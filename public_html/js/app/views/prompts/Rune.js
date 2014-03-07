@@ -21,7 +21,7 @@ define([
         initialize: function() {
             Prompt.prototype.initialize.call(this);
             Rune.canvas = new Canvas();
-            this.listenTo(Rune.canvas, 'input:up', this.recognize);
+            this.listenTo(Rune.canvas, 'input:up', this.handleInput);
         },
         /**
          * @method render
@@ -34,12 +34,25 @@ define([
             return this;
         },
         /**
-         * @method recognize
+         * @method clear
+         * @returns {Backbone.Model}
+         */
+        clear: function() {
+            Rune.canvas.render();
+            Prompt.prototype.clear.call(this);
+        },
+        /**
+         * @method handleInput
          * @param {Array} points
          * @param {CreateJS.Shape} shape
          */
-        recognize: function(points, shape) {
-            Rune.canvas.drawShape('background', Prompt.review.characters[0].targets[0].shape(Prompt.size));
+        handleInput: function(points, shape) {
+            var result = Prompt.review.characters[Prompt.review.get('position') - 1].recognize(points, shape);
+            if (result) {
+                Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
+                if (Prompt.review.characters[Prompt.review.get('position') - 1].isFinished())
+                    Rune.canvas.injectLayerColor('display', 'green');
+            }
         },
         /**
          * @method resize
@@ -48,11 +61,11 @@ define([
         resize: function(settings) {
             settings = settings ? settings : skritter.settings;
             if (settings.orientation() === 'landscape') {
-                Prompt.size = settings.height();
-                Rune.canvas.resize(Prompt.size).render();
+                this.size.canvas = settings.height();
+                Rune.canvas.resize(this.size.canvas).render();
             } else {
-                Prompt.size = settings.width();
-                Rune.canvas.resize(Prompt.size).render();
+                this.size.canvas = settings.width();
+                Rune.canvas.resize(this.size.canvas).render();
             }
             Prompt.prototype.resize.call(this, settings);
         },

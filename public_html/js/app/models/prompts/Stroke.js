@@ -9,42 +9,21 @@ define(function() {
      */
     var Stroke = Backbone.Model.extend({
         /**
-         * Returns the sprite transformed to fit the stroke data and canvas size.
-         * 
-         * @method inflatedSprite
-         * @param {Number} size
-         * @param {String} color
-         * @return {unresolved}
+         * @method initialize
          */
-        inflatedShape: function(size, color) {
-            var shape = skritter.assets.stroke(this.get('bitmapId'), color);
-            var spriteBounds = shape.getBounds();
-            var data = this.inflatedData(size);
-            var ms = shape.getMatrix();
-
-            var sx = data.w / spriteBounds.width;
-            var sy = data.h / spriteBounds.height;
-            ms.scale(sx, sy);
-            ms.translate(-data.w / 2, -data.h / 2);
-            ms.rotate(data.rot * Math.PI / 180);
-            var t = ms.decompose();
-
-            shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
-            var finalBounds = shape.getTransformedBounds();
-            shape.name = 'stroke';
-            shape.x += finalBounds.width / 2 + data.x;
-            shape.y += finalBounds.height / 2 + data.y;
-
-            return shape;
+        initialize: function() {
+            this.on('change:points', function(stroke) {
+                stroke.set('corners', skritter.fn.shortstraw.process(stroke.clone().get('points')));
+            });
         },
         /**
          * Returns an inflated version of the data based on the canvas size.
          * 
          * @method inflatedData
-         * @param {Number} size
          * @return {Object}
          */
-        inflatedData: function(size) {
+        inflateData: function() {
+            var size = this.size();
             var bounds = this.get('shape').getBounds();
             var data = this.get('data');
             return {
@@ -57,6 +36,89 @@ define(function() {
                 scaleY: (data[4] * size) / bounds.height,
                 rot: -data[5]
             };
+        },
+        /**
+         * @method inflateParams
+         * @returns {Array}
+         */
+        inflateParams: function() {
+            var inflatedParams = [];
+            var matrix = this.inflateShape().getMatrix();
+            var params = skritter.params.where({bitmapId: this.get('bitmapId')});
+            for (var a = 0, lengthA = params.length; a < lengthA; a++) {
+                var param = params[a].clone();
+                var corners = param.get('corners');
+                for (var b = 0, lengthB = corners.length; b < lengthB; b++) {
+                    var inflatedCorner = matrix.transformPoint(corners[b].x, corners[b].y);
+                    corners[b].x = inflatedCorner.x;
+                    corners[b].y = inflatedCorner.y;
+                }
+                param.set('corners', corners);
+                var deviations = param.get('deviations');
+                for (var c = 0, lengthC = deviations.length; c < lengthC; c++) {
+                    var inflatedDeviation = matrix.transformPoint(deviations[c].x, deviations[c].y);
+                    deviations[c].x = inflatedDeviation.x;
+                    deviations[c].y = inflatedDeviation.y;
+                }
+                param.set('deviations', deviations);
+                inflatedParams.push(param);
+            }
+            return inflatedParams;
+        },
+        /**
+         * Returns the sprite transformed to fit the stroke data and canvas size.
+         * 
+         * @method inflatedSprite
+         * @param {String} color
+         * @return {CreateJS.Shape}
+         */
+        inflateShape: function(color) {
+            var shape = skritter.assets.stroke(this.get('bitmapId'), color);
+            var spriteBounds = shape.getBounds();
+            var data = this.inflateData();
+            var ms = shape.getMatrix();
+            //apply rotation based on newly sized shape
+            var sx = data.w / spriteBounds.width;
+            var sy = data.h / spriteBounds.height;
+            ms.scale(sx, sy);
+            ms.translate(-data.w / 2, -data.h / 2);
+            ms.rotate(data.rot * Math.PI / 180);
+            var t = ms.decompose();
+            //find the actual position based on prior transformations
+            shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
+            var finalBounds = shape.getTransformedBounds();
+            shape.name = 'stroke';
+            shape.x += finalBounds.width / 2 + data.x;
+            shape.y += finalBounds.height / 2 + data.y;
+            return shape;
+        },
+        /**
+         * @method rectangle
+         * @returns {Object}
+         */
+        rectangle: function() {
+            var size = this.size();
+            return skritter.fn.boundingRectangle(this.get('points'), size, size, 14);
+        },
+        /**
+         * @method size
+         * @returns {Number}
+         */
+        size: function() {
+            return skritter.router.view.study.prompt.size.canvas;
+        },
+        /**
+         * @method userShape
+         * @param {String} color
+         * @returns {CreateJS.Shape}
+         */
+        userShape: function(color) {
+            var shape = this.inflateShape(color);
+            var rect = this.rectangle();
+            shape.name = 'stroke';
+            shape.x = rect.x;
+            shape.y = rect.y;
+            return shape;
         }
     });
 

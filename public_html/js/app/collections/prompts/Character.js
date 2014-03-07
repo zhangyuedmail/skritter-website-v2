@@ -30,6 +30,46 @@ define([
             return stroke.get('position');
         },
         /**
+         * @method isFinished
+         * @returns {Boolean}
+         */
+        isFinished: function() {
+            if (this.position() >= this.max())
+                return true;
+            return false;
+        },
+        /**
+         * @method position
+         * @returns {Number}
+         */
+        position: function() {
+            var position = 1;
+            for (var i = 0, length = this.length; i < length; i++)
+                position += this.at(i).has('contains') ? 2 : 1;
+            return position;
+        },
+        /**
+         * @method max
+         * @returns {Number}
+         */
+        max: function() {
+            var max = 0;
+            for (var i = 0, length = this.targets.length; i < length; i++) {
+                var targetMax = this.targets[i].position();
+                max = targetMax > max ? targetMax : max;
+            }
+            return max;
+        },
+        /**
+         * @method recognize
+         * @param {Array} points
+         * @returns {Backbone.Model}
+         */
+        recognize: function(points) {
+            var stroke = new Stroke().set('points', points);
+            return this.add(skritter.fn.recognizer.recognize(stroke, this));
+        },
+        /**
          * @method shape
          * @param {Number} size
          * @param {Number} excludeStrokePosition

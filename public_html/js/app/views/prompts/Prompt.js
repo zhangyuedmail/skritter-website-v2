@@ -15,7 +15,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            Prompt.size = 600;
+            this.size = {};
             Prompt.gradingButton = new GradingButtons();
             Prompt.review = null;
             this.listenTo(skritter.settings, 'resize', this.resize);
@@ -40,9 +40,17 @@ define([
                 skritter.router.view.study.previousPrompt();
             } else {
                 Prompt.review.set('position', position - 1);
+                this.clear();
                 this.show();
             }
             event.preventDefault();
+        },
+        /**
+         * @method clear
+         * @returns {Backbone.Model}
+         */
+        clear: function() {
+            return this;
         },
         /**
          * @method forward
@@ -54,6 +62,7 @@ define([
                 skritter.router.view.study.nextPrompt();
             } else {
                 Prompt.review.set('position', position + 1);
+                this.clear();
                 this.show();
             }
             event.preventDefault();
@@ -104,12 +113,18 @@ define([
          */
         resize: function(settings) {
             if (settings.orientation() === 'landscape') {
-                this.$('#info-container').width(settings.width() - this.$('#input-container').width() - 2);
-                this.$('#info-container').height(settings.height());
+                this.size.info = {
+                    width: settings.width() - this.$('#input-container').width() - 2,
+                    height: settings.height()
+                };
             } else {
-                this.$('#info-container').width(settings.width());
-                this.$('#info-container').height(settings.height() - this.$('#input-container').height() - 2);
+                this.size.info = {
+                    width: settings.width(),
+                    height: settings.height() - this.$('#input-container').height() - 2
+                };
             }
+            this.$('#info-container').width(this.size.info.width);
+            this.$('#info-container').height(this.size.info.height);
         },
         /**
          * @method set

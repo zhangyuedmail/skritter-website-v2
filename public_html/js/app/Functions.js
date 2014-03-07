@@ -39,6 +39,36 @@ define([
      */
     var bootstrap = Bootstrap;
     /**
+     * @method boundingRectangle
+     * @param {Array} points An array of point values
+     * @param {Number} areaWidth The width of the canvas area
+     * @param {Number} areaHeight The height of the canvas area
+     * @param {Number} pointRadius The radius of
+     * @return {Object} The bounds of the calculated rectangle
+     */
+    var boundingRectangle = function(points, areaWidth, areaHeight, pointRadius) {
+        var left = areaWidth;
+        var top = 0.0;
+        var right = 0.0;
+        var bottom = areaHeight;
+        for (var i = 0, length = points.length; i < length; i++) {
+            var x = points[i].x;
+            var y = points[i].y;
+            if (x - pointRadius < left)
+                left = x - pointRadius;
+            if (y + pointRadius > top)
+                top = y + pointRadius;
+            if (x + pointRadius > right)
+                right = x + pointRadius;
+            if (y - pointRadius < bottom)
+                bottom = y - pointRadius;
+        }
+        var width = right - left;
+        var height = top - bottom;
+        var center = {x: width / 2, y: height / 2};
+        return {x: left, y: bottom, w: width, h: height, c: center};
+    };
+    /**
      * @method bytesToSize
      * @param {Number} bytes
      * @returns {String}
@@ -123,6 +153,7 @@ define([
     return {
         arrayToInt: arrayToInt,
         bootstrap: bootstrap,
+        boundingRectangle: boundingRectangle,
         bytesToSize: bytesToSize,
         getUnixTime: getUnixTime,
         isKana: isKana,
