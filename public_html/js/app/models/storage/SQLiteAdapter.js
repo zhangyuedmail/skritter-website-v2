@@ -23,7 +23,7 @@ define(function() {
                 },
                 reviews: {
                     keys: ['id'],
-                    fields: ['score', 'bearTime', 'reviewTime', 'thinkingTime', 'currentInterval', 'actualInterval', 'newInterval', 'wordGroup', 'previousInterval', 'previousSuccess']
+                    fields: ['base', 'contained', 'part', 'position']
                 },
                 sentences: {
                     keys: ['id'],
@@ -31,7 +31,7 @@ define(function() {
                 },
                 srsconfigs: {
                     keys: ['part'],
-                    fields: ['initialRightInterval', 'initialWrongInterval', 'rightFactors', 'wrongFactors']
+                    fields: ['lang', 'initialRightInterval', 'initialWrongInterval', 'rightFactors', 'wrongFactors']
                 },
                 strokes: {
                     keys: ['rune'],
@@ -211,8 +211,8 @@ define(function() {
         },
         getSqlValueString: function(fieldArray) {
             var valueString = '';
-            for (var i = 1; i <= fieldArray.length; i++)
-                valueString += (i === fieldArray.length) ? '?' : '?,';
+            for (var i = 1, length = fieldArray.length; i <= length; i++)
+                valueString += i === fieldArray.length ? '?' : '?,';
             return valueString;
         },
         /**
@@ -245,8 +245,8 @@ define(function() {
          */
         parseResult: function(result) {
             var parsedResult = [];
-            for (var i = 0; i < result.rows.length; i++) {
-                var item = _.cloneDeep(result.rows.item(i));
+            for (var a = 0, lengthA = result.rows.length; a < lengthA; a++) {
+                var item = _.cloneDeep(result.rows.item(a));
                 for (var key in item)
                     if (item.hasOwnProperty(key))
                         item[key] = JSON.parse(item[key]);

@@ -99,12 +99,24 @@ define([
                             if (result) {
                                 callback2(result);
                                 async.series([
-                                    async.apply(skritter.storage.setItems, 'decomps', result.Decomps),
-                                    async.apply(skritter.storage.setItems, 'items', result.Items),
-                                    async.apply(skritter.storage.setItems, 'srsconfigs', result.SRSConfigs),
-                                    async.apply(skritter.storage.setItems, 'sentences', result.Sentences),
-                                    async.apply(skritter.storage.setItems, 'strokes', result.Strokes),
-                                    async.apply(skritter.storage.setItems, 'vocabs', result.Vocabs)
+                                    function(callback) {
+                                        skritter.storage.setItems('decomps', result.Decomps, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.storage.setItems('items', result.Items, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.storage.setItems('srsconfigs', result.SRSConfigs, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.storage.setItems('sentences', result.Sentences, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.storage.setItems('strokes', result.Strokes, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.storage.setItems('vocabs', result.Vocabs, callback);
+                                    }
                                 ], function() {
                                     next();
                                 });
