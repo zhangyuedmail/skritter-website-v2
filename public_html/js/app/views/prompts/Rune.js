@@ -80,6 +80,6 @@ define([
             this.showSentence();
         }
     });
-    
+
     return Rune;
 });

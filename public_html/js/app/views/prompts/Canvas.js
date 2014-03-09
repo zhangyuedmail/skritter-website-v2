@@ -142,17 +142,29 @@ define(function() {
             Canvas.stage.input.removeAllEventListeners();
         },
         /**
+         * @method drawPoint
+         * @param {String} layerName
+         * @param {Object} point
+         * @returns {CreateJS.Shape}
+         */
+        drawPoint: function(layerName, point) {
+            var circle = new createjs.Shape();
+            circle.graphics.beginFill('blue').drawCircle(point.x, point.y, 10);
+            this.getLayer(layerName).addChild(circle);
+            return circle;
+        },
+        /**
          * @method drawShape
          * @param {String} layerName
          * @param {CreateJS.Shape} shape
          * @param {Number} alpha
-         * @returns {Bitmap}
+         * @returns {CreateJS.Shape}
          */
         drawShape: function(layerName, shape, alpha) {
             shape.alpha = (alpha) ? alpha : 1;
             this.getLayer(layerName).addChild(shape);
             Canvas.stage.display.update();
-            return this;
+            return shape;
         },
         /**
          * @method enableInput

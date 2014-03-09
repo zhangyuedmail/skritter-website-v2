@@ -47,14 +47,14 @@ define(function() {
             var params = skritter.params.where({bitmapId: this.get('bitmapId')});
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
                 var param = params[a].clone();
-                var corners = param.get('corners');
+                var corners = _.cloneDeep(param.get('corners'));
                 for (var b = 0, lengthB = corners.length; b < lengthB; b++) {
                     var inflatedCorner = matrix.transformPoint(corners[b].x, corners[b].y);
                     corners[b].x = inflatedCorner.x;
                     corners[b].y = inflatedCorner.y;
                 }
                 param.set('corners', corners);
-                var deviations = param.get('deviations');
+                var deviations = _.cloneDeep(param.get('deviations'));
                 for (var c = 0, lengthC = deviations.length; c < lengthC; c++) {
                     var inflatedDeviation = matrix.transformPoint(deviations[c].x, deviations[c].y);
                     deviations[c].x = inflatedDeviation.x;
@@ -98,7 +98,7 @@ define(function() {
          */
         rectangle: function() {
             var size = this.size();
-            return skritter.fn.boundingRectangle(this.get('points'), size, size, 14);
+            return skritter.fn.boundingRectangle(_.clone(this.get('corners')), size, size, 14);
         },
         /**
          * @method size

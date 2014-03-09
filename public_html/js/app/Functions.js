@@ -65,7 +65,7 @@ define([
         }
         var width = right - left;
         var height = top - bottom;
-        var center = {x: width / 2, y: height / 2};
+        var center = {x: width / 2 + left, y: height / 2 + bottom};
         return {x: left, y: bottom, w: width, h: height, c: center};
     };
     /**
@@ -79,6 +79,19 @@ define([
             return '';
         var value = parseFloat(Math.floor(Math.log(bytes) / Math.log(1024)));
         return (bytes / Math.pow(1024, value)).toFixed(2) + ' ' + sizes[value];
+    };
+    /**
+     * @method distance
+     * @param {Point} point1
+     * @param {Point} point2
+     * @return {Number} The distance between the first and last points
+     */
+    var distance = function(point1, point2) {
+        var xs = point2.x - point1.x;
+        xs = xs * xs;
+        var ys = point2.y - point1.y;
+        ys = ys * ys;
+        return Math.sqrt(xs + ys);
     };
     /**
      * Takes a the first character from a string and return whether it is a kana character.
@@ -155,6 +168,7 @@ define([
         bootstrap: bootstrap,
         boundingRectangle: boundingRectangle,
         bytesToSize: bytesToSize,
+        distance: distance,
         getUnixTime: getUnixTime,
         isKana: isKana,
         isLocal: isLocal,

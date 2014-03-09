@@ -11,7 +11,7 @@ define(function() {
         initialize: function() {
             Api.clientId = 'mcfarljwapiclient';
             Api.clientSecret = 'e3872517fed90a820e441531548b8c';
-            Api.root = 'https://www.skritter';
+            Api.root = 'https://beta.skritter';
             Api.tld = document.location.host.indexOf('.cn') > -1 ? '.cn' : '.com';
             Api.base = Api.root + Api.tld + '/api/v' + this.get('version') + '/';
             Api.credentials = 'basic ' + Base64.encode(Api.clientId + ':' + Api.clientSecret);
@@ -77,6 +77,40 @@ define(function() {
                 });
                 promise.done(function(data) {
                     callback(data.Batch);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
+         * @method checkReviewErrors
+         */
+        checkReviewErrors: function() {
+            var self = this;
+            var errors = [];
+            function request(cursor) {
+                var promise = $.ajax({
+                    url: Api.base + '/reviews/errors',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor
+                    }
+                });
+                promise.done(function(data) {
+                    errors = errors.concat(data.ReviewErrors);
+                    if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 1000);
+                    } else {
+                        callback(errors);
+                    }
                 });
                 promise.fail(function(error) {
                     callback(error);

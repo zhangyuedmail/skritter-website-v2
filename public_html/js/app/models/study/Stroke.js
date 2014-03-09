@@ -49,7 +49,9 @@ define([
                     var params = skritter.params.findWhere({bitmapId: bitmapId});
                     stroke.set({
                         bitmapId: bitmapId,
+                        corners: params.get('corners'),
                         data: data,
+                        deviations: params.get('deviations'),
                         id: position + '|' + bitmapId,
                         position: position,
                         shape: skritter.assets.stroke(bitmapId)
