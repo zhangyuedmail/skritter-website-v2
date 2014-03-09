@@ -60,13 +60,15 @@ define([
          */
         resize: function(settings) {
             settings = settings ? settings : skritter.settings;
+            var canvasSize = 600;
             if (settings.orientation() === 'landscape') {
-                this.size.canvas = settings.height();
-                Rune.canvas.resize(this.size.canvas).render();
+                canvasSize = settings.height();
+                Rune.canvas.resize(canvasSize).render();
             } else {
-                this.size.canvas = settings.width();
-                Rune.canvas.resize(this.size.canvas).render();
+                canvasSize = settings.width();
+                Rune.canvas.resize(canvasSize).render();
             }
+            skritter.settings.set('canvasSize', canvasSize);
             Prompt.prototype.resize.call(this, settings);
         },
         /**

@@ -17,7 +17,8 @@ define(function() {
      * @returns {Backbone.Model}
      */
     Recognizer.prototype.recognize = function(userStroke, character) {
-        this.analyze(userStroke, character);
+        var results = this.analyze(userStroke, character);
+        return results[0];
     };
     /**
      * @method analyze
@@ -32,8 +33,14 @@ define(function() {
             for (var b = 0, lengthB = target.length; b < lengthB; b++) {
                 var stroke = target.at(b);
                 if (stroke.get('position') === character.position()) {
-                    this.checkDistance(userStroke, stroke);
-                    return userStroke;
+                    if (this.checkDistance(userStroke, stroke)) {
+                        userStroke.set({
+                            bitmapId: stroke.get('bitmapId'),
+                            data: stroke.get('data'),
+                            shape: stroke.get('shape')
+                        });
+                        results.push(userStroke);
+                    }
                 }
             }
         }

@@ -19,6 +19,7 @@ define(function() {
          * @property {Object} defaults
          */
         defaults: {
+            canvasSize: 600,
             container: $('#skritter-container'),
             navbar: $('.navbar')
         },
