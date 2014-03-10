@@ -133,7 +133,7 @@ define(function() {
             shape.name = 'stroke';
             shape.x = rect.x;
             shape.y = rect.y;
-            
+            shape.rotation = this.angle() - this.get('param').angle();
             return shape;
         }
     });

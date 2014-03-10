@@ -9,6 +9,13 @@ define(function() {
      */
     var Param = Backbone.Model.extend({
         /**
+         * @method angle
+         * @returns {Number}
+         */
+        angle: function() {
+            return skritter.fn.angle(this.get('corners'));
+        },
+        /**
          * @method rectangle
          * @returns {Object}
          */
