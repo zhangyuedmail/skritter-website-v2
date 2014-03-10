@@ -8,6 +8,7 @@ define(function() {
      * @class Recognizer
      */
     function Recognizer() {
+        this.cornersPenalty = 100;
         this.cornersThreshold = 2;
         this.distanceThreshold = 200;
     }
@@ -19,10 +20,9 @@ define(function() {
      */
     Recognizer.prototype.recognize = function(userStroke, character) {
         var results = this.analyze(userStroke, character);
-        console.log(results);
         results = _.filter(results, 'total');
         results = _.sortBy(results, 'total');
-        if (results.length > 0)
+        if (results.length > 0 && !character.contains(results[0]))
             return results[0];
         return false;
     };
@@ -40,8 +40,11 @@ define(function() {
                 var stroke = target.at(b);
                 if (stroke.get('position') === character.position()) {
                     var bitmapId = stroke.get('bitmapId');
+                    var contains = stroke.get('contains');
                     var data = stroke.get('data');
+                    var id = stroke.id;
                     var params = stroke.inflateParams();
+                    var position = stroke.get('position');
                     var shape = stroke.get('shape');
                     for (var c = 0, lengthC = params.length; c < lengthC; c++) {
                         var param = params[c];
@@ -61,8 +64,11 @@ define(function() {
                         }
                         result.set({
                             bitmapId: bitmapId,
+                            contains: contains,
                             data: data,
+                            id: id,
                             param: param,
+                            position: position,
                             scores: scores,
                             shape: shape
                         });
@@ -83,7 +89,7 @@ define(function() {
     Recognizer.prototype.checkCorners = function(stroke, target) {
         var score = Math.abs(stroke.get('corners').length - target.get('corners').length);
         if (score <= this.cornersThreshold)
-            return score === 0 ? score : score * 50;
+            return score === 0 ? score : score * this.cornersPenalty;
         return -1;
 
     };

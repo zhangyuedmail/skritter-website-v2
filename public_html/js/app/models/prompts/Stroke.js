@@ -17,6 +17,21 @@ define(function() {
             });
         },
         /**
+         * @method containedIds
+         * @returns {Array}
+         */
+        containedIds: function() {
+            var ids = [];
+            var contains = this.has('contains') ? this.get('contains') : [];
+            var position = this.get('position');
+            for (var i = 0, length = contains.length; i < length; i++) {
+                var contained = contains[i];
+                ids.push(position + '|' + contained);
+                ids.push((position + 1) + '|' + contained);
+            }
+            return ids;
+        },
+        /**
          * Returns an inflated version of the data based on the canvas size.
          * 
          * @method inflatedData

@@ -30,6 +30,25 @@ define([
             return stroke.get('position');
         },
         /**
+         * @method contains
+         * @param {Backbone.Model} stroke
+         * @returns {Boolean}
+         */
+        contains: function(stroke) {
+            var newId = stroke.id;
+            var newContained = stroke.containedIds();
+            for (var a = 0, lengthA = this.length; a < lengthA; a++) {
+                var id = this.at(a).id;
+                var contains = this.at(a).containedIds();
+                if (newId === id)
+                    return true;
+                for (var b = 0, lengthB = contains.length; b < lengthB; b++)
+                    if (newContained.indexOf(contains[b]) !== -1)
+                        return true;
+            }
+            return false;
+        },
+        /**
          * @method isFinished
          * @returns {Boolean}
          */
