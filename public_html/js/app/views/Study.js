@@ -33,6 +33,8 @@ define([
          */
         render: function() {
             this.$el.html(templateStudy);
+            if (!window.cordova)
+                this.$('.view').css("overflow-x", "hidden");
             skritter.user.scheduler.filter({ids: ['mcfarljwtest2-zh-幼儿-1-rune']});
             //skritter.user.scheduler.filter({parts: ['rune']});
             if (this.review) {
