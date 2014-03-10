@@ -50,8 +50,11 @@ define([
             var result = Prompt.review.character().recognize(points, shape);
             if (result) {
                 Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
-                if (Prompt.review.character().isFinished())
+                if (Prompt.review.character().isFinished()) {
+                    Rune.canvas.disableInput();
                     Rune.canvas.injectLayerColor('display', 'green');
+                    Prompt.gradingButtons.show();
+                }
             }
         },
         /**

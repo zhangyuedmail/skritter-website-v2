@@ -130,6 +130,33 @@ body {
 .canvas-holder #input-display { z-index: 8888; }
 
 
+/*** PROMPT: GRADING BUTTON ***/
+#input-container #grading-container {
+    width: 100%;
+}
+#input-container #grading-buttons {
+    bottom: 5px;
+    margin: 0;
+    position: absolute;
+    width: 100%;
+}
+#input-container #grading-buttons div {
+    cursor: pointer;
+    display: inline-block;
+    opacity: 0.6;
+    position: relative;
+}
+#input-container #grading-buttons div:hover {
+    opacity: 1;
+}
+#input-container #grading-buttons div img {
+    display: block;
+    max-height: 8%;
+    min-height: 40px;
+    margin: 0 auto 5px auto;
+}
+
+
 /*** PROMPT: INFO-CONTAINER ***/
 #info-container { 
     background-color: #ffffff;

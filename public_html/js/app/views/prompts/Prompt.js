@@ -16,7 +16,7 @@ define([
          */
         initialize: function() {
             this.size = {};
-            Prompt.gradingButton = new GradingButtons();
+            Prompt.gradingButtons = new GradingButtons();
             Prompt.review = null;
             this.listenTo(skritter.settings, 'resize', this.resize);
         },
@@ -25,6 +25,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
+            Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
             this.$('.navigation.left').hammer().on('tap', _.bind(this.back, this));
             this.$('.navigation.right').hammer().on('tap', _.bind(this.forward, this));
             this.show();
