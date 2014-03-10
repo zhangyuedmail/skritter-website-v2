@@ -17,6 +17,13 @@ define(function() {
             });
         },
         /**
+         * @method angle
+         * @returns {Number}
+         */
+        angle: function() {
+            return skritter.fn.angle(this.get('corners'));
+        },
+        /**
          * @method containedIds
          * @returns {Array}
          */
@@ -126,6 +133,7 @@ define(function() {
             shape.name = 'stroke';
             shape.x = rect.x;
             shape.y = rect.y;
+            
             return shape;
         }
     });

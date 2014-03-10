@@ -23,6 +23,18 @@ define([
     'functions/StrokeMap'
 ], function(Bootstrap, ParamMap, PinyinConverter, Recognizer, Shortstraw, SimpTradMap, StrokeMap) {
     /**
+     * @method angle
+     * @param {Array} points An array of point values
+     * @return {Number} The angle formed by the first and last points
+     */
+    var angle = function(points) {
+        var point1 = points[0];
+        var point2 = points[points.length - 1];
+        var xDiff = point2.x - point1.x;
+        var yDiff = point2.y - point1.y;
+        return (Math.atan2(yDiff, xDiff)) * (180 / Math.PI);
+    };
+    /**
      * Parses through and array attempting to convert each value to an int.
      * 
      * @method arrayToInt
@@ -164,6 +176,7 @@ define([
     var strokes = StrokeMap;
     
     return {
+        angle: angle,
         arrayToInt: arrayToInt,
         bootstrap: bootstrap,
         boundingRectangle: boundingRectangle,
