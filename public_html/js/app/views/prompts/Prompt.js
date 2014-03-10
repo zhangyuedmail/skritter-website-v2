@@ -19,6 +19,7 @@ define([
             Prompt.gradingButtons = new GradingButtons();
             Prompt.review = null;
             this.listenTo(skritter.settings, 'resize', this.resize);
+            this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradeSelected);
         },
         /**
          * @method render
@@ -67,6 +68,13 @@ define([
                 this.show();
             }
             event.preventDefault();
+        },
+        /**
+         * @method handleGradeSelected
+         * @param {Number} grade
+         */
+        handleGradeSelected: function(grade) {
+            console.log('GRADE SELECTED', grade);
         },
         /**
          * @method hideDefinition

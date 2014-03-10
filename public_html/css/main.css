@@ -131,29 +131,19 @@ body {
 
 
 /*** PROMPT: GRADING BUTTON ***/
-#input-container #grading-container {
-    width: 100%;
-}
 #input-container #grading-buttons {
-    bottom: 5px;
-    margin: 0;
+    bottom: 0;
+    display: none;
     position: absolute;
     width: 100%;
 }
-#input-container #grading-buttons div {
-    cursor: pointer;
-    display: inline-block;
-    opacity: 0.6;
-    position: relative;
+#input-container #grading-buttons .btn-group {
+    width: 100%;
 }
-#input-container #grading-buttons div:hover {
-    opacity: 1;
-}
-#input-container #grading-buttons div img {
-    display: block;
-    max-height: 8%;
-    min-height: 40px;
-    margin: 0 auto 5px auto;
+#input-container #grading-buttons button {
+    margin-left: 0;
+    text-align: center;
+    width: 25%;
 }
 
 
@@ -162,6 +152,7 @@ body {
     background-color: #ffffff;
     border-bottom: none;
     border-right: 2px #000000 solid;
+    position: relative;
 }
 #info-container .part-badge {
     background: #999999;
@@ -203,4 +194,5 @@ body {
 #input-container { 
     background-color: #ffffff;
     cursor: pointer;
+    position: relative;
 }
