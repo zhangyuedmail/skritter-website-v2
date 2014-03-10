@@ -12,6 +12,7 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
+            this.characters = [];
         },
         /**
          * @property {Object} defaults
@@ -51,6 +52,15 @@ define(function() {
             //updates the final grade when contained items exist
             this.get('base').score = this.finalGrade();
             return this;
+        },
+        /**
+         * @method character
+         * @param {Number} position
+         * @returns {Backbone.Model}
+         */
+        character: function(position) {
+            position = position ? position : this.get('position');
+            return this.characters[position - 1];
         },
         /**
          * @method finalGrade

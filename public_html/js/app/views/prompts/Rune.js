@@ -47,10 +47,10 @@ define([
          * @param {CreateJS.Shape} shape
          */
         handleInput: function(points, shape) {
-            var result = Prompt.review.characters[Prompt.review.get('position') - 1].recognize(points, shape);
+            var result = Prompt.review.character().recognize(points, shape);
             if (result) {
                 Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
-                if (Prompt.review.characters[Prompt.review.get('position') - 1].isFinished())
+                if (Prompt.review.character().isFinished())
                     Rune.canvas.injectLayerColor('display', 'green');
             }
         },
