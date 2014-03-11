@@ -130,7 +130,7 @@ body {
 .canvas-holder #input-display { z-index: 8888; }
 
 
-/*** PROMPT: GRADING BUTTON ***/
+/*** PROMPT: GRADING BUTTONS ***/
 #input-container #grading-buttons {
     bottom: 0;
     display: none;
