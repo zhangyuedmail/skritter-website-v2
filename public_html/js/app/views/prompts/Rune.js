@@ -73,6 +73,9 @@ define([
                 Rune.canvas.resize(canvasSize).render();
             }
             skritter.settings.set('canvasSize', canvasSize);
+            if (Prompt.review.character().length > 0) {
+                Rune.canvas.drawShape('display', Prompt.review.character().shape());
+            }
             Prompt.prototype.resize.call(this, settings);
         },
         /**

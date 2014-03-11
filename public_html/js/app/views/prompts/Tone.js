@@ -70,10 +70,19 @@ define([
          */
         resize: function(settings) {
             settings = settings ? settings : skritter.settings;
+            var canvasSize = 600;
             if (settings.orientation() === 'landscape') {
-                Tone.canvas.resize(settings.height()).render();
+                canvasSize = settings.height();
+                Rune.canvas.resize(canvasSize).render();
             } else {
-                Tone.canvas.resize(settings.width()).render();
+                canvasSize = settings.width();
+                Rune.canvas.resize(canvasSize).render();
+            }
+            skritter.settings.set('canvasSize', canvasSize);
+            if (Prompt.review.character().length > 0) {
+                Tone.canvas.drawCharacterFromFont('background', Prompt.review.vocab().characters()[Prompt.review.get('position') - 1], skritter.user.settings.font(), 0.6);
+            } else {
+                Tone.canvas.drawCharacterFromFont('background', Prompt.review.vocab().characters()[Prompt.review.get('position') - 1], skritter.user.settings.font(), 1.0);
             }
             Prompt.prototype.resize.call(this, settings);
         },
