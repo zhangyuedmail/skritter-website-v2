@@ -29,7 +29,7 @@ define([
          */
         render: function() {
             this.$el.html(templateRune);
-            Rune.canvas.setElement(this.$('#canvas-container'));
+            Rune.canvas.setElement(this.$('#canvas-container')).render();
             Prompt.prototype.render.call(this);
             return this;
         },

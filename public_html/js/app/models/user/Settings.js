@@ -65,6 +65,15 @@ define(function() {
             });
         },
         /**
+         * @method font
+         * @returns {String}
+         */
+        font: function() {
+            if (this.isChinese())
+                return 'simkai';
+            return 'kaisho';
+        },
+        /**
          * Returns true if the target language is set to Chinese.
          * 
          * @method isChinese

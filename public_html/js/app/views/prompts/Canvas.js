@@ -111,7 +111,7 @@ define(function() {
             var layer = this.getLayer(layerName);
             color = (color) ? color : Canvas.textColor;
             font = (font) ? font : Canvas.textFont;
-            var text = new createjs.Text(character, skritter.settings.get('canvasSize') + 'px ' + font, color);
+            var text = new createjs.Text(character, Canvas.size + 'px ' + font, color);
             text.alpha = (alpha) ? alpha : 1;
             layer.addChild(text);
             Canvas.stage.display.update();

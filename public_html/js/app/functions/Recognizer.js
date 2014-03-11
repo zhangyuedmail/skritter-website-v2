@@ -46,6 +46,7 @@ define(function() {
                     var params = stroke.inflateParams();
                     var position = stroke.get('position');
                     var shape = stroke.get('shape');
+                    var tone = stroke.get('tone');
                     for (var c = 0, lengthC = params.length; c < lengthC; c++) {
                         var param = params[c];
                         var result = userStroke.clone();
@@ -70,7 +71,8 @@ define(function() {
                             param: param,
                             position: position,
                             scores: scores,
-                            shape: shape
+                            shape: shape,
+                            tone: tone
                         });
                         result.total = total;
                         results.push(result);

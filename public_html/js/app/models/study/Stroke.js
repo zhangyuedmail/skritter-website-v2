@@ -54,7 +54,8 @@ define([
                         deviations: params.get('deviations'),
                         id: position + '|' + bitmapId,
                         position: position,
-                        shape: skritter.assets.stroke(bitmapId)
+                        shape: skritter.assets.stroke(bitmapId),
+                        tone: rune === 'tones' ? a + 1 : undefined
                     });
                     if (params.has('contains')) {
                         stroke.set('contains', params.get('contains'));
