@@ -73,10 +73,10 @@ define([
             var canvasSize = 600;
             if (settings.orientation() === 'landscape') {
                 canvasSize = settings.height();
-                Rune.canvas.resize(canvasSize).render();
+                Tone.canvas.resize(canvasSize).render();
             } else {
                 canvasSize = settings.width();
-                Rune.canvas.resize(canvasSize).render();
+                Tone.canvas.resize(canvasSize).render();
             }
             skritter.settings.set('canvasSize', canvasSize);
             if (Prompt.review.character().length > 0) {
