@@ -25,7 +25,16 @@ define([
          */
         render: function() {
             this.$el.html(templateRdng);
+            this.$('#input-container').hammer().on('tap', _.bind(this.handleTap, this));
             Prompt.prototype.render.call(this);
+        },
+        /**
+         * @method handleTap
+         * @returns {undefined}
+         */
+        handleTap: function(event) {
+            Prompt.gradingButtons.show();
+            event.preventDefault();
         },
         /**
          * @method resize
@@ -51,6 +60,8 @@ define([
          * @method show
          */
         show: function() {
+            this.$('.prompt-writing-input').html(Prompt.review.vocab().writing());
+            this.$('.prompt-question').html("What's the reading?");
             this.showWriting();
             this.showDefinition();
             this.showSentence();
