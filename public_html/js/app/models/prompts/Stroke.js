@@ -39,6 +39,17 @@ define(function() {
             return ids;
         },
         /**
+         * @method cornersLength
+         * @returns {Number}
+         */
+        cornersLength: function() {
+            var cornersLength = 0;
+            var corners = this.get('corners');
+            for (var i = 0, length = corners.length - 1; i < length; i++)
+                cornersLength += skritter.fn.distance(corners[i], corners[i + 1]);
+            return cornersLength;
+        },
+        /**
          * Returns an inflated version of the data based on the canvas size.
          * 
          * @method inflatedData
