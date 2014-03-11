@@ -133,6 +133,7 @@ define(function() {
          * @returns {Backbone.Model}
          */
         save: function() {
+            this.calculate();
             for (var i = 0, length = this.get('contained').length + 1; i < length; i++) {
                 var item = this.item(i);
                 var review = this.position(i);

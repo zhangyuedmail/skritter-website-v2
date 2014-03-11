@@ -54,6 +54,7 @@ define([
                     Rune.canvas.disableInput();
                     Rune.canvas.injectLayerColor('display', 'green');
                     Prompt.gradingButtons.show();
+                    this.showWriting(Prompt.review.get('position') + 1);
                 }
             }
         },

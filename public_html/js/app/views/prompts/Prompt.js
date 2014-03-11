@@ -34,9 +34,8 @@ define([
         },
         /**
          * @method back
-         * @param {Object} event
          */
-        back: function(event) {
+        back: function() {
             var position = Prompt.review.get('position');
             if (position === 1) {
                 skritter.router.view.study.previousPrompt();
@@ -45,7 +44,6 @@ define([
                 this.clear();
                 this.show();
             }
-            event.preventDefault();
         },
         /**
          * @method clear
@@ -56,25 +54,24 @@ define([
         },
         /**
          * @method forward
-         * @param {Object} event
          */
-        forward: function(event) {
+        forward: function() {
             var position = Prompt.review.get('position');
-            if (position > Prompt.review.max()) {
+            if (position >= Prompt.review.max()) {
                 skritter.router.view.study.nextPrompt();
             } else {
                 Prompt.review.set('position', position + 1);
                 this.clear();
                 this.show();
             }
-            event.preventDefault();
         },
         /**
          * @method handleGradeSelected
          * @param {Number} grade
          */
         handleGradeSelected: function(grade) {
-            console.log('GRADE SELECTED', grade);
+            Prompt.review.position(Prompt.review.get('position')).score = grade;
+            this.forward();
         },
         /**
          * @method hideDefinition
