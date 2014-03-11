@@ -46,6 +46,14 @@ define([
             this.showWriting();
             this.showDefinition();
             this.showSentence();
+        },
+        /**
+         * @method show
+         */
+        show: function() {
+            this.showWriting();
+            this.showDefinition();
+            this.showSentence();
         }
     });
     

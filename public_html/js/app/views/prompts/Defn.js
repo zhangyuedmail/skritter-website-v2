@@ -42,7 +42,10 @@ define([
             }
             Prompt.prototype.resize.call(this, settings);
         },
-        display: function() {
+        /**
+         * @method show
+         */
+        show: function() {
             this.showWriting();
             this.showReading();
             this.showSentence();
