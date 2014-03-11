@@ -103,7 +103,6 @@ define(function() {
                         tones.push([skritter.fn.arrayToInt(reading[i].match(/[0-9]+/g))]);
                 }
             }
-            console.log(tones);
             return tones;
         },
         /**

@@ -38,13 +38,17 @@ define([
         resize: function(settings) {
             settings = settings ? settings : skritter.settings;
             if (settings.orientation() === 'landscape') {
-                Tone.canvas.size(settings.height()).render();
+                Tone.canvas.resize(settings.height()).render();
             } else {
-                Tone.canvas.size(settings.width()).render();
+                Tone.canvas.resize(settings.width()).render();
             }
             Prompt.prototype.resize.call(this, settings);
         },
-        display: function() {
+        /**
+         * @method show
+         */
+        show: function() {
+            Tone.canvas.enableInput();
             this.showWriting();
             this.showReading(Prompt.review.get('position'));
             this.showDefinition();

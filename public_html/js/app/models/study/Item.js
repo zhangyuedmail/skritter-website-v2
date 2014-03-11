@@ -105,6 +105,8 @@ define([
          * @returns {Backbone.Model}
          */
         stroke: function() {
+            if (this.get('part') === 'tone')
+                return skritter.user.data.strokes.get('tones');
             return skritter.user.data.strokes.get(this.vocab().get('writing'));
         },
         /**
