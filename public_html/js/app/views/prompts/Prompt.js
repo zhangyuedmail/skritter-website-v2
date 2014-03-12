@@ -57,6 +57,7 @@ define([
          * @returns {Backbone.Model}
          */
         clear: function() {
+            Prompt.gradingButtons.hide();
             return this;
         },
         /**
