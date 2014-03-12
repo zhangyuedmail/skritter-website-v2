@@ -112,10 +112,10 @@ define([
      * @param {Function} callback
      */
     var loadStorage = function(callback) {
-        if (window.cordova) {
-            skritter.storage = new SQLiteAdapter();
-        } else {
+        if (window.indexedDB) {
             skritter.storage = new IndexedDBAdapter();
+        } else {
+            skritter.storage = new SQLiteAdapter();
         }
         callback();
     };
