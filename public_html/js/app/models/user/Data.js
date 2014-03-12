@@ -221,7 +221,7 @@ define([
                 },
                 //contained items
                 function(item, vocab, callback) {
-                    if (_.contains(['rune', 'tone'], part)) {
+                    if (part === 'rune' || part === 'tone') {
                         var containedItemIds = vocab.containedItemIds(part);
                         var containedItemCount = containedItemIds.length;
                         skritter.storage.getItems('items', containedItemIds, function(containedItems) {

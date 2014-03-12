@@ -27,9 +27,12 @@ define([
          */
         containedItems: function() {
             var items = [];
-            var containedIds = this.vocab().containedItemIds(this.get('part'));
-            for (var i = 0, length = containedIds.length; i < length; i++)
-                items.push(skritter.user.data.items.get(containedIds[i]));
+            var part = this.get('part');
+            if (part === 'rune' || part === 'tone') {
+                var containedIds = this.vocab().containedItemIds(part);
+                for (var i = 0, length = containedIds.length; i < length; i++)
+                    items.push(skritter.user.data.items.get(containedIds[i]));
+            }
             return items;
         },
         /**
