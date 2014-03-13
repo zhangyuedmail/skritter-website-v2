@@ -31,7 +31,7 @@ define([
         insert: function(vocabs, callback) {
             var self = this;
             skritter.storage.put('vocabs', vocabs, function() {
-                //self.add(vocabs, {merge: true, silent: true});
+                self.add(vocabs, {merge: true, silent: true, sort: false});
                 callback();
             });
         },

@@ -16,6 +16,7 @@ define([
          */
         initialize: function() {
             Items.daysInSecond = 1 / 86400;
+            Items.sortStarted = 0;
             this.on('change', function(item) {
                 item.cache();
             });
@@ -30,15 +31,14 @@ define([
          * @returns {undefined}
          */
         comparator: function(item) {
-            var now = skritter.fn.getUnixTime();
             var held = item.get('held');
-            if (held && held > now) {
-                item.readiness = 0.5 + (now / item.held) * 0.1;
+            if (held && held > Items.sortStarted) {
+                item.readiness = 0.5 + (Items.sortStarted / item.held) * 0.1;
                 return -item.readiness;
             }
             var last = item.get('last');
             var next = item.get('next');
-            if (!last && (next - now) > 600) {
+            if (!last && (next - Items.sortStarted) > 600) {
                 item.readiness = 0.2;
                 return -item.readiness;
             }
@@ -46,7 +46,7 @@ define([
                 item.readiness = 99999999;
                 return -item.readiness;
             }
-            var seenAgo = now - last;
+            var seenAgo = Items.sortStarted - last;
             var rtd = next - last;
             var readiness = seenAgo / rtd;
             if (readiness > 0 && seenAgo > 9000) {
@@ -67,7 +67,7 @@ define([
         insert: function(items, callback) {
             var self = this;
             skritter.storage.put('items', items, function() {
-                //self.add(items, {merge: true, silent: true});
+                self.add(items, {merge: true, silent: true, sort: false});
                 callback();
             });
         },
@@ -81,6 +81,15 @@ define([
                 self.add(items, {merge: true, silent: true, sort: false});
                 callback();
             });
+        },
+        /**
+         * @method sort
+         * @param {Object} options
+         * @returns {Backbone.Collection}
+         */
+        sort: function(options) {
+            Items.sortStarted = skritter.fn.getUnixTime();
+            return Backbone.Collection.prototype.sort.apply(this, options);
         }
     });
 

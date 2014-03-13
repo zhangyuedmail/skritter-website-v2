@@ -12,7 +12,6 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
-            
         },
         /**
          * @property {Object} defaults

@@ -202,7 +202,7 @@ define([
                         downloadedRequests += result.downloadedRequests;
                         responseSize += result.responseSize;
                         if (responseSize > 0)
-                            skritter.modals.set('.modal-title-right', 'Downloading (' + skritter.fn.bytesToSize(responseSize) + ')');
+                            skritter.modals.set('.modal-title-right', '~' + skritter.fn.bytesToSize(responseSize));
                         if (result.totalRequests > 10 && result.runningRequests === 0)
                             skritter.modals.progress((downloadedRequests / result.totalRequests) * 100);
                     });
