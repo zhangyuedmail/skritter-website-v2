@@ -4,6 +4,7 @@ docs/
 files/
 nbproject/
 node_modules/
+scripts/
 
 # Files #
 *.DS_Store

@@ -41,12 +41,19 @@ body {
 }
 
 
+/*** HOME: IN ***/
+
+
+/*** HOME: OUT ***/
+#home-view.logged-out #reviews { text-align: center; }
+
+
 /*** MODALS ***/
 #modals-container .modal { overflow-y: hidden; }
 #modals-container .vertical-centered {
     position: fixed;
     outline: 0;
-    top: 20% !important;
+    top: 15% !important;
 }
 #modals-container .modal-title-right {
     float: right;

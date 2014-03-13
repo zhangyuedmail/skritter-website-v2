@@ -123,6 +123,9 @@ define([
                     skritter.modals.show('default', function() {
                         skritter.user.data.loadAll(callback);
                     }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
+                },
+                function(callback) {
+                    skritter.user.data.sync(callback, false);
                 }
             ], function() {
                 skritter.modals.hide();

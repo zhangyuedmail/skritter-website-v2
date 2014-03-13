@@ -3,14 +3,12 @@
  * @submodule Models
  * @param Data
  * @param Settings
- * @param Sync
  * @author Joshua McFarland
  */
 define([
     'models/user/Data',
-    'models/user/Settings',
-    'models/user/Sync'
-], function(Data, Settings, Sync) {
+    'models/user/Settings'
+], function(Data, Settings) {
     /**
      * @method User
      */
@@ -25,7 +23,7 @@ define([
             //loads models for authenticated active user
             if (localStorage.getItem('active')) {
                 var userId = localStorage.getItem('active');
-                this.sync = new Sync(JSON.parse(localStorage.getItem(userId + '-sync')));
+                this.data.set(JSON.parse(localStorage.getItem(userId + '-data')), {silent: true});
                 this.set(JSON.parse(localStorage.getItem(userId)));
                 this.settings.set(JSON.parse(localStorage.getItem(userId + '-settings')));
                 skritter.api.set('token', this.get('access_token'));
@@ -105,7 +103,7 @@ define([
             skritter.storage.destroy(function() {
                 localStorage.removeItem('active');
                 localStorage.removeItem(id);
-                localStorage.removeItem(id + '-sync');
+                localStorage.removeItem(id + '-data');
                 document.location.reload(true);
             });
         }

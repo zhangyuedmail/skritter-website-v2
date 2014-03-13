@@ -29,6 +29,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            Data.syncing = false;
             this.decomps = new Decomps();
             this.items = new Items();
             this.reviews = new Reviews();
@@ -37,6 +38,20 @@ define([
             this.strokes = new Strokes();
             this.vocablists = new VocabLists();
             this.vocabs = new Vocabs();
+            this.on('change', this.cache);
+        },
+        /**
+         * @property {Object} defaults
+         */
+        defaults: {
+            lastSync: 0
+        },
+        /**
+         * @method cache
+         * @param {Object} event
+         */
+        cache: function(event) {
+            localStorage.setItem(skritter.user.id + '-data', JSON.stringify(event.toJSON()));
         },
         /**
          * @method clear
@@ -51,11 +66,12 @@ define([
             this.vocabs.reset();
         },
         /**
-         * @method fetch
+         * @method fetchItems
          * @param {Number} offset
-         * @param {Function} callback
+         * @param {Function} callback1
+         * @param {Function} callback2
          */
-        fetch: function(offset, callback) {
+        fetchItems: function(offset, callback1, callback2) {
             async.waterfall([
                 function(callback) {
                     skritter.api.requestBatch([{
@@ -80,6 +96,8 @@ define([
                     var next = function() {
                         skritter.api.getBatch(batch.id, function(result) {
                             if (result) {
+                                if (typeof callback2 === 'function')
+                                    callback2(result);
                                 async.series([
                                     function(callback) {
                                         skritter.user.data.decomps.insert(result.Decomps, callback);
@@ -110,9 +128,17 @@ define([
                     next();
                 }
             ], function() {
-                console.log('SYNC COMPLETE!!!');
-                if (typeof callback === 'function')
-                    callback();
+                if (typeof callback1 === 'function')
+                    callback1();
+            });
+        },
+        /**
+         * @method fetchSRSConfigs
+         * @param {Function} callback
+         */
+        fetchSRSConfigs: function(callback) {
+            skritter.api.getSRSConfigs(function(srsconfigs) {
+                skritter.user.data.srsconfigs.insert(srsconfigs, callback);
             });
         },
         /**
@@ -147,6 +173,53 @@ define([
                     self.vocabs.loadAll(callback);
                 }
             ], callback);
+        },
+        /**
+         * @method sync
+         * @param {Function} callback
+         * @param {Boolean} showModal
+         */
+        sync: function(callback, showModal) {
+            var self = this;
+            var downloadedRequests = 0;
+            var lastSync = this.get('lastSync');
+            var responseSize = 0;
+            Data.syncing = true;
+            console.log('SYNCING FROM', (lastSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastSync * 1000).format('YYYY-MM-DD H:mm:ss'));
+            if (showModal || lastSync === 0) {
+                skritter.modals.show('download')
+                        .set('.modal-title', lastSync === 0 ? 'INITIAL SYNC' : 'SYNC')
+                        .set('.modal-title-right', 'Downloading')
+                        .progress(100)
+                        .set('.modal-footer', false);
+            } else {
+                callback();
+            }
+            async.series([
+                //downloads all of the changed items and related data since last sync
+                function(callback) {
+                    self.fetchItems(lastSync, callback, function(result) {
+                        downloadedRequests += result.downloadedRequests;
+                        responseSize += result.responseSize;
+                        if (responseSize > 0)
+                            skritter.modals.set('.modal-title-right', 'Downloading (' + skritter.fn.bytesToSize(responseSize) + ')');
+                        if (result.totalRequests > 10 && result.runningRequests === 0)
+                            skritter.modals.progress((downloadedRequests / result.totalRequests) * 100);
+                    });
+                },
+                //downloads the latest configs for more accurate scheduling
+                function(callback) {
+                    self.fetchSRSConfigs(callback);
+                }
+            ], function() {
+                console.log('FINISHED SYNCING AT', moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD H:mm:ss'));
+                if (showModal || lastSync === 0) {
+                    skritter.modals.hide();
+                    callback();
+                }
+                self.set('lastSync', skritter.fn.getUnixTime());
+                Data.syncing = false;
+            });
         },
         /**
          * @method total

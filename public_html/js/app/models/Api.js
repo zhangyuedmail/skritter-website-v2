@@ -84,7 +84,6 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
-                    console.log(data);
                     callback(data);
                 });
                 promise.fail(function(error) {
@@ -249,6 +248,32 @@ define(function() {
                     } else {
                         callback(error);
                     }
+                });
+            }
+            request();
+        },
+        /**
+         * @method getSRSConfigs
+         * @param {Function} callback
+         */
+        getSRSConfigs: function(callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'srsconfigs',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token')
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.SRSConfigs);
+                });
+                promise.fail(function(error) {
+                    callback(error);
                 });
             }
             request();
