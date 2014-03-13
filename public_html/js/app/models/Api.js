@@ -326,7 +326,6 @@ define(function() {
                     data: JSON.stringify(settings)
                 });
                 promise.done(function(data) {
-                    console.log(data);
                     if (typeof callback === 'function')
                         callback(data);
                 });
