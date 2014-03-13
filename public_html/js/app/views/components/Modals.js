@@ -29,6 +29,10 @@ define([
             });
         },
         /**
+         * @property {DOMElement} el
+         */
+        el: $('#modals-container'),
+        /**
          * @method render
          * @returns {Backbone.View}
          */

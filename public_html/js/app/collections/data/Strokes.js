@@ -5,10 +5,10 @@
  * @author Joshua McFarland
  */
 define([
-    'models/study/Stroke'
+    'models/data/Stroke'
 ], function(Stroke) {
     /**
-     * @class Strokes
+     * @class DataStrokes
      */
     var Strokes = Backbone.Collection.extend({
         /**
@@ -30,7 +30,30 @@ define([
         /**
          * @property {Stroke} model
          */
-        model: Stroke
+        model: Stroke,
+        /**
+         * @method insert
+         * @param {Array} strokes
+         * @param {Function} callback
+         */
+        insert: function(strokes, callback) {
+            var self = this;
+            skritter.storage.put('strokes', strokes, function() {
+                //self.add(strokes, {merge: true, silent: true});
+                callback();
+            });
+        },
+        /**
+         * @method loadAll
+         * @param {Function} callback
+         */
+        loadAll: function(callback) {
+            var self = this;
+            skritter.storage.getAll('strokes', function(strokes) {
+                self.add(strokes, {merge: true, silent: true});
+                callback();
+            });
+        }
     });
 
     return Strokes;

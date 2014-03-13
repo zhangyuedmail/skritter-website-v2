@@ -2,17 +2,15 @@
  * @module Skritter
  * @submodule Models
  * @param Data
- * @param Scheduler
  * @param Settings
  * @param Sync
  * @author Joshua McFarland
  */
 define([
     'models/user/Data',
-    'models/user/Scheduler',
     'models/user/Settings',
     'models/user/Sync'
-], function(Data, Scheduler, Settings, Sync) {
+], function(Data, Settings, Sync) {
     /**
      * @method User
      */
@@ -27,7 +25,6 @@ define([
             //loads models for authenticated active user
             if (localStorage.getItem('active')) {
                 var userId = localStorage.getItem('active');
-                this.scheduler = new Scheduler();
                 this.sync = new Sync(JSON.parse(localStorage.getItem(userId + '-sync')));
                 this.set(JSON.parse(localStorage.getItem(userId)));
                 this.settings.set(JSON.parse(localStorage.getItem(userId + '-settings')));
@@ -100,15 +97,15 @@ define([
          * @method logout
          */
         logout: function() {
-            var self = this;
+            var id = this.id;
             skritter.modals.show()
                     .set('.modal-header', false)
                     .set('.modal-body', 'LOGGING OUT', 'text-center')
                     .set('.modal-footer', false);
-            skritter.storage.deleteDatabase(function() {
+            skritter.storage.destroy(function() {
                 localStorage.removeItem('active');
-                localStorage.removeItem(self.id);
-                localStorage.removeItem(self.id + '-sync');
+                localStorage.removeItem(id);
+                localStorage.removeItem(id + '-sync');
                 document.location.reload(true);
             });
         }

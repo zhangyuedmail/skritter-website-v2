@@ -1,13 +1,9 @@
 # Directories #
 build/
-config/
 docs/
 files/
-log/
 nbproject/
 node_modules/
-public_html/media/audio/
-scripts/
 
 # Files #
 *.DS_Store

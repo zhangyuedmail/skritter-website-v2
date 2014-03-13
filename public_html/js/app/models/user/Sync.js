@@ -12,7 +12,6 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
-            Sync.syncing = false;
             //stores user sync to localStorage when they are changed
             this.on('change', this.cache);
         },
@@ -30,76 +29,68 @@ define(function() {
             localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(event.toJSON()));
         },
         /**
-         * Checks whether the user has synced before. This will generally be used to determine when to
-         * start the initial download as opposed to background syncing.
-         * 
-         * @method isFirst
-         * @returns {Boolean}
-         */
-        isFirst: function() {
-            if (this.get('last'))
-                return false;
-            return true;
-        },
-        /**
-         * @method isSyncing
-         * @returns {Boolean}
-         */
-        isSyncing: function() {
-            return Sync.syncing;
-        },
-        /**
-         * @method start
+         * @method fetch
+         * @param {Number} offset
          * @param {Function} callback
-         * @param {Boolean} showModal
          */
-        start: function(callback, showModal) {
-            var self = this;
-            var offset = this.get('last');
-            var downloadedRequests = 0;
-            var responseSize = 0;
-            Sync.syncing = true;
-            log('SYNCING FROM', (offset === 0) ? 'THE BEGINNING OF TIME' : moment(offset * 1000).format('YYYY-MM-DD H:mm:ss'));
-            if (showModal)
-                skritter.modals.show('download')
-                        .set('.modal-title', 'SYNC')
-                        .set('.modal-title-right', 'Downloading')
-                        .progress(100)
-                        .set('.modal-footer', false);
-            async.series([
-                //downloads all of the changed data since the last sync
+        fetch: function(offset, callback) {
+            async.waterfall([
                 function(callback) {
-                    skritter.user.data.fetchStudyData(offset, true, callback, function(result) {
-                        downloadedRequests += result.downloadedRequests;
-                        responseSize += result.responseSize;
-                        if (responseSize > 0)
-                            skritter.modals.set('.modal-title-right', 'Downloading (' + skritter.fn.bytesToSize(responseSize) + ')');
-                        if (result.totalRequests > 10 && result.runningRequests === 0)
-                            skritter.modals.progress((downloadedRequests / result.totalRequests) * 100);
+                    skritter.api.requestBatch([{
+                            path: 'api/v' + skritter.api.get('version') + '/items',
+                            method: 'GET',
+                            params: {
+                                sort: 'changed',
+                                offset: offset,
+                                include_vocabs: 'true',
+                                include_strokes: 'true',
+                                include_sentences: 'true',
+                                include_heisigs: 'true',
+                                include_top_mnemonics: 'true',
+                                include_decomps: 'true'
+                            },
+                            spawner: true
+                        }], function(batch) {
+                        callback(null, batch);
                     });
                 },
-                //downloads vocablists if this is the users first sync
-                function(callback) {
-                    if (offset === 0) {
-                        skritter.modals
-                                .progress(100)
-                                .set('.modal-title-right', 'Downloading Lists');
-                        skritter.user.data.fetchVocabLists(callback);
-                    } else {
-                        callback();
-                    }
-                },
-                //posts reviews to the server if there are any
-                function(callback) {
-                    callback();
+                function(batch, callback) {
+                    var next = function() {
+                        skritter.api.getBatch(batch.id, function(result) {
+                            if (result) {
+                                async.series([
+                                    function(callback) {
+                                        skritter.user.data.decomps.insert(result.Decomps, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.user.data.items.insert(result.Items, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.user.data.srsconfigs.insert(result.SRSConfigs, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.user.data.sentences.insert(result.Sentences, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.user.data.strokes.insert(result.Strokes, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.user.data.vocabs.insert(result.Vocabs, callback);
+                                    }
+                                ], function() {
+                                    window.setTimeout(next, 500);
+                                });
+                            } else {
+                                callback();
+                            }
+                        });
+                    };
+                    next();
                 }
             ], function() {
-                log('FINISHED SYNCING AT', moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD H:mm:ss'));
-                self.set('last', skritter.fn.getUnixTime());
+                console.log('SYNC COMPLETE!!!');
                 if (typeof callback === 'function')
                     callback();
-                skritter.modals.hide();
-                Sync.syncing = false;
             });
         }
     });

@@ -4,13 +4,12 @@
  * @param Assets
  * @param Functions
  * @param IndexedDBAdapter
- * @param Log
  * @param Modals
  * @param Params
  * @param Router
  * @param Settings
- * @param SQLiteAdapter
  * @param User
+ * @param WebSQLAdapter
  * @author Joshua McFarland
  */
 define([
@@ -18,14 +17,13 @@ define([
     'models/Assets',
     'Functions',
     'models/storage/IndexedDBAdapter',
-    'models/Log',
     'views/components/Modals',
-    'collections/study/Params',
+    'collections/data/Params',
     'Router',
     'models/Settings',
-    'models/storage/SQLiteAdapter',
-    'models/User'
-], function(Api, Assets, Functions, IndexedDBAdapter, Log, Modals, Params, Router, Settings, SQLiteAdapter, User) {
+    'models/User',
+    'models/storage/WebSQLAdapter'
+], function(Api, Assets, Functions, IndexedDBAdapter, Modals, Params, Router, Settings, User, WebSQLAdapter) {
     /**
      * Reserves the global skritter namespace if it doesn't already exist.
      * @param skritter
@@ -41,7 +39,6 @@ define([
             async.apply(loadApi),
             async.apply(loadAssets),
             async.apply(loadFunctions),
-            async.apply(loadLog),
             async.apply(loadModals),
             async.apply(loadParams),
             async.apply(loadSettings),
@@ -76,19 +73,11 @@ define([
         callback();
     };
     /**
-     * @method loadLog
-     * @param {Function} callback
-     */
-    var loadLog = function(callback) {
-        window.log = new Log().console;
-        callback();
-    };
-    /**
      * @method loadModals
      * @param {Function} callback
      */
     var loadModals = function(callback) {
-        skritter.modals = new Modals({el: $('#modals-container')}).render();
+        skritter.modals = new Modals().render();
         callback();
     };
     /**
@@ -115,7 +104,7 @@ define([
         if (window.indexedDB) {
             skritter.storage = new IndexedDBAdapter();
         } else {
-            skritter.storage = new SQLiteAdapter();
+            skritter.storage = new WebSQLAdapter();
         }
         callback();
     };
@@ -128,30 +117,12 @@ define([
         if (skritter.user.isLoggedIn()) {
             async.series([
                 function(callback) {
-                    skritter.storage.openDatabase(skritter.user.get('user_id'), callback);
+                    skritter.storage.open(skritter.user.get('user_id'), callback);
                 },
                 function(callback) {
-                    if (skritter.user.sync.isFirst()) {
-                        skritter.user.sync.start(callback, true);
-                    } else {
-                        skritter.user.sync.start();
-                        callback();
-                    }
-                },
-                function(callback) {
-                    skritter.modals.show('default', callback)
-                            .set('.modal-header', false)
-                            .set('.modal-body', 'LOADING', 'text-center')
-                            .set('.modal-footer', false);
-                },
-                function(callback) {
-                    skritter.user.scheduler.load(callback);
-                },
-                function(callback) {
-                    skritter.user.data.reviews.loadAll(callback);
-                },
-                function(callback) {
-                    skritter.user.data.srsconfigs.loadAll(callback);
+                    skritter.modals.show('default', function() {
+                        skritter.user.data.loadAll(callback);
+                    }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
                 }
             ], function() {
                 skritter.modals.hide();

@@ -12,8 +12,7 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
-            Assets.audioPlayer = new Audio();
-            Assets.strokes = {};
+            Assets.audio = new Audio();
         },
         /**
          * @method stroke

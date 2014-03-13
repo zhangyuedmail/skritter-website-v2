@@ -235,8 +235,7 @@ module.exports = function(grunt) {
                     'cd build/',
                     'cordova create cordova com.inkren.skritter Skritter',
                     'cd cordova/',
-                    'cordova platforms add android',
-                    'cordova plugins add https://github.com/mcfarljw/Cordova-SQLitePlugin.git'
+                    'cordova platforms add android'
                 ].join('&&'),
                 options: {
                     stdout: true

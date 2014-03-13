@@ -10,7 +10,7 @@ define([
     'models/prompts/Stroke'
 ], function(PromptCharacter, PromptStroke) {
     /**
-     * @class Stroke
+     * @class DataStroke
      */
     var Stroke = Backbone.Model.extend({
         /**
@@ -22,7 +22,7 @@ define([
          * @param {Function} callback
          */
         cache: function(callback) {
-            skritter.storage.setItems('stroke', this.toJSON(), function() {
+            skritter.storage.put('stroke', this.toJSON(), function() {
                 if (typeof callback === 'function')
                     callback();
             });

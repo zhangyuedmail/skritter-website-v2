@@ -5,20 +5,24 @@
  */
 define(function() {
     /**
-     * @class VocabList
+     * @class DataSRSConfigs
      */
-    var VocabList = Backbone.Model.extend({
+    var SRSConfigs = Backbone.Model.extend({
+        /**
+         * @property {String} idAttribute
+         */
+        idAttribute: 'part',
         /**
          * @method cache
          * @param {Function} callback
          */
         cache: function(callback) {
-            skritter.storage.setItems('vocablists', this.toJSON(), function() {
+            skritter.storage.put('srsconfigs', this.toJSON(), function() {
                 if (typeof callback === 'function')
                     callback();
             });
         }
     });
-    
-    return VocabList;
+
+    return SRSConfigs;
 });

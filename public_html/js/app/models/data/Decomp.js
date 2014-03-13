@@ -5,27 +5,24 @@
  */
 define(function() {
     /**
-     * @class Sentence
+     * @class DataDecomp
      */
-    var Sentence = Backbone.Model.extend({
+    var Decomp = Backbone.Model.extend({
+	/**
+         * @property {String} idAttribute
+         */
+        idAttribute: 'writing',
         /**
          * @method cache
          * @param {Function} callback
          */
         cache: function(callback) {
-            skritter.storage.setItems('sentence', this.toJSON(), function() {
+            skritter.storage.put('decomps', this.toJSON(), function() {
                 if (typeof callback === 'function')
                     callback();
             });
-        },
-        /**
-         * @method reading
-         * @returns {String}
-         */
-        reading: function() {
-            return skritter.fn.pinyin.toTone(this.get('reading'));
         }
     });
-
-    return Sentence;
+    
+    return Decomp;
 });

@@ -5,7 +5,7 @@
  */
 define(function() {
     /**
-     * @class Param
+     * @class DataParam
      */
     var Param = Backbone.Model.extend({
         /**

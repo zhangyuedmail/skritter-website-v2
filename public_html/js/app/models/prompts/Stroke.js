@@ -50,8 +50,6 @@ define(function() {
             return cornersLength;
         },
         /**
-         * Returns an inflated version of the data based on the canvas size.
-         * 
          * @method inflatedData
          * @return {Object}
          */
@@ -99,8 +97,6 @@ define(function() {
             return inflatedParams;
         },
         /**
-         * Returns the sprite transformed to fit the stroke data and canvas size.
-         * 
          * @method inflatedSprite
          * @param {String} color
          * @return {CreateJS.Shape}

@@ -5,24 +5,20 @@
  */
 define(function() {
     /**
-     * @class SRSConfigs
+     * @class DataItem
      */
-    var SRSConfigs = Backbone.Model.extend({
-        /**
-         * @property {String} idAttribute
-         */
-        idAttribute: 'part',
+    var Item = Backbone.Model.extend({
         /**
          * @method cache
          * @param {Function} callback
          */
         cache: function(callback) {
-            skritter.storage.setItems('srsconfigs', this.toJSON(), function() {
+            skritter.storage.put('items', this.toJSON(), function() {
                 if (typeof callback === 'function')
                     callback();
             });
         }
     });
 
-    return SRSConfigs;
+    return Item;
 });

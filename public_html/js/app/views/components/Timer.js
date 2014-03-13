@@ -5,8 +5,6 @@
  */
 define(function() {
     /**
-     * Used to start, stop and calculate accurate durations of time.     
-     * 
      * @class Stopwatch
      * @param {Number} offset
      */

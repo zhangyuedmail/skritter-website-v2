@@ -1,29 +1,27 @@
 /**
  * @module Skritter
  * @submodule Collections
- * @param Decomp
+ * @param Param
  * @author Joshua McFarland
  */
 define([
-    'models/study/Decomp'
-], function(Decomp) {
+    'models/data/Param'
+], function(Param) {
     /**
-     * @class Decomps
+     * @class DataParams
      */
-    var Decomps = Backbone.Collection.extend({
+    var Params = Backbone.Collection.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(decomp) {
-                decomp.cache();
-            });
+            this.add(skritter.fn.params);
         },
         /**
          * @property {Backbone.Model} model
          */
-        model: Decomp
+        model: Param
     });
 
-    return Decomps;
+    return Params;
 });

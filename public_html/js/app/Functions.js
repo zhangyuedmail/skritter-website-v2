@@ -151,6 +151,20 @@ define([
         return milliseconds ? unixtime : Math.round(unixtime / 1000);
     };
     /**
+     * @method pad
+     * @param {String} text The text requiring padding
+     * @param {String} value The value to be applied as padding
+     * @param {Number} size The number of spaces of padding to be applied
+     * @return {String}
+     */
+    var pad = function(text, value, size) {
+        value = '' + value;
+        var string = text + '';
+        while (string.length < size)
+            string = value + '' + string;
+        return string;
+    };
+    /**
      * @property {Object} params
      */
     var params = ParamMap;
@@ -186,6 +200,7 @@ define([
         isKana: isKana,
         isLocal: isLocal,
         isNumber: isNumber,
+        pad: pad,
         params: params,
         pinyin: pinyin,
         recognizer: recognizer,
