@@ -15,8 +15,9 @@ define([
          * @method initialize
          */
         initialize: function() {
-            Prompt.gradingButtons = new GradingButtons();
             this.review = null;
+            Prompt.gradingButtons = new GradingButtons();
+            this.listenTo(skritter.settings, 'resize', this.resize);
         },
         /**
          * @method render
@@ -24,7 +25,14 @@ define([
          */
         render: function() {
             Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
+            this.resize();
             return this;
+        },
+        /**
+         * @method resize
+         */
+        resize: function() {
+            //TODO: add general resizing logic
         },
         /**
          * @method set

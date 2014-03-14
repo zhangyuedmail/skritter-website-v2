@@ -27,6 +27,13 @@ define([
             this.$el.html(templateDefn);
             Prompt.prototype.render.call(this);
             return this;
+        },
+        /**
+         * @method resize
+         */
+        resize: function() {
+            Prompt.prototype.resize.call(this);
+            //TODO: add prompt specific resizing logic
         }
     });
 

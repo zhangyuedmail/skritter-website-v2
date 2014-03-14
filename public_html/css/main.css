@@ -20,7 +20,8 @@ body {
     padding-top: 45px;
 }
 #skritter-container { height: 100%; }
-#content-container { height: 100%; }
+#content-container { }
+#content-container.no-scroll { height: 100%; }
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-block {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
@@ -39,7 +40,7 @@ body {
 /*** FOOTER ***/
 #footer {
     width: 100%;
-    margin-top: 25px;
+    margin-top: 10px;
     height: 45px;
     background-color: #222222;
 }
@@ -115,4 +116,19 @@ body {
 .navbar .navbar-text a {
     padding: 10px 15px;
     text-decoration: none;
+}
+
+
+/*** PROMPT ***/
+
+
+/*** PROMPT: INFO CONTAINER ***/
+#info-container {
+    background-color: #ffffff;
+}
+
+
+/*** PROMPT: INPUT CONTAINER ***/
+#input-container {
+    background-color: #ffffff;
 }

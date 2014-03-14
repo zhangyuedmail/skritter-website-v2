@@ -12,6 +12,10 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
+            $(window).resize(_.bind(function(event) {
+                this.trigger('resize', this);
+                event.preventDefault();
+            }, this));
         },
         /**
          * @property {Object} defaults
@@ -22,7 +26,8 @@ define(function() {
                 2: '#fff79a',
                 3: '#82ca9d',
                 4: '#8493ca'
-            }
+            },
+            maxCanvasSize: 600
         },
         /**
          * @method appHeight
@@ -37,6 +42,15 @@ define(function() {
          */
         appWidth: function() {
             return $(window).width();
+        },
+        /**
+         * @method canvasSize
+         * @returns {Number}
+         */
+        canvasSize: function() {
+            if (this.contentWidth() > this.get('maxCanvasSize'))
+                return this.get('maxCanvasSize');
+            return this.contentWidth();
         },
         /**
          * @method contentHeight
