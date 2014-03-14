@@ -49,7 +49,7 @@ define([
                     break;
             }
             this.prompt.set(item.createReview());
-            this.prompt.setElement(this.$('.prompt-container'));
+            this.prompt.setElement(this.$('#prompt-container'));
             this.prompt.render();
         },
         nextPrompt: function() {
