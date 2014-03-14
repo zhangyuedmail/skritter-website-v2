@@ -17,6 +17,7 @@ define([
         initialize: function() {
             Items.daysInSecond = 1 / 86400;
             Items.sortStarted = 0;
+            Items.schedule = [];
             this.on('change', function(item) {
                 item.cache();
             });
@@ -31,13 +32,13 @@ define([
          * @returns {undefined}
          */
         comparator: function(item) {
-            var held = item.get('held');
+            var held = item.attributes.held;
             if (held && held > Items.sortStarted) {
                 item.readiness = 0.5 + (Items.sortStarted / item.held) * 0.1;
                 return -item.readiness;
             }
-            var last = item.get('last');
-            var next = item.get('next');
+            var last = item.attributes.last;
+            var next = item.attributes.next;
             if (!last && (next - Items.sortStarted) > 600) {
                 item.readiness = 0.2;
                 return -item.readiness;
@@ -69,6 +70,17 @@ define([
                 self.add(items, {merge: true, silent: true, sort: false});
                 callback();
             });
+        },
+        loadSchedule: function(callback) {
+            
+            
+            
+        },
+        /**
+         * @method next
+         * @returns {Backbone.Model}
+         */
+        next: function() {
         },
         /**
          * @method sort

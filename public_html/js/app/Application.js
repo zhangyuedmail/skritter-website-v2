@@ -121,7 +121,7 @@ define([
                 },
                 function(callback) {
                     skritter.modals.show('default', function() {
-                        skritter.user.data.items.loadAll(callback);
+                        skritter.user.data.loadAll(callback);
                     }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
                 },
                 function(callback) {

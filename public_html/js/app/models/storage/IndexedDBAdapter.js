@@ -60,8 +60,9 @@ define([
          * @method getAll
          * @param {String} tableName
          * @param {Function} callback
+         * @param {Array} columns
          */
-        getAll: function(tableName, callback) {
+        getAll: function(tableName, callback, columns) {
             var items = [];
             var transaction = IndexedDBAdapter.database.transaction(tableName, 'readonly');
             transaction.oncomplete = function() {
@@ -73,7 +74,14 @@ define([
             transaction.objectStore(tableName).openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    items.push(cursor.value);
+                    if (columns) {
+                        var value = {};
+                        for (var i = 0, length = columns.length; i < length; i++)
+                            value[columns[i]] = cursor.value[columns[i]] ? cursor.value[columns[i]] : undefined;
+                        items.push(value);
+                    } else {
+                        items.push(cursor.value);
+                    }
                     cursor.continue();
                 }
             };
