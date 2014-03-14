@@ -43,15 +43,17 @@ define([
                 transaction.oncomplete = function() {
                     callback(items);
                 };
+                var push = function(event) {
+                    items.push(event.target.result);
+                };
                 transaction.onerror = function(event) {
                     console.error(event);
                 };
-                var push = function(event) {
-                    items.push(event.result.value);
-                };
                 var objectStore = transaction.objectStore(tableName);
-                for (var i = 0, length = ids.length; i < length; i++) 
-                    objectStore.get(ids[i]).onsuccess(push);
+                for (var i = 0, length = ids.length; i < length; i++) {
+                    var request = objectStore.get(ids[i]);
+                    request.onsuccess = push;
+                }
             } else {
                 callback(items);
             }

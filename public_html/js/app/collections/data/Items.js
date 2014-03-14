@@ -47,9 +47,13 @@ define([
         },
         /**
          * @method next
+         * @param {Function} callback
          * @returns {Backbone.Model}
          */
-        next: function() {
+        next: function(callback) {
+            skritter.user.data.loadItem(this.sort()[0].id, function(item) {
+                callback(item);
+            });
         },
         /**
          * @method sort
