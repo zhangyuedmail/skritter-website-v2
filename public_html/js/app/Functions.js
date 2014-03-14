@@ -93,12 +93,9 @@ define([
         return (bytes / Math.pow(1024, value)).toFixed(2) + ' ' + sizes[value];
     };
     /**
-     * @method daysInSecond
-     * @returns {Number}
+     * @property {Number} daysInSecond
      */
-    var daysInSecond = function() {
-        return 1 / 86400;
-    };
+    var daysInSecond = 1 / 86400;
     /**
      * @method distance
      * @param {Point} point1
