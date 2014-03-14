@@ -24,18 +24,6 @@ define([
          */
         model: Sentence,
         /**
-         * @method insert
-         * @param {Array} sentences
-         * @param {Function} callback
-         */
-        insert: function(sentences, callback) {
-            var self = this;
-            skritter.storage.put('sentences', sentences, function() {
-                //self.add(sentences, {merge: true, silent: true});
-                callback();
-            });
-        },
-        /**
          * @method loadAll
          * @param {Function} callback
          */

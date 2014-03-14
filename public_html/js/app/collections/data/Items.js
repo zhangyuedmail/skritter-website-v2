@@ -60,18 +60,6 @@ define([
             return -item.readiness;
         },
         /**
-         * @method insert
-         * @param {Array} items
-         * @param {Function} callback
-         */
-        insert: function(items, callback) {
-            var self = this;
-            skritter.storage.put('items', items, function() {
-                self.add(items, {merge: true, silent: true, sort: false});
-                callback();
-            });
-        },
-        /**
          * @method loadAll
          * @param {Function} callback
          */

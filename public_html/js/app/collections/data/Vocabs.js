@@ -24,18 +24,6 @@ define([
          */
         model: Vocab,
         /**
-         * @method insert
-         * @param {Array} vocabs
-         * @param {Function} callback
-         */
-        insert: function(vocabs, callback) {
-            var self = this;
-            skritter.storage.put('vocabs', vocabs, function() {
-                self.add(vocabs, {merge: true, silent: true, sort: false});
-                callback();
-            });
-        },
-        /**
          * @method loadAll
          * @param {Function} callback
          */

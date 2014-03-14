@@ -24,18 +24,6 @@ define([
          */
         model: Decomp,
         /**
-         * @method insert
-         * @param {Array} decomps
-         * @param {Function} callback
-         */
-        insert: function(decomps, callback) {
-            var self = this;
-            skritter.storage.put('decomps', decomps, function() {
-                //self.add(decomps, {merge: true, silent: true});
-                callback();
-            });
-        },
-        /**
          * @method loadAll
          * @param {Function} callback
          */

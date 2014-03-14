@@ -100,22 +100,22 @@ define([
                                     callback2(result);
                                 async.series([
                                     function(callback) {
-                                        skritter.user.data.decomps.insert(result.Decomps, callback);
+                                        skritter.storage.put('decomps', result.Decomps, callback);
                                     },
                                     function(callback) {
-                                        skritter.user.data.items.insert(result.Items, callback);
+                                        skritter.storage.put('items', result.Items, function() {
+                                            skritter.user.data.items.add(result.Items, {merge: true, silent: true, sort: false});
+                                            callback();
+                                        });
                                     },
                                     function(callback) {
-                                        skritter.user.data.srsconfigs.insert(result.SRSConfigs, callback);
+                                        skritter.storage.put('sentences', result.Sentences, callback);
                                     },
                                     function(callback) {
-                                        skritter.user.data.sentences.insert(result.Sentences, callback);
+                                        skritter.storage.put('strokes', result.Strokes, callback);
                                     },
                                     function(callback) {
-                                        skritter.user.data.strokes.insert(result.Strokes, callback);
-                                    },
-                                    function(callback) {
-                                        skritter.user.data.vocabs.insert(result.Vocabs, callback);
+                                        skritter.storage.put('vocabs', result.Vocabs, callback);
                                     }
                                 ], function() {
                                     window.setTimeout(next, 500);
@@ -138,7 +138,7 @@ define([
          */
         fetchSRSConfigs: function(callback) {
             skritter.api.getSRSConfigs(function(srsconfigs) {
-                skritter.user.data.srsconfigs.insert(srsconfigs, callback);
+                skritter.storage.put('srsconfigs', srsconfigs, callback);
             });
         },
         /**
@@ -193,7 +193,8 @@ define([
                         .progress(100)
                         .set('.modal-footer', false);
             } else {
-                callback();
+                if (typeof callback === 'function')
+                    callback();
             }
             async.series([
                 //downloads all of the changed items and related data since last sync
@@ -215,7 +216,8 @@ define([
                 console.log('FINISHED SYNCING AT', moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD H:mm:ss'));
                 if (showModal || lastSync === 0) {
                     skritter.modals.hide();
-                    callback();
+                    if (typeof callback === 'function')
+                        callback();
                 }
                 self.set('lastSync', skritter.fn.getUnixTime());
                 Data.syncing = false;
