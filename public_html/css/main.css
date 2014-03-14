@@ -10,6 +10,7 @@
 
 
 /*** GENERAL ***/
+html, body { height: 100%; }
 body {
     -webkit-touch-callout: none;
     -webkit-text-size-adjust: none;
@@ -18,8 +19,10 @@ body {
     background-repeat: repeat;
     padding-top: 45px;
 }
+#skritter-container { height: 100%; }
+#content-container { height: 100%; }
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
-.content {
+.content-block {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     background-color: #ffffff;
@@ -30,6 +33,7 @@ body {
 }
 .cursor { cursor: pointer; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
+.view { height: 100%; }
 
 
 /*** FOOTER ***/
@@ -39,6 +43,10 @@ body {
     height: 45px;
     background-color: #222222;
 }
+
+
+/*** GRADING BUTTONS ***/
+#grading-buttons { display: none; }
 
 
 /*** HOME: IN ***/

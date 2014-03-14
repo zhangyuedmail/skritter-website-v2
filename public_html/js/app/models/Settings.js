@@ -17,8 +17,40 @@ define(function() {
          * @property {Object} defaults
          */
         defaults: {
-            container: $('#skritter-container'),
-            navbar: $('.navbar')
+            gradingColors: {
+                1: '#f7977a',
+                2: '#fff79a',
+                3: '#82ca9d',
+                4: '#8493ca'
+            }
+        },
+        /**
+         * @method appHeight
+         * @returns {Number}
+         */
+        appHeight: function() {
+            return $(window).height();
+        },
+        /**
+         * @method appWidth
+         * @returns {Number}
+         */
+        appWidth: function() {
+            return $(window).width();
+        },
+        /**
+         * @method contentHeight
+         * @returns {Number}
+         */
+        contentHeight: function() {
+            return $('#content-container').height();
+        },
+        /**
+         * @method contentWidth
+         * @returns {Number}
+         */
+        contentWidth: function() {
+            return $('#content-container').width();
         }
     });
     
