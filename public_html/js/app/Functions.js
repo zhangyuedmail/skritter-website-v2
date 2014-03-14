@@ -93,6 +93,13 @@ define([
         return (bytes / Math.pow(1024, value)).toFixed(2) + ' ' + sizes[value];
     };
     /**
+     * @method daysInSecond
+     * @returns {Number}
+     */
+    var daysInSecond = function() {
+        return 1 / 86400;
+    };
+    /**
      * @method distance
      * @param {Point} point1
      * @param {Point} point2
@@ -195,6 +202,7 @@ define([
         bootstrap: bootstrap,
         boundingRectangle: boundingRectangle,
         bytesToSize: bytesToSize,
+        daysInSecond: daysInSecond,
         distance: distance,
         getUnixTime: getUnixTime,
         isKana: isKana,

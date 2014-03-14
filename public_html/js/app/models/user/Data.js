@@ -103,10 +103,7 @@ define([
                                         skritter.storage.put('decomps', result.Decomps, callback);
                                     },
                                     function(callback) {
-                                        skritter.storage.put('items', result.Items, function() {
-                                            skritter.user.data.items.add(result.Items, {merge: true, silent: true, sort: false});
-                                            callback();
-                                        });
+                                        skritter.storage.put('items', result.Items, callback);
                                     },
                                     function(callback) {
                                         skritter.storage.put('sentences', result.Sentences, callback);
