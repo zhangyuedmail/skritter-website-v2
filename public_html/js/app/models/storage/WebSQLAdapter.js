@@ -141,7 +141,7 @@ define([
                         var values = [];
                         for (var b = 0, lengthB = keysColumns.length; b < lengthB; b++) {
                             var value = item[keysColumns[b]];
-                            if (typeof value === undefined) {
+                            if (typeof value === 'undefined') {
                                 values.push('null');
                             } else {
                                 values.push(JSON.stringify(value));
