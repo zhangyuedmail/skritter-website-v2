@@ -22,6 +22,7 @@ define([
          */
         render: function() {
             this.$el.html(templateStudy);
+            skritter.timer.setElement(this.$('#timer')).render();
             return this;
         }
     });

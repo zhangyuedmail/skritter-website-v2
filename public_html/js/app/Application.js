@@ -8,6 +8,7 @@
  * @param Params
  * @param Router
  * @param Settings
+ * @param Timer
  * @param User
  * @param WebSQLAdapter
  * @author Joshua McFarland
@@ -21,9 +22,10 @@ define([
     'collections/data/Params',
     'Router',
     'models/Settings',
+    'views/components/Timer',
     'models/User',
     'models/storage/WebSQLAdapter'
-], function(Api, Assets, Functions, IndexedDBAdapter, Modals, Params, Router, Settings, User, WebSQLAdapter) {
+], function(Api, Assets, Functions, IndexedDBAdapter, Modals, Params, Router, Settings, Timer, User, WebSQLAdapter) {
     /**
      * Reserves the global skritter namespace if it doesn't already exist.
      * @param skritter
@@ -43,6 +45,7 @@ define([
             async.apply(loadParams),
             async.apply(loadSettings),
             async.apply(loadStorage),
+            async.apply(loadTimer),
             async.apply(loadUser)
         ], function() {
             Router.initialize();
@@ -106,6 +109,14 @@ define([
         } else {
             skritter.storage = new WebSQLAdapter();
         }
+        callback();
+    };
+    /**
+     * @method loadTimer
+     * @param {Function} callback
+     */
+    var loadTimer = function(callback) {
+        skritter.timer = new Timer();
         callback();
     };
     /**
