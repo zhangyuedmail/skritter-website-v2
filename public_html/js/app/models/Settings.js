@@ -13,7 +13,9 @@ define(function() {
          */
         initialize: function() {
             $(window).resize(_.bind(function(event) {
-                this.trigger('resize', this);
+                window.setTimeout(_.bind(function() {
+                    this.trigger('resize', this);
+                }, this), 500);
                 event.preventDefault();
             }, this));
         },

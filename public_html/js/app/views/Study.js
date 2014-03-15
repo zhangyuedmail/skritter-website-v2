@@ -11,7 +11,7 @@
 define([
     'require.text!templates/study.html',
     'views/prompts/Defn',
-    'views/prompts/Rune',
+    'views/prompts/Rune'
 ], function(templateStudy, Defn, Rune) {
     /**
      * @class Study
@@ -49,7 +49,7 @@ define([
                     break;
             }
             this.prompt.set(item.createReview());
-            this.prompt.setElement(this.$('#prompt-container'));
+            this.prompt.setElement(this.$('#content-container'));
             this.prompt.render();
         },
         nextPrompt: function() {

@@ -20,7 +20,7 @@ body {
     padding-top: 45px;
 }
 #skritter-container { height: 100%; }
-#content-container { }
+#content-container { position: relative; }
 #content-container.no-scroll { height: 100%; }
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-block {
@@ -35,6 +35,16 @@ body {
 .cursor { cursor: pointer; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { height: 100%; }
+@media (max-width: 767px) {
+    .container.no-scroll {
+        margin: 0;
+        padding: 0;
+    }
+    .container.no-scroll .row {
+        margin: 0;
+        padding: 0;
+    }
+}
 
 
 /*** FOOTER ***/
@@ -109,17 +119,20 @@ body {
 
 
 /*** NAVBAR ***/
-.navbar { font-size: 16px; }
+.navbar { font-size: 18px; }
 .navbar .navbar-text {
     margin: 10px 0;
 }
 .navbar .navbar-text a {
-    padding: 10px 15px;
+    padding: 10px 5px;
     text-decoration: none;
 }
 
 
 /*** PROMPT ***/
+.prompt-container {
+    height: 100%;
+}
 
 
 /*** PROMPT: INFO CONTAINER ***/
@@ -129,6 +142,8 @@ body {
 
 
 /*** PROMPT: INPUT CONTAINER ***/
-#input-container {
+#input-container { 
     background-color: #ffffff;
+    bottom: 0;
+    position: absolute;
 }
