@@ -329,7 +329,6 @@ define([
             ], function() {
                 console.log('FINISHED SYNCING AT', moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD H:mm:ss'));
                 if (showModal || lastSync === 0) {
-                    skritter.modals.hide();
                     if (typeof callback === 'function')
                         callback();
                 }

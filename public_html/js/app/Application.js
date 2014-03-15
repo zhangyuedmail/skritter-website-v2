@@ -131,12 +131,12 @@ define([
                     skritter.storage.open(skritter.user.get('user_id'), callback);
                 },
                 function(callback) {
+                    skritter.user.data.sync(callback, false);
+                },
+                function(callback) {
                     skritter.modals.show('default', function() {
                         skritter.user.data.items.loadSchedule(callback);
                     }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
-                },
-                function(callback) {
-                    skritter.user.data.sync(callback, false);
                 }
             ], function() {
                 skritter.modals.hide();
