@@ -135,14 +135,14 @@ body {
 }
 
 
-/*** PROMPT: INFO CONTAINER ***/
-#info-container {
+/*** PROMPT: TOP CONTAINER ***/
+#top-container {
     background-color: #ffffff;
 }
 
 
-/*** PROMPT: INPUT CONTAINER ***/
-#input-container { 
+/*** PROMPT: BOTTOM CONTAINER ***/
+#bottom-container { 
     background-color: #ffffff;
     bottom: 0;
     position: absolute;

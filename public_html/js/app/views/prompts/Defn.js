@@ -33,10 +33,10 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
-            this.$('#info-container').height(skritter.settings.contentHeight() - skritter.settings.canvasSize() - 2);
-            this.$('#info-container').width(skritter.settings.contentWidth());
-            this.$('#input-container').height(skritter.settings.canvasSize());
-            this.$('#input-container').width(skritter.settings.contentWidth());
+            this.$('#top-container').height(skritter.settings.contentHeight() - skritter.settings.canvasSize() - 2);
+            this.$('#top-container').width(skritter.settings.contentWidth());
+            this.$('#bottom-container').height(skritter.settings.canvasSize());
+            this.$('#bottom-container').width(skritter.settings.contentWidth());
         }
     });
 
