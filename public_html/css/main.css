@@ -132,12 +132,31 @@ body {
 /*** PROMPT ***/
 .prompt-container {
     height: 100%;
+    position: relative;
+}
+
+
+/*** PROMPT: GRADING BUTTONS ***/
+.prompt-container #grading-buttons {
+    bottom: 0;
+    left: 0;
+    position: absolute;
 }
 
 
 /*** PROMPT: TOP CONTAINER ***/
 #top-container {
     background-color: #ffffff;
+    border-bottom: 3px #222222 solid;
+    position: absolute;
+    z-index: 1000;
+}
+#hint-caret {
+    cursor: pointer;
+    font-size: 26px;
+    position: absolute;
+    right: 10px;
+    top: 20px;
 }
 
 
@@ -145,5 +164,17 @@ body {
 #bottom-container { 
     background-color: #ffffff;
     bottom: 0;
+    display: table;
     position: absolute;
+    z-index: 1001;
+}
+#bottom-container .answer {
+    cursor: pointer;
+    display: table-cell;
+    vertical-align: middle;
+}
+#bottom-container .question {
+    cursor: pointer;
+    display: table-cell;
+    vertical-align: middle;
 }

@@ -26,7 +26,40 @@ define([
         render: function() {
             Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
             this.resize();
+            console.log('PROMPT', this.review);
             return this;
+        },
+        /**
+         * @property {Object} events
+         */
+        events: {
+            'click.Prompt .prompt-container #hint-caret': 'toggleHint'
+        },
+        /**
+         * @method toggleHint
+         * @param {Object} event
+         */
+        toggleHint: function(event) {
+            if (this.$('#top-container').hasClass('expanded')) {
+                this.$('#top-container').animate({
+                    height: '65px'
+                }, 500, function() {
+                    $(this).removeClass('expanded');
+                    $(this).css('z-index', '');
+                    $(this).find('#hint-caret').removeClass('fa fa-chevron-up');
+                    $(this).find('#hint-caret').addClass('fa fa-chevron-down');
+                });
+            } else {
+                this.$('#top-container').css('z-index', 1002);
+                this.$('#top-container').animate({
+                    height: '300px'
+                }, 500, function() {
+                    $(this).addClass('expanded');
+                    $(this).find('#hint-caret').removeClass('fa fa-chevron-down');
+                    $(this).find('#hint-caret').addClass('fa fa-chevron-up');
+                });
+            }
+            event.preventDefault();
         },
         /**
          * @method resize

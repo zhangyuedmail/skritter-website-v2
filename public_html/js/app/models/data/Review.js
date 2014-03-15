@@ -47,6 +47,13 @@ define(function() {
             return this.get('position') === actualPosition ? true : false;
         },
         /**
+         * @method item
+         * @returns {Backbone.Model}
+         */
+        item: function() {
+            return skritter.user.data.items.get(this.get('reviews')[0].itemId);
+        },
+        /**
          * @method next
          * @returns {Number}
          */
@@ -84,6 +91,13 @@ define(function() {
                 this.trigger('change:reviews');
             }
             return review;
+        },
+        /**
+         * @method vocab
+         * @returns {Backbone.Model}
+         */
+        vocab: function() {
+            return this.item().vocab();
         }
     });
 
