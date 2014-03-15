@@ -9,5 +9,6 @@
     </author>
     <content src="index-cordova.html" />
     <access origin="*" />
-	<preference name="Fullscreen" value="false" />
+    <preference name="Fullscreen" value="false" />
+    <preference name="Orientation" value="portrait" />
 </widget>
