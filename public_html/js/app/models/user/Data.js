@@ -177,7 +177,6 @@ define([
          * @param {Function} callback
          */
         loadItem: function(itemId, callback) {
-            this.clear();
             var part = itemId.split('-')[4];
             async.waterfall([
                 //intial item

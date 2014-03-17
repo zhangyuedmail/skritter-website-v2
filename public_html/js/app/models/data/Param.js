@@ -31,7 +31,7 @@ define(function() {
          * @returns {Object}
          */
         rectangle: function() {
-            var size = skritter.settings.get('canvasSize');
+            var size = skritter.settings.contentWidth();
             return skritter.fn.boundingRectangle(_.clone(this.get('corners')), size, size, 14);
         }
     });

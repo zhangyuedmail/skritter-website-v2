@@ -43,7 +43,10 @@ define([
             var review = new Review();
             var items = [this].concat(this.containedItems());
             var now = skritter.fn.getUnixTime();
+            var part = this.get('part');
             var wordGroup = now + '_' + this.id;
+            if (part === 'rune' || part === 'tone')
+                review.characters = [];
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
                 review.get('originalItems')[i] = item.toJSON();
@@ -61,8 +64,23 @@ define([
                     previousInterval: item.has('previousInterval') ? item.get('previousInterval') : 0,
                     previousSuccess: item.has('previousSuccess') ? item.get('previousSuccess') : 0
                 };
+                if (review.characters)
+                    if (items.length === 1) {
+                        review.characters.push(item.stroke().canvasCharacter());
+                    } else if (i > 0) {
+                        review.characters.push(item.stroke().canvasCharacter());
+                    }
             }
             return review;
+        },
+        /**
+         * @method stroke
+         * @returns {Backbone.Model}
+         */
+        stroke: function() {
+            if (this.get('part') === 'tone')
+                return skritter.user.data.strokes.get('tones');
+            return skritter.user.data.strokes.get(this.vocab().get('writing'));
         },
         /**
          * @method vocab
