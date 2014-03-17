@@ -48,10 +48,17 @@ define([
         /**
          * @method next
          * @param {Function} callback
+         * @param {Array} filter
          * @returns {Backbone.Model}
          */
-        next: function(callback) {
-            skritter.user.data.loadItem(this.sort()[0].id, function(item) {
+        next: function(callback, filter) {
+            var schedule = this.sort();
+            var i = 0;
+            if (filter)
+                for (var length = schedule.length; i < length; i++)
+                    if (filter.indexOf(schedule[i].id.split('-')[4]) > -1)
+                        break;
+            skritter.user.data.loadItem(schedule[i].id, function(item) {
                 callback(item);
             });
         },

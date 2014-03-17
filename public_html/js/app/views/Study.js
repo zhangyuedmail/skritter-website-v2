@@ -11,8 +11,10 @@
 define([
     'require.text!templates/study.html',
     'views/prompts/Defn',
-    'views/prompts/Rune'
-], function(templateStudy, Defn, Rune) {
+    'views/prompts/Rdng',
+    'views/prompts/Rune',
+    'views/prompts/Tone'
+], function(templateStudy, Defn, Rdng, Rune, Tone) {
     /**
      * @class Study
      */
@@ -53,7 +55,7 @@ define([
             this.prompt.render();
         },
         nextPrompt: function() {
-            skritter.user.data.items.next(_.bind(this.loadPrompt, this));
+            skritter.user.data.items.next(_.bind(this.loadPrompt, this), ['tone']);
             //TODO: check to see if this is the most recent prompt
         },
         previousPrompt: function() {

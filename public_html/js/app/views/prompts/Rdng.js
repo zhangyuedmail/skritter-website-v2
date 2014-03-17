@@ -1,18 +1,18 @@
 /**
  * @module Skritter
  * @submodule Views
- * @param templateDefn
+ * @param templateRdng
  * @param Prompt
  * @author Joshua McFarland
  */
 define([
-    'require.text!templates/prompt-defn.html',
+    'require.text!templates/prompt-rdng.html',
     'views/prompts/Prompt'
-], function(templateDefn, Prompt) {
+], function(templateRdng, Prompt) {
     /**
-     * @class PromptDefn
+     * @class PromptRdng
      */
-    var Defn = Prompt.extend({
+    var Rdng = Prompt.extend({
         /**
          * @method initialize
          */
@@ -24,7 +24,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.html(templateDefn);
+            this.$el.html(templateRdng);
             Prompt.prototype.render.call(this);
             this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.vocab().get('reading'));
@@ -59,5 +59,5 @@ define([
         }
     });
 
-    return Defn;
+    return Rdng;
 });

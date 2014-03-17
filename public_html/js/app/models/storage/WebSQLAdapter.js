@@ -45,6 +45,7 @@ define([
         get: function(tableName, ids, callback) {
             var items = [];
             if (tableName && ids) {
+                ids = Array.isArray(ids) ? ids : [ids];
                 ids = ids.map(function(id) {
                     return JSON.stringify(id);
                 });
@@ -92,6 +93,31 @@ define([
                         for (var b = 0, keys = Object.keys(item), lengthB = keys.length; b < lengthB; ++b)
                             item[keys[b]] = JSON.parse(item[keys[b]]);
                         items.push(item);
+                    }
+                }
+            }, onError, onSuccess);
+        },
+        /**
+         * @method getSchedule
+         * @param {Function} callback
+         */
+        getSchedule: function(callback) {
+            var schedule = [];
+            var onError = function(event) {
+                console.error(event);
+            };
+            var onSuccess = function() {
+                callback(schedule);
+            };
+            WebSQLAdapter.database.transaction(function(tx) {
+                tx.executeSql('SELECT id, last, next, vocabIds FROM items', [], results);
+                function results(tx, result) {
+                    for (var a = 0, lengthA = result.rows.length; a < lengthA; a++) {
+                        var item = _.cloneDeep(result.rows.item(a));
+                        for (var b = 0, keys = Object.keys(item), lengthB = keys.length; b < lengthB; ++b)
+                            item[keys[b]] = JSON.parse(item[keys[b]]);
+                        if (item.vocabIds.length > 0)
+                            schedule.push(item);
                     }
                 }
             }, onError, onSuccess);

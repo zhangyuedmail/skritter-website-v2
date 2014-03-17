@@ -1,32 +1,22 @@
-<div id="rdng" class="prompt">
-    <div id="info-container">
+<div id="rdng" class="prompt-container">
+    <div id="top-container">
         <div class="row">
-            <div class="col-xs-6"><span class="active part-badge">W</span><div class="prompt-writing"></div></div>
-            <div class="col-xs-6"><span class="part-badge">R</span><div class="prompt-reading"></div></div>
+            <span id="hint-caret" class="fa fa-chevron-down pull-right"></span>
+            <h3 id="question-text" class="text-center">How do you say it?</h3>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <span class="part-badge">D</span>
-                <div class="prompt-heisig"></div>
-                <div class="prompt-definition"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <span class="part-badge">S</span>
-                <span class="prompt-sentence"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <span class="part-badge">M</span>
-                <span class="prompt-mnemonic"></span>
-            </div>
+        <div id="hint-text" class="row">
+            <h4 id="prompt-definition" class="text-center"></h4>
+            <h4 id="prompt-sentence" class="text-center"></h4>
         </div>
     </div>
-    <div id="input-container">
-        <h1 class="prompt-writing-input"></h1>
-        <h1 class="prompt-question"></h1>
+    <div id="bottom-container">
+        <div class="question">
+            <h1 id="prompt-writing" class="chinese-text text-center" style="font-size: 104px;"></h1>
+            <h4 class="text-center">(click to show answer)</h4>
+        </div>
+        <div class="answer" style="display: none;">
+            <h3 id="prompt-reading" class="text-center"></h3>
+        </div>
         <div id="grading-container"></div>
     </div>
 </div>

@@ -104,10 +104,10 @@ define([
      * @param {Function} callback
      */
     var loadStorage = function(callback) {
-        if (window.indexedDB) {
-            skritter.storage = new IndexedDBAdapter();
-        } else {
+        if (window.cordova) {
             skritter.storage = new WebSQLAdapter();
+        } else {
+            skritter.storage = new IndexedDBAdapter();
         }
         callback();
     };
