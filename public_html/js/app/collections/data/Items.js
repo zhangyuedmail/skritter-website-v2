@@ -48,16 +48,25 @@ define([
         /**
          * @method next
          * @param {Function} callback
-         * @param {Array} filter
+         * @param {Array|String} filterParts
+         * @param {Array|String} filterIds
          * @returns {Backbone.Model}
          */
-        next: function(callback, filter) {
+        next: function(callback, filterParts, filterIds) {
             var schedule = this.sort();
             var i = 0;
-            if (filter)
+            if (filterParts) {
+                filterParts = Array.isArray(filterParts) ? filterParts : [filterParts];
                 for (var length = schedule.length; i < length; i++)
-                    if (filter.indexOf(schedule[i].id.split('-')[4]) > -1)
+                    if (filterParts.indexOf(schedule[i].id.split('-')[4]) > -1)
                         break;
+            }
+            if (filterIds) {
+                filterIds = Array.isArray(filterIds) ? filterIds : [filterIds];
+                schedule = schedule.filter(function(item) {
+                    return filterIds.indexOf(item.id) > -1;
+                });
+            }
             skritter.user.data.loadItem(schedule[i].id, function(item) {
                 callback(item);
             });

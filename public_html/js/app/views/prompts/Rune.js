@@ -32,9 +32,9 @@ define([
             Prompt.prototype.render.call(this);
             Rune.canvas.setElement(this.$('#writing-area')).render();
             Rune.canvas.enableInput();
-            this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
-            this.$('#prompt-reading').html(this.review.vocab().reading());
-            this.$('#prompt-writing').html(this.review.vocab().writingBlocks(1));
+            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            this.$('#prompt-reading').html(this.review.baseVocab().reading());
+            this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
             this.resize();
             return this;
         },
@@ -44,10 +44,10 @@ define([
          * @param {CreateJS.Shape} shape
          */
         handleStrokeReceived: function(points, shape) {
-            var result = this.review.characters[0].recognize(points, shape);
+            var result = this.review.character().recognize(points, shape);
             if (result) {
                 Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
-                if (this.review.characters[0].isFinished()) {
+                if (this.review.character().isFinished()) {
                     Rune.canvas.disableInput();
                     Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
                     Prompt.gradingButtons.show();

@@ -12,6 +12,7 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
+            this.characters = null;
         },
         /**
          * @property {Object} defaults
@@ -46,6 +47,27 @@ define(function() {
             return review;
         },
         /**
+         * @method baseItem
+         * @returns {Backbone.Model}
+         */
+        baseItem: function() {
+            return skritter.user.data.items.get(this.get('reviews')[0].itemId);
+        },
+        /**
+         * @method baseVocab
+         * @returns {Backbone.Model}
+         */
+        baseVocab: function() {
+            return this.baseItem().vocab();
+        },
+        /**
+         * @method character
+         * @returns {Backbone.Collection}
+         */
+        character: function() {
+            return this.characters && this.hasContained() ? this.characters[this.get('position') - 1] : this.characters[0];
+        },
+        /**
          * @method hasContained
          * @returns {Boolean}
          */
@@ -72,7 +94,8 @@ define(function() {
          * @returns {Backbone.Model}
          */
         item: function() {
-            return skritter.user.data.items.get(this.get('reviews')[0].itemId);
+            var position = this.hasContained() ? this.get('position') : 0;
+            return skritter.user.data.items.get(this.get('reviews')[position].itemId);
         },
         /**
          * @method next

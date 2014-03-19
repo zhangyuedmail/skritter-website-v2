@@ -32,9 +32,9 @@ define([
             Prompt.prototype.render.call(this);
             Tone.canvas.setElement(this.$('#writing-area')).render();
             Tone.canvas.enableInput();
-            this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
-            this.$('#prompt-reading').html(this.review.vocab().readingBlocks(1));
-            this.$('#prompt-writing').html(this.review.vocab().get('writing'));
+            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position')));
+            this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
             this.resize();
             return this;
         },
@@ -44,17 +44,17 @@ define([
          * @param {CreateJS.Shape} shape
          */
         handleStrokeReceived: function(points, shape) {
-            var result = this.review.characters[0].recognize(points, shape);
+            var result = this.review.character().recognize(points, shape);
             if (result) {
-                var possibleTones = _.flatten(this.review.vocab().tones());
+                var possibleTones = _.flatten(this.review.baseVocab().tones());
                 if (possibleTones.indexOf(result.get('tone')) > -1) {
                     Tone.canvas.tweenShape('display', result.userShape(), result.inflateShape());
                     Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
                 } else {
-                    Tone.canvas.drawShape('display', this.review.characters[0].targets[possibleTones[0] - 1].shape());
+                    Tone.canvas.drawShape('display', this.review.character().shape());
                     Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[1]);
                 }
-                if (this.review.characters[0].isFinished()) {
+                if (this.review.character().isFinished()) {
                     Tone.canvas.disableInput();
                     Prompt.gradingButtons.show();
                 }
@@ -67,7 +67,7 @@ define([
             Prompt.prototype.resize.call(this);
             Tone.canvas.render();
             Tone.canvas.resize(skritter.settings.canvasSize());
-            Tone.canvas.drawCharacterFromFont('background', this.review.vocab().characters()[0], skritter.user.settings.font());
+            Tone.canvas.drawCharacterFromFont('background', this.review.baseVocab().characters()[this.review.get('position') - 1], skritter.user.settings.font());
             this.$('#top-container').height(skritter.settings.contentHeight() - skritter.settings.canvasSize() - 3);
             this.$('#top-container').width(skritter.settings.contentWidth());
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);

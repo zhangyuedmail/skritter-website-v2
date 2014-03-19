@@ -35,6 +35,10 @@ define([
             this.nextPrompt();
             return this;
         },
+        /**
+         * @method loadPrompt
+         * @param {Backbone.Model} item
+         */
         loadPrompt: function(item) {
             switch (item.get('part')) {
                 case 'defn':
@@ -54,10 +58,16 @@ define([
             this.prompt.setElement(this.$('#content-container'));
             this.prompt.render();
         },
+        /**
+         * @method nextPrompt
+         */
         nextPrompt: function() {
-            skritter.user.data.items.next(_.bind(this.loadPrompt, this));
+            skritter.user.data.items.next(_.bind(this.loadPrompt, this), null, 'mcfarljwtest2-zh-包子-0-rune');
             //TODO: check to see if this is the most recent prompt
         },
+        /**
+         * @method previousPrompt
+         */
         previousPrompt: function() {
             //TODO: better handle moved backwards through prompts
         }
