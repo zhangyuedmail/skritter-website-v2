@@ -5,7 +5,7 @@
  * @author Joshua McFarland
  */
 define([
-    'models/study/Vocab'
+    'models/data/Vocab'
 ], function(Vocab) {
     var test1 = new Vocab({"lang": "ja", "rareKanji": false, "reading": "せきがでる", "toughness": 10, "containedVocabIds": ["ja-出-0"], "definitions": {"en": "to cough"}, "toughnessString": "hardest", "writing": "せきが出る", "starred": false, "audio": "/sounds?file=%E3%81%9B%E3%81%8D%E3%81%8C%E3%81%A7%E3%82%8B_%E3%81%9B%E3%81%8D%E3%81%8C%E5%87%BA%E3%82%8B.mp3", "id": "ja-せきが出る-0"});
     describe('Vocab', function() {

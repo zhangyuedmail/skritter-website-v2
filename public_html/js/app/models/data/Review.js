@@ -32,6 +32,27 @@ define(function() {
             });
         },
         /**
+         * @method at
+         * @param {Object} data
+         * @returns {Object}
+         */
+        at: function(data) {
+            var review = this.get('reviews').length === 1 ? this.get('reviews')[0] : this.get('reviews')[this.get('position')];
+            if (data) {
+                for (var key in data)
+                    review[key] = data[key];
+                this.trigger('change:reviews');
+            }
+            return review;
+        },
+        /**
+         * @method hasContained
+         * @returns {Boolean}
+         */
+        hasContained: function() {
+            return this.get('reviews').length > 1 ? true : false;
+        },
+        /**
          * @method isFirst
          * @returns {Boolean}
          */
@@ -77,20 +98,6 @@ define(function() {
             if (this.isFirst())
                 return this.get('position');
             return this.set('position', this.attributes.position - 1).get('position');
-        },
-        /**
-         * @method review
-         * @param {Object} data
-         * @returns {Object}
-         */
-        review: function(data) {
-            var review = this.get('reviews').length === 1 ? this.get('reviews')[0] : this.get('reviews')[this.get('position')];
-            if (data) {
-                for (var key in data)
-                    review[key] = data[key];
-                this.trigger('change:reviews');
-            }
-            return review;
         },
         /**
          * @method vocab

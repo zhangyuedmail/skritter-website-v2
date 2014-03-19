@@ -40,7 +40,15 @@ define([
          * @param {Number} selectedGrade
          */
         handleGradingSelected: function(selectedGrade) {
-            //TODO: implement grade selection behaviors
+            if (this.review.isLast()) {
+                console.log('PROMPT FINISHED', this.review.at({
+                    score: selectedGrade
+                }));
+                this.trigger('prompt:finished');
+            } else {
+                this.review.next();
+                this.render();
+            }
         },
         /**
          * @method toggleHint

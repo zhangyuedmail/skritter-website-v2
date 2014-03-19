@@ -5,7 +5,7 @@
  * @author Joshua McFarland
  */
 define([
-    'models/study/Item'
+    'models/data/Item'
 ], function(Item) {
     describe('Item', function() {
         describe('vocabId', function() {

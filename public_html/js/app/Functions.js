@@ -8,6 +8,7 @@
  * @param ParamMap
  * @param PinyinConverter
  * @param Recognizer
+ * @param Scheduler
  * @param Shortstraw
  * @param SimpTradMap
  * @param StrokeMap
@@ -18,10 +19,11 @@ define([
     'functions/ParamMap',
     'functions/PinyinConverter',
     'functions/Recognizer',
+    'functions/Scheduler',
     'functions/Shortstraw',
     'functions/SimpTradMap',
     'functions/StrokeMap'
-], function(Bootstrap, ParamMap, PinyinConverter, Recognizer, Shortstraw, SimpTradMap, StrokeMap) {
+], function(Bootstrap, ParamMap, PinyinConverter, Recognizer, Scheduler, Shortstraw, SimpTradMap, StrokeMap) {
     /**
      * @method angle
      * @param {Array} points An array of point values
