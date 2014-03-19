@@ -161,6 +161,8 @@ body {
 }
 #top-container .writing-hidden { border-bottom: 1px #222222 solid; }
 #top-container .writing-hidden span { visibility: hidden; }
+#top-container .reading-hidden { border-bottom: 1px #222222 solid; }
+#top-container .reading-hidden span { visibility: hidden; }
 
 
 /*** PROMPT: BOTTOM CONTAINER ***/

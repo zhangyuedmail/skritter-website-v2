@@ -13,7 +13,7 @@ define(function() {
          */
         initialize: function() {
             Canvas.stage = {};
-            Canvas.size = skritter.settings.contentWidth();
+            Canvas.size = skritter.settings.canvasSize();
             Canvas.gridColor = 'grey';
             Canvas.strokeSize = 12;
             Canvas.strokeCapStyle = 'round';

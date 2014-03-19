@@ -27,10 +27,11 @@ define([
             this.$el.html(templateDefn);
             Prompt.prototype.render.call(this);
             this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
-            this.$('#prompt-reading').html(this.review.vocab().get('reading'));
+            this.$('#prompt-reading').html(this.review.vocab().reading());
             this.$('#prompt-sentence').html(this.review.vocab().get('sentenceId'));
             this.$('#prompt-writing').html(this.review.vocab().get('writing'));
             this.$('#bottom-container').hammer().on('tap', _.bind(this.handleTap, this));
+            this.resize();
             return this;
         },
         /**

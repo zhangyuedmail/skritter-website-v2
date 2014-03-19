@@ -33,11 +33,16 @@ define([
             Tone.canvas.setElement(this.$('#writing-area')).render();
             Tone.canvas.enableInput();
             this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
-            this.$('#prompt-reading').html(this.review.vocab().get('reading'));
-            this.$('#prompt-writing').html(this.review.vocab().writingBlocks(1));
-            Tone.canvas.drawCharacterFromFont('background', this.review.vocab().characters()[0], skritter.user.settings.font());
+            this.$('#prompt-reading').html(this.review.vocab().readingBlocks(1));
+            this.$('#prompt-writing').html(this.review.vocab().get('writing'));
+            this.resize();
             return this;
         },
+        /**
+         * @method handleStrokeReceived
+         * @param {Array} points
+         * @param {CreateJS.Shape} shape
+         */
         handleStrokeReceived: function(points, shape) {
             var result = this.review.characters[0].recognize(points, shape);
             if (result) {
@@ -60,7 +65,10 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
-            this.$('#top-container').height(skritter.settings.contentHeight() - skritter.settings.contentWidth() - 3);
+            Tone.canvas.render();
+            Tone.canvas.resize(skritter.settings.canvasSize());
+            Tone.canvas.drawCharacterFromFont('background', this.review.vocab().characters()[0], skritter.user.settings.font());
+            this.$('#top-container').height(skritter.settings.contentHeight() - skritter.settings.canvasSize() - 3);
             this.$('#top-container').width(skritter.settings.contentWidth());
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
             this.$('#bottom-container').width(skritter.settings.contentWidth());

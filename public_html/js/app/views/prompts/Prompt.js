@@ -25,7 +25,6 @@ define([
          */
         render: function() {
             Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
-            this.resize();
             console.log('PROMPT', this.review);
             return this;
         },

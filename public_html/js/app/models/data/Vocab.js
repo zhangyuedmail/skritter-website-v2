@@ -68,6 +68,13 @@ define(function() {
             return definition;
         },
         /**
+         * @method reading
+         * @returns {String}
+         */
+        reading: function() {
+            return skritter.fn.pinyin.toTone(this.get('reading'));
+        },
+        /**
          * @method readingBlocks
          * @param {Number} offset
          * @param {Boolean} mask
