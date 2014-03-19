@@ -17,6 +17,7 @@ define([
         initialize: function() {
             this.review = null;
             Prompt.gradingButtons = new GradingButtons();
+            this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradingSelected);
             this.listenTo(skritter.settings, 'resize', this.resize);
         },
         /**
@@ -33,6 +34,13 @@ define([
          */
         events: {
             'click.Prompt .prompt-container #hint-caret': 'toggleHint'
+        },
+        /**
+         * @method handleGradingSelected
+         * @param {Number} selectedGrade
+         */
+        handleGradingSelected: function(selectedGrade) {
+            //TODO: implement grade selection behaviors
         },
         /**
          * @method toggleHint

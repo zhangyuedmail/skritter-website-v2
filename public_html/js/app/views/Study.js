@@ -55,7 +55,7 @@ define([
             this.prompt.render();
         },
         nextPrompt: function() {
-            skritter.user.data.items.next(_.bind(this.loadPrompt, this), ['rdng']);
+            skritter.user.data.items.next(_.bind(this.loadPrompt, this));
             //TODO: check to see if this is the most recent prompt
         },
         previousPrompt: function() {
