@@ -33,7 +33,7 @@ define([
             Tone.canvas.setElement(this.$('#writing-area')).render();
             Tone.canvas.enableInput();
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
-            this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position')));
+            this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position'), skritter.user.settings.get('hideReading')));
             this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
             this.resize();
             return this;
@@ -56,6 +56,7 @@ define([
                 }
                 if (this.review.character().isFinished()) {
                     Tone.canvas.disableInput();
+                    this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
                     Prompt.gradingButtons.show();
                 }
             }

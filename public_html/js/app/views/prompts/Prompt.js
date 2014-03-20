@@ -26,7 +26,7 @@ define([
          */
         render: function() {
             Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
-            console.log('PROMPT', this.review);
+            console.log('PROMPT', this.review.vocab().get('writing'), this.review);
             return this;
         },
         /**
