@@ -24,6 +24,14 @@ define([
          */
         model: Review,
         /**
+         * @method comparator
+         * @param {Backbone.Model} review
+         * @returns {Number}
+         */
+        comparator: function(review) {
+            return -review.attributes.reviews[0].submitTime;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

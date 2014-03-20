@@ -26,6 +26,27 @@ define([
          */
         model: Item,
         /**
+         * @method due
+         * @param {Boolean} skipSort
+         * @returns {Array}
+         */
+        due: function(skipSort) {
+            if (skipSort)
+                return this.schedule.filter(function(item) {
+                    return item.readiness >= 1;
+                });
+            return this.sort().filter(function(item) {
+                return item.readiness >= 1;
+            });
+        },
+        /**
+         * @method dueCount
+         * @returns {Number}
+         */
+        dueCount: function() {
+            return this.due().length;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
