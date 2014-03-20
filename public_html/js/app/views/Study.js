@@ -40,6 +40,7 @@ define([
          * @param {Backbone.Model} item
          */
         loadPrompt: function(item) {
+            this.$('#items-due').html(skritter.user.data.items.dueCount(true));
             switch (item.get('part')) {
                 case 'defn':
                     this.prompt = new Defn();

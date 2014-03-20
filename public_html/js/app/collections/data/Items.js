@@ -33,10 +33,10 @@ define([
         due: function(skipSort) {
             if (skipSort)
                 return this.schedule.filter(function(item) {
-                    return item.readiness >= 1;
+                    return !item.held && item.readiness >= 1;
                 });
             return this.sort().filter(function(item) {
-                return item.readiness >= 1;
+                return !item.held && item.readiness >= 1;
             });
         },
         /**
