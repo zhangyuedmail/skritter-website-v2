@@ -40,10 +40,11 @@ define([
          * @param {Number} selectedGrade
          */
         handleGradingSelected: function(selectedGrade) {
+            this.review.at({
+                score: selectedGrade
+            });
             if (this.review.isLast()) {
-                console.log('PROMPT FINISHED', this.review.at({
-                    score: selectedGrade
-                }));
+                console.log('PROMPT FINISHED', this.review.save());
                 this.trigger('prompt:finished');
             } else {
                 this.review.next();

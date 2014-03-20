@@ -50,6 +50,7 @@ define([
                 if (this.review.character().isFinished()) {
                     Rune.canvas.disableInput();
                     Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
+                    this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position') + 1));
                     Prompt.gradingButtons.show();
                 }
             }

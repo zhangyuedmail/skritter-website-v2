@@ -45,6 +45,7 @@ define([
             var now = skritter.fn.getUnixTime();
             var part = this.get('part');
             var wordGroup = now + '_' + this.id;
+            review.set('id', wordGroup, {silent: true});
             if (part === 'rune' || part === 'tone')
                 review.characters = [];
             for (var i = 0, length = items.length; i < length; i++) {

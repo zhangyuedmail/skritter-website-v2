@@ -183,6 +183,10 @@ define([
      */
     var recognizer = new Recognizer();
     /**
+     * @property {Object} Scheduler
+     */
+    var scheduler = Scheduler;
+    /**
      * @property {Object} shortstraw
      */
     var shortstraw = new Shortstraw();
@@ -211,6 +215,7 @@ define([
         params: params,
         pinyin: pinyin,
         recognizer: recognizer,
+        scheduler: scheduler,
         shortstraw: shortstraw,
         simptrad: simptrad,
         strokes: strokes

@@ -57,6 +57,7 @@ define([
             this.prompt.set(item.createReview());
             this.prompt.setElement(this.$('#content-container'));
             this.prompt.render();
+            this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
         },
         /**
          * @method nextPrompt

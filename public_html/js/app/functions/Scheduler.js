@@ -4,8 +4,7 @@
  * @class Scheduler
  * @author Joshua McFarland
  */
-define([
-], function() {
+define(function() {
     /**
      * @method interval
      * @param {Backbone.Model} item
