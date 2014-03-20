@@ -37,6 +37,7 @@ define([
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
+            skritter.timer.start();
             this.resize();
             return this;
         },
@@ -50,6 +51,7 @@ define([
             if (result) {
                 Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
                 if (this.review.character().isFinished()) {
+                    skritter.timer.stop();
                     Rune.canvas.disableInput();
                     Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
                     this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position') + 1));

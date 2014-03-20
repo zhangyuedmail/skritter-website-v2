@@ -33,6 +33,7 @@ define([
             this.$('#prompt-sentence').html(this.review.baseVocab().get('sentenceId'));
             this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
             this.$('#bottom-container').hammer().on('tap', _.bind(this.handleTap, this));
+            skritter.timer.start();
             this.resize();
             return this;
         },
@@ -55,6 +56,7 @@ define([
             this.$('#bottom-container').width(skritter.settings.contentWidth());
         },
         showAnswer: function() {
+            skritter.timer.stop();
             this.$('.question').hide();
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Answer:');

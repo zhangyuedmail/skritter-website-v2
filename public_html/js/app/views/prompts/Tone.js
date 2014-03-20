@@ -37,6 +37,7 @@ define([
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position'), skritter.user.settings.get('hideReading')));
             this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
+            skritter.timer.start();
             this.resize();
             return this;
         },
@@ -57,6 +58,7 @@ define([
                     Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[1]);
                 }
                 if (this.review.character().isFinished()) {
+                    skritter.timer.stop();
                     Tone.canvas.disableInput();
                     this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
                     Prompt.gradingButtons.show();
