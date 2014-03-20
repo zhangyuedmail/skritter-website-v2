@@ -16,9 +16,10 @@ define([
          */
         initialize: function() {
             this.schedule = [];
-            this.on('change', function(item) {
+            this.on('change', _.bind(function(item) {
+                this.updateSchedule(item);
                 item.cache();
-            });
+            }, this));
         },
         /**
          * @property {Backbone.Model} model
@@ -104,6 +105,39 @@ define([
                 return -item.readiness;
             });
             return this.schedule;
+        },
+        /**
+         * @method updateSchedule
+         * @param {Backbone.Model} item
+         */
+        updateSchedule: function(item) {
+            console.log('UPDATING ITEM');
+            var scheduleIndex = _.findIndex(this.schedule, {id: item.id});
+            //update directly scheduled item 
+            this.schedule[scheduleIndex] = {
+                id: item.id,
+                last: item.get('last'),
+                next: item.get('next')
+            };
+            //update indirectly related base items
+            var base = item.id.split('-')[2];
+            var maxSpacing = 43200;
+            var minSpacing = 600;
+            var spacedItems = [];
+            for (var i = 0, length = this.schedule.length; i < length; i++)
+                if (this.schedule[i].id.split('-')[2] === base && this.schedule[i].id !== item.id) {
+                    var scheduledItem = _.clone(this.schedule[i]);
+                    var spacing = (scheduledItem.next - scheduledItem.last) * 0.2;
+                    if (spacing >= maxSpacing || !item.previous('last')) {
+                        spacing = maxSpacing;
+                    } else if (spacing <= minSpacing) {
+                        spacing = minSpacing;
+                    }
+                    spacedItems.push({id: scheduledItem.id, held: spacing});
+                    this.schedule[i].held = spacing;
+                }
+            if (spacedItems.length > 0)
+                skritter.storage.update('items', spacedItems);
         }
     });
 

@@ -150,12 +150,16 @@ define(function() {
                 return this.get('position');
             return this.set('position', this.attributes.position - 1).get('position');
         },
+        /**
+         * @method save
+         * @returns {Backbone.Model}
+         */
         save: function() {
             var reviews = _.clone(this.get('reviews'));
             //updates all of the new review intervals
-            for (var i = 0, length = reviews.length; i < length; i++) {
-                var item = this.item(i);
-                var review = reviews[i];
+            for (var a = 0, lengthA = reviews.length; a < lengthA; a++) {
+                var item = this.item(a);
+                var review = reviews[a];
                 review.newInterval = skritter.fn.scheduler.interval(item, review.score);
             }
             //updates the base review based on contained reviews
@@ -165,6 +169,20 @@ define(function() {
             }
             //set the review data and trigger local caching
             this.set('reviews', reviews);
+            //update the actual items and scheduler
+            for (var b = 0, lengthB = reviews.length; b < lengthB; b++) {
+                var item = this.item(b);
+                var review = reviews[b];
+                item.set({
+                    changed: review.submitTime,
+                    last: review.submitTime,
+                    next: review.submitTime + review.newInterval,
+                    previousInterval: review.currentInterval,
+                    previousSuccess: (review.score > 1) ? true : false,
+                    reviews: item.get('reviews') + 1,
+                    successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes')
+                });        
+            }
             if (!skritter.user.data.reviews.get(this))
                 skritter.user.data.reviews.add(this);
             return this;
