@@ -98,12 +98,16 @@ define([
             transaction.objectStore('items').openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    if (cursor.value.vocabIds.length > 0)
-                        schedule.push({
+                    if (cursor.value.vocabIds.length > 0) {
+                        var scheduleItem = {
                             id: cursor.value.id,
                             last: cursor.value.last ? cursor.value.last : 0,
                             next: cursor.value.next ? cursor.value.next : 0
-                        });
+                        };
+                        if (cursor.value.held)
+                            scheduleItem.held = cursor.value.held;
+                        schedule.push(scheduleItem);
+                    }
                     cursor.continue();
                 }
             };

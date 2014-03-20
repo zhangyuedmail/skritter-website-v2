@@ -88,7 +88,7 @@ define([
             var now = skritter.fn.getUnixTime();
             this.schedule = _.sortBy(this.schedule, function(item) {
                 if (item.held && item.held > now) {
-                    item.readiness = 0.5 + (now / item.held) * 0.1;
+                    item.readiness = 0.2 + (now / item.held) * 0.1;
                     return -item.readiness;
                 }
                 if (!item.last && (item.next - now) > 600) {
@@ -119,7 +119,7 @@ define([
          * @param {Backbone.Model} item
          */
         updateSchedule: function(item) {
-            console.log('UPDATING ITEM');
+            var now = skritter.fn.getUnixTime();
             var scheduleIndex = _.findIndex(this.schedule, {id: item.id});
             //update directly scheduled item 
             this.schedule[scheduleIndex] = {
@@ -141,8 +141,8 @@ define([
                     } else if (spacing <= minSpacing) {
                         spacing = minSpacing;
                     }
-                    spacedItems.push({id: scheduledItem.id, held: spacing});
-                    this.schedule[i].held = spacing;
+                    spacedItems.push({id: scheduledItem.id, held: now + spacing});
+                    this.schedule[i].held = now + spacing;
                 }
             if (spacedItems.length > 0)
                 skritter.storage.update('items', spacedItems);
