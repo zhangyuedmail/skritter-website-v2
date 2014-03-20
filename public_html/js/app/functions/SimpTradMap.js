@@ -2642,9 +2642,9 @@ define(function() {
     var fromBase = function(base) {
         var splitBase = base.split('-');
         var baseRune = splitBase[1];
-        var baseVariation = splitBase[2];
+        var baseVariation = parseInt(splitBase[2], 10);
         var matchedRune = map[baseRune];
-        if (matchedRune) {
+        if (baseVariation !== 0 && matchedRune) {
             var matchedVariations = matchedRune.split('');
             matchedRune = matchedVariations[baseVariation - 1];
             return matchedRune;
