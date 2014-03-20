@@ -18,11 +18,11 @@ define(function() {
             },
             items: {
                 keys: ['id'],
-                columns: ['lang', 'part', 'vocabIds', 'style', 'timeStudied', 'next', 'last', 'interval', 'vocabListIds', 'sectionIds', 'reviews', 'successes', 'created', 'changed', 'previousSuccess', 'previousInterval']
+                columns: ['lang', 'part', 'vocabIds', 'style', 'timeStudied', 'next', 'last', 'interval', 'vocabListIds', 'sectionIds', 'reviews', 'successes', 'created', 'changed', 'previousSuccess', 'previousInterval', 'held']
             },
             reviews: {
                 keys: ['id'],
-                columns: ['base', 'contained', 'part', 'position']
+                columns: ['originalItems', 'position', 'reviews']
             },
             sentences: {
                 keys: ['id'],

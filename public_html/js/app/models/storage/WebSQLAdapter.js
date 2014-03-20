@@ -90,8 +90,14 @@ define([
                 function results(tx, result) {
                     for (var a = 0, lengthA = result.rows.length; a < lengthA; a++) {
                         var item = _.cloneDeep(result.rows.item(a));
-                        for (var b = 0, keys = Object.keys(item), lengthB = keys.length; b < lengthB; ++b)
-                            item[keys[b]] = JSON.parse(item[keys[b]]);
+                        for (var b = 0, keys = Object.keys(item), lengthB = keys.length; b < lengthB; ++b) {
+                            var value = JSON.parse(item[keys[b]]);
+                            if (value) {
+                                item[keys[b]] = value;
+                            } else {
+                                delete item[keys[b]];
+                            }
+                        }
                         items.push(item);
                     }
                 }
@@ -110,14 +116,26 @@ define([
                 callback(schedule);
             };
             WebSQLAdapter.database.transaction(function(tx) {
-                tx.executeSql('SELECT id, last, next, vocabIds FROM items', [], results);
+                tx.executeSql('SELECT id, held, last, next, vocabIds FROM items', [], results);
                 function results(tx, result) {
                     for (var a = 0, lengthA = result.rows.length; a < lengthA; a++) {
                         var item = _.cloneDeep(result.rows.item(a));
-                        for (var b = 0, keys = Object.keys(item), lengthB = keys.length; b < lengthB; ++b)
-                            item[keys[b]] = JSON.parse(item[keys[b]]);
-                        if (item.vocabIds.length > 0)
+                        var held = JSON.parse(item.held);
+                        var last = JSON.parse(item.last);
+                        var next = JSON.parse(item.next);
+                        var vocabIds = JSON.parse(item.vocabIds);
+                        if (vocabIds.length > 0) {
+                            item.id = JSON.parse(item.id);
+                            item.last = last ? last : 0;
+                            item.next = next ? next : 0;
+                            if (held) {
+                                item.held = held;
+                            } else {
+                                delete item.held;
+                            }
+                            delete item.vocabIds;
                             schedule.push(item);
+                        }
                     }
                 }
             }, onError, onSuccess);
@@ -151,6 +169,7 @@ define([
          */
         put: function(tableName, items, callback) {
             if (tableName && items) {
+                items = Array.isArray(items) ? items : [items];
                 var table = this.tables[tableName];
                 var keysColumns = table.keys.concat(table.columns);
                 var valueString = this.valueString(keysColumns);
@@ -161,6 +180,7 @@ define([
                     callback();
                 };
                 WebSQLAdapter.database.transaction(function(tx) {
+                    console.log(tableName, items);
                     var queryString = 'INSERT OR REPLACE INTO ' + tableName + ' (' + keysColumns.join(',') + ') VALUES (' + valueString + ')';
                     for (var a = 0, lengthA = items.length; a < lengthA; a++) {
                         var item = items[a];
@@ -188,8 +208,8 @@ define([
          */
         update: function(tableName, items, callback) {
             items = Array.isArray(items) ? items : [items];
-            this.get(tableName, _.pluck(items, 'id'), _.bind(function(originalItems) {
-                var key = this.tables[tableName].keys[0];
+            var key = this.tables[tableName].keys[0];
+            this.get(tableName, _.pluck(items, key), _.bind(function(originalItems) {
                 var updatedItems = [];
                 for (var i = 0, length = items.length; i < length; i++)
                     updatedItems.push(_.assign(_.find(originalItems, {id: items[i][key]}), items[i]));

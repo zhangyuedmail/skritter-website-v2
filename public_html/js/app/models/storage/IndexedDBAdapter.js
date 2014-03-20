@@ -171,8 +171,8 @@ define([
          */
         update: function(tableName, items, callback) {
             items = Array.isArray(items) ? items : [items];
-            this.get(tableName, _.pluck(items, 'id'), _.bind(function(originalItems) {
-                var key = this.tables[tableName].keys[0];
+            var key = this.tables[tableName].keys[0];
+            this.get(tableName, _.pluck(items, key), _.bind(function(originalItems) {
                 var updatedItems = [];
                 for (var i = 0, length = items.length; i < length; i++)
                     updatedItems.push(_.assign(_.find(originalItems, {id: items[i][key]}), items[i]));
