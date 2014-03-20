@@ -30,7 +30,7 @@ define([
             Prompt.prototype.render.call(this);
             this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
-            this.$('#prompt-sentence').html(this.review.baseVocab().sentence().maskWriting(this.review.baseVocab().get('writing')));
+            this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
             this.$('#bottom-container').hammer().on('tap', _.bind(this.handleTap, this));
             skritter.timer.start();
@@ -60,7 +60,6 @@ define([
             this.$('.question').hide();
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Answer:');
-            this.$('#prompt-sentence').html(this.review.baseVocab().sentence().get('writing'));
             Prompt.gradingButtons.show();
         }
     });

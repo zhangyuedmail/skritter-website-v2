@@ -36,6 +36,7 @@ define([
             Rune.canvas.enableInput();
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
+            this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
             skritter.timer.start();
             this.resize();
@@ -54,6 +55,7 @@ define([
                     skritter.timer.stop();
                     Rune.canvas.disableInput();
                     Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
+                    this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
                     this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position') + 1));
                     Prompt.gradingButtons.show();
                 }

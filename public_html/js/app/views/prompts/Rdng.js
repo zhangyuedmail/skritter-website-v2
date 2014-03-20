@@ -30,7 +30,7 @@ define([
             Prompt.prototype.render.call(this);
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
-            this.$('#prompt-sentence').html(this.review.baseVocab().get('sentenceId'));
+            this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
             this.$('#bottom-container').hammer().on('tap', _.bind(this.handleTap, this));
             skritter.timer.start();

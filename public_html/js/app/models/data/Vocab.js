@@ -123,6 +123,24 @@ define(function() {
             return skritter.user.data.sentences.get(this.get('sentenceId'));
         },
         /**
+         * @method sentenceMaskWriting
+         * @returns {String}
+         */
+        sentenceMaskWriting: function() {
+            var sentence = this.sentence();
+            if (sentence)
+                return sentence.maskWriting(this.get('writing'));
+        },
+        /**
+         * @method sentenceWriting
+         * @returns {String}
+         */
+        sentenceWriting: function() {
+            var sentence = this.sentence();
+            if (sentence)
+                return sentence.get('writing');
+        },
+        /**
          * Returns an array of unique possible tone numbers in the order they appear in the
          * reading string. Japanese will just return an empty array since it doesn't have tones.
          * 
