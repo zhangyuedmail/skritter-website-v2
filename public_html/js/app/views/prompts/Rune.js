@@ -21,6 +21,8 @@ define([
         initialize: function() {
             Prompt.prototype.initialize.call(this);
             Rune.canvas = new Canvas();
+            skritter.timer.setReviewLimit(30);
+            skritter.timer.setThinkingLimit(15);
             this.listenTo(Rune.canvas, 'input:up', this.handleStrokeReceived);
         },
         /**
