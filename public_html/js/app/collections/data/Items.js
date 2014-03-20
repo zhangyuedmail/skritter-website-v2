@@ -68,9 +68,17 @@ define([
                     return filterIds.indexOf(item.id) > -1;
                 });
             }
-            skritter.user.data.loadItem(schedule[i].id, function(item) {
-                callback(item);
-            });
+            var load = function() {
+                skritter.user.data.loadItem(schedule[i].id, function(item) {
+                    if (item) {
+                        callback(item);
+                    } else {
+                        i++;
+                        load();
+                    }
+                });
+            };
+            load();
         },
         /**
          * @method sort

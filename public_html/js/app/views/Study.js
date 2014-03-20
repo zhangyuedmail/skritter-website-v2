@@ -63,7 +63,7 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            skritter.user.data.items.next(_.bind(this.loadPrompt, this), null, ['mcfarljwtest2-zh-包子-0-rune', 'mcfarljwtest2-zh-包子-0-defn']);
+            skritter.user.data.items.next(_.bind(this.loadPrompt, this), null);
             //TODO: check to see if this is the most recent prompt
         },
         /**

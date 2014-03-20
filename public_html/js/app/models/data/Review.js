@@ -156,23 +156,16 @@ define(function() {
          */
         save: function() {
             var reviews = _.clone(this.get('reviews'));
-            //updates all of the new review intervals
-            for (var a = 0, lengthA = reviews.length; a < lengthA; a++) {
-                var item = this.item(a);
-                var review = reviews[a];
-                review.newInterval = skritter.fn.scheduler.interval(item, review.score);
-            }
             //updates the base review based on contained reviews
             if (this.hasContained()) {
                 reviews[0].reviewTime = this.totalReviewTime();
                 reviews[0].thinkingTime = this.totalThinkingTime();
             }
-            //set the review data and trigger local caching
-            this.set('reviews', reviews);
-            //update the actual items and scheduler
-            for (var b = 0, lengthB = reviews.length; b < lengthB; b++) {
-                var item = this.item(b);
-                var review = reviews[b];
+            //updates all of the new review intervals
+            for (var i = 0, length = reviews.length; i < length; i++) {
+                var item = this.item(i);
+                var review = reviews[i];
+                review.newInterval = skritter.fn.scheduler.interval(item, review.score);
                 item.set({
                     changed: review.submitTime,
                     last: review.submitTime,
@@ -181,8 +174,10 @@ define(function() {
                     previousSuccess: (review.score > 1) ? true : false,
                     reviews: item.get('reviews') + 1,
                     successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes')
-                });        
+                }); 
             }
+            //set the review data and trigger local caching
+            this.set('reviews', reviews);
             if (!skritter.user.data.reviews.get(this))
                 skritter.user.data.reviews.add(this);
             return this;

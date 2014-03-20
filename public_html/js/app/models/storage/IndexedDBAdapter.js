@@ -44,7 +44,8 @@ define([
                     callback(items);
                 };
                 var push = function(event) {
-                    items.push(event.target.result);
+                    if (event.target.result)
+                        items.push(event.target.result);
                 };
                 transaction.onerror = function(event) {
                     console.error(event);

@@ -179,6 +179,25 @@ define([
             } else {
                 callback();
             }
+        },
+        /**
+         * @method update
+         * @param {String} tableName
+         * @param {Array|Object} items
+         * @param {Function} callback
+         */
+        update: function(tableName, items, callback) {
+            items = Array.isArray(items) ? items : [items];
+            this.get(tableName, _.pluck(items, 'id'), _.bind(function(originalItems) {
+                var key = this.tables[tableName].keys[0];
+                var updatedItems = [];
+                for (var i = 0, length = items.length; i < length; i++)
+                    updatedItems.push(_.assign(_.find(originalItems, {id: items[i][key]}), items[i]));
+                this.put(tableName, updatedItems, function() {
+                    if (typeof callback === 'function')
+                        callback();
+                });
+            }, this));
         }
     });
     
