@@ -111,6 +111,8 @@ define([
                 if (item.held && item.held > now) {
                     item.readiness = 0.2 + (now / item.held) * 0.1;
                     return -item.readiness;
+                } else if (item.held) {
+                    delete item.held;
                 }
                 if (!item.last && (item.next - now) > 600) {
                     item.readiness = 0.2;

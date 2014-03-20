@@ -12,6 +12,13 @@ define([
      */
     var Item = Backbone.Model.extend({
         /**
+         * @method initialize
+         */
+        initialize: function() {
+            if (this.get('held') && this.get('held') > skritter.fn.getUnixTime())
+                this.unset('held');
+        },
+        /**
          * @method cache
          * @param {Function} callback
          */
