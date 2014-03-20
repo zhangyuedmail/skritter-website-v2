@@ -16,6 +16,7 @@ define([
          */
         initialize: function() {
             IndexedDBAdapter.database = null;
+            IndexedDBAdapter.databaseName = null;
             IndexedDBAdapter.version = 1;
         },
         /**
@@ -24,7 +25,7 @@ define([
          */
         destroy: function(callback) {
             IndexedDBAdapter.database.close();
-            var request = window.indexedDB.deleteDatabase(IndexedDBAdapter.database.name);
+            var request = window.indexedDB.deleteDatabase(IndexedDBAdapter.databaseName);
             request.onsuccess = function() {
                 callback();
             };
@@ -131,6 +132,7 @@ define([
             };
             request.onsuccess = function() {
                 IndexedDBAdapter.database = request.result;
+                IndexedDBAdapter.databaseName = databaseName;
                 callback();
             };
         },
