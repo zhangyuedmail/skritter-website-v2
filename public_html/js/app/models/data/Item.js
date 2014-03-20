@@ -43,15 +43,17 @@ define([
             var review = new Review();
             var items = [this].concat(this.containedItems());
             var now = skritter.fn.getUnixTime();
+            var originalItems = [];
             var part = this.get('part');
+            var reviews = [];
             var wordGroup = now + '_' + this.id;
             review.set('id', wordGroup, {silent: true});
             if (part === 'rune' || part === 'tone')
                 review.characters = [];
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
-                review.get('originalItems')[i] = item.toJSON();
-                review.get('reviews')[i] = {
+                originalItems.push(item.toJSON());
+                reviews.push({
                     itemId: item.id,
                     score: 3,
                     bearTime: true,
@@ -64,13 +66,17 @@ define([
                     wordGroup: wordGroup,
                     previousInterval: item.has('previousInterval') ? item.get('previousInterval') : 0,
                     previousSuccess: item.has('previousSuccess') ? item.get('previousSuccess') : 0
-                };
+                });
                 if (review.characters)
                     if (items.length === 1) {
                         review.characters.push(item.stroke().canvasCharacter());
                     } else if (i > 0) {
                         review.characters.push(item.stroke().canvasCharacter());
                     }
+                review.set({
+                    originalItems: originalItems,
+                    reviews: reviews
+                }, {silent: true});
             }
             return review;
         },
