@@ -116,6 +116,13 @@ define(function() {
             return element;
         },
         /**
+         * @method sentence
+         * @returns {Backbone.Model}
+         */
+        sentence: function() {
+            return skritter.user.data.sentences.get(this.get('sentenceId'));
+        },
+        /**
          * Returns an array of unique possible tone numbers in the order they appear in the
          * reading string. Japanese will just return an empty array since it doesn't have tones.
          * 
