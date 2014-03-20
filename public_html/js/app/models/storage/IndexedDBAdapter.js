@@ -100,8 +100,8 @@ define([
                     if (cursor.value.vocabIds.length > 0)
                         schedule.push({
                             id: cursor.value.id,
-                            last: cursor.value.last,
-                            next: cursor.value.next
+                            last: cursor.value.last ? cursor.value.last : 0,
+                            next: cursor.value.next ? cursor.value.next : 0
                         });
                     cursor.continue();
                 }
