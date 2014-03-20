@@ -19,7 +19,7 @@ define([
         initialize: function() {
             Prompt.prototype.initialize.call(this);
             skritter.timer.setReviewLimit(30);
-            skritter.timer.setThinkingLimit(15)
+            skritter.timer.setThinkingLimit(15);
         },
         /**
          * @method render
