@@ -41,6 +41,21 @@ define([
                 self.add(reviews, {merge: true, silent: true});
                 callback();
             });
+        },
+        /**
+         * @method totalTimeToday
+         * @returns {Number}
+         */
+        totalTimeToday: function() {
+            var totalTime = 0;
+            var today = moment().subtract('hours', 3).format('YYYYMMDD');
+            for (var a = 0, lengthA = this.length; a < lengthA; a++) {
+                var review = this.at(a);
+                if (moment(review.get('reviews')[0].submitTime * 1000).subtract('hours', 3).format('YYYYMMDD') === today)
+                for (var b = 0, lengthB = review.get('reviews').length; b < lengthB; b++)
+                    totalTime += review.get('reviews')[b].reviewTime;
+            }
+            return totalTime;
         }
     });
 
