@@ -60,7 +60,7 @@ define(function() {
         render: function() {
             var time = (time) ? time : Timer.time;
             //adjusts the rendered time for the offset
-            time += Timer.offset;
+            time += Timer.offset * 1000;
             //switched to bitwise operations for better performance across browsers
             var hours = (time / (3600 * 1000)) >> 0;
             time = time % (3600 * 1000);
@@ -131,7 +131,9 @@ define(function() {
          * @returns {Boolean}
          */
         isThinkingLimitReached: function() {
-
+            if (Timer.getLapTime() >= Timer.thinkingLimit * 1000)
+                return true;
+            return false;
         },
         /**
          * @method reset
