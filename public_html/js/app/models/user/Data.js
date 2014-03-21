@@ -288,6 +288,57 @@ define([
             });
         },
         /**
+         * @method loadVocab
+         * @param {String} vocabId
+         * @param {Function} callback
+         */
+        loadVocab: function(vocabId, callback) {
+            async.series([
+                function(callback) {
+                    if (skritter.user.data.vocabs.get(vocabId)) {
+                        callback(skritter.user.data.vocabs.get(vocabId));
+                    } else {
+                        callback();
+                    }
+                },
+                function(callback) {
+                    skritter.storage.get('vocabs', vocabId, function(vocab) {
+                        if (vocab.length > 0) {
+                            callback(vocab[0]);
+                        } else {
+                            callback();
+                        }
+                    });
+                }
+            ], function(vocab) {
+                if (vocab.sentenceId) {
+                    async.series([
+                        function(callback) {
+                            if (skritter.user.data.sentences.get(vocab.sentenceId)) {
+                                callback(skritter.user.data.sentences.get(vocab.sentenceId));
+                            } else {
+                                callback();
+                            }
+                        },
+                        function(callback) {
+                            skritter.storage.get('sentences', vocab.sentenceId, function(sentence) {
+                                if (sentence.length > 0) {
+                                    callback(sentence);
+                                } else {
+                                    callback();
+                                }
+                            });
+                        }
+                    ], function(sentence) {
+                        skritter.user.data.sentences.add(sentence, {merge: true, silent: true});
+                        callback(skritter.user.data.vocabs.add(vocab, {merge: true, silent: true}));
+                    });
+                } else {
+                    callback(skritter.user.data.vocabs.add(vocab, {merge: true, silent: true}));
+                }
+            });
+        },
+        /**
          * @method sync
          * @param {Function} callback
          * @param {Boolean} showModal

@@ -1,15 +1,17 @@
 /**
  * @module Skritter
  * @param Home
+ * @param Info
  * @param Study
  * @param Tests
  * @author Joshua McFarland
  */
 define([
     'views/Home',
+    'views/Info',
     'views/Study',
     'views/Tests'
-], function(Home, Study, Tests) {
+], function(Home, Info, Study, Tests) {
     /**
      * @class Router
      */
@@ -25,6 +27,7 @@ define([
          */
         routes: {
             '': 'showHomeView',
+            'info/:language/:writing': 'showInfoView',
             'study': 'showStudyView',
             'tests': 'showTestsView'
         },
@@ -48,6 +51,22 @@ define([
                 this.view.home.setElement($('#skritter-container'));
             }
             this.view.home.render();
+        },
+        /**
+         * Shows the info view which requires character parameters be included in the url.
+         * 
+         * @method showInfoView
+         * @param {String} language
+         * @param {String} writing
+         */
+        showInfoView: function(language, writing) {
+            if (!this.view.info) {
+                this.view.info = new Info({el: $('#skritter-container')});
+            } else {
+                this.view.info.setElement($('#skritter-container'));
+            }
+            this.view.info.load(language, writing);
+            this.view.info.render();
         },
         /**
          * Shows the the study view.

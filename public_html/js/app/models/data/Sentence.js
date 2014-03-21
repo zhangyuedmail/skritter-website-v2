@@ -19,6 +19,19 @@ define(function() {
             });
         },
         /**
+         * @method definition
+         * @returns {String}
+         */
+        definition: function() {
+            var definition;
+            if (this.get('definitions')[skritter.user.settings.get('sourceLang')]) {
+                definition = this.get('definitions')[skritter.user.settings.get('sourceLang')];
+            } else if (this.get('definitions').en) {
+                definition = this.get('definitions').en;
+            }
+            return definition;
+        },
+        /**
          * @method maskWriting
          * @param {Array|String} value
          * @returns {String}
