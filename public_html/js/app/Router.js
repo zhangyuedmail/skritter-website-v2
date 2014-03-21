@@ -1,27 +1,19 @@
 /**
  * @module Skritter
  * @param Home
- * @param Options
- * @param Reviews
+ * @param Info
  * @param Study
+ * @param StudySettings
  * @param Tests
- * @param VocabInfo
- * @param VocabList
- * @param VocabListSection
- * @param VocabLists
  * @author Joshua McFarland
  */
 define([
     'views/Home',
-    'views/Options',
-    'views/Reviews',
+    'views/Info',
     'views/Study',
-    'views/Tests',
-    'views/vocabs/VocabInfo',
-    'views/vocabs/VocabList',
-    'views/vocabs/VocabListSection',
-    'views/vocabs/VocabLists'
-], function(Home, Options, Reviews, Study, Tests, VocabInfo, VocabList, VocabListSection, VocabLists) {
+    'views/study/Settings',
+    'views/Tests'
+], function(Home, Info, Study, StudySettings, Tests) {
     /**
      * @class Router
      */
@@ -30,152 +22,101 @@ define([
          * @method initialize
          */
         initialize: function() {
-            //creates the namespace for accessing views in this router
-            Router.view = {};
-            //creates the namespace for accessing views directly
-            skritter.view = {};
-            //stop the timer when the view has moved from study
-            this.on('route', function(route) {
-                if (route !== 'showStudy')
-                    skritter.timer.stop();
-            });
+            this.view = {};
         },
         /**
          * @property {Object} routes
          */
         routes: {
-            '': 'showHome',
-            'options': 'showOptions',
-            'vocab/list': 'showVocabLists',
-            'vocab/list/:id': 'showVocabList',
-            'vocab/list/:listId/:sectionId': 'showVocabListSection',
-            'vocab/:lang/:writing': 'showVocabInfo',
-            'review': 'showReviews',
-            'study': 'showStudy',
-            'tests': 'showTests'
+            '': 'showHomeView',
+            'info/:writing': 'showInfoView',
+            'info/:language/:writing': 'showInfoView',
+            'study': 'showStudyView',
+            'study/settings': 'showStudySettingsView',
+            'tests': 'showTestsView'
         },
         /**
+         * Shortcut method for traversing backwards through the windows history.
+         * 
          * @method back
          */
         back: function() {
             window.history.back();
         },
         /**
-         * @method showHome
+         * Shows the homepage which either displays as logged in or out depending on the authentication status.
+         * 
+         * @method showHomeView
          */
-        showHome: function() {
-            if (!Router.view.home) {
-                Router.view.home = new Home({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
+        showHomeView: function() {
+            if (!this.view.home) {
+                this.view.home = new Home({el: $('#skritter-container')});
             } else {
-                Router.view.home.setElement($(skritter.settings.get('container')));
+                this.view.home.setElement($('#skritter-container'));
             }
-            Router.view.home.render();
+            this.view.home.render();
         },
         /**
-         * @method showOptions
-         */
-        showOptions: function() {
-            if (!Router.view.options) {
-                Router.view.options = new Options({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
-            } else {
-                Router.view.options.setElement($(skritter.settings.get('container')));
-            }
-            Router.view.options.render();
-        },
-        /**
-         * @method showReviews
-         */
-        showReviews: function() {
-            if (!Router.view.reviews) {
-                Router.view.reviews = new Reviews({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
-            } else {
-                Router.view.reviews.setElement($(skritter.settings.get('container')));
-            }
-            Router.view.reviews.render();
-        },
-        /**
-         * @method showStudy
-         */
-        showStudy: function() {
-            if (!Router.view.study) {
-                Router.view.study = new Study({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
-            } else {
-                Router.view.study.setElement($(skritter.settings.get('container')));
-            }
-            Router.view.study.render();
-        },
-        /**
-         * @method showTests
-         */
-        showTests: function() {
-            if (!Router.view.tests) {
-                Router.view.tests = new Tests({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
-            } else {
-                Router.view.tests.setElement($(skritter.settings.get('container')));
-            }
-            Router.view.tests.render();
-        },
-        /**
-         * @method showVocabInfo
-         * @param {String} lang
+         * Shows the info view which requires character parameters be included in the url.
+         * 
+         * @method showInfoView
+         * @param {String} language
          * @param {String} writing
          */
-        showVocabInfo: function(lang, writing) {
-            if (!Router.view.vocabInfo) {
-                Router.view.vocabInfo = new VocabInfo({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
+        showInfoView: function(language, writing) {
+            if (!this.view.info) {
+                this.view.info = new Info({el: $('#skritter-container')});
             } else {
-                Router.view.vocabInfo.setElement($(skritter.settings.get('container')));
+                this.view.info.setElement($('#skritter-container'));
             }
-            Router.view.vocabInfo.load(lang, writing);
+            this.view.info.load(language, writing);
+            this.view.info.render();
         },
         /**
-         * @method showVocabList
-         * @param {String} listId
+         * Shows the the study view.
+         * 
+         * @method showStudyView
          */
-        showVocabList: function(listId) {
-            if (!Router.view.vocabList) {
-                Router.view.vocabList = new VocabList({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
+        showStudyView: function() {
+            if (!this.view.studySettings) {
+                this.view.studySettings = new Study({el: $('#skritter-container')});
             } else {
-                Router.view.vocabList.setElement($(skritter.settings.get('container')));
+                this.view.studySettings.setElement($('#skritter-container'));
             }
-            Router.view.vocabList.load(listId).render();
+            this.view.studySettings.render();
         },
         /**
-         * @method showVocabListSection
-         * @param {String} listId
-         * @param {String} sectionId
+         * Shows the the study view.
+         * 
+         * @method showStudyView
          */
-        showVocabListSection: function(listId, sectionId) {
-            if (!Router.view.vocabListSection) {
-                Router.view.vocabListSection = new VocabListSection({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
+        showStudySettingsView: function() {
+            if (!this.view.study) {
+                this.view.study = new StudySettings({el: $('#skritter-container')});
             } else {
-                Router.view.vocabListSection.setElement($(skritter.settings.get('container')));
+                this.view.study.setElement($('#skritter-container'));
             }
-            Router.view.vocabListSection.load(listId, sectionId).render();
+            this.view.study.render();
         },
         /**
-         * @method showVocabLists
+         * Runs and shows the results of the jasmine test cases.
+         * 
+         * @method showTestsView
          */
-        showVocabLists: function() {
-            if (!Router.view.vocabLists) {
-                Router.view.vocabLists = new VocabLists({el: $(skritter.settings.get('container'))});
-                skritter.view = Router.view;
+        showTestsView: function() {
+            if (!this.view.tests) {
+                this.view.tests = new Tests({el: $('#skritter-container')});
             } else {
-                Router.view.vocabLists.setElement($(skritter.settings.get('container')));
+                this.view.tests.setElement($('#skritter-container'));
             }
-            Router.view.vocabLists.load().render();
+            this.view.tests.render();
         }
     });
 
     /**
+     * Initialized the router and enabled pushState based on the environment. If the application
+     * is run from a local server then it's disabled to prevent routing errors.
+     * 
      * @method initialize
      */
     var initialize = function() {

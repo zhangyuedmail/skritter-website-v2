@@ -1,81 +1,64 @@
 /**
  * @module Skritter
+ * @submodule Storage
+ * @param Database
  * @author Joshua McFarland
  */
-define(function() {
-    var IndexedDBAdapter = Backbone.Model.extend({
+define([
+    'models/storage/Database'
+], function(Database) {
+    /**
+     * @class IndexedDBAdapter
+     */
+    var IndexedDBAdapter = Database.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            IndexedDBAdapter.this = this;
             IndexedDBAdapter.database = null;
             IndexedDBAdapter.databaseName = null;
-            IndexedDBAdapter.databaseVersion = 1;
+            IndexedDBAdapter.version = 1;
         },
         /**
-         * @method count
+         * @method destroy
+         * @param {Function} callback
+         */
+        destroy: function(callback) {
+            IndexedDBAdapter.database.close();
+            var request = window.indexedDB.deleteDatabase(IndexedDBAdapter.databaseName);
+            request.onsuccess = function() {
+                callback();
+            };
+        },
+        /**
+         * @method get
          * @param {String} tableName
+         * @param {Array|String} ids
          * @param {Function} callback
          */
-        count: function(tableName, callback) {
-            var promise = $.indexedDB(IndexedDBAdapter.databaseName).objectStore(tableName).count();
-            promise.done(function(count) {
-                callback(count);
-            });
-            promise.fail(function(error) {
-                console.error(tableName, error);
-            });
-        },
-        /**
-         * @method deleteDatabase
-         * @param {Function} callback
-         */
-        deleteDatabase: function(callback) {
-            var promise = IndexedDBAdapter.database.deleteDatabase();
-            promise.done(function() {
-                if (typeof callback === 'function')
-                    callback();
-            });
-            promise.fail(function(error) {
-                console.error(error);
-            });
-        },
-        /**
-         * @method openDatabase
-         * @param {String} databaseName
-         * @param {Function} callback
-         */
-        openDatabase: function(databaseName, callback) {
-            IndexedDBAdapter.databaseName = databaseName;
-            var promise = $.indexedDB(IndexedDBAdapter.databaseName, {
-                version: IndexedDBAdapter.databaseVersion,
-                schema: {
-                    1: function(transaction) {
-                        transaction.createObjectStore('decomps', {keyPath: 'writing'});
-                        transaction.createObjectStore('items', {keyPath: 'id'});
-                        transaction.createObjectStore('reviews', {keyPath: 'id'});
-                        transaction.createObjectStore('sentences', {keyPath: 'id'});
-                        transaction.createObjectStore('strokes', {keyPath: 'rune'});
-                        transaction.createObjectStore('srsconfigs', {keyPath: 'part'});
-                        transaction.createObjectStore('vocabs', {keyPath: 'id'});
-                        transaction.createObjectStore('vocablists', {keyPath: 'id'});
-                    }
+        get: function(tableName, ids, callback) {
+            var items = [];
+            if (tableName && ids) {
+                ids = Array.isArray(ids) ? ids : [ids];
+                var transaction = IndexedDBAdapter.database.transaction(tableName, 'readonly');
+                transaction.oncomplete = function() {
+                    callback(items);
+                };
+                var push = function(event) {
+                    if (event.target.result)
+                        items.push(event.target.result);
+                };
+                transaction.onerror = function(event) {
+                    console.error(event);
+                };
+                var objectStore = transaction.objectStore(tableName);
+                for (var i = 0, length = ids.length; i < length; i++) {
+                    var request = objectStore.get(ids[i]);
+                    request.onsuccess = push;
                 }
-            });
-            promise.done(function(event) {
-                IndexedDBAdapter.database = promise;
-                if (event.objectStoreNames.length < 1) {
-                    IndexedDBAdapter.this.deleteDatabase(function() {
-                        IndexedDBAdapter.this.openDatabase(databaseName, callback);
-                    });
-                } else {
-                    callback();
-                }
-            });
-            promise.fail(function(error) {
-                console.error(databaseName, error);
-            });
+            } else {
+                callback(items);
+            }
         },
         /**
          * @method getAll
@@ -84,154 +67,122 @@ define(function() {
          */
         getAll: function(tableName, callback) {
             var items = [];
-            var table = IndexedDBAdapter.database.objectStore(tableName);
-            var promise = table.each(function(item) {
-                items.push(item.value);
-            });
-            promise.done(function() {
+            var transaction = IndexedDBAdapter.database.transaction(tableName, 'readonly');
+            transaction.oncomplete = function() {
                 callback(items);
-            });
-            promise.fail(function(error) {
-                console.error(tableName, error);
-                callback(items);
-            });
-        },
-        /**
-         * @method getItems
-         * @param {String} tableName
-         * @param {Arrau} keys
-         * @param {Function} callback
-         */
-        getItems: function(tableName, keys, callback) {
-            var position = 0;
-            var items = [];
-            var table = IndexedDBAdapter.database.objectStore(tableName);
-            keys = Array.isArray(keys) ? keys : [keys];
-            keys = _.remove(keys, undefined);
-            getNext();
-            function getNext() {
-                if (position < keys.length) {
-                    var promise = table.get(keys[position]);
-                    promise.done(function(item) {
-                        position++;
-                        if (item)
-                            items.push(item);
-                        getNext();
-                    });
-                    promise.fail(function(error) {
-                        console.error(tableName, keys[position], error);
-                    });
-                } else {
-                    callback(items);
+            };
+            transaction.onerror = function(event) {
+                console.error(event);
+            };
+            transaction.objectStore(tableName).openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    items.push(cursor.value);
+                    cursor.continue();
                 }
-            }
-        },
-        /**
-         * @method getItemsWhere
-         * @param {String} tableName
-         * @param {String} attribute
-         * @param {String} value
-         * @param {Function} callback
-         */
-        getItemsWhere: function(tableName, attribute, value, callback) {
-            var items = [];
-            var table = IndexedDBAdapter.database.objectStore(tableName);
-            var promise = table.each(function(item) {
-                if (item.value[attribute] === value)
-                    items.push(item.value);
-            });
-            promise.done(function() {
-                callback(items);
-            });
-            promise.fail(function(error) {
-                console.error(tableName, error);
-            });
+            };
         },
         /**
          * @method getSchedule
          * @param {Function} callback
          */
         getSchedule: function(callback) {
-            var items = [];
-            var table = IndexedDBAdapter.database.objectStore('items');
-            var promise = table.each(function(item) {
-                if (item.value.vocabIds.length > 0) {
-                    var splitId = item.value.id.split('-');
-                    items.push({
-                        base: splitId[1] + '-' + splitId[2] + '-' + splitId[3],
-                        id: item.value.id,
-                        last: (item.value.last) ? item.value.last : 0,
-                        next: item.value.next,
-                        part: item.value.part,
-                        style: item.value.style,
-                        vocabIds: item.value.vocabIds
-                    });
+            var schedule = [];
+            var transaction = IndexedDBAdapter.database.transaction('items', 'readonly');
+            transaction.oncomplete = function() {
+                callback(schedule);
+            };
+            transaction.onerror = function(event) {
+                console.error(event);
+            };
+            transaction.objectStore('items').openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    if (cursor.value.vocabIds.length > 0) {
+                        var scheduleItem = {
+                            id: cursor.value.id,
+                            last: cursor.value.last ? cursor.value.last : 0,
+                            next: cursor.value.next ? cursor.value.next : 0
+                        };
+                        if (cursor.value.held)
+                            scheduleItem.held = cursor.value.held;
+                        schedule.push(scheduleItem);
+                    }
+                    cursor.continue();
                 }
-            });
-            promise.done(function() {
-                callback(items);
-            });
-            promise.fail(function(error) {
-                console.error('schedule', error);
+            };
+        },
+        /**
+         * @method open
+         * @param {String} databaseName
+         * @param {Function} callback
+         */
+        open: function(databaseName, callback) {
+            var tables = this.tables;
+            var request = window.indexedDB.open(databaseName, IndexedDBAdapter.version);
+            request.onerror = function(event) {
+                console.error(event);
+            };
+            request.onupgradeneeded = function(event) {
+                var database = event.target.result;
+                database.createObjectStore('decomps', {keyPath: tables.decomps.keys[0]});
+                database.createObjectStore('items', {keyPath: tables.items.keys[0]});
+                database.createObjectStore('reviews', {keyPath: tables.reviews.keys[0]});
+                database.createObjectStore('sentences', {keyPath: tables.sentences.keys[0]});
+                database.createObjectStore('strokes', {keyPath: tables.strokes.keys[0]});
+                database.createObjectStore('srsconfigs', {keyPath: tables.srsconfigs.keys[0]});
+                database.createObjectStore('vocablists', {keyPath: tables.vocablists.keys[0]});
+                database.createObjectStore('vocabs', {keyPath: tables.vocabs.keys[0]});
+            };
+            request.onsuccess = function() {
+                IndexedDBAdapter.database = request.result;
+                IndexedDBAdapter.databaseName = databaseName;
                 callback();
-            });
+            };
         },
         /**
-         * @method removeItems
+         * @method put
          * @param {String} tableName
-         * @param {Array} keys
+         * @param {Array|Object} items
          * @param {Function} callback
          */
-        removeItems: function(tableName, keys, callback) {
-            var position = 0;
-            var table = IndexedDBAdapter.database.objectStore(tableName);
-            keys = Array.isArray(keys) ? keys : [keys];
-            removeNext();
-            function removeNext() {
-                if (position < keys.length) {
-                    var promise = table.delete(keys[position]);
-                    promise.done(function() {
-                        position++;
-                        removeNext();
-                    });
-                    promise.fail(function(error) {
-                        console.error(tableName, keys[position], error);
-                    });
-                } else {
-                    if (typeof callback === 'function')
-                        callback();
-                }
+        put: function(tableName, items, callback) {
+            if (tableName && items) {
+                items = Array.isArray(items) ? items : [items];
+                var transaction = IndexedDBAdapter.database.transaction(tableName, 'readwrite');
+                transaction.oncomplete = function() {
+                    callback();
+                };
+                transaction.onerror = function(event) {
+                    console.error(event);
+                };
+                var objectStore = transaction.objectStore(tableName);
+                for (var i = 0, length = items.length; i < length; i++)
+                    objectStore.put(items[i]);
+            } else {
+                callback();
             }
         },
         /**
-         * @method setItems
+         * @method update
          * @param {String} tableName
-         * @param {Array} items
+         * @param {Array|Object} items
          * @param {Function} callback
          */
-        setItems: function(tableName, items, callback) {
-            var position = 0;
-            var table = IndexedDBAdapter.database.objectStore(tableName);
+        update: function(tableName, items, callback) {
             items = Array.isArray(items) ? items : [items];
-            setNext();
-            function setNext() {
-                if (position < items.length) {
-                    var promise = table.put(items[position]);
-                    promise.done(function() {
-                        position++;
-                        setNext();
-                    });
-                    promise.fail(function(error) {
-                        skritter.log.console('tableName: ' + error);
-                        console.error(tableName, items[position], error);
-                    });
-                } else {
+            var key = this.tables[tableName].keys[0];
+            this.get(tableName, _.pluck(items, key), _.bind(function(originalItems) {
+                var updatedItems = [];
+                for (var i = 0, length = items.length; i < length; i++)
+                    updatedItems.push(_.assign(_.find(originalItems, {id: items[i][key]}), items[i]));
+                this.put(tableName, updatedItems, function() {
                     if (typeof callback === 'function')
                         callback();
-                }
-            }
+                });
+            }, this));
         }
     });
-
+    
     return IndexedDBAdapter;
 });

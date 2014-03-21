@@ -1,36 +1,20 @@
-<div id="tone" class="prompt">
-    <div id="info-container" class="container">
+<div id="tone" class="prompt-container">
+    <div id="top-container">
         <div class="row">
-            <div class="col-xs-6"><span class="part-badge">W</span><div class="prompt-writing"></div></div>
-            <div class="col-xs-6"><span class="active part-badge">R</span><div class="prompt-reading"></div></div>
+            <h4 id="prompt-style" class="text-muted"></h4>
+            <!--<span id="hint-caret" class="fa fa-chevron-down pull-right"></span>-->
+            <h3 id="question-text" class="text-center">What is the tone?</h3>
+            <h4 id="prompt-writing" class="text-center"></h4>
+            <h4 id="prompt-reading" class="text-center"></h4>
+            <h4 id="prompt-definition" class="text-center"></h5>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <span class="part-badge">D</span>
-                <div class="prompt-heisig"></div>
-                <div class="prompt-definition"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <span class="part-badge">S</span>
-                <span class="prompt-sentence"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <span class="part-badge">M</span>
-                <span class="prompt-mnemonic"></span>
-            </div>
+        <div id="hint-text" class="row">
+            <!--<h4 id="prompt-reading" class="text-center"></h4>
+            <h4 id="prompt-sentence" class="text-center"></h4>-->
         </div>
     </div>
-    <div id="input-container">
-        <div id="canvas-holder">
-            <div id="prompt-previous" class="prompt-nav-arrow"><span class="fa fa-3x fa-chevron-left"></span></div>
-            <div id="prompt-next" class="prompt-nav-arrow"><span class="fa fa-3x fa-chevron-right"></span></div>
-            <div class="prompt-style"></div>
-            <div id="canvas-container"></div>
-            <div id="grading-container"></div>
-        </div>
+    <div id="bottom-container">
+        <div id="writing-area"></div>
+        <div id="grading-container"></div>
     </div>
 </div>

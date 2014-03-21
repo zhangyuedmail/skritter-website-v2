@@ -4,13 +4,13 @@
  * @param Assets
  * @param Functions
  * @param IndexedDBAdapter
- * @param Log
- * @param Modal
+ * @param Modals
+ * @param Params
  * @param Router
  * @param Settings
- * @param SqlLiteAdapter
  * @param Timer
  * @param User
+ * @param WebSQLAdapter
  * @author Joshua McFarland
  */
 define([
@@ -18,21 +18,21 @@ define([
     'models/Assets',
     'Functions',
     'models/storage/IndexedDBAdapter',
-    'Log',
-    'views/components/Modal',
+    'views/components/Modals',
+    'collections/data/Params',
     'Router',
     'models/Settings',
-    'models/storage/SqlLiteAdapter',
     'views/components/Timer',
-    'models/User'
-], function(Api, Assets, Functions, IndexedDBAdapter, Log, Modal, Router, Settings, SqlLiteAdapter, Timer, User) {
+    'models/User',
+    'models/storage/WebSQLAdapter'
+], function(Api, Assets, Functions, IndexedDBAdapter, Modals, Params, Router, Settings, Timer, User, WebSQLAdapter) {
     /**
-     * Creates the global skritter namescape.
+     * Reserves the global skritter namespace if it doesn't already exist.
      * @param skritter
      */
     window.skritter = (function(skritter) {
         return skritter;
-    })(window.skritter || {});    
+    })(window.skritter || {});
     /**
      * @method initialize
      */
@@ -41,15 +41,14 @@ define([
             async.apply(loadApi),
             async.apply(loadAssets),
             async.apply(loadFunctions),
-            async.apply(loadLog),
-            async.apply(loadModal),
+            async.apply(loadModals),
+            async.apply(loadParams),
             async.apply(loadSettings),
             async.apply(loadStorage),
             async.apply(loadTimer),
-            async.apply(loadUser),
-            async.apply(loadRouter)
+            async.apply(loadUser)
         ], function() {
-            skritter.log.console('APPLICATION INITIALIZED');
+            Router.initialize();
         });
     };
     /**
@@ -77,27 +76,19 @@ define([
         callback();
     };
     /**
-     * @method loadLog
+     * @method loadModals
      * @param {Function} callback
      */
-    var loadLog = function(callback) {
-        skritter.log = new Log();
+    var loadModals = function(callback) {
+        skritter.modals = new Modals().render();
         callback();
     };
     /**
-     * @method loadModal
+     * @method loadParams
      * @param {Function} callback
      */
-    var loadModal = function(callback) {
-        skritter.modal = new Modal().render();
-        callback();
-    };
-    /**
-     * @method loadRouter
-     * @param {Function} callback
-     */
-    var loadRouter = function(callback) {
-        Router.initialize();
+    var loadParams = function(callback) {
+        skritter.params = new Params();
         callback();
     };
     /**
@@ -113,15 +104,15 @@ define([
      * @param {Function} callback
      */
     var loadStorage = function(callback) {
-        if (skritter.fn.isCordova()) {
-            skritter.storage = new SqlLiteAdapter();
+        if (window.cordova) {
+            skritter.storage = new WebSQLAdapter();
         } else {
             skritter.storage = new IndexedDBAdapter();
         }
         callback();
     };
     /**
-     * @method timer
+     * @method loadTimer
      * @param {Function} callback
      */
     var loadTimer = function(callback) {
@@ -135,27 +126,27 @@ define([
     var loadUser = function(callback) {
         skritter.user = new User();
         if (skritter.user.isLoggedIn()) {
-            skritter.modal.show('progress').setTitle('Loading Data').setProgress(100, '');
             async.series([
-                async.apply(skritter.storage.openDatabase, skritter.user.get('user_id')),
-                async.apply(skritter.user.loadData),
                 function(callback) {
-                    if (skritter.user.getLastSync() === 0) {
-                        skritter.modal.setTitle('Initial Download').setProgress(100, '');
-                        skritter.user.sync(function() {
-                            skritter.scheduler.loadAll(function() {
-                                callback();
-                            });
-                        });
-                    } else {
-                        skritter.user.sync();
-                        callback();
-                    }
+                    skritter.storage.open(skritter.user.get('user_id'), callback);
+                },
+                function(callback) {
+                    skritter.user.data.sync(callback, false);
+                },
+                function(callback) {
+                    skritter.modals.show('default', function() {
+                        skritter.user.data.items.loadSchedule(callback);
+                    }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
+                },
+                function(callback) {
+                    skritter.user.data.srsconfigs.loadAll(callback);
+                },
+                function(callback) {
+                    skritter.user.data.reviews.loadAll(callback);
                 }
             ], function() {
-                window.setTimeout(function() {
-                    skritter.modal.hide();
-                }, 500);
+                skritter.timer.setOffset(skritter.user.data.reviews.totalTimeToday());
+                skritter.modals.hide();
                 callback();
             });
         } else {

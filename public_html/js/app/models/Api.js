@@ -1,5 +1,6 @@
 /**
  * @module Skritter
+ * @submodule Models
  * @author Joshua McFarland
  */
 define(function() {
@@ -7,44 +8,55 @@ define(function() {
      * @method Api
      */
     var Api = Backbone.Model.extend({
+        initialize: function() {
+            Api.clientId = 'mcfarljwapiclient';
+            Api.clientSecret = 'e3872517fed90a820e441531548b8c';
+            Api.root = 'https://beta.skritter';
+            Api.tld = document.location.host.indexOf('.cn') > -1 ? '.cn' : '.com';
+            Api.base = Api.root + Api.tld + '/api/v' + this.get('version') + '/';
+            Api.credentials = 'basic ' + Base64.encode(Api.clientId + ':' + Api.clientSecret);
+            if (localStorage.getItem('guest'))
+                this.authenticateGuest(JSON.parse(localStorage.getItem('guest')));
+        },
+        /**
+         * @property {Object} defaults
+         */
         defaults: {
-            clientId: 'mcfarljwapiclient',
-            clientSecret: 'e3872517fed90a820e441531548b8c',
-            domain: (document.location.host.indexOf('cn') > -1) ? 'cn' : 'com',
-            root: 'https://www.skritter',
             token: null,
             version: 0
         },
         /**
          * @method authenticateGuest
+         * @param {Object} guest
+         * @param {Function} callback
          */
-        authenticateGuest: function() {
+        authenticateGuest: function(guest, callback) {
             var self = this;
-            var guest = JSON.parse(localStorage.getItem('guest'));
             if (guest) {
-                this.token = guest.access_token;
-                callback();
+                this.set('token', guest.access_token);
+                if (typeof callback === 'function')
+                    callback();
             } else {
                 var promise = $.ajax({
-                    url: self.baseUrl() + 'oauth2/token',
+                    url: Api.base + 'oauth2/token',
                     beforeSend: function(xhr) {
-                        xhr.setRequestHeader('AUTHORIZATION', self.credentials());
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
                     type: 'POST',
                     data: {
                         suppress_response_codes: true,
                         grant_type: 'client_credentials',
-                        client_id: this.get('clientId')
+                        client_id: Api.clientId
                     }
                 });
                 promise.done(function(data) {
-                    self.token = data.access_token;
+                    self.set('token', data.access_token);
                     localStorage.setItem('guest', JSON.stringify(data));
-                    callback();
+                    if (typeof callback === 'function')
+                        callback();
                 });
                 promise.fail(function(error) {
                     console.error(error);
-                    callback(error);
                 });
             }
         },
@@ -55,34 +67,135 @@ define(function() {
          * @param {Function} callback
          */
         authenticateUser: function(username, password, callback) {
+            password = password ? password : '';
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'oauth2/token',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'POST',
+                    data: {
+                        suppress_response_codes: true,
+                        grant_type: 'password',
+                        client_id: Api.clientId,
+                        username: username,
+                        password: password
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
+         * @method checkBatch
+         * @param {String} batchId
+         * @param {Boolean} detailed
+         * @param {Function} callback
+         */
+        checkBatch: function(batchId, detailed, callback) {
             var self = this;
-            var promise = $.ajax({
-                url: self.baseUrl() + 'oauth2/token',
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('AUTHORIZATION', self.credentials());
-                },
-                type: 'POST',
-                data: {
-                    suppress_response_codes: true,
-                    grant_type: 'password',
-                    client_id: self.get('clientId'),
-                    username: username,
-                    password: password
-                }
-            });
-            promise.done(function(data) {
-                callback(data);
-            });
-            promise.fail(function(error) {
-                console.error(error);
-                callback(error);
-            });
+            detailed = detailed ? detailed : false;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'batch/' + batchId + '/status',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        detailed: detailed
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.Batch);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
         },
-        baseUrl: function() {
-            return this.get('root') + '.' + this.get('domain') + '/api/v' + this.get('version') + '/';
+        /**
+         * @method checkReviewErrors
+         */
+        checkReviewErrors: function() {
+            var self = this;
+            var errors = [];
+            function request(cursor) {
+                var promise = $.ajax({
+                    url: Api.base + '/reviews/errors',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor
+                    }
+                });
+                promise.done(function(data) {
+                    errors = errors.concat(data.ReviewErrors);
+                    if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 1000);
+                    } else {
+                        callback(errors);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
         },
-        credentials: function() {
-            return 'basic ' + Base64.encode(this.get('clientId') + ':' + this.get('clientSecret'));
+        /**
+         * @method createUser
+         * @param {String} language
+         * @param {Function} callback
+         */
+        createUser: function(language, callback) {
+            var self = this;
+            language = language ? language : 'zh';
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'users',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'POST',
+                    data: {
+                        bearer_token: self.get('token'),
+                        lang: language
+                    }
+                });
+                promise.done(function(data) {
+                    console.log(data);
+                    //callback(data);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
+         * Merges the key results of two object arrays.
+         * 
+         * @method concatObjectArray
+         * @param {Array} objectArray1
+         * @param {Array} objectArray2
+         * @returns {Array}
+         */
+        concatObjectArray: function(objectArray1, objectArray2) {
+            return Array.isArray(objectArray1) ? objectArray1.concat(objectArray2) : undefined;
         },
         /**
          * Using repeated calls it returns the data from a batch request of a given batch id. It works
@@ -95,12 +208,12 @@ define(function() {
          */
         getBatch: function(batchId, callback) {
             var self = this;
-            var retryCount = 0;
-            var getBatch = function() {
+            var retry = 0;
+            function request() {
                 var promise = $.ajax({
-                    url: self.baseUrl() + 'batch/' + batchId,
+                    url: Api.base + 'batch/' + batchId,
                     beforeSend: function(xhr) {
-                        xhr.setRequestHeader('AUTHORIZATION', self.credentials());
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
                     type: 'GET',
                     data: {
@@ -108,172 +221,62 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
-                    try {
-                        var batch = data.Batch;
-                        var requests = batch.Requests;
-                        var responseSize = 0;
-                        var result = {};
-                        for (var i in requests) {
-                            if (requests[i].response) {
-                                _.merge(result, requests[i].response, skritter.fn.concatObjectArray);
-                                responseSize += requests[i].responseSize;
-                            }
+                    var batch = data.Batch;
+                    var requests = batch.Requests;
+                    var responseSize = 0;
+                    var result = {};
+                    for (var i = 0, len = requests.length; i < len; i++)
+                        if (requests[i].response) {
+                            _.merge(result, requests[i].response, self.concatObjectArray);
+                            responseSize += requests[i].responseSize;
                         }
-                        result.responseSize = responseSize;
-                        if (batch && (batch.runningRequests > 0 || requests.length > 0)) {
-                            callback(result);
-                        } else {
-                            callback();
-                        }
-                    } catch (error) {
-                        console.error(error);
-                        window.setTimeout(function() {
-                            getBatch();
-                        }, 2000);
+                    result.downloadedRequests = requests.length;
+                    result.totalRequests = batch.totalRequests;
+                    result.responseSize = responseSize;
+                    result.runningRequests = batch.runningRequests;
+                    retry = 0;
+                    if (batch.runningRequests > 0 || requests.length > 0) {
+                        callback(result);
+                    } else {
+                        callback();
                     }
                 });
                 promise.fail(function(error) {
-                    retryCount++;
-                    if (retryCount > 3) {
-                        console.error(error);
-                        callback(error);
+                    if (retry < 5) {
+                        window.setTimeout(request, 5000);
+                        retry++;
                     } else {
-                        window.setTimeout(function() {
-                            getBatch();
-                        }, 2000);
+                        callback(error);
                     }
                 });
-            };
-            getBatch();
+            }
+            request();
         },
         /**
-         * Returns a single vocablist with section ids for further querying.
-         * 
-         * @method getVocabList
-         * @param {Number} id
+         * @method getSRSConfigs
          * @param {Function} callback
          */
-        getVocabList: function(id, callback) {
+        getSRSConfigs: function(callback) {
             var self = this;
-            var promise = $.ajax({
-                url: self.baseUrl() + '/vocablists/' + id,
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('AUTHORIZATION', self.credentials());
-                },
-                type: 'GET',
-                data: {
-                    bearer_token: self.get('token')
-                }
-            });
-            promise.done(function(data) {
-                callback(data.VocabList);
-            });
-            promise.fail(function(error) {
-                console.error(error);
-                callback(error);
-            });
-        },
-        /**
-         * @method getVocabListSection
-         * @param {String} listId
-         * @param {String} sectionId
-         * @param {Function} callback
-         */
-        getVocabListSection: function(listId, sectionId, callback) {
-            var self = this;
-            var promise = $.ajax({
-                url: self.baseUrl() + '/vocablists/' + listId + '/sections/' + sectionId,
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('AUTHORIZATION', self.credentials());
-                },
-                type: 'GET',
-                data: {
-                    bearer_token: self.get('token')
-                }
-            });
-            promise.done(function(data) {
-                callback(data);
-            });
-            promise.fail(function(error) {
-                console.error(error);
-                callback(error);
-            });
-        },
-        /**
-         * Returns a high level list of lists available sorted by type. For longer sort groups
-         * it might be necessary to use pagination. Sort values include: published, custom,
-         * official and studying.
-         * 
-         * @method getVocabLists
-         * @param {String} sort
-         * @param {String} fields
-         * @param {Function} callback
-         */
-        getVocabLists: function(sort, fields, callback) {
-            var self = this;
-            var lists = [];
-            fields = (fields) ? fields : undefined;
-            var getNext = function(cursor) {
+            function request() {
                 var promise = $.ajax({
-                    url: self.baseUrl() + 'vocablists',
+                    url: Api.base + 'srsconfigs',
                     beforeSend: function(xhr) {
-                        xhr.setRequestHeader('AUTHORIZATION', self.credentials());
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
                     type: 'GET',
                     data: {
-                        bearer_token: self.get('token'),
-                        sort: sort,
-                        cursor: cursor,
-                        fields: fields
+                        bearer_token: self.get('token')
                     }
                 });
                 promise.done(function(data) {
-                    lists = lists.concat(data.VocabLists);
-                    if (data.cursor) {
-                        setTimeout(function() {
-                            getNext(data.cursor);
-                        }, 500);
-                    } else {
-                        callback(lists, data.cursor);
-                    }
+                    callback(data.SRSConfigs);
                 });
                 promise.fail(function(error) {
-                    console.error(error);
                     callback(error);
                 });
-            };
-            getNext();
-        },
-        /**
-         * @method getVocabs
-         * @param {Array} ids
-         * @param {Function} callback
-         */
-        getVocabs: function(ids, callback) {
-            var self = this;
-            var promise = $.ajax({
-                url: self.baseUrl() + '/vocabs',
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('AUTHORIZATION', self.credentials());
-                },
-                type: 'GET',
-                data: {
-                    bearer_token: self.get('token'),
-                    ids: ids.join('|'),
-                    include_strokes: 'true',
-                    include_sentences: 'true',
-                    include_heisigs: 'true',
-                    include_top_mnemonics: 'true',
-                    include_decomps: 'true'
-                }
-            });
-            promise.done(function(data) {
-                callback(data);
-            });
-            promise.fail(function(error) {
-                console.error(error);
-                callback(error);
-            });
+            }
+            request();
         },
         /**
          * @method getUser
@@ -282,13 +285,11 @@ define(function() {
          */
         getUser: function(userId, callback) {
             var self = this;
-            var tryCount = 0;
-            request();
             function request() {
                 var promise = $.ajax({
-                    url: self.baseUrl() + 'users/' + userId,
+                    url: Api.base + 'users/' + userId,
                     beforeSend: function(xhr) {
-                        xhr.setRequestHeader('AUTHORIZATION', self.credentials());
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
                     type: 'GET',
                     data: {
@@ -300,52 +301,10 @@ define(function() {
                     callback(data.User);
                 });
                 promise.fail(function(error) {
-                    console.error(error);
-                    if (tryCount > 2) {
-                        callback(error);
-                    } else {
-                        tryCount++;
-                        skritter.log.console('RETRYING TO GET USER');
-                        setTimeout(function() {
-                            request();
-                        }, 1000);
-                    }
+                    callback(error);
                 });
             }
-        },
-        /**
-         * Posts batches of reviews in groups of 500 and then returns an array of the posted objects.
-         * 
-         * @method postReviews
-         * @param {Array} reviews
-         * @param {Function} callback
-         */
-        postReviews: function(reviews, callback) {
-            var self = this;
-            var postedReviews = [];
-            var postBatch = function(batch) {
-                var promise = $.ajax({
-                    url: self.baseUrl() + 'reviews?bearer_token=' + self.get('token'),
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader('AUTHORIZATION', self.credentials());
-                    },
-                    type: 'POST',
-                    data: JSON.stringify(batch)
-                });
-                promise.done(function() {
-                    postedReviews = postedReviews.concat(batch);
-                    if (reviews.length > 0) {
-                        postBatch(reviews.splice(0, 499));
-                    } else {
-                        callback(postedReviews);
-                    }
-                });
-                promise.fail(function(error) {
-                    console.error(error);
-                    callback(postedReviews);
-                });
-            };
-            postBatch(reviews.splice(0, 499));
+            request();
         },
         /**
          * Requests a specific batch from the server and returns the request id. Use the
@@ -357,44 +316,49 @@ define(function() {
          */
         requestBatch: function(requests, callback) {
             var self = this;
-            var promise = $.ajax({
-                url: self.baseUrl() + 'batch?bearer_token=' + this.get('token'),
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('AUTHORIZATION', self.credentials());
-                },
-                type: 'POST',
-                data: JSON.stringify(requests)
-            });
-            promise.done(function(data) {
-                callback(data.Batch);
-            });
-            promise.fail(function(error) {
-                console.error(error);
-                callback(error);
-            });
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'batch?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'POST',
+                    data: JSON.stringify(requests)
+                });
+                promise.done(function(data) {
+                    callback(data.Batch);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
         },
         /**
-         * @method updateVocabList
-         * @param {Object} list
+         * @method updateUser
+         * @param {Object} settings
          * @param {Function} callback
          */
-        updateVocabList: function(list, callback) {
+        updateUser: function(settings, callback) {
             var self = this;
-            var promise = $.ajax({
-                url: self.baseUrl() + 'vocablists/' + list.id + '?bearer_token=' + self.get('token'),
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('AUTHORIZATION', self.credentials());
-                },
-                type: 'PUT',
-                data: JSON.stringify(list)
-            });
-            promise.done(function(data) {
-                callback(data);
-            });
-            promise.fail(function(error) {
-                console.error(error);
-                callback(error);
-            });
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'users?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'PUT',
+                    data: JSON.stringify(settings)
+                });
+                promise.done(function(data) {
+                    if (typeof callback === 'function')
+                        callback(data);
+                });
+                promise.fail(function(error) {
+                    console.error(error);
+                });
+            }
+            request();
         }
     });
 

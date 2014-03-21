@@ -1,12 +1,9 @@
 /**
  * @module Skritter
- * @submodule Model
- * @param Strokes
+ * @submodule Models
  * @author Joshua McFarland
  */
-define([
-    'Strokes'
-], function(Strokes) {
+define(function() {
     /**
      * @class Assets
      */
@@ -15,36 +12,19 @@ define([
          * @method initialize
          */
         initialize: function() {
-            Assets.audioPlayer = new Audio();
-            Assets.strokeShapes = {};
+            Assets.audio = new Audio();
         },
         /**
-         * Plays an audio file using the native HTML5 audio element.
-         * 
-         * @method getAudio
-         * @param {String} audioId
-         * @return {Object}
-         */
-        getAudio: function(audioId) {
-            if (Assets.audioPlayer.paused) {
-                Assets.audioPlayer.src = skritter.api.get('root') + '.' + skritter.api.get('domain') + '/' + 'sounds?file=' + audioId;
-                Assets.audioPlayer.play();
-            }
-            return Assets.audioPlayer;
-        },
-        /**
-         * Returns a stroke in the form of a sprite from the preloaded spritesheet.
-         * 
-         * @method getStroke
-         * @param {String} bitmapId
+         * @method stroke
+         * @param {Number} bitmapId
          * @param {String} color
-         * @return {Sprite}
+         * @returns {CreateJS.Shape}
          */
-        getStroke: function(bitmapId, color) {
+        stroke: function(bitmapId, color) {
             color = (color) ? color : '#000000';
-            return Strokes[bitmapId](color).clone();
+            return skritter.fn.strokes[bitmapId](color);
         }
     });
-
+    
     return Assets;
 });

@@ -1,29 +1,29 @@
 /**
  * @module Skritter
+ * @submodule Views
  * @param templateStudy
- * @param PromptDefn
- * @param PromptRdng
- * @param PromptRune
- * @param PromptTone
+ * @param Defn
+ * @param Rdng
+ * @param Rune
+ * @param Tone
  * @author Joshua McFarland
  */
 define([
     'require.text!templates/study.html',
-    'views/prompts/PromptDefn',
-    'views/prompts/PromptRdng',
-    'views/prompts/PromptRune',
-    'views/prompts/PromptTone'
-], function(templateStudy, PromptDefn, PromptRdng, PromptRune, PromptTone) {
+    'views/prompts/Defn',
+    'views/prompts/Rdng',
+    'views/prompts/Rune',
+    'views/prompts/Tone'
+], function(templateStudy, Defn, Rdng, Rune, Tone) {
     /**
-     * @class StudyView
+     * @class Study
      */
     var Study = Backbone.View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            Study.this = this;
-            Study.prompt = null;
+            this.prompt = null;
         },
         /**
          * @method render
@@ -31,153 +31,75 @@ define([
          */
         render: function() {
             this.$el.html(templateStudy);
-            //skritter.scheduler.filter({ids: ['mcfarljwtest2-zh-在这种情况下-1-rune']});
-            //skritter.scheduler.filter({parts: ['rune']});
             skritter.timer.setElement(this.$('#timer')).render();
-            this.updateDueCount();
-            if (skritter.scheduler.getItemCount() === 0) {
-                skritter.router.navigate('/', {trigger: true});
-            } else {
-                if (Study.prompt) {
-                    this.loadPrompt();
-                } else {
-                    this.nextPrompt();
-                }
-            }
+            this.nextPrompt();
             return this;
         },
         /**
          * @property {Object} events
          */
         events: {
-            'click.Study #study-view #add-button': 'handleAddClicked',
-            'click.Study #study-view #audio-button': 'playAudio',
-            'click.Study #study-view .home-button': 'handleHomeClicked',
-            'click.Study #study-view #info-button': 'navigateVocabsInfo'
+            'click.Study #study-view #info-button': 'handleInfoButtonClicked',
+            'click.Study #study-view #study-settings-button': 'handleStudySettingsButtonClicked'
         },
         /**
-         * @method checkAutoSync
-         */
-        checkAutoSync: function() {
-            if (skritter.user.get('autoSync') && (skritter.user.get('autoSyncThreshold') < skritter.data.reviews.getCount()))
-                skritter.user.sync();
-        },
-        /**
-         * @method clearPrompt
-         * @returns {Backbone.View}
-         */
-        clearPrompt: function() {
-            Study.prompt = null;
-            return this;
-        },
-        /**
-         * @method handleAddClicked
+         * @method handleInfoButtonClicked
          * @param {Object} event
          */
-        handleAddClicked: function(event) {
-            event.preventDefault();
-            skritter.modal.show('add-items').setTitle('How many items would you like to add?');
-            this.listenToOnce(skritter.modal, 'addItemsClicked', function(quantity) {
-                skritter.modal.show('progress').setTitle('Adding Items').setProgress(100);
-                skritter.user.addItems(quantity, function() {
-                    skritter.modal.setProgress(100, 'Rescheduling');
-                    skritter.scheduler.loadAll(function() {
-                        Study.this.updateDueCount();
-                        skritter.modal.hide();
-                    });
-                });
-            });
-        },
-        /**
-         * @method handleHomeClicked
-         * @param {Object} event
-         */
-        handleHomeClicked: function(event) {
-            skritter.router.navigate('/', {trigger: true});
+        handleInfoButtonClicked: function(event) {
+            skritter.router.navigate('info/' + this.prompt.review.baseVocab().id, {trigger: true});
             event.preventDefault();
         },
         /**
-         * @method handlePromptComplete
-         */
-        handlePromptComplete: function() {
-            Study.this.updateDueCount();
-            this.nextPrompt();
-        },
-        loadPrompt: function() {
-            Study.prompt.setElement(this.$('#prompt-container'));
-            Study.prompt.render().load();
-        },
-        /**
-         * @method navigateVocabsInfo
+         * @method handleStudySettingsButtonClicked
          * @param {Object} event
          */
-        navigateVocabsInfo: function(event) {
-            if (Study.prompt)
-                skritter.router.navigate('vocab/' + Study.prompt.data().vocab.get('lang') + '/' + Study.prompt.data().vocab.get('writing'), {trigger: true});
+        handleStudySettingsButtonClicked: function(event) {
+            skritter.router.navigate('study/settings', {trigger: true});
             event.preventDefault();
         },
+        /**
+         * @method loadPrompt
+         * @param {Backbone.Model} item
+         */
+        loadPrompt: function(item) {
+            this.$('#items-due').html(skritter.user.data.items.dueCount(true));
+            if (this.prompt)
+                this.prompt.remove();
+            switch (item.get('part')) {
+                case 'defn':
+                    this.prompt = new Defn();
+                    break;
+                case 'rdng':
+                    this.prompt = new Rdng();
+                    break;
+                case 'rune':
+                    this.prompt = new Rune();
+                    break;
+                case 'tone':
+                    this.prompt = new Tone();
+                    break;
+            }
+            this.prompt.set(item.createReview());
+            this.prompt.setElement(this.$('#content-container'));
+            this.prompt.render();
+            this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
+        },
+        /**
+         * @method nextPrompt
+         */
         nextPrompt: function() {
-            if (!Study.prompt || Study.prompt.data().isLast()) {
-                this.checkAutoSync();
-                skritter.scheduler.getNext(function(item) {
-                    switch (item.get('part')) {
-                        case 'defn':
-                            Study.prompt = new PromptDefn();
-                            break;
-                        case 'rdng':
-                            Study.prompt = new PromptRdng();
-                            break;
-                        case 'rune':
-                            Study.prompt = new PromptRune();
-                            break;
-                        case 'tone':
-                            Study.prompt = new PromptTone();
-                            break;
-                    }
-                    Study.prompt.set(item.getPromptData());
-                    Study.this.listenToOnce(Study.prompt, 'complete', Study.this.handlePromptComplete);
-                    Study.this.listenToOnce(Study.prompt, 'previous', Study.this.previousPrompt);
-                    Study.this.toggleAudioButton();
-                    Study.this.loadPrompt();
-                });
-            } else {
-                Study.prompt.next();
-            }
+            skritter.timer.reset();
+            skritter.user.data.items.next(_.bind(this.loadPrompt, this), null, null);
+            //TODO: check to see if this is the most recent prompt
         },
         /**
-         * @method playAudio
-         * @param {Object} event
+         * @method previousPrompt
          */
-        playAudio: function(event) {
-            Study.prompt.data().vocab.play();
-            event.preventDefault();
-        },
         previousPrompt: function() {
-            if (Study.prompt)
-                if (Study.history.length > 0) {
-                    skritter.log.console('historic prompts exist');
-                    /*Study.prompt = Study.history[0];
-                    Study.this.loadPrompt();*/
-                } else {
-                    skritter.log.console('no historic prompt');
-                }
-        },
-        /**
-         * @method toggleAudioButton
-         */
-        toggleAudioButton: function() {
-            if (Study.prompt.data().vocab.has('audio')) {
-                Study.this.$('#audio-button span').removeClass('fa fa-volume-off');
-                Study.this.$('#audio-button span').addClass('fa fa-volume-up');
-            } else {
-                Study.this.$('#audio-button span').removeClass('fa fa-volume-up');
-                Study.this.$('#audio-button span').addClass('fa fa-volume-off');
-            }
-        },
-        updateDueCount: function() {
-            Study.this.$('#items-due').text(skritter.scheduler.getDueCount());
+            //TODO: better handle moved backwards through prompts
         }
     });
-    
+
     return Study;
 });

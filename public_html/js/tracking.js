@@ -1,5 +1,5 @@
 /*** errorception ***/
-(function(_, e, rr, s) {
+/** (function(_, e, rr, s) {
     _errs = [s];
     var c = _.onerror;
     _.onerror = function() {
@@ -15,11 +15,11 @@
     };
     _.addEventListener ? _.addEventListener("load", b, !1) : _.attachEvent("onload", b);
 })
-        (window, document, "script", "51e23f206fdb191b3e000110");
+        (window, document, "script", "51e23f206fdb191b3e000110"); **/
 
 
 /*** google analytics ***/
-var _gaq = _gaq || [];
+/** var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-4642573-1']);
 _gaq.push(['_trackPageview']);
 
@@ -30,5 +30,5 @@ _gaq.push(['_trackPageview']);
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ga, s);
-})();
+})(); **/
         
