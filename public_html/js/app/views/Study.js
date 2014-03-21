@@ -39,7 +39,8 @@ define([
          * @property {Object} events
          */
         events: {
-            'click.Study #study-view #info-button': 'handleInfoButtonClicked'
+            'click.Study #study-view #info-button': 'handleInfoButtonClicked',
+            'click.Study #study-view #study-settings-button': 'handleStudySettingsButtonClicked'
         },
         /**
          * @method handleInfoButtonClicked
@@ -47,6 +48,14 @@ define([
          */
         handleInfoButtonClicked: function(event) {
             skritter.router.navigate('info/' + this.prompt.review.baseVocab().id, {trigger: true});
+            event.preventDefault();
+        },
+        /**
+         * @method handleStudySettingsButtonClicked
+         * @param {Object} event
+         */
+        handleStudySettingsButtonClicked: function(event) {
+            skritter.router.navigate('study/settings', {trigger: true});
             event.preventDefault();
         },
         /**
