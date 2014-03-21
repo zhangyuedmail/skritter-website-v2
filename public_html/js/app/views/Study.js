@@ -64,6 +64,8 @@ define([
          */
         loadPrompt: function(item) {
             this.$('#items-due').html(skritter.user.data.items.dueCount(true));
+            if (this.prompt)
+                this.prompt.remove();
             switch (item.get('part')) {
                 case 'defn':
                     this.prompt = new Defn();
@@ -88,7 +90,7 @@ define([
          */
         nextPrompt: function() {
             skritter.timer.reset();
-            skritter.user.data.items.next(_.bind(this.loadPrompt, this), null, null);
+            skritter.user.data.items.next(_.bind(this.loadPrompt, this), 'defn', null);
             //TODO: check to see if this is the most recent prompt
         },
         /**

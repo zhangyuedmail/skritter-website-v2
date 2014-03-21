@@ -81,6 +81,14 @@ define([
             event.preventDefault();
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.$el.empty();
+            this.stopListening();
+            this.undelegateEvents();
+        },
+        /**
          * @method resize
          */
         resize: function() {
