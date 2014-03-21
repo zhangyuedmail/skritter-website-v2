@@ -113,7 +113,7 @@ define(function() {
      * @returns {String} The string with replaced values
      */
     var tone = function(text) {
-        text = text.replace('5', '').toLowerCase();
+        text = text.replace(new RegExp('5', 'g'), '').toLowerCase();
         for (var key in mapping) {
             var expression = new RegExp(key, 'g');
             text = text.replace(expression, mapping[key]);
