@@ -141,6 +141,15 @@ define(function() {
                 return sentence.get('writing');
         },
         /**
+         * @method style
+         * @returns {String}
+         */
+        style: function() {
+            if (this.has('style') && this.get('style') !== 'both')
+                return this.get('style').toUpperCase();
+            return '';
+        },
+        /**
          * Returns an array of unique possible tone numbers in the order they appear in the
          * reading string. Japanese will just return an empty array since it doesn't have tones.
          * 

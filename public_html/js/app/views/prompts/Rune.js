@@ -37,6 +37,7 @@ define([
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
+            this.$('#prompt-style').html(this.review.baseVocab().style());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
             skritter.timer.start();
             this.resize();

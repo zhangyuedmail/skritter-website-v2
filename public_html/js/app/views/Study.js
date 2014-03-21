@@ -90,7 +90,7 @@ define([
          */
         nextPrompt: function() {
             skritter.timer.reset();
-            skritter.user.data.items.next(_.bind(this.loadPrompt, this), 'defn', null);
+            skritter.user.data.items.next(_.bind(this.loadPrompt, this), null, null);
             //TODO: check to see if this is the most recent prompt
         },
         /**

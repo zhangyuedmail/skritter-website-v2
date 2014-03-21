@@ -159,6 +159,11 @@ body {
     right: 10px;
     top: 20px;
 }
+#top-container #prompt-style {
+    position: absolute;
+    left: 10px;
+    top: 15px;
+}
 #top-container .writing-hidden { border-bottom: 1px #222222 solid; }
 #top-container .writing-hidden span { visibility: hidden; }
 #top-container .reading-hidden { border-bottom: 1px #222222 solid; }
