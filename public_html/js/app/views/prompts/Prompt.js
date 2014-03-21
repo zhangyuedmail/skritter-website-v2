@@ -71,7 +71,7 @@ define([
             } else {
                 this.$('#top-container').css('z-index', 1002);
                 this.$('#top-container').animate({
-                    height: '300px'
+                    height: this.$('#top-container')[0].scrollHeight + 'px'
                 }, 500, function() {
                     $(this).addClass('expanded');
                     $(this).find('#hint-caret').removeClass('fa fa-chevron-down');
