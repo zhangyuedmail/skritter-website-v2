@@ -37,14 +37,29 @@ define([
             }
             return this;
         },
+        events: {
+            'click.Info #info-view .back-button': 'handleBackButtonClicked'
+        },
+        /**
+         * @method handleBackButtonClicked
+         * @param {Object} event
+         */
+        handleBackButtonClicked: function(event) {
+            skritter.router.back();
+            event.preventDefault();
+        },
         /**
          * @method load
          * @param {String} language
          * @param {String} writing
          */
         load: function(language, writing) {
-            var base = skritter.fn.simptrad.toBase(writing);
-            skritter.user.data.loadVocab(base, _.bind(function(vocab) {
+            if (writing) {
+                writing = skritter.fn.simptrad.toBase(writing);
+            } else {
+                writing = language;
+            }
+            skritter.user.data.loadVocab(writing, _.bind(function(vocab) {
                 Info.vocab = vocab;
                 this.render();
             }, this));

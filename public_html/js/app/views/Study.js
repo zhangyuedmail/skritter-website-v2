@@ -35,6 +35,13 @@ define([
             this.nextPrompt();
             return this;
         },
+        events: {
+            'click.Study #study-view #info-button': 'handleInfoButtonClicked'
+        },
+        handleInfoButtonClicked: function(event) {
+            skritter.router.navigate('info/' + this.prompt.review.baseVocab().id, {trigger: true});
+            event.preventDefault();
+        },
         /**
          * @method loadPrompt
          * @param {Backbone.Model} item

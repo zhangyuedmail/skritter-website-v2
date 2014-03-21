@@ -27,6 +27,7 @@ define([
          */
         routes: {
             '': 'showHomeView',
+            'info/:writing': 'showInfoView',
             'info/:language/:writing': 'showInfoView',
             'study': 'showStudyView',
             'tests': 'showTestsView'
