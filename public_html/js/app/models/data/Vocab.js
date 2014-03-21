@@ -68,6 +68,46 @@ define(function() {
             return definition;
         },
         /**
+         * @method font
+         * @returns {String}
+         */
+        font: function() {
+            if (this.isChinese())
+                return 'simkai';
+            return 'kaisho';
+        },
+        /**
+         * @method fontClass
+         * @returns {String}
+         */
+        fontClass: function() {
+            if (this.isChinese())
+                return 'chinese-text';
+            return 'japanese-text';
+        },
+        /**
+         * Returns true if the vocab language is set to Chinese.
+         * 
+         * @method isChinese
+         * @returns {Boolean}
+         */
+        isChinese: function() {
+            if (this.get('lang') === 'zh')
+                return true;
+            return false;
+        },
+        /**
+         * Returns true if the vocab language is set to Japanese.
+         * 
+         * @method isJapanese
+         * @returns {Boolean}
+         */
+        isJapanese: function() {
+            if (this.get('lang') === 'ja')
+                return true;
+            return false;
+        },
+        /**
          * @method reading
          * @returns {String}
          */

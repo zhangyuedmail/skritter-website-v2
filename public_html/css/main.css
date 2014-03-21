@@ -181,17 +181,27 @@ body {
 #bottom-container .answer {
     cursor: pointer;
     display: table-cell;
+    padding: 0 15px;
     vertical-align: middle;
 }
 #bottom-container .question {
     cursor: pointer;
     display: table-cell;
+    padding: 0 15px;
     vertical-align: middle;
 }
 #bottom-container #writing-area {
     bottom: 0;
     position: absolute;
 }
+
+
+/*** PROMPT: DEFINITION ***/
+#defn #prompt-writing { font-size: 104px; }
+
+
+/*** PROMPT: READING ***/
+#rdng #prompt-writing { font-size: 104px; }
 
 
 /*** PROMPT: WRITING AREA ***/

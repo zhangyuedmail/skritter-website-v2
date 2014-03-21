@@ -26,6 +26,7 @@ define([
          */
         render: function() {
             Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
+            this.$('.character-font').addClass(this.review.baseVocab().fontClass());
             console.log('PROMPT', this.review.vocab().get('writing'), this.review);
             return this;
         },
