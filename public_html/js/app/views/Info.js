@@ -37,6 +37,9 @@ define([
             }
             return this;
         },
+        /**
+         * @property {Object} events
+         */
         events: {
             'click.Info #info-view .back-button': 'handleBackButtonClicked'
         },

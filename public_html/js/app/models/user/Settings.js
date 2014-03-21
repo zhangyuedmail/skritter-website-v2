@@ -31,12 +31,19 @@ define(function() {
             localStorage.setItem(event.id + '-settings', JSON.stringify(event.toJSON()));
         },
         /**
-         * Returns an array of active parts based on the current language being studied.
+         * Returns and sets an array of active parts based on the current language being studied.
          * 
          * @method activeParts
+         * @param {Array} parts
          * @returns {Array}
          */
-        activeParts: function() {
+        activeParts: function(parts) {
+            if (parts)
+                if (this.isChinese()) {
+                    this.set('filterChineseParts', parts);
+                } else {
+                    this.set('filterJapaneseParts', parts);
+                }
             if (this.isChinese())
                 return this.get('filterChineseParts');
             return this.get('filterJapaneseParts');

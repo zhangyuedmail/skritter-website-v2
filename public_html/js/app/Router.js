@@ -3,6 +3,7 @@
  * @param Home
  * @param Info
  * @param Study
+ * @param StudySettings
  * @param Tests
  * @author Joshua McFarland
  */
@@ -10,8 +11,9 @@ define([
     'views/Home',
     'views/Info',
     'views/Study',
+    'views/study/Settings',
     'views/Tests'
-], function(Home, Info, Study, Tests) {
+], function(Home, Info, Study, StudySettings, Tests) {
     /**
      * @class Router
      */
@@ -30,6 +32,7 @@ define([
             'info/:writing': 'showInfoView',
             'info/:language/:writing': 'showInfoView',
             'study': 'showStudyView',
+            'study/settings': 'showStudySettingsView',
             'tests': 'showTestsView'
         },
         /**
@@ -75,8 +78,21 @@ define([
          * @method showStudyView
          */
         showStudyView: function() {
+            if (!this.view.studySettings) {
+                this.view.studySettings = new Study({el: $('#skritter-container')});
+            } else {
+                this.view.studySettings.setElement($('#skritter-container'));
+            }
+            this.view.studySettings.render();
+        },
+        /**
+         * Shows the the study view.
+         * 
+         * @method showStudyView
+         */
+        showStudySettingsView: function() {
             if (!this.view.study) {
-                this.view.study = new Study({el: $('#skritter-container')});
+                this.view.study = new StudySettings({el: $('#skritter-container')});
             } else {
                 this.view.study.setElement($('#skritter-container'));
             }
