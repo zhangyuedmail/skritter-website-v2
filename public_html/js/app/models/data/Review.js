@@ -173,7 +173,8 @@ define(function() {
                     previousInterval: review.currentInterval,
                     previousSuccess: (review.score > 1) ? true : false,
                     reviews: item.get('reviews') + 1,
-                    successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes')
+                    successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
+                    timeStudied: item.get('timeStudied') + review.reviewTime
                 }); 
             }
             //set the review data and trigger local caching
