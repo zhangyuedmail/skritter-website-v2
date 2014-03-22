@@ -54,7 +54,7 @@ define(function() {
          * @return {Object}
          */
         inflateData: function() {
-            var size = skritter.settings.contentWidth();
+            var size = skritter.settings.canvasSize();
             var bounds = this.get('shape').getBounds();
             var data = this.get('data');
             return {
