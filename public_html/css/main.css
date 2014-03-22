@@ -206,7 +206,7 @@ body {
 
 
 /*** PROMPT: WRITING AREA ***/
-#writing-area .canvas-holder { position: absolute; }
+#writing-area .canvas-holder { position: relative; }
 #writing-area .canvas-holder #canvas-display {
     bottom: 0;
     left: 0;
