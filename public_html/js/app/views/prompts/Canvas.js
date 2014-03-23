@@ -112,6 +112,7 @@ define(function() {
             color = (color) ? color : Canvas.textColor;
             font = (font) ? font : Canvas.textFont;
             var text = new createjs.Text(character, Canvas.size + 'px ' + font, color);
+            text.name = character;
             text.alpha = (alpha) ? alpha : 1;
             layer.addChild(text);
             Canvas.stage.display.update();
@@ -181,6 +182,7 @@ define(function() {
                 squig = new createjs.Shape();
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
+                self.triggerInputDown(oldPoint);
                 stage.addEventListener('stagemousemove', move);
                 stage.addEventListener('stagemouseup', up);
             }

@@ -23,6 +23,7 @@ define([
             Tone.canvas = new Canvas();
             skritter.timer.setReviewLimit(15);
             skritter.timer.setThinkingLimit(10);
+            this.listenTo(Tone.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(Tone.canvas, 'input:up', this.handleStrokeReceived);
         },
         /**
@@ -42,6 +43,13 @@ define([
             skritter.timer.start();
             this.resize();
             return this;
+        },
+        /**
+         * @method handleStrokeDown
+         * @returns {undefined}
+         */
+        handleStrokeDown: function() {            
+            Tone.canvas.getLayer('background').alpha = 0.6;
         },
         /**
          * @method handleStrokeReceived
