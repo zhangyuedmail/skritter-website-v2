@@ -12,6 +12,7 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
+            this.grid = true;
             Canvas.stage = {};
             Canvas.size = skritter.settings.canvasSize();
             Canvas.gridColor = 'grey';
@@ -43,7 +44,8 @@ define(function() {
             this.createLayer('display');
             this.createLayer('hint');
             this.updateAll();
-            this.drawGrid();
+            if (this.grid)
+                this.drawGrid();
             return this;
         },
         /**

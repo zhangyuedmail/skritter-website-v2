@@ -21,6 +21,7 @@ define([
         initialize: function() {
             Prompt.prototype.initialize.call(this);
             Tone.canvas = new Canvas();
+            Tone.canvas.grid = false;
             skritter.timer.setReviewLimit(15);
             skritter.timer.setThinkingLimit(10);
             this.listenTo(Tone.canvas, 'input:down', this.handleStrokeDown);
