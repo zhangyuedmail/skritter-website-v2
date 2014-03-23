@@ -68,6 +68,13 @@ define([
             }
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            Tone.canvas.remove();
+            Prompt.prototype.remove.call(this);
+        },
+        /**
          * @method resize
          */
         resize: function() {

@@ -63,6 +63,13 @@ define([
             }
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            Rune.canvas.remove();
+            Prompt.prototype.remove.call(this);
+        },
+        /**
          * @method resize
          */
         resize: function() {

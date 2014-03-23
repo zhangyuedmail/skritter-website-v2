@@ -85,6 +85,7 @@ define([
          * @method remove
          */
         remove: function() {
+            Prompt.gradingButtons.remove();
             this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
