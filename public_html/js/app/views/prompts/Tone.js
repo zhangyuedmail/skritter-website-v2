@@ -38,6 +38,8 @@ define([
             Tone.canvas.enableInput();
             this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            if (this.review.baseItem().isNew())
+                this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position'), skritter.user.settings.get('hideReading')));
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-style').html(this.review.baseVocab().style());

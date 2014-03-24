@@ -165,6 +165,12 @@ body {
     left: 10px;
     top: 15px;
 }
+#top-container #prompt-new-tag {
+    color: #ff0000;
+    display: none;
+    font-size: 14px;
+    vertical-align: super;
+}
 #top-container .writing-hidden { border-bottom: 1px #222222 solid; }
 #top-container .writing-hidden span { visibility: hidden; }
 #top-container .reading-hidden { border-bottom: 1px #222222 solid; }

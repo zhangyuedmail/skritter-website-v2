@@ -30,6 +30,8 @@ define([
             Prompt.prototype.render.call(this);
             this.$('#bottom-container').hammer().on('tap', _.bind(this.handleTap, this));
             this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
+            if (this.review.baseItem().isNew())
+                this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-style').html(this.review.baseVocab().style());

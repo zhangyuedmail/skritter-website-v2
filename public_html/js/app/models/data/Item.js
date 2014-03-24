@@ -88,6 +88,15 @@ define([
             return review;
         },
         /**
+         * @method isNew
+         * @returns {Boolean}
+         */
+        isNew: function() {
+            if (this.get('reviews') === 0)
+                return true;
+            return false;
+        },
+        /**
          * @method stroke
          * @returns {Backbone.Model}
          */

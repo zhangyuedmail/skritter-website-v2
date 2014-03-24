@@ -41,6 +41,8 @@ define([
             this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
             this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            if (this.review.baseItem().isNew())
+                this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
             this.$('#prompt-style').html(this.review.baseVocab().style());
