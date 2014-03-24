@@ -217,6 +217,26 @@ define(function() {
             }
         },
         /**
+         * @method fadeLayer
+         * @param {String} layerName
+         * @param {Function} callback
+         * @returns {Container}
+         */
+        fadeLayer: function(layerName, callback) {
+            var layer = this.getLayer(layerName);
+            layer.cache(0, 0, Canvas.size, Canvas.size);
+            if (layer.getNumChildren() > 0) {
+                createjs.Tween.get(layer).to({alpha: 0}, 500).call(function() {
+                    layer.removeAllChildren();
+                    layer.uncache();
+                    layer.alpha = 1.0;
+                    if (typeof callback === 'function')
+                        callback(layer);
+                });
+            }
+            return layer;
+        },
+        /**
          * @method fadeShape
          * @param {String} layerName
          * @param {CreateJS.Shape} shape

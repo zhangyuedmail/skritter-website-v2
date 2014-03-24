@@ -99,9 +99,10 @@ define(function() {
         /**
          * @method inflatedSprite
          * @param {String} color
+         * @param {Number} alpha
          * @return {CreateJS.Shape}
          */
-        inflateShape: function(color) {
+        inflateShape: function(color, alpha) {
             var shape = skritter.assets.stroke(this.get('bitmapId'), color);
             var spriteBounds = shape.getBounds();
             var data = this.inflateData();
@@ -117,6 +118,7 @@ define(function() {
             shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
             var finalBounds = shape.getTransformedBounds();
             shape.name = 'stroke';
+            shape.alpha = alpha ? alpha : 1;
             shape.x += finalBounds.width / 2 + data.x;
             shape.y += finalBounds.height / 2 + data.y;
             return shape;

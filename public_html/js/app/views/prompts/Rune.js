@@ -23,6 +23,7 @@ define([
             Rune.canvas = new Canvas();
             skritter.timer.setReviewLimit(30);
             skritter.timer.setThinkingLimit(15);
+            this.listenTo(Rune.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(Rune.canvas, 'input:up', this.handleStrokeReceived);
         },
         /**
@@ -35,6 +36,7 @@ define([
             Rune.canvas.setElement(this.$('#writing-area')).render();
             Rune.canvas.enableInput();
             this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
+            this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
@@ -45,16 +47,36 @@ define([
             return this;
         },
         /**
+         * @method handleDoubleTap
+         * @param {Object} event
+         */
+        handleDoubleTap: function(event) {
+            Prompt.gradingButtons.grade(1);
+            Rune.canvas.drawShape('background', this.review.character().targets[0].shape(null, '#999999'));
+            event.preventDefault();
+        },
+        /**
+         * @method handleStrokeDown
+         */
+        handleStrokeDown: function() {
+            skritter.timer.stopThinking();
+        },
+        /**
          * @method handleStrokeReceived
          * @param {Array} points
          * @param {CreateJS.Shape} shape
          */
         handleStrokeReceived: function(points, shape) {
-            var result = this.review.character().recognize(points, shape);
-            if (result) {
-                Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
-                if (this.review.character().isFinished())
-                    this.showAnswer();
+            if (points.length > 5) {
+                Rune.canvas.fadeLayer('background');
+                var result = this.review.character().recognize(points, shape);
+                if (result) {
+                    Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
+                    if (this.review.character().isFinished())
+                        this.showAnswer();
+                }
+            } else {
+
             }
         },
         /**
@@ -85,7 +107,7 @@ define([
             Rune.canvas.disableInput();
             Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
             window.setTimeout(_.bind(function() {
-               this.$('#writing-area').hammer().one('tap', _.bind(this.handleTap, this)); 
+                this.$('#writing-area').hammer().one('tap', _.bind(this.handleTap, this));
             }, this), 500);
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position') + 1));
