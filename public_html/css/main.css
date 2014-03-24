@@ -139,6 +139,7 @@ body {
 /*** PROMPT: GRADING BUTTONS ***/
 .prompt-container #grading-buttons {
     bottom: 0;
+    display: none;
     left: 0;
     position: absolute;
     z-index: 9999;

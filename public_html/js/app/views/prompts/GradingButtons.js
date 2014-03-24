@@ -85,8 +85,11 @@ define([
         hide: function(skipAnimation) {
             if (skipAnimation) {
                 this.$('#grading-buttons').hide();
+                this.$('#grading-buttons').css('display', 'none');
             } else {
-                this.$('#grading-buttons').hide(GradingButtons.animationSpeed);
+                this.$('#grading-buttons').hide(GradingButtons.animationSpeed, function() {
+                    $(this).css('display', 'none');
+                });
             }
             return this;
         },
@@ -118,7 +121,9 @@ define([
          * @method show
          */
         show: function() {
-            this.$('#grading-buttons').show(GradingButtons.animationSpeed);
+            this.$('#grading-buttons').show(GradingButtons.animationSpeed, function() {
+                $(this).css('display', 'table');
+            });
             return this;
         },
         /**
