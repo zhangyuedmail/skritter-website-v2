@@ -59,6 +59,8 @@ define([
             this.$('#top-container').width(skritter.settings.contentWidth());
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
             this.$('#bottom-container').width(skritter.settings.contentWidth());
+            this.$('#prompt-reading').fitText(0.8);
+            this.$('#prompt-writing').fitText(0.8);
         },
         /**
          * @method showAnswer
@@ -70,6 +72,7 @@ define([
             this.$('#question-text').html('Answer:');
             Prompt.gradingButtons.show();
             Prompt.answerShown = true;
+            this.resize();
         }
     });
 
