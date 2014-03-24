@@ -112,7 +112,7 @@ define([
             skritter.timer.stop();
             Tone.canvas.disableInput();
             window.setTimeout(_.bind(function() {
-               this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this)); 
+               this.$('#writing-area').hammer().one('tap', _.bind(this.handleTap, this)); 
             }, this), 500);
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
             Prompt.gradingButtons.show();

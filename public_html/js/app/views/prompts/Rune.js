@@ -85,7 +85,7 @@ define([
             Rune.canvas.disableInput();
             Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
             window.setTimeout(_.bind(function() {
-               this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this)); 
+               this.$('#writing-area').hammer().one('tap', _.bind(this.handleTap, this)); 
             }, this), 500);
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position') + 1));
