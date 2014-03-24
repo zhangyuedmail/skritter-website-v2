@@ -185,7 +185,7 @@ define(function() {
         sentenceWriting: function() {
             var sentence = this.sentence();
             if (sentence)
-                return sentence.get('writing');
+                return sentence.get('writing').replace(/\s/g, '');
         },
         /**
          * @method style
