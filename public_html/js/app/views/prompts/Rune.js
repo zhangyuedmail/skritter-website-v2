@@ -21,6 +21,8 @@ define([
         initialize: function() {
             Prompt.prototype.initialize.call(this);
             Rune.canvas = new Canvas();
+            Rune.maxStrokeAttempts = 3;
+            Rune.strokeAttempts = 0;
             skritter.timer.setReviewLimit(30);
             skritter.timer.setThinkingLimit(15);
             this.listenTo(Rune.canvas, 'input:down', this.handleStrokeDown);
@@ -71,13 +73,17 @@ define([
                 Rune.canvas.fadeLayer('background');
                 var result = this.review.character().recognize(points, shape);
                 if (result) {
+                    Rune.strokeAttempts = 0;
                     Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
-                    if (this.review.character().isFinished())
-                        this.showAnswer();
+                } else {
+                    Rune.strokeAttempts++;
+                    if (Rune.strokeAttempts > Rune.maxStrokeAttempts) {
+                        Prompt.gradingButtons.grade(1);
+                    }
                 }
-            } else {
-
             }
+            if (this.review.character().isFinished())
+                this.showAnswer();
         },
         /**
          * @method remove
@@ -105,7 +111,8 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             Rune.canvas.disableInput();
-            Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
+            Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]);
+            Rune.strokeAttempts = 0;
             window.setTimeout(_.bind(function() {
                 this.$('#writing-area').hammer().one('tap', _.bind(this.handleTap, this));
             }, this), 500);
