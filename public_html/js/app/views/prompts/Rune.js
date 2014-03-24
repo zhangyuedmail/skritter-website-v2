@@ -39,6 +39,7 @@ define([
             Rune.canvas.enableInput();
             this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
             this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
+            this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
@@ -49,12 +50,29 @@ define([
             return this;
         },
         /**
+         * @method clear
+         */
+        clear: function() {
+            Rune.canvas.disableInput().enableInput();
+            Rune.canvas.render();
+            Prompt.gradingButtons.hide();
+            this.review.character().reset();
+        },
+        /**
          * @method handleDoubleTap
          * @param {Object} event
          */
         handleDoubleTap: function(event) {
             Prompt.gradingButtons.grade(1);
             Rune.canvas.drawShape('background', this.review.character().targets[0].shape(null, '#999999'));
+            event.preventDefault();
+        },
+        /**
+         * @method handleHold
+         * @param {Object} event
+         */
+        handleHold: function(event) {
+            this.clear();
             event.preventDefault();
         },
         /**

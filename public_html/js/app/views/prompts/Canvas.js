@@ -141,9 +141,11 @@ define(function() {
         },
         /**
          * @method disableInput
+         * @returns {Backbone.View}
          */
         disableInput: function() {
             Canvas.stage.input.removeAllEventListeners();
+            return this;
         },
         /**
          * @method drawPoint
