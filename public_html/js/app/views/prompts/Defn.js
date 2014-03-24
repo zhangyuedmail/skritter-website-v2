@@ -59,7 +59,7 @@ define([
             this.$('#top-container').width(skritter.settings.contentWidth());
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
             this.$('#bottom-container').width(skritter.settings.contentWidth());
-            this.$('#prompt-writing').fitText(0.8);
+            this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});
         },
         /**
          * @method showAnswer
