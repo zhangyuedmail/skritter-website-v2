@@ -212,7 +212,6 @@ define(function() {
                 stage.removeEventListener('stagemouseup', up);
                 if (event.rawX >= 0 && event.rawX < Canvas.size && event.rawY >= 0 && event.rawY < Canvas.size)
                     self.triggerInputUp(points, squig);
-                self.fadeShape('marker', squig);
                 marker.graphics.clear();
                 stage.clear();
             }
