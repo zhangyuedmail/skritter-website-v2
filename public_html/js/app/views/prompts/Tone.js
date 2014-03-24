@@ -85,14 +85,6 @@ define([
                 this.showAnswer();
         },
         /**
-         * @method handleTap
-         * @param {Object} event
-         */
-        handleTap: function(event) {
-            this.handleGradingSelected(Prompt.gradingButtons.grade());
-            event.preventDefault();
-        },
-        /**
          * @method remove
          */
         remove: function() {
@@ -119,9 +111,12 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             Tone.canvas.disableInput();
-            this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
+            window.setTimeout(_.bind(function() {
+               this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this)); 
+            }, this), 500);
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
             Prompt.gradingButtons.show();
+            Prompt.answerShown = true;
         }
     });
 

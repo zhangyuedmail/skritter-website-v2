@@ -43,7 +43,11 @@ define([
          * @param {Object} event
          */
         handleTap: function(event) {
-            this.showAnswer();
+            if (Prompt.answerShown) {
+                this.handleGradingSelected(Prompt.gradingButtons.grade());
+            } else {
+                this.showAnswer();
+            }
             event.preventDefault();
         },
         /**
@@ -56,12 +60,16 @@ define([
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
             this.$('#bottom-container').width(skritter.settings.contentWidth());
         },
+        /**
+         * @method showAnswer
+         */
         showAnswer: function() {
             skritter.timer.stop();
             this.$('.question').hide();
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Answer:');
             Prompt.gradingButtons.show();
+            Prompt.answerShown = true;
         }
     });
 

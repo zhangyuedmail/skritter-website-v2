@@ -16,6 +16,7 @@ define([
          */
         initialize: function() {
             this.review = null;
+            Prompt.answerShown = false;
             Prompt.gradingButtons = new GradingButtons();
             this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradingSelected);
             this.listenTo(skritter.settings, 'resize', this.resize);
@@ -51,9 +52,18 @@ define([
                 this.trigger('prompt:finished');
             } else {
                 skritter.timer.reset();
+                Prompt.answerShown = false;
                 this.review.next();
                 this.render();
             }
+        },
+        /**
+         * @method handleTap
+         * @param {Object} event
+         */
+        handleTap: function(event) {
+            this.handleGradingSelected(Prompt.gradingButtons.grade());
+            event.preventDefault();
         },
         /**
          * @method toggleHint

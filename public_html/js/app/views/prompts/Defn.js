@@ -28,12 +28,12 @@ define([
         render: function() {
             this.$el.html(templateDefn);
             Prompt.prototype.render.call(this);
+            this.$('#bottom-container').hammer().on('tap', _.bind(this.handleTap, this));
             this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-style').html(this.review.baseVocab().style());
             this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
-            this.$('#bottom-container').hammer().on('tap', _.bind(this.handleTap, this));
             skritter.timer.start();
             this.resize();
             return this;
@@ -43,7 +43,11 @@ define([
          * @param {Object} event
          */
         handleTap: function(event) {
-            this.showAnswer();
+            if (Prompt.answerShown) {
+                this.handleGradingSelected(Prompt.gradingButtons.grade());
+            } else {
+                this.showAnswer();
+            }
             event.preventDefault();
         },
         /**
@@ -56,12 +60,16 @@ define([
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
             this.$('#bottom-container').width(skritter.settings.contentWidth());
         },
+        /**
+         * @method showAnswer
+         */
         showAnswer: function() {
             skritter.timer.stop();
             this.$('.question').hide();
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Answer:');
             Prompt.gradingButtons.show();
+            Prompt.answerShown = true;
         }
     });
 
