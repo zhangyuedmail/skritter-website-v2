@@ -36,6 +36,7 @@ define([
             Prompt.prototype.render.call(this);
             Tone.canvas.setElement(this.$('#writing-area')).render();
             Tone.canvas.enableInput();
+            this.$('#bottom-container').hammer().on('tap', this.handleTap);
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position'), skritter.user.settings.get('hideReading')));
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
@@ -75,6 +76,13 @@ define([
                     Prompt.gradingButtons.show();
                 }
             }
+        },
+        /**
+         * @method handleTap
+         * @param {Object} event
+         */
+        handleTap: function(event) {
+            event.preventDefault();
         },
         /**
          * @method remove
