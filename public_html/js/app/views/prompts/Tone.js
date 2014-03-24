@@ -81,13 +81,8 @@ define([
                     Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[1]);
                 }
             }
-            if (this.review.character().isFinished()) {
-                skritter.timer.stop();
-                Tone.canvas.disableInput();
-                this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
-                this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
-                Prompt.gradingButtons.show();
-            }
+            if (this.review.character().isFinished())
+                this.showAnswer();
         },
         /**
          * @method handleTap
@@ -117,6 +112,16 @@ define([
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
             this.$('#bottom-container').width(skritter.settings.contentWidth());
             this.$('#writing-area').width(skritter.settings.canvasSize());
+        },
+        /**
+         * @method showAnswer
+         */
+        showAnswer: function() {
+            skritter.timer.stop();
+            Tone.canvas.disableInput();
+            this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
+            this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
+            Prompt.gradingButtons.show();
         }
     });
 
