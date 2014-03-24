@@ -36,7 +36,7 @@ define([
             Prompt.prototype.render.call(this);
             Tone.canvas.setElement(this.$('#writing-area')).render();
             Tone.canvas.enableInput();
-            this.$('#bottom-container').hammer().on('tap', this.handleTap);
+            this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position'), skritter.user.settings.get('hideReading')));
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
@@ -72,8 +72,9 @@ define([
                     }
                 }
             } else {
+                this.review.character().add(this.review.character().targets[4].models);
                 if (possibleTones.indexOf(5) > -1) {
-                    Tone.canvas.drawShape('display', this.review.character().targets[4].shape());
+                    Tone.canvas.drawShape('display', this.review.character().shape());
                     Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
                 } else {
                     Tone.canvas.drawShape('display', this.review.character().targets[possibleTones[0] - 1].shape());
@@ -83,6 +84,7 @@ define([
             if (this.review.character().isFinished()) {
                 skritter.timer.stop();
                 Tone.canvas.disableInput();
+                this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
                 this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
                 Prompt.gradingButtons.show();
             }
@@ -92,6 +94,7 @@ define([
          * @param {Object} event
          */
         handleTap: function(event) {
+            this.handleGradingSelected(Prompt.gradingButtons.grade());
             event.preventDefault();
         },
         /**
