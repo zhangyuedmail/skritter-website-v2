@@ -59,7 +59,7 @@ define([
             var variation = this.expectedVariation();
             if (this.length === 0)
                 return variation.at(0);
-            return variation.at(this.position());
+            return variation.at(this.position() - 1);
         },
         /**
          * Returns the expected variation from the array possible targets.
@@ -69,7 +69,7 @@ define([
          */
         expectedVariation: function() {
             if (this.targets.length <= 1)
-                return 0;
+                return this.targets[0];
             var targetScores = [];
             for (var i = 0, length = this.targets.length; i < length; i++)
                 targetScores[i] = 0;

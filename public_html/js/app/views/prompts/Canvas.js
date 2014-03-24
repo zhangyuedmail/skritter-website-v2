@@ -42,6 +42,7 @@ define(function() {
             Canvas.stage.input.removeAllChildren();
             this.createLayer('background');
             this.createLayer('display');
+            this.createLayer('marker');
             this.createLayer('hint');
             this.updateAll();
             if (this.grid)
@@ -211,7 +212,7 @@ define(function() {
                 stage.removeEventListener('stagemouseup', up);
                 if (event.rawX >= 0 && event.rawX < Canvas.size && event.rawY >= 0 && event.rawY < Canvas.size)
                     self.triggerInputUp(points, squig);
-                self.fadeShape('background', squig);
+                self.fadeShape('marker', squig);
                 marker.graphics.clear();
                 stage.clear();
             }
@@ -229,7 +230,7 @@ define(function() {
                 createjs.Tween.get(layer).to({alpha: 0}, 500).call(function() {
                     layer.removeAllChildren();
                     layer.uncache();
-                    layer.alpha = 1.0;
+                    layer.alpha = 1;
                     if (typeof callback === 'function')
                         callback(layer);
                 });
@@ -247,7 +248,7 @@ define(function() {
             layer.addChild(shape);
             Canvas.stage.display.update();
             shape.cache(0, 0, Canvas.size, Canvas.size);
-            createjs.Tween.get(shape).to({alpha: 0}, 300, createjs.Ease.backOut).call(function() {
+            createjs.Tween.get(shape).to({alpha: 0}, 2500, createjs.Ease.backOut).call(function() {
                 shape.uncache();
                 layer.removeChild(shape);
                 if (typeof callback === 'function')
