@@ -59,22 +59,32 @@ define([
          * @param {CreateJS.Shape} shape
          */
         handleStrokeReceived: function(points, shape) {
-            var result = this.review.character().recognize(points, shape);
-            if (result) {
-                var possibleTones = _.flatten(this.review.baseVocab().tones());
-                if (possibleTones.indexOf(result.get('tone')) > -1) {
-                    Tone.canvas.tweenShape('display', result.userShape(), result.inflateShape());
+            var possibleTones = _.flatten(this.review.baseVocab().tones());
+            if (points.length > 5) {
+                var result = this.review.character().recognize(points, shape);
+                if (result) {
+                    if (possibleTones.indexOf(result.get('tone')) > -1) {
+                        Tone.canvas.tweenShape('display', result.userShape(), result.inflateShape());
+                        Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
+                    } else {
+                        Tone.canvas.drawShape('display', this.review.character().targets[possibleTones[0] - 1].shape());
+                        Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[1]);
+                    }
+                }
+            } else {
+                if (possibleTones.indexOf(5) > -1) {
+                    Tone.canvas.drawShape('display', this.review.character().targets[4].shape());
                     Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[3]);
                 } else {
-                    Tone.canvas.drawShape('display', this.review.character().shape());
+                    Tone.canvas.drawShape('display', this.review.character().targets[possibleTones[0] - 1].shape());
                     Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[1]);
                 }
-                if (this.review.character().isFinished()) {
-                    skritter.timer.stop();
-                    Tone.canvas.disableInput();
-                    this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
-                    Prompt.gradingButtons.show();
-                }
+            }
+            if (this.review.character().isFinished()) {
+                skritter.timer.stop();
+                Tone.canvas.disableInput();
+                this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
+                Prompt.gradingButtons.show();
             }
         },
         /**
