@@ -59,7 +59,7 @@ define([
          * @param {CreateJS.Shape} shape
          */
         handleStrokeReceived: function(points, shape) {
-            var possibleTones = _.flatten(this.review.baseVocab().tones());
+            var possibleTones = _.flatten(this.review.baseVocab().tones(this.review.get('position')));
             if (points.length > 5) {
                 var result = this.review.character().recognize(points, shape);
                 if (result) {

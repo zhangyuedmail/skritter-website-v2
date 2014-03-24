@@ -19,6 +19,13 @@ define(function() {
             });
         },
         /**
+         * @method characterCount
+         * @returns {Number}
+         */
+        characterCount: function() {
+            return this.characters().length;
+        },
+        /**
          * @method characters
          * @returns {Array}
          */
@@ -194,9 +201,10 @@ define(function() {
          * reading string. Japanese will just return an empty array since it doesn't have tones.
          * 
          * @method tones
+         * @param {Number} position
          * @returns {Array}
          */
-        tones: function() {
+        tones: function(position) {
             var tones = [];
             var reading = this.get('reading');
             if (skritter.user.settings.isChinese()) {
@@ -210,6 +218,8 @@ define(function() {
                         tones.push([skritter.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
                 }
             }
+            if (position && this.characterCount() > 1)
+                return tones[position - 1];
             return tones;
         },
         /**
