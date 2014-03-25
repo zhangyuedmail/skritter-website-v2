@@ -54,10 +54,15 @@ define(function() {
          */
         containedItemIds: function(part) {
             var containedItemIds = [];
-            if (part && part === 'rune' || part === 'tone') {
-                var containedVocabIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [];
+            var containedVocabIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [];
+            if (part === 'rune') {
                 for (var i = 0, length = containedVocabIds.length; i < length; i++)
                     containedItemIds.push(skritter.user.id + '-' + containedVocabIds[i] + '-' + part);
+            } else if (part === 'tone') {
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    var splitId = containedVocabIds[i].split('-');
+                    containedItemIds.push(skritter.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
+                }
             }
             return containedItemIds;
         },
