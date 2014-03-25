@@ -43,7 +43,7 @@ define(function() {
                 var splitWriting = this.get('writing').split('');
                 if (splitWriting.length === 1 && !skritter.fn.isKana(splitWriting[0]))
                     characters.push(splitWriting[0]);
-                    
+
             }
             return characters;
         },
@@ -132,13 +132,13 @@ define(function() {
          * @param {Boolean} mask
          * @returns {String}
          */
-        readingBlocks: function(offset, mask) {            
+        readingBlocks: function(offset, mask) {
             var element = '';
-            var position = 1;
             var reading = this.get('reading');
             if (skritter.user.settings.isChinese()) {
                 reading = reading.indexOf(', ') === -1 ? [reading] : reading.split(', ');
                 for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
+                    var position = 1;
                     var pieces = reading[a].match(/[a-z]+[0-9]+|\s\.\.\.\s|\'/g);
                     element += "<span id=reading-" + (a + 1) + "'>";
                     for (var b = 0, lengthB = pieces.length; b < lengthB; b++) {
@@ -155,7 +155,7 @@ define(function() {
                             }
                             position++;
                         } else {
-                            element += "<span class='reading-filler'>" + piece  + "</span>";
+                            element += "<span class='reading-filler'>" + piece + "</span>";
                         }
                     }
                     element += "</span>";
@@ -243,9 +243,9 @@ define(function() {
                     element += "<span class='writing-filler'>" + character + "</span>";
                 } else {
                     if (offset && position >= offset) {
-                        element += "<span id='writing-" + position + "' class='writing-hidden'><span>" +  character + "</span></span>";
+                        element += "<span id='writing-" + position + "' class='writing-hidden'><span>" + character + "</span></span>";
                     } else {
-                        element += "<span id='writing-" + position + "'>" +  character + "</span>";
+                        element += "<span id='writing-" + position + "'>" + character + "</span>";
                     }
                     position++;
                 }
