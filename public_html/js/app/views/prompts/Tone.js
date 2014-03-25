@@ -44,6 +44,15 @@ define([
             return this;
         },
         /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
+            Prompt.gradingButtons.hide();
+            Tone.canvas.render();
+            return this;
+        },
+        /**
          * @method handleStrokeDown
          * @returns {undefined}
          */
@@ -117,6 +126,7 @@ define([
         show: function() {
             skritter.timer.start();
             Tone.canvas.enableInput();
+            Tone.canvas.drawCharacterFromFont('background', this.review.baseVocab().characters()[this.review.get('position') - 1], skritter.user.settings.font());
             this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
             this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
             if (this.review.baseItem().isNew())
