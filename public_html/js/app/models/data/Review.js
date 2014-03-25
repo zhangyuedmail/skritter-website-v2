@@ -195,10 +195,13 @@ define(function() {
             for (var i = 0, length = reviews.length; i < length; i++) {
                 var item = this.item(i);
                 var review = reviews[i];
+                if (i == 0 && reviews.length > 1)
+                    review.score = this.finalGrade();
                 review.newInterval = skritter.fn.scheduler.interval(item, review.score);
                 item.set({
                     changed: review.submitTime,
                     last: review.submitTime,
+                    interval: review.newInterval,
                     next: review.submitTime + review.newInterval,
                     previousInterval: review.currentInterval,
                     previousSuccess: (review.score > 1) ? true : false,
