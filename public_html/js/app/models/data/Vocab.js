@@ -56,11 +56,11 @@ define(function() {
             var containedItemIds = [];
             var containedVocabIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [];
             if (part === 'rune') {
-                for (var i = 0, length = containedVocabIds.length; i < length; i++)
-                    containedItemIds.push(skritter.user.id + '-' + containedVocabIds[i] + '-' + part);
+                for (var a = 0, lengthA = containedVocabIds.length; a < lengthA; a++)
+                    containedItemIds.push(skritter.user.id + '-' + containedVocabIds[a] + '-' + part);
             } else if (part === 'tone') {
-                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                    var splitId = containedVocabIds[i].split('-');
+                for (var b = 0, lengthB = containedVocabIds.length; i < lengthB; b++) {
+                    var splitId = containedVocabIds[b].split('-');
                     containedItemIds.push(skritter.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
                 }
             }
