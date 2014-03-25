@@ -18,17 +18,17 @@ define([
             this.review = null;
             Prompt.answerShown = false;
             Prompt.gradingButtons = new GradingButtons();
-            this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradingSelected);
-            this.listenTo(skritter.settings, 'resize', this.resize);
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
+            console.log('PROMPT', this.review.vocab().get('writing'), this.review);
             Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
             this.$('.character-font').addClass(this.review.baseVocab().fontClass());
-            console.log('PROMPT', this.review.vocab().get('writing'), this.review);
+            this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradingSelected);
+            this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
         },
         /**

@@ -181,17 +181,21 @@ body {
 #bottom-container { 
     background-color: #ffffff;
     bottom: 0;
-    display: table;
     position: absolute;
     z-index: 1001;
 }
-#bottom-container .answer {
+#bottom-container #prompt-text {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+#bottom-container #prompt-text .answer {
     cursor: pointer;
     display: table-cell;
     padding: 0 15px;
     vertical-align: middle;
 }
-#bottom-container .question {
+#bottom-container #prompt-text .question {
     cursor: pointer;
     display: table-cell;
     padding: 0 15px;

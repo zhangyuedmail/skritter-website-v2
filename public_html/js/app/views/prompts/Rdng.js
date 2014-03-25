@@ -28,16 +28,13 @@ define([
         render: function() {
             this.$el.html(templateRdng);
             Prompt.prototype.render.call(this);
-            this.$('#bottom-container').hammer().on('tap', _.bind(this.handleTap, this));
-            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
-            if (this.review.baseItem().isNew())
-                this.$('#prompt-new-tag').show();
-            this.$('#prompt-reading').html(this.review.baseVocab().reading());
-            this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
-            this.$('#prompt-style').html(this.review.baseVocab().style());
-            this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
-            skritter.timer.start();
+            this.$('#prompt-text').hammer().on('tap', _.bind(this.handleTap, this));
             this.resize();
+            if (this.review.get('finished')) {
+                this.show().showAnswer();
+            } else {
+                this.show();
+            }
             return this;
         },
         /**
@@ -53,6 +50,13 @@ define([
             event.preventDefault();
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.$('#prompt-text').hammer().off();
+            Prompt.prototype.remove.call(this);
+        },
+        /**
          * @method resize
          */
         resize: function() {
@@ -65,7 +69,23 @@ define([
             this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});
         },
         /**
+         * @method show
+         * @returns {Backbone.View}
+         */
+        show: function() {
+            skritter.timer.start();
+            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            if (this.review.baseItem().isNew())
+                this.$('#prompt-new-tag').show();
+            this.$('#prompt-reading').html(this.review.baseVocab().reading());
+            this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
+            this.$('#prompt-style').html(this.review.baseVocab().style());
+            this.$('#prompt-writing').html(this.review.baseVocab().get('writing'));
+            return this;
+        },
+        /**
          * @method showAnswer
+         * @returns {Backbone.View}
          */
         showAnswer: function() {
             skritter.timer.stop();
@@ -74,7 +94,9 @@ define([
             this.$('#question-text').html('Answer:');
             Prompt.gradingButtons.show();
             Prompt.answerShown = true;
+            this.review.set('finished', true);
             this.resize();
+            return this;
         }
     });
 

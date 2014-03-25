@@ -25,8 +25,6 @@ define([
             Rune.strokeAttempts = 0;
             skritter.timer.setReviewLimit(30);
             skritter.timer.setThinkingLimit(15);
-            this.listenTo(Rune.canvas, 'input:down', this.handleStrokeDown);
-            this.listenTo(Rune.canvas, 'input:up', this.handleStrokeReceived);
         },
         /**
          * @method render
@@ -36,19 +34,15 @@ define([
             this.$el.html(templateRune);
             Prompt.prototype.render.call(this);
             Rune.canvas.setElement(this.$('#writing-area')).render();
-            Rune.canvas.enableInput();
-            this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
-            this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
             this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
-            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
-            if (this.review.baseItem().isNew())
-                this.$('#prompt-new-tag').show();
-            this.$('#prompt-reading').html(this.review.baseVocab().reading());
-            this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
-            this.$('#prompt-style').html(this.review.baseVocab().style());
-            this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
-            skritter.timer.start();
+            this.listenTo(Rune.canvas, 'input:down', this.handleStrokeDown);
+            this.listenTo(Rune.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
+            if (this.review.character().isFinished()) {
+                this.show().showAnswer();
+            } else {
+                this.show();
+            }
             return this;
         },
         /**
@@ -112,6 +106,7 @@ define([
          */
         remove: function() {
             Rune.canvas.remove();
+            this.$('#writing-area').hammer().off();
             Prompt.prototype.remove.call(this);
         },
         /**
@@ -119,16 +114,37 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
-            Rune.canvas.render();
-            Rune.canvas.resize(skritter.settings.canvasSize());
+            Rune.canvas.render().resize(skritter.settings.canvasSize());
             this.$('#top-container').height(skritter.settings.contentHeight() - skritter.settings.canvasSize() - 3);
             this.$('#top-container').width(skritter.settings.contentWidth());
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
             this.$('#bottom-container').width(skritter.settings.contentWidth());
             this.$('#writing-area').width(skritter.settings.canvasSize());
+            if (this.review.character().length > 0)
+                Rune.canvas.drawShape('display', this.review.character().shape());
+        },
+        /**
+         * @method show
+         * @returns {Backbone.View}
+         */
+        show: function() {
+            skritter.timer.start();
+            Rune.canvas.enableInput();
+            this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
+            this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
+            this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
+            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            if (this.review.baseItem().isNew())
+                this.$('#prompt-new-tag').show();
+            this.$('#prompt-reading').html(this.review.baseVocab().reading());
+            this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
+            this.$('#prompt-style').html(this.review.baseVocab().style());
+            this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
+            return this;
         },
         /**
          * @method showAnswer
+         * @returns {Backbone.View}
          */
         showAnswer: function() {
             skritter.timer.stop();
@@ -136,12 +152,14 @@ define([
             Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]);
             Rune.strokeAttempts = 0;
             window.setTimeout(_.bind(function() {
+                this.$('#writing-area').hammer().off('doubletap', _.bind(this.handleDoubleTap, this));
                 this.$('#writing-area').hammer().one('tap', _.bind(this.handleTap, this));
             }, this), 500);
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position') + 1));
             Prompt.gradingButtons.show();
             Prompt.answerShown = true;
+            return this;
         }
     });
 
