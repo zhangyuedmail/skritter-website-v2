@@ -59,7 +59,7 @@ define([
          * @param {Object} event
          */
         handleDoubleTap: function(event) {
-            if (this.review.character().isFinished()) {
+            if (!this.review.character().isFinished()) {
                 Prompt.gradingButtons.grade(1);
                 Rune.canvas.drawShape('background', this.review.character().targets[0].shape(null, '#999999'));
             }
