@@ -59,10 +59,8 @@ define([
         clear: function() {
             this.decomps.reset();
             this.items.reset();
-            this.reviews.reset();
             this.sentences.reset();
             this.strokes.reset();
-            this.vocablists.reset();
             this.vocabs.reset();
         },
         /**
@@ -177,6 +175,7 @@ define([
          * @param {Function} callback
          */
         loadItem: function(itemId, callback) {
+            this.clear();
             var part = itemId.split('-')[4];
             async.waterfall([
                 //intial item
