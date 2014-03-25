@@ -46,15 +46,6 @@ define([
             return this;
         },
         /**
-         * @method clear
-         */
-        clear: function() {
-            Rune.canvas.disableInput().enableInput();
-            Rune.canvas.render();
-            Prompt.gradingButtons.hide();
-            this.review.character().reset();
-        },
-        /**
          * @method handleDoubleTap
          * @param {Object} event
          */
@@ -70,7 +61,7 @@ define([
          * @param {Object} event
          */
         handleHold: function(event) {
-            this.clear();
+            this.reset();
             event.preventDefault();
         },
         /**
@@ -110,6 +101,15 @@ define([
             Rune.canvas.remove();
             this.$('#writing-area').hammer().off();
             Prompt.prototype.remove.call(this);
+        },
+        /**
+         * @method reset
+         */
+        reset: function() {
+            Rune.canvas.disableInput().enableInput();
+            Rune.canvas.render();
+            Prompt.gradingButtons.hide();
+            this.review.character().reset();
         },
         /**
          * @method resize
