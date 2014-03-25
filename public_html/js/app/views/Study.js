@@ -35,7 +35,7 @@ define([
             this.stopListening();
             skritter.timer.setElement(this.$('#timer')).render();
             if (this.prompt) {
-                this.loadPrompt();
+                this.loadPrompt(this.prompt.review);
             } else {
                 this.nextPrompt();
             }
