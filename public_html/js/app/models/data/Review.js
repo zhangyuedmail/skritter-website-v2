@@ -126,6 +126,29 @@ define(function() {
             return skritter.user.data.items.get(this.get('reviews')[position].itemId);
         },
         /**
+         * @method load
+         * @param {Function} callback
+         */
+        load: function(callback) {
+            var part = this.get('part');
+            skritter.user.data.loadItem(this.originalBaseItem().id, _.bind(function(item) {
+                if (part === 'rune' || part === 'tone') {
+                    this.characters = [];
+                    var reviews = this.get('reviews');
+                    for (var i = 0, length = reviews.length; i < length; i++) {
+                        if (reviews.length === 1) {
+                            this.characters.push(this.item(i).stroke().canvasCharacter());
+                        } else if (i > 0) {
+                            this.characters.push(this.item(i).stroke().canvasCharacter());
+                        }
+                    }
+                    callback(item);
+                } else {
+                    callback(item);
+                }
+            }, this));
+        },
+        /**
          * @method next
          * @returns {Number}
          */

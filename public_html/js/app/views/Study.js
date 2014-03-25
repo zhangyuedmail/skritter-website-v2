@@ -23,6 +23,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.index = -1;
             this.prompt = null;
         },
         /**
@@ -102,7 +103,15 @@ define([
          * @method previousPrompt
          */
         previousPrompt: function() {
-            //TODO: better handle moved backwards through prompts
+            var review = skritter.user.data.reviews.at(this.index + 1);
+            if (review) {
+                review.load(_.bind(function(item) {
+                    if (item) {
+                        this.loadPrompt(review);
+                        this.index++;
+                    }
+                }, this));
+            }
         }
     });
 
