@@ -51,6 +51,7 @@ define([
                 this.trigger('prompt:finished');
             } else {
                 skritter.timer.reset();
+                Prompt.gradingButtons.grade(3);
                 this.review.next();
                 this.clear().show();
             }
