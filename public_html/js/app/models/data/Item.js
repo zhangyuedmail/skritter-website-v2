@@ -82,6 +82,7 @@ define([
                     }
             }
             review.set({
+                part: part,
                 originalItems: originalItems,
                 reviews: reviews
             }, {silent: true});

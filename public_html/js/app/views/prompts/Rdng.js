@@ -42,7 +42,7 @@ define([
          * @param {Object} event
          */
         handleTap: function(event) {
-            if (Prompt.answerShown) {
+            if (this.review.get('finished')) {
                 this.handleGradingSelected(Prompt.gradingButtons.grade());
             } else {
                 this.showAnswer();
@@ -93,7 +93,6 @@ define([
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Answer:');
             Prompt.gradingButtons.show();
-            Prompt.answerShown = true;
             this.review.set('finished', true);
             this.resize();
             return this;

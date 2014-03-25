@@ -65,29 +65,26 @@ define([
         },
         /**
          * @method loadPrompt
-         * @param {Backbone.Model} item
+         * @param {Backbone.Model} review
          */
-        loadPrompt: function(item) {
-            if (this.prompt) {
+        loadPrompt: function(review) {
+            if (this.prompt)
                 this.prompt.remove();
-            } else {
-                switch (item.get('part')) {
-                    case 'defn':
-                        this.prompt = new Defn();
-                        break;
-                    case 'rdng':
-                        this.prompt = new Rdng();
-                        break;
-                    case 'rune':
-                        this.prompt = new Rune();
-                        break;
-                    case 'tone':
-                        this.prompt = new Tone();
-                        break;
-                }
-                this.prompt.set(item.createReview());
-                
+            switch (review.get('part')) {
+                case 'defn':
+                    this.prompt = new Defn();
+                    break;
+                case 'rdng':
+                    this.prompt = new Rdng();
+                    break;
+                case 'rune':
+                    this.prompt = new Rune();
+                    break;
+                case 'tone':
+                    this.prompt = new Tone();
+                    break;
             }
+            this.prompt.set(review);
             this.prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
         },
@@ -95,11 +92,11 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            this.prompt = null;
             skritter.timer.reset();
-            skritter.user.data.items.next(_.bind(this.loadPrompt, this), null, null);
-            this.$('#items-due').html(skritter.user.data.items.dueCount(true));
-            //TODO: check to see if this is the most recent prompt
+            skritter.user.data.items.next(_.bind(function(item) {
+                this.loadPrompt(item.createReview());
+                this.$('#items-due').html(skritter.user.data.items.dueCount(true));
+            }, this), null, null);
         },
         /**
          * @method previousPrompt
