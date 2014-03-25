@@ -52,7 +52,7 @@ define([
             } else {
                 skritter.timer.reset();
                 this.review.next();
-                this.render();
+                this.clear().show();
             }
         },
         /**

@@ -46,6 +46,15 @@ define([
             return this;
         },
         /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
+            Prompt.gradingButtons.hide();
+            Rune.canvas.render();
+            return this;
+        },
+        /**
          * @method handleDoubleTap
          * @param {Object} event
          */
@@ -104,12 +113,14 @@ define([
         },
         /**
          * @method reset
+         * @returns {Backbone.View}
          */
         reset: function() {
             Rune.canvas.disableInput().enableInput();
             Rune.canvas.render();
             Prompt.gradingButtons.hide();
             this.review.character().reset();
+            return this;
         },
         /**
          * @method resize
