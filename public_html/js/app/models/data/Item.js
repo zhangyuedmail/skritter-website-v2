@@ -80,11 +80,11 @@ define([
                     } else if (i > 0) {
                         review.characters.push(item.stroke().canvasCharacter());
                     }
-                review.set({
-                    originalItems: originalItems,
-                    reviews: reviews
-                }, {silent: true});
             }
+            review.set({
+                originalItems: originalItems,
+                reviews: reviews
+            }, {silent: true});
             return review;
         },
         /**

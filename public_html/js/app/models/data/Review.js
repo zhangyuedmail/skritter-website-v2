@@ -135,6 +135,13 @@ define(function() {
             return this.set('position', this.attributes.position + 1).get('position');
         },
         /**
+         * @method originalBaseItem
+         * @returns {Object}
+         */
+        originalBaseItem: function() {
+            return this.get('originalItems')[0];
+        },
+        /**
          * @method originalItem
          * @returns {Object}
          */
@@ -175,7 +182,7 @@ define(function() {
                     reviews: item.get('reviews') + 1,
                     successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                     timeStudied: item.get('timeStudied') + review.reviewTime
-                }); 
+                });
             }
             //set the review data and trigger local caching
             this.set('reviews', reviews);
