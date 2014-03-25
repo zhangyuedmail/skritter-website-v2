@@ -47,7 +47,7 @@ define([
                 score: selectedGrade
             });
             if (this.review.isLast()) {
-                console.log('PROMPT FINISHED', this.review.save());
+                this.review.save();
                 this.trigger('prompt:finished');
             } else {
                 skritter.timer.reset();

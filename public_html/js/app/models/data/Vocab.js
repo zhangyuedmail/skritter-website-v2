@@ -59,7 +59,7 @@ define(function() {
                 for (var a = 0, lengthA = containedVocabIds.length; a < lengthA; a++)
                     containedItemIds.push(skritter.user.id + '-' + containedVocabIds[a] + '-' + part);
             } else if (part === 'tone') {
-                for (var b = 0, lengthB = containedVocabIds.length; i < lengthB; b++) {
+                for (var b = 0, lengthB = containedVocabIds.length; b < lengthB; b++) {
                     var splitId = containedVocabIds[b].split('-');
                     containedItemIds.push(skritter.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
                 }
