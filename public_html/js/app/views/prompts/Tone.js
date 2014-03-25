@@ -105,8 +105,10 @@ define([
             this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
             this.$('#bottom-container').width(skritter.settings.contentWidth());
             this.$('#writing-area').width(skritter.settings.canvasSize());
-            if (this.review.character().isFinished())
-                Tone.canvas.drawShape('display', this.review.character().shape());
+            if (this.review.character().isFinished()) {
+                Tone.canvas.drawShape('display', this.review.character().shape(null, skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]));
+                Tone.canvas.getLayer('background').alpha = 0.6;
+            }
         },
         /**
          * @method show
