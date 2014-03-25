@@ -139,7 +139,6 @@ define([
             }, this), 500);
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
             Prompt.gradingButtons.show();
-            Prompt.answerShown = true;
             return this;
         }
     });

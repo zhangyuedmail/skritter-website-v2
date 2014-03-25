@@ -16,7 +16,6 @@ define([
          */
         initialize: function() {
             this.review = null;
-            Prompt.answerShown = false;
             Prompt.gradingButtons = new GradingButtons();
         },
         /**
@@ -52,7 +51,6 @@ define([
                 this.trigger('prompt:finished');
             } else {
                 skritter.timer.reset();
-                Prompt.answerShown = false;
                 this.review.next();
                 this.render();
             }

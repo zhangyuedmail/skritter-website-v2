@@ -59,8 +59,10 @@ define([
          * @param {Object} event
          */
         handleDoubleTap: function(event) {
-            Prompt.gradingButtons.grade(1);
-            Rune.canvas.drawShape('background', this.review.character().targets[0].shape(null, '#999999'));
+            if (this.review.character().isFinished()) {
+                Prompt.gradingButtons.grade(1);
+                Rune.canvas.drawShape('background', this.review.character().targets[0].shape(null, '#999999'));
+            }
             event.preventDefault();
         },
         /**
@@ -158,7 +160,6 @@ define([
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position') + 1));
             Prompt.gradingButtons.show();
-            Prompt.answerShown = true;
             return this;
         }
     });
