@@ -86,9 +86,9 @@ define([
          */
         handleStrokeReceived: function(points, shape) {
             if (points.length > 5) {
-                Rune.canvas.fadeLayer('background');
                 var result = this.review.character().recognize(points, shape);
                 if (result) {
+                    Rune.canvas.fadeLayer('background');
                     Rune.strokeAttempts = 0;
                     Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
                 } else {

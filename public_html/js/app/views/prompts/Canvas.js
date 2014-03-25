@@ -112,11 +112,11 @@ define(function() {
          */
         drawCharacterFromFont: function(layerName, character, font, alpha, color) {
             var layer = this.getLayer(layerName);
-            color = (color) ? color : Canvas.textColor;
-            font = (font) ? font : Canvas.textFont;
+            color = color ? color : Canvas.textColor;
+            font = font ? font : Canvas.textFont;
             var text = new createjs.Text(character, Canvas.size + 'px ' + font, color);
             text.name = character;
-            text.alpha = (alpha) ? alpha : 1;
+            text.alpha = alpha ? alpha : 1;
             layer.addChild(text);
             Canvas.stage.display.update();
         },
@@ -125,7 +125,7 @@ define(function() {
          * @param {String} color
          */
         drawGrid: function(color) {
-            color = (color) ? color : Canvas.gridColor;
+            color = color ? color : Canvas.gridColor;
             if (!Canvas.stage.display.getChildByName('grid')) {
                 var grid = new createjs.Shape();
                 grid.name = 'grid';
@@ -167,7 +167,7 @@ define(function() {
          * @returns {CreateJS.Shape}
          */
         drawShape: function(layerName, shape, alpha) {
-            shape.alpha = (alpha) ? alpha : 1;
+            shape.alpha = alpha ? alpha : 1;
             this.getLayer(layerName).addChild(shape);
             Canvas.stage.display.update();
             return shape;
@@ -226,12 +226,12 @@ define(function() {
          */
         fadeLayer: function(layerName, callback) {
             var layer = this.getLayer(layerName);
-            layer.cache(0, 0, Canvas.size, Canvas.size);
             if (layer.getNumChildren() > 0) {
+                layer.cache(0, 0, Canvas.size, Canvas.size);
                 createjs.Tween.get(layer).to({alpha: 0}, 500).call(function() {
+                    layer.alpha = 1;
                     layer.removeAllChildren();
                     layer.uncache();
-                    layer.alpha = 1;
                     if (typeof callback === 'function')
                         callback(layer);
                 });
@@ -328,7 +328,7 @@ define(function() {
          * @param {Function} callback
          */
         tweenShape: function(layerName, fromShape, toShape, duration, callback) {
-            duration = (duration) ? duration : 500;
+            duration = duration ? duration : 500;
             var layer = this.getLayer(layerName);
             layer.addChildAt(fromShape, 0);
             Canvas.stage.display.update();
