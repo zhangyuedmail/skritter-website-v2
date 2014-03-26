@@ -290,6 +290,7 @@ module.exports = function(grunt) {
         'jshint',
         'clean:cordova-www',
         'copy:cordova-www',
+        'replace:cordova',
         'shell:android-build-run'
     ]);
     grunt.registerTask('build-web-combined', [
