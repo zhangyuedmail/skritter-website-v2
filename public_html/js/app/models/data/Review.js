@@ -126,6 +126,29 @@ define(function() {
             return skritter.user.data.items.get(this.get('reviews')[position].itemId);
         },
         /**
+         * @method load
+         * @param {Function} callback
+         */
+        load: function(callback) {
+            var part = this.get('part');
+            skritter.user.data.loadItem(this.originalBaseItem().id, _.bind(function(item) {
+                if (part === 'rune' || part === 'tone') {
+                    this.characters = [];
+                    var reviews = this.get('reviews');
+                    for (var i = 0, length = reviews.length; i < length; i++) {
+                        if (reviews.length === 1) {
+                            this.characters.push(this.item(i).stroke().canvasCharacter());
+                        } else if (i > 0) {
+                            this.characters.push(this.item(i).stroke().canvasCharacter());
+                        }
+                    }
+                    callback(item);
+                } else {
+                    callback(item);
+                }
+            }, this));
+        },
+        /**
          * @method next
          * @returns {Number}
          */
@@ -133,6 +156,13 @@ define(function() {
             if (this.isLast())
                 return this.get('position');
             return this.set('position', this.attributes.position + 1).get('position');
+        },
+        /**
+         * @method originalBaseItem
+         * @returns {Object}
+         */
+        originalBaseItem: function() {
+            return this.get('originalItems')[0];
         },
         /**
          * @method originalItem
@@ -165,17 +195,20 @@ define(function() {
             for (var i = 0, length = reviews.length; i < length; i++) {
                 var item = this.item(i);
                 var review = reviews[i];
+                if (i == 0 && reviews.length > 1)
+                    review.score = this.finalGrade();
                 review.newInterval = skritter.fn.scheduler.interval(item, review.score);
                 item.set({
                     changed: review.submitTime,
                     last: review.submitTime,
+                    interval: review.newInterval,
                     next: review.submitTime + review.newInterval,
                     previousInterval: review.currentInterval,
                     previousSuccess: (review.score > 1) ? true : false,
                     reviews: item.get('reviews') + 1,
                     successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                     timeStudied: item.get('timeStudied') + review.reviewTime
-                }); 
+                });
             }
             //set the review data and trigger local caching
             this.set('reviews', reviews);

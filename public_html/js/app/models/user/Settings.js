@@ -81,6 +81,15 @@ define(function() {
             return 'kaisho';
         },
         /**
+         * @method fontClass
+         * @returns {String}
+         */
+        fontClass: function() {
+            if (this.isChinese())
+                return 'chinese-font';
+            return 'japanese-font';
+        },
+        /**
          * Returns true if the target language is set to Chinese.
          * 
          * @method isChinese

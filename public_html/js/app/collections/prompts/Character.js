@@ -49,6 +49,41 @@ define([
             return false;
         },
         /**
+         * Returns the expected next stroke based on the predicted variation and current position
+         * within the user character.
+         * 
+         * @method expectedStroke
+         * @returns {Backbone.Model}
+         */
+        expectedStroke: function() {
+            var variation = this.expectedVariation();
+            if (this.length === 0)
+                return variation.at(0);
+            return variation.at(this.position() - 1);
+        },
+        /**
+         * Returns the expected variation from the array possible targets.
+         * 
+         * @method expectedVariation
+         * @returns {Backbone.Model}
+         */
+        expectedVariation: function() {
+            if (this.targets.length <= 1)
+                return this.targets[0];
+            var targetScores = [];
+            for (var i = 0, length = this.targets.length; i < length; i++)
+                targetScores[i] = 0;
+            for (var a = 0, lengthA = this.length; a < lengthA; a++) {
+                var strokeId = this.at(a).id;
+                for (var b = 0, lengthB = this.targets.length; b < lengthB; b++) {
+                    var target = this.targets[b];
+                    if (target.findWhere({id: strokeId}))
+                        targetScores[b]++;
+                }
+            }
+            return this.targets[targetScores.indexOf(Math.max.apply(Math, targetScores))];
+        },
+        /**
          * @method isFinished
          * @returns {Boolean}
          */

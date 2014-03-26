@@ -19,6 +19,13 @@ define(function() {
             });
         },
         /**
+         * @method characterCount
+         * @returns {Number}
+         */
+        characterCount: function() {
+            return this.characters().length;
+        },
+        /**
          * @method characters
          * @returns {Array}
          */
@@ -36,7 +43,7 @@ define(function() {
                 var splitWriting = this.get('writing').split('');
                 if (splitWriting.length === 1 && !skritter.fn.isKana(splitWriting[0]))
                     characters.push(splitWriting[0]);
-                    
+
             }
             return characters;
         },
@@ -47,10 +54,15 @@ define(function() {
          */
         containedItemIds: function(part) {
             var containedItemIds = [];
-            if (part && part === 'rune' || part === 'tone') {
-                var containedVocabIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [];
-                for (var i = 0, length = containedVocabIds.length; i < length; i++)
-                    containedItemIds.push(skritter.user.id + '-' + containedVocabIds[i] + '-' + part);
+            var containedVocabIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [];
+            if (part === 'rune') {
+                for (var a = 0, lengthA = containedVocabIds.length; a < lengthA; a++)
+                    containedItemIds.push(skritter.user.id + '-' + containedVocabIds[a] + '-' + part);
+            } else if (part === 'tone') {
+                for (var b = 0, lengthB = containedVocabIds.length; b < lengthB; b++) {
+                    var splitId = containedVocabIds[b].split('-');
+                    containedItemIds.push(skritter.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
+                }
             }
             return containedItemIds;
         },
@@ -68,6 +80,46 @@ define(function() {
             return definition;
         },
         /**
+         * @method font
+         * @returns {String}
+         */
+        font: function() {
+            if (this.isChinese())
+                return 'simkai';
+            return 'kaisho';
+        },
+        /**
+         * @method fontClass
+         * @returns {String}
+         */
+        fontClass: function() {
+            if (this.isChinese())
+                return 'chinese-text';
+            return 'japanese-text';
+        },
+        /**
+         * Returns true if the vocab language is set to Chinese.
+         * 
+         * @method isChinese
+         * @returns {Boolean}
+         */
+        isChinese: function() {
+            if (this.get('lang') === 'zh')
+                return true;
+            return false;
+        },
+        /**
+         * Returns true if the vocab language is set to Japanese.
+         * 
+         * @method isJapanese
+         * @returns {Boolean}
+         */
+        isJapanese: function() {
+            if (this.get('lang') === 'ja')
+                return true;
+            return false;
+        },
+        /**
          * @method reading
          * @returns {String}
          */
@@ -80,13 +132,13 @@ define(function() {
          * @param {Boolean} mask
          * @returns {String}
          */
-        readingBlocks: function(offset, mask) {            
+        readingBlocks: function(offset, mask) {
             var element = '';
-            var position = 1;
             var reading = this.get('reading');
             if (skritter.user.settings.isChinese()) {
                 reading = reading.indexOf(', ') === -1 ? [reading] : reading.split(', ');
                 for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
+                    var position = 1;
                     var pieces = reading[a].match(/[a-z]+[0-9]+|\s\.\.\.\s|\'/g);
                     element += "<span id=reading-" + (a + 1) + "'>";
                     for (var b = 0, lengthB = pieces.length; b < lengthB; b++) {
@@ -103,7 +155,7 @@ define(function() {
                             }
                             position++;
                         } else {
-                            element += "<span class='reading-filler'>" + piece  + "</span>";
+                            element += "<span class='reading-filler'>" + piece + "</span>";
                         }
                     }
                     element += "</span>";
@@ -138,7 +190,7 @@ define(function() {
         sentenceWriting: function() {
             var sentence = this.sentence();
             if (sentence)
-                return sentence.get('writing');
+                return sentence.get('writing').replace(/\s/g, '');
         },
         /**
          * @method style
@@ -154,9 +206,10 @@ define(function() {
          * reading string. Japanese will just return an empty array since it doesn't have tones.
          * 
          * @method tones
+         * @param {Number} position
          * @returns {Array}
          */
-        tones: function() {
+        tones: function(position) {
             var tones = [];
             var reading = this.get('reading');
             if (skritter.user.settings.isChinese()) {
@@ -170,6 +223,8 @@ define(function() {
                         tones.push([skritter.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
                 }
             }
+            if (position && this.characterCount() > 1)
+                return tones[position - 1];
             return tones;
         },
         /**
@@ -188,9 +243,9 @@ define(function() {
                     element += "<span class='writing-filler'>" + character + "</span>";
                 } else {
                     if (offset && position >= offset) {
-                        element += "<span id='writing-" + position + "' class='writing-hidden'><span>" +  character + "</span></span>";
+                        element += "<span id='writing-" + position + "' class='writing-hidden'><span>" + character + "</span></span>";
                     } else {
-                        element += "<span id='writing-" + position + "'>" +  character + "</span>";
+                        element += "<span id='writing-" + position + "'>" + character + "</span>";
                     }
                     position++;
                 }

@@ -78,12 +78,12 @@ define([
          * @method showStudyView
          */
         showStudyView: function() {
-            if (!this.view.studySettings) {
-                this.view.studySettings = new Study({el: $('#skritter-container')});
+            if (!this.view.study) {
+                this.view.study = new Study({el: $('#skritter-container')});
             } else {
-                this.view.studySettings.setElement($('#skritter-container'));
+                this.view.study.setElement($('#skritter-container'));
             }
-            this.view.studySettings.render();
+            this.view.study.render();
         },
         /**
          * Shows the the study view.
@@ -91,12 +91,12 @@ define([
          * @method showStudyView
          */
         showStudySettingsView: function() {
-            if (!this.view.study) {
-                this.view.study = new StudySettings({el: $('#skritter-container')});
+            if (!this.view.studySettings) {
+                this.view.studySettings = new StudySettings({el: $('#skritter-container')});
             } else {
-                this.view.study.setElement($('#skritter-container'));
+                this.view.studySettings.setElement($('#skritter-container'));
             }
-            this.view.study.render();
+            this.view.studySettings.render();
         },
         /**
          * Runs and shows the results of the jasmine test cases.

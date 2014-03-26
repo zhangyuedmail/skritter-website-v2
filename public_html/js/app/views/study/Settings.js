@@ -24,10 +24,12 @@ define([
         render: function() {
             this.$el.html(templateStudySettings);
             Settings.activeParts = skritter.user.settings.activeParts();
-            this.$('input').bootstrapSwitch();
+            this.$('input.bootswitch').bootstrapSwitch();
+            this.$('#general #audio').bootstrapSwitch('state', skritter.user.settings.get('audio'));
             this.$('#parts #defn').bootstrapSwitch('state', Settings.activeParts.indexOf('defn') > -1);
             this.$('#parts #rdng').bootstrapSwitch('state', Settings.activeParts.indexOf('rdng') > -1);
             this.$('#parts #rune').bootstrapSwitch('state', Settings.activeParts.indexOf('rune') > -1);
+            this.$('#parts #raw-squigs').prop('checked', skritter.user.settings.get('squigs'));
             if (skritter.user.settings.isJapanese()) {
                 this.$('#parts #tone').parent().parent().parent().hide();
             } else {
@@ -56,20 +58,21 @@ define([
          */
         save: function(event) {
             Settings.activeParts = [];
+            skritter.user.settings.set('audio', this.$('#general #audio').prop('checked'));
             if (this.$('#parts #defn').bootstrapSwitch('state'))
                 Settings.activeParts.push('defn');
             if (this.$('#parts #rdng').bootstrapSwitch('state'))
                 Settings.activeParts.push('rdng');
             if (this.$('#parts #rune').bootstrapSwitch('state'))
                 Settings.activeParts.push('rune');
+            skritter.user.settings.set('squigs', this.$('#parts #raw-squigs').prop('checked'));
             if (this.$('#parts #tone').bootstrapSwitch('state'))
                 Settings.activeParts.push('tone');
             if (Settings.activeParts.length === 0) {
                 skritter.modals.show('confirmation').set('.modal-header', false).set('.modal-body', 'You must enable at least one part!', 'text-center');
                 return false;
-            } else {
-                skritter.user.settings.activeParts(Settings.activeParts);
             }
+            skritter.user.settings.activeParts(Settings.activeParts);
             skritter.router.back();
             event.preventDefault();
         }

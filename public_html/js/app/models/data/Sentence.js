@@ -42,7 +42,7 @@ define(function() {
             var chars = value.split('');
             for (var i = 0, length = chars.length; i < length; i++)
                 text = text.replace(new RegExp(chars[i], 'gi'), '__');
-            return text;
+            return text.replace(/\s/g, '');
         },
         /**
          * @method reading

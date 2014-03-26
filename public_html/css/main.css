@@ -139,6 +139,7 @@ body {
 /*** PROMPT: GRADING BUTTONS ***/
 .prompt-container #grading-buttons {
     bottom: 0;
+    display: none;
     left: 0;
     position: absolute;
     z-index: 9999;
@@ -164,6 +165,12 @@ body {
     left: 10px;
     top: 15px;
 }
+#top-container #prompt-new-tag {
+    color: #ff0000;
+    display: none;
+    font-size: 14px;
+    vertical-align: super;
+}
 #top-container .writing-hidden { border-bottom: 1px #222222 solid; }
 #top-container .writing-hidden span { visibility: hidden; }
 #top-container .reading-hidden { border-bottom: 1px #222222 solid; }
@@ -174,27 +181,43 @@ body {
 #bottom-container { 
     background-color: #ffffff;
     bottom: 0;
-    display: table;
     position: absolute;
     z-index: 1001;
 }
-#bottom-container .answer {
+#bottom-container #prompt-text {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+#bottom-container #prompt-text .answer {
     cursor: pointer;
     display: table-cell;
+    padding: 0 15px;
     vertical-align: middle;
 }
-#bottom-container .question {
+#bottom-container #prompt-text .question {
     cursor: pointer;
     display: table-cell;
+    padding: 0 15px;
     vertical-align: middle;
 }
 #bottom-container #writing-area {
     bottom: 0;
-    position: absolute;
+    margin: 0 auto;
+    position: relative;
 }
 
 
+/*** PROMPT: DEFINITION ***/
+#defn #prompt-writing { font-size: 104px; }
+
+
+/*** PROMPT: READING ***/
+#rdng #prompt-writing { font-size: 104px; }
+
+
 /*** PROMPT: WRITING AREA ***/
+#writing-area .canvas-holder { position: relative; }
 #writing-area .canvas-holder #canvas-display {
     bottom: 0;
     left: 0;

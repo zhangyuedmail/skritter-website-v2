@@ -107,7 +107,12 @@ define([
          */
         sort: function() {
             var now = skritter.fn.getUnixTime();
+            var recent = skritter.user.data.reviews.recentIds();
             this.schedule = _.sortBy(this.schedule, function(item) {
+                if (recent.indexOf(item.id) > -1) {
+                    item.readiness = 0.00001;
+                    return -item.readiness;
+                }
                 if (item.held && item.held > now) {
                     item.readiness = 0.2 + (now / item.held) * 0.1;
                     return -item.readiness;

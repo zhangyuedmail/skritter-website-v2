@@ -36,6 +36,7 @@ define(function() {
      */
     Recognizer.prototype.analyze = function(userStroke, character) {
         var results = [];
+        var size = skritter.settings.canvasSize();
         for (var a = 0, lengthA = character.targets.length; a < lengthA; a++) {
             var target = character.targets[a];
             for (var b = 0, lengthB = target.length; b < lengthB; b++) {
@@ -55,8 +56,8 @@ define(function() {
                         var scores = {
                             angle: this.checkAngle(result, param),
                             corners: this.checkCorners(result, param),
-                            cornersLength: this.checkCornersLength(result, param),
-                            distance: this.checkDistance(result, param)
+                            cornersLength: this.checkCornersLength(result, param, size),
+                            distance: this.checkDistance(result, param, size)
                         };
                         var total = 0;
                         for (var category in scores) {
@@ -116,11 +117,12 @@ define(function() {
      * @method checkDistance
      * @param {Backbone.Model} stroke
      * @param {Backbone.Model} target
+     * @param {Number} size
      * @returns {Number}
      */
-    Recognizer.prototype.checkDistance = function(stroke, target) {
+    Recognizer.prototype.checkDistance = function(stroke, target, size) {
         var score = skritter.fn.distance(stroke.rectangle().c, target.rectangle().c);
-        if (score < this.distanceThreshold)
+        if (score < this.distanceThreshold * (size / skritter.settings.get('maxCanvasSize')))
             return score;
         return -1;
 
@@ -129,11 +131,12 @@ define(function() {
      * @method checkCornersLength
      * @param {Backbone.Model} stroke
      * @param {Backbone.Model} target
+     * @param {Number} size
      * @returns {Number}
      */
-    Recognizer.prototype.checkCornersLength = function(stroke, target) {
+    Recognizer.prototype.checkCornersLength = function(stroke, target, size) {
         var score = Math.abs(stroke.cornersLength() - target.cornersLength());
-        if (score < this.cornersLengthThreshold)
+        if (score < this.cornersLengthThreshold * (size / skritter.settings.get('maxCanvasSize')))
             return score;
         return -1;
 

@@ -23,6 +23,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.index = -1;
             this.prompt = null;
         },
         /**
@@ -31,8 +32,13 @@ define([
          */
         render: function() {
             this.$el.html(templateStudy);
+            this.stopListening();
             skritter.timer.setElement(this.$('#timer')).render();
-            this.nextPrompt();
+            if (this.prompt) {
+                this.loadPrompt(this.prompt.review);
+            } else {
+                this.nextPrompt();
+            }
             return this;
         },
         /**
@@ -60,13 +66,12 @@ define([
         },
         /**
          * @method loadPrompt
-         * @param {Backbone.Model} item
+         * @param {Backbone.Model} review
          */
-        loadPrompt: function(item) {
-            this.$('#items-due').html(skritter.user.data.items.dueCount(true));
+        loadPrompt: function(review) {
             if (this.prompt)
                 this.prompt.remove();
-            switch (item.get('part')) {
+            switch (review.get('part')) {
                 case 'defn':
                     this.prompt = new Defn();
                     break;
@@ -80,9 +85,8 @@ define([
                     this.prompt = new Tone();
                     break;
             }
-            this.prompt.set(item.createReview());
-            this.prompt.setElement(this.$('#content-container'));
-            this.prompt.render();
+            this.prompt.set(review);
+            this.prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
         },
         /**
@@ -90,14 +94,24 @@ define([
          */
         nextPrompt: function() {
             skritter.timer.reset();
-            skritter.user.data.items.next(_.bind(this.loadPrompt, this), null, null);
-            //TODO: check to see if this is the most recent prompt
+            skritter.user.data.items.next(_.bind(function(item) {
+                this.loadPrompt(item.createReview());
+                this.$('#items-due').html(skritter.user.data.items.dueCount(true));
+            }, this), null, null);
         },
         /**
          * @method previousPrompt
          */
         previousPrompt: function() {
-            //TODO: better handle moved backwards through prompts
+            var review = skritter.user.data.reviews.at(this.index + 1);
+            if (review) {
+                review.load(_.bind(function(item) {
+                    if (item) {
+                        this.loadPrompt(review);
+                        this.index++;
+                    }
+                }, this));
+            }
         }
     });
 

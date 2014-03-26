@@ -29,6 +29,7 @@ define(function() {
                 3: '#82ca9d',
                 4: '#8493ca'
             },
+            hintColor: '#87cefa',
             maxCanvasSize: 600
         },
         /**

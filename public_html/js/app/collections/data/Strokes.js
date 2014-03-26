@@ -41,6 +41,16 @@ define([
                 self.add(strokes, {merge: true, silent: true});
                 callback();
             });
+        },
+        /**
+         * @method reset
+         */
+        reset: function() {
+            var models = [];
+            for (var i = 1, length = this.length; i < length; i++)
+                if (this.models[i].attributes.rune !== 'tone')
+                    models.push(this.models[i]);
+            this.remove(models);
         }
     });
 

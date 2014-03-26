@@ -12,6 +12,7 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
+            this.grid = true;
             Canvas.stage = {};
             Canvas.size = skritter.settings.canvasSize();
             Canvas.gridColor = 'grey';
@@ -39,11 +40,13 @@ define(function() {
             this.$(Canvas.container).append(Canvas.stage.input.canvas);
             Canvas.stage.display.removeAllChildren();
             Canvas.stage.input.removeAllChildren();
-            this.createLayer('background');
-            this.createLayer('display');
             this.createLayer('hint');
+            this.createLayer('marker');
+            this.createLayer('display');
+            this.createLayer('background');
             this.updateAll();
-            this.drawGrid();
+            if (this.grid)
+                this.drawGrid();
             return this;
         },
         /**
@@ -96,6 +99,9 @@ define(function() {
             Canvas.stage.display.addChild(layer);
             return layer;
         },
+        display: function() {
+            return Canvas.stage.display;
+        },
         /**
          * Draws the to the background using a font rather than assembling
          * the character strokes.
@@ -109,10 +115,11 @@ define(function() {
          */
         drawCharacterFromFont: function(layerName, character, font, alpha, color) {
             var layer = this.getLayer(layerName);
-            color = (color) ? color : Canvas.textColor;
-            font = (font) ? font : Canvas.textFont;
+            color = color ? color : Canvas.textColor;
+            font = font ? font : Canvas.textFont;
             var text = new createjs.Text(character, Canvas.size + 'px ' + font, color);
-            text.alpha = (alpha) ? alpha : 1;
+            text.name = character;
+            text.alpha = alpha ? alpha : 1;
             layer.addChild(text);
             Canvas.stage.display.update();
         },
@@ -121,7 +128,7 @@ define(function() {
          * @param {String} color
          */
         drawGrid: function(color) {
-            color = (color) ? color : Canvas.gridColor;
+            color = color ? color : Canvas.gridColor;
             if (!Canvas.stage.display.getChildByName('grid')) {
                 var grid = new createjs.Shape();
                 grid.name = 'grid';
@@ -137,9 +144,11 @@ define(function() {
         },
         /**
          * @method disableInput
+         * @returns {Backbone.View}
          */
         disableInput: function() {
             Canvas.stage.input.removeAllEventListeners();
+            return this;
         },
         /**
          * @method drawPoint
@@ -161,7 +170,7 @@ define(function() {
          * @returns {CreateJS.Shape}
          */
         drawShape: function(layerName, shape, alpha) {
-            shape.alpha = (alpha) ? alpha : 1;
+            shape.alpha = alpha ? alpha : 1;
             this.getLayer(layerName).addChild(shape);
             Canvas.stage.display.update();
             return shape;
@@ -181,6 +190,7 @@ define(function() {
                 squig = new createjs.Shape();
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
+                self.triggerInputDown(oldPoint);
                 stage.addEventListener('stagemousemove', move);
                 stage.addEventListener('stagemouseup', up);
             }
@@ -206,11 +216,31 @@ define(function() {
                 stage.removeEventListener('stagemousemove', move);
                 stage.removeEventListener('stagemouseup', up);
                 if (event.rawX >= 0 && event.rawX < Canvas.size && event.rawY >= 0 && event.rawY < Canvas.size)
-                    self.triggerInputUp(points, squig);
-                self.fadeShape('background', squig);
+                    self.triggerInputUp(points, squig.clone(true));
                 marker.graphics.clear();
+                squig.graphics.clear();
                 stage.clear();
             }
+        },
+        /**
+         * @method fadeLayer
+         * @param {String} layerName
+         * @param {Function} callback
+         * @returns {Container}
+         */
+        fadeLayer: function(layerName, callback) {
+            var layer = this.getLayer(layerName);
+            if (layer.getNumChildren() > 0) {
+                layer.cache(0, 0, Canvas.size, Canvas.size);
+                createjs.Tween.get(layer).to({alpha: 0}, 500).call(function() {
+                    layer.alpha = 1;
+                    layer.removeAllChildren();
+                    layer.uncache();
+                    if (typeof callback === 'function')
+                        callback(layer);
+                });
+            }
+            return layer;
         },
         /**
          * @method fadeShape
@@ -223,7 +253,7 @@ define(function() {
             layer.addChild(shape);
             Canvas.stage.display.update();
             shape.cache(0, 0, Canvas.size, Canvas.size);
-            createjs.Tween.get(shape).to({alpha: 0}, 300, createjs.Ease.backOut).call(function() {
+            createjs.Tween.get(shape).to({alpha: 0}, 2500, createjs.Ease.backOut).call(function() {
                 shape.uncache();
                 layer.removeChild(shape);
                 if (typeof callback === 'function')
@@ -302,7 +332,7 @@ define(function() {
          * @param {Function} callback
          */
         tweenShape: function(layerName, fromShape, toShape, duration, callback) {
-            duration = (duration) ? duration : 500;
+            duration = duration ? duration : 500;
             var layer = this.getLayer(layerName);
             layer.addChildAt(fromShape, 0);
             Canvas.stage.display.update();

@@ -3,20 +3,22 @@
         <div class="row">
             <h4 id="prompt-style" class="text-muted"></h4>
             <span id="hint-caret" class="fa fa-chevron-down"></span>
-            <h3 id="question-text" class="text-center">How do you say it?</h3>
+            <h3 id="question-text" class="text-center"><span id="prompt-new-tag">NEW</span> How do you say it?</h3>
         </div>
         <div id="hint-text" class="row">
             <h4 id="prompt-definition" class="text-center"></h4>
-            <h4 id="prompt-sentence" class="text-center"></h4>
+            <h4 id="prompt-sentence" class="character-font text-center"></h4>
         </div>
     </div>
     <div id="bottom-container">
-        <div class="question">
-            <h1 id="prompt-writing" class="chinese-text text-center" style="font-size: 104px;"></h1>
-            <h4 class="text-center">(click to show answer)</h4>
-        </div>
-        <div class="answer" style="display: none;">
-            <h3 id="prompt-reading" class="text-center"></h3>
+        <div id="prompt-text">
+            <div class="question">
+                <h1 id="prompt-writing" class="character-font text-center"></h1>
+                <h4 class="text-center">(click to show answer)</h4>
+            </div>
+            <div class="answer" style="display: none;">
+                <h3 id="prompt-reading" class="text-center"></h3>
+            </div>
         </div>
         <div id="grading-container"></div>
     </div>

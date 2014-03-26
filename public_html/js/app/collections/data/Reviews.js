@@ -43,6 +43,19 @@ define([
             });
         },
         /**
+         * @method recentIds
+         * @param {Number} number
+         * @returns {Array}
+         */
+        recentIds: function(number) {
+            number = number ? number : 5;
+            if (this.models.length === 0)
+                return [];
+            return this.models.map(function(item) {
+                return item.id.split('_')[1];
+            }).slice(0, number - 1);
+        },
+        /**
          * @method totalTimeToday
          * @returns {Number}
          */

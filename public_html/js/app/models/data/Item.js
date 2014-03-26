@@ -80,12 +80,22 @@ define([
                     } else if (i > 0) {
                         review.characters.push(item.stroke().canvasCharacter());
                     }
-                review.set({
-                    originalItems: originalItems,
-                    reviews: reviews
-                }, {silent: true});
             }
+            review.set({
+                part: part,
+                originalItems: originalItems,
+                reviews: reviews
+            }, {silent: true});
             return review;
+        },
+        /**
+         * @method isNew
+         * @returns {Boolean}
+         */
+        isNew: function() {
+            if (this.get('reviews') === 0)
+                return true;
+            return false;
         },
         /**
          * @method stroke

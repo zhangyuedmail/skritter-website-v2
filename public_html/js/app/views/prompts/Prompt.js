@@ -17,16 +17,17 @@ define([
         initialize: function() {
             this.review = null;
             Prompt.gradingButtons = new GradingButtons();
-            this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradingSelected);
-            this.listenTo(skritter.settings, 'resize', this.resize);
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
             console.log('PROMPT', this.review.vocab().get('writing'), this.review);
+            Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
+            this.$('.character-font').addClass(this.review.baseVocab().fontClass());
+            this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradingSelected);
+            this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
         },
         /**
@@ -46,13 +47,22 @@ define([
                 score: selectedGrade
             });
             if (this.review.isLast()) {
-                console.log('PROMPT FINISHED', this.review.save());
+                this.review.save();
                 this.trigger('prompt:finished');
             } else {
                 skritter.timer.reset();
+                Prompt.gradingButtons.grade(3);
                 this.review.next();
-                this.render();
+                this.clear().show();
             }
+        },
+        /**
+         * @method handleTap
+         * @param {Object} event
+         */
+        handleTap: function(event) {
+            this.handleGradingSelected(Prompt.gradingButtons.grade());
+            event.preventDefault();
         },
         /**
          * @method toggleHint
@@ -84,6 +94,7 @@ define([
          * @method remove
          */
         remove: function() {
+            Prompt.gradingButtons.remove();
             this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
