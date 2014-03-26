@@ -76,8 +76,8 @@ define(function() {
          * @returns {String}
          */
         language: function() {
-            if (this.get('language') === '@@version')
-                return skritter.user.setting.get('targetLang');
+            if (this.get('language') === '@@language')
+                return skritter.user.settings.get('targetLang');
             return this.get('language');
         }
     });
