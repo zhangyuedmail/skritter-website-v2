@@ -26,6 +26,9 @@ define([
             this.$el.html('');
             if (skritter.user.isLoggedIn()) {
                 this.$el.html(templateLoggedIn);
+                this.$('#user-avatar').html(skritter.user.settings.avatar('img-circle'));
+                this.$('#user-items-due').html(skritter.user.data.items.dueCount());
+                this.$('#user-username').html(skritter.user.settings.get('name'));
             } else {
                 this.$el.html(templateLoggedOut);
             }
