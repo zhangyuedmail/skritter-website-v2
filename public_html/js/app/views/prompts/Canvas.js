@@ -40,10 +40,10 @@ define(function() {
             this.$(Canvas.container).append(Canvas.stage.input.canvas);
             Canvas.stage.display.removeAllChildren();
             Canvas.stage.input.removeAllChildren();
-            this.createLayer('background');
-            this.createLayer('display');
-            this.createLayer('marker');
             this.createLayer('hint');
+            this.createLayer('marker');
+            this.createLayer('display');
+            this.createLayer('background');
             this.updateAll();
             if (this.grid)
                 this.drawGrid();
@@ -98,6 +98,9 @@ define(function() {
             layer.name = 'layer-' + name;
             Canvas.stage.display.addChild(layer);
             return layer;
+        },
+        display: function() {
+            return Canvas.stage.display;
         },
         /**
          * Draws the to the background using a font rather than assembling
@@ -213,8 +216,9 @@ define(function() {
                 stage.removeEventListener('stagemousemove', move);
                 stage.removeEventListener('stagemouseup', up);
                 if (event.rawX >= 0 && event.rawX < Canvas.size && event.rawY >= 0 && event.rawY < Canvas.size)
-                    self.triggerInputUp(points, squig);
+                    self.triggerInputUp(points, squig.clone(true));
                 marker.graphics.clear();
+                squig.graphics.clear();
                 stage.clear();
             }
         },
