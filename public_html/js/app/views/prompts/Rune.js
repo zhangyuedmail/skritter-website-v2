@@ -166,13 +166,12 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             Rune.canvas.disableInput();
-            if (skritter.user.settings.get('squigs')) {
+            if (skritter.user.settings.get('squigs') && this.review.character().length > 0) {
                 var color = skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()];
                 for (var i = 0, length = this.review.character().length; i < length; i++) {
                     var stroke = this.review.character().at(i);
                     Rune.canvas.tweenShape('hint', stroke.userShape(color), stroke.inflateShape());
                 }
-                console.log(Rune.canvas.display());
             } else {
                 Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]);
             }
