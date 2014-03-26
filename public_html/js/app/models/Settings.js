@@ -30,7 +30,9 @@ define(function() {
                 4: '#8493ca'
             },
             hintColor: '#87cefa',
-            maxCanvasSize: 600
+            language: '@@language',
+            maxCanvasSize: 600,
+            version: '@@version'
         },
         /**
          * @method appHeight
