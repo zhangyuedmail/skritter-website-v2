@@ -32,6 +32,9 @@ module.exports = function(grunt) {
     };
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        /*
+         * CLEAN 
+         */
         clean: {
             cordova: {
                 src: ['build/cordova/'],
@@ -39,8 +42,14 @@ module.exports = function(grunt) {
                     force: true
                 }
             },
-            'cordova-www': {
-                src: ['build/cordova/www/'],
+            'cordova-www-ja': {
+                src: ['build/cordova/japanese/www/'],
+                options: {
+                    force: true
+                }
+            },
+            'cordova-www-zh': {
+                src: ['build/cordova/chinese/www/'],
                 options: {
                     force: true
                 }
@@ -52,19 +61,28 @@ module.exports = function(grunt) {
                 }
             }
         },
+        /*
+         * COPY 
+         */
         copy: {
-            'cordova-install': {
+            'cordova-install-ja': {
                 files: [
-                    {expand: true, cwd: 'cordova/', src: [
-                            '**'
-                        ], dest: 'build/cordova/'}
+                    {expand: true, cwd: 'cordova/japanese', src: '**', dest: 'build/cordova/japanese/'}
                 ]
             },
-            'cordova-www': {
+            'cordova-install-zh': {
                 files: [
-                    {expand: true, cwd: 'public_html/', src: [
-                            '**'
-                        ], dest: 'build/cordova/www/'}
+                    {expand: true, cwd: 'cordova/chinese', src: '**', dest: 'build/cordova/chinese/'}
+                ]
+            },
+            'cordova-www-ja': {
+                files: [
+                    {expand: true, cwd: 'public_html/', src: '**', dest: 'build/cordova/japanese/www/'}
+                ]
+            },
+            'cordova-www-zh': {
+                files: [
+                    {expand: true, cwd: 'public_html/', src: '**', dest: 'build/cordova/chinese/www/'}
                 ]
             },
             web: {
@@ -75,6 +93,9 @@ module.exports = function(grunt) {
                 ]
             }
         },
+        /*
+         * JASMINE 
+         */
         jasmine: {
             pivotal: {
                 src: 'src/**/*.js',
@@ -83,9 +104,15 @@ module.exports = function(grunt) {
                 }
             }
         },
+        /*
+         * JSHINT 
+         */
         jshint: {
             all: ['Gruntfile.js', 'public_html/js/app/**/*.js']
         },
+        /*
+         * MANIFEST 
+         */
         manifest: {
             generate: {
                 options: {
@@ -134,23 +161,41 @@ module.exports = function(grunt) {
                 dest: 'build/web/skritter.appcache'
             }
         },
+        /*
+         * REPLACE 
+         */
         replace: {
-            cordova: {
+            'cordova-ja': {
                 options: {
                     variables: {
-                        'version': '<%= pkg.version %>',
-                        'date': new Date().toUTCString().substr(0, 25)
+                        'date': new Date().toUTCString().substr(0, 25),
+                        'language': 'ja',
+                        'version': '<%= pkg.version %>'
                     }
                 },
                 files: [
-                    {src: 'config.xml', dest: 'build/cordova/', expand: true, cwd: 'build/cordova/'}
+                    {src: 'config.xml', dest: 'build/cordova/japanese/', expand: true, cwd: 'build/cordova/japanese/'},
+                    {src: 'Settings.js', dest: 'build/cordova/japanese/www/js/app/models/', expand: true, cwd: 'build/cordova/japanese/www/js/app/models/'}
+                ]
+            },
+            'cordova-zh': {
+                options: {
+                    variables: {
+                        'date': new Date().toUTCString().substr(0, 25),
+                        'language': 'zh',
+                        'version': '<%= pkg.version %>'
+                    }
+                },
+                files: [
+                    {src: 'config.xml', dest: 'build/cordova/chinese/', expand: true, cwd: 'build/cordova/chinese/'},
+                    {src: 'Settings.js', dest: 'build/cordova/chinese/www/js/app/models/', expand: true, cwd: 'build/cordova/chinese/www/js/app/models/'}
                 ]
             },
             'web-combined': {
                 options: {
                     variables: {
-                        'version': '<%= pkg.version %>',
-                        'date': new Date().toUTCString().substr(0, 25)
+                        'date': new Date().toUTCString().substr(0, 25),
+                        'version': '<%= pkg.version %>'
                     }
                 },
                 files: [
@@ -160,8 +205,8 @@ module.exports = function(grunt) {
             'web-copied': {
                 options: {
                     variables: {
-                        'version': '<%= pkg.version %>',
-                        'date': new Date().toUTCString().substr(0, 25)
+                        'date': new Date().toUTCString().substr(0, 25),
+                        'version': '<%= pkg.version %>'
                     }
                 },
                 files: [
@@ -169,6 +214,9 @@ module.exports = function(grunt) {
                 ]
             }
         },
+        /*
+         * REQUIREJS 
+         */
         requirejs: {
             'web-combined': {
                 options: {
@@ -219,10 +267,13 @@ module.exports = function(grunt) {
                 }
             }
         },
+        /*
+         * SHELL 
+         */
         shell: {
-            'android-build-run': {
+            'android-build-run-ja': {
                 command: [
-                    'cd build/cordova/',
+                    'cd build/cordova/japanese/',
                     'cordova build android',
                     'cordova run android'
                 ].join('&&'),
@@ -231,11 +282,44 @@ module.exports = function(grunt) {
                     stderr: true
                 }
             },
-            'android-install': {
+            'android-build-run-zh': {
+                command: [
+                    'cd build/cordova/chinese/',
+                    'cordova build android',
+                    'cordova run android'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'cordova-install-ja': {
+                command: [
+                    'cd build/cordova/',
+                    'cordova create japanese com.inkren.skritter.japanese Skritter',
+                    'cd japanese/',
+                    'cordova platforms add android'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'cordova-install-prepare': {
                 command: [
                     'cd build/',
-                    'cordova create cordova com.inkren.skritter Skritter',
-                    'cd cordova/',
+                    'mkdir cordova'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'cordova-install-zh': {
+                command: [
+                    'cd build/cordova/',
+                    'cordova create chinese com.inkren.skritter.chinese Skritter',
+                    'cd chinese/',
                     'cordova platforms add android'
                 ].join('&&'),
                 options: {
@@ -250,6 +334,9 @@ module.exports = function(grunt) {
                 }
             }
         },
+        /*
+         * YUIDOC 
+         */
         yuidoc: {
             compile: {
                 name: '<%= pkg.appName %>: Documentation',
@@ -273,7 +360,9 @@ module.exports = function(grunt) {
             }
         }
     });
-
+    /*
+     * PACKAGES
+     */
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -282,16 +371,30 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-manifest');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-shell');
-
+    /*
+     * COMMANDS: GENERAL
+     */
     grunt.registerTask('appcache', ['manifest']);
     grunt.registerTask('docs', ['yuidoc:compile']);
     grunt.registerTask('hint', ['jshint']);
-    grunt.registerTask('build-android', [
+    /*
+     * COMMANDS: BUILDING
+     */
+    grunt.registerTask('build-android-zh', [
         'jshint',
-        'clean:cordova-www',
-        'copy:cordova-www',
-        'replace:cordova',
-        'shell:android-build-run'
+        'clean:cordova-www-zh',
+        'copy:cordova-www-zh',
+        'copy:cordova-install-zh',
+        'replace:cordova-zh',
+        'shell:android-build-run-zh'
+    ]);
+    grunt.registerTask('build-android-ja', [
+        'jshint',
+        'clean:cordova-www-ja',
+        'copy:cordova-www-ja',
+        'copy:cordova-install-ja',
+        'replace:cordova-ja',
+        'shell:android-build-run-ja'
     ]);
     grunt.registerTask('build-web-combined', [
         'jshint',
@@ -317,11 +420,16 @@ module.exports = function(grunt) {
         'manifest:web-combined',
         'yuidoc:web'
     ]);
-    grunt.registerTask('install-android', [
+    /*
+     * COMMANDS: INSTALLING
+     */
+    grunt.registerTask('install-cordova', [
         'shell:kill-adb',
         'clean:cordova',
-        'shell:android-install',
-        'copy:cordova-install',
-        'replace:cordova'
+        'shell:cordova-install-prepare',
+        'shell:cordova-install-ja',
+        'copy:cordova-install-ja',
+        'shell:cordova-install-zh',
+        'copy:cordova-install-zh'
     ]);
 };
