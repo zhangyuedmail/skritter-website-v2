@@ -195,7 +195,7 @@ define(function() {
             for (var i = 0, length = reviews.length; i < length; i++) {
                 var item = this.item(i);
                 var review = reviews[i];
-                if (i == 0 && reviews.length > 1)
+                if (parseInt(i, 10) === 0 && reviews.length > 1)
                     review.score = this.finalGrade();
                 review.newInterval = skritter.fn.scheduler.interval(item, review.score);
                 item.set({
