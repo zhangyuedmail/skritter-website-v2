@@ -90,7 +90,11 @@ define([
                 if (result) {
                     Rune.canvas.fadeLayer('background');
                     Rune.strokeAttempts = 0;
-                    Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
+                    if (skritter.user.settings.get('squigs')) {
+                        Rune.canvas.drawShape('display', shape);
+                    } else {
+                        Rune.canvas.tweenShape('display', result.userShape(), result.inflateShape());
+                    }
                 } else {
                     Rune.strokeAttempts++;
                     Rune.canvas.fadeShape('marker', shape);
@@ -162,7 +166,16 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             Rune.canvas.disableInput();
-            Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]);
+            if (skritter.user.settings.get('squigs')) {
+                var color = skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()];
+                for (var i = 0, length = this.review.character().length; i < length; i++) {
+                    var stroke = this.review.character().at(i);
+                    Rune.canvas.tweenShape('hint', stroke.userShape(color), stroke.inflateShape());
+                }
+                console.log(Rune.canvas.display());
+            } else {
+                Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]);
+            }
             Rune.strokeAttempts = 0;
             window.setTimeout(_.bind(function() {
                 this.$('#writing-area').hammer().off('doubletap', _.bind(this.handleDoubleTap, this));
