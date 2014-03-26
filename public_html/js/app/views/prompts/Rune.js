@@ -172,6 +172,7 @@ define([
                     var stroke = this.review.character().at(i);
                     Rune.canvas.tweenShape('hint', stroke.userShape(color), stroke.inflateShape());
                 }
+                Rune.canvas.display().swapChildren(Rune.canvas.getLayer('display'), Rune.canvas.getLayer('hint'));
             } else {
                 Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]);
             }

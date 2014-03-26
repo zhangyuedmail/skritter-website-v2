@@ -40,10 +40,10 @@ define(function() {
             this.$(Canvas.container).append(Canvas.stage.input.canvas);
             Canvas.stage.display.removeAllChildren();
             Canvas.stage.input.removeAllChildren();
+            this.createLayer('background');
+            this.createLayer('display');
             this.createLayer('hint');
             this.createLayer('marker');
-            this.createLayer('display');
-            this.createLayer('background');
             this.updateAll();
             if (this.grid)
                 this.drawGrid();
