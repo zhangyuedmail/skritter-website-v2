@@ -8,4 +8,5 @@ scripts/
 
 # Files #
 *.DS_Store
+*.keystore
 *.log

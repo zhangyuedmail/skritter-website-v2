@@ -65,6 +65,32 @@ module.exports = function(grunt) {
          * COPY 
          */
         copy: {
+            'android-unsigned-ja' : {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/chinese/platforms/android/ant-build/',
+                        src: 'Skritter-release-unsigned.apk',
+                        dest: 'build/android/',
+                        rename: function(dest, src) {
+                            return dest + src.replace('release', 'japanese');
+                        }
+                    }
+                ]
+            },
+            'android-unsigned-zh' : {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/chinese/platforms/android/ant-build/',
+                        src: 'Skritter-release-unsigned.apk',
+                        dest: 'build/android/',
+                        rename: function(dest, src) {
+                            return dest + src.replace('release', 'chinese');
+                        }
+                    }
+                ]
+            },
             'cordova-install-ja': {
                 files: [
                     {expand: true, cwd: 'cordova/japanese', src: '**', dest: 'build/cordova/japanese/'}
@@ -271,6 +297,26 @@ module.exports = function(grunt) {
          * SHELL 
          */
         shell: {
+            'android-build-ja': {
+                command: [
+                    'cd build/cordova/japanese/',
+                    'cordova build android --release'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'android-build-zh': {
+                command: [
+                    'cd build/cordova/chinese/',
+                    'cordova build android --release'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
             'android-build-run-ja': {
                 command: [
                     'cd build/cordova/japanese/',
@@ -395,6 +441,24 @@ module.exports = function(grunt) {
         'copy:cordova-install-ja',
         'replace:cordova-ja',
         'shell:android-build-run-ja'
+    ]);
+    grunt.registerTask('build-android-unsigned-zh', [
+        'jshint',
+        'clean:cordova-www-zh',
+        'copy:cordova-www-zh',
+        'copy:cordova-install-zh',
+        'replace:cordova-zh',
+        'shell:android-build-zh',
+        'copy:android-unsigned-zh'
+    ]);
+    grunt.registerTask('build-android-unsigned-ja', [
+        'jshint',
+        'clean:cordova-www-ja',
+        'copy:cordova-www-ja',
+        'copy:cordova-install-ja',
+        'replace:cordova-ja',
+        'shell:android-build-ja',
+        'shell:android-copy-unsigned-ja'
     ]);
     grunt.registerTask('build-web-combined', [
         'jshint',
