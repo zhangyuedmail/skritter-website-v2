@@ -93,29 +93,58 @@ module.exports = function(grunt) {
             },
             'cordova-install-ja': {
                 files: [
-                    {expand: true, cwd: 'cordova/japanese', src: '**', dest: 'build/cordova/japanese/'}
+                    {
+                        expand: true,
+                        cwd: 'cordova/japanese',
+                        src: '**',
+                        dest: 'build/cordova/japanese/'
+                    }
                 ]
             },
             'cordova-install-zh': {
                 files: [
-                    {expand: true, cwd: 'cordova/chinese', src: '**', dest: 'build/cordova/chinese/'}
+                    {
+                        expand: true,
+                        cwd: 'cordova/chinese',
+                        src: '**',
+                        dest: 'build/cordova/chinese/'
+                    }
                 ]
             },
             'cordova-www-ja': {
                 files: [
-                    {expand: true, cwd: 'public_html/', src: '**', dest: 'build/cordova/japanese/www/'}
+                    {
+                        expand: true,
+                        cwd: 'public_html/',
+                        src: [
+                            '**',
+                            '!fonts/simkai.ttf'
+                        ],
+                        dest: 'build/cordova/japanese/www/'
+                    }
                 ]
             },
             'cordova-www-zh': {
                 files: [
-                    {expand: true, cwd: 'public_html/', src: '**', dest: 'build/cordova/chinese/www/'}
+                    {
+                        expand: true,
+                        cwd: 'public_html/',
+                        src: [
+                            '**',
+                            '!fonts/DFPKaiSho-Md.ttf'
+                        ],
+                        dest: 'build/cordova/chinese/www/'
+                    }
                 ]
             },
             web: {
                 files: [
-                    {expand: true, cwd: 'public_html/', src: [
-                            '**'
-                        ], dest: 'build/web/'}
+                    {
+                        expand: true, 
+                        cwd: 'public_html/', 
+                        src: '**',
+                        dest: 'build/web/'
+                    }
                 ]
             }
         },
