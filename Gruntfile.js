@@ -428,8 +428,8 @@ module.exports = function(grunt) {
         'clean:cordova',
         'shell:cordova-install-prepare',
         'shell:cordova-install-ja',
-        'copy:cordova-install-ja',
         'shell:cordova-install-zh',
+        'copy:cordova-install-ja',
         'copy:cordova-install-zh'
     ]);
 };

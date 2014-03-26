@@ -2,13 +2,11 @@
 <widget id="com.inkren.skritter.chinese" version="@@version" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Skritter</name>
     <description>
-        Learn to Read and Write Chinese Characters.
+        Learn to read and write Chinese characters.
     </description>
     <author email="josh@skritter.com" href="http://www.skritter.com/">
         Joshua McFarland
     </author>
-	<access origin="*" />
-    <content src="index.html" />
-	<preference name="Fullscreen" value="false" />
-    <preference name="Orientation" value="portrait" />
+    <content src="index-cordova.html" />
+    <access origin="*" />
 </widget>
