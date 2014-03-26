@@ -254,9 +254,10 @@ define(function() {
         },
         /**
          * @method getSRSConfigs
+         * @param {String} language
          * @param {Function} callback
          */
-        getSRSConfigs: function(callback) {
+        getSRSConfigs: function(language, callback) {
             var self = this;
             function request() {
                 var promise = $.ajax({
@@ -266,7 +267,8 @@ define(function() {
                     },
                     type: 'GET',
                     data: {
-                        bearer_token: self.get('token')
+                        bearer_token: self.get('token'),
+                        language: language
                     }
                 });
                 promise.done(function(data) {

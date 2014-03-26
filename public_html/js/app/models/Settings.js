@@ -70,6 +70,15 @@ define(function() {
          */
         contentWidth: function() {
             return $('#content-container').width();
+        },
+        /**
+         * @method language
+         * @returns {String}
+         */
+        language: function() {
+            if (this.get('language') === '@@version')
+                return skritter.user.setting.get('targetLang');
+            return this.get('language');
         }
     });
     

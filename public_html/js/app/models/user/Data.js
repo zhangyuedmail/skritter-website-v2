@@ -76,6 +76,7 @@ define([
                             path: 'api/v' + skritter.api.get('version') + '/items',
                             method: 'GET',
                             params: {
+                                lang: skritter.settings.language(),
                                 sort: 'changed',
                                 offset: offset,
                                 include_vocabs: 'true',
@@ -132,7 +133,7 @@ define([
          * @param {Function} callback
          */
         fetchSRSConfigs: function(callback) {
-            skritter.api.getSRSConfigs(function(srsconfigs) {
+            skritter.api.getSRSConfigs(skritter.settings.language(), function(srsconfigs) {
                 skritter.storage.put('srsconfigs', srsconfigs, callback);
             });
         },
