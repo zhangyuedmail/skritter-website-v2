@@ -28,6 +28,7 @@ define(function() {
             Canvas.stage.display = this.createDisplayStage();
             Canvas.stage.input = this.createInputStage();
             createjs.Ticker.addEventListener('tick', Canvas.stage.display);
+            createjs.Ticker.setFPS(1000);
             createjs.Touch.enable(Canvas.stage.input);
         },
         /**
@@ -209,7 +210,7 @@ define(function() {
                         .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 oldPoint = point;
                 oldMidPoint = midPoint;
-                points.push(point.clone());
+                points.push(point);
                 stage.update();
             }
             function up(event) {
