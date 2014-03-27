@@ -76,9 +76,10 @@ define(function() {
          * @returns {String}
          */
         language: function() {
-            if (this.get('language') === '@@language')
-                return skritter.user.settings.get('targetLang');
-            return this.get('language');
+            var language = this.get('language');
+            if (language === 'zh' || language === 'ja')
+                return language;
+            return skritter.user.settings.get('targetLang');
         }
     });
     

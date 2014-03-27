@@ -268,7 +268,7 @@ define(function() {
                     type: 'GET',
                     data: {
                         bearer_token: self.get('token'),
-                        language: language
+                        lang: language
                     }
                 });
                 promise.done(function(data) {
