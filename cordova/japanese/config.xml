@@ -8,6 +8,8 @@
         Joshua McFarland
     </author>
 	<preference name="Fullscreen" value="true" />
+	<preference name="SplashScreen" value="screen" />
+	<preference name="SplashScreenDelay" value="2000" />
     <content src="index-cordova.html" />
     <access origin="*" />
 </widget>
