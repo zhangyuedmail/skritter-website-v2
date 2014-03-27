@@ -48,6 +48,8 @@ define([
             async.apply(loadTimer),
             async.apply(loadUser)
         ], function() {
+            if (window.cordova)
+                navigator.splashscreen.hide();
             Router.initialize();
         });
     };
@@ -134,9 +136,13 @@ define([
                     skritter.user.data.sync(callback, false);
                 },
                 function(callback) {
-                    skritter.modals.show('default', function() {
+                    if (window.cordova) {
                         skritter.user.data.items.loadSchedule(callback);
-                    }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
+                    } else {
+                        skritter.modals.show('default', function() {
+                            skritter.user.data.items.loadSchedule(callback);
+                        }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
+                    }                    
                 },
                 function(callback) {
                     skritter.user.data.srsconfigs.loadAll(callback);
