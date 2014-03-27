@@ -51,7 +51,7 @@ body {
 
 
 /*** FOOTER ***/
-#footer {
+#content-container #footer {
     width: 100%;
     margin-top: 10px;
     height: 45px;
@@ -67,7 +67,29 @@ body {
 
 
 /*** HOME: OUT ***/
-#home-view.logged-out #reviews { text-align: center; }
+#home-view.logged-out {
+    background-color: #333333;
+    color: #ffffff;
+    padding-top: 100px;
+    text-align: center;
+}
+#home-view.logged-out #header {
+    padding-left: 15px;
+    padding-right: 15px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+#home-view.logged-out #content-container {
+    position: fixed;
+    top: 30%;
+    width: 100%;
+}
+#home-view.logged-out #footer {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
 
 
 /*** MODALS ***/

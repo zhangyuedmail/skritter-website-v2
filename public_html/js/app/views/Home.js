@@ -31,6 +31,8 @@ define([
                 this.$('#user-username').html(skritter.user.settings.get('name'));
             } else {
                 this.$el.html(templateLoggedOut);
+                if (skritter.settings.language())
+                    this.$('#target-language').html(skritter.settings.language() === 'zh' ? 'Chinese' : 'Japanese');
             }
             return this;
         },
