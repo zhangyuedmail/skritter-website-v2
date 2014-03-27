@@ -17,7 +17,6 @@ body {
     -webkit-user-select: none;
     background-image: url('../images/textures/ricepaper.png');
     background-repeat: repeat;
-    padding-top: 45px;
 }
 #skritter-container { height: 100%; }
 #content-container { position: relative; }
@@ -34,7 +33,11 @@ body {
 }
 .cursor { cursor: pointer; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
-.view { height: 100%; }
+.view { 
+    height: 100%;
+    padding-top: 45px;
+}
+.view.no-nav { padding-top: 0; }
 @media (max-width: 767px) {
     .container.no-scroll {
         margin: 0;
