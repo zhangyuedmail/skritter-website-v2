@@ -7,6 +7,7 @@
     <author email="josh@skritter.com" href="http://www.skritter.com/">
         Joshua McFarland
     </author>
+	<preference name="Fullscreen" value="true" />
     <content src="index-cordova.html" />
     <access origin="*" />
 </widget>
