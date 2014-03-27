@@ -183,13 +183,14 @@ body {
 #top-container #prompt-style {
     position: absolute;
     left: 10px;
-    top: 15px;
+    top: 30px;
 }
 #top-container #prompt-new-tag {
-    color: #ff0000;
     display: none;
     font-size: 14px;
-    vertical-align: super;
+    left: 10px;
+    position: absolute;
+    top: 15px;
 }
 #top-container .writing-hidden { border-bottom: 1px #222222 solid; }
 #top-container .writing-hidden span { visibility: hidden; }
