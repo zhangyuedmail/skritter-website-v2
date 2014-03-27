@@ -85,7 +85,7 @@ define([
          * @param {CreateJS.Shape} shape
          */
         handleStrokeReceived: function(points, shape) {
-            if (points.length > 5) {
+            if (points.length > 2) {
                 var result = this.review.character().recognize(points, shape);
                 if (result) {
                     Rune.canvas.fadeLayer('background');
