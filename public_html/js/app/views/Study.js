@@ -97,7 +97,7 @@ define([
             skritter.user.data.items.next(_.bind(function(item) {
                 this.loadPrompt(item.createReview());
                 this.$('#items-due').html(skritter.user.data.items.dueCount(true));
-            }, this), null, null);
+            }, this), skritter.user.settings.activeParts(), null);
         },
         /**
          * @method previousPrompt
