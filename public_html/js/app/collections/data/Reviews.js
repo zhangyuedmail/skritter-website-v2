@@ -49,7 +49,7 @@ define([
         post: function(callback) {
             if (this.length > 0) {
                 skritter.api.postReviews(this.toArray(), function(reviews) {
-                    console.log('POSTED REVIEWS', reviews);
+                    skritter.user.data.reviews.remove(_.uniq(_.pluck(reviews, 'wordGroup')));
                     if (typeof callback === 'function')
                         callback();
                 });
