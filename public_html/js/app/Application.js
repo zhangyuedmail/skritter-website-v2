@@ -107,8 +107,16 @@ define([
      */
     var loadStorage = function(callback) {
         if (window.cordova) {
-            skritter.storage = new WebSQLAdapter();
+            var version = window.device.version.split('.');
+            if (version[0] === '4' && version[1] === '4') {
+                console.log('USING INDEXEDDB');
+                skritter.storage = new IndexedDBAdapter();
+            } else {
+                console.log('USING WEBSQL');
+                skritter.storage = new WebSQLAdapter();
+            }
         } else {
+            console.log('USING INDEXEDDB');
             skritter.storage = new IndexedDBAdapter();
         }
         callback();
