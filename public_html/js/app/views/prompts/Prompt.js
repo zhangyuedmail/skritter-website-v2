@@ -47,8 +47,9 @@ define([
                 score: selectedGrade
             });
             if (this.review.isLast()) {
-                this.review.save();
-                this.trigger('prompt:finished');
+                this.review.save(_.bind(function() {
+                    this.trigger('prompt:finished');
+                }, this));
             } else {
                 skritter.timer.reset();
                 Prompt.gradingButtons.grade(3);

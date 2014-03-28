@@ -18,6 +18,9 @@ define([
             this.on('add change', function(review) {
                 review.cache();
             });
+            this.on('remove', function(review) {
+                review.uncache();
+            });
         },
         /**
          * @property {Backbone.Model} model
@@ -43,6 +46,22 @@ define([
             });
         },
         /**
+         * @method post
+         * @param {function} callback
+         */
+        post: function(callback) {
+            if (this.length > 0) {
+                skritter.api.postReviews(this.toArray(), function(reviews) {
+                    skritter.user.data.reviews.remove(_.uniq(_.pluck(reviews, 'wordGroup')));
+                    if (typeof callback === 'function')
+                        callback();
+                });
+            } else {
+                if (typeof callback === 'function')
+                    callback(0);
+            }
+        },
+        /**
          * @method recentIds
          * @param {Number} number
          * @returns {Array}
@@ -54,6 +73,16 @@ define([
             return this.models.map(function(item) {
                 return item.id.split('_')[1];
             }).slice(0, number - 1);
+        },
+        /**
+         * @method toArray
+         * @returns {Array}
+         */
+        toArray: function() {
+            var reviews = [];
+            for (var i = 0, length = this.length; i < length; i ++)
+                reviews = reviews.concat(this.at(i).get('reviews'));
+            return reviews;
         },
         /**
          * @method totalTimeToday

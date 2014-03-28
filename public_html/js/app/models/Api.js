@@ -309,6 +309,78 @@ define(function() {
             request();
         },
         /**
+         * @method getReviewErrors
+         * @param {Number} offset
+         * @param {Function} callback
+         */
+        getReviewErrors: function(offset, callback) {
+            var self = this;
+            var reviewErrors = [];
+            function request(cursor) {
+                var promise = $.ajax({
+                    url: Api.base + 'reviews/errors',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor,
+                        offset: offset ? offset : 0
+                    }
+                });
+                promise.done(function(data) {
+                    reviewErrors = reviewErrors.concat(data.ReviewErrors);
+                    if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 500);
+                    } else {
+                        console.log('REVIEW ERRORS', reviewErrors);
+                        callback(reviewErrors);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
+         * Posts batches of reviews in groups of 500 and then returns an array of the posted objects.
+         * 
+         * @method postReviews
+         * @param {Array} reviews
+         * @param {Function} callback
+         */
+        postReviews: function(reviews, callback) {
+            var self = this;
+            var postedReviews = [];
+            var postBatch = function(batch) {
+                var promise = $.ajax({
+                    url: Api.base + 'reviews?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'POST',
+                    data: JSON.stringify(batch)
+                });
+                promise.done(function() {
+                    postedReviews = postedReviews.concat(batch);
+                    if (reviews.length > 0) {
+                        postBatch(reviews.splice(0, 499));
+                    } else {
+                        callback(postedReviews);
+                    }
+                });
+                promise.fail(function(error) {
+                    console.error('REVIEW POST ERROR', error);
+                    callback(postedReviews);
+                });
+            };
+            postBatch(reviews.splice(0, 499));
+        },
+        /**
          * Requests a specific batch from the server and returns the request id. Use the
          * getBatch function to get the requested data from the server.
          * 

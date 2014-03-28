@@ -26,6 +26,16 @@ define([
          */
         model: Item,
         /**
+         * @method cache
+         * @param {Function} callback
+         */
+        cache: function(callback) {
+            skritter.storage.put('items', this.toJSON(), function() {
+                if (typeof callback === 'function')
+                    callback();
+            });
+        },
+        /**
          * @method due
          * @param {Boolean} skipSort
          * @returns {Array}

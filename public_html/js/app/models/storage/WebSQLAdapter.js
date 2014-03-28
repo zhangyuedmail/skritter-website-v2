@@ -201,6 +201,34 @@ define([
             }
         },
         /**
+         * @method remove
+         * @param {String} tableName
+         * @param {Array|String} ids
+         * @param {Function} callback
+         */
+        remove: function(tableName, ids, callback) {
+            var items = [];
+            if (tableName && ids) {
+                ids = Array.isArray(ids) ? ids : [ids];
+                ids = ids.map(function(id) {
+                    return JSON.stringify(id);
+                });
+                var key = this.tables[tableName].keys[0];
+                var error = function(event) {
+                    console.error(event);
+                };
+                var success = function() {
+                    callback(items);
+                };
+                WebSQLAdapter.database.transaction(function(tx) {
+                    for (var i = 0, length = ids.length; i < length; i++)
+                        tx.executeSql('DELETE FROM ' + tableName + ' WHERE ' + key + ' = ?', [ids[i]]);
+                }, error, success);
+            } else {
+                callback(items);
+            }
+        },
+        /**
          * @method update
          * @param {String} tableName
          * @param {Array|Object} items

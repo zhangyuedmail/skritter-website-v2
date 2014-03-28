@@ -81,6 +81,7 @@ define([
                     self.set(result);
                     self.settings.set('id', result.user_id);
                     self.settings.fetch(function() {
+                        window.indexedDB.deleteDatabase(result.user_id);
                         localStorage.setItem('active', result.user_id);
                         callback(result);
                     });

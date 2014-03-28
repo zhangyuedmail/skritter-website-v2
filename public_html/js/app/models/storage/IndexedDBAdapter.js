@@ -161,6 +161,29 @@ define([
             }
         },
         /**
+         * @method remove
+         * @param {String} tableName
+         * @param {Array|String} ids
+         * @param {Function} callback
+         */
+        remove: function(tableName, ids, callback) {
+            if (tableName && ids) {
+                ids = Array.isArray(ids) ? ids : [ids];
+                var transaction = IndexedDBAdapter.database.transaction(tableName, 'readwrite');
+                transaction.oncomplete = function() {
+                    callback();
+                };
+                transaction.onerror = function(event) {
+                    console.error(event);
+                };
+                var objectStore = transaction.objectStore(tableName);
+                for (var i = 0, length = ids.length; i < length; i++)
+                    objectStore.delete(ids[i]);
+            } else {
+                callback();
+            }
+        },
+        /**
          * @method update
          * @param {String} tableName
          * @param {Array|Object} items
