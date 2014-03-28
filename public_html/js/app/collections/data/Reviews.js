@@ -43,6 +43,22 @@ define([
             });
         },
         /**
+         * @method post
+         * @param {function} callback
+         */
+        post: function(callback) {
+            if (this.length > 0) {
+                skritter.api.postReviews(this.toArray(), function(reviews) {
+                    console.log('POSTED REVIEWS', reviews);
+                    if (typeof callback === 'function')
+                        callback();
+                });
+            } else {
+                if (typeof callback === 'function')
+                    callback(0);
+            }
+        },
+        /**
          * @method recentIds
          * @param {Number} number
          * @returns {Array}
@@ -54,6 +70,16 @@ define([
             return this.models.map(function(item) {
                 return item.id.split('_')[1];
             }).slice(0, number - 1);
+        },
+        /**
+         * @method toArray
+         * @returns {Array}
+         */
+        toArray: function() {
+            var reviews = [];
+            for (var i = 0, length = this.length; i < length; i ++)
+                reviews = reviews.concat(this.at(i).get('reviews'));
+            return reviews;
         },
         /**
          * @method totalTimeToday
