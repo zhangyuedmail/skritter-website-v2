@@ -252,3 +252,9 @@ body {
     position: absolute;
     z-index: 9002;
 }
+
+/*** STUDY: SETTINGS ***/
+#study-settings-view #parts .setting-label {
+    float: left;
+    width: 150px;
+}
