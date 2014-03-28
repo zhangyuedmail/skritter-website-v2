@@ -77,7 +77,7 @@ define(function() {
                 var max = this.get('reviews').length - 1;
                 var totalGrade = 0;
                 var totalWrong = 0;
-                for (var i = 1, length = max; i < length; i++) {
+                for (var i = 1, length = this.get('reviews').length; i < length; i++) {
                     var review = this.get('reviews')[i];
                     totalGrade += review.score;
                     if (review.score === 1)
@@ -182,9 +182,9 @@ define(function() {
         },
         /**
          * @method save
-         * @returns {Backbone.Model}
+         * @param {Function} callback
          */
-        save: function() {
+        save: function(callback) {
             var reviews = _.clone(this.get('reviews'));
             //updates the base review based on contained reviews
             if (this.hasContained()) {
@@ -204,7 +204,7 @@ define(function() {
                     interval: review.newInterval,
                     next: review.submitTime + review.newInterval,
                     previousInterval: review.currentInterval,
-                    previousSuccess: (review.score > 1) ? true : false,
+                    previousSuccess: review.score > 1 ? true : false,
                     reviews: item.get('reviews') + 1,
                     successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                     timeStudied: item.get('timeStudied') + review.reviewTime
@@ -212,9 +212,12 @@ define(function() {
             }
             //set the review data and trigger local caching
             this.set('reviews', reviews);
-            if (!skritter.user.data.reviews.get(this))
+            if (!skritter.user.data.reviews.get(this)) {
                 skritter.user.data.reviews.add(this);
-            return this;
+                skritter.user.data.items.cache(callback);
+            } else {
+                callback();
+            }
         },
         /**
          * @method totalReviewTime
