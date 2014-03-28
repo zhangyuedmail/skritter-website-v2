@@ -24,7 +24,9 @@ define([
         render: function() {
             this.$el.html(templateInfo);
             if (Info.vocab) {
+                this.$('.character-font').addClass(Info.vocab.fontClass());
                 this.$('#writing-primary').html(Info.vocab.get('writing'));
+                this.$('#writing-secondary').html('');
                 this.$('#reading').html(Info.vocab.reading());
                 this.$('#definition').html(Info.vocab.definition());
                 if (Info.vocab.has('sentenceId')) {
