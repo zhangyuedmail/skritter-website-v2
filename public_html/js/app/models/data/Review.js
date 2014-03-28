@@ -248,6 +248,16 @@ define(function() {
             return thinkingTime;
         },
         /**
+         * @method uncache
+         * @param {Function} callback
+         */
+        uncache: function(callback) {
+            skritter.storage.remove('reviews', this.id, function() {
+                if (typeof callback === 'function')
+                    callback();
+            });
+        },
+        /**
          * @method vocab
          * @param {Number} position
          * @returns {Backbone.Model}

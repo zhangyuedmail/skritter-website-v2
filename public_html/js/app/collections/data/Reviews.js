@@ -18,6 +18,9 @@ define([
             this.on('add change', function(review) {
                 review.cache();
             });
+            this.on('remove', function(review) {
+                review.uncache();
+            });
         },
         /**
          * @property {Backbone.Model} model
