@@ -45,8 +45,8 @@ define(function() {
                     this.set('filterJapaneseParts', parts);
                 }
             if (this.isChinese())
-                return this.get('filterChineseParts');
-            return this.get('filterJapaneseParts');
+                return _.intersection(this.get('filterChineseParts'), this.enabledParts());
+            return _.intersection(this.get('filterJapaneseParts'), this.enabledParts());
         },
         /**
          * Returns the users current avatar and returns it as an image tag using base64 data.
@@ -59,6 +59,15 @@ define(function() {
             if (classes)
                 return "<img src='data:image/png;base64," + this.get('avatar') + "' + class='" + classes + "' />";
             return "<img src='data:image/png;base64," + this.get('avatar') + "' />";
+        },
+        /**
+         * @method enabledParts
+         * @returns {Array}
+         */
+        enabledParts: function() {
+            if (this.isChinese())
+                return this.get('chineseStudyParts');
+            return this.get('japaneseStudyParts');
         },
         /**
          * @method fetch

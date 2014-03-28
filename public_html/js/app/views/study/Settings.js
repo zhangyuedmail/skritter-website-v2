@@ -16,6 +16,7 @@ define([
          */
         initialize: function() {
             Settings.activeParts = [];
+            Settings.enabledParts = [];
         },
         /**
          * @method render
@@ -24,6 +25,7 @@ define([
         render: function() {
             this.$el.html(templateStudySettings);
             Settings.activeParts = skritter.user.settings.activeParts();
+            Settings.enabledParts = skritter.user.settings.enabledParts();
             this.$('input.bootswitch').bootstrapSwitch();
             this.$('#general #audio').bootstrapSwitch('state', skritter.user.settings.get('audio'));
             this.$('#parts #defn').bootstrapSwitch('state', Settings.activeParts.indexOf('defn') > -1);
@@ -35,6 +37,10 @@ define([
             } else {
                 this.$('#parts #tone').bootstrapSwitch('state', Settings.activeParts.indexOf('tone') > -1);
             }
+            this.$('#parts #defn').bootstrapSwitch('disabled', Settings.enabledParts.indexOf('defn') === -1);
+            this.$('#parts #rdng').bootstrapSwitch('disabled', Settings.enabledParts.indexOf('rdng') === -1);
+            this.$('#parts #rune').bootstrapSwitch('disabled', Settings.enabledParts.indexOf('rune') === -1);
+            this.$('#parts #tone').bootstrapSwitch('disabled', Settings.enabledParts.indexOf('tone') === -1);
             return this;
         },
         /**
