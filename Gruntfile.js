@@ -225,11 +225,13 @@ module.exports = function(grunt) {
                     variables: {
                         'date': new Date().toUTCString().substr(0, 25),
                         'language': 'ja',
-                        'version': '<%= pkg.version %>'
+                        'version': '<%= pkg.version %>',
+                        'versionCode': '<%= pkg.versionCode %>'
                     }
                 },
                 files: [
                     {src: 'config.xml', dest: 'build/cordova/japanese/', expand: true, cwd: 'build/cordova/japanese/'},
+                    {src: 'AndroidManifest.xml', dest: 'build/cordova/japanese/platforms/android', expand: true, cwd: 'build/cordova/japanese/platforms/android/'},
                     {src: 'Settings.js', dest: 'build/cordova/japanese/www/js/app/models/', expand: true, cwd: 'build/cordova/japanese/www/js/app/models/'}
                 ]
             },
@@ -238,11 +240,13 @@ module.exports = function(grunt) {
                     variables: {
                         'date': new Date().toUTCString().substr(0, 25),
                         'language': 'zh',
-                        'version': '<%= pkg.version %>'
+                        'version': '<%= pkg.version %>',
+                        'versionCode': '<%= pkg.versionCode %>'
                     }
                 },
                 files: [
                     {src: 'config.xml', dest: 'build/cordova/chinese/', expand: true, cwd: 'build/cordova/chinese/'},
+                    {src: 'AndroidManifest.xml', dest: 'build/cordova/chinese/platforms/android', expand: true, cwd: 'build/cordova/chinese/platforms/android/'},
                     {src: 'Settings.js', dest: 'build/cordova/chinese/www/js/app/models/', expand: true, cwd: 'build/cordova/chinese/www/js/app/models/'}
                 ]
             },
