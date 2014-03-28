@@ -72,7 +72,7 @@ define([
                     newInterval: undefined,
                     wordGroup: wordGroup,
                     previousInterval: item.has('previousInterval') ? item.get('previousInterval') : 0,
-                    previousSuccess: item.has('previousSuccess') ? item.get('previousSuccess') : 0
+                    previousSuccess: item.has('previousSuccess') ? item.get('previousSuccess') : false
                 });
                 if (review.characters)
                     if (items.length === 1) {
