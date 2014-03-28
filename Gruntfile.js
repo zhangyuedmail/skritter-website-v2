@@ -69,7 +69,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'build/cordova/chinese/platforms/android/ant-build/',
+                        cwd: 'build/cordova/japanese/platforms/android/ant-build/',
                         src: 'Skritter-release-unsigned.apk',
                         dest: 'build/android/',
                         rename: function(dest, src) {
@@ -491,7 +491,7 @@ module.exports = function(grunt) {
         'copy:cordova-install-ja',
         'replace:cordova-ja',
         'shell:android-build-ja',
-        'shell:android-copy-unsigned-ja'
+        'copy:android-unsigned-ja'
     ]);
     grunt.registerTask('build-web-combined', [
         'jshint',
