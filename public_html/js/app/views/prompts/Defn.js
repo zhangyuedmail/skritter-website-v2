@@ -95,7 +95,7 @@ define([
             skritter.timer.stop();
             this.$('.question').hide();
             this.$('.answer').show('fade', 200);
-            this.$('#question-text').html('Answer:');
+            this.$('#question-text').html('Definition:');
             Prompt.gradingButtons.show();
             this.review.set('finished', true);
             return this;
