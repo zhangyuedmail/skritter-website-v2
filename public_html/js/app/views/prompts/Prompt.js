@@ -70,28 +70,20 @@ define([
          * @param {Object} event
          */
         toggleHint: function(event) {
-            var actualInfoHeight = this.$('#info-section')[0].scrollHeight;
-            var defaultInfoHeight = skritter.settings.contentHeight() - skritter.settings.canvasSize() - 35;
-            var maxInfoHeight = skritter.settings.contentHeight();
             if (this.$('#info-section').hasClass('expanded')) {
-                this.$('#info-section').animate({
-                    height: defaultInfoHeight,
-                    'max-height': 'auto'
-                }, 200, function() {
-                    $(this).css('height', 'auto');
-                    $(this).css('max-height', defaultInfoHeight);
-                    $(this).removeClass('expanded');
-                    $(this).find('#hint-caret').removeClass('fa-chevron-up');
-                    $(this).find('#hint-caret').addClass('fa-chevron-down');
+                this.$('#prompt-hint').hide(200, function() {
+                    $('#info-section').removeClass('expanded');
+                    $('#info-section').find('#hint-caret').removeClass('fa-chevron-up');
+                    $('#info-section').find('#hint-caret').addClass('fa-chevron-down');
+                    $('#info-section').css('max-height', skritter.settings.contentHeight() - skritter.settings.canvasSize() - 35);
                 });
             } else {
-                this.$('#info-section').animate({
-                    height: actualInfoHeight > maxInfoHeight ? maxInfoHeight : actualInfoHeight,
-                    'max-height': 'auto'
-                }, 200, function() {
-                    $(this).addClass('expanded');
-                    $(this).find('#hint-caret').removeClass('fa-chevron-down');
-                    $(this).find('#hint-caret').addClass('fa-chevron-up');
+                this.$('#info-section').css('max-height', '');
+                this.$('#prompt-hint').show(200, function() {
+                    $('#info-section').addClass('expanded');
+                    $('#info-section').find('#hint-caret').removeClass('fa-chevron-down');
+                    $('#info-section').find('#hint-caret').addClass('fa-chevron-up');
+                    $('#info-section').css('max-height', skritter.settings.contentHeight() - 15);
                 });
             }
             event.preventDefault();

@@ -173,8 +173,10 @@ body {
 #info-section #hint-caret {
     cursor: pointer;
     position: absolute;
-    right: 15px;
+    right: 20px;
+    top: 10px;
 }
+#info-section #prompt-hint { display: none; }
 #info-section .writing-hidden { border-bottom: 1px #222222 solid; }
 #info-section .writing-hidden span { visibility: hidden; }
 #info-section .reading-hidden { border-bottom: 1px #222222 solid; }
