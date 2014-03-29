@@ -176,6 +176,13 @@ body {
     right: 20px;
     top: 10px;
 }
+#info-section #info-button {
+    cursor: pointer;
+    font-size: 24px;
+    left: 20px;
+    position: absolute;
+    top: 15px;
+}
 #info-section #prompt-hint { display: none; }
 #info-section .writing-hidden { border-bottom: 1px #222222 solid; }
 #info-section .writing-hidden span { visibility: hidden; }
