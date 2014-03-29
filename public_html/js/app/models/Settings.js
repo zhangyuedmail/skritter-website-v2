@@ -32,6 +32,7 @@ define(function() {
             hintColor: '#87cefa',
             language: '@@language',
             maxCanvasSize: 600,
+            storageType: 'IndexedDB',
             version: '@@version'
         },
         /**
@@ -70,6 +71,15 @@ define(function() {
          */
         contentWidth: function() {
             return $('#content-container').width();
+        },
+        /**
+         * @method isIndexedDB
+         * @returns {Boolean}
+         */
+        isIndexedDB: function() {
+            if (this.get('storageType') === 'IndexedDB')
+                return true;
+            return false;
         },
         /**
          * @method language

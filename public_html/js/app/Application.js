@@ -109,14 +109,14 @@ define([
         if (window.cordova) {
             var version = window.device.version.split('.');
             if (version[0] === '4' && version[1] === '4') {
-                console.log('USING INDEXEDDB');
+                skritter.settings.set('storageType', 'IndexedDB');
                 skritter.storage = new IndexedDBAdapter();
             } else {
-                console.log('USING WEBSQL');
+                skritter.settings.set('storageType', 'WebSQL');
                 skritter.storage = new WebSQLAdapter();
             }
         } else {
-            console.log('USING INDEXEDDB');
+            skritter.settings.set('storageType', 'IndexedDB');
             skritter.storage = new IndexedDBAdapter();
         }
         callback();
