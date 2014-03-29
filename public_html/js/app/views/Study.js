@@ -45,16 +45,7 @@ define([
          * @property {Object} events
          */
         events: {
-            'click.Study #study-view #info-button': 'handleInfoButtonClicked',
             'click.Study #study-view #study-settings-button': 'handleStudySettingsButtonClicked'
-        },
-        /**
-         * @method handleInfoButtonClicked
-         * @param {Object} event
-         */
-        handleInfoButtonClicked: function(event) {
-            skritter.router.navigate('info/' + this.prompt.review.baseVocab().id, {trigger: true});
-            event.preventDefault();
         },
         /**
          * @method handleStudySettingsButtonClicked
