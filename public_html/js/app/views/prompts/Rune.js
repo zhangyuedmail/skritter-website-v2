@@ -135,9 +135,11 @@ define([
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
+                this.$('#input-section').css('left', (skritter.settings.contentWidth() - skritter.settings.canvasSize()) / 2);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
+                this.$('#input-section').css('left', '');
             }
             this.$('#input-section').height(skritter.settings.canvasSize());
             this.$('#input-section').width(skritter.settings.canvasSize());
