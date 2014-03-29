@@ -129,7 +129,7 @@ define(function() {
          */
         style: function() {
             if (this.isJapanese()) {
-                return [];
+                return null;
             } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
                 return ['both', 'simp', 'trad'];
             } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {

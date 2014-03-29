@@ -116,18 +116,20 @@ define([
                 callback(schedule);
             };
             WebSQLAdapter.database.transaction(function(tx) {
-                tx.executeSql('SELECT id, held, last, next, vocabIds FROM items', [], results);
+                tx.executeSql('SELECT id, held, last, next, style, vocabIds FROM items', [], results);
                 function results(tx, result) {
                     for (var a = 0, lengthA = result.rows.length; a < lengthA; a++) {
                         var item = _.cloneDeep(result.rows.item(a));
                         var held = JSON.parse(item.held);
                         var last = JSON.parse(item.last);
                         var next = JSON.parse(item.next);
+                        var style = JSON.parse(item.style);
                         var vocabIds = JSON.parse(item.vocabIds);
                         if (vocabIds.length > 0) {
                             item.id = JSON.parse(item.id);
                             item.last = last ? last : 0;
                             item.next = next ? next : 0;
+                            item.style = style ? style : undefined;
                             if (held) {
                                 item.held = held;
                             } else {

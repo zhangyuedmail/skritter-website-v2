@@ -82,21 +82,28 @@ define([
          * @param {Function} callback
          * @param {Array|String} filterParts
          * @param {Array|String} filterIds
+         * @param {Array|String} filterStyle
          * @returns {Backbone.Model}
          */
-        next: function(callback, filterParts, filterIds) {
-            var schedule = this.sort();
+        next: function(callback, filterParts, filterIds, filterStyle) {
             var i = 0;
+            var schedule = this.sort();
             if (filterParts) {
                 filterParts = Array.isArray(filterParts) ? filterParts : [filterParts];
-                for (var length = schedule.length; i < length; i++)
-                    if (filterParts.indexOf(schedule[i].id.split('-')[4]) > -1)
-                        break;
+                schedule = schedule.filter(function(item) {
+                    return filterParts.indexOf(item.id.split('-')[4]) !== -1;
+                });
             }
             if (filterIds) {
                 filterIds = Array.isArray(filterIds) ? filterIds : [filterIds];
                 schedule = schedule.filter(function(item) {
-                    return filterIds.indexOf(item.id) > -1;
+                    return filterIds.indexOf(item.id) !== -1;
+                });
+            }
+            if (filterStyle) {
+                filterStyle = Array.isArray(filterStyle) ? filterStyle : [filterStyle];
+                schedule = schedule.filter(function(item) {
+                    return filterStyle.indexOf(item.style) !== -1;
                 });
             }
             var load = function() {

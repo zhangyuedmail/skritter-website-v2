@@ -99,7 +99,8 @@ define([
                         var scheduleItem = {
                             id: cursor.value.id,
                             last: cursor.value.last ? cursor.value.last : 0,
-                            next: cursor.value.next ? cursor.value.next : 0
+                            next: cursor.value.next ? cursor.value.next : 0,
+                            style: cursor.value.style
                         };
                         if (cursor.value.held)
                             scheduleItem.held = cursor.value.held;
