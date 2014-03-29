@@ -34,7 +34,7 @@ define([
          * @property {Object} events
          */
         events: {
-            'click.Prompt .prompt-container #hint-caret': 'toggleHint'
+            'click.Prompt .prompt-container #info-button': 'toggleInfo'
         },
         /**
          * @method handleGradingSelected
@@ -66,27 +66,30 @@ define([
             event.preventDefault();
         },
         /**
-         * @method toggleHint
+         * @method toggleInfo
          * @param {Object} event
          */
-        toggleHint: function(event) {
-            if (this.$('#top-container').hasClass('expanded')) {
-                this.$('#top-container').animate({
-                    height: '65px'
+        toggleInfo: function(event) {
+            console.log(event);
+            var maxInfoHeight = skritter.settings.contentHeight() - skritter.settings.canvasSize() - 35;
+            if (this.$('#info-section').hasClass('expanded')) {
+                this.$('#info-section').animate({
+                    height: maxInfoHeight,
+                    'max-height': 'auto'
                 }, 500, function() {
+                    $(this).css('max-height', maxInfoHeight);
                     $(this).removeClass('expanded');
-                    $(this).css('z-index', '');
-                    $(this).find('#hint-caret').removeClass('fa fa-chevron-up');
-                    $(this).find('#hint-caret').addClass('fa fa-chevron-down');
+                    $(this).find('#info-button').removeClass('fa-times-circle');
+                    $(this).find('#info-button').addClass('fa-info-circle');
                 });
             } else {
-                this.$('#top-container').css('z-index', 1002);
-                this.$('#top-container').animate({
-                    height: this.$('#top-container')[0].scrollHeight + 'px'
+                this.$('#info-section').animate({
+                    height: skritter.settings.contentHeight() - 15,
+                    'max-height': 'auto'
                 }, 500, function() {
                     $(this).addClass('expanded');
-                    $(this).find('#hint-caret').removeClass('fa fa-chevron-down');
-                    $(this).find('#hint-caret').addClass('fa fa-chevron-up');
+                    $(this).find('#info-button').removeClass('fa-info-circle');
+                    $(this).find('#info-button').addClass('fa-times-circle');
                 });
             }
             event.preventDefault();

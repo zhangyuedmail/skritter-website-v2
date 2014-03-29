@@ -164,11 +164,17 @@ body {
 
 /*** PROMPT: INFO SECTION ***/
 #info-section {
+    overflow-y: auto;
     position: absolute;
     z-index: 1002;
 }
 .prompt-container.landscape #info-section { width: 50%; }
 .prompt-container.portrait #info-section { width: 100%; }
+#info-section #info-button {
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+}
 #info-section .writing-hidden { border-bottom: 1px #222222 solid; }
 #info-section .writing-hidden span { visibility: hidden; }
 #info-section .reading-hidden { border-bottom: 1px #222222 solid; }
@@ -186,7 +192,7 @@ body {
     width: 50%;
 }
 .prompt-container.portrait #input-section {
-    bottom: 20px;
+    bottom: 15px;
     width: 100%;
 }
 #input-section #prompt-text {
@@ -209,11 +215,20 @@ body {
 
 
 /*** PROMPT: DEFINITION ***/
-#defn #prompt-writing { font-size: 104px; }
 
 
 /*** PROMPT: READING ***/
-#rdng #prompt-writing { font-size: 104px; }
+
+
+/*** PROMPT: TONE ***/
+
+
+/*** PROMPT: WRITING ***/
+#rune #prompt-question-text {}
+#rune #prompt-writing {}
+#rune #prompt-reading {}
+#rune #prompt-definition {}
+#rune #prompt-sentence {}
 
 
 /*** PROMPT: WRITING AREA ***/

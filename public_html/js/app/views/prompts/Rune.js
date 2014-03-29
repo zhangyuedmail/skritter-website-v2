@@ -135,6 +135,7 @@ define([
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
+                this.$('#info-section').css('max-height', skritter.settings.contentHeight() - skritter.settings.canvasSize() - 35);
                 this.$('#input-section').css('left', (skritter.settings.contentWidth() - skritter.settings.canvasSize()) / 2);
             } else {
                 this.$('.prompt-container').addClass('landscape');
