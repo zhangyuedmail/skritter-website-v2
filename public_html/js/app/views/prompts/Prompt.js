@@ -70,13 +70,13 @@ define([
          * @param {Object} event
          */
         toggleInfo: function(event) {
-            console.log(event);
             var maxInfoHeight = skritter.settings.contentHeight() - skritter.settings.canvasSize() - 35;
             if (this.$('#info-section').hasClass('expanded')) {
                 this.$('#info-section').animate({
                     height: maxInfoHeight,
                     'max-height': 'auto'
-                }, 500, function() {
+                }, 200, function() {
+                    $(this).css('height', 'auto');
                     $(this).css('max-height', maxInfoHeight);
                     $(this).removeClass('expanded');
                     $(this).find('#info-button').removeClass('fa-times-circle');
@@ -86,7 +86,7 @@ define([
                 this.$('#info-section').animate({
                     height: skritter.settings.contentHeight() - 15,
                     'max-height': 'auto'
-                }, 500, function() {
+                }, 200, function() {
                     $(this).addClass('expanded');
                     $(this).find('#info-button').removeClass('fa-info-circle');
                     $(this).find('#info-button').addClass('fa-times-circle');
