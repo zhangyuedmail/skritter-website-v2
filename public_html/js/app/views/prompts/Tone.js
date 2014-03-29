@@ -109,11 +109,15 @@ define([
             Prompt.prototype.resize.call(this);
             Tone.canvas.render().resize(skritter.settings.canvasSize());
             Tone.canvas.drawCharacterFromFont('background', this.review.baseVocab().characters()[this.review.get('position') - 1], skritter.user.settings.font());
-            this.$('#top-container').height(skritter.settings.contentHeight() - skritter.settings.canvasSize() - 3);
-            this.$('#top-container').width(skritter.settings.contentWidth());
-            this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
-            this.$('#bottom-container').width(skritter.settings.contentWidth());
-            this.$('#writing-area').width(skritter.settings.canvasSize());
+            if (skritter.settings.isPortrait()) {
+                this.$('.prompt-container').addClass('portrait');
+                this.$('.prompt-container').removeClass('landscape');
+            } else {
+                this.$('.prompt-container').addClass('landscape');
+                this.$('.prompt-container').removeClass('portrait');
+            }
+            this.$('#input-section').height(skritter.settings.canvasSize());
+            this.$('#input-section').width(skritter.settings.canvasSize());
             if (this.review.character().isFinished()) {
                 Tone.canvas.drawShape('display', this.review.character().shape(null, skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]));
                 Tone.canvas.getLayer('background').alpha = 0.6;

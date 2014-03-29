@@ -61,10 +61,15 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
-            this.$('#top-container').height(63);
-            this.$('#top-container').width(skritter.settings.contentWidth());
-            this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
-            this.$('#bottom-container').width(skritter.settings.contentWidth());
+            if (skritter.settings.isPortrait()) {
+                this.$('.prompt-container').addClass('portrait');
+                this.$('.prompt-container').removeClass('landscape');
+            } else {
+                this.$('.prompt-container').addClass('landscape');
+                this.$('.prompt-container').removeClass('portrait');
+            }
+            this.$('#input-section').height(skritter.settings.canvasSize());
+            this.$('#input-section').width(skritter.settings.canvasSize());
             this.$('#prompt-reading').fitText(1.2, {maxFontSize: '64px'});
             this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});
         },

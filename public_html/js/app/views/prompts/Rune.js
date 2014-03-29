@@ -132,11 +132,15 @@ define([
         resize: function() {
             Prompt.prototype.resize.call(this);
             Rune.canvas.render().resize(skritter.settings.canvasSize());
-            this.$('#top-container').height(skritter.settings.contentHeight() - skritter.settings.canvasSize() - 3);
-            this.$('#top-container').width(skritter.settings.contentWidth());
-            this.$('#bottom-container').height(skritter.settings.contentHeight() - this.$('#top-container').height() - 3);
-            this.$('#bottom-container').width(skritter.settings.contentWidth());
-            this.$('#writing-area').width(skritter.settings.canvasSize());
+            if (skritter.settings.isPortrait()) {
+                this.$('.prompt-container').addClass('portrait');
+                this.$('.prompt-container').removeClass('landscape');
+            } else {
+                this.$('.prompt-container').addClass('landscape');
+                this.$('.prompt-container').removeClass('portrait');
+            }
+            this.$('#input-section').height(skritter.settings.canvasSize());
+            this.$('#input-section').width(skritter.settings.canvasSize());
             if (this.review.character().length > 0)
                 Rune.canvas.drawShape('display', this.review.character().shape());
         },

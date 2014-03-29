@@ -20,7 +20,10 @@ body {
 }
 #skritter-container { height: 100%; }
 #content-container { position: relative; }
-#content-container.no-scroll { height: 100%; }
+#content-container.no-scroll { 
+    height: 100%; 
+    overflow-y: hidden;
+}
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-block {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
@@ -31,6 +34,7 @@ body {
     padding: 15px;
     margin-top: 10px;
 }
+.content-block.no-padding { padding: 0; }
 .cursor { cursor: pointer; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
@@ -39,14 +43,6 @@ body {
 }
 .view.no-nav { padding-top: 0; }
 @media (max-width: 767px) {
-    .container.no-scroll {
-        margin: 0;
-        padding: 0;
-    }
-    .container.no-scroll .row {
-        margin: 0;
-        padding: 0;
-    }
     .container .row {
         margin-left: 0;
         margin-right: 0;
@@ -166,66 +162,49 @@ body {
 }
 
 
-/*** PROMPT: TOP CONTAINER ***/
-#top-container {
-    background-color: #ffffff;
-    border-bottom: 3px #222222 solid;
+/*** PROMPT: INFO SECTION ***/
+#info-section {
     position: absolute;
-    z-index: 1000;
+    z-index: 1002;
 }
-#top-container #hint-caret {
-    cursor: pointer;
-    font-size: 26px;
-    position: absolute;
-    right: 10px;
-    top: 20px;
-}
-#top-container #prompt-style {
-    position: absolute;
-    left: 10px;
-    top: 30px;
-}
-#top-container #prompt-new-tag {
-    display: none;
-    font-size: 14px;
-    left: 10px;
-    position: absolute;
-    top: 15px;
-}
-#top-container .writing-hidden { border-bottom: 1px #222222 solid; }
-#top-container .writing-hidden span { visibility: hidden; }
-#top-container .reading-hidden { border-bottom: 1px #222222 solid; }
-#top-container .reading-hidden span { visibility: hidden; }
+.prompt-container.landscape #info-section { width: 50%; }
+.prompt-container.portrait #info-section { width: 100%; }
+#info-section .writing-hidden { border-bottom: 1px #222222 solid; }
+#info-section .writing-hidden span { visibility: hidden; }
+#info-section .reading-hidden { border-bottom: 1px #222222 solid; }
+#info-section .reading-hidden span { visibility: hidden; }
 
 
-/*** PROMPT: BOTTOM CONTAINER ***/
-#bottom-container { 
-    background-color: #ffffff;
-    bottom: 0;
+/*** PROMPT: INPUT SECTION ***/
+#input-section {
     position: absolute;
     z-index: 1001;
 }
-#bottom-container #prompt-text {
+.prompt-container.landscape #input-section {
+    right: 0;
+    top: 0;
+    width: 50%;
+}
+.prompt-container.portrait #input-section {
+    bottom: 20px;
+    width: 100%;
+}
+#input-section #prompt-text {
     display: table;
     height: 100%;
     width: 100%;
 }
-#bottom-container #prompt-text .answer {
+#input-section #prompt-text .answer {
     cursor: pointer;
     display: table-cell;
     padding: 0 15px;
     vertical-align: middle;
 }
-#bottom-container #prompt-text .question {
+#input-section #prompt-text .question {
     cursor: pointer;
     display: table-cell;
     padding: 0 15px;
     vertical-align: middle;
-}
-#bottom-container #writing-area {
-    bottom: 0;
-    margin: 0 auto;
-    position: relative;
 }
 
 
