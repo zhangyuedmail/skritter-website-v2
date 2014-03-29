@@ -82,6 +82,24 @@ define(function() {
             return false;
         },
         /**
+         * @method isLandscape
+         * @returns {Boolean}
+         */
+        isLandscape: function() {
+            if (this.contentWidth() >= this.contentHeight())
+                return true;
+            return false;
+        },
+        /**
+         * @method isPortrait
+         * @returns {Boolean}
+         */
+        isPortrait: function() {
+            if (this.contentWidth() < this.contentHeight())
+                return true;
+            return false;
+        },
+        /**
          * @method language
          * @returns {String}
          */
