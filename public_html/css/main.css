@@ -170,7 +170,7 @@ body {
 }
 .prompt-container.landscape #info-section { width: 50%; }
 .prompt-container.portrait #info-section { width: 100%; }
-#info-section #info-button {
+#info-section #hint-caret {
     cursor: pointer;
     position: absolute;
     right: 15px;
