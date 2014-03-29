@@ -56,9 +56,11 @@ define(function() {
         canvasSize: function() {
             var size = 0;
             if (this.isPortrait()) {
-                if (this.contentWidth() > this.get('maxCanvasSize'))
+                if (this.contentWidth() > this.get('maxCanvasSize')) {
                     size = this.get('maxCanvasSize');
-                size = this.contentWidth();
+                } else {
+                    size = this.contentWidth();
+                }
             } else {
                 size = this.contentWidth() / 2;
             }
