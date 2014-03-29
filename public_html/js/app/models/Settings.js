@@ -54,9 +54,15 @@ define(function() {
          * @returns {Number}
          */
         canvasSize: function() {
-            if (this.contentWidth() > this.get('maxCanvasSize'))
-                return this.get('maxCanvasSize');
-            return this.contentWidth();
+            var size = 0;
+            if (this.isPortrait()) {
+                if (this.contentWidth() > this.get('maxCanvasSize'))
+                    size = this.get('maxCanvasSize');
+                size = this.contentWidth();
+            } else {
+                size = this.contentWidth() / 2;
+            }
+            return size;
         },
         /**
          * @method contentHeight
