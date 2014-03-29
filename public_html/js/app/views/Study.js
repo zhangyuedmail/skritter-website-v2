@@ -33,6 +33,7 @@ define([
         render: function() {
             this.$el.html(templateStudy);
             this.stopListening();
+            this.$('#items-due').html(skritter.user.data.items.dueCount(true));
             skritter.timer.setElement(this.$('#timer')).render();
             if (this.prompt) {
                 this.loadPrompt(this.prompt.review);
