@@ -54,29 +54,26 @@ body {
 #grading-buttons { display: none; }
 
 
-/*** HOME: IN ***/
-
-
-/*** HOME: OUT ***/
-#home-view.logged-out {
+/*** LANDING PAGE ***/
+.landing-page {
     background-color: #333333;
     color: #ffffff;
     padding-top: 100px;
     text-align: center;
 }
-#home-view.logged-out #header {
+.landing-page #header {
     padding-left: 15px;
     padding-right: 15px;
     position: absolute;
     top: 0;
     width: 100%;
 }
-#home-view.logged-out #content-container {
+.landing-page #content-container {
     position: fixed;
     top: 30%;
     width: 100%;
 }
-#home-view.logged-out #footer {
+.landing-page #footer {
     bottom: 0;
     position: absolute;
     width: 100%;

@@ -5,6 +5,7 @@
  * @param Study
  * @param StudySettings
  * @param Tests
+ * @param UserNew
  * @author Joshua McFarland
  */
 define([
@@ -12,8 +13,9 @@ define([
     'views/Info',
     'views/Study',
     'views/study/Settings',
-    'views/Tests'
-], function(Home, Info, Study, StudySettings, Tests) {
+    'views/Tests',
+    'views/user/New'
+], function(Home, Info, Study, StudySettings, Tests, UserNew) {
     /**
      * @class Router
      */
@@ -33,7 +35,8 @@ define([
             'info/:language/:writing': 'showInfoView',
             'study': 'showStudyView',
             'study/settings': 'showStudySettingsView',
-            'tests': 'showTestsView'
+            'tests': 'showTestsView',
+            'user/new': 'showUserNew'
         },
         /**
          * Shortcut method for traversing backwards through the windows history.
@@ -110,6 +113,19 @@ define([
                 this.view.tests.setElement($('#skritter-container'));
             }
             this.view.tests.render();
+        },
+        /**
+         * Shows the the study view.
+         * 
+         * @method showUserNew
+         */
+        showUserNew: function() {
+            if (!this.view.userNew) {
+                this.view.userNew = new UserNew({el: $('#skritter-container')});
+            } else {
+                this.view.userNew.setElement($('#skritter-container'));
+            }
+            this.view.userNew.render();
         }
     });
 
