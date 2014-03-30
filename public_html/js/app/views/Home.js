@@ -40,6 +40,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'click.Home #home-view #new-user-button': 'handleNewUserButtonClicked',
             'click.Home #home-view .login-button': 'handleLoginButtonClicked',
             'click.Home #home-view .logout-button': 'handleLogoutButtonClicked',
             'click.Home #home-view .study-button': 'handleStudyButtonClicked',
@@ -59,6 +60,18 @@ define([
          */
         handleLogoutButtonClicked: function(event) {
             skritter.user.logout();
+            event.preventDefault();
+        },
+        /**
+         * @method handleNewUserButtonClicked
+         * @param {Object} event
+         */
+        handleNewUserButtonClicked: function(event) {
+            skritter.modals.show('default')
+                    .set('.modal-header', false)
+                    .set('.modal-body', '<h3>Try the tutorial first?</h3>')
+                    .set('#default-button', 'No thanks')
+                    .set('#primary-button', "Let's go");
             event.preventDefault();
         },
         /**
