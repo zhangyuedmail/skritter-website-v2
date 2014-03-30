@@ -5,6 +5,7 @@
  * @param Study
  * @param StudySettings
  * @param Tests
+ * @param User
  * @param UserNew
  * @author Joshua McFarland
  */
@@ -14,8 +15,9 @@ define([
     'views/Study',
     'views/study/Settings',
     'views/Tests',
+    'views/User',
     'views/user/New'
-], function(Home, Info, Study, StudySettings, Tests, UserNew) {
+], function(Home, Info, Study, StudySettings, Tests, User, UserNew) {
     /**
      * @class Router
      */
@@ -36,6 +38,7 @@ define([
             'study': 'showStudyView',
             'study/settings': 'showStudySettingsView',
             'tests': 'showTestsView',
+            'user': 'showUser',
             'user/new': 'showUserNew'
         },
         /**
@@ -89,7 +92,7 @@ define([
             this.view.study.render();
         },
         /**
-         * Shows the the study view.
+         * Shows the study view.
          * 
          * @method showStudyView
          */
@@ -115,7 +118,20 @@ define([
             this.view.tests.render();
         },
         /**
-         * Shows the the study view.
+         * Shows another user or editable logged in user view.
+         * 
+         * @method showUser
+         */
+        showUser: function() {
+            if (!this.view.user) {
+                this.view.user = new User({el: $('#skritter-container')});
+            } else {
+                this.view.user.setElement($('#skritter-container'));
+            }
+            this.view.user.render();
+        },
+        /**
+         * Shows the new user account creation process view.
          * 
          * @method showUserNew
          */
