@@ -1,8 +1,4 @@
 /**
- * Loads the jasmine test framework and specs into view.
- */
-
-/**
  * @module Skritter
  * @submodule Views
  * @param templateTests
