@@ -344,13 +344,13 @@ define([
          * @param {Object} options
          */
         setData: function(data, options) {
-            this.decomps.set(data.Decomps, options);
-            this.items.set(data.Items, options);
-            this.sentences.set(data.Sentences, options);
-            this.srsconfigs.set(data.SRSConfigs, options);
-            this.strokes.set(data.Strokes, options);
-            this.vocablists.set(data.VocabLists, options);
-            this.vocabs.set(data.Vocabs, options);
+            this.decomps.add(data.Decomps, options);
+            this.items.add(data.Items, options);
+            this.sentences.add(data.Sentences, options);
+            this.srsconfigs.add(data.SRSConfigs, options);
+            this.strokes.add(data.Strokes, options);
+            this.vocablists.add(data.VocabLists, options);
+            this.vocabs.add(data.Vocabs, options);
         },
         /**
          * @method sync
