@@ -1,9 +1,12 @@
 /**
  * @module Skritter
  * @submodule Models
+ * @param Item
  * @author Joshua McFarland
  */
-define(function() {
+define([
+    'models/data/Item'
+], function(Item) {
     /**
      * @class DataVocab
      */
@@ -191,6 +194,27 @@ define(function() {
             var sentence = this.sentence();
             if (sentence)
                 return sentence.get('writing').replace(/\s/g, '');
+        },
+        /**
+         * @method spawnItem
+         * @param {String} part
+         * @returns {Backbone.Model}
+         */
+        spawnItem: function(part) {
+            return new Item({
+                id: this.id + '-' + part,
+                lang: this.get('lang'),
+                vocabIds: [this.id],
+                style: this.get('style'),
+                next: 0,
+                last: 0,
+                interval: 0,
+                reviews: 0,
+                successes: 0,
+                created: skritter.fn.getUnixTime(),
+                previousSuccess: false,
+                previousInterval: 0
+            });
         },
         /**
          * @method style
