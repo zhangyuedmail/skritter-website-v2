@@ -203,6 +203,7 @@ define([
         spawnItem: function(part) {
             return new Item({
                 id: this.id + '-' + part,
+                part: part,
                 lang: this.get('lang'),
                 vocabIds: [this.id],
                 style: this.get('style'),
