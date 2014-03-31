@@ -347,6 +347,40 @@ define(function() {
             request();
         },
         /**
+         * @method getVocab
+         * @param {Array|String} vocabIds
+         * @param {Function} callback
+         */
+        getVocab: function(vocabIds, callback) {
+            var self = this;
+            var ids = Array.isArray(vocabIds) ? vocabIds : [vocabIds];
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'vocabs',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        ids: ids.join('|'),
+                        include_strokes: 'true',
+                        include_sentences: 'true',
+                        include_heisigs: 'true',
+                        include_top_mnemonics: 'true',
+                        include_decomps: 'true'
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
          * Posts batches of reviews in groups of 500 and then returns an array of the posted objects.
          * 
          * @method postReviews

@@ -5,6 +5,7 @@
  * @param Study
  * @param StudySettings
  * @param Tests
+ * @param Tutorial
  * @param User
  * @param UserNew
  * @author Joshua McFarland
@@ -15,9 +16,10 @@ define([
     'views/Study',
     'views/study/Settings',
     'views/Tests',
+    'views/Tutorial',
     'views/User',
     'views/user/New'
-], function(Home, Info, Study, StudySettings, Tests, User, UserNew) {
+], function(Home, Info, Study, StudySettings, Tests, Tutorial, User, UserNew) {
     /**
      * @class Router
      */
@@ -38,8 +40,9 @@ define([
             'study': 'showStudyView',
             'study/settings': 'showStudySettingsView',
             'tests': 'showTestsView',
-            'user': 'showUser',
-            'user/new': 'showUserNew'
+            'tutorial': 'showTutorialView',
+            'user': 'showUserView',
+            'user/new': 'showUserNewView'
         },
         /**
          * Shortcut method for traversing backwards through the windows history.
@@ -118,11 +121,24 @@ define([
             this.view.tests.render();
         },
         /**
+         * Shows the tutorial view for new users.
+         * 
+         * @method showTutorialView
+         */
+        showTutorialView: function() {
+            if (!this.view.tutorial) {
+                this.view.tutorial = new Tutorial({el: $('#skritter-container')});
+            } else {
+                this.view.tutorial.setElement($('#skritter-container'));
+            }
+            this.view.tutorial.render();
+        },
+        /**
          * Shows another user or editable logged in user view.
          * 
-         * @method showUser
+         * @method showUserView
          */
-        showUser: function() {
+        showUserView: function() {
             if (!this.view.user) {
                 this.view.user = new User({el: $('#skritter-container')});
             } else {
@@ -133,9 +149,9 @@ define([
         /**
          * Shows the new user account creation process view.
          * 
-         * @method showUserNew
+         * @method showUserNewView
          */
-        showUserNew: function() {
+        showUserNewView: function() {
             if (!this.view.userNew) {
                 this.view.userNew = new UserNew({el: $('#skritter-container')});
             } else {
