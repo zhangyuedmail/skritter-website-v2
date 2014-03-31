@@ -2,12 +2,16 @@
  * @module Skritter
  * @submodule Views
  * @param templateTutorial
+ * @param Defn
+ * @param Rdng
+ * @param Rune
+ * @param Tone
  * @author Joshua McFarland
  */
 
 define([
     'require.text!templates/tutorial.html'
-], function(templateTutorial) {
+], function(templateTutorial, Defn, Rdng, Rune, Tone) {
     /**
      * @class Tutorial
      */
