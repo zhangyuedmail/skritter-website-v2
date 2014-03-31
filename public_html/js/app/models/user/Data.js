@@ -339,6 +339,20 @@ define([
             });
         },
         /**
+         * @method setData
+         * @param {Object} data
+         * @param {Object} options
+         */
+        setData: function(data, options) {
+            this.decomps.set(data.Decomps, options);
+            this.items.set(data.Items, options);
+            this.sentences.set(data.Sentences, options);
+            this.srsconfigs.set(data.SRSConfigs, options);
+            this.strokes.set(data.Strokes, options);
+            this.vocablists.set(data.VocabLists, options);
+            this.vocabs.set(data.Vocabs, options);
+        },
+        /**
          * @method sync
          * @param {Function} callback
          * @param {Boolean} showModal
