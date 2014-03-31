@@ -54,6 +54,20 @@ define([
             localStorage.setItem(skritter.user.id + '-data', JSON.stringify(event.toJSON()));
         },
         /**
+         * @method add
+         * @param {Object} data
+         * @param {Object} options
+         */
+        add: function(data, options) {
+            this.decomps.add(data.Decomps, options);
+            this.items.add(data.Items, options);
+            this.sentences.add(data.Sentences, options);
+            this.srsconfigs.add(data.SRSConfigs, options);
+            this.strokes.add(data.Strokes, options);
+            this.vocablists.add(data.VocabLists, options);
+            this.vocabs.add(data.Vocabs, options);
+        },
+        /**
          * @method clear
          */
         clear: function() {
@@ -337,20 +351,6 @@ define([
                     callback(skritter.user.data.vocabs.add(vocab, {merge: true, silent: true}));
                 }
             });
-        },
-        /**
-         * @method setData
-         * @param {Object} data
-         * @param {Object} options
-         */
-        setData: function(data, options) {
-            this.decomps.add(data.Decomps, options);
-            this.items.add(data.Items, options);
-            this.sentences.add(data.Sentences, options);
-            this.srsconfigs.add(data.SRSConfigs, options);
-            this.strokes.add(data.Strokes, options);
-            this.vocablists.add(data.VocabLists, options);
-            this.vocabs.add(data.Vocabs, options);
         },
         /**
          * @method sync
