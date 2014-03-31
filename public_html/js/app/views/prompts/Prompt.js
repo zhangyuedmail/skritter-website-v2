@@ -17,6 +17,7 @@ define([
         initialize: function() {
             this.review = null;
             Prompt.gradingButtons = new GradingButtons();
+            Prompt.skipReviewSave = false;
         },
         /**
          * @method render
@@ -47,9 +48,13 @@ define([
                 score: selectedGrade
             });
             if (this.review.isLast()) {
-                this.review.save(_.bind(function() {
+                if (Prompt.skipReviewSave) {
                     this.trigger('prompt:finished');
-                }, this));
+                } else {
+                    this.review.save(_.bind(function() {
+                        this.trigger('prompt:finished');
+                    }, this));
+                }
             } else {
                 skritter.timer.reset();
                 Prompt.gradingButtons.grade(3);
@@ -106,9 +111,11 @@ define([
         /**
          * @method set
          * @param {Backbone.Model} review
+         * @param {Boolean} skipReview
          */
-        set: function(review) {
+        set: function(review, skipReviewSave) {
             this.review = review;
+            Prompt.skipReviewSave = skipReviewSave ? skipReviewSave : false;
         }
     });
 
