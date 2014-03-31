@@ -80,7 +80,8 @@ define([
          */
         toArray: function() {
             var reviews = [];
-            for (var i = 0, length = this.length; i < length; i ++)
+            if (this.length > 1)
+            for (var i = 1, length = this.length; i < length; i ++)
                 reviews = reviews.concat(this.at(i).get('reviews'));
             return reviews;
         },
