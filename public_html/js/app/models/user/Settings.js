@@ -20,6 +20,8 @@ define(function() {
          */
         defaults: {
             audio: true,
+            autoSync: true,
+            autoSyncThreshold: 10,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune']
         },

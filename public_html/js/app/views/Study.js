@@ -50,6 +50,14 @@ define([
             'click.Study #study-view #study-settings-button': 'handleStudySettingsButtonClicked'
         },
         /**
+         * @method autoSync
+         */
+        autoSync: function() {
+            if (skritter.user.settings.get('autoSync') &&
+                    skritter.user.data.reviews.length > skritter.user.data.settings.get('autoSyncThreshold'))
+                skritter.user.data.reviews.post();
+        },
+        /**
          * @method handleInfoButtonClicked
          * @param {Object} event
          */
@@ -96,6 +104,7 @@ define([
         nextPrompt: function() {
             skritter.timer.reset();
             skritter.user.data.items.next(_.bind(function(item) {
+                this.autoSync();
                 this.loadPrompt(item.createReview());
                 this.$('#items-due').html(skritter.user.data.items.dueCount(true));
             }, this), skritter.user.settings.activeParts(), null, skritter.user.settings.style());
