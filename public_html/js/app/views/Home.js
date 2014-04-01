@@ -44,6 +44,7 @@ define([
             'click.Home #home-view .login-button': 'handleLoginButtonClicked',
             'click.Home #home-view .logout-button': 'handleLogoutButtonClicked',
             'click.Home #home-view .study-button': 'handleStudyButtonClicked',
+            'click.Home #home-view .sync-button': 'handleSyncButtonClicked',
             'click.Home #home-view .vocablists-button': 'handleVocabListsButtonClicked'
         },
         /**
@@ -80,6 +81,14 @@ define([
          */
         handleStudyButtonClicked: function(event) {
             skritter.router.navigate('study', {trigger: true});
+            event.preventDefault();
+        },
+        /**
+         * @method handleSyncButtonClicked
+         * @param {Object} event
+         */
+        handleSyncButtonClicked: function(event) {
+            skritter.user.data.sync(null, true);
             event.preventDefault();
         },
         /**

@@ -54,8 +54,8 @@ define([
          */
         autoSync: function() {
             if (skritter.user.settings.get('autoSync') &&
-                    skritter.user.data.reviews.length > skritter.user.data.settings.get('autoSyncThreshold'))
-                skritter.user.data.reviews.post();
+                    skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold'))
+                skritter.user.data.sync();
         },
         /**
          * @method handleInfoButtonClicked
