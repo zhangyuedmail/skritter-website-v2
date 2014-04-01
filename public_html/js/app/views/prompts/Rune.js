@@ -100,7 +100,7 @@ define([
                     Rune.canvas.fadeShape('marker', shape);
                     if (Rune.strokeAttempts > Rune.maxStrokeAttempts) {
                         Prompt.gradingButtons.grade(1);
-                        Rune.canvas.fadeShape('hint', this.review.character().expectedStroke().inflateShape(skritter.settings.get('hintColor')));
+                        Rune.canvas.fadeShape('hint', this.review.character().expectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
                 }
             }

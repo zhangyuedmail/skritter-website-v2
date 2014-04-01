@@ -247,14 +247,16 @@ define(function() {
          * @method fadeShape
          * @param {String} layerName
          * @param {CreateJS.Shape} shape
+         * @param {Number} milliseconds
          * @param {Function} callback
          */
-        fadeShape: function(layerName, shape, callback) {
+        fadeShape: function(layerName, shape, milliseconds, callback) {
             var layer = this.getLayer(layerName);
+            milliseconds = milliseconds ? milliseconds : 1000;
             layer.addChild(shape);
             Canvas.stage.display.update();
             shape.cache(0, 0, Canvas.size, Canvas.size);
-            createjs.Tween.get(shape).to({alpha: 0}, 2500, createjs.Ease.backOut).call(function() {
+            createjs.Tween.get(shape).to({alpha: 0}, milliseconds, createjs.Ease.backOut).call(function() {
                 shape.uncache();
                 layer.removeChild(shape);
                 if (typeof callback === 'function')
