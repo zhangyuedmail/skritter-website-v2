@@ -160,6 +160,7 @@ define([
                 }
             ], function() {
                 skritter.timer.setOffset(skritter.user.data.reviews.totalTimeToday());
+                skritter.modals.hide();
                 callback();
             });
         } else {
