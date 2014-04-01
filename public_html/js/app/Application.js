@@ -159,7 +159,7 @@ define([
                     skritter.user.data.reviews.loadAll(callback);
                 }
             ], function() {
-                skritter.timer.setOffset(skritter.user.data.reviews.totalTimeToday());
+                skritter.timer.refresh(true);
                 skritter.modals.hide();
                 callback();
             });

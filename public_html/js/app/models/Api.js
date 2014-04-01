@@ -253,6 +253,35 @@ define(function() {
             request();
         },
         /**
+         * @method getProgressStats
+         * @param {String} language
+         * @param {Object} options
+         * @param {Function} callback
+         */
+        getProgressStats: function(language, options, callback) {
+            var data = $.extend({
+                bearer_token: this.get('token'),
+                lang: language
+            }, options);
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'progstats',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: data
+                });
+                promise.done(function(data) {
+                    callback(data.ProgressStats);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
          * @method getSRSConfigs
          * @param {String} language
          * @param {Function} callback

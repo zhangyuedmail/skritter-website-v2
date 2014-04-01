@@ -136,6 +136,21 @@ define(function() {
             return false;
         },
         /**
+         * Refreshes the offset based on the gathered total study time for the day.
+         * 
+         * @method refresh
+         * @param {Boolean} includeServer
+         */
+        refresh: function(includeServer) {
+            Timer.offset = skritter.user.data.reviews.totalTimeToday();
+            if (includeServer)
+                skritter.api.getProgressStats(skritter.settings.language(), {
+                    start: moment().format('YYYY-MM-DD')
+                }, function(stats) {
+                    Timer.offset += stats[0].timeStudied.day;
+                });
+        },
+        /**
          * @method reset
          * @returns {Backbone.View}
          */
@@ -209,22 +224,6 @@ define(function() {
             if (!Timer.thinkingStop)
                 Timer.thinkingStop = skritter.fn.getUnixTime(true);
             return this;
-        },
-        /**
-         * Updates the offset based on the gathered total study time for the day.
-         * 
-         * @method sync
-         * @param {Boolean} includeServer
-         */
-        sync: function(includeServer) {
-            Timer.offset = skritter.data.reviews.getTotalTime();
-            if (includeServer) {
-                skritter.api.getProgressStats({
-                    start: skritter.settings.get('date')
-                }, function(data) {
-                    Timer.offset += data[0].timeStudied.day * 1000;
-                });
-            }
         },
         /**
          * @method update
