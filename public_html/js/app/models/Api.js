@@ -310,34 +310,6 @@ define(function() {
             request();
         },
         /**
-         * @method getUser
-         * @param {String} userId
-         * @param {Function} callback
-         */
-        getUser: function(userId, callback) {
-            var self = this;
-            function request() {
-                var promise = $.ajax({
-                    url: Api.base + 'users/' + userId,
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
-                    },
-                    type: 'GET',
-                    data: {
-                        bearer_token: self.get('token'),
-                        detailed: true
-                    }
-                });
-                promise.done(function(data) {
-                    callback(data.User);
-                });
-                promise.fail(function(error) {
-                    callback(error);
-                });
-            }
-            request();
-        },
-        /**
          * @method getReviewErrors
          * @param {Number} offset
          * @param {Function} callback
@@ -376,6 +348,49 @@ define(function() {
             request();
         },
         /**
+         * @method getVocabLists
+         * @param {String} language
+         * @param {String} sort
+         * @param {Array} fields
+         * @param {Function} callback
+         */
+        getVocabLists: function(language, sort, fields, callback) {
+            var self = this;
+            var lists = [];
+            fields = fields ? fields : undefined;
+            function request(cursor) {
+                var promise = $.ajax({
+                    url: Api.base + 'vocablists',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor,
+                        lang: language,
+                        sort: sort,
+                        fields: fields
+                    }
+                });
+                promise.done(function(data) {
+                    if (data.cursor) {
+                        lists = lists.concat(data.VocabLists);
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 500);
+                    } else {
+                        console.log(lists);
+                        callback(lists);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
          * @method getVocab
          * @param {Array|String} vocabIds
          * @param {Function} callback
@@ -402,6 +417,34 @@ define(function() {
                 });
                 promise.done(function(data) {
                     callback(data);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
+         * @method getUser
+         * @param {String} userId
+         * @param {Function} callback
+         */
+        getUser: function(userId, callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'users/' + userId,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        detailed: true
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.User);
                 });
                 promise.fail(function(error) {
                     callback(error);

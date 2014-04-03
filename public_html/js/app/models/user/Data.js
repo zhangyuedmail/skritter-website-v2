@@ -152,6 +152,29 @@ define([
             });
         },
         /**
+         * @method fetchVocabLists
+         * @param {Function} callback
+         */
+        fetchVocabLists: function(callback) {
+            async.series([
+                function(callback) {
+                    skritter.api.getVocabLists(skritter.settings.language(), 'official', null, function(lists) {
+                        skritter.storage.put('vocablists', lists, callback);
+                    });
+                },
+                function(callback) {
+                    skritter.api.getVocabLists(skritter.settings.language(), 'custom', null, function(lists) {
+                        skritter.storage.put('vocablists', lists, callback);
+                    });
+                },
+                function(callback) {
+                    skritter.api.getVocabLists(skritter.settings.language(), 'studying', null, function(lists) {
+                        skritter.storage.put('vocablists', lists, callback);
+                    });
+                }
+            ], callback);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
