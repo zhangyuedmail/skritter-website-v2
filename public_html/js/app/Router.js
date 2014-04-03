@@ -6,6 +6,7 @@
  * @param StudySettings
  * @param Tests
  * @param Tutorial
+ * @param VocabLists
  * @param User
  * @param UserNew
  * @author Joshua McFarland
@@ -17,9 +18,10 @@ define([
     'views/study/Settings',
     'views/Tests',
     'views/Tutorial',
+    'views/vocab/Lists',
     'views/User',
     'views/user/New'
-], function(Home, Info, Study, StudySettings, Tests, Tutorial, User, UserNew) {
+], function(Home, Info, Study, StudySettings, Tests, Tutorial, VocabLists, User, UserNew) {
     /**
      * @class Router
      */
@@ -41,6 +43,7 @@ define([
             'study/settings': 'showStudySettingsView',
             'tests': 'showTestsView',
             'tutorial': 'showTutorialView',
+            'vocab/lists': 'showVocabLists',
             'user': 'showUserView',
             'user/new': 'showUserNewView'
         },
@@ -132,6 +135,17 @@ define([
                 this.view.tutorial.setElement($('#skritter-container'));
             }
             this.view.tutorial.render();
+        },
+        /**
+         * @method showVocabLists
+         */
+        showVocabLists: function() {
+            if (!this.view.vocabLists) {
+                this.view.vocabLists = new VocabLists({el: $('#skritter-container')});
+            } else {
+                this.view.vocabLists.setElement($('#skritter-container'));
+            }
+            this.view.vocabLists.render();
         },
         /**
          * Shows another user or editable logged in user view.
