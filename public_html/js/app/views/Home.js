@@ -3,12 +3,14 @@
  * @submodule Views
  * @param templateLoggedIn
  * @param templateLoggedOut
+ * @param ListsTable
  * @author Joshua McFarland
  */
 define([
     'require.text!templates/home-logged-in.html',
-    'require.text!templates/home-logged-out.html'
-], function(templateLoggedIn, templateLoggedOut) {
+    'require.text!templates/home-logged-out.html',
+    'views/vocab/ListsTable'
+], function(templateLoggedIn, templateLoggedOut, ListsTable) {
     /**
      * @class Home
      */
@@ -17,6 +19,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            Home.lists = new ListsTable();
         },
         /**
          * @method render
