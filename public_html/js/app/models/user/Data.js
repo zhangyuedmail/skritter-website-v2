@@ -44,7 +44,8 @@ define([
          * @property {Object} defaults
          */
         defaults: {
-            lastSync: 0
+            lastItemSync: 0,
+            lastVocabSync: 0
         },
         /**
          * @method cache
@@ -149,6 +150,54 @@ define([
         fetchSRSConfigs: function(callback) {
             skritter.api.getSRSConfigs(skritter.settings.language(), function(srsconfigs) {
                 skritter.storage.put('srsconfigs', srsconfigs, callback);
+            });
+        },
+        /**
+         * @method fetchSRSConfigs
+         * @param {Number} offset
+         * @param {Function} callback1
+         * @param {Function} callback2
+         */
+        fetchVocabs: function(offset, callback1, callback2) {
+            async.waterfall([
+                function(callback) {
+                    skritter.api.requestBatch([{
+                            path: 'api/v' + skritter.api.get('version') + '/vocabs',
+                            method: 'GET',
+                            params: {
+                                lang: skritter.settings.language(),
+                                sort: 'all',
+                                offset: offset,
+                                include_strokes: 'true',
+                                include_sentences: 'true',
+                                include_heisigs: 'true',
+                                include_top_mnemonics: 'true',
+                                include_decomps: 'true'
+                            },
+                            spawner: true
+                        }], function(batch) {
+                        callback(null, batch);
+                    });
+                },
+                function(batch, callback) {
+                    var next = function() {
+                        skritter.api.getBatch(batch.id, function(result) {
+                            if (result) {
+                                if (typeof callback2 === 'function')
+                                    callback2(result);
+                                skritter.storage.put('vocabs', result.Vocabs, function() {
+                                    window.setTimeout(next, 500);
+                                });
+                            } else {
+                                callback();
+                            }
+                        });
+                    };
+                    next();
+                }
+            ], function() {
+                if (typeof callback1 === 'function')
+                    callback1();
             });
         },
         /**
@@ -383,13 +432,15 @@ define([
         sync: function(callback, showModal) {
             var self = this;
             var downloadedRequests = 0;
-            var lastSync = this.get('lastSync');
+            var lastItemSync = this.get('lastItemSync');
+            var lastVocabSync = this.get('lastVocabSync');
+            var now = skritter.fn.getUnixTime();
             var responseSize = 0;
             Data.syncing = true;
-            console.log('SYNCING FROM', (lastSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastSync * 1000).format('YYYY-MM-DD H:mm:ss'));
-            if (showModal || lastSync === 0) {
+            console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
+            if (showModal || lastItemSync === 0) {
                 skritter.modals.show('download')
-                        .set('.modal-title', lastSync === 0 ? 'INITIAL SYNC' : 'SYNC')
+                        .set('.modal-title', lastItemSync === 0 ? 'INITIAL SYNC' : 'SYNC')
                         .set('.modal-title-right', 'Downloading')
                         .progress(100)
                         .set('.modal-footer', false);
@@ -400,7 +451,7 @@ define([
             async.series([
                 //downloads all of the changed items and related data since last sync
                 function(callback) {
-                    self.fetchItems(lastSync, callback, function(result) {
+                    self.fetchItems(lastItemSync, callback, function(result) {
                         downloadedRequests += result.downloadedRequests;
                         responseSize += result.responseSize;
                         if (responseSize > 0)
@@ -409,23 +460,39 @@ define([
                             skritter.modals.progress((downloadedRequests / result.totalRequests) * 100);
                     });
                 },
+                //downloads changed vocabs at maximum once per day
+                function(callback) {
+                    if (lastVocabSync > 0) {
+                        skritter.modals.set('.modal-title-right', 'Updating Vocabs');
+                        self.fetchVocabs(lastVocabSync, callback, null);
+                    } else {
+                        callback();
+                    }
+                },
                 //downloads the latest configs for more accurate scheduling
                 function(callback) {
+                    skritter.modals.set('.modal-title-right', 'Updating SRS');
                     self.fetchSRSConfigs(callback);
                 },
                 //posts stores reviews to the server
                 function(callback) {
-                    skritter.user.data.reviews.post(callback);
+                    if (skritter.user.data.reviews.length > 0) {
+                        skritter.modals.set('.modal-title-right', 'Posting Reviews');
+                        skritter.user.data.reviews.post(callback);
+                    } else {
+                        callback();
+                    }
                 }
             ], function() {
-                console.log('FINISHED SYNCING AT', moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD H:mm:ss'));
-                if (showModal || lastSync === 0) {
+                console.log('FINISHED SYNCING AT', moment(now * 1000).format('YYYY-MM-DD H:mm:ss'));
+                if (showModal || lastItemSync === 0) {
                     skritter.modals.hide(function() {
                         if (typeof callback === 'function')
                             callback();
                     });
                 }
-                self.set('lastSync', skritter.fn.getUnixTime());
+                self.set('lastItemSync', now);
+                self.set('lastVocabSync', now);
                 Data.syncing = false;
             });
         },
