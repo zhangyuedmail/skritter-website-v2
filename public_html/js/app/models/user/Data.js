@@ -460,9 +460,9 @@ define([
                             skritter.modals.progress((downloadedRequests / result.totalRequests) * 100);
                     });
                 },
-                //downloads changed vocabs at maximum once per day
+                //downloads changed vocabs at a maximum of once per day
                 function(callback) {
-                    if (lastVocabSync > 0) {
+                    if (lastVocabSync !== 0 && moment(now * 1000).add('days', 1) >= lastVocabSync) {
                         skritter.modals.set('.modal-title-right', 'Updating Vocabs');
                         self.fetchVocabs(lastVocabSync, callback, null);
                     } else {
