@@ -22,6 +22,8 @@ define(function() {
             audio: true,
             autoSync: true,
             autoSyncThreshold: 10,
+            hideDueCount: false,
+            hideTimer: false,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune']
         },
