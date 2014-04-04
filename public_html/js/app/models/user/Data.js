@@ -462,7 +462,7 @@ define([
                 },
                 //downloads changed vocabs at a maximum of once per day
                 function(callback) {
-                    if (lastVocabSync !== 0 && moment(now * 1000).add('days', 1) >= lastVocabSync) {
+                    if (lastVocabSync !== 0 &&  moment(lastVocabSync * 1000).add('days', 1).valueOf() / 1000 <= now) {
                         skritter.modals.set('.modal-title-right', 'Updating Vocabs');
                         self.fetchVocabs(lastVocabSync, callback, null);
                     } else {
