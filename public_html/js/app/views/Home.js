@@ -44,11 +44,20 @@ define([
          */
         events: {
             'click.Home #home-view #new-user-button': 'handleNewUserButtonClicked',
+            'click.Home #home-view .lists-button': 'handleListsButtonClicked',
             'click.Home #home-view .login-button': 'handleLoginButtonClicked',
             'click.Home #home-view .logout-button': 'handleLogoutButtonClicked',
             'click.Home #home-view .study-button': 'handleStudyButtonClicked',
             'click.Home #home-view .sync-button': 'handleSyncButtonClicked',
             'click.Home #home-view .vocablists-button': 'handleVocabListsButtonClicked'
+        },
+        /**
+         * @method handleListsButtonClicked
+         * @param {Object} event
+         */
+        handleListsButtonClicked: function(event) {
+            skritter.router.navigate('vocab/lists', {trigger: true});
+            event.preventDefault();
         },
         /**
          * @method handleLoginButtonClicked
