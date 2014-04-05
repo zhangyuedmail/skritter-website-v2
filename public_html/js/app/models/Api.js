@@ -380,7 +380,6 @@ define(function() {
                             request(data.cursor);
                         }, 500);
                     } else {
-                        console.log(lists);
                         callback(lists);
                     }
                 });
