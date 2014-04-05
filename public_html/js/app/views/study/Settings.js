@@ -28,10 +28,12 @@ define([
             Settings.enabledParts = skritter.user.settings.enabledParts();
             this.$('input.bootswitch').bootstrapSwitch();
             this.$('#general #audio').bootstrapSwitch('state', skritter.user.settings.get('audio'));
+            this.$('#general #hide-due-count').bootstrapSwitch('state', skritter.user.settings.get('hideDueCount'));
+            this.$('#general #hide-timer').bootstrapSwitch('state', skritter.user.settings.get('hideTimer'));
+            this.$('#general #raw-squigs').bootstrapSwitch('state', skritter.user.settings.get('squigs'));
             this.$('#parts #defn').bootstrapSwitch('state', Settings.activeParts.indexOf('defn') > -1);
             this.$('#parts #rdng').bootstrapSwitch('state', Settings.activeParts.indexOf('rdng') > -1);
             this.$('#parts #rune').bootstrapSwitch('state', Settings.activeParts.indexOf('rune') > -1);
-            this.$('#parts #raw-squigs').prop('checked', skritter.user.settings.get('squigs'));
             if (skritter.user.settings.isJapanese()) {
                 this.$('#parts #tone').parent().parent().parent().hide();
             } else {
@@ -64,14 +66,17 @@ define([
          */
         save: function(event) {
             Settings.activeParts = [];
+            console.log(this.$('#general #raw-squigs').prop('checked'));
             skritter.user.settings.set('audio', this.$('#general #audio').prop('checked'));
+            skritter.user.settings.set('hideDueCount', this.$('#general #hide-due-count').prop('checked'));
+            skritter.user.settings.set('hideTimer', this.$('#general #hide-timer').prop('checked'));
+            skritter.user.settings.set('squigs', this.$('#general #raw-squigs').prop('checked'));
             if (this.$('#parts #defn').bootstrapSwitch('state'))
                 Settings.activeParts.push('defn');
             if (this.$('#parts #rdng').bootstrapSwitch('state'))
                 Settings.activeParts.push('rdng');
             if (this.$('#parts #rune').bootstrapSwitch('state'))
                 Settings.activeParts.push('rune');
-            skritter.user.settings.set('squigs', this.$('#parts #raw-squigs').prop('checked'));
             if (this.$('#parts #tone').bootstrapSwitch('state'))
                 Settings.activeParts.push('tone');
             if (Settings.activeParts.length === 0) {
