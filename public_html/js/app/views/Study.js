@@ -35,6 +35,10 @@ define([
             this.stopListening();
             this.$('#items-due').html(skritter.user.data.items.dueCount(true));
             skritter.timer.setElement(this.$('#timer')).render();
+            if (skritter.user.settings.get('hideDueCount'))
+                this.$('#items-due').parent().hide();
+            if (skritter.user.settings.get('hideTimer'))
+                this.$('#timer').parent().hide();
             if (this.prompt) {
                 this.loadPrompt(this.prompt.review);
             } else {
