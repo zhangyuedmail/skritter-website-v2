@@ -43,7 +43,7 @@ define([
             'study/settings': 'showStudySettingsView',
             'tests': 'showTestsView',
             'tutorial': 'showTutorialView',
-            'vocab/lists': 'showVocabLists',
+            'vocab/list': 'showVocabLists',
             'user': 'showUserView',
             'user/new': 'showUserNewView'
         },

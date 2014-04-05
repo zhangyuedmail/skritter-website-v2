@@ -56,7 +56,7 @@ define([
          * @param {Object} event
          */
         handleListsButtonClicked: function(event) {
-            skritter.router.navigate('vocab/lists', {trigger: true});
+            skritter.router.navigate('vocab/list', {trigger: true});
             event.preventDefault();
         },
         /**
