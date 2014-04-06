@@ -2,6 +2,7 @@
  * @module Skritter
  * @submodule Views
  * @param templateTutorial
+ * @param TutorialData
  * @param Defn
  * @param Rdng
  * @param Rune
@@ -11,11 +12,12 @@
 
 define([
     'require.text!templates/tutorial.html',
+    'tutorials/Data',
     'views/prompts/Defn',
     'views/prompts/Rdng',
     'views/prompts/Rune',
     'views/prompts/Tone'
-], function(templateTutorial, Defn, Rdng, Rune, Tone) {
+], function(templateTutorial, TutorialData, Defn, Rdng, Rune, Tone) {
     /**
      * @class Tutorial
      */
@@ -24,33 +26,26 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.position = 0;
             this.prompt = null;
-            Tutorial.vocab = null;
-            Tutorial.vocabIds = {
-                'ja': ['ja-魚-0'],
-                'simp': ['zh-鱼-0'],
-                'trad': ['zh-鱼-1']
-            };
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            this.load();
             this.$el.html(templateTutorial);
+            this.load();
+            this.showWriting();
             return this;
         },
         /**
          * @method load
+         * @param {String} language
          */
-        load: function() {
-            skritter.api.getVocab(Tutorial.vocabIds.simp, _.bind(function(data) {
-                skritter.user.settings.set('targetLang', 'zh');
-                skritter.user.data.add(data, {silent: true});
-                Tutorial.vocab = skritter.user.data.vocabs.at(0);
-                this.showTone();
-            }, this));
+        load: function(language) {
+            language = language ? language : 'zh-trad';
+            skritter.user.data.add(TutorialData[language], {silent: true});
         },
         /**
          * @method loadPrompt
@@ -80,7 +75,7 @@ define([
          * @method showDefinition
          */
         showDefinition: function() {
-            var item = Tutorial.vocab.spawnItem('defn');
+            var item = skritter.user.data.vocabs.at(this.position).spawnItem('defn');
             this.loadPrompt(skritter.user.data.items.set(item, {silent: true}).createReview());
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.showReading, this));
         },
@@ -88,14 +83,14 @@ define([
          * @method showReading
          */
         showReading: function() {
-            var item = Tutorial.vocab.spawnItem('rdng');
+            var item = skritter.user.data.vocabs.at(this.position).spawnItem('rdng');
             this.loadPrompt(skritter.user.data.items.set(item, {silent: true}).createReview());
         },
         /**
          * @method showTone
          */
         showTone: function() {
-            var item = Tutorial.vocab.spawnItem('tone');
+            var item = skritter.user.data.vocabs.at(this.position).spawnItem('tone');
             this.loadPrompt(skritter.user.data.items.set(item, {silent: true}).createReview());
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.showDefinition, this));
         },
@@ -103,7 +98,7 @@ define([
          * @method showWriting
          */
         showWriting: function() {
-            var item = Tutorial.vocab.spawnItem('rune');
+            var item = skritter.user.data.vocabs.at(this.position).spawnItem('rune');
             this.loadPrompt(skritter.user.data.items.set(item, {silent: true}).createReview());
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.showTone, this));
         }
