@@ -71,7 +71,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'build/cordova/japanese/platforms/android/ant-build/',
                         src: 'Skritter-release-unsigned.apk',
-                        dest: 'build/android/',
+                        dest: 'cordova/android/keystore/unsigned/',
                         rename: function(dest, src) {
                             return dest + src.replace('release', 'japanese');
                         }
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'build/cordova/chinese/platforms/android/ant-build/',
                         src: 'Skritter-release-unsigned.apk',
-                        dest: 'build/android/',
+                        dest: 'cordova/android/keystore/unsigned/',
                         rename: function(dest, src) {
                             return dest + src.replace('release', 'chinese');
                         }
@@ -344,10 +344,30 @@ module.exports = function(grunt) {
                     stderr: true
                 }
             },
+            'android-sign-ja': {
+                command: [
+                    'cd cordova/android/keystore/',
+                    'sign-skritter_japanese.bat'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
             'android-build-zh': {
                 command: [
                     'cd build/cordova/chinese/',
                     'cordova build android --release'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'android-sign-zh': {
+                command: [
+                    'cd cordova/android/keystore/',
+                    'sign-skritter_chinese.bat'
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -485,6 +505,16 @@ module.exports = function(grunt) {
         'replace:cordova-ja',
         'shell:android-build-run-ja'
     ]);
+    grunt.registerTask('build-android-signed-zh', [
+        'jshint',
+        'clean:cordova-www-zh',
+        'copy:cordova-www-zh',
+        'copy:cordova-install-zh',
+        'replace:cordova-zh',
+        'shell:android-build-zh',
+        'copy:android-unsigned-zh',
+        'shell:android-sign-zh'
+    ]);
     grunt.registerTask('build-android-unsigned-zh', [
         'jshint',
         'clean:cordova-www-zh',
@@ -493,6 +523,16 @@ module.exports = function(grunt) {
         'replace:cordova-zh',
         'shell:android-build-zh',
         'copy:android-unsigned-zh'
+    ]);
+    grunt.registerTask('build-android-signed-ja', [
+        'jshint',
+        'clean:cordova-www-ja',
+        'copy:cordova-www-ja',
+        'copy:cordova-install-ja',
+        'replace:cordova-ja',
+        'shell:android-build-ja',
+        'copy:android-unsigned-ja',
+        'shell:android-sign-ja'
     ]);
     grunt.registerTask('build-android-unsigned-ja', [
         'jshint',
