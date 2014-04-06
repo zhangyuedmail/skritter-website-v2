@@ -163,13 +163,15 @@ module.exports = function(grunt) {
          * JSHINT 
          */
         jshint: {
-            all: ['Gruntfile.js', 'public_html/js/app/**/*.js']
+            root: {
+                all: ['Gruntfile.js', 'public_html/js/app/**/*.js']
+            }
         },
         /*
          * MANIFEST 
          */
         manifest: {
-            generate: {
+            root: {
                 options: {
                     basePath: 'public_html/',
                     cache: ['index.html'],
@@ -461,9 +463,9 @@ module.exports = function(grunt) {
     /*
      * COMMANDS: GENERAL
      */
-    grunt.registerTask('appcache', ['manifest']);
+    grunt.registerTask('appcache', ['manifest:root']);
     grunt.registerTask('docs', ['yuidoc:compile']);
-    grunt.registerTask('hint', ['jshint']);
+    grunt.registerTask('hint', ['jshint:root']);
     /*
      * COMMANDS: BUILDING
      */
