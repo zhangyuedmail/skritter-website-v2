@@ -258,7 +258,8 @@ module.exports = function(grunt) {
                     }
                 },
                 files: [
-                    {src: 'Application.js', dest: 'build/web/js/app/', expand: true, cwd: 'build/web/js/app/'}
+                    {src: 'Application.js', dest: 'build/web/js/app/', expand: true, cwd: 'build/web/js/app/'},
+                    {src: 'version.json', dest: 'build/web/', expand: true, cwd: 'build/web/'}
                 ]
             },
             'web-copied': {
@@ -269,7 +270,8 @@ module.exports = function(grunt) {
                     }
                 },
                 files: [
-                    {src: 'Settings.js', dest: 'build/web/js/app/model/', expand: true, cwd: 'build/web/js/app/model/'}
+                    {src: 'Settings.js', dest: 'build/web/js/app/model/', expand: true, cwd: 'build/web/js/app/model/'},
+                    {src: 'version.json', dest: 'build/web/', expand: true, cwd: 'build/web/'}
                 ]
             }
         },
@@ -307,7 +309,7 @@ module.exports = function(grunt) {
                     baseUrl: 'js/app/',
                     dir: 'build/web/',
                     fileExclusionRegExp: /\.mp3$/,
-                    generateSourceMaps: true,
+                    generateSourceMaps: false,
                     keepBuildDir: false,
                     modules: [
                         {
