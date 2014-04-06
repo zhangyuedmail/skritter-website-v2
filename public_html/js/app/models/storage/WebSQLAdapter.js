@@ -182,7 +182,6 @@ define([
                     callback();
                 };
                 WebSQLAdapter.database.transaction(function(tx) {
-                    console.log(tableName, items);
                     var queryString = 'INSERT OR REPLACE INTO ' + tableName + ' (' + keysColumns.join(',') + ') VALUES (' + valueString + ')';
                     for (var a = 0, lengthA = items.length; a < lengthA; a++) {
                         var item = items[a];
