@@ -44,7 +44,34 @@ define([
          * @property {Object} events
          */
         events: {
+            'click.Modals #language-select.modal .language-select-button': 'handleLanguageSelectButtonClicked',
             'click.Modals #login.modal #login-button': 'handleLoginButtonClicked'
+        },
+        /**
+         * Handles the events when a language is selected from the language modal.
+         * 
+         * @method handleLanguageSelectButtonClicked
+         * @param {Object} event
+         */
+        handleLanguageSelectButtonClicked: function(event) {
+            switch (event.currentTarget.id.replace('-button', '')) {
+                case 'chinese simplified':
+                    skritter.user.settings.set('targetLang', 'zh', {silent: true});
+                    skritter.user.settings.set('style', 'simp', {silent: true});
+                    break;
+                case 'chinese-traditional':
+                    skritter.user.settings.set('targetLang', 'zh', {silent: true});
+                    skritter.user.settings.set('style', 'trad', {silent: true});
+                    break;
+                case 'japanese':
+                    skritter.user.settings.set('targetLang', 'ja', {silent: true});
+                    break;
+            }
+            this.hide(_.bind(function() {
+                skritter.router.navigate('tutorial', {trigger: true});
+                this.trigger('language-selected');
+            }, this));
+            event.preventDefault();
         },
         /**
          * Handles the events when the login button is clicked from the login modal.
