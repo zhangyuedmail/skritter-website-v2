@@ -43,7 +43,7 @@ define([
             'study/settings': 'showStudySettingsView',
             'tests': 'showTestsView',
             'tutorial': 'showTutorialView',
-            'vocab/list': 'showVocabLists',
+            'vocab/list': 'showVocabListsView',
             'user': 'showUserView',
             'user/new': 'showUserNewView'
         },
@@ -137,9 +137,9 @@ define([
             this.view.tutorial.render();
         },
         /**
-         * @method showVocabLists
+         * @method showVocabListsView
          */
-        showVocabLists: function() {
+        showVocabListsView: function() {
             if (!this.view.vocabLists) {
                 this.view.vocabLists = new VocabLists({el: $('#skritter-container')});
             } else {
