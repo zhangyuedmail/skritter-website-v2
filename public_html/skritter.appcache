@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Sun Apr 06 2014 13:24:37 GMT+0800 (China Standard Time)
+# Time: Sun Apr 06 2014 14:02:31 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -79,6 +79,7 @@ js/app/models/storage/IndexedDBAdapter.js
 js/app/models/storage/WebSQLAdapter.js
 js/app/models/user/Data.js
 js/app/models/user/Settings.js
+js/app/tutorials/Data.js
 js/app/views/Home.js
 js/app/views/Info.js
 js/app/views/Study.js
