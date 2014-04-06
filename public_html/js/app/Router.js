@@ -45,6 +45,7 @@ define([
             'tutorial': 'showTutorialView',
             'vocab/list': 'showVocabListsView',
             'user': 'showUserView',
+            'user/:id': 'showUserView',
             'user/new': 'showUserNewView'
         },
         /**
@@ -151,14 +152,15 @@ define([
          * Shows another user or editable logged in user view.
          * 
          * @method showUserView
+         * @param {String} id
          */
-        showUserView: function() {
+        showUserView: function(id) {
             if (!this.view.user) {
                 this.view.user = new User({el: $('#skritter-container')});
             } else {
                 this.view.user.setElement($('#skritter-container'));
             }
-            this.view.user.render();
+            this.view.user.set(id).render();
         },
         /**
          * Shows the new user account creation process view.

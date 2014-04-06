@@ -15,6 +15,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            User.id = null;
         },
         /**
          * @method render
@@ -22,6 +23,26 @@ define([
          */
         render: function() {
             this.$el.html(templateUser);
+            skritter.api.getUser(User.id, _.bind(function(user) {
+                this.$('#user-username').text(user.name);
+                this.$('#user-avatar').html("<img src='data:image/png;base64," + user.avatar + "' + class='img-circle' />");
+                this.$('#user-about-me').html(user.aboutMe);
+            }, this));
+            return this;
+        },
+        /**
+         * @method load
+         */
+        load: function() {
+            
+        },
+        /**
+         * @method set
+         * @param {String} id
+         * @returns {Backbone.View}
+         */
+        set: function(id) {
+            User.id = id;
             return this;
         }
     });
