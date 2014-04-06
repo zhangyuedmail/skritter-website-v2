@@ -28,6 +28,7 @@ define([
         initialize: function() {
             this.position = 0;
             this.prompt = null;
+            Tutorial.data = null;
         },
         /**
          * @method render
@@ -35,17 +36,31 @@ define([
          */
         render: function() {
             this.$el.html(templateTutorial);
-            this.load();
-            this.showWriting();
+            if (skritter.user.settings.has('style')) {
+                switch (skritter.user.settings.get('style')) {
+                    case 'simp':
+                        Tutorial.data = TutorialData['zh-simp'];
+                        break;
+                    case 'trad':
+                        Tutorial.data = TutorialData['zh-trad'];
+                        break;
+                    default:
+                        Tutorial.data = TutorialData['ja'];
+                        break;
+                }
+                skritter.user.data.clear().add(Tutorial.data, {silent: true});
+                this.next();
+            } else {
+                this.listenToOnce(skritter.modals, 'language-selected', this.render);
+                this.openLanguageSelect();
+            }
             return this;
         },
         /**
-         * @method load
-         * @param {String} language
+         * @method next
          */
-        load: function(language) {
-            language = language ? language : 'zh-trad';
-            skritter.user.data.add(TutorialData[language], {silent: true});
+        next: function() {
+            this.showWriting();
         },
         /**
          * @method loadPrompt
@@ -70,6 +85,17 @@ define([
             }
             this.prompt.set(review, true);
             this.prompt.setElement(this.$('#content-container')).render();
+        },
+        /**
+         * @method openLanguageSelect
+         */
+        openLanguageSelect: function() {
+            if (window.cordova) {
+                if (skritter.settings.language() === 'zh')
+                    skritter.modals.show('language-select').set('.modal-body #japanese-button', null, 'hidden');
+            } else {
+                skritter.modals.show('language-select');
+            }
         },
         /**
          * @method showDefinition
@@ -105,4 +131,4 @@ define([
     });
     
     return Tutorial;
-});
+}); 
