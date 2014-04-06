@@ -70,6 +70,7 @@ define([
         },
         /**
          * @method clear
+         * @returns {Backbone.Model}
          */
         clear: function() {
             this.decomps.reset();
@@ -77,6 +78,7 @@ define([
             this.sentences.reset();
             this.strokes.reset();
             this.vocabs.reset();
+            return this;
         },
         /**
          * @method fetchItems
