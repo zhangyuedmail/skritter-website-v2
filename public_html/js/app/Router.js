@@ -1,5 +1,6 @@
 /**
  * @module Skritter
+ * @param Account
  * @param Home
  * @param Info
  * @param Study
@@ -12,6 +13,7 @@
  * @author Joshua McFarland
  */
 define([
+    'views/user/Account',
     'views/Home',
     'views/Info',
     'views/Study',
@@ -21,7 +23,7 @@ define([
     'views/vocab/Lists',
     'views/User',
     'views/user/New'
-], function(Home, Info, Study, StudySettings, Tests, Tutorial, VocabLists, User, UserNew) {
+], function(Account, Home, Info, Study, StudySettings, Tests, Tutorial, VocabLists, User, UserNew) {
     /**
      * @class Router
      */
@@ -37,6 +39,7 @@ define([
          */
         routes: {
             '': 'showHomeView',
+            'account': 'showAccountView',
             'info/:writing': 'showInfoView',
             'info/:language/:writing': 'showInfoView',
             'study': 'showStudyView',
@@ -44,7 +47,6 @@ define([
             'tests': 'showTestsView',
             'tutorial': 'showTutorialView',
             'vocab/list': 'showVocabListsView',
-            'user': 'showUserView',
             'user/:id': 'showUserView',
             'user/new': 'showUserNewView'
         },
@@ -55,6 +57,19 @@ define([
          */
         back: function() {
             window.history.back();
+        },
+        /**
+         * Shows the authenticated users account settings that can be edited.
+         * 
+         * @method showAccountView
+         */
+        showAccountView: function() {
+            if (!this.view.account) {
+                this.view.account = new Account({el: $('#skritter-container')});
+            } else {
+                this.view.account.setElement($('#skritter-container'));
+            }
+            this.view.account.render();
         },
         /**
          * Shows the homepage which either displays as logged in or out depending on the authentication status.
