@@ -147,7 +147,8 @@ define(function() {
                 skritter.api.getProgressStats(skritter.settings.language(), {
                     start: moment().format('YYYY-MM-DD')
                 }, function(stats) {
-                    Timer.offset += stats[0].timeStudied.day;
+                    if (stats.statusText !== 'error')
+                        Timer.offset += stats[0].timeStudied.day;
                 });
         },
         /**

@@ -103,7 +103,12 @@ define([
                             },
                             spawner: true
                         }], function(batch) {
-                        callback(null, batch);
+                        
+                        if (batch.statusText === 'error') {
+                            callback(batch, null);
+                        } else {
+                            callback(null, batch);
+                        }
                     });
                 },
                 function(batch, callback) {
@@ -149,7 +154,11 @@ define([
          */
         fetchSRSConfigs: function(callback) {
             skritter.api.getSRSConfigs(skritter.settings.language(), function(srsconfigs) {
-                skritter.storage.put('srsconfigs', srsconfigs, callback);
+                if (srsconfigs.statusText === 'error') {
+                    callback();
+                } else {
+                    skritter.storage.put('srsconfigs', srsconfigs, callback);
+                }
             });
         },
         /**
@@ -176,7 +185,11 @@ define([
                             },
                             spawner: true
                         }], function(batch) {
-                        callback(null, batch);
+                        if (batch.statusText === 'error') {
+                            callback(batch, null);
+                        } else {
+                            callback(null, batch);
+                        }
                     });
                 },
                 function(batch, callback) {
@@ -254,7 +267,10 @@ define([
                 function(callback) {
                     self.vocabs.loadAll(callback);
                 }
-            ], callback);
+            ], function() {
+                if (typeof callback === 'function')
+                    callback();
+            });
         },
         /**
          * @method loadItem
