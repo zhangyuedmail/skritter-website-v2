@@ -80,11 +80,7 @@ define([
          * @param {Object} event
          */
         handleNewUserButtonClicked: function(event) {
-            skritter.modals.show('default')
-                    .set('.modal-header', false)
-                    .set('.modal-body', '<h3>Try the tutorial first?</h3>')
-                    .set('#default-button', 'No thanks')
-                    .set('#primary-button', "Let's go");
+            skritter.router.navigate('tutorial', {trigger: true});
             event.preventDefault();
         },
         /**
