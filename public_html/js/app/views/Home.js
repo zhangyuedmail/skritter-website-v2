@@ -35,7 +35,7 @@ define([
             } else {
                 this.$el.html(templateLoggedOut);
                 if (skritter.settings.language())
-                    this.$('#target-language').html(skritter.settings.language() === 'zh' ? 'Chinese' : 'Japanese');
+                    this.$('#target-language').html(skritter.settings.language() === 'zh' ? '中文' : '日本語');
             }
             return this;
         },
