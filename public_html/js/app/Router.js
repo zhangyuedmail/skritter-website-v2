@@ -39,7 +39,6 @@ define([
          */
         routes: {
             '': 'showHomeView',
-            'account': 'showAccountView',
             'info/:writing': 'showInfoView',
             'info/:language/:writing': 'showInfoView',
             'study': 'showStudyView',
@@ -47,7 +46,8 @@ define([
             'tests': 'showTestsView',
             'tutorial': 'showTutorialView',
             'vocab/list': 'showVocabListsView',
-            'user/:id': 'showUserView',
+            'user/account': 'showAccountView',
+            'user/profile/:id': 'showUserView',
             'user/new': 'showUserNewView'
         },
         /**
