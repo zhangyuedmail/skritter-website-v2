@@ -28,8 +28,8 @@ define(function() {
             Canvas.stage.display = this.createDisplayStage();
             Canvas.stage.input = this.createInputStage();
             createjs.Ticker.addEventListener('tick', Canvas.stage.display);
-            createjs.Ticker.setFPS(1000);
             createjs.Touch.enable(Canvas.stage.input);
+            createjs.Ticker.setFPS(1000);
         },
         /**
          * @method render
@@ -297,8 +297,8 @@ define(function() {
          * @method remove
          */
         remove: function() {
-            createjs.Ticker.reset();
             createjs.Touch.disable(Canvas.stage.input);
+            createjs.Ticker.removeEventListener('tick', Canvas.stage.display);
             Canvas.stage.display.removeAllChildren();
             Canvas.stage.input.removeAllChildren();
             this.$el.empty();

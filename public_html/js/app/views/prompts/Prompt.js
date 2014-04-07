@@ -111,7 +111,7 @@ define([
         /**
          * @method set
          * @param {Backbone.Model} review
-         * @param {Boolean} skipReview
+         * @param {Boolean} skipReviewSave
          */
         set: function(review, skipReviewSave) {
             this.review = review;
