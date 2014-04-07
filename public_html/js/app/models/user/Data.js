@@ -443,15 +443,36 @@ define([
             });
         },
         /**
+         * @method redownload
+         * @param {Function} callback
+         */
+        redownload: function(callback) {
+            async.series([
+                function(callback) {
+                    skritter.storage.destroy(callback);
+                },
+                function(callback) {
+                    skritter.storage.open(skritter.user.get('user_id'), callback);
+                },
+                function() {
+                    skritter.user.data.sync(callback, true, true);
+                }
+            ], function() {
+                if (typeof callback === 'function')
+                    callback();
+            });
+        },
+        /**
          * @method sync
          * @param {Function} callback
          * @param {Boolean} showModal
+         * @param {Boolean} forceDownload
          */
-        sync: function(callback, showModal) {
+        sync: function(callback, showModal, forceDownload) {
             var self = this;
             var downloadedRequests = 0;
-            var lastItemSync = this.get('lastItemSync');
-            var lastVocabSync = this.get('lastVocabSync');
+            var lastItemSync = forceDownload ? 0 : this.get('lastItemSync');
+            var lastVocabSync = forceDownload ? 0 : this.get('lastVocabSync');
             var now = skritter.fn.getUnixTime();
             var responseSize = 0;
             Data.syncing = true;
