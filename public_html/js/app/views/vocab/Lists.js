@@ -51,11 +51,15 @@ define([
         load: function(sort) {
             sort = sort ? sort : VocabLists.sort;
             skritter.api.getVocabLists(skritter.settings.language(), sort, null, function(lists) {
-                VocabLists.sort = sort;
-                VocabLists.lists.set(lists, {
-                    name: 'Name',
-                    studyingMode: 'Status'
-                }).render();
+                if (lists.statusText === 'error') {
+                    VocabLists.lists.set(null);
+                } else {
+                    VocabLists.sort = sort;
+                    VocabLists.lists.set(lists, {
+                        name: 'Name',
+                        studyingMode: 'Status'
+                    }).render();
+                }
             });
         }
     });
