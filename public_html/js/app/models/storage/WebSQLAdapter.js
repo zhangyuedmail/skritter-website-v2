@@ -29,7 +29,8 @@ define([
                 console.error(event);
             };
             var onSuccess = function() {
-                callback();
+                if (typeof callback === 'function')
+                    callback();
             };
             WebSQLAdapter.database.transaction(function(tx) {
                 for (var name in tables)

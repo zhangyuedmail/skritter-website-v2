@@ -25,7 +25,8 @@ define([
          */
         destroy: function(callback) {
             window.indexedDB.deleteDatabase(IndexedDBAdapter.databaseName);
-            callback();
+            if (typeof callback === 'function')
+                callback();
         },
         /**
          * @method get
