@@ -97,8 +97,9 @@ define([
          * @method remove
          */
         remove: function() {
-            this.$('#grading-buttons').remove();
-            return this;
+            this.$el.empty();
+            this.stopListening();
+            this.undelegateEvents();
         },
         /**
          * @method select
