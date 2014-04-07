@@ -294,6 +294,18 @@ define(function() {
             }
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            createjs.Ticker.reset();
+            createjs.Touch.disable(Canvas.stage.input);
+            Canvas.stage.display.removeAllChildren();
+            Canvas.stage.input.removeAllChildren();
+            this.$el.empty();
+            this.stopListening();
+            this.undelegateEvents();
+        },
+        /**
          * @method size
          * @param {Number} size
          */
