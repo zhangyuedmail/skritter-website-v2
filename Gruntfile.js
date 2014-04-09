@@ -403,7 +403,6 @@ module.exports = function(grunt) {
                     'cd japanese/',
                     'cordova platforms add android',
                     'cordova plugin add org.apache.cordova.device',
-                    'cordova plugin add org.apache.cordova.media',
                     'cordova plugin add org.apache.cordova.splashscreen',
                     'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion-file.git'
                 ].join('&&'),
@@ -429,7 +428,6 @@ module.exports = function(grunt) {
                     'cd chinese/',
                     'cordova platforms add android',
                     'cordova plugin add org.apache.cordova.device',
-                    'cordova plugin add org.apache.cordova.media',
                     'cordova plugin add org.apache.cordova.splashscreen',
                     'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion-file.git'
                 ].join('&&'),
