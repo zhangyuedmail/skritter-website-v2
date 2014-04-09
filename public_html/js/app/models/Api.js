@@ -25,6 +25,9 @@ define(function() {
             token: null,
             version: 0
         },
+        audioBase: function() {
+            return Api.root + Api.tld + '/';
+        },
         /**
          * @method authenticateGuest
          * @param {Object} guest

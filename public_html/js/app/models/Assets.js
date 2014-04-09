@@ -15,6 +15,22 @@ define(function() {
             Assets.audio = new Audio();
         },
         /**
+         * @method playAudio
+         * @param {String} filename
+         */
+        playAudio: function(filename) {
+            if (window.cordova) {
+                navigator.expansion.media.set(filename, function() {
+                    navigator.expansion.media.start();
+                });
+            } else {
+                if (Assets.audio.paused) {
+                    Assets.audio.src = skritter.api.audioBase() + 'sounds?file=' + filename;
+                    Assets.audio.play();
+                }
+            }
+        },
+        /**
          * @method stroke
          * @param {Number} bitmapId
          * @param {String} color
