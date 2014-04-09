@@ -21,6 +21,11 @@ define([
                     callback();
             });
         },
+        audio: function() {
+            if (this.has('audio'))
+                return this.get('audio').replace('/sounds?file=', '');
+            return false;
+        },
         /**
          * @method characterCount
          * @returns {Number}

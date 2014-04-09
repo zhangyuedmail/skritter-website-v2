@@ -50,6 +50,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'click.Study #study-view #audio-button': 'handleAudioButtonClicked',
             'click.Study #study-view #info-button': 'handleInfoButtonClicked',
             'click.Study #study-view #study-settings-button': 'handleStudySettingsButtonClicked'
         },
@@ -60,6 +61,15 @@ define([
             if (skritter.user.settings.get('autoSync') &&
                     skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold'))
                 skritter.user.data.sync();
+        },
+        /**
+         * @method handleAudioButtonClicked
+         * @param {Object} event
+         */
+        handleAudioButtonClicked: function(event) {
+            if (this.prompt && this.prompt.review.baseVocab().audio())
+                skritter.assets.playAudio(this.prompt.review.baseVocab().audio());
+            event.preventDefault();
         },
         /**
          * @method handleInfoButtonClicked
@@ -101,6 +111,7 @@ define([
             this.prompt.set(review);
             this.prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
+            this.updateAudioButtonState();
         },
         /**
          * @method nextPrompt
@@ -125,6 +136,18 @@ define([
                         this.index++;
                     }
                 }, this));
+            }
+        },
+        /**
+         * @method updateAudioButtonState
+         */
+        updateAudioButtonState: function() {
+            if (this.prompt && this.prompt.review.baseVocab().has('audio')) {
+                this.$('#audio-button span').removeClass('fa fa-volume-off');
+                this.$('#audio-button span').addClass('fa fa-volume-up');
+            } else {
+                this.$('#audio-button span').removeClass('fa fa-volume-up');
+                this.$('#audio-button span').addClass('fa fa-volume-off');
             }
         }
     });
