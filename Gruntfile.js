@@ -438,6 +438,42 @@ module.exports = function(grunt) {
                     stderr: true
                 }
             },
+            'cordova-update-plugins-ja': {
+                command: [
+                    'cd build/cordova/japanese/',
+                    'cordova plugin rm org.apache.cordova.device',
+                    'cordova plugin rm org.apache.cordova.media',
+                    'cordova plugin rm org.apache.cordova.splashscreen',
+                    'cordova plugin rm com.jernung.cordova.expansion-file',
+                    'cordova plugin add org.apache.cordova.device',
+                    'cordova plugin add org.apache.cordova.media',
+                    'cordova plugin add org.apache.cordova.splashscreen',
+                    'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion-file.git',
+                    'cordova build'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'cordova-update-plugins-zh': {
+                command: [
+                    'cd build/cordova/chinese/',
+                    'cordova plugin rm org.apache.cordova.device',
+                    'cordova plugin rm org.apache.cordova.media',
+                    'cordova plugin rm org.apache.cordova.splashscreen',
+                    'cordova plugin rm com.jernung.cordova.expansion-file',
+                    'cordova plugin add org.apache.cordova.device',
+                    'cordova plugin add org.apache.cordova.media',
+                    'cordova plugin add org.apache.cordova.splashscreen',
+                    'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion-file.git',
+                    'cordova build'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
             'kill-adb': {
                 command: 'Taskkill /F /IM adb.exe',
                 options: {
@@ -568,6 +604,19 @@ module.exports = function(grunt) {
         'replace:web-combined',
         'manifest:web-combined',
         'yuidoc:web'
+    ]);
+    /*
+     * COMMANDS: UPDATING
+     */
+    grunt.registerTask('update-cordova-plugins', [
+        'shell:cordova-update-plugins-ja',
+        'shell:cordova-update-plugins-zh'
+    ]);
+    grunt.registerTask('update-cordova-plugins-ja', [
+        'shell:cordova-update-plugins-ja'
+    ]);
+    grunt.registerTask('update-cordova-plugins-zh', [
+        'shell:cordova-update-plugins-zh'
     ]);
     /*
      * COMMANDS: INSTALLING
