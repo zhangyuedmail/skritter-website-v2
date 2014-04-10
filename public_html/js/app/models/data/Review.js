@@ -214,9 +214,9 @@ define(function() {
             this.set('reviews', reviews);
             if (!skritter.user.data.reviews.get(this)) {
                 skritter.user.data.reviews.add(this);
-                skritter.user.data.items.cache(callback);
+                this.cache(callback);
             } else {
-                callback();
+                this.cache(callback);
             }
         },
         /**
