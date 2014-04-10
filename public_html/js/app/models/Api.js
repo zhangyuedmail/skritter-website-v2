@@ -379,7 +379,8 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
-                    lists = lists.concat(data.VocabLists);
+                    if (data.VocabLists)
+                        lists = lists.concat(data.VocabLists);
                     if (data.cursor) {
                         window.setTimeout(function() {
                             request(data.cursor);
