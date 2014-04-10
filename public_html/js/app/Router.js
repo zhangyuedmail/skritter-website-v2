@@ -6,7 +6,6 @@
  * @param Study
  * @param StudySettings
  * @param Tests
- * @param Tutorial
  * @param VocabLists
  * @param User
  * @param UserNew
@@ -19,11 +18,10 @@ define([
     'views/Study',
     'views/study/Settings',
     'views/Tests',
-    'views/Tutorial',
     'views/vocab/Lists',
     'views/User',
     'views/user/New'
-], function(Account, Home, Info, Study, StudySettings, Tests, Tutorial, VocabLists, User, UserNew) {
+], function(Account, Home, Info, Study, StudySettings, Tests, VocabLists, User, UserNew) {
     /**
      * @class Router
      */
@@ -138,19 +136,6 @@ define([
                 this.view.tests.setElement($('#skritter-container'));
             }
             this.view.tests.render();
-        },
-        /**
-         * Shows the tutorial view for new users.
-         * 
-         * @method showTutorialView
-         */
-        showTutorialView: function() {
-            if (!this.view.tutorial) {
-                this.view.tutorial = new Tutorial({el: $('#skritter-container')});
-            } else {
-                this.view.tutorial.setElement($('#skritter-container'));
-            }
-            this.view.tutorial.render();
         },
         /**
          * @method showVocabListsView
