@@ -17,7 +17,7 @@ define([
         initialize: function() {
             this.review = null;
             Prompt.gradingButtons = new GradingButtons();
-            Prompt.skipReviewSave = false;
+            Prompt.skipSave = false;
         },
         /**
          * @method render
@@ -48,7 +48,7 @@ define([
                 score: selectedGrade
             });
             if (this.review.isLast()) {
-                if (Prompt.skipReviewSave) {
+                if (Prompt.skipSave) {
                     this.trigger('prompt:finished');
                 } else {
                     this.review.save(_.bind(function() {
@@ -111,11 +111,11 @@ define([
         /**
          * @method set
          * @param {Backbone.Model} review
-         * @param {Boolean} skipReviewSave
+         * @param {Boolean} skipSave
          */
-        set: function(review, skipReviewSave) {
+        set: function(review, skipSave) {
             this.review = review;
-            Prompt.skipReviewSave = skipReviewSave ? skipReviewSave : false;
+            Prompt.skipSave = skipSave ? skipSave : false;
         }
     });
 

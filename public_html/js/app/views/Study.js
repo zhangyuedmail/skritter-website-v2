@@ -23,7 +23,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.index = -1;
             this.prompt = null;
         },
         /**
@@ -123,20 +122,6 @@ define([
                 this.loadPrompt(item.createReview());
                 this.$('#items-due').html(skritter.user.data.items.dueCount(true));
             }, this), skritter.user.settings.activeParts(), null, skritter.user.settings.style());
-        },
-        /**
-         * @method previousPrompt
-         */
-        previousPrompt: function() {
-            var review = skritter.user.data.reviews.at(this.index + 1);
-            if (review) {
-                review.load(_.bind(function(item) {
-                    if (item) {
-                        this.loadPrompt(review);
-                        this.index++;
-                    }
-                }, this));
-            }
         },
         /**
          * @method updateAudioButtonState
