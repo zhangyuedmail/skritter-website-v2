@@ -36,6 +36,7 @@ define([
                 } else {
                     this.$('#sentence').hide();
                 }
+                this.updateAudioButtonState();
             }
             return this;
         },
@@ -43,7 +44,17 @@ define([
          * @property {Object} events
          */
         events: {
+            'click.Info #info-view #audio-button': 'handleAudioButtonClicked',
             'click.Info #info-view .back-button': 'handleBackButtonClicked'
+        },
+        /**
+         * @method handleAudioButtonClicked
+         * @param {Object} event
+         */
+        handleAudioButtonClicked: function(event) {
+            if (Info.vocab && Info.vocab.audio())
+                skritter.assets.playAudio(Info.vocab.audio());
+            event.preventDefault();
         },
         /**
          * @method handleBackButtonClicked
@@ -68,6 +79,18 @@ define([
                 Info.vocab = vocab;
                 this.render();
             }, this));
+        },
+        /**
+         * @method updateAudioButtonState
+         */
+        updateAudioButtonState: function() {
+            if (Info.vocab && Info.vocab.has('audio')) {
+                this.$('#audio-button span').removeClass('fa fa-volume-off');
+                this.$('#audio-button span').addClass('fa fa-volume-up');
+            } else {
+                this.$('#audio-button span').removeClass('fa fa-volume-up');
+                this.$('#audio-button span').addClass('fa fa-volume-off');
+            }
         }
     });
 
