@@ -246,6 +246,7 @@ define(function() {
                 });
                 promise.fail(function(error) {
                     if (retry < 5) {
+                        Api.tld = Api.tld === '.com' ? '.cn' : '.com';
                         window.setTimeout(request, 5000);
                         retry++;
                     } else {
