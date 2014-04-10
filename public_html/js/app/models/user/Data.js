@@ -220,23 +220,9 @@ define([
          * @param {Function} callback
          */
         fetchVocabLists: function(callback) {
-            async.series([
-                function(callback) {
-                    skritter.api.getVocabLists(skritter.settings.language(), 'official', null, function(lists) {
-                        skritter.storage.put('vocablists', lists, callback);
-                    });
-                },
-                function(callback) {
-                    skritter.api.getVocabLists(skritter.settings.language(), 'custom', null, function(lists) {
-                        skritter.storage.put('vocablists', lists, callback);
-                    });
-                },
-                function(callback) {
-                    skritter.api.getVocabLists(skritter.settings.language(), 'studying', null, function(lists) {
-                        skritter.storage.put('vocablists', lists, callback);
-                    });
-                }
-            ], callback);
+            skritter.api.getVocabLists(skritter.settings.language(), 'studying', null, function(lists) {
+                skritter.storage.put('vocablists', lists, callback);
+            });
         },
         /**
          * @method loadAll
@@ -480,7 +466,7 @@ define([
             if (showModal || lastItemSync === 0) {
                 skritter.modals.show('download')
                         .set('.modal-title', lastItemSync === 0 ? 'INITIAL SYNC' : 'SYNC')
-                        .set('.modal-title-right', 'Downloading')
+                        .set('.modal-title-right', 'Getting Items')
                         .progress(100)
                         .set('.modal-footer', false);
             } else {
@@ -494,10 +480,19 @@ define([
                         downloadedRequests += result.downloadedRequests;
                         responseSize += result.responseSize;
                         if (responseSize > 0)
-                            skritter.modals.set('.modal-title-right', '~' + skritter.fn.bytesToSize(responseSize));
+                            skritter.modals.set('.modal-title-right', skritter.fn.bytesToSize(responseSize));
                         if (result.totalRequests > 10 && result.runningRequests === 0)
                             skritter.modals.progress((downloadedRequests / result.totalRequests) * 100);
                     });
+                },
+                //downloads vocab lists currently being studied on intial sync
+                function(callback) {
+                    if (lastItemSync === 0) {
+                        skritter.modals.set('.modal-title-right', 'Getting Lists');
+                        self.fetchVocabLists(callback);
+                    } else {
+                        callback();
+                    }
                 },
                 //downloads changed vocabs at a maximum of once per day
                 function(callback) {

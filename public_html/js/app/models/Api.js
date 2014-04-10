@@ -361,6 +361,7 @@ define(function() {
         getVocabLists: function(language, sort, fields, callback) {
             var self = this;
             var lists = [];
+            language = language ? language : undefined;
             fields = fields ? fields : undefined;
             function request(cursor) {
                 var promise = $.ajax({
@@ -378,8 +379,8 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
+                    lists = lists.concat(data.VocabLists);
                     if (data.cursor) {
-                        lists = lists.concat(data.VocabLists);
                         window.setTimeout(function() {
                             request(data.cursor);
                         }, 500);
