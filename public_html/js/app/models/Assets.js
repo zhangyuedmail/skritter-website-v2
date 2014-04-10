@@ -21,7 +21,7 @@ define(function() {
         playAudio: function(filename) {
             if (window.cordova) {
                 navigator.expansion.media.set(filename, function() {
-                    navigator.expansion.media.start();
+                    navigator.expansion.media.play();
                 });
             } else {
                 if (Assets.audio.paused) {
