@@ -153,10 +153,13 @@ define([
                     }                    
                 },
                 function(callback) {
+                    skritter.user.data.reviews.loadAll(callback);
+                },
+                function(callback) {
                     skritter.user.data.srsconfigs.loadAll(callback);
                 },
                 function(callback) {
-                    skritter.user.data.reviews.loadAll(callback);
+                    skritter.user.data.vocablists.loadAll(callback);
                 }
             ], function() {
                 skritter.timer.refresh(true);
