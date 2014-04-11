@@ -127,10 +127,13 @@ define(function() {
         },
         /**
          * @method checkReviewErrors
+         * @param {Number} offset
+         * @param {Function} callback
          */
-        checkReviewErrors: function() {
+        checkReviewErrors: function(offset, callback) {
             var self = this;
             var errors = [];
+            offset = offset ? offset : undefined;
             function request(cursor) {
                 var promise = $.ajax({
                     url: Api.base + '/reviews/errors',
@@ -140,7 +143,8 @@ define(function() {
                     type: 'GET',
                     data: {
                         bearer_token: self.get('token'),
-                        cursor: cursor
+                        cursor: cursor,
+                        offset: offset
                     }
                 });
                 promise.done(function(data) {

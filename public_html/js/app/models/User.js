@@ -108,6 +108,18 @@ define([
                 localStorage.removeItem(id + '-data');
                 document.location.reload(true);
             });
+        },
+        /**
+         * @method reviewErrors
+         * @param {Number} offset
+         * @param {Function} callback
+         */
+        reviewErrors: function(offset, callback) {
+            skritter.api.checkReviewErrors(offset, function(errors) {
+                console.log('REVIEW ERRORS', errors);
+                if (typeof callback === 'function')
+                    callback(errors);
+            });
         }
     });
 
