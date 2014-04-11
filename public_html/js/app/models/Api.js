@@ -382,6 +382,34 @@ define(function() {
             request();
         },
         /**
+         * @method getVocabListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         * @param {Function} callback
+         */
+        getVocabListSection: function(listId, sectionId, callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'vocablists/' + listId + '/sections/' + sectionId,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token')
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.VocabListSection);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
          * @method getVocabLists
          * @param {String} language
          * @param {String} sort
