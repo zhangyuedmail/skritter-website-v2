@@ -63,6 +63,21 @@ define([
             return this;
         },
         /**
+         * @property {Object} function
+         */
+        events: {
+            'click.Table #vocab-lists-container table tr': 'handleListClicked'
+        },
+        /**
+         * @method handleListClicked
+         * @param {Object} event
+         */
+        handleListClicked: function(event) {
+            var listId = event.currentTarget.id.replace('list-', '');
+            skritter.router.navigate('vocab/list/' + listId, {trigger: true});
+            event.preventDefault();
+        },
+        /**
          * @method clear
          * @returns {Backbone.View}
          */
