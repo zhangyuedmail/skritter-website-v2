@@ -17,7 +17,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            Table.fieldNameMap = [];
+            Table.fieldNameMap = {};
             Table.lists = new VocabLists();
         },
         /**
@@ -63,6 +63,17 @@ define([
             return this;
         },
         /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
+            Table.fieldNameMap = {};
+            Table.lists.reset();
+            this.$('table thead').html('');
+            this.$('table tbody').html('');
+            return this;
+        },
+        /**
          * @method hideLoading
          */
         hideLoading: function() {
@@ -75,7 +86,8 @@ define([
          * @returns {Backbone.View}
          */
         set: function(lists, fieldNameMap) {
-            Table.fieldNameMap = fieldNameMap;
+            if (fieldNameMap)
+                Table.fieldNameMap = fieldNameMap;
             Table.lists.add(lists, {silent: true});
             return this;
         },
