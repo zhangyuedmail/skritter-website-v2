@@ -7,7 +7,7 @@
  */
 define([
     'require.text!templates/vocab-lists-table.html',
-    'collections/data/vocablists'
+    'collections/data/VocabLists'
 ], function(templateVocabListsTable, VocabLists) {
     /**
      * @class VocabListsTable

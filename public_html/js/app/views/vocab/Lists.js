@@ -57,8 +57,11 @@ define([
                     studyingMode: 'Status'
             }).render().showLoading();
             skritter.api.getVocabLists(skritter.settings.language(), sort, null, function(lists) {
-                if (sort === 'studying')
+                if (sort === 'studying' && lists.statusText === 'error') {
                     lists = skritter.user.data.vocablists.toJSON();
+                } else if (sort === 'studying') {
+                    skritter.user.data.vocablists.set(lists);
+                }
                 VocabLists.table.set(lists).render().hideLoading();
             });
         }

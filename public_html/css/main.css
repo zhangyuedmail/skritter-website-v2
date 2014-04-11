@@ -42,12 +42,6 @@ body {
     padding-top: 45px;
 }
 .view.no-nav { padding-top: 0; }
-@media (max-width: 767px) {
-    .container .row {
-        margin-left: 0;
-        margin-right: 0;
-    }
-}
 
 
 /*** GRADING BUTTONS ***/

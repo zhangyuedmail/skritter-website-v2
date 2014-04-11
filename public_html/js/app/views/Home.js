@@ -32,6 +32,19 @@ define([
                 this.$('#user-avatar').html(skritter.user.settings.avatar('img-circle'));
                 this.$('#user-items-due').html(skritter.user.data.items.dueCount());
                 this.$('#user-username').html(skritter.user.settings.get('name'));
+                Home.lists.setElement(this.$('#lists-table'));
+                Home.lists.clear().set(null, {
+                    name: 'Name',
+                    studyingMode: 'Status'
+                }).render().showLoading();
+                skritter.api.getVocabLists(skritter.settings.language(), 'studying', null, function(lists) {
+                    if (lists.statusText === 'error') {
+                        lists = skritter.user.data.vocablists.toJSON();
+                    } else {
+                        skritter.user.data.vocablists.set(lists);
+                    }
+                    Home.lists.set(lists).render().hideLoading();
+                });
             } else {
                 this.$el.html(templateLoggedOut);
                 if (skritter.settings.language())

@@ -11,7 +11,6 @@
                 <a class="hidden-xs home-button navbar-brand" href="#">Skritter</a>  
                 <ul class="navbar-nav navbar-text list-inline">
                     <li><a class="study-button" href="#"><span class="fa fa-pencil"></span> Study</a></li>
-                    <li><a class="lists-button" href="#"><span class="fa fa-list"></span> Lists</a></li>
                 </ul>
             </div>
             <div class="collapse navbar-collapse">
@@ -23,25 +22,25 @@
     </div>
     <div id="content-container" class="container">
         <div class="row">
-            <div id="summary" class="content-block col-md-6">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <span id="user-avatar" class="media-object"></span>
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Overview</h4>
-                        <p><strong><span id="user-username"></span></strong>, you currently have <strong><span id="user-items-due"></span></strong> items ready to review.</p>
-                        <button type="button" class="btn btn-primary pull-right sync-button"><span class="fa fa-refresh"></span> Sync</button>
+            <div class="col-md-6">
+                <div id="summary" class="content-block">
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <span id="user-avatar" class="media-object"></span>
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">Overview</h4>
+                            <p><strong><span id="user-username"></span></strong>, you currently have <strong><span id="user-items-due"></span></strong> items ready to review.</p>
+                            <button type="button" class="btn btn-primary pull-right sync-button"><span class="fa fa-refresh"></span> Sync</button>
+                        </div>
                     </div>
+                </div>
+                <div id="lists" class="content-block">
+                    <h4><span class="fa fa-list"></span> My Lists</h4>
+                    <div id="lists-table"></div>
                 </div>
             </div>
             <div class="col-md-6"></div>
-        </div>
-        <div class="row">
-            <div id="lists" class="hidden content-block col-xs-12">
-                <h4><span class="fa fa-list"></span> Active Lists</h4>
-                <div id="lists-table"></div>
-            </div>
         </div>
     </div>
 </div>

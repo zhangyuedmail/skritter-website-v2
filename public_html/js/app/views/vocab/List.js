@@ -52,7 +52,7 @@ define([
          * @param {Object} event
          */
         handleBackButtonClicked: function(event) {
-            skritter.router.navigate('vocab/list', {trigger: true});
+            skritter.router.back();
             event.preventDefault();
         },
         /**
