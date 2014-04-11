@@ -48,6 +48,13 @@ body {
 #grading-buttons { display: none; }
 
 
+/*** HOME: LOGGED IN ***/
+#home-view.logged-in #lists {
+    max-height: 300px;
+    overflow-x: auto;
+}
+
+
 /*** LANDING PAGE ***/
 .landing-page {
     background-color: #333333;

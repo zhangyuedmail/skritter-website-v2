@@ -99,12 +99,11 @@ define([
                     if (cursor.value.vocabIds.length > 0) {
                         var scheduleItem = {
                             id: cursor.value.id,
+                            held: cursor.value.held,
                             last: cursor.value.last ? cursor.value.last : 0,
                             next: cursor.value.next ? cursor.value.next : 0,
                             style: cursor.value.style
                         };
-                        if (cursor.value.held)
-                            scheduleItem.held = cursor.value.held;
                         schedule.push(scheduleItem);
                     }
                     cursor.continue();
