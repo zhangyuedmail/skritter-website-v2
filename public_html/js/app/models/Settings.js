@@ -31,7 +31,7 @@ define(function() {
             },
             hintColor: '#87cefa',
             language: '@@language',
-            maxCanvasSize: 600,
+            maxCanvasSize: 800,
             storageType: 'IndexedDB',
             version: '@@version'
         },

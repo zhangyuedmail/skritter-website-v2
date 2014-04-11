@@ -29,7 +29,7 @@ define(function() {
             Canvas.stage.input = this.createInputStage();
             createjs.Ticker.addEventListener('tick', Canvas.stage.display);
             createjs.Touch.enable(Canvas.stage.input);
-            createjs.Ticker.setFPS(1000);
+            createjs.Ticker.setFPS(200);
         },
         /**
          * @method render
