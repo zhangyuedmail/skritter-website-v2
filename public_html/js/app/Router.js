@@ -6,6 +6,7 @@
  * @param Study
  * @param StudySettings
  * @param Tests
+ * @param VocabList
  * @param VocabLists
  * @param User
  * @param UserNew
@@ -18,10 +19,11 @@ define([
     'views/Study',
     'views/study/Settings',
     'views/Tests',
+    'views/vocab/List',
     'views/vocab/Lists',
     'views/User',
     'views/user/New'
-], function(Account, Home, Info, Study, StudySettings, Tests, VocabLists, User, UserNew) {
+], function(Account, Home, Info, Study, StudySettings, Tests, VocabList, VocabLists, User, UserNew) {
     /**
      * @class Router
      */
@@ -44,6 +46,7 @@ define([
             'tests': 'showTestsView',
             'tutorial': 'showTutorialView',
             'vocab/list': 'showVocabListsView',
+            'vocab/list/:listId': 'showVocabListView',
             'user/account': 'showAccountView',
             'user/profile/:id': 'showUserView',
             'user/new': 'showUserNewView'
@@ -136,6 +139,18 @@ define([
                 this.view.tests.setElement($('#skritter-container'));
             }
             this.view.tests.render();
+        },
+        /**
+         * @method showVocabListView
+         * @param {String} listId
+         */
+        showVocabListView: function(listId) {
+            if (!this.view.vocabList) {
+                this.view.vocabList = new VocabList({el: $('#skritter-container')});
+            } else {
+                this.view.vocabList.setElement($('#skritter-container'));
+            }
+            this.view.vocabList.render().load(listId);
         },
         /**
          * @method showVocabListsView
