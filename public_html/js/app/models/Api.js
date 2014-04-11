@@ -567,7 +567,7 @@ define(function() {
                 });
                 promise.done(function(data) {
                     if (typeof callback === 'function')
-                        callback(data);
+                        callback(data.User);
                 });
                 promise.fail(function(error) {
                     console.error(error);
@@ -593,7 +593,7 @@ define(function() {
                 });
                 promise.done(function(data) {
                     if (typeof callback === 'function')
-                        callback(data);
+                        callback(data.VocabList);
                 });
                 promise.fail(function(error) {
                     console.error(error);
@@ -620,7 +620,7 @@ define(function() {
                 });
                 promise.done(function(data) {
                     if (typeof callback === 'function')
-                        callback(data);
+                        callback(data.VocabListSection);
                 });
                 promise.fail(function(error) {
                     console.error(error);
