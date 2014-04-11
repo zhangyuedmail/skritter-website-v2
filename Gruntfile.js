@@ -163,9 +163,7 @@ module.exports = function(grunt) {
          * JSHINT 
          */
         jshint: {
-            root: {
-                all: ['Gruntfile.js', 'public_html/js/app/**/*.js']
-            }
+            root: ['Gruntfile.js', 'public_html/js/app/**/*.js']
         },
         /*
          * MANIFEST 
@@ -521,7 +519,7 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('appcache', ['manifest:root']);
     grunt.registerTask('docs', ['yuidoc:compile']);
-    grunt.registerTask('hint', ['jshint:root']);
+    grunt.registerTask('hint', ['jshint']);
     /*
      * COMMANDS: BUILDING
      */
