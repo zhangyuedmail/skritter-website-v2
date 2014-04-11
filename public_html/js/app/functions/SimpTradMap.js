@@ -2640,16 +2640,25 @@ define(function() {
      * @returns {String}
      */
     var fromBase = function(base) {
+        var rune = '';
         var splitBase = base.split('-');
-        var baseRune = splitBase[1];
-        var baseVariation = parseInt(splitBase[2], 10);
-        var matchedRune = map[baseRune];
-        if (baseVariation !== 0 && matchedRune) {
-            var matchedVariations = matchedRune.split('');
-            matchedRune = matchedVariations[baseVariation - 1];
-            return matchedRune;
+        var splitBaseRunes = splitBase[1].split('');
+        var language = splitBase[0];
+        var variation = parseInt(splitBase[2], 10);
+        if (language === 'zh') {
+            for (var i = 0, length = splitBaseRunes.length; i < length; i++) {
+                var splitBaseRune = splitBaseRunes[i];
+                var splitMatchedRune = map[splitBaseRune];
+                if (variation !== 0 && splitMatchedRune) {
+                    rune += splitMatchedRune[variation - 1];
+                } else {
+                    rune += splitBaseRune;
+                }
+            }   
+        } else {
+            rune = splitBase[1];
         }
-        return baseRune;
+        return rune;
     };
     /**
      * Takes a Chinese word and creates a simplified base for it.
