@@ -17,8 +17,8 @@ define([
          * @method initialize
          */
         initialize: function() {
-            VocabLists.lists = new ListsTable();
             VocabLists.defaultSort = 'studying';
+            VocabLists.table = new ListsTable();
         },
         /**
          * @method render
@@ -26,6 +26,7 @@ define([
          */
         render: function() {
             this.$el.html(templateVocabLists);
+            VocabLists.table.setElement(this.$('#vocab-lists'));
             this.load();
             return this;
         },
@@ -51,6 +52,15 @@ define([
             sort = sort ? sort : VocabLists.defaultSort;
             this.$('#search #sort .btn-group button').removeClass('active');
             this.$('#search #sort #sort-' + sort).addClass('active');
+            VocabLists.table.render().showLoading();
+            skritter.api.getVocabLists(skritter.settings.language(), sort, null, function(lists) {
+                if (sort === 'studying')
+                    lists = skritter.user.data.vocablists.toJSON();
+                VocabLists.table.set(lists, {
+                    name: 'Name',
+                    studyingMode: 'Status'
+                }).render().hideLoading();
+            });
         }
     });
     
