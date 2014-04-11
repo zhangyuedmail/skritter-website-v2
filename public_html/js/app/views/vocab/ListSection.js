@@ -35,11 +35,11 @@ define([
                 this.$('#section-title').text(ListSection.section.name);
                 for (var i = 0, length = ListSection.section.rows.length; i < length; i++) {
                     var row = ListSection.section.rows[i];
-                    divBody += "<tr id='vocab-" + row.vocabId + "'>";
+                    divBody += "<tr id='vocab-" + row.vocabId + "' class='cursor'>";
                     divBody += "<td class='writing'>" + skritter.fn.simptrad.fromBase(row.vocabId) + "</td>";
                     divBody += "</tr>";
                     if (row.vocabId !== row.tradVocabId) {
-                        divBody += "<tr id='vocab-" + row.tradVocabId + "'>";
+                        divBody += "<tr id='vocab-" + row.tradVocabId + "' class='cursor'>";
                         divBody += "<td class='writing'>" + skritter.fn.simptrad.fromBase(row.tradVocabId) + "</td>";
                         divBody += "</tr>";
                     }
@@ -52,6 +52,15 @@ define([
          * @property {Object} function
          */
         events: {
+            'click.ListSection #vocab-list-section-view #back-button': 'handleBackButtonClicked'
+        },
+        /**
+         * @method handleBackButtonClicked
+         * @param {Object} event
+         */
+        handleBackButtonClicked: function(event) {
+            skritter.router.navigate('vocab/list/' + ListSection.listId, {trigger: true});
+            event.preventDefault();
         },
         /**
          * @method clear
@@ -64,7 +73,8 @@ define([
          * @param sectionId
          */
         load: function(listId, sectionId) {
-            ListSection.id = listId;
+            ListSection.id = sectionId;
+            ListSection.listId = listId;
             skritter.api.getVocabList(listId, null, _.bind(function(list) {
                 ListSection.list = list;
                 ListSection.section = _.find(list.sections, {id: sectionId});

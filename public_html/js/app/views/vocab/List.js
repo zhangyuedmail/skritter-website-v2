@@ -31,7 +31,7 @@ define([
                 this.$('#list-description').text(VocabList.list.description);
                 for (var i = 0, length = VocabList.list.sections.length; i < length; i++) {
                     var section = VocabList.list.sections[i];
-                    divBody += "<tr id='section-" + section.id + "'>";
+                    divBody += "<tr id='section-" + section.id + "' class='cursor'>";
                     divBody += "<td class='section-name'>" + section.name + "</td>";
                     divBody += "<td class='section-count'>" + section.rows.length + " words</td>";
                     divBody += "</tr>";
@@ -44,7 +44,16 @@ define([
          * @property {Object} function
          */
         events: {
+            'click.ListSection #vocab-list-view #back-button': 'handleBackButtonClicked',
             'click.VocabList #vocab-list-view #sections table tr': 'handleVocabListSectionClicked'
+        },
+        /**
+         * @method handleBackButtonClicked
+         * @param {Object} event
+         */
+        handleBackButtonClicked: function(event) {
+            skritter.router.navigate('vocab/list', {trigger: true});
+            event.preventDefault();
         },
         /**
          * @method handleVocabListSectionClicked
