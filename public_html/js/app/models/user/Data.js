@@ -225,6 +225,13 @@ define([
             });
         },
         /**
+         * @method syncing
+         * @returns {Boolean}
+         */
+        syncing: function() {
+            return Data.syncing;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
@@ -508,12 +515,14 @@ define([
                     skritter.modals.set('.modal-title-right', 'Updating SRS');
                     self.fetchSRSConfigs(callback);
                 },
-                //checks the server for review errors from last successful sync
+                //checks the server for review errors from last sync
                 function(callback) {
                     if (lastItemSync === 0) {
                         callback();
                     } else {
-                        skritter.user.reviewErrors(lastItemSync, callback);
+                        skritter.user.reviewErrors(lastItemSync, function() {
+                            callback();
+                        });
                     }
                 },
                 //posts stores reviews to the server
