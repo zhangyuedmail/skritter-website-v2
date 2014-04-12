@@ -208,16 +208,22 @@ define(function() {
                     reviews: item.get('reviews') + 1,
                     successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                     timeStudied: item.get('timeStudied') + review.reviewTime
-                });
+                }, {merge: true, silent: true, sort: false});
+                skritter.user.data.items.updateSchedule(item);
             }
             //set the review data and trigger local caching
-            this.set('reviews', reviews);
+            this.set('reviews', reviews, {merge: true, silent: true, sort: false});
             if (!skritter.user.data.reviews.get(this)) {
-                skritter.user.data.reviews.add(this);
-                this.cache(callback);
-            } else {
-                this.cache(callback);
+                skritter.user.data.reviews.add(this, {merge: false, silent: true, sort: true});
             }
+            async.series([
+                _.bind(function(callback) {
+                    this.cache(callback);
+                }, this),
+                function(callback) {
+                    skritter.user.data.items.cache(callback);
+                }
+            ], callback);
         },
         /**
          * @method totalReviewTime

@@ -445,7 +445,7 @@ define([
                     skritter.storage.destroy(callback);
                 },
                 function(callback) {
-                    skritter.storage.open(skritter.user.get('user_id'), callback);
+                    skritter.storage.open(skritter.user.id, callback);
                 },
                 function() {
                     skritter.user.data.sync(callback, true, true);
