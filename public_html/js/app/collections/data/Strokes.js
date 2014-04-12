@@ -38,7 +38,7 @@ define([
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('strokes', function(strokes) {
-                self.add(strokes, {merge: true, silent: true});
+                self.add(strokes, {merge: true, silent: true, sort: false});
                 callback();
             });
         },

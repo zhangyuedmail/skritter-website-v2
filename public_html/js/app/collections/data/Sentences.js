@@ -15,9 +15,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(sentence) {
-                sentence.cache();
-            });
         },
         /**
          * @property {Backbone.Model} model
@@ -30,7 +27,7 @@ define([
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('sentences', function(sentences) {
-                self.add(sentences, {merge: true, silent: true});
+                self.add(sentences, {merge: true, silent: true, sort: false});
                 callback();
             });
         }

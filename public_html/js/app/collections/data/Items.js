@@ -16,10 +16,6 @@ define([
          */
         initialize: function() {
             this.schedule = [];
-            this.on('change', _.bind(function(item) {
-                this.updateSchedule(item);
-                item.cache();
-            }, this));
         },
         /**
          * @property {Backbone.Model} model

@@ -15,9 +15,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(srsconfig) {
-                srsconfig.cache();
-            });
         },
         /**
          * @property {Backbone.Model} model
@@ -30,7 +27,7 @@ define([
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('srsconfigs', function(reviews) {
-                self.add(reviews, {merge: true, silent: true});
+                self.add(reviews, {merge: true, silent: true, sort: false});
                 callback();
             });
         }

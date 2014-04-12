@@ -15,9 +15,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(vocab) {
-                vocab.cache();
-            });
         },
         /**
          * @property {Vocab} model
@@ -30,7 +27,7 @@ define([
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('vocabs', function(vocabs) {
-                self.add(vocabs, {merge: true, silent: true});
+                self.add(vocabs, {merge: true, silent: true, sort: false});
                 callback();
             });
         }

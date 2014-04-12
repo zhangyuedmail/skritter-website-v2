@@ -15,12 +15,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('add change', function(review) {
-                review.cache();
-            });
-            this.on('remove', function(review) {
-                review.uncache();
-            });
         },
         /**
          * @property {Backbone.Model} model

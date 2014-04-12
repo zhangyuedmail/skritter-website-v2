@@ -15,9 +15,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(vocablist) {
-                vocablist.cache();
-            });
         },
         /**
          * @property {Backbone.Model} model
@@ -30,7 +27,7 @@ define([
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('vocablists', function(vocablists) {
-                self.add(vocablists, {merge: true, silent: true});
+                self.add(vocablists, {merge: true, silent: true, sort: false});
                 callback();
             });
         }
