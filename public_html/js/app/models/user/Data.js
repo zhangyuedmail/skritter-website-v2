@@ -280,7 +280,7 @@ define([
                 function(callback) {
                     skritter.storage.get('items', itemId, function(item) {
                         if (item.length > 0) {
-                            callback(null, skritter.user.data.items.add(item[0], {merge: true, silent: true}));
+                            callback(null, skritter.user.data.items.add(item[0], {merge: true, silent: true, sort: false}));
                         } else {
                             callback("Initial item is missing.");
                         }
@@ -290,7 +290,7 @@ define([
                 function(item, callback) {
                     skritter.storage.get('vocabs', item.vocabId(), function(vocab) {
                         if (vocab.length > 0) {
-                            callback(null, item, skritter.user.data.vocabs.add(vocab[0], {merge: true, silent: true}));
+                            callback(null, item, skritter.user.data.vocabs.add(vocab[0], {merge: true, silent: true, sort: false}));
                         } else {
                             callback("Initial vocab is missing.", item);
                         }
@@ -303,7 +303,7 @@ define([
                         var containedItemCount = containedItemIds.length;
                         skritter.storage.get('items', containedItemIds, function(containedItems) {
                             if (containedItemCount === containedItems.length) {
-                                callback(null, item, vocab, skritter.user.data.items.add(containedItems, {merge: true, silent: true}));
+                                callback(null, item, vocab, skritter.user.data.items.add(containedItems, {merge: true, silent: true, sort: false}));
                             } else {
                                 callback("One or more of the contained items is missing.", item);
                             }
@@ -321,7 +321,7 @@ define([
                         var containedVocabCount = containedVocabIds.length;
                         skritter.storage.get('vocabs', containedVocabIds, function(containedVocabs) {
                             if (containedVocabCount === containedVocabs.length) {
-                                callback(null, item, vocab, containedItems, skritter.user.data.vocabs.add(containedVocabs, {merge: true, silent: true}));
+                                callback(null, item, vocab, containedItems, skritter.user.data.vocabs.add(containedVocabs, {merge: true, silent: true, sort: false}));
                             } else {
                                 callback("One or more of the contained vocabs is missing.", item);
                             }
@@ -335,7 +335,7 @@ define([
                     if (vocab.has('sentenceId')) {
                         skritter.storage.get('sentences', vocab.get('sentenceId'), function(sentences) {
                             if (sentences.length === 1) {
-                                callback(null, item, vocab, containedItems, containedVocabs, skritter.user.data.sentences.add(sentences, {merge: true, silent: true}));
+                                callback(null, item, vocab, containedItems, containedVocabs, skritter.user.data.sentences.add(sentences, {merge: true, silent: true, sort: false}));
                             } else {
                                 callback("Sentence is missing.", item);
                             }
@@ -357,7 +357,7 @@ define([
                         var writingsCount = writings.length;
                         skritter.storage.get('strokes', writings, function(strokes) {
                             if (writingsCount === strokes.length) {
-                                callback(null, item, vocab, containedItems, containedVocabs, sentence, skritter.user.data.strokes.add(strokes, {merge: true, silent: true}));
+                                callback(null, item, vocab, containedItems, containedVocabs, sentence, skritter.user.data.strokes.add(strokes, {merge: true, silent: true, sort: false}));
                             } else {
                                 callback("One or more of the strokes are missing.", item);
                             }
@@ -427,11 +427,11 @@ define([
                             });
                         }
                     ], function(sentence) {
-                        skritter.user.data.sentences.add(sentence, {merge: true, silent: true});
-                        callback(skritter.user.data.vocabs.add(vocab, {merge: true, silent: true}));
+                        skritter.user.data.sentences.add(sentence, {merge: true, silent: true, sort: false});
+                        callback(skritter.user.data.vocabs.add(vocab, {merge: true, silent: true, sort: false}));
                     });
                 } else {
-                    callback(skritter.user.data.vocabs.add(vocab, {merge: true, silent: true}));
+                    callback(skritter.user.data.vocabs.add(vocab, {merge: true, silent: true, sort: false}));
                 }
             });
         },
