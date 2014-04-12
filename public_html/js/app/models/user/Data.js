@@ -508,6 +508,14 @@ define([
                     skritter.modals.set('.modal-title-right', 'Updating SRS');
                     self.fetchSRSConfigs(callback);
                 },
+                //checks the server for review errors from last successful sync
+                function(callback) {
+                    if (lastItemSync === 0) {
+                        callback();
+                    } else {
+                        skritter.user.reviewErrors(lastItemSync, callback);
+                    }
+                },
                 //posts stores reviews to the server
                 function(callback) {
                     if (skritter.user.data.reviews.length > 0) {
