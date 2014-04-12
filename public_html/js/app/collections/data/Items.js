@@ -160,33 +160,14 @@ define([
          * @param {Backbone.Model} item
          */
         updateSchedule: function(item) {
-            var now = skritter.fn.getUnixTime();
-            var scheduleIndex = _.findIndex(this.schedule, {id: item.id});
+            //var now = skritter.fn.getUnixTime();
+            var position = _.findIndex(this.schedule, {id: item.id});
             //update directly scheduled item 
-            this.schedule[scheduleIndex] = {
+            this.schedule[position] = {
                 id: item.id,
                 last: item.get('last'),
                 next: item.get('next')
             };
-            //update indirectly related base items
-            var base = item.id.split('-')[2];
-            var maxSpacing = 43200;
-            var minSpacing = 600;
-            var spacedItems = [];
-            for (var i = 0, length = this.schedule.length; i < length; i++)
-                if (this.schedule[i].id.split('-')[2] === base && this.schedule[i].id !== item.id) {
-                    var scheduledItem = _.clone(this.schedule[i]);
-                    var spacing = (scheduledItem.next - scheduledItem.last) * 0.2;
-                    if (spacing >= maxSpacing || !item.previous('last')) {
-                        spacing = maxSpacing;
-                    } else if (spacing <= minSpacing) {
-                        spacing = minSpacing;
-                    }
-                    spacedItems.push({id: scheduledItem.id, held: now + spacing});
-                    this.schedule[i].held = now + spacing;
-                }
-            if (spacedItems.length > 0)
-                skritter.storage.update('items', spacedItems);
         }
     });
 
