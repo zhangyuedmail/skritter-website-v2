@@ -100,6 +100,9 @@ define([
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Reading:');
             Prompt.gradingButtons.show();
+            window.setTimeout(_.bind(function() {
+                this.review.baseVocab().playAudio();
+            }, this), 200);
             this.review.set('finished', true);
             this.resize();
             return this;

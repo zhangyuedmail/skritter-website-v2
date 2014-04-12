@@ -164,6 +164,8 @@ define([
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
             this.$('#prompt-style').html(this.review.baseVocab().style());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
+            if (this.review.isFirst())
+                this.review.baseVocab().playAudio();
             return this;
         },
         /**
