@@ -48,6 +48,8 @@ body {
 
 /*** GRADING BUTTONS ***/
 #grading-buttons { display: none; }
+#grading-buttons .btn { background-color: #ffffff; }
+#grading-buttons .grade-icon { max-height: 30px; }
 
 
 /*** HOME: LOGGED IN ***/
