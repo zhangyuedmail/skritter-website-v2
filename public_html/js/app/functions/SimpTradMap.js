@@ -2650,7 +2650,8 @@ define(function() {
                 var splitBaseRune = splitBaseRunes[i];
                 var splitMatchedRune = map[splitBaseRune];
                 if (variation !== 0 && splitMatchedRune) {
-                    rune += splitMatchedRune[variation - 1];
+                    var offset = variation > 1 ? 2 : 1;
+                    rune += splitMatchedRune[variation - offset];
                 } else {
                     rune += splitBaseRune;
                 }

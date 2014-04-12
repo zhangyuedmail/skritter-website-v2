@@ -468,7 +468,12 @@ define([
             var lastVocabSync = forceDownload ? 0 : this.get('lastVocabSync');
             var now = skritter.fn.getUnixTime();
             var responseSize = 0;
-            Data.syncing = true;
+            if (Data.syncing) {
+                callback();
+                return;
+            } else {
+                Data.syncing = true;
+            }
             console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
             if (showModal || lastItemSync === 0) {
                 skritter.modals.show('download')
