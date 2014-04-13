@@ -166,8 +166,10 @@ define([
             this.schedule[position] = {
                 id: item.id,
                 last: item.get('last'),
-                next: item.get('next')
+                next: item.get('next'),
+                style: item.get('style')
             };
+            //TODO: add better handling for indirectly related prompts
         }
     });
 
