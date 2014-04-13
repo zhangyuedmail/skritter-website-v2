@@ -46,8 +46,9 @@ body {
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;
-    padding-top: 45px;
+    padding-top: 55px;
 }
+.view.no-space { padding-top: 45px; }
 .view.no-nav { padding-top: 0; }
 
 
