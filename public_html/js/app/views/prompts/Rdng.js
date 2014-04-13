@@ -77,6 +77,8 @@ define([
                 this.$('#input-section').height(contentHeight);
             }
             this.$('#input-section').width(canvasSize);
+            this.$('#prompt-reading').fitText(1.2, {maxFontSize: '64px'});
+            this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});
         },
         /**
          * @method show
@@ -106,6 +108,7 @@ define([
             if (skritter.user.settings.get('audio'))
                 this.review.baseVocab().playAudio();
             this.review.set('finished', true);
+            this.resize();
             return this;
         }
     });

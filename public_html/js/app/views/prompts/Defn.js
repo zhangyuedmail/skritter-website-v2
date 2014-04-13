@@ -77,6 +77,7 @@ define([
                 this.$('#input-section').height(contentHeight);
             }
             this.$('#input-section').width(canvasSize);
+            this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});
         },
         /**
          * @method show
