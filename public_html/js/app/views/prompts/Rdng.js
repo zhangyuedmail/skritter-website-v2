@@ -103,9 +103,8 @@ define([
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Reading:');
             Prompt.gradingButtons.show();
-            window.setTimeout(_.bind(function() {
+            if (skritter.user.settings.get('audio'))
                 this.review.baseVocab().playAudio();
-            }, this), 200);
             this.review.set('finished', true);
             return this;
         }

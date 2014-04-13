@@ -164,10 +164,8 @@ define([
             }, this), 500);
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
             Prompt.gradingButtons.show();
-            if (this.review.isLast())
-                window.setTimeout(_.bind(function() {
-                    this.review.baseVocab().playAudio();
-                }, this), 200);
+            if (skritter.user.settings.get('audio') && this.review.isLast())
+                this.review.baseVocab().playAudio();
             return this;
         }
     });
