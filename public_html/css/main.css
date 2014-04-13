@@ -40,6 +40,11 @@ body {
     padding: 15px;
     margin-bottom: 10px;
 }
+.content-block.no-shadow {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
 .content-block.no-padding { padding: 0; }
 .content-block.no-top { margin-top: 0; }
 .cursor { cursor: pointer; }
