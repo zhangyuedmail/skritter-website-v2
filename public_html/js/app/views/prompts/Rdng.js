@@ -61,19 +61,22 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
+            var canvasSize = skritter.settings.canvasSize();
+            var contentHeight = skritter.settings.contentHeight();
+            var contentWidth = skritter.settings.contentWidth();
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
-                this.$('#input-section').css('left', (skritter.settings.contentWidth() - skritter.settings.canvasSize()) / 2);
+                this.$('#info-section').height('');
+                this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
+                this.$('#input-section').height(contentHeight - this.$('#info-section').height() - 30);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
                 this.$('#input-section').css('left', '');
+                this.$('#input-section').height(contentHeight);
             }
-            this.$('#input-section').height(skritter.settings.canvasSize());
-            this.$('#input-section').width(skritter.settings.canvasSize());
-            this.$('#prompt-reading').fitText(1.2, {maxFontSize: '64px'});
-            this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});
+            this.$('#input-section').width(canvasSize);
         },
         /**
          * @method show
@@ -104,7 +107,6 @@ define([
                 this.review.baseVocab().playAudio();
             }, this), 200);
             this.review.set('finished', true);
-            this.resize();
             return this;
         }
     });

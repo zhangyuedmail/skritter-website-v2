@@ -131,19 +131,22 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
-            Rune.canvas.render().resize(skritter.settings.canvasSize());
+            var canvasSize = skritter.settings.canvasSize();
+            var contentHeight = skritter.settings.contentHeight();
+            var contentWidth = skritter.settings.contentWidth();
+            Rune.canvas.render().resize(canvasSize);
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
-                this.$('#info-section').css('max-height', skritter.settings.contentHeight() - skritter.settings.canvasSize() - 35);
-                this.$('#input-section').css('left', (skritter.settings.contentWidth() - skritter.settings.canvasSize()) / 2);
+                this.$('#info-section').css('height', contentHeight - canvasSize + 5);
+                this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
                 this.$('#input-section').css('left', '');
             }
-            this.$('#input-section').height(skritter.settings.canvasSize());
-            this.$('#input-section').width(skritter.settings.canvasSize());
+            this.$('#input-section').height(canvasSize);
+            this.$('#input-section').width(canvasSize);
             if (this.review.character().length > 0)
                 Rune.canvas.drawShape('display', this.review.character().shape());
         },

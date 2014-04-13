@@ -107,19 +107,23 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
-            Tone.canvas.render().resize(skritter.settings.canvasSize());
+            var canvasSize = skritter.settings.canvasSize();
+            var contentHeight = skritter.settings.contentHeight();
+            var contentWidth = skritter.settings.contentWidth();
+            Tone.canvas.render().resize(canvasSize);
             Tone.canvas.drawCharacterFromFont('background', this.review.baseVocab().characters()[this.review.get('position') - 1], skritter.user.settings.font());
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
-                this.$('#input-section').css('left', (skritter.settings.contentWidth() - skritter.settings.canvasSize()) / 2);
+                this.$('#info-section').css('height', contentHeight - canvasSize + 5);
+                this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
                 this.$('#input-section').css('left', '');
             }
-            this.$('#input-section').height(skritter.settings.canvasSize());
-            this.$('#input-section').width(skritter.settings.canvasSize());
+            this.$('#input-section').height(canvasSize);
+            this.$('#input-section').width(canvasSize);
             if (this.review.character().isFinished()) {
                 Tone.canvas.drawShape('display', this.review.character().shape(null, skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]));
                 Tone.canvas.getLayer('background').alpha = 0.6;
