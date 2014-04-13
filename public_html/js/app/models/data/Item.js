@@ -53,7 +53,7 @@ define([
             var originalItems = [];
             var part = this.get('part');
             var reviews = [];
-            var wordGroup = now + '_' + this.id;
+            var wordGroup = now + '_' + skritter.fn.guid() + '_' + this.id;
             review.set('id', wordGroup, {silent: true});
             if (part === 'rune' || part === 'tone')
                 review.characters = [];

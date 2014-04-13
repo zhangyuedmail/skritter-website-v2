@@ -186,34 +186,36 @@ define(function() {
          */
         save: function(callback) {
             var reviews = _.clone(this.get('reviews'));
-            //updates the base review based on contained reviews
-            if (this.hasContained()) {
-                reviews[0].reviewTime = this.totalReviewTime();
-                reviews[0].thinkingTime = this.totalThinkingTime();
-            }
-            //updates all of the new review intervals
-            for (var i = 0, length = reviews.length; i < length; i++) {
-                var item = this.item(i);
-                var review = reviews[i];
-                if (parseInt(i, 10) === 0 && reviews.length > 1)
-                    review.score = this.finalGrade();
-                review.newInterval = skritter.fn.scheduler.interval(item, review.score);
-                item.set({
-                    changed: review.submitTime,
-                    last: review.submitTime,
-                    interval: review.newInterval,
-                    next: review.submitTime + review.newInterval,
-                    previousInterval: review.currentInterval,
-                    previousSuccess: review.score > 1 ? true : false,
-                    reviews: item.get('reviews') + 1,
-                    successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
-                    timeStudied: item.get('timeStudied') + review.reviewTime
-                }, {merge: true, silent: true, sort: false});
-                skritter.user.data.items.updateSchedule(item);
-            }
-            //set the review data and trigger local caching
-            this.set('reviews', reviews, {merge: true, silent: true, sort: false});
-            if (!skritter.user.data.reviews.get(this)) {
+            if (skritter.user.data.reviews.get(this)) {
+                //TODO: handle updating historic items and reviews
+            } else {
+                //updates the base review based on contained reviews
+                if (this.hasContained()) {
+                    reviews[0].reviewTime = this.totalReviewTime();
+                    reviews[0].thinkingTime = this.totalThinkingTime();
+                }
+                //updates all of the new review intervals
+                for (var i = 0, length = reviews.length; i < length; i++) {
+                    var item = this.item(i);
+                    var review = reviews[i];
+                    if (parseInt(i, 10) === 0 && reviews.length > 1)
+                        review.score = this.finalGrade();
+                    review.newInterval = skritter.fn.scheduler.interval(item, review.score);
+                    item.set({
+                        changed: review.submitTime,
+                        last: review.submitTime,
+                        interval: review.newInterval,
+                        next: review.submitTime + review.newInterval,
+                        previousInterval: review.currentInterval,
+                        previousSuccess: review.score > 1 ? true : false,
+                        reviews: item.get('reviews') + 1,
+                        successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
+                        timeStudied: item.get('timeStudied') + review.reviewTime
+                    }, {merge: true, silent: true, sort: false});
+                    skritter.user.data.items.updateSchedule(item);
+                }
+                //set the review data and trigger local caching
+                this.set('reviews', reviews, {merge: true, silent: true, sort: false});
                 skritter.user.data.reviews.add(this, {merge: false, silent: true, sort: true});
             }
             async.series([
@@ -223,7 +225,9 @@ define(function() {
                 function(callback) {
                     skritter.user.data.items.cache(callback);
                 }
-            ], callback);
+            ], function() {
+                callback();
+            });
         },
         /**
          * @method totalReviewTime
