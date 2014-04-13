@@ -18,6 +18,7 @@ define(function() {
          * @property {Object} defaults
          */
         defaults: {
+            audioPlayed: false,
             originalItems: [],
             position: 1,
             reviews: []

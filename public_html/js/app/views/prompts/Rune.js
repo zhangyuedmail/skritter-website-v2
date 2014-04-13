@@ -172,8 +172,10 @@ define([
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
             this.$('#prompt-style').html(this.review.baseVocab().style());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
-            if (skritter.user.settings.get('audio') && this.review.isFirst())
+            if (skritter.user.settings.get('audio') && this.review.isFirst() && !this.review.get('audioPlayed')) {
                 this.review.baseVocab().playAudio();
+                this.review.set('audioPlayed', true);
+            }
             return this;
         },
         /**

@@ -109,8 +109,10 @@ define([
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Reading:');
             Prompt.gradingButtons.show();
-            if (skritter.user.settings.get('audio'))
+            if (skritter.user.settings.get('audio') && !this.review.get('audioPlayed')) {
                 this.review.baseVocab().playAudio();
+                this.review.set('audioPlayed', true);
+            }
             this.review.set('finished', true);
             this.resize();
             return this;

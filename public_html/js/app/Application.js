@@ -163,7 +163,11 @@ define([
                 }
             ], function() {
                 skritter.timer.refresh(true);
-                skritter.modals.hide(callback);
+                if (window.cordova) {
+                    callback();
+                } else {
+                    skritter.modals.hide(callback);
+                }
             });
         } else {
             callback();

@@ -23,6 +23,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            skritter.user.data.items.sort();
             this.prompt = null;
         },
         /**
@@ -32,8 +33,8 @@ define([
         render: function() {
             this.$el.html(templateStudy);
             this.stopListening();
-            if (window.cordova)
-                this.$el.addClass('full-width')
+            if (window.cordova || skritter.settings.appWidth() <= skritter.settings.get('maxCanvasSize'))
+                this.$('#content-container').addClass('full-width');
             this.$('#items-due').html(skritter.user.data.items.dueCount(true));
             skritter.timer.setElement(this.$('#timer')).render();
             if (skritter.user.settings.get('hideDueCount'))
@@ -124,6 +125,7 @@ define([
                 this.autoSync();
                 this.loadPrompt(item.createReview());
                 this.$('#items-due').html(skritter.user.data.items.dueCount(true));
+                window.setTimeout(skritter.user.data.items.sort, 0);
             }, this), skritter.user.settings.activeParts(), null, skritter.user.settings.style());
         },
         /**
