@@ -112,6 +112,13 @@ define([
         return Math.sqrt(xs + ys);
     };
     /**
+     * @method guid
+     * @returns {String}
+     */
+    function guid() {
+        return Math.floor((1 + Math.random()) * 0x100000000).toString(16).substring(1);
+    };
+    /**
      * Takes a the first character from a string and return whether it is a kana character.
      * 
      * NOTE: It's also currently checking for the unicode tilde because those need to be filtered
@@ -179,6 +186,15 @@ define([
      */
     var pinyin = PinyinConverter;
     /**
+     * @method randomNumber
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
+     */
+    function randomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+    /**
      * @property {Object} recognizer
      */
     var recognizer = new Recognizer();
@@ -208,12 +224,14 @@ define([
         daysInSecond: daysInSecond,
         distance: distance,
         getUnixTime: getUnixTime,
+        guid: guid,
         isKana: isKana,
         isLocal: isLocal,
         isNumber: isNumber,
         pad: pad,
         params: params,
         pinyin: pinyin,
+        randomNumber: randomNumber,
         recognizer: recognizer,
         scheduler: scheduler,
         shortstraw: shortstraw,
