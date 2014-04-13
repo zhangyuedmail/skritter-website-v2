@@ -84,7 +84,7 @@ define([
          */
         show: function() {
             skritter.timer.start();
-            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            this.$('#prompt-definition').html(this.review.baseVocab().definition());
             if (this.review.baseItem().isNew())
                 this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().reading());

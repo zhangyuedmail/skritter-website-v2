@@ -165,7 +165,7 @@ define([
             this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
             this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
             this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
-            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            this.$('#prompt-definition').html(this.review.baseVocab().definition());
             if (this.review.baseItem().isNew())
                 this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().reading());

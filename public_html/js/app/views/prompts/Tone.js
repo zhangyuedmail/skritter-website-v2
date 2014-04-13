@@ -141,7 +141,7 @@ define([
             Tone.canvas.enableInput();
             Tone.canvas.drawCharacterFromFont('background', this.review.baseVocab().characters()[this.review.get('position') - 1], skritter.user.settings.font());
             this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
-            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            this.$('#prompt-definition').html(this.review.baseVocab().definition());
             if (this.review.baseItem().isNew())
                 this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position'), skritter.user.settings.get('hideReading')));
