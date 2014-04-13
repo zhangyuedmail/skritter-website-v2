@@ -73,13 +73,17 @@ define([
          * @param sectionId
          */
         load: function(listId, sectionId) {
+            var self = this;
             ListSection.id = sectionId;
             ListSection.listId = listId;
-            skritter.api.getVocabList(listId, null, _.bind(function(list) {
-                ListSection.list = list;
+            var start = function() {
+                skritter.api.getVocabList(listId, null, function(list) {
+                    ListSection.list = list;
                 ListSection.section = _.find(list.sections, {id: sectionId});
-                this.render();
-            }, this));
+                    skritter.modals.hide(_.bind(self.render, self));
+                });
+            };
+            skritter.modals.show('default', start).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
         }
     });
 

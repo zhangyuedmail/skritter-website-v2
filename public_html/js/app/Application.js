@@ -150,7 +150,7 @@ define([
                         skritter.modals.show('default', function() {
                             skritter.user.data.items.loadSchedule(callback);
                         }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
-                    }                    
+                    }
                 },
                 function(callback) {
                     skritter.user.data.reviews.loadAll(callback);
@@ -163,14 +163,13 @@ define([
                 }
             ], function() {
                 skritter.timer.refresh(true);
-                skritter.modals.hide();
-                callback();
+                skritter.modals.hide(callback);
             });
         } else {
             callback();
         }
     };
-    
+
     return {
         initialize: initialize
     };
