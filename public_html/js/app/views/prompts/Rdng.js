@@ -74,7 +74,11 @@ define([
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
                 this.$('#input-section').css('left', '');
-                this.$('#input-section').height(contentHeight);
+                if (window.cordova) {
+                    this.$('#input-section').height(contentHeight);
+                } else {
+                    this.$('#input-section').height(canvasSize);
+                }
             }
             this.$('#input-section').width(canvasSize);
             this.$('#prompt-reading').fitText(1.2, {maxFontSize: '64px'});

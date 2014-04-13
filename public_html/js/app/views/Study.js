@@ -32,6 +32,8 @@ define([
         render: function() {
             this.$el.html(templateStudy);
             this.stopListening();
+            if (window.cordova)
+                this.$el.addClass('full-width')
             this.$('#items-due').html(skritter.user.data.items.dueCount(true));
             skritter.timer.setElement(this.$('#timer')).render();
             if (skritter.user.settings.get('hideDueCount'))
