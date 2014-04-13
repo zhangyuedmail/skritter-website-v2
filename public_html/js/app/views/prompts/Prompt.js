@@ -26,6 +26,7 @@ define([
         render: function() {
             console.log('PROMPT', this.review.vocab().get('writing'), this.review);
             Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
+            Prompt.gradingButtons.grade(this.review.at().score);
             this.$('.character-font').addClass(this.review.baseVocab().fontClass());
             this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradingSelected);
             this.listenTo(skritter.settings, 'resize', this.resize);

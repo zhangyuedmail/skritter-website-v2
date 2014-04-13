@@ -60,6 +60,7 @@ define([
          */
         handleDoubleTap: function(event) {
             if (!this.review.character().isFinished()) {
+                this.review.at({score: 1});
                 Prompt.gradingButtons.grade(1);
                 Rune.canvas.drawShape('background', this.review.character().targets[0].shape(null, '#999999'));
             }
@@ -99,6 +100,7 @@ define([
                     Rune.strokeAttempts++;
                     Rune.canvas.fadeShape('marker', shape);
                     if (Rune.strokeAttempts > Rune.maxStrokeAttempts) {
+                        this.review.at({score: 1});
                         Prompt.gradingButtons.grade(1);
                         Rune.canvas.fadeShape('hint', this.review.character().expectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
@@ -147,8 +149,11 @@ define([
             }
             this.$('#input-section').height(canvasSize);
             this.$('#input-section').width(canvasSize);
-            if (this.review.character().length > 0)
+            if (this.review.character().isFinished()) {
+                Rune.canvas.drawShape('display', this.review.character().shape(null, skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]));
+            } else if (this.review.character().length > 0) {
                 Rune.canvas.drawShape('display', this.review.character().shape());
+            }
         },
         /**
          * @method show

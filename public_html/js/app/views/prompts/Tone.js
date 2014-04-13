@@ -70,9 +70,11 @@ define([
                 var result = this.review.character().recognize(points, shape);
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
+                        this.review.at({score: 1});
                         Tone.canvas.tweenShape('display', result.userShape(), result.inflateShape());
                         Prompt.gradingButtons.grade(3);
                     } else {
+                        this.review.at({score: 1});
                         this.review.character().reset();
                         this.review.character().add(this.review.character().targets[possibleTones[0] - 1].models);
                         Tone.canvas.drawShape('display', this.review.character().shape());
@@ -80,12 +82,13 @@ define([
                     }
                 }
             } else {
-                
                 if (possibleTones.indexOf(5) > -1) {
+                    this.review.at({score: 1});
                     this.review.character().add(this.review.character().targets[4].models);
                     Tone.canvas.drawShape('display', this.review.character().shape());
                     Prompt.gradingButtons.grade(3);
                 } else {
+                    this.review.at({score: 1});
                     this.review.character().add(this.review.character().targets[possibleTones[0] - 1].models);
                     Tone.canvas.drawShape('display', this.review.character().shape());
                     Prompt.gradingButtons.grade(1);

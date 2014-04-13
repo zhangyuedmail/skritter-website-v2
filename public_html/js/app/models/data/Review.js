@@ -39,11 +39,9 @@ define(function() {
          */
         at: function(data) {
             var review = this.get('reviews').length === 1 ? this.get('reviews')[0] : this.get('reviews')[this.get('position')];
-            if (data) {
+            if (data)
                 for (var key in data)
                     review[key] = data[key];
-                this.trigger('change:reviews');
-            }
             return review;
         },
         /**
