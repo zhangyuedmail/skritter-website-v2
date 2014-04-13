@@ -115,7 +115,7 @@ define([
      * @method guid
      * @returns {String}
      */
-    function guid() {
+    var guid = function() {
         return Math.floor((1 + Math.random()) * 0x100000000).toString(16).substring(1);
     };
     /**
@@ -191,7 +191,7 @@ define([
      * @param {Number} max
      * @returns {Number}
      */
-    function randomNumber(min, max) {
+    var randomNumber = function(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
     /**
