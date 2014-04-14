@@ -72,10 +72,9 @@ define([
         /**
          * @method addItems
          * @param {Number} limit
-         * @param {Function} callback1
-         * @param {Function} callback2
+         * @param {Function} callback
          */
-        addItems: function(limit, callback1, callback2) {
+        addItems: function(limit, callback) {
             if (Data.syncing) {
                 callback();
                 return;
@@ -83,11 +82,13 @@ define([
                 Data.syncing = true;
             }
             var self = this;
+            var items = [];
             var lastItemSync = this.get('lastItemSync');
             var lastVocabSync = this.get('lastVocabSync');
             var now = skritter.fn.getUnixTime();
             var offset = this.get('addOffset');
             limit = limit ? limit : 1;
+            console.log('getting', limit);
             var requests = [
                 {
                     path: 'api/v' + skritter.api.get('version') + '/items/add',
@@ -116,18 +117,14 @@ define([
                 },
                 //continuously checks the batch request until items have been downloaded
                 function(batch, callback) {
-                    var items = [];
                     var next = function() {
                         skritter.api.getBatch(batch.id, function(result) {
                             if (result) {
-                                if (typeof callback2 === 'function')
-                                    callback2(result);
                                 skritter.storage.put('items', result.Items, function() {
-                                    items = items.concat(result.Items);
+                                    items = items.concat(_.without(result.Items, undefined));
                                     window.setTimeout(next, 500);
                                 });
                             } else {
-                                console.log('ITEMS ADDED', items);
                                 callback();
                             }
                         });
@@ -137,14 +134,19 @@ define([
                 //fetch vocab and relates resources after new items added
                 function(callback) {
                     self.fetchVocabs(lastVocabSync, callback);
+                },
+                //reload the schedule from storage with new items
+                function(callback) {
+                    skritter.user.data.items.loadSchedule(callback);
                 }
             ], function() {
+                console.log('ITEMS ADDED', items);
                 self.set('addOffset', offset);
                 self.set('lastItemSync', now);
                 self.set('lastVocabSync', now);
                 Data.syncing = false;
                 if (typeof callback === 'function')
-                    callback1();
+                    callback();
             });
         },
         /**
@@ -203,19 +205,19 @@ define([
                                     callback2(result);
                                 async.series([
                                     function(callback) {
-                                        skritter.storage.put('decomps', result.Decomps, callback);
+                                        skritter.user.data.decomps.insert(result.Decomps, callback);
                                     },
                                     function(callback) {
-                                        skritter.storage.put('items', result.Items, callback);
+                                        skritter.user.data.items.insert(result.Items, callback);
                                     },
                                     function(callback) {
-                                        skritter.storage.put('sentences', result.Sentences, callback);
+                                        skritter.user.data.sentences.insert(result.Sentences, callback);
                                     },
                                     function(callback) {
-                                        skritter.storage.put('strokes', result.Strokes, callback);
+                                        skritter.user.data.strokes.insert(result.Strokes, callback);
                                     },
                                     function(callback) {
-                                        skritter.storage.put('vocabs', result.Vocabs, callback);
+                                        skritter.user.data.vocabs.insert(result.Vocabs, callback);
                                     }
                                 ], function() {
                                     window.setTimeout(next, 500);
@@ -284,16 +286,16 @@ define([
                                     callback2(result);
                                 async.series([
                                     function(callback) {
-                                        skritter.storage.put('decomps', result.Decomps, callback);
+                                        skritter.user.data.decomps.insert(result.Decomps, callback);
                                     },
                                     function(callback) {
-                                        skritter.storage.put('sentences', result.Sentences, callback);
+                                        skritter.user.data.sentences.insert(result.Sentences, callback);
                                     },
                                     function(callback) {
-                                        skritter.storage.put('strokes', result.Strokes, callback);
+                                        skritter.user.data.strokes.insert(result.Strokes, callback);
                                     },
                                     function(callback) {
-                                        skritter.storage.put('vocabs', result.Vocabs, callback);
+                                        skritter.user.data.vocabs.insert(result.Vocabs, callback);
                                     }
                                 ], function() {
                                     window.setTimeout(next, 500);

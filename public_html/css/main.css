@@ -145,6 +145,13 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+#modals-container #add-items .modal-body {
+    text-align: center;
+}
+#modals-container #add-items #number-spinner {
+    font-size: 32px;
+    text-align: center;
+}
 
 
 /*** NAVBAR ***/

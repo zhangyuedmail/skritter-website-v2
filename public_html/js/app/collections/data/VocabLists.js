@@ -21,6 +21,14 @@ define([
          */
         model: VocabList,
         /**
+         * @method insert
+         * @param {Array|Object} vocablists
+         * @param {Function} callback
+         */
+        insert: function(vocablists, callback) {
+            skritter.storage.put('vocablists', vocablists, callback);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

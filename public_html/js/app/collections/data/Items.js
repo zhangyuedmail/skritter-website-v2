@@ -33,24 +33,33 @@ define([
         },
         /**
          * @method due
-         * @param {Boolean} skipSort
+         * @param {Boolean} sort
          * @returns {Array}
          */
-        due: function(skipSort) {
-            if (skipSort)
-                return this.schedule.filter(function(item) {
+        due: function(sort) {
+            if (sort)
+                return this.sort().filter(function(item) {
                     return !item.held && item.readiness >= 1;
                 });
-            return this.sort().filter(function(item) {
+            return this.schedule.filter(function(item) {
                 return !item.held && item.readiness >= 1;
             });
         },
         /**
          * @method dueCount
+         * @param {Boolean} sort
          * @returns {Number}
          */
-        dueCount: function() {
-            return this.due().length;
+        dueCount: function(sort) {
+            return this.due(sort).length;
+        },
+        /**
+         * @method insert
+         * @param {Array|Object} items
+         * @param {Function} callback
+         */
+        insert: function(items, callback) {
+            skritter.storage.put('items', items, callback);
         },
         /**
          * @method loadAll
@@ -70,6 +79,7 @@ define([
         loadSchedule: function(callback) {
             skritter.storage.getSchedule(_.bind(function(schedule) {
                 this.schedule = schedule;
+                this.trigger('schedule:load');
                 callback();
             }, this));
         },
@@ -83,7 +93,7 @@ define([
          */
         next: function(callback, filterParts, filterIds, filterStyle) {
             var i = 0;
-            var schedule = this.sort();
+            var schedule = this.schedule;
             if (filterParts) {
                 filterParts = Array.isArray(filterParts) ? filterParts : [filterParts];
                 schedule = schedule.filter(function(item) {
@@ -119,6 +129,7 @@ define([
          * @returns {Array}
          */
         sort: function() {
+            console.log('SORTING SCHEDULE');
             var now = skritter.fn.getUnixTime();
             var recent = skritter.user.data.reviews.recentIds();
             this.schedule = _.sortBy(this.schedule, function(item) {
@@ -153,6 +164,7 @@ define([
                 item.readiness = readiness;
                 return -item.readiness;
             });
+            this.trigger('schedule:sort');
             return this.schedule;
         },
         /**

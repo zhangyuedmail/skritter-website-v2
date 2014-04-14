@@ -21,6 +21,14 @@ define([
          */
         model: SRSConfig,
         /**
+         * @method insert
+         * @param {Array|Object} srsconfigs
+         * @param {Function} callback
+         */
+        insert: function(srsconfigs, callback) {
+            skritter.storage.put('srsconfigs', srsconfigs, callback);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

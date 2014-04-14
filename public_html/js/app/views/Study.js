@@ -23,7 +23,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            skritter.user.data.items.sort();
             this.prompt = null;
         },
         /**
@@ -35,7 +34,6 @@ define([
             this.stopListening();
             if (window.cordova || skritter.settings.appWidth() <= skritter.settings.get('maxCanvasSize'))
                 this.$('#content-container').addClass('full-width');
-            this.$('#items-due').html(skritter.user.data.items.dueCount(true));
             skritter.timer.setElement(this.$('#timer')).render();
             if (skritter.user.settings.get('hideDueCount'))
                 this.$('#items-due').parent().hide();
@@ -52,6 +50,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'click.Study #study-view #add-button': 'handleAddItemsButtonClicked',
             'click.Study #study-view #audio-button': 'handleAudioButtonClicked',
             'click.Study #study-view #info-button': 'handleInfoButtonClicked',
             'click.Study #study-view #study-settings-button': 'handleStudySettingsButtonClicked'
@@ -64,6 +63,14 @@ define([
                     !skritter.user.data.syncing() &&
                     skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold'))
                 skritter.user.data.sync();
+        },
+         /**
+         * @method handleAddItemsButtonClicked
+         * @param {Object} event
+         */
+        handleAddItemsButtonClicked: function(event) {
+            skritter.modals.show('add-items');
+            event.preventDefault();
         },
         /**
          * @method handleAudioButtonClicked
@@ -115,17 +122,17 @@ define([
             this.prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
             this.updateAudioButtonState();
+            this.updateDueCount();
         },
         /**
          * @method nextPrompt
          */
         nextPrompt: function() {
             skritter.timer.reset();
+            skritter.user.data.items.sort();
             skritter.user.data.items.next(_.bind(function(item) {
                 this.autoSync();
                 this.loadPrompt(item.createReview());
-                this.$('#items-due').html(skritter.user.data.items.dueCount(true));
-                window.setTimeout(skritter.user.data.items.sort, 0);
             }, this), skritter.user.settings.activeParts(), null, skritter.user.settings.style());
         },
         /**
@@ -139,6 +146,12 @@ define([
                 this.$('#audio-button span').removeClass('fa fa-volume-up');
                 this.$('#audio-button span').addClass('fa fa-volume-off');
             }
+        },
+        /**
+         * @method updateDueCount
+         */
+        updateDueCount: function() {
+            this.$('#items-due').html(skritter.user.data.items.dueCount());
         }
     });
 

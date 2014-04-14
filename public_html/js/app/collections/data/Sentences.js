@@ -21,6 +21,14 @@ define([
          */
         model: Sentence,
         /**
+         * @method insert
+         * @param {Array|Object} sentences
+         * @param {Function} callback
+         */
+        insert: function(sentences, callback) {
+            skritter.storage.put('sentences', sentences, callback);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

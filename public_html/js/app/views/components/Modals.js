@@ -44,33 +44,25 @@ define([
          * @property {Object} events
          */
         events: {
-            'click.Modals #language-select.modal .language-select-button': 'handleLanguageSelectButtonClicked',
+            'click.Modals #add-items.modal #add-items-button': 'handleAddItemsButtonClicked',
             'click.Modals #login.modal #login-button': 'handleLoginButtonClicked'
         },
         /**
-         * Handles the events when a language is selected from the language modal.
-         * 
-         * @method handleLanguageSelectButtonClicked
+         * @method handleAddItemsButtonClicked
          * @param {Object} event
          */
-        handleLanguageSelectButtonClicked: function(event) {
-            switch (event.currentTarget.id.replace('-button', '')) {
-                case 'chinese simplified':
-                    skritter.user.settings.set('targetLang', 'zh', {silent: true});
-                    skritter.user.settings.set('style', 'simp', {silent: true});
-                    break;
-                case 'chinese-traditional':
-                    skritter.user.settings.set('targetLang', 'zh', {silent: true});
-                    skritter.user.settings.set('style', 'trad', {silent: true});
-                    break;
-                case 'japanese':
-                    skritter.user.settings.set('targetLang', 'ja', {silent: true});
-                    break;
-            }
-            this.hide(_.bind(function() {
-                skritter.router.navigate('tutorial', {trigger: true});
-                this.trigger('language-selected');
-            }, this));
+        handleAddItemsButtonClicked: function(event) {
+            var content = this.$(event.currentTarget).parents('.modal-content');
+            var spinner = content.find('#number-spinner');
+            var limit = parseInt(spinner.val(), 10);
+            content.find(':input').prop('disabled', true);
+            spinner.hide();
+            skritter.modals.set('.adding-message', "<img src='images/ajax-loader.gif' alt='' />  ADDING " + limit  + " ITEMS", 'text-center');
+            skritter.user.data.addItems(limit, function() {
+                skritter.user.data.items.sort();
+                skritter.router.view.study.updateDueCount();
+                skritter.modals.hide();
+            });
             event.preventDefault();
         },
         /**
@@ -80,12 +72,12 @@ define([
          * @param {Object} event
          */
         handleLoginButtonClicked: function(event) {
-            var content = this.$(event.target).parents('.modal-content');
+            var content = this.$(event.currentTarget).parents('.modal-content');
             var form = content.find('.form-signin');
             var username = form.find('#login-username').val();
             var password = form.find('#login-password').val(); 
             content.find(':input').prop('disabled', true);
-            skritter.modals.set('#login-message', "<img src='images/ajax-loader.gif' /> LOGGING IN", 'text-center');
+            skritter.modals.set('#login-message', "<img src='images/ajax-loader.gif' alt='' /> LOGGING IN", 'text-center');
             skritter.user.login(username, password, function(result) {
                 if (result.statusCode === 200) {
                     document.location.href = '';
