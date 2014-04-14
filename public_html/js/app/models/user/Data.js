@@ -44,6 +44,7 @@ define([
          * @property {Object} defaults
          */
         defaults: {
+            addOffset: 0,
             lastItemSync: 0,
             lastVocabSync: 0
         },
@@ -69,6 +70,71 @@ define([
             this.vocabs.add(data.Vocabs, options);
         },
         /**
+         * @method addItems
+         * @param {Number} limit
+         * @param {Function} callback1
+         * @param {Function} callback2
+         */
+        addItems: function(limit, callback1, callback2) {
+            var self = this;
+            var lastItemSync = this.get('lastItemSync');
+            var now = skritter.fn.getUnixTime();
+            var offset = this.get('addOffset');
+            limit = limit ? limit : 1;
+            var requests = [
+                {
+                    path: 'api/v' + skritter.api.get('version') + '/items/add',
+                    method: 'POST',
+                    params: {
+                        limit: limit,
+                        offset: offset
+                    }
+                }
+            ];
+            async.waterfall([
+                //downloads all of the changed items and related data since last sync
+                function(callback) {
+                    self.fetchItems(lastItemSync, callback);
+                },
+                //creates a batch request to download the specified number of items
+                function(callback) {
+                    
+                    skritter.api.requestBatch(requests, function(batch) {
+                        if (batch.statusText === 'error') {
+                            callback(batch, null);
+                        } else {
+                            callback(null, batch);
+                        }
+                    });
+                },
+                //continuously checks the batch request until items have been downloaded
+                function(batch, callback) {
+                    var items = [];
+                    var next = function() {
+                        skritter.api.getBatch(batch.id, function(result) {
+                            if (result) {
+                                if (typeof callback2 === 'function')
+                                    callback2(result);
+                                skritter.storage.put('items', result.Items, function() {
+                                    items = items.concat(result.Items);
+                                    window.setTimeout(next, 500);
+                                });
+                            } else {
+                                console.log('ITEMS ADDED', items);
+                                callback();
+                            }
+                        });
+                    };
+                    next();
+                }
+            ], function() {
+                self.set('addOffset', offset);
+                self.set('lastItemSync', now);
+                if (typeof callback === 'function')
+                    callback1();
+            });
+        },
+        /**
          * @method clear
          * @returns {Backbone.Model}
          */
@@ -87,25 +153,28 @@ define([
          * @param {Function} callback2
          */
         fetchItems: function(offset, callback1, callback2) {
+            var requests = [
+                {
+                    path: 'api/v' + skritter.api.get('version') + '/items',
+                    method: 'GET',
+                    params: {
+                        lang: skritter.settings.language(),
+                        sort: 'changed',
+                        offset: offset,
+                        include_vocabs: 'true',
+                        include_strokes: 'true',
+                        include_sentences: 'true',
+                        include_heisigs: 'true',
+                        include_top_mnemonics: 'true',
+                        include_decomps: 'true'
+                    },
+                    spawner: true
+                }
+            ];
             async.waterfall([
                 function(callback) {
-                    skritter.api.requestBatch([{
-                            path: 'api/v' + skritter.api.get('version') + '/items',
-                            method: 'GET',
-                            params: {
-                                lang: skritter.settings.language(),
-                                sort: 'changed',
-                                offset: offset,
-                                include_vocabs: 'true',
-                                include_strokes: 'true',
-                                include_sentences: 'true',
-                                include_heisigs: 'true',
-                                include_top_mnemonics: 'true',
-                                include_decomps: 'true'
-                            },
-                            spawner: true
-                        }], function(batch) {
-                        
+                    skritter.api.requestBatch(requests, function(batch) {
+
                         if (batch.statusText === 'error') {
                             callback(batch, null);
                         } else {
@@ -511,6 +580,7 @@ define([
                     if (lastVocabSync !== 0 &&  moment(lastVocabSync * 1000).add('days', 1).valueOf() / 1000 <= now) {
                         skritter.modals.set('.modal-title-right', 'Updating Vocabs');
                         self.fetchVocabs(lastVocabSync, callback, null);
+                        self.set('lastVocabSync', now);
                     } else {
                         callback();
                     }
@@ -548,7 +618,6 @@ define([
                     });
                 }
                 self.set('lastItemSync', now);
-                self.set('lastVocabSync', now);
                 Data.syncing = false;
             });
         },
