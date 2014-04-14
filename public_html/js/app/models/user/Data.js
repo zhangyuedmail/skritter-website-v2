@@ -99,7 +99,6 @@ define([
             var now = skritter.fn.getUnixTime();
             var offset = this.get('addOffset');
             limit = limit ? limit : 1;
-            console.log('getting', limit);
             var requests = [
                 {
                     path: 'api/v' + skritter.api.get('version') + '/items/add',
@@ -142,9 +141,9 @@ define([
                     };
                     next();
                 },
-                //fetch vocab and relates resources after new items added
+                //downloads all of the changed items and resources after adding new items
                 function(callback) {
-                    self.fetchVocabs(lastVocabSync, callback);
+                    self.fetchItems(lastItemSync, callback);
                 },
                 //reload the schedule from storage with new items
                 function(callback) {
