@@ -113,14 +113,18 @@ define([
                 });
             }
             var load = function() {
-                skritter.user.data.loadItem(schedule[i].id, function(item) {
-                    if (item) {
-                        callback(item);
-                    } else {
-                        i++;
-                        load();
-                    }
-                });
+                if (schedule[i]) {
+                    skritter.user.data.loadItem(schedule[i].id, function(item) {
+                        if (item) {
+                            callback(item);
+                        } else {
+                            i++;
+                            load();
+                        }
+                    });
+                } else {
+                    callback();
+                }
             };
             load();
         },
@@ -129,7 +133,6 @@ define([
          * @returns {Array}
          */
         sort: function() {
-            console.log('SORTING SCHEDULE');
             var now = skritter.fn.getUnixTime();
             var recent = skritter.user.data.reviews.recentIds();
             this.schedule = _.sortBy(this.schedule, function(item) {

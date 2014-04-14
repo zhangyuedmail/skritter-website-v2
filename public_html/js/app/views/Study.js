@@ -131,8 +131,12 @@ define([
             skritter.timer.reset();
             skritter.user.data.items.sort();
             skritter.user.data.items.next(_.bind(function(item) {
-                this.autoSync();
-                this.loadPrompt(item.createReview());
+                if (item) {
+                    this.autoSync();
+                    this.loadPrompt(item.createReview());
+                } else {
+                    //TODO: handle when a prompt can't be loaded
+                }
             }, this), skritter.user.settings.activeParts(), null, skritter.user.settings.style());
         },
         /**

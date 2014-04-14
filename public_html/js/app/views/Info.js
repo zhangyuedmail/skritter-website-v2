@@ -34,7 +34,7 @@ define([
                     this.$('#sentence .reading').html(Info.vocab.sentence().reading());
                     this.$('#sentence .definition').html(Info.vocab.sentence().definition());
                 } else {
-                    this.$('#sentence').hide();
+                    this.$('#sentence').closest('.content-block').hide();
                 }
                 this.updateAudioButtonState();
             }
