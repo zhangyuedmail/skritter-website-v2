@@ -650,7 +650,7 @@ define([
                 },
                 //downloads the latest configs for more accurate scheduling
                 function(callback) {
-                    if (lastSRSConfigSync === 0 ||  moment(lastSRSConfigSync * 1000).add('seconds', 2).valueOf() / 1000 <= now) {
+                    if (lastSRSConfigSync === 0 ||  moment(lastSRSConfigSync * 1000).add('hours', 2).valueOf() / 1000 <= now) {
                         skritter.modals.set('.modal-title-right', 'Updating SRS');
                         self.fetchSRSConfigs(callback);
                         self.set('lastSRSConfigSync', now);
