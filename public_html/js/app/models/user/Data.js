@@ -47,6 +47,7 @@ define([
             addOffset: 0,
             changedVocabIds: [],
             lastItemSync: 0,
+            lastSRSConfigSync: 0,
             lastVocabSync: 0
         },
         /**
@@ -578,6 +579,7 @@ define([
             var self = this;
             var downloadedRequests = 0;
             var lastItemSync = forceDownload ? 0 : this.get('lastItemSync');
+            var lastSRSConfigSync = forceDownload ? 0 : this.get('lastSRSConfigSync');
             var lastVocabSync = forceDownload ? 0 : this.get('lastVocabSync');
             var now = skritter.fn.getUnixTime();
             var responseSize = 0;
@@ -648,8 +650,13 @@ define([
                 },
                 //downloads the latest configs for more accurate scheduling
                 function(callback) {
-                    skritter.modals.set('.modal-title-right', 'Updating SRS');
-                    self.fetchSRSConfigs(callback);
+                    if (lastSRSConfigSync === 0 ||  moment(lastSRSConfigSync * 1000).add('seconds', 2).valueOf() / 1000 <= now) {
+                        skritter.modals.set('.modal-title-right', 'Updating SRS');
+                        self.fetchSRSConfigs(callback);
+                        self.set('lastSRSConfigSync', now);
+                    } else {
+                        callback();
+                    }
                 },
                 //checks the server for review errors from last sync
                 function(callback) {
