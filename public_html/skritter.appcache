@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Fri Apr 11 2014 13:13:29 GMT+0800 (China Standard Time)
+# Time: Mon Apr 14 2014 18:26:17 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -144,12 +144,6 @@ images/textures/ricepaper2.png
 images/textures/stardust.png
 images/textures/textured_paper.png
 images/textures/zwartevilt.png
-images/tutorials/android-chrome-cache1.png
-images/tutorials/android-chrome-cache2.png
-images/tutorials/android-chrome-cache3.png
-images/tutorials/testflight1.png
-images/tutorials/testflight2.png
-images/tutorials/testflight3.png
 tests/libs/jasmine_favicon.png
 bootstrap/fonts/glyphicons-halflings-regular.svg
 fonts/fontawesome-webfont.svg
