@@ -185,7 +185,6 @@ define(function() {
                 });
                 promise.done(function(data) {
                     console.log(data);
-                    //callback(data);
                 });
                 promise.fail(function(error) {
                     callback(error);
@@ -606,6 +605,44 @@ define(function() {
                 });
             }
             request();
+        },
+        /**
+         * @method updateVocabs
+         * @param {Array|Object} vocabs
+         * @param {Function} callback
+         */
+        updateVocabs: function(vocabs, callback) {
+            var self = this;
+            vocabs = Array.isArray(vocabs) ? vocabs : [vocabs];
+            var results = {
+                items: [],
+                vocabs: []
+            };
+            function request(vocab) {
+                var promise = $.ajax({
+                    url: Api.base + 'vocabs/' + vocab.id + '?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'PUT',
+                    data: JSON.stringify(vocab)
+                });
+                promise.done(function(data) {
+                    results.items = results.items.concat(data.Items);
+                    results.vocabs.push(data.Vocab);
+                    vocabs.splice(0, 1);
+                    if (vocabs.length === 0) {
+                        if (typeof callback === 'function')
+                            callback(results);
+                    } else {
+                        request(vocabs[0]);
+                    }
+                });
+                promise.fail(function(error) {
+                    console.error(error);
+                });
+            }
+            request(vocabs[0]);
         },
         /**
          * @method updateVocabList

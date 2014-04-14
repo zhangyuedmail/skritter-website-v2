@@ -45,6 +45,7 @@ define([
          */
         defaults: {
             addOffset: 0,
+            changedVocabIds: [],
             lastItemSync: 0,
             lastVocabSync: 0
         },
@@ -68,6 +69,15 @@ define([
             this.strokes.add(data.Strokes, options);
             this.vocablists.add(data.VocabLists, options);
             this.vocabs.add(data.Vocabs, options);
+        },
+        /**
+         * @method addChangedVocabId
+         * @param {String} vocabId
+         */
+        addChangedVocabId: function(vocabId) {
+            var changedVocabIds = _.clone(this.get('changedVocabIds'));
+            changedVocabIds.push(vocabId);
+            this.set('changedVocabIds', _.uniq(changedVocabIds));
         },
         /**
          * @method addItems
@@ -599,6 +609,29 @@ define([
                     if (lastItemSync === 0) {
                         skritter.modals.set('.modal-title-right', 'Getting Lists');
                         self.fetchVocabLists(callback);
+                    } else {
+                        callback();
+                    }
+                },
+                //checks for updates vocabs to put to the server
+                function(callback) {
+                    if (self.get('changedVocabIds').length > 0) {
+                        skritter.modals.set('.modal-title-right', 'Updating Vocabs');
+                        async.waterfall([
+                            function(callback) {
+                                skritter.storage.get('vocabs', self.get('changedVocabIds'), function(vocabs) {
+                                    callback(null, vocabs);
+                                });
+                            },
+                            function(vocabs, callback) {
+                                skritter.api.updateVocabs(vocabs, function(result) {
+                                    skritter.user.data.items.insert(result.Items, callback);
+                                }); 
+                            }
+                        ], function() {
+                            self.set('changedVocabIds', []);
+                            callback();
+                        });
                     } else {
                         callback();
                     }

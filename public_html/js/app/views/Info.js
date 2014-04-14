@@ -15,6 +15,8 @@ define([
          * @method initialize
          */
         initialize: function() {
+            Info.buttonBan = null;
+            Info.buttonStar = null;
             Info.vocab = null;
         },
         /**
@@ -23,7 +25,19 @@ define([
          */
         render: function() {
             this.$el.html(templateInfo);
+            Info.buttonBan = this.$('#ban-button span');
+            Info.buttonStar = this.$('#star-button span');
             if (Info.vocab) {
+                if (Info.vocab.has('bannedParts')) {
+                    Info.buttonBan.addClass('text-danger');
+                } else {
+                    Info.buttonBan.removeClass('text-danger');
+                }
+                 if (Info.vocab.get('starred')) {
+                     Info.buttonStar.addClass('text-warning');
+                 } else {
+                     Info.buttonStar.removeClass('text-warning');
+                 }
                 this.$('.character-font').addClass(Info.vocab.fontClass());
                 this.$('#writing-primary').html(Info.vocab.get('writing'));
                 this.$('#writing-secondary').html('');
@@ -45,7 +59,9 @@ define([
          */
         events: {
             'click.Info #info-view #audio-button': 'handleAudioButtonClicked',
-            'click.Info #info-view .back-button': 'handleBackButtonClicked'
+            'click.Info #info-view .back-button': 'handleBackButtonClicked',
+            'click.Info #info-view #ban-button': 'toggleBan',
+            'click.Info #info-view #star-button': 'toggleStar'
         },
         /**
          * @method handleAudioButtonClicked
@@ -79,6 +95,40 @@ define([
                 Info.vocab = vocab;
                 this.render();
             }, this));
+        },
+        /**
+         * @method toggleBan
+         * @param {Object} event
+         */
+        toggleBan: function(event) {
+            if (Info.buttonBan.hasClass('text-danger')) {
+                Info.vocab.unset('bannedParts');
+                Info.buttonBan.removeClass('text-danger');
+            } else {
+                if (Info.vocab.isChinese()) {
+                    Info.vocab.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
+                } else {
+                    Info.vocab.set('bannedParts', ['defn', 'rdng', 'rune']);
+                }
+                Info.buttonBan.addClass('text-danger');
+            }
+            Info.vocab.cache();
+            event.preventDefault();
+        },
+        /**
+         * @method toggleStar
+         * @param {Object} event
+         */
+        toggleStar: function(event) {
+            if (Info.buttonStar.hasClass('text-warning')) {
+                Info.vocab.set('starred', false);
+                Info.buttonStar.removeClass('text-warning');
+            } else {
+                Info.vocab.set('starred', true);
+                Info.buttonStar.addClass('text-warning');
+            }
+            Info.vocab.cache();
+            event.preventDefault();
         },
         /**
          * @method updateAudioButtonState

@@ -24,7 +24,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            console.log('PROMPT', this.review.vocab().get('writing'), this.review);
+            console.log('PROMPT', this.review.vocab().get('writing'), this.review.item().get('part'), this.review);
             Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
             Prompt.gradingButtons.grade(this.review.at().score);
             this.$('.character-font').addClass(this.review.baseVocab().fontClass());
