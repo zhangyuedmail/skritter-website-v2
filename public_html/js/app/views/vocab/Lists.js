@@ -17,8 +17,8 @@ define([
          * @method initialize
          */
         initialize: function() {
-            VocabLists.lists = new ListsTable();
-            VocabLists.sort = 'studying';
+            VocabLists.defaultSort = 'studying';
+            VocabLists.table = new ListsTable();
         },
         /**
          * @method render
@@ -26,7 +26,7 @@ define([
          */
         render: function() {
             this.$el.html(templateVocabLists);
-            VocabLists.lists.setElement(this.$('#lists-table')).render();
+            VocabLists.table.setElement(this.$('#vocab-lists'));
             this.load();
             return this;
         },
@@ -49,17 +49,20 @@ define([
          * @param {String} sort
          */
         load: function(sort) {
-            sort = sort ? sort : VocabLists.sort;
+            sort = sort ? sort : VocabLists.defaultSort;
+            this.$('#search #sort .btn-group button').removeClass('active');
+            this.$('#search #sort #sort-' + sort).addClass('active');
+            VocabLists.table.clear().set(null, {
+                name: 'Name',
+                    studyingMode: 'Status'
+            }).render().showLoading();
             skritter.api.getVocabLists(skritter.settings.language(), sort, null, function(lists) {
-                if (lists.statusText === 'error') {
-                    VocabLists.lists.set(null);
-                } else {
-                    VocabLists.sort = sort;
-                    VocabLists.lists.set(lists, {
-                        name: 'Name',
-                        studyingMode: 'Status'
-                    }).render();
+                if (sort === 'studying' && lists.statusText === 'error') {
+                    lists = skritter.user.data.vocablists.toJSON();
+                } else if (sort === 'studying') {
+                    skritter.user.data.vocablists.set(lists);
                 }
+                VocabLists.table.set(lists).render().hideLoading();
             });
         }
     });

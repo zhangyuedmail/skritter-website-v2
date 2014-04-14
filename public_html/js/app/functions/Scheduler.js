@@ -47,11 +47,8 @@ define(function() {
             var divisions = [2, 1200, 18000, 691200];
             var index;
             for (var i in divisions)
-            {
-                if (item.get('interval') > divisions[i]) {
+                if (item.get('interval') > divisions[i])
                     index = i;
-                }
-            }
             factor = factorsList[index];
         }
         //adjust the factor based on readiness
@@ -61,14 +58,12 @@ define(function() {
             factor += 1;
         }
         //accelerate new items that appear to be known
-        if (item.get('successes') === item.get('reviews') && item.get('reviews') < 5) {
+        if (item.get('successes') === item.get('reviews') && item.get('reviews') < 5)
             factor *= 1.5;
-        }
         //decelerate hard items consistently marked wrong
-        if (item.get('reviews') > 8) {
+        if (item.get('reviews') > 8)
             if (pctRight < 0.5)
                 factor *= Math.pow(pctRight, 0.7);
-        }
         //multiple by the factor and randomize the interval
         newInterval = randomizeInterval(item.get('interval') * factor);
         //bound the interval

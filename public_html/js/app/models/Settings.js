@@ -31,7 +31,7 @@ define(function() {
             },
             hintColor: '#87cefa',
             language: '@@language',
-            maxCanvasSize: 600,
+            maxCanvasSize: 800,
             storageType: 'IndexedDB',
             version: '@@version'
         },
@@ -56,11 +56,15 @@ define(function() {
         canvasSize: function() {
             var size = 0;
             if (this.isPortrait()) {
-                if (this.contentWidth() > this.get('maxCanvasSize')) {
+                var calculatedMaxSize = this.contentHeight() * 0.8;
+                var width = this.contentWidth();
+                if (width > this.get('maxCanvasSize')) {
                     size = this.get('maxCanvasSize');
                 } else {
-                    size = this.contentWidth();
+                    size = width;
                 }
+                if (size > calculatedMaxSize)
+                    size = calculatedMaxSize;
             } else {
                 size = this.contentWidth() / 2;
             }

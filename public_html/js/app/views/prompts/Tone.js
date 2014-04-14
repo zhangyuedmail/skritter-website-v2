@@ -70,9 +70,11 @@ define([
                 var result = this.review.character().recognize(points, shape);
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
+                        this.review.at({score: 1});
                         Tone.canvas.tweenShape('display', result.userShape(), result.inflateShape());
                         Prompt.gradingButtons.grade(3);
                     } else {
+                        this.review.at({score: 1});
                         this.review.character().reset();
                         this.review.character().add(this.review.character().targets[possibleTones[0] - 1].models);
                         Tone.canvas.drawShape('display', this.review.character().shape());
@@ -80,12 +82,13 @@ define([
                     }
                 }
             } else {
-                
                 if (possibleTones.indexOf(5) > -1) {
+                    this.review.at({score: 1});
                     this.review.character().add(this.review.character().targets[4].models);
                     Tone.canvas.drawShape('display', this.review.character().shape());
                     Prompt.gradingButtons.grade(3);
                 } else {
+                    this.review.at({score: 1});
                     this.review.character().add(this.review.character().targets[possibleTones[0] - 1].models);
                     Tone.canvas.drawShape('display', this.review.character().shape());
                     Prompt.gradingButtons.grade(1);
@@ -107,19 +110,23 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
-            Tone.canvas.render().resize(skritter.settings.canvasSize());
+            var canvasSize = skritter.settings.canvasSize();
+            var contentHeight = skritter.settings.contentHeight();
+            var contentWidth = skritter.settings.contentWidth();
+            Tone.canvas.render().resize(canvasSize);
             Tone.canvas.drawCharacterFromFont('background', this.review.baseVocab().characters()[this.review.get('position') - 1], skritter.user.settings.font());
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
-                this.$('#input-section').css('left', (skritter.settings.contentWidth() - skritter.settings.canvasSize()) / 2);
+                this.$('#info-section').css('height', contentHeight - canvasSize + 5);
+                this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
                 this.$('#input-section').css('left', '');
             }
-            this.$('#input-section').height(skritter.settings.canvasSize());
-            this.$('#input-section').width(skritter.settings.canvasSize());
+            this.$('#input-section').height(canvasSize);
+            this.$('#input-section').width(canvasSize);
             if (this.review.character().isFinished()) {
                 Tone.canvas.drawShape('display', this.review.character().shape(null, skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]));
                 Tone.canvas.getLayer('background').alpha = 0.6;
@@ -134,7 +141,7 @@ define([
             Tone.canvas.enableInput();
             Tone.canvas.drawCharacterFromFont('background', this.review.baseVocab().characters()[this.review.get('position') - 1], skritter.user.settings.font());
             this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
-            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            this.$('#prompt-definition').html(this.review.baseVocab().definition());
             if (this.review.baseItem().isNew())
                 this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position'), skritter.user.settings.get('hideReading')));
@@ -157,6 +164,10 @@ define([
             }, this), 500);
             this.$('#prompt-reading').html(this.review.baseVocab().readingBlocks(this.review.get('position') + 1));
             Prompt.gradingButtons.show();
+            if (skritter.user.settings.get('audio') && this.review.isLast() && !this.review.get('audioPlayed')) {
+                this.review.baseVocab().playAudio();
+                this.review.set('audioPlayed', true);
+            }
             return this;
         }
     });

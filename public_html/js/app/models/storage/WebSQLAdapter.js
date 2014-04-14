@@ -128,14 +128,10 @@ define([
                         var vocabIds = JSON.parse(item.vocabIds);
                         if (vocabIds.length > 0) {
                             item.id = JSON.parse(item.id);
+                            item.held = held;
                             item.last = last ? last : 0;
                             item.next = next ? next : 0;
                             item.style = style ? style : undefined;
-                            if (held) {
-                                item.held = held;
-                            } else {
-                                delete item.held;
-                            }
                             delete item.vocabIds;
                             schedule.push(item);
                         }

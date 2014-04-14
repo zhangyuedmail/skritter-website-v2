@@ -20,9 +20,15 @@ body {
 }
 #skritter-container { height: 100%; }
 #content-container { position: relative; }
+#content-container.no-padding { padding: 0; }
 #content-container.no-scroll { 
     height: 100%; 
     overflow-y: hidden;
+}
+#content-container.full-width {
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-block {
@@ -32,26 +38,36 @@ body {
     border-top: solid #e7e7e7 1px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     padding: 15px;
-    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.content-block.no-shadow {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 .content-block.no-padding { padding: 0; }
+.content-block.no-top { margin-top: 0; }
 .cursor { cursor: pointer; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;
-    padding-top: 45px;
+    padding-top: 55px;
 }
+.view.no-space { padding-top: 45px; }
 .view.no-nav { padding-top: 0; }
-@media (max-width: 767px) {
-    .container .row {
-        margin-left: 0;
-        margin-right: 0;
-    }
-}
 
 
 /*** GRADING BUTTONS ***/
 #grading-buttons { display: none; }
+#grading-buttons .btn { background-color: #ffffff; }
+#grading-buttons .grade-icon { max-height: 30px; }
+
+
+/*** HOME: LOGGED IN ***/
+#home-view.logged-in #lists {
+    max-height: 300px;
+    overflow-x: auto;
+}
 
 
 /*** LANDING PAGE ***/
@@ -129,6 +145,13 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+#modals-container #add-items .modal-body {
+    text-align: center;
+}
+#modals-container #add-items #number-spinner {
+    font-size: 32px;
+    text-align: center;
+}
 
 
 /*** NAVBAR ***/
@@ -198,9 +221,10 @@ body {
     width: 50%;
 }
 .prompt-container.portrait #input-section {
-    bottom: 15px;
+    bottom: -15px;
     width: 100%;
 }
+.prompt-container.portrait #info-section { border-bottom: 2px solid #222222; }
 #input-section #prompt-text {
     display: table;
     height: 100%;
@@ -221,20 +245,41 @@ body {
 
 
 /*** PROMPT: DEFINITION ***/
+#defn #prompt-question-text { font-size: 20px; }
+#defn #prompt-writing { font-size: 72px; }
+#defn #prompt-reading { font-size: 18px; }
+#defn #prompt-definition { font-size: 24px; }
+#defn #prompt-sentence { font-size: 18px; }
 
 
 /*** PROMPT: READING ***/
+#rdng #prompt-question-text { font-size: 20px; }
+#rdng #prompt-writing { font-size: 72px; }
+#rdng #prompt-reading { font-size: 48px; }
+#rdng #prompt-definition { font-size: 18px; }
+#rdng #prompt-sentence { font-size: 18px; }
 
 
 /*** PROMPT: TONE ***/
+#tone #prompt-question-text { font-size: 20px; }
+#tone #prompt-writing { font-size: 32px; }
+#tone #prompt-reading { 
+    font-size: 20px;
+    padding-left: 15px;
+}
+#tone #prompt-definition { font-size: 18px; }
+#tone #prompt-sentence { font-size: 18px; }
 
 
 /*** PROMPT: WRITING ***/
-#rune #prompt-question-text {}
-#rune #prompt-writing {}
-#rune #prompt-reading {}
-#rune #prompt-definition {}
-#rune #prompt-sentence {}
+#rune #prompt-question-text { font-size: 20px; }
+#rune #prompt-writing { font-size: 32px; }
+#rune #prompt-reading { 
+    font-size: 20px;
+    padding-left: 15px;
+}
+#rune #prompt-definition { font-size: 18px; }
+#rune #prompt-sentence { font-size: 18px; }
 
 
 /*** PROMPT: WRITING AREA ***/

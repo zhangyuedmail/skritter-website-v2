@@ -61,17 +61,26 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
+            var canvasSize = skritter.settings.canvasSize();
+            var contentHeight = skritter.settings.contentHeight();
+            var contentWidth = skritter.settings.contentWidth();
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
-                this.$('#input-section').css('left', (skritter.settings.contentWidth() - skritter.settings.canvasSize()) / 2);
+                this.$('#info-section').height('');
+                this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
+                this.$('#input-section').height(contentHeight - this.$('#info-section').height() - 30);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
                 this.$('#input-section').css('left', '');
+                if (window.cordova) {
+                    this.$('#input-section').height(contentHeight);
+                } else {
+                    this.$('#input-section').height(canvasSize);
+                }
             }
-            this.$('#input-section').height(skritter.settings.canvasSize());
-            this.$('#input-section').width(skritter.settings.canvasSize());
+            this.$('#input-section').width(canvasSize);
             this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});
         },
         /**
@@ -80,7 +89,7 @@ define([
          */
         show: function() {
             skritter.timer.start();
-            this.$('#prompt-definition').html(this.review.vocab().get('definitions').en);
+            this.$('#prompt-definition').html(this.review.vocab().definition());
             if (this.review.baseItem().isNew())
                 this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
@@ -99,6 +108,10 @@ define([
             this.$('.answer').show('fade', 200);
             this.$('#question-text').html('Definition:');
             Prompt.gradingButtons.show();
+            if (skritter.user.settings.get('audio') && !this.review.get('audioPlayed')) {
+                this.review.baseVocab().playAudio();
+                this.review.set('audioPlayed', true);
+            }
             this.review.set('finished', true);
             return this;
         }

@@ -23,7 +23,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.index = -1;
             this.prompt = null;
         },
         /**
@@ -33,7 +32,8 @@ define([
         render: function() {
             this.$el.html(templateStudy);
             this.stopListening();
-            this.$('#items-due').html(skritter.user.data.items.dueCount(true));
+            if (window.cordova || skritter.settings.appWidth() <= skritter.settings.get('maxCanvasSize'))
+                this.$('#content-container').addClass('full-width');
             skritter.timer.setElement(this.$('#timer')).render();
             if (skritter.user.settings.get('hideDueCount'))
                 this.$('#items-due').parent().hide();
@@ -50,6 +50,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'click.Study #study-view #add-button': 'handleAddItemsButtonClicked',
             'click.Study #study-view #audio-button': 'handleAudioButtonClicked',
             'click.Study #study-view #info-button': 'handleInfoButtonClicked',
             'click.Study #study-view #study-settings-button': 'handleStudySettingsButtonClicked'
@@ -59,8 +60,17 @@ define([
          */
         autoSync: function() {
             if (skritter.user.settings.get('autoSync') &&
+                    !skritter.user.data.syncing() &&
                     skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold'))
                 skritter.user.data.sync();
+        },
+         /**
+         * @method handleAddItemsButtonClicked
+         * @param {Object} event
+         */
+        handleAddItemsButtonClicked: function(event) {
+            skritter.modals.show('add-items');
+            event.preventDefault();
         },
         /**
          * @method handleAudioButtonClicked
@@ -112,31 +122,22 @@ define([
             this.prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
             this.updateAudioButtonState();
+            this.updateDueCount();
         },
         /**
          * @method nextPrompt
          */
         nextPrompt: function() {
             skritter.timer.reset();
+            skritter.user.data.items.sort();
             skritter.user.data.items.next(_.bind(function(item) {
-                this.autoSync();
-                this.loadPrompt(item.createReview());
-                this.$('#items-due').html(skritter.user.data.items.dueCount(true));
+                if (item) {
+                    this.autoSync();
+                    this.loadPrompt(item.createReview());
+                } else {
+                    //TODO: handle when a prompt can't be loaded
+                }
             }, this), skritter.user.settings.activeParts(), null, skritter.user.settings.style());
-        },
-        /**
-         * @method previousPrompt
-         */
-        previousPrompt: function() {
-            var review = skritter.user.data.reviews.at(this.index + 1);
-            if (review) {
-                review.load(_.bind(function(item) {
-                    if (item) {
-                        this.loadPrompt(review);
-                        this.index++;
-                    }
-                }, this));
-            }
         },
         /**
          * @method updateAudioButtonState
@@ -149,6 +150,12 @@ define([
                 this.$('#audio-button span').removeClass('fa fa-volume-up');
                 this.$('#audio-button span').addClass('fa fa-volume-off');
             }
+        },
+        /**
+         * @method updateDueCount
+         */
+        updateDueCount: function() {
+            this.$('#items-due').html(skritter.user.data.items.dueCount());
         }
     });
 

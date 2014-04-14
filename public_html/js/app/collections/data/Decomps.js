@@ -15,14 +15,19 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(decomp) {
-                decomp.cache();
-            });
         },
         /**
          * @property {Backbone.Model} model
          */
         model: Decomp,
+        /**
+         * @method insert
+         * @param {Array|Object} decomps
+         * @param {Function} callback
+         */
+        insert: function(decomps, callback) {
+            skritter.storage.put('decomps', decomps, callback);
+        },
         /**
          * @method loadAll
          * @param {Function} callback
@@ -30,7 +35,7 @@ define([
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('decomps', function(items) {
-                self.add(items, {merge: true, silent: true});
+                self.add(items, {merge: true, silent: true, sort: false});
                 callback();
             });
         }

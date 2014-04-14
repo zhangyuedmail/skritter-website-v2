@@ -16,7 +16,8 @@ define([
          */
         initialize: function() {
             this.on('change', function(vocab) {
-                vocab.cache();
+                vocab.set('changed', skritter.fn.getUnixTime(), {silent: true, sort: false});
+                skritter.user.data.addChangedVocabId(vocab.id);
             });
         },
         /**
@@ -24,13 +25,21 @@ define([
          */
         model: Vocab,
         /**
+         * @method insert
+         * @param {Array|Object} vocabs
+         * @param {Function} callback
+         */
+        insert: function(vocabs, callback) {
+            skritter.storage.put('vocabs', vocabs, callback);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('vocabs', function(vocabs) {
-                self.add(vocabs, {merge: true, silent: true});
+                self.add(vocabs, {merge: true, silent: true, sort: false});
                 callback();
             });
         }

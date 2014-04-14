@@ -6,7 +6,8 @@
  * @param Study
  * @param StudySettings
  * @param Tests
- * @param Tutorial
+ * @param VocabList
+ * @param VocabListSection
  * @param VocabLists
  * @param User
  * @param UserNew
@@ -19,11 +20,12 @@ define([
     'views/Study',
     'views/study/Settings',
     'views/Tests',
-    'views/Tutorial',
+    'views/vocab/List',
+    'views/vocab/ListSection',
     'views/vocab/Lists',
     'views/User',
     'views/user/New'
-], function(Account, Home, Info, Study, StudySettings, Tests, Tutorial, VocabLists, User, UserNew) {
+], function(Account, Home, Info, Study, StudySettings, Tests, VocabList, VocabListSection, VocabLists, User, UserNew) {
     /**
      * @class Router
      */
@@ -46,6 +48,8 @@ define([
             'tests': 'showTestsView',
             'tutorial': 'showTutorialView',
             'vocab/list': 'showVocabListsView',
+            'vocab/list/:listId': 'showVocabListView',
+            'vocab/list/:listId/:sectionId': 'showVocabListSectionView',
             'user/account': 'showAccountView',
             'user/profile/:id': 'showUserView',
             'user/new': 'showUserNewView'
@@ -140,17 +144,29 @@ define([
             this.view.tests.render();
         },
         /**
-         * Shows the tutorial view for new users.
-         * 
-         * @method showTutorialView
+         * @method showVocabListView
+         * @param {String} listId
          */
-        showTutorialView: function() {
-            if (!this.view.tutorial) {
-                this.view.tutorial = new Tutorial({el: $('#skritter-container')});
+        showVocabListView: function(listId) {
+            if (!this.view.vocabList) {
+                this.view.vocabList = new VocabList({el: $('#skritter-container')});
             } else {
-                this.view.tutorial.setElement($('#skritter-container'));
+                this.view.vocabList.setElement($('#skritter-container'));
             }
-            this.view.tutorial.render();
+            this.view.vocabList.render().load(listId);
+        },
+        /**
+         * @method showVocabListSectionView
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        showVocabListSectionView: function(listId, sectionId) {
+            if (!this.view.vocabListSection) {
+                this.view.vocabListSection = new VocabListSection({el: $('#skritter-container')});
+            } else {
+                this.view.vocabListSection.setElement($('#skritter-container'));
+            }
+            this.view.vocabListSection.render().load(listId, sectionId);
         },
         /**
          * @method showVocabListsView

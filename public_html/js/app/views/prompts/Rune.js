@@ -60,6 +60,7 @@ define([
          */
         handleDoubleTap: function(event) {
             if (!this.review.character().isFinished()) {
+                this.review.at({score: 1});
                 Prompt.gradingButtons.grade(1);
                 Rune.canvas.drawShape('background', this.review.character().targets[0].shape(null, '#999999'));
             }
@@ -99,6 +100,7 @@ define([
                     Rune.strokeAttempts++;
                     Rune.canvas.fadeShape('marker', shape);
                     if (Rune.strokeAttempts > Rune.maxStrokeAttempts) {
+                        this.review.at({score: 1});
                         Prompt.gradingButtons.grade(1);
                         Rune.canvas.fadeShape('hint', this.review.character().expectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
@@ -131,21 +133,27 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
-            Rune.canvas.render().resize(skritter.settings.canvasSize());
+            var canvasSize = skritter.settings.canvasSize();
+            var contentHeight = skritter.settings.contentHeight();
+            var contentWidth = skritter.settings.contentWidth();
+            Rune.canvas.render().resize(canvasSize);
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
-                this.$('#info-section').css('max-height', skritter.settings.contentHeight() - skritter.settings.canvasSize() - 35);
-                this.$('#input-section').css('left', (skritter.settings.contentWidth() - skritter.settings.canvasSize()) / 2);
+                this.$('#info-section').css('height', contentHeight - canvasSize + 5);
+                this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
                 this.$('#input-section').css('left', '');
             }
-            this.$('#input-section').height(skritter.settings.canvasSize());
-            this.$('#input-section').width(skritter.settings.canvasSize());
-            if (this.review.character().length > 0)
+            this.$('#input-section').height(canvasSize);
+            this.$('#input-section').width(canvasSize);
+            if (this.review.character().isFinished()) {
+                Rune.canvas.drawShape('display', this.review.character().shape(null, skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]));
+            } else if (this.review.character().length > 0) {
                 Rune.canvas.drawShape('display', this.review.character().shape());
+            }
         },
         /**
          * @method show
@@ -157,13 +165,17 @@ define([
             this.$('#writing-area').hammer().off('tap', _.bind(this.handleTap, this));
             this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
             this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
-            this.$('#prompt-definition').html(this.review.baseVocab().get('definitions').en);
+            this.$('#prompt-definition').html(this.review.baseVocab().definition());
             if (this.review.baseItem().isNew())
                 this.$('#prompt-new-tag').show();
             this.$('#prompt-reading').html(this.review.baseVocab().reading());
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceMaskWriting());
             this.$('#prompt-style').html(this.review.baseVocab().style());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position')));
+            if (skritter.user.settings.get('audio') && this.review.isFirst() && !this.review.get('audioPlayed')) {
+                this.review.baseVocab().playAudio();
+                this.review.set('audioPlayed', true);
+            }
             return this;
         },
         /**

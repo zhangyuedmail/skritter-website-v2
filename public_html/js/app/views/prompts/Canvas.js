@@ -16,7 +16,7 @@ define(function() {
             Canvas.stage = {};
             Canvas.size = skritter.settings.canvasSize();
             Canvas.gridColor = 'grey';
-            Canvas.strokeSize = 12;
+            Canvas.strokeSize = 8;
             Canvas.strokeCapStyle = 'round';
             Canvas.strokeColor = '#000000';
             Canvas.strokeJointStyle = 'round';
@@ -29,7 +29,7 @@ define(function() {
             Canvas.stage.input = this.createInputStage();
             createjs.Ticker.addEventListener('tick', Canvas.stage.display);
             createjs.Touch.enable(Canvas.stage.input);
-            createjs.Ticker.setFPS(1000);
+            createjs.Ticker.setFPS(200);
         },
         /**
          * @method render

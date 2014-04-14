@@ -11,9 +11,9 @@
                 <a class="hidden-xs home-button navbar-brand" href="#">Skritter</a>  
                 <ul class="navbar-nav navbar-text list-inline">
                     <li><a class="back-button" href="#"><span class="fa fa-arrow-left"></span></a></li>
-                    <li class="pull-right"><a class="ban-button" href="#"><span class="fa fa-ban"></span></a></li>
-                    <li class="pull-right"><a class="star-button" href="#"><span class="fa fa-star-o"></span></a></li>
-                    <li class="pull-right"><a class="volume-button" href="#"><span class="fa fa-volume-up"></span></a></li>
+                    <li><a id="audio-button" href="#"><span class="fa fa-volume-up"></span></a></li>
+                    <li class="pull-right"><a id="ban-button" href="#"><span class="fa fa-ban"></span></a></li>
+                    <li class="pull-right"><a id="star-button" href="#"><span class="fa fa-star"></span></a></li>
                 </ul>
             </div>
             <!--<div class="collapse navbar-collapse">
@@ -24,22 +24,31 @@
             </div>-->
         </div>
     </div>
-    <div id="content-container" class="container text-center">
-        <div class="content-block row">
-            <h1 class="character-font col-xs-6">
-                <span id="writing-primary"></span>
-                <span id="writing-secondary"></span>
-            </h1>
-            <h3 id="reading" class="col-xs-6"></h3>
+    <div id="content-container" class="container no-row-margins text-center">
+        <div class="content-block">
+            <div class="row">
+
+                <h1 class="character-font col-xs-6">
+                    <span id="writing-primary"></span>
+                    <span id="writing-secondary"></span>
+                </h1>
+                <h3 id="reading" class="col-xs-6"></h3>
+            </div>
         </div>
-        <div class="content-block row">
-            <h4 id="definition" class="col-xs-12"></h4>
+        <div class="content-block">
+            <div class="row">
+
+                <h4 id="definition" class="col-xs-12"></h4>
+            </div>
         </div>
-        <div class="content-block row">
-            <div id="sentence" class="col-xs-12">
-                <h3 class="character-font writing"></h3>
-                <h5 class="reading"></h5>
-                <h4 class="definition"></h4>
+        <div class="content-block">
+            <div class="row">
+
+                <div id="sentence" class="col-xs-12">
+                    <h3 class="character-font writing"></h3>
+                    <h5 class="reading"></h5>
+                    <h4 class="definition"></h4>
+                </div>
             </div>
         </div>
     </div>

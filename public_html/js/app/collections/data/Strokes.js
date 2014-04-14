@@ -32,13 +32,21 @@ define([
          */
         model: Stroke,
         /**
+         * @method insert
+         * @param {Array|Object} strokes
+         * @param {Function} callback
+         */
+        insert: function(strokes, callback) {
+            skritter.storage.put('strokes', strokes, callback);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('strokes', function(strokes) {
-                self.add(strokes, {merge: true, silent: true});
+                self.add(strokes, {merge: true, silent: true, sort: false});
                 callback();
             });
         },

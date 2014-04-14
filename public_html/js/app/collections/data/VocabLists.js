@@ -15,14 +15,19 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(vocablist) {
-                vocablist.cache();
-            });
         },
         /**
          * @property {Backbone.Model} model
          */
         model: VocabList,
+        /**
+         * @method insert
+         * @param {Array|Object} vocablists
+         * @param {Function} callback
+         */
+        insert: function(vocablists, callback) {
+            skritter.storage.put('vocablists', vocablists, callback);
+        },
         /**
          * @method loadAll
          * @param {Function} callback
@@ -30,7 +35,7 @@ define([
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('vocablists', function(vocablists) {
-                self.add(vocablists, {merge: true, silent: true});
+                self.add(vocablists, {merge: true, silent: true, sort: false});
                 callback();
             });
         }

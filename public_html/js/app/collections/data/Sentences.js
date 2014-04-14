@@ -15,14 +15,19 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(sentence) {
-                sentence.cache();
-            });
         },
         /**
          * @property {Backbone.Model} model
          */
         model: Sentence,
+        /**
+         * @method insert
+         * @param {Array|Object} sentences
+         * @param {Function} callback
+         */
+        insert: function(sentences, callback) {
+            skritter.storage.put('sentences', sentences, callback);
+        },
         /**
          * @method loadAll
          * @param {Function} callback
@@ -30,7 +35,7 @@ define([
         loadAll: function(callback) {
             var self = this;
             skritter.storage.getAll('sentences', function(sentences) {
-                self.add(sentences, {merge: true, silent: true});
+                self.add(sentences, {merge: true, silent: true, sort: false});
                 callback();
             });
         }

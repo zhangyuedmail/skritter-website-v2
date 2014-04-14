@@ -15,12 +15,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('add change', function(review) {
-                review.cache();
-            });
-            this.on('remove', function(review) {
-                review.uncache();
-            });
         },
         /**
          * @property {Backbone.Model} model
@@ -47,18 +41,21 @@ define([
         },
         /**
          * @method post
-         * @param {function} callback
+         * @param {Function} callback
          */
         post: function(callback) {
             if (this.length > 0) {
                 skritter.api.postReviews(this.toArray(), function(reviews) {
-                    skritter.user.data.reviews.remove(_.uniq(_.pluck(reviews, 'wordGroup')));
-                    if (typeof callback === 'function')
-                        callback();
+                    var ids = _.uniq(_.pluck(reviews, 'wordGroup'));
+                    skritter.user.data.reviews.remove(ids);
+                    skritter.storage.remove('reviews', ids, function() {
+                        if (typeof callback === 'function')
+                            callback();
+                    });
                 });
             } else {
                 if (typeof callback === 'function')
-                    callback(0);
+                    callback();
             }
         },
         /**

@@ -150,24 +150,30 @@ define([
                         skritter.modals.show('default', function() {
                             skritter.user.data.items.loadSchedule(callback);
                         }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
-                    }                    
+                    }
+                },
+                function(callback) {
+                    skritter.user.data.reviews.loadAll(callback);
                 },
                 function(callback) {
                     skritter.user.data.srsconfigs.loadAll(callback);
                 },
                 function(callback) {
-                    skritter.user.data.reviews.loadAll(callback);
+                    skritter.user.data.vocablists.loadAll(callback);
                 }
             ], function() {
                 skritter.timer.refresh(true);
-                skritter.modals.hide();
-                callback();
+                if (window.cordova) {
+                    callback();
+                } else {
+                    skritter.modals.hide(callback);
+                }
             });
         } else {
             callback();
         }
     };
-    
+
     return {
         initialize: initialize
     };

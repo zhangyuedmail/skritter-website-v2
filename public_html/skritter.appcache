@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Sun Apr 06 2014 21:18:28 GMT+0800 (China Standard Time)
+# Time: Fri Apr 11 2014 13:13:29 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -31,10 +31,11 @@ templates/study-settings.html
 templates/study.html
 templates/template.html
 templates/tests.html
-templates/tutorial.html
 templates/user-account.html
 templates/user-new.html
 templates/user.html
+templates/vocab-list-section.html
+templates/vocab-list.html
 templates/vocab-lists-table.html
 templates/vocab-lists.html
 bootstrap/components/switch/js/bootstrap-switch.min.js
@@ -85,7 +86,6 @@ js/app/views/Home.js
 js/app/views/Info.js
 js/app/views/Study.js
 js/app/views/Tests.js
-js/app/views/Tutorial.js
 js/app/views/User.js
 js/app/views/components/Modals.js
 js/app/views/components/Timer.js
@@ -99,6 +99,8 @@ js/app/views/prompts/Tone.js
 js/app/views/study/Settings.js
 js/app/views/user/Account.js
 js/app/views/user/New.js
+js/app/views/vocab/List.js
+js/app/views/vocab/ListSection.js
 js/app/views/vocab/Lists.js
 js/app/views/vocab/ListsTable.js
 js/libs/async.js

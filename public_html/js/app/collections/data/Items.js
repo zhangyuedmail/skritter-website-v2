@@ -16,10 +16,6 @@ define([
          */
         initialize: function() {
             this.schedule = [];
-            this.on('change', _.bind(function(item) {
-                this.updateSchedule(item);
-                item.cache();
-            }, this));
         },
         /**
          * @property {Backbone.Model} model
@@ -37,24 +33,33 @@ define([
         },
         /**
          * @method due
-         * @param {Boolean} skipSort
+         * @param {Boolean} sort
          * @returns {Array}
          */
-        due: function(skipSort) {
-            if (skipSort)
-                return this.schedule.filter(function(item) {
+        due: function(sort) {
+            if (sort)
+                return this.sort().filter(function(item) {
                     return !item.held && item.readiness >= 1;
                 });
-            return this.sort().filter(function(item) {
+            return this.schedule.filter(function(item) {
                 return !item.held && item.readiness >= 1;
             });
         },
         /**
          * @method dueCount
+         * @param {Boolean} sort
          * @returns {Number}
          */
-        dueCount: function() {
-            return this.due().length;
+        dueCount: function(sort) {
+            return this.due(sort).length;
+        },
+        /**
+         * @method insert
+         * @param {Array|Object} items
+         * @param {Function} callback
+         */
+        insert: function(items, callback) {
+            skritter.storage.put('items', items, callback);
         },
         /**
          * @method loadAll
@@ -74,6 +79,7 @@ define([
         loadSchedule: function(callback) {
             skritter.storage.getSchedule(_.bind(function(schedule) {
                 this.schedule = schedule;
+                this.trigger('schedule:load');
                 callback();
             }, this));
         },
@@ -87,7 +93,7 @@ define([
          */
         next: function(callback, filterParts, filterIds, filterStyle) {
             var i = 0;
-            var schedule = this.sort();
+            var schedule = this.schedule;
             if (filterParts) {
                 filterParts = Array.isArray(filterParts) ? filterParts : [filterParts];
                 schedule = schedule.filter(function(item) {
@@ -107,14 +113,18 @@ define([
                 });
             }
             var load = function() {
-                skritter.user.data.loadItem(schedule[i].id, function(item) {
-                    if (item) {
-                        callback(item);
-                    } else {
-                        i++;
-                        load();
-                    }
-                });
+                if (schedule[i]) {
+                    skritter.user.data.loadItem(schedule[i].id, function(item) {
+                        if (item) {
+                            callback(item);
+                        } else {
+                            i++;
+                            load();
+                        }
+                    });
+                } else {
+                    callback();
+                }
             };
             load();
         },
@@ -157,6 +167,7 @@ define([
                 item.readiness = readiness;
                 return -item.readiness;
             });
+            this.trigger('schedule:sort');
             return this.schedule;
         },
         /**
@@ -164,33 +175,16 @@ define([
          * @param {Backbone.Model} item
          */
         updateSchedule: function(item) {
-            var now = skritter.fn.getUnixTime();
-            var scheduleIndex = _.findIndex(this.schedule, {id: item.id});
+            //var now = skritter.fn.getUnixTime();
+            var position = _.findIndex(this.schedule, {id: item.id});
             //update directly scheduled item 
-            this.schedule[scheduleIndex] = {
+            this.schedule[position] = {
                 id: item.id,
                 last: item.get('last'),
-                next: item.get('next')
+                next: item.get('next'),
+                style: item.get('style')
             };
-            //update indirectly related base items
-            var base = item.id.split('-')[2];
-            var maxSpacing = 43200;
-            var minSpacing = 600;
-            var spacedItems = [];
-            for (var i = 0, length = this.schedule.length; i < length; i++)
-                if (this.schedule[i].id.split('-')[2] === base && this.schedule[i].id !== item.id) {
-                    var scheduledItem = _.clone(this.schedule[i]);
-                    var spacing = (scheduledItem.next - scheduledItem.last) * 0.2;
-                    if (spacing >= maxSpacing || !item.previous('last')) {
-                        spacing = maxSpacing;
-                    } else if (spacing <= minSpacing) {
-                        spacing = minSpacing;
-                    }
-                    spacedItems.push({id: scheduledItem.id, held: now + spacing});
-                    this.schedule[i].held = now + spacing;
-                }
-            if (spacedItems.length > 0)
-                skritter.storage.update('items', spacedItems);
+            //TODO: add better handling for indirectly related prompts
         }
     });
 

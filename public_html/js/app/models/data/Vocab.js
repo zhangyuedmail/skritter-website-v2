@@ -128,6 +128,13 @@ define([
             return false;
         },
         /**
+         * @method playAudio
+         */
+        playAudio: function() {
+            if (this.has('audio'))
+                skritter.assets.playAudio(this.audio());
+        },
+        /**
          * @method reading
          * @returns {String}
          */
