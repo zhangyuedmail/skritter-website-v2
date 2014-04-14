@@ -76,8 +76,15 @@ define([
          * @param {Function} callback2
          */
         addItems: function(limit, callback1, callback2) {
+            if (Data.syncing) {
+                callback();
+                return;
+            } else {
+                Data.syncing = true;
+            }
             var self = this;
             var lastItemSync = this.get('lastItemSync');
+            var lastVocabSync = this.get('lastVocabSync');
             var now = skritter.fn.getUnixTime();
             var offset = this.get('addOffset');
             limit = limit ? limit : 1;
@@ -126,10 +133,16 @@ define([
                         });
                     };
                     next();
+                },
+                //fetch vocab and relates resources after new items added
+                function(callback) {
+                    self.fetchVocabs(lastVocabSync, callback);
                 }
             ], function() {
                 self.set('addOffset', offset);
                 self.set('lastItemSync', now);
+                self.set('lastVocabSync', now);
+                Data.syncing = false;
                 if (typeof callback === 'function')
                     callback1();
             });
@@ -269,7 +282,20 @@ define([
                             if (result) {
                                 if (typeof callback2 === 'function')
                                     callback2(result);
-                                skritter.storage.put('vocabs', result.Vocabs, function() {
+                                async.series([
+                                    function(callback) {
+                                        skritter.storage.put('decomps', result.Decomps, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.storage.put('sentences', result.Sentences, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.storage.put('strokes', result.Strokes, callback);
+                                    },
+                                    function(callback) {
+                                        skritter.storage.put('vocabs', result.Vocabs, callback);
+                                    }
+                                ], function() {
                                     window.setTimeout(next, 500);
                                 });
                             } else {
@@ -531,18 +557,18 @@ define([
          * @param {Boolean} forceDownload
          */
         sync: function(callback, showModal, forceDownload) {
-            var self = this;
-            var downloadedRequests = 0;
-            var lastItemSync = forceDownload ? 0 : this.get('lastItemSync');
-            var lastVocabSync = forceDownload ? 0 : this.get('lastVocabSync');
-            var now = skritter.fn.getUnixTime();
-            var responseSize = 0;
             if (Data.syncing) {
                 callback();
                 return;
             } else {
                 Data.syncing = true;
             }
+            var self = this;
+            var downloadedRequests = 0;
+            var lastItemSync = forceDownload ? 0 : this.get('lastItemSync');
+            var lastVocabSync = forceDownload ? 0 : this.get('lastVocabSync');
+            var now = skritter.fn.getUnixTime();
+            var responseSize = 0;
             console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
             if (showModal || lastItemSync === 0) {
                 skritter.modals.show('download')
