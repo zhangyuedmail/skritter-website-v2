@@ -38,23 +38,27 @@ define([
         },
         /**
          * @method collapse
+         * @returns {Backbone.View}
          */
         collapse: function() {
             GradingButtons.expanded = false;
             for (var i = 1; i <= 4; i++) {
                 if (this.$('#grade' + i).hasClass('selected')) {
-                    this.$('#grade' + i).show(GradingButtons.animationSpeed);
+                    this.$('#grade' + i).removeClass('hidden');
                 } else {
-                    this.$('#grade' + i).hide(GradingButtons.animationSpeed);
+                    this.$('#grade' + i).addClass('hidden');
                 }
             }
+            return this;
         },
         /**
          * @method expand
+         * @returns {Backbone.View}
          */
         expand: function() {
+            this.$('#grading-buttons').children().removeClass('hidden');
             GradingButtons.expanded = true;
-            this.$('#grading-buttons').children().show(GradingButtons.animationSpeed);
+            return this;
         },
         /**
          * @method grade
@@ -85,11 +89,8 @@ define([
         hide: function(skipAnimation) {
             if (skipAnimation) {
                 this.$('#grading-buttons').hide();
-                this.$('#grading-buttons').css('display', 'none');
             } else {
-                this.$('#grading-buttons').hide(GradingButtons.animationSpeed, function() {
-                    $(this).css('display', 'none');
-                });
+                this.$('#grading-buttons').hide(GradingButtons.animationSpeed);
             }
             return this;
         },
@@ -115,16 +116,13 @@ define([
                     this.$('#grade' + i).removeClass('selected');
                 }
             }
-            this.show();
             return this;
         },
         /**
          * @method show
          */
         show: function() {
-            this.$('#grading-buttons').show(GradingButtons.animationSpeed, function() {
-                $(this).css('display', 'table');
-            });
+            this.$('#grading-buttons').show(GradingButtons.animationSpeed);
             return this;
         },
         /**

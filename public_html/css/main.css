@@ -58,9 +58,24 @@ body {
 
 
 /*** GRADING BUTTONS ***/
-#grading-buttons { display: none; }
-#grading-buttons .btn { background-color: #ffffff; }
-#grading-buttons .grade-icon { max-height: 30px; }
+#grading-buttons { 
+    display: table;
+    width: 100%;
+}
+#grading-buttons div { 
+    background-color: transparent; 
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    opacity: 0.6;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    width: 24%;
+}
+#grading-buttons div:hover { opacity: 1; }
+#grading-buttons div.selected { opacity: 1; }
+#grading-buttons .grade-icon { max-height: 50px; }
 
 
 /*** HOME: LOGGED IN ***/

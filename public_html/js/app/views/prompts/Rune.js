@@ -61,7 +61,6 @@ define([
         handleDoubleTap: function(event) {
             if (!this.review.character().isFinished()) {
                 this.review.at({score: 1});
-                Prompt.gradingButtons.grade(1);
                 Rune.canvas.drawShape('background', this.review.character().targets[0].shape(null, '#999999'));
             }
             event.preventDefault();
@@ -101,7 +100,6 @@ define([
                     Rune.canvas.fadeShape('marker', shape);
                     if (Rune.strokeAttempts > Rune.maxStrokeAttempts) {
                         this.review.at({score: 1});
-                        Prompt.gradingButtons.grade(1);
                         Rune.canvas.fadeShape('hint', this.review.character().expectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
                 }
@@ -150,7 +148,7 @@ define([
             this.$('#input-section').height(canvasSize);
             this.$('#input-section').width(canvasSize);
             if (this.review.character().isFinished()) {
-                Rune.canvas.drawShape('display', this.review.character().shape(null, skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]));
+                Rune.canvas.drawShape('display', this.review.character().shape(null, skritter.settings.get('gradingColors')[this.review.at().score]));
             } else if (this.review.character().length > 0) {
                 Rune.canvas.drawShape('display', this.review.character().shape());
             }
@@ -186,14 +184,14 @@ define([
             skritter.timer.stop();
             Rune.canvas.disableInput();
             if (skritter.user.settings.get('squigs') && this.review.character().length > 0) {
-                var color = skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()];
+                var color = skritter.settings.get('gradingColors')[this.review.at().score];
                 for (var i = 0, length = this.review.character().length; i < length; i++) {
                     var stroke = this.review.character().at(i);
                     Rune.canvas.tweenShape('hint', stroke.userShape(color), stroke.inflateShape());
                 }
                 Rune.canvas.display().swapChildren(Rune.canvas.getLayer('display'), Rune.canvas.getLayer('hint'));
             } else {
-                Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[Prompt.gradingButtons.grade()]);
+                Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.at().score]);
             }
             Rune.strokeAttempts = 0;
             window.setTimeout(_.bind(function() {
@@ -202,7 +200,7 @@ define([
             }, this), 500);
             this.$('#prompt-sentence').html(this.review.baseVocab().sentenceWriting());
             this.$('#prompt-writing').html(this.review.baseVocab().writingBlocks(this.review.get('position') + 1));
-            Prompt.gradingButtons.show();
+            Prompt.gradingButtons.show().select(this.review.at().score).collapse();
             return this;
         }
     });
