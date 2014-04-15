@@ -106,9 +106,11 @@ define([
         },
         /**
          * @method getSchedule
+         * @param {Array|String} filterParts
+         * @param {Array|String} filterStyle
          * @param {Function} callback
          */
-        getSchedule: function(callback) {
+        getSchedule: function(filterParts, filterStyle, callback) {
             var schedule = [];
             var onError = function(event) {
                 console.error(event);
@@ -124,15 +126,16 @@ define([
                         var held = JSON.parse(item.held);
                         var last = JSON.parse(item.last);
                         var next = JSON.parse(item.next);
+                        var part = JSON.parse(item.part);
                         var style = JSON.parse(item.style);
                         var vocabIds = JSON.parse(item.vocabIds);
-                        if (vocabIds.length > 0) {
+                        if (vocabIds.length > 0 &&
+                                filterParts.indexOf(part) !== 0 &&
+                                filterStyle.indexOf(style) !== 0) {
                             item.id = JSON.parse(item.id);
                             item.held = held;
                             item.last = last ? last : 0;
                             item.next = next ? next : 0;
-                            item.style = style ? style : undefined;
-                            delete item.vocabIds;
                             schedule.push(item);
                         }
                     }

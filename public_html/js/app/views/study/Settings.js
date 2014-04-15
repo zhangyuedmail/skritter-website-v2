@@ -84,7 +84,10 @@ define([
                 return false;
             }
             skritter.user.settings.activeParts(Settings.activeParts);
-            skritter.router.back();
+            skritter.user.data.items.loadSchedule(function() {
+                skritter.user.data.items.sort();
+                skritter.router.back();
+            });
             event.preventDefault();
         }
     });

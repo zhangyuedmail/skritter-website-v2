@@ -82,9 +82,11 @@ define([
         },
         /**
          * @method getSchedule
+         * @param {Array|String} filterParts
+         * @param {Array|String} filterStyle
          * @param {Function} callback
          */
-        getSchedule: function(callback) {
+        getSchedule: function(filterParts, filterStyle, callback) {
             var schedule = [];
             var transaction = IndexedDBAdapter.database.transaction('items', 'readonly');
             transaction.oncomplete = function() {
@@ -96,15 +98,16 @@ define([
             transaction.objectStore('items').openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    if (cursor.value.vocabIds.length > 0) {
-                        var scheduleItem = {
+                    if (cursor.value.vocabIds.length > 0 &&
+                            filterParts.indexOf(cursor.value.part) !== -1 &&
+                            filterStyle.indexOf(cursor.value.style) !== -1) {
+                        schedule.push({
                             id: cursor.value.id,
                             held: cursor.value.held,
                             last: cursor.value.last ? cursor.value.last : 0,
                             next: cursor.value.next ? cursor.value.next : 0,
-                            style: cursor.value.style
-                        };
-                        schedule.push(scheduleItem);
+                            vocabIds: cursor.value.vocabIds
+                        });
                     }
                     cursor.continue();
                 }
@@ -204,6 +207,6 @@ define([
             }, this));
         }
     });
-    
+
     return IndexedDBAdapter;
 });

@@ -77,7 +77,7 @@ define([
          * @param {Function} callback
          */
         loadSchedule: function(callback) {
-            skritter.storage.getSchedule(_.bind(function(schedule) {
+            skritter.storage.getSchedule(skritter.user.settings.activeParts(), skritter.user.settings.style(), _.bind(function(schedule) {
                 this.schedule = schedule;
                 this.trigger('schedule:load');
                 callback();
@@ -85,31 +85,17 @@ define([
         },
         /**
          * @method next
-         * @param {Function} callback
-         * @param {Array|String} filterParts
+         * @param {Function} callback         
          * @param {Array|String} filterIds
-         * @param {Array|String} filterStyle
          * @returns {Backbone.Model}
          */
-        next: function(callback, filterParts, filterIds, filterStyle) {
+        next: function(callback, filterIds) {
             var i = 0;
             var schedule = this.schedule;
-            if (filterParts) {
-                filterParts = Array.isArray(filterParts) ? filterParts : [filterParts];
-                schedule = schedule.filter(function(item) {
-                    return filterParts.indexOf(item.id.split('-')[4]) !== -1;
-                });
-            }
             if (filterIds) {
                 filterIds = Array.isArray(filterIds) ? filterIds : [filterIds];
                 schedule = schedule.filter(function(item) {
                     return filterIds.indexOf(item.id) !== -1;
-                });
-            }
-            if (filterStyle) {
-                filterStyle = Array.isArray(filterStyle) ? filterStyle : [filterStyle];
-                schedule = schedule.filter(function(item) {
-                    return filterStyle.indexOf(item.style) !== -1;
                 });
             }
             var load = function() {

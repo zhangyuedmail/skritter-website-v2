@@ -35,6 +35,7 @@ define([
             if (window.cordova || skritter.settings.appWidth() <= skritter.settings.get('maxCanvasSize'))
                 this.$('#content-container').addClass('full-width');
             skritter.timer.setElement(this.$('#timer')).render();
+            this.updateDueCount();
             if (skritter.user.settings.get('hideDueCount'))
                 this.$('#items-due').parent().hide();
             if (skritter.user.settings.get('hideTimer'))
@@ -137,7 +138,7 @@ define([
                 } else {
                     //TODO: handle when a prompt can't be loaded
                 }
-            }, this), skritter.user.settings.activeParts(), null, skritter.user.settings.style());
+            }, this), null);
         },
         /**
          * @method updateAudioButtonState
