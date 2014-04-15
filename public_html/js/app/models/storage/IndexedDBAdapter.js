@@ -103,7 +103,6 @@ define([
                             filterStyle.indexOf(cursor.value.style) !== -1) {
                         schedule.push({
                             id: cursor.value.id,
-                            held: cursor.value.held,
                             last: cursor.value.last ? cursor.value.last : 0,
                             next: cursor.value.next ? cursor.value.next : 0,
                             vocabIds: cursor.value.vocabIds

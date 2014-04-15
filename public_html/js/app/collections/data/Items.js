@@ -168,7 +168,8 @@ define([
                 id: item.id,
                 last: item.get('last'),
                 next: item.get('next'),
-                style: item.get('style')
+                style: item.get('style'),
+                vocabIds: item.get('vocabIds')
             };
             //TODO: add better handling for indirectly related prompts
         }
