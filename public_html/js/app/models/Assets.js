@@ -20,7 +20,7 @@ define(function() {
          */
         playAudio: function(filename) {
             if (window.cordova) {
-                navigator.expansion.media.play(filename);
+                navigator.expansion.media.play(decodeURIComponent(filename));
             } else {
                 if (Assets.audio.paused) {
                     Assets.audio.src = skritter.api.audioBase() + 'sounds?file=' + filename;
