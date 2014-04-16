@@ -79,7 +79,7 @@ define([
          * @returns {String}
          */
         definition: function() {
-            if (this.has('customDefinition')) {
+            if (this.has('customDefinition') && this.get('customDefinition') !== '') {
                 return this.get('customDefinition');
             } else if (this.get('definitions')[skritter.user.settings.get('sourceLang')]) {
                 return this.get('definitions')[skritter.user.settings.get('sourceLang')];

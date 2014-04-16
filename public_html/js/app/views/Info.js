@@ -43,6 +43,7 @@ define([
                 this.$('#writing-secondary').html('');
                 this.$('#reading').html(Info.vocab.reading());
                 this.$('#definition').html(Info.vocab.definition());
+                this.$('#mnemonic').html(Info.vocab.mnemonic());
                 if (Info.vocab.has('sentenceId')) {
                     this.$('#sentence .writing').html(Info.vocab.sentence().get('writing'));
                     this.$('#sentence .reading').html(Info.vocab.sentence().reading());
@@ -61,6 +62,7 @@ define([
             'click.Info #info-view #audio-button': 'handleAudioButtonClicked',
             'click.Info #info-view .back-button': 'handleBackButtonClicked',
             'click.Info #info-view #ban-button': 'toggleBan',
+            'click.Info #info-view #edit-definition-button': 'handleEditDefinitionButtonClicked',
             'click.Info #info-view #star-button': 'toggleStar'
         },
         /**
@@ -78,6 +80,32 @@ define([
          */
         handleBackButtonClicked: function(event) {
             skritter.router.back();
+            event.preventDefault();
+        },
+        /**
+         * @method handleEditDefinitionButtonClicked
+         * @param {Object} event
+         */
+        handleEditDefinitionButtonClicked: function(event) {
+            if (this.$('#edit-definition-button').html() === 'Edit') {
+                var html = this.$('#definition').html();
+                this.$('#definition').html("<textarea class='info-edit-text'></textarea>");
+                this.$('#definition .info-edit-text').html(html);
+                this.$('#definition .info-edit-text').focus();
+                this.$('#edit-definition-button').html('Save');
+            } else {
+                var text = this.$('#definition .info-edit-text').val();
+                if (text === '') {
+                    Info.vocab.unset('customDefinition');
+                    this.$('#definition').html(Info.vocab.definition());
+                } else {
+                    this.$('#definition').html(text);
+                }
+                this.$('#edit-definition-button').html('Edit');
+                Info.vocab.set('customDefinition', text);
+                skritter.user.data.addChangedVocabId(Info.vocab.id);
+                Info.vocab.cache();
+            }
             event.preventDefault();
         },
         /**
