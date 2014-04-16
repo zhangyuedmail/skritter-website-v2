@@ -79,13 +79,13 @@ define([
          * @returns {String}
          */
         definition: function() {
-            var definition;
-            if (this.get('definitions')[skritter.user.settings.get('sourceLang')]) {
-                definition = this.get('definitions')[skritter.user.settings.get('sourceLang')];
+            if (this.has('customDefinition')) {
+                return this.get('customDefinition');
+            } else if (this.get('definitions')[skritter.user.settings.get('sourceLang')]) {
+                return this.get('definitions')[skritter.user.settings.get('sourceLang')];
             } else if (this.get('definitions').en) {
-                definition = this.get('definitions').en;
+                return this.get('definitions').en;
             }
-            return definition;
         },
         /**
          * @method font
@@ -133,6 +133,18 @@ define([
         playAudio: function() {
             if (this.has('audio'))
                 skritter.assets.playAudio(this.audio());
+        },
+        /**
+         * @method mnemonic
+         * @returns {String}
+         */
+        mnemonic: function() {
+            if (this.has('mnemonic')) {
+                return this.get('topMnemonic').text;
+            } else if (this.has('topMnemonic')) {
+                if (this.get('topMnemonic').public)
+                    return this.get('topMnemonic').text + ' (' + this.get('topMnemonic').creator + ')';
+            }
         },
         /**
          * @method reading
