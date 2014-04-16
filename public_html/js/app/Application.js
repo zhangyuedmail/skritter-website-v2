@@ -65,11 +65,7 @@ define([
      */
     var loadAssets = function(callback) {
         skritter.assets = new Assets();
-        if (window.cordova) {
-            navigator.expansion.load(3, 3, callback);
-        } else {
-            callback();
-        }
+        callback();
     };
     /**
      * @method loadFunctions
