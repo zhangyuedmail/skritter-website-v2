@@ -101,6 +101,7 @@ body {
     position: absolute;
     top: 5px;
 }
+#info-view #writing-block, #info-view #reading-block { height: 105px; }
 
 
 /*** LANDING PAGE ***/
