@@ -63,6 +63,7 @@ define([
             'click.Info #info-view .back-button': 'handleBackButtonClicked',
             'click.Info #info-view #ban-button': 'toggleBan',
             'click.Info #info-view #edit-definition-button': 'handleEditDefinitionButtonClicked',
+            'click.Info #info-view #edit-mnemonic-button': 'handleEditMnemonicButtonClicked',
             'click.Info #info-view #star-button': 'toggleStar'
         },
         /**
@@ -103,6 +104,32 @@ define([
                 }
                 this.$('#edit-definition-button').html('Edit');
                 Info.vocab.set('customDefinition', text);
+                skritter.user.data.addChangedVocabId(Info.vocab.id);
+                Info.vocab.cache();
+            }
+            event.preventDefault();
+        },
+        /**
+         * @method handleEditMnemonicButtonClicked
+         * @param {Object} event
+         */
+        handleEditMnemonicButtonClicked: function(event) {
+            if (this.$('#edit-mnemonic-button').html() === 'Edit') {
+                var html = this.$('#mnemonic').html();
+                this.$('#mnemonic').html("<textarea class='info-edit-text'></textarea>");
+                this.$('#mnemonic .info-edit-text').html(html);
+                this.$('#mnemonic .info-edit-text').focus();
+                this.$('#edit-mnemonic-button').html('Save');
+            } else {
+                var text = this.$('#mnemonic .info-edit-text').val();
+                if (text === '') {
+                    Info.vocab.unset('mnemonic');
+                    this.$('#mnemonic').html(Info.vocab.mnemonic());
+                } else {
+                    this.$('#mnemonic').html(text);
+                }
+                this.$('#edit-mnemonic-button').html('Edit');
+                Info.vocab.set('mnemonic', text === '' ? {text: text, public: false} : {text: text, public: true});
                 skritter.user.data.addChangedVocabId(Info.vocab.id);
                 Info.vocab.cache();
             }

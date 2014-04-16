@@ -139,11 +139,11 @@ define([
          * @returns {String}
          */
         mnemonic: function() {
-            if (this.has('mnemonic')) {
-                return this.get('topMnemonic').text;
+            if (this.has('mnemonic') && this.get('mnemonic').text !== '') {
+                return this.get('mnemonic').text;
             } else if (this.has('topMnemonic')) {
                 if (this.get('topMnemonic').public)
-                    return this.get('topMnemonic').text + ' (' + this.get('topMnemonic').creator + ')';
+                    return this.get('topMnemonic').text;
             }
         },
         /**
