@@ -523,7 +523,7 @@ module.exports = function(grunt) {
     /*
      * COMMANDS: BUILDING
      */
-    grunt.registerTask('build-android-zh', [
+    grunt.registerTask('build-android', [
         'build-android-ja',
         'build-android-zh',
     ]);
