@@ -28,7 +28,7 @@ define([
             Info.buttonBan = this.$('#ban-button span');
             Info.buttonStar = this.$('#star-button span');
             if (Info.vocab) {
-                if (Info.vocab.has('bannedParts')) {
+                if (Info.vocab.has('bannedParts') && Info.vocab.get('bannedParts').length > 0) {
                     Info.buttonBan.addClass('text-danger');
                 } else {
                     Info.buttonBan.removeClass('text-danger');
@@ -102,7 +102,7 @@ define([
          */
         toggleBan: function(event) {
             if (Info.buttonBan.hasClass('text-danger')) {
-                Info.vocab.unset('bannedParts');
+                Info.vocab.set('bannedParts', []);
                 Info.buttonBan.removeClass('text-danger');
             } else {
                 if (Info.vocab.isChinese()) {

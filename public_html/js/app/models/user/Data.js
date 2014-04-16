@@ -614,7 +614,7 @@ define([
                         callback();
                     }
                 },
-                //checks for updates vocabs to put to the server
+                //checks for vocab updates to put to the server
                 function(callback) {
                     if (self.get('changedVocabIds').length > 0) {
                         skritter.modals.set('.modal-title-right', 'Updating Vocabs');
@@ -626,6 +626,7 @@ define([
                             },
                             function(vocabs, callback) {
                                 skritter.api.updateVocabs(vocabs, function(result) {
+                                    console.log('UPDATED VOCABS', result);
                                     skritter.user.data.items.insert(result.Items, callback);
                                 }); 
                             }
