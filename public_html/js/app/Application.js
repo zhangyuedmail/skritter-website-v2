@@ -48,8 +48,6 @@ define([
             async.apply(loadTimer),
             async.apply(loadUser)
         ], function() {
-            if (window.cordova)
-                navigator.splashscreen.hide();
             Router.initialize();
         });
     };

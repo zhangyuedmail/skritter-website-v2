@@ -15,10 +15,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('change', function(vocab) {
-                vocab.set('changed', skritter.fn.getUnixTime(), {silent: true, sort: false});
-                skritter.user.data.addChangedVocabId(vocab.id);
-            });
         },
         /**
          * @property {Vocab} model

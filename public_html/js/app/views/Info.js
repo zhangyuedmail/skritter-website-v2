@@ -33,11 +33,11 @@ define([
                 } else {
                     Info.buttonBan.removeClass('text-danger');
                 }
-                 if (Info.vocab.get('starred')) {
-                     Info.buttonStar.addClass('text-warning');
-                 } else {
-                     Info.buttonStar.removeClass('text-warning');
-                 }
+                if (Info.vocab.get('starred')) {
+                    Info.buttonStar.addClass('text-warning');
+                } else {
+                    Info.buttonStar.removeClass('text-warning');
+                }
                 this.$('.character-font').addClass(Info.vocab.fontClass());
                 this.$('#writing-primary').html(Info.vocab.get('writing'));
                 this.$('#writing-secondary').html('');
@@ -102,16 +102,17 @@ define([
          */
         toggleBan: function(event) {
             if (Info.buttonBan.hasClass('text-danger')) {
-                Info.vocab.set('bannedParts', []);
                 Info.buttonBan.removeClass('text-danger');
+                Info.vocab.set('bannedParts', []);
             } else {
+                Info.buttonBan.addClass('text-danger');
                 if (Info.vocab.isChinese()) {
                     Info.vocab.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
                 } else {
                     Info.vocab.set('bannedParts', ['defn', 'rdng', 'rune']);
                 }
-                Info.buttonBan.addClass('text-danger');
             }
+            skritter.user.data.addChangedVocabId(Info.vocab.id);
             Info.vocab.cache();
             event.preventDefault();
         },
@@ -121,12 +122,14 @@ define([
          */
         toggleStar: function(event) {
             if (Info.buttonStar.hasClass('text-warning')) {
-                Info.vocab.set('starred', false);
                 Info.buttonStar.removeClass('text-warning');
+                Info.vocab.set('starred', false);
+                
             } else {
-                Info.vocab.set('starred', true);
                 Info.buttonStar.addClass('text-warning');
+                Info.vocab.set('starred', true);
             }
+            skritter.user.data.addChangedVocabId(Info.vocab.id);
             Info.vocab.cache();
             event.preventDefault();
         },

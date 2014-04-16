@@ -217,6 +217,9 @@ define([
     var initialize = function() {
         skritter.router = new Router();
         Backbone.history.start(skritter.fn.isLocal() ? {} : {pushState: true});
+        if (window.cordova) {
+            navigator.splashscreen.hide();
+        }
     };
 
     return {

@@ -29,7 +29,7 @@ define(function() {
             Canvas.stage.input = this.createInputStage();
             createjs.Ticker.addEventListener('tick', Canvas.stage.display);
             createjs.Touch.enable(Canvas.stage.input);
-            createjs.Ticker.setFPS(200);
+            createjs.Ticker.setFPS(24);
         },
         /**
          * @method render
@@ -208,10 +208,10 @@ define(function() {
                         .beginStroke(Canvas.strokeColor)
                         .moveTo(midPoint.x, midPoint.y)
                         .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+                stage.update();
                 oldPoint = point;
                 oldMidPoint = midPoint;
                 points.push(point);
-                stage.update();
             }
             function up(event) {
                 stage.removeEventListener('stagemousemove', move);
@@ -252,7 +252,7 @@ define(function() {
          */
         fadeShape: function(layerName, shape, milliseconds, callback) {
             var layer = this.getLayer(layerName);
-            milliseconds = milliseconds ? milliseconds : 1000;
+            milliseconds = milliseconds ? milliseconds : 500;
             layer.addChild(shape);
             Canvas.stage.display.update();
             shape.cache(0, 0, Canvas.size, Canvas.size);

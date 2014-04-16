@@ -116,7 +116,7 @@ define([
                 },
                 //creates a batch request to download the specified number of items
                 function(callback) {
-                    
+
                     skritter.api.requestBatch(requests, function(batch) {
                         if (batch.statusText === 'error') {
                             callback(batch, null);
@@ -627,8 +627,11 @@ define([
                             function(vocabs, callback) {
                                 skritter.api.updateVocabs(vocabs, function(result) {
                                     console.log('UPDATED VOCABS', result);
-                                    skritter.user.data.items.insert(result.Items, callback);
-                                }); 
+                                    async.series([
+                                        async.apply(skritter.user.data.items.insert, result.Items),
+                                        async.apply(skritter.user.data.vocabs.insert, result.Vocabs)
+                                    ], callback);
+                                });
                             }
                         ], function() {
                             self.set('changedVocabIds', []);
@@ -640,7 +643,7 @@ define([
                 },
                 //downloads changed vocabs at a maximum of once per day
                 function(callback) {
-                    if (lastVocabSync !== 0 &&  moment(lastVocabSync * 1000).add('days', 1).valueOf() / 1000 <= now) {
+                    if (lastVocabSync !== 0 && moment(lastVocabSync * 1000).add('days', 1).valueOf() / 1000 <= now) {
                         skritter.modals.set('.modal-title-right', 'Updating Vocabs');
                         self.fetchVocabs(lastVocabSync, callback, null);
                         self.set('lastVocabSync', now);
@@ -650,7 +653,7 @@ define([
                 },
                 //downloads the latest configs for more accurate scheduling
                 function(callback) {
-                    if (lastSRSConfigSync === 0 ||  moment(lastSRSConfigSync * 1000).add('hours', 2).valueOf() / 1000 <= now) {
+                    if (lastSRSConfigSync === 0 || moment(lastSRSConfigSync * 1000).add('hours', 2).valueOf() / 1000 <= now) {
                         skritter.modals.set('.modal-title-right', 'Updating SRS');
                         self.fetchSRSConfigs(callback);
                         self.set('lastSRSConfigSync', now);
