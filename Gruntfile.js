@@ -524,6 +524,10 @@ module.exports = function(grunt) {
      * COMMANDS: BUILDING
      */
     grunt.registerTask('build-android-zh', [
+        'build-android-ja',
+        'build-android-zh',
+    ]);
+    grunt.registerTask('build-android-zh', [
         'jshint',
         'clean:cordova-www-zh',
         'copy:cordova-www-zh',
@@ -538,6 +542,10 @@ module.exports = function(grunt) {
         'copy:cordova-install-ja',
         'replace:cordova-ja',
         'shell:android-build-run-ja'
+    ]);
+    grunt.registerTask('build-android-signed', [
+        'build-android-signed-ja',
+        'build-android-signed-zh'
     ]);
     grunt.registerTask('build-android-signed-zh', [
         'jshint',
