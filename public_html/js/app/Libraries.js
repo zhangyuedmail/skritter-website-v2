@@ -11,6 +11,7 @@
 define([
     'async',
     'moment',
+    'require.locale',
     'require.text'
 ], function(async, moment) {
     window.async = async;

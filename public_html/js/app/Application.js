@@ -1,54 +1,35 @@
 /**
  * @module Skritter
- * @param Api
- * @param Assets
- * @param Functions
- * @param IndexedDBAdapter
- * @param Modals
- * @param Params
- * @param Router
- * @param Settings
- * @param Timer
- * @param User
- * @param WebSQLAdapter
  * @author Joshua McFarland
  */
 define([
-    'models/Api',
-    'models/Assets',
+    'model/Api',
     'Functions',
-    'models/storage/IndexedDBAdapter',
-    'views/components/Modals',
-    'collections/data/Params',
+    'model/storage/IndexedDBAdapter',
+    'view/component/Modal',
     'Router',
-    'models/Settings',
-    'views/components/Timer',
-    'models/User',
-    'models/storage/WebSQLAdapter'
-], function(Api, Assets, Functions, IndexedDBAdapter, Modals, Params, Router, Settings, Timer, User, WebSQLAdapter) {
-    /**
-     * Reserves the global skritter namespace if it doesn't already exist.
-     * @param skritter
-     */
-    window.skritter = (function(skritter) {
-        return skritter;
-    })(window.skritter || {});
+    'model/Settings',
+    'model/User'
+], function(Api, Functions, IndexedDBAdapter, Modal, Router, Settings, User) {
     /**
      * @method initialize
      */
     var initialize = function() {
+        //creates the global skritter namespace
+        window.skritter = (function(skritter) {
+            return skritter;
+        })(window.skritter || {});
+        //asynchronously loads all of the required modules
         async.series([
             async.apply(loadApi),
-            async.apply(loadAssets),
             async.apply(loadFunctions),
-            async.apply(loadModals),
-            async.apply(loadParams),
+            async.apply(loadModal),
             async.apply(loadSettings),
             async.apply(loadStorage),
-            async.apply(loadTimer),
-            async.apply(loadUser)
+            async.apply(loadUser),
+            async.apply(loadRouter)
         ], function() {
-            Router.initialize();
+            console.log('Application Initialized');
         });
     };
     /**
@@ -57,14 +38,6 @@ define([
      */
     var loadApi = function(callback) {
         skritter.api = new Api();
-        callback();
-    };
-    /**
-     * @method loadAssets
-     * @param {Function} callback
-     */
-    var loadAssets = function(callback) {
-        skritter.assets = new Assets();
         callback();
     };
     /**
@@ -79,16 +52,16 @@ define([
      * @method loadModals
      * @param {Function} callback
      */
-    var loadModals = function(callback) {
-        skritter.modals = new Modals().render();
+    var loadModal = function(callback) {
+        skritter.modal = new Modal().render();
         callback();
     };
     /**
-     * @method loadParams
+     * @method loadRouter
      * @param {Function} callback
      */
-    var loadParams = function(callback) {
-        skritter.params = new Params();
+    var loadRouter = function(callback) {
+        skritter.router = new Router();
         callback();
     };
     /**
@@ -104,27 +77,7 @@ define([
      * @param {Function} callback
      */
     var loadStorage = function(callback) {
-        if (window.cordova) {
-            var version = window.device.version.split('.');
-            if (version[0] === '4' && version[1] === '4') {
-                skritter.settings.set('storageType', 'IndexedDB');
-                skritter.storage = new IndexedDBAdapter();
-            } else {
-                skritter.settings.set('storageType', 'WebSQL');
-                skritter.storage = new WebSQLAdapter();
-            }
-        } else {
-            skritter.settings.set('storageType', 'IndexedDB');
-            skritter.storage = new IndexedDBAdapter();
-        }
-        callback();
-    };
-    /**
-     * @method loadTimer
-     * @param {Function} callback
-     */
-    var loadTimer = function(callback) {
-        skritter.timer = new Timer();
+        skritter.storage = new IndexedDBAdapter();
         callback();
     };
     /**
@@ -136,37 +89,12 @@ define([
         if (skritter.user.isLoggedIn()) {
             async.series([
                 function(callback) {
-                    skritter.storage.open(skritter.user.get('user_id'), callback);
+                    skritter.storage.open(skritter.user.id, callback);
                 },
                 function(callback) {
-                    skritter.user.data.sync(callback, false);
-                },
-                function(callback) {
-                    if (window.cordova) {
-                        skritter.user.data.items.loadSchedule(callback);
-                    } else {
-                        skritter.modals.show('default', function() {
-                            skritter.user.data.items.loadSchedule(callback);
-                        }).set('.modal-header', false).set('.modal-body', 'LOADING', 'text-center').set('.modal-footer', false);
-                    }
-                },
-                function(callback) {
-                    skritter.user.data.reviews.loadAll(callback);
-                },
-                function(callback) {
-                    skritter.user.data.srsconfigs.loadAll(callback);
-                },
-                function(callback) {
-                    skritter.user.data.vocablists.loadAll(callback);
+                    skritter.user.scheduler.load(callback);
                 }
-            ], function() {
-                skritter.timer.refresh(true);
-                if (window.cordova) {
-                    callback();
-                } else {
-                    skritter.modals.hide(callback);
-                }
-            });
+            ], callback);
         } else {
             callback();
         }

@@ -15,14 +15,14 @@
  * @author Joshua McFarland
  */
 define([
-    'functions/Bootstrap',
-    'functions/ParamMap',
-    'functions/PinyinConverter',
-    'functions/Recognizer',
-    'functions/Scheduler',
-    'functions/Shortstraw',
-    'functions/SimpTradMap',
-    'functions/StrokeMap'
+    'function/Bootstrap',
+    'function/ParamMap',
+    'function/PinyinConverter',
+    'function/Recognizer',
+    'function/Scheduler',
+    'function/Shortstraw',
+    'function/SimpTradMap',
+    'function/StrokeMap'
 ], function(Bootstrap, ParamMap, PinyinConverter, Recognizer, Scheduler, Shortstraw, SimpTradMap, StrokeMap) {
     /**
      * @method angle

@@ -12,24 +12,10 @@
 /*** GENERAL ***/
 html, body { height: 100%; }
 body {
-    -webkit-touch-callout: none;
-    -webkit-text-size-adjust: none;
-    -webkit-user-select: none;
-    background-image: url('../images/textures/ricepaper.png');
+    background-image: url('../image/background/ricepaper1.png');
     background-repeat: repeat;
 }
 #skritter-container { height: 100%; }
-#content-container { position: relative; }
-#content-container.no-padding { padding: 0; }
-#content-container.no-scroll { 
-    height: 100%; 
-    overflow-y: hidden;
-}
-#content-container.full-width {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-block {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
@@ -41,21 +27,11 @@ body {
     margin-bottom: 10px;
     position: relative;
 }
-.content-block.no-shadow {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-}
-.content-block.no-padding { padding: 0; }
-.content-block.no-top { margin-top: 0; }
-.cursor { cursor: pointer; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;
-    padding-top: 55px;
+    padding-top: 45px;
 }
-.view.no-space { padding-top: 45px; }
-.view.no-nav { padding-top: 0; }
 
 
 /*** GRADING BUTTONS ***/
@@ -79,261 +55,52 @@ body {
 #grading-buttons .grade-icon { max-height: 50px; }
 
 
-/*** HOME: LOGGED IN ***/
-#home-view.logged-in #lists {
-    max-height: 300px;
-    overflow-x: auto;
-}
-
-
-/*** INFO ***/
-#info-view .edit-buttons {
-    right: 15px;
-    position: absolute;
-    top: 5px;
-}
-#info-view .info-edit-text {
-    min-height: 100px;
-    width: 100%;
-}
-#info-view .info-title {
-    left: 15px;
-    position: absolute;
-    top: 5px;
-}
-#info-view #writing-block, #info-view #reading-block { height: 105px; }
-
-
 /*** LANDING PAGE ***/
 .landing-page {
     background-color: #333333;
     color: #ffffff;
-    padding-top: 100px;
+    padding-top: 10px;
     text-align: center;
 }
 .landing-page #header {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0 15px;
     position: absolute;
-    top: 0;
+    top: 10px;
     width: 100%;
 }
-.landing-page #content-container {
+.landing-page #content {
+    left:0;
     position: fixed;
-    top: 30%;
-    width: 100%;
+    margin-left:auto;
+    margin-right:auto;
+    max-width: 400px;
+    right:0;
+    top: 25%;
 }
 .landing-page #footer {
-    bottom: 0;
+    bottom: 10px;
+    padding: 0 15px;
     position: absolute;
     width: 100%;
 }
 
-
 /*** MODALS ***/
-#modals-container .modal { overflow-y: hidden; }
-#modals-container .vertical-centered {
+#modal-container .modal { overflow-y: hidden; }
+#modal-container .vertical-centered {
     position: fixed;
     outline: 0;
     top: 15% !important;
 }
-#modals-container .modal-title-right {
+#modal-container .modal-title-right {
     float: right;
     line-height: 1.42857143;
     margin: 0;
 }
 
-
-/*** MODALS: LOGIN ***/
-#modals-container .form-signin {
-    max-width: 330px;
-    padding: 15px;
-    margin: 0 auto;
-}
-#modals-container .form-signin .form-signin-heading,
-.form-signin .checkbox {
-    margin-bottom: 10px;
-}
-#modals-container .form-signin .checkbox {
-    font-weight: normal;
-}
-#modals-container .form-signin .form-control {
-    position: relative;
-    font-size: 16px;
-    height: auto;
-    padding: 10px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-#modals-container .form-signin .form-control:focus {
-    z-index: 2;
-}
-#modals-container .form-signin input[type="text"] {
-    margin-bottom: -1px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
-#modals-container .form-signin input[type="password"] {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-#modals-container #add-items .modal-body {
-    text-align: center;
-}
-#modals-container #add-items #number-spinner {
-    font-size: 32px;
-    text-align: center;
-}
-
-
 /*** NAVBAR ***/
 .navbar { font-size: 18px; }
-.navbar .navbar-text {
-    margin: 10px 0;
-}
+.navbar .navbar-text { margin: 10px 0; }
 .navbar .navbar-text a {
     padding: 10px 5px;
     text-decoration: none;
-}
-
-
-/*** PROMPT ***/
-.prompt-container {
-    height: 100%;
-    position: relative;
-}
-
-
-/*** PROMPT: GRADING BUTTONS ***/
-.prompt-container #grading-buttons {
-    bottom: 0;
-    display: none;
-    left: 0;
-    position: absolute;
-    z-index: 9003;
-}
-
-
-/*** PROMPT: INFO SECTION ***/
-#info-section {
-    overflow-y: auto;
-    position: absolute;
-    z-index: 1002;
-}
-.prompt-container.landscape #info-section { width: 50%; }
-.prompt-container.portrait #info-section { width: 100%; }
-#info-section #hint-caret {
-    cursor: pointer;
-    position: absolute;
-    right: 20px;
-    top: 10px;
-}
-#info-section #info-button {
-    cursor: pointer;
-    font-size: 24px;
-    left: 20px;
-    position: absolute;
-    top: 15px;
-}
-#info-section #prompt-hint { display: none; }
-#info-section .writing-hidden { border-bottom: 1px #222222 solid; }
-#info-section .writing-hidden span { visibility: hidden; }
-#info-section .reading-hidden { border-bottom: 1px #222222 solid; }
-#info-section .reading-hidden span { visibility: hidden; }
-
-
-/*** PROMPT: INPUT SECTION ***/
-#input-section {
-    position: absolute;
-    z-index: 1001;
-}
-.prompt-container.landscape #input-section {
-    right: 0;
-    top: 0;
-    width: 50%;
-}
-.prompt-container.portrait #input-section {
-    bottom: -15px;
-    width: 100%;
-}
-.prompt-container.portrait #info-section { border-bottom: 2px solid #222222; }
-#input-section #prompt-text {
-    display: table;
-    height: 100%;
-    width: 100%;
-}
-#input-section #prompt-text .answer {
-    cursor: pointer;
-    display: table-cell;
-    padding: 0 15px;
-    vertical-align: middle;
-}
-#input-section #prompt-text .question {
-    cursor: pointer;
-    display: table-cell;
-    padding: 0 15px;
-    vertical-align: middle;
-}
-
-
-/*** PROMPT: DEFINITION ***/
-#defn #prompt-question-text { font-size: 20px; }
-#defn #prompt-writing { font-size: 72px; }
-#defn #prompt-reading { font-size: 18px; }
-#defn #prompt-definition { font-size: 24px; }
-#defn #prompt-sentence { font-size: 18px; }
-
-
-/*** PROMPT: READING ***/
-#rdng #prompt-question-text { font-size: 20px; }
-#rdng #prompt-writing { font-size: 72px; }
-#rdng #prompt-reading { font-size: 48px; }
-#rdng #prompt-definition { font-size: 18px; }
-#rdng #prompt-sentence { font-size: 18px; }
-
-
-/*** PROMPT: TONE ***/
-#tone #prompt-question-text { font-size: 20px; }
-#tone #prompt-writing { font-size: 32px; }
-#tone #prompt-reading { 
-    font-size: 20px;
-    padding-left: 15px;
-}
-#tone #prompt-definition { font-size: 18px; }
-#tone #prompt-sentence { font-size: 18px; }
-
-
-/*** PROMPT: WRITING ***/
-#rune #prompt-question-text { font-size: 20px; }
-#rune #prompt-writing { font-size: 32px; }
-#rune #prompt-reading { 
-    font-size: 20px;
-    padding-left: 15px;
-}
-#rune #prompt-definition { font-size: 18px; }
-#rune #prompt-sentence { font-size: 18px; }
-
-
-/*** PROMPT: WRITING AREA ***/
-#writing-area .canvas-holder { position: relative; }
-#writing-area .canvas-holder #canvas-display {
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    z-index: 9001;
-}
-#writing-area .canvas-holder #canvas-input {
-    bottom: 0;
-    cursor: pointer;
-    left: 0;
-    position: absolute;
-    z-index: 9002;
-}
-
-/*** STUDY: SETTINGS ***/
-#study-settings-view #parts .setting-label {
-    float: left;
-    width: 150px;
 }
