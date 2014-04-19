@@ -25,6 +25,14 @@ define([
                 });
             });
             return this;
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.stopListening();
+            this.undelegateEvents();
+            this.$el.empty();
         }
     });
     

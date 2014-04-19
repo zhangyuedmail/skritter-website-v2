@@ -27,15 +27,35 @@ define([
             'login': 'login',
             'test': 'test'
         },
+        /**
+         * @method removeView
+         */
+        removeView: function() {
+            if (this.view)
+                this.view.remove();
+            this.view = null;
+        },
+        /**
+         * @method home
+         */
         home: function() {
+            this.removeView();
             this.view = new Home({el: this.container});
             this.view.render();
         },
+        /**
+         * @method login
+         */
         login: function() {
+            this.removeView();
             this.view = new Login({el: this.container});
             this.view.render();
         },
+        /**
+         * @method test
+         */
         test: function() {
+            this.removeView();
             this.view = new Test({el: this.container});
             this.view.render();
         }

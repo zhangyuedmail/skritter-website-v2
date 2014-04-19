@@ -76,6 +76,14 @@ define([
         navigateNewUser: function(event) {
             skritter.router.navigate('user/new', {trigger: true, replace: true});
             event.preventDefault();
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.stopListening();
+            this.undelegateEvents();
+            this.$el.empty();
         }
     });
     

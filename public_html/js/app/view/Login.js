@@ -65,6 +65,14 @@ define([
             event.preventDefault();
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.stopListening();
+            this.undelegateEvents();
+            this.$el.empty();
+        },
+        /**
          * @method toHome
          * @param {Object} event
          */
