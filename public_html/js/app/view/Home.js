@@ -17,6 +17,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.listenTo(skritter.user.sync, 'sync', this.toggleSyncButton);
         },
         /**
          * @method render
@@ -37,22 +38,42 @@ define([
          * @property {Object} events
          */
         events: {
-            'click #button-existing-user': 'toLogin',
-            'click #button-new-user': 'toNewUser'
+            'click .button-existing-user': 'navigateLogin',
+            'click .button-new-user': 'navigateNewUser',
+            'click .button-logout': 'logout'
         },
         /**
-         * @method toLogin
+         * @method logout
          * @param {Object} event
          */
-        toLogin: function(event) {
+        logout: function(event) {
+            skritter.user.logout();
+            event.preventDefault();
+        },
+        /**
+         * @method toggleSyncButton
+         * @param {Boolean} disabled
+         */
+        toggleSyncButton: function(disabled) {
+            if (disabled) {
+                this.$('.button-sync').hide();
+            } else {
+                this.$('.button-sync').show();
+            }
+        },
+        /**
+         * @method navigateLogin
+         * @param {Object} event
+         */
+        navigateLogin: function(event) {
             skritter.router.navigate('login', {trigger: true, replace: true});
             event.preventDefault();
         },
         /**
-         * @method toNewUser
+         * @method navigateNewUser
          * @param {Object} event
          */
-        toNewUser: function(event) {
+        navigateNewUser: function(event) {
             skritter.router.navigate('user/new', {trigger: true, replace: true});
             event.preventDefault();
         }

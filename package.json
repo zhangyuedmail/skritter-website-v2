@@ -5,7 +5,7 @@
     "version": "0.0.874",
     "versionCode": "5",
     "devDependencies": {
-        "cordova": "~3.2.0-0.4.0",
+        "cordova": "~3.4",
         "grunt": "~0.4.4",
         "grunt-contrib-clean": "~0.5.0",
         "grunt-contrib-copy": "~0.5.0",

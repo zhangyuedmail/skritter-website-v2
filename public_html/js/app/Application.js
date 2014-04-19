@@ -29,6 +29,9 @@ define([
             async.apply(loadUser),
             async.apply(loadRouter)
         ], function() {
+            if (window.cordova) {
+                navigator.splashscreen.hide();
+            }
             console.log('Application Initialized');
         });
     };

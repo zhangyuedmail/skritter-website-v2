@@ -47,10 +47,10 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
-                    callback(data);
+                    callback(data, data.statusCode);
                 });
                 promise.fail(function(error) {
-                    callback(error);
+                    callback(error, 0);
                 });
             }
             request();
@@ -72,79 +72,47 @@ define(function() {
          * cause mobile browsers to crash.
          * 
          * @method getBatch
-         * @param {Array|Object} requests
-         * @param {Function} callback1
-         * @param {Function} callback2
+         * @param {Number} batchId
+         * @param {Function} callback
          */
-        getBatch: function(requests, callback1, callback2) {
+        getBatch: function(batchId, callback) {
             var self = this;
-            async.waterfall([
-                function(callback) {
-                    self.requestBatch(requests, function(batch, status) {
-                        if (status === 200) {
-                            callback(null, batch);
-                        } else {
-                            callback(batch);
-                        }
-                    });
-                },
-                function(batch, callback) {
-                    var result = {};
-                    var retryCount = 0;
-                    function request() {
-                        var promise = $.ajax({
-                            url: self.base + 'batch/' + batch.id,
-                            beforeSend: function(xhr) {
-                                xhr.setRequestHeader('AUTHORIZATION', self.credentials);
-                            },
-                            type: 'GET',
-                            data: {
-                                bearer_token: self.get('token')
-                            }
-                        });
-                        promise.done(function(data) {
-                            var batch = data.Batch;
-                            var requests = batch.Requests;
-                            var responseSize = 0;
-                            var partialResult = {};
-                            for (var i = 0, len = requests.length; i < len; i++)
-                                if (requests[i].response) {
-                                    _.merge(partialResult, requests[i].response, self.concatObjectArray);
-                                    responseSize += requests[i].responseSize;
-                                }
-                            partialResult.downloadedRequests = requests.length;
-                            partialResult.totalRequests = batch.totalRequests;
-                            partialResult.responseSize = responseSize;
-                            partialResult.runningRequests = batch.runningRequests;
-                            _.merge(result, partialResult, self.concatObjectArray);
-                            if (batch.runningRequests > 0 || requests.length > 0) {
-                                retryCount = 0;
-                                if (typeof callback2 === 'function')
-                                    callback2(partialResult);
-                                window.setTimeout(request, 500);
-                            } else {
-                                callback(null, result);
-                            }
-                        });
-                        promise.fail(function(error) {
-                            if (retryCount < 5) {
-                                self.tld = self.tld === '.com' ? '.cn' : '.com';
-                                window.setTimeout(request, 1000);
-                                retryCount++;
-                            } else {
-                                callback(error);
-                            }
-                        });
+            function request() {
+                var promise = $.ajax({
+                    url: self.base + 'batch/' + batchId,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token')
                     }
-                    request();
-                }
-            ], function(error, result) {
-                if (error) {
-                    callback1(error);
-                } else {
-                    callback1(result);
-                }
-            });
+                });
+                promise.done(function(data) {
+                    var batch = data.Batch;
+                    var requests = batch.Requests;
+                    var responseSize = 0;
+                    var partialResult = {};
+                    for (var i = 0, len = requests.length; i < len; i++)
+                        if (requests[i].response) {
+                            _.merge(partialResult, requests[i].response, self.concatObjectArray);
+                            responseSize += requests[i].responseSize;
+                        }
+                    partialResult.downloadedRequests = requests.length;
+                    partialResult.totalRequests = batch.totalRequests;
+                    partialResult.responseSize = responseSize;
+                    partialResult.runningRequests = batch.runningRequests;
+                    if (batch.runningRequests > 0 || requests.length > 0) {
+                        callback(partialResult, data.statusCode);
+                    } else {
+                        callback(null, 200);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request();
         },
         /**
          * @method getUser
@@ -166,10 +134,10 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
-                    callback(data.User);
+                    callback(data.User, data.statusCode);
                 });
                 promise.fail(function(error) {
-                    callback(error);
+                    callback(error, 0);
                 });
             }
             request();
@@ -198,7 +166,7 @@ define(function() {
                     callback(data.Batch, data.statusCode);
                 });
                 promise.fail(function(error) {
-                    callback(error);
+                    callback(error, 0);
                 });
             }
             request();

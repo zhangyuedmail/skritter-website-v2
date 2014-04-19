@@ -12,14 +12,14 @@ define(function() {
          * @method angle
          * @returns {Number}
          */
-        angle: function() {
+        getAngle: function() {
             return skritter.fn.angle(this.get('corners'));
         },
         /**
-         * @method cornersLength
+         * @method getCornerLength
          * @returns {Number}
          */
-        cornersLength: function() {
+        getCornerLength: function() {
             var cornersLength = 0;
             var corners = this.get('corners');
             for (var i = 0, length = corners.length - 1; i < length; i++)
@@ -27,10 +27,10 @@ define(function() {
             return cornersLength;
         },
         /**
-         * @method rectangle
+         * @method getRectangle
          * @returns {Object}
          */
-        rectangle: function() {
+        getRectangle: function() {
             var size = skritter.settings.contentWidth();
             return skritter.fn.boundingRectangle(_.clone(this.get('corners')), size, size, 14);
         }

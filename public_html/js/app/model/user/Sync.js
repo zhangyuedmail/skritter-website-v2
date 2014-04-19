@@ -39,14 +39,27 @@ define([
                 return;
             }
             var requests = [];
+            var downloadedRequests = 0;
+            var responseSize = 0;
             var lastItemSync = downloadAll ? 0 : this.get('lastItemSync');
             var lastSRSConfigSync = downloadAll ? 0 : this.get('lastSRSConfigSync');
             var lastVocabSync = downloadAll ? 0 : this.get('lastVocabSync');
-            if (lastItemSync === 0)
+            var now = skritter.fn.getUnixTime();
+            self.syncing = true;
+            self.trigger('sync', self.syncing);
+            if (lastItemSync === 0 || downloadAll) {
                 skritter.modal.show('download')
                         .set('.modal-title', 'DOWNLOADING ACCOUNT')
-                        .set('.modal-title-right', 'Getting Items')
                         .progress(100);
+                requests.push({
+                    path: 'api/v' + skritter.api.get('version') + '/vocablists',
+                    method: 'GET',
+                    params: {
+                        sort: 'studying'
+                    },
+                    spawner: true
+                });
+            }
             requests.push({
                 path: 'api/v' + skritter.api.get('version') + '/items',
                 method: 'GET',
@@ -84,11 +97,50 @@ define([
                     method: 'GET'
                 });
             }
-            skritter.api.getBatch(requests, _.bind(function(result) {
-                skritter.user.data.insert(result);
+            async.waterfall([
+                function(callback) {
+                    skritter.api.requestBatch(requests, function(batch, status) {
+                        if (status === 200) {
+                            callback(null, batch);
+                        } else {
+                            callback(batch);
+                        }
+                    });
+                },
+                function(batch, callback) {
+                    function request() {
+                        skritter.api.getBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                downloadedRequests += result.downloadedRequests;
+                                responseSize += result.responseSize;
+                                if (responseSize > 0)
+                                    skritter.modal.set('.modal-title-right', skritter.fn.bytesToSize(responseSize));
+                                if (result.totalRequests > 100)
+                                    skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
+                                skritter.user.data.insert(result, function() {
+                                    window.setTimeout(request, 2000);
+                                });
+                            } else if (result) {
+                                //TODO: handle errors and other incorrect status codes
+                            } else {
+                                callback();
+                            }
+                        });
+                    }
+                    request();
+                }
+            ], function() {
+                if (lastItemSync === 0 || downloadAll) {
+                    self.set('lastItemSync', now);
+                    self.set('lastVocabSync', now);
+                } else {
+                    self.set('lastItemSync', now);
+                }
+                self.syncing = false;
+                self.trigger('sync', self.syncing);
                 skritter.modal.hide();
-            }, this), function(result) {
-                console.log(result);
+                if (typeof callback === 'function')
+                    callback();
             });
         }
     });

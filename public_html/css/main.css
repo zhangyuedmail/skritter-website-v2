@@ -32,6 +32,10 @@ body {
     height: 100%;
     padding-top: 45px;
 }
+.view.padding-top { padding-top: 55px; }
+@media screen and (max-width: 767px) {
+    .btn { margin-bottom: 10px; }
+}
 
 
 /*** GRADING BUTTONS ***/
@@ -55,6 +59,10 @@ body {
 #grading-buttons .grade-icon { max-height: 50px; }
 
 
+/*** HOME: LOGGED IN ***/
+/*** HOME: LOGGED OUT ***/
+
+
 /*** LANDING PAGE ***/
 .landing-page {
     background-color: #333333;
@@ -70,18 +78,22 @@ body {
 }
 .landing-page #content {
     left:0;
-    position: fixed;
     margin-left:auto;
     margin-right:auto;
     max-width: 400px;
+    padding-top: 150px;
     right:0;
-    top: 25%;
 }
 .landing-page #footer {
     bottom: 10px;
     padding: 0 15px;
     position: absolute;
     width: 100%;
+}
+@media screen and (max-width: 767px) and (orientation: landscape) {
+    .landing-page #content {
+        padding-top: 20px;
+    }
 }
 
 /*** MODALS ***/
@@ -99,6 +111,7 @@ body {
 
 /*** NAVBAR ***/
 .navbar { font-size: 18px; }
+.navbar .navbar-header { width: 100%; }
 .navbar .navbar-text { margin: 10px 0; }
 .navbar .navbar-text a {
     padding: 10px 5px;

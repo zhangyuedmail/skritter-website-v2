@@ -1,6 +1,6 @@
 # Directories #
 /build/
-/cordova/android/keystore/
+/cordova/build/
 /docs/
 /files/
 /nbproject/

@@ -83,7 +83,14 @@ define([
                 if (result.statusCode === 200) {
                     this.set(result);
                     this.sync.cache();
-                    this.settings.fetch(function() {
+                    async.series([
+                        _.bind(function(callback) {
+                            this.settings.fetch(callback);
+                        }, this),
+                        _.bind(function(callback) {
+                            skritter.storage.open(this.id, callback);
+                        }, this)
+                    ], function() {
                         localStorage.setItem('active', result.user_id);
                         callback(result);
                     });
@@ -91,8 +98,29 @@ define([
                     callback(result);
                 }
             }, this));
+        },
+        /**
+         * @method logout
+         */
+        logout: function() {
+            async.series([
+                function(callback) {
+                    skritter.modal.show('loading', callback).set('.modal-body', 'LOGGING OUT');
+                },
+                function(callback) {
+                    skritter.storage.destroy(callback);
+                },
+                function(callback) {
+                    window.setTimeout(callback, 2000);
+                }
+            ], function() {
+                localStorage.removeItem('active');
+                localStorage.removeItem(skritter.user.id + '-sync');
+                document.location.href = '';
+                document.location.reload(true);
+            });
         }
     });
-    
+
     return User;
 });

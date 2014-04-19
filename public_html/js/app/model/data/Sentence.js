@@ -22,7 +22,7 @@ define(function() {
          * @method definition
          * @returns {String}
          */
-        definition: function() {
+        getDefinition: function() {
             var definition;
             if (this.get('definitions')[skritter.user.settings.get('sourceLang')]) {
                 definition = this.get('definitions')[skritter.user.settings.get('sourceLang')];
@@ -32,11 +32,11 @@ define(function() {
             return definition;
         },
         /**
-         * @method maskWriting
+         * @method getMaskedWriting
          * @param {Array|String} value
          * @returns {String}
          */
-        maskWriting: function(value) {
+        getMaskedWriting: function(value) {
             var text = '' + this.get('writing');
             value = '' + value;
             var chars = value.split('');
@@ -45,10 +45,10 @@ define(function() {
             return text.replace(/\s/g, '');
         },
         /**
-         * @method reading
+         * @method getReading
          * @returns {String}
          */
-        reading: function() {
+        getReading: function() {
             return skritter.fn.pinyin.toTone(this.get('reading'));
         }
     });

@@ -54,7 +54,9 @@ define([
             var password = this.$('#password').val();
             skritter.user.login(username, password, _.bind(function(result) {
                 if (result.statusCode === 200) {
-                    document.location.href = '';
+                    skritter.user.sync.start(function() {
+                        document.location.href = '';
+                    });
                 } else {
                     this.$('#message').html(result.message ? result.message : skritter.nls.login['message-error']);
                     this.enableForm();

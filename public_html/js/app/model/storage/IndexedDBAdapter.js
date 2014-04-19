@@ -24,9 +24,15 @@ define([
          * @param {Function} callback
          */
         destroy: function(callback) {
-            window.indexedDB.deleteDatabase(IndexedDBAdapter.databaseName);
-            if (typeof callback === 'function')
-                callback();
+            IndexedDBAdapter.database.close();
+            var request = window.indexedDB.deleteDatabase(IndexedDBAdapter.databaseName);
+            request.onsuccess = function() {
+                if (typeof callback === 'function')
+                    callback();
+            };
+            request.onerror = function(error) {
+                console.error(error);
+            };
         },
         /**
          * @method get
