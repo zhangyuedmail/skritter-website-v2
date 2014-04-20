@@ -1,12 +1,17 @@
 /**
  * @module Skritter
+ * @param Home
+ * @param Login
+ * @param Study
+ * @param Test
  * @author Joshua McFarland
  */
 define([
     'view/Home',
     'view/Login',
+    'view/Study',
     'view/Test'
-], function(Home, Login, Test) {
+], function(Home, Login, Study, Test) {
     /**
      * @class Router
      */
@@ -25,6 +30,7 @@ define([
         routes: {
             '': 'home',
             'login': 'login',
+            'study': 'study',
             'test': 'test'
         },
         /**
@@ -49,6 +55,14 @@ define([
         login: function() {
             this.removeView();
             this.view = new Login({el: this.container});
+            this.view.render();
+        },
+        /**
+         * @method study
+         */
+        study: function() {
+            this.removeView();
+            this.view = new Study({el: this.container});
             this.view.render();
         },
         /**

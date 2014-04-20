@@ -18,7 +18,6 @@ define(function() {
          * @property {Object} defaults
          */
         defaults: {
-            audioPlayed: false,
             originalItems: [],
             position: 1,
             reviews: []
@@ -34,51 +33,42 @@ define(function() {
             });
         },
         /**
-         * @method at
-         * @param {Object} data
-         * @returns {Object}
-         */
-        at: function(data) {
-            var review = this.get('reviews').length === 1 ? this.get('reviews')[0] : this.get('reviews')[this.get('position')];
-            if (data)
-                for (var key in data)
-                    review[key] = data[key];
-            return review;
-        },
-        /**
-         * @method baseItem
+         * @method getBaseItem
          * @returns {Backbone.Model}
          */
-        baseItem: function() {
+        getBaseItem: function() {
             return skritter.user.data.items.get(this.get('reviews')[0].itemId);
         },
         /**
-         * @method baseVocab
+         * @method getBaseVocab
          * @returns {Backbone.Model}
          */
-        baseVocab: function() {
-            return this.baseItem().vocab();
+        getBaseVocab: function() {
+            return this.getBaseItem().getVocab();
         },
         /**
-         * @method character
+         * @method getCharacterAt
+         * @param {Number} position
          * @returns {Backbone.Collection}
          */
-        character: function() {
-            return this.characters && this.hasContained() ? this.characters[this.get('position') - 1] : this.characters[0];
+        getCharacterAt: function(position) {
+            if (this.characters)
+                return this.hasContained() ? this.characters[position] : this.characters[0];
+            return this.characters;
         },
         /**
-         * @method finalGrade
+         * @method getFinalScore
          * @returns {Number}
          */
-        finalGrade: function() {
+        getFinalScore: function() {
             var grade = this.get('reviews')[0].score;
             if (this.hasContained()) {
                 var max = this.get('reviews').length - 1;
-                var totalGrade = 0;
+                var totalScore = 0;
                 var totalWrong = 0;
                 for (var i = 1, length = this.get('reviews').length; i < length; i++) {
                     var review = this.get('reviews')[i];
-                    totalGrade += review.score;
+                    totalScore += review.score;
                     if (review.score === 1)
                         totalWrong++;
                 }
@@ -87,17 +77,83 @@ define(function() {
                 } else if (totalWrong > 1) {
                     grade = 1;
                 } else {
-                    grade = Math.floor(totalGrade / max);
+                    grade = Math.floor(totalScore / max);
                 }
             }
             return grade;
+        },
+        /**
+         * @method getItemAt
+         * @param {Number} position
+         * @returns {Backbone.Model}
+         */
+        getItemAt: function(position) {
+            return skritter.user.data.items.get(this.getReviewAt(position).itemId);
+        },
+        /**
+         * @method getOriginalItemAt
+         * @param {Number} position
+         * @returns {Object}
+         */
+        getOriginalItemAt: function(position) {
+            if (this.get('originalItems').length > 1 && position !== 0)
+                return this.get('originalItems')[position];
+            return this.get('originalItems')[0];
+        },
+        /**
+         * @method getTotalReviewTime
+         * @returns {Number}
+         */
+        getTotalReviewTime: function() {
+            var reviewTime = 0;
+            if (this.hasContained()) {
+                for (var i = 1, length = this.get('reviews').length; i < length; i++)
+                    reviewTime += this.get('reviews')[i].reviewTime;
+            } else {
+                reviewTime = this.get('reviews')[0].reviewTime;
+            }
+            return reviewTime;
+        },
+        /**
+         * @method getReviewAt
+         * @param {Number} position
+         * @returns {Object}
+         */
+        getReviewAt: function(position) {
+            if (this.hasContained() && position !== 0)
+                return this.get('reviews')[position];
+            return this.get('reviews')[0];
+        },
+        /**
+         * @method getTotalThinkingTime
+         * @returns {Number}
+         */
+        getTotalThinkingTime: function() {
+            var thinkingTime = 0;
+            if (this.hasContained()) {
+                for (var i = 1, length = this.get('reviews').length; i < length; i++)
+                    thinkingTime += this.get('reviews')[i].thinkingTime;
+            } else {
+                thinkingTime = this.get('reviews')[0].thinkingTime;
+            }
+            return thinkingTime;
+        },
+        /**
+         * @method getVocabAt
+         * @param {Number} position
+         * @returns {Backbone.Model}
+         */
+        getVocabAt: function(position) {
+            return skritter.user.data.items.get(this.getReviewAt(position).itemId).getVocab();
         },
         /**
          * @method hasContained
          * @returns {Boolean}
          */
         hasContained: function() {
-            return this.get('reviews').length > 1 ? true : false;
+            if (this.get('reviews').length > 1)
+                return true;
+            return false;
         },
         /**
          * @method isFirst
@@ -111,94 +167,51 @@ define(function() {
          * @returns {Boolean}
          */
         isLast: function() {
-            var actualPosition = this.get('reviews').length === 1 ? 1 : this.get('reviews').length - 1;
-            return this.get('position') === actualPosition ? true : false;
-        },
-        /**
-         * @method item
-         * @param {Number} position
-         * @returns {Backbone.Model}
-         */
-        item: function(position) {
-            if (typeof position !== 'number')
-                position = this.hasContained() ? this.get('position') : 0;
-            return skritter.user.data.items.get(this.get('reviews')[position].itemId);
-        },
-        /**
-         * @method load
-         * @param {Function} callback
-         */
-        load: function(callback) {
-            var part = this.get('part');
-            skritter.user.data.loadItem(this.originalBaseItem().id, _.bind(function(item) {
-                if (part === 'rune' || part === 'tone') {
-                    this.characters = [];
-                    var reviews = this.get('reviews');
-                    for (var i = 0, length = reviews.length; i < length; i++) {
-                        if (reviews.length === 1) {
-                            this.characters.push(this.item(i).stroke().canvasCharacter());
-                        } else if (i > 0) {
-                            this.characters.push(this.item(i).stroke().canvasCharacter());
-                        }
-                    }
-                    callback(item);
-                } else {
-                    callback(item);
-                }
-            }, this));
-        },
-        /**
-         * @method next
-         * @returns {Number}
-         */
-        next: function() {
-            if (this.isLast())
-                return this.get('position');
-            return this.set('position', this.attributes.position + 1).get('position');
-        },
-        /**
-         * @method originalBaseItem
-         * @returns {Object}
-         */
-        originalBaseItem: function() {
-            return this.get('originalItems')[0];
-        },
-        /**
-         * @method originalItem
-         * @returns {Object}
-         */
-        originalItem: function() {
-            return this.get('originalItems').length === 1 ? this.get('originalItems')[0] : this.get('originalItems')[this.get('position')];
-        },
-        /**
-         * @method previous
-         * @returns {Number}
-         */
-        previous: function() {
-            if (this.isFirst())
-                return this.get('position');
-            return this.set('position', this.attributes.position - 1).get('position');
+            var position = this.hasContained() ? this.get('reviews').length - 1 : 1;
+            return this.get('position') === position ? true : false;
         },
         /**
          * @method save
          * @param {Function} callback
          */
         save: function(callback) {
-            var reviews = _.clone(this.get('reviews'));
+            var reviews = this.get('reviews');
             if (skritter.user.data.reviews.get(this)) {
-                //TODO: handle updating historic items and reviews
+                //updates the base review based on contained reviews
+                if (this.hasContained()) {
+                    reviews[0].reviewTime = this.getTotalReviewTime();
+                    reviews[0].thinkingTime = this.getTotalThinkingTime();
+                }
+                //updates all of the new review intervals and items
+                for (var i = 0, length = reviews.length; i < length; i++) {
+                    var item = this.getItemAt(i);
+                    var review = reviews[i];
+                    if (parseInt(i, 10) === 0 && reviews.length > 1)
+                        review.score = this.getFinalScore();
+                    review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
+                    item.set({
+                        changed: review.submitTime,
+                        last: review.submitTime,
+                        interval: review.newInterval,
+                        next: review.submitTime + review.newInterval,
+                        previousInterval: review.currentInterval,
+                        previousSuccess: review.score > 1 ? true : false
+                        //TODO: remove or add successes based on previous score
+                        //successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes')
+                    }, {silent: true, sort: false});
+                }
             } else {
                 //updates the base review based on contained reviews
                 if (this.hasContained()) {
-                    reviews[0].reviewTime = this.totalReviewTime();
-                    reviews[0].thinkingTime = this.totalThinkingTime();
+                    reviews[0].reviewTime = this.getTotalReviewTime();
+                    reviews[0].thinkingTime = this.getTotalThinkingTime();
                 }
-                //updates all of the new review intervals
+                //updates all of the new review intervals and items
                 for (var i = 0, length = reviews.length; i < length; i++) {
-                    var item = this.item(i);
+                    var item = this.getItemAt(i);
                     var review = reviews[i];
                     if (parseInt(i, 10) === 0 && reviews.length > 1)
-                        review.score = this.finalGrade();
+                        review.score = this.getFinalScore();
                     review.newInterval = skritter.fn.scheduler.interval(item, review.score);
                     item.set({
                         changed: review.submitTime,
@@ -210,12 +223,10 @@ define(function() {
                         reviews: item.get('reviews') + 1,
                         successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                         timeStudied: item.get('timeStudied') + review.reviewTime
-                    }, {merge: true, silent: true, sort: false});
-                    skritter.user.data.items.updateSchedule(item);
+                    }, {silent: true, sort: false});
                 }
-                //set the review data and trigger local caching
-                this.set('reviews', reviews, {merge: true, silent: true, sort: false});
-                skritter.user.data.reviews.add(this, {merge: false, silent: true, sort: true});
+                //save the reviews to the official collection
+                skritter.user.data.reviews.add(this, {merge: true, silent: true, sort: false});
             }
             async.series([
                 _.bind(function(callback) {
@@ -225,36 +236,29 @@ define(function() {
                     skritter.user.data.items.cache(callback);
                 }
             ], function() {
+                skritter.user.data.reviews.sort();
                 callback();
             });
         },
         /**
-         * @method totalReviewTime
-         * @returns {Number}
+         * @method setReviewAt
+         * @param {Number} position
+         * @param {String|Object} key
+         * @param {Array|Number|Object|String} value
+         * @returns {Object}
          */
-        totalReviewTime: function() {
-            var reviewTime = 0;
-            if (this.hasContained()) {
-                for (var i = 1, length = this.get('reviews').length; i < length; i++)
-                    reviewTime += this.get('reviews')[i].reviewTime;
+        setReviewAt: function(position, key, value) {
+            var review = this.hasContained() ? this.get('reviews')[position] : this.get('reviews')[0];
+            var data = {};
+            if (typeof key === 'object') {
+                data = key;
             } else {
-                reviewTime = this.get('reviews')[0].reviewTime;
+                data[key] = value;
             }
-            return reviewTime;
-        },
-        /**
-         * @method totalThinkingTime
-         * @returns {Number}
-         */
-        totalThinkingTime: function() {
-            var thinkingTime = 0;
-            if (this.hasContained()) {
-                for (var i = 1, length = this.get('reviews').length; i < length; i++)
-                    thinkingTime += this.get('reviews')[i].thinkingTime;
-            } else {
-                thinkingTime = this.get('reviews')[0].thinkingTime;
-            }
-            return thinkingTime;
+            if (data)
+                for (var obj in data)
+                    review[obj] = data[obj];
+            return review;
         },
         /**
          * @method uncache
@@ -265,16 +269,6 @@ define(function() {
                 if (typeof callback === 'function')
                     callback();
             });
-        },
-        /**
-         * @method vocab
-         * @param {Number} position
-         * @returns {Backbone.Model}
-         */
-        vocab: function(position) {
-            if (typeof position !== 'number')
-                return this.item().vocab();
-            return this.item(position).vocab();
         }
     });
 
