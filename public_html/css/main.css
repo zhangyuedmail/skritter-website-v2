@@ -1,11 +1,11 @@
 /*** FONTS ***/
 @font-face {
     font-family: "kaisho";
-    src: url('../fonts/DFPKaiSho-Md.ttf');
+    src: url('../font/japanese/DFPKaiSho-Md.ttf');
 }
 @font-face {
     font-family: "simkai";
-    src: url('../fonts/simkai.ttf');
+    src: url('../font/chinese/simkai.ttf');
 }
 
 
@@ -16,6 +16,15 @@ body {
     background-repeat: repeat;
 }
 #skritter-container { height: 100%; }
+#content-container.full-width {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+#content-container.no-scroll { 
+    height: 100%; 
+    overflow-y: hidden;
+}
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-block {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
@@ -23,10 +32,16 @@ body {
     background-color: #ffffff;
     border-top: solid #e7e7e7 1px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-    padding: 15px;
+    padding: 10px;
     margin-bottom: 10px;
     position: relative;
 }
+.content-block.no-shadow {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+.content-block.no-padding { padding: 0; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;
@@ -116,4 +131,138 @@ body {
 .navbar .navbar-text a {
     padding: 10px 5px;
     text-decoration: none;
+}
+
+
+/*** PROMPT ***/
+.prompt-container {
+    height: 100%;
+    position: relative;
+}
+
+
+/*** PROMPT: GRADING BUTTONS ***/
+.prompt-container #grading-buttons {
+    bottom: 0;
+    display: none;
+    left: 0;
+    position: absolute;
+    z-index: 9003;
+}
+
+
+/*** PROMPT: INFO SECTION ***/
+#info-section {
+    overflow-y: auto;
+    position: absolute;
+    z-index: 1002;
+    
+    font-size: 24px;
+}
+#info-section .prompt-row { clear: both; }
+#info-section .prompt-row div { float: left; }
+#info-section #prompt-writing span {
+    margin-right: 5px;
+    padding: 0 2px;
+}
+#info-section .writing-hidden { border: 2px #222222 solid; }
+#info-section .writing-hidden span { visibility: hidden; }
+#info-section #prompt-reading span {
+    margin-right: 5px;
+    padding: 0 2px;
+}
+#info-section .reading-hidden { border-bottom: 2px #222222 solid; }
+#info-section .reading-hidden span { visibility: hidden; }
+.prompt-container.landscape #info-section { width: 50%; }
+.prompt-container.portrait #info-section { 
+    border-bottom: 2px solid #333333;
+    width: 100%;
+}
+
+
+/*** PROMPT: INPUT SECTION ***/
+#input-section {
+    position: absolute;
+    z-index: 1001;
+}
+#input-section #prompt-text {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+#input-section #prompt-text #answer {
+    cursor: pointer;
+    display: table-cell;
+    padding: 0 15px;
+    vertical-align: middle;
+}
+#input-section #prompt-text #question {
+    cursor: pointer;
+    display: table-cell;
+    padding: 0 15px;
+    vertical-align: middle;
+}
+.prompt-container.landscape #input-section {
+    right: 0;
+    top: 0;
+    width: 50%;
+}
+.prompt-container.portrait #input-section {
+    bottom: -15px;
+    width: 100%;
+}
+
+
+/*** PROMPT: TONE ***/
+#tone #prompt-question-text { font-size: 18px; }
+#tone #prompt-writing { 
+    font-size: 36px;
+    width: 50%;
+}
+#tone #prompt-reading { 
+    font-size: 32px;
+    padding-left: 15px;
+    width: 50%;
+}
+#tone #prompt-definition { font-size: 18px; }
+#tone #prompt-sentence { font-size: 20px; }
+
+
+/*** PROMPT: WRITING ***/
+#rune #prompt-question-text { font-size: 18px; }
+#rune #prompt-writing { 
+    font-size: 36px;
+    width: 50%;
+}
+#rune #prompt-reading { 
+    font-size: 32px;
+    padding-left: 15px;
+    width: 50%;
+}
+#rune #prompt-definition { font-size: 18px; }
+#rune #prompt-sentence { font-size: 20px; }
+
+
+/*** PROMPT: WRITING AREA ***/
+#writing-area .canvas-holder { position: relative; }
+#writing-area .canvas-holder #canvas-display {
+    background-image: url('../image/background/paper2.png');
+    background-size: cover;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    z-index: 9001;
+}
+#writing-area .canvas-holder #canvas-input {
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    z-index: 9002;
+}
+
+/*** STUDY: SETTINGS ***/
+#study-settings-view #parts .setting-label {
+    float: left;
+    width: 150px;
 }

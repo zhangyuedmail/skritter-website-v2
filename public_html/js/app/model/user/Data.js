@@ -42,6 +42,18 @@ define([
             return this;
         },
         /**
+         * @method clear
+         * @returns {Backbone.Model}
+         */
+        clear: function() {
+            this.decomps.reset();
+            this.items.reset();
+            this.sentences.reset();
+            this.strokes.reset();
+            this.vocabs.reset();
+            return this;
+        },
+        /**
          * @method add
          * @param {Object} data
          * @param {Function} callback
@@ -55,6 +67,20 @@ define([
                 async.apply(this.strokes.insert, data.Strokes),
                 async.apply(this.vocablists.insert, data.VocabLists),
                 async.apply(this.vocabs.insert, data.Vocabs)
+            ], callback);
+        },
+        /**
+         * @method loadResources
+         * @param {Function} callback
+         */
+        loadResources: function(callback) {
+            async.series([
+                _.bind(function(callback) {
+                    this.reviews.loadAll(callback);
+                }, this),
+                _.bind(function(callback) {
+                    this.srsconfigs.loadAll(callback);
+                }, this)
             ], callback);
         }
     });

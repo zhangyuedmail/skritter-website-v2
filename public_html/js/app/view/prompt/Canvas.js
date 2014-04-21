@@ -1,6 +1,6 @@
 /**
  * @module Skritter
- * @submodule Views
+ * @submodule View
  * @author Joshua McFarland
  */
 define(function() {

@@ -1,6 +1,6 @@
 /**
  * @module Skritter
- * @submodule Models
+ * @submodule Model
  * @param Review
  * @author Joshua McFarland
  */
@@ -61,9 +61,9 @@ define([
                 });
                 if (review.characters)
                     if (items.length === 1) {
-                        review.characters.push(item.stroke().canvasCharacter());
+                        review.characters.push(item.getStroke().getCanvasCharacter());
                     } else if (i > 0) {
-                        review.characters.push(item.stroke().canvasCharacter());
+                        review.characters.push(item.getStroke().getCanvasCharacter());
                     }
             }
             review.set({
@@ -82,7 +82,7 @@ define([
             var items = [];
             var part = this.get('part');
             if (part === 'rune' || part === 'tone') {
-                var containedIds = this.vocab().containedItemIds(part);
+                var containedIds = this.getVocab().getContainedItemIds(part);
                 for (var i = 0, length = containedIds.length; i < length; i++)
                     items.push(skritter.user.data.items.get(containedIds[i]));
             }
@@ -95,7 +95,7 @@ define([
         getStroke: function() {
             if (this.get('part') === 'tone')
                 return skritter.user.data.strokes.get('tones');
-            return skritter.user.data.strokes.get(this.vocab().get('writing'));
+            return skritter.user.data.strokes.get(this.getVocab().get('writing'));
         },
         /**
          * @method getVocab

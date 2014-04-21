@@ -1,6 +1,6 @@
 /**
  * @module Skritter
- * @submodule Component
+ * @submodule View
  * @param templateGradingButtons
  * @author Joshua McFarland
  */
@@ -8,7 +8,7 @@ define([
     'require.text!template/grading-buttons.html'
 ], function(templateGradingButtons) {
     /**
-     * @class GradingButtons
+     * @class PromptGradingButtons
      */
     var GradingButtons = Backbone.View.extend({
         /**

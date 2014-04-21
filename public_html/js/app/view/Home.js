@@ -40,7 +40,8 @@ define([
         events: {
             'click .button-existing-user': 'navigateLogin',
             'click .button-new-user': 'navigateNewUser',
-            'click .button-logout': 'logout'
+            'click .button-logout': 'logout',
+            'click .button-study': 'navigateStudy'
         },
         /**
          * @method logout
@@ -75,6 +76,14 @@ define([
          */
         navigateNewUser: function(event) {
             skritter.router.navigate('user/new', {trigger: true, replace: true});
+            event.preventDefault();
+        },
+        /**
+         * @method navigateStudy
+         * @param {Object} event
+         */
+        navigateStudy: function(event) {
+            skritter.router.navigate('study', {trigger: true, replace: true});
             event.preventDefault();
         },
         /**

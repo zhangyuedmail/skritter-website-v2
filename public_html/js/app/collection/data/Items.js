@@ -55,6 +55,7 @@ define([
          */
         loadItem: function(itemId, callback) {
             var part = itemId.split('-')[4];
+            skritter.user.data.clear();
             async.waterfall([
                 //intial item
                 function(callback) {
@@ -97,7 +98,7 @@ define([
                     if (containedItems) {
                         var containedVocabIds = [];
                         for (var i = 0, length = containedItems.length; i < length; i++)
-                            containedVocabIds.push(containedItems[i].vocabId());
+                            containedVocabIds.push(containedItems[i].getVocabId());
                         var containedVocabCount = containedVocabIds.length;
                         skritter.storage.get('vocabs', containedVocabIds, function(containedVocabs) {
                             if (containedVocabCount === containedVocabs.length) {

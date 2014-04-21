@@ -1,6 +1,6 @@
 /**
  * @module Skritter
- * @submodule Models
+ * @submodule Model
  * @author Joshua McFarland 
  */
 define(function() {
@@ -17,17 +17,17 @@ define(function() {
             });
         },
         /**
-         * @method angle
+         * @method getAngle
          * @returns {Number}
          */
-        angle: function() {
+        getAngle: function() {
             return skritter.fn.angle(this.get('corners'));
         },
         /**
-         * @method containedIds
+         * @method getContainedIds
          * @returns {Array}
          */
-        containedIds: function() {
+        getContainedIds: function() {
             var ids = [];
             var contains = this.has('contains') ? this.get('contains') : [];
             var position = this.get('position');
@@ -39,15 +39,37 @@ define(function() {
             return ids;
         },
         /**
-         * @method cornersLength
+         * @method getCornerLength
          * @returns {Number}
          */
-        cornersLength: function() {
+        getCornerLength: function() {
             var cornersLength = 0;
             var corners = this.get('corners');
             for (var i = 0, length = corners.length - 1; i < length; i++)
                 cornersLength += skritter.fn.distance(corners[i], corners[i + 1]);
             return cornersLength;
+        },
+        /**
+         * @method getRectangle
+         * @returns {Object}
+         */
+        getRectangle: function() {
+            var size = skritter.settings.contentWidth();
+            return skritter.fn.boundingRectangle(_.clone(this.get('corners')), size, size, 14);
+        },
+        /**
+         * @method getUserShape
+         * @param {String} color
+         * @returns {CreateJS.Shape}
+         */
+        getUserShape: function(color) {
+            var shape = this.inflateShape(color);
+            var rect = this.getRectangle();
+            shape.name = 'stroke';
+            shape.x = rect.x;
+            shape.y = rect.y;
+            shape.rotation = this.getAngle() - this.get('param').getAngle();
+            return shape;
         },
         /**
          * @method inflatedData
@@ -103,7 +125,7 @@ define(function() {
          * @return {CreateJS.Shape}
          */
         inflateShape: function(color, alpha) {
-            var shape = skritter.assets.stroke(this.get('bitmapId'), color);
+            var shape = skritter.assets.getStroke(this.get('bitmapId'), color);
             var spriteBounds = shape.getBounds();
             var data = this.inflateData();
             var ms = shape.getMatrix();
@@ -121,28 +143,6 @@ define(function() {
             shape.alpha = alpha ? alpha : 1;
             shape.x += finalBounds.width / 2 + data.x;
             shape.y += finalBounds.height / 2 + data.y;
-            return shape;
-        },
-        /**
-         * @method rectangle
-         * @returns {Object}
-         */
-        rectangle: function() {
-            var size = skritter.settings.contentWidth();
-            return skritter.fn.boundingRectangle(_.clone(this.get('corners')), size, size, 14);
-        },
-        /**
-         * @method userShape
-         * @param {String} color
-         * @returns {CreateJS.Shape}
-         */
-        userShape: function(color) {
-            var shape = this.inflateShape(color);
-            var rect = this.rectangle();
-            shape.name = 'stroke';
-            shape.x = rect.x;
-            shape.y = rect.y;
-            shape.rotation = this.angle() - this.get('param').angle();
             return shape;
         }
     });

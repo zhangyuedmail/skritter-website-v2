@@ -194,8 +194,7 @@ module.exports = function(grunt) {
                     'cordova create japanese com.inkren.skritter.japanese Skritter',
                     'cd japanese/',
                     'cordova platforms add android',
-                    'cordova plugin add org.apache.cordova.splashscreen',
-                    'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion-file.git'
+                    'cordova plugin add org.apache.cordova.splashscreen'
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -208,8 +207,7 @@ module.exports = function(grunt) {
                     'cordova create chinese com.inkren.skritter.chinese Skritter',
                     'cd chinese/',
                     'cordova platforms add android',
-                    'cordova plugin add org.apache.cordova.splashscreen',
-                    'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion-file.git'
+                    'cordova plugin add org.apache.cordova.splashscreen'
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -245,6 +243,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     /*** COMMANDS ***/
     grunt.registerTask('build-run-android-ja', [
+        'jshint:root',
         'clean:build-cordova-www-ja',
         'copy:cordova-www-ja',
         'copy:cordova-config-ja',
@@ -252,11 +251,15 @@ module.exports = function(grunt) {
         'shell:cordova-build-run-android-ja'
     ]);
     grunt.registerTask('build-run-android-zh', [
+        'jshint:root',
         'clean:build-cordova-www-zh',
         'copy:cordova-www-zh',
         'copy:cordova-config-zh',
         'replace:cordova-zh',
         'shell:cordova-build-run-android-zh'
+    ]);
+    grunt.registerTask('hint', [
+        'jshint:root'
     ]);
     grunt.registerTask('install-cordova', [
         'shell:kill-adb',

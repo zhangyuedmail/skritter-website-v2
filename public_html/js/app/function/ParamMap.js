@@ -1,12 +1,13 @@
-/*
- * 
- * Module: Params
- * 
- * Created By: Joshua McFarland
- * 
+/**
+ * @module Skritter
+ * @submodule Function
+ * @class ParamMap
+ * @author Joshua McFarland
  */
 define(function() {
-
+    /**
+     * @property {Array} params
+     */
     var params = [
         {"bitmapId": 0, "corners": [{"x": 26, "y": 51}, {"x": 356, "y": 12}], "deviations": [{"x": 162, "y": 39}]},
         {"bitmapId": 1, "corners": [{"x": 19, "y": 46}, {"x": 270, "y": 15}], "deviations": [{"x": 159, "y": 25}]},

@@ -28,10 +28,10 @@ define([
             });
         },
         /**
-         * @method canvasCharacter
+         * @method getCanvasCharacter
          * @returns {Backbone.Model}
          */
-        canvasCharacter: function() {
+        getCanvasCharacter: function() {
             var character = new PromptCharacter();
             var targets = [];
             var variations = this.get('strokes');
@@ -54,7 +54,7 @@ define([
                         deviations: params.get('deviations'),
                         id: position + '|' + bitmapId,
                         position: position,
-                        shape: skritter.assets.stroke(bitmapId),
+                        shape: skritter.assets.getStroke(bitmapId),
                         tone: rune === 'tones' ? a + 1 : undefined
                     });
                     if (params.has('contains')) {

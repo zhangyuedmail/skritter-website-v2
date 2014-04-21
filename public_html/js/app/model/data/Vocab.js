@@ -53,7 +53,7 @@ define([
          * @returns {Number}
          */
         getCharacterCount: function() {
-            return this.characters().length;
+            return this.getCharacters().length;
         },
         /**
          * @method getCharacters
@@ -132,9 +132,9 @@ define([
          * @returns {String}
          */
         getMaskedSentenceWriting: function() {
-            var sentence = this.sentence();
+            var sentence = this.getSentence();
             if (sentence)
-                return sentence.maskWriting(this.get('writing'));
+                return sentence.getMaskedWriting(this.get('writing'));
         },
         /**
          * @method getMnemonic
@@ -208,7 +208,7 @@ define([
          * @returns {String}
          */
         getSentenceWriting: function() {
-            var sentence = this.sentence();
+            var sentence = this.getSentence();
             if (sentence)
                 return sentence.get('writing').replace(/\s/g, '');
         },
@@ -232,7 +232,7 @@ define([
         getTones: function(position) {
             var tones = [];
             var reading = this.get('reading');
-            if (skritter.user.settings.isChinese()) {
+            if (this.isChinese()) {
                 if (reading.indexOf(', ') === -1) {
                     reading = reading.match(/[0-9]+/g);
                     for (var a = 0, lengthA = reading.length; a < lengthA; a++)
@@ -243,7 +243,7 @@ define([
                         tones.push([skritter.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
                 }
             }
-            if (position && this.characterCount() > 1)
+            if (position && this.getCharacterCount() > 1)
                 return tones[position - 1];
             return tones;
         },

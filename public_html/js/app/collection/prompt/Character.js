@@ -1,6 +1,6 @@
 /**
  * @module Skritter
- * @submodule Collections
+ * @submodule Collection
  * @param Stroke
  * @author Joshua McFarland
  */
@@ -36,10 +36,10 @@ define([
          */
         contains: function(stroke) {
             var newId = stroke.id;
-            var newContained = stroke.containedIds();
+            var newContained = stroke.getContainedIds();
             for (var a = 0, lengthA = this.length; a < lengthA; a++) {
                 var id = this.at(a).id;
-                var contains = this.at(a).containedIds();
+                var contains = this.at(a).getContainedIds();
                 if (newId === id)
                     return true;
                 for (var b = 0, lengthB = contains.length; b < lengthB; b++)
@@ -55,11 +55,11 @@ define([
          * @method expectedStroke
          * @returns {Backbone.Model}
          */
-        expectedStroke: function() {
-            var variation = this.expectedVariation();
+        getExpectedStroke: function() {
+            var variation = this.getExpectedVariation();
             if (this.length === 0)
                 return variation.at(0);
-            return variation.at(this.position() - 1);
+            return variation.at(this.length);
         },
         /**
          * Returns the expected variation from the array possible targets.
@@ -67,7 +67,7 @@ define([
          * @method expectedVariation
          * @returns {Backbone.Model}
          */
-        expectedVariation: function() {
+        getExpectedVariation: function() {
             if (this.targets.length <= 1)
                 return this.targets[0];
             var targetScores = [];
@@ -84,35 +84,50 @@ define([
             return this.targets[targetScores.indexOf(Math.max.apply(Math, targetScores))];
         },
         /**
-         * @method isFinished
-         * @returns {Boolean}
-         */
-        isFinished: function() {
-            if (this.position() >= this.max())
-                return true;
-            return false;
-        },
-        /**
-         * @method position
+         * @method getPosition
          * @returns {Number}
          */
-        position: function() {
+        getPosition: function() {
             var position = 1;
             for (var i = 0, length = this.length; i < length; i++)
                 position += this.at(i).has('contains') ? 2 : 1;
             return position;
         },
         /**
-         * @method max
+         * @method getMax
          * @returns {Number}
          */
-        max: function() {
+        getMax: function() {
             var max = 0;
             for (var i = 0, length = this.targets.length; i < length; i++) {
-                var targetMax = this.targets[i].position();
+                var targetMax = this.targets[i].getPosition();
                 max = targetMax > max ? targetMax : max;
             }
             return max;
+        },
+        /**
+         * @method getShape
+         * @param {Number} excludeStrokePosition
+         * @param {String} color
+         * @returns {CreateJS.Container}
+         */
+        getShape: function(excludeStrokePosition, color) {
+            color = (color) ? color : '#000000';
+            var shapeContainer = new createjs.Container();
+            shapeContainer.name = 'character';
+            for (var i = 0, length = this.models.length; i < length; i++)
+                if (i !== excludeStrokePosition - 1)
+                    shapeContainer.addChild(this.models[i].inflateShape(color));
+            return shapeContainer;
+        },
+        /**
+         * @method isFinished
+         * @returns {Boolean}
+         */
+        isFinished: function() {
+            if (this.getPosition() >= this.getMax())
+                return true;
+            return false;
         },
         /**
          * @method recognize
@@ -122,21 +137,6 @@ define([
         recognize: function(points) {
             var stroke = new Stroke().set('points', points);
             return this.add(skritter.fn.recognizer.recognize(stroke, this));
-        },
-        /**
-         * @method shape
-         * @param {Number} excludeStrokePosition
-         * @param {String} color
-         * @returns {CreateJS.Container}
-         */
-        shape: function(excludeStrokePosition, color) {
-            color = (color) ? color : '#000000';
-            var shapeContainer = new createjs.Container();
-            shapeContainer.name = 'character';
-            for (var i = 0, length = this.models.length; i < length; i++)
-                if (i !== excludeStrokePosition - 1)
-                    shapeContainer.addChild(this.models[i].inflateShape(color));
-            return shapeContainer;
         }
     });
 

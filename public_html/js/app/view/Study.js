@@ -63,6 +63,7 @@ define([
          */
         nextPrompt: function() {
             var scheduledItem = skritter.user.scheduler.getNext();
+            //scheduledItem.id = 'mcfarljwtest2-zh-一字-0-rdng';
             skritter.user.data.items.loadItem(scheduledItem.id, _.bind(function(item) {
                 this.loadPrompt(item.createReview());
             }, this));

@@ -41,7 +41,7 @@ define(function() {
             var target = character.targets[a];
             for (var b = 0, lengthB = target.length; b < lengthB; b++) {
                 var stroke = target.at(b);
-                if (stroke.get('position') === character.position()) {
+                if (stroke.get('position') === character.getPosition()) {
                     var bitmapId = stroke.get('bitmapId');
                     var contains = stroke.get('contains');
                     var data = stroke.get('data');
@@ -94,7 +94,7 @@ define(function() {
      * @returns {Number}
      */
     Recognizer.prototype.checkAngle = function(stroke, target) {
-        var score = Math.abs(stroke.angle() - target.angle());
+        var score = Math.abs(stroke.getAngle() - target.getAngle());
         if (score <= this.angleThreshold)
             return score;
         return -1;
@@ -121,7 +121,7 @@ define(function() {
      * @returns {Number}
      */
     Recognizer.prototype.checkDistance = function(stroke, target, size) {
-        var score = skritter.fn.distance(stroke.rectangle().c, target.rectangle().c);
+        var score = skritter.fn.distance(stroke.getRectangle().c, target.getRectangle().c);
         if (score < this.distanceThreshold * (size / skritter.settings.get('maxCanvasSize')))
             return score;
         return -1;
@@ -135,7 +135,7 @@ define(function() {
      * @returns {Number}
      */
     Recognizer.prototype.checkCornersLength = function(stroke, target, size) {
-        var score = Math.abs(stroke.cornersLength() - target.cornersLength());
+        var score = Math.abs(stroke.getCornerLength() - target.getCornerLength());
         if (score < this.cornersLengthThreshold * (size / skritter.settings.get('maxCanvasSize')))
             return score;
         return -1;

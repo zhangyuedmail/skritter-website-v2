@@ -4,13 +4,16 @@
  */
 define([
     'model/Api',
+    'model/Assets',
     'Functions',
     'model/storage/IndexedDBAdapter',
     'view/component/Modal',
+    'collection/data/Params',
     'Router',
     'model/Settings',
+    'view/component/Timer',
     'model/User'
-], function(Api, Functions, IndexedDBAdapter, Modal, Router, Settings, User) {
+], function(Api, Assets, Functions, IndexedDBAdapter, Modal, Params, Router, Settings, Timer, User) {
     /**
      * @method initialize
      */
@@ -22,10 +25,13 @@ define([
         //asynchronously loads all of the required modules
         async.series([
             async.apply(loadApi),
+            async.apply(loadAssets),
             async.apply(loadFunctions),
             async.apply(loadModal),
+            async.apply(loadParams),
             async.apply(loadSettings),
             async.apply(loadStorage),
+            async.apply(loadTimer),
             async.apply(loadUser),
             async.apply(loadRouter)
         ], function() {
@@ -41,6 +47,14 @@ define([
      */
     var loadApi = function(callback) {
         skritter.api = new Api();
+        callback();
+    };
+    /**
+     * @method loadAssets
+     * @param {Function} callback
+     */
+    var loadAssets = function(callback) {
+        skritter.assets = new Assets();
         callback();
     };
     /**
@@ -60,6 +74,14 @@ define([
         callback();
     };
     /**
+     * @method loadParams
+     * @param {Function} callback
+     */
+    var loadParams = function(callback) {
+        skritter.params = new Params();
+        callback();
+    };
+    /**
      * @method loadRouter
      * @param {Function} callback
      */
@@ -73,6 +95,14 @@ define([
      */
     var loadSettings = function(callback) {
         skritter.settings = new Settings();
+        callback();
+    };
+    /**
+     * @method loadTimer
+     * @param {Function} callback
+     */
+    var loadTimer = function(callback) {
+        skritter.timer = new Timer();
         callback();
     };
     /**
@@ -96,6 +126,9 @@ define([
                 },
                 function(callback) {
                     skritter.user.scheduler.load(callback);
+                },
+                function(callback) {
+                    skritter.user.data.loadResources(callback);
                 }
             ], callback);
         } else {

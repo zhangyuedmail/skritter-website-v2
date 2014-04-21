@@ -1,5 +1,4 @@
-define([
-], function() {
+define(function() {
     /**
      * @class Schedule
      */
@@ -181,8 +180,9 @@ define([
          * @param {Backbone.Model} item
          */
         update: function(item) {
-            var position = _.findIndex(this.schedule, {id: item.id});
-            this.schedule[position] = {
+            console.log('UPDATING', item.id);
+            var position = _.findIndex(this.data, {id: item.id});
+            this.data[position] = {
                 id: item.id,
                 last: item.get('last'),
                 next: item.get('next'),

@@ -1,6 +1,6 @@
 /**
  * @module Skritter
- * @submodule Models
+ * @submodule Model
  * @author Joshua McFarland
  */
 define(function() {
@@ -52,8 +52,9 @@ define(function() {
          * @returns {Backbone.Collection}
          */
         getCharacterAt: function(position) {
+            position = position ? position : this.get('position');
             if (this.characters)
-                return this.hasContained() ? this.characters[position] : this.characters[0];
+                return this.characters[position - 1];
             return this.characters;
         },
         /**
@@ -88,6 +89,7 @@ define(function() {
          * @returns {Backbone.Model}
          */
         getItemAt: function(position) {
+            position = position || position === 0 ? position : this.get('position');
             return skritter.user.data.items.get(this.getReviewAt(position).itemId);
         },
         /**
@@ -96,6 +98,7 @@ define(function() {
          * @returns {Object}
          */
         getOriginalItemAt: function(position) {
+            position = position ? position : this.get('position');
             if (this.get('originalItems').length > 1 && position !== 0)
                 return this.get('originalItems')[position];
             return this.get('originalItems')[0];
@@ -120,6 +123,7 @@ define(function() {
          * @returns {Object}
          */
         getReviewAt: function(position) {
+            position = position || position === 0 ? position : this.get('position');
             if (this.hasContained() && position !== 0)
                 return this.get('reviews')[position];
             return this.get('reviews')[0];
@@ -171,11 +175,32 @@ define(function() {
             return this.get('position') === position ? true : false;
         },
         /**
+         * @method previous
+         * @returns {Boolean}
+         */
+        previous: function() {
+            if (this.isFirst())
+                return false;
+            this.set('position', this.get('position') - 1, {silent: true, sort: false});
+            return true;
+        },
+        /**
+         * @method next
+         * @returns {Boolean}
+         */
+        next: function() {
+            if (this.isLast())
+                return false;
+            this.set('position', this.get('position') + 1, {silent: true, sort: false});
+            return true;
+        },
+        /**
          * @method save
          * @param {Function} callback
          */
         save: function(callback) {
             var reviews = this.get('reviews');
+            var i, length, item, review;
             if (skritter.user.data.reviews.get(this)) {
                 //updates the base review based on contained reviews
                 if (this.hasContained()) {
@@ -183,9 +208,9 @@ define(function() {
                     reviews[0].thinkingTime = this.getTotalThinkingTime();
                 }
                 //updates all of the new review intervals and items
-                for (var i = 0, length = reviews.length; i < length; i++) {
-                    var item = this.getItemAt(i);
-                    var review = reviews[i];
+                for (i = 0, length = reviews.length; i < length; i++) {
+                    item = this.getItemAt(i);
+                    review = reviews[i];
                     if (parseInt(i, 10) === 0 && reviews.length > 1)
                         review.score = this.getFinalScore();
                     review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
@@ -199,6 +224,7 @@ define(function() {
                         //TODO: remove or add successes based on previous score
                         //successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes')
                     }, {silent: true, sort: false});
+                    skritter.user.scheduler.update(item);
                 }
             } else {
                 //updates the base review based on contained reviews
@@ -207,12 +233,12 @@ define(function() {
                     reviews[0].thinkingTime = this.getTotalThinkingTime();
                 }
                 //updates all of the new review intervals and items
-                for (var i = 0, length = reviews.length; i < length; i++) {
-                    var item = this.getItemAt(i);
-                    var review = reviews[i];
+                for (i = 0, length = reviews.length; i < length; i++) {
+                    item = this.getItemAt(i);
+                    review = reviews[i];
                     if (parseInt(i, 10) === 0 && reviews.length > 1)
                         review.score = this.getFinalScore();
-                    review.newInterval = skritter.fn.scheduler.interval(item, review.score);
+                    review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
                     item.set({
                         changed: review.submitTime,
                         last: review.submitTime,
@@ -224,6 +250,7 @@ define(function() {
                         successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                         timeStudied: item.get('timeStudied') + review.reviewTime
                     }, {silent: true, sort: false});
+                    skritter.user.scheduler.update(item);
                 }
                 //save the reviews to the official collection
                 skritter.user.data.reviews.add(this, {merge: true, silent: true, sort: false});
@@ -237,6 +264,7 @@ define(function() {
                 }
             ], function() {
                 skritter.user.data.reviews.sort();
+                skritter.user.scheduler.sort();
                 callback();
             });
         },
@@ -248,6 +276,7 @@ define(function() {
          * @returns {Object}
          */
         setReviewAt: function(position, key, value) {
+            position = position ? position : this.get('position');
             var review = this.hasContained() ? this.get('reviews')[position] : this.get('reviews')[0];
             var data = {};
             if (typeof key === 'object') {
