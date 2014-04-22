@@ -126,7 +126,11 @@ body {
 
 /*** NAVBAR ***/
 .navbar { font-size: 18px; }
-.navbar .navbar-header { width: 100%; }
+.navbar .container {  padding: 0; }
+.navbar .navbar-header { 
+    margin: 0;
+    width: 100%;
+}
 .navbar .navbar-text { margin: 10px 0; }
 .navbar .navbar-text a {
     padding: 10px 5px;
@@ -156,7 +160,6 @@ body {
     overflow-y: auto;
     position: absolute;
     z-index: 1002;
-    
     font-size: 24px;
 }
 #info-section .prompt-row { clear: both; }
@@ -246,8 +249,6 @@ body {
 /*** PROMPT: WRITING AREA ***/
 #writing-area .canvas-holder { position: relative; }
 #writing-area .canvas-holder #canvas-display {
-    background-image: url('../image/background/paper2.png');
-    background-size: cover;
     bottom: 0;
     left: 0;
     position: absolute;

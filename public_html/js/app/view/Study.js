@@ -21,6 +21,8 @@ define([
          */
         render: function() {
             this.$el.html(templateStudy);
+            skritter.timer.setElement(this.$('#timer')).render();
+            skritter.user.scheduler.sort();
             this.nextPrompt();
             return this;
         },
@@ -28,6 +30,8 @@ define([
          * @property {Object} events
          */
         events: {
+            'click #view-study .button-audio': 'playAudio',
+            'click #view-study .button-study-settings': 'navigateStudySettings'
         },
         /**
          * @method loadPrompt
@@ -59,14 +63,30 @@ define([
             this.updateDueCount();
         },
         /**
+         * @method navigateStudySettings
+         * @param {Object} event
+         */
+        navigateStudySettings: function(event) {
+            skritter.router.navigate('study/settings', {trigger: true});
+            event.preventDefault();
+        },
+        /**
          * @method nextPrompt
          */
         nextPrompt: function() {
+            skritter.timer.reset();
             var scheduledItem = skritter.user.scheduler.getNext();
-            //scheduledItem.id = 'mcfarljwtest2-zh-一字-0-rdng';
             skritter.user.data.items.loadItem(scheduledItem.id, _.bind(function(item) {
                 this.loadPrompt(item.createReview());
             }, this));
+        },
+        /**
+         * @method playAudio
+         * @param {Object} event
+         */
+        playAudio: function(event) {
+            this.prompt.review.getBaseVocab().playAudio();
+            event.preventDefault();
         },
         /**
          * @method previousPrompt
@@ -86,11 +106,11 @@ define([
          */
         updateAudioButtonState: function() {
             if (this.prompt && this.prompt.review.getBaseVocab().has('audio')) {
-                this.$('#audio-button span').removeClass('fa fa-volume-off');
-                this.$('#audio-button span').addClass('fa fa-volume-up');
+                this.$('.button-audio span').removeClass('fa fa-volume-off');
+                this.$('.button-audio span').addClass('fa fa-volume-up');
             } else {
-                this.$('#audio-button span').removeClass('fa fa-volume-up');
-                this.$('#audio-button span').addClass('fa fa-volume-off');
+                this.$('.button-audio span').removeClass('fa fa-volume-up');
+                this.$('.button-audio span').addClass('fa fa-volume-off');
             }
         },
         /**

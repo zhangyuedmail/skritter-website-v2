@@ -11,6 +11,8 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            skritter.timer.setReviewLimit(30);
+            skritter.timer.setThinkingLimit(15);
         },
         /**
          * @method render
@@ -30,11 +32,18 @@ define([
          */
         handleTap: function(event) {
             if (this.review.get('finished')) {
-                
+                Prompt.gradingButtons.trigger('selected');
             } else {
                 this.showAnswer();
             }
             event.preventDefault();
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.$('#prompt-text').hammer().off();
+            Prompt.prototype.remove.call(this);
         },
         /**
          * @method resize
@@ -47,12 +56,15 @@ define([
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
+                this.$('.prompt-container').css('height', '');
                 this.$('#info-section').height('');
                 this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
                 this.$('#input-section').height(contentHeight - this.$('#info-section').height() - 30);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
+                this.$('.prompt-container').css('height', canvasSize);
+                this.$('#info-section').css('height', canvasSize);
                 this.$('#input-section').css('left', '');
                 if (window.cordova) {
                     this.$('#input-section').height(contentHeight);
@@ -68,6 +80,8 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
+            skritter.timer.start();
+            this.review.set('finished', false);
             this.$('#answer').hide();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReading());
@@ -81,6 +95,8 @@ define([
          * @returns {Backbone.View}
          */
         showAnswer: function() {
+            skritter.timer.stop();
+            this.review.set('finished', true);
             this.$('#question').hide();
             this.$('#answer').show('fade', 200);
             this.$('#question-text').html('Definition:');

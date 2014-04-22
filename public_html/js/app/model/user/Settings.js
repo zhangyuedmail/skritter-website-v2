@@ -127,6 +127,19 @@ define([
             if (this.get('targetLang') === 'ja')
                 return true;
             return false;
+        },
+        /**
+         * @method setActiveParts
+         * @param {Array} parts
+         * @returns {Array}
+         */
+        setActiveParts: function(parts) {
+            if (this.isChinese()) {
+                this.set('filterChineseParts', parts);
+                return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
+            }
+            this.set('filterJapaneseParts', parts);
+            return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
         }
     });
     

@@ -85,6 +85,14 @@ define([
                     this.sync.cache();
                     async.series([
                         _.bind(function(callback) {
+                            if (skritter.settings.isIndexedDB()) {
+                                window.indexedDB.deleteDatabase(this.id);
+                                skritter.storage.open(this.id, callback);
+                            } else {
+                                callback();
+                            }
+                        }, this),
+                        _.bind(function(callback) {
                             this.settings.fetch(callback);
                         }, this),
                         _.bind(function(callback) {

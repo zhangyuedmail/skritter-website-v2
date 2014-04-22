@@ -53,7 +53,7 @@ define([
             }
         },
         next: function() {
-            //skritter.timer.reset();
+            skritter.timer.reset();
             this.review.next();
             Prompt.gradingButtons.grade(this.review.getReviewAt().score);
             this.clear().show();
@@ -71,16 +71,18 @@ define([
          * @method resize
          */
         resize: function() {
-            //TODO: add general resizing logic
+            if (window.cordova || skritter.settings.appWidth() <= skritter.settings.get('maxCanvasSize')) {
+                $('#content-container').addClass('full-width');
+            } else {
+                $('#content-container').removeClass('full-width');
+            }
         },
         /**
          * @method set
          * @param {Backbone.Model} review
-         * @param {Boolean} skipSave
          */
-        set: function(review, skipSave) {
+        set: function(review) {
             this.review = review;
-            Prompt.skipSave = skipSave ? skipSave : false;
         }
     });
 

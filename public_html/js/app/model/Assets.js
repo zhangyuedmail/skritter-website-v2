@@ -13,6 +13,16 @@ define(function() {
          */
         initialize: function() {
             this.audio = new Audio();
+            if (window.cordova) {
+                navigator.expansion.load(this.get('cordovaMainVersion'), this.get('cordovaPatchVersion'));
+            }
+        },
+        /**
+         * @property {Object} defaults
+         */
+        defaults: {
+            cordovaMainVersion: 3,
+            cordovaPatchVersion: 1
         },
         /**
          * @method playAudio
@@ -20,7 +30,7 @@ define(function() {
          */
         playAudio: function(filename) {
             if (window.cordova) {
-                //TODO: impement a better plugin for dealing with expansion file audio
+                navigator.expansion.media.play(window.decodeURIComponent(filename));
             } else {
                 if (this.audio.paused) {
                     this.audio.src = skritter.api.root + skritter.api.tld + '/sounds?file=' + filename;

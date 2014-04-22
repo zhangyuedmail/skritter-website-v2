@@ -194,7 +194,8 @@ module.exports = function(grunt) {
                     'cordova create japanese com.inkren.skritter.japanese Skritter',
                     'cd japanese/',
                     'cordova platforms add android',
-                    'cordova plugin add org.apache.cordova.splashscreen'
+                    'cordova plugin add org.apache.cordova.splashscreen',
+                    'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion.git'
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -207,7 +208,8 @@ module.exports = function(grunt) {
                     'cordova create chinese com.inkren.skritter.chinese Skritter',
                     'cd chinese/',
                     'cordova platforms add android',
-                    'cordova plugin add org.apache.cordova.splashscreen'
+                    'cordova plugin add org.apache.cordova.splashscreen',
+                    'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion.git'
                 ].join('&&'),
                 options: {
                     stdout: true,

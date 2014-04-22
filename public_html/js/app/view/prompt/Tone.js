@@ -12,6 +12,8 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            skritter.timer.setReviewLimit(15);
+            skritter.timer.setThinkingLimit(10);
             Tone.canvas = new Canvas();
         },
         /**
@@ -22,16 +24,12 @@ define([
             this.$el.html(templateTone);
             Prompt.prototype.render.call(this);
             Tone.canvas.setElement(this.$('#writing-area'));
+            this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
             this.listenTo(Tone.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(Tone.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
             this.show();
             return this;
-        },
-        /**
-         * @property {Object} events
-         */
-        events: {
         },
         /**
          * @method clear
@@ -47,7 +45,7 @@ define([
          * @returns {undefined}
          */
         handleStrokeDown: function() {            
-            //TODO: fade or change the color of the character on stroke down
+            skritter.timer.stopThinking();
         },
         /**
          * @method handleStrokeReceived
@@ -84,6 +82,24 @@ define([
                 this.showAnswer();
         },
         /**
+         * @method handleTap
+         * @param {Object} event
+         */
+        handleTap: function(event) {
+            if (this.review.get('finished')) {
+                Prompt.gradingButtons.trigger('selected');
+            }
+            event.preventDefault();
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            Tone.canvas.remove();
+            this.$('#writing-area').hammer().off();
+            Prompt.prototype.remove.call(this);
+        },
+        /**
          * @method resize
          */
         resize: function() {
@@ -92,26 +108,34 @@ define([
             var contentHeight = skritter.settings.contentHeight();
             var contentWidth = skritter.settings.contentWidth();
             Tone.canvas.resize(canvasSize).render();
+            Tone.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
+                this.$('.prompt-container').css('height', '');
                 this.$('#info-section').css('height', contentHeight - canvasSize + 5);
                 this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
+                this.$('.prompt-container').css('height', canvasSize);
+                this.$('#info-section').css('height', canvasSize);
                 this.$('#input-section').css('left', '');
             }
             this.$('#input-section').height(canvasSize);
             this.$('#input-section').width(canvasSize);
+            if (this.review.getCharacterAt().isFinished())
+                Tone.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
         },
         /**
          * @method show
          * @returns {Backbone.View}
          */
         show: function() {
+            skritter.timer.start();
             Tone.canvas.enableInput();
             Tone.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
+            this.review.set('finished', false);
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position'), skritter.user.settings.get('hideReading')));
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
@@ -124,8 +148,10 @@ define([
          * @returns {Backbone.View}
          */
         showAnswer: function() {
+            skritter.timer.stop();
             Tone.canvas.disableInput();
             Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+            this.review.set('finished', true);
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position') + 1, skritter.user.settings.get('hideReading')));
             Prompt.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             return this;

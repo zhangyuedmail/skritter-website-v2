@@ -3,6 +3,7 @@
  * @param Home
  * @param Login
  * @param Study
+ * @param StudySettings
  * @param Test
  * @author Joshua McFarland
  */
@@ -10,8 +11,9 @@ define([
     'view/Home',
     'view/Login',
     'view/Study',
+    'view/study/Settings',
     'view/Test'
-], function(Home, Login, Study, Test) {
+], function(Home, Login, Study, StudySettings, Test) {
     /**
      * @class Router
      */
@@ -31,6 +33,7 @@ define([
             '': 'home',
             'login': 'login',
             'study': 'study',
+            'study/settings': 'studySettings',
             'test': 'test'
         },
         /**
@@ -63,6 +66,14 @@ define([
         study: function() {
             this.removeView();
             this.view = new Study({el: this.container});
+            this.view.render();
+        },
+        /**
+         * @method studySettings
+         */
+        studySettings: function() {
+            this.removeView();
+            this.view = new StudySettings({el: this.container});
             this.view.render();
         },
         /**

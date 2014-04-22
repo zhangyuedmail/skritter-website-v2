@@ -12,6 +12,8 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            skritter.timer.setReviewLimit(30);
+            skritter.timer.setThinkingLimit(15);
             Rune.canvas = new Canvas();
             Rune.maxStrokeAttempts = 3;
             Rune.strokeAttempts = 0;
@@ -24,7 +26,9 @@ define([
             this.$el.html(templateRune);
             Prompt.prototype.render.call(this);
             Rune.canvas.setElement(this.$('#writing-area'));
+            this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
             this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
+            this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
             this.listenTo(Rune.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(Rune.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
@@ -41,6 +45,17 @@ define([
             return this;
         },
         /**
+         * @method handleDoubleTap
+         * @param {Object} event
+         */
+        handleDoubleTap: function(event) {
+            if (!this.review.get('finished')) {
+                this.review.setReviewAt(null, 'score', 1);
+                Rune.canvas.drawShape('background', this.review.getCharacterAt().targets[0].getShape(null, '#999999'));
+            }
+            event.preventDefault();
+        },
+        /**
          * @method handleHold
          * @param {Object} event
          */
@@ -49,10 +64,20 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleTap
+         * @param {Object} event
+         */
+        handleTap: function(event) {
+            if (this.review.get('finished')) {
+                Prompt.gradingButtons.trigger('selected');
+            }
+            event.preventDefault();
+        },
+        /**
          * @method handleStrokeDown
          */
         handleStrokeDown: function() {
-            //skritter.timer.stopThinking();
+            skritter.timer.stopThinking();
         },
         /**
          * @method handleStrokeReceived
@@ -79,8 +104,17 @@ define([
                     }
                 }
             }
-            if (this.review.getCharacterAt().isFinished())
+            if (this.review.getCharacterAt().isFinished()) {
                 this.showAnswer();
+            }
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            Rune.canvas.remove();
+            this.$('#writing-area').hammer().off();
+            Prompt.prototype.remove.call(this);
         },
         /**
          * @method reset
@@ -105,22 +139,32 @@ define([
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
+                this.$('.prompt-container').css('height', '');
                 this.$('#info-section').css('height', contentHeight - canvasSize + 5);
                 this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
+                this.$('.prompt-container').css('height', canvasSize);
+                this.$('#info-section').css('height', canvasSize);
                 this.$('#input-section').css('left', '');
             }
             this.$('#input-section').height(canvasSize);
             this.$('#input-section').width(canvasSize);
+            if (this.review.getCharacterAt().isFinished()) {
+                Rune.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
+            } else if (this.review.getCharacterAt().length > 0) {
+                Rune.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+            }
         },
         /**
          * @method show
          * @returns {Backbone.View}
          */
         show: function() {
+            skritter.timer.start();
             Rune.canvas.enableInput();
+            this.review.set('finished', false);
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReading());
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getMaskedSentenceWriting());
@@ -133,10 +177,12 @@ define([
          * @returns {Backbone.View}
          */
         showAnswer: function() {
+            skritter.timer.stop();
             Rune.canvas.disableInput();
+            this.review.set('finished', true);
             if (skritter.user.settings.get('squigs') && this.review.getCharacterAt().length > 0) {
                 var color = skritter.settings.get('gradingColors')[this.review.getReviewAt().score];
-                var character = this.review.getcCharacterAt();
+                var character = this.review.getCharacterAt();
                 for (var i = 0, length = character.length; i < length; i++) {
                     var stroke = character.at(i);
                     Rune.canvas.tweenShape('hint', stroke.getUserShape(color), stroke.inflateShape());
