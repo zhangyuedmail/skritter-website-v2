@@ -26,9 +26,9 @@ define([
             this.$el.html(templateRune);
             Prompt.prototype.render.call(this);
             Rune.canvas.setElement(this.$('#writing-area'));
+            this.$('#writing-area').hammer().on('click', _.bind(this.handleTap, this));
             this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
             this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
-            this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
             this.listenTo(Rune.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(Rune.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();

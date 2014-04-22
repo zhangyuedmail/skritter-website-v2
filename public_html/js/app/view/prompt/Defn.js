@@ -21,7 +21,7 @@ define([
         render: function() {
             this.$el.html(templateDefn);
             Prompt.prototype.render.call(this);
-            this.$('#prompt-text').hammer().on('tap', _.bind(this.handleTap, this));
+            this.$('#prompt-text').hammer().on('click', _.bind(this.handleTap, this));
             this.resize();
             this.show();
             return this;
@@ -104,6 +104,6 @@ define([
             return this;
         }
     });
-    
+
     return Defn;
 });

@@ -24,7 +24,7 @@ define([
             this.$el.html(templateTone);
             Prompt.prototype.render.call(this);
             Tone.canvas.setElement(this.$('#writing-area'));
-            this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
+            this.$('#writing-area').hammer().on('click', _.bind(this.handleTap, this));
             this.listenTo(Tone.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(Tone.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();

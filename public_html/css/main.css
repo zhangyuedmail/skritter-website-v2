@@ -176,7 +176,10 @@ body {
 }
 #info-section .reading-hidden { border-bottom: 2px #222222 solid; }
 #info-section .reading-hidden span { visibility: hidden; }
-.prompt-container.landscape #info-section { width: 50%; }
+.prompt-container.landscape #info-section { 
+    border-right: 2px solid #333333;
+    width: 50%;
+}
 .prompt-container.portrait #info-section { 
     border-bottom: 2px solid #333333;
     width: 100%;

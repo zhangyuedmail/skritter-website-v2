@@ -1,5 +1,15 @@
 /**
  * @module Skritter
+ * @param Api
+ * @param Assets
+ * @param Functions
+ * @param IndexedDBAdapter
+ * @param Modal
+ * @param Params
+ * @param Router
+ * @param Settings
+ * @param Timer
+ * @param User
  * @author Joshua McFarland
  */
 define([
