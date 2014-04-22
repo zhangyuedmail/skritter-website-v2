@@ -180,7 +180,6 @@ define(function() {
          * @param {Backbone.Model} item
          */
         update: function(item) {
-            console.log('UPDATING', item.id);
             var position = _.findIndex(this.data, {id: item.id});
             this.data[position] = {
                 id: item.id,

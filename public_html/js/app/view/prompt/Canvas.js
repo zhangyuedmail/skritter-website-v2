@@ -100,6 +100,10 @@ define(function() {
             Canvas.stage.display.addChild(layer);
             return layer;
         },
+        /**
+         * @method display
+         * @returns {CreateJS.Stage}
+         */
         display: function() {
             return Canvas.stage.display;
         },
