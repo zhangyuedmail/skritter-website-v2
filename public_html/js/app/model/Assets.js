@@ -13,9 +13,8 @@ define(function() {
          */
         initialize: function() {
             this.audio = new Audio();
-            if (window.cordova) {
+            if (window.cordova)
                 navigator.expansion.load(this.get('cordovaMainVersion'), this.get('cordovaPatchVersion'));
-            }
         },
         /**
          * @property {Object} defaults

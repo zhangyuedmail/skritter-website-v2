@@ -41,6 +41,7 @@ body {
     -moz-box-shadow: none;
     box-shadow: none;
 }
+.content-block.no-margin { margin: 0; }
 .content-block.no-padding { padding: 0; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
@@ -147,7 +148,7 @@ body {
 
 /*** PROMPT: GRADING BUTTONS ***/
 .prompt-container #grading-buttons {
-    bottom: 0;
+    bottom: 15px;
     display: none;
     left: 0;
     position: absolute;
@@ -214,7 +215,7 @@ body {
     width: 50%;
 }
 .prompt-container.portrait #input-section {
-    bottom: -15px;
+    bottom: -10px;
     width: 100%;
 }
 

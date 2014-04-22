@@ -52,27 +52,42 @@ define([
             Prompt.prototype.resize.call(this);
             var canvasSize = skritter.settings.canvasSize();
             var contentHeight = skritter.settings.contentHeight();
-            var contentWidth = skritter.settings.contentWidth();
+            var contentWidth = skritter.settings.contentWidth();            
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
-                this.$('.prompt-container').css('height', '');
-                this.$('#info-section').height('');
-                this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
-                this.$('#input-section').height(contentHeight - this.$('#info-section').height() - 30);
+                this.$('.prompt-container').css({
+                    height: '',
+                    width: ''
+                });
+                this.$('#info-section').css({
+                    height: contentHeight * 0.7,
+                    'max-height': '30%',
+                    width: ''
+                });
+                this.$('#input-section').css({
+                    height: contentHeight - this.$('#info-section').height(),
+                    left: (contentWidth - canvasSize) / 2,
+                    width: canvasSize
+                });
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
-                this.$('.prompt-container').css('height', canvasSize);
-                this.$('#info-section').css('height', canvasSize);
-                this.$('#input-section').css('left', '');
-                if (window.cordova) {
-                    this.$('#input-section').height(contentHeight);
-                } else {
-                    this.$('#input-section').height(canvasSize);
-                }
+                this.$('.prompt-container').css({
+                    height: canvasSize,
+                    width: ''
+                });
+                this.$('#info-section').css({
+                    height: canvasSize,
+                    'max-height': '',
+                    width: ''
+                });
+                this.$('#input-section').css({
+                    height: canvasSize,
+                    left: '',
+                    width: ''
+                });
             }
-            this.$('#input-section').width(canvasSize);
             this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});
         },
         /**

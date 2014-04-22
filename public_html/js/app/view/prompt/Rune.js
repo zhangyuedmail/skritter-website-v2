@@ -139,18 +139,37 @@ define([
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
-                this.$('.prompt-container').css('height', '');
-                this.$('#info-section').css('height', contentHeight - canvasSize + 5);
-                this.$('#input-section').css('left', (contentWidth - canvasSize) / 2);
+                this.$('.prompt-container').css({
+                    height: '',
+                    width: ''
+                });
+                this.$('#info-section').css({
+                    height: contentHeight - canvasSize + 10,
+                    width: ''
+                });
+                this.$('#input-section').css({
+                    height: canvasSize,
+                    left: (contentWidth - canvasSize) / 2,
+                    width: canvasSize
+                });
             } else {
                 this.$('.prompt-container').addClass('landscape');
                 this.$('.prompt-container').removeClass('portrait');
-                this.$('.prompt-container').css('height', canvasSize);
+                this.$('.prompt-container').css({
+                    height: canvasSize,
+                    width: ''
+                });
+                this.$('#info-section').css({
+                    height: canvasSize,
+                    width: ''
+                });
                 this.$('#info-section').css('height', canvasSize);
-                this.$('#input-section').css('left', '');
+                this.$('#input-section').css({
+                    height: canvasSize,
+                    left: '',
+                    width: canvasSize
+                });
             }
-            this.$('#input-section').height(canvasSize);
-            this.$('#input-section').width(canvasSize);
             if (this.review.getCharacterAt().isFinished()) {
                 Rune.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
             } else if (this.review.getCharacterAt().length > 0) {
