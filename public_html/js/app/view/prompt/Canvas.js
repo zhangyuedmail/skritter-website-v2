@@ -44,6 +44,14 @@ define(function() {
             this.$('#canvas-input').on('taphold', _.bind(this.triggerCanvasTapHold, this));
             this.$('#canvas-input').on('vmousedown', _.bind(this.triggerCanvasMouseDown, this));
             this.$('#canvas-input').on('vmouseup', _.bind(this.triggerCanvasMouseUp, this));
+            this.clear();
+            return this;
+        },
+        /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
             Canvas.stage.display.removeAllChildren();
             Canvas.stage.input.removeAllChildren();
             this.createLayer('background');

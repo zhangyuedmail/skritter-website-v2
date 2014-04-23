@@ -90,13 +90,12 @@ define([
                     Rune.strokeAttempts++;
                     Rune.canvas.fadeShape('marker', shape);
                     if (Rune.strokeAttempts > Rune.maxStrokeAttempts) {
-                        this.review.getReviewAt({score: 1});
+                        this.review.setReviewAt(null, 'score', 1);
                         Rune.canvas.fadeShape('hint', this.review.getCharacterAt().getExpectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
                 }
             }
             if (this.review.getCharacterAt().isFinished()) {
-                console.log('received');
                 this.showAnswer();
             }
         },
@@ -121,8 +120,7 @@ define([
          * @returns {Backbone.View}
          */
         reset: function() {
-            Rune.canvas.disableInput().enableInput();
-            Rune.canvas.render();
+            Rune.canvas.clear().disableInput().enableInput();
             Prompt.gradingButtons.hide();
             this.review.getCharacterAt().reset();
             return this;
