@@ -16,6 +16,8 @@ define(function() {
             Canvas.stage = {};
             Canvas.size = skritter.settings.canvasSize();
             Canvas.gridColor = 'grey';
+            Canvas.lastMouseDownEvent = null;
+            Canvas.lastMouseUpEvent = null;
             Canvas.strokeSize = 8;
             Canvas.strokeCapStyle = 'round';
             Canvas.strokeColor = '#000000';
@@ -39,6 +41,9 @@ define(function() {
             this.$el.html(Canvas.container);
             this.$(Canvas.container).append(Canvas.stage.display.canvas);
             this.$(Canvas.container).append(Canvas.stage.input.canvas);
+            this.$('#canvas-input').on('taphold', _.bind(this.triggerCanvasTapHold, this));
+            this.$('#canvas-input').on('vmousedown', _.bind(this.triggerCanvasMouseDown, this));
+            this.$('#canvas-input').on('vmouseup', _.bind(this.triggerCanvasMouseUp, this));
             Canvas.stage.display.removeAllChildren();
             Canvas.stage.input.removeAllChildren();
             this.createLayer('background');
@@ -152,7 +157,9 @@ define(function() {
          * @returns {Backbone.View}
          */
         disableInput: function() {
-            Canvas.stage.input.removeAllEventListeners();
+            this.$('#canvas-input').off('vmousedown.Input');
+            this.$('#canvas-input').off('vmousemove.Input');
+            this.$('#canvas-input').off('vmouseup.Input');
             return this;
         },
         /**
@@ -187,8 +194,7 @@ define(function() {
             var self = this;
             var stage = Canvas.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
-            if (!stage.hasEventListener('stagemousedown'))
-                stage.addEventListener('stagemousedown', down);
+            self.$('#canvas-input').on('vmousedown.Input', down);
             function down() {
                 points = [];
                 marker = new createjs.Shape();
@@ -196,8 +202,8 @@ define(function() {
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
                 self.triggerInputDown(oldPoint);
-                stage.addEventListener('stagemousemove', move);
-                stage.addEventListener('stagemouseup', up);
+                self.$('#canvas-input').on('vmousemove.Input', move);
+                self.$('#canvas-input').on('vmouseup.Input', up);
             }
             function move() {
                 var point = new createjs.Point(stage.mouseX, stage.mouseY);
@@ -217,11 +223,10 @@ define(function() {
                 oldMidPoint = midPoint;
                 points.push(point);
             }
-            function up(event) {
-                stage.removeEventListener('stagemousemove', move);
-                stage.removeEventListener('stagemouseup', up);
-                if (event.rawX >= 0 && event.rawX < Canvas.size && event.rawY >= 0 && event.rawY < Canvas.size)
-                    self.triggerInputUp(points, squig.clone(true));
+            function up() {
+                self.$('#canvas-input').off('vmousemove.Input', move);
+                self.$('#canvas-input').off('vmouseup.Input', up);
+                self.triggerInputUp(points, squig.clone(true));
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
@@ -303,6 +308,8 @@ define(function() {
         remove: function() {
             createjs.Touch.disable(Canvas.stage.input);
             createjs.Ticker.removeEventListener('tick', Canvas.stage.display);
+            this.$('#canvas-display').off();
+            this.$('#canvas-input').off();
             Canvas.stage.display.removeAllChildren();
             Canvas.stage.input.removeAllChildren();
             this.$el.empty();
@@ -322,6 +329,51 @@ define(function() {
             Canvas.stage.input.canvas.width = size;
             Canvas.stage.input.canvas.height = size;
             return this;
+        },
+        /**
+         * @method triggerClick
+         * @param {Object} event
+         */
+        triggerCanvasClick: function(event) {
+            this.trigger('canvas:click', event);
+        },
+        /**
+         * @method triggerCanvasDoubleTap
+         * @param {Object} event
+         */
+        triggerCanvasDoubleTap: function(event) {
+            this.trigger('canvas:doubletap', event);
+        },
+        /**
+         * @method triggerCanvasMouseDown
+         * @param {Object} event
+         */
+        triggerCanvasMouseDown: function(event) {
+            Canvas.lastMouseDownEvent = event;
+            this.trigger('canvas:mousedown', event);
+        },
+        /**
+         * @method triggerClick
+         * @param {Object} event
+         */
+        triggerCanvasMouseUp: function(event) {
+            Canvas.lastMouseUpEvent = event;
+            var mouseDownPosition = {x: Canvas.lastMouseDownEvent.pageX, y: Canvas.lastMouseDownEvent.pageY};
+            var mouseUpPosition = {x: Canvas.lastMouseUpEvent.pageX, y: Canvas.lastMouseUpEvent.pageY};
+            var mouseDistance = skritter.fn.distance(mouseDownPosition, mouseUpPosition);
+            var mouseDuration = Canvas.lastMouseUpEvent.timeStamp - Canvas.lastMouseDownEvent.timeStamp;
+            if (mouseDistance <= 10 && mouseDuration > 20 && mouseDuration < 500) {
+                this.triggerCanvasClick(event);
+            } else {
+                this.trigger('canvas:mouseup', event);
+            }
+        },
+        /**
+         * @method triggerCanvasTapHold
+         * @param {Object} event
+         */
+        triggerCanvasTapHold: function(event) {
+            this.trigger('canvas:taphold', event);
         },
         /**
          * Enables the view to fire events when the canvas has been touched.

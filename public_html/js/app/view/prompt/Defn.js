@@ -21,16 +21,16 @@ define([
         render: function() {
             this.$el.html(templateDefn);
             Prompt.prototype.render.call(this);
-            this.$('#prompt-text').hammer().on('click', _.bind(this.handleTap, this));
+            this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
             this.resize();
             this.show();
             return this;
         },
         /**
-         * @method handleTap
+         * @method handleClick
          * @param {Object} event
          */
-        handleTap: function(event) {
+        handleClick: function(event) {
             if (this.review.get('finished')) {
                 Prompt.gradingButtons.trigger('selected');
             } else {
@@ -42,7 +42,7 @@ define([
          * @method remove
          */
         remove: function() {
-            this.$('#prompt-text').hammer().off();
+            this.$('#prompt-text').off();
             Prompt.prototype.remove.call(this);
         },
         /**

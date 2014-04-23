@@ -24,7 +24,7 @@ define([
             this.$el.html(templateTone);
             Prompt.prototype.render.call(this);
             Tone.canvas.setElement(this.$('#writing-area'));
-            this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
+            this.listenTo(Tone.canvas, 'canvas:click', this.handleClick);
             this.listenTo(Tone.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(Tone.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
@@ -39,6 +39,16 @@ define([
             Prompt.gradingButtons.hide();
             Tone.canvas.render();
             return this;
+        },
+        /**
+         * @method handleClick
+         * @param {Object} event
+         */
+        handleClick: function(event) {
+            if (this.review.get('finished')) {
+                Prompt.gradingButtons.trigger('selected');
+            }
+            event.preventDefault();
         },
         /**
          * @method handleStrokeDown
@@ -82,21 +92,11 @@ define([
                 this.showAnswer();
         },
         /**
-         * @method handleTap
-         * @param {Object} event
-         */
-        handleTap: function(event) {
-            if (this.review.get('finished')) {
-                Prompt.gradingButtons.trigger('selected');
-            }
-            event.preventDefault();
-        },
-        /**
          * @method remove
          */
         remove: function() {
             Tone.canvas.remove();
-            this.$('#writing-area').hammer().off();
+            this.$('#writing-area').off();
             Prompt.prototype.remove.call(this);
         },
         /**

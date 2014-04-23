@@ -26,9 +26,8 @@ define([
             this.$el.html(templateRune);
             Prompt.prototype.render.call(this);
             Rune.canvas.setElement(this.$('#writing-area'));
-            this.$('#writing-area').hammer().on('tap', _.bind(this.handleTap, this));
-            this.$('#writing-area').hammer().on('doubletap', _.bind(this.handleDoubleTap, this));
-            this.$('#writing-area').hammer().on('hold', _.bind(this.handleHold, this));
+            this.listenTo(Rune.canvas, 'canvas:click', this.handleClick);
+            this.listenTo(Rune.canvas, 'canvas:taphold', this.handleTapHold);
             this.listenTo(Rune.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(Rune.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
@@ -45,6 +44,16 @@ define([
             return this;
         },
         /**
+         * @method handleClick
+         * @param {Object} event
+         */
+        handleClick: function(event) {
+            if (this.review.get('finished')) {
+                Prompt.gradingButtons.trigger('selected');
+            }
+            event.preventDefault();
+        },
+        /**
          * @method handleDoubleTap
          * @param {Object} event
          */
@@ -52,24 +61,6 @@ define([
             if (!this.review.get('finished')) {
                 this.review.setReviewAt(null, 'score', 1);
                 Rune.canvas.drawShape('background', this.review.getCharacterAt().targets[0].getShape(null, '#999999'));
-            }
-            event.preventDefault();
-        },
-        /**
-         * @method handleHold
-         * @param {Object} event
-         */
-        handleHold: function(event) {
-            this.reset();
-            event.preventDefault();
-        },
-        /**
-         * @method handleTap
-         * @param {Object} event
-         */
-        handleTap: function(event) {
-            if (this.review.get('finished')) {
-                Prompt.gradingButtons.trigger('selected');
             }
             event.preventDefault();
         },
@@ -105,15 +96,24 @@ define([
                 }
             }
             if (this.review.getCharacterAt().isFinished()) {
+                console.log('received');
                 this.showAnswer();
             }
+        },
+        /**
+         * @method handleTapHold
+         * @param {Object} event
+         */
+        handleTapHold: function(event) {
+            this.reset();
+            event.preventDefault();
         },
         /**
          * @method remove
          */
         remove: function() {
             Rune.canvas.remove();
-            this.$('#writing-area').hammer().off();
+            this.$('#writing-area').off();
             Prompt.prototype.remove.call(this);
         },
         /**
