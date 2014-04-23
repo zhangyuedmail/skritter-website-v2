@@ -89,6 +89,26 @@ define([
             return $('#content-container').width();
         },
         /**
+         * @method getLanguage
+         * @returns {String}
+         */
+        getLanguage: function() {
+            var language = this.get('language');
+            if (language === 'zh' || language === 'ja')
+                return language === 'zh' ? 'Chinese' : 'Japanese';
+            return skritter.user.settings.get('targetLang');
+        },
+        /**
+         * @method getLanguageCode
+         * @returns {String}
+         */
+        getLanguageCode: function() {
+            var language = this.get('language');
+            if (language === 'zh' || language === 'ja')
+                return language;
+            return skritter.user.settings.get('targetLang');
+        },
+        /**
          * @method isIndexedDB
          * @returns {Boolean}
          */
@@ -114,16 +134,6 @@ define([
             if (this.contentWidth() < this.contentHeight())
                 return true;
             return false;
-        },
-        /**
-         * @method language
-         * @returns {String}
-         */
-        language: function() {
-            var language = this.get('language');
-            if (language === 'zh' || language === 'ja')
-                return language;
-            return skritter.user.settings.get('targetLang');
         }
     });
 

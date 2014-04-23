@@ -84,7 +84,6 @@ body {
     background-color: #333333;
     color: #ffffff;
     padding-top: 10px;
-    text-align: center;
 }
 .landing-page #header {
     padding: 0 15px;
@@ -99,6 +98,7 @@ body {
     max-width: 400px;
     padding-top: 150px;
     right:0;
+    text-align: center;
 }
 .landing-page #footer {
     bottom: 10px;

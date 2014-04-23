@@ -17,6 +17,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            Home.languageCode = skritter.settings.getLanguageCode();
             this.listenTo(skritter.user.sync, 'sync', this.toggleSyncButton);
         },
         /**
@@ -31,6 +32,9 @@ define([
                 this.$('#user-id').text(skritter.user.id);
             } else {
                 this.$el.html(templateHomeLoggedOut);
+                if (Home.languageCode) {
+                    this.$('#language-text').text(Home.languageCode === 'zh' ? '中文' : '日本語');
+                }
             }
             return this;
         },
