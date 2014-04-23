@@ -56,11 +56,22 @@ define(function() {
             Canvas.stage.input.removeAllChildren();
             this.createLayer('background');
             this.createLayer('display');
+            this.createLayer('teach');
             this.createLayer('hint');
             this.createLayer('marker');
             this.updateAll();
             if (this.grid)
                 this.drawGrid();
+            return this;
+        },
+        /**
+         * @method clearLayer
+         * @param {String} layerName
+         * @returns {Backbone.View}
+         */
+        clearLayer: function(layerName) {
+            this.getLayer(layerName).removeAllChildren();
+            this.updateAll();
             return this;
         },
         /**
@@ -171,6 +182,32 @@ define(function() {
             return this;
         },
         /**
+         * @method drawArrow
+         * @param {String} layerName
+         * @param {Object} point
+         * @param {String} color
+         * @param {String} borderColor
+         * @param {Number} rotation
+         * @returns {CreateJS.Shape}
+         */
+        drawArrow: function(layerName, point, color, borderColor, rotation) {
+            borderColor = borderColor ? borderColor : '#000000';
+            color = color ? color : '#000000';
+            rotation = rotation ? rotation : 0;
+            var arrow = new createjs.Shape();
+            arrow.graphics.f(color).ss(5).s(borderColor).p("AAUAKIHWHqInWHgIAAvK").cp().ef().es().f(color).ss(5).s(borderColor).p("AH+AKIHWHqInWHgIAAvK").cp().ef().es();
+            arrow.setBounds(100, 100);
+            arrow.x = point.x;
+            arrow.y = point.y;
+            arrow.scaleX = 0.3;
+            arrow.scaleY = 0.3;
+            arrow.regX = 100 / 2;
+            arrow.regY = 100 / 2;
+            arrow.rotation = rotation;
+            this.getLayer(layerName).addChild(arrow);
+            return arrow;
+        },
+        /**
          * @method drawPoint
          * @param {String} layerName
          * @param {Object} point
@@ -192,6 +229,7 @@ define(function() {
         drawShape: function(layerName, shape, alpha) {
             shape.alpha = alpha ? alpha : 1;
             this.getLayer(layerName).addChild(shape);
+            console.log(this.getLayer(layerName));
             Canvas.stage.display.update();
             return shape;
         },

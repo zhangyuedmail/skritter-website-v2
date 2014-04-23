@@ -17,6 +17,7 @@ define([
             Rune.canvas = new Canvas();
             Rune.maxStrokeAttempts = 3;
             Rune.strokeAttempts = 0;
+            Rune.teaching = false;
         },
         /**
          * @method render
@@ -41,6 +42,7 @@ define([
         clear: function() {
             Prompt.gradingButtons.hide();
             Rune.canvas.render();
+            this.review.set('finished', false);
             return this;
         },
         /**
@@ -86,6 +88,11 @@ define([
                     } else {
                         Rune.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
                     }
+                    if (this.review.getCharacterAt().isFinished()) {
+                        this.showAnswer();
+                    } else if (Rune.teaching) {
+                        this.teach();
+                    }
                 } else {
                     Rune.strokeAttempts++;
                     Rune.canvas.fadeShape('marker', shape);
@@ -94,9 +101,6 @@ define([
                         Rune.canvas.fadeShape('hint', this.review.getCharacterAt().getExpectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
                 }
-            }
-            if (this.review.getCharacterAt().isFinished()) {
-                this.showAnswer();
             }
         },
         /**
@@ -187,6 +191,8 @@ define([
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getMaskedSentenceWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position')));
+            if (skritter.user.settings.get('teachingMode') && this.review.getBaseItem().isNew())
+                this.teach();
             return this;
         },
         /**
@@ -196,6 +202,7 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             Rune.canvas.disableInput();
+            Rune.canvas.clearLayer('teach');
             this.review.set('finished', true);
             if (skritter.user.settings.get('squigs') && this.review.getCharacterAt().length > 0) {
                 var color = skritter.settings.get('gradingColors')[this.review.getReviewAt().score];
@@ -206,12 +213,26 @@ define([
                 }
                 Rune.canvas.display().swapChildren(Rune.canvas.getLayer('display'), Rune.canvas.getLayer('hint'));
             } else {
-                Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+                if (!Rune.teaching)
+                    Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
             }
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position') + 1));
-            Prompt.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
+            if (!Rune.teaching)
+                Prompt.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             return this;
+        },
+        /**
+         * @method teach
+         */
+        teach: function() {
+            var character = this.review.getCharacterAt();
+            var stroke = character.getExpectedStroke();
+            var strokeParams = stroke.inflateParams();
+            this.review.setReviewAt(null, 'score', 1);
+            Rune.teaching = true;
+            Rune.canvas.clearLayer('teach').drawShape('teach', stroke.inflateShape('#999999'));
+            Rune.canvas.drawArrow('teach', strokeParams[0].get('corners')[0], '#000000', '#fff79a', strokeParams[0].getStartingAngle());
         }
     });
     

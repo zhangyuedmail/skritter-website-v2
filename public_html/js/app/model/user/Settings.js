@@ -20,7 +20,8 @@ define([
             hideDueCount: false,
             hideTimer: false,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
-            filterJapaneseParts: ['defn', 'rdng', 'rune']
+            filterJapaneseParts: ['defn', 'rdng', 'rune'],
+            teachingMode: true
         },
         /**
          * @method cache

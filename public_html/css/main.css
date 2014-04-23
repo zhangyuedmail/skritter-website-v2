@@ -161,20 +161,13 @@ body {
     overflow-y: auto;
     position: absolute;
     z-index: 1002;
-    font-size: 24px;
 }
 #info-section .prompt-row { clear: both; }
 #info-section .prompt-row div { float: left; }
-#info-section #prompt-writing span {
-    margin-right: 5px;
-    padding: 0 2px;
-}
+#info-section #prompt-writing span { margin-right: 5px; }
 #info-section .writing-hidden { border: 2px #222222 solid; }
 #info-section .writing-hidden span { visibility: hidden; }
-#info-section #prompt-reading span {
-    margin-right: 5px;
-    padding: 0 2px;
-}
+#info-section #prompt-reading span { margin-right: 5px; }
 #info-section .reading-hidden { border-bottom: 2px #222222 solid; }
 #info-section .reading-hidden span { visibility: hidden; }
 .prompt-container.landscape #info-section { 
@@ -247,7 +240,7 @@ body {
     width: 50%;
 }
 #rune #prompt-definition { font-size: 18px; }
-#rune #prompt-sentence { font-size: 20px; }
+#rune #prompt-sentence { font-size: 18px; }
 
 
 /*** PROMPT: WRITING AREA ***/

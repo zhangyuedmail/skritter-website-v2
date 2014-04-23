@@ -31,6 +31,7 @@ define([
             this.$('#general #hide-due-count').bootstrapSwitch('state', skritter.user.settings.get('hideDueCount'));
             this.$('#general #hide-timer').bootstrapSwitch('state', skritter.user.settings.get('hideTimer'));
             this.$('#general #raw-squigs').bootstrapSwitch('state', skritter.user.settings.get('squigs'));
+            this.$('#general #teaching-mode').bootstrapSwitch('state', skritter.user.settings.get('teachingMode'));
             this.$('#parts #defn').bootstrapSwitch('state', Settings.activeParts.indexOf('defn') > -1);
             this.$('#parts #rdng').bootstrapSwitch('state', Settings.activeParts.indexOf('rdng') > -1);
             this.$('#parts #rune').bootstrapSwitch('state', Settings.activeParts.indexOf('rune') > -1);
@@ -78,6 +79,7 @@ define([
             skritter.user.settings.set('hideDueCount', this.$('#general #hide-due-count').prop('checked'));
             skritter.user.settings.set('hideTimer', this.$('#general #hide-timer').prop('checked'));
             skritter.user.settings.set('squigs', this.$('#general #raw-squigs').prop('checked'));
+            skritter.user.settings.set('teachingMode', this.$('#general #teaching-mode').prop('checked'));
             if (this.$('#parts #defn').bootstrapSwitch('state'))
                 Settings.activeParts.push('defn');
             if (this.$('#parts #rdng').bootstrapSwitch('state'))

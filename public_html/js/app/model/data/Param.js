@@ -33,6 +33,16 @@ define(function() {
         getRectangle: function() {
             var size = skritter.settings.contentWidth();
             return skritter.fn.boundingRectangle(_.clone(this.get('corners')), size, size, 14);
+        },
+        /**
+         * @method getStartingAngle
+         * @returns {Number}
+         */
+        getStartingAngle: function() {
+            var corners = [];
+            corners.push(this.get('corners')[0]);
+            corners.push(this.get('corners')[1]);
+            return skritter.fn.angle(corners);
         }
     });
 
