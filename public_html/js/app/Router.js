@@ -4,6 +4,7 @@
  * @param Login
  * @param Study
  * @param StudySettings
+ * @param StrokeEditor
  * @param Test
  * @author Joshua McFarland
  */
@@ -12,8 +13,9 @@ define([
     'view/Login',
     'view/Study',
     'view/study/Settings',
+    'view/admin/StrokeEditor',
     'view/Test'
-], function(Home, Login, Study, StudySettings, Test) {
+], function(Home, Login, Study, StudySettings, StrokeEditor, Test) {
     /**
      * @class Router
      */
@@ -31,6 +33,7 @@ define([
          */
         routes: {
             '': 'home',
+            'admin/stroke/editor': 'strokeEditor',
             'login': 'login',
             'study': 'study',
             'study/settings': 'studySettings',
@@ -74,6 +77,14 @@ define([
         studySettings: function() {
             this.removeView();
             this.view = new StudySettings({el: this.container});
+            this.view.render();
+        },
+        /**
+         * @method strokeEditor
+         */
+        strokeEditor: function() {
+            this.removeView();
+            this.view = new StrokeEditor({el: this.container});
             this.view.render();
         },
         /**

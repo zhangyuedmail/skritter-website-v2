@@ -5,9 +5,8 @@
  * @author Joshua McFarland
  */
 define([
-    'function/KanaStrokeData',
     'model/data/Stroke'
-], function(KanaStrokeData, Stroke) {
+], function(Stroke) {
     /**
      * @class DataStrokes
      */
@@ -27,7 +26,6 @@ define([
                     [[387, 0.40, 0.40, 0.20, 0.20, 0.0]]
                 ]
             }, {merge: true, silent: true, sort: false});
-            this.add(KanaStrokeData, {merge: true, silent: true, sort: false});
         },
         /**
          * @property {Stroke} model
