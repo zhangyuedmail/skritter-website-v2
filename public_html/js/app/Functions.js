@@ -24,14 +24,15 @@ define([
 ], function(Bootstrap, ParamMap, PinyinConverter, Recognizer, Shortstraw, SimpTradMap, StrokeMap) {
     /**
      * @method angle
-     * @param {Array} points An array of point values
+     * @param {Array|Object} point1 An array of point values
+     * @param {Object} point2 An array of point values
      * @return {Number} The angle formed by the first and last points
      */
-    var angle = function(points) {
-        var point1 = points[0];
-        var point2 = points[points.length - 1];
-        var xDiff = point2.x - point1.x;
-        var yDiff = point2.y - point1.y;
+    var angle = function(point1, point2) {
+        var p1 = Array.isArray(point1) ? point1[0] : point1;
+        var p2 = Array.isArray(point1) ? point1[point1.length - 1] : point2;
+        var xDiff = p2.x - p1.x;
+        var yDiff = p2.y - p1.y;
         return (Math.atan2(yDiff, xDiff)) * (180 / Math.PI);
     };
     /**
@@ -108,6 +109,29 @@ define([
         var ys = point2.y - point1.y;
         ys = ys * ys;
         return Math.sqrt(xs + ys);
+    };
+    /**
+     * @method distanceToLineSegment
+     * @param {Object} start The starting point of a line segment
+     * @param {Object} end The ending point of a line segment
+     * @param {Object} point Point to measure distance from the line segment
+     * @return {Number} The distance from the point and line segment
+     */
+    var distanceToLineSegment = function(start, end, point) {
+        var px = end.x - start.x;
+        var py = end.y - start.y;
+        var segment = (px * px) + (py * py);
+        var z = ((point.x - start.x) * px + (point.y - start.y) * py) / parseFloat(segment);
+        if (z > 1) {
+            z = 1;
+        } else if (z < 0) {
+            z = 0;
+        }
+        var x = start.x + z * px;
+        var y = start.y + z * py;
+        var dx = x - point.x;
+        var dy = y - point.y;
+        return Math.sqrt((dx * dx) + (dy * dy));
     };
     /**
      * @method guid
@@ -217,6 +241,7 @@ define([
         bytesToSize: bytesToSize,
         daysInSecond: daysInSecond,
         distance: distance,
+        distanceToLineSegment: distanceToLineSegment,
         getUnixTime: getUnixTime,
         guid: guid,
         isKana: isKana,
