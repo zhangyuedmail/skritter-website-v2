@@ -1,34 +1,54 @@
 /**
  * @module Skritter
  * @submodule View
- * @param templateStrokeEditor
+ * @param templateParamEditor
  * @param PromptCanvas
+ * @param Stroke
  * @author Joshua McFarland
  */
 define([
-    'require.text!template/admin-stroke-editor.html',
-    'view/prompt/Canvas'
-], function(templateStrokeEditor, PromptCanvas) {
+    'require.text!template/admin-param-editor.html',
+    'view/prompt/Canvas',
+    'model/prompt/Stroke'
+], function(templateParamEditor, PromptCanvas, Stroke) {
     /**
-     * @class AdminStrokeEditor
+     * @class AdminParamEditor
      */
-    var StrokeEditor = Backbone.View.extend({
+    var ParamEditor = Backbone.View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
             this.canvas = new PromptCanvas();
+            this.stroke = null;
+            this.strokeId = null;
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.html(templateStrokeEditor);
+            this.$el.html(templateParamEditor);
             this.canvas.setElement(this.$('#writing-area'));
             this.listenTo(skritter.settings, 'resize', this.resize);
+            this.listenTo(this.canvas, 'input:up', _.bind(this.handleStrokeReceived, this));
             this.resize();
+            this.canvas.drawShape('background', this.stroke);
+            this.canvas.enableInput();
             return this;
+        },
+        /**
+         * @method handleStrokeReceived
+         * @param {Array} points
+         */
+        handleStrokeReceived: function(points) {
+            var stroke = new Stroke().set('points', points);
+            var param = {
+                bitmapId: this.strokeId,
+                corners: stroke.get('corners'),
+                deviations: stroke.getLineDeviations()
+            };
+            console.log(JSON.stringify(param));
         },
         /**
          * @method remove
@@ -44,8 +64,19 @@ define([
         resize: function() {
             var canvasSize = skritter.settings.canvasSize();
             this.canvas.resize(canvasSize).render();
+            
+        },
+        /**
+         * @method setStrokeId
+         * @param {type} strokeId
+         * @returns {Backbone.View}
+         */
+        setStrokeId: function(strokeId) {
+            this.stroke = skritter.assets.getStroke(strokeId, 'grey');
+            this.strokeId = strokeId;
+            return this;
         }
     });
     
-    return StrokeEditor;
+    return ParamEditor;
 });

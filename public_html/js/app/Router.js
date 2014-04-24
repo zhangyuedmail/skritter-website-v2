@@ -2,20 +2,20 @@
  * @module Skritter
  * @param Home
  * @param Login
+ * @param ParamEditor
  * @param Study
  * @param StudySettings
- * @param StrokeEditor
  * @param Test
  * @author Joshua McFarland
  */
 define([
     'view/Home',
     'view/Login',
+    'view/admin/ParamEditor',
     'view/Study',
     'view/study/Settings',
-    'view/admin/StrokeEditor',
     'view/Test'
-], function(Home, Login, Study, StudySettings, StrokeEditor, Test) {
+], function(Home, Login, ParamEditor, Study, StudySettings, Test) {
     /**
      * @class Router
      */
@@ -33,7 +33,7 @@ define([
          */
         routes: {
             '': 'home',
-            'admin/stroke/editor': 'strokeEditor',
+            'admin/param/:strokeId': 'adminParamEditor',
             'login': 'login',
             'study': 'study',
             'study/settings': 'studySettings',
@@ -46,6 +46,14 @@ define([
             if (this.view)
                 this.view.remove();
             this.view = null;
+        },
+        /**
+         * @method adminEditor
+         */
+        adminParamEditor: function(strokeId) {
+            this.removeView();
+            this.view = new ParamEditor({el: this.container});
+            this.view.setStrokeId(strokeId).render();
         },
         /**
          * @method home
@@ -77,14 +85,6 @@ define([
         studySettings: function() {
             this.removeView();
             this.view = new StudySettings({el: this.container});
-            this.view.render();
-        },
-        /**
-         * @method strokeEditor
-         */
-        strokeEditor: function() {
-            this.removeView();
-            this.view = new StrokeEditor({el: this.container});
             this.view.render();
         },
         /**

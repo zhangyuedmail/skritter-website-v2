@@ -50,6 +50,32 @@ define(function() {
             return cornersLength;
         },
         /**
+         * @method getLineDeviations
+         * @returns {Array}
+         */
+        getLineDeviations: function() {
+	    var deviationPoints = [];
+	    var corners = _.clone(this.get('corners'));
+	    var points = _.clone(this.get('points'));
+	    for (var a = 0, lengthA = corners.length - 1; a < lengthA; a++) {
+                var segmentStart = corners[a];
+                var segmentEnd = corners[a + 1];
+		var segmentPoints = points.slice(_.indexOf(points, segmentStart), _.indexOf(points, segmentEnd));
+                var curve = false;
+                for (var b = 0, lengthB = segmentPoints.length; b < lengthB; b++) {
+		    var direction, point;
+		    var distance = skritter.fn.distanceToLineSegment(segmentPoints[0], segmentPoints[segmentPoints.length-1], segmentPoints[b]);
+		    if (!curve || distance > curve) {
+			point = segmentPoints[b];
+			curve = distance;
+			direction = skritter.fn.angle(segmentPoints[0], point);
+		    }
+		}
+		deviationPoints.push(point);
+	    }
+	    return deviationPoints;
+	},
+        /**
          * @method getRectangle
          * @returns {Object}
          */
