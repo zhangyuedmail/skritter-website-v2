@@ -43,6 +43,7 @@ body {
 }
 .content-block.no-margin { margin: 0; }
 .content-block.no-padding { padding: 0; }
+.cursor { cursor: pointer; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;
@@ -125,18 +126,20 @@ body {
     margin: 0;
 }
 
+
 /*** NAVBAR ***/
-.navbar { font-size: 18px; }
-.navbar .container {  padding: 0; }
+.navbar .container { padding: 0; }
 .navbar .navbar-header { 
     margin: 0;
-    width: 100%;
+    width: 100%
 }
-.navbar .navbar-text { margin: 10px 0; }
-.navbar .navbar-text a {
-    padding: 10px 5px;
-    text-decoration: none;
+.navbar .navbar-nav { margin: 0; }
+.navbar .navbar-nav a { 
+    height: 45px;
+    padding: 0;
 }
+.navbar .navbar-nav li { padding: 9px 10px; }
+.navbar .navbar-nav i { font-size: 27px; }
 
 
 /*** PROMPT ***/
@@ -170,6 +173,13 @@ body {
 #info-section #prompt-reading span { margin-right: 5px; }
 #info-section .reading-hidden { border-bottom: 2px #222222 solid; }
 #info-section .reading-hidden span { visibility: hidden; }
+#info-section #prompt-hint { display: none; }
+#info-section .button-toggle-hint {
+    cursor: pointer;
+    margin-top: -3px;
+    right: 10px;
+    position: absolute;
+}
 .prompt-container.landscape #info-section { 
     border-right: 2px solid #333333;
     width: 50%;
@@ -213,16 +223,33 @@ body {
 }
 
 
+/*** PROMPT: DEFN ***/
+#defn #prompt-question-text { font-size: 18px; }
+#defn #prompt-writing {}
+#defn #prompt-reading {}
+#defn #prompt-definition { font-size: 18px; }
+#defn #prompt-sentence { font-size: 20px; }
+
+
+/*** PROMPT: RDNG ***/
+#rdng #prompt-question-text { font-size: 18px; }
+#rdng #prompt-writing {}
+#rdng #prompt-reading {}
+#rdng #prompt-definition { font-size: 18px; }
+#rdng #prompt-sentence { font-size: 20px; }
+
+
 /*** PROMPT: TONE ***/
 #tone #prompt-question-text { font-size: 18px; }
 #tone #prompt-writing { 
+    float: left;
     font-size: 36px;
-    width: 50%;
 }
 #tone #prompt-reading { 
+    float: left;
     font-size: 32px;
-    padding-left: 15px;
-    width: 50%;
+    padding-left: 30px;
+    word-break: break-all;
 }
 #tone #prompt-definition { font-size: 18px; }
 #tone #prompt-sentence { font-size: 20px; }
@@ -231,13 +258,14 @@ body {
 /*** PROMPT: WRITING ***/
 #rune #prompt-question-text { font-size: 18px; }
 #rune #prompt-writing { 
+    float: left;
     font-size: 36px;
-    width: 50%;
 }
 #rune #prompt-reading { 
+    float: left;
     font-size: 32px;
-    padding-left: 15px;
-    width: 50%;
+    padding-left: 30px;
+    word-break: break-all;
 }
 #rune #prompt-definition { font-size: 18px; }
 #rune #prompt-sentence { font-size: 18px; }
