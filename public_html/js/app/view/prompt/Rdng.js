@@ -22,6 +22,7 @@ define([
             this.$el.html(templateRdng);
             Prompt.prototype.render.call(this);
             this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
+            this.$('.button-toggle-hint').on('vclick', _.bind(this.toggleHint, this));
             this.resize();
             this.show();
             return this;
@@ -61,8 +62,9 @@ define([
                     width: ''
                 });
                 this.$('#info-section').css({
-                    height: contentHeight * 0.7,
-                    'max-height': '30%',
+                    height: '45px', 
+                    //height: contentHeight * 0.7,
+                    //'max-height': '30%',
                     width: ''
                 });
                 this.$('#input-section').css({
@@ -118,6 +120,13 @@ define([
             Prompt.gradingButtons.show().select(this.review.getReviewAt().score).expand();
             this.review.set('finished', true);
             return this;
+        },
+        /**
+         * @method toggleHint
+         * @param {Object} event
+         */
+        toggleHint: function(event) {
+            event.preventDefault();
         }
     });
     
