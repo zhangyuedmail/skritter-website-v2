@@ -113,6 +113,32 @@ module.exports = function(grunt) {
         jshint: {
             root: ['Gruntfile.js', 'public_html/js/app/**/*.js']
         },
+        /*** MANIFEST ***/
+        manifest: {
+            root: {
+                options: {
+                    basePath: 'public_html/',
+                    cache: ['index.html'],
+                    network: ['*'],
+                    preferOnline: false,
+                    verbose: false,
+                    timestamp: true,
+                    exclude: ['skritter.appcache', 'version.json']
+                },
+                src: [
+                    '*.*',
+                    '**/*.css',
+                    '**/*.eot',
+                    '**/*.html',
+                    '**/*.js',
+                    '**/*.otf',
+                    '**/*.png',
+                    '**/*.svg',
+                    '**/*.woff'
+                ],
+                dest: 'public_html/skritter.appcache'
+            }
+        },
         /*** REPLACE ***/
         replace: {
             'cordova-ja': {
@@ -246,6 +272,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-shell');
     /*** COMMANDS ***/
+    grunt.registerTask('appcache', [
+        'manifest:root'
+    ]);
     grunt.registerTask('build-run-android-ja', [
         'jshint:root',
         'clean:build-cordova-www-ja',
