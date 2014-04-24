@@ -1,34 +1,29 @@
 /*** FONTS ***/
 @font-face {
     font-family: "kaisho";
-    src: url('../fonts/DFPKaiSho-Md.ttf');
+    src: url('../font/japanese/DFPKaiSho-Md.ttf');
 }
 @font-face {
     font-family: "simkai";
-    src: url('../fonts/simkai.ttf');
+    src: url('../font/chinese/simkai.ttf');
 }
 
 
 /*** GENERAL ***/
 html, body { height: 100%; }
 body {
-    -webkit-touch-callout: none;
-    -webkit-text-size-adjust: none;
-    -webkit-user-select: none;
-    background-image: url('../images/textures/ricepaper.png');
+    background-image: url('../image/background/ricepaper1.png');
     background-repeat: repeat;
 }
 #skritter-container { height: 100%; }
-#content-container { position: relative; }
-#content-container.no-padding { padding: 0; }
-#content-container.no-scroll { 
-    height: 100%; 
-    overflow-y: hidden;
-}
 #content-container.full-width {
     margin: 0;
     padding: 0;
     width: 100%;
+}
+#content-container.no-scroll { 
+    height: 100%; 
+    overflow-y: hidden;
 }
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-block {
@@ -37,7 +32,7 @@ body {
     background-color: #ffffff;
     border-top: solid #e7e7e7 1px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-    padding: 15px;
+    padding: 10px;
     margin-bottom: 10px;
     position: relative;
 }
@@ -46,16 +41,18 @@ body {
     -moz-box-shadow: none;
     box-shadow: none;
 }
+.content-block.no-margin { margin: 0; }
 .content-block.no-padding { padding: 0; }
-.content-block.no-top { margin-top: 0; }
 .cursor { cursor: pointer; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;
-    padding-top: 55px;
+    padding-top: 45px;
 }
-.view.no-space { padding-top: 45px; }
-.view.no-nav { padding-top: 0; }
+.view.padding-top { padding-top: 55px; }
+@media screen and (max-width: 767px) {
+    .btn { margin-bottom: 10px; }
+}
 
 
 /*** GRADING BUTTONS ***/
@@ -80,123 +77,69 @@ body {
 
 
 /*** HOME: LOGGED IN ***/
-#home-view.logged-in #lists {
-    max-height: 300px;
-    overflow-x: auto;
-}
-
-
-/*** INFO ***/
-#info-view .edit-buttons {
-    right: 15px;
-    position: absolute;
-    top: 5px;
-}
-#info-view .info-edit-text {
-    min-height: 100px;
-    width: 100%;
-}
-#info-view .info-title {
-    left: 15px;
-    position: absolute;
-    top: 5px;
-}
-#info-view #writing-block, #info-view #reading-block { height: 105px; }
+/*** HOME: LOGGED OUT ***/
 
 
 /*** LANDING PAGE ***/
 .landing-page {
     background-color: #333333;
     color: #ffffff;
-    padding-top: 100px;
-    text-align: center;
+    padding-top: 10px;
 }
 .landing-page #header {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0 15px;
     position: absolute;
-    top: 0;
+    top: 10px;
     width: 100%;
 }
-.landing-page #content-container {
-    position: fixed;
-    top: 30%;
-    width: 100%;
+.landing-page #content {
+    left:0;
+    margin-left:auto;
+    margin-right:auto;
+    max-width: 400px;
+    padding-top: 150px;
+    right:0;
+    text-align: center;
 }
 .landing-page #footer {
-    bottom: 0;
+    bottom: 10px;
+    padding: 0 15px;
     position: absolute;
     width: 100%;
 }
-
+@media screen and (max-width: 767px) and (orientation: landscape) {
+    .landing-page #content {
+        padding-top: 20px;
+    }
+}
 
 /*** MODALS ***/
-#modals-container .modal { overflow-y: hidden; }
-#modals-container .vertical-centered {
+#modal-container .modal { overflow-y: hidden; }
+#modal-container .vertical-centered {
     position: fixed;
     outline: 0;
     top: 15% !important;
 }
-#modals-container .modal-title-right {
+#modal-container .modal-title-right {
     float: right;
     line-height: 1.42857143;
     margin: 0;
 }
 
 
-/*** MODALS: LOGIN ***/
-#modals-container .form-signin {
-    max-width: 330px;
-    padding: 15px;
-    margin: 0 auto;
-}
-#modals-container .form-signin .form-signin-heading,
-.form-signin .checkbox {
-    margin-bottom: 10px;
-}
-#modals-container .form-signin .checkbox {
-    font-weight: normal;
-}
-#modals-container .form-signin .form-control {
-    position: relative;
-    font-size: 16px;
-    height: auto;
-    padding: 10px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-#modals-container .form-signin .form-control:focus {
-    z-index: 2;
-}
-#modals-container .form-signin input[type="text"] {
-    margin-bottom: -1px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
-#modals-container .form-signin input[type="password"] {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-#modals-container #add-items .modal-body {
-    text-align: center;
-}
-#modals-container #add-items #number-spinner {
-    font-size: 32px;
-    text-align: center;
-}
-
-
 /*** NAVBAR ***/
-.navbar { font-size: 18px; }
-.navbar .navbar-text {
-    margin: 10px 0;
+.navbar .container { padding: 0; }
+.navbar .navbar-header { 
+    margin: 0;
+    width: 100%
 }
-.navbar .navbar-text a {
-    padding: 10px 5px;
-    text-decoration: none;
+.navbar .navbar-nav { margin: 0; }
+.navbar .navbar-nav a { 
+    height: 45px;
+    padding: 0;
 }
+.navbar .navbar-nav li { padding: 9px 10px; }
+.navbar .navbar-nav i { font-size: 27px; }
 
 
 /*** PROMPT ***/
@@ -208,7 +151,7 @@ body {
 
 /*** PROMPT: GRADING BUTTONS ***/
 .prompt-container #grading-buttons {
-    bottom: 0;
+    bottom: 15px;
     display: none;
     left: 0;
     position: absolute;
@@ -222,26 +165,29 @@ body {
     position: absolute;
     z-index: 1002;
 }
-.prompt-container.landscape #info-section { width: 50%; }
-.prompt-container.portrait #info-section { width: 100%; }
-#info-section #hint-caret {
-    cursor: pointer;
-    position: absolute;
-    right: 20px;
-    top: 10px;
-}
-#info-section #info-button {
-    cursor: pointer;
-    font-size: 24px;
-    left: 20px;
-    position: absolute;
-    top: 15px;
-}
-#info-section #prompt-hint { display: none; }
-#info-section .writing-hidden { border-bottom: 1px #222222 solid; }
+#info-section .prompt-row { clear: both; }
+#info-section .prompt-row div { float: left; }
+#info-section #prompt-writing span { margin-right: 5px; }
+#info-section .writing-hidden { border: 2px #222222 solid; }
 #info-section .writing-hidden span { visibility: hidden; }
-#info-section .reading-hidden { border-bottom: 1px #222222 solid; }
+#info-section #prompt-reading span { margin-right: 5px; }
+#info-section .reading-hidden { border-bottom: 2px #222222 solid; }
 #info-section .reading-hidden span { visibility: hidden; }
+#info-section #prompt-hint { display: none; }
+#info-section .button-toggle-hint {
+    cursor: pointer;
+    margin-top: -3px;
+    right: 10px;
+    position: absolute;
+}
+.prompt-container.landscape #info-section { 
+    border-right: 2px solid #333333;
+    width: 50%;
+}
+.prompt-container.portrait #info-section { 
+    border-bottom: 2px solid #333333;
+    width: 100%;
+}
 
 
 /*** PROMPT: INPUT SECTION ***/
@@ -249,68 +195,77 @@ body {
     position: absolute;
     z-index: 1001;
 }
+#input-section #prompt-text {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+#input-section #prompt-text #answer {
+    cursor: pointer;
+    display: table-cell;
+    padding: 0 15px;
+    vertical-align: middle;
+}
+#input-section #prompt-text #question {
+    cursor: pointer;
+    display: table-cell;
+    padding: 0 15px;
+    vertical-align: middle;
+}
 .prompt-container.landscape #input-section {
     right: 0;
     top: 0;
     width: 50%;
 }
 .prompt-container.portrait #input-section {
-    bottom: -15px;
+    bottom: -10px;
     width: 100%;
 }
-.prompt-container.portrait #info-section { border-bottom: 2px solid #222222; }
-#input-section #prompt-text {
-    display: table;
-    height: 100%;
-    width: 100%;
-}
-#input-section #prompt-text .answer {
-    cursor: pointer;
-    display: table-cell;
-    padding: 0 15px;
-    vertical-align: middle;
-}
-#input-section #prompt-text .question {
-    cursor: pointer;
-    display: table-cell;
-    padding: 0 15px;
-    vertical-align: middle;
-}
 
 
-/*** PROMPT: DEFINITION ***/
-#defn #prompt-question-text { font-size: 20px; }
-#defn #prompt-writing { font-size: 72px; }
-#defn #prompt-reading { font-size: 18px; }
-#defn #prompt-definition { font-size: 24px; }
-#defn #prompt-sentence { font-size: 18px; }
+/*** PROMPT: DEFN ***/
+#defn #prompt-question-text { font-size: 18px; }
+#defn #prompt-writing {}
+#defn #prompt-reading {}
+#defn #prompt-definition { font-size: 18px; }
+#defn #prompt-sentence { font-size: 20px; }
 
 
-/*** PROMPT: READING ***/
-#rdng #prompt-question-text { font-size: 20px; }
-#rdng #prompt-writing { font-size: 72px; }
-#rdng #prompt-reading { font-size: 48px; }
+/*** PROMPT: RDNG ***/
+#rdng #prompt-question-text { font-size: 18px; }
+#rdng #prompt-writing {}
+#rdng #prompt-reading {}
 #rdng #prompt-definition { font-size: 18px; }
-#rdng #prompt-sentence { font-size: 18px; }
+#rdng #prompt-sentence { font-size: 20px; }
 
 
 /*** PROMPT: TONE ***/
-#tone #prompt-question-text { font-size: 20px; }
-#tone #prompt-writing { font-size: 32px; }
+#tone #prompt-question-text { font-size: 18px; }
+#tone #prompt-writing { 
+    float: left;
+    font-size: 36px;
+}
 #tone #prompt-reading { 
-    font-size: 20px;
-    padding-left: 15px;
+    float: left;
+    font-size: 32px;
+    padding-left: 30px;
+    word-break: break-all;
 }
 #tone #prompt-definition { font-size: 18px; }
-#tone #prompt-sentence { font-size: 18px; }
+#tone #prompt-sentence { font-size: 20px; }
 
 
 /*** PROMPT: WRITING ***/
-#rune #prompt-question-text { font-size: 20px; }
-#rune #prompt-writing { font-size: 32px; }
+#rune #prompt-question-text { font-size: 18px; }
+#rune #prompt-writing { 
+    float: left;
+    font-size: 36px;
+}
 #rune #prompt-reading { 
-    font-size: 20px;
-    padding-left: 15px;
+    float: left;
+    font-size: 32px;
+    padding-left: 30px;
+    word-break: break-all;
 }
 #rune #prompt-definition { font-size: 18px; }
 #rune #prompt-sentence { font-size: 18px; }

@@ -8,22 +8,20 @@
  * @param ParamMap
  * @param PinyinConverter
  * @param Recognizer
- * @param Scheduler
  * @param Shortstraw
  * @param SimpTradMap
  * @param StrokeMap
  * @author Joshua McFarland
  */
 define([
-    'functions/Bootstrap',
-    'functions/ParamMap',
-    'functions/PinyinConverter',
-    'functions/Recognizer',
-    'functions/Scheduler',
-    'functions/Shortstraw',
-    'functions/SimpTradMap',
-    'functions/StrokeMap'
-], function(Bootstrap, ParamMap, PinyinConverter, Recognizer, Scheduler, Shortstraw, SimpTradMap, StrokeMap) {
+    'function/Bootstrap',
+    'function/ParamMap',
+    'function/PinyinConverter',
+    'function/Recognizer',
+    'function/Shortstraw',
+    'function/SimpTradMap',
+    'function/StrokeMap'
+], function(Bootstrap, ParamMap, PinyinConverter, Recognizer, Shortstraw, SimpTradMap, StrokeMap) {
     /**
      * @method angle
      * @param {Array} points An array of point values
@@ -199,10 +197,6 @@ define([
      */
     var recognizer = new Recognizer();
     /**
-     * @property {Object} Scheduler
-     */
-    var scheduler = Scheduler;
-    /**
      * @property {Object} shortstraw
      */
     var shortstraw = new Shortstraw();
@@ -233,7 +227,6 @@ define([
         pinyin: pinyin,
         randomNumber: randomNumber,
         recognizer: recognizer,
-        scheduler: scheduler,
         shortstraw: shortstraw,
         simptrad: simptrad,
         strokes: strokes
