@@ -1948,6 +1948,21 @@ define([
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AEYAAYgKAKAAAUAAAUYgKAoAAAKgeAKYgeAAgKAUgKAUYAAAUgKAKAAgKYgKgKAAAAgoAKYgeAKAAAAAAAeYAKAKgKAKAAAAYgKAAAAAKAAAKYAAAKgKAUgUAKYgKAKgKAUAKAKYAAAAgKAKgKAAYgdAAAJBGAeAeYAoAeAAAAgUAKYgKAKAAAKAAAUYAKAUBGAoAoAAYAKAAAKAAAAAKYAKAKAAAAAKgKYAKAAAUAKAUAKYAoAeBGAeAeAKYAeAABGAUAKAUYAKAAAKAKAKAAYAKAAAKAAAAAKYAKAKAygKAegeYAKgKAKgKAKAAYAKAAAKgKAAgKYAKgUAKgUAUgKYAUgUAKgKAAgKYgKAAAAgKAKgKYAKgKAAgKgKgKYgUgeAeg8AegeYAUgKAKgKgKgKYAAAAAAgKAKAAYAAAAAKgKAAgKYAAgUgogUgKAUYgUAUAAgeAKgeYAegygKgUg8gKYgegKAAAAAKgoYAAgUAAgKgUgUYgUgKgKAAAAAUYgKAKAAAAgUgUYgKgKgUgKgKAAYgUAAgygeAAgKYAAAAgegKgeAAYgogKgegKgKAAYAAgKgeAAgKAAYgUAAgUgKgKAAYAAAAgKAAgKAA").cp());
             stroke.setBounds(0, 0, 89, 77);
             return stroke;
+        },
+        600: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAhwACMYAAgegegegogeYjIh3iqB3i+AyYhkAehaAUhaAUYjIAyjIAojIAUYi0AUjcAoiqh4YhZhGAACCAdA8YBuDIC0AADSgUYEEgUEEgyEEgyYCggeCggeCWgeYBGgUFKgygKhk").cp().ef());
+            stroke.setBounds(0, 0, 218, 55);
+            return stroke;
+        },
+        601: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AE2BGYgegUh4g7goAJYg8AUA8BGAUAeYAeAeAeAoAKAKYAKAygKAyAAAyYgKBGAABGgKBGYgeC0geC0geC+YgyEsgoE2gKFAYAABaAABaAABkYAAE2AKFABGE2YAeB4AeC0BkBaYAeAeAUAKAUgKYAegKAogyAUgyYAehugohugehkYgehugehugehuYhGlAgKlAAUlAYAKhaAKhaAKhkYAKhQAKhaAKhQYAokYAykOA8kOYAKg8AKgyAUg8YAKgyAegygUgyYgUhahQhQhGgy").cp().ef());
+            stroke.setBounds(0, 0, 50, 370);
+            return stroke;
+        },
+        602: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAuaAHgYiWhkjIg8kOgUIhQgKYgKAAgeh4gKgUYgUgygUgygogoYhGg7AKCfAAAoYAAAeAAAygUAeYgUAygyAAgyAAYleA8lUB4lAC0YiCBQiMBQiCBkYhkBQjSDIgyBGYiCCqgoC0AADIYAADSA8BkB4AoYBQAUAyAAB4geYE2hQE2iqDwjcYCWiMCCigCCigYBGhaBQhkBGhkYAegoAUgoAegoYAyhQAyhGAyhQYAegyAogyAegyYDcAUDwAeCWC0YAoAoAeAoAUAyYAoBkAKAyAKCqYAKDSgUBkhGCCYgyB4g8A8h4BkYi0CWjcB4jcBQYgeAKiCAeAeBGYAeAyBkgyAygKYGQhuEYiCC+i0YDSjIBkjmAAksYAAkshkjSjwig").cp().ef());
+            stroke.setBounds(0, 0, 332, 235);
+            return stroke;
         }
     };
 
