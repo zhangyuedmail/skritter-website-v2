@@ -72,7 +72,7 @@ define([
                         if (self.syncing) {
                             window.setTimeout(sync, 2000);
                         } else {
-                            self.changed(callback);
+                            self.changedItems(callback);
                         }
                     }
                     sync();
