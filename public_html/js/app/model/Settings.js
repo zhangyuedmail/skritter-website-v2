@@ -89,18 +89,27 @@ define([
             return $('#content-container').width();
         },
         /**
+         * @method getAllParts 
+         * @returns {Array}
+         */
+        getAllParts: function() {
+            if (this.getLanguageCode() === 'zh')
+                return this.getAllChineseParts();
+            return this.getAllJapaneseParts();
+        },
+        /**
          * @method getAllChineseParts 
          * @returns {Array}
          */
         getAllChineseParts: function() {
-                return ['defn', 'rdng', 'rune', 'tone'];
+            return ['defn', 'rdng', 'rune', 'tone'];
         },
         /**
          * @method getAllJapaneseParts 
          * @returns {Array}
          */
         getAllJapaneseParts: function() {
-                return ['defn', 'rdng', 'rune'];
+            return ['defn', 'rdng', 'rune'];
         },
         /**
          * @method getLanguage

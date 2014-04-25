@@ -200,7 +200,7 @@ define(function() {
          */
         save: function(callback) {
             var reviews = this.get('reviews');
-            var i, length, item, review, vocab;
+            var i, length, item, review;
             if (skritter.user.data.reviews.get(this)) {
                 //updates the base review based on contained reviews
                 if (this.hasContained()) {
@@ -210,7 +210,6 @@ define(function() {
                 //updates all of the new review intervals and items
                 for (i = 0, length = reviews.length; i < length; i++) {
                     item = this.getItemAt(i);
-                    vocab = this.getVocabAt(i);
                     review = reviews[i];
                     if (parseInt(i, 10) === 0 && reviews.length > 1)
                         review.score = this.getFinalScore();
@@ -225,7 +224,7 @@ define(function() {
                         //TODO: remove or add successes based on previous score
                         //successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes')
                     }, {silent: true, sort: false});
-                    skritter.user.scheduler.update(item, vocab);
+                    skritter.user.scheduler.update(item);
                 }
             } else {
                 //updates the base review based on contained reviews
@@ -236,7 +235,6 @@ define(function() {
                 //updates all of the new review intervals and items
                 for (i = 0, length = reviews.length; i < length; i++) {
                     item = this.getItemAt(i);
-                    vocab = this.getVocabAt(i);
                     review = reviews[i];
                     if (parseInt(i, 10) === 0 && reviews.length > 1)
                         review.score = this.getFinalScore();
@@ -252,7 +250,7 @@ define(function() {
                         successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                         timeStudied: item.get('timeStudied') + review.reviewTime
                     }, {silent: true, sort: false});
-                    skritter.user.scheduler.update(item, vocab);
+                    skritter.user.scheduler.update(item);
                 }
                 //save the reviews to the official collection
                 skritter.user.data.reviews.add(this, {merge: true, silent: true, sort: false});

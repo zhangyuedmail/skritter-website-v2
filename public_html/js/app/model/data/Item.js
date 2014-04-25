@@ -89,6 +89,28 @@ define([
             return items;
         },
         /**
+         * @method getRelatedIds
+         * @returns {Array}
+         */
+        getRelatedIds: function() {
+            var parts = _.without(skritter.settings.getAllParts(), this.get('part'));
+            var relatedItemIds = [];
+            var userId = skritter.user.id;
+            var vocabIds = this.get('vocabIds');
+            for (var a = 0, lengthA = parts.length; a < lengthA; a++) {
+                for (var b = 0, lengthB = vocabIds.length; b < lengthB; b++) {
+                    var vocabId = vocabIds[b];
+                    if (parts[a] === 'rune') {
+                        relatedItemIds.push(userId + '-' + vocabId + '-' + parts[a]);
+                    } else {
+                        var splitVocabId = vocabId.split('-');
+                        relatedItemIds.push(userId + '-' + splitVocabId[0] + '-' + splitVocabId[1] + '-0-' + parts[a]);
+                    }
+                }
+            }
+            return _.uniq(relatedItemIds);
+        },
+        /**
          * @method getStroke
          * @returns {Backbone.Model}
          */

@@ -193,11 +193,10 @@ define(function() {
         /**
          * @method update
          * @param {Backbone.Model} item
-         * @param {Backbone.Model} vocab
          */
-        update: function(item, vocab) {
+        update: function(item) {
             var position = _.findIndex(this.data, {id: item.id});
-            var relatedItemIds = vocab.getRelatedItemIds(item.get('part'));
+            var relatedItemIds = item.getRelatedIds();
             this.data[position] = {
                 id: item.id,
                 last: item.get('last'),
