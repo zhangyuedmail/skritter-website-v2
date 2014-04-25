@@ -31,6 +31,8 @@ define([
                 this.set(JSON.parse(localStorage.getItem(userId)), {silent: true});
                 if (localStorage.getItem(userId + '-data'))
                     this.data.set(JSON.parse(localStorage.getItem(userId + '-data')), {silent: true});
+                if (localStorage.getItem(userId + '-scheduler'))
+                    this.scheduler.set(JSON.parse(localStorage.getItem(userId + '-scheduler')), {silent: true});
                 if (localStorage.getItem(userId + '-settings'))
                     this.settings.set(JSON.parse(localStorage.getItem(userId + '-settings')), {silent: true});
                 if (localStorage.getItem(userId + '-sync'))

@@ -10,6 +10,18 @@ define(function() {
             this.data = [];
         },
         /**
+         * @property {Object} defaults
+         */
+        defaults: {
+            held: {}
+        },
+        /**
+         * @method cache
+         */
+        cache: function() {
+            localStorage.setItem(skritter.user.id + '-scheduler', JSON.stringify(this.toJSON()));
+        },
+        /**
          * @method calculateInterval
          * @param {Backbone.Model} item
          * @param {Number} score
@@ -144,12 +156,15 @@ define(function() {
          */
         sort: function() {
             var now = skritter.fn.getUnixTime();
+            var held = this.get('held');
             this.data = _.sortBy(this.data, function(item) {
-                if (item.held && item.held > now) {
-                    item.readiness = 0.2 + (now / item.held) * 0.1;
+                var heldUntil = held[item.id];
+                if (heldUntil && heldUntil >= now) {
+                    item.readiness = 0;
                     return -item.readiness;
-                } else if (item.held) {
-                    delete item.held;
+                } else if (heldItem) {
+                    console.log('deleting held');
+                    delete held[item.id];
                 }
                 if (!item.last && (item.next - now) > 600) {
                     item.readiness = 0.2;
@@ -172,21 +187,26 @@ define(function() {
                 item.readiness = readiness;
                 return -item.readiness;
             });
+            this.set('held', held, {silent: true});
             this.trigger('schedule:sorted');
             return this.data;
         },
         /**
          * @method update
          * @param {Backbone.Model} item
+         * @param {Backbone.Model} vocab
          */
-        update: function(item) {
+        update: function(item, vocab) {
             var position = _.findIndex(this.data, {id: item.id});
+            var relatedItemIds = vocab.getRelatedItemIds(item.get('part'));
             this.data[position] = {
                 id: item.id,
                 last: item.get('last'),
                 next: item.get('next'),
                 vocabIds: item.get('vocabIds')
             };
+            for (var i = 0, length = relatedItemIds.length; i < length; i++)
+                this.get('held')[relatedItemIds[i]] = skritter.fn.getUnixTime() + 1200;
             this.trigger('schedule:updated');
         }
     });

@@ -199,9 +199,10 @@ define([
         /**
          * @method getRelatedItemIds
          * @param {String} excludePart
+         * @param {Boolean} includeContained
          * @returns {Array}
          */
-        getRelatedItemIds: function(excludePart) {
+        getRelatedItemIds: function(excludePart, includeContained) {
             var containedVocabIds = this.get('containedVocabIds');
             var parts = _.without(['defn', 'rdng', 'rune', 'tone'], excludePart);
             var relatedItemIds = [];
@@ -209,7 +210,7 @@ define([
             var vocabId = this.id;
             for (var a = 0, lengthA = parts.length; a < lengthA; a++) {
                 relatedItemIds.push(userId + '-' + vocabId + '-' + parts[a]);
-                if (containedVocabIds) {
+                if (includeContained && containedVocabIds) {
                     for (var b = 0, lengthB = containedVocabIds.length; b < lengthB; b++)
                         relatedItemIds.push(userId +  '-' + containedVocabIds[b] + '-' + parts[a]);
                 }
