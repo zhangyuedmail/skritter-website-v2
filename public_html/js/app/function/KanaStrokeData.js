@@ -10,6 +10,7 @@ define(function() {
      */
     var strokes = [
         {
+            "kana": true,
             "lang": "ja",
             "rune": "あ",
             "strokes": [

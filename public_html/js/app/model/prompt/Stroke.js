@@ -54,27 +54,27 @@ define(function() {
          * @returns {Array}
          */
         getLineDeviations: function() {
-	    var deviationPoints = [];
-	    var corners = _.clone(this.get('corners'));
-	    var points = _.clone(this.get('points'));
-	    for (var a = 0, lengthA = corners.length - 1; a < lengthA; a++) {
+            var deviationPoints = [];
+            var corners = _.clone(this.get('corners'));
+            var points = _.clone(this.get('points'));
+            for (var a = 0, lengthA = corners.length - 1; a < lengthA; a++) {
                 var segmentStart = corners[a];
                 var segmentEnd = corners[a + 1];
-		var segmentPoints = points.slice(_.indexOf(points, segmentStart), _.indexOf(points, segmentEnd));
+                var segmentPoints = points.slice(_.indexOf(points, segmentStart), _.indexOf(points, segmentEnd));
                 var curve = false;
                 for (var b = 0, lengthB = segmentPoints.length; b < lengthB; b++) {
-		    var direction, point;
-		    var distance = skritter.fn.distanceToLineSegment(segmentPoints[0], segmentPoints[segmentPoints.length-1], segmentPoints[b]);
-		    if (!curve || distance > curve) {
-			point = segmentPoints[b];
-			curve = distance;
-			direction = skritter.fn.angle(segmentPoints[0], point);
-		    }
-		}
-		deviationPoints.push(point);
-	    }
-	    return deviationPoints;
-	},
+                    var direction, point;
+                    var distance = skritter.fn.distanceToLineSegment(segmentPoints[0], segmentPoints[segmentPoints.length - 1], segmentPoints[b]);
+                    if (!curve || distance > curve) {
+                        point = segmentPoints[b];
+                        curve = distance;
+                        direction = skritter.fn.angle(segmentPoints[0], point);
+                    }
+                }
+                deviationPoints.push(point);
+            }
+            return deviationPoints;
+        },
         /**
          * @method getRectangle
          * @returns {Object}
@@ -152,23 +152,28 @@ define(function() {
          */
         inflateShape: function(color, alpha) {
             var shape = skritter.assets.getStroke(this.get('bitmapId'), color);
-            var spriteBounds = shape.getBounds();
             var data = this.inflateData();
-            var ms = shape.getMatrix();
-            //apply rotation based on newly sized shape
-            var sx = data.w / spriteBounds.width;
-            var sy = data.h / spriteBounds.height;
-            ms.scale(sx, sy);
-            ms.translate(-data.w / 2, -data.h / 2);
-            ms.rotate(data.rot * Math.PI / 180);
-            var t = ms.decompose();
-            //find the actual position based on prior transformations
-            shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
-            var finalBounds = shape.getTransformedBounds();
-            shape.name = 'stroke';
-            shape.alpha = alpha ? alpha : 1;
-            shape.x += finalBounds.width / 2 + data.x;
-            shape.y += finalBounds.height / 2 + data.y;
+            if (this.get('kana')) {
+                shape.x = data.x;
+                shape.y = data.y;
+            } else {
+                var spriteBounds = shape.getBounds();
+                var ms = shape.getMatrix();
+                //apply rotation based on newly sized shape
+                var sx = data.w / spriteBounds.width;
+                var sy = data.h / spriteBounds.height;
+                ms.scale(sx, sy);
+                ms.translate(-data.w / 2, -data.h / 2);
+                ms.rotate(data.rot * Math.PI / 180);
+                var t = ms.decompose();
+                //find the actual position based on prior transformations
+                shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
+                var finalBounds = shape.getTransformedBounds();
+                shape.name = 'stroke';
+                shape.alpha = alpha ? alpha : 1;
+                shape.x += finalBounds.width / 2 + data.x;
+                shape.y += finalBounds.height / 2 + data.y;
+            }
             return shape;
         }
     });

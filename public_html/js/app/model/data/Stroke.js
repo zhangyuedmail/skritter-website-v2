@@ -53,6 +53,7 @@ define([
                         data: data,
                         deviations: params.get('deviations'),
                         id: position + '|' + bitmapId,
+                        kana: bitmapId >= 600 ? true : false,
                         position: position,
                         shape: skritter.assets.getStroke(bitmapId),
                         tone: rune === 'tones' ? a + 1 : undefined
