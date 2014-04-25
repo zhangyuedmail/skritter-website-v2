@@ -27,11 +27,68 @@ define([
             localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method start
+         * @method addItems
+         * @param {Number} limit
+         * @param {Function} callback
+         */
+        addItems: function(limit, callback) {
+            var self = this;
+            var offset = this.get('addItemOffset');
+            var requests = {
+                path: 'api/v' + skritter.api.get('version') + '/items/add',
+                method: 'POST',
+                params: {
+                    limit: limit,
+                    offset: offset
+                }
+            };
+            async.waterfall([
+                function(callback) {
+                    skritter.api.requestBatch(requests, function(batch, status) {
+                        if (status === 200) {
+                            callback(null, batch);
+                        } else {
+                            callback(batch);
+                        }
+                    });
+                },
+                function(batch, callback) {
+                    function request() {
+                        skritter.api.getBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                console.log('ADDED ITEMS', result.Items);
+                                window.setTimeout(request, 2000);
+                            } else if (result) {
+                                //TODO: handle errors and other incorrect status codes
+                            } else {
+                                callback();
+                            }
+                        });
+                    }
+                    request();
+                },
+                function(callback) {
+                    function sync() {
+                        if (self.syncing) {
+                            window.setTimeout(sync, 2000);
+                        } else {
+                            self.changed(callback);
+                        }
+                    }
+                    sync();
+                }
+            ], function() {
+                skritter.user.scheduler.sort();
+                if (typeof callback === 'function')
+                    callback();
+            });
+        },
+        /**
+         * @method changedItems
          * @param {Function} callback
          * @param {Boolean} downloadAll
          */
-        start: function(callback, downloadAll) {
+        changedItems: function(callback, downloadAll) {
             var self = this;
             if (self.syncing) {
                 if (typeof callback === 'function')
@@ -47,6 +104,7 @@ define([
             var now = skritter.fn.getUnixTime();
             self.syncing = true;
             self.trigger('sync', self.syncing);
+            console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
             if (lastItemSync === 0 || downloadAll) {
                 skritter.modal.show('download')
                         .set('.modal-title', 'DOWNLOADING ACCOUNT')
@@ -117,6 +175,8 @@ define([
                                     skritter.modal.set('.modal-title-right', skritter.fn.bytesToSize(responseSize));
                                 if (result.totalRequests > 100)
                                     skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
+                                if (lastItemSync !== 0 && result.Items)
+                                    skritter.user.scheduler.insert(result.Items);
                                 skritter.user.data.insert(result, function() {
                                     window.setTimeout(request, 2000);
                                 });
@@ -130,6 +190,7 @@ define([
                     request();
                 }
             ], function() {
+                console.log('FINISHED SYNCING AT', moment(now * 1000).format('YYYY-MM-DD H:mm:ss'));
                 if (lastItemSync === 0 || downloadAll) {
                     self.set('lastItemSync', now);
                     self.set('lastVocabSync', now);
