@@ -20,6 +20,7 @@ define([
             Modals.options = null;
             this.$el.on('hide.bs.modal', _.bind(function(event) {
                 this.$('*').off();
+                this.render();
             }, this));
             this.$el.on('show.bs.modal', _.bind(function(event) {
                 if (this.$el.children().hasClass('in')) {
@@ -50,7 +51,6 @@ define([
          */
         hide: function(callback) {
             this.$(Modals.element).modal('hide').one('hidden.bs.modal', _.bind(function() {
-                this.render();
                 if (typeof callback === 'function')
                     callback();
             }, this));
