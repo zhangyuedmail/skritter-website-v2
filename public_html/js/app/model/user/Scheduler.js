@@ -162,8 +162,7 @@ define(function() {
                 if (heldUntil && heldUntil >= now) {
                     item.readiness = 0;
                     return -item.readiness;
-                } else if (heldItem) {
-                    console.log('deleting held');
+                } else if (heldUntil) {
                     delete held[item.id];
                 }
                 if (!item.last && (item.next - now) > 600) {
@@ -187,7 +186,7 @@ define(function() {
                 item.readiness = readiness;
                 return -item.readiness;
             });
-            this.set('held', held, {silent: true});
+            this.set('held', held).cache();
             this.trigger('schedule:sorted');
             return this.data;
         },
@@ -206,7 +205,7 @@ define(function() {
                 vocabIds: item.get('vocabIds')
             };
             for (var i = 0, length = relatedItemIds.length; i < length; i++)
-                this.get('held')[relatedItemIds[i]] = skritter.fn.getUnixTime() + 1200;
+                this.get('held')[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 20;
             this.trigger('schedule:updated');
         }
     });

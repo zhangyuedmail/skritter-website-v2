@@ -267,7 +267,6 @@ define(function() {
             ], function() {
                 skritter.user.data.reviews.sort();
                 skritter.user.scheduler.sort();
-                skritter.user.scheduler.cache();
                 callback();
             });
         },
