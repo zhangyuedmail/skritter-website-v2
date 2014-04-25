@@ -14,6 +14,7 @@ define([
          */
         initialize: function() {
             this.prompt = null;
+            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
         },
         /**
          * @method render

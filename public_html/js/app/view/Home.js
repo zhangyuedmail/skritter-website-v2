@@ -18,6 +18,7 @@ define([
          */
         initialize: function() {
             Home.languageCode = skritter.settings.getLanguageCode();
+            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
             this.listenTo(skritter.user.sync, 'sync', this.toggleSyncButton);
         },
         /**
@@ -97,6 +98,13 @@ define([
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+        },
+        /**
+         * @method updateDueCount
+         */
+        updateDueCount: function() {
+            console.log('updating due count');
+            this.$('#user-due-count').text(skritter.user.scheduler.getDueCount());
         }
     });
     
