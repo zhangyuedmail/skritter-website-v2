@@ -130,6 +130,32 @@ define(function() {
             return this.data[0];
         },
         /**
+         * @method insert
+         * @param {Array|Object} items
+         */
+        insert: function(items) {
+            items = Array.isArray(items) ? items : [items];
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                var position = _.findIndex(this.data, {id: item.id});
+                if (position > -1) {
+                    this.data[position] = {
+                        id: item.id,
+                        last: item.last,
+                        next: item.next,
+                        vocabIds: item.vocabIds
+                    };
+                } else {
+                    this.data.push({
+                        id: item.id,
+                        last: item.last,
+                        next: item.next,
+                        vocabIds: item.vocabIds
+                    });
+                }
+            }
+        },
+        /**
          * @method load
          * @param {Function} callback
          */
