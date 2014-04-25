@@ -56,7 +56,7 @@ body {
 
 
 /*** ADMIN: STROKE EDITOR ***/
-#view-admin-stroke-editor #writing-area .canvas-holder { 
+#view-admin-param-editor #writing-area .canvas-holder { 
     background: #ffffff;
     margin: 0 auto;
 }

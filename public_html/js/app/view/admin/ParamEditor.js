@@ -44,10 +44,11 @@ define([
         handleStrokeReceived: function(points) {
             var stroke = new Stroke().set('points', points);
             var param = {
-                bitmapId: this.strokeId,
+                bitmapId: parseInt(this.strokeId, 10),
                 corners: stroke.get('corners'),
                 deviations: stroke.getLineDeviations()
             };
+            console.log('Param ', param.bitmapId, ' created with ', param.corners.length, ' corners.');
             console.log(JSON.stringify(param));
         },
         /**
