@@ -89,6 +89,20 @@ define([
             return $('#content-container').width();
         },
         /**
+         * @method getAllChineseParts 
+         * @returns {Array}
+         */
+        getAllChineseParts: function() {
+                return ['defn', 'rdng', 'rune', 'tone'];
+        },
+        /**
+         * @method getAllJapaneseParts 
+         * @returns {Array}
+         */
+        getAllJapaneseParts: function() {
+                return ['defn', 'rdng', 'rune'];
+        },
+        /**
          * @method getLanguage
          * @returns {String}
          */
