@@ -61,9 +61,9 @@ define(function() {
                 var segmentStart = corners[a];
                 var segmentEnd = corners[a + 1];
                 var segmentPoints = points.slice(_.indexOf(points, segmentStart), _.indexOf(points, segmentEnd));
-                var curve = false;
+                var curve, point;
                 for (var b = 0, lengthB = segmentPoints.length; b < lengthB; b++) {
-                    var direction, point;
+                    var direction;
                     var distance = skritter.fn.distanceToLineSegment(segmentPoints[0], segmentPoints[segmentPoints.length - 1], segmentPoints[b]);
                     if (!curve || distance > curve) {
                         point = segmentPoints[b];
