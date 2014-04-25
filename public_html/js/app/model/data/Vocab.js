@@ -197,6 +197,26 @@ define([
             return element;
         },
         /**
+         * @method getRelatedItemIds
+         * @param {String} excludePart
+         * @returns {Array}
+         */
+        getRelatedItemIds: function(excludePart) {
+            var containedVocabIds = this.get('containedVocabIds');
+            var parts = _.without(['defn', 'rdng', 'rune', 'tone'], excludePart);
+            var relatedItemIds = [];
+            var userId = skritter.user.id;
+            var vocabId = this.id;
+            for (var a = 0, lengthA = parts.length; a < lengthA; a++) {
+                relatedItemIds.push(userId + '-' + vocabId + '-' + parts[a]);
+                if (containedVocabIds) {
+                    for (var b = 0, lengthB = containedVocabIds.length; b < lengthB; b++)
+                        relatedItemIds.push(userId +  '-' + containedVocabIds[b] + '-' + parts[a]);
+                }
+            }
+            return _.uniq(relatedItemIds);
+        },
+        /**
          * @method getSentence
          * @returns {Backbone.Model}
          */
