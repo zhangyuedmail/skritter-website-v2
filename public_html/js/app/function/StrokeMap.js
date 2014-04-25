@@ -1960,7 +1960,7 @@ define([
             return stroke;
         },
         602: function(defaultColor) {
-            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAuaAHgYiWhkjIg8kOgUIhQgKYgKAAgeh4gKgUYgUgygUgygogoYhGg7AKCfAAAoYAAAeAAAygUAeYgUAygyAAgyAAYleA8lUB4lAC0YiCBQiMBQiCBkYhkBQjSDIgyBGYiCCqgoC0AADIYAADSA8BkB4AoYBQAUAyAAB4geYE2hQE2iqDwjcYCWiMCCigCCigYBGhaBQhkBGhkYAegoAUgoAegoYAyhQAyhGAyhQYAegyAogyAegyYDcAUDwAeCWC0YAoAoAeAoAUAyYAoBkAKAyAKCqYAKDSgUBkhGCCYgyB4g8A8h4BkYi0CWjcB4jcBQYgeAKiCAeAeBGYAeAyBkgyAygKYGQhuEYiCC+i0YDSjIBkjmAAksYAAkshkjSjwig").cp().ef());
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAuaAHgYiWhkjIg8kOgUIhQgKYgKAAgeh4gKgUYgUgygUgygogoYhGg7AKCfAAAoYAAAeAAAygUAeYgUAygyAAgyAAYleA8lUB4lAC0YiCBQiMBQiCBkYhkBQjSDIgyBGYiCCqgoC0AADIYAADSA8BkB4AoYBQAUAyAAB4geYE2hQE2iqDwjcYCWiMCCigCCigYBGhaBQhkBGhkYAegoAUgoAegoYAyhQAyhGAyhQYAegyAogyAegyYDcAUDwAeCWC0YAoAoAeAoAUAyYAoBkAKAyAKCqYAKDSgUBkhGCCYgyB4g8A8h4BkYi0CWjcB4jcBQYgeAKiCAeAeBGYAeAyBkgyAygKYGQhuEYiCC+i0YDSjIBkjmAAksYAAkshkjSjwig").p("AeAI6YgKAKgKAUAAAAYgyBQgyBQgyBQYhuCWhuCMh4CMYh4B4huCMiMBaYiqBujSBujIAeYhuAUh4gKgUh4YgeiCBQiWBGhkYC0kYFKi+EiiWYBQgyBagoBagoYBugyBkgeBugeYAogKAegKAogKYAegKBugoAAAyYAKAUgeAogUAU").cp().ef());
             stroke.setBounds(0, 0, 332, 235);
             return stroke;
         }

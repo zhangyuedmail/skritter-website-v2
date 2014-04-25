@@ -1,6 +1,7 @@
 /**
  * @module Skritter
  * @submodule Collections
+ * @param KanaStrokeData
  * @param Stroke
  * @author Joshua McFarland
  */
@@ -56,9 +57,11 @@ define([
          */
         reset: function() {
             var models = [];
-            for (var i = 1, length = this.length; i < length; i++)
-                if (this.models[i].attributes.rune !== 'tone')
-                    models.push(this.models[i]);
+            for (var i = 1, length = this.length; i < length; i++) {
+                var model = this.models[i];
+                if (model.attributes.rune !== 'tone' && !model.has('kana'))
+                    models.push(model);
+            }
             this.remove(models);
         }
     });

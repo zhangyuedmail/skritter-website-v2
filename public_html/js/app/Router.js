@@ -2,6 +2,7 @@
  * @module Skritter
  * @param Home
  * @param Login
+ * @param ParamEditor
  * @param Study
  * @param StudySettings
  * @param Test
@@ -10,10 +11,11 @@
 define([
     'view/Home',
     'view/Login',
+    'view/admin/ParamEditor',
     'view/Study',
     'view/study/Settings',
     'view/Test'
-], function(Home, Login, Study, StudySettings, Test) {
+], function(Home, Login, ParamEditor, Study, StudySettings, Test) {
     /**
      * @class Router
      */
@@ -31,6 +33,7 @@ define([
          */
         routes: {
             '': 'home',
+            'admin/param/:strokeId': 'adminParamEditor',
             'login': 'login',
             'study': 'study',
             'study/settings': 'studySettings',
@@ -43,6 +46,14 @@ define([
             if (this.view)
                 this.view.remove();
             this.view = null;
+        },
+        /**
+         * @method adminEditor
+         */
+        adminParamEditor: function(strokeId) {
+            this.removeView();
+            this.view = new ParamEditor({el: this.container});
+            this.view.setStrokeId(strokeId).render();
         },
         /**
          * @method home

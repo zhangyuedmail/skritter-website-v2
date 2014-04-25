@@ -55,6 +55,12 @@ body {
 }
 
 
+/*** ADMIN: STROKE EDITOR ***/
+#view-admin-param-editor #writing-area .canvas-holder { 
+    background: #ffffff;
+    margin: 0 auto;
+}
+
 /*** GRADING BUTTONS ***/
 #grading-buttons { 
     display: table;

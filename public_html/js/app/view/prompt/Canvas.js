@@ -229,7 +229,6 @@ define(function() {
         drawShape: function(layerName, shape, alpha) {
             shape.alpha = alpha ? alpha : 1;
             this.getLayer(layerName).addChild(shape);
-            console.log(this.getLayer(layerName));
             Canvas.stage.display.update();
             return shape;
         },
