@@ -125,6 +125,7 @@ define([
                 }
             ], function() {
                 localStorage.removeItem('active');
+                localStorage.removeItem(skritter.user.id + '-scheduler');
                 localStorage.removeItem(skritter.user.id + '-sync');
                 document.location.href = '';
                 document.location.reload(true);
