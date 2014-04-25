@@ -15,18 +15,20 @@ define([
          * @method initialize
          */
         initialize: function() {
-            var self = this;
             Modals.element = null;
             Modals.id = null;
             Modals.options = null;
-            this.$el.on('show.bs.modal', function(event) {
-                if (self.$el.children().hasClass('in')) {
-                    self.$el.children('.in').modal('hide').one('hidden.bs.modal', function() {
-                        self.$(Modals.element).modal(Modals.options);
-                    });
+            this.$el.on('hide.bs.modal', _.bind(function(event) {
+                this.$('*').off();
+            }, this));
+            this.$el.on('show.bs.modal', _.bind(function(event) {
+                if (this.$el.children().hasClass('in')) {
+                    this.$el.children('.in').modal('hide').one('hidden.bs.modal', _.bind(function() {
+                        this.$(Modals.element).modal(Modals.options);
+                    }, this));
                     event.preventDefault();
                 }
-            });
+            }, this));
         },
         /**
          * @property {DOMElement} el
@@ -47,12 +49,11 @@ define([
          * @param {Function} callback
          */
         hide: function(callback) {
-            var self = this;
-            this.$(Modals.element).modal('hide').one('hidden.bs.modal', function() {
-                self.render();
+            this.$(Modals.element).modal('hide').one('hidden.bs.modal', _.bind(function() {
+                this.render();
                 if (typeof callback === 'function')
                     callback();
-            });
+            }, this));
         },
         /**
          * Returns the element of the current active modal.
@@ -126,10 +127,10 @@ define([
             options.show = (options.show) ? options.show : true;
             options.remote = (options.remote) ? options.remote : false;
             Modals.options = options;
-            Modals.element = this.$('#' + id).modal(options).one('shown.bs.modal', function() {
+            Modals.element = this.$('#' + id).modal(options).one('shown.bs.modal', _.bind(function() {
                 if (typeof callback === 'function')
                     callback();
-            });
+            }, this));
             this.reset();
             return this;
         }
