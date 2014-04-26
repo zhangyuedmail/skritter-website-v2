@@ -142,7 +142,7 @@ define(function() {
             }
             request();
         },
-         /**
+        /**
          * @method getVocabList
          * @param {String} id
          * @param {Array} fields
@@ -202,16 +202,17 @@ define(function() {
         },
         /**
          * @method getVocabLists
-         * @param {String} language
-         * @param {String} sort
-         * @param {Array} fields
          * @param {Function} callback
+         * @param {Object} options
          */
-        getVocabLists: function(language, sort, fields, callback) {
+        getVocabLists: function(callback, options) {
             var self = this;
             var lists = [];
-            language = language ? language : undefined;
-            fields = fields ? fields : undefined;
+            options = options ? options : {};
+            options.cursor = options.cursor ? options.cursor : undefined;
+            options.fields = options.fields ? options.fields.join(',') : undefined;
+            options.language = options.language ? options.language : undefined;
+            options.sort = options.sort ? options.sort : undefined;
             function request(cursor) {
                 var promise = $.ajax({
                     url: self.base + 'vocablists',
@@ -222,15 +223,17 @@ define(function() {
                     data: {
                         bearer_token: self.get('token'),
                         cursor: cursor,
-                        lang: language,
-                        sort: sort,
-                        fields: fields
+                        lang: options.language,
+                        sort: options.sort,
+                        fields: options.fields
                     }
                 });
                 promise.done(function(data) {
                     if (data.VocabLists)
                         lists = lists.concat(data.VocabLists);
-                    if (data.cursor) {
+                    if (options.cursor) {
+                        callback(lists, data.statusCode);
+                    } else if (data.cursor) {
                         window.setTimeout(function() {
                             request(data.cursor);
                         }, 500);
@@ -242,7 +245,7 @@ define(function() {
                     callback(error);
                 });
             }
-            request();
+            request(options.cursor);
         },
         /**
          * Posts batches of reviews in groups of 500 and then returns an array of the posted objects.
