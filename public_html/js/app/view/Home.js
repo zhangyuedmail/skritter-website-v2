@@ -112,7 +112,6 @@ define([
          * @method updateDueCount
          */
         updateDueCount: function() {
-            console.log('updating due count');
             this.$('#user-due-count').text(skritter.user.scheduler.getDueCount());
         }
     });

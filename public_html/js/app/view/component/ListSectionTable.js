@@ -87,7 +87,7 @@ define([
                     for (var field in Table.fieldMap) {
                         var fieldValue = section[field];
                         if (field === 'rows') {
-                            divBody += "<td class='list-field-" + field + "'><h6>" + fieldValue.length + "</h6></td>";
+                            divBody += "<td class='list-field-" + field + "'><h6>" + fieldValue.length + " Words</h6></td>";
                         } else {
                             divBody += "<td class='list-field-" + field + "'><h6>" + fieldValue + "</h6></td>";
                         }
