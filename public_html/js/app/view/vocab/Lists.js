@@ -2,11 +2,13 @@
  * @module Skritter
  * @submodule View
  * @param templateVocabLists
+ * @param ListTable
  * @author Joshua McFarland
  */
 define([
-    'require.text!template/vocab-lists.html'
-], function(templateVocabLists) {
+    'require.text!template/vocab-lists.html',
+    'view/component/ListTable'
+], function(templateVocabLists, ListTable) {
     /**
      * @class Lists
      */
@@ -15,6 +17,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.table = new ListTable();
         },
         /**
          * @method render
@@ -22,6 +25,10 @@ define([
          */
         render: function() {
             this.$el.html(templateVocabLists);
+            this.table.setElement(this.$('#lists')).render();
+            this.table.set(skritter.user.data.vocablists.toJSON(), {
+                name: 'Name'
+            });
             return this;
         },
         /**

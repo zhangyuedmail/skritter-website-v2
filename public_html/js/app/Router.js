@@ -43,7 +43,7 @@ define([
             'study/settings': 'studySettings',
             'test': 'test',
             'vocab/list': 'vocabLists',
-            'vocab/list/:listId': ''
+            'vocab/list/:listId': 'vocabList'
         },
         /**
          * @method removeView
@@ -55,6 +55,7 @@ define([
         },
         /**
          * @method adminEditor
+         * @param {Number} strokeId
          */
         adminParamEditor: function(strokeId) {
             this.removeView();
@@ -103,11 +104,12 @@ define([
         },
         /**
          * @method vocabList
+         * @param {String} listId
          */
-        vocabList: function() {
+        vocabList: function(listId) {
             this.removeView();
             this.view = new VocabList({el: this.container});
-            this.view.render();
+            this.view.render().set(listId);
         },
         /**
          * @method vocabLists

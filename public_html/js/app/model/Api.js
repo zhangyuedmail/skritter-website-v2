@@ -153,7 +153,7 @@ define(function() {
             fields = fields ? fields : undefined;
             function request() {
                 var promise = $.ajax({
-                    url: Api.base + 'vocablists/' + id,
+                    url: self.base + 'vocablists/' + id,
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
@@ -164,7 +164,7 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
-                    callback(data.VocabList);
+                    callback(data.VocabList, data.statusCode);
                 });
                 promise.fail(function(error) {
                     callback(error);
@@ -192,7 +192,7 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
-                    callback(data.VocabListSection);
+                    callback(data.VocabListSection, data.statusCode);
                 });
                 promise.fail(function(error) {
                     callback(error);
@@ -235,7 +235,7 @@ define(function() {
                             request(data.cursor);
                         }, 500);
                     } else {
-                        callback(lists);
+                        callback(lists, data.statusCode);
                     }
                 });
                 promise.fail(function(error) {
