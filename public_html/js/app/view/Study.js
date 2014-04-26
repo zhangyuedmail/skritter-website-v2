@@ -111,7 +111,11 @@ define([
         showAddItemsModal: function(event) {
             skritter.modal.show('add-items');
             skritter.modal.element('.modal-footer').hide();
-            skritter.modal.element().on('vclick', function() {
+            skritter.modal.element('.item-limit').on('vclick', function(event) {
+                $(this).select();
+                event.preventDefault();
+            });
+            skritter.modal.element('.button-add').on('vclick', function() {
                 var limit = skritter.modal.$('#add-items .item-limit').val();
                 skritter.modal.element('.modal-footer').show();
                 if (limit >= 1 && limit <= 100) {
