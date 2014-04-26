@@ -110,18 +110,20 @@ define([
          */
         showAddItemsModal: function(event) {
             skritter.modal.show('add-items');
-            skritter.modal.$('#add-items .button-add').on('vclick', function() {
+            skritter.modal.element('.modal-footer').hide();
+            skritter.modal.element().on('vclick', function() {
                 var limit = skritter.modal.$('#add-items .item-limit').val();
+                skritter.modal.element('.modal-footer').show();
                 if (limit >= 1 && limit <= 100) {
-                    skritter.modal.$('#add-items :input').prop('disabled', true);
-                    skritter.modal.$('#add-items .message').addClass('text-info');
-                    skritter.modal.$('#add-items .message').html("<i class='fa fa-spin fa-spinner'></i> Adding Items");
+                    skritter.modal.element(':input').prop('disabled', true);
+                    skritter.modal.element('.message').addClass('text-info');
+                    skritter.modal.element('.message').html("<i class='fa fa-spin fa-spinner'></i> Adding Items");
                     skritter.user.sync.addItems(limit, function() {
                         skritter.modal.hide();
                     });
                 } else {
-                    skritter.modal.$('#add-items .message').addClass('text-danger');
-                    skritter.modal.$('#add-items .message').text('Must be between 1 and 100.');
+                    skritter.modal.element('.message').addClass('text-danger');
+                    skritter.modal.element('.message').text('Must be between 1 and 100.');
                 }
             });
             event.preventDefault();
