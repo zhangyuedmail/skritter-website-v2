@@ -84,7 +84,7 @@ define([
                 //generates the body section of the table
                 for (var b in Table.rows) {
                     var row = Table.rows[b];
-                    divBody += "<tr id='list-" + section.id + "' class='cursor'>";
+                    divBody += "<tr id='list-" + row.id + "' class='cursor'>";
                     for (var field in Table.fieldMap) {
                         var fieldValue = row[field];
                         if (field === 'rows') {

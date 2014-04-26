@@ -18,6 +18,7 @@ body {
 #skritter-container { height: 100%; }
 #content-container.full-width {
     margin: 0;
+    overflow-y: auto;
     padding: 0;
     width: 100%;
 }
@@ -47,6 +48,7 @@ body {
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;
+    overflow-y: auto;
     padding-top: 45px;
 }
 .view.padding-top { padding-top: 55px; }

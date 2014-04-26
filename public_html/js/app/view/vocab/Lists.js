@@ -27,7 +27,7 @@ define([
             this.$el.html(templateVocabLists);
             this.table.setElement(this.$('#lists')).render();
             this.table.set(skritter.user.data.vocablists.toJSON(), {
-                name: 'Name'
+                name: 'List Name'
             });
             return this;
         },

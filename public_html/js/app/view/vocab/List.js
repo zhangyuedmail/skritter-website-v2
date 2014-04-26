@@ -3,14 +3,16 @@
  * @submodule View
  * @param templateVocabList
  * @param ListSectionTable
+ * @param ListSectionRowTable
  * @param VocabList
  * @author Joshua McFarland
  */
 define([
     'require.text!template/vocab-list.html',
     'view/component/ListSectionTable',
+    'view/component/ListSectionRowTable',
     'model/data/VocabList'
-], function(templateVocabList, ListSectionTable, VocabList) {
+], function(templateVocabList, ListSectionTable, ListSectionRowTable, VocabList) {
     /**
      * @class List
      */
@@ -21,7 +23,9 @@ define([
         initialize: function() {
             List.id = null;
             List.model = new VocabList();
-            List.table = new ListSectionTable();
+            List.sectionId = null;
+            List.sectionRowTable = new ListSectionRowTable();
+            List.sectionTable = new ListSectionTable();
         },
         /**
          * @method render
@@ -29,7 +33,8 @@ define([
          */
         render: function() {
             this.$el.html(templateVocabList);
-            List.table.setElement(this.$('#section-table')).render();
+            List.sectionTable.setElement(this.$('#section-table')).render();
+            List.sectionRowTable.setElement(this.$('#row-table')).render();
             return this;
         },
         /**
@@ -50,7 +55,7 @@ define([
             skritter.api.updateVocabList({id: List.model.id, studyingMode: 'not studying'}, _.bind(function(list, status) {
                 if (status === 200) {
                     List.model.set(list);
-                    this.load();
+                    this.loadList();
                 }
                 skritter.modal.hide();
             }, this));
@@ -65,18 +70,16 @@ define([
             skritter.api.updateVocabList({id: List.model.id, studyingMode: 'adding'}, _.bind(function(list, status) {
                 if (status === 200) {
                     List.model.set(list);
-                    this.load();
+                    this.loadList();
                 }
                 skritter.modal.hide();
             }, this));
             event.preventDefault();
         },
         /**
-         * @method load
+         * @method loadList
          */
-        load: function() {
-            this.$('#overview').removeClass('hidden');
-            this.$('#settings').removeClass('hidden');
+        loadList: function() {
             this.$('#list-name').text(List.model.get('name'));
             if (List.model.has('categories'))
                 this.$('#list-categories').text(List.model.get('categories').join(', '));
@@ -103,6 +106,38 @@ define([
                     this.$('#settings .button-disable-studying').show();
                     break;
             }
+            if (List.id && List.sectionId) {
+                this.loadSectionRows();
+            } else {
+                this.loadSections();
+            }
+        },
+        /**
+         * @method loadSections
+         */
+        loadSections: function() {
+            List.sectionTable.set(List.id, List.model.get('sections'), {
+                name: 'Section Name',
+                rows: ''
+            });
+            this.$('#overview').removeClass('hidden');
+            this.$('#settings').removeClass('hidden');
+            this.$('#sections').removeClass('hidden');
+            this.$('#rows').addClass('hidden');
+        },
+        /**
+         * @method loadSectionRows
+         */
+        loadSectionRows: function() {
+            var section = _.find(List.model.get('sections'), {id: List.sectionId});
+            List.sectionRowTable.set(section.rows, {
+                vocabId: 'ID'
+            });
+            this.$('#section-name').text(section.name);
+            this.$('#overview').removeClass('hidden');
+            this.$('#settings').addClass('hidden');
+            this.$('#sections').addClass('hidden');
+            this.$('#rows').removeClass('hidden');
         },
         /**
          * @method pauseList
@@ -113,7 +148,7 @@ define([
             skritter.api.updateVocabList({id: List.model.id, studyingMode: 'reviewing'}, _.bind(function(list, status) {
                 if (status === 200) {
                     List.model.set(list);
-                    this.load();
+                    this.loadList();
                 }
                 skritter.modal.hide();
             }, this));
@@ -128,21 +163,29 @@ define([
             this.$el.empty();
         },
         /**
+         * @method selectSection
+         * @param {Object} event
+         */
+        selectSection: function(event) {
+            var sectionId = event.currentTarget.id.replace('section-', '');
+            List.sectionId = sectionId;
+            this.loadSectionRows();
+            event.preventDefault();
+        },
+        /**
          * @method set
          * @param {String} listId
+         * @param {String} sectionId
          * @returns {Backbone.View}
          */
-        set: function(listId) {
+        set: function(listId, sectionId) {
             List.id = listId;
-            List.table.showLoading();
+            List.sectionId = sectionId;
+            skritter.modal.show('loading').set('.modal-body', sectionId ? 'Loading Section' : 'Loading List');
             skritter.api.getVocabList(listId, null, _.bind(function(list) {
                 List.model.set(list);
-                List.table.set(listId, list.sections, {
-                    name: 'Section Name',
-                    rows: ''
-                });
-                List.table.hideLoading();
-                this.load();
+                this.loadList();
+                skritter.modal.hide();
             }, this));
             return this;
         },
@@ -155,7 +198,7 @@ define([
             skritter.api.updateVocabList({id: List.model.id, studyingMode: 'adding'}, _.bind(function(list, status) {
                 if (status === 200) {
                     List.model.set(list);
-                    this.load();
+                    this.loadList();
                 }
                 skritter.modal.hide();
             }, this));

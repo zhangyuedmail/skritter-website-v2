@@ -43,7 +43,8 @@ define([
             'study/settings': 'studySettings',
             'test': 'test',
             'vocab/list': 'vocabLists',
-            'vocab/list/:listId': 'vocabList'
+            'vocab/list/:listId': 'vocabList',
+            'vocab/list/:listId/:sectionId': 'vocabList'
         },
         /**
          * @method removeView
@@ -105,11 +106,12 @@ define([
         /**
          * @method vocabList
          * @param {String} listId
+         * @param {String} sectionId
          */
-        vocabList: function(listId) {
+        vocabList: function(listId, sectionId) {
             this.removeView();
             this.view = new VocabList({el: this.container});
-            this.view.render().set(listId);
+            this.view.render().set(listId, sectionId);
         },
         /**
          * @method vocabLists
