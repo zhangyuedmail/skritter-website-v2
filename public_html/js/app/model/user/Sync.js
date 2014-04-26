@@ -113,6 +113,14 @@ define([
                     path: 'api/v' + skritter.api.get('version') + '/vocablists',
                     method: 'GET',
                     params: {
+                        sort: 'custom'
+                    },
+                    spawner: true
+                });
+                requests.push({
+                    path: 'api/v' + skritter.api.get('version') + '/vocablists',
+                    method: 'GET',
+                    params: {
                         sort: 'studying'
                     },
                     spawner: true
