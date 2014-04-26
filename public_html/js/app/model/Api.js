@@ -182,7 +182,7 @@ define(function() {
             var self = this;
             function request() {
                 var promise = $.ajax({
-                    url: Api.base + 'vocablists/' + listId + '/sections/' + sectionId,
+                    url: self.base + 'vocablists/' + listId + '/sections/' + sectionId,
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
@@ -214,7 +214,7 @@ define(function() {
             fields = fields ? fields : undefined;
             function request(cursor) {
                 var promise = $.ajax({
-                    url: Api.base + 'vocablists',
+                    url: self.base + 'vocablists',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
@@ -256,7 +256,7 @@ define(function() {
             var postedReviews = [];
             var postBatch = function(batch) {
                 var promise = $.ajax({
-                    url: Api.base + 'reviews?bearer_token=' + self.get('token'),
+                    url: self.base + 'reviews?bearer_token=' + self.get('token'),
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
@@ -316,7 +316,7 @@ define(function() {
             var self = this;
             function request() {
                 var promise = $.ajax({
-                    url: Api.base + 'users?bearer_token=' + self.get('token'),
+                    url: self.base + 'users?bearer_token=' + self.get('token'),
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
@@ -342,7 +342,7 @@ define(function() {
             var self = this;
             function request() {
                 var promise = $.ajax({
-                    url: Api.base + 'vocablists/' + list.id + '?bearer_token=' + self.get('token'),
+                    url: self.base + 'vocablists/' + list.id + '?bearer_token=' + self.get('token'),
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
@@ -351,7 +351,7 @@ define(function() {
                 });
                 promise.done(function(data) {
                     if (typeof callback === 'function')
-                        callback(data.VocabList);
+                        callback(data.VocabList, data.statusCode);
                 });
                 promise.fail(function(error) {
                     console.error(error);
@@ -369,7 +369,7 @@ define(function() {
             var self = this;
             function request() {
                 var promise = $.ajax({
-                    url: Api.base + 'vocablists/' + listId + '/section/' + section.id + '?bearer_token=' + self.get('token'),
+                    url: self.base + 'vocablists/' + listId + '/section/' + section.id + '?bearer_token=' + self.get('token'),
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
