@@ -142,6 +142,142 @@ define(function() {
             }
             request();
         },
+         /**
+         * @method getVocabList
+         * @param {String} id
+         * @param {Array} fields
+         * @param {Function} callback
+         */
+        getVocabList: function(id, fields, callback) {
+            var self = this;
+            fields = fields ? fields : undefined;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'vocablists/' + id,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        fields: fields
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.VocabList);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
+         * @method getVocabListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         * @param {Function} callback
+         */
+        getVocabListSection: function(listId, sectionId, callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'vocablists/' + listId + '/sections/' + sectionId,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token')
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.VocabListSection);
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
+         * @method getVocabLists
+         * @param {String} language
+         * @param {String} sort
+         * @param {Array} fields
+         * @param {Function} callback
+         */
+        getVocabLists: function(language, sort, fields, callback) {
+            var self = this;
+            var lists = [];
+            language = language ? language : undefined;
+            fields = fields ? fields : undefined;
+            function request(cursor) {
+                var promise = $.ajax({
+                    url: Api.base + 'vocablists',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor,
+                        lang: language,
+                        sort: sort,
+                        fields: fields
+                    }
+                });
+                promise.done(function(data) {
+                    if (data.VocabLists)
+                        lists = lists.concat(data.VocabLists);
+                    if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 500);
+                    } else {
+                        callback(lists);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
+         * Posts batches of reviews in groups of 500 and then returns an array of the posted objects.
+         * 
+         * @method postReviews
+         * @param {Array} reviews
+         * @param {Function} callback
+         */
+        postReviews: function(reviews, callback) {
+            var self = this;
+            var postedReviews = [];
+            var postBatch = function(batch) {
+                var promise = $.ajax({
+                    url: Api.base + 'reviews?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'POST',
+                    data: JSON.stringify(batch)
+                });
+                promise.done(function() {
+                    postedReviews = postedReviews.concat(batch);
+                    if (reviews.length > 0) {
+                        postBatch(reviews.splice(0, 499));
+                    } else {
+                        callback(postedReviews);
+                    }
+                });
+                promise.fail(function(error) {
+                    console.error('REVIEW POST ERROR', error);
+                    callback(postedReviews);
+                });
+            };
+            postBatch(reviews.splice(0, 499));
+        },
         /**
          * Requests a specific batch from the server and returns the request id. Use the
          * getBatch function to get the requested data from the server.
@@ -167,6 +303,85 @@ define(function() {
                 });
                 promise.fail(function(error) {
                     callback(error, 0);
+                });
+            }
+            request();
+        },
+        /**
+         * @method updateUser
+         * @param {Object} settings
+         * @param {Function} callback
+         */
+        updateUser: function(settings, callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'users?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'PUT',
+                    data: JSON.stringify(settings)
+                });
+                promise.done(function(data) {
+                    if (typeof callback === 'function')
+                        callback(data.User);
+                });
+                promise.fail(function(error) {
+                    console.error(error);
+                });
+            }
+            request();
+        },
+        /**
+         * @method updateVocabList
+         * @param {Object} list
+         * @param {Function} callback
+         */
+        updateVocabList: function(list, callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'vocablists/' + list.id + '?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'PUT',
+                    data: JSON.stringify(list)
+                });
+                promise.done(function(data) {
+                    if (typeof callback === 'function')
+                        callback(data.VocabList);
+                });
+                promise.fail(function(error) {
+                    console.error(error);
+                });
+            }
+            request();
+        },
+        /**
+         * @method updateVocabListSection
+         * @param {String} listId
+         * @param {Object} section
+         * @param {Function} callback
+         */
+        updateVocabListSection: function(listId, section, callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: Api.base + 'vocablists/' + listId + '/section/' + section.id + '?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'PUT',
+                    data: JSON.stringify(section)
+                });
+                promise.done(function(data) {
+                    if (typeof callback === 'function')
+                        callback(data.VocabListSection);
+                });
+                promise.fail(function(error) {
+                    console.error(error);
                 });
             }
             request();
