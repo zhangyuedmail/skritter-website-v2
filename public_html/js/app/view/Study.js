@@ -14,6 +14,7 @@ define([
          */
         initialize: function() {
             this.prompt = null;
+            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
         },
         /**
          * @method render
@@ -30,6 +31,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'click #view-study .button-add-items': 'showAddItemsModal',
             'click #view-study .button-audio': 'playAudio',
             'click #view-study .button-study-settings': 'navigateStudySettings'
         },
@@ -92,6 +94,7 @@ define([
          * @method previousPrompt
          */
         previousPrompt: function() {
+            //TODO: add in the ability to move backwards a few prompts
         },
         /**
          * @method remove
@@ -100,6 +103,34 @@ define([
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+        },
+        /**
+         * @method showAddItemsModal
+         * @param {Object} event
+         */
+        showAddItemsModal: function(event) {
+            skritter.modal.show('add-items');
+            skritter.modal.element('.modal-footer').hide();
+            skritter.modal.element('.item-limit').on('vclick', function(event) {
+                $(this).select();
+                event.preventDefault();
+            });
+            skritter.modal.element('.button-add').on('vclick', function() {
+                var limit = skritter.modal.$('#add-items .item-limit').val();
+                skritter.modal.element('.modal-footer').show();
+                if (limit >= 1 && limit <= 100) {
+                    skritter.modal.element(':input').prop('disabled', true);
+                    skritter.modal.element('.message').addClass('text-info');
+                    skritter.modal.element('.message').html("<i class='fa fa-spin fa-spinner'></i> Adding Items");
+                    skritter.user.sync.addItems(limit, function() {
+                        skritter.modal.hide();
+                    });
+                } else {
+                    skritter.modal.element('.message').addClass('text-danger');
+                    skritter.modal.element('.message').text('Must be between 1 and 100.');
+                }
+            });
+            event.preventDefault();
         },
         /**
          * @method updateAudioButtonState

@@ -1,32 +1,35 @@
 /**
  * @module Skritter
- * @submodule Views
- * @param templateModals
+ * @submodule View
+ * @param templateModal
  * @author Joshua McFarland
  */
 define([
     'require.text!template/modals.html'
-], function(templateModals) {
+], function(templateModal) {
     /**
-     * @class Modals
+     * @class Modal
      */
-    var Modals = Backbone.View.extend({
+    var Modal = Backbone.View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            var self = this;
-            Modals.element = null;
-            Modals.id = null;
-            Modals.options = null;
-            this.$el.on('show.bs.modal', function(event) {
-                if (self.$el.children().hasClass('in')) {
-                    self.$el.children('.in').modal('hide').one('hidden.bs.modal', function() {
-                        self.$(Modals.element).modal(Modals.options);
-                    });
+            Modal.id = null;
+            Modal.options = null;
+            this.$el.on('hide.bs.modal', _.bind(function() {
+                Modal.id = null;
+                this.$('*').off();
+                this.render();
+            }, this));
+            this.$el.on('show.bs.modal', _.bind(function(event) {
+                if (this.$el.children().hasClass('in')) {
+                    this.$el.children('.in').modal('hide').one('hidden.bs.modal', _.bind(function() {
+                        this.$(Modal.element).modal(Modal.options);
+                    }, this));
                     event.preventDefault();
                 }
-            });
+            }, this));
         },
         /**
          * @property {DOMElement} el
@@ -37,7 +40,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.html(templateModals);
+            this.$el.html(templateModal);
             return this;
         },
         /**
@@ -47,21 +50,22 @@ define([
          * @param {Function} callback
          */
         hide: function(callback) {
-            var self = this;
-            this.$(Modals.element).modal('hide').one('hidden.bs.modal', function() {
-                self.render();
+            this.element().modal('hide').one('hidden.bs.modal', _.bind(function() {
                 if (typeof callback === 'function')
                     callback();
-            });
+            }, this));
         },
         /**
          * Returns the element of the current active modal.
          * 
          * @method element
+         * @param {String} selector
          * @returns {DOMElement}
          */
-        element: function() {
-            return Modals.element;
+        element: function(selector) {
+            if (selector)
+                return this.$el.find('#' + Modal.id + ' ' + selector);
+            return this.$el.find('#' + Modal.id);
         },
         /**
          * @method progress
@@ -70,8 +74,8 @@ define([
          */
         progress: function(percent) {
             percent = percent ? Math.round(percent) : 0;
-            this.$('#' + Modals.id + ' .progress-bar').width(percent + '%');
-            this.$('#' + Modals.id + ' .progress-bar .sr-only').text(percent + '% Complete');
+            this.element('.progress-bar').width(percent + '%');
+            this.element('.progress-bar .sr-only').text(percent + '% Complete');
             return this;
         },
         /**
@@ -81,10 +85,10 @@ define([
          * @returns {Backbone.View}
          */
         reset: function() {
-            this.$('#' + Modals.id + ' .modal-footer').attr('classes', 'modal-footer');
-            this.$('#' + Modals.id + ' .modal-header').attr('classes', 'modal-header');
-            this.$('#' + Modals.id + ' .modal-title').attr('classes', 'modal-title');
-            this.$('#' + Modals.id).find('*').show();
+            this.element('.progress-bar').attr('classes', 'modal-footer');
+            this.element('.progress-bar').attr('classes', 'modal-header');
+            this.element('.progress-bar').attr('classes', 'modal-title');
+            this.element('.progress-bar').find('*').show();
             return this;
         },
         /**
@@ -98,7 +102,7 @@ define([
          */
         set: function(findBy, html, atrribute) {
             var atributes = Array.isArray(atrribute) ? atrribute : [atrribute];
-            var element = this.$('#' + Modals.id).find(findBy);
+            var element = this.element().find(findBy);
             if (html === false) {
                 element.hide();
             } else {
@@ -119,21 +123,21 @@ define([
          */
         show: function(id, callback, options) {
             id = id ? id : 'default';
-            Modals.id = id;
+            Modal.id = id;
             options = (options) ? options : {};
             options.backdrop = (options.backdrop) ? options.backdrop : 'static';
             options.keyboard = (options.keyboard) ? options.keyboard : false;
             options.show = (options.show) ? options.show : true;
             options.remote = (options.remote) ? options.remote : false;
-            Modals.options = options;
-            Modals.element = this.$('#' + id).modal(options).one('shown.bs.modal', function() {
+            Modal.options = options;
+            this.$('#' + id).modal(options).one('shown.bs.modal', _.bind(function() {
                 if (typeof callback === 'function')
                     callback();
-            });
+            }, this));
             this.reset();
             return this;
         }
     });
     
-    return Modals;
+    return Modal;
 });
