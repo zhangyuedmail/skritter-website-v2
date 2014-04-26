@@ -6,6 +6,8 @@
  * @param Study
  * @param StudySettings
  * @param Test
+ * @param VocabList
+ * @param VocabLists
  * @author Joshua McFarland
  */
 define([
@@ -14,8 +16,10 @@ define([
     'view/admin/ParamEditor',
     'view/Study',
     'view/study/Settings',
-    'view/Test'
-], function(Home, Login, ParamEditor, Study, StudySettings, Test) {
+    'view/Test',
+    'view/vocab/List',
+    'view/vocab/Lists'
+], function(Home, Login, ParamEditor, Study, StudySettings, Test, VocabList, VocabLists) {
     /**
      * @class Router
      */
@@ -37,7 +41,9 @@ define([
             'login': 'login',
             'study': 'study',
             'study/settings': 'studySettings',
-            'test': 'test'
+            'test': 'test',
+            'vocab/list': 'vocabLists',
+            'vocab/list/:listId': ''
         },
         /**
          * @method removeView
@@ -93,6 +99,22 @@ define([
         test: function() {
             this.removeView();
             this.view = new Test({el: this.container});
+            this.view.render();
+        },
+        /**
+         * @method vocabList
+         */
+        vocabList: function() {
+            this.removeView();
+            this.view = new VocabList({el: this.container});
+            this.view.render();
+        },
+        /**
+         * @method vocabLists
+         */
+        vocabLists: function() {
+            this.removeView();
+            this.view = new VocabLists({el: this.container});
             this.view.render();
         }
     });
