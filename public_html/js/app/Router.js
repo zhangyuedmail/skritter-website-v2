@@ -6,6 +6,8 @@
  * @param Study
  * @param StudySettings
  * @param Test
+ * @param VocabList
+ * @param VocabLists
  * @author Joshua McFarland
  */
 define([
@@ -14,8 +16,10 @@ define([
     'view/admin/ParamEditor',
     'view/Study',
     'view/study/Settings',
-    'view/Test'
-], function(Home, Login, ParamEditor, Study, StudySettings, Test) {
+    'view/Test',
+    'view/vocab/List',
+    'view/vocab/Lists'
+], function(Home, Login, ParamEditor, Study, StudySettings, Test, VocabList, VocabLists) {
     /**
      * @class Router
      */
@@ -37,7 +41,11 @@ define([
             'login': 'login',
             'study': 'study',
             'study/settings': 'studySettings',
-            'test': 'test'
+            'test': 'test',
+            'vocab/list': 'vocabLists',
+            'vocab/list/category/:category': 'vocabLists',
+            'vocab/list/:listId': 'vocabList',
+            'vocab/list/:listId/:sectionId': 'vocabList'
         },
         /**
          * @method removeView
@@ -49,6 +57,7 @@ define([
         },
         /**
          * @method adminEditor
+         * @param {Number} strokeId
          */
         adminParamEditor: function(strokeId) {
             this.removeView();
@@ -94,6 +103,25 @@ define([
             this.removeView();
             this.view = new Test({el: this.container});
             this.view.render();
+        },
+        /**
+         * @method vocabList
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        vocabList: function(listId, sectionId) {
+            this.removeView();
+            this.view = new VocabList({el: this.container});
+            this.view.render().set(listId, sectionId);
+        },
+        /**
+         * @method vocabLists
+         * @param {String} category
+         */
+        vocabLists: function(category) {
+            this.removeView();
+            this.view = new VocabLists({el: this.container});
+            this.view.render().set(category);
         }
     });
 
