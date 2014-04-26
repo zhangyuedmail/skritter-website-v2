@@ -43,8 +43,20 @@ define([
          * @param {Backbone.Model} vocablist
          */
         comparator: function(vocablist) {
-            if (vocablist.attributes.name)
+            if (vocablist.has('name') && vocablist.has('studyingMode')) {
+                var studyingMode = vocablist.attributes.studyingMode;
+                if (studyingMode === 'adding') {
+                    return '1-' + vocablist.attributes.name;
+                } else if (studyingMode === 'reviewing') {
+                    return '2-' + vocablist.attributes.name;
+                } else if (studyingMode === 'not studying') {
+                    return '3-' + vocablist.attributes.name;
+                } else {
+                    return '4-' + vocablist.attributes.name;
+                }
+            } else if (vocablist.has('name')) {
                 return vocablist.attributes.name;
+            }
             return vocablist.id;
         },
         /**

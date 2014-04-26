@@ -49,12 +49,12 @@ define([
             skritter.api.getVocabLists(function(lists) {
                 Lists.table.set(lists, {
                     name: 'List Name',
-                    studyingMode: 'Status'
+                    peopleStudying: 'Studying'
                 });
                 skritter.modal.hide();
             }, {
                 cursor: false,
-                fields: ['id', 'name', 'studyingMode'],
+                fields: ['id', 'name', 'peopleStudying'],
                 sort: 'official'
             });
         },

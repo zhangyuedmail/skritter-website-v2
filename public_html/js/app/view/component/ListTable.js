@@ -87,11 +87,13 @@ define([
                         var fieldValue = list.get(field);
                         if (field === 'studyingMode') {
                             if (fieldValue === 'not studying') {
-                                divBody += "<td class='list-field-" + field + "'></td>";
+                                divBody += "<td class='list-field-" + field + "'>Not Studying</td>";
                             } else if (fieldValue === 'finished') {
-                                divBody += "<td class='list-field-" + field + "'></td>";
+                                divBody += "<td class='list-field-" + field + "'>Finished</td>";
+                            } else if (fieldValue === 'adding'){
+                                divBody += "<td class='list-field-" + field + "'>Adding</td>";
                             } else {
-                                divBody += "<td class='list-field-" + field + "'></td>";
+                                divBody += "<td class='list-field-" + field + "'>Reviewing</td>";
                             }
                         } else {
                             divBody += "<td class='list-field-" + field + "'><h6>" + fieldValue + "</h6></td>";
