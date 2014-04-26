@@ -80,6 +80,9 @@ define([
                 }, this),
                 _.bind(function(callback) {
                     this.srsconfigs.loadAll(callback);
+                }, this),
+                _.bind(function(callback) {
+                    this.vocablists.loadAll(callback);
                 }, this)
             ], callback);
         }
