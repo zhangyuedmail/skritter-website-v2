@@ -43,6 +43,7 @@ define([
             'study/settings': 'studySettings',
             'test': 'test',
             'vocab/list': 'vocabLists',
+            'vocab/list/category/:category': 'vocabLists',
             'vocab/list/:listId': 'vocabList',
             'vocab/list/:listId/:sectionId': 'vocabList'
         },
@@ -115,11 +116,12 @@ define([
         },
         /**
          * @method vocabLists
+         * @param {String} category
          */
-        vocabLists: function() {
+        vocabLists: function(category) {
             this.removeView();
             this.view = new VocabLists({el: this.container});
-            this.view.render();
+            this.view.render().set(category);
         }
     });
 

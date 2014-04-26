@@ -29,6 +29,15 @@ define([
             skritter.storage.put('vocablists', vocablists, callback);
         },
         /**
+         * @method comparator
+         * @param {Backbone.Model} vocablist
+         */
+        comparator: function(vocablist) {
+            if (vocablist.attributes.name)
+                return vocablist.attributes.name;
+            return vocablist.id;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
@@ -39,6 +48,6 @@ define([
             }, this));
         }
     });
-    
+
     return VocabLists;
 });
