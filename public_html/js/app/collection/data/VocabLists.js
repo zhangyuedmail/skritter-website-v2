@@ -21,6 +21,16 @@ define([
          */
         model: VocabList,
         /**
+         * @method cache
+         * @param {Function} callback
+         */
+        cache: function(callback) {
+            skritter.storage.put('vocablists', this.toJSON(), function() {
+                if (typeof callback === 'function')
+                    callback();
+            });
+        },
+        /**
          * @method insert
          * @param {Array|Object} vocablists
          * @param {Function} callback
