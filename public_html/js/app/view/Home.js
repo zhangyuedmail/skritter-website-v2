@@ -45,6 +45,7 @@ define([
         events: {
             'click .button-existing-user': 'navigateLogin',
             'click .button-new-user': 'navigateNewUser',
+            'click .button-lists': 'navigateLists',
             'click .button-logout': 'logout',
             'click .button-study': 'navigateStudy'
         },
@@ -66,6 +67,14 @@ define([
             } else {
                 this.$('.button-sync').show();
             }
+        },
+        /**
+         * @method navigateLists
+         * @param {Object} event
+         */
+        navigateLists: function(event) {
+            skritter.router.navigate('vocab/list', {trigger: true, replace: true});
+            event.preventDefault();
         },
         /**
          * @method navigateLogin
