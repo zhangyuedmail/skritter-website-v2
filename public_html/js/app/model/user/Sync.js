@@ -101,6 +101,8 @@ define([
             var lastItemSync = downloadAll ? 0 : this.get('lastItemSync');
             var lastSRSConfigSync = downloadAll ? 0 : this.get('lastSRSConfigSync');
             var lastVocabSync = downloadAll ? 0 : this.get('lastVocabSync');
+            var updatedSRSConfigs = false;
+            var updatedVocabs = false;
             var now = skritter.fn.getUnixTime();
             self.syncing = true;
             self.trigger('sync', self.syncing);
@@ -141,7 +143,7 @@ define([
                 },
                 spawner: true
             });
-            if (lastVocabSync !== 0) {
+            if (lastVocabSync !== 0 && moment(lastVocabSync * 1000).add('hours', 12).valueOf() / 1000 <= now) {
                 requests.push({
                     path: 'api/v' + skritter.api.get('version') + '/vocabs',
                     method: 'GET',
@@ -156,12 +158,14 @@ define([
                     },
                     spawner: true
                 });
+                updatedVocabs = true;
             }
-            if (lastSRSConfigSync === 0) {
+            if (lastSRSConfigSync === 0 || moment(lastSRSConfigSync * 1000).add('hours', 2).valueOf() / 1000 <= now) {
                 requests.push({
                     path: 'api/v' + skritter.api.get('version') + '/srsconfigs',
                     method: 'GET'
                 });
+                updatedSRSConfigs = true;
             }
             async.waterfall([
                 function(callback) {
@@ -199,12 +203,11 @@ define([
                 }
             ], function() {
                 console.log('FINISHED SYNCING AT', moment(now * 1000).format('YYYY-MM-DD H:mm:ss'));
-                if (lastItemSync === 0 || downloadAll) {
-                    self.set('lastItemSync', now);
+                self.set('lastItemSync', now);
+                if (updatedSRSConfigs)
+                    self.set('lastSRSConfigSync', now);
+                if (updatedVocabs)
                     self.set('lastVocabSync', now);
-                } else {
-                    self.set('lastItemSync', now);
-                }
                 self.syncing = false;
                 self.trigger('sync', self.syncing);
                 skritter.modal.hide();
