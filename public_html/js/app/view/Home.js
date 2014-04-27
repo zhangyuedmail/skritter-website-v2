@@ -47,7 +47,8 @@ define([
             'click .button-new-user': 'navigateNewUser',
             'click .button-lists': 'navigateLists',
             'click .button-logout': 'logout',
-            'click .button-study': 'navigateStudy'
+            'click .button-study': 'navigateStudy',
+            'click .button-sync': 'startSync'
         },
         /**
          * @method logout
@@ -59,13 +60,13 @@ define([
         },
         /**
          * @method toggleSyncButton
-         * @param {Boolean} disabled
+         * @param {Boolean} syncing
          */
-        toggleSyncButton: function(disabled) {
-            if (disabled) {
-                this.$('.button-sync').hide();
+        toggleSyncButton: function(syncing) {
+            if (syncing) {
+                this.$('.button-sync i').addClass('fa-spin');
             } else {
-                this.$('.button-sync').show();
+                this.$('.button-sync i').removeClass('fa-spin');
             }
         },
         /**
@@ -107,6 +108,17 @@ define([
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+        },
+        /**
+         * @method startSync
+         */
+        startSync: function() {
+            if (!skritter.user.sync.syncing) {
+                skritter.modal.show('download')
+                        .set('.modal-title', 'SYNCING')
+                        .progress(100);
+                skritter.user.sync.changedItems();
+            }
         },
         /**
          * @method updateDueCount

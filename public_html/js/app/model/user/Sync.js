@@ -105,7 +105,7 @@ define([
             var updatedVocabs = false;
             var now = skritter.fn.getUnixTime();
             self.syncing = true;
-            self.trigger('sync', self.syncing);
+            self.trigger('sync', self.syncing, true);
             console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
             if (lastItemSync === 0 || downloadAll) {
                 skritter.modal.show('download')
@@ -209,7 +209,7 @@ define([
                 if (updatedVocabs)
                     self.set('lastVocabSync', now);
                 self.syncing = false;
-                self.trigger('sync', self.syncing);
+                self.trigger('sync', self.syncing, false);
                 skritter.modal.hide();
                 if (typeof callback === 'function')
                     callback();
