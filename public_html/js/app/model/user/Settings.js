@@ -14,6 +14,7 @@ define([
          * @property {Object} defaults
          */
         defaults: {
+            addItemAmount: 1,
             audio: true,
             autoSync: true,
             autoSyncThreshold: 10,

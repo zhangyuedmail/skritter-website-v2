@@ -111,18 +111,20 @@ define([
         showAddItemsModal: function(event) {
             skritter.modal.show('add-items');
             skritter.modal.element('.modal-footer').hide();
+            skritter.modal.element('.item-limit').val(skritter.user.settings.get('addItemAmount'));
             skritter.modal.element('.item-limit').on('vclick', function(event) {
                 $(this).select();
                 event.preventDefault();
             });
             skritter.modal.element('.button-add').on('vclick', function() {
-                var limit = skritter.modal.$('#add-items .item-limit').val();
+                var limit = skritter.modal.element('.item-limit').val();
                 skritter.modal.element('.modal-footer').show();
                 if (limit >= 1 && limit <= 100) {
                     skritter.modal.element(':input').prop('disabled', true);
                     skritter.modal.element('.message').addClass('text-info');
                     skritter.modal.element('.message').html("<i class='fa fa-spin fa-spinner'></i> Adding Items");
                     skritter.user.sync.addItems(limit, function() {
+                        skritter.user.settings.set('addItemAmount', limit);
                         skritter.modal.hide();
                     });
                 } else {
