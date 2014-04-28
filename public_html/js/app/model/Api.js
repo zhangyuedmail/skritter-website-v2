@@ -266,17 +266,17 @@ define(function() {
                     type: 'POST',
                     data: JSON.stringify(batch)
                 });
-                promise.done(function() {
+                promise.done(function(data) {
                     postedReviews = postedReviews.concat(batch);
                     if (reviews.length > 0) {
                         postBatch(reviews.splice(0, 499));
                     } else {
-                        callback(postedReviews);
+                        callback(postedReviews, data.statusCode);
                     }
                 });
                 promise.fail(function(error) {
                     console.error('REVIEW POST ERROR', error);
-                    callback(postedReviews);
+                    callback(error, 0);
                 });
             };
             postBatch(reviews.splice(0, 499));

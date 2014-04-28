@@ -29,6 +29,16 @@ define([
             return -review.attributes.reviews[0].submitTime;
         },
         /**
+         * @method getReviews
+         * @returns {Array}
+         */
+        getReviews: function() {
+            var reviews = [];
+            for (var i = 0, length = this.length; i < length; i++)
+                reviews = reviews.concat(this.at(i).get('reviews'));
+            return reviews;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
@@ -37,6 +47,22 @@ define([
                 this.add(reviews, {merge: true, silent: true});
                 callback();
             }, this));
+        },
+        /**
+         * @method save
+         * @param {Function} callback
+         */
+        save: function(callback) {
+            var reviews = this.getReviews();
+            if (reviews.length > 0) {
+                skritter.api.postReviews(reviews, _.bind(function(postedReviews) {
+                    console.log('POSTED REVIEWS', postedReviews);
+                    this.remove(postedReviews);
+                    callback();
+                }, this));
+            } else {
+                callback();
+            }
         }
     });
 

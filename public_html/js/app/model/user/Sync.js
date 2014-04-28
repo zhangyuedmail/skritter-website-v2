@@ -169,6 +169,13 @@ define([
             }
             async.waterfall([
                 function(callback) {
+                    if (skritter.user.data.reviews.length > 0) {
+                        skritter.user.data.reviews.save(callback);
+                    } else {
+                        callback();
+                    }
+                },
+                function(callback) {
                     skritter.api.requestBatch(requests, function(batch, status) {
                         if (status === 200) {
                             callback(null, batch);
