@@ -20,6 +20,22 @@ define([
             IndexedDBAdapter.version = 1;
         },
         /**
+         * @method clear
+         * @param {String} tableName
+         * @param {Function} callback
+         */
+        clear: function(tableName, callback) {
+            var transaction = IndexedDBAdapter.database.transaction(tableName, 'readwrite');
+            transaction.oncomplete = function() {
+                if (typeof callback === 'function')
+                    callback();
+            };
+            transaction.onerror = function(event) {
+                console.error(event);
+            };
+            transaction.objectStore(tableName).clear();
+        },
+        /**
          * @method destroy
          * @param {Function} callback
          */

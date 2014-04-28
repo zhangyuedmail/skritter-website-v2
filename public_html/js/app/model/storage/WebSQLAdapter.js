@@ -20,6 +20,23 @@ define([
             WebSQLAdapter.size = 50 * 1024 * 1024;
         },
         /**
+         * @method clear
+         * @param {String} tableName
+         * @param {Function} callback
+         */
+        clear: function(tableName, callback) {
+            var onError = function(event) {
+                console.error(event);
+            };
+            var onSuccess = function() {
+                if (typeof callback === 'function')
+                    callback();
+            };
+            WebSQLAdapter.database.transaction(function(tx) {
+                tx.executeSql('DROP TABLE IF EXISTS ' + tableName);    
+            }, onError, onSuccess);
+        },
+        /**
          * @method destroy
          * @param {Function} callback
          */
