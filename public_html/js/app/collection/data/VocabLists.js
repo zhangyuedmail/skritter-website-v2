@@ -31,6 +31,16 @@ define([
             });
         },
         /**
+         * @method clearCache
+         * @param {Function} callback
+         */
+        clearCache: function(callback) {
+            skritter.storage.clear('vocablists', function() {
+                if (typeof callback === 'function')
+                    callback();
+            });
+        },
+        /**
          * @method insert
          * @param {Array|Object} vocablists
          * @param {Function} callback
