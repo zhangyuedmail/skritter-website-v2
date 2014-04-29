@@ -68,6 +68,13 @@ define([
             return this.$el.find('#' + Modal.id);
         },
         /**
+         * @method isDisplayed
+         * @returns {Boolean}
+         */
+        isDisplayed: function() {
+            return Modal.id ? true : false;
+        },
+        /**
          * @method progress
          * @param {Number} percent
          * @returns {Backbone.View}
