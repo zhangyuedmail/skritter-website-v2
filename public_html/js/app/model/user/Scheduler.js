@@ -181,6 +181,7 @@ define(function() {
          * @returns {Array}
          */
         sort: function() {
+            var self = this;
             var now = skritter.fn.getUnixTime();
             var held = this.get('held');
             this.data = _.sortBy(this.data, function(item) {
@@ -196,7 +197,7 @@ define(function() {
                     return -item.readiness;
                 }
                 if (!item.last || (item.next - item.last) === 1) {
-                    item.readiness = 99999999;
+                    item.readiness = self.randomizeInterval(99999999);
                     return -item.readiness;
                 }
                 var seenAgo = now - item.last;
