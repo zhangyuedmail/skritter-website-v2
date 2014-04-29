@@ -60,8 +60,12 @@ define([
             if (reviews.length > 0) {
                 async.waterfall([
                     function(callback) {
-                        skritter.api.postReviews(reviews, function(posted) {
-                            callback(null, _.uniq(_.pluck(posted, 'wordGroup')));
+                        skritter.api.postReviews(reviews, function(posted, status) {
+                            if (status === 200) {
+                                callback(null, _.uniq(_.pluck(posted, 'wordGroup')));
+                            } else {
+                                callback(posted);
+                            }
                         });
                     },
                     function(reviewIds, callback) {
