@@ -231,7 +231,7 @@ define(function() {
                 vocabIds: item.get('vocabIds')
             };
             for (var i = 0, length = relatedItemIds.length; i < length; i++)
-                this.get('held')[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 20;
+                this.get('held')[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 10;
             this.trigger('schedule:updated');
         }
     });
