@@ -239,7 +239,8 @@ define(function() {
             var self = this;
             var stage = Canvas.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
-            self.$('#canvas-input').on('vmousedown.Input', down);
+            this.disableInput();
+            this.$('#canvas-input').on('vmousedown.Input', down);
             function down() {
                 points = [];
                 marker = new createjs.Shape();

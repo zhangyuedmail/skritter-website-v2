@@ -124,7 +124,7 @@ define([
          * @returns {Backbone.View}
          */
         reset: function() {
-            Rune.canvas.clear().disableInput().enableInput();
+            Rune.canvas.clear().enableInput();
             Prompt.gradingButtons.hide();
             this.review.getCharacterAt().reset();
             return this;
