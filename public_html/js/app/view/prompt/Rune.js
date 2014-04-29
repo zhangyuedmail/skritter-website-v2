@@ -174,9 +174,11 @@ define([
             }
             if (this.review.getCharacterAt().isFinished()) {
                 Rune.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
-            } else if (this.review.getCharacterAt().length > 0) {
+            } else {
                 Rune.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+                Rune.canvas.enableInput();
             }
+
         },
         /**
          * @method show
@@ -218,8 +220,11 @@ define([
             }
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position') + 1));
-            if (!Rune.teaching)
+            if (Rune.teaching) {
+                //TODO: handle what to show when finished and teaching
+            } else {
                 Prompt.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
+            }
             return this;
         },
         /**
@@ -235,6 +240,6 @@ define([
             Rune.canvas.drawArrow('teach', strokeParams[0].get('corners')[0], '#000000', '#fff79a', strokeParams[0].getStartingAngle());
         }
     });
-    
+
     return Rune;
 });

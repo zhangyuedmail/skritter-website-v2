@@ -66,28 +66,10 @@ body {
     margin: 0 auto;
 }
 
-/*** GRADING BUTTONS ***/
-#grading-buttons { 
-    display: table;
-    width: 100%;
-}
-#grading-buttons div { 
-    background-color: transparent; 
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-    opacity: 0.6;
-    padding: 10px;
-    text-align: center;
-    vertical-align: middle;
-    width: 24%;
-}
-#grading-buttons div:hover { opacity: 1; }
-#grading-buttons div.selected { opacity: 1; }
-#grading-buttons .grade-icon { max-height: 50px; }
-
 
 /*** HOME: LOGGED IN ***/
+
+
 /*** HOME: LOGGED OUT ***/
 
 
@@ -162,13 +144,28 @@ body {
 
 
 /*** PROMPT: GRADING BUTTONS ***/
-.prompt-container #grading-buttons {
+.prompt-container #prompt-grading-buttons {
     bottom: 15px;
     display: none;
     left: 0;
     position: absolute;
+    width: 100%;
     z-index: 9003;
 }
+.prompt-container #prompt-grading-buttons div { 
+    background-color: transparent; 
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    opacity: 0.6;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    width: 24%;
+}
+.prompt-container #prompt-grading-buttons div:hover { opacity: 1; }
+.prompt-container #prompt-grading-buttons div.selected { opacity: 1; }
+.prompt-container #prompt-grading-buttons .grade-icon { max-height: 50px; }
 
 
 /*** PROMPT: INFO SECTION ***/

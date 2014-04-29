@@ -56,7 +56,7 @@ define([
          * @returns {Backbone.View}
          */
         expand: function() {
-            this.$('#grading-buttons').children().removeClass('hidden');
+            this.$('#prompt-grading-buttons').children().removeClass('hidden');
             GradingButtons.expanded = true;
             return this;
         },
@@ -88,9 +88,9 @@ define([
          */
         hide: function(skipAnimation) {
             if (skipAnimation) {
-                this.$('#grading-buttons').hide();
+                this.$('#prompt-grading-buttons').hide();
             } else {
-                this.$('#grading-buttons').hide(GradingButtons.animationSpeed);
+                this.$('#prompt-grading-buttons').hide(GradingButtons.animationSpeed);
             }
             return this;
         },
@@ -122,7 +122,7 @@ define([
          * @method show
          */
         show: function() {
-            this.$('#grading-buttons').show(GradingButtons.animationSpeed);
+            this.$('#prompt-grading-buttons').show(GradingButtons.animationSpeed);
             return this;
         },
         /**

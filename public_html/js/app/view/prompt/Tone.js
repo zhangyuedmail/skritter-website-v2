@@ -88,8 +88,11 @@ define([
                     Tone.canvas.drawShape('display', this.review.getCharacterAt().getShape());
                 }
             }
-            if (this.review.getCharacterAt().isFinished())
+            if (this.review.getCharacterAt().isFinished()) {
                 this.showAnswer();
+            } else {
+                Tone.canvas.enableInput();
+            }
         },
         /**
          * @method remove
