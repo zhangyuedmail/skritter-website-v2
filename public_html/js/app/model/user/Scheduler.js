@@ -222,6 +222,7 @@ define(function() {
          * @param {Backbone.Model} item
          */
         update: function(item) {
+            var heldItems = this.get('held');
             var position = _.findIndex(this.data, {id: item.id});
             var relatedItemIds = item.getRelatedIds();
             this.data[position] = {
@@ -230,8 +231,12 @@ define(function() {
                 next: item.get('next'),
                 vocabIds: item.get('vocabIds')
             };
-            for (var i = 0, length = relatedItemIds.length; i < length; i++)
-                this.get('held')[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 10;
+            //TODO: update the held time based on age of the item
+            for (var i = 0, length = relatedItemIds.length; i < length; i++) {
+                if (!heldItems[relatedItemIds[i]]) {
+                    heldItems[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 5;
+                }
+            }
             this.trigger('schedule:updated');
         }
     });
