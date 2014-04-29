@@ -5,7 +5,7 @@
  * @author Joshua McFarland
  */
 define([
-    'require.text!template/grading-buttons.html'
+    'require.text!template/prompt-grading-buttons.html'
 ], function(templateGradingButtons) {
     /**
      * @class PromptGradingButtons
