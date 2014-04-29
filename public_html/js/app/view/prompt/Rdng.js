@@ -45,6 +45,27 @@ define([
             event.preventDefault();
         },
         /**
+         * @method showHint
+         */
+        hideHint: function() {
+            var promptHint = this.$('#prompt-hint');
+            if (promptHint.hasClass('expanded')) {
+                var infoSection = this.$('#info-section');
+                var promptHintText = this.$('#prompt-hint-text');
+                var promptHintToggleButton = this.$('.button-toggle-hint');
+                promptHint.removeClass('expanded');
+                promptHint.addClass('collapsed');
+                infoSection.animate({
+                    height: 45
+                }, function() {
+                    promptHint.hide();
+                    promptHintText.show();
+                    promptHintToggleButton.addClass('fa-arrow-circle-down');
+                    promptHintToggleButton.removeClass('fa-arrow-circle-up');
+                });
+            }
+        },
+        /**
          * @method remove
          */
         remove: function() {
@@ -121,32 +142,22 @@ define([
             this.$('#question').hide();
             this.$('#answer').show('fade', 200);
             this.$('#question-text').html('Definition:');
+            this.showHint();
             Prompt.gradingButtons.show().select(this.review.getReviewAt().score).expand();
             if (this.review.isLast() && skritter.user.settings.get('audio'))
                 this.review.getBaseVocab().playAudio();
             return this;
         },
         /**
-         * @method toggleHint
-         * @param {Object} event
+         * @method showHint
          */
-        toggleHint: function(event) {
-            var infoSection = this.$('#info-section');
+        showHint: function() {
             var promptHint = this.$('#prompt-hint');
-            var promptHintText = this.$('#prompt-hint-text');
-            var promptHintToggleButton = this.$('.button-toggle-hint');
-            if (promptHint.hasClass('expanded')) {
-                promptHint.removeClass('expanded');
-                promptHint.addClass('collapsed');
-                infoSection.animate({
-                    height: 45
-                }, function() {
-                    promptHint.hide();
-                    promptHintText.show();
-                    promptHintToggleButton.addClass('fa-arrow-circle-down');
-                    promptHintToggleButton.removeClass('fa-arrow-circle-up');
-                });
-            } else {
+            if (promptHint.hasClass('collapsed')) {
+                var infoSection = this.$('#info-section');
+                var promptHint = this.$('#prompt-hint');
+                var promptHintText = this.$('#prompt-hint-text');
+                var promptHintToggleButton = this.$('.button-toggle-hint');
                 promptHint.removeClass('collapsed');
                 promptHint.addClass('expanded');
                 promptHint.show();
@@ -158,7 +169,16 @@ define([
                     promptHintToggleButton.removeClass('fa-arrow-circle-down');
                 });
             }
-            event.preventDefault();
+        },
+        /**
+         * @method toggleHint
+         */
+        toggleHint: function() {
+            if (this.$('#prompt-hint').hasClass('expanded')) {
+                this.hideHint();
+            } else {
+                this.showHint();
+            }
         }
     });
     
