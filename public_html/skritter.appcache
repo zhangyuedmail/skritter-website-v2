@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Mon Apr 28 2014 21:27:38 GMT+0800 (China Standard Time)
+# Time: Tue Apr 29 2014 13:15:37 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -22,12 +22,12 @@ template/admin-param-editor.html
 template/component-list-section-row-table.html
 template/component-list-section-table.html
 template/component-list-table.html
-template/grading-buttons.html
 template/home-logged-in.html
 template/home-logged-out.html
 template/login.html
 template/modals.html
 template/prompt-defn.html
+template/prompt-grading-buttons.html
 template/prompt-rdng.html
 template/prompt-rune.html
 template/prompt-tone.html

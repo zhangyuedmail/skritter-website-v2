@@ -155,7 +155,6 @@ define([
             var promptHint = this.$('#prompt-hint');
             if (promptHint.hasClass('collapsed')) {
                 var infoSection = this.$('#info-section');
-                var promptHint = this.$('#prompt-hint');
                 var promptHintText = this.$('#prompt-hint-text');
                 var promptHintToggleButton = this.$('.button-toggle-hint');
                 promptHint.removeClass('collapsed');
