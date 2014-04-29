@@ -113,9 +113,6 @@ define([
             this.trigger('sync', this.syncing);
             console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
             if (lastItemSync === 0 || options.downloadAll) {
-                skritter.modal.show('download')
-                        .set('.modal-title', 'DOWNLOADING ACCOUNT')
-                        .progress(100);
                 requests.push({
                     path: 'api/v' + skritter.api.get('version') + '/vocablists',
                     method: 'GET',
@@ -133,21 +130,23 @@ define([
                     spawner: true
                 });
             }
-            requests.push({
-                path: 'api/v' + skritter.api.get('version') + '/items',
-                method: 'GET',
-                params: {
-                    sort: 'changed',
-                    offset: lastItemSync,
-                    include_vocabs: 'true',
-                    include_strokes: 'true',
-                    include_sentences: 'true',
-                    include_heisigs: 'true',
-                    include_top_mnemonics: 'true',
-                    include_decomps: 'true'
-                },
-                spawner: true
-            });
+            if (lastItemSync >= 0) {
+                requests.push({
+                    path: 'api/v' + skritter.api.get('version') + '/items',
+                    method: 'GET',
+                    params: {
+                        sort: 'changed',
+                        offset: lastItemSync,
+                        include_vocabs: 'true',
+                        include_strokes: 'true',
+                        include_sentences: 'true',
+                        include_heisigs: 'true',
+                        include_top_mnemonics: 'true',
+                        include_decomps: 'true'
+                    },
+                    spawner: true
+                });
+            }
             if (lastVocabSync !== 0 && moment(lastVocabSync * 1000).add('hours', 12).valueOf() / 1000 <= now) {
                 requests.push({
                     path: 'api/v' + skritter.api.get('version') + '/vocabs',
@@ -236,7 +235,6 @@ define([
                     this.set('lastVocabSync', now);
                 this.syncing = false;
                 this.trigger('sync', this.syncing);
-                skritter.modal.hide();
                 if (typeof callback === 'function')
                     callback();
             }, this));

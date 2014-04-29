@@ -16,6 +16,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
+            document.title = "Skritter - Test";
             this.$el.html(templateTest);
             require(['jasmine-boot'], function() {
                 require([

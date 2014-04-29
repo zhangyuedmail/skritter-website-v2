@@ -93,9 +93,11 @@ define([
                 return false;
             }
             skritter.user.settings.setActiveParts(Settings.activeParts);
+            skritter.modal.show('loading').set('.modal-body', 'Rescheduling');
             skritter.user.scheduler.load(function() {
                 skritter.user.scheduler.sort();
                 skritter.router.navigate('study', {trigger: true, replace: true});
+                skritter.modal.hide();
             });
             event.preventDefault();
         }

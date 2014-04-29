@@ -27,11 +27,16 @@ define([
          */
         render: function() {
             if (skritter.user.isLoggedIn()) {
+                document.title = "Skritter - " + skritter.user.settings.get('name');
                 this.$el.html(templateHomeLoggedIn);
                 this.$('#user-avatar').html(skritter.user.settings.getAvatar('img-thumbnail'));
                 this.$('#user-due-count').text(skritter.user.scheduler.getDueCount(true));
-                this.$('#user-id').text(skritter.user.id);
+                this.$('#user-id').text(skritter.user.settings.get('name'));
+                if (skritter.user.sync.syncing) {
+                    this.toggleSyncButton(true);
+                }
             } else {
+                document.title = "Skritter - Learn to Write Chinese and Japanese Characters";
                 this.$el.html(templateHomeLoggedOut);
                 if (Home.languageCode) {
                     this.$('#language-text').text(Home.languageCode === 'zh' ? '中文' : '日本語');
@@ -125,7 +130,9 @@ define([
                 skritter.modal.show('download')
                         .set('.modal-title', 'SYNCING')
                         .progress(100);
-                skritter.user.sync.changedItems();
+                skritter.user.sync.changedItems(function() {
+                    skritter.modal.hide();
+                });
             }
         },
         /**

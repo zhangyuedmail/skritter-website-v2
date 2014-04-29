@@ -54,6 +54,9 @@ define([
             var password = this.$('#password').val();
             skritter.user.login(username, password, _.bind(function(result) {
                 if (result.statusCode === 200) {
+                    skritter.modal.show('download')
+                            .set('.modal-title', 'DOWNLOADING ACCOUNT')
+                            .progress(100);
                     skritter.user.sync.changedItems(function() {
                         document.location.href = '';
                     });
