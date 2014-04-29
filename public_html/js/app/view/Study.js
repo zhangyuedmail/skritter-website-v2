@@ -150,12 +150,13 @@ define([
          * @method updateAudioButtonState
          */
         updateAudioButtonState: function() {
+            console.log(this.prompt.review.getBaseVocab().has('audio'));
             if (this.prompt && this.prompt.review.getBaseVocab().has('audio')) {
-                this.$('.button-audio span').removeClass('fa fa-volume-off');
-                this.$('.button-audio span').addClass('fa fa-volume-up');
+                this.$('.button-audio i').removeClass('fa fa-volume-off');
+                this.$('.button-audio i').addClass('fa fa-volume-up');
             } else {
-                this.$('.button-audio span').removeClass('fa fa-volume-up');
-                this.$('.button-audio span').addClass('fa fa-volume-off');
+                this.$('.button-audio i').removeClass('fa fa-volume-up');
+                this.$('.button-audio i').addClass('fa fa-volume-off');
             }
         },
         /**
