@@ -30,7 +30,7 @@ define([
                 this.$el.html(templateHomeLoggedIn);
                 this.$('#user-avatar').html(skritter.user.settings.getAvatar('img-thumbnail'));
                 this.$('#user-due-count').text(skritter.user.scheduler.getDueCount(true));
-                this.$('#user-id').text(skritter.user.id);
+                this.$('#user-id').text(skritter.user.settings.get('name'));
             } else {
                 this.$el.html(templateHomeLoggedOut);
                 if (Home.languageCode) {
