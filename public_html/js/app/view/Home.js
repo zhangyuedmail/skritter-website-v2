@@ -55,7 +55,15 @@ define([
          * @param {Object} event
          */
         logout: function(event) {
-            skritter.user.logout();
+            skritter.modal.show('logout');
+            skritter.modal.element('.modal-footer').hide();
+            skritter.modal.element('.modal-button-logout').on('vclick', function() {
+                skritter.modal.element('.modal-footer').show();
+                skritter.modal.element(':input').prop('disabled', true);
+                skritter.modal.element('.message').addClass('text-info');
+                skritter.modal.element('.message').html("<i class='fa fa-spin fa-spinner'></i> Logging Out");
+                skritter.user.logout();
+            });
             event.preventDefault();
         },
         /**

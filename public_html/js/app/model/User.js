@@ -115,9 +115,6 @@ define([
         logout: function() {
             async.series([
                 function(callback) {
-                    skritter.modal.show('loading', callback).set('.modal-body', 'LOGGING OUT');
-                },
-                function(callback) {
                     skritter.storage.destroy(callback);
                 },
                 function(callback) {
