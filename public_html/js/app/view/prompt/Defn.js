@@ -56,7 +56,7 @@ define([
                 promptHint.removeClass('expanded');
                 promptHint.addClass('collapsed');
                 infoSection.animate({
-                    height: 55
+                    height: skritter.settings.isPortrait() ? 55 : skritter.settings.canvasSize()
                 }, function() {
                     promptHint.hide();
                     promptHintText.show();
