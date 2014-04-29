@@ -22,10 +22,15 @@ define([
             this.$el.html(templateDefn);
             Prompt.prototype.render.call(this);
             this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
-            this.$('.button-toggle-hint').on('vclick', _.bind(this.toggleHint, this));
             this.resize();
             this.show();
             return this;
+        },
+        /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick #info-section': 'toggleHint'
         },
         /**
          * @method handleClick
@@ -53,7 +58,7 @@ define([
             Prompt.prototype.resize.call(this);
             var canvasSize = skritter.settings.canvasSize();
             var contentHeight = skritter.settings.contentHeight();
-            var contentWidth = skritter.settings.contentWidth();            
+            var contentWidth = skritter.settings.contentWidth();
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
@@ -63,8 +68,7 @@ define([
                 });
                 this.$('#info-section').css({
                     height: '45px',
-                    //height: contentHeight * 0.7,
-                    //'max-height': '30%',
+                    'max-height': '30%',
                     width: ''
                 });
                 this.$('#input-section').css({
@@ -127,6 +131,33 @@ define([
          * @param {Object} event
          */
         toggleHint: function(event) {
+            var infoSection = this.$('#info-section');
+            var promptHint = this.$('#prompt-hint');
+            var promptHintText = this.$('#prompt-hint-text');
+            var promptHintToggleButton = this.$('.button-toggle-hint');
+            if (promptHint.hasClass('expanded')) {
+                promptHint.removeClass('expanded');
+                promptHint.addClass('collapsed');
+                infoSection.animate({
+                    height: 45
+                }, function() {
+                    promptHint.hide();
+                    promptHintText.show();
+                    promptHintToggleButton.addClass('fa-arrow-circle-down');
+                    promptHintToggleButton.removeClass('fa-arrow-circle-up');
+                });
+            } else {
+                promptHint.removeClass('collapsed');
+                promptHint.addClass('expanded');
+                promptHint.show();
+                promptHintText.hide();
+                infoSection.animate({
+                    height: infoSection[0].scrollHeight + 5
+                }, function() {
+                    promptHintToggleButton.addClass('fa-arrow-circle-up');
+                    promptHintToggleButton.removeClass('fa-arrow-circle-down');
+                });
+            }
             event.preventDefault();
         }
     });
