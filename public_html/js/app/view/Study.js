@@ -95,12 +95,21 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
+            var self = this;
             skritter.timer.reset();
-            var scheduledItem = skritter.user.scheduler.getNext();
-            skritter.user.data.items.loadItem(scheduledItem.id, _.bind(function(item) {
-                this.checkAutoSync();
-                this.loadPrompt(item.createReview());
-            }, this));
+            function next() {
+                var scheduledItem = skritter.user.scheduler.getNext();
+                skritter.user.data.items.loadItem(scheduledItem.id, function(item) {
+                    if (item) {
+                        self.checkAutoSync();
+                        self.loadPrompt(item.createReview());
+                    } else {
+                        skritter.user.scheduler.splice(0);
+                        next();
+                    }
+                });
+            }
+            next();
         },
         /**
          * @method playAudio

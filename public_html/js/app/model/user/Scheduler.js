@@ -218,6 +218,14 @@ define(function() {
             return this.data;
         },
         /**
+         * @method splice
+         * @param {Number} position
+         * @returns {Object}
+         */
+        splice: function(position) {
+            return this.data.splice(position, 1);
+        },
+        /**
          * @method update
          * @param {Backbone.Model} item
          */
