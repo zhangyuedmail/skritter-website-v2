@@ -31,10 +31,10 @@ define([
          * @property {Object} events
          */
         events: {
-            'click.GradingButtons #grade1': 'handleButtonClick',
-            'click.GradingButtons #grade2': 'handleButtonClick',
-            'click.GradingButtons #grade3': 'handleButtonClick',
-            'click.GradingButtons #grade4': 'handleButtonClick'
+            'vclick.GradingButtons #grade1': 'handleButtonClick',
+            'vclick.GradingButtons #grade2': 'handleButtonClick',
+            'vclick.GradingButtons #grade3': 'handleButtonClick',
+            'vclick.GradingButtons #grade4': 'handleButtonClick'
         },
         /**
          * @method collapse
