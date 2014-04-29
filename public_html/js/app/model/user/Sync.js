@@ -87,21 +87,24 @@ define([
         /**
          * @method changedItems
          * @param {Function} callback
-         * @param {Boolean} downloadAll
+         * @param {Boolean} options
          */
-        changedItems: function(callback, downloadAll) {
+        changedItems: function(callback, options) {
             if (this.syncing) {
                 if (typeof callback === 'function')
                     callback();
-                return;
+                return false;
             }
+            options = options ? options : {};
+            options.downloadAll = options.downloadAll ? options.downloadAll : false;
+            options.holdReviews = options.holdReviews ? options.holdReviews : 0;
             var requests = [];
             var downloadedRequests = 0;
             var responseSize = 0;
-            var lastItemSync = downloadAll ? 0 : this.get('lastItemSync');
-            var lastSRSConfigSync = downloadAll ? 0 : this.get('lastSRSConfigSync');
-            var lastReviewErrorCheck = downloadAll ? 0 : this.get('lastReviewErrorCheck');
-            var lastVocabSync = downloadAll ? 0 : this.get('lastVocabSync');
+            var lastItemSync = options.downloadAll ? 0 : this.get('lastItemSync');
+            var lastSRSConfigSync = options.downloadAll ? 0 : this.get('lastSRSConfigSync');
+            var lastReviewErrorCheck = options.downloadAll ? 0 : this.get('lastReviewErrorCheck');
+            var lastVocabSync = options.downloadAll ? 0 : this.get('lastVocabSync');
             var updatedSRSConfigs = false;
             var updatedReviewErrors = false;
             var updatedVocabs = false;
@@ -109,7 +112,7 @@ define([
             this.syncing = true;
             this.trigger('sync', this.syncing);
             console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
-            if (lastItemSync === 0 || downloadAll) {
+            if (lastItemSync === 0 || options.downloadAll) {
                 skritter.modal.show('download')
                         .set('.modal-title', 'DOWNLOADING ACCOUNT')
                         .progress(100);
@@ -180,7 +183,7 @@ define([
             async.waterfall([
                 function(callback) {
                     if (skritter.user.data.reviews.length > 0) {
-                        skritter.user.data.reviews.save(callback);
+                        skritter.user.data.reviews.save(callback, options.holdReviews);
                     } else {
                         callback();
                     }

@@ -36,6 +36,17 @@ define([
             'click #view-study .button-study-settings': 'navigateStudySettings'
         },
         /**
+         * @method checkAutoSync
+         * @returns {Boolean}
+         */
+        checkAutoSync: function() {
+            if (skritter.user.settings.get('autoSync') && skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
+                skritter.user.sync.changedItems(null, {holdReviews: 1});
+                return true;
+            }
+            return false;
+        },
+        /**
          * @method loadPrompt
          * @param {Backbone.Model} review
          */
@@ -79,6 +90,7 @@ define([
             skritter.timer.reset();
             var scheduledItem = skritter.user.scheduler.getNext();
             skritter.user.data.items.loadItem(scheduledItem.id, _.bind(function(item) {
+                this.checkAutoSync();
                 this.loadPrompt(item.createReview());
             }, this));
         },
