@@ -17,6 +17,7 @@ define([
         defaults: {
             addItemOffset: 0,
             lastItemSync: 0,
+            lastReviewErrorCheck: 0,
             lastSRSConfigSync: 0,
             lastVocabSync: 0
         },
@@ -89,8 +90,7 @@ define([
          * @param {Boolean} downloadAll
          */
         changedItems: function(callback, downloadAll) {
-            var self = this;
-            if (self.syncing) {
+            if (this.syncing) {
                 if (typeof callback === 'function')
                     callback();
                 return;
@@ -100,12 +100,14 @@ define([
             var responseSize = 0;
             var lastItemSync = downloadAll ? 0 : this.get('lastItemSync');
             var lastSRSConfigSync = downloadAll ? 0 : this.get('lastSRSConfigSync');
+            var lastReviewErrorCheck = downloadAll ? 0 : this.get('lastReviewErrorCheck');
             var lastVocabSync = downloadAll ? 0 : this.get('lastVocabSync');
             var updatedSRSConfigs = false;
+            var updatedReviewErrors = false;
             var updatedVocabs = false;
             var now = skritter.fn.getUnixTime();
-            self.syncing = true;
-            self.trigger('sync', self.syncing, true);
+            this.syncing = true;
+            this.trigger('sync', this.syncing);
             console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
             if (lastItemSync === 0 || downloadAll) {
                 skritter.modal.show('download')
@@ -167,6 +169,14 @@ define([
                 });
                 updatedSRSConfigs = true;
             }
+            if (lastReviewErrorCheck > 0) {
+                requests.push({
+                    path: 'api/v' + skritter.api.get('version') + '/reviews/errors',
+                    method: 'GET',
+                    offset: lastReviewErrorCheck
+                });
+                updatedReviewErrors = true;
+            }
             async.waterfall([
                 function(callback) {
                     if (skritter.user.data.reviews.length > 0) {
@@ -196,6 +206,10 @@ define([
                                     skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
                                 if (lastItemSync !== 0 && result.Items)
                                     skritter.user.scheduler.insert(result.Items);
+                                if (result.ReviewErrors && result.ReviewErrors.length > 0) {
+                                    window.alert("It looks like there are some review errors!");
+                                    console.log("REVIEW ERRORS", result.ReviewErrors);
+                                }
                                 skritter.user.data.insert(result, function() {
                                     window.setTimeout(request, 2000);
                                 });
@@ -208,19 +222,21 @@ define([
                     }
                     request();
                 }
-            ], function() {
+            ], _.bind(function() {
                 console.log('FINISHED SYNCING AT', moment(now * 1000).format('YYYY-MM-DD H:mm:ss'));
-                self.set('lastItemSync', now);
+                this.set('lastItemSync', now);
                 if (updatedSRSConfigs)
-                    self.set('lastSRSConfigSync', now);
+                    this.set('lastSRSConfigSync', now);
+                if (updatedReviewErrors)
+                    this.set('lastReviewErrorCheck', now);
                 if (updatedVocabs)
-                    self.set('lastVocabSync', now);
-                self.syncing = false;
-                self.trigger('sync', self.syncing, false);
+                    this.set('lastVocabSync', now);
+                this.syncing = false;
+                this.trigger('sync', this.syncing);
                 skritter.modal.hide();
                 if (typeof callback === 'function')
                     callback();
-            });
+            }, this));
         }
     });
 
