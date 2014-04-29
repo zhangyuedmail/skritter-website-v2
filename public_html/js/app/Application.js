@@ -49,6 +49,9 @@ define([
                 navigator.splashscreen.hide();
             }
             console.log('Application Initialized');
+            if (skritter.user.isLoggedIn()) {
+                skritter.user.sync.changedItems();
+            }
         });
     };
     /**
@@ -140,7 +143,9 @@ define([
                 function(callback) {
                     skritter.user.data.loadResources(callback);
                 }
-            ], callback);
+            ], function() {
+                callback();
+            });
         } else {
             callback();
         }
