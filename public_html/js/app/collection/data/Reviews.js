@@ -30,11 +30,13 @@ define([
         },
         /**
          * @method getReviews
+         * @param {Number} startFrom
          * @returns {Array}
          */
-        getReviews: function() {
+        getReviews: function(startFrom) {
             var reviews = [];
-            for (var i = 0, length = this.length; i < length; i++)
+            startFrom = startFrom ? startFrom : 0;
+            for (var i = startFrom, length = this.length; i < length; i++)
                 reviews = reviews.concat(this.at(i).get('reviews'));
             return reviews;
         },
@@ -50,10 +52,11 @@ define([
         },
         /**
          * @method save
+         * @param {Number} startFrom
          * @param {Function} callback
          */
-        save: function(callback) {
-            var reviews = this.getReviews();
+        save: function(callback, startFrom) {
+            var reviews = this.getReviews(startFrom);
             if (reviews.length > 0) {
                 async.waterfall([
                     function(callback) {
