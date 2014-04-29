@@ -81,6 +81,7 @@ define([
             } else {
                 this.toggle();
             }
+            event.preventDefault();
         },
         /**
          * @method hide
