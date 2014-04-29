@@ -23,6 +23,10 @@ define([
         render: function() {
             this.$el.html(templateStudy);
             skritter.timer.setElement(this.$('#timer')).render();
+            if (skritter.user.settings.get('hideTimer'))
+                this.$('#timer').parent().hide();
+            if (skritter.user.settings.get('hideDueCount'))
+                this.$('#items-due').parent().hide();
             skritter.user.scheduler.sort();
             if (skritter.user.scheduler.data.length > 4) {
                 this.nextPrompt();
