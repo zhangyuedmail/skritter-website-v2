@@ -275,6 +275,10 @@ module.exports = function(grunt) {
     grunt.registerTask('appcache', [
         'manifest:root'
     ]);
+    grunt.registerTask('build-run-android', [
+        'build-run-android-ja',
+        'build-run-android-zh'
+    ]);
     grunt.registerTask('build-run-android-ja', [
         'jshint:root',
         'clean:build-cordova-www-ja',
