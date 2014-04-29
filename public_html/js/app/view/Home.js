@@ -32,6 +32,9 @@ define([
                 this.$('#user-avatar').html(skritter.user.settings.getAvatar('img-thumbnail'));
                 this.$('#user-due-count').text(skritter.user.scheduler.getDueCount(true));
                 this.$('#user-id').text(skritter.user.settings.get('name'));
+                if (skritter.user.sync.syncing) {
+                    this.toggleSyncButton(true);
+                }
             } else {
                 document.title = "Skritter - Learn to Write Chinese and Japanese Characters";
                 this.$el.html(templateHomeLoggedOut);
@@ -127,7 +130,9 @@ define([
                 skritter.modal.show('download')
                         .set('.modal-title', 'SYNCING')
                         .progress(100);
-                skritter.user.sync.changedItems();
+                skritter.user.sync.changedItems(function() {
+                    skritter.modal.hide();
+                });
             }
         },
         /**
