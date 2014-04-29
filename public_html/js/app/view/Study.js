@@ -24,7 +24,11 @@ define([
             this.$el.html(templateStudy);
             skritter.timer.setElement(this.$('#timer')).render();
             skritter.user.scheduler.sort();
-            this.nextPrompt();
+            if (skritter.user.scheduler.data.length > 4) {
+                this.nextPrompt();
+            } else {
+                this.showAddItemsModal();
+            }
             return this;
         },
         /**
@@ -128,7 +132,7 @@ define([
                 $(this).select();
                 event.preventDefault();
             });
-            skritter.modal.element('.button-add').on('vclick', function() {
+            skritter.modal.element('.button-add').on('vclick', function(event) {
                 var limit = skritter.modal.element('.item-limit').val();
                 skritter.modal.element('.modal-footer').show();
                 if (limit >= 1 && limit <= 100) {
@@ -143,8 +147,11 @@ define([
                     skritter.modal.element('.message').addClass('text-danger');
                     skritter.modal.element('.message').text('Must be between 1 and 100.');
                 }
+                event.preventDefault();
             });
-            event.preventDefault();
+            if (event) {
+                event.preventDefault();
+            }
         },
         /**
          * @method updateAudioButtonState
