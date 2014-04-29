@@ -56,7 +56,7 @@ define([
                 promptHint.removeClass('expanded');
                 promptHint.addClass('collapsed');
                 infoSection.animate({
-                    height: 45
+                    height: 55
                 }, function() {
                     promptHint.hide();
                     promptHintText.show();
@@ -88,7 +88,7 @@ define([
                     width: ''
                 });
                 this.$('#info-section').css({
-                    height: '45px', 
+                    height: '55px', 
                     'max-height': '30%',
                     width: ''
                 });
@@ -126,6 +126,7 @@ define([
             this.review.set('finished', false);
             this.$('#answer').hide();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
+            this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReading());
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());

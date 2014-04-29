@@ -171,6 +171,7 @@ body {
 /*** PROMPT: INFO SECTION ***/
 #info-section {
     overflow-y: auto;
+    padding-bottom: 20px;
     position: absolute;
     z-index: 1002;
 }
@@ -187,6 +188,11 @@ body {
     cursor: pointer;
     margin-top: -3px;
     right: 10px;
+    position: absolute;
+}
+#info-section #prompt-stats {
+    bottom: 2px;
+    font-size: 12px;
     position: absolute;
 }
 .prompt-container.landscape #info-section { 

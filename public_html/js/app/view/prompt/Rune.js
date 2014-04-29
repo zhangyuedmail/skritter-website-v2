@@ -189,6 +189,7 @@ define([
             Rune.canvas.enableInput();
             this.review.set('finished', false);
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
+            this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReading());
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getMaskedSentenceWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());

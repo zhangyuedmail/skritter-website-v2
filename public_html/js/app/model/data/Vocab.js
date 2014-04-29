@@ -218,7 +218,7 @@ define([
          */
         getStyle: function() {
             if (this.has('style') && this.get('style') !== 'both')
-                return this.get('style').toUpperCase();
+                return this.get('style');
             return '';
         },
         /**
