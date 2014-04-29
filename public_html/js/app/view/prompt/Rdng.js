@@ -171,13 +171,15 @@ define([
         },
         /**
          * @method toggleHint
+         * @param {Object} event
          */
-        toggleHint: function() {
+        toggleHint: function(event) {
             if (this.$('#prompt-hint').hasClass('expanded')) {
                 this.hideHint();
             } else {
                 this.showHint();
             }
+            event.preventDefault();
         }
     });
     

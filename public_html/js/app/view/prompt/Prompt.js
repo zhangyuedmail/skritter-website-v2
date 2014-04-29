@@ -32,11 +32,6 @@ define([
             return this;
         },
         /**
-         * @property {Object} events
-         */
-        events: {
-        },
-        /**
          * @method handleGradingSelected
          * @param {Number} selectedGrade
          */
