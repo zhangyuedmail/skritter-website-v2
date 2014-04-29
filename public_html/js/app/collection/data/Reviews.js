@@ -55,10 +55,22 @@ define([
         save: function(callback) {
             var reviews = this.getReviews();
             if (reviews.length > 0) {
-                skritter.api.postReviews(reviews, _.bind(function(postedReviews) {
-                    console.log('POSTED REVIEWS', postedReviews);
-                    this.remove(postedReviews);
-                    callback();
+                async.waterfall([
+                    function(callback) {
+                        skritter.api.postReviews(reviews, function(posted) {
+                            callback(null, _.uniq(_.pluck(posted, 'wordGroup')));
+                        });
+                    },
+                    function(reviewIds, callback) {
+                        skritter.storage.remove('reviews', reviewIds, function() {
+                            callback(null, reviewIds);
+                        });
+                    }
+                ], _.bind(function(error, reviewIds) {
+                    if (reviewIds && !error)
+                        this.remove(reviewIds);
+                    if (typeof callback === 'function')
+                        callback();
                 }, this));
             } else {
                 callback();
