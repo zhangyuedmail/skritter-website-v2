@@ -195,6 +195,8 @@ define([
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position')));
             if (skritter.user.settings.get('teachingMode') && this.review.getBaseItem().isNew())
                 this.teach();
+            if (this.review.isFirst() && skritter.user.settings.get('audio'))
+                this.review.getBaseVocab().playAudio();
             return this;
         },
         /**
@@ -225,6 +227,8 @@ define([
             } else {
                 Prompt.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             }
+            if (skritter.user.settings.get('audio'))
+                this.review.getVocabAt().playAudio();
             return this;
         },
         /**

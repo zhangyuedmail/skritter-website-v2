@@ -118,7 +118,8 @@ define([
             this.$('#answer').show('fade', 200);
             this.$('#question-text').html('Definition:');
             Prompt.gradingButtons.show().select(this.review.getReviewAt().score).expand();
-            this.review.set('finished', true);
+            if (this.review.isLast() && skritter.user.settings.get('audio'))
+                this.review.getBaseVocab().playAudio();
             return this;
         },
         /**

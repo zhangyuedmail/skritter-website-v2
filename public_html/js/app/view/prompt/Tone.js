@@ -176,6 +176,11 @@ define([
             this.review.set('finished', true);
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position') + 1, skritter.user.settings.get('hideReading')));
             Prompt.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
+            if (this.review.isLast() && skritter.user.settings.get('audio')) {
+                this.review.getBaseVocab().playAudio();
+            } else if (skritter.user.settings.get('audio')) {
+                this.review.getVocabAt().playAudio();
+            }
             return this;
         }
     });

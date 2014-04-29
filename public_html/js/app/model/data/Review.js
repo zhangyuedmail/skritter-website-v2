@@ -148,6 +148,7 @@ define(function() {
          * @returns {Backbone.Model}
          */
         getVocabAt: function(position) {
+            position = position || position === 0 ? position : this.get('position');
             return skritter.user.data.items.get(this.getReviewAt(position).itemId).getVocab();
         },
         /**
