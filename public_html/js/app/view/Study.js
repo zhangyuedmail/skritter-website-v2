@@ -21,6 +21,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
+            document.title = "Skritter - Study";
             this.$el.html(templateStudy);
             skritter.timer.setElement(this.$('#timer')).render();
             if (skritter.user.settings.get('hideTimer'))
