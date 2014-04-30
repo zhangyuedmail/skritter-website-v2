@@ -46,7 +46,7 @@ define([
          */
         handleClick: function(event) {
             if (this.review.get('finished')) {
-                Prompt.gradingButtons.trigger('selected');
+                Prompt.gradingButtons.triggerSelected();
             }
             event.preventDefault();
         },
