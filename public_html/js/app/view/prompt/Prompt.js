@@ -49,6 +49,9 @@ define([
                 this.next();
             }
         },
+        /**
+         * @method next
+         */
         next: function() {
             skritter.timer.reset();
             this.review.next();

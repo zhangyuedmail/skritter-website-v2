@@ -124,10 +124,22 @@ define(function() {
         },
         /**
          * @method getNext
-         * @returns {Object}
+         * @param {Function} callback
          */
-        getNext: function() {
-            return this.data[0];
+        getNext: function(callback) {
+            var position = 0;
+            function next() {
+                var item = skritter.user.scheduler.data[position];
+                skritter.user.data.items.loadItem(item.id, function(item) {
+                    if (item) {
+                        callback(item);
+                    } else {
+                        position++;
+                        next();
+                    }
+                });
+            }
+            next();
         },
         /**
          * @method insert

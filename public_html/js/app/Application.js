@@ -49,9 +49,6 @@ define([
                 navigator.splashscreen.hide();
             }
             console.log('Application Initialized');
-            if (skritter.user.isLoggedIn()) {
-                skritter.user.sync.changedItems();
-            }
         });
     };
     /**

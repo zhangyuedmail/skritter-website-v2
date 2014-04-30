@@ -57,29 +57,14 @@ define([
         },
         /**
          * @method loadPrompt
-         * @param {Backbone.Model} review
+         * @param {Backbone.View} prompt
          */
-        loadPrompt: function(review) {
+        loadPrompt: function(prompt) {
             if (this.prompt) {
                 this.prompt.remove();
                 this.prompt = null;
             }
-            switch (review.get('part')) {
-                case 'defn':
-                    this.prompt = new Defn();
-                    break;
-                case 'rdng':
-                    this.prompt = new Rdng();
-                    break;
-                case 'rune':
-                    this.prompt = new Rune();
-                    break;
-                case 'tone':
-                    this.prompt = new Tone();
-                    break;
-            }
-            this.prompt.set(review);
-            this.prompt.setElement(this.$('#content-container')).render();
+            this.prompt = prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
             this.updateAudioButtonState();
             this.updateDueCount();
@@ -96,21 +81,28 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            var self = this;
+            this.checkAutoSync();
             skritter.timer.reset();
-            function next() {
-                var scheduledItem = skritter.user.scheduler.getNext();
-                skritter.user.data.items.loadItem(scheduledItem.id, function(item) {
-                    if (item) {
-                        self.checkAutoSync();
-                        self.loadPrompt(item.createReview());
-                    } else {
-                        skritter.user.scheduler.splice(0);
-                        next();
-                    }
-                });
-            }
-            next();
+            skritter.user.scheduler.getNext(_.bind(function(item) {
+                var review = item.createReview();
+                var prompt = null;
+                switch (review.get('part')) {
+                    case 'defn':
+                        prompt = new Defn();
+                        break;
+                    case 'rdng':
+                        prompt = new Rdng();
+                        break;
+                    case 'rune':
+                        prompt = new Rune();
+                        break;
+                    case 'tone':
+                        prompt = new Tone();
+                        break;
+                }
+                prompt.set(review);
+                this.loadPrompt(prompt);
+            }, this));
         },
         /**
          * @method playAudio
