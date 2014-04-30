@@ -253,8 +253,8 @@ define(function() {
                 self.$('#canvas-input').on('vmouseup.Input', up);
             }
             function move() {
-                var point = new createjs.Point(stage.mouseX, stage.mouseY);
-                var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
+                var point = {x: stage.mouseX, y: stage.mouseY};
+                var midPoint = {x: oldPoint.x + point.x >> 1, y: oldPoint.y + point.y >> 1};
                 marker.graphics.clear()
                         .setStrokeStyle(self.strokeSize, self.strokeCapStyle, self.strokeJointStyle)
                         .beginStroke(self.strokeColor)
