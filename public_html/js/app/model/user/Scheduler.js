@@ -197,6 +197,7 @@ define(function() {
             var now = skritter.fn.getUnixTime();
             var held = this.get('held');
             this.data = _.sortBy(this.data, function(item) {
+                //deprioritize items being held
                 var heldUntil = held[item.id];
                 if (heldUntil && heldUntil >= now) {
                     item.readiness = 0;
@@ -204,11 +205,8 @@ define(function() {
                 } else if (heldUntil) {
                     delete held[item.id];
                 }
-                if (!item.last && (item.next - now) > 600) {
-                    item.readiness = 0.2;
-                    return -item.readiness;
-                }
-                if (!item.last || (item.next - item.last) === 1) {
+                //randomize study of newly added items
+                if (!item.last && item.next - now < 0) {
                     item.readiness = self.randomizeInterval(99999999);
                     return -item.readiness;
                 }
