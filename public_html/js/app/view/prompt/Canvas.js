@@ -17,7 +17,10 @@ define(function() {
             this.size = skritter.settings.canvasSize();
             this.gridColor = 'grey';
             this.lastMouseDownEvent = null;
-            this.lastMouseUpEvent = null;
+            this.mouseDownEvent = null;
+            this.mouseDownTimer = null;
+            this.mouseMoveEvent = null;
+            this.mouseUpEvent = null;
             this.strokeSize = 8;
             this.strokeCapStyle = 'round';
             this.strokeColor = '#000000';
@@ -41,9 +44,8 @@ define(function() {
             this.$el.html(this.container);
             this.$(this.container).append(this.stage.display.canvas);
             this.$(this.container).append(this.stage.input.canvas);
-            this.$('#canvas-input').on('taphold', _.bind(this.triggerCanvasTapHold, this));
-            this.$('#canvas-input').on('vmousedown', _.bind(this.triggerCanvasMouseDown, this));
-            this.$('#canvas-input').on('vmouseup', _.bind(this.triggerCanvasMouseUp, this));
+            this.$('#canvas-input').on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
+            this.$('#canvas-input').on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
             this.clear();
             return this;
         },
@@ -383,42 +385,60 @@ define(function() {
             this.trigger('canvas:click', event);
         },
         /**
-         * @method triggerCanvasDoubleTap
+         * @method triggerCanvasClickHold
          * @param {Object} event
          */
-        triggerCanvasDoubleTap: function(event) {
-            this.trigger('canvas:doubletap', event);
+        triggerCanvasClickHold: function(event) {
+            this.trigger('canvas:clickhold', event);
+        },
+        /**
+         * @method triggerCanvasDoubleClick
+         * @param {Object} event
+         */
+        triggerCanvasDoubleClick: function(event) {
+            this.trigger('canvas:doubleclick', event);
         },
         /**
          * @method triggerCanvasMouseDown
          * @param {Object} event
          */
         triggerCanvasMouseDown: function(event) {
-            this.lastMouseDownEvent = event;
+            this.mouseDownEvent = event;
             this.trigger('canvas:mousedown', event);
+            this.$('#canvas-input').on('vmousemove.Canvas', _.bind(function(event) {
+                this.mouseMoveEvent = event;
+            }, this));
+            this.mouseDownTimer = window.setTimeout(_.bind(function() {
+                var distance = 0;
+                if (this.mouseMoveEvent) {
+                    var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
+                    var endPosition = {x: this.mouseMoveEvent.pageX, y: this.mouseMoveEvent.pageY};
+                    distance = skritter.fn.distance(startPosition, endPosition);
+                }
+                if (distance <= 10) {
+                    this.triggerCanvasClickHold(event);
+                }
+            }, this), 1000);
         },
         /**
          * @method triggerClick
          * @param {Object} event
          */
         triggerCanvasMouseUp: function(event) {
-            this.lastMouseUpEvent = event;
-            var mouseDownPosition = {x: this.lastMouseDownEvent.pageX, y: this.lastMouseDownEvent.pageY};
-            var mouseUpPosition = {x: this.lastMouseUpEvent.pageX, y: this.lastMouseUpEvent.pageY};
-            var mouseDistance = skritter.fn.distance(mouseDownPosition, mouseUpPosition);
-            var mouseDuration = this.lastMouseUpEvent.timeStamp - this.lastMouseDownEvent.timeStamp;
-            if (mouseDistance <= 10 && mouseDuration > 20 && mouseDuration < 500) {
+            window.clearTimeout(this.mouseDownTimer);
+            this.$('#canvas-input').off('vmousemove.Canvas');
+            this.lastMouseDownEvent = this.mouseDownEvent;
+            this.mouseMoveEvent = null;
+            this.mouseUpEvent = event;
+            var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
+            var endPosition = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
+            var distance = skritter.fn.distance(startPosition, endPosition);
+            var duration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
+            if (distance <= 10 && (duration > 20 && duration < 500)) {
                 this.triggerCanvasClick(event);
             } else {
                 this.trigger('canvas:mouseup', event);
             }
-        },
-        /**
-         * @method triggerCanvasTapHold
-         * @param {Object} event
-         */
-        triggerCanvasTapHold: function(event) {
-            this.trigger('canvas:taphold', event);
         },
         /**
          * Enables the view to fire events when the canvas has been touched.

@@ -29,7 +29,7 @@ define([
             this.canvas = new Canvas();
             this.canvas.setElement(this.$('#writing-area'));
             this.listenTo(this.canvas, 'canvas:click', this.handleClick);
-            this.listenTo(this.canvas, 'canvas:taphold', this.handleTapHold);
+            this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHold);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
@@ -54,6 +54,14 @@ define([
             if (this.review.get('finished')) {
                 this.gradingButtons.triggerSelected();
             }
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickHold
+         * @param {Object} event
+         */
+        handleClickHold: function(event) {
+            this.reset();
             event.preventDefault();
         },
         /**
@@ -103,14 +111,6 @@ define([
                     }
                 }
             }
-        },
-        /**
-         * @method handleTapHold
-         * @param {Object} event
-         */
-        handleTapHold: function(event) {
-            this.reset();
-            event.preventDefault();
         },
         /**
          * @method remove
