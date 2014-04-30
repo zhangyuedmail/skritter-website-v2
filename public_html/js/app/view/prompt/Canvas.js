@@ -34,7 +34,7 @@ define(function() {
             this.stage.input = this.createInputStage();
             createjs.Ticker.addEventListener('tick', this.stage.display);
             createjs.Touch.enable(this.stage.input);
-            createjs.Ticker.setFPS(24);
+            createjs.Ticker.setFPS(200);
         },
         /**
          * @method render
@@ -405,6 +405,9 @@ define(function() {
         triggerCanvasMouseDown: function(event) {
             this.mouseDownEvent = event;
             this.trigger('canvas:mousedown', event);
+            if (this.lastMouseDownEvent && this.mouseDownEvent.timeStamp - this.lastMouseDownEvent.timeStamp < 200) {
+                this.triggerCanvasDoubleClick(event);
+            }
             this.$('#canvas-input').on('vmousemove.Canvas', _.bind(function(event) {
                 this.mouseMoveEvent = event;
             }, this));

@@ -30,6 +30,7 @@ define([
             this.canvas.setElement(this.$('#writing-area'));
             this.listenTo(this.canvas, 'canvas:click', this.handleClick);
             this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHold);
+            this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClick);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
@@ -65,10 +66,10 @@ define([
             event.preventDefault();
         },
         /**
-         * @method handleDoubleTap
+         * @method handleDoubleClick
          * @param {Object} event
          */
-        handleDoubleTap: function(event) {
+        handleDoubleClick: function(event) {
             if (!this.review.get('finished')) {
                 this.review.setReviewAt(null, 'score', 1);
                 this.canvas.drawShape('background', this.review.getCharacterAt().targets[0].getShape(null, '#999999'));
