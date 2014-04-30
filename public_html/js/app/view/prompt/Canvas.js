@@ -13,37 +13,39 @@ define(function() {
          */
         initialize: function() {
             this.grid = true;
-            Canvas.stage = {};
-            Canvas.size = skritter.settings.canvasSize();
-            Canvas.gridColor = 'grey';
-            Canvas.lastMouseDownEvent = null;
-            Canvas.lastMouseUpEvent = null;
-            Canvas.strokeSize = 8;
-            Canvas.strokeCapStyle = 'round';
-            Canvas.strokeColor = '#000000';
-            Canvas.strokeJointStyle = 'round';
-            Canvas.squigColor = '#000000';
-            Canvas.textColor = '#000000';
-            Canvas.textFont = 'Arial';
-            Canvas.textSize = '12px';
-            Canvas.container = this.createCanvasContainer();
-            Canvas.stage.display = this.createDisplayStage();
-            Canvas.stage.input = this.createInputStage();
-            createjs.Ticker.addEventListener('tick', Canvas.stage.display);
-            createjs.Touch.enable(Canvas.stage.input);
-            createjs.Ticker.setFPS(24);
+            this.stage = {};
+            this.size = skritter.settings.canvasSize();
+            this.gridColor = 'grey';
+            this.lastMouseDownEvent = null;
+            this.mouseDownEvent = null;
+            this.mouseDownTimer = null;
+            this.mouseMoveEvent = null;
+            this.mouseUpEvent = null;
+            this.strokeSize = 8;
+            this.strokeCapStyle = 'round';
+            this.strokeColor = '#000000';
+            this.strokeJointStyle = 'round';
+            this.squigColor = '#000000';
+            this.textColor = '#000000';
+            this.textFont = 'Arial';
+            this.textSize = '12px';
+            this.container = this.createCanvasContainer();
+            this.stage.display = this.createDisplayStage();
+            this.stage.input = this.createInputStage();
+            createjs.Ticker.addEventListener('tick', this.stage.display);
+            createjs.Touch.enable(this.stage.input);
+            createjs.Ticker.setFPS(200);
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.html(Canvas.container);
-            this.$(Canvas.container).append(Canvas.stage.display.canvas);
-            this.$(Canvas.container).append(Canvas.stage.input.canvas);
-            this.$('#canvas-input').on('taphold', _.bind(this.triggerCanvasTapHold, this));
-            this.$('#canvas-input').on('vmousedown', _.bind(this.triggerCanvasMouseDown, this));
-            this.$('#canvas-input').on('vmouseup', _.bind(this.triggerCanvasMouseUp, this));
+            this.$el.html(this.container);
+            this.$(this.container).append(this.stage.display.canvas);
+            this.$(this.container).append(this.stage.input.canvas);
+            this.$('#canvas-input').on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
+            this.$('#canvas-input').on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
             this.clear();
             return this;
         },
@@ -52,8 +54,8 @@ define(function() {
          * @returns {Backbone.View}
          */
         clear: function() {
-            Canvas.stage.display.removeAllChildren();
-            Canvas.stage.input.removeAllChildren();
+            this.stage.display.removeAllChildren();
+            this.stage.input.removeAllChildren();
             this.createLayer('background');
             this.createLayer('display');
             this.createLayer('teach');
@@ -81,8 +83,8 @@ define(function() {
         createDisplayStage: function() {
             var element = document.createElement('canvas');
             element.id = 'canvas-display';
-            element.width = Canvas.size;
-            element.height = Canvas.size;
+            element.width = this.size;
+            element.height = this.size;
             var stage = new createjs.Stage(element);
             stage.autoClear = true;
             stage.enableDOMEvents(false);
@@ -95,8 +97,8 @@ define(function() {
         createCanvasContainer: function() {
             var element = document.createElement('div');
             element.className = 'canvas-holder';
-            element.style.width = Canvas.size + 'px';
-            element.style.height = Canvas.size + 'px';
+            element.style.width = this.size + 'px';
+            element.style.height = this.size + 'px';
             return element;
         },
         /**
@@ -106,8 +108,8 @@ define(function() {
         createInputStage: function() {
             var element = document.createElement('canvas');
             element.id = 'canvas-input';
-            element.width = Canvas.size;
-            element.height = Canvas.size;
+            element.width = this.size;
+            element.height = this.size;
             var stage = new createjs.Stage(element);
             stage.autoClear = false;
             stage.enableDOMEvents(true);
@@ -121,7 +123,7 @@ define(function() {
         createLayer: function(name) {
             var layer = new createjs.Container();
             layer.name = 'layer-' + name;
-            Canvas.stage.display.addChild(layer);
+            this.stage.display.addChild(layer);
             return layer;
         },
         /**
@@ -129,7 +131,7 @@ define(function() {
          * @returns {CreateJS.Stage}
          */
         display: function() {
-            return Canvas.stage.display;
+            return this.stage.display;
         },
         /**
          * Draws the to the background using a font rather than assembling
@@ -144,31 +146,31 @@ define(function() {
          */
         drawCharacterFromFont: function(layerName, character, font, alpha, color) {
             var layer = this.getLayer(layerName);
-            color = color ? color : Canvas.textColor;
-            font = font ? font : Canvas.textFont;
-            var text = new createjs.Text(character, Canvas.size + 'px ' + font, color);
+            color = color ? color : this.textColor;
+            font = font ? font : this.textFont;
+            var text = new createjs.Text(character, this.size + 'px ' + font, color);
             text.name = character;
             text.alpha = alpha ? alpha : 1;
             layer.addChild(text);
-            Canvas.stage.display.update();
+            this.stage.display.update();
         },
         /**
          * @method drawGrid
          * @param {String} color
          */
         drawGrid: function(color) {
-            color = color ? color : Canvas.gridColor;
-            if (!Canvas.stage.display.getChildByName('grid')) {
+            color = color ? color : this.gridColor;
+            if (!this.stage.display.getChildByName('grid')) {
                 var grid = new createjs.Shape();
                 grid.name = 'grid';
-                grid.graphics.beginStroke(color).setStrokeStyle(Canvas.gridLineWidth, Canvas.strokeCapStyle, Canvas.strokeJointStyle);
-                grid.graphics.moveTo(Canvas.size / 2, 0).lineTo(Canvas.size / 2, Canvas.size);
-                grid.graphics.moveTo(0, Canvas.size / 2).lineTo(Canvas.size, Canvas.size / 2);
-                grid.graphics.moveTo(0, 0).lineTo(Canvas.size, Canvas.size);
-                grid.graphics.moveTo(Canvas.size, 0).lineTo(0, Canvas.size);
+                grid.graphics.beginStroke(color).setStrokeStyle(this.gridLineWidth, this.strokeCapStyle, this.strokeJointStyle);
+                grid.graphics.moveTo(this.size / 2, 0).lineTo(this.size / 2, this.size);
+                grid.graphics.moveTo(0, this.size / 2).lineTo(this.size, this.size / 2);
+                grid.graphics.moveTo(0, 0).lineTo(this.size, this.size);
+                grid.graphics.moveTo(this.size, 0).lineTo(0, this.size);
                 grid.graphics.endStroke();
-                Canvas.stage.display.addChildAt(grid, 0);
-                Canvas.stage.display.update();
+                this.stage.display.addChildAt(grid, 0);
+                this.stage.display.update();
             }
         },
         /**
@@ -229,7 +231,7 @@ define(function() {
         drawShape: function(layerName, shape, alpha) {
             shape.alpha = alpha ? alpha : 1;
             this.getLayer(layerName).addChild(shape);
-            Canvas.stage.display.update();
+            this.stage.display.update();
             return shape;
         },
         /**
@@ -237,7 +239,7 @@ define(function() {
          */
         enableInput: function() {
             var self = this;
-            var stage = Canvas.stage.input;
+            var stage = this.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
             this.disableInput().$('#canvas-input').on('vmousedown.Input', down);
             function down() {
@@ -251,16 +253,16 @@ define(function() {
                 self.$('#canvas-input').on('vmouseup.Input', up);
             }
             function move() {
-                var point = new createjs.Point(stage.mouseX, stage.mouseY);
-                var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
+                var point = {x: stage.mouseX, y: stage.mouseY};
+                var midPoint = {x: oldPoint.x + point.x >> 1, y: oldPoint.y + point.y >> 1};
                 marker.graphics.clear()
-                        .setStrokeStyle(Canvas.strokeSize, Canvas.strokeCapStyle, Canvas.strokeJointStyle)
-                        .beginStroke(Canvas.strokeColor)
+                        .setStrokeStyle(self.strokeSize, self.strokeCapStyle, self.strokeJointStyle)
+                        .beginStroke(self.strokeColor)
                         .moveTo(midPoint.x, midPoint.y)
                         .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 squig.graphics
-                        .setStrokeStyle(Canvas.strokeSize, Canvas.strokeCapStyle, Canvas.strokeJointStyle)
-                        .beginStroke(Canvas.strokeColor)
+                        .setStrokeStyle(self.strokeSize, self.strokeCapStyle, self.strokeJointStyle)
+                        .beginStroke(self.strokeColor)
                         .moveTo(midPoint.x, midPoint.y)
                         .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 stage.update();
@@ -286,7 +288,7 @@ define(function() {
         fadeLayer: function(layerName, callback) {
             var layer = this.getLayer(layerName);
             if (layer.getNumChildren() > 0) {
-                layer.cache(0, 0, Canvas.size, Canvas.size);
+                layer.cache(0, 0, this.size, this.size);
                 createjs.Tween.get(layer).to({alpha: 0}, 500).call(function() {
                     layer.alpha = 1;
                     layer.removeAllChildren();
@@ -308,8 +310,8 @@ define(function() {
             var layer = this.getLayer(layerName);
             milliseconds = milliseconds ? milliseconds : 500;
             layer.addChild(shape);
-            Canvas.stage.display.update();
-            shape.cache(0, 0, Canvas.size, Canvas.size);
+            this.stage.display.update();
+            shape.cache(0, 0, this.size, this.size);
             createjs.Tween.get(shape).to({alpha: 0}, milliseconds, createjs.Ease.backOut).call(function() {
                 shape.uncache();
                 layer.removeChild(shape);
@@ -323,7 +325,7 @@ define(function() {
          * @returns {CreateJS.Container}
          */
         getLayer: function(name) {
-            return Canvas.stage.display.getChildByName('layer-' + name);
+            return this.stage.display.getChildByName('layer-' + name);
         },
         /**
          * @method injectLayerColor
@@ -351,12 +353,12 @@ define(function() {
          * @method remove
          */
         remove: function() {
-            createjs.Touch.disable(Canvas.stage.input);
-            createjs.Ticker.removeEventListener('tick', Canvas.stage.display);
+            createjs.Touch.disable(this.stage.input);
+            createjs.Ticker.removeEventListener('tick', this.stage.display);
             this.$('#canvas-display').off();
             this.$('#canvas-input').off();
-            Canvas.stage.display.removeAllChildren();
-            Canvas.stage.input.removeAllChildren();
+            this.stage.display.removeAllChildren();
+            this.stage.input.removeAllChildren();
             this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
@@ -366,13 +368,13 @@ define(function() {
          * @param {Number} size
          */
         resize: function(size) {
-            Canvas.size = size;
-            Canvas.container.style.width = size + 'px';
-            Canvas.container.style.height = size + 'px';
-            Canvas.stage.display.canvas.width = size;
-            Canvas.stage.display.canvas.height = size;
-            Canvas.stage.input.canvas.width = size;
-            Canvas.stage.input.canvas.height = size;
+            this.size = size;
+            this.container.style.width = size + 'px';
+            this.container.style.height = size + 'px';
+            this.stage.display.canvas.width = size;
+            this.stage.display.canvas.height = size;
+            this.stage.input.canvas.width = size;
+            this.stage.input.canvas.height = size;
             return this;
         },
         /**
@@ -383,42 +385,63 @@ define(function() {
             this.trigger('canvas:click', event);
         },
         /**
-         * @method triggerCanvasDoubleTap
+         * @method triggerCanvasClickHold
          * @param {Object} event
          */
-        triggerCanvasDoubleTap: function(event) {
-            this.trigger('canvas:doubletap', event);
+        triggerCanvasClickHold: function(event) {
+            this.trigger('canvas:clickhold', event);
+        },
+        /**
+         * @method triggerCanvasDoubleClick
+         * @param {Object} event
+         */
+        triggerCanvasDoubleClick: function(event) {
+            this.trigger('canvas:doubleclick', event);
         },
         /**
          * @method triggerCanvasMouseDown
          * @param {Object} event
          */
         triggerCanvasMouseDown: function(event) {
-            Canvas.lastMouseDownEvent = event;
+            this.mouseDownEvent = event;
             this.trigger('canvas:mousedown', event);
+            if (this.lastMouseDownEvent && this.mouseDownEvent.timeStamp - this.lastMouseDownEvent.timeStamp < 200) {
+                this.triggerCanvasDoubleClick(event);
+            }
+            this.$('#canvas-input').on('vmousemove.Canvas', _.bind(function(event) {
+                this.mouseMoveEvent = event;
+            }, this));
+            this.mouseDownTimer = window.setTimeout(_.bind(function() {
+                var distance = 0;
+                if (this.mouseMoveEvent) {
+                    var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
+                    var endPosition = {x: this.mouseMoveEvent.pageX, y: this.mouseMoveEvent.pageY};
+                    distance = skritter.fn.distance(startPosition, endPosition);
+                }
+                if (distance <= 10) {
+                    this.triggerCanvasClickHold(event);
+                }
+            }, this), 1000);
         },
         /**
          * @method triggerClick
          * @param {Object} event
          */
         triggerCanvasMouseUp: function(event) {
-            Canvas.lastMouseUpEvent = event;
-            var mouseDownPosition = {x: Canvas.lastMouseDownEvent.pageX, y: Canvas.lastMouseDownEvent.pageY};
-            var mouseUpPosition = {x: Canvas.lastMouseUpEvent.pageX, y: Canvas.lastMouseUpEvent.pageY};
-            var mouseDistance = skritter.fn.distance(mouseDownPosition, mouseUpPosition);
-            var mouseDuration = Canvas.lastMouseUpEvent.timeStamp - Canvas.lastMouseDownEvent.timeStamp;
-            if (mouseDistance <= 10 && mouseDuration > 20 && mouseDuration < 500) {
+            window.clearTimeout(this.mouseDownTimer);
+            this.$('#canvas-input').off('vmousemove.Canvas');
+            this.lastMouseDownEvent = this.mouseDownEvent;
+            this.mouseMoveEvent = null;
+            this.mouseUpEvent = event;
+            var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
+            var endPosition = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
+            var distance = skritter.fn.distance(startPosition, endPosition);
+            var duration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
+            if (distance <= 10 && (duration > 20 && duration < 500)) {
                 this.triggerCanvasClick(event);
             } else {
                 this.trigger('canvas:mouseup', event);
             }
-        },
-        /**
-         * @method triggerCanvasTapHold
-         * @param {Object} event
-         */
-        triggerCanvasTapHold: function(event) {
-            this.trigger('canvas:taphold', event);
         },
         /**
          * Enables the view to fire events when the canvas has been touched.
@@ -451,7 +474,7 @@ define(function() {
             duration = duration ? duration : 500;
             var layer = this.getLayer(layerName);
             layer.addChildAt(fromShape, 0);
-            Canvas.stage.display.update();
+            this.stage.display.update();
             createjs.Tween.get(fromShape).to({
                 x: toShape.x,
                 y: toShape.y,
@@ -467,10 +490,10 @@ define(function() {
          * @method updateAll
          */
         updateAll: function() {
-            Canvas.stage.display.clear();
-            Canvas.stage.input.clear();
-            Canvas.stage.display.update();
-            Canvas.stage.input.update();
+            this.stage.display.clear();
+            this.stage.input.clear();
+            this.stage.display.update();
+            this.stage.input.update();
         }
     });
 

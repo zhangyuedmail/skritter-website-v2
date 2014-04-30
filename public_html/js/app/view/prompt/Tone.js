@@ -12,21 +12,22 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
-            skritter.timer.setReviewLimit(15);
-            skritter.timer.setThinkingLimit(10);
-            Tone.canvas = new Canvas();
+            this.canvas = null;
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
+            skritter.timer.setReviewLimit(15);
+            skritter.timer.setThinkingLimit(10);
             this.$el.html(templateTone);
             Prompt.prototype.render.call(this);
-            Tone.canvas.setElement(this.$('#writing-area'));
-            this.listenTo(Tone.canvas, 'canvas:click', this.handleClick);
-            this.listenTo(Tone.canvas, 'input:down', this.handleStrokeDown);
-            this.listenTo(Tone.canvas, 'input:up', this.handleStrokeReceived);
+            this.canvas = new Canvas();
+            this.canvas.setElement(this.$('#writing-area'));
+            this.listenTo(this.canvas, 'canvas:click', this.handleClick);
+            this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
+            this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
             this.show();
             return this;
@@ -36,8 +37,8 @@ define([
          * @returns {Backbone.View}
          */
         clear: function() {
-            Prompt.gradingButtons.hide();
-            Tone.canvas.render();
+            this.gradingButtons.hide();
+            this.canvas.render();
             return this;
         },
         /**
@@ -46,7 +47,7 @@ define([
          */
         handleClick: function(event) {
             if (this.review.get('finished')) {
-                Prompt.gradingButtons.trigger('selected');
+                this.gradingButtons.triggerSelected();
             }
             event.preventDefault();
         },
@@ -69,36 +70,36 @@ define([
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
                         this.review.setReviewAt(null, 'score', 3);
-                        Tone.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
+                        this.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
                     } else {
                         this.review.setReviewAt(null, 'score', 1);
                         this.review.getCharacterAt().reset();
                         this.review.getCharacterAt().add(this.review.getCharacterAt().targets[possibleTones[0] - 1].models);
-                        Tone.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+                        this.canvas.drawShape('display', this.review.getCharacterAt().getShape());
                     }
                 }
             } else {
                 if (possibleTones.indexOf(5) > -1) {
                     this.review.setReviewAt(null, 'score', 3);
                     this.review.getCharacterAt().add(this.review.getCharacterAt().targets[4].models);
-                    Tone.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+                    this.canvas.drawShape('display', this.review.getCharacterAt().getShape());
                 } else {
                     this.review.setReviewAt(null, 'score', 1);
                     this.review.getCharacterAt().add(this.review.getCharacterAt().targets[possibleTones[0] - 1].models);
-                    Tone.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+                    this.canvas.drawShape('display', this.review.getCharacterAt().getShape());
                 }
             }
             if (this.review.getCharacterAt().isFinished()) {
                 this.showAnswer();
             } else {
-                Tone.canvas.enableInput();
+                this.canvas.enableInput();
             }
         },
         /**
          * @method remove
          */
         remove: function() {
-            Tone.canvas.remove();
+            this.canvas.remove();
             this.$('#writing-area').off();
             Prompt.prototype.remove.call(this);
         },
@@ -110,8 +111,8 @@ define([
             var canvasSize = skritter.settings.canvasSize();
             var contentHeight = skritter.settings.contentHeight();
             var contentWidth = skritter.settings.contentWidth();
-            Tone.canvas.resize(canvasSize).render();
-            Tone.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
+            this.canvas.resize(canvasSize).render();
+            this.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
@@ -147,7 +148,7 @@ define([
                 });
             }
             if (this.review.getCharacterAt().isFinished())
-                Tone.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
+                this.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
         },
         /**
          * @method show
@@ -155,8 +156,8 @@ define([
          */
         show: function() {
             skritter.timer.start();
-            Tone.canvas.enableInput();
-            Tone.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
+            this.canvas.enableInput();
+            this.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
             this.review.set('finished', false);
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
@@ -172,11 +173,11 @@ define([
          */
         showAnswer: function() {
             skritter.timer.stop();
-            Tone.canvas.disableInput();
-            Tone.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+            this.canvas.disableInput();
+            this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
             this.review.set('finished', true);
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position') + 1, skritter.user.settings.get('hideReading')));
-            Prompt.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
+            this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             if (this.review.isLast() && skritter.user.settings.get('audio')) {
                 this.review.getBaseVocab().playAudio();
             } else if (skritter.user.settings.get('audio')) {

@@ -68,7 +68,7 @@ define([
                 }
                 targets.push(target);
             }
-            character.targets = targets;
+            character.targets = rune === 'tones' ? targets : targets.reverse();
             return character;
         }
     });

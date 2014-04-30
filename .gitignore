@@ -1,11 +1,11 @@
 # Directories #
 /build/
-/cordova/build/
 /docs/
 /files/
 /nbproject/
 /node_modules/
 /scripts/
+/utils/
 
 # Files #
 *.DS_Store

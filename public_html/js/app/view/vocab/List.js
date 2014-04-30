@@ -21,11 +21,11 @@ define([
          * @method initialize
          */
         initialize: function() {
-            List.id = null;
-            List.model = new VocabList();
-            List.sectionId = null;
-            List.sectionRowTable = new ListSectionRowTable();
-            List.sectionTable = new ListSectionTable();
+            this.id = null;
+            this.model = new VocabList();
+            this.sectionId = null;
+            this.sectionRowTable = new ListSectionRowTable();
+            this.sectionTable = new ListSectionTable();
         },
         /**
          * @method render
@@ -33,8 +33,8 @@ define([
          */
         render: function() {
             this.$el.html(templateVocabList);
-            List.sectionTable.setElement(this.$('#section-table')).render();
-            List.sectionRowTable.setElement(this.$('#row-table')).render();
+            this.sectionTable.setElement(this.$('#section-table')).render();
+            this.sectionRowTable.setElement(this.$('#row-table')).render();
             return this;
         },
         /**
@@ -52,9 +52,9 @@ define([
          */
         disableList: function(event) {
             skritter.modal.show('loading').set('.modal-body', "Saving Changes");
-            skritter.api.updateVocabList({id: List.model.id, studyingMode: 'not studying'}, _.bind(function(list, status) {
+            skritter.api.updateVocabList({id: this.model.id, studyingMode: 'not studying'}, _.bind(function(list, status) {
                 if (status === 200) {
-                    List.model.set(list);
+                    this.model.set(list);
                     this.loadList();
                 }
                 skritter.modal.hide();
@@ -67,9 +67,9 @@ define([
          */
         enableList: function(event) {
             skritter.modal.show('loading').set('.modal-body', "Saving Changes");
-            skritter.api.updateVocabList({id: List.model.id, studyingMode: 'adding'}, _.bind(function(list, status) {
+            skritter.api.updateVocabList({id: this.model.id, studyingMode: 'adding'}, _.bind(function(list, status) {
                 if (status === 200) {
-                    List.model.set(list);
+                    this.model.set(list);
                     this.loadList();
                 }
                 skritter.modal.hide();
@@ -80,13 +80,13 @@ define([
          * @method loadList
          */
         loadList: function() {
-            this.$('#list-name').text(List.model.get('name'));
-            if (List.model.has('categories'))
-                this.$('#list-categories').text(List.model.get('categories').join(', '));
-            this.$('#list-description').text(List.model.get('description'));
-            this.$('#list-people-studying').text(List.model.get('peopleStudying'));
+            this.$('#list-name').text(this.model.get('name'));
+            if (this.model.has('categories'))
+                this.$('#list-categories').text(this.model.get('categories').join(', '));
+            this.$('#list-description').text(this.model.get('description'));
+            this.$('#list-people-studying').text(this.model.get('peopleStudying'));
             this.$('#settings button').hide();
-            switch (List.model.get('studyingMode')) {
+            switch (this.model.get('studyingMode')) {
                 case 'not studying':
                     this.$('#list-status').html("<span class='text-danger'>You haven't enabled this list for studying yet.</span>");
                     this.$('#settings .button-enable-studying').show();
@@ -106,7 +106,7 @@ define([
                     this.$('#settings .button-disable-studying').show();
                     break;
             }
-            if (List.id && List.sectionId) {
+            if (this.id && this.sectionId) {
                 this.loadSectionRows();
             } else {
                 this.loadSections();
@@ -116,7 +116,7 @@ define([
          * @method loadSections
          */
         loadSections: function() {
-            List.sectionTable.set(List.id, List.model.get('sections'), {
+            this.sectionTable.set(this.id, this.model.get('sections'), {
                 name: 'Section Name',
                 rows: ''
             });
@@ -129,8 +129,8 @@ define([
          * @method loadSectionRows
          */
         loadSectionRows: function() {
-            var section = _.find(List.model.get('sections'), {id: List.sectionId});
-            List.sectionRowTable.set(section.rows, {
+            var section = _.find(this.model.get('sections'), {id: this.sectionId});
+            this.sectionRowTable.set(section.rows, {
                 vocabId: 'ID'
             });
             this.$('#section-name').text(section.name);
@@ -145,9 +145,9 @@ define([
          */
         pauseList: function(event) {
             skritter.modal.show('loading').set('.modal-body', "Saving Changes");
-            skritter.api.updateVocabList({id: List.model.id, studyingMode: 'reviewing'}, _.bind(function(list, status) {
+            skritter.api.updateVocabList({id: this.model.id, studyingMode: 'reviewing'}, _.bind(function(list, status) {
                 if (status === 200) {
-                    List.model.set(list);
+                    this.model.set(list);
                     this.loadList();
                 }
                 skritter.modal.hide();
@@ -168,7 +168,7 @@ define([
          */
         selectSection: function(event) {
             var sectionId = event.currentTarget.id.replace('section-', '');
-            List.sectionId = sectionId;
+            this.sectionId = sectionId;
             this.loadSectionRows();
             event.preventDefault();
         },
@@ -179,11 +179,11 @@ define([
          * @returns {Backbone.View}
          */
         set: function(listId, sectionId) {
-            List.id = listId;
-            List.sectionId = sectionId;
-            skritter.modal.show('loading').set('.modal-body', sectionId ? 'Loading Section' : 'Loading List');
+            this.id = listId;
+            this.sectionId = sectionId;
+            skritter.modal.show('loading').set('.modal-body', sectionId ? 'Loading Section' : 'Loading this');
             skritter.api.getVocabList(listId, null, _.bind(function(list) {
-                List.model.set(list);
+                this.model.set(list);
                 this.loadList();
                 skritter.modal.hide();
             }, this));
@@ -195,9 +195,9 @@ define([
          */
         startList: function(event) {
             skritter.modal.show('loading').set('.modal-body', "Saving Changes");
-            skritter.api.updateVocabList({id: List.model.id, studyingMode: 'adding'}, _.bind(function(list, status) {
+            skritter.api.updateVocabList({id: this.model.id, studyingMode: 'adding'}, _.bind(function(list, status) {
                 if (status === 200) {
-                    List.model.set(list);
+                    this.model.set(list);
                     this.loadList();
                 }
                 skritter.modal.hide();

@@ -11,14 +11,14 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
-            skritter.timer.setReviewLimit(30);
-            skritter.timer.setThinkingLimit(15);
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
+            skritter.timer.setReviewLimit(30);
+            skritter.timer.setThinkingLimit(15);
             this.$el.html(templateRdng);
             Prompt.prototype.render.call(this);
             this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
@@ -38,7 +38,7 @@ define([
          */
         handleClick: function(event) {
             if (this.review.get('finished')) {
-                Prompt.gradingButtons.trigger('selected');
+                this.gradingButtons.triggerSelected();
             } else {
                 this.showAnswer();
             }
@@ -144,7 +144,7 @@ define([
             this.$('#answer').show('fade', 200);
             this.$('#question-text').html('Definition:');
             this.showHint();
-            Prompt.gradingButtons.show().select(this.review.getReviewAt().score).expand();
+            this.gradingButtons.show().select(this.review.getReviewAt().score).expand();
             if (this.review.isLast() && skritter.user.settings.get('audio'))
                 this.review.getBaseVocab().playAudio();
             return this;
