@@ -20,8 +20,8 @@ define([
          */
         initialize: function() {
             this.lists = new VocabLists();
-            Lists.category = 'studying';
-            Lists.table = new ListTable();
+            this.category = 'studying';
+            this.table = new ListTable();
         },
         /**
          * @method render
@@ -29,7 +29,7 @@ define([
          */
         render: function() {
             this.$el.html(templateVocabLists);
-            Lists.table.setElement(this.$('#lists')).render();
+            this.table.setElement(this.$('#lists')).render();
             return this;
         },
         /**
@@ -46,13 +46,13 @@ define([
             this.$('.button-category-studying').removeClass('active');
             this.$('.button-category-textbook').addClass('active');
             skritter.modal.show('loading').set('.modal-body', 'Loading Lists');
-            skritter.api.getVocabLists(function(lists) {
-                Lists.table.set(lists, {
+            skritter.api.getVocabLists(_.bind(function(lists) {
+                this.table.set(lists, {
                     name: 'List Name',
                     peopleStudying: 'Studying'
                 });
                 skritter.modal.hide();
-            }, {
+            }, this), {
                 cursor: false,
                 fields: ['id', 'name', 'peopleStudying'],
                 sort: 'official'
@@ -84,11 +84,11 @@ define([
                         sort: 'studying'
                     });
                 }
-            ], function(error, lists) {
+            ], _.bind(function(error, lists) {
                 if (error) {
                     //TODO: handle list loading errors
                 } else {
-                    Lists.table.set(lists, {
+                    this.table.set(lists, {
                         name: 'List Name',
                         studyingMode: 'Status'
                     });
@@ -98,7 +98,7 @@ define([
                         skritter.modal.hide();
                     });
                 }
-            });
+            }, this));
         },
         /**
          * @method navigateCategoryTextbook
@@ -130,8 +130,8 @@ define([
          * @returns {Backbone.View}
          */
         set: function(category) {
-            Lists.category = category ? category : Lists.category;
-            switch (Lists.category) {
+            this.category = category ? category : this.category;
+            switch (this.category) {
                 case 'studying':
                     this.loadStudying();
                     break;
