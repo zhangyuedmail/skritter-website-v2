@@ -14,7 +14,6 @@ define([
          */
         initialize: function() {
             this.prompt = null;
-            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
         },
         /**
          * @method render
@@ -24,16 +23,20 @@ define([
             document.title = "Skritter - Study";
             this.$el.html(templateStudy);
             skritter.timer.setElement(this.$('#timer')).render();
+            //apply the navbar user hide settings
             if (skritter.user.settings.get('hideTimer'))
                 this.$('#timer').parent().hide();
             if (skritter.user.settings.get('hideDueCount'))
                 this.$('#items-due').parent().hide();
-            skritter.user.scheduler.sort();
-            if (skritter.user.scheduler.data.length > 4) {
+            //selectively load a new or existing prompt
+            if (this.prompt) {
+                this.loadPrompt(this.prompt);
+            } else if (skritter.user.scheduler.data.length > 4) {
                 this.nextPrompt();
             } else {
                 this.showAddItemsModal();
             }
+            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
             return this;
         },
         /**
@@ -62,7 +65,6 @@ define([
         loadPrompt: function(prompt) {
             if (this.prompt) {
                 this.prompt.remove();
-                this.prompt = null;
             }
             this.prompt = prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
@@ -83,6 +85,7 @@ define([
         nextPrompt: function() {
             this.checkAutoSync();
             skritter.timer.reset();
+            skritter.user.scheduler.sort();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 var review = item.createReview();
                 var prompt = null;
@@ -122,6 +125,7 @@ define([
          * @method remove
          */
         remove: function() {
+            this.prompt.remove();
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();

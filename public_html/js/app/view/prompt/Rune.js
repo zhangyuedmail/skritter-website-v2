@@ -12,25 +12,26 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
-            skritter.timer.setReviewLimit(30);
-            skritter.timer.setThinkingLimit(15);
-            Rune.canvas = new Canvas();
-            Rune.maxStrokeAttempts = 3;
-            Rune.strokeAttempts = 0;
-            Rune.teaching = false;
+            this.canvas = null;
+            this.maxStrokeAttempts = 3;
+            this.strokeAttempts = 0;
+            this.teaching = false;
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
+            skritter.timer.setReviewLimit(30);
+            skritter.timer.setThinkingLimit(15);
             this.$el.html(templateRune);
             Prompt.prototype.render.call(this);
-            Rune.canvas.setElement(this.$('#writing-area'));
-            this.listenTo(Rune.canvas, 'canvas:click', this.handleClick);
-            this.listenTo(Rune.canvas, 'canvas:taphold', this.handleTapHold);
-            this.listenTo(Rune.canvas, 'input:down', this.handleStrokeDown);
-            this.listenTo(Rune.canvas, 'input:up', this.handleStrokeReceived);
+            this.canvas = new Canvas();
+            this.canvas.setElement(this.$('#writing-area'));
+            this.listenTo(this.canvas, 'canvas:click', this.handleClick);
+            this.listenTo(this.canvas, 'canvas:taphold', this.handleTapHold);
+            this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
+            this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
             this.show();
             return this;
@@ -40,8 +41,8 @@ define([
          * @returns {Backbone.View}
          */
         clear: function() {
-            Prompt.gradingButtons.hide();
-            Rune.canvas.render();
+            this.gradingButtons.hide();
+            this.canvas.render();
             this.review.set('finished', false);
             return this;
         },
@@ -51,7 +52,7 @@ define([
          */
         handleClick: function(event) {
             if (this.review.get('finished')) {
-                Prompt.gradingButtons.triggerSelected();
+                this.gradingButtons.triggerSelected();
             }
             event.preventDefault();
         },
@@ -62,7 +63,7 @@ define([
         handleDoubleTap: function(event) {
             if (!this.review.get('finished')) {
                 this.review.setReviewAt(null, 'score', 1);
-                Rune.canvas.drawShape('background', this.review.getCharacterAt().targets[0].getShape(null, '#999999'));
+                this.canvas.drawShape('background', this.review.getCharacterAt().targets[0].getShape(null, '#999999'));
             }
             event.preventDefault();
         },
@@ -81,24 +82,24 @@ define([
             if (points.length > 2) {
                 var result = this.review.getCharacterAt().recognize(points, shape);
                 if (result) {
-                    Rune.canvas.fadeLayer('background');
-                    Rune.strokeAttempts = 0;
+                    this.canvas.fadeLayer('background');
+                    this.strokeAttempts = 0;
                     if (skritter.user.settings.get('squigs')) {
-                        Rune.canvas.drawShape('display', shape);
+                        this.canvas.drawShape('display', shape);
                     } else {
-                        Rune.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
+                        this.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
                     }
                     if (this.review.getCharacterAt().isFinished()) {
                         this.showAnswer();
-                    } else if (Rune.teaching) {
+                    } else if (this.teaching) {
                         this.teach();
                     }
                 } else {
-                    Rune.strokeAttempts++;
-                    Rune.canvas.fadeShape('marker', shape);
-                    if (Rune.strokeAttempts > Rune.maxStrokeAttempts) {
+                    this.strokeAttempts++;
+                    this.canvas.fadeShape('marker', shape);
+                    if (this.strokeAttempts > this.maxStrokeAttempts) {
                         this.review.setReviewAt(null, 'score', 1);
-                        Rune.canvas.fadeShape('hint', this.review.getCharacterAt().getExpectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
+                        this.canvas.fadeShape('hint', this.review.getCharacterAt().getExpectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
                 }
             }
@@ -115,7 +116,7 @@ define([
          * @method remove
          */
         remove: function() {
-            Rune.canvas.remove();
+            this.canvas.remove();
             this.$('#writing-area').off();
             Prompt.prototype.remove.call(this);
         },
@@ -124,8 +125,8 @@ define([
          * @returns {Backbone.View}
          */
         reset: function() {
-            Rune.canvas.clear().enableInput();
-            Prompt.gradingButtons.hide();
+            this.canvas.clear().enableInput();
+            this.gradingButtons.hide();
             this.review.getCharacterAt().reset();
             return this;
         },
@@ -137,7 +138,7 @@ define([
             var canvasSize = skritter.settings.canvasSize();
             var contentHeight = skritter.settings.contentHeight();
             var contentWidth = skritter.settings.contentWidth();
-            Rune.canvas.resize(canvasSize).render();
+            this.canvas.resize(canvasSize).render();
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
                 this.$('.prompt-container').removeClass('landscape');
@@ -173,10 +174,10 @@ define([
                 });
             }
             if (this.review.getCharacterAt().isFinished()) {
-                Rune.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
+                this.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
             } else {
-                Rune.canvas.drawShape('display', this.review.getCharacterAt().getShape());
-                Rune.canvas.enableInput();
+                this.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+                this.canvas.enableInput();
             }
 
         },
@@ -186,7 +187,7 @@ define([
          */
         show: function() {
             skritter.timer.start();
-            Rune.canvas.enableInput();
+            this.canvas.enableInput();
             this.review.set('finished', false);
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
@@ -206,27 +207,27 @@ define([
          */
         showAnswer: function() {
             skritter.timer.stop();
-            Rune.canvas.disableInput();
-            Rune.canvas.clearLayer('teach');
+            this.canvas.disableInput();
+            this.canvas.clearLayer('teach');
             this.review.set('finished', true);
             if (skritter.user.settings.get('squigs') && this.review.getCharacterAt().length > 0) {
                 var color = skritter.settings.get('gradingColors')[this.review.getReviewAt().score];
                 var character = this.review.getCharacterAt();
                 for (var i = 0, length = character.length; i < length; i++) {
                     var stroke = character.at(i);
-                    Rune.canvas.tweenShape('hint', stroke.getUserShape(color), stroke.inflateShape());
+                    this.canvas.tweenShape('hint', stroke.getUserShape(color), stroke.inflateShape());
                 }
-                Rune.canvas.display().swapChildren(Rune.canvas.getLayer('display'), Rune.canvas.getLayer('hint'));
+                this.canvas.display().swapChildren(this.canvas.getLayer('display'), this.canvas.getLayer('hint'));
             } else {
-                if (!Rune.teaching)
-                    Rune.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+                if (!this.teaching)
+                    this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
             }
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position') + 1));
-            if (Rune.teaching) {
+            if (this.teaching) {
                 //TODO: handle what to show when finished and teaching
             } else {
-                Prompt.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
+                this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             }
             if (skritter.user.settings.get('audio'))
                 this.review.getVocabAt().playAudio();
@@ -240,9 +241,9 @@ define([
             var stroke = character.getExpectedStroke();
             var strokeParams = stroke.inflateParams();
             this.review.setReviewAt(null, 'score', 1);
-            Rune.teaching = true;
-            Rune.canvas.clearLayer('teach').drawShape('teach', stroke.inflateShape('#999999'));
-            Rune.canvas.drawArrow('teach', strokeParams[0].get('corners')[0], '#000000', '#fff79a', strokeParams[0].getStartingAngle());
+            this.teaching = true;
+            this.canvas.clearLayer('teach').drawShape('teach', stroke.inflateShape('#999999'));
+            this.canvas.drawArrow('teach', strokeParams[0].get('corners')[0], '#000000', '#fff79a', strokeParams[0].getStartingAngle());
         }
     });
 

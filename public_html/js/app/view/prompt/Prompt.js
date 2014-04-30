@@ -15,8 +15,8 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.gradingButtons = null;
             this.review = null;
-            Prompt.gradingButtons = new GradingButtons();
         },
         /**
          * @method render
@@ -24,10 +24,11 @@ define([
          */
         render: function() {
             console.log('PROMPT', this.review.getBaseVocab().get('writing'), this.review.get('part'), this.review);
-            Prompt.gradingButtons.setElement(this.$('#grading-container')).render();
-            Prompt.gradingButtons.grade(this.review.getReviewAt().score);
+            this.gradingButtons = new GradingButtons();
+            this.gradingButtons.setElement(this.$('#grading-container')).render();
+            this.gradingButtons.grade(this.review.getReviewAt().score);
             this.$('.character-font').addClass(this.review.getBaseVocab().getFontClass());
-            this.listenTo(Prompt.gradingButtons, 'selected', this.handleGradingSelected);
+            this.listenTo(this.gradingButtons, 'selected', this.handleGradingSelected);
             this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
         },
@@ -55,14 +56,14 @@ define([
         next: function() {
             skritter.timer.reset();
             this.review.next();
-            Prompt.gradingButtons.grade(this.review.getReviewAt().score);
+            this.gradingButtons.grade(this.review.getReviewAt().score);
             this.clear().show();
         },
         /**
          * @method remove
          */
         remove: function() {
-            Prompt.gradingButtons.remove();
+            this.gradingButtons.remove();
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
