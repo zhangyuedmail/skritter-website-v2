@@ -147,8 +147,11 @@ define([
                     width: canvasSize
                 });
             }
-            if (this.review.getCharacterAt().isFinished())
+            if (this.review.getCharacterAt().isFinished()) {
                 this.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
+            } else {
+                this.canvas.enableInput();
+            }
         },
         /**
          * @method show
