@@ -31,10 +31,11 @@ define([
             //selectively load a new or existing prompt
             if (this.prompt) {
                 this.loadPrompt(this.prompt);
-            } else if (skritter.user.scheduler.data.length > 4) {
+            } else if (skritter.user.scheduler.data.length > 0) {
                 this.nextPrompt();
             } else {
                 this.showAddItemsModal();
+                skritter.router.navigate('', {replace: true, trigger: true});
             }
             this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
             return this;
@@ -125,7 +126,9 @@ define([
          * @method remove
          */
         remove: function() {
-            this.prompt.remove();
+            if (this.prompt) {
+                this.prompt.remove();
+            }
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
