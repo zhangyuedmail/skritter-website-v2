@@ -17,9 +17,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            Home.languageCode = skritter.settings.getLanguageCode();
-            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
-            this.listenTo(skritter.user.sync, 'sync', this.toggleSyncButton);
+            this.languageCode = skritter.settings.getLanguageCode();
         },
         /**
          * @method render
@@ -38,10 +36,12 @@ define([
             } else {
                 document.title = "Skritter - Learn to Write Chinese and Japanese Characters";
                 this.$el.html(templateHomeLoggedOut);
-                if (Home.languageCode) {
-                    this.$('#language-text').text(Home.languageCode === 'zh' ? '中文' : '日本語');
+                if (this.languageCode) {
+                    this.$('#language-text').text(this.languageCode === 'zh' ? '中文' : '日本語');
                 }
             }
+            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
+            this.listenTo(skritter.user.sync, 'sync', this.toggleSyncButton);
             return this;
         },
         /**

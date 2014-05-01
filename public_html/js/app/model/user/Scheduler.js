@@ -156,17 +156,20 @@ define(function() {
          */
         insert: function(items) {
             items = Array.isArray(items) ? items : [items];
+            var removeIds = [];
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
                 var position = _.findIndex(this.data, {id: item.id});
-                if (position > -1) {
+                if (position > -1 && item.vocabIds.length === 0) {
+                    removeIds.push(item.id);
+                } else if (position > -1) {
                     this.data[position] = {
                         id: item.id,
                         last: item.last,
                         next: item.next,
                         vocabIds: item.vocabIds
                     };
-                } else {
+                } else if (item.vocabIds.length === 0) {
                     this.data.push({
                         id: item.id,
                         last: item.last,
@@ -174,6 +177,11 @@ define(function() {
                         vocabIds: item.vocabIds
                     });
                 }
+            }
+            if (removeIds.length > 0) {
+                this.data.filter(function(item) {
+                    return removeIds.indexOf(item.id) === -1;
+                });
             }
         },
         /**
