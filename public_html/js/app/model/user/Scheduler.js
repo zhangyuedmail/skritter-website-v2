@@ -13,7 +13,8 @@ define(function() {
          * @property {Object} defaults
          */
         defaults: {
-            held: {}
+            held: {},
+            history: []
         },
         /**
          * @method cache
@@ -196,11 +197,17 @@ define(function() {
             var self = this;
             var now = skritter.fn.getUnixTime();
             var held = this.get('held');
+            var history = this.get('history');
             this.data = _.sortBy(this.data, function(item) {
+                //temporarily ban items in the recent history
+                if (history.indexOf(item.id)) {
+                    item.readiness = 0;
+                    return -item.readiness;
+                }
                 //deprioritize items being held
                 var heldUntil = held[item.id];
                 if (heldUntil && heldUntil >= now) {
-                    item.readiness = 0;
+                    item.readiness = self.randomizeInterval(0.2);
                     return -item.readiness;
                 } else if (heldUntil) {
                     delete held[item.id];
@@ -240,21 +247,31 @@ define(function() {
          * @param {Backbone.Model} item
          */
         update: function(item) {
-            var heldItems = this.get('held');
+            var held = this.get('held');
+            var history = this.get('history');
             var position = _.findIndex(this.data, {id: item.id});
             var relatedItemIds = item.getRelatedIds();
+            //update the direct schedule item
             this.data[position] = {
                 id: item.id,
                 last: item.get('last'),
                 next: item.get('next'),
                 vocabIds: item.get('vocabIds')
             };
-            //TODO: update the held time based on age of the item
+            //remove hold on directly updated item
+            delete held[item.id];
+            //keeps a maximum schedule history of five items
+            history.unshift(item.id);
+            if (history.length > 5) {
+                history.pop();
+            }
+            //place holds on related items for sorting
             for (var i = 0, length = relatedItemIds.length; i < length; i++) {
-                if (!heldItems[relatedItemIds[i]]) {
-                    heldItems[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 5;
+                if (!held[relatedItemIds[i]]) {
+                    held[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 5;
                 }
             }
+            this.set('history', history);
             this.trigger('schedule:updated');
         }
     });
