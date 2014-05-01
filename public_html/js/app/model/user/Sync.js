@@ -39,6 +39,7 @@ define([
                 path: 'api/v' + skritter.api.get('version') + '/items/add',
                 method: 'POST',
                 params: {
+                    lang: skritter.settings.getLanguageCode(),
                     limit: limit,
                     offset: offset
                 }
