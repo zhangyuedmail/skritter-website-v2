@@ -115,6 +115,45 @@ define(function() {
             request();
         },
         /**
+         * @method getReviewErrors
+         * @param {Number} offset
+         * @param {Function} callback
+         */
+        getReviewErrors: function(offset, callback) {
+            var self = this;
+            var errors = [];
+            offset = offset ? offset : undefined;
+            function request(cursor) {
+                var promise = $.ajax({
+                    url: self.base + '/reviews/errors',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor,
+                        offset: offset
+                    }
+                });
+                promise.done(function(data) {
+                    errors = errors.concat(data.ReviewErrors);
+                    if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 500);
+                    } else {
+                        console.log('REVIEW ERRORS', errors);
+                        callback(errors);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error);
+                });
+            }
+            request();
+        },
+        /**
          * @method getUser
          * @param {String} userId
          * @param {Function} callback
