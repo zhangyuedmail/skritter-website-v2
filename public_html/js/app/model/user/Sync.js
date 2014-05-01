@@ -101,6 +101,7 @@ define([
             var requests = [];
             var downloadedRequests = 0;
             var responseSize = 0;
+            var langCode = skritter.settings.getLanguageCode();
             var lastItemSync = options.downloadAll ? 0 : this.get('lastItemSync');
             var lastSRSConfigSync = options.downloadAll ? 0 : this.get('lastSRSConfigSync');
             var lastReviewErrorCheck = options.downloadAll ? 0 : this.get('lastReviewErrorCheck');
@@ -117,6 +118,7 @@ define([
                     path: 'api/v' + skritter.api.get('version') + '/vocablists',
                     method: 'GET',
                     params: {
+                        lang: langCode,
                         sort: 'custom'
                     },
                     spawner: true
@@ -125,6 +127,7 @@ define([
                     path: 'api/v' + skritter.api.get('version') + '/vocablists',
                     method: 'GET',
                     params: {
+                        lang: langCode,
                         sort: 'studying'
                     },
                     spawner: true
@@ -135,6 +138,7 @@ define([
                     path: 'api/v' + skritter.api.get('version') + '/items',
                     method: 'GET',
                     params: {
+                        lang: langCode,
                         sort: 'changed',
                         offset: lastItemSync,
                         include_vocabs: 'true',
@@ -152,6 +156,7 @@ define([
                     path: 'api/v' + skritter.api.get('version') + '/vocabs',
                     method: 'GET',
                     params: {
+                        lang: langCode,
                         sort: 'all',
                         offset: lastVocabSync,
                         include_strokes: 'true',
@@ -167,7 +172,10 @@ define([
             if (lastSRSConfigSync === 0 || moment(lastSRSConfigSync * 1000).add('hours', 2).valueOf() / 1000 <= now) {
                 requests.push({
                     path: 'api/v' + skritter.api.get('version') + '/srsconfigs',
-                    method: 'GET'
+                    method: 'GET',
+                    params: {
+                        lang: langCode
+                    }
                 });
                 updatedSRSConfigs = true;
             }

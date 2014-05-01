@@ -55,6 +55,7 @@ define([
             }, this), {
                 cursor: false,
                 fields: ['id', 'name', 'peopleStudying'],
+                lang: skritter.settings.getLanguageCode(),
                 sort: 'official'
             });
         },
@@ -72,6 +73,7 @@ define([
                     }, {
                         cursor: false,
                         fields: ['id', 'name', 'studyingMode'],
+                        lang: skritter.settings.getLanguageCode(),
                         sort: 'custom'
                     });
                 },
@@ -81,6 +83,7 @@ define([
                     }, {
                         cursor: false,
                         fields: ['id', 'name', 'studyingMode'],
+                        lang: skritter.settings.getLanguageCode(),
                         sort: 'studying'
                     });
                 }

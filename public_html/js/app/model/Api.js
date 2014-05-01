@@ -211,7 +211,7 @@ define(function() {
             options = options ? options : {};
             options.cursor = options.cursor ? options.cursor : undefined;
             options.fields = options.fields ? options.fields.join(',') : undefined;
-            options.language = options.language ? options.language : undefined;
+            options.lang = options.lang ? options.lang : undefined;
             options.sort = options.sort ? options.sort : undefined;
             function request(cursor) {
                 var promise = $.ajax({
@@ -223,7 +223,7 @@ define(function() {
                     data: {
                         bearer_token: self.get('token'),
                         cursor: cursor,
-                        lang: options.language,
+                        lang: options.lang,
                         sort: options.sort,
                         fields: options.fields
                     }
