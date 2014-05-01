@@ -406,7 +406,11 @@ define(function() {
             this.mouseDownEvent = event;
             this.trigger('canvas:mousedown', event);
             if (this.lastMouseDownEvent && this.mouseDownEvent.timeStamp - this.lastMouseDownEvent.timeStamp < 200) {
-                this.triggerCanvasDoubleClick(event);
+                var lastPostion = {x: this.lastMouseDownEvent.pageX, y: this.lastMouseDownEvent.pageY};
+                var currentPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
+                if (skritter.fn.distance(lastPostion, currentPosition) <= 10) {
+                    this.triggerCanvasDoubleClick(event);
+                }
             }
             this.$('#canvas-input').on('vmousemove.Canvas', _.bind(function(event) {
                 this.mouseMoveEvent = event;
