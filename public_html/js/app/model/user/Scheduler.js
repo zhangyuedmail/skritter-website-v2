@@ -124,6 +124,14 @@ define(function() {
             return this.getDue(sort).length;
         },
         /**
+         * @method getItemBaseWriting
+         * @param {String} itemId
+         * @returns {String}
+         */
+        getItemBaseWriting: function(itemId) {
+            return itemId.split('-')[2];
+        },
+        /**
          * @method getNext
          * @param {Function} callback
          */
@@ -194,32 +202,35 @@ define(function() {
          * @returns {Array}
          */
         sort: function() {
-            var self = this;
             var now = skritter.fn.getUnixTime();
             var held = this.get('held');
             var history = this.get('history');
-            this.data = _.sortBy(this.data, function(item) {
-                //temporarily ban items in the recent history
-                if (history.indexOf(item.id)) {
-                    item.readiness = 0;
-                    return -item.readiness;
-                }
-                //deprioritize items being held
+            var historyCheck = this.data.length > 5 ? true : false;
+            this.data = _.sortBy(this.data, _.bind(function(item) {
                 var heldUntil = held[item.id];
-                if (heldUntil && heldUntil >= now) {
-                    item.readiness = self.randomizeInterval(0.2);
-                    return -item.readiness;
-                } else if (heldUntil) {
-                    delete held[item.id];
-                }
-                //randomize study of newly added items
-                if (!item.last && item.next - now < 0) {
-                    item.readiness = self.randomizeInterval(99999999);
-                    return -item.readiness;
-                }
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;
+                //temporarily ban recent items
+                if (historyCheck && history.indexOf(item.id.split('-')[2]) !== -1) {
+                    item.readiness = 0;
+                    return -item.readiness;
+                }
+                //randomly prioritize new items
+                if (!heldUntil && !item.last && item.next < now) {
+                    item.readiness = this.randomizeInterval(9999);
+                    return -item.readiness;
+                }
+                //deprioritize held ready items
+                if (heldUntil && heldUntil > now) {
+                    if (readiness > 0.2) {
+                        item.readiness = 0.2;
+                        return -item.readiness;
+                    }
+                } else if (held) {
+                    delete held[item.id];
+                }
+                //tweak old item readiness
                 if (readiness > 0 && seenAgo > 9000) {
                     var dayBonus = 1;
                     var ageBonus = 0.1 * Math.log(dayBonus + (dayBonus * dayBonus * seenAgo) * skritter.fn.daysInSecond);
@@ -227,9 +238,14 @@ define(function() {
                     ageBonus *= readiness2 * readiness2;
                     readiness += ageBonus;
                 }
+                //mix overdue items in with new items
+                if (readiness > 9999) {
+                    item.readiness = this.randomizeInterval(9999);
+                    return -item.readiness;
+                }
                 item.readiness = readiness;
                 return -item.readiness;
-            });
+            }, this));
             this.set('held', held).cache();
             this.trigger('schedule:sorted');
             return this.data;
@@ -261,14 +277,14 @@ define(function() {
             //remove hold on directly updated item
             delete held[item.id];
             //keeps a maximum schedule history of five items
-            history.unshift(item.id);
+            history.unshift(this.getItemBaseWriting(item.id));
             if (history.length > 5) {
                 history.pop();
             }
             //place holds on related items for sorting
             for (var i = 0, length = relatedItemIds.length; i < length; i++) {
                 if (!held[relatedItemIds[i]]) {
-                    held[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 5;
+                    held[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 10;
                 }
             }
             this.set('history', history);
