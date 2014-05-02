@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Fri May 02 2014 08:05:04 GMT+0800 (China Standard Time)
+# Time: Fri May 02 2014 22:33:53 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -112,6 +112,7 @@ js/lib/jquery.mobile-1.4.2.custom.min.js
 js/lib/jquery.ui-1.10.4.custom.min.js
 js/lib/lodash-2.4.1.compat.min.js
 js/lib/moment-2.6.0.min.js
+js/lib/raygun.min.js
 js/lib/require-2.1.11.min.js
 js/lib/require.i18n-2.0.4.js
 js/lib/require.text-2.0.10.js
