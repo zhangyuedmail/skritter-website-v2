@@ -22,6 +22,7 @@ define([
          */
         initialize: function() {
             this.data = new Data();
+            this.prompt = null;
             this.scheduler = new Scheduler();
             this.settings = new Settings();
             this.sync = new Sync();

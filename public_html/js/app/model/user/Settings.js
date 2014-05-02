@@ -109,6 +109,36 @@ define([
             }
         },
         /**
+         * @method getStyleName
+         * @returns {String}
+         */
+        getStyleName: function() {
+            if (this.isJapanese()) {
+                return 'both';
+            } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
+                return 'both';
+            } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
+                return 'simp';
+            } else {
+                return 'trad';
+            }
+        },
+        /**
+         * @method getTags
+         * @returns {Array}
+         */
+        getTags: function() {
+            if (this.isJapanese()) {
+                return ['japanese', 'both'];
+            } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
+                return ['chinese', 'both', 'simp', 'trad'];
+            } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
+                return ['chinese', 'both', 'simp'];
+            } else {
+                return ['chinese', 'both', 'trad'];
+            }
+        },
+        /**
          * Returns true if the target language is set to Chinese.
          * 
          * @method isChinese

@@ -29,7 +29,8 @@ define([
             if (skritter.user.settings.get('hideDueCount'))
                 this.$('#items-due').parent().hide();
             //selectively load a new or existing prompt
-            if (this.prompt) {
+            if (skritter.user.prompt) {
+                this.prompt = skritter.user.prompt;
                 this.loadPrompt(this.prompt);
             } else if (skritter.user.scheduler.data.length > 0) {
                 this.nextPrompt();
@@ -69,6 +70,7 @@ define([
             }
             this.prompt = prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
+            skritter.user.prompt = this.prompt;
             this.updateAudioButtonState();
             this.updateDueCount();
         },
@@ -138,6 +140,7 @@ define([
          * @param {Object} event
          */
         showAddItemsModal: function(event) {
+            skritter.timer.stop();
             skritter.modal.show('add-items');
             skritter.modal.element('.modal-footer').hide();
             skritter.modal.element('.item-limit').val(skritter.user.settings.get('addItemAmount'));
@@ -155,6 +158,7 @@ define([
                     skritter.user.sync.addItems(limit, function() {
                         skritter.user.settings.set('addItemAmount', limit);
                         skritter.modal.hide();
+                        skritter.timer.start();
                     });
                 } else {
                     skritter.modal.element('.message').addClass('text-danger');

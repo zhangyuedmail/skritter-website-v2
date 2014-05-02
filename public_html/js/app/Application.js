@@ -45,6 +45,7 @@ define([
             async.apply(loadUser),
             async.apply(loadRouter)
         ], function() {
+            //perform specific cordova tasks before initialization
             if (window.cordova) {
                 navigator.splashscreen.hide();
             }
@@ -141,6 +142,14 @@ define([
                     skritter.user.data.loadResources(callback);
                 }
             ], function() {
+                //load raygun javascript error logging module
+                if (window.Raygun) {
+                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach().withCustomData([
+                        skritter.user.settings.toJSON()
+                    ]).withTags(skritter.user.settings.getTags());
+                    Raygun.setUser(skritter.user.id);
+                    Raygun.setVersion(skritter.settings.getVersion());
+                }
                 callback();
             });
         } else {
