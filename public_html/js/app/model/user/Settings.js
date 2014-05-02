@@ -109,6 +109,21 @@ define([
             }
         },
         /**
+         * @method getStyleName
+         * @returns {String}
+         */
+        getStyleName: function() {
+            if (this.isJapanese()) {
+                return 'both';
+            } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
+                return 'both';
+            } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
+                return 'simp';
+            } else {
+                return 'trad';
+            }
+        },
+        /**
          * Returns true if the target language is set to Chinese.
          * 
          * @method isChinese
