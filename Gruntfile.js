@@ -172,16 +172,6 @@ module.exports = function(grunt) {
         },
         /*** SHELL ***/
         shell: {
-            'cordova-build-android-zh': {
-                command: [
-                    'cd build/cordova/chinese/',
-                    'cordova build android --release'
-                ].join('&&'),
-                options: {
-                    stdout: true,
-                    stderr: true
-                }
-            },
             'cordova-build-android-ja': {
                 command: [
                     'cd build/cordova/japanese/',
@@ -192,11 +182,10 @@ module.exports = function(grunt) {
                     stderr: true
                 }
             },
-            'cordova-build-run-android-zh': {
+            'cordova-build-android-zh': {
                 command: [
                     'cd build/cordova/chinese/',
-                    'cordova build android --release',
-                    'cordova run android'
+                    'cordova build android --release'
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -206,6 +195,17 @@ module.exports = function(grunt) {
             'cordova-build-run-android-ja': {
                 command: [
                     'cd build/cordova/japanese/',
+                    'cordova build android --release',
+                    'cordova run android'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'cordova-build-run-android-zh': {
+                command: [
+                    'cd build/cordova/chinese/',
                     'cordova build android --release',
                     'cordova run android'
                 ].join('&&'),
@@ -272,6 +272,26 @@ module.exports = function(grunt) {
     /*** COMMANDS ***/
     grunt.registerTask('appcache', [
         'manifest:root'
+    ]);
+    grunt.registerTask('build-android', [
+        'build-android-ja',
+        'build-android-zh'
+    ]);
+    grunt.registerTask('build-android-ja', [
+        'jshint:root',
+        'clean:build-cordova-www-ja',
+        'copy:cordova-www-ja',
+        'copy:cordova-config-ja',
+        'replace:cordova-ja',
+        'shell:cordova-build-android-ja'
+    ]);
+    grunt.registerTask('build-android-zh', [
+        'jshint:root',
+        'clean:build-cordova-www-zh',
+        'copy:cordova-www-zh',
+        'copy:cordova-config-zh',
+        'replace:cordova-zh',
+        'shell:cordova-build-android-zh'
     ]);
     grunt.registerTask('build-run-android', [
         'build-run-android-ja',
