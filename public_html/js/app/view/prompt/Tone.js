@@ -29,7 +29,11 @@ define([
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
-            this.show();
+            if (this.review.get('finished')) {
+                this.show().showAnswer();
+            } else {
+                this.show();
+            }
             return this;
         },
         /**

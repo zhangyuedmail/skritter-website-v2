@@ -23,7 +23,11 @@ define([
             Prompt.prototype.render.call(this);
             this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
             this.resize();
-            this.show();
+            if (this.review.get('finished')) {
+                this.show().showAnswer();
+            } else {
+                this.show();
+            }
             return this;
         },
         /**

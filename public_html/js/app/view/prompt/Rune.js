@@ -34,7 +34,11 @@ define([
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
-            this.show();
+            if (this.review.get('finished')) {
+                this.show().showAnswer();
+            } else {
+                this.show();
+            }
             return this;
         },
         /**
@@ -181,7 +185,9 @@ define([
                     width: canvasSize
                 });
             }
-            if (this.review.getCharacterAt().isFinished()) {
+            if (this.review.getCharacterAt().isFinished() && skritter.user.settings.get('teachingMode')) {
+                this.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+            } else if (this.review.getCharacterAt().isFinished()) {
                 this.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
             } else {
                 this.canvas.drawShape('display', this.review.getCharacterAt().getShape());
@@ -203,10 +209,14 @@ define([
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getMaskedSentenceWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position')));
-            if (skritter.user.settings.get('teachingMode') && this.review.getBaseItem().isNew())
+            if (!this.review.getCharacterAt().isFinished() &&
+                    skritter.user.settings.get('teachingMode') &&
+                    this.review.getBaseItem().isNew()) {
                 this.teach();
-            if (this.review.isFirst() && skritter.user.settings.get('audio'))
+            }
+            if (this.review.isFirst() && skritter.user.settings.get('audio')) {
                 this.review.getBaseVocab().playAudio();
+            }
             return this;
         },
         /**
