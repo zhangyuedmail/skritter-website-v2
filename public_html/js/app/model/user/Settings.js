@@ -64,6 +64,15 @@ define([
             return "<img src='data:image/png;base64," + this.get('avatar') + "' />";
         },
         /**
+         * @method getBriefing
+         * @returns {Object}
+         */
+        getBriefing: function() {
+            var data = this.toJSON();
+            delete data.avatar;
+            return data;
+        },
+        /**
          * @method getEnabledParts
          * @returns {Array}
          */
