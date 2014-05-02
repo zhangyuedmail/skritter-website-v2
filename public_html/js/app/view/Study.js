@@ -29,7 +29,8 @@ define([
             if (skritter.user.settings.get('hideDueCount'))
                 this.$('#items-due').parent().hide();
             //selectively load a new or existing prompt
-            if (this.prompt) {
+            if (skritter.user.prompt) {
+                this.prompt = skritter.user.prompt;
                 this.loadPrompt(this.prompt);
             } else if (skritter.user.scheduler.data.length > 0) {
                 this.nextPrompt();
@@ -69,6 +70,7 @@ define([
             }
             this.prompt = prompt.setElement(this.$('#content-container')).render();
             this.listenToOnce(this.prompt, 'prompt:finished', _.bind(this.nextPrompt, this));
+            skritter.user.prompt = this.prompt;
             this.updateAudioButtonState();
             this.updateDueCount();
         },
