@@ -62,7 +62,12 @@ define([
          * @param {Object} event
          */
         handleClickHold: function(event) {
-            this.reset();
+            if (this.teaching) {
+                this.reset();
+                this.teach();
+            } else {
+                this.reset();
+            }
             event.preventDefault();
         },
         /**
