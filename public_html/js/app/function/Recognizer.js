@@ -53,12 +53,22 @@ define(function() {
                     for (var c = 0, lengthC = params.length; c < lengthC; c++) {
                         var param = params[c];
                         var result = userStroke.clone();
-                        var scores = {
-                            angle: this.checkAngle(result, param),
-                            corners: this.checkCorners(result, param),
-                            cornersLength: this.checkCornersLength(result, param, size),
-                            distance: this.checkDistance(result, param, size)
-                        };
+                        var scores;
+                        if (param.skipChecks) {
+                            scores = {
+                                angle: param.skipChecks.indexOf('angle') === -1 ? this.checkAngle(result, param) : undefined,
+                                corners: param.skipChecks.indexOf('corners') === -1 ? this.checkCorners(result, param) : undefined,
+                                cornersLength: param.skipChecks.indexOf('length') === -1 ? this.checkCornersLength(result, param, size) : undefined,
+                                distance: param.skipChecks.indexOf('distance') === -1 ? this.checkDistance(result, param, size) : undefined
+                            };
+                        } else {
+                            scores = {
+                                angle: this.checkAngle(result, param),
+                                corners: this.checkCorners(result, param),
+                                cornersLength: this.checkCornersLength(result, param, size),
+                                distance: this.checkDistance(result, param, size)
+                            };
+                        }
                         var total = 0;
                         for (var category in scores) {
                             var score = scores[category];
@@ -66,7 +76,7 @@ define(function() {
                                 total = false;
                                 break;
                             }
-                            total += score;    
+                            total += score;
                         }
                         result.set({
                             bitmapId: bitmapId,
