@@ -60,7 +60,7 @@ define([
          */
         navigateList: function(event) {
             var listId = event.currentTarget.id.replace('list-', '');
-            skritter.router.navigate('vocab/list/' + listId, {trigger: true, replace: true});
+            skritter.router.navigate('vocab/list/' + listId, {replace: true, trigger: true});
             event.preventDefault();
         },
         /**

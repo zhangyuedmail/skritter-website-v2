@@ -77,7 +77,7 @@ define([
          * @param {Object} event
          */
         navigateStudySettings: function(event) {
-            skritter.router.navigate('study/settings', {trigger: true});
+            skritter.router.navigate('study/settings', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**

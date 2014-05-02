@@ -80,7 +80,7 @@ define([
          * @param {Object} event
          */
         toHome: function(event) {
-            skritter.router.navigate('', {trigger: true, replace: true});
+            skritter.router.navigate('', {replace: true, trigger: true});
             event.preventDefault();
         }
     });

@@ -58,7 +58,7 @@ define([
          * @param {Object} event
          */
         cancel: function(event) {
-            skritter.router.navigate('study', {trigger: true, replace: true});
+            skritter.router.navigate('study', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
@@ -96,7 +96,7 @@ define([
             skritter.modal.show('loading').set('.modal-body', 'Rescheduling');
             skritter.user.scheduler.load(function() {
                 skritter.user.scheduler.sort();
-                skritter.router.navigate('study', {trigger: true, replace: true});
+                skritter.router.navigate('study', {replace: true, trigger: true});
                 skritter.modal.hide();
             });
             event.preventDefault();

@@ -87,7 +87,7 @@ define([
          * @param {Object} event
          */
         navigateLists: function(event) {
-            skritter.router.navigate('vocab/list', {trigger: true, replace: true});
+            skritter.router.navigate('vocab/list', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
@@ -95,7 +95,7 @@ define([
          * @param {Object} event
          */
         navigateLogin: function(event) {
-            skritter.router.navigate('login', {trigger: true, replace: true});
+            skritter.router.navigate('login', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
@@ -103,7 +103,7 @@ define([
          * @param {Object} event
          */
         navigateNewUser: function(event) {
-            skritter.router.navigate('user/new', {trigger: true, replace: true});
+            skritter.router.navigate('user/new', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
@@ -111,7 +111,7 @@ define([
          * @param {Object} event
          */
         navigateStudy: function(event) {
-            skritter.router.navigate('study', {trigger: true, replace: true});
+            skritter.router.navigate('study', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**

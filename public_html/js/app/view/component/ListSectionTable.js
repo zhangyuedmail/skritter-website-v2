@@ -61,7 +61,7 @@ define([
          */
         navigateListSection: function(event) {
             var sectionId = event.currentTarget.id.replace('section-', '');
-            skritter.router.navigate('vocab/list/' + Table.listId + '/' + sectionId, {trigger: true, replace: true});
+            skritter.router.navigate('vocab/list/' + Table.listId + '/' + sectionId, {replace: true, trigger: true});
             event.preventDefault();
         },
         /**

@@ -108,7 +108,7 @@ define([
          * @param {Object} event
          */
         navigateCategoryTextbook: function(event) {
-            skritter.router.navigate('vocab/list/category/textbook', {trigger: true});
+            skritter.router.navigate('vocab/list/category/textbook', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
@@ -116,7 +116,7 @@ define([
          * @param {Object} event
          */
         navigateCategoryStudying: function(event) {
-            skritter.router.navigate('vocab/list/category/studying', {trigger: true});
+            skritter.router.navigate('vocab/list/category/studying', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
