@@ -119,7 +119,7 @@ define([
             var language = this.get('language');
             if (language === 'zh' || language === 'ja')
                 return language === 'zh' ? 'Chinese' : 'Japanese';
-            return skritter.user.settings.get('targetLang');
+            return skritter.user.settings.get('targetLang') === 'zh' ? 'Chinese' : 'Japanese';
         },
         /**
          * @method getLanguageCode
@@ -130,6 +130,16 @@ define([
             if (language === 'zh' || language === 'ja')
                 return language;
             return skritter.user.settings.get('targetLang');
+        },
+        /**
+         * @method getVersion
+         * @returns {String}
+         */
+        getVersion: function() {
+            var version = this.get('version');
+            if (version.indexOf('@') === -1)
+                return version;
+            return 'localhost';
         },
         /**
          * @method isIndexedDB
