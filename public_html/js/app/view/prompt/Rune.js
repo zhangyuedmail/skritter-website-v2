@@ -226,7 +226,7 @@ define([
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position') + 1));
             if (this.teaching) {
-                //TODO: handle what to show when finished and teaching
+                this.gradingButtons.grade(this.review.getReviewAt().score);
             } else {
                 this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             }
