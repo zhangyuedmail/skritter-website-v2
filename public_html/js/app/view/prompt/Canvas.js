@@ -180,6 +180,7 @@ define(function() {
         disableInput: function() {
             this.$('#canvas-input').off('vmousedown.Input');
             this.$('#canvas-input').off('vmousemove.Input');
+            this.$('#canvas-input').off('vmouseout.Input');
             this.$('#canvas-input').off('vmouseup.Input');
             return this;
         },
@@ -250,6 +251,7 @@ define(function() {
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
                 self.triggerInputDown(oldPoint);
                 self.$('#canvas-input').on('vmousemove.Input', move);
+                self.$('#canvas-input').on('vmouseout.Input', out);
                 self.$('#canvas-input').on('vmouseup.Input', up);
             }
             function move() {
@@ -270,8 +272,18 @@ define(function() {
                 oldMidPoint = midPoint;
                 points.push(point);
             }
+            function out() {
+                self.$('#canvas-input').off('vmousemove.Input', move);
+                self.$('#canvas-input').off('vmouseout.Input', out);
+                self.$('#canvas-input').off('vmouseup.Input', up);
+                self.triggerInputUp(null, squig.clone(true));
+                marker.graphics.clear();
+                squig.graphics.clear();
+                stage.clear();
+            }
             function up() {
                 self.$('#canvas-input').off('vmousemove.Input', move);
+                self.$('#canvas-input').off('vmouseout.Input', up);
                 self.$('#canvas-input').off('vmouseup.Input', up);
                 self.triggerInputUp(points, squig.clone(true));
                 marker.graphics.clear();

@@ -93,7 +93,7 @@ define([
          * @param {CreateJS.Shape} shape
          */
         handleStrokeReceived: function(points, shape) {
-            if (points.length > 2) {
+            if (points && points.length > 2) {
                 var result = this.review.getCharacterAt().recognize(points, shape);
                 if (result) {
                     this.canvas.fadeLayer('background');
@@ -116,6 +116,8 @@ define([
                         this.canvas.fadeShape('hint', this.review.getCharacterAt().getExpectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
                 }
+            } else {
+                this.canvas.fadeShape('marker', shape);
             }
         },
         /**
