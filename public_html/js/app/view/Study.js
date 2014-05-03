@@ -124,11 +124,11 @@ define([
          */
         previousPrompt: function() {
             var review = skritter.user.data.reviews.at(0);
-            if (this.prompt.review.isFirst()) {
+            if (review && this.prompt.review.isFirst()) {
                 review.getPrompt(_.bind(function(prompt) {
                     this.loadPrompt(prompt);
                 }, this));
-            } else {
+            } else if (review) {
                 this.prompt.previous();
             }
         },
