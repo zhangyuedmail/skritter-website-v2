@@ -143,12 +143,11 @@ define(function() {
                             request(data.cursor);
                         }, 500);
                     } else {
-                        console.log('REVIEW ERRORS', errors);
-                        callback(errors);
+                        callback(errors, data.statusCode);
                     }
                 });
                 promise.fail(function(error) {
-                    callback(error);
+                    callback(error, 0);
                 });
             }
             request();
