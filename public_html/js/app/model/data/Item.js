@@ -68,6 +68,7 @@ define([
             }
             review.set({
                 id: wordGroup,
+                itemId: items[0].id,
                 part: part,
                 originalItems: originalItems,
                 reviews: reviews
