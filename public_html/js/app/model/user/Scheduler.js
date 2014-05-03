@@ -213,19 +213,20 @@ define(function() {
             var now = skritter.fn.getUnixTime();
             var held = this.get('held');
             var history = this.get('history');
-            var historyCheck = this.data.length > 5 ? true : false;
+            var historyCheck = this.data.length > 24 ? true : false;
             this.data = _.sortBy(this.data, _.bind(function(item) {
                 var heldUntil = held[item.id];
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;
+                
                 //temporarily ban recent items
                 if (historyCheck && history.indexOf(item.id.split('-')[2]) !== -1) {
                     item.readiness = 0;
                     return -item.readiness;
                 }
                 //randomly prioritize new items
-                if (!heldUntil && !item.last && item.next < now) {
+                if (!heldUntil && !item.last) {
                     item.readiness = this.randomizeInterval(9999);
                     return -item.readiness;
                 }
@@ -235,7 +236,7 @@ define(function() {
                         item.readiness = 0.2;
                         return -item.readiness;
                     }
-                } else if (held) {
+                } else if (heldUntil) {
                     delete held[item.id];
                 }
                 //tweak old item readiness
