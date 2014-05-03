@@ -119,9 +119,9 @@ define([
          * @param {Function} callback
          */
         getPrompt: function(callback) {
-            skritter.user.data.items.loadItem(this.get('itemId'), _.bind(function(item) {
+            skritter.user.data.items.loadItem(this.get('itemId'), _.bind(function(promptItem) {
                 var items = this.get('originalItems');
-                var part = item.get('part');
+                var part = promptItem.get('part');
                 var prompt = null;
                 switch (part) {
                     case 'defn':
@@ -140,7 +140,7 @@ define([
                 if (part === 'rune' || part === 'tone') {
                     this.characters = [];
                     for (var i = items.length > 1 ? 1 : 0, length = items.length; i < length; i++) {
-                        var item = this.getItemAt(i);;
+                        var item = this.getItemAt(i);
                         this.characters.push(item.getStroke().getCanvasCharacter());
                     }
                 }
