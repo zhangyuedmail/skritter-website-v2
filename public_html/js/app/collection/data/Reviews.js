@@ -74,8 +74,12 @@ define([
                         });
                     }
                 ], _.bind(function(error, reviewIds) {
-                    if (reviewIds && !error)
+                    if (error) {
+                        alert('REVIEW ERRORS DETECTED!');
+                        console.log('REVIEW ERRORS', reviewIds);
+                    } else {
                         this.remove(reviewIds);
+                    }
                     if (typeof callback === 'function')
                         callback();
                 }, this));
