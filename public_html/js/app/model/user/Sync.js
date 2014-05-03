@@ -105,10 +105,8 @@ define([
             var langCode = skritter.settings.getLanguageCode();
             var lastItemSync = options.downloadAll ? 0 : this.get('lastItemSync');
             var lastSRSConfigSync = options.downloadAll ? 0 : this.get('lastSRSConfigSync');
-            var lastReviewErrorCheck = options.downloadAll ? 0 : this.get('lastReviewErrorCheck');
             var lastVocabSync = options.downloadAll ? 0 : this.get('lastVocabSync');
             var updatedSRSConfigs = false;
-            var updatedReviewErrors = false;
             var updatedVocabs = false;
             var now = skritter.fn.getUnixTime();
             this.syncing = true;
@@ -180,15 +178,22 @@ define([
                 });
                 updatedSRSConfigs = true;
             }
-            if (lastReviewErrorCheck > 0) {
-                requests.push({
-                    path: 'api/v' + skritter.api.get('version') + '/reviews/errors',
-                    method: 'GET',
-                    offset: lastReviewErrorCheck
-                });
-                updatedReviewErrors = true;
-            }
             async.waterfall([
+                _.bind(function(callback) {
+                    if (this.get('lastReviewErrorCheck') === 0) {
+                        this.set('lastReviewErrorCheck', now);
+                        callback();
+                    } else {
+                        skritter.api.getReviewErrors(this.get('lastReviewErrorCheck'), _.bind(function(errors) {
+                            if (errors.length > 0) {
+                                alert('REVIEW ERRORS DETECTED!');
+                                console.log('REVIEW ERRORS', errors);
+                            }
+                            this.set('lastReviewErrorCheck', now);
+                            callback();
+                        }, this));
+                    }
+                }, this),
                 function(callback) {
                     if (skritter.user.data.reviews.length > 0) {
                         skritter.user.data.reviews.save(callback, options.holdReviews);
@@ -217,10 +222,6 @@ define([
                                     skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
                                 if (lastItemSync !== 0 && result.Items)
                                     skritter.user.scheduler.insert(result.Items);
-                                if (result.ReviewErrors && result.ReviewErrors.length > 0) {
-                                    window.alert("It looks like there are some review errors!");
-                                    console.log("REVIEW ERRORS", result.ReviewErrors);
-                                }
                                 skritter.user.data.insert(result, function() {
                                     window.setTimeout(request, 2000);
                                 });
@@ -238,8 +239,6 @@ define([
                 this.set('lastItemSync', now);
                 if (updatedSRSConfigs)
                     this.set('lastSRSConfigSync', now);
-                if (updatedReviewErrors)
-                    this.set('lastReviewErrorCheck', now);
                 if (updatedVocabs)
                     this.set('lastVocabSync', now);
                 this.syncing = false;
