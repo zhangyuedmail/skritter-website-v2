@@ -47,7 +47,8 @@ define([
         events: {
             'click #view-study .button-add-items': 'showAddItemsModal',
             'click #view-study .button-audio': 'playAudio',
-            'click #view-study .button-study-settings': 'navigateStudySettings'
+            'click #view-study .button-study-settings': 'navigateStudySettings',
+            'click #view-study .button-undo': 'previousPrompt'
         },
         /**
          * @method checkAutoSync
@@ -122,7 +123,14 @@ define([
          * @method previousPrompt
          */
         previousPrompt: function() {
-            //TODO: add in the ability to move backwards a few prompts
+            var review = skritter.user.data.reviews.at(0);
+            if (this.prompt.review.isFirst()) {
+                review.getPrompt(_.bind(function(prompt) {
+                    this.loadPrompt(prompt);
+                }, this));
+            } else {
+                this.prompt.previous();
+            }
         },
         /**
          * @method remove

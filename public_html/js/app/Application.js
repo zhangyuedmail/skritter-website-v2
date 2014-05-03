@@ -147,7 +147,7 @@ define([
                     Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach().withCustomData([
                         skritter.user.settings.getBriefing()
                     ]).withTags(skritter.user.settings.getTags());
-                    Raygun.saveIfOffline(false);
+                    Raygun.saveIfOffline(true);
                     Raygun.setUser(skritter.user.id);
                     Raygun.setVersion(skritter.settings.getVersion());
                 }

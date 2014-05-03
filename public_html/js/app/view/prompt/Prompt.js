@@ -37,11 +37,15 @@ define([
          * @param {Number} selectedGrade
          */
         handleGradingSelected: function(selectedGrade) {
-            this.review.setReviewAt(null, {
-                reviewTime: skritter.timer.getReviewTime(),
-                score: selectedGrade,
-                thinkingTime: skritter.timer.getThinkingTime()
-            });
+            if (this.isPrevious) {
+                this.review.setReviewAt(null, 'score', selectedGrade);
+            } else {
+                this.review.setReviewAt(null, {
+                    reviewTime: skritter.timer.getReviewTime(),
+                    score: selectedGrade,
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
             if (this.review.isLast()) {
                 this.review.save(_.bind(function() {
                     this.trigger('prompt:finished');
@@ -58,6 +62,16 @@ define([
             this.review.next();
             this.gradingButtons.grade(this.review.getReviewAt().score);
             this.clear().show();
+        },
+        /**
+         * @method previous
+         */
+        previous: function() {
+            skritter.timer.stop();
+            this.review.previous();
+            this.gradingButtons.grade(this.review.getReviewAt().score);
+            this.clear().show().showAnswer();
+            this.resize();
         },
         /**
          * @method remove
@@ -81,9 +95,11 @@ define([
         /**
          * @method set
          * @param {Backbone.Model} review
+         * @param {Boolean} isPrevious
          */
-        set: function(review) {
+        set: function(review, isPrevious) {
             this.review = review;
+            this.isPrevious = isPrevious ? 'true' : 'false';
         }
     });
 

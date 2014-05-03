@@ -1,6 +1,10 @@
 /**
  * @module Skritter
  * @submodule Model
+ * @param Defn
+ * @param Rdng
+ * @param Rune
+ * @param Tone
  * @author Joshua McFarland
  */
 define([
@@ -129,7 +133,7 @@ define([
                         prompt = new Tone();
                         break;
                 }
-                prompt.set(this);
+                prompt.set(this, true);
                 callback(prompt);
             }, this));
         },
