@@ -27,9 +27,11 @@ define([
          * @property {Object} defaults
          */
         defaults: {
+            finished: false,
             originalItems: [],
             position: 1,
-            reviews: []
+            reviews: [],
+            taught: false
         },
         /**
          * @method cache
@@ -118,8 +120,10 @@ define([
          */
         getPrompt: function(callback) {
             skritter.user.data.items.loadItem(this.get('itemId'), _.bind(function(item) {
+                var items = this.get('originalItems');
+                var part = item.get('part');
                 var prompt = null;
-                switch (item.get('part')) {
+                switch (part) {
                     case 'defn':
                         prompt = new Defn();
                         break;
@@ -133,7 +137,14 @@ define([
                         prompt = new Tone();
                         break;
                 }
-                prompt.set(this, true);
+                if (part === 'rune' || part === 'tone') {
+                    this.characters = [];
+                    for (var i = items.length > 1 ? 1 : 0, length = items.length; i < length; i++) {
+                        var item = this.getItemAt(i);;
+                        this.characters.push(item.getStroke().getCanvasCharacter());
+                    }
+                }
+                prompt.set(this);
                 callback(prompt);
             }, this));
         },

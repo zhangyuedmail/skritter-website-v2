@@ -22,12 +22,13 @@ define([
             this.$el.html(templateRdng);
             Prompt.prototype.render.call(this);
             this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
-            this.resize();
-            if (this.review.get('finished')) {
+            if (this.isPrevious || this.review.get('finished')) {
                 this.show().showAnswer();
             } else {
+                skritter.timer.start();
                 this.show();
             }
+            this.resize();
             return this;
         },
         /**
@@ -126,8 +127,6 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
-            skritter.timer.start();
-            this.review.set('finished', false);
             this.$('#answer').hide();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');

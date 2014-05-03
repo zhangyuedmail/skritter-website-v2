@@ -61,7 +61,12 @@ define([
             skritter.timer.reset();
             this.review.next();
             this.gradingButtons.grade(this.review.getReviewAt().score);
-            this.clear().show();
+            if (this.review.get('finished')) {
+                this.clear().show().showAnswer();
+                this.resize();
+            } else {
+                this.clear().show();
+            }
         },
         /**
          * @method previous
@@ -70,7 +75,12 @@ define([
             skritter.timer.stop();
             this.review.previous();
             this.gradingButtons.grade(this.review.getReviewAt().score);
-            this.clear().show().showAnswer();
+            if (this.review.get('finished')) {
+                this.clear().show().showAnswer();
+                this.resize();
+            } else {
+                this.clear().show();
+            }
             this.resize();
         },
         /**
@@ -95,11 +105,9 @@ define([
         /**
          * @method set
          * @param {Backbone.Model} review
-         * @param {Boolean} isPrevious
          */
-        set: function(review, isPrevious) {
+        set: function(review) {
             this.review = review;
-            this.isPrevious = isPrevious ? 'true' : 'false';
         }
     });
 

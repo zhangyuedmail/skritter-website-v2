@@ -24,16 +24,17 @@ define([
             this.$el.html(templateTone);
             Prompt.prototype.render.call(this);
             this.canvas = new Canvas();
-            this.canvas.setElement(this.$('#writing-area'));
+            this.canvas.setElement(this.$('#writing-area')).render();
             this.listenTo(this.canvas, 'canvas:click', this.handleClick);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
-            this.resize();
             if (this.review.get('finished')) {
                 this.show().showAnswer();
             } else {
+                skritter.timer.start();
                 this.show();
             }
+            this.resize();
             return this;
         },
         /**
@@ -115,7 +116,7 @@ define([
             var canvasSize = skritter.settings.canvasSize();
             var contentHeight = skritter.settings.contentHeight();
             var contentWidth = skritter.settings.contentWidth();
-            this.canvas.resize(canvasSize).render();
+            this.canvas.resize(canvasSize);
             this.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
             if (skritter.settings.isPortrait()) {
                 this.$('.prompt-container').addClass('portrait');
@@ -162,10 +163,8 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
-            skritter.timer.start();
             this.canvas.enableInput();
             this.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
-            this.review.set('finished', false);
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position'), skritter.user.settings.get('hideReading')));

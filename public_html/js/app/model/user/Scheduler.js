@@ -219,7 +219,6 @@ define(function() {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;
-                
                 //temporarily ban recent items
                 if (historyCheck && history.indexOf(item.id.split('-')[2]) !== -1) {
                     item.readiness = 0;
