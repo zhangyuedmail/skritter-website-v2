@@ -3,7 +3,12 @@
  * @submodule Model
  * @author Joshua McFarland
  */
-define(function() {
+define([
+    'view/prompt/Defn',
+    'view/prompt/Rdng',
+    'view/prompt/Rune',
+    'view/prompt/Tone'
+], function(Defn, Rdng, Rune, Tone) {
     /**
      * @class DataReview
      */
@@ -102,6 +107,31 @@ define(function() {
             if (this.get('originalItems').length > 1 && position !== 0)
                 return this.get('originalItems')[position];
             return this.get('originalItems')[0];
+        },
+        /**
+         * @method getPrompt
+         * @param {Function} callback
+         */
+        getPrompt: function(callback) {
+            skritter.user.data.items.loadItem(this.get('itemId'), _.bind(function(item) {
+                var prompt = null;
+                switch (item.get('part')) {
+                    case 'defn':
+                        prompt = new Defn();
+                        break;
+                    case 'rdng':
+                        prompt = new Rdng();
+                        break;
+                    case 'rune':
+                        prompt = new Rune();
+                        break;
+                    case 'tone':
+                        prompt = new Tone();
+                        break;
+                }
+                prompt.set(this);
+                callback(prompt);
+            }, this));
         },
         /**
          * @method getTotalReviewTime
