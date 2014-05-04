@@ -16,8 +16,8 @@ define([
          */
         defaults: {
             addItemOffset: 0,
+            lastErrorCheck: 0,
             lastItemSync: 0,
-            lastReviewErrorCheck: 0,
             lastSRSConfigSync: 0,
             lastVocabSync: 0
         },
@@ -34,6 +34,8 @@ define([
          */
         addItems: function(limit, callback) {
             var self = this;
+            var now = skritter.fn.getUnixTime();
+            var numVocabsAdded = 0;
             var offset = this.get('addItemOffset');
             var requests = {
                 path: 'api/v' + skritter.api.get('version') + '/items/add',
@@ -58,11 +60,13 @@ define([
                     function request() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
-                                console.log('ADDED ITEMS', result.Items);
+                                if (result.Items) {
+                                    skritter.user.scheduler.insert(result.Items);
+                                }
+                                numVocabsAdded += result.numVocabsAdded;
                                 window.setTimeout(request, 2000);
-                            } else if (result) {
-                                //TODO: handle errors and other incorrect status codes
                             } else {
+                                self.set('addItemOffset', offset + numVocabsAdded);
                                 callback();
                             }
                         });
@@ -70,14 +74,7 @@ define([
                     request();
                 },
                 function(callback) {
-                    function sync() {
-                        if (self.syncing) {
-                            window.setTimeout(sync, 2000);
-                        } else {
-                            self.changedItems(callback);
-                        }
-                    }
-                    sync();
+                    self.changedItems(callback, now, true);
                 }
             ], function() {
                 skritter.user.scheduler.sort();
@@ -88,58 +85,51 @@ define([
         /**
          * @method changedItems
          * @param {Function} callback
-         * @param {Boolean} options
+         * @param {Number} offset
+         * @param {Boolean} includeResources
          */
-        changedItems: function(callback, options) {
-            if (this.syncing) {
-                if (typeof callback === 'function')
-                    callback();
-                return false;
-            }
-            options = options ? options : {};
-            options.downloadAll = options.downloadAll ? options.downloadAll : false;
-            options.holdReviews = options.holdReviews ? options.holdReviews : 0;
-            var requests = [];
-            var downloadedRequests = 0;
-            var responseSize = 0;
-            var langCode = skritter.settings.getLanguageCode();
-            var lastItemSync = options.downloadAll ? 0 : this.get('lastItemSync');
-            var lastSRSConfigSync = options.downloadAll ? 0 : this.get('lastSRSConfigSync');
-            var lastVocabSync = options.downloadAll ? 0 : this.get('lastVocabSync');
-            var updatedSRSConfigs = false;
-            var updatedVocabs = false;
-            var now = skritter.fn.getUnixTime();
-            this.syncing = true;
-            this.trigger('sync', this.syncing);
-            console.log('SYNCING FROM', (lastItemSync === 0) ? 'THE BEGINNING OF TIME' : moment(lastItemSync * 1000).format('YYYY-MM-DD H:mm:ss'));
-            if (lastItemSync === 0 || options.downloadAll) {
-                requests.push({
-                    path: 'api/v' + skritter.api.get('version') + '/vocablists',
-                    method: 'GET',
-                    params: {
-                        lang: langCode,
-                        sort: 'custom'
-                    },
-                    spawner: true
-                });
-                requests.push({
-                    path: 'api/v' + skritter.api.get('version') + '/vocablists',
-                    method: 'GET',
-                    params: {
-                        lang: langCode,
-                        sort: 'studying'
-                    },
-                    spawner: true
-                });
-            }
-            if (lastItemSync >= 0) {
-                requests.push({
+        changedItems: function(callback, offset, includeResources) {
+            offset = offset ? offset : this.get('lastItemSync');
+            var requests = [
+                {
                     path: 'api/v' + skritter.api.get('version') + '/items',
                     method: 'GET',
                     params: {
-                        lang: langCode,
+                        lang: skritter.settings.getLanguageCode(),
                         sort: 'changed',
-                        offset: lastItemSync,
+                        offset: offset,
+                        include_vocabs: includeResources ? 'true' : 'false',
+                        include_strokes: includeResources ? 'true' : 'false',
+                        include_sentences: includeResources ? 'true' : 'false',
+                        include_heisigs: includeResources ? 'true' : 'false',
+                        include_top_mnemonics: includeResources ? 'true' : 'false',
+                        include_decomps: includeResources ? 'true' : 'false'
+                    },
+                    spawner: true
+                }
+            ];
+
+            async.series([
+                async.apply(this.processBatch, requests)
+            ], _.bind(function() {
+                callback();
+            }, this));
+        },
+        /**
+         * @method downloadAccount
+         * @param {Function} callback
+         */
+        downloadAccount: function(callback) {
+            var now = skritter.fn.getUnixTime();
+            var lang = skritter.settings.getLanguageCode();
+            var requests = [
+                {
+                    path: 'api/v' + skritter.api.get('version') + '/items',
+                    method: 'GET',
+                    params: {
+                        lang: lang,
+                        sort: 'changed',
+                        offset: 0,
                         include_vocabs: 'true',
                         include_strokes: 'true',
                         include_sentences: 'true',
@@ -148,59 +138,34 @@ define([
                         include_decomps: 'true'
                     },
                     spawner: true
-                });
-            }
-            if (lastVocabSync !== 0 && moment(lastVocabSync * 1000).add('hours', 12).valueOf() / 1000 <= now) {
-                requests.push({
-                    path: 'api/v' + skritter.api.get('version') + '/vocabs',
-                    method: 'GET',
-                    params: {
-                        lang: langCode,
-                        sort: 'all',
-                        offset: lastVocabSync,
-                        include_strokes: 'true',
-                        include_sentences: 'true',
-                        include_heisigs: 'true',
-                        include_top_mnemonics: 'true',
-                        include_decomps: 'true'
-                    },
-                    spawner: true
-                });
-                updatedVocabs = true;
-            }
-            if (lastSRSConfigSync === 0 || moment(lastSRSConfigSync * 1000).add('hours', 2).valueOf() / 1000 <= now) {
-                requests.push({
+                },
+                {
                     path: 'api/v' + skritter.api.get('version') + '/srsconfigs',
                     method: 'GET',
-                    params: {
-                        lang: langCode
-                    }
+                    params: {lang: lang}
+                }
+            ];
+            async.series([
+                async.apply(this.processBatch, requests)
+            ], _.bind(function() {
+                this.set({
+                    lastErrorCheck: now,
+                    lastItemSync: now,
+                    lastSRSConfigSync: now,
+                    lastVocabSync: now
                 });
-                updatedSRSConfigs = true;
-            }
+                callback();
+            }, this));
+        },
+        /**
+         * @method processBatch
+         * @param {Array} requests
+         * @param {Function} callback
+         */
+        processBatch: function(requests, callback) {
+            var downloadedRequests = 0;
+            var responseSize = 0;
             async.waterfall([
-                _.bind(function(callback) {
-                    if (this.get('lastReviewErrorCheck') === 0) {
-                        this.set('lastReviewErrorCheck', now);
-                        callback();
-                    } else {
-                        skritter.api.getReviewErrors(this.get('lastReviewErrorCheck'), _.bind(function(errors) {
-                            if (errors.length > 0) {
-                                alert('REVIEW ERRORS DETECTED!');
-                                console.log('REVIEW ERRORS', errors);
-                            }
-                            this.set('lastReviewErrorCheck', now);
-                            callback();
-                        }, this));
-                    }
-                }, this),
-                function(callback) {
-                    if (skritter.user.data.reviews.length > 0) {
-                        skritter.user.data.reviews.save(callback, options.holdReviews);
-                    } else {
-                        callback();
-                    }
-                },
                 function(callback) {
                     skritter.api.requestBatch(requests, function(batch, status) {
                         if (status === 200) {
@@ -220,13 +185,9 @@ define([
                                     skritter.modal.set('.modal-title-right', skritter.fn.bytesToSize(responseSize));
                                 if (result.totalRequests > 100)
                                     skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
-                                if (lastItemSync !== 0 && result.Items)
-                                    skritter.user.scheduler.insert(result.Items);
                                 skritter.user.data.insert(result, function() {
-                                    window.setTimeout(request, 2000);
+                                    window.setTimeout(request, 1000);
                                 });
-                            } else if (result) {
-                                //TODO: handle errors and other incorrect status codes
                             } else {
                                 callback();
                             }
@@ -234,18 +195,65 @@ define([
                     }
                     request();
                 }
-            ], _.bind(function() {
-                console.log('FINISHED SYNCING AT', moment(now * 1000).format('YYYY-MM-DD H:mm:ss'));
-                this.set('lastItemSync', now);
-                if (updatedSRSConfigs)
-                    this.set('lastSRSConfigSync', now);
-                if (updatedVocabs)
-                    this.set('lastVocabSync', now);
-                this.syncing = false;
-                this.trigger('sync', this.syncing);
-                if (typeof callback === 'function')
+            ], function() {
+                callback();
+            });
+        },
+        /**
+         * @method reviews
+         * @param {Function} callback
+         */
+        reviews: function(callback) {
+            var lastErrorCheck = this.get('lastErrorCheck');
+            var reviews = skritter.user.data.reviews.getReviewArray();
+            async.waterfall([
+                function(callback) {
+                    skritter.api.getReviewErrors(lastErrorCheck, function(errors, status) {
+                        if (status === 200 && errors.length > 0) {
+                            alert('REVIEW ERRORS DETECTED!');
+                            console.log('REVIEW ERRORS', errors);
+                            callback(null, errors);
+                        } else if (status === 200) {
+                            callback();
+                        } else {
+                            callback(errors);
+                        }
+                    });
+                },
+                function(callback) {
+                    skritter.api.postReviews(reviews, function(postedReviews, status) {
+                        if (status === 200) {
+                            callback(null, _.uniq(_.pluck(postedReviews, 'wordGroup')));
+                        } else {
+                            callback(postedReviews);
+                        }
+                    });
+                    
+                },
+                function(postedReviewIds, callback) {
+                    skritter.storage.remove('reviews', postedReviewIds, function() {
+                        skritter.user.data.reviews.remove(postedReviewIds);
+                        callback();
+                    });
+                }
+            ], function() {
+                callback();
+            });
+        },
+        /**
+         * @method srsconfigs
+         * @param {Function} callback
+         */
+        srsconfigs: function(callback) {
+            skritter.api.getSRSConfigs(skritter.settings.getLanguageCode(), function(srsconfigs, status) {
+                if (status === 200) {
+                    skritter.user.data.srsconfigs.reset();
+                    skritter.user.data.srsconfigs.add(srsconfigs, {merge: true, silent: true});
+                    skritter.user.data.srsconfigs.insert(srsconfigs, callback);
+                } else {
                     callback();
-            }, this));
+                }
+            });
         }
     });
 

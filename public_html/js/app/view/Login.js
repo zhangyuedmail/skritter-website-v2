@@ -57,7 +57,7 @@ define([
                     skritter.modal.show('download')
                             .set('.modal-title', 'DOWNLOADING ACCOUNT')
                             .progress(100);
-                    skritter.user.sync.changedItems(function() {
+                    skritter.user.sync.downloadAccount(function() {
                         document.location.href = '';
                     });
                 } else {
