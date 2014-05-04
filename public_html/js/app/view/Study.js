@@ -46,8 +46,8 @@ define([
          */
         events: {
             'click #view-study .button-add-items': 'showAddItemsModal',
-            'click #view-study .button-audio': 'playAudio',
-            'click #view-study .button-study-settings': 'navigateStudySettings'
+            'click #view-study .button-study-settings': 'navigateStudySettings',
+            'click #view-study .button-undo': 'previousPrompt'
         },
         /**
          * @method checkAutoSync
@@ -55,7 +55,7 @@ define([
          */
         checkAutoSync: function() {
             if (skritter.user.settings.get('autoSync') && skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
-                skritter.user.sync.changedItems(null, {holdReviews: 1});
+                skritter.user.sync.reviews();
                 return true;
             }
             return false;
@@ -111,18 +111,17 @@ define([
             }, this));
         },
         /**
-         * @method playAudio
-         * @param {Object} event
-         */
-        playAudio: function(event) {
-            this.prompt.review.getBaseVocab().playAudio();
-            event.preventDefault();
-        },
-        /**
          * @method previousPrompt
          */
         previousPrompt: function() {
-            //TODO: add in the ability to move backwards a few prompts
+            var review = skritter.user.data.reviews.at(0);
+            if (review && this.prompt.review.isFirst()) {
+                review.getPrompt(_.bind(function(prompt) {
+                    this.loadPrompt(prompt);
+                }, this));
+            } else if (review) {
+                this.prompt.previous();
+            }
         },
         /**
          * @method remove

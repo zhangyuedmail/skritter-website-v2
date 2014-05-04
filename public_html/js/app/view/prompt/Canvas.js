@@ -387,6 +387,7 @@ define(function() {
             this.stage.display.canvas.height = size;
             this.stage.input.canvas.width = size;
             this.stage.input.canvas.height = size;
+            this.clear();
             return this;
         },
         /**

@@ -33,6 +33,12 @@ define([
             return this;
         },
         /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick #prompt-reading': 'playAudio'
+        },
+        /**
          * @method handleGradingSelected
          * @param {Number} selectedGrade
          */
@@ -57,7 +63,35 @@ define([
             skritter.timer.reset();
             this.review.next();
             this.gradingButtons.grade(this.review.getReviewAt().score);
-            this.clear().show();
+            if (this.review.getReview().finished) {
+                this.clear().show().showAnswer();
+                this.resize();
+            } else {
+                this.clear().show();
+            }
+        },
+        /**
+         * @method playAudio
+         * @param {Object} event
+         */
+        playAudio: function(event) {
+            this.review.getBaseVocab().playAudio();
+            event.preventDefault();
+        },
+        /**
+         * @method previous
+         */
+        previous: function() {
+            skritter.timer.stop();
+            this.review.previous();
+            this.gradingButtons.grade(this.review.getReviewAt().score);
+            if (this.review.getReview().finished) {
+                this.clear().show().showAnswer();
+                this.resize();
+            } else {
+                this.clear().show();
+            }
+            this.resize();
         },
         /**
          * @method remove

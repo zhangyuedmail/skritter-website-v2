@@ -22,8 +22,13 @@ define([
             this.$el.html(templateDefn);
             Prompt.prototype.render.call(this);
             this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
+            if (this.isPrevious || this.review.getReview().finished) {
+                this.show().showAnswer();
+            } else {
+                skritter.timer.start();
+                this.show();
+            }
             this.resize();
-            this.show();
             return this;
         },
         /**
@@ -37,7 +42,7 @@ define([
          * @param {Object} event
          */
         handleClick: function(event) {
-            if (this.review.get('finished')) {
+            if (this.review.getReview().finished) {
                 this.gradingButtons.triggerSelected();
             } else {
                 this.showAnswer();
@@ -122,8 +127,6 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
-            skritter.timer.start();
-            this.review.set('finished', false);
             this.$('#answer').hide();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
@@ -131,6 +134,9 @@ define([
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().get('writing'));
+            if (this.review.getBaseVocab().has('audio')) {
+                this.$('#prompt-reading').addClass('has-audio');
+            }
             return this;
         },
         /**
@@ -139,7 +145,7 @@ define([
          */
         showAnswer: function() {
             skritter.timer.stop();
-            this.review.set('finished', true);
+            this.review.setReview('finished', true);
             this.$('#question').hide();
             this.$('#answer').show('fade', 200);
             this.$('#question-text').html('Definition:');

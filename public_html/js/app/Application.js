@@ -145,8 +145,9 @@ define([
                 //load raygun javascript error logging module
                 if (window.Raygun) {
                     Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach().withCustomData([
-                        skritter.user.settings.toJSON()
+                        skritter.user.settings.getBriefing()
                     ]).withTags(skritter.user.settings.getTags());
+                    Raygun.saveIfOffline(true);
                     Raygun.setUser(skritter.user.id);
                     Raygun.setVersion(skritter.settings.getVersion());
                 }

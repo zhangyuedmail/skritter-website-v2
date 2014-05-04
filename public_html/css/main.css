@@ -146,6 +146,10 @@ body {
     height: 100%;
     position: relative;
 }
+.prompt-container .has-audio {
+    color: #0000ff;
+    border-bottom: 2px dotted blue;
+}
 
 
 /*** PROMPT: GRADING BUTTONS ***/
@@ -247,7 +251,7 @@ body {
 #defn #prompt-question-text { font-size: 18px; }
 #defn #prompt-writing {}
 #defn #prompt-reading {}
-#defn #prompt-definition { font-size: 18px; }
+#defn #prompt-definition { font-size: 28px; }
 #defn #prompt-sentence { font-size: 20px; }
 
 
@@ -268,7 +272,7 @@ body {
 #tone #prompt-reading { 
     float: left;
     font-size: 32px;
-    padding-left: 30px;
+    margin-left: 30px;
     word-break: break-all;
 }
 #tone #prompt-definition { font-size: 18px; }
@@ -284,7 +288,7 @@ body {
 #rune #prompt-reading { 
     float: left;
     font-size: 32px;
-    padding-left: 30px;
+    margin-left: 30px;
     word-break: break-all;
 }
 #rune #prompt-definition { font-size: 18px; }

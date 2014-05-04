@@ -169,7 +169,7 @@ define(function() {
                         next: item.next,
                         vocabIds: item.vocabIds
                     };
-                } else if (item.vocabIds.length === 0) {
+                } else if (item.vocabIds.length > 0) {
                     this.data.push({
                         id: item.id,
                         last: item.last,
@@ -179,7 +179,7 @@ define(function() {
                 }
             }
             if (removeIds.length > 0) {
-                this.data.filter(function(item) {
+                this.data = this.data.filter(function(item) {
                     return removeIds.indexOf(item.id) === -1;
                 });
             }
@@ -213,7 +213,7 @@ define(function() {
             var now = skritter.fn.getUnixTime();
             var held = this.get('held');
             var history = this.get('history');
-            var historyCheck = this.data.length > 5 ? true : false;
+            var historyCheck = this.data.length > 24 ? true : false;
             this.data = _.sortBy(this.data, _.bind(function(item) {
                 var heldUntil = held[item.id];
                 var seenAgo = now - item.last;
@@ -225,7 +225,7 @@ define(function() {
                     return -item.readiness;
                 }
                 //randomly prioritize new items
-                if (!heldUntil && !item.last && item.next < now) {
+                if (!heldUntil && !item.last) {
                     item.readiness = this.randomizeInterval(9999);
                     return -item.readiness;
                 }
@@ -235,7 +235,7 @@ define(function() {
                         item.readiness = 0.2;
                         return -item.readiness;
                     }
-                } else if (held) {
+                } else if (heldUntil) {
                     delete held[item.id];
                 }
                 //tweak old item readiness
