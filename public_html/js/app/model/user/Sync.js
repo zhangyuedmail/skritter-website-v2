@@ -239,7 +239,7 @@ define([
                     });
                 }
             ], function() {
-                if (typeof callbacj === 'function')
+                if (typeof callback === 'function')
                     callback();
             });
         },

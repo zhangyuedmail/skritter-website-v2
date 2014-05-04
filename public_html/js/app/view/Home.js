@@ -53,7 +53,7 @@ define([
             'click .button-lists': 'navigateLists',
             'click .button-logout': 'logout',
             'click .button-study': 'navigateStudy',
-            'click .button-sync': 'startSync'
+            'click .button-sync': 'sync'
         },
         /**
          * @method logout
@@ -123,14 +123,21 @@ define([
             this.$el.empty();
         },
         /**
-         * @method startSync
+         * @method sync
          */
-        startSync: function() {
+        sync: function() {
             if (!skritter.user.sync.syncing) {
                 skritter.modal.show('download')
                         .set('.modal-title', 'SYNCING')
                         .progress(100);
-                skritter.user.sync.changedItems(function() {
+                async.series([
+                    function(callback) {
+                        skritter.user.sync.reviews(callback);
+                    },
+                    function(callback) {
+                        skritter.user.sync.changedItems(callback);
+                    }
+                ], function() {
                     skritter.modal.hide();
                 });
             }
