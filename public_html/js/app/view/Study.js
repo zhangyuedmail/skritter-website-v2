@@ -46,7 +46,6 @@ define([
          */
         events: {
             'click #view-study .button-add-items': 'showAddItemsModal',
-            'click #view-study .button-audio': 'playAudio',
             'click #view-study .button-study-settings': 'navigateStudySettings',
             'click #view-study .button-undo': 'previousPrompt'
         },
@@ -56,7 +55,7 @@ define([
          */
         checkAutoSync: function() {
             if (skritter.user.settings.get('autoSync') && skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
-                skritter.user.sync.changedItems(null, {holdReviews: 1});
+                skritter.user.sync.reviews();
                 return true;
             }
             return false;
@@ -110,14 +109,6 @@ define([
                 prompt.set(review);
                 this.loadPrompt(prompt);
             }, this));
-        },
-        /**
-         * @method playAudio
-         * @param {Object} event
-         */
-        playAudio: function(event) {
-            this.prompt.review.getBaseVocab().playAudio();
-            event.preventDefault();
         },
         /**
          * @method previousPrompt

@@ -90,6 +90,7 @@ define([
          */
         changedItems: function(callback, offset, includeResources) {
             offset = offset ? offset : this.get('lastItemSync');
+            var now = skritter.fn.getUnixTime();
             var requests = [
                 {
                     path: 'api/v' + skritter.api.get('version') + '/items',
@@ -112,6 +113,7 @@ define([
             async.series([
                 async.apply(this.processBatch, requests)
             ], _.bind(function() {
+                this.set('lastItemSync', now);
                 callback();
             }, this));
         },
@@ -237,7 +239,8 @@ define([
                     });
                 }
             ], function() {
-                callback();
+                if (typeof callbacj === 'function')
+                    callback();
             });
         },
         /**
