@@ -153,6 +153,34 @@ define(function() {
             request();
         },
         /**
+         * @method getSRSConfigs
+         * @param {String} language
+         * @param {Function} callback
+         */
+        getSRSConfigs: function(language, callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: self.base + 'srsconfigs',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        lang: language
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.SRSConfigs, data.statusCode);
+                });
+                promise.fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request();
+        },
+        /**
          * @method getUser
          * @param {String} userId
          * @param {Function} callback
@@ -233,7 +261,7 @@ define(function() {
                     callback(data.VocabListSection, data.statusCode);
                 });
                 promise.fail(function(error) {
-                    callback(error);
+                    callback(error, 0);
                 });
             }
             request();
@@ -280,7 +308,7 @@ define(function() {
                     }
                 });
                 promise.fail(function(error) {
-                    callback(error);
+                    callback(error, 0);
                 });
             }
             request(options.cursor);
