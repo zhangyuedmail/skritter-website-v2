@@ -134,6 +134,9 @@ define([
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().get('writing'));
+            if (this.review.getBaseVocab().has('audio')) {
+                this.$('#prompt-reading').addClass('has-audio');
+            }
             return this;
         },
         /**

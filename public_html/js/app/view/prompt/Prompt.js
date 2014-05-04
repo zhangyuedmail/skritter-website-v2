@@ -33,6 +33,12 @@ define([
             return this;
         },
         /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick #prompt-reading': 'playAudio'
+        },
+        /**
          * @method handleGradingSelected
          * @param {Number} selectedGrade
          */
@@ -63,6 +69,14 @@ define([
             } else {
                 this.clear().show();
             }
+        },
+        /**
+         * @method playAudio
+         * @param {Object} event
+         */
+        playAudio: function(event) {
+            this.review.getBaseVocab().playAudio();
+            event.preventDefault();
         },
         /**
          * @method previous

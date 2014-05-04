@@ -211,6 +211,9 @@ define([
                     this.review.getBaseItem().isNew()) {
                 this.teach();
             }
+            if (this.review.getBaseVocab().has('audio')) {
+                this.$('#prompt-reading').addClass('has-audio');
+            }
             if (this.review.isFirst() && skritter.user.settings.get('audio')) {
                 this.review.getBaseVocab().playAudio();
             }

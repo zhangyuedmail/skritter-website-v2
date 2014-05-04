@@ -184,6 +184,9 @@ define([
             this.review.setReview('finished', true);
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position') + 1, skritter.user.settings.get('hideReading')));
             this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
+            if (this.review.getBaseVocab().has('audio')) {
+                this.$('#prompt-reading').addClass('has-audio');
+            }
             if (this.review.isLast() && skritter.user.settings.get('audio')) {
                 this.review.getBaseVocab().playAudio();
             } else if (skritter.user.settings.get('audio')) {
