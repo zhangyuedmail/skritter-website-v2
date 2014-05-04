@@ -57,7 +57,7 @@ define([
             skritter.timer.reset();
             this.review.next();
             this.gradingButtons.grade(this.review.getReviewAt().score);
-            if (this.review.get('finished')) {
+            if (this.review.getReview().finished) {
                 this.clear().show().showAnswer();
                 this.resize();
             } else {
@@ -71,7 +71,7 @@ define([
             skritter.timer.stop();
             this.review.previous();
             this.gradingButtons.grade(this.review.getReviewAt().score);
-            if (this.review.get('finished')) {
+            if (this.review.getReview().finished) {
                 this.clear().show().showAnswer();
                 this.resize();
             } else {

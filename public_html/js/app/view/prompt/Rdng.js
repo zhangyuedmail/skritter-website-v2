@@ -22,7 +22,7 @@ define([
             this.$el.html(templateRdng);
             Prompt.prototype.render.call(this);
             this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
-            if (this.isPrevious || this.review.get('finished')) {
+            if (this.isPrevious || this.review.getReview().finished) {
                 this.show().showAnswer();
             } else {
                 skritter.timer.start();
@@ -42,7 +42,7 @@ define([
          * @param {Object} event
          */
         handleClick: function(event) {
-            if (this.review.get('finished')) {
+            if (this.review.getReview().finished) {
                 this.gradingButtons.triggerSelected();
             } else {
                 this.showAnswer();
@@ -142,7 +142,7 @@ define([
          */
         showAnswer: function() {
             skritter.timer.stop();
-            this.review.set('finished', true);
+            this.review.setReview('finished', true);
             this.$('#question').hide();
             this.$('#answer').show('fade', 200);
             this.$('#question-text').html('Definition:');
