@@ -37,15 +37,11 @@ define([
          * @param {Number} selectedGrade
          */
         handleGradingSelected: function(selectedGrade) {
-            if (this.isPrevious) {
-                this.review.setReviewAt(null, 'score', selectedGrade);
-            } else {
-                this.review.setReviewAt(null, {
-                    reviewTime: skritter.timer.getReviewTime(),
-                    score: selectedGrade,
-                    thinkingTime: skritter.timer.getThinkingTime()
-                });
-            }
+            this.review.setReviewAt(null, {
+                reviewTime: skritter.timer.getReviewTime(),
+                score: selectedGrade,
+                thinkingTime: skritter.timer.getThinkingTime()
+            });
             if (this.review.isLast()) {
                 this.review.save(_.bind(function() {
                     this.trigger('prompt:finished');

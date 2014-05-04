@@ -36,7 +36,7 @@ define([
             var review = new Review();
             var items = [this].concat(this.getContainedItems());
             var now = skritter.fn.getUnixTime();
-            var originalItems = [];
+            var copiedItems = [];
             var part = this.get('part');
             var reviews = [];
             var wordGroup = now + '_' + skritter.fn.guid() + '_' + this.id;
@@ -44,9 +44,10 @@ define([
                 review.characters = [];
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
-                originalItems.push(item.toJSON());
+                copiedItems.push(item.toJSON());
                 reviews.push({
                     itemId: item.id,
+                    finished: false,
                     score: 3,
                     bearTime: parseInt(i, 10) === 0 ? true : false,
                     submitTime: now,
@@ -68,9 +69,9 @@ define([
             }
             review.set({
                 id: wordGroup,
+                items: copiedItems,
                 itemId: items[0].id,
                 part: part,
-                originalItems: originalItems,
                 reviews: reviews
             }, {silent: true, sort: false});
             return review;
