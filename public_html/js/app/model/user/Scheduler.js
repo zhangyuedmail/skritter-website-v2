@@ -169,7 +169,7 @@ define(function() {
                         next: item.next,
                         vocabIds: item.vocabIds
                     };
-                } else if (item.vocabIds.length === 0) {
+                } else if (item.vocabIds.length > 0) {
                     this.data.push({
                         id: item.id,
                         last: item.last,
@@ -179,7 +179,7 @@ define(function() {
                 }
             }
             if (removeIds.length > 0) {
-                this.data.filter(function(item) {
+                this.data = this.data.filter(function(item) {
                     return removeIds.indexOf(item.id) === -1;
                 });
             }
