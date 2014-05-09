@@ -60,6 +60,8 @@ define([
                     }
                     div += "<td>" + contained.itemId +"</td>";
                     div += "<td>" + moment(contained.submitTime * 1000).format('YYYY/MM/DD HH:mm:ss') +"</td>";
+                    div += "<td>" + contained.previousInterval +"</td>";
+                    div += "<td>" + contained.newInterval +"</td>";
                     div += "<td>" + contained.reviewTime +"</td>";
                     div += "<td>" + contained.thinkingTime +"</td>";
                     div += "<td>" + contained.score +"</td>";
