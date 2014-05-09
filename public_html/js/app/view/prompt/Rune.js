@@ -43,6 +43,12 @@ define([
             return this;
         },
         /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick #prompt-reading': 'playAudio'
+        },
+        /**
          * @method clear
          * @returns {Backbone.View}
          */

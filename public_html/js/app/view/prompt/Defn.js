@@ -21,7 +21,6 @@ define([
             skritter.timer.setThinkingLimit(15);
             this.$el.html(templateDefn);
             Prompt.prototype.render.call(this);
-            this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
             if (this.review.isFinished()) {
                 this.show().showAnswer();
             } else {
@@ -35,7 +34,9 @@ define([
          * @property {Object} events
          */
         events: {
-            'vclick #info-section': 'toggleHint'
+            'vclick #prompt-text': 'handleClick',
+            'vclick #info-section': 'toggleHint',
+            'vclick #prompt-reading': 'playAudio'
         },
         /**
          * @method handleClick
