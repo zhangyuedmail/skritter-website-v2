@@ -3,6 +3,7 @@
  * @param Home
  * @param Login
  * @param ParamEditor
+ * @param Review
  * @param Study
  * @param StudySettings
  * @param Test
@@ -14,12 +15,13 @@ define([
     'view/Home',
     'view/Login',
     'view/admin/ParamEditor',
+    'view/admin/Review',
     'view/Study',
     'view/study/Settings',
     'view/Test',
     'view/vocab/List',
     'view/vocab/Lists'
-], function(Home, Login, ParamEditor, Study, StudySettings, Test, VocabList, VocabLists) {
+], function(Home, Login, ParamEditor, Review, Study, StudySettings, Test, VocabList, VocabLists) {
     /**
      * @class Router
      */
@@ -40,6 +42,7 @@ define([
             '': 'home',
             'admin/param/:strokeId': 'adminParamEditor',
             'login': 'login',
+            'review': 'review',
             'study': 'study',
             'study/settings': 'studySettings',
             'test': 'test',
@@ -85,6 +88,14 @@ define([
         login: function() {
             this.removeView();
             this.view = new Login({el: this.container});
+            this.view.render();
+        },
+        /**
+         * @method review
+         */
+        review: function() {
+            this.removeView();
+            this.view = new Review({el: this.container});
             this.view.render();
         },
         /**
