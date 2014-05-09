@@ -140,16 +140,25 @@ define(function() {
          * 
          * @method refresh
          * @param {Boolean} includeServer
+         * @param {Function} callback
          */
-        refresh: function(includeServer) {
-            Timer.offset = skritter.user.data.reviews.totalTimeToday();
-            if (includeServer)
-                skritter.api.getProgressStats(skritter.settings.language(), {
-                    start: moment().format('YYYY-MM-DD')
-                }, function(stats) {
-                    if (stats.statusText !== 'error')
-                        Timer.offset += stats[0].timeStudied.day;
+        refresh: function(includeServer, callback) {
+            Timer.offset = skritter.user.data.reviews.getTotalTime();
+            if (includeServer) {
+                skritter.api.getProgStats({
+                }, function(progstats, status) {
+                    if (status === 200) {
+                        Timer.offset += progstats[0].timeStudied.day;
+                    }
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
                 });
+            } else {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }
         },
         /**
          * @method reset
