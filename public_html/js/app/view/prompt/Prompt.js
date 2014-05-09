@@ -67,6 +67,7 @@ define([
                 this.clear().show().showAnswer();
                 this.resize();
             } else {
+                skritter.timer.start();
                 this.clear().show();
             }
         },
