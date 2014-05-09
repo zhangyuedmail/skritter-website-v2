@@ -101,6 +101,7 @@ define([
             if (points && points.length > 2) {
                 var result = this.review.getCharacterAt().recognize(points, shape);
                 if (result) {
+                    this.canvas.lastMouseDownEvent = null;
                     this.canvas.fadeLayer('background');
                     this.strokeAttempts = 0;
                     if (skritter.user.settings.get('squigs')) {
