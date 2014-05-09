@@ -8,7 +8,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.syncing = false;
+            this.set('syncing', false);
             this.on('change', _.bind(this.cache, this));
         },
         /**
@@ -19,7 +19,8 @@ define([
             lastErrorCheck: 0,
             lastItemSync: 0,
             lastSRSConfigSync: 0,
-            lastVocabSync: 0
+            lastVocabSync: 0,
+            syncing: false
         },
         /**
          * @method cache
@@ -46,6 +47,7 @@ define([
                     offset: offset
                 }
             };
+            this.set('syncing', true);
             async.waterfall([
                 function(callback) {
                     skritter.api.requestBatch(requests, function(batch, status) {
@@ -76,11 +78,12 @@ define([
                 function(callback) {
                     self.changedItems(callback, now, true);
                 }
-            ], function() {
+            ], _.bind(function() {
                 skritter.user.scheduler.sort();
+                this.set('syncing', false);
                 if (typeof callback === 'function')
                     callback();
-            });
+            }, this));
         },
         /**
          * @method changedItems
@@ -109,11 +112,12 @@ define([
                     spawner: true
                 }
             ];
-
+            this.set('syncing', true);
             async.series([
                 async.apply(this.processBatch, requests)
             ], _.bind(function() {
                 this.set('lastItemSync', now);
+                this.set('syncing', false);
                 callback();
             }, this));
         },
@@ -147,6 +151,7 @@ define([
                     params: {lang: lang}
                 }
             ];
+            this.set('syncing', true);
             async.series([
                 async.apply(this.processBatch, requests)
             ], _.bind(function() {
@@ -156,8 +161,19 @@ define([
                     lastSRSConfigSync: now,
                     lastVocabSync: now
                 });
+                this.set('syncing', false);
                 callback();
             }, this));
+        },
+        /**
+         * @method isActive
+         * @return {Boolean}
+         */
+        isActive: function() {
+            if (this.get('syncing')) {
+                return true;
+            }
+            return false;
         },
         /**
          * @method processBatch
@@ -208,6 +224,7 @@ define([
         reviews: function(callback) {
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
+            this.set('syncing', true);
             async.waterfall([
                 function(callback) {
                     skritter.api.getReviewErrors(lastErrorCheck, function(errors, status) {
@@ -238,10 +255,11 @@ define([
                         callback();
                     });
                 }
-            ], function() {
+            ], _.bind(function() {
+                this.set('syncing', false);
                 if (typeof callback === 'function')
                     callback();
-            });
+            }, this));
         },
         /**
          * @method srsconfigs
