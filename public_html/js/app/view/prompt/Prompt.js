@@ -43,32 +43,37 @@ define([
          * @param {Number} selectedGrade
          */
         handleGradingSelected: function(selectedGrade) {
-            this.review.setReviewAt(null, {
-                reviewTime: skritter.timer.getReviewTime(),
-                score: selectedGrade,
-                thinkingTime: skritter.timer.getThinkingTime()
-            });
-            if (this.review.isLast()) {
-                this.review.save(_.bind(function() {
-                    this.trigger('prompt:finished');
-                }, this));
+            if (this.review.getReview().finished) {
+                this.review.setReviewAt(null, {
+                    score: selectedGrade
+                });
             } else {
-                this.next();
+                this.review.setReviewAt(null, {
+                    reviewTime: skritter.timer.getReviewTime(),
+                    score: selectedGrade,
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
             }
+            this.next();
         },
         /**
          * @method next
          */
         next: function() {
             skritter.timer.reset();
-            this.review.next();
-            this.gradingButtons.grade(this.review.getReviewAt().score);
-            if (this.review.getReview().finished) {
-                this.clear().show().showAnswer();
-                this.resize();
+            if (this.review.next()) {
+                this.gradingButtons.grade(this.review.getReviewAt().score);
+                if (this.review.getReview().finished) {
+                    this.clear().show().showAnswer();
+                    this.resize();
+                } else {
+                    skritter.timer.start();
+                    this.clear().show();
+                }
             } else {
-                skritter.timer.start();
-                this.clear().show();
+                this.review.save(_.bind(function() {
+                    this.trigger('prompt:finished');
+                }, this));
             }
         },
         /**
@@ -84,15 +89,18 @@ define([
          */
         previous: function() {
             skritter.timer.stop();
-            this.review.previous();
-            this.gradingButtons.grade(this.review.getReviewAt().score);
-            if (this.review.getReview().finished) {
-                this.clear().show().showAnswer();
+            if (this.review.previous()) {
+                this.gradingButtons.grade(this.review.getReviewAt().score);
+                if (this.review.getReview().finished) {
+                    this.clear().show().showAnswer();
+                    this.resize();
+                } else {
+                    this.clear().show();
+                }
                 this.resize();
             } else {
-                this.clear().show();
+                this.trigger('prompt:previous');
             }
-            this.resize();
         },
         /**
          * @method remove
