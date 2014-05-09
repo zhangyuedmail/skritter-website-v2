@@ -22,7 +22,9 @@ define([
         render: function() {
             document.title = "Skritter - Study";
             this.$el.html(templateStudy);
+            //prepare the timer and sync time with the server
             skritter.timer.setElement(this.$('#timer')).render();
+            skritter.timer.refresh(true);
             //apply the navbar user hide settings
             if (skritter.user.settings.get('hideTimer'))
                 this.$('#timer').parent().hide();
