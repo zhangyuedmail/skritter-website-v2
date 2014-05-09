@@ -115,6 +115,44 @@ define(function() {
             request();
         },
         /**
+         * @method getProgStats
+         * @param {Object} options
+         * @param {Function} callback
+         */
+        getProgStats: function(options, callback) {
+            var self = this;
+            options = options ? options : {};
+            options.start = options.start ? options.start : moment().format('YYYY-MM-DD');
+            options.end = options.end ? options.end : undefined;
+            options.step = options.step ? options.step : undefined;
+            options.lang = options.lang ? options.lang : undefined;
+            options.fields = options.fields ? options.fields : undefined;
+            function request() {
+                var promise = $.ajax({
+                    url: self.base + 'progstats',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        start: options.start,
+                        end: options.end,
+                        step: options.step,
+                        lang: options.lang,
+                        fields: options.fields
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.ProgressStats, data.statusCode);
+                });
+                promise.fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request();
+        },
+        /**
          * @method getReviewErrors
          * @param {Number} offset
          * @param {Function} callback
@@ -145,6 +183,36 @@ define(function() {
                     } else {
                         callback(errors, data.statusCode);
                     }
+                });
+                promise.fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request();
+        },
+        /**
+         * @method getServerTime
+         * @param {Function} callback
+         */
+        getServerTime: function(callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: self.base + 'dateinfo',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token')
+                    }
+                });
+                promise.done(function(data) {
+                    callback({
+                        serverTime: data.serverTime,
+                        timeLeft: data.timeLeft,
+                        today: data.today
+                    }, data.statusCode);
                 });
                 promise.fail(function(error) {
                     callback(error, 0);

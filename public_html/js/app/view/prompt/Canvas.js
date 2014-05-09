@@ -418,11 +418,14 @@ define(function() {
         triggerCanvasMouseDown: function(event) {
             this.mouseDownEvent = event;
             this.trigger('canvas:mousedown', event);
-            if (this.lastMouseDownEvent && this.mouseDownEvent.timeStamp - this.lastMouseDownEvent.timeStamp < 200) {
-                var lastPostion = {x: this.lastMouseDownEvent.pageX, y: this.lastMouseDownEvent.pageY};
-                var currentPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
-                if (skritter.fn.distance(lastPostion, currentPosition) <= 10) {
-                    this.triggerCanvasDoubleClick(event);
+            if (this.lastMouseDownEvent) {
+                var elapsed = this.mouseDownEvent.timeStamp - this.lastMouseDownEvent.timeStamp;
+                if (elapsed > 20 && elapsed < 400) {
+                    var lastPostion = {x: this.lastMouseDownEvent.pageX, y: this.lastMouseDownEvent.pageY};
+                    var currentPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
+                    if (skritter.fn.distance(lastPostion, currentPosition) <= 10) {
+                        this.triggerCanvasDoubleClick(event);
+                    }
                 }
             }
             this.$('#canvas-input').on('vmousemove.Canvas', _.bind(function(event) {
@@ -454,7 +457,7 @@ define(function() {
             var endPosition = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
             var distance = skritter.fn.distance(startPosition, endPosition);
             var duration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
-            if (distance <= 10 && (duration > 20 && duration < 500)) {
+            if (distance <= 10 && (duration > 20 && duration < 400)) {
                 this.triggerCanvasClick(event);
             } else {
                 this.trigger('canvas:mouseup', event);

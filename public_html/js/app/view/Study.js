@@ -22,7 +22,9 @@ define([
         render: function() {
             document.title = "Skritter - Study";
             this.$el.html(templateStudy);
+            //prepare the timer and sync time with the server
             skritter.timer.setElement(this.$('#timer')).render();
+            skritter.timer.refresh(true);
             //apply the navbar user hide settings
             if (skritter.user.settings.get('hideTimer'))
                 this.$('#timer').parent().hide();
@@ -45,9 +47,9 @@ define([
          * @property {Object} events
          */
         events: {
-            'click #view-study .button-add-items': 'showAddItemsModal',
-            'click #view-study .button-study-settings': 'navigateStudySettings',
-            'click #view-study .button-undo': 'previousPrompt'
+            'vclick #view-study .button-add-items': 'showAddItemsModal',
+            'vclick #view-study .button-previous': 'previousPrompt',
+            'vclick #view-study .button-study-settings': 'navigateStudySettings'
         },
         /**
          * @method checkAutoSync
@@ -112,8 +114,9 @@ define([
         },
         /**
          * @method previousPrompt
+         * @param {Object} event
          */
-        previousPrompt: function() {
+        previousPrompt: function(event) {
             var review = skritter.user.data.reviews.at(0);
             if (review && this.prompt.review.isFirst()) {
                 review.getPrompt(_.bind(function(prompt) {
@@ -122,6 +125,7 @@ define([
             } else if (review) {
                 this.prompt.previous();
             }
+            event.preventDefault();
         },
         /**
          * @method remove

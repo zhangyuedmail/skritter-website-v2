@@ -34,9 +34,21 @@ define([
          */
         getReviewArray: function() {
             var reviews = [];
-            for (var i = 0, length = this.length; i < length; i++)
+            for (var i = 0, length = this.length; i < length; i++) {
                 reviews = reviews.concat(this.at(i).get('reviews'));
+            }
             return reviews;
+        },
+        /**
+         * @method getTotalTime
+         * @returns {Number}
+         */
+        getTotalTime: function() {
+            var totalTime = 0;
+            for (var i = 0, length = this.length; i < length; i++) {
+                totalTime += this.at(i).get('reviews')[0].timeStudied;
+            }
+            return totalTime;
         },
         /**
          * @method loadAll

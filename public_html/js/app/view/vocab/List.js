@@ -167,8 +167,8 @@ define([
          * @param {Object} event
          */
         selectSection: function(event) {
-            var sectionId = event.currentTarget.id.replace('section-', '');
-            this.sectionId = sectionId;
+            var id = event.currentTarget.id.replace('section-', '');
+            this.sectionId = id;
             this.loadSectionRows();
             event.preventDefault();
         },

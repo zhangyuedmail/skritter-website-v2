@@ -20,9 +20,8 @@ define([
             skritter.timer.setReviewLimit(30);
             skritter.timer.setThinkingLimit(15);
             this.$el.html(templateRdng);
-            Prompt.prototype.render.call(this);
-            this.$('#prompt-text').on('vclick', _.bind(this.handleClick, this));
-            if (this.isPrevious || this.review.getReview().finished) {
+            Prompt.prototype.render.call(this);            
+            if (this.review.isFinished()) {
                 this.show().showAnswer();
             } else {
                 skritter.timer.start();
@@ -35,7 +34,9 @@ define([
          * @property {Object} events
          */
         events: {
-            'vclick #info-section': 'toggleHint'
+            'vclick #prompt-text': 'handleClick',
+            'vclick #info-section': 'toggleHint',
+            'vclick #prompt-reading': 'playAudio'
         },
         /**
          * @method handleClick
@@ -145,7 +146,13 @@ define([
          */
         showAnswer: function() {
             skritter.timer.stop();
-            this.review.setReview('finished', true);
+            if (!this.review.getReview().finished) {
+                this.review.setReview({
+                    finished: true,
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
             this.$('#question').hide();
             this.$('#answer').show('fade', 200);
             this.$('#question-text').html('Definition:');

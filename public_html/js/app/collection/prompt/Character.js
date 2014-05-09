@@ -89,8 +89,9 @@ define([
          */
         getPosition: function() {
             var position = 1;
-            for (var i = 0, length = this.length; i < length; i++)
+            for (var i = 0, length = this.length; i < length; i++) {
                 position += this.at(i).has('contains') ? 2 : 1;
+            }
             return position;
         },
         /**

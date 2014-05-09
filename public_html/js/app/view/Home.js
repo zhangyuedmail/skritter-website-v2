@@ -30,8 +30,8 @@ define([
                 this.$('#user-avatar').html(skritter.user.settings.getAvatar('img-thumbnail'));
                 this.$('#user-due-count').text(skritter.user.scheduler.getDueCount(true));
                 this.$('#user-id').text(skritter.user.settings.get('name'));
-                if (skritter.user.sync.syncing) {
-                    this.toggleSyncButton(true);
+                if (skritter.user.sync.isActive()) {
+                    this.toggleSyncButton();
                 }
             } else {
                 document.title = "Skritter - Learn to Write Chinese and Japanese Characters";
@@ -41,7 +41,7 @@ define([
                 }
             }
             this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
-            this.listenTo(skritter.user.sync, 'sync', this.toggleSyncButton);
+            this.listenTo(skritter.user.sync, 'change:syncing', this.toggleSyncButton);
             return this;
         },
         /**
@@ -73,10 +73,9 @@ define([
         },
         /**
          * @method toggleSyncButton
-         * @param {Boolean} syncing
          */
-        toggleSyncButton: function(syncing) {
-            if (syncing) {
+        toggleSyncButton: function() {
+            if (skritter.user.sync.isActive()) {
                 this.$('.button-sync i').addClass('fa-spin');
             } else {
                 this.$('.button-sync i').removeClass('fa-spin');
@@ -126,7 +125,7 @@ define([
          * @method sync
          */
         sync: function() {
-            if (!skritter.user.sync.syncing) {
+            if (!skritter.user.sync.isActive()) {
                 skritter.modal.show('download')
                         .set('.modal-title', 'SYNCING')
                         .progress(100);
