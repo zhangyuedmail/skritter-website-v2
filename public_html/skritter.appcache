@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Sun May 04 2014 23:31:09 GMT+0800 (China Standard Time)
+# Time: Fri May 09 2014 19:45:10 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -19,6 +19,7 @@ test/lib/jasmine.css
 bootstrap/fonts/glyphicons-halflings-regular.eot
 font/fontawesome-webfont.eot
 template/admin-param-editor.html
+template/admin-review.html
 template/component-list-section-row-table.html
 template/component-list-section-table.html
 template/component-list-table.html
@@ -86,6 +87,7 @@ js/app/view/Login.js
 js/app/view/Study.js
 js/app/view/Test.js
 js/app/view/admin/ParamEditor.js
+js/app/view/admin/Review.js
 js/app/view/component/ListSectionRowTable.js
 js/app/view/component/ListSectionTable.js
 js/app/view/component/ListTable.js
