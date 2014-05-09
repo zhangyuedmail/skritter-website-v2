@@ -139,7 +139,6 @@ define(function() {
             var position = 0;
             function next() {
                 var item = skritter.user.scheduler.data[position];
-                item.id = "mcfarljwtest2-zh-品-0-rune";
                 skritter.user.data.items.loadItem(item.id, function(item) {
                     if (item) {
                         callback(item);
