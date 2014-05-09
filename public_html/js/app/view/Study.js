@@ -112,8 +112,9 @@ define([
         },
         /**
          * @method previousPrompt
+         * @param {Object} event
          */
-        previousPrompt: function() {
+        previousPrompt: function(event) {
             var review = skritter.user.data.reviews.at(0);
             if (review && this.prompt.review.isFirst()) {
                 review.getPrompt(_.bind(function(prompt) {
@@ -122,6 +123,7 @@ define([
             } else if (review) {
                 this.prompt.previous();
             }
+            event.preventDefault();
         },
         /**
          * @method remove

@@ -43,17 +43,7 @@ define([
          * @param {Number} selectedGrade
          */
         handleGradingSelected: function(selectedGrade) {
-            if (this.review.getReview().finished) {
-                this.review.setReviewAt(null, {
-                    score: selectedGrade
-                });
-            } else {
-                this.review.setReviewAt(null, {
-                    reviewTime: skritter.timer.getReviewTime(),
-                    score: selectedGrade,
-                    thinkingTime: skritter.timer.getThinkingTime()
-                });
-            }
+            this.review.setReview('score', selectedGrade);
             this.next();
         },
         /**

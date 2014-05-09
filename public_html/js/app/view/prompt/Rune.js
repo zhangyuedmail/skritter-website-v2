@@ -34,7 +34,7 @@ define([
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
             this.resize();
-            if (this.review.get('finished')) {
+            if (this.review.isFinished()) {
                 this.show().showAnswer();
             } else {
                 skritter.timer.start();
@@ -228,7 +228,13 @@ define([
             skritter.timer.stop();
             this.canvas.disableInput();
             this.canvas.clearLayer('teach');
-            this.review.setReview('finished', true);
+            if (!this.review.getReview().finished) {
+                this.review.setReview({
+                    finished: true,
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
             if (skritter.user.settings.get('squigs') && this.review.getCharacterAt().length > 0) {
                 var color = skritter.settings.get('gradingColors')[this.review.getReviewAt().score];
                 var character = this.review.getCharacterAt();

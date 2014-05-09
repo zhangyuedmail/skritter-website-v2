@@ -28,7 +28,7 @@ define([
             this.listenTo(this.canvas, 'canvas:click', this.handleClick);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
-            if (this.review.getReview().finished) {
+            if (this.review.isFinished()) {
                 this.show().showAnswer();
             } else {
                 skritter.timer.start();
@@ -152,8 +152,9 @@ define([
                     width: canvasSize
                 });
             }
-            if (this.review.getCharacterAt().isFinished()) {
-                this.canvas.drawShape('display', this.review.getCharacterAt().getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
+            if (this.review.getReview().finished) {
+                var tone = _.flatten(this.review.getBaseVocab().getTones(this.review.get('position')))[0];
+                this.canvas.drawShape('display', this.review.getCharacterAt().targets[tone - 1].getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
             } else {
                 this.canvas.enableInput();
             }
@@ -181,7 +182,13 @@ define([
             skritter.timer.stop();
             this.canvas.disableInput();
             this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
-            this.review.setReview('finished', true);
+            if (!this.review.getReview().finished) {
+                this.review.setReview({
+                    finished: true,
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position') + 1, skritter.user.settings.get('hideReading')));
             this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             if (this.review.getBaseVocab().has('audio')) {

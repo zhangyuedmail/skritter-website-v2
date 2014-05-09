@@ -130,7 +130,7 @@ define([
          */
         getPrompt: function(callback) {
             skritter.user.data.items.loadItem(this.get('itemId'), _.bind(function(promptItem) {
-                var items = this.get('originalItems');
+                var items = this.get('items');
                 var part = promptItem.get('part');
                 var prompt = null;
                 switch (part) {
@@ -150,7 +150,8 @@ define([
                 if (part === 'rune' || part === 'tone') {
                     this.characters = [];
                     for (var i = items.length > 1 ? 1 : 0, length = items.length; i < length; i++) {
-                        var item = this.getItemAt(i);
+                        var itemId = this.getItemAt(i).id;
+                        var item = skritter.user.data.items.findWhere({id: itemId});
                         this.characters.push(item.getStroke().getCanvasCharacter());
                     }
                 }
@@ -233,6 +234,13 @@ define([
             return false;
         },
         /**
+         * @method isFinished
+         * @returns {Boolean}
+         */
+        isFinished: function() {
+            return this.get('reviews')[0].finished;
+        },
+        /**
          * @method isFirst
          * @returns {Boolean}
          */
@@ -276,6 +284,7 @@ define([
             var i, length, item, review;
             //updates the base review based on contained reviews
             if (this.hasContained()) {
+                reviews[0].finished = true;
                 reviews[0].reviewTime = this.getTotalReviewTime();
                 reviews[0].thinkingTime = this.getTotalThinkingTime();
             }
