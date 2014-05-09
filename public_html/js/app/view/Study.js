@@ -45,9 +45,9 @@ define([
          * @property {Object} events
          */
         events: {
-            'click #view-study .button-add-items': 'showAddItemsModal',
-            'click #view-study .button-study-settings': 'navigateStudySettings',
-            'click #view-study .button-undo': 'previousPrompt'
+            'vclick #view-study .button-add-items': 'showAddItemsModal',
+            'vclick #view-study .button-previous': 'previousPrompt',
+            'vclick #view-study .button-study-settings': 'navigateStudySettings'
         },
         /**
          * @method checkAutoSync
