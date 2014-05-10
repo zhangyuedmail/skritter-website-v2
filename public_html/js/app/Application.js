@@ -140,6 +140,9 @@ define([
                 },
                 function(callback) {
                     skritter.user.data.loadResources(callback);
+                },
+                function(callback) {
+                    skritter.timer.refresh(true, callback);
                 }
             ], function() {
                 //load raygun javascript error logging module
