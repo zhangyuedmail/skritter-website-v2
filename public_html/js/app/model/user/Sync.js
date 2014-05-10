@@ -229,9 +229,9 @@ define([
                 function(callback) {
                     skritter.api.getReviewErrors(lastErrorCheck, function(errors, status) {
                         if (status === 200 && errors.length > 0) {
-                            alert('REVIEW ERRORS DETECTED!');
+                            window.alert('REVIEW ERRORS DETECTED!');
                             console.log('REVIEW ERRORS', errors);
-                            callback(null, errors);
+                            callback(errors);
                         } else if (status === 200) {
                             callback();
                         } else {
@@ -247,7 +247,7 @@ define([
                             callback(postedReviews);
                         }
                     });
-                    
+
                 },
                 function(postedReviewIds, callback) {
                     skritter.storage.remove('reviews', postedReviewIds, function() {

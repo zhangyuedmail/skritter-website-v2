@@ -409,7 +409,6 @@ define(function() {
                     }
                 });
                 promise.fail(function(error) {
-                    console.error('REVIEW POST ERROR', error);
                     callback(error, 0);
                 });
             };
