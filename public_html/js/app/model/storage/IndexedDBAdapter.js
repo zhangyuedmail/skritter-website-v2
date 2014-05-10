@@ -120,7 +120,7 @@ define([
             transaction.objectStore('items').openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    if (cursor.value.vocabIds.length > 0 &&
+                    if (cursor.value.vocabIds.length > 0 && !cursor.value.flag &&
                             filterParts.indexOf(cursor.value.part) !== -1 &&
                             filterStyle.indexOf(cursor.value.style) !== -1) {
                         schedule.push({
