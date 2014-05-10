@@ -29,6 +29,8 @@ define([
                 this.$('#timer').parent().hide();
             if (skritter.user.settings.get('hideDueCount'))
                 this.$('#items-due').parent().hide();
+            //sort scheduler while study view is rendering
+            skritter.user.scheduler.sort();
             //selectively load a new or existing prompt
             if (skritter.user.prompt) {
                 this.prompt = skritter.user.prompt;
@@ -89,7 +91,6 @@ define([
         nextPrompt: function() {
             this.checkAutoSync();
             skritter.timer.reset();
-            skritter.user.scheduler.sort();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 var review = item.createReview();
                 var prompt = null;
