@@ -26,7 +26,9 @@ define([
          * @method cache
          */
         cache: function() {
-            localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
+            var syncData = this.toJSON();
+            delete syncData.syncing;
+            localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(syncData));
         },
         /**
          * @method addItems
