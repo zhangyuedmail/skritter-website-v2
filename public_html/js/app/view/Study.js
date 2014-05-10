@@ -41,7 +41,6 @@ define([
                 this.showAddItemsModal();
                 skritter.router.navigate('', {replace: true, trigger: true});
             }
-            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
             return this;
         },
         /**
