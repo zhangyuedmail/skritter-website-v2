@@ -24,12 +24,13 @@ define([
             this.$el.html(templateStudy);
             //prepare the timer and sync time with the server
             skritter.timer.setElement(this.$('#timer')).render();
-            skritter.timer.refresh(true);
             //apply the navbar user hide settings
             if (skritter.user.settings.get('hideTimer'))
                 this.$('#timer').parent().hide();
             if (skritter.user.settings.get('hideDueCount'))
                 this.$('#items-due').parent().hide();
+            //sort scheduler while study view is rendering
+            skritter.user.scheduler.sort();
             //selectively load a new or existing prompt
             if (skritter.user.prompt) {
                 this.prompt = skritter.user.prompt;
@@ -40,7 +41,6 @@ define([
                 this.showAddItemsModal();
                 skritter.router.navigate('', {replace: true, trigger: true});
             }
-            this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
             return this;
         },
         /**
@@ -90,7 +90,6 @@ define([
         nextPrompt: function() {
             this.checkAutoSync();
             skritter.timer.reset();
-            skritter.user.scheduler.sort();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 var review = item.createReview();
                 var prompt = null;
@@ -131,6 +130,7 @@ define([
          * @method remove
          */
         remove: function() {
+            skritter.timer.stop();
             if (this.prompt) {
                 this.prompt.remove();
             }

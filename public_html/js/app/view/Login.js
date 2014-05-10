@@ -29,8 +29,9 @@ define([
          * @property {Object} events
          */
         events: {
-            'click #button-home': 'toHome',
-            'click #button-login': 'login'
+            'keyup #password': 'handleLoginEnter',
+            'vclick #button-home': 'toHome',
+            'vclick #button-login': 'login'
         },
         /**
          * @method disableForm
@@ -39,10 +40,21 @@ define([
             this.$(':input').prop('disabled', true);
         },
         /**
-         * @method enableFprm
+         * @method enableForm
          */
         enableForm: function() {
             this.$(':input').prop('disabled', false);
+        },
+        /**
+         * @method handleEnterPressed
+         * @param {Object} event
+         */
+        handleLoginEnter: function(event) {
+            if (event.keyCode === 13) {
+                this.login(event);
+            } else {
+                event.preventDefault();
+            }
         },
         /**
          * @method toLogin
