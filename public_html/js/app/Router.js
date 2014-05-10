@@ -33,7 +33,6 @@ define([
             this.container = $('#skritter-container');
             this.view = null;
             Backbone.history.start();
-            this.on('route', this.handleRouteChanged);
         },
         /**
          * @property {Object} routes
@@ -50,12 +49,6 @@ define([
             'vocab/list/category/:category': 'vocabLists',
             'vocab/list/:listId': 'vocabList',
             'vocab/list/:listId/:sectionId': 'vocabList'
-        },
-        /**
-         * @method handleRouteChanged
-         */
-        handleRouteChanged: function() {
-            skritter.timer.stop();
         },
         /**
          * @method removeView

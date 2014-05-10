@@ -131,6 +131,7 @@ define([
          * @method remove
          */
         remove: function() {
+            skritter.timer.stop();
             if (this.prompt) {
                 this.prompt.remove();
             }
