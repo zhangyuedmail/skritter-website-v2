@@ -48,12 +48,13 @@ define([
          * @property {Object} events
          */
         events: {
-            'click .button-existing-user': 'navigateLogin',
-            'click .button-new-user': 'navigateNewUser',
-            'click .button-lists': 'navigateLists',
-            'click .button-logout': 'logout',
-            'click .button-study': 'navigateStudy',
-            'click .button-sync': 'sync'
+            'vclick #user-avatar': 'navigateAccount',
+            'vclick .button-existing-user': 'navigateLogin',
+            'vclick .button-new-user': 'navigateNewUser',
+            'vclick .button-lists': 'navigateLists',
+            'vclick .button-logout': 'logout',
+            'vclick .button-study': 'navigateStudy',
+            'vclick .button-sync': 'sync'
         },
         /**
          * @method logout
@@ -80,6 +81,14 @@ define([
             } else {
                 this.$('.button-sync i').removeClass('fa-spin');
             }
+        },
+        /**
+         * @method navigateAccount
+         * @param {Object} event
+         */
+        navigateAccount: function(event) {
+            skritter.router.navigate('account', {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method navigateLists
