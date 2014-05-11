@@ -1,3 +1,8 @@
+/**
+ * @module Skritter
+ * @submodule Model
+ * @author Joshua McFarland
+ */
 define(function() {
     /**
      * @class Schedule
