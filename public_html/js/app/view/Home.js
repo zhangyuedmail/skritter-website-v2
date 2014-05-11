@@ -50,9 +50,10 @@ define([
         events: {
             'vclick #user-avatar': 'navigateAccount',
             'vclick .button-existing-user': 'navigateLogin',
-            'vclick .button-new-user': 'navigateNewUser',
             'vclick .button-lists': 'navigateLists',
             'vclick .button-logout': 'logout',
+            'vclick .button-new-user': 'navigateNewUser',
+            'vclick .button-review-list': 'navigateReviewList',
             'vclick .button-study': 'navigateStudy',
             'vclick .button-sync': 'sync'
         },
@@ -112,6 +113,14 @@ define([
          */
         navigateNewUser: function(event) {
             skritter.router.navigate('user/new', {replace: true, trigger: true});
+            event.preventDefault();
+        },
+        /**
+         * @method navigateReviewList
+         * @param {Object} event
+         */
+        navigateReviewList: function(event) {
+            skritter.router.navigate('review', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
