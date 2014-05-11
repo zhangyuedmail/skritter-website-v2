@@ -125,6 +125,16 @@ define([
             return this.get('items')[0];
         },
         /**
+         * @method getMaxPosition
+         * @returns {Number}
+         */
+        getMaxPosition: function() {
+            if (this.hasContained()) {
+                return this.get('reviews').length - 1;
+            }
+            return 1;
+        },
+        /**
          * @method getPrompt
          * @param {Function} callback
          */

@@ -202,9 +202,9 @@ define([
                 this.review.getVocabAt().playAudio();
             }
             if (this.review.isLast()) {
-                this.$('#prompt-reading').on('click', _.bind(this.playAudio, this));
+                this.$('#prompt-reading .reading').on('vclick', _.bind(this.playAudio, this));
                 if (this.review.getBaseVocab().has('audio')) {
-                    this.$('#prompt-reading').addClass('has-audio');
+                    this.$('#prompt-reading .reading').addClass('has-audio');
                 }
             }
             return this;

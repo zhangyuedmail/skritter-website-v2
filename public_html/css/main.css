@@ -147,8 +147,9 @@ body {
     position: relative;
 }
 .prompt-container .has-audio {
+    border-bottom: 1px dotted blue;
     color: #0000ff;
-    border-bottom: 2px dotted blue;
+    cursor: pointer;
 }
 
 

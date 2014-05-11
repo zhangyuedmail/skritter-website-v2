@@ -65,7 +65,8 @@ define([
          * @param {Object} event
          */
         playAudio: function(event) {
-            this.review.getBaseVocab().playAudio();
+            var filename = this.$(event.currentTarget).data('reading') + '.mp3';
+            skritter.assets.playAudio(filename.toLowerCase());
             event.stopPropagation();
         },
         /**
