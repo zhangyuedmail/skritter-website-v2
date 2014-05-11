@@ -46,7 +46,7 @@ define([
          * @property {Object} events
          */
         events: {
-            'vclick #prompt-reading': 'playAudio'
+            'vclick #prompt-reading .reading': 'playAudio'
         },
         /**
          * @method clear
@@ -209,7 +209,7 @@ define([
             this.canvas.enableInput();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
-            this.$('#prompt-reading').html(this.review.getBaseVocab().getReading());
+            this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.getMaxPosition() + 1));
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getMaskedSentenceWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position')));
@@ -219,7 +219,7 @@ define([
                 this.teach();
             }
             if (this.review.getBaseVocab().has('audio')) {
-                this.$('#prompt-reading').addClass('has-audio');
+                this.$('#prompt-reading .reading').addClass('has-audio');
             }
             if (this.review.isFirst() && skritter.user.settings.get('audio')) {
                 this.review.getBaseVocab().playAudio();
@@ -260,8 +260,9 @@ define([
             } else {
                 this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             }
-            if (skritter.user.settings.get('audio'))
+            if (skritter.user.settings.get('audio')) {
                 this.review.getVocabAt().playAudio();
+            }
             return this;
         },
         /**

@@ -41,7 +41,6 @@ define([
          * @property {Object} events
          */
         events: {
-            'vclick #prompt-reading': 'playAudio'
         },
         /**
          * @method clear
@@ -197,13 +196,16 @@ define([
             }
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position') + 1, skritter.user.settings.get('hideReading')));
             this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
-            if (this.review.getBaseVocab().has('audio')) {
-                this.$('#prompt-reading').addClass('has-audio');
-            }
             if (this.review.isLast() && skritter.user.settings.get('audio')) {
                 this.review.getBaseVocab().playAudio();
             } else if (skritter.user.settings.get('audio')) {
                 this.review.getVocabAt().playAudio();
+            }
+            if (this.review.isLast()) {
+                this.$('#prompt-reading .reading').on('vclick', _.bind(this.playAudio, this));
+                if (this.review.getBaseVocab().has('audio')) {
+                    this.$('#prompt-reading .reading').addClass('has-audio');
+                }
             }
             return this;
         }

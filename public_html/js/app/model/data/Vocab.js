@@ -26,8 +26,9 @@ define([
          * @returns {Boolean}
          */
         isChinese: function() {
-            if (this.get('lang') === 'zh')
+            if (this.get('lang') === 'zh') {
                 return true;
+            }
             return false;
         },
         /**
@@ -35,8 +36,9 @@ define([
          * @returns {Boolean}
          */
         isJapanese: function() {
-            if (this.get('lang') === 'ja')
+            if (this.get('lang') === 'ja') {
                 return true;
+            }
             return false;
         },
         /**
@@ -44,8 +46,9 @@ define([
          * @returns {String}
          */
         getAudioFileName: function() {
-            if (this.has('audio'))
+            if (this.has('audio')) {
                 return this.get('audio').replace('/sounds?file=', '');
+            }
             return null;
         },
         /**
@@ -168,8 +171,8 @@ define([
                 reading = reading.indexOf(', ') === -1 ? [reading] : reading.split(', ');
                 for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
                     var position = 1;
-                    var pieces = reading[a].match(/[a-z]+[0-9]+|\s\.\.\.\s|\'/g);
-                    element += "<span id=reading-" + (a + 1) + "'>";
+                    var pieces = reading[a].match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g);
+                    element += "<span id='reading-" + (a + 1) + "' class='reading' data-reading='" + reading[a] + "'>";
                     for (var b = 0, lengthB = pieces.length; b < lengthB; b++) {
                         var piece = pieces[b];
                         if (piece.indexOf(' ... ') === -1 && piece.indexOf("'") === -1) {
@@ -187,12 +190,13 @@ define([
                             element += "<span class='reading-filler'>" + piece + "</span>";
                         }
                     }
-                    element += "</span>";
+                    element += a + 1 >= reading.length ? "</span>" : "</span> , ";
                 }
             } else {
                 reading = reading.split('');
-                for (var i = 0, length = reading.length; i < length; i++)
-                    element += "<span class='reading-kana'>" + reading[i] + "</span>";
+                for (var i = 0, length = reading.length; i < length; i++) {
+                    element += "<span class='reading-kana reading'>" + reading[i] + "</span>";
+                }
             }
             return element;
         },
@@ -276,8 +280,9 @@ define([
          * @method playAudio
          */
         playAudio: function() {
-            if (this.has('audio'))
+            if (this.has('audio')) {
                 skritter.assets.playAudio(this.getAudioFileName());
+            }
         },
         /**
          * @method spawnItem
