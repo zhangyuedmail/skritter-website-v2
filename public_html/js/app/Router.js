@@ -1,5 +1,6 @@
 /**
  * @module Skritter
+ * @param Account
  * @param Home
  * @param Login
  * @param ParamEditor
@@ -12,6 +13,7 @@
  * @author Joshua McFarland
  */
 define([
+    'view/Account',
     'view/Home',
     'view/Login',
     'view/admin/ParamEditor',
@@ -21,7 +23,7 @@ define([
     'view/Test',
     'view/vocab/List',
     'view/vocab/Lists'
-], function(Home, Login, ParamEditor, Review, Study, StudySettings, Test, VocabList, VocabLists) {
+], function(Account, Home, Login, ParamEditor, Review, Study, StudySettings, Test, VocabList, VocabLists) {
     /**
      * @class Router
      */
@@ -39,6 +41,7 @@ define([
          */
         routes: {
             '': 'home',
+            'account': 'account',
             'admin/param/:strokeId': 'adminParamEditor',
             'login': 'login',
             'review': 'review',
@@ -66,6 +69,14 @@ define([
             this.removeView();
             this.view = new ParamEditor({el: this.container});
             this.view.setStrokeId(strokeId).render();
+        },
+        /**
+         * @method account
+         */
+        account: function() {
+            this.removeView();
+            this.view = new Account({el: this.container});
+            this.view.render();
         },
         /**
          * @method home
