@@ -249,6 +249,33 @@ define(function() {
             request();
         },
         /**
+         * @method getSubscription
+         * @param {String} id
+         * @param {Function} callback
+         */
+        getSubscription: function(id, callback) {
+            var self = this;
+            function request() {
+                var promise = $.ajax({
+                    url: self.base + 'subscriptions/' + id,
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token')
+                    }
+                });
+                promise.done(function(data) {
+                    callback(data.Subscription, data.statusCode);
+                });
+                promise.fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request();
+        },
+        /**
          * @method getUser
          * @param {String} userId
          * @param {Function} callback
