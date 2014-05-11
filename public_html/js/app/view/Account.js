@@ -23,6 +23,14 @@ define([
         render: function() {
             document.title = "Skritter - Account";
             this.$el.html(templateAccount);
+            var userName = skritter.user.settings.get('name');
+            var userId = skritter.user.id;
+            this.$('#user-name').text(skritter.user.settings.get('name'));
+            if (userName !== userId) {
+                this.$('#user-id').text('(' + userId + ')');
+            }
+            this.$('#user-avatar').html(skritter.user.settings.getAvatar('img-thumbnail'));
+            this.$('#user-about-me').html(skritter.user.settings.get('aboutMe'));
             return this;
         },
         /**

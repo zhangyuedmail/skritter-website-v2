@@ -250,14 +250,14 @@ define(function() {
         },
         /**
          * @method getSubscription
-         * @param {String} id
+         * @param {String} userId
          * @param {Function} callback
          */
-        getSubscription: function(id, callback) {
+        getSubscription: function(userId, callback) {
             var self = this;
             function request() {
                 var promise = $.ajax({
-                    url: self.base + 'subscriptions/' + id,
+                    url: self.base + 'subscriptions/' + userId,
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
                     },
