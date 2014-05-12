@@ -14,7 +14,6 @@ requirejs.config({
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
-        moment: '../lib/moment-2.6.0.min',
         'require.locale': '../lib/require.i18n-2.0.4',
         'require.text': '../lib/require.text-2.0.10'
     },
@@ -34,7 +33,7 @@ requirejs.config({
     waitSeconds: 120
 });
 
-requirejs(['Libraries'], function() {
+requirejs(['require.locale', 'require.text'], function() {
     //main run function that loads application specific files
     function run() {
         requirejs(['Application'], function(Application) {
