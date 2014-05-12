@@ -29,6 +29,10 @@ body {
     height: 100%; 
     overflow-y: hidden;
 }
+#font-preloader {
+    position: absolute;
+    visibility: hidden;
+}
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-block {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
