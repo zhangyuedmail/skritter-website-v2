@@ -84,7 +84,7 @@ define([
             }
             //location
             this.$('#location-country').text(this.settings.get('country'));
-            this.$('#location-timezone').text(this.settings.get('timezone'));
+            this.$('#location-timezone').text(moment().tz(this.settings.get('timezone')).format('hh:m A') + ' | ' + this.settings.get('timezone'));
             return this;
         },
         /**
