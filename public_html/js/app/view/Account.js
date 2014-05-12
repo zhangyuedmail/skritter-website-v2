@@ -15,6 +15,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.settings = skritter.user.settings;
             this.subscription = skritter.user.subscription;
         },
         /**
@@ -81,7 +82,9 @@ define([
                 this.$('#subscription-expires').html("Your account does not current have an active subscription.");
                 this.$('.button-cancel-subscription').hide();
             }
-            
+            //location
+            this.$('#location-country').text(this.settings.get('country'));
+            this.$('#location-timezone').text(this.settings.get('timezone'));
             return this;
         },
         /**
