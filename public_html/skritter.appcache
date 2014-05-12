@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Sun May 11 2014 21:42:42 GMT+0800 (China Standard Time)
+# Time: Mon May 12 2014 20:35:10 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -42,7 +42,6 @@ bootstrap/components/switch/js/bootstrap-switch.min.js
 bootstrap/js/bootstrap.min.js
 js/app/Application.js
 js/app/Functions.js
-js/app/Libraries.js
 js/app/Router.js
 js/app/collection/data/Decomps.js
 js/app/collection/data/Items.js
@@ -82,6 +81,7 @@ js/app/model/storage/WebSQLAdapter.js
 js/app/model/user/Data.js
 js/app/model/user/Scheduler.js
 js/app/model/user/Settings.js
+js/app/model/user/Subscription.js
 js/app/model/user/Sync.js
 js/app/view/Account.js
 js/app/view/Home.js
@@ -116,6 +116,8 @@ js/lib/jquery.mobile-1.4.2.custom.min.js
 js/lib/jquery.ui-1.10.4.custom.min.js
 js/lib/lodash-2.4.1.compat.min.js
 js/lib/moment-2.6.0.min.js
+js/lib/moment.timezone-0.0.6.min.js
+js/lib/moment.timezone.data.js
 js/lib/raygun.min.js
 js/lib/require-2.1.11.min.js
 js/lib/require.i18n-2.0.4.js
