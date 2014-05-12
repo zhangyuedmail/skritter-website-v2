@@ -4,6 +4,7 @@
  * @param Data
  * @param Scheduler
  * @param Settings
+ * @param Subscription
  * @param Sync
  * @author Joshua McFarland
  */
@@ -11,8 +12,9 @@ define([
     'model/user/Data',
     'model/user/Scheduler',
     'model/user/Settings',
+    'model/user/Subscription',
     'model/user/Sync'
-], function(Data, Scheduler, Settings, Sync) {
+], function(Data, Scheduler, Settings, Subscription, Sync) {
     /**
      * @class User
      */
@@ -25,19 +27,27 @@ define([
             this.prompt = null;
             this.scheduler = new Scheduler();
             this.settings = new Settings();
+            this.subscription = new Subscription();
             this.sync = new Sync();
             //loads models for authenticated active user
             if (localStorage.getItem('active')) {
                 var userId = localStorage.getItem('active');
                 this.set(JSON.parse(localStorage.getItem(userId)), {silent: true});
-                if (localStorage.getItem(userId + '-data'))
+                if (localStorage.getItem(userId + '-data')) {
                     this.data.set(JSON.parse(localStorage.getItem(userId + '-data')), {silent: true});
-                if (localStorage.getItem(userId + '-scheduler'))
+                }
+                if (localStorage.getItem(userId + '-scheduler')) {
                     this.scheduler.set(JSON.parse(localStorage.getItem(userId + '-scheduler')), {silent: true});
-                if (localStorage.getItem(userId + '-settings'))
+                }
+                if (localStorage.getItem(userId + '-settings')) {
                     this.settings.set(JSON.parse(localStorage.getItem(userId + '-settings')), {silent: true});
-                if (localStorage.getItem(userId + '-sync'))
+                }
+                if (localStorage.getItem(userId + '-subscription')) {
+                    this.subscription.set(JSON.parse(localStorage.getItem(userId + '-subscription')), {silent: true});
+                }
+                if (localStorage.getItem(userId + '-sync')) {
                     this.sync.set(JSON.parse(localStorage.getItem(userId + '-sync')), {silent: true});
+                }
                 skritter.api.set('token', this.get('access_token'));
             }
             this.set('id', this.get('user_id'));
@@ -97,6 +107,9 @@ define([
                         }, this),
                         _.bind(function(callback) {
                             this.settings.fetch(callback);
+                        }, this),
+                        _.bind(function(callback) {
+                            this.subscription.fetch(callback);
                         }, this),
                         _.bind(function(callback) {
                             skritter.storage.open(this.id, callback);

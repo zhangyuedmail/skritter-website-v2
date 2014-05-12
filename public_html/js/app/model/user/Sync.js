@@ -1,5 +1,9 @@
-define([
-], function() {
+/**
+ * @module Skritter
+ * @submodule Model
+ * @author Joshua McFarland
+ */
+define(function() {
     /**
      * @class UserSync
      */

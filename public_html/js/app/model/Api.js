@@ -430,7 +430,7 @@ define(function() {
                 promise.done(function(data) {
                     postedReviews = postedReviews.concat(batch);
                     if (reviews.length > 0) {
-                        postBatch(reviews.splice(0, 499));
+                        postBatch(reviews.splice(0, 99));
                     } else {
                         callback(postedReviews, data.statusCode);
                     }
@@ -439,7 +439,7 @@ define(function() {
                     callback(error, 0);
                 });
             };
-            postBatch(reviews.splice(0, 499));
+            postBatch(reviews.splice(0, 99));
         },
         /**
          * Requests a specific batch from the server and returns the request id. Use the

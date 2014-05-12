@@ -1,3 +1,16 @@
+/**
+ * @module Skritter
+ * @submodule Model
+ * @param Decomps
+ * @param Items
+ * @param Reviews
+ * @param Sentences
+ * @param SRSConfigs
+ * @param Strokes
+ * @param VocabLists
+ * @param Vocabs
+ * @author Joshua McFarland
+ */
 define([
     'collection/data/Decomps',
     'collection/data/Items',

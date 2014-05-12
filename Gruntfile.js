@@ -9,11 +9,10 @@ module.exports = function(grunt) {
         template: '../../template',
         spec: '../../test/spec',
         //libraries
-        async: '../lib/async-0.7.0',
+        async: '../lib/async-0.8.0',
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
-        moment: '../lib/moment-2.6.0.min',
         'require.locale': '../lib/require.i18n-2.0.4',
         'require.text': '../lib/require.text-2.0.10'
     };

@@ -27,6 +27,7 @@ define([
             if (skritter.user.isLoggedIn()) {
                 document.title = "Skritter - " + skritter.user.settings.get('name');
                 this.$el.html(templateHomeLoggedIn);
+                this.preloadFont();
                 this.$('#user-avatar').html(skritter.user.settings.getAvatar('img-thumbnail'));
                 this.$('#user-due-count').text(skritter.user.scheduler.getDueCount(true));
                 this.$('#user-id').text(skritter.user.settings.get('name'));
@@ -48,11 +49,12 @@ define([
          * @property {Object} events
          */
         events: {
-            'vclick #user-avatar': 'navigateAccount',
+            'vclick .button-edit-account': 'navigateAccount',
             'vclick .button-existing-user': 'navigateLogin',
-            'vclick .button-new-user': 'navigateNewUser',
             'vclick .button-lists': 'navigateLists',
             'vclick .button-logout': 'logout',
+            'vclick .button-new-user': 'navigateNewUser',
+            'vclick .button-review-list': 'navigateReviewList',
             'vclick .button-study': 'navigateStudy',
             'vclick .button-sync': 'sync'
         },
@@ -71,6 +73,16 @@ define([
                 skritter.user.logout();
             });
             event.preventDefault();
+        },
+        /**
+         * @method preloadFont
+         */
+        preloadFont: function() {
+            if (this.languageCode === 'zh') {
+                this.$('#font-preloader').addClass('chinese-text');
+            } else {
+                this.$('#font-preloader').addClass('japanese-text');
+            }
         },
         /**
          * @method toggleSyncButton
@@ -112,6 +124,14 @@ define([
          */
         navigateNewUser: function(event) {
             skritter.router.navigate('user/new', {replace: true, trigger: true});
+            event.preventDefault();
+        },
+        /**
+         * @method navigateReviewList
+         * @param {Object} event
+         */
+        navigateReviewList: function(event) {
+            skritter.router.navigate('review', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
