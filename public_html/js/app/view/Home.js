@@ -48,7 +48,7 @@ define([
          * @property {Object} events
          */
         events: {
-            'vclick #user-avatar': 'navigateAccount',
+            'vclick .button-edit-account': 'navigateAccount',
             'vclick .button-existing-user': 'navigateLogin',
             'vclick .button-lists': 'navigateLists',
             'vclick .button-logout': 'logout',
