@@ -174,7 +174,7 @@ define([
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position'), skritter.user.settings.get('hideReading')));
-            this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
+            this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentence().getWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().get('writing'));
             return this;
