@@ -250,8 +250,9 @@ define([
                 }
                 this.canvas.display().swapChildren(this.canvas.getLayer('display'), this.canvas.getLayer('hint'));
             } else {
-                if (!this.teaching)
+                if (!this.teaching) {
                     this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+                }
             }
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position') + 1));
@@ -261,7 +262,7 @@ define([
                 this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             }
             if (skritter.user.settings.get('audio')) {
-                this.review.getVocabAt().playAudio();
+                this.review.getBaseVocab().playAudio(this.review.get('position'));
             }
             return this;
         },

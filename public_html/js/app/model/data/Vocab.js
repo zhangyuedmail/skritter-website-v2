@@ -159,6 +159,16 @@ define([
             return skritter.fn.pinyin.toTone(this.get('reading'));
         },
         /**
+         * @method getReadingAt
+         * @param {Number} position
+         * @returns {String}
+         */
+        getReadingAt: function(position) {
+            position = position === 0 ? 1 : position;
+            var reading = this.get('reading').split(', ')[0];
+            return reading.match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g)[position - 1];
+        },
+        /**
          * @method getReadingBlock
          * @param {Number} offset
          * @param {Boolean} mask
@@ -278,9 +288,13 @@ define([
         },
         /**
          * @method playAudio
+         * @param {Number} position
          */
-        playAudio: function() {
-            if (this.has('audio')) {
+        playAudio: function(position) {
+            if (position) {
+                var filename = this.getReadingAt(position) + '.mp3';
+                skritter.assets.playAudio(filename.toLowerCase());
+            } else if (this.has('audio')) {
                 skritter.assets.playAudio(this.getAudioFileName());
             }
         },
