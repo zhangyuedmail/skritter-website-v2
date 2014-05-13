@@ -131,7 +131,7 @@ define([
             this.$('#answer').hide();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
-            this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.getMaxPosition() + 1));
+            this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.getBaseVocab().getCharacterCount() + 1));
             this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().get('writing'));
