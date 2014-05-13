@@ -254,7 +254,9 @@ define([
                     this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
                 }
             }
-            this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentence().getWriting());
+            if (this.review.getBaseVocab().getSentence()) {
+                this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentence().getWriting());
+            }
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position') + 1));
             if (this.teaching) {
                 this.gradingButtons.grade(this.review.getReviewAt().score);
