@@ -237,8 +237,7 @@ define(function() {
                 function(callback) {
                     skritter.api.getReviewErrors(lastErrorCheck, function(errors, status) {
                         if (status === 200 && errors.length > 0) {
-                            window.alert('REVIEW ERRORS DETECTED!');
-                            console.log('REVIEW ERRORS', errors);
+                            Raygun.send('Review Errors', errors);
                             callback(errors);
                         } else if (status === 200) {
                             callback();

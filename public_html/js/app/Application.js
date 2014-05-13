@@ -146,13 +146,13 @@ define([
                 }
             ], function() {
                 //load raygun javascript error logging module
-                if (window.Raygun) {
-                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach().withCustomData([
-                        skritter.user.settings.getBriefing()
-                    ]).withTags(skritter.user.settings.getTags());
-                    Raygun.saveIfOffline(true);
+                if (window.Raygun && window.cordova) {
+                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach().withTags(skritter.user.settings.getTags());
                     Raygun.setUser(skritter.user.id);
                     Raygun.setVersion(skritter.settings.getVersion());
+                    Raygun.saveIfOffline(true);
+                } else if (window.Raygun) {
+                    //TODO: implement tracking for the html5 web version
                 }
                 callback();
             });
