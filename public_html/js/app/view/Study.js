@@ -155,15 +155,18 @@ define([
                 var limit = skritter.modal.element('.item-limit').val();
                 skritter.modal.element('.modal-footer').show();
                 if (limit >= 1 && limit <= 100) {
-                    skritter.modal.element(':input').prop('disabled', true);
-                    skritter.modal.element('.message').addClass('text-info');
-                    skritter.modal.element('.message').html("<i class='fa fa-spin fa-spinner'></i> Adding Items");
+                    skritter.modal.element(':input').prop('disabled', true);      
+                    skritter.modal.element('.message').html("Looking for new items");
                     skritter.user.sync.addItems(limit, _.bind(function() {
                         skritter.user.settings.set('addItemAmount', limit);
                         this.updateDueCount();
                         skritter.modal.hide();
                         skritter.timer.start();
-                    }, this));
+                    }, this), function(numVocabsAdded) {
+                        if (numVocabsAdded > 0) {
+                            skritter.modal.element('.message').html("Adding " + numVocabsAdded + " items");
+                        }
+                    });
                 } else {
                     skritter.modal.element('.message').addClass('text-danger');
                     skritter.modal.element('.message').text('Must be between 1 and 100.');
@@ -193,6 +196,6 @@ define([
             this.$('#items-due').html(skritter.user.scheduler.getDueCount());
         }
     });
-    
+
     return Study;
 });

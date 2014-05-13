@@ -37,9 +37,10 @@ define(function() {
         /**
          * @method addItems
          * @param {Number} limit
-         * @param {Function} callback
+         * @param {Function} callback1
+         * @param {Function} callback2
          */
-        addItems: function(limit, callback) {
+        addItems: function(limit, callback1, callback2) {
             var self = this;
             var now = skritter.fn.getUnixTime();
             var numVocabsAdded = 0;
@@ -76,6 +77,9 @@ define(function() {
                                 }
                                 window.setTimeout(request, 2000);
                             } else {
+                                if (typeof callback2 === 'function') {
+                                    callback2(numVocabsAdded);
+                                }
                                 self.set('addItemOffset', offset + numVocabsAdded);
                                 callback();
                             }
@@ -89,8 +93,9 @@ define(function() {
             ], _.bind(function() {
                 skritter.user.scheduler.sort();
                 this.set('syncing', false);
-                if (typeof callback === 'function')
-                    callback();
+                if (typeof callback1 === 'function') {
+                    callback1();
+                }
             }, this));
         },
         /**
