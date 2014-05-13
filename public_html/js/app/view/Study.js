@@ -47,6 +47,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick #view-study .navigate-backward': 'previousPrompt',
             'vclick #view-study .button-add-items': 'showAddItemsModal',
             'vclick #view-study .button-vocab-info': 'navigateVocabInfo',
             'vclick #view-study .button-study-settings': 'navigateStudySettings'

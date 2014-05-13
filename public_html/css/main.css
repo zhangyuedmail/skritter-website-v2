@@ -169,7 +169,7 @@ body {
     left: 0;
     position: absolute;
     width: 100%;
-    z-index: 9003;
+    z-index: 9004;
 }
 .prompt-container #prompt-grading-buttons div { 
     background-color: transparent; 
@@ -233,6 +233,23 @@ body {
     display: table;
     height: 100%;
     width: 100%;
+}
+#input-section .navigate {
+    background-color: transparent;
+    cursor: pointer;
+    height: 100%;
+    position: absolute;
+    width: 30px;
+    z-index: 9003;
+}
+#input-section .navigate:hover {
+    background-color: #e7e7e7;
+    opacity: 0.4;
+}
+#input-section .navigate-backward { left: 0; }
+#input-section .navigate-forward {
+    display: none;
+    right: 0;
 }
 #input-section #prompt-text #answer {
     cursor: pointer;
