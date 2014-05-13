@@ -22,7 +22,7 @@ define([
     'view/Study',
     'view/study/Settings',
     'view/Test',
-    'view/vocab/info',
+    'view/vocab/Info',
     'view/vocab/List',
     'view/vocab/Lists'
 ], function(Account, Home, Login, ParamEditor, Review, Study, StudySettings, Test, VocabInfo, VocabList, VocabLists) {
