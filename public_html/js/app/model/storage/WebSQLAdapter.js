@@ -15,9 +15,9 @@ define([
          * @method initialize
          */
         initialize: function() {
-            WebSQLAdapter.database = null;
-            WebSQLAdapter.version = '1.0';
-            WebSQLAdapter.size = 50 * 1024 * 1024;
+            this.database = null;
+            this.version = '1.0';
+            this.size = 50 * 1024 * 1024;
         },
         /**
          * @method clear
@@ -32,7 +32,7 @@ define([
                 if (typeof callback === 'function')
                     callback();
             };
-            WebSQLAdapter.database.transaction(function(tx) {
+            this.database.transaction(function(tx) {
                 tx.executeSql('DROP TABLE IF EXISTS ' + tableName);    
             }, onError, onSuccess);
         },
@@ -49,7 +49,7 @@ define([
                 if (typeof callback === 'function')
                     callback();
             };
-            WebSQLAdapter.database.transaction(function(tx) {
+            this.database.transaction(function(tx) {
                 for (var name in tables)
                     tx.executeSql('DROP TABLE IF EXISTS ' + name);
             }, onError, onSuccess);
@@ -75,7 +75,7 @@ define([
                 var success = function() {
                     callback(items);
                 };
-                WebSQLAdapter.database.transaction(function(tx) {
+                this.database.transaction(function(tx) {
                     tx.executeSql('SELECT * FROM ' + tableName + ' WHERE ' + key + ' IN (' + valueString + ')', ids, results);
                     function results(tx, result) {
                         for (var a = 0, lengthA = result.rows.length; a < lengthA; a++) {
@@ -103,7 +103,7 @@ define([
             var onSuccess = function() {
                 callback(items);
             };
-            WebSQLAdapter.database.transaction(function(tx) {
+            this.database.transaction(function(tx) {
                 tx.executeSql('SELECT * FROM ' + tableName, [], results);
                 function results(tx, result) {
                     for (var a = 0, lengthA = result.rows.length; a < lengthA; a++) {
@@ -135,7 +135,7 @@ define([
             var onSuccess = function() {
                 callback(schedule);
             };
-            WebSQLAdapter.database.transaction(function(tx) {
+            this.database.transaction(function(tx) {
                 tx.executeSql('SELECT id, flag, last, next, style, vocabIds FROM items', [], results);
                 function results(tx, result) {
                     for (var a = 0, lengthA = result.rows.length; a < lengthA; a++) {
@@ -171,8 +171,8 @@ define([
             var onSuccess = function() {
                 callback();
             };
-            WebSQLAdapter.database = window.openDatabase(databaseName, WebSQLAdapter.version, databaseName, WebSQLAdapter.size);
-            WebSQLAdapter.database.transaction(function(tx) {
+            this.database = window.openDatabase(databaseName, this.version, databaseName, this.size);
+            this.database.transaction(function(tx) {
                 for (var name in tables) {
                     var table = tables[name];
                     tx.executeSql('CREATE TABLE IF NOT EXISTS ' + name + ' (' + table.keys[0] + ' PRIMARY KEY,' + table.columns.join(',') + ')');
@@ -197,7 +197,7 @@ define([
                 var onSuccess = function() {
                     callback();
                 };
-                WebSQLAdapter.database.transaction(function(tx) {
+                this.database.transaction(function(tx) {
                     var queryString = 'INSERT OR REPLACE INTO ' + tableName + ' (' + keysColumns.join(',') + ') VALUES (' + valueString + ')';
                     for (var a = 0, lengthA = items.length; a < lengthA; a++) {
                         var item = items[a];
@@ -237,7 +237,7 @@ define([
                 var success = function() {
                     callback(items);
                 };
-                WebSQLAdapter.database.transaction(function(tx) {
+                this.database.transaction(function(tx) {
                     for (var i = 0, length = ids.length; i < length; i++)
                         tx.executeSql('DELETE FROM ' + tableName + ' WHERE ' + key + ' = ?', [ids[i]]);
                 }, error, success);

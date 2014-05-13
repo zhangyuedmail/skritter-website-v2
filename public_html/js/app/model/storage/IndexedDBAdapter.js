@@ -15,9 +15,9 @@ define([
          * @method initialize
          */
         initialize: function() {
-            IndexedDBAdapter.database = null;
-            IndexedDBAdapter.databaseName = null;
-            IndexedDBAdapter.version = 1;
+            this.database = null;
+            this.databaseName = null;
+            this.version = 1;
         },
         /**
          * @method clear
@@ -25,7 +25,7 @@ define([
          * @param {Function} callback
          */
         clear: function(tableName, callback) {
-            var transaction = IndexedDBAdapter.database.transaction(tableName, 'readwrite');
+            var transaction = this.database.transaction(tableName, 'readwrite');
             transaction.oncomplete = function() {
                 if (typeof callback === 'function')
                     callback();
@@ -40,8 +40,8 @@ define([
          * @param {Function} callback
          */
         destroy: function(callback) {
-            IndexedDBAdapter.database.close();
-            var request = window.indexedDB.deleteDatabase(IndexedDBAdapter.databaseName);
+            this.database.close();
+            var request = window.indexedDB.deleteDatabase(this.databaseName);
             request.onsuccess = function() {
                 if (typeof callback === 'function')
                     callback();
@@ -60,7 +60,7 @@ define([
             var items = [];
             if (tableName && ids) {
                 ids = Array.isArray(ids) ? ids : [ids];
-                var transaction = IndexedDBAdapter.database.transaction(tableName, 'readonly');
+                var transaction = this.database.transaction(tableName, 'readonly');
                 transaction.oncomplete = function() {
                     callback(items);
                 };
@@ -87,7 +87,7 @@ define([
          */
         getAll: function(tableName, callback) {
             var items = [];
-            var transaction = IndexedDBAdapter.database.transaction(tableName, 'readonly');
+            var transaction = this.database.transaction(tableName, 'readonly');
             transaction.oncomplete = function() {
                 callback(items);
             };
@@ -110,7 +110,7 @@ define([
          */
         getSchedule: function(filterParts, filterStyle, callback) {
             var schedule = [];
-            var transaction = IndexedDBAdapter.database.transaction('items', 'readonly');
+            var transaction = this.database.transaction('items', 'readonly');
             transaction.oncomplete = function() {
                 callback(schedule);
             };
@@ -141,7 +141,7 @@ define([
          */
         open: function(databaseName, callback) {
             var tables = this.tables;
-            var request = window.indexedDB.open(databaseName, IndexedDBAdapter.version);
+            var request = window.indexedDB.open(databaseName, this.version);
             request.onerror = function(event) {
                 console.error(event);
             };
@@ -156,11 +156,11 @@ define([
                 database.createObjectStore('vocablists', {keyPath: tables.vocablists.keys[0]});
                 database.createObjectStore('vocabs', {keyPath: tables.vocabs.keys[0]});
             };
-            request.onsuccess = function() {
-                IndexedDBAdapter.database = request.result;
-                IndexedDBAdapter.databaseName = databaseName;
+            request.onsuccess = _.bind(function() {
+                this.database = request.result;
+                this.databaseName = databaseName;
                 callback();
-            };
+            }, this);
         },
         /**
          * @method put
@@ -171,7 +171,7 @@ define([
         put: function(tableName, items, callback) {
             if (tableName && items) {
                 items = Array.isArray(items) ? items : [items];
-                var transaction = IndexedDBAdapter.database.transaction(tableName, 'readwrite');
+                var transaction = this.database.transaction(tableName, 'readwrite');
                 transaction.oncomplete = function() {
                     callback();
                 };
@@ -194,7 +194,7 @@ define([
         remove: function(tableName, ids, callback) {
             if (tableName && ids) {
                 ids = Array.isArray(ids) ? ids : [ids];
-                var transaction = IndexedDBAdapter.database.transaction(tableName, 'readwrite');
+                var transaction = this.database.transaction(tableName, 'readwrite');
                 transaction.oncomplete = function() {
                     callback();
                 };
