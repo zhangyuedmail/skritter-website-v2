@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Mon May 12 2014 20:35:10 GMT+0800 (China Standard Time)
+# Time: Tue May 13 2014 19:43:13 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -36,6 +36,7 @@ template/prompt-tone.html
 template/study-settings.html
 template/study.html
 template/test.html
+template/vocab-info.html
 template/vocab-list.html
 template/vocab-lists.html
 bootstrap/components/switch/js/bootstrap-switch.min.js
@@ -103,6 +104,7 @@ js/app/view/prompt/Rdng.js
 js/app/view/prompt/Rune.js
 js/app/view/prompt/Tone.js
 js/app/view/study/Settings.js
+js/app/view/vocab/Info.js
 js/app/view/vocab/List.js
 js/app/view/vocab/Lists.js
 js/lib/async-0.8.0.js
