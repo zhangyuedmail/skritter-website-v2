@@ -48,7 +48,7 @@ define([
          */
         events: {
             'vclick #view-study .button-add-items': 'showAddItemsModal',
-            'vclick #view-study .button-previous': 'previousPrompt',
+            'vclick #view-study .button-vocab-info': 'navigateVocabInfo',
             'vclick #view-study .button-study-settings': 'navigateStudySettings'
         },
         /**
@@ -75,6 +75,15 @@ define([
             skritter.user.prompt = this.prompt;
             this.updateAudioButtonState();
             this.updateDueCount();
+        },
+        /**
+         * @method navigateVocabInfo
+         * @param {Object} event
+         */
+        navigateVocabInfo: function(event) {
+            var vocab = this.prompt.review.getBaseVocab();
+            skritter.router.navigate('vocab/info/' + vocab.get('lang') + '/' + vocab.get('writing'), {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method navigateStudySettings
