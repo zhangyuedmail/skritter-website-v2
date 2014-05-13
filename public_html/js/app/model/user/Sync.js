@@ -212,10 +212,12 @@ define(function() {
                             if (result && status === 200) {
                                 downloadedRequests += result.downloadedRequests;
                                 responseSize += result.responseSize;
-                                if (responseSize > 0)
+                                if (responseSize > 0) {
                                     skritter.modal.set('.modal-title-right', skritter.fn.bytesToSize(responseSize));
-                                if (result.totalRequests > 100)
+                                }
+                                if (result.totalRequests > 100) {
                                     skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
+                                }
                                 skritter.user.data.insert(result, function() {
                                     window.setTimeout(request, 1000);
                                 });
