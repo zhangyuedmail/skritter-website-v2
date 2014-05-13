@@ -162,25 +162,29 @@ define(function() {
         insert: function(items) {
             items = Array.isArray(items) ? items : [items];
             var removeIds = [];
+            var parts = skritter.user.settings.getActiveParts();
+            var style = skritter.user.settings.getStyle();
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
-                var position = _.findIndex(this.data, {id: item.id});
-                if (position > -1 && item.vocabIds.length === 0) {
-                    removeIds.push(item.id);
-                } else if (position > -1) {
-                    this.data[position] = {
-                        id: item.id,
-                        last: item.last,
-                        next: item.next,
-                        vocabIds: item.vocabIds
-                    };
-                } else if (item.vocabIds.length > 0) {
-                    this.data.push({
-                        id: item.id,
-                        last: item.last,
-                        next: item.next,
-                        vocabIds: item.vocabIds
-                    });
+                if (parts.indexOf(item.part) !== -1 && style.indexOf(item.style) !== -1) {
+                    var position = _.findIndex(this.data, {id: item.id});
+                    if (position > -1 && item.vocabIds.length === 0) {
+                        removeIds.push(item.id);
+                    } else if (position > -1) {
+                        this.data[position] = {
+                            id: item.id,
+                            last: item.last,
+                            next: item.next,
+                            vocabIds: item.vocabIds
+                        };
+                    } else if (item.vocabIds.length > 0) {
+                        this.data.push({
+                            id: item.id,
+                            last: item.last,
+                            next: item.next,
+                            vocabIds: item.vocabIds
+                        });
+                    }
                 }
             }
             if (removeIds.length > 0) {

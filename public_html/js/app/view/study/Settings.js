@@ -93,7 +93,7 @@ define([
                 return false;
             }
             skritter.user.settings.setActiveParts(Settings.activeParts);
-            skritter.modal.show('loading').set('.modal-body', 'Rescheduling');
+            skritter.modal.show('loading').set('.modal-body', 'Applying Changes');
             skritter.user.scheduler.load(function() {
                 skritter.user.scheduler.sort();
                 skritter.router.navigate('study', {replace: true, trigger: true});

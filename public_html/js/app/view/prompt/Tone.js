@@ -174,7 +174,7 @@ define([
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position'), skritter.user.settings.get('hideReading')));
-            this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
+            this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentence().getWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().get('writing'));
             return this;
@@ -197,9 +197,13 @@ define([
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.get('position') + 1, skritter.user.settings.get('hideReading')));
             this.gradingButtons.show().select(this.review.getReviewAt().score).collapse();
             if (this.review.isLast() && skritter.user.settings.get('audio')) {
-                this.review.getBaseVocab().playAudio();
+                if (this.review.getBaseVocab().has('audio')) {
+                    this.review.getBaseVocab().playAudio();
+                } else {
+                    this.review.getBaseVocab().playAudio(this.review.get('position'));
+                }
             } else if (skritter.user.settings.get('audio')) {
-                this.review.getVocabAt().playAudio();
+                this.review.getBaseVocab().playAudio(this.review.get('position'));
             }
             if (this.review.isLast()) {
                 this.$('#prompt-reading .reading').on('vclick', _.bind(this.playAudio, this));

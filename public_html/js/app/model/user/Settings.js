@@ -142,13 +142,13 @@ define(function() {
          */
         getTags: function() {
             if (this.isJapanese()) {
-                return ['japanese', 'both'];
+                return ['japanese'];
             } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
-                return ['chinese', 'both', 'simp', 'trad'];
+                return ['chinese', 'simplified', 'traditional'];
             } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
-                return ['chinese', 'both', 'simp'];
+                return ['chinese', 'simplified'];
             } else {
-                return ['chinese', 'both', 'trad'];
+                return ['chinese', 'traditional'];
             }
         },
         /**

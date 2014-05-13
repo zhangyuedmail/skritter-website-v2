@@ -37,9 +37,10 @@ define(function() {
         /**
          * @method addItems
          * @param {Number} limit
-         * @param {Function} callback
+         * @param {Function} callback1
+         * @param {Function} callback2
          */
-        addItems: function(limit, callback) {
+        addItems: function(limit, callback1, callback2) {
             var self = this;
             var now = skritter.fn.getUnixTime();
             var numVocabsAdded = 0;
@@ -71,9 +72,14 @@ define(function() {
                                 if (result.Items) {
                                     skritter.user.scheduler.insert(result.Items);
                                 }
-                                numVocabsAdded += result.numVocabsAdded;
+                                if (result.numVocabsAdded) {
+                                    numVocabsAdded += result.numVocabsAdded;
+                                }
                                 window.setTimeout(request, 2000);
                             } else {
+                                if (typeof callback2 === 'function') {
+                                    callback2(numVocabsAdded);
+                                }
                                 self.set('addItemOffset', offset + numVocabsAdded);
                                 callback();
                             }
@@ -87,8 +93,9 @@ define(function() {
             ], _.bind(function() {
                 skritter.user.scheduler.sort();
                 this.set('syncing', false);
-                if (typeof callback === 'function')
-                    callback();
+                if (typeof callback1 === 'function') {
+                    callback1();
+                }
             }, this));
         },
         /**
@@ -205,10 +212,12 @@ define(function() {
                             if (result && status === 200) {
                                 downloadedRequests += result.downloadedRequests;
                                 responseSize += result.responseSize;
-                                if (responseSize > 0)
+                                if (responseSize > 0) {
                                     skritter.modal.set('.modal-title-right', skritter.fn.bytesToSize(responseSize));
-                                if (result.totalRequests > 100)
+                                }
+                                if (result.totalRequests > 100) {
                                     skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
+                                }
                                 skritter.user.data.insert(result, function() {
                                     window.setTimeout(request, 1000);
                                 });
@@ -235,8 +244,7 @@ define(function() {
                 function(callback) {
                     skritter.api.getReviewErrors(lastErrorCheck, function(errors, status) {
                         if (status === 200 && errors.length > 0) {
-                            window.alert('REVIEW ERRORS DETECTED!');
-                            console.log('REVIEW ERRORS', errors);
+                            Raygun.send('Review Errors', errors);
                             callback(errors);
                         } else if (status === 200) {
                             callback();

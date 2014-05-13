@@ -66,8 +66,8 @@ define([
                 }, function() {
                     promptHint.hide();
                     promptHintText.show();
-                    promptHintToggleButton.addClass('fa-arrow-circle-down');
-                    promptHintToggleButton.removeClass('fa-arrow-circle-up');
+                    promptHintToggleButton.addClass('fa-chevron-down');
+                    promptHintToggleButton.removeClass('fa-chevron-up');
                 });
             }
         },
@@ -131,8 +131,8 @@ define([
             this.$('#answer').hide();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
-            this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.getMaxPosition() + 1));
-            this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentenceWriting());
+            this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.getBaseVocab().getCharacterCount() + 1));
+            this.$('#prompt-sentence').html(this.review.getBaseVocab().getSentence().getWriting());
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().get('writing'));
             if (this.review.getBaseVocab().has('audio')) {
@@ -178,8 +178,8 @@ define([
                 infoSection.animate({
                     height: infoSection[0].scrollHeight + 5
                 }, function() {
-                    promptHintToggleButton.addClass('fa-arrow-circle-up');
-                    promptHintToggleButton.removeClass('fa-arrow-circle-down');
+                    promptHintToggleButton.addClass('fa-chevron-up');
+                    promptHintToggleButton.removeClass('fa-chevron-down');
                 });
             }
         },

@@ -52,31 +52,23 @@ define(function() {
                     var tone = stroke.get('tone');
                     for (var c = 0, lengthC = params.length; c < lengthC; c++) {
                         var param = params[c];
+                        var skipChecks = param.has('skipChecks') ? param.get('skipChecks') : [];
                         var result = userStroke.clone();
-                        var scores;
-                        if (param.skipChecks) {
-                            scores = {
-                                angle: param.skipChecks.indexOf('angle') === -1 ? this.checkAngle(result, param) : undefined,
-                                corners: param.skipChecks.indexOf('corners') === -1 ? this.checkCorners(result, param) : undefined,
-                                cornersLength: param.skipChecks.indexOf('length') === -1 ? this.checkCornersLength(result, param, size) : undefined,
-                                distance: param.skipChecks.indexOf('distance') === -1 ? this.checkDistance(result, param, size) : undefined
-                            };
-                        } else {
-                            scores = {
-                                angle: this.checkAngle(result, param),
-                                corners: this.checkCorners(result, param),
-                                cornersLength: this.checkCornersLength(result, param, size),
-                                distance: this.checkDistance(result, param, size)
-                            };
-                        }
+                        var scores = {
+                            angle: skipChecks.indexOf('angle') === -1 ? this.checkAngle(result, param) : undefined,
+                            corners: skipChecks.indexOf('corners') === -1 ? this.checkCorners(result, param) : undefined,
+                            cornersLength: skipChecks.indexOf('cornersLength') === -1 ? this.checkCornersLength(result, param, size) : undefined,
+                            distance: skipChecks.indexOf('distance') === -1 ? this.checkDistance(result, param, size) : undefined
+                        };
                         var total = 0;
                         for (var category in scores) {
                             var score = scores[category];
-                            if (score < 0) {
+                            if (score === -1) {
                                 total = false;
                                 break;
+                            } else if (score) {
+                                total += score;
                             }
-                            total += score;
                         }
                         result.set({
                             bitmapId: bitmapId,

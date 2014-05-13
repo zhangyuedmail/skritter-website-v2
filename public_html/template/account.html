@@ -11,16 +11,18 @@
     </div>
     <div id="content-container" class="container">
         <div class="content-block">
-            <div class="row">
-                <div class="col-xs-9">
-                    <h4><span id="user-name"></span> <span id="user-id" class="text-muted"></span></h4>
-                    <p id="user-about-me" class="lead"></p>
-                </div>
-                <div class="col-xs-3">
-                    <div id="user-avatar"></div>
-                    <button type="button" class="button-change-avatar btn btn-xs btn-default">Change Avatar</button>
-                </div>
-            </div>
+            <ul class="media-list">
+                <li class="media">
+                    <div class="pull-right">
+                        <div id="user-avatar"></div>
+                        <button type="button" class="button-change-avatar btn btn-xs btn-default">Change Avatar</button>
+                    </div>
+                    <div class="media-body">
+                        <h4><span id="user-name"></span> <span id="user-id" class="text-muted"></span></h4>
+                        <p id="user-about-me" class="lead"></p>
+                    </div>
+                </li>
+            </ul>
         </div>
         <div class="content-block">
             <h3>Subscription</h3>

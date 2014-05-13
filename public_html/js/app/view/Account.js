@@ -91,6 +91,14 @@ define([
          * @property {Object} events
          */
         events: {
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.stopListening();
+            this.undelegateEvents();
+            this.$el.empty();
         }
     });
     
