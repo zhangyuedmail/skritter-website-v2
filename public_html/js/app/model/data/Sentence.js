@@ -50,6 +50,16 @@ define(function() {
          */
         getReading: function() {
             return skritter.fn.pinyin.toTone(this.get('reading'));
+        },
+        /**
+         * @method getWriting
+         * @returns {String}
+         */
+        getWriting: function() {
+            var writing = this.get('writing');
+            if (writing) {
+                return writing.replace(/\s/g, '');
+            }
         }
     });
 

@@ -218,15 +218,6 @@ define([
             return skritter.user.data.sentences.get(this.get('sentenceId'));
         },
         /**
-         * @method getSentenceWriting
-         * @returns {String}
-         */
-        getSentenceWriting: function() {
-            var sentence = this.getSentence();
-            if (sentence)
-                return sentence.get('writing').replace(/\s/g, '');
-        },
-        /**
          * @method getStyle
          * @returns {String}
          */
