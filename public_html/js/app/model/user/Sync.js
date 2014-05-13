@@ -71,7 +71,9 @@ define(function() {
                                 if (result.Items) {
                                     skritter.user.scheduler.insert(result.Items);
                                 }
-                                numVocabsAdded += result.numVocabsAdded;
+                                if (result.numVocabsAdded) {
+                                    numVocabsAdded += result.numVocabsAdded;
+                                }
                                 window.setTimeout(request, 2000);
                             } else {
                                 self.set('addItemOffset', offset + numVocabsAdded);
