@@ -66,8 +66,8 @@ define([
                 }, function() {
                     promptHint.hide();
                     promptHintText.show();
-                    promptHintToggleButton.addClass('fa-arrow-circle-down');
-                    promptHintToggleButton.removeClass('fa-arrow-circle-up');
+                    promptHintToggleButton.addClass('fa-chevron-down');
+                    promptHintToggleButton.removeClass('fa-chevron-up');
                 });
             }
         },
@@ -178,8 +178,8 @@ define([
                 infoSection.animate({
                     height: infoSection[0].scrollHeight + 5
                 }, function() {
-                    promptHintToggleButton.addClass('fa-arrow-circle-up');
-                    promptHintToggleButton.removeClass('fa-arrow-circle-down');
+                    promptHintToggleButton.addClass('fa-chevron-up');
+                    promptHintToggleButton.removeClass('fa-chevron-down');
                 });
             }
         },
