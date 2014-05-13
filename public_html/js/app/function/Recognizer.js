@@ -52,7 +52,7 @@ define(function() {
                     var tone = stroke.get('tone');
                     for (var c = 0, lengthC = params.length; c < lengthC; c++) {
                         var param = params[c];
-                        var skipChecks = param.get('skipChecks');
+                        var skipChecks = param.has('skipChecks') ? param.get('skipChecks') : [];
                         var result = userStroke.clone();
                         var scores = {
                             angle: skipChecks.indexOf('angle') === -1 ? this.checkAngle(result, param) : undefined,
