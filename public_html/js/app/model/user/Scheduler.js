@@ -18,7 +18,6 @@ define(function() {
          * @property {Object} defaults
          */
         defaults: {
-            held: {},
             history: []
         },
         /**
@@ -141,17 +140,26 @@ define(function() {
          * @param {Function} callback
          */
         getNext: function(callback) {
+            var reviewsPosting = skritter.user.sync.reviewsPosting;
+            var history = this.get('history');
             var position = 0;
             function next() {
                 var item = skritter.user.scheduler.data[position];
-                skritter.user.data.items.loadItem(item.id, function(item) {
-                    if (item) {
-                        callback(item);
-                    } else {
-                        position++;
-                        next();
-                    }
-                });
+                var baseWriting = item.id.split('-')[2];
+                if (history.indexOf(baseWriting) === -1 &&
+                        reviewsPosting.indexOf(baseWriting) === -1) {
+                    skritter.user.data.items.loadItem(item.id, function(item) {
+                        if (item) {
+                            callback(item);
+                        } else {
+                            position++;
+                            next();
+                        }
+                    });
+                } else {
+                    position++;
+                    next();
+                }
             }
             next();
         },
@@ -232,32 +240,14 @@ define(function() {
          */
         sort: function() {
             var now = skritter.fn.getUnixTime();
-            var held = this.get('held');
-            var history = this.get('history');
-            var historyCheck = this.data.length > 24 ? true : false;
             this.data = _.sortBy(this.data, _.bind(function(item) {
-                var heldUntil = held[item.id];
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;
-                //temporarily ban recent items
-                if (historyCheck && history.indexOf(item.id.split('-')[2]) !== -1) {
-                    item.readiness = 0;
-                    return -item.readiness;
-                }
                 //randomly prioritize new items
-                if (!heldUntil && !item.last) {
+                if (!item.last) {
                     item.readiness = this.randomizeInterval(9999);
                     return -item.readiness;
-                }
-                //deprioritize held ready items
-                if (heldUntil && heldUntil > now) {
-                    if (readiness > 0.2) {
-                        item.readiness = 0.2;
-                        return -item.readiness;
-                    }
-                } else if (heldUntil) {
-                    delete held[item.id];
                 }
                 //tweak old item readiness
                 if (readiness > 0 && seenAgo > 9000) {
@@ -275,7 +265,6 @@ define(function() {
                 item.readiness = readiness;
                 return -item.readiness;
             }, this));
-            this.set('held', held).cache();
             this.trigger('schedule:sorted');
             return this.data;
         },
@@ -292,10 +281,8 @@ define(function() {
          * @param {Backbone.Model} item
          */
         update: function(item) {
-            var held = this.get('held');
             var history = this.get('history');
             var position = _.findIndex(this.data, {id: item.id});
-            var relatedItemIds = item.getRelatedIds();
             //update the direct schedule item
             this.data[position] = {
                 id: item.id,
@@ -303,18 +290,10 @@ define(function() {
                 next: item.get('next'),
                 vocabIds: item.get('vocabIds')
             };
-            //remove hold on directly updated item
-            delete held[item.id];
-            //keeps a maximum schedule history of five items
-            history.unshift(this.getItemBaseWriting(item.id));
+            //store limited history of simplified writings
+            history.unshift(item.id.split('-')[2]);
             if (history.length > 5) {
                 history.pop();
-            }
-            //place holds on related items for sorting
-            for (var i = 0, length = relatedItemIds.length; i < length; i++) {
-                if (!held[relatedItemIds[i]]) {
-                    held[relatedItemIds[i]] = skritter.fn.getUnixTime() + 60 * 10;
-                }
             }
             this.set('history', history);
             this.trigger('schedule:updated');

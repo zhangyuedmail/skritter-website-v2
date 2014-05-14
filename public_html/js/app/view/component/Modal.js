@@ -15,17 +15,17 @@ define([
          * @method initialize
          */
         initialize: function() {
-            Modal.id = null;
-            Modal.options = null;
+            this.id = null;
+            this.options = null;
             this.$el.on('hide.bs.modal', _.bind(function() {
-                Modal.id = null;
+                this.id = null;
                 this.$('*').off();
                 this.render();
             }, this));
             this.$el.on('show.bs.modal', _.bind(function(event) {
                 if (this.$el.children().hasClass('in')) {
                     this.$el.children('.in').modal('hide').one('hidden.bs.modal', _.bind(function() {
-                        this.$(Modal.element).modal(Modal.options);
+                        this.$(Modal.element).modal(this.options);
                     }, this));
                     event.preventDefault();
                 }
@@ -64,15 +64,15 @@ define([
          */
         element: function(selector) {
             if (selector)
-                return this.$el.find('#' + Modal.id + ' ' + selector);
-            return this.$el.find('#' + Modal.id);
+                return this.$el.find('#' + this.id + ' ' + selector);
+            return this.$el.find('#' + this.id);
         },
         /**
          * @method isDisplayed
          * @returns {Boolean}
          */
         isDisplayed: function() {
-            return Modal.id ? true : false;
+            return this.id ? true : false;
         },
         /**
          * @method progress
@@ -130,13 +130,13 @@ define([
          */
         show: function(id, callback, options) {
             id = id ? id : 'default';
-            Modal.id = id;
+            this.id = id;
             options = (options) ? options : {};
             options.backdrop = (options.backdrop) ? options.backdrop : 'static';
             options.keyboard = (options.keyboard) ? options.keyboard : false;
             options.show = (options.show) ? options.show : true;
             options.remote = (options.remote) ? options.remote : false;
-            Modal.options = options;
+            this.options = options;
             this.$('#' + id).modal(options).one('shown.bs.modal', _.bind(function() {
                 if (typeof callback === 'function')
                     callback();

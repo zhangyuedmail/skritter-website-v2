@@ -15,9 +15,9 @@ define([
          * @method initialize
          */
         initialize: function() {
-            GradingButtons.animationSpeed = 100;
-            GradingButtons.expanded = true;
-            GradingButtons.value = 3;
+            this.animationSpeed = 100;
+            this.expanded = true;
+            this.value = 3;
         },
         /**
          * @method render
@@ -41,7 +41,7 @@ define([
          * @returns {Backbone.View}
          */
         collapse: function() {
-            GradingButtons.expanded = false;
+            this.expanded = false;
             for (var i = 1; i <= 4; i++) {
                 if (this.$('#grade' + i).hasClass('selected')) {
                     this.$('#grade' + i).removeClass('hidden');
@@ -57,7 +57,7 @@ define([
          */
         expand: function() {
             this.$('#prompt-grading-buttons').children().removeClass('hidden');
-            GradingButtons.expanded = true;
+            this.expanded = true;
             return this;
         },
         /**
@@ -67,8 +67,8 @@ define([
          */
         grade: function(value) {
             if (value)
-                GradingButtons.value = value;
-            return GradingButtons.value;
+                this.value = value;
+            return this.value;
         },
         /**
          * @method handleButtonClick
@@ -76,7 +76,7 @@ define([
          */
         handleButtonClick: function(event) {
             this.select(parseInt(event.currentTarget.id.replace(/[^\d]+/, ''), 10));
-            if (GradingButtons.expanded) {
+            if (this.expanded) {
                 this.triggerSelected();
             } else {
                 this.toggle();
@@ -91,7 +91,7 @@ define([
             if (skipAnimation) {
                 this.$('#prompt-grading-buttons').hide();
             } else {
-                this.$('#prompt-grading-buttons').hide(GradingButtons.animationSpeed);
+                this.$('#prompt-grading-buttons').hide(this.animationSpeed);
             }
             return this;
         },
@@ -109,9 +109,9 @@ define([
          */
         select: function(value) {
             if (value)
-                GradingButtons.value = value;
+                this.value = value;
             for (var i = 1; i <= 4; i++) {
-                if (GradingButtons.value === i) {
+                if (this.value === i) {
                     this.$('#grade' + i).addClass('selected');
                 } else {
                     this.$('#grade' + i).removeClass('selected');
@@ -123,14 +123,14 @@ define([
          * @method show
          */
         show: function() {
-            this.$('#prompt-grading-buttons').show(GradingButtons.animationSpeed);
+            this.$('#prompt-grading-buttons').show(this.animationSpeed);
             return this;
         },
         /**
          * @method toggle
          */
         toggle: function() {
-            if (GradingButtons.expanded) {
+            if (this.expanded) {
                 this.collapse();
             } else {
                 this.expand();
@@ -141,7 +141,7 @@ define([
          * @method triggerSelected
          */
         triggerSelected: function() {
-            this.trigger('selected', GradingButtons.value);
+            this.trigger('selected', this.value);
         }
     });
 
