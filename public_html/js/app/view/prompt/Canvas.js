@@ -453,14 +453,16 @@ define(function() {
             this.lastMouseDownEvent = this.mouseDownEvent;
             this.mouseMoveEvent = null;
             this.mouseUpEvent = event;
-            var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
-            var endPosition = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
-            var distance = skritter.fn.distance(startPosition, endPosition);
-            var duration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
-            if (distance <= 10 && (duration > 20 && duration < 400)) {
-                this.triggerCanvasClick(event);
-            } else {
-                this.trigger('canvas:mouseup', event);
+            if (this.mouseDownEvent) {
+                var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
+                var endPosition = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
+                var distance = skritter.fn.distance(startPosition, endPosition);
+                var duration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
+                if (distance <= 10 && (duration > 20 && duration < 400)) {
+                    this.triggerCanvasClick(event);
+                } else {
+                    this.trigger('canvas:mouseup', event);
+                }
             }
         },
         /**
