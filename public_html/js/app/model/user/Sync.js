@@ -249,12 +249,17 @@ define(function() {
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
             this.reviewsPosting = _.uniq(_.pluck(reviews, 'itemId'));
+            console.log('POSTING REVIEWS', this.reviewsPosting);
             this.set('syncing', true);
             async.waterfall([
                 function(callback) {
                     skritter.api.getReviewErrors(lastErrorCheck, function(errors, status) {
                         if (status === 200 && errors.length > 0) {
-                            Raygun.send('Review Errors', errors);
+                            window.alert('Oh no! Review errors were detected!');
+                            console.log('REVIEW ERRORS', errors);
+                            if (window.Raygun) {
+                                Raygun.send('Review Errors', errors);
+                            }
                             callback(errors);
                         } else if (status === 200) {
                             callback();
