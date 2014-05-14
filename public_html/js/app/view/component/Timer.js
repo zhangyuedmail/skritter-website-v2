@@ -38,29 +38,29 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
-            Timer.interval = null;
-            Timer.getLapTime = function() {
-                return Timer.lapStartAt ? Timer.lapTime + skritter.fn.getUnixTime(true) - Timer.lapStartAt : Timer.lapTime;
+            this.interval = null;
+            this.getLapTime = function() {
+                return this.lapStartAt ? this.lapTime + skritter.fn.getUnixTime(true) - this.lapStartAt : this.lapTime;
             };
-            Timer.lapStartAt = 0;
-            Timer.lapTime = 0;
-            Timer.reviewLimit = 30;
-            Timer.reviewStart = null;
-            Timer.reviewStop = null;
-            Timer.offset = 0;
-            Timer.stopwatch = new Stopwatch();
-            Timer.thinkingLimit = 15;
-            Timer.thinkingStop = null;
-            Timer.time = 0;
+            this.lapStartAt = 0;
+            this.lapTime = 0;
+            this.reviewLimit = 30;
+            this.reviewStart = null;
+            this.reviewStop = null;
+            this.offset = 0;
+            this.stopwatch = new Stopwatch();
+            this.thinkingLimit = 15;
+            this.thinkingStop = null;
+            this.time = 0;
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            var time = (time) ? time : Timer.time;
+            var time = (time) ? time : this.time;
             //adjusts the rendered time for the offset
-            time += Timer.offset * 1000;
+            time += this.offset * 1000;
             //switched to bitwise operations for better performance across browsers
             var hours = (time / (3600 * 1000)) >> 0;
             time = time % (3600 * 1000);
@@ -80,9 +80,9 @@ define(function() {
          * @returns {Number}
          */
         getReviewTime: function() {
-            var lapTime = Timer.getLapTime() / 1000;
-            if (lapTime >= Timer.reviewLimit)
-                return Timer.reviewLimit;
+            var lapTime = this.getLapTime() / 1000;
+            if (lapTime >= this.reviewLimit)
+                return this.reviewLimit;
             return lapTime;
         },
         /**
@@ -90,22 +90,22 @@ define(function() {
          * @returns {Number}
          */
         getStartTime: function() {
-            return parseInt(Timer.reviewStart / 1000, 10);
+            return parseInt(this.reviewStart / 1000, 10);
         },
         /**
          * @method getThinkingTime
          * @returns {Number}
          */
         getThinkingTime: function() {
-            var lapTime = Timer.getLapTime() / 1000;
-            if (Timer.thinkingStop) {
-                var thinkingTime = (Timer.thinkingStop - Timer.reviewStart) / 1000;
-                if (thinkingTime >= Timer.thinkingLimit)
-                    return Timer.thinkingLimit;
+            var lapTime = this.getLapTime() / 1000;
+            if (this.thinkingStop) {
+                var thinkingTime = (this.thinkingStop - this.reviewStart) / 1000;
+                if (thinkingTime >= this.thinkingLimit)
+                    return this.thinkingLimit;
                 return thinkingTime;
             }
-            if (lapTime >= Timer.thinkingLimit)
-                return Timer.thinkingLimit;
+            if (lapTime >= this.thinkingLimit)
+                return this.thinkingLimit;
             return lapTime;
         },
         /**
@@ -113,7 +113,7 @@ define(function() {
          * @returns {Boolean}
          */
         isReviewLimitReached: function() {
-            if (Timer.getLapTime() >= Timer.reviewLimit * 1000)
+            if (this.getLapTime() >= this.reviewLimit * 1000)
                 return true;
             return false;
         },
@@ -122,7 +122,7 @@ define(function() {
          * @returns {Boolean}
          */
         isRunning: function() {
-            if (Timer.interval)
+            if (this.interval)
                 return true;
             return false;
         },
@@ -131,7 +131,7 @@ define(function() {
          * @returns {Boolean}
          */
         isThinkingLimitReached: function() {
-            if (Timer.getLapTime() >= Timer.thinkingLimit * 1000)
+            if (this.getLapTime() >= this.thinkingLimit * 1000)
                 return true;
             return false;
         },
@@ -143,17 +143,17 @@ define(function() {
          * @param {Function} callback
          */
         refresh: function(includeServer, callback) {
-            Timer.offset = skritter.user.data.reviews.getTotalTime();
+            this.offset = skritter.user.data.reviews.getTotalTime();
             if (includeServer) {
                 skritter.api.getProgStats({
-                }, function(progstats, status) {
+                }, _.bind(function(progstats, status) {
                     if (status === 200) {
-                        Timer.offset += progstats[0].timeStudied.day;
+                        this.offset += progstats[0].timeStudied.day;
                     }
                     if (typeof callback === 'function') {
                         callback();
                     }
-                });
+                }, this));
             } else {
                 if (typeof callback === 'function') {
                     callback();
@@ -166,11 +166,11 @@ define(function() {
          */
         reset: function() {
             if (!this.isRunning()) {
-                Timer.lapStartAt = 0;
-                Timer.lapTime = 0;
-                Timer.reviewStart = null;
-                Timer.reviewStop = null;
-                Timer.thinkingStop = null;
+                this.lapStartAt = 0;
+                this.lapTime = 0;
+                this.reviewStart = null;
+                this.reviewStop = null;
+                this.thinkingStop = null;
             }
             return this;
         },
@@ -180,7 +180,7 @@ define(function() {
          * @returns {Backbone.View}
          */
         setReviewLimit: function(value) {
-            Timer.reviewLimit = value;
+            this.reviewLimit = value;
             return this;
         },
         /**
@@ -189,7 +189,7 @@ define(function() {
          * @returns {Backbone.View}
          */
         setOffset: function(value) {
-            Timer.offset = value;
+            this.offset = value;
             return this;
         },
         /**
@@ -198,19 +198,19 @@ define(function() {
          * @returns {Backbone.View}
          */
         setThinkingLimit: function(value) {
-            Timer.thinkingLimit = value;
+            this.thinkingLimit = value;
             return this;
         },
         /**
          * @method start
          */
         start: function() {
-            if (!Timer.reviewStart)
-                Timer.reviewStart = skritter.fn.getUnixTime(true);
+            if (!this.reviewStart)
+                this.reviewStart = skritter.fn.getUnixTime(true);
             if (!this.isRunning() && !this.isReviewLimitReached()) {
-                Timer.interval = setInterval(this.update, 10, this);
-                Timer.lapStartAt = Timer.lapStartAt ? Timer.lapStartAt : skritter.fn.getUnixTime(true);
-                Timer.stopwatch.start();
+                this.interval = setInterval(this.update, 10, this);
+                this.lapStartAt = this.lapStartAt ? this.lapStartAt : skritter.fn.getUnixTime(true);
+                this.stopwatch.start();
             }
         },
         /**
@@ -218,12 +218,12 @@ define(function() {
          */
         stop: function() {
             if (this.isRunning()) {
-                Timer.lapTime = Timer.lapStartAt ? Timer.lapTime + skritter.fn.getUnixTime(true) - Timer.lapStartAt : Timer.lapTime;
-                Timer.lapStartAt = 0;
-                Timer.reviewStop = skritter.fn.getUnixTime(true);
-                Timer.stopwatch.stop();
-                clearInterval(Timer.interval);
-                Timer.interval = null;
+                this.lapTime = this.lapStartAt ? this.lapTime + skritter.fn.getUnixTime(true) - this.lapStartAt : this.lapTime;
+                this.lapStartAt = 0;
+                this.reviewStop = skritter.fn.getUnixTime(true);
+                this.stopwatch.stop();
+                clearInterval(this.interval);
+                this.interval = null;
             }
         },
         /**
@@ -231,8 +231,8 @@ define(function() {
          * @returns {Backbone.View}
          */
         stopThinking: function() {
-            if (!Timer.thinkingStop)
-                Timer.thinkingStop = skritter.fn.getUnixTime(true);
+            if (!this.thinkingStop)
+                this.thinkingStop = skritter.fn.getUnixTime(true);
             return this;
         },
         /**
@@ -241,11 +241,11 @@ define(function() {
          */
         update: function(self) {
             //get the new time to check in milliseconds and seconds
-            var time = Timer.stopwatch.time();
+            var time = self.stopwatch.time();
             var seconds = (time / 1000) >> 0;
             //only check and update things when a full second has elapsed
-            if ((Timer.time / 1000) >> 0 !== seconds) {
-                Timer.time = time;
+            if ((this.time / 1000) >> 0 !== seconds) {
+                self.time = time;
                 self.render();
                 //stop the review timer if exceeds the set limit
                 if (self.isReviewLimitReached())
