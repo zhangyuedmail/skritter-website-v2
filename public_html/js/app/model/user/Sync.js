@@ -106,6 +106,10 @@ define(function() {
          * @param {Boolean} includeResources
          */
         changedItems: function(callback, offset, includeResources) {
+            if (this.isActive()) {
+                callback();
+                return false;
+            }
             offset = offset ? offset : this.get('lastItemSync');
             var now = skritter.fn.getUnixTime();
             var requests = [
@@ -238,6 +242,10 @@ define(function() {
          * @param {Function} callback
          */
         reviews: function(callback) {
+            if (this.isActive()) {
+                callback();
+                return false;
+            }
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
             this.reviewsPosting = _.uniq(_.pluck(reviews, 'itemId'));
