@@ -33,6 +33,29 @@ define([
         events: {
         },
         /**
+         * @method loadVocab
+         */
+        loadVocab: function() {
+            var vocab = this.vocab;
+            var sentence = this.sentence;
+            this.$('#info-writing').text(vocab.get('writing'));
+            this.$('#info-reading').text(vocab.getReading());
+            this.$('#info-definition').text(vocab.getDefinition());
+            if (sentence) {
+                this.$('#info-sentence .writing').text(sentence.getWriting());
+                this.$('#info-sentence .reading').text(sentence.getReading());
+                this.$('#info-sentence .definition').text(sentence.getDefinition());
+            } else {
+                this.$('#info-sentence').parent().hide();
+            }
+            var mnemonic = vocab.getMnemonic();
+            if (mnemonic) {
+                this.$('#info-mnemonic').text(mnemonic);
+            } else {
+                this.$('#info-mnemonic').parent().hide();
+            }
+        },
+        /**
          * @method remove
          */
         remove: function() {
@@ -47,30 +70,21 @@ define([
          */
         set: function(languageCode, writing) {
             var vocabId;
+            document.title = "Skritter - Info - " + writing;
             if (languageCode === 'zh') {
                 vocabId = skritter.fn.simptrad.toBase(writing);
                 skritter.user.data.vocabs.loadVocab(vocabId, _.bind(function(vocab, sentence) {
-                    this.$('#info-writing').text(vocab.get('writing'));
-                    this.$('#info-reading').text(vocab.getReading());
-                    this.$('#info-definition').text(vocab.getDefinition());
-                    if (sentence) {
-                        this.$('#info-sentence .writing').text(sentence.getWriting());
-                        this.$('#info-sentence .reading').text(sentence.getReading());
-                        this.$('#info-sentence .definition').text(sentence.getDefinition());
-                    } else {
-                        this.$('#info-sentence').parent().hide();
-                    }
-                    var mnemonic = vocab.getMnemonic();
-                    if (mnemonic) {
-                        this.$('#info-mnemonic').text(mnemonic);
-                    } else {
-                        this.$('#info-mnemonic').parent().hide();
-                    }
                     this.sentence = sentence;
                     this.vocab = vocab;
+                    this.loadVocab();
                 }, this));
             } else if (languageCode === 'ja') {
-                
+                vocabId = 'ja-' + writing + '-0';
+                skritter.user.data.vocabs.loadVocab(vocabId, _.bind(function(vocab, sentence) {
+                    this.sentence = sentence;
+                    this.vocab = vocab;
+                    this.loadVocab();
+                }, this));
             }
         }
     });
