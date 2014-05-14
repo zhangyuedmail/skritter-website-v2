@@ -57,7 +57,9 @@ define([
          * @returns {Boolean}
          */
         checkAutoSync: function() {
-            if (skritter.user.settings.get('autoSync') && skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
+            if (skritter.user.settings.get('autoSync') &&
+                    !skritter.user.sync.isActive() &&
+                    skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
                 skritter.user.sync.reviews();
                 return true;
             }
