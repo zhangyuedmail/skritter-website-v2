@@ -52,8 +52,12 @@ define(function() {
                     var tone = stroke.get('tone');
                     for (var c = 0, lengthC = params.length; c < lengthC; c++) {
                         var param = params[c];
-                        var skipChecks = param.has('skipChecks') ? param.get('skipChecks') : [];
-                        var skipThreshold = param.get('skipChecks').indexOf('threshold') === -1 ? false : true;
+                        var skipChecks = [];
+                        var skipThreshold = false;
+                        if (param.has('skipChecks')) {
+                            skipChecks = param.get('skipChecks');
+                            skipThreshold = skipChecks.indexOf('threshold');
+                        }
                         var result = userStroke.clone();
                         var scores = {
                             angle: skipChecks.indexOf('angle') === -1 ? this.checkAngle(result, param, skipThreshold) : undefined,

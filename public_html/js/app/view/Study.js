@@ -78,6 +78,7 @@ define([
             skritter.user.prompt = this.prompt;
             this.updateAudioButtonState();
             this.updateDueCount();
+            this.delegateEvents();
         },
         /**
          * @method navigateVocabInfo
@@ -100,6 +101,7 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
+            this.undelegateEvents();
             this.checkAutoSync();
             skritter.timer.reset();
             skritter.user.scheduler.getNext(_.bind(function(item) {
