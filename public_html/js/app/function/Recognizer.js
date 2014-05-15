@@ -53,12 +53,13 @@ define(function() {
                     for (var c = 0, lengthC = params.length; c < lengthC; c++) {
                         var param = params[c];
                         var skipChecks = param.has('skipChecks') ? param.get('skipChecks') : [];
+                        var skipThreshold = param.get('skipChecks').indexOf('threshold') === -1 ? false : true;
                         var result = userStroke.clone();
                         var scores = {
-                            angle: skipChecks.indexOf('angle') === -1 ? this.checkAngle(result, param) : undefined,
-                            corners: skipChecks.indexOf('corners') === -1 ? this.checkCorners(result, param) : undefined,
-                            cornersLength: skipChecks.indexOf('cornersLength') === -1 ? this.checkCornersLength(result, param, size) : undefined,
-                            distance: skipChecks.indexOf('distance') === -1 ? this.checkDistance(result, param, size) : undefined
+                            angle: skipChecks.indexOf('angle') === -1 ? this.checkAngle(result, param, skipThreshold) : undefined,
+                            corners: skipChecks.indexOf('corners') === -1 ? this.checkCorners(result, param, skipThreshold) : undefined,
+                            cornersLength: skipChecks.indexOf('cornersLength') === -1 ? this.checkCornersLength(result, param, size, skipThreshold) : undefined,
+                            distance: skipChecks.indexOf('distance') === -1 ? this.checkDistance(result, param, size, skipThreshold) : undefined
                         };
                         var total = 0;
                         for (var category in scores) {
@@ -95,9 +96,9 @@ define(function() {
      * @param {Backbone.Model} target
      * @returns {Number}
      */
-    Recognizer.prototype.checkAngle = function(stroke, target) {
+    Recognizer.prototype.checkAngle = function(stroke, target, skipThreshold) {
         var score = Math.abs(stroke.getAngle() - target.getAngle());
-        if (score <= this.angleThreshold)
+        if (skipThreshold || score <= this.angleThreshold)
             return score;
         return -1;
 
@@ -108,9 +109,9 @@ define(function() {
      * @param {Backbone.Model} target
      * @returns {Number}
      */
-    Recognizer.prototype.checkCorners = function(stroke, target) {
+    Recognizer.prototype.checkCorners = function(stroke, target, skipThreshold) {
         var score = Math.abs(stroke.get('corners').length - target.get('corners').length);
-        if (score <= this.cornersThreshold)
+        if (skipThreshold || score <= this.cornersThreshold)
             return score === 0 ? score : score * this.cornersPenalty;
         return -1;
 
@@ -122,9 +123,9 @@ define(function() {
      * @param {Number} size
      * @returns {Number}
      */
-    Recognizer.prototype.checkDistance = function(stroke, target, size) {
+    Recognizer.prototype.checkDistance = function(stroke, target, size, skipThreshold) {
         var score = skritter.fn.distance(stroke.getRectangle().c, target.getRectangle().c);
-        if (score < this.distanceThreshold * (size / skritter.settings.get('maxCanvasSize')))
+        if (skipThreshold || score < this.distanceThreshold * (size / skritter.settings.get('maxCanvasSize')))
             return score;
         return -1;
 
@@ -136,9 +137,9 @@ define(function() {
      * @param {Number} size
      * @returns {Number}
      */
-    Recognizer.prototype.checkCornersLength = function(stroke, target, size) {
+    Recognizer.prototype.checkCornersLength = function(stroke, target, size, skipThreshold) {
         var score = Math.abs(stroke.getCornerLength() - target.getCornerLength());
-        if (score < this.cornersLengthThreshold * (size / skritter.settings.get('maxCanvasSize')))
+        if (skipThreshold || score < this.cornersLengthThreshold * (size / skritter.settings.get('maxCanvasSize')))
             return score;
         return -1;
 
