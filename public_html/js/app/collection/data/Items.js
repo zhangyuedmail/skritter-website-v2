@@ -150,12 +150,13 @@ define([
             ], function(error, item) {
                 if (error) {
                     console.log('ITEM ERROR', item, error);
-                    if (item)
+                    if (item) {
                         item.set({
                             flag: 'true',
                             flagMessage: error
                         });
-                    skritter.user.scheduler.remove(item.id);
+                        skritter.user.scheduler.remove(item.id);
+                    }
                     item.cache(callback);
                 } else {
                     if (item.has('flag')) {
