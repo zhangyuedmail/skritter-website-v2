@@ -46,11 +46,13 @@ define([
             this.$('.button-category-studying').removeClass('active');
             this.$('.button-category-textbook').addClass('active');
             skritter.modal.show('loading').set('.modal-body', 'Loading Lists');
-            skritter.api.getVocabLists(_.bind(function(lists) {
-                this.table.set(lists, {
-                    name: 'List Name',
-                    peopleStudying: 'Studying'
-                });
+            skritter.api.getVocabLists(_.bind(function(lists, status) {
+                if (status === 200) {
+                    this.table.set(lists, {
+                        name: 'List Name',
+                        peopleStudying: 'Studying'
+                    });
+                }
                 skritter.modal.hide();
             }, this), {
                 cursor: false,
@@ -68,8 +70,12 @@ define([
             skritter.modal.show('loading').set('.modal-body', 'Loading Lists');
             async.waterfall([
                 function(callback) {
-                    skritter.api.getVocabLists(function(customLists) {
-                        callback(null, customLists);
+                    skritter.api.getVocabLists(function(customLists, status) {
+                        if (status === 200) {
+                            callback(null, customLists);
+                        } else {
+                            callback(customLists);
+                        }
                     }, {
                         cursor: false,
                         fields: ['id', 'name', 'studyingMode'],
@@ -78,8 +84,12 @@ define([
                     });
                 },
                 function(lists, callback) {
-                    skritter.api.getVocabLists(function(studyingLists) {
-                        callback(null, lists.concat(studyingLists));
+                    skritter.api.getVocabLists(function(studyingLists, status) {
+                        if (status === 200) {
+                            callback(null, lists.concat(studyingLists));
+                        } else {
+                            callback(studyingLists);
+                        }
                     }, {
                         cursor: false,
                         fields: ['id', 'name', 'studyingMode'],
