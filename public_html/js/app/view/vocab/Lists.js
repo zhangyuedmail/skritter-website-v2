@@ -101,7 +101,11 @@ define([
                 }
             ], _.bind(function(error, lists) {
                 if (error) {
-                    //TODO: handle list loading errors
+                    this.table.set(skritter.user.data.vocablists.toJSON(), {
+                        name: 'List Name',
+                        studyingMode: 'Status'
+                    });
+                    skritter.modal.hide();
                 } else {
                     this.table.set(lists, {
                         name: 'List Name',

@@ -182,9 +182,13 @@ define([
             this.id = listId;
             this.sectionId = sectionId;
             skritter.modal.show('loading').set('.modal-body', sectionId ? 'Loading Section' : 'Loading this');
-            skritter.api.getVocabList(listId, null, _.bind(function(list) {
-                this.model.set(list);
-                this.loadList();
+            skritter.api.getVocabList(listId, null, _.bind(function(list, status) {
+                if (status === 200) {
+                    this.model.set(list);
+                    this.loadList();
+                } else {
+                    skritter.router.navigate('vocab/list', {replace: true, trigger: true});
+                }
                 skritter.modal.hide();
             }, this));
             return this;
