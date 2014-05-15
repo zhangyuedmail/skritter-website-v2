@@ -251,14 +251,18 @@ define(function() {
             this.set('syncing', true);
             async.waterfall([
                 function(callback) {
-                    skritter.api.getReviewErrors(lastErrorCheck, function(errors, status) {
-                        if (status === 200 && errors.length > 0) {
+                    skritter.api.getReviewErrors(lastErrorCheck, function(reviewErrors, status) {
+                        if (status === 200 && reviewErrors.length > 0) {
                             window.alert('Oh no! Review errors were detected!');
-                            console.log('REVIEW ERRORS', errors);
+                            console.log('REVIEW ERRORS', reviewErrors);
                             if (window.Raygun) {
-                                Raygun.send('Review Errors', errors);
+                                try {
+                                    throw new Error('Review Errors');
+                                } catch (error) {
+                                    Raygun.send(error, reviewErrors);
+                                }
                             }
-                            callback(errors);
+                            callback(reviewErrors);
                         } else if (status === 200) {
                             callback();
                         } else {
