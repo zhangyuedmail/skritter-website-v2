@@ -403,7 +403,7 @@ define(function() {
         {"bitmapId": 384, "corners": [{"x": 23, "y": 312}, {"x": 255, "y": 27}], "deviations": [{"x": 61, "y": 250}], "skipChecks": ["cornersLength", "distance", "threshold"]},
         {"bitmapId": 385, "corners": [{"x": 36, "y": 24}, {"x": 171.3501888811492, "y": 252.13358517486557}, {"x": 302, "y": 30}], "deviations": [{"x": 108, "y": 172}, {"x": 199, "y": 195}], "skipChecks": ["cornersLength", "distance", "threshold"]},
         {"bitmapId": 386, "corners": [{"x": 25, "y": 24}, {"x": 289, "y": 289}], "deviations": [{"x": 112, "y": 177}], "skipChecks": ["cornersLength", "distance", "threshold"]},
-        {"bitmapId": 387, "corners": [{"x": 26, "y": 15}, {"x": 56, "y": 55}], "deviations": [{"x": 29, "y": 14}], "skipChecks": ["cornersLength", "distance", "threshold"]},
+        //{"bitmapId": 387, "corners": [{"x": 26, "y": 15}, {"x": 56, "y": 55}], "deviations": [{"x": 29, "y": 14}], "skipChecks": ["cornersLength", "distance", "threshold"]},
         {"bitmapId": 600, "corners": [{"x": 17.5, "y": 41}, {"x": 197.5, "y": 10}], "deviations": [{"x": 116.5, "y": 28}]},
         {"bitmapId": 601, "corners": [{"x": 33.5, "y": 21}, {"x": 31.5, "y": 354}], "deviations": [{"x": 8.5, "y": 213}]},
         {"bitmapId": 602, "corners": [{"x": 216.5, "y": 28}, {"x": 92.39875624298568, "y": 183}, {"x": 21.5, "y": 189.71603918044286}, {"x": 289.66345749730436, "y": 57.163457497304336}, {"x": 220.06528871773926, "y": 224}, {"x": 201.5, "y": 229}], "deviations": [{"x": 161.5, "y": 125}, {"x": 56.5, "y": 197}, {"x": 103.5, "y": 65}, {"x": 307.5, "y": 153}, {"x": 212.5, "y": 228}]}

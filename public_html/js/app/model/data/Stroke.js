@@ -49,16 +49,16 @@ define([
                     var params = skritter.params.findWhere({bitmapId: bitmapId});
                     stroke.set({
                         bitmapId: bitmapId,
-                        corners: params.get('corners'),
+                        corners: params ? params.get('corners') : [],
                         data: data,
-                        deviations: params.get('deviations'),
+                        deviations: params ? params.get('deviations') : [],
                         id: position + '|' + bitmapId,
                         kana: bitmapId >= 600 ? true : false,
                         position: position,
                         shape: skritter.assets.getStroke(bitmapId),
                         tone: rune === 'tones' ? a + 1 : undefined
                     });
-                    if (params.has('contains')) {
+                    if (params && params.has('contains')) {
                         stroke.set('contains', params.get('contains'));
                         position += 2;
                     } else {
