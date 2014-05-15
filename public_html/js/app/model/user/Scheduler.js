@@ -140,14 +140,12 @@ define(function() {
          * @param {Function} callback
          */
         getNext: function(callback) {
-            var reviewsPosting = skritter.user.sync.reviewsPosting;
             var history = this.get('history');
             var position = 0;
             function next() {
                 var item = skritter.user.scheduler.data[position];
                 var baseWriting = item.id.split('-')[2];
-                if (history.indexOf(baseWriting) === -1 &&
-                        reviewsPosting.indexOf(baseWriting) === -1) {
+                if (history.indexOf(baseWriting) === -1) {
                     skritter.user.data.items.loadItem(item.id, function(item) {
                         if (item) {
                             callback(item);

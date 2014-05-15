@@ -34,6 +34,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .navigate-forward': 'next',
             'vclick #prompt-text': 'handleClick',
             'vclick #info-section': 'toggleHint',
             'vclick #prompt-reading .reading': 'playAudio'
@@ -129,6 +130,7 @@ define([
          */
         show: function() {
             this.$('#answer').hide();
+            this.showNavigation();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.getBaseVocab().getCharacterCount() + 1));
@@ -148,6 +150,7 @@ define([
          */
         showAnswer: function() {
             skritter.timer.stop();
+            this.showNavigation();
             if (!this.review.getReview().finished) {
                 this.review.setReview({
                     finished: true,

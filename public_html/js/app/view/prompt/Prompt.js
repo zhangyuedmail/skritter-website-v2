@@ -41,6 +41,13 @@ define([
             this.next();
         },
         /**
+         * @method hideNavigation
+         */
+        hideNavigation: function() {
+            this.$('.navigate-backward i').hide();
+            this.$('.navigate-forward i').hide();
+        },
+        /**
          * @method next
          */
         next: function() {
@@ -112,6 +119,17 @@ define([
          */
         set: function(review) {
             this.review = review;
+        },
+        /**
+         * @method showNavigation
+         */
+        showNavigation: function() {
+            if (skritter.user.data.reviews.length > 0) {
+                this.$('.navigate-backward i').show();
+            } else {
+                this.$('.navigate-backward i').hide();
+            }
+            this.$('.navigate-forward').hide();
         }
     });
 

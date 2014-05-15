@@ -82,6 +82,17 @@ define([
                 this.$('#subscription-expires').html("Your account does not current have an active subscription.");
                 this.$('.button-cancel-subscription').hide();
             }
+            //language
+            this.$('#language').text(this.settings.isChinese() ? 'Chinese' : 'Japanese');
+            if (this.settings.isChinese()) {
+                if (this.settings.get('reviewSimplified') && this.settings.get('reviewTraditional')) {
+                    this.$('#language-style').text('Simplified and Traditional');
+                } else if (this.settings.get('reviewSimplified') && !this.settings.get('reviewTraditional')) {
+                    this.$('#language-style').text('Simplified');
+                } else {
+                    this.$('#language-style').text('Traditional');
+                }
+            }
             //location
             this.$('#location-country').text(this.settings.get('country'));
             this.$('#location-timezone').text(moment().tz(this.settings.get('timezone')).format('hh:m A') + ' | ' + this.settings.get('timezone'));

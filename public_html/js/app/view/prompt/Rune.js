@@ -46,6 +46,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .navigate-forward': 'next',
             'vclick #prompt-reading .reading': 'playAudio'
         },
         /**
@@ -96,6 +97,7 @@ define([
          * @method handleStrokeDown
          */
         handleStrokeDown: function() {
+            this.hideNavigation();
             skritter.timer.stopThinking();
         },
         /**
@@ -207,6 +209,7 @@ define([
          */
         show: function() {
             this.canvas.enableInput();
+            this.showNavigation();
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.getMaxPosition() + 1));
@@ -234,6 +237,7 @@ define([
             skritter.timer.stop();
             this.canvas.disableInput();
             this.canvas.clearLayer('teach');
+            this.showNavigation();
             if (!this.review.getReview().finished) {
                 this.review.setReview({
                     finished: true,
