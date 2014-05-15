@@ -88,7 +88,7 @@ module.exports = function(grunt) {
                         cwd: 'public_html/',
                         src: [
                             '**',
-                            '!fonts/simkai.ttf'
+                            '!font/chinese/**'
                         ],
                         dest: 'build/cordova/japanese/www/'
                     }
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
                         cwd: 'public_html/',
                         src: [
                             '**',
-                            '!fonts/DFPKaiSho-Md.ttf'
+                            '!font/japanese/**'
                         ],
                         dest: 'build/cordova/chinese/www/'
                     }
