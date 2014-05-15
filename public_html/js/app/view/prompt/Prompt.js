@@ -124,18 +124,12 @@ define([
          * @method showNavigation
          */
         showNavigation: function() {
-            if (skritter.user.data.reviews.length > 0 &&
-                    this.review.isFinished() &&
-                    this.review.isFirst()) {
-                this.$('.navigate-backward i').hide();
-                this.$('.navigate-forward i').show();
-            } else if (this.review.isFinished()) {
+            if (skritter.user.data.reviews.length > 0) {
                 this.$('.navigate-backward i').show();
-                this.$('.navigate-forward i').show();
             } else {
-                this.$('.navigate-backward i').show();
-                this.$('.navigate-forward i').hide();
+                this.$('.navigate-backward i').hide();
             }
+            this.$('.navigate-forward').hide();
         }
     });
 

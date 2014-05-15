@@ -247,7 +247,7 @@ define(function() {
             }
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
-            console.log('POSTING REVIEWS', _.pluck(reviews, 'id'));
+            console.log('POSTING REVIEWS', _.uniq(_.pluck(reviews, 'wordGroup')));
             this.set('syncing', true);
             async.waterfall([
                 function(callback) {

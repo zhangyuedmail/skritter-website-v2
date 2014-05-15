@@ -41,6 +41,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .navigate-forward': 'next'
         },
         /**
          * @method clear

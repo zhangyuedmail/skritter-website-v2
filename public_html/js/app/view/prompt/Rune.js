@@ -46,6 +46,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .navigate-forward': 'next',
             'vclick #prompt-reading .reading': 'playAudio'
         },
         /**
