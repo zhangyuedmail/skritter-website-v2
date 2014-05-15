@@ -146,7 +146,7 @@ define([
                 skritter.timer.refresh(true);
                 //load raygun javascript error logging module
                 if (window.Raygun && window.cordova) {
-                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach().withTags(skritter.user.settings.getTags())
+                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach().withTags(skritter.user.settings.getTags());
                     Raygun.setUser(skritter.user.id);
                     Raygun.setVersion(skritter.settings.getVersion());
                     Raygun.saveIfOffline(true);
