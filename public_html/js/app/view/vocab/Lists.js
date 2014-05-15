@@ -70,23 +70,10 @@ define([
             skritter.modal.show('loading').set('.modal-body', 'Loading Lists');
             async.waterfall([
                 function(callback) {
-                    skritter.api.getVocabLists(function(customLists, status) {
-                        if (status === 200) {
-                            callback(null, customLists);
-                        } else {
-                            callback(customLists);
-                        }
-                    }, {
-                        cursor: false,
-                        fields: ['id', 'name', 'studyingMode'],
-                        lang: skritter.settings.getLanguageCode(),
-                        sort: 'custom'
-                    });
-                },
-                function(lists, callback) {
                     skritter.api.getVocabLists(function(studyingLists, status) {
                         if (status === 200) {
-                            callback(null, lists.concat(studyingLists));
+                            console.log(studyingLists);
+                            callback(null, studyingLists);
                         } else {
                             callback(studyingLists);
                         }
@@ -95,6 +82,21 @@ define([
                         fields: ['id', 'name', 'studyingMode'],
                         lang: skritter.settings.getLanguageCode(),
                         sort: 'studying'
+                    });
+                },
+                function(lists, callback) {
+                    skritter.api.getVocabLists(function(customLists, status) {
+                        if (status === 200) {
+                            console.log(customLists);
+                            callback(null, lists.concat(customLists));
+                        } else {
+                            callback(customLists);
+                        }
+                    }, {
+                        cursor: false,
+                        fields: ['id', 'name', 'studyingMode'],
+                        lang: skritter.settings.getLanguageCode(),
+                        sort: 'custom'
                     });
                 }
             ], _.bind(function(error, lists) {
