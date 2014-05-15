@@ -12,7 +12,6 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
-            this.reviewsPosting = [];
             this.set('syncing', false);
             this.on('change', _.bind(this.cache, this));
         },
@@ -248,8 +247,7 @@ define(function() {
             }
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
-            this.reviewsPosting = _.uniq(_.pluck(reviews, 'itemId'));
-            console.log('POSTING REVIEWS', this.reviewsPosting);
+            console.log('POSTING REVIEWS', _.pluck(reviews, 'id'));
             this.set('syncing', true);
             async.waterfall([
                 function(callback) {
