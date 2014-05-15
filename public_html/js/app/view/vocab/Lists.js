@@ -101,6 +101,7 @@ define([
                 }
             ], _.bind(function(error, lists) {
                 if (error) {
+                    this.$('#message').html(skritter.fn.bootstrap.alert('<strong>OFFLINE:</strong> Several list functions will be unavailable.', 'info'));
                     this.table.set(skritter.user.data.vocablists.toJSON(), {
                         name: 'List Name',
                         studyingMode: 'Status'
