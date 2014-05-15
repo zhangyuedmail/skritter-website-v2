@@ -145,15 +145,33 @@ define(function() {
         refresh: function(includeServer, callback) {
             this.offset = skritter.user.data.reviews.getTotalTime();
             if (includeServer) {
-                skritter.api.getProgStats({
-                }, _.bind(function(progstats, status) {
-                    if (status === 200) {
-                        this.offset += progstats[0].timeStudied.day;
-                    }
+                async.waterfall([
+                    function(callback) {
+                        skritter.api.getServerTime(function(time, status) {
+                            if (status === 200) {
+                                callback(null, time.today);
+                            } else {
+                                callback(time);
+                            }
+                        });
+                    },
+                    _.bind(function(today, callback) {
+                        skritter.api.getProgStats({
+                            start: today
+                        }, _.bind(function(progstats, status) {
+                            if (status === 200) {
+                                this.offset += progstats[0].timeStudied.day;
+                                callback();
+                            } else {
+                                callback(progstats);
+                            }
+                        }, this));
+                    }, this)
+                ],function() {
                     if (typeof callback === 'function') {
                         callback();
                     }
-                }, this));
+                });
             } else {
                 if (typeof callback === 'function') {
                     callback();
