@@ -72,16 +72,6 @@ define([
             localStorage.setItem(this.get('user_id'), JSON.stringify(this.toJSON()));
         },
         /**
-         * @method getActiveReview
-         * @returns {Object}
-         */
-        getActiveReview: function() {
-            if (this.prompt) {
-                return this.prompt.review.toJSON();
-            }
-            return null;
-        },
-        /**
          * Returns true if the user has been authenticated and is logged in.
          * 
          * @method isLoggedIn
