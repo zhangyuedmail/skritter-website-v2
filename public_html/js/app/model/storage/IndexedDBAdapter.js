@@ -126,8 +126,7 @@ define([
                         schedule.push({
                             id: cursor.value.id,
                             last: cursor.value.last ? cursor.value.last : 0,
-                            next: cursor.value.next ? cursor.value.next : 0,
-                            vocabIds: cursor.value.vocabIds
+                            next: cursor.value.next ? cursor.value.next : 0
                         });
                     }
                     cursor.continue();
