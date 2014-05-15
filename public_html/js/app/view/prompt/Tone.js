@@ -65,7 +65,8 @@ define([
          * @method handleStrokeDown
          * @returns {undefined}
          */
-        handleStrokeDown: function() {            
+        handleStrokeDown: function() {
+            this.hideNavigation();
             skritter.timer.stopThinking();
         },
         /**
@@ -170,6 +171,7 @@ define([
          */
         show: function() {
             this.canvas.enableInput();
+            this.showNavigation();
             this.canvas.drawCharacterFromFont('background', this.review.getBaseVocab().getCharacters()[this.review.get('position') - 1], this.review.getBaseVocab().getFontName());
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
@@ -188,6 +190,7 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             this.canvas.disableInput();
+            this.showNavigation();
             this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
             if (!this.review.getReview().finished) {
                 this.review.setReview({

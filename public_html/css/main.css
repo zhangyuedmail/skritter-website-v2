@@ -242,17 +242,23 @@ body {
     background-color: transparent;
     cursor: pointer;
     height: 100%;
+    opacity: 0.4;
     position: absolute;
     width: 30px;
     z-index: 9003;
 }
-#input-section .navigate:hover {
-    background-color: #e7e7e7;
-    opacity: 0.4;
+#input-section .navigate:hover { opacity: 1.0; }
+#input-section .navigate i {
+    position: absolute;
+    top: 47%;
 }
-#input-section .navigate-backward { left: 0; }
+#input-section .navigate-backward { 
+    left: 0;
+    padding-left: 2px;
+}
 #input-section .navigate-forward {
     display: none;
+    padding-right: 2px;
     right: 0;
 }
 #input-section #prompt-text #answer {

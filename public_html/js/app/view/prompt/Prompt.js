@@ -41,6 +41,13 @@ define([
             this.next();
         },
         /**
+         * @method hideNavigation
+         */
+        hideNavigation: function() {
+            this.$('.navigate-backward i').hide();
+            this.$('.navigate-forward i').hide();
+        },
+        /**
          * @method next
          */
         next: function() {
@@ -112,6 +119,23 @@ define([
          */
         set: function(review) {
             this.review = review;
+        },
+        /**
+         * @method showNavigation
+         */
+        showNavigation: function() {
+            if (skritter.user.data.reviews.length > 0 &&
+                    this.review.isFinished() &&
+                    this.review.isFirst()) {
+                this.$('.navigate-backward i').hide();
+                this.$('.navigate-forward i').show();
+            } else if (this.review.isFinished()) {
+                this.$('.navigate-backward i').show();
+                this.$('.navigate-forward i').show();
+            } else {
+                this.$('.navigate-backward i').show();
+                this.$('.navigate-forward i').hide();
+            }
         }
     });
 
