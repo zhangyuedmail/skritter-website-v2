@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Thu May 15 2014 16:50:01 GMT+0800 (China Standard Time)
+# Time: Fri May 16 2014 22:07:53 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -109,14 +109,13 @@ js/app/view/vocab/List.js
 js/app/view/vocab/Lists.js
 js/lib/async-0.8.0.js
 js/lib/backbone-1.1.2.min.js
-js/lib/base64-2.12.js
 js/lib/createjs.easel-NEXT.min.js
 js/lib/createjs.tween-NEXT.min.js
 js/lib/jquery-1.11.0.min.js
 js/lib/jquery.fittext.js
 js/lib/jquery.mobile-1.4.2.custom.min.js
 js/lib/jquery.ui-1.10.4.custom.min.js
-js/lib/lodash-2.4.1.compat.min.js
+js/lib/lodash.compat-2.4.1.min.js
 js/lib/moment-2.6.0.min.js
 js/lib/moment.timezone-0.0.6.min.js
 js/lib/moment.timezone.data.js
