@@ -114,13 +114,13 @@ body {
 }
 @media screen and (max-width: 767px) and (orientation: landscape) {
     .landing-page #content {
-        padding-top: 20px;
+        padding-top: 100px;
     }
 }
 
 
 /*** LOGIN ***/
-#view-login.landing-page #content { padding-top: 50px; }
+#view-login.landing-page #content { padding-top: 10px; }
 
 
 /*** MODALS ***/
