@@ -266,7 +266,7 @@ define(function() {
                         } else if (status === 200) {
                             callback();
                         } else {
-                            callback(errors);
+                            callback(reviewErrors);
                         }
                     });
                 },
