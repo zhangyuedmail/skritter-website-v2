@@ -182,9 +182,17 @@ define([
             this.id = listId;
             this.sectionId = sectionId;
             skritter.modal.show('loading').set('.modal-body', sectionId ? 'Loading Section' : 'Loading this');
-            skritter.api.getVocabList(listId, null, _.bind(function(list) {
-                this.model.set(list);
-                this.loadList();
+            skritter.api.getVocabList(listId, null, _.bind(function(list, status) {
+                if (status === 200) {
+                    this.model.set(list);
+                    this.loadList();
+                } else if (skritter.user.data.vocablists.get(this.id)) {
+                    this.$('#message').html(skritter.fn.bootstrap.alert('<strong>OFFLINE:</strong> Several list functions will be unavailable.', 'info'));
+                    this.model.set(skritter.user.data.vocablists.get(this.id).toJSON());
+                    this.loadList();
+                } else {
+                    skritter.router.navigate('vocab/list', {replace: true, trigger: true});
+                }
                 skritter.modal.hide();
             }, this));
             return this;

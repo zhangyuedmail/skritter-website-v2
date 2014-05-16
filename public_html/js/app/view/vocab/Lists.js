@@ -46,11 +46,13 @@ define([
             this.$('.button-category-studying').removeClass('active');
             this.$('.button-category-textbook').addClass('active');
             skritter.modal.show('loading').set('.modal-body', 'Loading Lists');
-            skritter.api.getVocabLists(_.bind(function(lists) {
-                this.table.set(lists, {
-                    name: 'List Name',
-                    peopleStudying: 'Studying'
-                });
+            skritter.api.getVocabLists(_.bind(function(lists, status) {
+                if (status === 200) {
+                    this.table.set(lists, {
+                        name: 'List Name',
+                        peopleStudying: 'Studying'
+                    });
+                }
                 skritter.modal.hide();
             }, this), {
                 cursor: false,
@@ -68,28 +70,43 @@ define([
             skritter.modal.show('loading').set('.modal-body', 'Loading Lists');
             async.waterfall([
                 function(callback) {
-                    skritter.api.getVocabLists(function(customLists) {
-                        callback(null, customLists);
-                    }, {
-                        cursor: false,
-                        fields: ['id', 'name', 'studyingMode'],
-                        lang: skritter.settings.getLanguageCode(),
-                        sort: 'custom'
-                    });
-                },
-                function(lists, callback) {
-                    skritter.api.getVocabLists(function(studyingLists) {
-                        callback(null, lists.concat(studyingLists));
+                    skritter.api.getVocabLists(function(studyingLists, status) {
+                        if (status === 200) {
+                            console.log(studyingLists);
+                            callback(null, studyingLists);
+                        } else {
+                            callback(studyingLists);
+                        }
                     }, {
                         cursor: false,
                         fields: ['id', 'name', 'studyingMode'],
                         lang: skritter.settings.getLanguageCode(),
                         sort: 'studying'
                     });
+                },
+                function(lists, callback) {
+                    skritter.api.getVocabLists(function(customLists, status) {
+                        if (status === 200) {
+                            console.log(customLists);
+                            callback(null, lists.concat(customLists));
+                        } else {
+                            callback(customLists);
+                        }
+                    }, {
+                        cursor: false,
+                        fields: ['id', 'name', 'studyingMode'],
+                        lang: skritter.settings.getLanguageCode(),
+                        sort: 'custom'
+                    });
                 }
             ], _.bind(function(error, lists) {
                 if (error) {
-                    //TODO: handle list loading errors
+                    this.$('#message').html(skritter.fn.bootstrap.alert('<strong>OFFLINE:</strong> Several list functions will be unavailable.', 'info'));
+                    this.table.set(skritter.user.data.vocablists.toJSON(), {
+                        name: 'List Name',
+                        studyingMode: 'Status'
+                    });
+                    skritter.modal.hide();
                 } else {
                     this.table.set(lists, {
                         name: 'List Name',

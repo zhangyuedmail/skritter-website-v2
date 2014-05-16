@@ -14,7 +14,7 @@ define(function() {
             this.root = 'https://beta.skritter';
             this.tld = document.location.host.indexOf('.cn') > -1 ? '.cn' : '.com';
             this.base = this.root + this.tld + '/api/v' + this.get('version') + '/';
-            this.credentials = 'basic ' + Base64.encode(this.clientId + ':' + this.clientSecret);
+            this.credentials = 'basic ' + window.btoa(this.clientId + ':' + this.clientSecret);
         },
         /**
          * @property {Object} defaults
@@ -56,17 +56,6 @@ define(function() {
             request();
         },
         /**
-         * Merges the key results of two object arrays.
-         * 
-         * @method concatObjectArray
-         * @param {Array} objectArray1
-         * @param {Array} objectArray2
-         * @returns {Array}
-         */
-        concatObjectArray: function(objectArray1, objectArray2) {
-            return Array.isArray(objectArray1) ? objectArray1.concat(objectArray2) : undefined;
-        },
-        /**
          * Using repeated calls it returns the data from a batch request of a given batch id. It works
          * best if the data is stored to the database before getting the next batch otherwise it could
          * cause mobile browsers to crash.
@@ -92,18 +81,30 @@ define(function() {
                     var batch = data.Batch;
                     var requests = batch.Requests;
                     var responseSize = 0;
-                    var partialResult = {};
-                    for (var i = 0, len = requests.length; i < len; i++)
-                        if (requests[i].response) {
-                            _.merge(partialResult, requests[i].response, self.concatObjectArray);
+                    var result = {};
+                    for (var i = 0, len = requests.length; i < len; i++) {
+                        var response = requests[i].response;
+                        if (response) {
                             responseSize += requests[i].responseSize;
+                            for (var key in response) {
+                                if (result[key]) {
+                                    if (Array.isArray(result[key])) {
+                                        result[key] = result[key].concat(response[key]);
+                                    } else {
+                                        result[key] = response[key];
+                                    }
+                                } else {
+                                    result[key] = response[key];
+                                }
+                            }
                         }
-                    partialResult.downloadedRequests = requests.length;
-                    partialResult.totalRequests = batch.totalRequests;
-                    partialResult.responseSize = responseSize;
-                    partialResult.runningRequests = batch.runningRequests;
+                    }
+                    result.downloadedRequests = requests.length;
+                    result.totalRequests = batch.totalRequests;
+                    result.responseSize = responseSize;
+                    result.runningRequests = batch.runningRequests;
                     if (batch.runningRequests > 0 || requests.length > 0) {
-                        callback(partialResult, data.statusCode);
+                        callback(result, data.statusCode);
                     } else {
                         callback(null, 200);
                     }
@@ -487,8 +488,9 @@ define(function() {
                     data: JSON.stringify(settings)
                 });
                 promise.done(function(data) {
-                    if (typeof callback === 'function')
+                    if (typeof callback === 'function') {
                         callback(data.User);
+                    }
                 });
                 promise.fail(function(error) {
                     console.error(error);
@@ -513,8 +515,9 @@ define(function() {
                     data: JSON.stringify(list)
                 });
                 promise.done(function(data) {
-                    if (typeof callback === 'function')
+                    if (typeof callback === 'function') {
                         callback(data.VocabList, data.statusCode);
+                    }
                 });
                 promise.fail(function(error) {
                     console.error(error);
@@ -540,8 +543,9 @@ define(function() {
                     data: JSON.stringify(section)
                 });
                 promise.done(function(data) {
-                    if (typeof callback === 'function')
+                    if (typeof callback === 'function') {
                         callback(data.VocabListSection);
+                    }
                 });
                 promise.fail(function(error) {
                     console.error(error);
