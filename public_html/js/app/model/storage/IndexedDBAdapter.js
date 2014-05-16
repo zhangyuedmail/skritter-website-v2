@@ -27,8 +27,9 @@ define([
         clear: function(tableName, callback) {
             var transaction = this.database.transaction(tableName, 'readwrite');
             transaction.oncomplete = function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             };
             transaction.onerror = function(event) {
                 console.error(event);
@@ -61,17 +62,18 @@ define([
             if (tableName && ids) {
                 ids = Array.isArray(ids) ? ids : [ids];
                 var transaction = this.database.transaction(tableName, 'readonly');
+                var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback(items);
                 };
                 var push = function(event) {
-                    if (event.target.result)
+                    if (event.target.result) {
                         items.push(event.target.result);
+                    }
                 };
                 transaction.onerror = function(event) {
                     console.error(event);
                 };
-                var objectStore = transaction.objectStore(tableName);
                 for (var i = 0, length = ids.length; i < length; i++) {
                     var request = objectStore.get(ids[i]);
                     request.onsuccess = push;
@@ -113,6 +115,8 @@ define([
             var transaction = this.database.transaction('items', 'readonly');
             transaction.oncomplete = function() {
                 callback(schedule);
+                schedule = null;
+                transaction = null;
             };
             transaction.onerror = function(event) {
                 console.error(event);
@@ -171,15 +175,16 @@ define([
             if (tableName && items) {
                 items = Array.isArray(items) ? items : [items];
                 var transaction = this.database.transaction(tableName, 'readwrite');
+                var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback();
                 };
                 transaction.onerror = function(event) {
                     console.error(event);
                 };
-                var objectStore = transaction.objectStore(tableName);
-                for (var i = 0, length = items.length; i < length; i++)
+                for (var i = 0, length = items.length; i < length; i++) {
                     objectStore.put(items[i]);
+                }
             } else {
                 callback();
             }
@@ -194,13 +199,13 @@ define([
             if (tableName && ids) {
                 ids = Array.isArray(ids) ? ids : [ids];
                 var transaction = this.database.transaction(tableName, 'readwrite');
+                var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback();
                 };
                 transaction.onerror = function(event) {
                     console.error(event);
                 };
-                var objectStore = transaction.objectStore(tableName);
                 for (var i = 0, length = ids.length; i < length; i++)
                     objectStore.delete(ids[i]);
             } else {
