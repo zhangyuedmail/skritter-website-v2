@@ -14,7 +14,7 @@ define(function() {
             this.root = 'https://beta.skritter';
             this.tld = document.location.host.indexOf('.cn') > -1 ? '.cn' : '.com';
             this.base = this.root + this.tld + '/api/v' + this.get('version') + '/';
-            this.credentials = 'basic ' + Base64.encode(this.clientId + ':' + this.clientSecret);
+            this.credentials = 'basic ' + window.btoa(this.clientId + ':' + this.clientSecret);
         },
         /**
          * @property {Object} defaults
