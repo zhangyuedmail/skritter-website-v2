@@ -156,8 +156,10 @@ define([
                             flagMessage: error
                         });
                         skritter.user.scheduler.remove(item.id);
+                        item.cache(callback);
+                    } else {
+                        callback();
                     }
-                    item.cache(callback);
                 } else {
                     if (item.has('flag')) {
                         item.unset('flag');
