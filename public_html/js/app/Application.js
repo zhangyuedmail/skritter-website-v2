@@ -49,6 +49,9 @@ define([
             if (window.cordova) {
                 navigator.splashscreen.hide();
             }
+            if (document.location.host.indexOf('localhost') === -1) {
+                skritter.user.sync.incremental();
+            }
             console.log('Application Initialized');
         });
     };

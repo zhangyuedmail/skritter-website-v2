@@ -158,21 +158,7 @@ define([
          * @method sync
          */
         sync: function() {
-            if (!skritter.user.sync.isActive()) {
-                skritter.modal.show('download')
-                        .set('.modal-title', 'SYNCING')
-                        .progress(100);
-                async.series([
-                    function(callback) {
-                        skritter.user.sync.reviews(callback);
-                    },
-                    function(callback) {
-                        skritter.user.sync.changedItems(callback);
-                    }
-                ], function() {
-                    skritter.modal.hide();
-                });
-            }
+            skritter.user.sync.incremental();
         },
         /**
          * @method updateDueCount

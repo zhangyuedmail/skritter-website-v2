@@ -182,6 +182,23 @@ define(function() {
                 callback();
             }, this));
         },
+        incremental: function(callback) {
+            if (!this.isActive()) {
+                skritter.modal.show('download')
+                        .set('.modal-title', 'SYNCING')
+                        .progress(100);
+                async.series([
+                    _.bind(function(callback) {
+                        this.reviews(callback);
+                    }, this),
+                    _.bind(function(callback) {
+                        this.changedItems(callback);
+                    }, this)
+                ], function() {
+                    skritter.modal.hide();
+                });
+            }
+        },
         /**
          * @method isActive
          * @return {Boolean}
