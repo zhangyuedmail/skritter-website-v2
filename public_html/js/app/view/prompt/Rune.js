@@ -197,6 +197,9 @@ define([
             }
             if (this.review.getReview().finished) {
                 this.canvas.drawShape('display', this.review.getCharacterAt().targets[0].getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
+                if (skritter.user.settings.get('squigs')) {
+                    this.canvas.drawShape('display', this.review.getCharacterAt().getSquig());
+                }
             } else {
                 if (skritter.user.settings.get('squigs')) {
                     this.canvas.drawShape('display', this.review.getCharacterAt().getSquig());
