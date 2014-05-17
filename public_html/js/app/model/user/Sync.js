@@ -182,6 +182,10 @@ define(function() {
                 callback();
             }, this));
         },
+        /**
+         * @method incremental
+         * @param {Function} callback
+         */
         incremental: function(callback) {
             if (!this.isActive()) {
                 skritter.modal.show('download')
@@ -189,13 +193,16 @@ define(function() {
                         .progress(100);
                 async.series([
                     _.bind(function(callback) {
-                        this.reviews(callback);
+                        this.changedItems(callback);
                     }, this),
                     _.bind(function(callback) {
-                        this.changedItems(callback);
+                        this.reviews(callback);
                     }, this)
                 ], function() {
                     skritter.modal.hide();
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
                 });
             }
         },
@@ -262,6 +269,7 @@ define(function() {
                 callback();
                 return false;
             }
+            var now = skritter.fn.getUnixTime();
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
             console.log('POSTING REVIEWS', _.uniq(_.pluck(reviews, 'wordGroup')));
@@ -314,6 +322,7 @@ define(function() {
                     });
                 }
             ], _.bind(function() {
+                this.set('lastItemSync', now);
                 this.set('syncing', false);
                 if (typeof callback === 'function') {
                     callback();
@@ -341,7 +350,6 @@ define(function() {
          * @param {Function} callback
          */
         updateItems: function(itemIds, callback) {
-            console.log('ok');
             async.waterfall([
                 function(callback) {
                     skritter.api.getItems(itemIds, function(items, status) {

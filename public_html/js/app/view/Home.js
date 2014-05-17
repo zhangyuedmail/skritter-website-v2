@@ -96,6 +96,7 @@ define([
                 this.$('.button-sync i').addClass('fa-spin');
             } else {
                 this.$('.button-sync i').removeClass('fa-spin');
+                this.updateDueCount();
             }
         },
         /**
