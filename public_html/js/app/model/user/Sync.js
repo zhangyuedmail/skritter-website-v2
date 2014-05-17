@@ -183,6 +183,30 @@ define(function() {
             }, this));
         },
         /**
+         * @method incremental
+         * @param {Function} callback
+         */
+        incremental: function(callback) {
+            if (!this.isActive()) {
+                skritter.modal.show('download')
+                        .set('.modal-title', 'SYNCING')
+                        .progress(100);
+                async.series([
+                    _.bind(function(callback) {
+                        this.changedItems(callback);
+                    }, this),
+                    _.bind(function(callback) {
+                        this.reviews(callback);
+                    }, this)
+                ], function() {
+                    skritter.modal.hide();
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                });
+            }
+        },
+        /**
          * @method isActive
          * @return {Boolean}
          */
@@ -245,6 +269,7 @@ define(function() {
                 callback();
                 return false;
             }
+            var now = skritter.fn.getUnixTime();
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
             console.log('POSTING REVIEWS', _.uniq(_.pluck(reviews, 'wordGroup')));
@@ -253,13 +278,14 @@ define(function() {
                 function(callback) {
                     skritter.api.getReviewErrors(lastErrorCheck, function(reviewErrors, status) {
                         if (status === 200 && reviewErrors.length > 0) {
-                            window.alert('Oh no! Review errors were detected!');
                             console.log('REVIEW ERRORS', reviewErrors);
                             if (window.Raygun) {
                                 try {
                                     throw new Error('Review Errors');
                                 } catch (error) {
-                                    Raygun.send(error, reviewErrors);
+                                    Raygun.send(error, {
+                                        reviewErrors: reviewErrors
+                                    });
                                 }
                             }
                             callback(reviewErrors);
@@ -275,10 +301,19 @@ define(function() {
                         if (status === 200) {
                             callback(null, _.uniq(_.pluck(postedReviews, 'wordGroup')));
                         } else {
-                            callback(postedReviews);
+                            if (window.Raygun) {
+                                try {
+                                    throw new Error('Review Format Errors');
+                                } catch (error) {
+                                    Raygun.send(error, {
+                                        reviewFormatErrors: postedReviews.responseJSON
+                                    });
+                                }
+                            }
+                            //TODO: handle all and any problematic format errors
+                            callback(null, postedReviews);
                         }
                     });
-
                 },
                 function(postedReviewIds, callback) {
                     skritter.storage.remove('reviews', postedReviewIds, function() {
@@ -287,9 +322,11 @@ define(function() {
                     });
                 }
             ], _.bind(function() {
+                this.set('lastItemSync', now);
                 this.set('syncing', false);
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             }, this));
         },
         /**
@@ -303,6 +340,34 @@ define(function() {
                     skritter.user.data.srsconfigs.add(srsconfigs, {merge: true, silent: true});
                     skritter.user.data.srsconfigs.insert(srsconfigs, callback);
                 } else {
+                    callback();
+                }
+            });
+        },
+        /**
+         * @method updateItems
+         * @param {Array|String} itemIds
+         * @param {Function} callback
+         */
+        updateItems: function(itemIds, callback) {
+            async.waterfall([
+                function(callback) {
+                    skritter.api.getItems(itemIds, function(items, status) {
+                        if (status === 200) {
+                            callback(null, items);
+                        } else {
+                            callback(items);
+                        }
+                    });
+                },
+                function(items, callback) {
+                    skritter.user.data.insert({Items: items}, function() {
+                        skritter.user.scheduler.insert(items);
+                        callback();
+                    });
+                }
+            ], function() {
+                if (typeof callback === 'function') {
                     callback();
                 }
             });

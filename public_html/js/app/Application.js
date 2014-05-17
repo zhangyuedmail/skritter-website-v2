@@ -49,8 +49,25 @@ define([
             if (window.cordova) {
                 navigator.splashscreen.hide();
             }
+            if (document.location.host.indexOf('localhost') === -1 && 
+                    skritter.user.isLoggedIn()) {
+                skritter.user.sync.incremental();
+            }
             console.log('Application Initialized');
         });
+    };
+    /**
+     * @method getCustomData
+     * @return {undefined}
+     */
+    var getCustomData = function() {
+        var activeReview = skritter.user.getActiveReview();
+        var settings = skritter.user.settings.toJSON();
+        delete settings.avatar;
+        return {
+            activeReview: activeReview,
+            settings: settings
+        };
     };
     /**
      * @method loadApi
@@ -146,12 +163,14 @@ define([
                 skritter.timer.refresh(true);
                 //load raygun javascript error logging module
                 if (window.Raygun && window.cordova) {
-                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach().withTags(skritter.user.settings.getTags());
+                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach()
+                            .withCustomData(getCustomData)
+                            .withTags(skritter.user.settings.getTags());
                     Raygun.setUser(skritter.user.id);
                     Raygun.setVersion(skritter.settings.getVersion());
                     Raygun.saveIfOffline(true);
                 } else if (window.Raygun) {
-                    //TODO: implement tracking for the html5 web version
+                    window.Raygun = undefined;
                 }
                 callback();
             });

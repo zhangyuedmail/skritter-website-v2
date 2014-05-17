@@ -34,6 +34,17 @@ define(function() {
                 this.set(result);
                 callback();
             }, this));
+        },
+        /**
+         * @method isExpired
+         * @returns {Boolean}
+         */
+        isExpired: function() {
+            var date = moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
+            if (this.get('expires') > date) {
+                return false;
+            }
+            return true;
         }
     });
     

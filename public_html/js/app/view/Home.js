@@ -28,6 +28,10 @@ define([
                 document.title = "Skritter - " + skritter.user.settings.get('name');
                 this.$el.html(templateHomeLoggedIn);
                 this.preloadFont();
+                if (skritter.user.subscription.isExpired()) {
+                    var message = "Your account has expired. You can renew it by editing your <a class='button-edit-account' href='#'>account settings</a>.";
+                    this.$('#message').html(skritter.fn.bootstrap.alert(message, 'danger'));
+                }
                 this.$('#user-avatar').html(skritter.user.settings.getAvatar('img-thumbnail'));
                 this.$('#user-due-count').text(skritter.user.scheduler.getDueCount(true));
                 this.$('#user-id').text(skritter.user.settings.get('name'));
@@ -92,6 +96,7 @@ define([
                 this.$('.button-sync i').addClass('fa-spin');
             } else {
                 this.$('.button-sync i').removeClass('fa-spin');
+                this.updateDueCount();
             }
         },
         /**
@@ -154,21 +159,7 @@ define([
          * @method sync
          */
         sync: function() {
-            if (!skritter.user.sync.isActive()) {
-                skritter.modal.show('download')
-                        .set('.modal-title', 'SYNCING')
-                        .progress(100);
-                async.series([
-                    function(callback) {
-                        skritter.user.sync.reviews(callback);
-                    },
-                    function(callback) {
-                        skritter.user.sync.changedItems(callback);
-                    }
-                ], function() {
-                    skritter.modal.hide();
-                });
-            }
+            skritter.user.sync.incremental();
         },
         /**
          * @method updateDueCount

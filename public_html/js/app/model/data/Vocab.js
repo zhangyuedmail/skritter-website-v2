@@ -165,8 +165,11 @@ define([
          */
         getReadingAt: function(position) {
             position = position === 0 ? 1 : position;
-            var reading = this.get('reading').split(', ')[0];
-            return reading.match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g)[position - 1];
+            if (this.isChinese()) {
+                var reading = this.get('reading').split(', ')[0];
+                return reading.match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g)[position - 1];
+            }
+            return this.get('reading');
         },
         /**
          * @method getReadingBlock
@@ -177,7 +180,7 @@ define([
         getReadingBlock: function(offset, mask) {
             var element = '';
             var reading = this.get('reading');
-            if (skritter.user.settings.isChinese()) {
+            if (this.isChinese()) {
                 reading = reading.indexOf(', ') === -1 ? [reading] : reading.split(', ');
                 for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
                     var position = 1;
@@ -203,10 +206,7 @@ define([
                     element += a + 1 >= reading.length ? "</span>" : "</span> , ";
                 }
             } else {
-                reading = reading.split('');
-                for (var i = 0, length = reading.length; i < length; i++) {
-                    element += "<span class='reading-kana reading'>" + reading[i] + "</span>";
-                }
+                element += "<span class='reading-kana reading' data-reading='" + reading + "'>" + reading + "</span>";
             }
             return element;
         },

@@ -32,7 +32,8 @@ define(function() {
                 navigator.expansion.media.play(window.decodeURIComponent(filename));
             } else {
                 if (this.audio.paused) {
-                    this.audio.src = skritter.api.root + skritter.api.tld + '/sounds?file=' + filename;
+                    var url = skritter.api.root + skritter.api.tld + '/sounds?file=' + filename;
+                    this.audio.src = url;
                     this.audio.play();
                 }
             }

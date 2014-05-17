@@ -150,9 +150,8 @@ define([
                 });
                 this.$('#info-section').css({
                     height: canvasSize,
-                    width: ''
+                    width: contentWidth - canvasSize
                 });
-                this.$('#info-section').css('height', canvasSize);
                 this.$('#input-section').css({
                     height: canvasSize,
                     left: '',

@@ -114,12 +114,12 @@ define([
                 this.$('#info-section').css({
                     height: canvasSize,
                     'max-height': '',
-                    width: ''
+                    width: contentWidth - canvasSize
                 });
                 this.$('#input-section').css({
                     height: canvasSize,
                     left: '',
-                    width: ''
+                    width: canvasSize
                 });
             }
             this.$('#prompt-writing').fitText(0.65, {maxFontSize: '128px'});

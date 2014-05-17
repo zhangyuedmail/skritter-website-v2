@@ -116,6 +116,42 @@ define(function() {
             request();
         },
         /**
+         * @method getItems
+         * @param {String} itemIds
+         * @param {Function} callback
+         */
+        getItems: function(itemIds, callback) {
+            var self = this;
+            var items = [];
+            itemIds = Array.isArray(itemIds) ? itemIds : [itemIds];
+            itemIds = _.uniq(itemIds);
+            function request(batch) {
+                var promise = $.ajax({
+                    url: self.base + 'items',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', Api.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        ids: batch.join('|')
+                    }
+                });
+                promise.done(function(data) {
+                    items = items.concat(data.Items);
+                    if (itemIds.length > 0) {
+                        request(itemIds.splice(0, 19));
+                    } else {
+                        callback(items, data.statusCode);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request(itemIds.splice(0, 19));
+        },
+        /**
          * @method getProgStats
          * @param {Object} options
          * @param {Function} callback
@@ -329,7 +365,7 @@ define(function() {
                     callback(data.VocabList, data.statusCode);
                 });
                 promise.fail(function(error) {
-                    callback(error);
+                    callback(error, 0);
                 });
             }
             request();
@@ -419,7 +455,7 @@ define(function() {
         postReviews: function(reviews, callback) {
             var self = this;
             var postedReviews = [];
-            var postBatch = function(batch) {
+            function postBatch(batch) {
                 var promise = $.ajax({
                     url: self.base + 'reviews?bearer_token=' + self.get('token'),
                     beforeSend: function(xhr) {
@@ -439,7 +475,7 @@ define(function() {
                 promise.fail(function(error) {
                     callback(error, 0);
                 });
-            };
+            }
             postBatch(reviews.splice(0, 99));
         },
         /**
