@@ -125,17 +125,23 @@ define([
         },
         /**
          * @method getSquig
-         * @param {Number} excludeStrokePosition
+         * @param {Number} excludeSquigPosition
          * @param {String} color
          * @returns {CreateJS.Container}
          */
         getSquig: function(excludeSquigPosition, color) {
             color = (color) ? color : '#000000';
+            var canvasSize = skritter.settings.canvasSize();
             var squigContainer = new createjs.Container();
             squigContainer.name = 'squig';
             for (var i = 0, length = this.models.length; i < length; i++) {
                 if (i !== excludeSquigPosition - 1) {
-                    squigContainer.addChild(this.models[i].get('squig'));
+                    var model = this.models[i];
+                    var squig = model.get('squig').clone(true);
+                    var squigSize = model.get('squigSize');
+                    squig.scaleX = canvasSize / squigSize;
+                    squig.scaleY = canvasSize / squigSize;
+                    squigContainer.addChild(squig);
                 }
             }
             return squigContainer;
@@ -160,6 +166,7 @@ define([
             var stroke = skritter.fn.recognizer.recognize(stroke, this);
             if (stroke) {
                 stroke.set('squig', shape);
+                console.log(stroke);
                 return this.add(stroke);
             } 
             return null;

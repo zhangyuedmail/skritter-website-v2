@@ -13,6 +13,7 @@ define(function() {
         this.cornersThreshold = 2;
         this.distanceThreshold = 200;
         this.cornersLengthThreshold = 200;
+        this.targetSize = 600;
     }
     /**
      * @method recognize
@@ -49,6 +50,7 @@ define(function() {
                     var params = stroke.inflateParams();
                     var position = stroke.get('position');
                     var shape = stroke.get('shape');
+                    var squigSize = size
                     var tone = stroke.get('tone');
                     for (var c = 0, lengthC = params.length; c < lengthC; c++) {
                         var param = params[c];
@@ -84,6 +86,7 @@ define(function() {
                             position: position,
                             scores: scores,
                             shape: shape,
+                            squigSize: squigSize,
                             tone: tone
                         });
                         result.total = total;
@@ -98,6 +101,7 @@ define(function() {
      * @method checkAngle
      * @param {Backbone.Model} stroke
      * @param {Backbone.Model} target
+     * @param {Boolean} skipThreshold
      * @returns {Number}
      */
     Recognizer.prototype.checkAngle = function(stroke, target, skipThreshold) {
@@ -111,6 +115,7 @@ define(function() {
      * @method checkCorners
      * @param {Backbone.Model} stroke
      * @param {Backbone.Model} target
+     * @param {Boolean} skipThreshold
      * @returns {Number}
      */
     Recognizer.prototype.checkCorners = function(stroke, target, skipThreshold) {
@@ -125,11 +130,12 @@ define(function() {
      * @param {Backbone.Model} stroke
      * @param {Backbone.Model} target
      * @param {Number} size
+     * @param {Boolean} skipThreshold
      * @returns {Number}
      */
     Recognizer.prototype.checkDistance = function(stroke, target, size, skipThreshold) {
         var score = skritter.fn.distance(stroke.getRectangle().c, target.getRectangle().c);
-        if (skipThreshold || score < this.distanceThreshold * (size / skritter.settings.get('maxCanvasSize')))
+        if (skipThreshold || score < this.distanceThreshold * (size / this.targetSize))
             return score;
         return -1;
 
@@ -139,11 +145,12 @@ define(function() {
      * @param {Backbone.Model} stroke
      * @param {Backbone.Model} target
      * @param {Number} size
+     * @param {Boolean} skipThreshold
      * @returns {Number}
      */
     Recognizer.prototype.checkCornersLength = function(stroke, target, size, skipThreshold) {
         var score = Math.abs(stroke.getCornerLength() - target.getCornerLength());
-        if (skipThreshold || score < this.cornersLengthThreshold * (size / skritter.settings.get('maxCanvasSize')))
+        if (skipThreshold || score < this.cornersLengthThreshold * (size / this.targetSize))
             return score;
         return -1;
 
