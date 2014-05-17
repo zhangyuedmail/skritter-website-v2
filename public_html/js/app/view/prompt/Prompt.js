@@ -72,8 +72,12 @@ define([
          * @param {Object} event
          */
         playAudio: function(event) {
-            var filename = this.$(event.currentTarget).data('reading') + '.mp3';
-            skritter.assets.playAudio(filename.toLowerCase());
+            if (skritter.user.settings.isChinese()) {
+                var filename = this.$(event.currentTarget).data('reading') + '.mp3';
+                skritter.assets.playAudio(filename.toLowerCase());
+            } else {
+                this.review.getBaseVocab().playAudio();
+            }
             event.stopPropagation();
         },
         /**
