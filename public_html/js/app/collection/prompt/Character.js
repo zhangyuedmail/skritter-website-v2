@@ -116,10 +116,29 @@ define([
             color = (color) ? color : '#000000';
             var shapeContainer = new createjs.Container();
             shapeContainer.name = 'character';
-            for (var i = 0, length = this.models.length; i < length; i++)
-                if (i !== excludeStrokePosition - 1)
+            for (var i = 0, length = this.models.length; i < length; i++) {
+                if (i !== excludeStrokePosition - 1) {
                     shapeContainer.addChild(this.models[i].inflateShape(color));
+                }
+            }
             return shapeContainer;
+        },
+        /**
+         * @method getSquig
+         * @param {Number} excludeStrokePosition
+         * @param {String} color
+         * @returns {CreateJS.Container}
+         */
+        getSquig: function(excludeSquigPosition, color) {
+            color = (color) ? color : '#000000';
+            var squigContainer = new createjs.Container();
+            squigContainer.name = 'squig';
+            for (var i = 0, length = this.models.length; i < length; i++) {
+                if (i !== excludeSquigPosition - 1) {
+                    squigContainer.addChild(this.models[i].get('squig'));
+                }
+            }
+            return squigContainer;
         },
         /**
          * @method isFinished
@@ -133,11 +152,17 @@ define([
         /**
          * @method recognize
          * @param {Array} points
+         * @param {CreateJS.Shape} shape
          * @returns {Backbone.Model}
          */
-        recognize: function(points) {
+        recognize: function(points, shape) {
             var stroke = new Stroke().set('points', points);
-            return this.add(skritter.fn.recognizer.recognize(stroke, this));
+            var stroke = skritter.fn.recognizer.recognize(stroke, this);
+            if (stroke) {
+                stroke.set('squig', shape);
+                return this.add(stroke);
+            } 
+            return null;
         }
     });
 

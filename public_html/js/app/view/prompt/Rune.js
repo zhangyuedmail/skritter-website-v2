@@ -198,7 +198,11 @@ define([
             if (this.review.getReview().finished) {
                 this.canvas.drawShape('display', this.review.getCharacterAt().targets[0].getShape(null, skritter.settings.get('gradingColors')[this.review.getReviewAt().score]));
             } else {
-                this.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+                if (skritter.user.settings.get('squigs')) {
+                    this.canvas.drawShape('display', this.review.getCharacterAt().getSquig());
+                } else {
+                    this.canvas.drawShape('display', this.review.getCharacterAt().getShape());
+                }
                 this.canvas.enableInput();
             }
         },
