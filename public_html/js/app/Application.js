@@ -166,7 +166,7 @@ define([
                     Raygun.setVersion(skritter.settings.getVersion());
                     Raygun.saveIfOffline(true);
                 } else if (window.Raygun) {
-                    //TODO: implement tracking for the html5 web version
+                    window.Raygun = undefined;
                 }
                 callback();
             });

@@ -253,13 +253,14 @@ define(function() {
                 function(callback) {
                     skritter.api.getReviewErrors(lastErrorCheck, function(reviewErrors, status) {
                         if (status === 200 && reviewErrors.length > 0) {
-                            window.alert('Oh no! Review errors were detected!');
                             console.log('REVIEW ERRORS', reviewErrors);
                             if (window.Raygun) {
                                 try {
                                     throw new Error('Review Errors');
                                 } catch (error) {
-                                    Raygun.send(error, reviewErrors);
+                                    Raygun.send(error, {
+                                        reviewErrors: reviewErrors
+                                    });
                                 }
                             }
                             callback(reviewErrors);
@@ -275,10 +276,19 @@ define(function() {
                         if (status === 200) {
                             callback(null, _.uniq(_.pluck(postedReviews, 'wordGroup')));
                         } else {
-                            callback(postedReviews);
+                            if (window.Raygun) {
+                                try {
+                                    throw new Error('Review Format Errors');
+                                } catch (error) {
+                                    Raygun.send(error, {
+                                        reviewFormatErrors: postedReviews.responseJSON
+                                    });
+                                }
+                            }
+                            //TODO: handle all and any problematic format errors
+                            callback(null, postedReviews);
                         }
                     });
-
                 },
                 function(postedReviewIds, callback) {
                     skritter.storage.remove('reviews', postedReviewIds, function() {
@@ -288,8 +298,9 @@ define(function() {
                 }
             ], _.bind(function() {
                 this.set('syncing', false);
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             }, this));
         },
         /**
