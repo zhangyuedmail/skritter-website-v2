@@ -166,7 +166,6 @@ define([
             var stroke = skritter.fn.recognizer.recognize(stroke, this);
             if (stroke) {
                 stroke.set('squig', shape);
-                console.log(stroke);
                 return this.add(stroke);
             } 
             return null;
