@@ -475,7 +475,7 @@ define(function() {
                 promise.fail(function(error) {
                     callback(error, 0);
                 });
-            };
+            }
             postBatch(reviews.splice(0, 99));
         },
         /**

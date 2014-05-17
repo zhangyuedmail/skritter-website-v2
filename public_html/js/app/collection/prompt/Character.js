@@ -163,7 +163,7 @@ define([
          */
         recognize: function(points, shape) {
             var stroke = new Stroke().set('points', points);
-            var stroke = skritter.fn.recognizer.recognize(stroke, this);
+            stroke = skritter.fn.recognizer.recognize(stroke, this);
             if (stroke) {
                 stroke.set('squig', shape);
                 return this.add(stroke);
