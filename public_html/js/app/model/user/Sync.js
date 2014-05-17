@@ -317,6 +317,35 @@ define(function() {
                     callback();
                 }
             });
+        },
+        /**
+         * @method updateItems
+         * @param {Array|String} itemIds
+         * @param {Function} callback
+         */
+        updateItems: function(itemIds, callback) {
+            console.log('ok');
+            async.waterfall([
+                function(callback) {
+                    skritter.api.getItems(itemIds, function(items, status) {
+                        if (status === 200) {
+                            callback(null, items);
+                        } else {
+                            callback(items);
+                        }
+                    });
+                },
+                function(items, callback) {
+                    skritter.user.data.insert({Items: items}, function() {
+                        skritter.user.scheduler.insert(items);
+                        callback();
+                    });
+                }
+            ], function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         }
     });
 
