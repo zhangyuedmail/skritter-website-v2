@@ -35,7 +35,7 @@ define([
             },
             hintColor: '#87cefa',
             language: '@@language',
-            maxCanvasSize: 800,
+            maxCanvasSize: 1800,
             storageType: 'IndexedDB',
             version: '@@version'
         },
@@ -70,7 +70,7 @@ define([
                 if (size > calculatedMaxSize)
                     size = calculatedMaxSize;
             } else {
-                size = this.contentWidth() / 2;
+                size = this.contentHeight();
             }
             return size;
         },
@@ -93,8 +93,9 @@ define([
          * @returns {Array}
          */
         getAllParts: function() {
-            if (this.getLanguageCode() === 'zh')
+            if (this.getLanguageCode() === 'zh') {
                 return this.getAllChineseParts();
+            }
             return this.getAllJapaneseParts();
         },
         /**
@@ -117,8 +118,9 @@ define([
          */
         getLanguage: function() {
             var language = this.get('language');
-            if (language === 'zh' || language === 'ja')
+            if (language === 'zh' || language === 'ja') {
                 return language === 'zh' ? 'Chinese' : 'Japanese';
+            }
             return skritter.user.settings.get('targetLang') === 'zh' ? 'Chinese' : 'Japanese';
         },
         /**
@@ -127,8 +129,9 @@ define([
          */
         getLanguageCode: function() {
             var language = this.get('language');
-            if (language === 'zh' || language === 'ja')
+            if (language === 'zh' || language === 'ja') {
                 return language;
+            }
             return skritter.user.settings.get('targetLang');
         },
         /**
@@ -137,8 +140,9 @@ define([
          */
         getVersion: function() {
             var version = this.get('version');
-            if (version.indexOf('@') === -1)
+            if (version.indexOf('@') === -1) {
                 return version;
+            }
             return 'localhost';
         },
         /**
@@ -146,8 +150,9 @@ define([
          * @returns {Boolean}
          */
         isIndexedDB: function() {
-            if (this.get('storageType') === 'IndexedDB')
+            if (this.get('storageType') === 'IndexedDB') {
                 return true;
+            }
             return false;
         },
         /**
@@ -155,8 +160,9 @@ define([
          * @returns {Boolean}
          */
         isLandscape: function() {
-            if (this.contentWidth() >= this.contentHeight())
+            if (this.contentWidth() >= this.contentHeight()) {
                 return true;
+            }
             return false;
         },
         /**
@@ -164,8 +170,9 @@ define([
          * @returns {Boolean}
          */
         isPortrait: function() {
-            if (this.contentWidth() < this.contentHeight())
+            if (this.contentWidth() < this.contentHeight()) {
                 return true;
+            }
             return false;
         }
     });
