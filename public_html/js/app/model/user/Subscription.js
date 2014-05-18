@@ -41,7 +41,8 @@ define(function() {
          */
         isExpired: function() {
             var date = moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
-            if (this.get('expires') > date) {
+            var expires = this.get('expires');
+            if (expires === false || expires > date) {
                 return false;
             }
             return true;
