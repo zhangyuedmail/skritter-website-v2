@@ -44,8 +44,9 @@ define([
             this.database.close();
             var request = window.indexedDB.deleteDatabase(this.databaseName);
             request.onsuccess = function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             };
             request.onerror = function(error) {
                 console.error(error);
@@ -206,8 +207,9 @@ define([
                 transaction.onerror = function(event) {
                     console.error(event);
                 };
-                for (var i = 0, length = ids.length; i < length; i++)
+                for (var i = 0, length = ids.length; i < length; i++) {
                     objectStore.delete(ids[i]);
+                }
             } else {
                 callback();
             }
@@ -223,11 +225,13 @@ define([
             var key = this.tables[tableName].keys[0];
             this.get(tableName, _.pluck(items, key), _.bind(function(originalItems) {
                 var updatedItems = [];
-                for (var i = 0, length = items.length; i < length; i++)
+                for (var i = 0, length = items.length; i < length; i++) {
                     updatedItems.push(_.assign(_.find(originalItems, {id: items[i][key]}), items[i]));
+                }
                 this.put(tableName, updatedItems, function() {
-                    if (typeof callback === 'function')
+                    if (typeof callback === 'function') {
                         callback();
+                    }
                 });
             }, this));
         }
