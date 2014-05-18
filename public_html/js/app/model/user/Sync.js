@@ -300,7 +300,7 @@ define(function() {
                     skritter.api.postReviews(reviews, function(postedReviews, status) {
                         if (status === 200) {
                             callback(null, _.uniq(_.pluck(postedReviews, 'wordGroup')));
-                        } else {
+                        } else if (status !== 403) {
                             if (window.Raygun) {
                                 try {
                                     throw new Error('Review Format Errors');
