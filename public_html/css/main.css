@@ -155,6 +155,10 @@ body {
 
 
 /*** NAVBAR ***/
+.navbar {
+    height: 45px;
+    min-height: 45px;
+}
 .navbar .container { padding: 0; }
 .navbar .navbar-header { 
     margin: 0;
