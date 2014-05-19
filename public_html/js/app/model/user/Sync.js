@@ -248,7 +248,7 @@ define(function() {
                                     skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
                                 }
                                 skritter.user.data.insert(result, function() {
-                                    window.setTimeout(request, 1000);
+                                    window.setTimeout(request, 500);
                                 });
                             } else {
                                 callback();
@@ -309,6 +309,8 @@ define(function() {
                             }
                             //TODO: handle all and any problematic format errors
                             callback(null, postedReviews);
+                        } else {
+                            callback(postedReviews);
                         }
                     });
                 },

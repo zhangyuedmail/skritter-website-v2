@@ -476,8 +476,8 @@ define(function() {
                         callback(postedReviews, data.statusCode);
                     }
                 });
-                promise.fail(function(error) {
-                    callback(error, 0);
+                promise.fail(function(error) {                    
+                    callback(error, error.status);
                 });
             }
             postBatch(reviews.splice(0, 99));
