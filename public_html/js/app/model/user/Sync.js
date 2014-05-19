@@ -173,7 +173,6 @@ define(function() {
                 async.apply(this.processBatch, requests)
             ], _.bind(function() {
                 this.set({
-                    lastErrorCheck: now,
                     lastItemSync: now,
                     lastSRSConfigSync: now,
                     lastVocabSync: now
@@ -193,10 +192,10 @@ define(function() {
                         .progress(100);
                 async.series([
                     _.bind(function(callback) {
-                        this.changedItems(callback);
+                        this.reviews(callback);
                     }, this),
                     _.bind(function(callback) {
-                        this.reviews(callback);
+                        this.changedItems(callback);
                     }, this)
                 ], function() {
                     skritter.modal.hide();
@@ -322,7 +321,7 @@ define(function() {
                     });
                 }
             ], _.bind(function() {
-                this.set('lastItemSync', now);
+                this.set('lastErrorCheck', now);
                 this.set('syncing', false);
                 if (typeof callback === 'function') {
                     callback();
