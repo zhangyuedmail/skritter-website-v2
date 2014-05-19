@@ -86,7 +86,7 @@ define([
          */
         navigateVocabInfo: function(event) {
             var vocab = this.prompt.review.getBaseVocab();
-            skritter.router.navigate('vocab/info/' + vocab.get('lang') + '/' + vocab.get('writing'), {replace: true, trigger: true});
+            skritter.router.navigate('vocab/info/' + vocab.get('lang') + '/' + vocab.get('writing'), {replace: false, trigger: true});
             event.preventDefault();
         },
         /**

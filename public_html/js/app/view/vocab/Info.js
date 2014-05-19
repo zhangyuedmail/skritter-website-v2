@@ -31,6 +31,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .button-back': 'navigateBack'
         },
         /**
          * @method loadVocab
@@ -54,6 +55,14 @@ define([
             } else {
                 this.$('#info-mnemonic').parent().hide();
             }
+        },
+        /**
+         * @method navigateBack
+         * @param {Object} event
+         */
+        navigateBack: function(event) {
+            window.history.back();
+            event.preventDefault();
         },
         /**
          * @method remove
