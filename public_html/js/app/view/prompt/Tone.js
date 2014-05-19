@@ -28,13 +28,13 @@ define([
             this.listenTo(this.canvas, 'canvas:click', this.handleClick);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
+            this.resize();
             if (this.review.isFinished()) {
                 this.show().showAnswer();
             } else {
                 skritter.timer.start();
                 this.show();
             }
-            this.resize();
             return this;
         },
         /**
