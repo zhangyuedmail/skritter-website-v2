@@ -143,6 +143,7 @@ module.exports = function(grunt) {
             'cordova-ja': {
                 options: {
                     variables: {
+                        'androidPublicKey': 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqO6YEuVqO+E7OmrSU7HEp1mi4hAoIKcMB/WyS7XGbPEZ9t/E+XjIv7MqlhVe9ROsoT7YS3kSlp19XX6uaiibgwbi6TDifyFMVjtOLqSEVcd9XrL6kk22JB8Z/6g8L/lEsLGWdBWyeEpWLpJ+pgewDnA3JsulmGvzo6qoAF5nRUitlYBcFDpFs1asfYh0cLiLO77D+TtIrz3T9bgdO/Hcz7pykiPYW5yuoe6RGKpoI3RNvbfO5aItAcXa3dKeReHx9YgfyASSYZvcmKLXyNAlHgadU0jQ1KoA/fJV429Qx8ACBmecJolT/ydMXbu1X9PWlh02bdvYiMfVPK2GZ/1xawIDAQAB',
                         'date': new Date().toUTCString().substr(0, 25),
                         'language': 'ja',
                         'version': '<%= pkg.version %>',
@@ -151,12 +152,14 @@ module.exports = function(grunt) {
                 },
                 files: [
                     {src: 'config.xml', dest: 'build/cordova/japanese/', expand: true, cwd: 'build/cordova/japanese/'},
+                    {src: 'InAppBillingPlugin.java', dest: 'build/cordova/japanese/plugins/com.smartmobilesoftware.inappbilling/src/android/com/smartmobilesoftware/inappbilling/', expand: true, cwd: 'build/cordova/japanese/plugins/com.smartmobilesoftware.inappbilling/src/android/com/smartmobilesoftware/inappbilling/'},
                     {src: 'Settings.js', dest: 'build/cordova/japanese/www/js/app/model/', expand: true, cwd: 'build/cordova/japanese/www/js/app/model/'}
                 ]
             },
             'cordova-zh': {
                 options: {
                     variables: {
+                        'androidPublicKey': 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwfbJgVyApOKSfeNtWqQPdikWCWYzNfh4ujKVxv5QZRTFxAKlfZnhT563Ttv1tUSS5OOBHiC+FJfTWKowcWTwRpT0+3WAD+5GiFpCE2khivssSrKxvL3A3dU+MhNp+CndVzMX/jIYTq5WPakV74oEATJT1MUCrWNklQTirt8H2cwtMZ7A7Nlhw8dn3gLyThEMyFSQN/J8au9H9NvPyQA8g9HjVJbC6EBQxotfnwWxTkmcD4nFStS5oelKCWrvmyzceYrsDTYGAL8wXNd+5RZ62B7w1jVnUS6JMBVCnpfTN/BeH80KcLmr3gBVDEbyjKoH6Ov47FgwLJWQc/+fKjNJvwIDAQAB',
                         'date': new Date().toUTCString().substr(0, 25),
                         'language': 'zh',
                         'version': '<%= pkg.version %>',
@@ -165,6 +168,7 @@ module.exports = function(grunt) {
                 },
                 files: [
                     {src: 'config.xml', dest: 'build/cordova/chinese/', expand: true, cwd: 'build/cordova/chinese/'},
+                    {src: 'InAppBillingPlugin.java', dest: 'build/cordova/chinese/plugins/com.smartmobilesoftware.inappbilling/src/android/com/smartmobilesoftware/inappbilling/', expand: true, cwd: 'build/cordova/chinese/plugins/com.smartmobilesoftware.inappbilling/src/android/com/smartmobilesoftware/inappbilling/'},
                     {src: 'Settings.js', dest: 'build/cordova/chinese/www/js/app/model/', expand: true, cwd: 'build/cordova/chinese/www/js/app/model/'}
                 ]
             }
@@ -220,6 +224,7 @@ module.exports = function(grunt) {
                     'cd japanese/',
                     'cordova platforms add android',
                     'cordova plugin add org.apache.cordova.splashscreen',
+                    'cordova plugin add https://github.com/mcfarljw/cordova-plugin-inappbilling.git',
                     'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion.git'
                 ].join('&&'),
                 options: {
@@ -234,6 +239,7 @@ module.exports = function(grunt) {
                     'cd chinese/',
                     'cordova platforms add android',
                     'cordova plugin add org.apache.cordova.splashscreen',
+                    'cordova plugin add https://github.com/mcfarljw/cordova-plugin-inappbilling.git',
                     'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion.git'
                 ].join('&&'),
                 options: {
@@ -320,6 +326,7 @@ module.exports = function(grunt) {
         'clean:build-cordova',
         'shell:cordova-prepare',
         'shell:cordova-create-ja',
-        'shell:cordova-create-zh'
+        'shell:cordova-create-zh',
+        'build-android'
     ]);
 };
