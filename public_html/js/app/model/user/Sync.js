@@ -105,10 +105,6 @@ define(function() {
          * @param {Boolean} includeResources
          */
         changedItems: function(callback, offset, includeResources) {
-            if (this.isActive()) {
-                callback();
-                return false;
-            }
             offset = offset ? offset : this.get('lastItemSync');
             var now = skritter.fn.getUnixTime();
             var requests = [
