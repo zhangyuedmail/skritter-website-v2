@@ -78,35 +78,39 @@ define(function() {
                     }
                 });
                 promise.done(function(data) {
-                    var batch = data.Batch;
-                    var requests = batch.Requests;
-                    var responseSize = 0;
-                    var result = {};
-                    for (var i = 0, len = requests.length; i < len; i++) {
-                        var response = requests[i].response;
-                        if (response) {
-                            responseSize += requests[i].responseSize;
-                            for (var key in response) {
-                                if (result[key]) {
-                                    if (Array.isArray(result[key])) {
-                                        result[key] = result[key].concat(response[key]);
+                    try {
+                        var batch = data.Batch;
+                        var requests = batch.Requests;
+                        var responseSize = 0;
+                        var result = {};
+                        for (var i = 0, len = requests.length; i < len; i++) {
+                            var response = requests[i].response;
+                            if (response) {
+                                responseSize += requests[i].responseSize;
+                                for (var key in response) {
+                                    if (result[key]) {
+                                        if (Array.isArray(result[key])) {
+                                            result[key] = result[key].concat(response[key]);
+                                        } else {
+                                            result[key] = response[key];
+                                        }
                                     } else {
                                         result[key] = response[key];
                                     }
-                                } else {
-                                    result[key] = response[key];
                                 }
                             }
                         }
-                    }
-                    result.downloadedRequests = requests.length;
-                    result.totalRequests = batch.totalRequests;
-                    result.responseSize = responseSize;
-                    result.runningRequests = batch.runningRequests;
-                    if (batch.runningRequests > 0 || requests.length > 0) {
-                        callback(result, data.statusCode);
-                    } else {
-                        callback(null, 200);
+                        result.downloadedRequests = requests.length;
+                        result.totalRequests = batch.totalRequests;
+                        result.responseSize = responseSize;
+                        result.runningRequests = batch.runningRequests;
+                        if (batch.runningRequests > 0 || requests.length > 0) {
+                            callback(result, data.statusCode);
+                        } else {
+                            callback(null, 200);
+                        }
+                    } catch (error) {
+                        callback({}, 200);
                     }
                 });
                 promise.fail(function(error) {
