@@ -15,7 +15,7 @@
                 <li class="media">
                     <div class="pull-right">
                         <div id="user-avatar"></div>
-                        <button type="button" class="button-change-avatar btn btn-fill btn-xs btn-default">Change Avatar</button>
+                        <button type="button" class="button-change-avatar btn btn-fill btn-xs btn-default" disabled="disabled">Change Avatar</button>
                     </div>
                     <div class="media-body">
                         <h4><span id="user-name"></span> <span id="user-id" class="text-muted"></span></h4>
@@ -25,10 +25,16 @@
             </ul>
         </div>
         <div class="content-block">
-            <h3>Subscription</h3>
-            <p><span id="subscription-expires"></span> <span id="subscription-plan"></span></p>
-            <button type="button" class="button-start-subscription btn btn-sm btn-success">Start Subscription</button>
-            <button type="button" class="button-cancel-subscription btn btn-sm btn-danger">Cancel Subscription</button>
+            <h3>Subscription (<span class="subscription-status"></span>)</h3>
+            <div><strong>Expires: </strong><span class="subscription-expires"></span></div>
+            <div><strong>Type: </strong><span class="subscription-type"></span></div>
+            <div><strong>Plan: </strong><span class="subscription-plan"></span></div>
+            <button type="button" class="button-subscription-subscribe btn btn-sm btn-success">Subscribe</button>
+            <button type="button" class="button-subscription-cancel btn btn-sm btn-danger">Cancel</button>
+            <select id="select-subscription-cycle">
+                <option value="one.month.sub">1 Month</option>
+                <option value="one.year.sub">1 Year</option>
+            </select>
         </div>
         <div class="content-block">
             <h3>Language</h3>

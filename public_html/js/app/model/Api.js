@@ -8,6 +8,9 @@ define(function() {
      * @method Api
      */
     var Api = Backbone.Model.extend({
+        /**
+         * @method initialize
+         */
         initialize: function() {
             this.clientId = 'mcfarljwapiclient';
             this.clientSecret = 'e3872517fed90a820e441531548b8c';
