@@ -51,7 +51,8 @@ define([
          */
         handleSubscribeClicked: function(event) {
             if (window.cordova) {
-                this.subscription.subscribeGplay('one.year.sub');
+                //TODO: handle refreshing the subscription after completed
+                this.subscription.subscribeGplay(this.$('#select-subscription-cycle').val());
             } else {
                 this.subscription.subscribe();
             }
