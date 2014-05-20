@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Sat May 17 2014 21:38:54 GMT+0800 (China Standard Time)
+# Time: Tue May 20 2014 19:08:34 GMT+0800 (China Standard Time)
 
 CACHE:
 index.html
@@ -12,6 +12,9 @@ index-cordova.html
 index.html
 bootstrap/components/switch/css/bootstrap-switch.min.css
 bootstrap/css/bootstrap.min.css
+bootstrap/themes/flatly.min.css
+bootstrap/themes/lumin.min.css
+bootstrap/themes/simplex.min.css
 bootstrap/themes/yeti.min.css
 css/font-awesome.min.css
 css/main.css
