@@ -104,7 +104,7 @@ define([
          * @param {Object} event
          */
         navigateAccount: function(event) {
-            skritter.router.navigate('account', {replace: true, trigger: true});
+            skritter.router.navigate('account', {replace: false, trigger: true});
             event.preventDefault();
         },
         /**
@@ -112,7 +112,7 @@ define([
          * @param {Object} event
          */
         navigateLists: function(event) {
-            skritter.router.navigate('vocab/list', {replace: true, trigger: true});
+            skritter.router.navigate('vocab/list', {replace: false, trigger: true});
             event.preventDefault();
         },
         /**
@@ -136,7 +136,7 @@ define([
          * @param {Object} event
          */
         navigateReviewList: function(event) {
-            skritter.router.navigate('review', {replace: true, trigger: true});
+            skritter.router.navigate('review', {replace: false, trigger: true});
             event.preventDefault();
         },
         /**

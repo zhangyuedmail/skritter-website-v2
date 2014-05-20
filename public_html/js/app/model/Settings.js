@@ -19,7 +19,7 @@ define([
             $(window).resize(_.bind(function(event) {
                 window.setTimeout(_.bind(function() {
                     this.trigger('resize', this);
-                }, this), 500);
+                }, this), 0);
                 event.preventDefault();
             }, this));
         },

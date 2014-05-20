@@ -21,13 +21,13 @@ define([
             skritter.timer.setThinkingLimit(15);
             this.$el.html(templateRdng);
             Prompt.prototype.render.call(this);            
+            this.resize();
             if (this.review.isFinished()) {
                 this.show().showAnswer();
             } else {
                 skritter.timer.start();
                 this.show();
             }
-            this.resize();
             return this;
         },
         /**

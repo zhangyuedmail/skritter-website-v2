@@ -25,10 +25,53 @@ define([
         render: function() {
             document.title = "Skritter - Account";
             this.$el.html(templateAccount);
-            var date = moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
+            this.showGeneral();
+            this.showLanguage();
+            this.showLocation();
+            this.showSubscription();
+            return this;
+        },
+        /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick .button-subscription-cancel': ' handleCancelSubscriptionClicked',
+            'vclick .button-subscription-subscribe': 'handleSubscribeClicked'
+        },
+        /**
+         * @method handleCancelSubscriptionClicked
+         * @param {Object} event
+         */
+        handleCancelSubscriptionClicked: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleSubscribeClicked
+         * @param {Object} event
+         */
+        handleSubscribeClicked: function(event) {
+            if (window.cordova) {
+                //TODO: handle refreshing the subscription after completed
+                this.subscription.subscribeGplay(this.$('#select-subscription-cycle').val());
+            } else {
+                this.subscription.subscribe();
+            }
+           event.preventDefault(); 
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.stopListening();
+            this.undelegateEvents();
+            this.$el.empty();
+        },
+        /**
+         * @method showGeneral
+         */
+        showGeneral: function() {
             var userName = skritter.user.settings.get('name');
             var userId = skritter.user.id;
-            //general
             if (userName === userId) {
                 this.$('#user-name').text(userId);
             } else {
@@ -37,52 +80,11 @@ define([
             }
             this.$('#user-avatar').html(skritter.user.settings.getAvatar('img-thumbnail'));
             this.$('#user-about-me').html(skritter.user.settings.get('aboutMe'));
-            //subscription
-            var expires = this.subscription.get('expires');
-            var plan = this.subscription.get('plan');
-            if (expires <= date) {
-                this.$('.button-cancel-subscription').hide();
-                this.$('#subscription-expires').html("Your account expired on <strong>" + expires + '</strong>');
-                switch (plan) {
-                    case 'one_month':
-                        this.$('#subscription-plan').html('and was billed every <strong>month</strong>.');
-                        break;
-                    case 'six_months':
-                        this.$('#subscription-plan').html('and was billed every <strong>six months</strong>.');
-                        break;
-                    case 'twelve_months':
-                        this.$('#subscription-plan').html('and was billed every <strong>year</strong>.');
-                        break;
-                    case 'twelve_months':
-                        this.$('#subscription-plan').html('and was billed every two <strong>years</strong>.');
-                        break;
-                }
-            } else if (expires > date) {
-                this.$('.button-start-subscription').hide();
-                this.$('#subscription-expires').html("Your account is active until <strong>" + expires + '</strong>');
-                switch (plan) {
-                    case 'one_month':
-                        this.$('#subscription-plan').html('and is billed every <strong>month</strong>.');
-                        break;
-                    case 'six_months':
-                        this.$('#subscription-plan').html('and is billed every <strong>six months</strong>.');
-                        break;
-                    case 'twelve_months':
-                        this.$('#subscription-plan').html('and is billed every <strong>year</strong>.');
-                        break;
-                    case 'twelve_months':
-                        this.$('#subscription-plan').html('and is billed every two <strong>years</strong>.');
-                        break;
-                }
-            } else if (expires === false) {
-                this.$('#subscription-expires').html("Your account is infinitely free, nice!");
-                this.$('.button-cancel-subscription').hide();
-                this.$('.button-start-subscription').hide();
-            } else {
-                this.$('#subscription-expires').html("Your account does not current have an active subscription.");
-                this.$('.button-cancel-subscription').hide();
-            }
-            //language
+        },
+        /**
+         * @method showLanguage
+         */
+        showLanguage: function() {
             this.$('#language').text(this.settings.isChinese() ? 'Chinese' : 'Japanese');
             if (this.settings.isChinese()) {
                 if (this.settings.get('reviewSimplified') && this.settings.get('reviewTraditional')) {
@@ -93,25 +95,77 @@ define([
                     this.$('#language-style').text('Traditional');
                 }
             }
-            //location
+        },
+        /**
+         * @method showLocation
+         */
+        showLocation: function() {
             this.$('#location-country').text(this.settings.get('country'));
-            this.$('#location-timezone').text(moment().tz(this.settings.get('timezone')).format('hh:m A') + ' | ' + this.settings.get('timezone'));
-            return this;
+            this.$('#location-timezone').text(moment().tz(this.settings.get('timezone')).format('hh:mm A') + ' | ' + this.settings.get('timezone'));
         },
         /**
-         * @property {Object} events
+         * @method showSubscription
          */
-        events: {
-        },
-        /**
-         * @method remove
-         */
-        remove: function() {
-            this.stopListening();
-            this.undelegateEvents();
-            this.$el.empty();
+        showSubscription: function() {
+            var date = moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
+            var subscribed = this.subscription.get('subscribed');
+            var expires = this.subscription.get('expires');
+            if (this.subscription.isExpired()) {
+                this.$('.subscription-status').text('Inactive');
+                this.$('.subscription-status').addClass('text-danger');
+                this.$('.button-subscription-subscribe').show();
+                this.$('.button-subscription-cancel').hide();
+                if (window.cordova) {
+                    this.$('#select-subscription-cycle').show();
+                } else {
+                    this.$('#select-subscription-cycle').hide();
+                }
+            } else {
+                this.$('.subscription-expires').text(expires);
+                if (expires > date) {
+                    this.$('.subscription-status').text('Active');
+                    this.$('.subscription-status').addClass('text-success');
+                    this.$('.subscription-type').text(this.subscription.getType());
+                    this.$('#select-subscription-cycle').hide();
+                    switch (subscribed) {
+                        case 'gplay':
+                            this.$('.subscription-plan').text(this.subscription.getGplayPlan());
+                            this.$('.button-subscription-subscribe').hide();
+                            this.$('.button-subscription-cancel').show();
+                            break;
+                        case 'ios':
+                            this.$('.subscription-plan').text(this.subscription.getPlan());
+                            this.$('.button-subscription-subscribe').hide();
+                            this.$('.button-subscription-subscribe').hide();
+                            break;
+                        case 'skritter':
+                            this.$('.subscription-plan').text(this.subscription.getPlan());
+                            this.$('.button-subscription-subscribe').hide();
+                            this.$('.button-subscription-subscribe').hide();
+                            break;
+                        default:
+                            this.$('.subscription-plan').text(this.subscription.getPlan());
+                            this.$('.button-subscription-subscribe').hide();
+                            this.$('.button-subscription-cancel').hide();
+                            break;
+                    }
+                } else if (expires === false) {
+                    this.$('.subscription-status').text('Active');
+                    this.$('.subscription-plan').text('Unlimited');
+                    this.$('.button-subscription-subscribe').hide();
+                    this.$('.button-subscription-cancel').hide();
+                    this.$('#select-subscription-cycle').hide();
+                } else {
+                    this.$('.subscription-plan').text();
+                    this.$('.subscription-status').text('Inactive');
+                    this.$('.subscription-status').addClass('text-danger');
+                    this.$('.button-subscription-subscribe').show();
+                    this.$('.button-subscription-cancel').hide();
+                    this.$('#select-subscription-cycle').show();
+                }
+            }
         }
     });
-    
+
     return Account;
 });

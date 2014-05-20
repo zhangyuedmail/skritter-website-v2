@@ -72,7 +72,6 @@ define([
                 function(callback) {
                     skritter.api.getVocabLists(function(studyingLists, status) {
                         if (status === 200) {
-                            console.log(studyingLists);
                             callback(null, studyingLists);
                         } else {
                             callback(studyingLists);
@@ -87,7 +86,6 @@ define([
                 function(lists, callback) {
                     skritter.api.getVocabLists(function(customLists, status) {
                         if (status === 200) {
-                            console.log(customLists);
                             callback(null, lists.concat(customLists));
                         } else {
                             callback(customLists);

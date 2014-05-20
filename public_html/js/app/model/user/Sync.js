@@ -75,7 +75,7 @@ define(function() {
                                 if (result.numVocabsAdded) {
                                     numVocabsAdded += result.numVocabsAdded;
                                 }
-                                window.setTimeout(request, 2000);
+                                window.setTimeout(request, 500);
                             } else {
                                 if (typeof callback2 === 'function') {
                                     callback2(numVocabsAdded);
@@ -87,9 +87,9 @@ define(function() {
                     }
                     request();
                 },
-                function(callback) {
-                    self.changedItems(callback, now, true);
-                }
+                _.bind(function(callback) {
+                    this.changedItems(callback, now, true);
+                }, this)
             ], _.bind(function() {
                 skritter.user.scheduler.sort();
                 this.set('syncing', false);
@@ -105,10 +105,6 @@ define(function() {
          * @param {Boolean} includeResources
          */
         changedItems: function(callback, offset, includeResources) {
-            if (this.isActive()) {
-                callback();
-                return false;
-            }
             offset = offset ? offset : this.get('lastItemSync');
             var now = skritter.fn.getUnixTime();
             var requests = [
@@ -129,12 +125,10 @@ define(function() {
                     spawner: true
                 }
             ];
-            this.set('syncing', true);
             async.series([
                 async.apply(this.processBatch, requests)
             ], _.bind(function() {
                 this.set('lastItemSync', now);
-                this.set('syncing', false);
                 callback();
             }, this));
         },
@@ -179,7 +173,9 @@ define(function() {
                     lastVocabSync: now
                 });
                 this.set('syncing', false);
-                callback();
+                if (typeof callback === 'function') {
+                    callback();
+                }
             }, this));
         },
         /**
@@ -188,22 +184,26 @@ define(function() {
          */
         incremental: function(callback) {
             if (!this.isActive()) {
+                this.set('syncing', true);
                 skritter.modal.show('download')
                         .set('.modal-title', 'SYNCING')
                         .progress(100);
                 async.series([
                     _.bind(function(callback) {
-                        this.changedItems(callback);
+                        this.reviews(callback);
                     }, this),
                     _.bind(function(callback) {
-                        this.reviews(callback);
+                        this.changedItems(callback);
                     }, this)
-                ], function() {
+                ], _.bind(function() {
                     skritter.modal.hide();
+                    this.set('syncing', false);
                     if (typeof callback === 'function') {
                         callback();
                     }
-                });
+                }, this));
+            } else {
+                callback();
             }
         },
         /**
@@ -211,10 +211,7 @@ define(function() {
          * @return {Boolean}
          */
         isActive: function() {
-            if (this.get('syncing')) {
-                return true;
-            }
-            return false;
+            return this.get('syncing');
         },
         /**
          * @method processBatch
@@ -247,7 +244,7 @@ define(function() {
                                     skritter.modal.progress(Math.round((downloadedRequests / result.totalRequests) * 100));
                                 }
                                 skritter.user.data.insert(result, function() {
-                                    window.setTimeout(request, 1000);
+                                    window.setTimeout(request, 500);
                                 });
                             } else {
                                 callback();
@@ -258,22 +255,17 @@ define(function() {
                 }
             ], function() {
                 callback();
-            });
+            }, this);
         },
         /**
          * @method reviews
          * @param {Function} callback
          */
         reviews: function(callback) {
-            if (this.isActive()) {
-                callback();
-                return false;
-            }
             var now = skritter.fn.getUnixTime();
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
             console.log('POSTING REVIEWS', _.uniq(_.pluck(reviews, 'wordGroup')));
-            this.set('syncing', true);
             async.waterfall([
                 function(callback) {
                     skritter.api.getReviewErrors(lastErrorCheck, function(reviewErrors, status) {
@@ -288,6 +280,7 @@ define(function() {
                                     });
                                 }
                             }
+                            //TODO: try to recover from review errors
                             callback(reviewErrors);
                         } else if (status === 200) {
                             callback();
@@ -300,7 +293,7 @@ define(function() {
                     skritter.api.postReviews(reviews, function(postedReviews, status) {
                         if (status === 200) {
                             callback(null, _.uniq(_.pluck(postedReviews, 'wordGroup')));
-                        } else {
+                        } else if (status !== 403) {
                             if (window.Raygun) {
                                 try {
                                     throw new Error('Review Format Errors');
@@ -312,6 +305,8 @@ define(function() {
                             }
                             //TODO: handle all and any problematic format errors
                             callback(null, postedReviews);
+                        } else {
+                            callback(postedReviews);
                         }
                     });
                 },
@@ -322,8 +317,7 @@ define(function() {
                     });
                 }
             ], _.bind(function() {
-                this.set('lastItemSync', now);
-                this.set('syncing', false);
+                this.set('lastErrorCheck', now);
                 if (typeof callback === 'function') {
                     callback();
                 }
