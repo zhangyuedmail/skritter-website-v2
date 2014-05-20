@@ -33,6 +33,10 @@ define(function() {
          * @returns {Number}
          */
         calculateInterval: function(item, score) {
+            if (!item) {
+                //TODO: remove this after the issue has been resolved
+                window.alert('Scheduling error! Take notes on what you did and let your local developer know about it.');
+            }
             var config = skritter.user.data.srsconfigs.get(item.get('part'));
             var newInterval;
             //return new items with randomized default config values
