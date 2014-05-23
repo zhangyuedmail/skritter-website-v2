@@ -64,6 +64,7 @@ define([
             this.disableForm();
             var username = this.$('#username').val();
             var password = this.$('#password').val();
+            this.$('#message').empty();
             skritter.user.login(username, password, _.bind(function(result) {
                 if (result.statusCode === 200) {
                     skritter.modal.show('download')
