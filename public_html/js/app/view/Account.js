@@ -85,8 +85,8 @@ define([
          * @method showLanguage
          */
         showLanguage: function() {
-            this.$('#language').text(this.settings.isChinese() ? 'Chinese' : 'Japanese');
-            if (this.settings.isChinese()) {
+            this.$('#language').text(skritter.settings.isChinese() ? 'Chinese' : 'Japanese');
+            if (skritter.settings.isChinese()) {
                 if (this.settings.get('reviewSimplified') && this.settings.get('reviewTraditional')) {
                     this.$('#language-style').text('Simplified and Traditional');
                 } else if (this.settings.get('reviewSimplified') && !this.settings.get('reviewTraditional')) {
