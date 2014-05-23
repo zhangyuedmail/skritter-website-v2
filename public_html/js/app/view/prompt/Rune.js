@@ -46,6 +46,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .button-teach': 'teach',
             'vclick .navigate-forward': 'next',
             'vclick #prompt-reading .reading': 'playAudio'
         },
@@ -115,7 +116,9 @@ define([
                     if (skritter.user.settings.get('squigs')) {
                         this.canvas.drawShape('display', shape);
                     } else {
-                        this.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
+                        window.setTimeout(_.bind(function() {
+                            this.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
+                        }, this), 0);
                     }
                     if (this.review.getCharacterAt().isFinished()) {
                         this.showAnswer();
@@ -254,14 +257,18 @@ define([
             if (skritter.user.settings.get('squigs') && this.review.getCharacterAt().length > 0) {
                 var color = skritter.settings.get('gradingColors')[this.review.getReviewAt().score];
                 var character = this.review.getCharacterAt();
-                for (var i = 0, length = character.length; i < length; i++) {
-                    var stroke = character.at(i);
-                    this.canvas.tweenShape('hint', stroke.getUserShape(color), stroke.inflateShape());
-                }
-                this.canvas.display().swapChildren(this.canvas.getLayer('display'), this.canvas.getLayer('hint'));
+                window.setTimeout(_.bind(function() {
+                    for (var i = 0, length = character.length; i < length; i++) {
+                        var stroke = character.at(i);
+                        this.canvas.tweenShape('hint', stroke.getUserShape(color), stroke.inflateShape());
+                    }
+                    this.canvas.display().swapChildren(this.canvas.getLayer('display'), this.canvas.getLayer('hint'));
+                }, this), 0);
             } else {
                 if (!this.teaching) {
-                    this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+                    window.setTimeout(_.bind(function() {
+                        this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+                    }, this), 1);
                 }
             }
             if (this.review.isLast() && this.review.getBaseVocab().getSentence()) {

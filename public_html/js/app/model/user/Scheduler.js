@@ -148,19 +148,29 @@ define(function() {
             var position = 0;
             function next() {
                 var item = skritter.user.scheduler.data[position];
-                var baseWriting = item.id.split('-')[2];
-                if (history.indexOf(baseWriting) === -1) {
-                    skritter.user.data.items.loadItem(item.id, function(item) {
+                if (item.id) {
+                    var baseWriting = item.id.split('-')[2];
+                    if (history.indexOf(baseWriting) === -1) {
+                        skritter.user.data.items.loadItem(item.id, function(item) {
+                            if (item) {
+                                callback(item);
+                            } else {
+                                position++;
+                                next();
+                            }
+                        });
+                    } else {
+                        position++;
+                        next();
+                    }
+                } else {
+                    skritter.user.data.items.loadItem(history[0].id, function(item) {
                         if (item) {
                             callback(item);
                         } else {
-                            position++;
-                            next();
+                            callback();
                         }
                     });
-                } else {
-                    position++;
-                    next();
                 }
             }
             next();

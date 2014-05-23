@@ -336,6 +336,11 @@ body {
 
 /*** PROMPT: WRITING ***/
 #rune #prompt-question-text { font-size: 18px; }
+#rune .button-teach {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+}
 #rune #prompt-writing { 
     float: left;
     font-size: 36px;

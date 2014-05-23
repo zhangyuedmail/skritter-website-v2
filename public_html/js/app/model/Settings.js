@@ -146,11 +146,31 @@ define([
             return 'localhost';
         },
         /**
+         * @method isChinese
+         * @returns {Boolean}
+         */
+        isChinese: function() {
+            if (this.getLanguageCode() === 'zh') {
+                return true;
+            }
+            return false;
+        },
+        /**
          * @method isIndexedDB
          * @returns {Boolean}
          */
         isIndexedDB: function() {
             if (this.get('storageType') === 'IndexedDB') {
+                return true;
+            }
+            return false;
+        },
+        /**
+         * @method isJapanese
+         * @returns {Boolean}
+         */
+        isJapanese: function() {
+            if (this.getLanguageCode() === 'ja') {
                 return true;
             }
             return false;
