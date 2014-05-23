@@ -1,5 +1,5 @@
 define({
     login: {
-        'message-error': "Something didn't go quite right. Please try again."
+        'message-error': "Unable to connect to the server, please check your internet connection."
     }
 });
