@@ -266,7 +266,9 @@ define([
                 }, this), 0);
             } else {
                 if (!this.teaching) {
-                    this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+                    window.setTimeout(_.bind(function() {
+                        this.canvas.injectLayerColor('display', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+                    }, this), 1);
                 }
             }
             if (this.review.isLast() && this.review.getBaseVocab().getSentence()) {
