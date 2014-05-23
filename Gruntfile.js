@@ -178,7 +178,7 @@ module.exports = function(grunt) {
             'cordova-build-android-ja': {
                 command: [
                     'cd build/cordova/japanese/',
-                    'cordova build android --release'
+                    'cordova build android'
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -188,7 +188,7 @@ module.exports = function(grunt) {
             'cordova-build-android-zh': {
                 command: [
                     'cd build/cordova/chinese/',
-                    'cordova build android --release'
+                    'cordova build android'
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -198,7 +198,7 @@ module.exports = function(grunt) {
             'cordova-build-run-android-ja': {
                 command: [
                     'cd build/cordova/japanese/',
-                    'cordova build android --release',
+                    'cordova build android',
                     'cordova run android'
                 ].join('&&'),
                 options: {
@@ -209,7 +209,7 @@ module.exports = function(grunt) {
             'cordova-build-run-android-zh': {
                 command: [
                     'cd build/cordova/chinese/',
-                    'cordova build android --release',
+                    'cordova build android',
                     'cordova run android'
                 ].join('&&'),
                 options: {
@@ -260,6 +260,8 @@ module.exports = function(grunt) {
             'kill-adb': {
                 command: 'taskkill /F /IM adb.exe',
                 options: {
+                    failOnError: false,
+                    stderr: true,
                     stdout: true
                 }
             }
