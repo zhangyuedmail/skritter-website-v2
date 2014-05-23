@@ -82,7 +82,9 @@ define([
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
                         this.review.setReviewAt(null, 'score', 3);
-                        this.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
+                        window.setTimeout(_.bind(function() {
+                            this.canvas.tweenShape('display', result.getUserShape(), result.inflateShape());
+                        }, this), 0);
                     } else {
                         this.review.setReviewAt(null, 'score', 1);
                         this.review.getCharacterAt().reset();
