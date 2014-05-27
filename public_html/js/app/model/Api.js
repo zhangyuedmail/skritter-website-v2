@@ -112,6 +112,11 @@ define(function() {
                         } else {
                             callback(null, 200);
                         }
+                        data = null;
+                        requests = null;
+                        responseSize = null;
+                        result = null;
+                        self = null;
                     } catch (error) {
                         callback({}, 200);
                     }

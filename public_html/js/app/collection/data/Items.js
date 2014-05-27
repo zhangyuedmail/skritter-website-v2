@@ -37,6 +37,7 @@ define([
          */
         insert: function(items, callback) {
             skritter.storage.put('items', items, callback);
+            items = null;
         },
         /**
          * @method loadAll
@@ -44,7 +45,7 @@ define([
          */
         loadAll: function(callback) {
             skritter.storage.getAll('items', _.bind(function(items) {
-                self.add(items, {merge: true, silent: true, sort: false});
+                this.add(items, {merge: true, silent: true, sort: false});
                 callback();
             }, this));
         },

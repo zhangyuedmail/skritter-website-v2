@@ -27,6 +27,7 @@ define([
          */
         insert: function(sentences, callback) {
             skritter.storage.put('sentences', sentences, callback);
+            sentences = null;
         },
         /**
          * @method loadAll

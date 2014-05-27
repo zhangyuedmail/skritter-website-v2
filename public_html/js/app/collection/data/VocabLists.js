@@ -47,6 +47,7 @@ define([
          */
         insert: function(vocablists, callback) {
             skritter.storage.put('vocablists', vocablists, callback);
+            vocablists= null;
         },
         /**
          * @method comparator

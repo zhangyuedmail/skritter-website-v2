@@ -27,6 +27,7 @@ define([
          */
         insert: function(srsconfigs, callback) {
             skritter.storage.put('srsconfigs', srsconfigs, callback);
+            srsconfigs = null;
         },
         /**
          * @method loadAll
