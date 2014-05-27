@@ -148,12 +148,21 @@ define([
      * think they are actually an issue when it comes to rune prompts.
      * 
      * @method isKana
-     * @param {String} character
+     * @param {String} text
      * @returns {Boolean}
      */
-    var isKana = function(character) {
-        var charCode = character.charCodeAt(0);
-        return (charCode >= 12353 && charCode <= 12436) || (charCode >= 12449 && charCode <= 12539) || charCode === 65374;
+    var isKana = function(text) {
+        var chars = text.split('');
+        if (chars.length === 0) {
+            return false;
+        }
+        for (var i = 0, length = chars.length; i < length; i++) {
+            var charCode = text.charCodeAt(i);
+            if (!(charCode >= 12353 && charCode <= 12436) && !(charCode >= 12449 && charCode <= 12540) && charCode !== 65374) {
+                return false;
+            }
+        }
+        return true;
     };
     /**
      * Checks to see if one of the approved live server domains is being used or not.

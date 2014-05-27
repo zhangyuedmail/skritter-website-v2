@@ -149,8 +149,10 @@ define(function() {
             function next() {
                 var item = skritter.user.scheduler.data[position];
                 if (item.id) {
+                    var basePart = item.id.split('-')[4];
                     var baseWriting = item.id.split('-')[2];
-                    if (history.indexOf(baseWriting) === -1) {
+                    if (history.indexOf(baseWriting) === -1 &&
+                            (!skritter.fn.isKana(baseWriting) || basePart !== 'rdng')) {
                         skritter.user.data.items.loadItem(item.id, function(item) {
                             if (item) {
                                 callback(item);
