@@ -30,6 +30,8 @@ define([
                 if (typeof callback === 'function') {
                     callback();
                 }
+                tableName = null;
+                transaction = null;
             };
             transaction.onerror = function(event) {
                 console.error(event);
@@ -43,11 +45,13 @@ define([
         destroy: function(callback) {
             this.database.close();
             var request = window.indexedDB.deleteDatabase(this.databaseName);
-            request.onsuccess = function() {
+            request.onsuccess = _.bind(function() {
                 if (typeof callback === 'function') {
                     callback();
                 }
-            };
+                request = null;
+                this.database = null;
+            }, this);
             request.onerror = function(error) {
                 console.error(error);
             };
@@ -66,6 +70,10 @@ define([
                 var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback(items);
+                    ids = null;
+                    objectStore = null;
+                    tableName = null;
+                    transaction = null;
                 };
                 var push = function(event) {
                     if (event.target.result) {
@@ -93,6 +101,9 @@ define([
             var transaction = this.database.transaction(tableName, 'readonly');
             transaction.oncomplete = function() {
                 callback(items);
+                items = null;
+                tableName = null;
+                transaction = null;
             };
             transaction.onerror = function(event) {
                 console.error(event);
@@ -164,6 +175,8 @@ define([
                 this.database = request.result;
                 this.databaseName = databaseName;
                 callback();
+                tables = null;
+                request = null;
             }, this);
         },
         /**
@@ -179,6 +192,9 @@ define([
                 var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback();
+                    items = null;
+                    objectStore = null;
+                    transaction = null;
                 };
                 transaction.onerror = function(event) {
                     console.error(event);
@@ -203,6 +219,9 @@ define([
                 var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback();
+                    ids = null;
+                    objectStore = null;
+                    transaction = null;
                 };
                 transaction.onerror = function(event) {
                     console.error(event);
@@ -232,6 +251,10 @@ define([
                     if (typeof callback === 'function') {
                         callback();
                     }
+                    items = null;
+                    key = null;
+                    originalItems = null;
+                    updatedItems = null;
                 });
             }, this));
         }
