@@ -152,7 +152,7 @@ module.exports = function(grunt) {
                 },
                 files: [
                     {src: 'config.xml', dest: 'build/cordova/japanese/', expand: true, cwd: 'build/cordova/japanese/'},
-                    {src: 'InAppBillingPlugin.java', dest: 'build/cordova/japanese/plugins/com.smartmobilesoftware.inappbilling/src/android/com/smartmobilesoftware/inappbilling/', expand: true, cwd: 'build/cordova/japanese/plugins/com.smartmobilesoftware.inappbilling/src/android/com/smartmobilesoftware/inappbilling/'},
+                    {src: 'InAppBillingPlugin.java', dest: 'build/cordova/japanese/plugins/com.jernung.cordova.inappbilling/inappbilling/', expand: true, cwd: 'build/cordova/japanese/plugins/com.jernung.cordova.inappbilling/inappbilling/'},
                     {src: 'Settings.js', dest: 'build/cordova/japanese/www/js/app/model/', expand: true, cwd: 'build/cordova/japanese/www/js/app/model/'}
                 ]
             },
@@ -168,7 +168,7 @@ module.exports = function(grunt) {
                 },
                 files: [
                     {src: 'config.xml', dest: 'build/cordova/chinese/', expand: true, cwd: 'build/cordova/chinese/'},
-                    {src: 'InAppBillingPlugin.java', dest: 'build/cordova/chinese/plugins/com.smartmobilesoftware.inappbilling/src/android/com/smartmobilesoftware/inappbilling/', expand: true, cwd: 'build/cordova/chinese/plugins/com.smartmobilesoftware.inappbilling/src/android/com/smartmobilesoftware/inappbilling/'},
+                    {src: 'InAppBillingPlugin.java', dest: 'build/cordova/chinese/plugins/com.jernung.cordova.inappbilling/inappbilling/', expand: true, cwd: 'build/cordova/chinese/plugins/com.jernung.cordova.inappbilling/inappbilling/'},
                     {src: 'Settings.js', dest: 'build/cordova/chinese/www/js/app/model/', expand: true, cwd: 'build/cordova/chinese/www/js/app/model/'}
                 ]
             }
