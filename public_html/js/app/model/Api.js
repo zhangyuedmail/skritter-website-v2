@@ -537,11 +537,11 @@ define(function() {
                 });
                 promise.done(function(data) {
                     if (typeof callback === 'function') {
-                        callback(data.User);
+                        callback(data.User, data.statusCode);
                     }
                 });
                 promise.fail(function(error) {
-                    console.error(error);
+                    console.error(error, 0);
                 });
             }
             request();
@@ -568,7 +568,7 @@ define(function() {
                     }
                 });
                 promise.fail(function(error) {
-                    console.error(error);
+                    console.error(error, 0);
                 });
             }
             request();
@@ -596,7 +596,7 @@ define(function() {
                     }
                 });
                 promise.fail(function(error) {
-                    console.error(error);
+                    console.error(error, 0);
                 });
             }
             request();
