@@ -72,13 +72,15 @@ define([
          * @param {Object} event
          */
         playAudio: function(event) {
-            if (skritter.user.settings.isChinese()) {
-                var filename = this.$(event.currentTarget).data('reading') + '.mp3';
-                skritter.assets.playAudio(filename.toLowerCase());
-            } else {
-                this.review.getBaseVocab().playAudio();
+            if (this.review.getBaseVocab().has('audio')) {
+                if (skritter.user.settings.isChinese()) {
+                    var filename = this.$(event.currentTarget).data('reading') + '.mp3';
+                    skritter.assets.playAudio(filename.toLowerCase());
+                } else {
+                    this.review.getBaseVocab().playAudio();
+                }
+                event.stopPropagation();
             }
-            event.stopPropagation();
         },
         /**
          * @method previous
