@@ -49,7 +49,7 @@ define([
             if (window.cordova) {
                 navigator.splashscreen.hide();
             }
-            if (document.location.host.indexOf('localhost') === -1 && 
+            if (document.location.host.indexOf('localhost') === -1 &&
                     skritter.user.isLoggedIn()) {
                 skritter.user.sync.incremental();
             }
