@@ -77,7 +77,7 @@ define([
          */
         handleStrokeReceived: function(points, shape) {
             var possibleTones = _.flatten(this.review.getBaseVocab().getTones(this.review.get('position')));
-            if (points.length > 5) {
+            if (points.length > 2) {
                 var result = this.review.getCharacterAt().recognize(points, shape);
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
