@@ -45,6 +45,7 @@ define([
                     this.$('#language-text').text(this.languageCode === 'zh' ? '中文' : '日本語');
                 }
             }
+            this.$('#admin-item-filter #filter-values').val(skritter.user.scheduler.filter.join(', '));
             this.listenTo(skritter.user.scheduler, 'schedule:sorted', _.bind(this.updateDueCount, this));
             this.listenTo(skritter.user.sync, 'change:syncing', this.toggleSyncButton);
             return this;
@@ -60,7 +61,26 @@ define([
             'vclick .button-new-user': 'navigateNewUser',
             'vclick .button-review-list': 'navigateReviewList',
             'vclick .button-study': 'navigateStudy',
-            'vclick .button-sync': 'sync'
+            'vclick .button-sync': 'sync',
+            'vclick .button-filter-apply': 'applyFilter',
+            'vclick .button-filter-clear': 'clearFilter'
+        },
+        /**
+         * @method applyFilter
+         * @param {Object} event
+         */
+        applyFilter: function(event) {
+            skritter.user.scheduler.filter = this.$('#admin-item-filter #filter-values').val().replace(' ', '').split(',');
+            event.preventDefault();
+        },
+        /**
+         * @method clearFilter
+         * @param {Object} event
+         */
+        clearFilter: function(event) {
+            skritter.user.scheduler.filter = [];
+            this.$('#admin-item-filter #filter-values').val('');
+            event.preventDefault();
         },
         /**
          * @method logout

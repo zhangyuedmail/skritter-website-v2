@@ -95,9 +95,11 @@ define([
             skritter.user.settings.setActiveParts(this.activeParts);
             skritter.modal.show('loading').set('.modal-body', 'Applying Changes');
             skritter.user.scheduler.load(function() {
-                skritter.user.scheduler.sort();
                 skritter.router.navigate('study', {replace: true, trigger: true});
-                skritter.modal.hide();
+                skritter.user.scheduler.sort();
+                skritter.user.sync.updateUser(function() {
+                    skritter.modal.hide();
+                });
             });
             event.preventDefault();
         }

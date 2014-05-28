@@ -72,6 +72,10 @@ body {
 .content-block.no-margin { margin: 0; }
 .content-block.no-padding { padding: 0; }
 .cursor { cursor: pointer; }
+.fill {
+    height: 100%;
+    width: 100%;
+}
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;
@@ -304,16 +308,24 @@ body {
 
 /*** PROMPT: DEFN ***/
 #defn #prompt-question-text { font-size: 18px; }
-#defn #prompt-writing {}
-#defn #prompt-reading {}
+#defn .prompt-writing {}
+#defn #prompt-reading { 
+    float: left;
+    font-size: 32px;
+    word-break: break-all;
+}
 #defn #prompt-definition { font-size: 28px; }
 #defn #prompt-sentence { font-size: 20px; }
 
 
 /*** PROMPT: RDNG ***/
 #rdng #prompt-question-text { font-size: 18px; }
-#rdng #prompt-writing {}
-#rdng #prompt-reading {}
+#rdng .prompt-writing {}
+#rdng #prompt-reading {
+    float: left;
+    font-size: 32px;
+    word-break: break-all;
+}
 #rdng #prompt-definition { font-size: 18px; }
 #rdng #prompt-sentence { font-size: 20px; }
 

@@ -27,6 +27,7 @@ define([
          */
         insert: function(decomps, callback) {
             skritter.storage.put('decomps', decomps, callback);
+            decomps = null;
         },
         /**
          * @method loadAll
@@ -34,7 +35,7 @@ define([
          */
         loadAll: function(callback) {
             skritter.storage.getAll('decomps', _.bind(function(items) {
-                self.add(items, {merge: true, silent: true, sort: false});
+                this.add(items, {merge: true, silent: true, sort: false});
                 callback();
             }, this));
         }

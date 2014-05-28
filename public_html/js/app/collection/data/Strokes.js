@@ -41,6 +41,7 @@ define([
          */
         insert: function(strokes, callback) {
             skritter.storage.put('strokes', strokes, callback);
+            strokes = null;
         },
         /**
          * @method loadAll

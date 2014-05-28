@@ -365,6 +365,17 @@ define(function() {
                     callback();
                 }
             });
+        },
+        /**
+         * @method updateUser
+         * @param {Function} callback
+         */
+        updateUser: function(callback) {
+            skritter.api.updateUser(skritter.user.settings.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         }
     });
 

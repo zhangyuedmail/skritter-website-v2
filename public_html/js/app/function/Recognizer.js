@@ -9,7 +9,7 @@ define(function() {
      */
     function Recognizer() {
         this.angleThreshold = 30;
-        this.cornersPenalty = 100;
+        this.cornersPenalty = 25;
         this.cornersThreshold = 2;
         this.distanceThreshold = 200;
         this.cornersLengthThreshold = 200;
@@ -25,8 +25,9 @@ define(function() {
         var results = this.analyze(userStroke, character);
         results = _.filter(results, 'total');
         results = _.sortBy(results, 'total');
-        if (results.length > 0 && !character.contains(results[0]))
+        if (results.length > 0 && !character.contains(results[0])) {
             return results[0];
+        }
         return false;
     };
     /**
@@ -106,8 +107,9 @@ define(function() {
      */
     Recognizer.prototype.checkAngle = function(stroke, target, skipThreshold) {
         var score = Math.abs(stroke.getAngle() - target.getAngle());
-        if (skipThreshold || score <= this.angleThreshold)
+        if (skipThreshold || score <= this.angleThreshold) {
             return score;
+        }
         return -1;
 
     };
@@ -120,8 +122,9 @@ define(function() {
      */
     Recognizer.prototype.checkCorners = function(stroke, target, skipThreshold) {
         var score = Math.abs(stroke.get('corners').length - target.get('corners').length);
-        if (skipThreshold || score <= this.cornersThreshold)
+        if (skipThreshold || score <= this.cornersThreshold) {
             return score === 0 ? score : score * this.cornersPenalty;
+        }
         return -1;
 
     };
@@ -135,8 +138,9 @@ define(function() {
      */
     Recognizer.prototype.checkDistance = function(stroke, target, size, skipThreshold) {
         var score = skritter.fn.distance(stroke.getRectangle().c, target.getRectangle().c);
-        if (skipThreshold || score < this.distanceThreshold * (size / this.targetSize))
+        if (skipThreshold || score < this.distanceThreshold * (size / this.targetSize)) {
             return score;
+        }
         return -1;
 
     };
@@ -150,8 +154,9 @@ define(function() {
      */
     Recognizer.prototype.checkCornersLength = function(stroke, target, size, skipThreshold) {
         var score = Math.abs(stroke.getCornerLength() - target.getCornerLength());
-        if (skipThreshold || score < this.cornersLengthThreshold * (size / this.targetSize))
+        if (skipThreshold || score < this.cornersLengthThreshold * (size / this.targetSize)) {
             return score;
+        }
         return -1;
 
     };

@@ -27,6 +27,7 @@ define([
          */
         insert: function(vocabs, callback) {
             skritter.storage.put('vocabs', vocabs, callback);
+            vocabs = null;
         },
         /**
          * @method loadAll
