@@ -72,6 +72,10 @@ body {
 .content-block.no-margin { margin: 0; }
 .content-block.no-padding { padding: 0; }
 .cursor { cursor: pointer; }
+.fill {
+    height: 100%;
+    width: 100%;
+}
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 .view { 
     height: 100%;

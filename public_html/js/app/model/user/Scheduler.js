@@ -13,6 +13,7 @@ define(function() {
          */
         initialize: function() {
             this.data = [];
+            this.filter = [];
         },
         /**
          * @property {Object} defaults
@@ -144,15 +145,26 @@ define(function() {
          * @param {Function} callback
          */
         getNext: function(callback) {
+            var filter = this.filter.map(function(id) {
+                return skritter.user.id + '-' + skritter.settings.getLanguageCode() + '-' + id;
+            });
             var history = this.get('history');
             var position = 0;
             function next() {
-                var item = skritter.user.scheduler.data[position];
+                var item = null;
+                if (filter.length > 0) {
+                    item = skritter.user.scheduler.data.filter(function(item) {
+                        return filter.indexOf(item.id) !== -1;
+                    })[position];
+                } else {
+                    item = skritter.user.scheduler.data[position];
+                }
                 if (item.id) {
                     var basePart = item.id.split('-')[4];
                     var baseWriting = item.id.split('-')[2];
-                    if (history.indexOf(baseWriting) === -1 &&
-                            (!skritter.fn.isKana(baseWriting) || basePart !== 'rdng')) {
+                    if (filter.length > 0 ||
+                            (history.indexOf(baseWriting) === -1 &&
+                            (!skritter.fn.isKana(baseWriting) || basePart !== 'rdng'))) {
                         skritter.user.data.items.loadItem(item.id, function(item) {
                             if (item) {
                                 callback(item);
