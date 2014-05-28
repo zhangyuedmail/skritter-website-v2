@@ -222,7 +222,9 @@ define([
             this.$('#prompt-definition').html(this.review.getBaseVocab().getDefinition());
             this.$('#prompt-newness').text(this.review.getBaseItem().isNew() ? 'new' : '');
             this.$('#prompt-reading').html(this.review.getBaseVocab().getReadingBlock(this.review.getMaxPosition() + 1));
-            this.$('#prompt-sentence').html(this.review.getBaseVocab().getMaskedSentenceWriting());
+            if (this.review.getBaseVocab().getSentence()) {
+                this.$('#prompt-sentence').html(this.review.getBaseVocab().getMaskedSentenceWriting());
+            }
             this.$('#prompt-style').html(this.review.getBaseVocab().getStyle());
             this.$('#prompt-writing').html(this.review.getBaseVocab().getWritingBlock(this.review.get('position')));
             if (!this.review.getCharacterAt().isFinished() &&
