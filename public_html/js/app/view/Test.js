@@ -15,7 +15,7 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this).renderElements();
             require([
-                //TODO: add specs for testing here
+                'spec/Functions'
             ], function() {
                 window.runJasmine();
             });

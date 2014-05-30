@@ -3,6 +3,7 @@ requirejs.config({
     locale: 'en-us',
     paths: {
         //directories
+        spec: '../../test/spec',
         template: '../../template',
         //libraries
         async: '../lib/async-0.9.0',

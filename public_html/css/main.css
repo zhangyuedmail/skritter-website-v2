@@ -231,3 +231,7 @@ body {
 .view-login { padding-top: 45px; }
 .view-login input[type="email"] { border-radius: 0; }
 .view-login input[type="password"] { border-radius: 0; }
+
+
+/*** VIEW: TEST ***/
+.view-test .content-block { background-color: #ffffff; }
