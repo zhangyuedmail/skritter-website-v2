@@ -84,7 +84,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'build/web',
+                        cwd: 'public_html',
                         src: [
                             '**',
                             '!font/chinese/**'
@@ -97,7 +97,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'build/web',
+                        cwd: 'public_html',
                         src: [
                             '**/*',
                             '!font/chinese/**'

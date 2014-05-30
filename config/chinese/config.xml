@@ -7,10 +7,12 @@
     <author email="josh@skritter.com" href="http://www.skritter.com/">
         Joshua McFarland
     </author>
+    <preference name="AndroidLaunchMode" value="singleTop" />
     <preference name="Fullscreen" value="true" />
+    <preference name="KeepRunning" value="true"/>
     <preference name="Orientation" value="default" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="600000" />
+    <preference name="SplashScreenDelay" value="60000" />
     <content src="index-cordova.html" />
     <access origin="*" />
 </widget>
