@@ -15,6 +15,7 @@ define([
             this.container = $('.skritter-container');
             this.view = null;
             Backbone.history.start();
+            window.document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
         },
         /**
          * @property {Object} routes
@@ -23,6 +24,28 @@ define([
             '': 'showHome',
             'login': 'showLogin',
             'test': 'showTest'
+        },
+        /**
+         * @method handleBackButtonPressed
+         * @param {Object} event
+         */
+        handleBackButtonPressed: function(event) {
+            var fragment = Backbone.history.fragment;
+            if (this.view.element.sidebar && this.view.element.sidebar.hasClass('expanded')) {
+                this.view.toggleSidebar();
+            } else if (fragment === '') {
+                if (skritter.modal.isVisible()) {
+                    skritter.modal.hide();
+                } else {
+                    skritter.modal.show('exit');
+                    skritter.modal.element('.modal-button-ok').on('vclick', function() {
+                        window.navigator.app.exitApp();
+                    });
+                }
+            } else {
+                
+            }
+            event.preventDefault();
         },
         /**
          * @method showHome

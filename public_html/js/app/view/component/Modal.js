@@ -65,6 +65,20 @@ define([
             return this.$el.find('#' + this.id);
         },
         /**
+         * @method isHidden
+         * @returns {Boolean}
+         */
+        isHidden: function() {
+            return this.id ? false : true;
+        },
+        /**
+         * @method isVisible
+         * @returns {Boolean}
+         */
+        isVisible: function() {
+            return this.id ? true: false;
+        },
+        /**
          * @method progress
          * @param {Number} percent
          * @returns {Backbone.View}
@@ -82,10 +96,10 @@ define([
          * @returns {Backbone.View}
          */
         reset: function() {
-            this.element('.progress-bar').attr('classes', 'modal-footer');
-            this.element('.progress-bar').attr('classes', 'modal-header');
-            this.element('.progress-bar').attr('classes', 'modal-title');
-            this.element('.progress-bar').find('*').show();
+            this.element().attr('classes', 'modal-footer');
+            this.element().attr('classes', 'modal-header');
+            this.element().attr('classes', 'modal-title');
+            this.element().find('*').show();
             return this;
         },
         /**

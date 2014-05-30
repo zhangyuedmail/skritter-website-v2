@@ -87,7 +87,7 @@ module.exports = function(grunt) {
                         cwd: 'public_html',
                         src: [
                             '**',
-                            '!font/chinese/**'
+                            '!font/japanese/**'
                         ],
                         dest: 'build/cordova/chinese/www'
                     }

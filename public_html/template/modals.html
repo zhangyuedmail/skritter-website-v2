@@ -60,6 +60,21 @@
     </div>
 </div>
 
+<!-- /MODAL: exit -->
+<div id="exit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Exit Skritter?</h3>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-danger modal-button-cancel" data-dismiss="modal"><span class="fa fa-2x fa-times"></span> No</button>
+                <button type="button" class="btn btn-success modal-button-ok pull-right"><span class="fa fa-2x fa-check"></span> Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- /MODAL: loading -->
 <div id="loading" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loading" aria-hidden="true">
     <div class="modal-dialog">
@@ -74,15 +89,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3 class="modal-title">Are you sure?</h3>
             </div>
             <div class="modal-body">
                 <p>Logging out will clear all of your local data and you'll need to redownload it next time you log in.</p>
-                <div class="text-right">
-                    <button type="button" class="btn btn-danger modal-button-logout">Log Out</button>
-                    <button type="button" class="btn btn-default modal-button-cancel" data-dismiss="modal">Cancel</button>
-                </div>
+                <button type="button" class="btn btn-default modal-button-cancel" data-dismiss="modal"><span class="fa fa-2x fa-times"></span> Cancel</button>
+                <button type="button" class="btn btn-danger modal-button-logout pull-right"><span class="fa fa-2x fa-check"></span> Log Out</button>
             </div>
             <div class="modal-footer">
                 <div class="message text-center"></div>
