@@ -24,7 +24,9 @@ define(function() {
          * @returns {Backbone.View}
          */
         render: function() {
+            this.element.fontPreloader = this.$('.font-preloader');
             this.element.sidebar = this.$('.sidebar');
+            this.preloadFont();
             return this;
         },
         /**
@@ -68,6 +70,18 @@ define(function() {
         handleSidebarToggled: function(event) {
             this.toggleSidebar();
             event.preventDefault();
+        },
+        /**
+         * @method preloadFont
+         */
+        preloadFont: function() {
+            if (this.element.fontPreloader) {
+                if (skritter.user.getLanguageCode() === 'zh') {
+                    this.element.fontPreloader.addClass('chinese-text');
+                } else {
+                    this.element.fontPreloader.addClass('japanese-text');
+                }
+            }
         },
         /**
          * @method remove
