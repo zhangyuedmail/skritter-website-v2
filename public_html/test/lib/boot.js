@@ -120,7 +120,7 @@
             queryString.setParam("catch", !env.catchingExceptions());
         },
         getContainer: function() {
-            return document.getElementById('content-container');
+            return document.getElementById('content');
         },
         createElement: function() {
             return document.createElement.apply(document, arguments);

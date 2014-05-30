@@ -1,14 +1,6 @@
-/**
- * @module Skritter
- * @submodule Collections
- * @param KanaStrokeData
- * @param Stroke
- * @author Joshua McFarland
- */
 define([
-    'function/KanaStrokeData',
     'model/data/Stroke'
-], function(KanaStrokeData, Stroke) {
+], function(Stroke) {
     /**
      * @class DataStrokes
      */
@@ -28,20 +20,21 @@ define([
                     [[387, 0.40, 0.40, 0.20, 0.20, 0.0]]
                 ]
             }, {merge: true, silent: true, sort: false});
-            this.add(KanaStrokeData, {merge: true, silent: true, sort: false});
         },
         /**
          * @property {Stroke} model
          */
         model: Stroke,
         /**
-         * @method insert
-         * @param {Array|Object} strokes
+         * @method cache
          * @param {Function} callback
          */
-        insert: function(strokes, callback) {
-            skritter.storage.put('strokes', strokes, callback);
-            strokes = null;
+        cache: function(callback) {
+            skritter.storage.put('strokes', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method loadAll
@@ -52,18 +45,6 @@ define([
                 this.add(strokes, {merge: true, silent: true, sort: false});
                 callback();
             }, this));
-        },
-        /**
-         * @method reset
-         */
-        reset: function() {
-            var models = [];
-            for (var i = 1, length = this.length; i < length; i++) {
-                var model = this.models[i];
-                if (model.attributes.rune !== 'tone' && !model.has('kana'))
-                    models.push(model);
-            }
-            this.remove(models);
         }
     });
 

@@ -1,12 +1,6 @@
-/**
- * @module Skritter
- * @submodule View
- * @param templateModal
- * @author Joshua McFarland
- */
 define([
     'require.text!template/modals.html'
-], function(templateModal) {
+], function(template) {
     /**
      * @class Modal
      */
@@ -30,17 +24,18 @@ define([
                     event.preventDefault();
                 }
             }, this));
+            this.render();
         },
         /**
          * @property {DOMElement} el
          */
-        el: $('#modal-container'),
+        el: $('.modal-container'),
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.html(templateModal);
+            this.$el.html(_.template(template));
             return this;
         },
         /**
@@ -51,8 +46,9 @@ define([
          */
         hide: function(callback) {
             this.element().modal('hide').one('hidden.bs.modal', _.bind(function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             }, this));
         },
         /**
@@ -63,16 +59,10 @@ define([
          * @returns {DOMElement}
          */
         element: function(selector) {
-            if (selector)
+            if (selector) {
                 return this.$el.find('#' + this.id + ' ' + selector);
+            }
             return this.$el.find('#' + this.id);
-        },
-        /**
-         * @method isDisplayed
-         * @returns {Boolean}
-         */
-        isDisplayed: function() {
-            return this.id ? true : false;
         },
         /**
          * @method progress
@@ -138,8 +128,9 @@ define([
             options.remote = (options.remote) ? options.remote : false;
             this.options = options;
             this.$('#' + id).modal(options).one('shown.bs.modal', _.bind(function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             }, this));
             this.reset();
             return this;

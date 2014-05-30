@@ -1,56 +1,34 @@
-/**
- * @module Skritter
- * @submodule Model
- * @param Data
- * @param Scheduler
- * @param Settings
- * @param Subscription
- * @param Sync
- * @author Joshua McFarland
- */
 define([
     'model/user/Data',
-    'model/user/Scheduler',
     'model/user/Settings',
-    'model/user/Subscription',
     'model/user/Sync'
-], function(Data, Scheduler, Settings, Subscription, Sync) {
+], function(Data, Settings, Sync) {
     /**
      * @class User
      */
-    var User = Backbone.Model.extend({
+    var Model = Backbone.Model.extend({
         /**
          * @method initialize
          */
         initialize: function() {
             this.data = new Data();
-            this.prompt = null;
-            this.scheduler = new Scheduler();
             this.settings = new Settings();
-            this.subscription = new Subscription();
             this.sync = new Sync();
             //loads models for authenticated active user
-            if (localStorage.getItem('active')) {
-                var userId = localStorage.getItem('active');
-                this.set(JSON.parse(localStorage.getItem(userId)), {silent: true});
-                if (localStorage.getItem(userId + '-data')) {
-                    this.data.set(JSON.parse(localStorage.getItem(userId + '-data')), {silent: true});
+            if (window.localStorage.getItem('active')) {
+                var userId = window.localStorage.getItem('active');
+                this.set(JSON.parse(window.localStorage.getItem(userId)), {silent: true});
+                skritter.api.set('token', this.get('access_token'), {silent: true});
+                if (window.localStorage.getItem(userId + '-settings')) {
+                    this.settings.set(JSON.parse(window.localStorage.getItem(userId + '-settings')), {silent: true});
                 }
-                if (localStorage.getItem(userId + '-scheduler')) {
-                    this.scheduler.set(JSON.parse(localStorage.getItem(userId + '-scheduler')), {silent: true});
+                if (window.localStorage.getItem(userId + '-sync')) {
+                    this.sync.set(JSON.parse(window.localStorage.getItem(userId + '-sync')), {silent: true});
                 }
-                if (localStorage.getItem(userId + '-settings')) {
-                    this.settings.set(JSON.parse(localStorage.getItem(userId + '-settings')), {silent: true});
-                }
-                if (localStorage.getItem(userId + '-subscription')) {
-                    this.subscription.set(JSON.parse(localStorage.getItem(userId + '-subscription')), {silent: true});
-                }
-                if (localStorage.getItem(userId + '-sync')) {
-                    this.sync.set(JSON.parse(localStorage.getItem(userId + '-sync')), {silent: true});
-                }
-                skritter.api.set('token', this.get('access_token'));
             }
-            this.set('id', this.get('user_id'));
+            //set the id identical to the user_id
+            this.set('id', this.get('user_id'), {silent: true});
+            //immediately cache user settings on change
             this.on('change', _.bind(this.cache, this));
         },
         /**
@@ -72,64 +50,61 @@ define([
             localStorage.setItem(this.get('user_id'), JSON.stringify(this.toJSON()));
         },
         /**
-         * @method getActiveReview
-         * @returns {Object}
+         * @method getLanguageCode
+         * @returns {String}
          */
-        getActiveReview: function() {
-            if (this.prompt) {
-                return this.prompt.review.toJSON();
+        getLanguageCode: function() {
+            var applicationLanguageCode = skritter.settings.get('languageCode');
+            if (applicationLanguageCode.indexOf('@@') === -1) {
+                return applicationLanguageCode;
             }
-            return null;
+            return this.settings.get('targetLang');
         },
         /**
-         * Returns true if the user has been authenticated and is logged in.
+         * Returns true if the target language is set to Chinese.
          * 
+         * @method isChinese
+         * @returns {Boolean}
+         */
+        isChinese: function() {
+            return this.settings.get('targetLang') === 'zh' ? true : false;
+        },
+        /**
+         * Returns true if the target language is set to Japanese.
+         * 
+         * @method isJapanese
+         * @returns {Boolean}
+         */
+        isJapanese: function() {
+            return this.settings.get('targetLang') === 'ja' ? true : false;
+        },
+        /**
          * @method isLoggedIn
          * @returns {Boolean}
          */
         isLoggedIn: function() {
-            if (this.get('access_token'))
-                return true;
-            return false;
+            return this.get('access_token') ? true : false;
         },
         /**
-         * Performs a login that updates all of the necessary models and then
-         * callbacks back when the operation has finished.
-         * 
          * @method login
          * @param {String} username
          * @param {String} password
          * @param {Function} callback
          */
         login: function(username, password, callback) {
-            skritter.api.authenticateUser(username, password, _.bind(function(result) {
-                if (result.statusCode === 200) {
+            skritter.api.authenticateUser(username, password, _.bind(function(result, status) {
+                if (status === 200) {
                     this.set(result);
-                    this.sync.cache();
                     async.series([
                         _.bind(function(callback) {
-                            if (skritter.settings.isIndexedDB()) {
-                                window.indexedDB.deleteDatabase(this.id);
-                                skritter.storage.open(this.id, callback);
-                            } else {
-                                callback();
-                            }
-                        }, this),
-                        _.bind(function(callback) {
-                            this.settings.fetch(callback);
-                        }, this),
-                        _.bind(function(callback) {
-                            this.subscription.fetch(callback);
-                        }, this),
-                        _.bind(function(callback) {
-                            skritter.storage.open(this.id, callback);
+                            this.settings.sync(callback);
                         }, this)
-                    ], function() {
-                        localStorage.setItem('active', result.user_id);
-                        callback(result);
-                    });
+                    ], _.bind(function() {
+                        window.localStorage.setItem('active', result.user_id);
+                        callback(result, status);
+                    }, this));
                 } else {
-                    callback(result);
+                    callback(result, status);
                 }
             }, this));
         },
@@ -137,22 +112,28 @@ define([
          * @method logout
          */
         logout: function() {
-            async.series([
-                function(callback) {
-                    skritter.storage.destroy(callback);
-                },
-                function(callback) {
-                    window.setTimeout(callback, 2000);
-                }
-            ], function() {
-                localStorage.removeItem('active');
-                localStorage.removeItem(skritter.user.id + '-scheduler');
-                localStorage.removeItem(skritter.user.id + '-sync');
-                document.location.href = '';
-                document.location.reload(true);
+            skritter.modal.show('logout');
+            skritter.modal.element('.modal-footer').hide();
+            skritter.modal.element('.modal-button-logout').on('vclick', function() {
+                skritter.modal.element('.modal-footer').show();
+                skritter.modal.element(':input').prop('disabled', true);
+                skritter.modal.element('.message').addClass('text-info');
+                skritter.modal.element('.message').html("<i class='fa fa-spin fa-cog'></i> Logging Out");
+                async.series([
+                    function(callback) {
+                        skritter.storage.destroy(callback);
+                    },
+                    function(callback) {
+                        window.setTimeout(callback, 2000);
+                    }
+                ], function() {
+                    window.localStorage.removeItem('active');
+                    window.localStorage.removeItem(skritter.user.id + '-sync');
+                    window.document.location.href = '';
+                });
             });
         }
     });
-
-    return User;
+    
+    return Model;
 });

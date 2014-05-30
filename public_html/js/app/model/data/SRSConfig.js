@@ -1,13 +1,13 @@
-/**
- * @module Skritter
- * @submodule Models
- * @author Joshua McFarland
- */
 define(function() {
     /**
      * @class DataSRSConfigs
      */
     var SRSConfigs = Backbone.Model.extend({
+        /**
+         * @method initialize
+         */
+        initialize: function() {
+        },
         /**
          * @property {String} idAttribute
          */
@@ -18,8 +18,9 @@ define(function() {
          */
         cache: function(callback) {
             skritter.storage.put('srsconfigs', this.toJSON(), function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             });
         }
     });

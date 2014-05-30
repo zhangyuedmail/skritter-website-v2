@@ -4,19 +4,17 @@
  * @param Database
  * @author Joshua McFarland
  */
-define([
-    'model/storage/Database'
-], function(Database) {
+define(function(Database) {
     /**
      * @class IndexedDBAdapter
      */
-    var IndexedDBAdapter = Database.extend({
+    var Model = Backbone.Model.extend({
         /**
          * @method initialize
          */
         initialize: function() {
             this.database = null;
-            this.databaseName = null;
+            this.name = null;
             this.version = 1;
         },
         /**
@@ -30,8 +28,6 @@ define([
                 if (typeof callback === 'function') {
                     callback();
                 }
-                tableName = null;
-                transaction = null;
             };
             transaction.onerror = function(event) {
                 console.error(event);
@@ -44,13 +40,11 @@ define([
          */
         destroy: function(callback) {
             this.database.close();
-            var request = window.indexedDB.deleteDatabase(this.databaseName);
+            var request = window.indexedDB.deleteDatabase(this.name);
             request.onsuccess = _.bind(function() {
                 if (typeof callback === 'function') {
                     callback();
                 }
-                request = null;
-                this.database = null;
             }, this);
             request.onerror = function(error) {
                 console.error(error);
@@ -70,10 +64,6 @@ define([
                 var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback(items);
-                    ids = null;
-                    objectStore = null;
-                    tableName = null;
-                    transaction = null;
                 };
                 var push = function(event) {
                     if (event.target.result) {
@@ -101,9 +91,6 @@ define([
             var transaction = this.database.transaction(tableName, 'readonly');
             transaction.oncomplete = function() {
                 callback(items);
-                items = null;
-                tableName = null;
-                transaction = null;
             };
             transaction.onerror = function(event) {
                 console.error(event);
@@ -117,66 +104,31 @@ define([
             };
         },
         /**
-         * @method getSchedule
-         * @param {Array|String} filterParts
-         * @param {Array|String} filterStyle
-         * @param {Function} callback
-         */
-        getSchedule: function(filterParts, filterStyle, callback) {
-            var schedule = [];
-            var transaction = this.database.transaction('items', 'readonly');
-            transaction.oncomplete = function() {
-                callback(schedule);
-                schedule = null;
-                transaction = null;
-            };
-            transaction.onerror = function(event) {
-                console.error(event);
-            };
-            transaction.objectStore('items').openCursor().onsuccess = function(event) {
-                var cursor = event.target.result;
-                if (cursor) {
-                    if (cursor.value.vocabIds.length > 0 && !cursor.value.flag &&
-                            filterParts.indexOf(cursor.value.part) !== -1 &&
-                            filterStyle.indexOf(cursor.value.style) !== -1) {
-                        schedule.push({
-                            id: cursor.value.id,
-                            last: cursor.value.last ? cursor.value.last : 0,
-                            next: cursor.value.next ? cursor.value.next : 0
-                        });
-                    }
-                    cursor.continue();
-                }
-            };
-        },
-        /**
          * @method open
-         * @param {String} databaseName
+         * @param {String} name
          * @param {Function} callback
          */
-        open: function(databaseName, callback) {
+        open: function(name, callback) {
             var tables = this.tables;
-            var request = window.indexedDB.open(databaseName, this.version);
+            var request = window.indexedDB.open(name, this.version);
             request.onerror = function(event) {
                 console.error(event);
             };
             request.onupgradeneeded = function(event) {
                 var database = event.target.result;
-                database.createObjectStore('decomps', {keyPath: tables.decomps.keys[0]});
-                database.createObjectStore('items', {keyPath: tables.items.keys[0]});
-                database.createObjectStore('reviews', {keyPath: tables.reviews.keys[0]});
-                database.createObjectStore('sentences', {keyPath: tables.sentences.keys[0]});
-                database.createObjectStore('strokes', {keyPath: tables.strokes.keys[0]});
-                database.createObjectStore('srsconfigs', {keyPath: tables.srsconfigs.keys[0]});
-                database.createObjectStore('vocablists', {keyPath: tables.vocablists.keys[0]});
-                database.createObjectStore('vocabs', {keyPath: tables.vocabs.keys[0]});
+                database.createObjectStore('decomps', {keyPath: 'writing'});
+                database.createObjectStore('items', {keyPath: 'id'});
+                database.createObjectStore('reviews', {keyPath: 'id'});
+                database.createObjectStore('sentences', {keyPath: 'id'});
+                database.createObjectStore('srsconfigs', {keyPath: 'part'});
+                database.createObjectStore('strokes', {keyPath: 'rune'});
+                database.createObjectStore('vocablists', {keyPath: 'id'});
+                database.createObjectStore('vocabs', {keyPath: 'id'});
             };
             request.onsuccess = _.bind(function() {
                 this.database = request.result;
-                this.databaseName = databaseName;
+                this.name = name;
                 callback();
-                tables = null;
-                request = null;
             }, this);
         },
         /**
@@ -192,9 +144,6 @@ define([
                 var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback();
-                    items = null;
-                    objectStore = null;
-                    transaction = null;
                 };
                 transaction.onerror = function(event) {
                     console.error(event);
@@ -219,9 +168,6 @@ define([
                 var objectStore = transaction.objectStore(tableName);
                 transaction.oncomplete = function() {
                     callback();
-                    ids = null;
-                    objectStore = null;
-                    transaction = null;
                 };
                 transaction.onerror = function(event) {
                     console.error(event);
@@ -232,33 +178,8 @@ define([
             } else {
                 callback();
             }
-        },
-        /**
-         * @method update
-         * @param {String} tableName
-         * @param {Array|Object} items
-         * @param {Function} callback
-         */
-        update: function(tableName, items, callback) {
-            items = Array.isArray(items) ? items : [items];
-            var key = this.tables[tableName].keys[0];
-            this.get(tableName, _.pluck(items, key), _.bind(function(originalItems) {
-                var updatedItems = [];
-                for (var i = 0, length = items.length; i < length; i++) {
-                    updatedItems.push(_.assign(_.find(originalItems, {id: items[i][key]}), items[i]));
-                }
-                this.put(tableName, updatedItems, function() {
-                    if (typeof callback === 'function') {
-                        callback();
-                    }
-                    items = null;
-                    key = null;
-                    originalItems = null;
-                    updatedItems = null;
-                });
-            }, this));
         }
     });
 
-    return IndexedDBAdapter;
+    return Model;
 });

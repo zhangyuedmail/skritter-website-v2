@@ -15,7 +15,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.add(skritter.fn.params);
         },
         /**
          * @property {Backbone.Model} model

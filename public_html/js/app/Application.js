@@ -1,74 +1,13 @@
-/**
- * @module Skritter
- * @param Api
- * @param Assets
- * @param Functions
- * @param IndexedDBAdapter
- * @param Modal
- * @param Params
- * @param Router
- * @param Settings
- * @param Timer
- * @param User
- * @author Joshua McFarland
- */
-define([
+define([ 
     'model/Api',
-    'model/Assets',
     'Functions',
     'model/storage/IndexedDBAdapter',
     'view/component/Modal',
-    'collection/data/Params',
-    'Router',
+    'router/Router',
     'model/Settings',
-    'view/component/Timer',
+    'require.locale!../../locale/nls/strings',
     'model/User'
-], function(Api, Assets, Functions, IndexedDBAdapter, Modal, Params, Router, Settings, Timer, User) {
-    /**
-     * @method initialize
-     */
-    var initialize = function() {
-        //creates the global skritter namespace
-        window.skritter = (function(skritter) {
-            return skritter;
-        })(window.skritter || {});
-        //asynchronously loads all of the required modules
-        async.series([
-            async.apply(loadApi),
-            async.apply(loadAssets),
-            async.apply(loadFunctions),
-            async.apply(loadModal),
-            async.apply(loadParams),
-            async.apply(loadSettings),
-            async.apply(loadStorage),
-            async.apply(loadTimer),
-            async.apply(loadUser),
-            async.apply(loadRouter)
-        ], function() {
-            //perform specific cordova tasks before initialization
-            if (window.cordova) {
-                navigator.splashscreen.hide();
-            }
-            if (document.location.host.indexOf('localhost') === -1 &&
-                    skritter.user.isLoggedIn()) {
-                skritter.user.sync.incremental();
-            }
-            console.log('Application Initialized');
-        });
-    };
-    /**
-     * @method getCustomData
-     * @return {undefined}
-     */
-    var getCustomData = function() {
-        var activeReview = skritter.user.getActiveReview();
-        var settings = skritter.user.settings.toJSON();
-        delete settings.avatar;
-        return {
-            activeReview: activeReview,
-            settings: settings
-        };
-    };
+], function(Api, Functions, IndexedDBAdapter, Modal, Router, Settings, Strings, User) {
     /**
      * @method loadApi
      * @param {Function} callback
@@ -78,11 +17,11 @@ define([
         callback();
     };
     /**
-     * @method loadAssets
+     * @method loadFastClick
      * @param {Function} callback
      */
-    var loadAssets = function(callback) {
-        skritter.assets = new Assets();
+    var loadFastClick = function(callback) {
+        skritter.fastclick = new window.FastClick(document.body);
         callback();
     };
     /**
@@ -94,31 +33,15 @@ define([
         callback();
     };
     /**
-     * @method loadModals
+     * @method loadApi
      * @param {Function} callback
      */
     var loadModal = function(callback) {
-        skritter.modal = new Modal().render();
+        skritter.modal = new Modal();
         callback();
     };
     /**
-     * @method loadParams
-     * @param {Function} callback
-     */
-    var loadParams = function(callback) {
-        skritter.params = new Params();
-        callback();
-    };
-    /**
-     * @method loadRouter
-     * @param {Function} callback
-     */
-    var loadRouter = function(callback) {
-        skritter.router = new Router();
-        callback();
-    };
-    /**
-     * @method loadSettings
+     * @method loadApi
      * @param {Function} callback
      */
     var loadSettings = function(callback) {
@@ -126,15 +49,7 @@ define([
         callback();
     };
     /**
-     * @method loadTimer
-     * @param {Function} callback
-     */
-    var loadTimer = function(callback) {
-        skritter.timer = new Timer();
-        callback();
-    };
-    /**
-     * @method loadStorage
+     * @method loadApi
      * @param {Function} callback
      */
     var loadStorage = function(callback) {
@@ -142,7 +57,15 @@ define([
         callback();
     };
     /**
-     * @method loadUser
+     * @method loadApi
+     * @param {Function} callback
+     */
+    var loadStrings = function(callback) {
+        skritter.strings = Strings;
+        callback();
+    };
+    /**
+     * @method loadApi
      * @param {Function} callback
      */
     var loadUser = function(callback) {
@@ -153,32 +76,48 @@ define([
                     skritter.storage.open(skritter.user.id, callback);
                 },
                 function(callback) {
-                    skritter.user.scheduler.load(callback);
-                },
-                function(callback) {
-                    skritter.user.data.loadResources(callback);
+                    if (skritter.user.sync.isFirst()) {
+                        skritter.modal.show('download').set('.modal-title', 'DOWNLOADING ACCOUNT').progress(100);
+                        skritter.user.sync.downloadAll(callback);
+                    } else {
+                        callback();
+                    }
                 }
             ], function() {
-                //load daily timer prog stats in background
-                skritter.timer.refresh(true);
-                //load raygun javascript error logging module
-                if (window.Raygun && window.cordova) {
-                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach()
-                            .withCustomData(getCustomData)
-                            .withTags(skritter.user.settings.getTags());
-                    Raygun.setUser(skritter.user.id);
-                    Raygun.setVersion(skritter.settings.getVersion());
-                    Raygun.saveIfOffline(true);
-                } else if (window.Raygun) {
-                    window.Raygun = undefined;
-                }
                 callback();
             });
         } else {
             callback();
         }
     };
-
+    /**
+     * @method initialize
+     */
+    var initialize = function() {
+        //creates the global skritter namespace
+        window.skritter = (function(skritter) {
+            return skritter;
+        })(window.skritter || {});
+        //asynchronously loads all required modules
+        async.series([
+            async.apply(loadApi),
+            async.apply(loadFastClick),
+            async.apply(loadFunctions),
+            async.apply(loadModal),
+            async.apply(loadSettings),
+            async.apply(loadStorage),
+            async.apply(loadStrings),
+            async.apply(loadUser)
+        ], function() {
+            console.log('application initialized');
+            skritter.router = new Router();
+            if (skritter.fn.hasCordova()) {
+                window.navigator.splashscreen.hide();
+            }
+            skritter.modal.hide();
+        });
+    };
+    
     return {
         initialize: initialize
     };

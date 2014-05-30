@@ -1,13 +1,13 @@
-/**
- * @module Skritter
- * @submodule Models
- * @author Joshua McFarland
- */
 define(function() {
     /**
      * @class DataDecomp
      */
     var Decomp = Backbone.Model.extend({
+        /**
+         * @method initialize
+         */
+        initialize: function() {
+        },
 	/**
          * @property {String} idAttribute
          */
@@ -18,8 +18,9 @@ define(function() {
          */
         cache: function(callback) {
             skritter.storage.put('decomps', this.toJSON(), function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             });
         }
     });
