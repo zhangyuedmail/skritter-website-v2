@@ -76,6 +76,9 @@ define([
                     skritter.storage.open(skritter.user.id, callback);
                 },
                 function(callback) {
+                    skritter.user.data.loadAll(callback);
+                },
+                function(callback) {
                     if (skritter.user.sync.isFirst()) {
                         skritter.modal.show('download').set('.modal-title', 'DOWNLOADING ACCOUNT').progress(100);
                         skritter.user.sync.downloadAll(callback);

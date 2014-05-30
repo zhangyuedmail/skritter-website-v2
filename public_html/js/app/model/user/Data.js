@@ -37,6 +37,42 @@ define([
             localStorage.setItem(skritter.user.id + '-data', JSON.stringify(this.toJSON()));
         },
         /**
+         * @method loadAll
+         * @param {Function} callback
+         */
+        loadAll: function(callback) {
+            async.series([
+//                function(callback) {
+//                    skritter.user.data.decomps.loadAll(callback);
+//                },
+                function(callback) {
+                    skritter.user.data.items.loadAll(callback);
+                },
+                function(callback) {
+                    skritter.user.data.reviews.loadAll(callback);
+                },
+//                function(callback) {
+//                    skritter.user.data.sentences.loadAll(callback);
+//                },
+                function(callback) {
+                    skritter.user.data.srsconfigs.loadAll(callback);
+                },
+//                function(callback) {
+//                    skritter.user.data.strokes.loadAll(callback);
+//                },
+                function(callback) {
+                    skritter.user.data.vocablists.loadAll(callback);
+                },
+//                function(callback) {
+//                    skritter.user.data.vocabs.loadAll(callback);
+//                }
+            ], function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        /**
          * @method put
          * @param {Object} result
          * @param {Function} callback
