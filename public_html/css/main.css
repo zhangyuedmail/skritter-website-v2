@@ -139,19 +139,20 @@ body {
 }
 
 
-/*** MODALS ***/
+/*** MODAL ***/
 .modal-container .modal { 
     overflow-y: hidden;
     z-index: 9999;
 }
-.modal-container .vertical-centered {
-    position: fixed;
-    top: 15%;
+.modal-container .progress { height: 20px; }
+.modal-container .progress-bar {
+    padding-top: 3.5px;
+    padding-left: 5px;
+    text-align: left;
 }
-.modal-container .modal-title-right {
-    float: right;
-    line-height: 1.42857143;  
-    margin: 0;
+.modal-container .modal-title-icon {
+    float: left;
+    margin: 10.5px;
 }
 
 
@@ -176,9 +177,8 @@ body {
     left: 0; 
     position: absolute;
 }
-.navbar .navbar-back:hover { 
+.navbar .navbar-back:active { 
     background-color: #2c3e50;
-
 }
 .navbar .navbar-back i {
     color: #ffffff;
@@ -195,7 +195,7 @@ body {
     padding: 0 6px;
     position: absolute;
 }
-.navbar .navbar-toggle-sidebar:hover { background-color: lightblue; }
+.navbar .navbar-toggle-sidebar:active { background-color: lightblue; }
 .navbar .navbar-toggle-sidebar i {
     color: #ffffff;
     padding: 7.5px 6px 7.5px 0;

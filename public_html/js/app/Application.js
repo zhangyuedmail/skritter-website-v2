@@ -76,11 +76,14 @@ define([
                     skritter.storage.open(skritter.user.id, callback);
                 },
                 function(callback) {
-                    skritter.user.data.loadAll(callback);
+                    skritter.user.scheduler.loadAll(callback);
                 },
                 function(callback) {
                     if (skritter.user.sync.isFirst()) {
-                        skritter.modal.show('download').set('.modal-title', 'DOWNLOADING ACCOUNT').progress(100);
+                        skritter.modal.show('download')
+                                .set('.modal-title', 'Downloading Account')
+                                .set('.modal-title-icon', null, 'fa-download')
+                                .progress(100);
                         skritter.user.sync.downloadAll(callback);
                     } else {
                         callback();
