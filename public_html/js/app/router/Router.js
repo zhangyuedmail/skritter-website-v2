@@ -43,7 +43,7 @@ define([
                     });
                 }
             } else {
-                
+                window.history.back();
             }
             event.preventDefault();
         },
