@@ -59,6 +59,7 @@ define([
             this.element.message.empty();
             var username = this.element.loginUsername.val();
             var password = this.element.loginPassword.val();
+            this.element.message.html("<i class='fa fa-spin fa-cog'></i> Signing In");
             skritter.user.login(username, password, _.bind(function(result, status) {
                 console.log('status', status);
                 if (status === 200) {

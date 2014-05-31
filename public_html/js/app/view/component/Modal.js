@@ -96,6 +96,7 @@ define([
          * @returns {Backbone.View}
          */
         reset: function() {
+            //TODO: reset modal icon
             this.element().attr('classes', 'modal-footer');
             this.element().attr('classes', 'modal-header');
             this.element().attr('classes', 'modal-title');

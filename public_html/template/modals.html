@@ -46,14 +46,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <i class="modal-title-icon fa fa-2x fa-download"></i>
+                <i class="modal-title-icon fa fa-2x"></i>
                 <h4> <span class="modal-title"></span></h4>
             </div>
             <div class="modal-body">
                 <div class="progress progress-striped active">
                     <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                         <span class="sr-only"><span id="percent-value"></span>% Complete</span>
-                        <span class="progress-value">30.00 KB</span>
+                        <span class="modal-progress-value"></span>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Exit Skritter?</h3>
+                <i class="modal-title-icon fa fa-2x"></i>
+                <h4 class="modal-title">Exit Skritter?</h4>
             </div>
             <div class="modal-body">
                 <button type="button" class="btn btn-danger modal-button-cancel" data-dismiss="modal"><span class="fa fa-2x fa-times"></span> No</button>
@@ -90,12 +91,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Are you sure?</h3>
+                <i class="modal-title-icon fa fa-2x"></i>
+                <h4><span class="modal-title"></span></h4>
             </div>
             <div class="modal-body">
-                <p>Logging out will clear all of your local data and you'll need to redownload it next time you log in.</p>
-                <button type="button" class="btn btn-default modal-button-cancel" data-dismiss="modal"><span class="fa fa-2x fa-times"></span> Cancel</button>
-                <button type="button" class="btn btn-danger modal-button-logout pull-right"><span class="fa fa-2x fa-check"></span> Log Out</button>
+                <div class="modal-options">
+                    <p>Logging out will clear all of your local data and you'll need to redownload it next time you log in.</p>
+                    <button type="button" class="btn btn-default modal-button-cancel" data-dismiss="modal"><span class="fa fa-2x fa-times"></span> Cancel</button>
+                    <button type="button" class="btn btn-danger modal-button-logout pull-right"><span class="fa fa-2x fa-check"></span> Log Out</button>
+                </div>
+                <div class="message text-center"></div>
             </div>
             <div class="modal-footer">
                 <div class="message text-center"></div>

@@ -76,7 +76,7 @@ define([], function() {
                                 responseSize += result.responseSize ? result.responseSize : 0;
                                 totalRequests = result.totalRequests ? result.totalRequests : totalRequests;
                                 if (responseSize > 0) {
-                                    skritter.modal.set('.modal-title-right', skritter.fn.convertBytesToSize(responseSize));
+                                    skritter.modal.set('.modal-progress-value', skritter.fn.convertBytesToSize(responseSize));
                                 }
                                 if (result.totalRequests > 100) {
                                     skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));

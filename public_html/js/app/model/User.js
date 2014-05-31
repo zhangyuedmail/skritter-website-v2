@@ -114,13 +114,15 @@ define([
          * @method logout
          */
         logout: function() {
-            skritter.modal.show('logout');
+            skritter.modal.show('logout')
+                    .set('.modal-title', 'Are you sure?')
+                    .set('.modal-title-icon', null, 'fa-sign-out');
             skritter.modal.element('.modal-footer').hide();
             skritter.modal.element('.modal-button-logout').on('vclick', function() {
-                skritter.modal.element('.modal-footer').show();
+                skritter.modal.element('.modal-options').hide(500);
                 skritter.modal.element(':input').prop('disabled', true);
                 skritter.modal.element('.message').addClass('text-info');
-                skritter.modal.element('.message').html("<i class='fa fa-spin fa-cog'></i> Logging Out");
+                skritter.modal.element('.message').html("<i class='fa fa-spin fa-cog'></i> Signing Out");
                 async.series([
                     function(callback) {
                         skritter.storage.destroy(callback);
