@@ -1,8 +1,9 @@
 define([
     'model/user/Data',
+    'model/user/Scheduler',
     'model/user/Settings',
     'model/user/Sync'
-], function(Data, Settings, Sync) {
+], function(Data, Scheduler, Settings, Sync) {
     /**
      * @class User
      */
@@ -12,6 +13,7 @@ define([
          */
         initialize: function() {
             this.data = new Data();
+            this.scheduler = new Scheduler();
             this.settings = new Settings();
             this.sync = new Sync();
             //loads models for authenticated active user

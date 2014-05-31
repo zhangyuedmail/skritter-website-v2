@@ -7,6 +7,7 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
+            this.readiness = 0;
         },
         /**
          * @method cache

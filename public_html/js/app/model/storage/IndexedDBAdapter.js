@@ -104,6 +104,38 @@ define(function(Database) {
             };
         },
         /**
+         * @method getSchedule
+         * @param {Function} callback
+         */
+        getSchedule: function(callback) {
+            var schedule = [];
+            var transaction = this.database.transaction('items', 'readonly');
+            transaction.oncomplete = function() {
+                callback(schedule);
+            };
+            transaction.onerror = function(event) {
+                console.error(event);
+            };
+            transaction.objectStore('items').openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    if (cursor.value.vocabIds.length !== 0) {
+                        schedule.push({
+                            id: cursor.value.id,
+                            last: cursor.value.last ? cursor.value.last : 0,
+                            next: cursor.value.next ? cursor.value.next : 0,
+                            part: cursor.value.part,
+                            reviews: cursor.value.reviews,
+                            style: cursor.value.style,
+                            successes: cursor.value.successes,
+                            timeStudied: cursor.value.timeStudied
+                        });
+                    }
+                    cursor.continue();
+                }
+            };
+        },
+        /**
          * @method open
          * @param {String} name
          * @param {Function} callback
