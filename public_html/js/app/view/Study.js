@@ -1,9 +1,9 @@
 define([
-    'require.text!template/home.html',
+    'require.text!template/study.html',
     'base/View'
 ], function(template, BaseView) {
     /**
-     * @class Home
+     * @class Study
      */
     var View = BaseView.extend({
         /**
@@ -17,7 +17,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            window.document.title = "Dashboard - Skritter";
+            window.document.title = "Study - Skritter";
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this).renderElements();
             this.element.avatar.html(skritter.user.settings.getAvatar('img-circle'));
@@ -28,16 +28,8 @@ define([
          * @method renderElements
          */
         renderElements: function() {
-        },
-        /**
-         * @property {Object} events
-         */
-        events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-            });
         }
     });
     
     return View;
-    
 });

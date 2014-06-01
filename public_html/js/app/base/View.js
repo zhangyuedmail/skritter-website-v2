@@ -16,6 +16,7 @@ define(function() {
             'vclick .button-back': 'handleBackClicked',
             'vclick .button-home': 'handleHomeClicked',
             'vclick .button-logout': 'handleLogoutClicked',
+            'vclick .button-study': 'handleStudyClicked',
             'vclick .content-container': 'handleContentContainerClicked',
             'vclick .navbar-toggle-sidebar': 'handleSidebarToggled'
         },
@@ -25,7 +26,9 @@ define(function() {
          */
         render: function() {
             this.element.fontPreloader = this.$('.font-preloader');
+            this.element.avatar = this.$('.user-avatar');
             this.element.sidebar = this.$('.sidebar');
+            this.element.username = this.$('.user-username');
             this.preloadFont();
             return this;
         },
@@ -69,6 +72,14 @@ define(function() {
          */
         handleSidebarToggled: function(event) {
             this.toggleSidebar();
+            event.preventDefault();
+        },
+        /**
+         * @method handleStudyClicked
+         * @param {Object} event
+         */
+        handleStudyClicked: function(event) {
+            skritter.router.navigate('study', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**

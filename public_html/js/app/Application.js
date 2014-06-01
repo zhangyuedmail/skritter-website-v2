@@ -76,6 +76,12 @@ define([
                     skritter.storage.open(skritter.user.id, callback);
                 },
                 function(callback) {
+                    skritter.user.data.reviews.loadAll(callback);
+                },
+                function(callback) {
+                    skritter.user.data.srsconfigs.loadAll(callback);
+                },
+                function(callback) {
                     skritter.user.scheduler.loadAll(callback);
                 },
                 function(callback) {

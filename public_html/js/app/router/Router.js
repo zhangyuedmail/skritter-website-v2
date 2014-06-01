@@ -2,8 +2,9 @@ define([
     'view/Home',
     'view/Landing',
     'view/Login',
+    'view/Study',
     'view/Test'
-], function(HomeView, LandingView, LoginView, TestView) {
+], function(HomeView, LandingView, LoginView, StudyView, TestView) {
     /**
      * @class Router
      */
@@ -23,6 +24,7 @@ define([
         routes: {
             '': 'showHome',
             'login': 'showLogin',
+            'study': 'showStudy',
             'test': 'showTest'
         },
         /**
@@ -65,6 +67,14 @@ define([
         showLogin: function() {
             this.reset();
             this.view = new LoginView({el: this.container});
+            this.view.render();
+        },
+         /**
+         * @method showStudy
+         */
+        showStudy: function() {
+            this.reset();
+            this.view = new StudyView({el: this.container});
             this.view.render();
         },
         /**
