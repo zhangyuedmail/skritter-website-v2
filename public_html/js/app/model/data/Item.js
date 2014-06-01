@@ -19,6 +19,28 @@ define([], function() {
                     callback();
                 }
             });
+        },
+        /**
+         * @method getVocab
+         * @returns {Backbone.Model}
+         */
+        getVocab: function() {
+            return skritter.user.data.vocabs.get(this.getVocabId());
+        },
+        /**
+         * @method getVocabId
+         * @returns {String}
+         */
+        getVocabId: function() {
+            var vocabIds = this.get('vocabIds');
+            return vocabIds[this.get('reviews') % vocabIds.length];
+        },
+        /**
+         * @method isNew
+         * @returns {Boolean}
+         */
+        isNew: function() {
+            return this.get('reviews') === 0 ? true : false;
         }
     });
 

@@ -105,6 +105,58 @@ define([], function() {
             return newInterval;
         },
         /**
+         * @method filter
+         * @returns {Array}
+         */
+        filter: function() {
+            return this.data.filter(function(item) {
+                if (item.vocabIds.length > 0) {
+                    return true;
+                }
+                return false;
+            });
+        },
+        /**
+         * @method getDue
+         * @returns {Array}
+         */
+        getDue: function() {
+            return this.data.filter(function(item) {
+                return item.readiness >= 1;
+            });
+        },
+        /**
+         * @method getDueCount
+         * @returns {Number}
+         */
+        getDueCount: function() {
+            return this.getDue().length;
+        },
+        /**
+         * @method getNext
+         * @param {Function} callback
+         */
+        getNext: function(callback) {
+            var data = this.data;
+            var position = 0;
+            var next = function() {
+                var item = data[position];
+                skritter.user.data.loadItem(item.id, function(item) {
+                    if (item) {
+                        callback(item);
+                    } else {
+                        position++;
+                        next();
+                    }
+                });
+            };
+            if (data.length > 0) {
+                next();
+            } else {
+                callback();
+            }
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
@@ -125,6 +177,10 @@ define([], function() {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;
+                if (item.vocabIds.length === 0) {
+                    item.readiness = 0;
+                    return -item.readiness;
+                }
                 //randomly prioritize new items
                 if (item.last === 0) {
                     item.readiness = randomizer(9999);
@@ -138,6 +194,7 @@ define([], function() {
                 item.readiness = readiness;
                 return -item.readiness;
             });
+            this.trigger('sorted', this.data);
             return this.data;
         },
         /**
