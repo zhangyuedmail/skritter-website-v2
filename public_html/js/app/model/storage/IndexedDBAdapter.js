@@ -119,18 +119,17 @@ define(function(Database) {
             transaction.objectStore('items').openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    if (cursor.value.vocabIds.length !== 0) {
-                        schedule.push({
-                            id: cursor.value.id,
-                            last: cursor.value.last ? cursor.value.last : 0,
-                            next: cursor.value.next ? cursor.value.next : 0,
-                            part: cursor.value.part,
-                            reviews: cursor.value.reviews,
-                            style: cursor.value.style,
-                            successes: cursor.value.successes,
-                            timeStudied: cursor.value.timeStudied
-                        });
-                    }
+                    schedule.push({
+                        id: cursor.value.id,
+                        last: cursor.value.last ? cursor.value.last : 0,
+                        next: cursor.value.next ? cursor.value.next : 0,
+                        part: cursor.value.part,
+                        reviews: cursor.value.reviews,
+                        style: cursor.value.style,
+                        successes: cursor.value.successes,
+                        timeStudied: cursor.value.timeStudied,
+                        vocabIds: cursor.value.vocabIds
+                    });
                     cursor.continue();
                 }
             };

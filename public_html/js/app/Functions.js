@@ -26,10 +26,39 @@ define([], function() {
     var hasCordova = function() {
         return window.cordova ? true : false;
     };
+    /**
+     * @method isKana
+     * @param {String} text
+     * @returns {Boolean}
+     */
+    var isKana = function(text) {
+        var chars = text.split('');
+        if (chars.length === 0) {
+            return false;
+        } else {
+            for (var i = 0, length = chars.length; i < length; i++) {
+                var charCode = text.charCodeAt(i);
+                if (!(charCode >= 12353 && charCode <= 12436) && !(charCode >= 12449 && charCode <= 12540) && charCode !== 65374) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+    /**
+     * @method isNumber
+     * @param {Number} number
+     * @returns {Boolean}
+     */
+    var isNumber = function(number) {
+        return !isNaN(parseFloat(number)) && isFinite(number);
+    };
 
     return {
         convertBytesToSize: convertBytesToSize,
         getUnixTime: getUnixTime,
-        hasCordova: hasCordova
+        hasCordova: hasCordova,
+        isKana: isKana,
+        isNumber: isNumber
     };
 });
