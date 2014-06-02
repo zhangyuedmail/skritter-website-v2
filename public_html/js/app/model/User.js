@@ -138,6 +138,6 @@ define([
             });
         }
     });
-    
+
     return Model;
 });

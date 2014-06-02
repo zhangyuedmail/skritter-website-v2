@@ -33,6 +33,12 @@ define(function() {
             return this;
         },
         /**
+         * @method renderElements
+         */
+        renderElements: function() {
+            this.element.avatar.html(skritter.user.settings.getAvatar('img-circle'));
+        },
+        /**
          * @method handleBackClicked
          * @param {Object} event
          */

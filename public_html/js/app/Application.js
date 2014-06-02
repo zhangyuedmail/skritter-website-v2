@@ -1,4 +1,4 @@
-define([ 
+define([
     'model/Api',
     'Functions',
     'model/storage/IndexedDBAdapter',
@@ -129,7 +129,7 @@ define([
             skritter.modal.hide();
         });
     };
-    
+
     return {
         initialize: initialize
     };

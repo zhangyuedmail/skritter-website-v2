@@ -20,14 +20,31 @@ define([
             window.document.title = "Study - Skritter";
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this).renderElements();
-            this.element.avatar.html(skritter.user.settings.getAvatar('img-circle'));
-            this.element.username.text(skritter.user.settings.get('name'));
             return this;
         },
         /**
          * @method renderElements
          */
         renderElements: function() {
+            BaseView.prototype.renderElements.call(this);
+        },
+        /**
+         * @method loadPrompt
+         */
+        loadPrompt: function() {
+            
+        },
+        /**
+         * @method nextPrompt
+         */
+        nextPrompt: function() {
+            
+        },
+        /**
+         * @method previousPrompt
+         */
+        previousPrompt: function() {
+            
         }
     });
     
