@@ -12,6 +12,13 @@ define([], function() {
         }
     };
     /**
+     * @method getGuid
+     * @returns {String}
+     */
+    var getGuid = function() {
+        return Math.floor((1 + Math.random()) * 0x100000000).toString(16).substring(1);
+    };
+    /**
      * @method getUnixTime
      * @param {Boolean} formatMilliseconds
      * @returns {Number}
@@ -56,6 +63,7 @@ define([], function() {
 
     return {
         convertBytesToSize: convertBytesToSize,
+        getGuid: getGuid,
         getUnixTime: getUnixTime,
         hasCordova: hasCordova,
         isKana: isKana,

@@ -1,25 +1,31 @@
-define([], function() {
+define([
+    'require.text!template/prompt-rune.html',
+    'view/prompt/Prompt'
+], function(template, Prompt) {
     /**
-     * @class Prompt
+     * @class PromptDefn
      */
-    var View = Backbone.View.extend({
+    var View = Prompt.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            this.review = null;
+            Prompt.prototype.initialize.call(this);
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
+            this.$el.html(_.template(template, skritter.strings));
+            Prompt.prototype.render.call(this);
             return this;
         },
         /**
          * @method resize
          */
         resize: function() {
+            Prompt.prototype.resize.call(this);
         }
     });
     

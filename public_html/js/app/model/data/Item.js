@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'model/data/Review'
+], function(Review) {
     /**
      * @class DataItem
      */
@@ -19,6 +21,61 @@ define([], function() {
                     callback();
                 }
             });
+        },
+        /**
+         * @method createReview
+         * @returns {Backbone.Model}
+         */
+        createReview: function() {
+            var review = new Review();
+            var items = [this].concat(this.getContainedItems());
+            var now = skritter.fn.getUnixTime();
+            var copiedItems = [];
+            var part = this.get('part');
+            var reviews = [];
+            var wordGroup = now + '_' + skritter.fn.getGuid() + '_' + this.id;
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                copiedItems.push(item.toJSON());
+                reviews.push({
+                    itemId: item.id,
+                    finished: false,
+                    score: 3,
+                    bearTime: window.parseInt(i, 10) === 0 ? true : false,
+                    submitTime: now,
+                    reviewTime: 0,
+                    thinkingTime: 0,
+                    currentInterval: item.has('interval') ? item.get('interval') : 0,
+                    actualInterval: item.has('last') ? now - item.get('last') : 0,
+                    newInterval: undefined,
+                    wordGroup: wordGroup,
+                    previousInterval: item.has('previousInterval') ? item.get('previousInterval') : 0,
+                    previousSuccess: item.has('previousSuccess') ? item.get('previousSuccess') : false
+                });
+            }
+            review.set({
+                id: wordGroup,
+                items: copiedItems,
+                itemId: items[0].id,
+                part: part,
+                reviews: reviews
+            });
+            return review;
+        },
+        /**
+         * @method getContainedItems
+         * @returns {Array}
+         */
+        getContainedItems: function() {
+            var items = [];
+            var part = this.get('part');
+            if (part === 'rune' || part === 'tone') {
+                var containedIds = this.getVocab().getContainedItemIds(part);
+                for (var i = 0, length = containedIds.length; i < length; i++) {
+                    items.push(skritter.user.data.items.get(containedIds[i]));
+                }
+            }
+            return items;
         },
         /**
          * @method getVocab
