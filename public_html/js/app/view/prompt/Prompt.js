@@ -14,7 +14,16 @@ define([], function() {
          * @returns {Backbone.View}
          */
         render: function() {
+            this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.stopListening();
+            this.undelegateEvents();
+            this.$el.empty();
         },
         /**
          * @method resize
@@ -22,6 +31,6 @@ define([], function() {
         resize: function() {
         }
     });
-    
+
     return View;
 });
