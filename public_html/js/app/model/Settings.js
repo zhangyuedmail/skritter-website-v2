@@ -7,10 +7,10 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            /**$(window).resize(_.bind(function(event) {
+            $(window).resize(_.bind(function(event) {
                 this.trigger('resize', this);
                 event.preventDefault();
-            }, this));**/
+            }, this));
         },
         /**
          * @property {Object} defaults
@@ -24,34 +24,56 @@ define([], function() {
             },
             hintColor: '#87cefa',
             languageCode: '@@languageCode',
+            maxCanvasSize: 1800,
             version: '@@version'
         },
         /**
-         * @method appHeight
+         * @method getAppHeight
          * @returns {Number}
          */
-        appHeight: function() {
+        getAppHeight: function() {
             return $(window).height();
         },
         /**
-         * @method appWidth
+         * @method getAppWidth
          * @returns {Number}
          */
-        appWidth: function() {
+        getAppWidth: function() {
             return $(window).width();
         },
         /**
-         * @method contentHeight
+         * @method getCanvasSize
          * @returns {Number}
          */
-        contentHeight: function() {
+        getCanvasSize: function() {
+            var size = 0;
+            if (this.isPortrait()) {
+                var calculatedMaxSize = this.getContentHeight() * 0.8;
+                var width = this.getContentWidth();
+                if (width > this.get('maxCanvasSize')) {
+                    size = this.get('maxCanvasSize');
+                } else {
+                    size = width;
+                }
+                if (size > calculatedMaxSize)
+                    size = calculatedMaxSize;
+            } else {
+                size = this.getContentHeight();
+            }
+            return size;
+        },
+        /**
+         * @method getContentHeight
+         * @returns {Number}
+         */
+        getContentHeight: function() {
             return $('#content').height();
         },
         /**
-         * @method contentWidth
+         * @method getContentWidth
          * @returns {Number}
          */
-        contentWidth: function() {
+        getContentWidth: function() {
             return $('#content').width();
         },
         /**
@@ -66,14 +88,14 @@ define([], function() {
          * @returns {Boolean}
          */
         isLandscape: function() {
-            return this.contentWidth() >= this.contentHeight() ? true : false;
+            return this.getContentWidth() >= this.getContentHeight() ? true : false;
         },
         /**
          * @method isPortrait
          * @returns {Boolean}
          */
         isPortrait: function() {
-            return this.contentWidth() < this.contentHeight() ? true : false;
+            return this.getContentWidth() < this.getContentHeight() ? true : false;
         }
     });
     
