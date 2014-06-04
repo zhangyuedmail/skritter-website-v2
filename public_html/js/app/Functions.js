@@ -12,6 +12,32 @@ define([], function() {
         }
     };
     /**
+     * @method getAngle
+     * @param {Array|Object} point1 An array of point values
+     * @param {Object} point2 An array of point values
+     * @return {Number} The angle formed by the first and last points
+     */
+    var getAngle = function(point1, point2) {
+        var p1 = Array.isArray(point1) ? point1[0] : point1;
+        var p2 = Array.isArray(point1) ? point1[point1.length - 1] : point2;
+        var xDiff = p2.x - p1.x;
+        var yDiff = p2.y - p1.y;
+        return (Math.atan2(yDiff, xDiff)) * (180 / Math.PI);
+    };
+    /**
+     * @method getDistance
+     * @param {Point} point1
+     * @param {Point} point2
+     * @return {Number} The distance between the first and last points
+     */
+    var getDistance = function(point1, point2) {
+        var xs = point2.x - point1.x;
+        xs = xs * xs;
+        var ys = point2.y - point1.y;
+        ys = ys * ys;
+        return Math.sqrt(xs + ys);
+    };
+    /**
      * @method getGuid
      * @returns {String}
      */
@@ -63,6 +89,8 @@ define([], function() {
 
     return {
         convertBytesToSize: convertBytesToSize,
+        getAngle: getAngle,
+        getDistance: getDistance,
         getGuid: getGuid,
         getUnixTime: getUnixTime,
         hasCordova: hasCordova,
