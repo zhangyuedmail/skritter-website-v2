@@ -3,7 +3,7 @@
     "adjoining-classes": false,
     "known-properties": true,
     "box-sizing": true,
-    "box-model": true,
+    "box-model": false,
     "overqualified-elements": true,
     "display-property-grouping": true,
     "bulletproof-font-face": false,

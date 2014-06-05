@@ -55,10 +55,11 @@ define([], function() {
                 } else {
                     size = width;
                 }
-                if (size > calculatedMaxSize)
+                if (size > calculatedMaxSize) {
                     size = calculatedMaxSize;
+                }
             } else {
-                size = this.getContentHeight();
+                size = this.getContentHeight() - 20;
             }
             return size;
         },

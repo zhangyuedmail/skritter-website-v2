@@ -1,7 +1,8 @@
 define([
     'require.text!template/prompt-rune.html',
+    'view/prompt/Canvas',
     'view/prompt/Prompt'
-], function(template, Prompt) {
+], function(template, Canvas, Prompt) {
     /**
      * @class PromptRune
      */
@@ -11,6 +12,7 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            this.canvas = new Canvas();
         },
         /**
          * @method render
@@ -19,6 +21,8 @@ define([
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
             Prompt.prototype.render.call(this);
+            this.canvas.setElement('.canvas-container');
+            this.canvas.render();
             this.resize();
             return this;
         },
@@ -37,9 +41,10 @@ define([
             var contentHeight = skritter.settings.getContentHeight();
             var contentWidth = skritter.settings.getContentWidth();
             var infoSection, inputSection;
+            this.canvas.resize();
             if (skritter.settings.isPortrait()) {
                 inputSection = this.$('#input-section').css({
-                    height: canvasSize - 10,
+                    height: canvasSize,
                     float: 'none',
                     width: contentWidth
                 });

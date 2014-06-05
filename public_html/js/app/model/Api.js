@@ -120,6 +120,33 @@ define(function() {
             });
         },
         /**
+         * @method getVocabs
+         * @param {Array} vocabIds
+         * @param {Function} callback
+         */
+        getVocabs: function(vocabIds, callback) {
+            $.ajax({
+                url: this.base + 'vocabs',
+                beforeSend: _.bind(function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                }, this),
+                type: 'GET',
+                data: {
+                    bearer_token: this.get('token'),
+                    ids: vocabIds.join('|'),
+                    include_strokes: 'true',
+                    include_sentences: 'true',
+                    include_heisigs: 'true',
+                    include_top_mnemonics: 'true',
+                    include_decomps: 'true'
+                }
+            }).done(function(data) {
+                callback(data, data.statusCode);
+            }).fail(function(error) {
+                callback(error, error.status);
+            });
+        },
+        /**
          * @method requestBatch
          * @param {Array|Object} requests
          * @param {Function} callback

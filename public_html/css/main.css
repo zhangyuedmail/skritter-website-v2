@@ -109,6 +109,24 @@ body {
     -webkit-user-select: none;
     user-select: none;
 }
+.canvas-holder { 
+    background-color: #ffffff;
+    margin: 0 auto;
+    position: relative;
+}
+.canvas-holder .canvas-display {
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 9001;
+}
+.canvas-holder .canvas-input {
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 9002;
+}
 .content-block {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
@@ -117,6 +135,8 @@ body {
     margin-top: 10px;
     padding: 5px 10px;
 }
+.content-block.no-margin { margin: 0; }
+.content-block.no-padding { padding: 0; }
 .content-block.no-shadow {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
