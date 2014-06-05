@@ -1,8 +1,11 @@
 define([
     'function/Bootstrap',
-    'function/ChineseMapper',
-    'function/PinyinConverter'
-], function(Bootstrap, ChineseMapper, PinyinConverter) {
+    'function/ChineseMap',
+    'function/PinyinConverter',
+    'function/Recognizer',
+    'function/Shortstraw',
+    'function/StrokeShapeMap'
+], function(Bootstrap, ChineseMap, PinyinConverter, Recognizer, Shortstraw, StrokeShapeMap) {
     /**
      * @property {Object} bootstrap
      */
@@ -97,11 +100,23 @@ define([
     /**
      * @property {Object} mapper
      */
-    var mapper = ChineseMapper;
+    var mapper = ChineseMap;
     /**
      * @property {Object} pinyin
      */
     var pinyin = PinyinConverter;
+    /**
+     * @property {Object} strokes
+     */
+    var recognizer = Recognizer;
+    /**
+     * @property {Object} strokes
+     */
+    var shortstraw = Shortstraw;
+    /**
+     * @property {Object} strokes
+     */
+    var strokes = StrokeShapeMap;
 
     return {
         bootstrap: bootstrap,
@@ -114,6 +129,9 @@ define([
         isKana: isKana,
         isNumber: isNumber,
         mapper: mapper,
-        pinyin: pinyin
+        pinyin: pinyin,
+        recognizer: recognizer,
+        shortstraw: shortstraw,
+        strokes: strokes
     };
 });
