@@ -17,7 +17,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            window.document.title = "Dashboard - Skritter";
+            window.document.title = "Home - Skritter";
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this).renderElements();
             return this;
