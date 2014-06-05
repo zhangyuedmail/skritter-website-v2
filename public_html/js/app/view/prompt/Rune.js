@@ -24,6 +24,7 @@ define([
             this.canvas.setElement('.canvas-container');
             this.canvas.render();
             this.resize();
+            this.show();
             return this;
         },
         /**
@@ -43,28 +44,46 @@ define([
             var infoSection, inputSection;
             this.canvas.resize();
             if (skritter.settings.isPortrait()) {
-                inputSection = this.$('#input-section').css({
+                inputSection = this.$('.input-section').css({
                     height: canvasSize,
                     float: 'none',
                     width: contentWidth
                 });
-                infoSection = this.$('#info-section').css({
-                    height: contentHeight - canvasSize - 20,
+                infoSection = this.$('.info-section').css({
+                    height: contentHeight - canvasSize,
                     float: 'none',
                     width: contentWidth
                 });
             } else {
-                inputSection = this.$('#input-section').css({
-                    height: contentHeight - 20,
+                inputSection = this.$('.input-section').css({
+                    height: canvasSize,
                     float: 'left',
                     width: canvasSize
                 });
-                infoSection = this.$('#info-section').css({
-                    height: contentHeight - 20,
+                infoSection = this.$('.info-section').css({
+                    height: contentHeight,
                     float: 'left',
                     width: contentWidth - canvasSize
                 });
             }
+        },
+        /**
+         * @method show
+         * @returns {Backbone.View}
+         */
+        show: function() {
+            this.element.definition.html(this.vocab.getDefinition());
+            this.element.reading.html(this.vocab.getReading());
+            this.element.sentence.html(this.vocab.getSentence().writing);
+            this.element.writing.html(this.vocab.getWriting(this.position));
+            return this;
+        },
+        /**
+         * @method showAnswer
+         * @returns {Backbone.View}
+         */
+        showAnswer: function() {
+            return this;
         }
     });
 

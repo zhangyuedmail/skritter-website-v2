@@ -144,6 +144,10 @@ body {
 }
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .content-container { height: 100%; }
+.content-container.full-width { 
+    padding-left: 0;
+    padding-right: 0;
+}
 .font-preloader { 
     position: fixed;
     visibility: hidden;
@@ -231,7 +235,7 @@ body {
     left: 0;
     position: fixed;
     width: 300px;
-    z-index: 9000;
+    z-index: 9900;
 }
 .sidebar div {
     color: #ffffff;
@@ -252,3 +256,14 @@ body {
 
 /*** VIEW: TEST ***/
 .view-test .content-block { background-color: #ffffff; }
+
+
+.info-section .prompt-row { clear: both; }
+.info-section .prompt-row div { float: left; }
+.info-section .prompt-writing span { margin-right: 5px; }
+.info-section .writing-hidden { border: 2px #ffffff solid; }
+.info-section .writing-hidden span { visibility: hidden; }
+.info-section .prompt-reading span { margin-right: 5px; }
+.info-section .reading-hidden { border-bottom: 2px #ffffff solid; }
+.info-section .reading-hidden span { visibility: hidden; }
+.info-section .prompt-hint { display: none; }

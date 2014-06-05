@@ -59,7 +59,7 @@ define([], function() {
                     size = calculatedMaxSize;
                 }
             } else {
-                size = this.getContentHeight() - 20;
+                size = this.getContentHeight();
             }
             return size;
         },

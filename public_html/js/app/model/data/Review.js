@@ -33,8 +33,22 @@ define([
                     view = new PromptTone();
                     break;
             }
-            view.review = this;
+            view.set(this);
             return view;
+        },
+        /**
+         * @method getBaseItem
+         * @returns {Backbone.Model}
+         */
+        getBaseItem: function() {
+            return skritter.user.data.items.get(this.get('reviews')[0].itemId);
+        },
+        /**
+         * @method getBaseVocab
+         * @returns {Backbone.Model}
+         */
+        getBaseVocab: function() {
+            return this.getBaseItem().getVocab();
         }
     });
 

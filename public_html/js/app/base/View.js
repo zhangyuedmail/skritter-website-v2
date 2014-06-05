@@ -10,17 +10,6 @@ define(function() {
             this.element = {};
         },
         /**
-         * @property {Object} events
-         */
-        events: {
-            'vclick .button-back': 'handleBackClicked',
-            'vclick .button-home': 'handleHomeClicked',
-            'vclick .button-logout': 'handleLogoutClicked',
-            'vclick .button-study': 'handleStudyClicked',
-            'vclick .content-container': 'handleContentContainerClicked',
-            'vclick .navbar-toggle-sidebar': 'handleSidebarToggled'
-        },
-        /**
          * @method render
          * @returns {Backbone.View}
          */
@@ -38,6 +27,17 @@ define(function() {
         renderElements: function() {
             this.element.avatar.html(skritter.user.settings.getAvatar('img-circle'));
             this.element.username.text(skritter.user.settings.get('name'));
+        },
+        /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick .button-back': 'handleBackClicked',
+            'vclick .button-home': 'handleHomeClicked',
+            'vclick .button-logout': 'handleLogoutClicked',
+            'vclick .button-study': 'handleStudyClicked',
+            'vclick .content-container': 'handleContentContainerClicked',
+            'vclick .navbar-toggle-sidebar': 'handleSidebarToggled'
         },
         /**
          * @method handleBackClicked

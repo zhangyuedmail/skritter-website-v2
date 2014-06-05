@@ -233,7 +233,6 @@ define([
          * @param {Object} event
          */
         triggerCanvasDoubleClick: function(event) {
-            console.log('clicked');
             this.trigger('canvas:doubleclick', event);
         },
         /**

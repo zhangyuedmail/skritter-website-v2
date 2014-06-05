@@ -20,6 +20,29 @@ define([], function() {
             });
         },
         /**
+         * @method getCharacters
+         * @returns {Array}
+         */
+        getCharacters: function() {
+            var characters = [];
+            var containedVocabIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [];
+            if (this.has('containedVocabIds')) {
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    if (this.get('lang') === 'zh') {
+                        characters.push(skritter.fn.mapper.fromBase(containedVocabIds[i]));
+                    } else {
+                        characters.push(containedVocabIds[i].split('-')[1]);
+                    }
+                }
+            } else {
+                var splitWriting = this.get('writing').split('');
+                if (splitWriting.length === 1 && !skritter.fn.isKana(splitWriting[0])) {
+                    characters.push(splitWriting[0]);
+                }
+            }
+            return characters;
+        },
+        /**
          * @method getContainedItemIds
          * @param {String} part
          * @returns {Array}
@@ -38,6 +61,108 @@ define([], function() {
                 }
             }
             return containedItemIds;
+        },
+        /**
+         * @method getDefinition
+         * @returns {String}
+         */
+        getDefinition: function() {
+            if (this.has('customDefinition') && this.get('customDefinition') !== '') {
+                return this.get('customDefinition');
+            } else if (this.get('definitions')[skritter.user.settings.get('sourceLang')]) {
+                return this.get('definitions')[skritter.user.settings.get('sourceLang')];
+            } else if (this.get('definitions').en) {
+                return this.get('definitions').en;
+            }
+        },
+        /**
+         * @method getReading
+         * @param {Number} offset
+         * @param {Boolean} mask
+         * @returns {String}
+         */
+        getReading: function(offset, mask) {
+            var element = '';
+            var reading = this.get('reading');
+            if (this.isChinese()) {
+                reading = reading.indexOf(', ') === -1 ? [reading] : reading.split(', ');
+                for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
+                    var position = 1;
+                    var pieces = reading[a].match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g);
+                    element += "<span id='reading-" + (a + 1) + "' class='reading' data-reading='" + reading[a] + "'>";
+                    for (var b = 0, lengthB = pieces.length; b < lengthB; b++) {
+                        var piece = pieces[b];
+                        if (piece.indexOf(' ... ') === -1 && piece.indexOf("'") === -1) {
+                            if (offset && position >= offset) {
+                                if (mask) {
+                                    element += "<span class='position-" + position + " reading-masked'>" + piece.replace(/[0-9]/g, '') + "</span>";
+                                } else {
+                                    element += "<span class='position-" + position + " reading-hidden'><span>" + skritter.fn.pinyin.toTone(piece) + "</span></span>";
+                                }
+                            } else {
+                                element += "<span class='position-" + position + "'>" + skritter.fn.pinyin.toTone(piece) + "</span>";
+                            }
+                            position++;
+                        } else {
+                            element += "<span class='reading-filler'>" + piece + "</span>";
+                        }
+                    }
+                    element += a + 1 >= reading.length ? "</span>" : "</span> , ";
+                }
+            } else {
+                element += "<span class='reading-kana reading' data-reading='" + reading + "'>" + reading + "</span>";
+            }
+            return element;
+        },
+        /**
+         * @method getSentence
+         * @returns {Backbone.Model}
+         */
+        getSentence: function() {
+            var sentence = skritter.user.data.sentences.get(this.get('sentenceId'));
+            if (sentence) {
+                return sentence;
+            }
+            return {};
+        },
+        /**
+         * @method getWriting
+         * @param {Number} offset
+         * @returns {String}
+         */
+        getWriting: function(offset) {
+            var element = '';
+            var position = 1;
+            var actualCharacters = this.get('writing').split('');
+            var containedCharacters = this.getCharacters();
+            for (var i = 0, length = actualCharacters.length; i < length; i++) {
+                var character = actualCharacters[i];
+                if (containedCharacters.indexOf(character) === -1) {
+                    element += "<span class='writing-filler'>" + character + "</span>";
+                } else {
+                    if (offset && position >= offset) {
+                        element += "<span id='writing-" + position + "' class='writing-hidden'><span>" + character + "</span></span>";
+                    } else {
+                        element += "<span id='writing-" + position + "'>" + character + "</span>";
+                    }
+                    position++;
+                }
+            }
+            return element;
+        },
+        /**
+         * @method isChinese
+         * @returns {Boolean}
+         */
+        isChinese: function() {
+            return this.get('lang') === 'zh' ? true : false;
+        },
+        /**
+         * @method isJapanese
+         * @returns {Boolean}
+         */
+        isJapanese: function() {
+            return this.get('lang') === 'ja' ? true : false;
         }
     });
 
