@@ -1965,6 +1965,19 @@ define([
             return stroke;
         }
     };
+    /**
+     * @method getShape
+     * @param {Number} bitmapId
+     * @param {String} color
+     * @returns {CreateJS.Shape}
+     */
+    var getShape = function(bitmapId, color) {
+        color = color ? color : '#000000';
+        return strokes[bitmapId](color);
+    };
 
-    return strokes;
+    return {
+        getShape: getShape,
+        strokes: strokes
+    };
 });

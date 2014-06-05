@@ -1,9 +1,3 @@
-/**
- * @module Skritter
- * @submodule Function
- * @class Params
- * @author Joshua McFarland
- */
 define(function() {
     /**
      * @property {Array} params

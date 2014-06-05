@@ -1,13 +1,14 @@
 define([
     'collection/data/Decomps',
     'collection/data/Items',
+    'collection/data/Params',
     'collection/data/Reviews',
     'collection/data/Sentences',
     'collection/data/SRSConfigs',
     'collection/data/Strokes',
     'collection/data/VocabLists',
     'collection/data/Vocabs'
-], function(Decomps, Items, Reviews, Sentences, SRSConfigs, Strokes, VocabLists, Vocabs) {
+], function(Decomps, Items, Params, Reviews, Sentences, SRSConfigs, Strokes, VocabLists, Vocabs) {
     /**
      * @class UserData
      */
@@ -18,6 +19,7 @@ define([
         initialize: function() {
             this.decomps = new Decomps();
             this.items = new Items();
+            this.params = new Params();
             this.reviews = new Reviews();
             this.sentences = new Sentences();
             this.srsconfigs = new SRSConfigs();
