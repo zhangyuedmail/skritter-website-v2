@@ -1,4 +1,12 @@
-define([], function() {
+define([
+    'function/Bootstrap',
+    'function/ChineseMapper',
+    'function/PinyinConverter'
+], function(Bootstrap, ChineseMapper, PinyinConverter) {
+    /**
+     * @property {Object} bootstrap
+     */
+    var bootstrap = Bootstrap;
     /**
      * @method convertBytesToSize
      * @param {Number} bytes
@@ -86,8 +94,17 @@ define([], function() {
     var isNumber = function(number) {
         return !isNaN(parseFloat(number)) && isFinite(number);
     };
+    /**
+     * @property {Object} mapper
+     */
+    var mapper = ChineseMapper;
+    /**
+     * @property {Object} pinyin
+     */
+    var pinyin = PinyinConverter;
 
     return {
+        bootstrap: bootstrap,
         convertBytesToSize: convertBytesToSize,
         getAngle: getAngle,
         getDistance: getDistance,
@@ -95,6 +112,8 @@ define([], function() {
         getUnixTime: getUnixTime,
         hasCordova: hasCordova,
         isKana: isKana,
-        isNumber: isNumber
+        isNumber: isNumber,
+        mapper: mapper,
+        pinyin: pinyin
     };
 });
