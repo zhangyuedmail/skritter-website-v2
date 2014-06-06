@@ -59,7 +59,6 @@ define([
                     if (items.length === 1) {
                         review.characters.push(item.getStroke().getCanvasCharacter());
                     } else if (i > 0) {
-                        console.log('getting character', item.getVocabId(), item);
                         review.characters.push(item.getStroke().getCanvasCharacter());
                     }
                 }
@@ -103,7 +102,6 @@ define([
          * @returns {Backbone.Model}
          */
         getVocab: function() {
-            console.log(this.getVocabId());
             return skritter.user.data.vocabs.get(this.getVocabId());
         },
         /**

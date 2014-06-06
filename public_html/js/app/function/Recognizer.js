@@ -42,7 +42,7 @@ define(function() {
         for (var a = 0, lengthA = character.targets.length; a < lengthA; a++) {
             var target = character.targets[a];
             for (var b = 0, lengthB = target.length; b < lengthB; b++) {
-                var stroke = target.at(b);
+                var stroke = target.at(b);                
                 if (stroke.get('position') === character.getPosition()) {
                     var bitmapId = stroke.get('bitmapId');
                     var contains = stroke.get('contains');
@@ -137,7 +137,7 @@ define(function() {
      * @returns {Number}
      */
     Recognizer.prototype.checkDistance = function(stroke, target, size, skipThreshold) {
-        var score = skritter.fn.distance(stroke.getRectangle().c, target.getRectangle().c);
+        var score = skritter.fn.getDistance(stroke.getRectangle().c, target.getRectangle().c);
         if (skipThreshold || score < this.distanceThreshold * (size / this.targetSize)) {
             return score;
         }

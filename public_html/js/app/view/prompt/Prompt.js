@@ -9,10 +9,7 @@ define([], function() {
         initialize: function() {
             this.element = {};
             this.item = null;
-            this.position = 1;
             this.review = null;
-            this.targetCharacter = null;
-            this.targetReview = null;
             this.vocab = null;
         },
         /**
@@ -52,8 +49,6 @@ define([], function() {
         set: function(review) {
             this.review = review;
             this.item = review.getBaseItem();
-            this.targetCharacter = null;
-            this.targetReview = null;
             this.vocab = review.getBaseVocab();
             return this;
         }

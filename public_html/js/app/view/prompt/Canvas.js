@@ -12,6 +12,7 @@ define([
             this.element = {};
             this.gridColor = '#666666';
             this.lastMouseDownEvent = null;
+            this.layerNames = [];
             this.mouseDownEvent = null;
             this.mouseDownTimer = null;
             this.mouseMoveEvent = null;
@@ -55,6 +56,18 @@ define([
             'vmouseup.Canvas .canvas-input': 'triggerCanvasMouseUp'
         },
         /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
+            for (var i = 0, length = this.layerNames.length; i < length; i++) {
+                this.getLayer(this.layerNames[i]).removeAllChildren();
+            }
+            this.drawGrid();
+            this.updateAll();
+            return this;
+        },
+        /**
          * @method clearLayer
          * @param {String} layerName
          * @returns {Backbone.View}
@@ -92,6 +105,7 @@ define([
             var layer = new createjs.Container();
             layer.name = 'layer-' + name;
             this.stage.display.addChild(layer);
+            this.layerNames.push(name);
             return layer;
         },
         /**
@@ -177,7 +191,7 @@ define([
                 self.$(self.element.input).off('vmousemove.Input', move);
                 self.$(self.element.input).off('vmouseout.Input', out);
                 self.$(self.element.input).off('vmouseup.Input', up);
-                self.triggerInputUp(null, squig.clone());
+                self.triggerInputUp(null, squig.clone(true));
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
@@ -186,12 +200,33 @@ define([
                 self.$(self.element.input).off('vmousemove.Input', move);
                 self.$(self.element.input).off('vmouseout.Input', out);
                 self.$(self.element.input).off('vmouseup.Input', up);
-                self.triggerInputUp(points, squig.clone());
+                self.triggerInputUp(points, squig.clone(true));
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
             }
             return this;
+        },
+        /**
+         * @method fadeLayer
+         * @param {String} layerName
+         * @param {Function} callback
+         * @returns {Container}
+         */
+        fadeLayer: function(layerName, callback) {
+            var layer = this.getLayer(layerName);
+            if (layer.getNumChildren() > 0) {
+                layer.cache(0, 0, this.size, this.size);
+                createjs.Tween.get(layer).to({alpha: 0}, 300).call(function() {
+                    layer.removeAllChildren();
+                    layer.uncache();
+                    layer.alpha = 1;
+                    if (typeof callback === 'function') {
+                        callback(layer);
+                    }
+                });
+            }
+            return layer;
         },
         /**
          * @method fadeShape
@@ -346,7 +381,7 @@ define([
          * @param {Object} event
          */
         triggerSwipeUp: function(event) {
-            this.trigger('input:swipeup', event);
+            this.trigger('canvas:swipeup', event);
         },
         /**
          * @method tweenShape

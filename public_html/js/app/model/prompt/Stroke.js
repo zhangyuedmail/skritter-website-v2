@@ -119,7 +119,7 @@ define(function() {
         inflateParams: function() {
             var inflatedParams = [];
             var matrix = this.inflateShape().getMatrix();
-            var params = skritter.user.data.params.where(this.get('bitmapId'));
+            var params = skritter.user.data.params.where({bitmapId: this.get('bitmapId')});
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
                 var param = params[a].clone();
                 var corners = _.cloneDeep(param.get('corners'));

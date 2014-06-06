@@ -1,8 +1,8 @@
 define(function() {
     /**
-     * @class View
+     * @class BaseView
      */
-    var BaseView = Backbone.View.extend({
+    var View = Backbone.View.extend({
         /**
          * @method initialize
          */
@@ -123,5 +123,5 @@ define(function() {
         }
     });
     
-    return BaseView;
+    return View;
 });

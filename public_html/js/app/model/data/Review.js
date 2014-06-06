@@ -143,6 +143,13 @@ define([
             return 1;
         },
         /**
+         * @method getPosition
+         * @returns {Number}
+         */
+        getPosition: function() {
+            return this.get('position');
+        },
+        /**
          * @method getPrompt
          * @param {Function} callback
          */
@@ -265,8 +272,9 @@ define([
          * @returns {Boolean}
          */
         next: function() {
-            if (this.isLast())
+            if (this.isLast()) {
                 return false;
+            }
             this.set('position', this.get('position') + 1, {silent: true, sort: false});
             return true;
         },
@@ -328,8 +336,9 @@ define([
          */
         uncache: function(callback) {
             skritter.storage.remove('reviews', this.id, function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             });
         }
     });
