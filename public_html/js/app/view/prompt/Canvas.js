@@ -123,6 +123,19 @@ define([
             this.stage.display.update();
         },
         /**
+         * @method drawShape
+         * @param {String} layerName
+         * @param {CreateJS.Shape} shape
+         * @param {Number} alpha
+         * @returns {CreateJS.Shape}
+         */
+        drawShape: function(layerName, shape, alpha) {
+            shape.alpha = alpha ? alpha : 1;
+            this.getLayer(layerName).addChild(shape);
+            this.stage.display.update();
+            return shape;
+        },
+        /**
          * @method enableInput
          * @returns {Backbone.View}
          */
@@ -301,10 +314,13 @@ define([
             if (this.mouseDownEvent) {
                 var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
                 var endPosition = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
+                var angle = skritter.fn.getAngle(startPosition, endPosition);
                 var distance = skritter.fn.getDistance(startPosition, endPosition);
                 var duration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
                 if (distance <= 10 && (duration > 20 && duration < 400)) {
                     this.triggerCanvasClick(event);
+                } else if (distance > 100 && angle < -70 && angle > -110) {
+                    this.triggerSwipeUp(event);
                 } else {
                     this.trigger('canvas:mouseup', event);
                 }
@@ -324,6 +340,38 @@ define([
          */
         triggerInputUp: function(points, shape) {
             this.trigger('input:up', points, shape);
+        },
+        /**
+         * @method triggerSwipeUp
+         * @param {Object} event
+         */
+        triggerSwipeUp: function(event) {
+            this.trigger('input:swipeup', event);
+        },
+        /**
+         * @method tweenShape
+         * @param {String} layerName
+         * @param {CreateJS.Shape} fromShape
+         * @param {CreateJS.Shape} toShape
+         * @param {Number} duration
+         * @param {Function} callback
+         */
+        tweenShape: function(layerName, fromShape, toShape, duration, callback) {
+            duration = duration ? duration : 500;
+            var layer = this.getLayer(layerName);
+            layer.addChildAt(fromShape, 0);
+            this.stage.display.update();
+            createjs.Tween.get(fromShape).to({
+                x: toShape.x,
+                y: toShape.y,
+                scaleX: toShape.scaleX,
+                scaleY: toShape.scaleY,
+                rotation: toShape.rotation
+            }, duration, createjs.Ease.backOut).call(function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method updateAll
