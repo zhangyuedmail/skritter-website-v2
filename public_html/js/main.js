@@ -9,6 +9,7 @@ requirejs.config({
         async: '../lib/async-0.9.0',
         backbone: '../lib/backbone-1.1.2.min',
         bootstrap: '../../bootstrap/js/bootstrap.min',
+        'bootstrap.switch': '../../bootstrap/components/switch/js/bootstrap-switch.min',
         'createjs.easel': '../lib/createjs.easel-NEXT.min',
         'createjs.tween': '../lib/createjs.tween-NEXT.min',
         moment: '../lib/moment-2.6.0.min',
@@ -28,6 +29,7 @@ requirejs.config({
     },
     shim: {
         bootstrap: ['jquery'],
+        'bootstrap.switch': ['bootstrap'],
         jasmine: {
             exports: 'jasmine'
         },

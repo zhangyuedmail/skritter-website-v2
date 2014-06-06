@@ -2,6 +2,7 @@ define([
     'async',
     'backbone',
     'bootstrap',
+    'bootstrap.switch',
     'createjs.easel',
     'createjs.tween',
     'fastclick',
