@@ -171,7 +171,7 @@ define([
             }
             function up() {
                 self.$(self.element.input).off('vmousemove.Input', move);
-                self.$(self.element.input).off('vmouseout.Input', up);
+                self.$(self.element.input).off('vmouseout.Input', out);
                 self.$(self.element.input).off('vmouseup.Input', up);
                 self.triggerInputUp(points, squig.clone());
                 marker.graphics.clear();
@@ -179,6 +179,27 @@ define([
                 stage.clear();
             }
             return this;
+        },
+        /**
+         * @method fadeShape
+         * @param {String} layerName
+         * @param {CreateJS.Shape} shape
+         * @param {Number} milliseconds
+         * @param {Function} callback
+         */
+        fadeShape: function(layerName, shape, milliseconds, callback) {
+            var layer = this.getLayer(layerName);
+            milliseconds = milliseconds ? milliseconds : 500;
+            layer.addChild(shape);
+            this.stage.display.update();
+            shape.cache(0, 0, this.size, this.size);
+            createjs.Tween.get(shape).to({alpha: 0}, milliseconds, createjs.Ease.backOut).call(function() {
+                shape.uncache();
+                layer.removeChild(shape);
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method getLayer
@@ -290,8 +311,6 @@ define([
             }
         },
         /**
-         * Enables the view to fire events when the canvas has been touched.
-         * 
          * @method triggerInputDown
          * @param {Object} point
          */
@@ -299,8 +318,6 @@ define([
             this.trigger('input:down', point);
         },
         /**
-         * Enables the view to fire events when the canvas touch has been released.
-         * 
          * @method triggerInputUp
          * @param {Array} points
          * @param {CreateJS.Shape} shape

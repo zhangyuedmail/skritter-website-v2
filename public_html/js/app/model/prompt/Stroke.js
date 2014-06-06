@@ -119,7 +119,7 @@ define(function() {
         inflateParams: function() {
             var inflatedParams = [];
             var matrix = this.inflateShape().getMatrix();
-            var params = skritter.params.get(this.get('bitmapId'));
+            var params = skritter.user.data.params.where(this.get('bitmapId'));
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
                 var param = params[a].clone();
                 var corners = _.cloneDeep(param.get('corners'));
@@ -147,7 +147,7 @@ define(function() {
          * @return {CreateJS.Shape}
          */
         inflateShape: function(color, alpha) {
-            var shape = skritter.fn.stroke.getShape(this.get('bitmapId'), color);
+            var shape = skritter.fn.strokes.getShape(this.get('bitmapId'), color);
             var data = this.inflateData();
             if (this.get('kana')) {
                 shape.x = data.x;

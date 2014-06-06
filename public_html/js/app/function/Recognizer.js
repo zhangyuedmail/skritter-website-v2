@@ -38,7 +38,7 @@ define(function() {
      */
     Recognizer.prototype.analyze = function(userStroke, character) {
         var results = [];
-        var size = skritter.settings.canvasSize();
+        var size = skritter.settings.getCanvasSize();
         for (var a = 0, lengthA = character.targets.length; a < lengthA; a++) {
             var target = character.targets[a];
             for (var b = 0, lengthB = target.length; b < lengthB; b++) {

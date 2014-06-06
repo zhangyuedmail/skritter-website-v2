@@ -170,11 +170,11 @@ define([
     /**
      * @property {Object} strokes
      */
-    var recognizer = Recognizer;
+    var recognizer = new Recognizer();
     /**
      * @property {Object} strokes
      */
-    var shortstraw = Shortstraw;
+    var shortstraw = new Shortstraw();
     /**
      * @property {Object} strokes
      */

@@ -34,6 +34,9 @@ define([
             var part = this.get('part');
             var reviews = [];
             var wordGroup = now + '_' + skritter.fn.getGuid() + '_' + this.id;
+            if (part === 'rune' || part === 'tone') {
+                review.characters = [];
+            }
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
                 copiedItems.push(item.toJSON());
@@ -52,6 +55,14 @@ define([
                     previousInterval: item.has('previousInterval') ? item.get('previousInterval') : 0,
                     previousSuccess: item.has('previousSuccess') ? item.get('previousSuccess') : false
                 });
+                if (review.characters) {
+                    if (items.length === 1) {
+                        review.characters.push(item.getStroke().getCanvasCharacter());
+                    } else if (i > 0) {
+                        console.log('getting character', item.getVocabId(), item);
+                        review.characters.push(item.getStroke().getCanvasCharacter());
+                    }
+                }
             }
             review.set({
                 id: wordGroup,
@@ -78,10 +89,21 @@ define([
             return items;
         },
         /**
+         * @method getStroke
+         * @returns {Backbone.Model}
+         */
+        getStroke: function() {
+            if (this.get('part') === 'tone') {
+                return skritter.user.data.strokes.get('tones');
+            }
+            return skritter.user.data.strokes.get(this.getVocab().get('writing'));
+        },
+        /**
          * @method getVocab
          * @returns {Backbone.Model}
          */
         getVocab: function() {
+            console.log(this.getVocabId());
             return skritter.user.data.vocabs.get(this.getVocabId());
         },
         /**
@@ -90,6 +112,10 @@ define([
          */
         getVocabId: function() {
             var vocabIds = this.get('vocabIds');
+            if (vocabIds.length === 0) {
+                var splitId = this.id.split('-');
+                return splitId[1] + '-' + splitId[2] + '-' + splitId[3];
+            }
             return vocabIds[this.get('reviews') % vocabIds.length];
         },
         /**
