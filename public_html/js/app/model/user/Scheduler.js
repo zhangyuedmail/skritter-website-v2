@@ -198,6 +198,24 @@ define([], function() {
          */
         randomizeInterval: function(interval) {
             return Math.round(interval * (0.925 + (Math.random() * 0.15)));
+        },
+        /**
+         * @method update
+         * @param {Backbone.Model} item
+         */
+        update: function(item) {
+            var position = _.findIndex(this.data, {id: item.id});
+            this.data[position] = {
+                id: item.id,
+                last: item.get('last'),
+                next: item.get('next'),
+                part: item.get('part'),
+                reviews: item.get('reviews'),
+                successes: item.get('successes'),
+                style: item.get('style'),
+                timeStudied: item.get('timeStudied'),
+                vocabIds: item.get('vocabIds')
+            };
         }
     });
     
