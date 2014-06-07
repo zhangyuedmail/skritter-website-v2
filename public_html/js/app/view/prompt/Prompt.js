@@ -86,14 +86,12 @@ define([], function() {
          * @method triggerNext
          */
         triggerNext: function() {
-            this.remove();
             this.trigger('prompt:next');
         },
         /**
          * @method triggerPrevious
          */
         triggerPrevious: function() {
-            this.remove();
             this.trigger('prompt:previous');
         }
     });

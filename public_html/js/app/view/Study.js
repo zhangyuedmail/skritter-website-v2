@@ -55,6 +55,9 @@ define([
          * @param {Backbone.Model} review
          */
         loadPrompt: function(review) {
+            if (this.prompt) {
+                this.prompt.remove();
+            }
             this.prompt = review.createView();
             this.prompt.setElement(this.$('.prompt-container'));
             this.listenToOnce(this.prompt, 'prompt:next', _.bind(this.nextPrompt, this));

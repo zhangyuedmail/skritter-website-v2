@@ -171,7 +171,7 @@ define([], function() {
                     return -item.readiness;
                 }
                 //filter out inactive parts and styles
-                /**if (item.part !== 'tone') {
+                /**if (item.part !== 'defn') {
                     item.readiness = 0;
                     return -item.readiness;
                 }**/

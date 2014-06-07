@@ -37,23 +37,17 @@ define([
          * @return {Backbone.View}
          */
         createView: function() {
-            var view = null;
             switch (this.get('part')) {
                 case 'defn':
-                    view = new PromptDefn();
-                    break;
+                    return new PromptDefn().set(this);
                 case 'rdng':
-                    view = new PromptRdng();
-                    break;
+                    return new PromptRdng().set(this);
                 case 'rune':
-                    view = new PromptRune();
-                    break;
+                    return new PromptRune().set(this);
                 case 'tone':
-                    view = new PromptTone();
-                    break;
+                    return new PromptTone().set(this);
             }
-            view.set(this);
-            return view;
+            return null;
         },
         /**
          * @method getBaseItem
