@@ -120,7 +120,7 @@ define([
                 },
                 //contained vocabs
                 function(item, vocab, containedItems, callback) {
-                    if (containedItems) {
+                    if (containedItems.length !== 0) {
                         var containedVocabIds = vocab.get('containedVocabIds');
                         skritter.storage.get('vocabs', containedVocabIds, function(containedVocabs) {
                             if (containedVocabIds.length === containedVocabs.length) {
@@ -130,7 +130,7 @@ define([
                             }
                         });
                     } else {
-                        callback(null, item, vocab, containedItems, null);
+                        callback(null, item, vocab, containedItems, []);
                     }
                 },
                 //sentence
