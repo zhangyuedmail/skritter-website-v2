@@ -18,9 +18,19 @@ define([
          * @property {Object} defaults
          */
         defaults: {
-            items: [],
             position: 1,
             reviews: []
+        },
+        /**
+         * @method cache
+         * @param {Function} callback
+         */
+        cache: function(callback) {
+            skritter.storage.put('reviews', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method createView
@@ -87,27 +97,28 @@ define([
          * @returns {Number}
          */
         getFinalScore: function() {
-            var grade = this.get('reviews')[0].score;
+            var reviews = this.get('reviews');
+            var score = reviews[0].score;
             if (this.hasContained()) {
                 var max = this.get('reviews').length - 1;
                 var totalScore = 0;
                 var totalWrong = 0;
-                for (var i = 1, length = this.get('reviews').length; i < length; i++) {
-                    var review = this.get('reviews')[i];
+                for (var i = 1, length = reviews.length; i < length; i++) {
+                    var review = reviews[i];
                     totalScore += review.score;
                     if (review.score === 1) {
                         totalWrong++;
                     }
                 }
                 if (max === 2 && totalWrong === 1) {
-                    grade = 1;
+                    score = 1;
                 } else if (totalWrong > 1) {
-                    grade = 1;
+                    score = 1;
                 } else {
-                    grade = Math.floor(totalScore / max);
+                    score = Math.floor(totalScore / max);
                 }
             }
-            return grade;
+            return score;
         },
         /**
          * @method getItem
@@ -157,21 +168,6 @@ define([
             //TODO: change get prompt to view
         },
         /**
-         * @method getTotalReviewTime
-         * @returns {Number}
-         */
-        getTotalReviewTime: function() {
-            var reviewTime = 0;
-            if (this.hasContained()) {
-                for (var i = 1, length = this.get('reviews').length; i < length; i++) {
-                    reviewTime += this.get('reviews')[i].reviewTime;
-                }
-            } else {
-                reviewTime = this.get('reviews')[0].reviewTime;
-            }
-            return reviewTime;
-        },
-        /**
          * @method getReview
          * @returns {Object}
          */
@@ -193,6 +189,21 @@ define([
                 return this.get('reviews')[position];
             }
             return this.get('reviews')[0];
+        },
+        /**
+         * @method getTotalReviewTime
+         * @returns {Number}
+         */
+        getTotalReviewTime: function() {
+            var reviewTime = 0;
+            if (this.hasContained()) {
+                for (var i = 1, length = this.get('reviews').length; i < length; i++) {
+                    reviewTime += this.get('reviews')[i].reviewTime;
+                }
+            } else {
+                reviewTime = this.get('reviews')[0].reviewTime;
+            }
+            return reviewTime;
         },
         /**
          * @method getTotalThinkingTime
@@ -283,7 +294,46 @@ define([
          * @param {Function} callback
          */
         save: function(callback) {
-            //TODO: check save for possible errors
+            var self = this;
+            var reviews = this.get('reviews');
+            //updates all of the new review intervals and items
+            for (var i = 0, length = reviews.length; i < length; i++) {
+                var review = reviews[i];
+                var item = skritter.user.data.items.get(review.itemId);
+                if (reviews.length > 1 && i === 0) {
+                    review.finished = true;
+                    review.reviewTime = this.getTotalReviewTime();
+                    review.score = this.getFinalScore();
+                    review.thinkingTime = this.getTotalThinkingTime();
+                }
+                review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
+                item.set({
+                    changed: review.submitTime,
+                    last: review.submitTime,
+                    interval: review.newInterval,
+                    next: review.submitTime + review.newInterval,
+                    previousInterval: review.currentInterval,
+                    previousSuccess: review.score > 1 ? true : false,
+                    reviews: item.get('reviews') + 1,
+                    successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
+                    timeStudied: item.get('timeStudied') + review.reviewTime
+                });
+                skritter.user.scheduler.update(item);
+            }
+            async.series([
+                function(callback) {
+                    skritter.user.data.reviews.add(this, {merge: true});
+                    callback();
+                },
+                function(callback) {
+                    skritter.user.data.items.cache(callback);
+                },
+                function(callback) {
+                    self.cache(callback);
+                }
+            ], function() {
+                callback();
+            });
         },
         /**
          * @method setReview

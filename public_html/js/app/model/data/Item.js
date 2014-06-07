@@ -39,12 +39,11 @@ define([
             }
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
-                copiedItems.push(item.toJSON());
                 reviews.push({
                     itemId: item.id,
                     finished: false,
                     score: 3,
-                    bearTime: window.parseInt(i, 10) === 0 ? true : false,
+                    bearTime: i === 0 ? true : false,
                     submitTime: now,
                     reviewTime: 0,
                     thinkingTime: 0,
@@ -65,7 +64,6 @@ define([
             }
             review.set({
                 id: wordGroup,
-                items: copiedItems,
                 itemId: items[0].id,
                 part: part,
                 reviews: reviews

@@ -234,6 +234,37 @@ body {
 .navbar .navbar-nav i { font-size: 27px; }
 
 
+/*** PROMPT: INFO SECTION ***/
+.info-section .prompt-row { clear: both; }
+.info-section .prompt-row div { float: left; }
+.info-section .prompt-writing span { margin-right: 5px; }
+.info-section .writing-hidden { border: 2px #ffffff solid; }
+.info-section .writing-hidden span { visibility: hidden; }
+.info-section .prompt-reading span { margin-right: 5px; }
+.info-section .reading-hidden { border-bottom: 2px #ffffff solid; }
+.info-section .reading-hidden span { visibility: hidden; }
+.info-section .prompt-hint { display: none; }
+
+
+/*** PROMPT: INPUT SECTION ***/
+.input-section { cursor: pointer; }
+.input-section .prompt-text {
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+.input-section .prompt-text .prompt-answer {
+    display: none;
+    position: absolute;
+    width: 100%;
+}
+.input-section .prompt-text .prompt-question {
+    display: none;
+    position: absolute;
+    width: 100%;
+}
+
+
 /*** SIDEBAR ***/
 .sidebar {
     background-color: #2c3e50;
@@ -263,14 +294,3 @@ body {
 
 /*** VIEW: TEST ***/
 .view-test .content-block { background-color: #ffffff; }
-
-
-.info-section .prompt-row { clear: both; }
-.info-section .prompt-row div { float: left; }
-.info-section .prompt-writing span { margin-right: 5px; }
-.info-section .writing-hidden { border: 2px #ffffff solid; }
-.info-section .writing-hidden span { visibility: hidden; }
-.info-section .prompt-reading span { margin-right: 5px; }
-.info-section .reading-hidden { border-bottom: 2px #ffffff solid; }
-.info-section .reading-hidden span { visibility: hidden; }
-.info-section .prompt-hint { display: none; }

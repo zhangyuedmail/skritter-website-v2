@@ -163,7 +163,7 @@ define([], function() {
                 } else {
                     reading = reading.split(', ');
                     for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
-                        tones.push([skritter.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
+                        tones.push([skritter.fn.convertArrayToInt(reading[b].match(/[0-9]+/g))]);
                     }
                 }
             }

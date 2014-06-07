@@ -187,9 +187,7 @@ define([
          */
         showAnswer: function() {
             this.canvas.disableInput();
-            this.review.setReview({
-                finished: true
-            });
+            this.review.setReview({finished: true});
             this.element.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             return this;
         }

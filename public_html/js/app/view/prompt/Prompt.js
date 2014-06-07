@@ -17,10 +17,13 @@ define([], function() {
          * @returns {Backbone.View}
          */
         render: function() {
-            console.log(this.review.get('itemId'), this.review.attributes);
+            console.log(this.review.id, this.review.toJSON());
+            this.element.answer = this.$('.prompt-answer');
+            this.element.canvas = this.$('.canvas-container');
             this.element.definition = this.$('.prompt-definition');
             this.element.heisig = this.$('.prompt-heisig');
             this.element.mnemonic = this.$('.prompt-mnemonic');
+            this.element.question = this.$('.prompt-question');
             this.element.reading = this.$('.prompt-reading');
             this.element.sentence = this.$('.prompt-sentence');
             this.element.writing = this.$('.prompt-writing');
@@ -42,7 +45,7 @@ define([], function() {
             if (this.review.next()) {
                 this.clear();
             } else {
-                this.trigger('prompt:next');
+                this.review.save(_.bind(this.triggerNext, this));
             }
         },
         /**
@@ -52,7 +55,7 @@ define([], function() {
             if (this.review.previous()) {
                 this.clear();
             } else {
-                this.trigger('prompt:previous');
+                this.triggerPrevious();
             }
         },
         /**
@@ -67,7 +70,6 @@ define([], function() {
          * @method resize
          */
         resize: function() {
-            //TODO: add global resizing
         },
         /**
          * @method set
@@ -79,6 +81,20 @@ define([], function() {
             this.item = review.getBaseItem();
             this.vocab = review.getBaseVocab();
             return this;
+        },
+        /**
+         * @method triggerNext
+         */
+        triggerNext: function() {
+            this.remove();
+            this.trigger('prompt:next');
+        },
+        /**
+         * @method triggerPrevious
+         */
+        triggerPrevious: function() {
+            this.remove();
+            this.trigger('prompt:previous');
         }
     });
 

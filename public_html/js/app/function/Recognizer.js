@@ -8,7 +8,7 @@ define(function() {
      * @class Recognizer
      */
     function Recognizer() {
-        this.angleThreshold = 30;
+        this.angleThreshold = 45;
         this.cornersPenalty = 25;
         this.cornersThreshold = 2;
         this.distanceThreshold = 200;

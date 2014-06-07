@@ -115,7 +115,7 @@ define([
                             }
                         });
                     } else {
-                        callback(null, item, vocab, null);
+                        callback(null, item, vocab, []);
                     }
                 },
                 //contained vocabs

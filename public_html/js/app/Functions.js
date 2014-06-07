@@ -11,6 +11,16 @@ define([
      */
     var bootstrap = Bootstrap;
     /**
+     * @method convertArrayToInt
+     * @param {Array} array
+     * @returns {Array}
+     */
+    var convertArrayToInt = function(array) {
+        return array.map(function(value) {
+            return parseInt(value, 10);
+        });
+    };
+    /**
      * @method convertBytesToSize
      * @param {Number} bytes
      * @returns {String}
@@ -182,6 +192,7 @@ define([
 
     return {
         bootstrap: bootstrap,
+        convertArrayToInt: convertArrayToInt,
         convertBytesToSize: convertBytesToSize,
         getAngle: getAngle,
         getBoundingRectangle: getBoundingRectangle,
