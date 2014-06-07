@@ -25,7 +25,7 @@ define(function() {
          * @method renderElements
          */
         renderElements: function() {
-            this.element.avatar.html(skritter.user.settings.getAvatar('img-circle'));
+            this.element.avatar.html(skritter.user.getAvatar('img-circle'));
             this.element.username.text(skritter.user.settings.get('name'));
         },
         /**

@@ -28,6 +28,34 @@ define([], function() {
             return this;
         },
         /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
+            this.show();
+            return this;
+        },
+        /**
+         * @method next
+         */
+        next: function() {
+            if (this.review.next()) {
+                this.clear();
+            } else {
+                this.trigger('prompt:next');
+            }
+        },
+        /**
+         * @method previous
+         */
+        previous: function() {
+            if (this.review.previous()) {
+                this.clear();
+            } else {
+                this.trigger('prompt:previous');
+            }
+        },
+        /**
          * @method remove
          */
         remove: function() {

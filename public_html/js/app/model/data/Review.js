@@ -230,16 +230,16 @@ define([
          * @returns {Boolean}
          */
         hasContained: function() {
-            if (this.get('reviews').length > 1)
-                return true;
-            return false;
+            return this.get('reviews').length > 1 ? true : false;
         },
         /**
          * @method isFinished
          * @returns {Boolean}
          */
         isFinished: function() {
-            return this.get('reviews')[0].finished;
+            var position = this.get('position');
+            var review = this.hasContained() ? this.get('reviews')[position] : this.get('reviews')[0];
+            return review.finished;
         },
         /**
          * @method isFirst
@@ -257,17 +257,6 @@ define([
             return this.get('position') === position ? true : false;
         },
         /**
-         * @method previous
-         * @returns {Boolean}
-         */
-        previous: function() {
-            if (this.isFirst()) {
-                return false;
-            }
-            this.set('position', this.get('position') - 1, {silent: true, sort: false});
-            return true;
-        },
-        /**
          * @method next
          * @returns {Boolean}
          */
@@ -276,6 +265,17 @@ define([
                 return false;
             }
             this.set('position', this.get('position') + 1, {silent: true, sort: false});
+            return true;
+        },
+        /**
+         * @method previous
+         * @returns {Boolean}
+         */
+        previous: function() {
+            if (this.isFirst()) {
+                return false;
+            }
+            this.set('position', this.get('position') - 1, {silent: true, sort: false});
             return true;
         },
         /**

@@ -52,6 +52,31 @@ define([
             localStorage.setItem(this.get('user_id'), JSON.stringify(this.toJSON()));
         },
         /**
+         * @method getActiveParts
+         * @returns {Array}
+         */
+        getActiveParts: function() {
+            return this.isChinese() ? _.intersection(this.settings.get('filterChineseParts'), this.getEnabledParts()) : _.intersection(this.settings.get('filterJapaneseParts'), this.getEnabledParts());
+        },
+        /**
+         * @method getAvatar
+         * @param {String} classes
+         * @returns {String}
+         */
+        getAvatar: function(classes) {
+            if (classes) {
+                return "<img src='data:image/png;base64," + this.settings.get('avatar') + "' + class='" + classes + "' />";
+            }
+            return "<img src='data:image/png;base64," + this.settings.get('avatar') + "' />";
+        },
+        /**
+         * @method getEnabledParts
+         * @returns {Array}
+         */
+        getEnabledParts: function() {
+            return this.isChinese() ? this.settings.get('chineseStudyParts') : this.settings.get('japaneseStudyParts');
+        },
+        /**
          * @method getLanguageCode
          * @returns {String}
          */

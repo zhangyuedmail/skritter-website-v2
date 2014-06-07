@@ -105,18 +105,6 @@ define([], function() {
             return newInterval;
         },
         /**
-         * @method filter
-         * @returns {Array}
-         */
-        filter: function() {
-            return this.data.filter(function(item) {
-                if (item.vocabIds.length > 0) {
-                    return true;
-                }
-                return false;
-            });
-        },
-        /**
          * @method getDue
          * @returns {Array}
          */
@@ -177,10 +165,16 @@ define([], function() {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;
+                //filter out inactive items
                 if (item.vocabIds.length === 0) {
                     item.readiness = 0;
                     return -item.readiness;
                 }
+                //filter out inactive parts and styles
+                /**if (item.part !== 'tone') {
+                    item.readiness = 0;
+                    return -item.readiness;
+                }**/
                 //randomly prioritize new items
                 if (item.last === 0) {
                     item.readiness = randomizer(9999);

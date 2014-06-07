@@ -6,8 +6,9 @@ define([
     'router/Router',
     'model/Settings',
     'require.locale!../../locale/nls/strings',
+    'view/component/Timer',
     'model/User'
-], function(Api, Functions, IndexedDBAdapter, Modal, Router, Settings, Strings, User) {
+], function(Api, Functions, IndexedDBAdapter, Modal, Router, Settings, Strings, Timer, User) {
     /**
      * @method loadApi
      * @param {Function} callback
@@ -65,6 +66,14 @@ define([
         callback();
     };
     /**
+     * @method loadTimer
+     * @param {Function} callback
+     */
+    var loadTimer = function(callback) {
+        skritter.timer = new Timer();
+        callback();
+    };
+    /**
      * @method loadApi
      * @param {Function} callback
      */
@@ -119,6 +128,7 @@ define([
             async.apply(loadSettings),
             async.apply(loadStorage),
             async.apply(loadStrings),
+            async.apply(loadTimer),
             async.apply(loadUser)
         ], function() {
             console.log('application initialized');

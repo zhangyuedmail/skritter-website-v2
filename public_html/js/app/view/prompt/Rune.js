@@ -29,9 +29,18 @@ define([
             this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClick);
             this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
-            this.listenTo(this.canvas, 'input:up', this.handleStrokeReceived);
+            this.listenTo(this.canvas, 'input:up', this.handleStrokeUp);
             this.resize();
             this.show();
+            return this;
+        },
+        /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
+            this.canvas.clear();
+            Prompt.prototype.clear.call(this);
             return this;
         },
         /**
@@ -39,6 +48,9 @@ define([
          * @param {Object} event
          */
         handleClick: function(event) {
+            if (this.review.isFinished()) {
+                this.next();
+            }
             event.preventDefault();
         },
         /**
@@ -58,11 +70,17 @@ define([
             event.preventDefault();
         },
         /**
-         * @method handleStrokeReceived
+         * @method handleStrokeDown
+         */
+        handleStrokeDown: function() {
+            skritter.timer.stopThinking();
+        },
+        /**
+         * @method handleStrokeUp
          * @param {Array} points
          * @param {CreateJS.Shape} shape
          */
-        handleStrokeReceived: function(points, shape) {
+        handleStrokeUp: function(points, shape) {
             if (points && points.length > 2) {
                 var result = this.review.getCharacterAt().recognize(points, shape);
                 if (result) {
@@ -169,6 +187,9 @@ define([
          */
         showAnswer: function() {
             this.canvas.disableInput();
+            this.review.setReview({
+                finished: true
+            });
             this.element.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             return this;
         }

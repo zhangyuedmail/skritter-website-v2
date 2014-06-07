@@ -10,6 +10,7 @@ define([
          */
         initialize: function() {
             this.element = {};
+            this.grid = true;
             this.gridColor = '#666666';
             this.lastMouseDownEvent = null;
             this.layerNames = [];
@@ -42,18 +43,18 @@ define([
             this.createLayer('background');
             this.createLayer('hint');
             this.createLayer('stroke');
-            this.resize();
+            this.$('.canvas-input').on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
+            this.$('.canvas-input').on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
             createjs.Ticker.addEventListener('tick', this.stage.display);
             createjs.Touch.enable(this.stage.input);
             createjs.Ticker.setFPS(200);
+            this.resize();
             return this;
         },
         /**
          * @property {Object} events
          */
         events: {
-            'vmousedown.Canvas .canvas-input': 'triggerCanvasMouseDown',
-            'vmouseup.Canvas .canvas-input': 'triggerCanvasMouseUp'
         },
         /**
          * @method clear
@@ -63,7 +64,7 @@ define([
             for (var i = 0, length = this.layerNames.length; i < length; i++) {
                 this.getLayer(this.layerNames[i]).removeAllChildren();
             }
-            this.drawGrid();
+            this.resize();
             this.updateAll();
             return this;
         },
@@ -109,6 +110,15 @@ define([
             return layer;
         },
         /**
+         * @method disableGrid
+         * @returns {Backbone.View}
+         */
+        disableGrid: function() {
+            this.grid = false;
+            this.clearLayer('grid');
+            return this;
+        },
+        /**
          * @method disableInput
          * @returns {Backbone.View}
          */
@@ -118,6 +128,24 @@ define([
             this.$(this.element.input).off('vmouseout.Input');
             this.$(this.element.input).off('vmouseup.Input');
             return this;
+        },
+        /**
+         * @method drawCharacterFromFont
+         * @param {String} layerName
+         * @param {String} character
+         * @param {String} font
+         * @param {Number} alpha
+         * @param {String} color
+         */
+        drawCharacterFromFont: function(layerName, character, font, alpha, color) {
+            var layer = this.getLayer(layerName);
+            color = color ? color : this.textColor;
+            font = font ? font : this.textFont;
+            var text = new createjs.Text(character, this.size + 'px ' + font, color);
+            text.name = character;
+            text.alpha = alpha ? alpha : 1;
+            layer.addChild(text);
+            this.stage.display.update();
         },
         /**
          * @method drawGrid
@@ -150,6 +178,15 @@ define([
             return shape;
         },
         /**
+         * @method enableGrid
+         * @returns {Backbone.View}
+         */
+        enableGrid: function() {
+            this.grid = true;
+            this.drawGrid();
+            return this;
+        },
+        /**
          * @method enableInput
          * @returns {Backbone.View}
          */
@@ -157,14 +194,14 @@ define([
             var self = this;
             var stage = this.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
-            this.disableInput().$(this.element.input).on('vmousedown.Input', down);
-            function down() {
+            this.disableInput().$(this.element.input).on('vmousedown.Input', down);            
+            function down(event) {
                 points = [];
                 marker = new createjs.Shape();
                 squig = new createjs.Shape();
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
-                self.triggerInputDown(oldPoint);
+                self.triggerInputDown(oldPoint, event);
                 self.$(self.element.input).on('vmousemove.Input', move);
                 self.$(self.element.input).on('vmouseout.Input', out);
                 self.$(self.element.input).on('vmouseup.Input', up);
@@ -187,20 +224,20 @@ define([
                 oldMidPoint = midPoint;
                 points.push(point);
             }
-            function out() {
+            function out(event) {
                 self.$(self.element.input).off('vmousemove.Input', move);
                 self.$(self.element.input).off('vmouseout.Input', out);
                 self.$(self.element.input).off('vmouseup.Input', up);
-                self.triggerInputUp(null, squig.clone(true));
+                self.triggerInputUp(null, squig.clone(true), event);
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
             }
-            function up() {
+            function up(event) {
                 self.$(self.element.input).off('vmousemove.Input', move);
                 self.$(self.element.input).off('vmouseout.Input', out);
                 self.$(self.element.input).off('vmouseup.Input', up);
-                self.triggerInputUp(points, squig.clone(true));
+                self.triggerInputUp(points, squig.clone(true), event);
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
@@ -261,8 +298,7 @@ define([
          * @method remove
          */
         remove: function() {
-            createjs.Touch.disable(this.stage.input);
-            createjs.Ticker.removeEventListener('tick', this.stage.display);
+            createjs.Ticker.removeAllEventListeners();
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
@@ -280,8 +316,22 @@ define([
             this.element.display.width = this.size;
             this.element.input.height = this.size;
             this.element.input.width = this.size;
-            this.drawGrid();
+            if (this.grid) {
+                this.drawGrid();
+            }
             return this;
+        },
+        /**
+         * @method startSparkling
+         */
+        startSparkling: function() {
+            //TODO: custom animations for pointer sparkling
+        },
+        /**
+         * @method stopSparkling
+         */
+        stopSparkling: function() {
+            //TODO: custom animations for pointer sparkling
         },
         /**
          * @method triggerClick
@@ -364,17 +414,19 @@ define([
         /**
          * @method triggerInputDown
          * @param {Object} point
+         * @param {Object} event
          */
-        triggerInputDown: function(point) {
-            this.trigger('input:down', point);
+        triggerInputDown: function(point, event) {
+            this.trigger('input:down', point, event);
         },
         /**
          * @method triggerInputUp
          * @param {Array} points
          * @param {CreateJS.Shape} shape
+         * @param {Object} event
          */
-        triggerInputUp: function(points, shape) {
-            this.trigger('input:up', points, shape);
+        triggerInputUp: function(points, shape, event) {
+            this.trigger('input:up', points, shape, event);
         },
         /**
          * @method triggerSwipeUp

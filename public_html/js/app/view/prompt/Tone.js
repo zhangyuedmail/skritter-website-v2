@@ -1,7 +1,8 @@
 define([
-    'require.text!template/prompt-rune.html',
+    'require.text!template/prompt-tone.html',
+    'view/prompt/Canvas',
     'view/prompt/Prompt'
-], function(template, Prompt) {
+], function(template, Canvas, Prompt) {
     /**
      * @class PromptTone
      */
@@ -11,6 +12,8 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            this.canvas = new Canvas();
+            this.finished = false;
         },
         /**
          * @method render
@@ -19,6 +22,105 @@ define([
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
             Prompt.prototype.render.call(this);
+            this.canvas.setElement('.canvas-container').render();
+            this.listenTo(this.canvas, 'canvas:click', this.handleClick);
+            this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
+            this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
+            this.listenTo(this.canvas, 'input:up', this.handleStrokeUp);
+            this.resize();
+            this.show();
+            return this;
+        },
+        /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
+            this.canvas.clear();
+            Prompt.prototype.clear.call(this);
+            return this;
+        },
+        /**
+         * @method handleClick
+         * @param {Object} event
+         */
+        handleClick: function(event) {
+            if (this.review.isFinished()) {
+                this.next();
+            }
+            event.preventDefault();
+        },
+        /**
+         * @method handleStrokeDown
+         */
+        handleStrokeDown: function() {
+            skritter.timer.stopThinking();
+        },
+        /**
+         * @method handleStrokeReceived
+         * @param {Array} points
+         * @param {CreateJS.Shape} shape
+         */
+        handleStrokeUp: function(points, shape) {
+            var possibleTones = _.flatten(this.review.getBaseVocab().getTones(this.review.get('position')));
+            if (points && points.length > 2) {
+                var result = this.review.getCharacterAt().recognize(points, shape);
+                if (result) {
+                    if (possibleTones.indexOf(result.get('tone')) > -1) {
+                        this.review.setReview('score', 3);
+                        window.setTimeout(_.bind(function() {
+                            this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
+                        }, this), 0);
+                    } else {
+                        this.review.setReview('score', 1);
+                        this.review.getCharacter().reset();
+                        this.review.getCharacter().add(this.review.getCharacter().targets[possibleTones[0] - 1].models);
+                        window.setTimeout(_.bind(function() {
+                            this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+                        }, this), 0);
+                    }
+                }
+            } else {
+                if (possibleTones.indexOf(5) > -1) {
+                    this.review.setReview('score', 3);
+                    this.review.getCharacter().add(this.review.getCharacter().targets[4].models);
+                    window.setTimeout(_.bind(function() {
+                        this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+                    }, this), 0);
+                } else {
+                    this.review.setReview('score', 1);
+                    this.review.getCharacter().add(this.review.getCharacter().targets[possibleTones[0] - 1].models);
+                    window.setTimeout(_.bind(function() {
+                        this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+                    }, this), 0);
+                }
+            }
+            if (this.review.getCharacter().isFinished()) {
+                this.showAnswer();
+            }
+        },
+        /**
+         * @method handleSwipeUp
+         * @param {Object} event
+         */
+        handleSwipeUp: function(event) {
+            this.reset();
+            event.preventDefault();
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.canvas.remove();
+            Prompt.prototype.remove.call(this);
+        },
+        /**
+         * @method reset
+         * @returns {Backbone.View}
+         */
+        reset: function() {
+            this.canvas.clear().enableInput();
+            this.review.getCharacter().reset();
             return this;
         },
         /**
@@ -26,8 +128,62 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
+            var canvasSize = skritter.settings.getCanvasSize();
+            var contentHeight = skritter.settings.getContentHeight();
+            var contentWidth = skritter.settings.getContentWidth();
+            var infoSection, inputSection;
+            this.canvas.resize();
+            if (skritter.settings.isPortrait()) {
+                inputSection = this.$('.input-section').css({
+                    height: canvasSize,
+                    float: 'none',
+                    width: contentWidth
+                });
+                infoSection = this.$('.info-section').css({
+                    height: contentHeight - canvasSize,
+                    float: 'none',
+                    width: contentWidth
+                });
+            } else {
+                inputSection = this.$('.input-section').css({
+                    height: canvasSize,
+                    float: 'left',
+                    width: canvasSize
+                });
+                infoSection = this.$('.info-section').css({
+                    height: contentHeight,
+                    float: 'left',
+                    width: contentWidth - canvasSize
+                });
+            }
+        },
+        /**
+         * @method show
+         * @returns {Backbone.View}
+         */
+        show: function() {
+            this.canvas.disableGrid();
+            this.canvas.enableInput();
+            this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
+            this.element.definition.html(this.vocab.getDefinition());
+            this.element.reading.html(this.vocab.getReading(this.review.getPosition(), true));
+            this.element.sentence.html(this.vocab.getSentence().writing);
+            this.element.writing.html(this.vocab.getWriting());
+            return this;
+        },
+        /**
+         * @method showAnswer
+         * @returns {Backbone.View}
+         */
+        showAnswer: function() {
+            this.canvas.disableInput();
+            this.review.setReview({
+                finished: true
+            });
+            this.element.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true));
+            return this;
         }
     });
-    
+
     return View;
 });

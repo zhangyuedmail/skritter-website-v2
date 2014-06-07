@@ -35,12 +35,29 @@ define([
             BaseView.prototype.renderElements.call(this);
         },
         /**
+         * @property {Object} events
+         */
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-study-settings': 'handleStudySetttingsClicked'
+            });
+        },
+        /**
+         * @method handleStudySetttingsClicked
+         * @param {Object} event
+         */
+        handleStudySetttingsClicked: function(event) {
+            skritter.router.navigate('study/settings', {replace: true, trigger: true});
+            event.preventDefault();
+        },
+        /**
          * @method loadPrompt
          * @param {Backbone.Model} review
          */
         loadPrompt: function(review) {
             this.prompt = review.createView();
             this.prompt.setElement(this.$('.prompt-container'));
+            this.listenToOnce(this.prompt, 'prompt:next', _.bind(this.nextPrompt, this));
             this.prompt.render();
         },
         /**

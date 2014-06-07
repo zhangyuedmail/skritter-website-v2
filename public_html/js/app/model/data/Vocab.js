@@ -20,6 +20,13 @@ define([], function() {
             });
         },
         /**
+         * @method getCharacterCount
+         * @returns {Number}
+         */
+        getCharacterCount: function() {
+            return this.getCharacters().length;
+        },
+        /**
          * @method getCharacters
          * @returns {Array}
          */
@@ -76,6 +83,20 @@ define([], function() {
             }
         },
         /**
+         * @method getFontName
+         * @returns {String}
+         */
+        getFontName: function() {
+            return this.isChinese() ? 'simkai' : 'kaisho';
+        },
+        /**
+         * @method fontClass
+         * @returns {String}
+         */
+        getFontClass: function() {
+            return this.isChinese() ? 'chinese-text' : 'japanese-text';            
+        },
+        /**
          * @method getReading
          * @param {Number} offset
          * @param {Boolean} mask
@@ -124,6 +145,32 @@ define([], function() {
                 return sentence;
             }
             return {};
+        },
+        /**
+         * @method getTones
+         * @param {Number} position
+         * @returns {Array}
+         */
+        getTones: function(position) {
+            var tones = [];
+            var reading = this.get('reading');
+            if (this.isChinese()) {
+                if (reading.indexOf(', ') === -1) {
+                    reading = reading.match(/[0-9]+/g);
+                    for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
+                        tones.push([parseInt(reading[a], 10)]);
+                    }
+                } else {
+                    reading = reading.split(', ');
+                    for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                        tones.push([skritter.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
+                    }
+                }
+            }
+            if (position && this.getCharacterCount() > 1) {
+                return tones[position - 1];
+            }
+            return tones;
         },
         /**
          * @method getWriting

@@ -10,6 +10,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            BaseView.prototype.initialize.call(this);
             this.activeParts = [];
             this.enabledParts = [];
         },
@@ -19,8 +20,8 @@ define([
          */
         render: function() {
             this.$el.html(templateStudySettings);
-            this.activeParts = skritter.user.settings.getActiveParts();
-            this.enabledParts = skritter.user.settings.getEnabledParts();
+            this.activeParts = skritter.user.getActiveParts();
+            this.enabledParts = skritter.user.getEnabledParts();
             this.$('input.bootswitch').bootstrapSwitch();
             this.$('#general #audio').bootstrapSwitch('state', skritter.user.settings.get('audio'));
             this.$('#general #hide-due-count').bootstrapSwitch('state', skritter.user.settings.get('hideDueCount'));
@@ -30,7 +31,7 @@ define([
             this.$('#parts #defn').bootstrapSwitch('state', this.activeParts.indexOf('defn') > -1);
             this.$('#parts #rdng').bootstrapSwitch('state', this.activeParts.indexOf('rdng') > -1);
             this.$('#parts #rune').bootstrapSwitch('state', this.activeParts.indexOf('rune') > -1);
-            if (skritter.user.settings.isJapanese()) {
+            if (skritter.user.isJapanese()) {
                 this.$('#parts #tone').parent().parent().parent().hide();
             } else {
                 this.$('#parts #tone').bootstrapSwitch('state', this.activeParts.indexOf('tone') > -1);
@@ -39,14 +40,17 @@ define([
             this.$('#parts #rdng').bootstrapSwitch('disabled', this.enabledParts.indexOf('rdng') === -1);
             this.$('#parts #rune').bootstrapSwitch('disabled', this.enabledParts.indexOf('rune') === -1);
             this.$('#parts #tone').bootstrapSwitch('disabled', this.enabledParts.indexOf('tone') === -1);
+            BaseView.prototype.render.call(this).renderElements();
             return this;
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'click #view-study-settings .button-cancel': 'cancel',
-            'click #view-study-settings .button-save': 'save'
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-cancel': 'cancel',
+                'vclick .button-save': 'save'
+            });
         },
         /**
          * @method cancel

@@ -30,17 +30,6 @@ define([], function() {
             localStorage.setItem(skritter.user.id + '-settings', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method getAvatar
-         * @param {String} classes
-         * @returns {String}
-         */
-        getAvatar: function(classes) {
-            if (classes) {
-                return "<img src='data:image/png;base64," + this.get('avatar') + "' + class='" + classes + "' />";
-            }
-            return "<img src='data:image/png;base64," + this.get('avatar') + "' />";
-        },
-        /**
          * @method sync
          * @param {Function} callback
          */
