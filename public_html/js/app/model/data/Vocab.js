@@ -110,7 +110,8 @@ define([], function() {
                 for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
                     var position = 1;
                     var pieces = reading[a].match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g);
-                    element += "<span id='reading-" + (a + 1) + "' class='reading' data-reading='" + reading[a] + "'>";
+                    var readingString = reading[a].replace(' ... ', '').replace("'", '').replace(' ', '');
+                    element += "<span id='reading-" + (a + 1) + "' class='reading' data-reading='" + readingString + "'>";
                     for (var b = 0, lengthB = pieces.length; b < lengthB; b++) {
                         var piece = pieces[b];
                         if (piece.indexOf(' ... ') === -1 && piece.indexOf("'") === -1) {
