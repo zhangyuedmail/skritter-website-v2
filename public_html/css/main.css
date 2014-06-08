@@ -247,7 +247,10 @@ body {
 .info-section .prompt-reading span { margin-right: 5px; }
 .info-section .reading-hidden { border-bottom: 2px #ffffff solid; }
 .info-section .reading-hidden span { visibility: hidden; }
-.info-section .prompt-hint { display: none; }
+.info-section .prompt-definition { font-size: 18px }
+.info-section .prompt-reading { font-size: 24px }
+.info-section .prompt-sentence { font-size: 18px }
+.info-section .prompt-writing { font-size: 32px }
 
 
 /*** PROMPT: INPUT SECTION ***/
@@ -296,7 +299,7 @@ body {
 .view-login input[type="password"] { border-radius: 0; }
 
 
-/*** VIEW: SETTIN GS ***/
+/*** VIEW: SETTINGS ***/
 .view-study-settings .setting-label {
     float: left;
     width: 100px;
