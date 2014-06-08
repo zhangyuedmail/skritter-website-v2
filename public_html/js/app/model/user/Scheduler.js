@@ -173,7 +173,7 @@ define([], function() {
                     return -item.readiness;
                 }
                 //filter out inactive parts and styles
-                if (activeParts.indexOf(item.part) === -1 &&
+                if (activeParts.indexOf(item.part) === -1 ||
                         activeStyles.indexOf(item.style) === -1) {
                     item.readiness = 0;
                     return -item.readiness;
