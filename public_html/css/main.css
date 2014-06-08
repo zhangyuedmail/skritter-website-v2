@@ -160,6 +160,10 @@ body {
 }
 
 
+/*** BOOTSTRAP SWITCH ***/
+.bootstrap-switch { border: none; }
+
+
 /*** MODAL ***/
 .modal-container .modal { 
     overflow-y: hidden;
@@ -290,6 +294,13 @@ body {
 .view-login { padding-top: 45px; }
 .view-login input[type="email"] { border-radius: 0; }
 .view-login input[type="password"] { border-radius: 0; }
+
+
+/*** VIEW: SETTIN GS ***/
+.view-study-settings .setting-label {
+    float: left;
+    width: 100px;
+}
 
 
 /*** VIEW: TEST ***/

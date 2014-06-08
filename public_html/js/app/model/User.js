@@ -59,6 +59,36 @@ define([
             return this.isChinese() ? _.intersection(this.settings.get('filterChineseParts'), this.getEnabledParts()) : _.intersection(this.settings.get('filterJapaneseParts'), this.getEnabledParts());
         },
         /**
+         * @method getActiveStyles
+         * @returns {Array}
+         */
+        getActiveStyles: function() {
+            if (this.isJapanese()) {
+                return ['both'];
+            } else if (this.isChinese() && this.settings.get('reviewSimplified') && this.settings.get('reviewTraditional')) {
+                return ['both', 'simp', 'trad'];
+            } else if (this.isChinese() && this.settings.get('reviewSimplified') && !this.settings.get('reviewTraditional')) {
+                return ['both', 'simp'];
+            } else {
+                return ['both', 'trad'];
+            }
+        },
+        /**
+         * @method getActiveStyleName
+         * @returns {String}
+         */
+        getActiveStyleName: function() {
+            if (this.isJapanese()) {
+                return 'both';
+            } else if (this.isChinese() && this.settings.get('reviewSimplified') && this.settings.get('reviewTraditional')) {
+                return 'both';
+            } else if (this.isChinese() && this.settings.get('reviewSimplified') && !this.settings.get('reviewTraditional')) {
+                return 'simp';
+            } else {
+                return 'trad';
+            }
+        },
+        /**
          * @method getAvatar
          * @param {String} classes
          * @returns {String}
@@ -86,36 +116,6 @@ define([
                 return applicationLanguageCode;
             }
             return this.settings.get('targetLang');
-        },
-        /**
-         * @method getStyles
-         * @returns {Array}
-         */
-        getStyles: function() {
-            if (this.isJapanese()) {
-                return ['both'];
-            } else if (this.isChinese() && this.settings.get('reviewSimplified') && this.settings.get('reviewTraditional')) {
-                return ['both', 'simp', 'trad'];
-            } else if (this.isChinese() && this.settings.get('reviewSimplified') && !this.settings.get('reviewTraditional')) {
-                return ['both', 'simp'];
-            } else {
-                return ['both', 'trad'];
-            }
-        },
-        /**
-         * @method getStyleName
-         * @returns {String}
-         */
-        getStyleName: function() {
-            if (this.isJapanese()) {
-                return 'both';
-            } else if (this.isChinese() && this.settings.get('reviewSimplified') && this.settings.get('reviewTraditional')) {
-                return 'both';
-            } else if (this.isChinese() && this.settings.get('reviewSimplified') && !this.settings.get('reviewTraditional')) {
-                return 'simp';
-            } else {
-                return 'trad';
-            }
         },
         /**
          * Returns true if the target language is set to Chinese.
@@ -191,6 +191,39 @@ define([
                     window.document.location.href = '';
                 });
             });
+        },
+        /**
+         * @method setActiveParts
+         * @param {Array} parts
+         * @returns {Array}
+         */
+        setActiveParts: function(parts) {
+            if (this.isChinese()) {
+                this.set('filterChineseParts', parts);
+                return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
+            }
+            this.set('filterJapaneseParts', parts);
+            return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
+        },
+        /**
+         * @method setActiveStyles
+         * @param {Array} styles
+         * @returns {Array}
+         */
+        setActiveStyles: function(styles) {
+            if (this.isChinese()) {
+                if (styles.indexOf('simp') === -1) {
+                    this.settings.set('reviewSimplified', false);
+                } else {
+                    this.settings.set('reviewSimplified', true);
+                }
+                if (styles.indexOf('trad') === -1) {
+                    this.settings.set('reviewTraditional', false);
+                } else {
+                    this.settings.set('reviewTraditional', true);
+                }
+            }
+            return this.getActiveStyles();
         }
     });
 

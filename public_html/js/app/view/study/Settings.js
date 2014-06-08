@@ -12,6 +12,7 @@ define([
         initialize: function() {
             BaseView.prototype.initialize.call(this);
             this.activeParts = [];
+            this.activeStyles = [];
             this.enabledParts = [];
         },
         /**
@@ -21,6 +22,7 @@ define([
         render: function() {
             this.$el.html(templateStudySettings);
             this.activeParts = skritter.user.getActiveParts();
+            this.activeStyles = skritter.user.getActiveStyles();
             this.enabledParts = skritter.user.getEnabledParts();
             this.$('input.bootswitch').bootstrapSwitch();
             this.$('#general #audio').bootstrapSwitch('state', skritter.user.settings.get('audio'));
@@ -40,6 +42,12 @@ define([
             this.$('#parts #rdng').bootstrapSwitch('disabled', this.enabledParts.indexOf('rdng') === -1);
             this.$('#parts #rune').bootstrapSwitch('disabled', this.enabledParts.indexOf('rune') === -1);
             this.$('#parts #tone').bootstrapSwitch('disabled', this.enabledParts.indexOf('tone') === -1);
+            if (skritter.user.isChinese()) {
+                this.$('#styles #simp').bootstrapSwitch('state', this.activeStyles.indexOf('simp') > -1);
+                this.$('#styles #trad').bootstrapSwitch('state', this.activeStyles.indexOf('trad') > -1);
+            } else {
+                this.$('#styles').hide();
+            }
             BaseView.prototype.render.call(this).renderElements();
             return this;
         },
@@ -74,6 +82,7 @@ define([
          */
         save: function(event) {
             this.activeParts = [];
+            this.activeStyles = [];
             skritter.user.settings.set('audio', this.$('#general #audio').prop('checked'));
             skritter.user.settings.set('hideDueCount', this.$('#general #hide-due-count').prop('checked'));
             skritter.user.settings.set('hideTimer', this.$('#general #hide-timer').prop('checked'));
@@ -92,22 +101,26 @@ define([
                 this.activeParts.push('tone');
             }
             if (this.activeParts.length === 0) {
-                skritter.modals.show('confirmation').set('.modal-header', false).set('.modal-body', 'You must enable at least one part!', 'text-center');
+                skritter.modal.show('confirm').set('.modal-header', false).set('.modal-body', 'You must enable at least one part!', 'text-center');
                 return false;
             }
-            skritter.user.settings.setActiveParts(this.activeParts);
-            skritter.modal.show('loading').set('.modal-body', 'Applying Changes');
-            skritter.user.scheduler.load(function() {
-                skritter.router.navigate('study', {replace: true, trigger: true});
-                skritter.user.scheduler.sort();
-                skritter.user.sync.updateUser(function() {
-                    skritter.modal.hide();
-                });
-            });
+            if (this.$('#styles #simp').bootstrapSwitch('state')) {
+                this.activeStyles.push('simp');
+            }
+            if (this.$('#styles #trad').bootstrapSwitch('state')) {
+                this.activeStyles.push('trad');
+            }
+            if (this.activeStyles.length === 0) {
+                skritter.modal.show('confirm').set('.modal-header', false).set('.modal-body', 'You must enable at least one style!', 'text-center');
+                return false;
+            }
+            skritter.user.setActiveParts(this.activeParts);
+            skritter.user.setActiveStyles(['both'].concat(this.activeStyles));
+            skritter.router.navigate('study', {replace: true, trigger: true});
             event.preventDefault();
         }
     });
-    
+
     return Settings;
 });
 

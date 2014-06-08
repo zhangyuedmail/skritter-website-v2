@@ -160,7 +160,7 @@ define([], function() {
          */
         sort: function() {
             var activeParts = skritter.user.getActiveParts();
-            var activeStyles = skritter.user.getStyles();
+            var activeStyles = skritter.user.getActiveStyles();
             var now = skritter.fn.getUnixTime();
             var randomizer = this.randomizeInterval;
             this.data = _.sortBy(this.data, function(item) {
