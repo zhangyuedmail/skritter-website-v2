@@ -25,9 +25,9 @@ define([
          * @method renderElements
          */
         renderElements: function() {
-            this.element.loginUsername = this.$('#login-username');
-            this.element.loginPassword = this.$('#login-password');
-            this.element.message = this.$('#message');
+            this.elements.loginUsername = this.$('#login-username');
+            this.elements.loginPassword = this.$('#login-password');
+            this.elements.message = this.$('#message');
         },
         /**
          * @property {Object} events
@@ -56,16 +56,16 @@ define([
          */
         handleLoginClicked: function(event) {
             this.disableForm();
-            this.element.message.empty();
-            var username = this.element.loginUsername.val();
-            var password = this.element.loginPassword.val();
-            this.element.message.html("<i class='fa fa-spin fa-cog'></i> Signing In");
+            this.elements.message.empty();
+            var username = this.elements.loginUsername.val();
+            var password = this.elements.loginPassword.val();
+            this.elements.message.html("<i class='fa fa-spin fa-cog'></i> Signing In");
             skritter.user.login(username, password, _.bind(function(result, status) {
                 console.log('status', status);
                 if (status === 200) {
                     document.location.href = '';
                 } else {
-                    this.element.message.text(result.message);
+                    this.elements.message.text(result.message);
                     this.enableForm();
                 }
             }, this));

@@ -28,7 +28,7 @@ define([
          * @method renderElements
          */
         renderElements: function() {
-            this.element.targetLanguage = this.$('.target-language');
+            this.elements.targetLanguage = this.$('.target-language');
         },
         /**
          * @property {Object} events
