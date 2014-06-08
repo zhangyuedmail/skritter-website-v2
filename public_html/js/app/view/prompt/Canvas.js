@@ -233,18 +233,18 @@ define([
                 points.push(point);
             }
             function out(event) {
-                this.$(this.elements.input).off('vmousemove.Input', _.bind(move, this));
-                this.$(this.elements.input).off('vmouseout.Input', _.bind(out, this));
-                this.$(this.elements.input).off('vmouseup.Input', _.bind(up, this));
+                this.$(this.elements.input).off('vmousemove.Input');
+                this.$(this.elements.input).off('vmouseout.Input');
+                this.$(this.elements.input).off('vmouseup.Input');
                 this.triggerInputUp(null, squig.clone(true), event);
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
             }
             function up(event) {
-                this.$(this.elements.input).off('vmousemove.Input', _.bind(move, this));
-                this.$(this.elements.input).off('vmouseout.Input', _.bind(out, this));
-                this.$(this.elements.input).off('vmouseup.Input', _.bind(up, this));
+                this.$(this.elements.input).off('vmousemove.Input');
+                this.$(this.elements.input).off('vmouseout.Input');
+                this.$(this.elements.input).off('vmouseup.Input');
                 this.triggerInputUp(points, squig.clone(true), event);
                 marker.graphics.clear();
                 squig.graphics.clear();
