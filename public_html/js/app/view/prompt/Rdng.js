@@ -103,12 +103,12 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
-            this.element.answer.hide();
-            this.element.definition.html(this.vocab.getDefinition());
-            this.element.reading.html(this.vocab.getReading());
-            this.element.sentence.html(this.vocab.getSentence().writing);
-            this.element.writing.html(this.vocab.getWriting());
-            this.element.question.show('slide', {direction: 'right'}, 300);
+            this.elements.answer.hide();
+            this.elements.definition.html(this.vocab.getDefinition());
+            this.elements.reading.html(this.vocab.getReading());
+            this.elements.sentence.html(this.vocab.getSentence().writing);
+            this.elements.writing.html(this.vocab.getWriting());
+            this.elements.question.show('slide', {direction: 'right'}, 300);
             return this;
         },
         /**
@@ -116,9 +116,9 @@ define([
          * @returns {Backbone.View}
          */
         showAnswer: function() {
-            this.element.question.hide();
+            this.elements.question.hide();
             this.review.setReview({finished: true});
-            this.element.answer.fadeIn(300);
+            this.elements.answer.fadeIn(300);
             return this;
         }
     });

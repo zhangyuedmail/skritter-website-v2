@@ -7,7 +7,7 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            this.element = {};
+            this.elements = {};
             this.item = null;
             this.review = null;
             this.vocab = null;
@@ -18,15 +18,15 @@ define([], function() {
          */
         render: function() {
             console.log(this.review.id, this.review.toJSON());
-            this.element.answer = this.$('.prompt-answer');
-            this.element.canvas = this.$('.canvas-container');
-            this.element.definition = this.$('.prompt-definition');
-            this.element.heisig = this.$('.prompt-heisig');
-            this.element.mnemonic = this.$('.prompt-mnemonic');
-            this.element.question = this.$('.prompt-question');
-            this.element.reading = this.$('.prompt-reading');
-            this.element.sentence = this.$('.prompt-sentence');
-            this.element.writing = this.$('.prompt-writing');
+            this.elements.answer = this.$('.prompt-answer');
+            this.elements.canvas = this.$('.canvas-container');
+            this.elements.definition = this.$('.prompt-definition');
+            this.elements.heisig = this.$('.prompt-heisig');
+            this.elements.mnemonic = this.$('.prompt-mnemonic');
+            this.elements.question = this.$('.prompt-question');
+            this.elements.reading = this.$('.prompt-reading');
+            this.elements.sentence = this.$('.prompt-sentence');
+            this.elements.writing = this.$('.prompt-writing');
             this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
         },
@@ -62,9 +62,21 @@ define([], function() {
          * @method remove
          */
         remove: function() {
+            this.removeElements();
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+        },
+        /**
+         * @method removeElements
+         * @returns {Object}
+         */
+        removeElements: function() {
+            for (var i in this.elements) {
+                this.elements[i].remove();
+                this.elements[i] = undefined;
+            }
+            return this.elements;
         },
         /**
          * @method resize

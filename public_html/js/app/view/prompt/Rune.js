@@ -175,10 +175,10 @@ define([
          */
         show: function() {
             this.canvas.enableInput();
-            this.element.definition.html(this.vocab.getDefinition());
-            this.element.reading.html(this.vocab.getReading());
-            this.element.sentence.html(this.vocab.getSentence().writing);
-            this.element.writing.html(this.vocab.getWriting(this.review.getPosition()));
+            this.elements.definition.html(this.vocab.getDefinition());
+            this.elements.reading.html(this.vocab.getReading());
+            this.elements.sentence.html(this.vocab.getSentence().writing);
+            this.elements.writing.html(this.vocab.getWriting(this.review.getPosition()));
             return this;
         },
         /**
@@ -188,7 +188,7 @@ define([
         showAnswer: function() {
             this.canvas.disableInput();
             this.review.setReview({finished: true});
-            this.element.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
+            this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             return this;
         }
     });

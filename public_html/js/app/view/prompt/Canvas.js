@@ -9,7 +9,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.element = {};
+            this.elements = {};
             this.grid = true;
             this.gridColor = '#666666';
             this.lastMouseDownEvent = null;
@@ -34,9 +34,9 @@ define([
          */
         render: function() {
             this.$el.append(template);
-            this.element.holder = this.$('.canvas-holder')[0];
-            this.element.display = this.$('.canvas-display')[0];
-            this.element.input = this.$('.canvas-input')[0];
+            this.elements.holder = this.$('.canvas-holder')[0];
+            this.elements.display = this.$('.canvas-display')[0];
+            this.elements.input = this.$('.canvas-input')[0];
             this.stage.display = this.createDisplayStage();
             this.stage.input = this.createInputStage();
             this.createLayer('grid');
@@ -82,7 +82,7 @@ define([
          * @returns {CreateJS.Stage}
          */
         createDisplayStage: function() {
-            var stage = new createjs.Stage(this.element.display);
+            var stage = new createjs.Stage(this.elements.display);
             stage.autoClear = true;
             stage.enableDOMEvents(false);
             return stage;
@@ -92,7 +92,7 @@ define([
          * @returns {CreateJS.Stage}
          */
         createInputStage: function() {
-            var stage = new createjs.Stage(this.element.input);
+            var stage = new createjs.Stage(this.elements.input);
             stage.autoClear = false;
             stage.enableDOMEvents(true);
             return stage;
@@ -123,10 +123,10 @@ define([
          * @returns {Backbone.View}
          */
         disableInput: function() {
-            this.$(this.element.input).off('vmousedown.Input');
-            this.$(this.element.input).off('vmousemove.Input');
-            this.$(this.element.input).off('vmouseout.Input');
-            this.$(this.element.input).off('vmouseup.Input');
+            this.$(this.elements.input).off('vmousedown.Input');
+            this.$(this.elements.input).off('vmousemove.Input');
+            this.$(this.elements.input).off('vmouseout.Input');
+            this.$(this.elements.input).off('vmouseup.Input');
             return this;
         },
         /**
@@ -194,7 +194,7 @@ define([
             var self = this;
             var stage = this.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
-            this.disableInput().$(this.element.input).on('vmousedown.Input', down);
+            this.disableInput().$(this.elements.input).on('vmousedown.Input', down);
             function down(event) {
                 points = [];
                 marker = new createjs.Shape();
@@ -298,12 +298,21 @@ define([
          * @method remove
          */
         remove: function() {
-            this.element.holder.remove();
-            this.element.display.remove();
-            this.element.input.remove();
+            this.removeElements();
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+        },
+        /**
+         * @method removeElements
+         * @returns {Object}
+         */
+        removeElements: function() {
+            for (var i in this.elements) {
+                this.elements[i].remove();
+                this.elements[i] = undefined;
+            }
+            return this.elements;
         },
         /**
          * @method resize
@@ -312,12 +321,12 @@ define([
          */
         resize: function(size) {
             this.size = size ? size : skritter.settings.getCanvasSize();
-            this.element.holder.style.height = this.size + 'px';
-            this.element.holder.style.width = this.size + 'px';
-            this.element.display.height = this.size;
-            this.element.display.width = this.size;
-            this.element.input.height = this.size;
-            this.element.input.width = this.size;
+            this.elements.holder.style.height = this.size + 'px';
+            this.elements.holder.style.width = this.size + 'px';
+            this.elements.display.height = this.size;
+            this.elements.display.width = this.size;
+            this.elements.input.height = this.size;
+            this.elements.input.width = this.size;
             if (this.grid) {
                 this.drawGrid();
             }

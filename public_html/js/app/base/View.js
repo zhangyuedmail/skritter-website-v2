@@ -7,17 +7,17 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
-            this.element = {};
+            this.elements = {};
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            this.element.fontPreloader = this.$('.font-preloader');
-            this.element.avatar = this.$('.user-avatar');
-            this.element.sidebar = this.$('.sidebar');
-            this.element.username = this.$('.user-username');
+            this.elements.fontPreloader = this.$('.font-preloader');
+            this.elements.avatar = this.$('.user-avatar');
+            this.elements.sidebar = this.$('.sidebar');
+            this.elements.username = this.$('.user-username');
             this.preloadFont();
             return this;
         },
@@ -25,8 +25,8 @@ define(function() {
          * @method renderElements
          */
         renderElements: function() {
-            this.element.avatar.html(skritter.user.getAvatar('img-circle'));
-            this.element.username.text(skritter.user.settings.get('name'));
+            this.elements.avatar.html(skritter.user.getAvatar('img-circle'));
+            this.elements.username.text(skritter.user.settings.get('name'));
         },
         /**
          * @property {Object} events
@@ -52,7 +52,7 @@ define(function() {
          * @param {Object} event
          */
         handleContentContainerClicked: function(event) {
-            if (this.element.sidebar.hasClass('expanded')) {
+            if (this.elements.sidebar.hasClass('expanded')) {
                 this.toggleSidebar();
             }
             event.preventDefault();
@@ -93,11 +93,11 @@ define(function() {
          * @method preloadFont
          */
         preloadFont: function() {
-            if (this.element.fontPreloader) {
+            if (this.elements.fontPreloader) {
                 if (skritter.user.getLanguageCode() === 'zh') {
-                    this.element.fontPreloader.addClass('chinese-text');
+                    this.elements.fontPreloader.addClass('chinese-text');
                 } else {
-                    this.element.fontPreloader.addClass('japanese-text');
+                    this.elements.fontPreloader.addClass('japanese-text');
                 }
             }
         },
@@ -105,20 +105,32 @@ define(function() {
          * @method remove
          */
         remove: function() {
+            this.removeElements();
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
         },
         /**
+         * @method removeElements
+         * @returns {Object}
+         */
+        removeElements: function() {
+            for (var i in this.elements) {
+                this.elements[i].remove();
+                this.elements[i] = undefined;
+            }
+            return this.elements;
+        },
+        /**
          * @method toggleSidebar
          */
         toggleSidebar: function() {
-            if (this.element.sidebar.hasClass('expanded')) {
-                this.element.sidebar.removeClass('expanded');
-                this.element.sidebar.hide('slide', {direction: 'left'}, 200);
+            if (this.elements.sidebar.hasClass('expanded')) {
+                this.elements.sidebar.removeClass('expanded');
+                this.elements.sidebar.hide('slide', {direction: 'left'}, 200);
             } else {
-                this.element.sidebar.addClass('expanded');
-                this.element.sidebar.show('slide', {direction: 'left'}, 200);
+                this.elements.sidebar.addClass('expanded');
+                this.elements.sidebar.show('slide', {direction: 'left'}, 200);
             }
         }
     });
