@@ -81,6 +81,7 @@ define([
          */
         loadItem: function(itemId, callback) {
             var part = itemId.split('-')[4];
+            this.reset();
             async.waterfall([
                 //intial item
                 function(callback) {
@@ -120,7 +121,7 @@ define([
                 },
                 //contained vocabs
                 function(item, vocab, containedItems, callback) {
-                    if (containedItems.length !== 0) {
+                    if (containedItems.length > 0) {
                         var containedVocabIds = vocab.get('containedVocabIds');
                         skritter.storage.get('vocabs', containedVocabIds, function(containedVocabs) {
                             if (containedVocabIds.length === containedVocabs.length) {
@@ -150,9 +151,14 @@ define([
                 //strokes
                 function(item, vocab, containedItems, containedVocabs, sentence, callback) {
                     if (part === 'rune') {
-                        var strokeWritings = _.pluck(containedVocabs, function(vocab) {
-                            return vocab.attributes.writing;
-                        });
+                        var strokeWritings = null;
+                        if (containedVocabs.length === 0) {
+                            strokeWritings = vocab.get('writing');
+                        } else {
+                            strokeWritings = _.pluck(containedVocabs, function(vocab) {
+                                return vocab.attributes.writing;
+                            });
+                        }
                         skritter.storage.get('strokes', strokeWritings, function(strokes) {
                             if (strokeWritings.length === strokes.length) {
                                 callback(null, item, vocab, containedItems, containedVocabs, sentence, skritter.user.data.strokes.add(strokes, {merge: true, silent: true}));
@@ -209,6 +215,18 @@ define([
                     callback();
                 }
             });
+        },
+        /**
+         * @method reset
+         * @return {Backbone.Model}
+         */
+        reset: function() {
+            this.decomps.reset();
+            this.items.reset();
+            this.sentences.reset();
+            this.strokes.reset();
+            this.vocabs.reset();
+            return this;
         }
     });
 

@@ -30,7 +30,6 @@ define([
             var review = new Review();
             var items = [this].concat(this.getContainedItems());
             var now = skritter.fn.getUnixTime();
-            var copiedItems = [];
             var part = this.get('part');
             var reviews = [];
             var wordGroup = now + '_' + skritter.fn.getGuid() + '_' + this.id;

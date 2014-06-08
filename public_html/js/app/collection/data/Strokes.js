@@ -36,6 +36,13 @@ define([
                 this.add(strokes, {merge: true, silent: true, sort: false});
                 callback();
             }, this));
+        },
+        /**
+         * @method reset
+         */
+        reset: function() {
+            Backbone.Collection.prototype.reset.call(this);
+            this.add(ToneData);
         }
     });
 

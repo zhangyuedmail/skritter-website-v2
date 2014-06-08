@@ -45,7 +45,8 @@ define([
             this.createLayer('stroke');
             this.$('.canvas-input').on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
             this.$('.canvas-input').on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
-            createjs.Ticker.addEventListener('tick', this.stage.display);
+            createjs.Ticker.addEventListener('tick', _.bind(this.tick, this));
+            createjs.Touch.enable(this.stage.input);
             createjs.Ticker.setFPS(200);
             this.resize();
             return this;
@@ -193,7 +194,7 @@ define([
             var self = this;
             var stage = this.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
-            this.disableInput().$(this.element.input).on('vmousedown.Input', down);            
+            this.disableInput().$(this.element.input).on('vmousedown.Input', down);
             function down(event) {
                 points = [];
                 marker = new createjs.Shape();
@@ -297,7 +298,9 @@ define([
          * @method remove
          */
         remove: function() {
-            createjs.Ticker.removeAllEventListeners();
+            this.element.holder.remove();
+            this.element.display.remove();
+            this.element.input.remove();
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
@@ -331,6 +334,12 @@ define([
          */
         stopSparkling: function() {
             //TODO: custom animations for pointer sparkling
+        },
+        /**
+         * @method tick
+         */
+        tick: function() {
+            this.stage.display.update();
         },
         /**
          * @method triggerClick
