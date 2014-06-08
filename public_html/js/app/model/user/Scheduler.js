@@ -18,7 +18,7 @@ define([], function() {
          * @method cache
          */
         cache: function() {
-            window.localStorage.setItem(skritter.user.id + '-scheduler', JSON.stringify(this.toJSON()));
+            localStorage.setItem(skritter.user.id + '-scheduler', JSON.stringify(this.toJSON()));
         },
         /**
          * @method calculateInterval
@@ -159,6 +159,8 @@ define([], function() {
          * @returns {Array}
          */
         sort: function() {
+            var activeParts = skritter.user.getActiveParts();
+            var activeStyles = skritter.user.getStyles();
             var now = skritter.fn.getUnixTime();
             var randomizer = this.randomizeInterval;
             this.data = _.sortBy(this.data, function(item) {
@@ -171,10 +173,11 @@ define([], function() {
                     return -item.readiness;
                 }
                 //filter out inactive parts and styles
-                /**if (item.part !== 'defn') {
+                if (activeParts.indexOf(item.part) === -1 &&
+                        activeStyles.indexOf(item.style) === -1) {
                     item.readiness = 0;
                     return -item.readiness;
-                }**/
+                }
                 //randomly prioritize new items
                 if (item.last === 0) {
                     item.readiness = randomizer(9999);

@@ -35,7 +35,6 @@ define([], function() {
          */
         sync: function(callback) {
             skritter.api.getUser(skritter.user.id, _.bind(function(result, status) {
-                console.log(result, status);
                 if (status === 200) {
                     this.set(result);
                     callback(null, status);
