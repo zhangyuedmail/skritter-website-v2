@@ -199,10 +199,10 @@ define([
          */
         setActiveParts: function(parts) {
             if (this.isChinese()) {
-                this.set('filterChineseParts', parts);
+                this.settings.set('filterChineseParts', parts);
                 return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
             }
-            this.set('filterJapaneseParts', parts);
+            this.settings.set('filterJapaneseParts', parts);
             return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
         },
         /**
