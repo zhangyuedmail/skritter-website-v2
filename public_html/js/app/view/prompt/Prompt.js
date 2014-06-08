@@ -39,6 +39,15 @@ define([], function() {
             return this;
         },
         /**
+         * @method destroy
+         */
+        destroy: function() {
+            var keys = _.keys(this);
+            for (var key in keys) {
+                this[keys[key]] = undefined;
+            }
+        },
+        /**
          * @method next
          */
         next: function() {
@@ -66,6 +75,7 @@ define([], function() {
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+            this.destroy();
         },
         /**
          * @method removeElements

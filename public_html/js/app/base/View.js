@@ -29,6 +29,15 @@ define(function() {
             this.elements.username.text(skritter.user.settings.get('name'));
         },
         /**
+         * @method destroy
+         */
+        destroy: function() {
+            var keys = _.keys(this);
+            for (var key in keys) {
+                this[keys[key]] = undefined;
+            }
+        },
+        /**
          * @property {Object} events
          */
         events: {
@@ -109,6 +118,7 @@ define(function() {
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+            this.destroy();
         },
         /**
          * @method removeElements

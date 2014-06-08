@@ -45,7 +45,7 @@ define([
             this.createLayer('stroke');
             this.$('.canvas-input').on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
             this.$('.canvas-input').on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
-            createjs.Ticker.addEventListener('tick', _.bind(this.tick, this));
+            createjs.Ticker.addEventListener('tick', this.stage.display);
             createjs.Touch.enable(this.stage.input);
             createjs.Ticker.setFPS(200);
             this.resize();
@@ -108,6 +108,15 @@ define([
             this.stage.display.addChild(layer);
             this.layerNames.push(name);
             return layer;
+        },
+        /**
+         * @method destroy
+         */
+        destroy: function() {
+            var keys = _.keys(this);
+            for (var key in keys) {
+                this[keys[key]] = undefined;
+            }
         },
         /**
          * @method disableGrid
@@ -191,32 +200,31 @@ define([
          * @returns {Backbone.View}
          */
         enableInput: function() {
-            var self = this;
             var stage = this.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
-            this.disableInput().$(this.elements.input).on('vmousedown.Input', down);
+            this.disableInput().$(this.elements.input).on('vmousedown.Input', _.bind(down, this));
             function down(event) {
                 points = [];
                 marker = new createjs.Shape();
                 squig = new createjs.Shape();
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
-                self.triggerInputDown(oldPoint, event);
-                self.$(self.element.input).on('vmousemove.Input', move);
-                self.$(self.element.input).on('vmouseout.Input', out);
-                self.$(self.element.input).on('vmouseup.Input', up);
+                this.triggerInputDown(oldPoint, event);
+                this.$(this.elements.input).on('vmousemove.Input', _.bind(move, this));
+                this.$(this.elements.input).on('vmouseout.Input', _.bind(out, this));
+                this.$(this.elements.input).on('vmouseup.Input', _.bind(up, this));
             }
             function move() {
                 var point = {x: stage.mouseX, y: stage.mouseY};
                 var midPoint = {x: oldPoint.x + point.x >> 1, y: oldPoint.y + point.y >> 1};
                 marker.graphics.clear()
-                        .setStrokeStyle(self.strokeSize, self.strokeCapStyle, self.strokeJointStyle)
-                        .beginStroke(self.strokeColor)
+                        .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
+                        .beginStroke(this.strokeColor)
                         .moveTo(midPoint.x, midPoint.y)
                         .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 squig.graphics
-                        .setStrokeStyle(self.strokeSize, self.strokeCapStyle, self.strokeJointStyle)
-                        .beginStroke(self.strokeColor)
+                        .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
+                        .beginStroke(this.strokeColor)
                         .moveTo(midPoint.x, midPoint.y)
                         .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 stage.update();
@@ -225,19 +233,19 @@ define([
                 points.push(point);
             }
             function out(event) {
-                self.$(self.element.input).off('vmousemove.Input', move);
-                self.$(self.element.input).off('vmouseout.Input', out);
-                self.$(self.element.input).off('vmouseup.Input', up);
-                self.triggerInputUp(null, squig.clone(true), event);
+                this.$(this.elements.input).off('vmousemove.Input', _.bind(move, this));
+                this.$(this.elements.input).off('vmouseout.Input', _.bind(out, this));
+                this.$(this.elements.input).off('vmouseup.Input', _.bind(up, this));
+                this.triggerInputUp(null, squig.clone(true), event);
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
             }
             function up(event) {
-                self.$(self.element.input).off('vmousemove.Input', move);
-                self.$(self.element.input).off('vmouseout.Input', out);
-                self.$(self.element.input).off('vmouseup.Input', up);
-                self.triggerInputUp(points, squig.clone(true), event);
+                this.$(this.elements.input).off('vmousemove.Input', _.bind(move, this));
+                this.$(this.elements.input).off('vmouseout.Input', _.bind(out, this));
+                this.$(this.elements.input).off('vmouseup.Input', _.bind(up, this));
+                this.triggerInputUp(points, squig.clone(true), event);
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
@@ -302,6 +310,7 @@ define([
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+            this.destroy();
         },
         /**
          * @method removeElements
@@ -343,12 +352,6 @@ define([
          */
         stopSparkling: function() {
             //TODO: custom animations for pointer sparkling
-        },
-        /**
-         * @method tick
-         */
-        tick: function() {
-            this.stage.display.update();
         },
         /**
          * @method triggerClick
