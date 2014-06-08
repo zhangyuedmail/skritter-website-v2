@@ -35,7 +35,7 @@ define([
          */
         handleBackButtonPressed: function(event) {
             var fragment = Backbone.history.fragment;
-            if (this.view.element.sidebar && this.view.element.sidebar.hasClass('expanded')) {
+            if (this.view.elements.sidebar && this.view.elements.sidebar.hasClass('expanded')) {
                 this.view.toggleSidebar();
             } else if (fragment === '') {
                 if (skritter.modal.isVisible()) {
