@@ -101,7 +101,7 @@ define([
         reset: function() {
             if (this.view) {
                 this.view.remove();
-                this.view = null;
+                this.view = undefined;
             }
         }
     });

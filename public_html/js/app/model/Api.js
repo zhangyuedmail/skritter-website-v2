@@ -48,6 +48,28 @@ define(function() {
             });
         },
         /**
+         * @method checkBatch
+         * @param {String} batchId
+         * @param {Function} callback
+         */
+        checkBatch: function(batchId, callback) {
+            $.ajax({
+                url: this.base + 'batch/' + batchId + '/status',
+                beforeSend: _.bind(function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                }, this),
+                type: 'GET',
+                data: {
+                    bearer_token: this.get('token'),
+                    detailed: true
+                }
+            }).done(function(data) {
+                callback(data.Batch, data.statusCode);
+            }).fail(function(error) {
+                callback(error, error.status);
+            });
+        },
+        /**
          * @method getBatch
          * @param {Number} batchId
          * @param {Function} callback
@@ -84,6 +106,7 @@ define(function() {
                         }
                     }
                     result.downloadedRequests = data.Batch.Requests.length;
+                    result.requestIds = _.pluck(data.Batch.Requests, 'id');
                     result.runningRequests = data.Batch.runningRequests;
                     result.totalRequests = data.Batch.totalRequests;
                 }

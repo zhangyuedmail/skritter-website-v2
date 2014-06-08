@@ -14,6 +14,8 @@ define([], function() {
          */
         defaults: {
             addItemOffset: 0,
+            downloadBatchId: null,
+            downloadedBatchRequests: [],
             lastErrorCheck: 0,
             lastItemSync: 0,
             lastSRSConfigSync: 0,
@@ -23,7 +25,7 @@ define([], function() {
          * @method cache
          */
         cache: function() {
-            window.localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
+            localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
         },
         /**
          * @method downloadAll
@@ -67,6 +69,7 @@ define([], function() {
                 },
                 function(batch, callback) {
                     var downloadedRequests = 0;
+                    var requestIds = [];
                     var responseSize = 0;
                     var totalRequests = 0;
                     var request = function() {
@@ -81,15 +84,31 @@ define([], function() {
                                 if (result.totalRequests > 100) {
                                     skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));
                                 }
-                                skritter.user.data.put(result, function() {
+                                skritter.user.data.put(result, _.bind(function() {
+                                    requestIds = requestIds.concat(_.without(result.requestIds, undefined));
                                     window.setTimeout(request, 2000);
-                                });
+                                }, this));
                             } else {
-                                callback();
+                                callback(null, batch, requestIds);
                             }
                         });
                     };
                     request();
+                },
+                function(batch, requestIds, callback) {
+                    skritter.api.checkBatch(batch.id, function(batch, status) {
+                        if (status === 200) {
+                            var batchRequestIds = _.pluck(batch.Requests, 'id');
+                            var missingRequestIds = _.difference(requestIds, batchRequestIds);
+                            if (missingRequestIds && missingRequestIds.length > 0) {
+                                callback();
+                            } else {
+                                callback();
+                            }
+                        } else {
+                            callback(batch);
+                        }
+                    });
                 }
             ], _.bind(function() {
                 this.set({

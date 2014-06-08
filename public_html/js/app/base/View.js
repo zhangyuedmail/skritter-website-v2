@@ -61,7 +61,7 @@ define(function() {
          * @param {Object} event
          */
         handleContentContainerClicked: function(event) {
-            if (this.elements.sidebar && this.elements.sidebar.hasClass('expanded')) {
+            if (this.elements && this.elements.sidebar.hasClass('expanded')) {
                 this.toggleSidebar();
             }
             event.preventDefault();
