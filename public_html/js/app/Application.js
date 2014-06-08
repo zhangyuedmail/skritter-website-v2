@@ -4,11 +4,12 @@ define([
     'model/storage/IndexedDBAdapter',
     'view/component/Modal',
     'router/Router',
+    'model/Schema',
     'model/Settings',
     'require.locale!../../locale/nls/strings',
     'view/component/Timer',
     'model/User'
-], function(Api, Functions, IndexedDBAdapter, Modal, Router, Settings, Strings, Timer, User) {
+], function(Api, Functions, IndexedDBAdapter, Modal, Router, Schema, Settings, Strings, Timer, User) {
     /**
      * @method loadApi
      * @param {Function} callback
@@ -39,6 +40,14 @@ define([
      */
     var loadModal = function(callback) {
         skritter.modal = new Modal();
+        callback();
+    };
+    /**
+     * @method loadSchema
+     * @param {Function} callback
+     */
+    var loadSchema = function(callback) {
+        skritter.schema = new Schema();
         callback();
     };
     /**
@@ -125,6 +134,7 @@ define([
             async.apply(loadFastClick),
             async.apply(loadFunctions),
             async.apply(loadModal),
+            async.apply(loadSchema),
             async.apply(loadSettings),
             async.apply(loadStorage),
             async.apply(loadStrings),
