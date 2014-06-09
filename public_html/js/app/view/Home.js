@@ -20,6 +20,7 @@ define([
             window.document.title = "Home - Skritter";
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this).renderElements();
+            this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
             return this;
         },
         /**
@@ -27,6 +28,8 @@ define([
          */
         renderElements: function() {
             BaseView.prototype.renderElements.call(this);
+            this.elements.dueCount = this.$('.due-count');
+            this.elements.listCount = this.$('.list-count');
         },
         /**
          * @property {Object} events

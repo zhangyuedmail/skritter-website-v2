@@ -106,19 +106,24 @@ define([], function() {
         },
         /**
          * @method getDue
+         * @param {Boolean} sort
          * @returns {Array}
          */
-        getDue: function() {
+        getDue: function(sort) {
+            if (sort) {
+                this.sort();
+            }
             return this.data.filter(function(item) {
                 return item.readiness >= 1;
             });
         },
         /**
          * @method getDueCount
+         * @param {Boolean} sort
          * @returns {Number}
          */
-        getDueCount: function() {
-            return this.getDue().length;
+        getDueCount: function(sort) {
+            return this.getDue(sort).length;
         },
         /**
          * @method getNext

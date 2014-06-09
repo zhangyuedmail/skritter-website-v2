@@ -117,7 +117,9 @@ define([
                                 .set('.modal-title', 'Downloading Account')
                                 .set('.modal-title-icon', null, 'fa-download')
                                 .progress(100);
-                        skritter.user.sync.downloadAll(callback);
+                        skritter.user.sync.downloadAll(function() {
+                            window.location.reload(true);
+                        });
                     } else {
                         callback();
                     }
