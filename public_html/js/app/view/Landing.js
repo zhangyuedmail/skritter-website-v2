@@ -44,7 +44,7 @@ define([
          * @param {Object} event
          */
         clickExistingUser: function(event) {
-            skritter.router.navigate('login', {trigger: true});
+            skritter.router.navigate('login', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
