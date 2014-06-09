@@ -21,6 +21,7 @@ define([], function() {
             hideTimer: false,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
+            readingStyle: 'pinyin',
             teachingMode: true
         },
         /**

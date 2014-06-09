@@ -30,6 +30,11 @@ define([
             this.$('#general #hide-timer').bootstrapSwitch('state', skritter.user.settings.get('hideTimer'));
             this.$('#general #raw-squigs').bootstrapSwitch('state', skritter.user.settings.get('squigs'));
             this.$('#general #teaching-mode').bootstrapSwitch('state', skritter.user.settings.get('teachingMode'));
+            if (skritter.user.isChinese()) {
+                this.$('#general #reading-style').bootstrapSwitch('state', skritter.user.settings.get('readingStyle') === 'pinyin' ? true : false);
+            } else {
+                this.$('#general #reading-style').parent().parent().parent().hide();
+            }
             this.$('#parts #defn').bootstrapSwitch('state', this.activeParts.indexOf('defn') > -1);
             this.$('#parts #rdng').bootstrapSwitch('state', this.activeParts.indexOf('rdng') > -1);
             this.$('#parts #rune').bootstrapSwitch('state', this.activeParts.indexOf('rune') > -1);
@@ -88,6 +93,7 @@ define([
             skritter.user.settings.set('hideTimer', this.$('#general #hide-timer').prop('checked'));
             skritter.user.settings.set('squigs', this.$('#general #raw-squigs').prop('checked'));
             skritter.user.settings.set('teachingMode', this.$('#general #teaching-mode').prop('checked'));
+            skritter.user.settings.set('readingStyle', this.$('#general #reading-style').prop('checked') ? 'pinyin' : 'zhuyin');
             if (this.$('#parts #defn').bootstrapSwitch('state')) {
                 this.activeParts.push('defn');
             }
