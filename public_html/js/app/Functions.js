@@ -1,11 +1,11 @@
 define([
     'function/Bootstrap',
     'function/ChineseMap',
-    'function/PinyinConverter',
+    'function/PinyinMap',
     'function/Recognizer',
     'function/Shortstraw',
     'function/StrokeShapeMap'
-], function(Bootstrap, ChineseMap, PinyinConverter, Recognizer, Shortstraw, StrokeShapeMap) {
+], function(Bootstrap, ChineseMap, PinyinMap, Recognizer, Shortstraw, StrokeShapeMap) {
     /**
      * @property {Object} bootstrap
      */
@@ -176,7 +176,7 @@ define([
     /**
      * @property {Object} pinyin
      */
-    var pinyin = PinyinConverter;
+    var pinyin = PinyinMap;
     /**
      * @property {Object} strokes
      */
