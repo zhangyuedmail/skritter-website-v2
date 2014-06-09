@@ -118,6 +118,13 @@ define([
             return this.settings.get('targetLang');
         },
         /**
+         * @method isAudioEnabled
+         * @returns {Boolean}
+         */
+        isAudioEnabled: function() {
+            return this.settings.get('audio');
+        },
+        /**
          * Returns true if the target language is set to Chinese.
          * 
          * @method isChinese
