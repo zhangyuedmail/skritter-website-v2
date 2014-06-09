@@ -31,6 +31,7 @@ define([
             this.elements.reading = this.$('.prompt-reading');
             this.elements.sentence = this.$('.prompt-sentence');
             this.elements.writing = this.$('.prompt-writing');
+            this.$('.character-font').addClass(this.vocab.getFontClass());
             this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
         },
