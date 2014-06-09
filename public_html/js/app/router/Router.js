@@ -67,25 +67,37 @@ define([
          * @method showLogin
          */
         showLogin: function() {
-            this.reset();
-            this.view = new LoginView({el: this.container});
-            this.view.render();
+            if (!skritter.user.isLoggedIn()) {
+                this.reset();
+                this.view = new LoginView({el: this.container});
+                this.view.render();
+            } else {
+                this.navigate('login', {replace: true, trigger: true});
+            }
         },
-         /**
+        /**
          * @method showStudy
          */
         showStudy: function() {
-            this.reset();
-            this.view = new StudyView({el: this.container});
-            this.view.render();
+            if (skritter.user.isLoggedIn()) {
+                this.reset();
+                this.view = new StudyView({el: this.container});
+                this.view.render();
+            } else {
+                this.navigate('', {replace: true, trigger: true});
+            }
         },
         /**
          * @method showStudySettings
          */
         showStudySettings: function() {
-            this.reset();
-            this.view = new StudySettings({el: this.container});
-            this.view.render();
+            if (skritter.user.isLoggedIn()) {
+                this.reset();
+                this.view = new StudySettings({el: this.container});
+                this.view.render();
+            } else {
+                this.navigate('', {replace: true, trigger: true});
+            }
         },
         /**
          * @method showTest
@@ -105,6 +117,6 @@ define([
             }
         }
     });
-    
+
     return Router;
 });

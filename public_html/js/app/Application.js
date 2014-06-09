@@ -114,7 +114,7 @@ define([
                 function(callback) {
                     if (skritter.user.sync.isFirst()) {
                         skritter.modal.show('download')
-                                .set('.modal-title', 'Downloading Account')
+                                .set('.modal-title', 'Initial Downloading')
                                 .set('.modal-title-icon', null, 'fa-download')
                                 .progress(100);
                         skritter.user.sync.downloadAll(function() {
