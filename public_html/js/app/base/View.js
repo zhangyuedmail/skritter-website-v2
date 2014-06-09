@@ -72,6 +72,7 @@ define(function() {
          */
         handleHomeClicked: function(event) {
             skritter.router.navigate('', {replace: true, trigger: true});
+            this.toggleSidebar();
             event.preventDefault();
         },
         /**
@@ -80,6 +81,7 @@ define(function() {
          */
         handleLogoutClicked: function(event) {
             skritter.user.logout();
+            this.toggleSidebar();
             event.preventDefault();
         },
         /**
@@ -96,6 +98,7 @@ define(function() {
          */
         handleStudyClicked: function(event) {
             skritter.router.navigate('study', {replace: true, trigger: true});
+            this.toggleSidebar();
             event.preventDefault();
         },
         /**

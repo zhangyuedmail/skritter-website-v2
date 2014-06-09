@@ -2,8 +2,9 @@ define([
     'model/user/Data',
     'model/user/Scheduler',
     'model/user/Settings',
+    'model/user/Subscription',
     'model/user/Sync'
-], function(Data, Scheduler, Settings, Sync) {
+], function(Data, Scheduler, Settings, Subscription, Sync) {
     /**
      * @class User
      */
@@ -15,6 +16,7 @@ define([
             this.data = new Data();
             this.scheduler = new Scheduler();
             this.settings = new Settings();
+            this.subscription = new Subscription();
             this.sync = new Sync();
             //loads models for authenticated active user
             if (window.localStorage.getItem('active')) {
@@ -23,6 +25,9 @@ define([
                 skritter.api.set('token', this.get('access_token'), {silent: true});
                 if (window.localStorage.getItem(userId + '-settings')) {
                     this.settings.set(JSON.parse(window.localStorage.getItem(userId + '-settings')), {silent: true});
+                }
+                if (window.localStorage.getItem(userId + '-subscription')) {
+                    this.subscription.set(JSON.parse(window.localStorage.getItem(userId + '-subscription')), {silent: true});
                 }
                 if (window.localStorage.getItem(userId + '-sync')) {
                     this.sync.set(JSON.parse(window.localStorage.getItem(userId + '-sync')), {silent: true});
@@ -176,6 +181,9 @@ define([
                     async.series([
                         _.bind(function(callback) {
                             this.settings.sync(callback);
+                        }, this),
+                        _.bind(function(callback) {
+                            this.subscription.sync(callback);
                         }, this)
                     ], _.bind(function() {
                         window.localStorage.setItem('active', result.user_id);

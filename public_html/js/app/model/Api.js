@@ -121,6 +121,27 @@ define(function() {
             });
         },
         /**
+         * @method getSubscription
+         * @param {String} userId
+         * @param {Function} callback
+         */
+        getSubscription: function(userId, callback) {
+            $.ajax({
+                url: this.base + 'subscriptions/' + userId,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'GET',
+                data: {
+                    bearer_token: this.get('token')
+                }
+            }).done(function(data) {
+                callback(data.Subscription, data.statusCode);
+            }).fail(function(error) {
+                callback(error, 0);
+            });
+        },
+        /**
          * @method getUser
          * @param {String} userId
          * @param {Function} callback

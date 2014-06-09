@@ -52,6 +52,14 @@ define([], function() {
                     spawner: true
                 },
                 {
+                    path: 'api/v' + skritter.api.version + '/vocablists',
+                    method: 'GET',
+                    params: {
+                        lang: languageCode,
+                        sort: 'studying'
+                    }
+                },
+                {
                     path: 'api/v' + skritter.api.version + '/srsconfigs',
                     method: 'GET',
                     params: {lang: languageCode}
