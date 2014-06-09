@@ -7,11 +7,13 @@ module.exports = function(grunt) {
     
     var paths = {
         //directories
+        spec: '../../test/spec',
         template: '../../template',
         //libraries
         async: '../lib/async-0.9.0',
         backbone: '../lib/backbone-1.1.2.min',
         bootstrap: '../../bootstrap/js/bootstrap.min',
+        'bootstrap.switch': '../../bootstrap/components/switch/js/bootstrap-switch.min',
         'createjs.easel': '../lib/createjs.easel-NEXT.min',
         'createjs.tween': '../lib/createjs.tween-NEXT.min',
         moment: '../lib/moment-2.6.0.min',
@@ -70,6 +72,26 @@ module.exports = function(grunt) {
                     force: true
                 } 
             },
+            'utils-chinese': {
+                src: [
+                    'utils/apksigner/unsigned/SkritterChinese-release-unsigned.apk',
+                    'utils/apksigner/signed/Skritter-chinese.apk',
+                    'utils/apktool/SkritterChinese-release-unsigned/assets/www/**/*'
+                ],
+                options: {
+                    force: true
+                }
+            },
+            'utils-japanese': {
+                src: [
+                    'utils/apksigner/unsigned/SkritterJapanese-release-unsigned.apk',
+                    'utils/apksigner/signed/Skritter-japanese.apk',
+                    'utils/apktool/SkritterJapanese-release-unsigned/assets/www/**/*'
+                ],
+                options: {
+                    force: true
+                }
+            },
             'web': {
                 src: ['build/web'],
                 options: {
@@ -80,6 +102,26 @@ module.exports = function(grunt) {
         
         /*** COPY ***/
         copy: {
+            'apktool-apksigner-chinese': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'utils/apktool/SkritterChinese-release-unsigned/dist',
+                        src: '**/*',
+                        dest: 'utils/apksigner/unsigned'
+                    }
+                ]
+            },
+            'apktool-apksigner-japanese': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'utils/apktool/SkritterJapanese-release-unsigned/dist',
+                        src: '**/*',
+                        dest: 'utils/apksigner/unsigned'
+                    }
+                ]
+            },
             'cordova-chinese': {
                 files: [
                     {
@@ -126,6 +168,26 @@ module.exports = function(grunt) {
                     }
                 ]
             },
+            'cordova-apktool-chinese': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/chinese/platforms/android/assets/www',
+                        src: '**/*',
+                        dest: 'utils/apktool/SkritterChinese-release-unsigned/assets/www'
+                    }
+                ]
+            },
+            'cordova-apktool-japanese': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/japanese/platforms/android/assets/www',
+                        src: '**/*',
+                        dest: 'utils/apktool/SkritterJapanese-release-unsigned/assets/www'
+                    }
+                ]
+            }
         },
         
         /*** CSSLINT ***/
@@ -222,6 +284,46 @@ module.exports = function(grunt) {
         
         /*** SHELL ***/
         shell: {
+            'apktool-compile-chinese': {
+                command: [
+                    'cd utils/apktool',
+                    'apktool b SkritterChinese-release-unsigned',
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'apktool-compile-japanese': {
+                command: [
+                    'cd utils/apktool',
+                    'apktool b SkritterJapanese-release-unsigned',
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'apksigner-build-chinese': {
+                command: [
+                    'cd utils/apksigner',
+                    'sign-skritter_chinese'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'apksigner-build-japanese': {
+                command: [
+                    'cd utils/apksigner',
+                    'sign-skritter_japanese',
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
             'cordova-build-android-chinese': {
                 command: [
                     'cd build/cordova/chinese',
@@ -367,6 +469,29 @@ module.exports = function(grunt) {
         'shell:cordova-prepare',
         'shell:cordova-install-chinese',
         'shell:cordova-install-japanese'
+    ]);
+    
+    grunt.registerTask('package-android', [
+        'package-android-chinese',
+        'package-android-japanese'
+    ]);
+    
+    grunt.registerTask('package-android-chinese', [
+        'build-android-chinese',
+        'clean:utils-chinese',
+        'copy:cordova-apktool-chinese',
+        'shell:apktool-compile-chinese',
+        'copy:apktool-apksigner-chinese',
+        'shell:apksigner-build-chinese'
+    ]);
+    
+    grunt.registerTask('package-android-japanese', [
+        'build-android-japanese',
+        'clean:utils-japanese',
+        'copy:cordova-apktool-japanese',
+        'shell:apktool-compile-japanese',
+        'copy:apktool-apksigner-japanese',
+        'shell:apksigner-build-japanese'
     ]);
     
     grunt.registerTask('run-android-chinese', [
