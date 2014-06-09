@@ -270,6 +270,7 @@ body {
 .input-section { cursor: pointer; }
 .input-section .prompt-text {
     height: 100%;
+    padding-top: 20%;
     position: relative;
     width: 100%;
 }
