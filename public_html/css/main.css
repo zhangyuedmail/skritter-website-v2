@@ -96,6 +96,7 @@
     margin-left: -10px;
     margin-right: -10px;
 }
+.row.bottom-spacing { margin-bottom: 10px; }
 
 
 /*** GENERAL ***/
@@ -255,6 +256,7 @@ body {
 .info-section {
     border-bottom: none;
     border-right: 2px solid #333333;
+    overflow-y: auto;
 }
 .info-section .prompt-row { clear: both; }
 .info-section .prompt-row div { float: left; }
@@ -262,7 +264,7 @@ body {
 .info-section .writing-hidden { border: 2px #333333 solid; }
 .info-section .writing-hidden span { visibility: hidden; }
 .info-section .prompt-reading span { margin-right: 5px; }
-.info-section .reading-hidden { border-bottom: 2px #333333 solid; }
+.info-section .reading-hidden { border: 2px #333333 solid; }
 .info-section .reading-hidden span { visibility: hidden; }
 .info-section .prompt-definition { font-size: 18px }
 .info-section .prompt-reading { font-size: 24px }
