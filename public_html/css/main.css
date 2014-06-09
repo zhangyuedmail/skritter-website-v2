@@ -1,61 +1,61 @@
 /*** FONTS ***/
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-Hairline.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-Hairline.ttf');
     font-weight: 100;
     font-style: normal;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-HairlineItalic.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-HairlineItalic.ttf');
     font-weight: 100;
     font-style: italic;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-Light.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-Light.ttf');
     font-weight: 300;
     font-style: normal;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-LightItalic.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-LightItalic.ttf');
     font-weight: 300;
     font-style: italic;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-Regular.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-Regular.ttf');
     font-weight: 400;
     font-style: normal;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-RegularItalic.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-RegularItalic.ttf');
     font-weight: 400;
     font-style: italic;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-Bold.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-Bold.ttf');
     font-weight: 700;
     font-style: normal;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-BoldItalic.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-BoldItalic.ttf');
     font-weight: 700;
     font-style: italic;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-Black.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-Black.ttf');
     font-weight: 900;
     font-style: normal;
 }
 @font-face {
-    font-family: "Lato";
-    src: url('../font/lato/Lato-BlackItalic.ttf');
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-BlackItalic.ttf');
     font-weight: 900;
     font-style: italic;
 }
@@ -107,6 +107,8 @@ body {
     -webkit-touch-callout: none;
     -webkit-text-size-adjust: none;
     -webkit-user-select: none;
+    background-image: url('../img/background/ricepaper1.png');
+    background-repeat: repeat;
     user-select: none;
 }
 .canvas-holder { 
@@ -131,7 +133,7 @@ body {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
-    background-color: #303030;
+    background-color: #ffffff;
     margin-top: 10px;
     padding: 5px 10px;
 }
@@ -160,10 +162,6 @@ body {
 }
 
 
-/*** BOOTSTRAP SWITCH ***/
-.bootstrap-switch { border: none; }
-
-
 /*** MODAL ***/
 .modal-container .modal { 
     overflow-y: hidden;
@@ -178,6 +176,11 @@ body {
 .modal-container .modal-title-icon {
     float: left;
     margin: 10.5px;
+}
+.modal-container .progress-bar { position: relative; }
+.modal-container .modal-progress-value { 
+    position: absolute;
+    top: -2.5px;
 }
 
 
@@ -239,18 +242,28 @@ body {
 
 
 /*** PROMPT: INFO SECTION ***/
+.info-section {
+    border-bottom: none;
+    border-right: 2px solid #333333;
+}
 .info-section .prompt-row { clear: both; }
 .info-section .prompt-row div { float: left; }
 .info-section .prompt-writing span { margin-right: 5px; }
-.info-section .writing-hidden { border: 2px #ffffff solid; }
+.info-section .writing-hidden { border: 2px #333333 solid; }
 .info-section .writing-hidden span { visibility: hidden; }
 .info-section .prompt-reading span { margin-right: 5px; }
-.info-section .reading-hidden { border-bottom: 2px #ffffff solid; }
+.info-section .reading-hidden { border-bottom: 2px #333333 solid; }
 .info-section .reading-hidden span { visibility: hidden; }
 .info-section .prompt-definition { font-size: 18px }
 .info-section .prompt-reading { font-size: 24px }
 .info-section .prompt-sentence { font-size: 18px }
 .info-section .prompt-writing { font-size: 32px }
+@media (max-width: 767px) {
+    .info-section { 
+        border-bottom: 2px solid #333333;
+        border-right: none;
+    }
+}
 
 
 /*** PROMPT: INPUT SECTION ***/
@@ -274,7 +287,7 @@ body {
 
 /*** SIDEBAR ***/
 .sidebar {
-    background-color: #2c3e50;
+    background-color: #333333;
     display: none;
     height: 100%;
     left: 0;
