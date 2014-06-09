@@ -145,7 +145,7 @@ define([
                             }
                         });
                     } else {
-                        callback(null, item, vocab, containedItems, null);
+                        callback(null, item, vocab, containedItems, containedVocabs, null);
                     }
                 },
                 //strokes
