@@ -44,7 +44,7 @@ define([], function() {
                         offset: 0,
                         include_vocabs: 'true',
                         include_strokes: 'true',
-                        include_sentences: 'true',
+                        include_sentences: 'false',
                         include_heisigs: 'true',
                         include_top_mnemonics: 'true',
                         include_decomps: 'true'
