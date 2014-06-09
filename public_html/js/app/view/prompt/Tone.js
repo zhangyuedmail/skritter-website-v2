@@ -32,6 +32,12 @@ define([
             return this;
         },
         /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick .prompt-reading .reading': 'playAudio'
+        },
+        /**
          * @method clear
          * @returns {Backbone.View}
          */
@@ -179,6 +185,9 @@ define([
             this.canvas.disableInput();
             this.review.setReview({finished: true});
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true, skritter.user.isUsingZhuyin()));
+            if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
+                this.review.getVocab().playAudio();
+            }
             return this;
         }
     });

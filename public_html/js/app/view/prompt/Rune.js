@@ -201,7 +201,7 @@ define([
             this.canvas.disableInput();
             this.review.setReview({finished: true});
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
-            if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
+            if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
                 this.review.getVocab().playAudio();
             }
             return this;

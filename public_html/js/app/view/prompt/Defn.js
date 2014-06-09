@@ -27,6 +27,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .prompt-reading .reading': 'playAudio',
             'vclick .prompt-text': 'handleClick'
         },
         /**
@@ -109,6 +110,9 @@ define([
             this.elements.sentence.html(this.vocab.getSentence().writing);
             this.elements.writing.html(this.vocab.getWriting());
             this.elements.question.show('slide', {direction: 'right'}, 300);
+            if (this.vocab.has('audio')) {
+                this.elements.reading.addClass('has-audio');
+            }
             return this;
         },
         /**
@@ -119,6 +123,9 @@ define([
             this.elements.question.hide();
             this.review.setReview({finished: true});
             this.elements.answer.fadeIn(300);
+            if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
+                this.vocab.playAudio();
+            }
             return this;
         }
     });

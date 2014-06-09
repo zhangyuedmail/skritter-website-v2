@@ -242,6 +242,13 @@ body {
 .navbar .navbar-nav i { font-size: 27px; }
 
 
+/*** PROMPT ***/
+.has-audio {
+    color: blue;
+    cursor: pointer;
+}
+
+
 /*** PROMPT: GRADING BUTTONS ***/
 .prompt .grading-container {
     bottom: 0;
