@@ -35,6 +35,12 @@ define([
             return this;
         },
         /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick .prompt-reading .reading': 'playAudio'
+        },
+        /**
          * @method clear
          * @returns {Backbone.View}
          */
@@ -179,6 +185,12 @@ define([
             this.elements.reading.html(this.vocab.getReading());
             this.elements.sentence.html(this.vocab.getSentence().writing);
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition()));
+            if (this.vocab.has('audio')) {
+                this.elements.reading.addClass('has-audio');
+                if (this.review.isFirst()) {
+                    this.vocab.playAudio();
+                }
+            }
             return this;
         },
         /**
@@ -189,6 +201,9 @@ define([
             this.canvas.disableInput();
             this.review.setReview({finished: true});
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
+            if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
+                this.review.getVocab().playAudio();
+            }
             return this;
         }
     });

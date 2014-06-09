@@ -20,6 +20,16 @@ define([], function() {
             });
         },
         /**
+         * @method getAudioFileName
+         * @returns {String}
+         */
+        getAudioFileName: function() {
+            if (this.has('audio')) {
+                return this.get('audio').replace('/sounds?file=', '');
+            }
+            return null;
+        },
+        /**
          * @method getCharacterCount
          * @returns {Number}
          */
@@ -211,6 +221,14 @@ define([], function() {
          */
         isJapanese: function() {
             return this.get('lang') === 'ja' ? true : false;
+        },
+        /**
+         * @method playAudio
+         */
+        playAudio: function() {
+            if (this.has('audio')) {
+                skritter.assets.playAudio(this.getAudioFileName());
+            }
         }
     });
 

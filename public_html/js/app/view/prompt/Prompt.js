@@ -58,6 +58,21 @@ define([], function() {
             }
         },
         /**
+         * @method playAudio
+         * @param {Object} event
+         */
+        playAudio: function(event) {
+            if (this.vocab.has('audio')) {
+                if (skritter.user.isChinese()) {
+                    var filename = this.$(event.currentTarget).data('reading') + '.mp3';
+                    skritter.assets.playAudio(filename.toLowerCase());
+                } else {
+                    this.vocab.playAudio();
+                }
+                event.stopPropagation();
+            }
+        },
+        /**
          * @method previous
          */
         previous: function() {
