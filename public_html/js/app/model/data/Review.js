@@ -155,13 +155,6 @@ define([
             return this.get('position');
         },
         /**
-         * @method getPrompt
-         * @param {Function} callback
-         */
-        getPrompt: function(callback) {
-            //TODO: change get prompt to view
-        },
-        /**
          * @method getReview
          * @returns {Object}
          */
