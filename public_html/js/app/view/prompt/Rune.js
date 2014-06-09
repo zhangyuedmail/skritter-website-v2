@@ -185,6 +185,10 @@ define([
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence().writing);
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition()));
+            if (this.vocab.getStyle()) {
+                this.elements.style.text(this.vocab.getStyle().toUpperCase());
+                this.elements.style.addClass(this.vocab.getStyle());
+            }
             if (this.vocab.has('audio')) {
                 this.elements.reading.addClass('has-audio');
                 if (this.review.isFirst()) {

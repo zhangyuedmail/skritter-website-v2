@@ -110,6 +110,10 @@ define([
             this.elements.sentence.html(this.vocab.getSentence().writing);
             this.elements.writing.html(this.vocab.getWriting());
             this.elements.question.show('slide', {direction: 'right'}, 300);
+            if (this.vocab.getStyle()) {
+                this.elements.style.text(this.vocab.getStyle().toUpperCase());
+                this.elements.style.addClass(this.vocab.getStyle());
+            }
             if (this.vocab.has('audio')) {
                 this.elements.reading.addClass('has-audio');
             }

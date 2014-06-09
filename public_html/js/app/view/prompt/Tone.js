@@ -175,6 +175,10 @@ define([
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), true, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence().writing);
             this.elements.writing.html(this.vocab.getWriting());
+            if (this.vocab.getStyle()) {
+                this.elements.style.text(this.vocab.getStyle().toUpperCase());
+                this.elements.style.addClass(this.vocab.getStyle());
+            }
             return this;
         },
         /**

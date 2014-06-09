@@ -162,6 +162,16 @@ define([], function() {
             return {};
         },
         /**
+         * @method getStyle
+         * @returns {String}
+         */
+        getStyle: function() {
+            if (this.has('style') && this.get('style') !== 'both') {
+                return this.get('style');
+            }
+            return false;
+        },
+        /**
          * @method getTones
          * @param {Number} position
          * @returns {Array}
