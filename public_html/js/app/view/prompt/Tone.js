@@ -166,7 +166,7 @@ define([
             this.canvas.enableInput();
             this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
             this.elements.definition.html(this.vocab.getDefinition());
-            this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), true));
+            this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), true, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence().writing);
             this.elements.writing.html(this.vocab.getWriting());
             return this;
@@ -178,7 +178,7 @@ define([
         showAnswer: function() {
             this.canvas.disableInput();
             this.review.setReview({finished: true});
-            this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true));
+            this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true, skritter.user.isUsingZhuyin()));
             return this;
         }
     });

@@ -105,7 +105,7 @@ define([
         show: function() {
             this.elements.answer.hide();
             this.elements.definition.html(this.vocab.getDefinition());
-            this.elements.reading.html(this.vocab.getReading());
+            this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence().writing);
             this.elements.writing.html(this.vocab.getWriting());
             this.elements.question.show('slide', {direction: 'right'}, 300);

@@ -2144,7 +2144,9 @@ define([], function() {
             var toneItem = textItem.match(/[0-9]+/g);
             if (textItem !== ' ... ' && textItem !== "'") {
                 zhuyinArray.push(map[textItem].zhuyin);
-                zhuyinArray.push(map[toneItem].zhuyin);
+                if (toneItem) {
+                    zhuyinArray.push(map[toneItem].zhuyin);
+                }
             }
         }
         return zhuyinArray.join('');

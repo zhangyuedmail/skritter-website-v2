@@ -110,9 +110,10 @@ define([], function() {
          * @method getReading
          * @param {Number} offset
          * @param {Boolean} mask
+         * @param {Boolean} zhuyin
          * @returns {String}
          */
-        getReading: function(offset, mask) {
+        getReading: function(offset, mask, zhuyin) {
             var element = '';
             var reading = this.get('reading');
             if (this.isChinese()) {
@@ -124,15 +125,18 @@ define([], function() {
                     element += "<span id='reading-" + (a + 1) + "' class='reading' data-reading='" + readingString + "'>";
                     for (var b = 0, lengthB = pieces.length; b < lengthB; b++) {
                         var piece = pieces[b];
+                        var nakedPiece = pieces[b].replace(/[0-9]/g, '');
+                        var formattedNakedPiece = zhuyin ? skritter.fn.pinyin.toZhuyin(nakedPiece + '1') : nakedPiece;
+                        var formattedPiece = zhuyin ? skritter.fn.pinyin.toZhuyin(piece) : skritter.fn.pinyin.toTone(piece);
                         if (piece.indexOf(' ... ') === -1 && piece.indexOf("'") === -1) {
                             if (offset && position >= offset) {
                                 if (mask) {
-                                    element += "<span class='position-" + position + " reading-masked'>" + piece.replace(/[0-9]/g, '') + "</span>";
+                                    element += "<span class='position-" + position + " reading-masked'>" + formattedNakedPiece + "</span>";
                                 } else {
-                                    element += "<span class='position-" + position + " reading-hidden'><span>" + skritter.fn.pinyin.toTone(piece) + "</span></span>";
+                                    element += "<span class='position-" + position + " reading-hidden'><span>" + formattedPiece + "</span></span>";
                                 }
                             } else {
-                                element += "<span class='position-" + position + "'>" + skritter.fn.pinyin.toTone(piece) + "</span>";
+                                element += "<span class='position-" + position + "'>" + formattedPiece + "</span>";
                             }
                             position++;
                         } else {

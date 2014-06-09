@@ -150,6 +150,20 @@ define([
             return this.get('access_token') ? true : false;
         },
         /**
+         * @method isUsingPinyin
+         * @returns {Boolean}
+         */
+        isUsingPinyin: function() {
+            return this.settings.get('readingStyle') === 'pinyin' ? true : false;
+        },
+        /**
+         * @method isUsingZhuyin
+         * @returns {Boolean}
+         */
+        isUsingZhuyin: function() {
+            return this.settings.get('readingStyle') === 'zhuyin' ? true : false;
+        },
+        /**
          * @method login
          * @param {String} username
          * @param {String} password
