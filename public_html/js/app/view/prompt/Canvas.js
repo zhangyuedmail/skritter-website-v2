@@ -43,11 +43,11 @@ define([
             this.createLayer('background');
             this.createLayer('hint');
             this.createLayer('stroke');
-            this.$('.canvas-input').on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
-            this.$('.canvas-input').on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
+            this.$(this.elements.input).on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
+            this.$(this.elements.input).on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
             createjs.Ticker.addEventListener('tick', this.stage.display);
             createjs.Touch.enable(this.stage.input);
-            createjs.Ticker.setFPS(200);
+            createjs.Ticker.setFPS(60);
             this.resize();
             return this;
         },
@@ -306,6 +306,8 @@ define([
          * @method remove
          */
         remove: function() {
+            createjs.Ticker.removeEventListener('tick', this.stage.display);
+            this.$(this.elements.input).off();
             this.removeElements();
             this.stopListening();
             this.undelegateEvents();
@@ -391,7 +393,7 @@ define([
                     }
                 }
             }
-            this.$('#canvas-input').on('vmousemove.Canvas', _.bind(function(event) {
+            this.$(this.elements.input).on('vmousemove.Canvas', _.bind(function(event) {
                 this.mouseMoveEvent = event;
             }, this));
             this.mouseDownTimer = window.setTimeout(_.bind(function() {
@@ -412,7 +414,7 @@ define([
          */
         triggerCanvasMouseUp: function(event) {
             window.clearTimeout(this.mouseDownTimer);
-            this.$('#canvas-input').off('vmousemove.Canvas');
+            this.$(this.elements.input).off('vmousemove.Canvas');
             this.lastMouseDownEvent = this.mouseDownEvent;
             this.mouseMoveEvent = null;
             this.mouseUpEvent = event;
