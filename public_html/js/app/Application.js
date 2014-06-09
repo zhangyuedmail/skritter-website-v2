@@ -1,5 +1,6 @@
 define([
     'model/Api',
+    'model/Assets',
     'Functions',
     'model/storage/IndexedDBAdapter',
     'view/component/Modal',
@@ -9,13 +10,21 @@ define([
     'require.locale!../../locale/nls/strings',
     'view/component/Timer',
     'model/User'
-], function(Api, Functions, IndexedDBAdapter, Modal, Router, Schema, Settings, Strings, Timer, User) {
+], function(Api, Assets, Functions, IndexedDBAdapter, Modal, Router, Schema, Settings, Strings, Timer, User) {
     /**
      * @method loadApi
      * @param {Function} callback
      */
     var loadApi = function(callback) {
         skritter.api = new Api();
+        callback();
+    };
+    /**
+     * @method loadAssets
+     * @param {Function} callback
+     */
+    var loadAssets = function(callback) {
+        skritter.assets = new Assets();
         callback();
     };
     /**
@@ -131,6 +140,7 @@ define([
         //asynchronously loads all required modules
         async.series([
             async.apply(loadApi),
+            async.apply(loadAssets),
             async.apply(loadFastClick),
             async.apply(loadFunctions),
             async.apply(loadModal),
