@@ -20,7 +20,7 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this).renderElements();
             if (skritter.user.getLanguageCode()) {
-                this.element.targetLanguage.text(skritter.user.getLanguageCode() === 'zh' ? 'Chinese' : 'Japanese');
+                this.elements.targetLanguage.text(skritter.user.getLanguageCode() === 'zh' ? 'Chinese' : 'Japanese');
             }
             return this;
         },
