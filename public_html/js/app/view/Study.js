@@ -24,6 +24,7 @@ define([
         render: function() {
             window.document.title = "Study - Skritter";
             this.$el.html(_.template(template, skritter.strings));
+            skritter.timer.setElement(this.$('.study-timer')).render();
             BaseView.prototype.render.call(this).renderElements();
             this.nextPrompt();
             return this;

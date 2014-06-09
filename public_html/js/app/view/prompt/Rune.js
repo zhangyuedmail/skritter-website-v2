@@ -199,6 +199,7 @@ define([
          */
         showAnswer: function() {
             this.canvas.disableInput();
+            this.grading.show();
             this.review.setReview({finished: true});
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
