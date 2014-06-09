@@ -41,7 +41,7 @@ define([
                 if (skritter.modal.isVisible()) {
                     skritter.modal.hide();
                 } else {
-                    skritter.modal.show('exit').set('.modal-title-icon', null, 'fa-sign-out');;
+                    skritter.modal.show('exit').set('.modal-title-icon', null, 'fa-sign-out');
                     skritter.modal.element('.modal-button-ok').on('vclick', function() {
                         window.navigator.app.exitApp();
                     });

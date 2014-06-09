@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'view/prompt/GradingButtons'
+], function(GradingButtons) {
     /**
      * @class Prompt
      */
@@ -8,6 +10,7 @@ define([], function() {
          */
         initialize: function() {
             this.elements = {};
+            this.grading = new GradingButtons();
             this.item = null;
             this.review = null;
             this.vocab = null;
@@ -18,6 +21,7 @@ define([], function() {
          */
         render: function() {
             console.log(this.review.id, this.review.toJSON());
+            this.grading.setElement('.grading-container').render();
             this.elements.answer = this.$('.prompt-answer');
             this.elements.canvas = this.$('.canvas-container');
             this.elements.definition = this.$('.prompt-definition');
