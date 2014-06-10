@@ -169,13 +169,31 @@ define([
                     } else {
                         callback(null, item, vocab, containedItems, containedVocabs, sentence, null);
                     }
+                },
+                //decomps
+                function(item, vocab, containedItems, containedVocabs, sentence, strokes, callback) {
+                    var strokeWritings = null;
+                    if (containedVocabs.length === 0) {
+                        strokeWritings = vocab.get('writing');
+                    } else {
+                        strokeWritings = _.pluck(containedVocabs, function(vocab) {
+                            return vocab.attributes.writing;
+                        });
+                    }
+                    skritter.storage.get('decomps', strokeWritings, function(decomps) {
+                        if (strokeWritings.length === decomps.length) {
+                            callback(null, item, vocab, containedItems, containedVocabs, sentence, strokes, skritter.user.data.decomps.add(decomps, {merge: true, silent: true}));
+                        } else {
+                            callback(null, item, vocab, containedItems, containedVocabs, sentence, strokes, null);
+                        }
+                    });
                 }
-            ], function(error, item, vocab, containedItems, containedVocabs, sentence, strokes) {
+            ], function(error, item, vocab, containedItems, containedVocabs, sentence, strokes, decomps) {
                 if (error) {
                     //TODO: add better error handling
                     callback();
                 } else {
-                    callback(item, vocab, containedItems, containedVocabs, sentence, strokes);
+                    callback(item, vocab, containedItems, containedVocabs, sentence, strokes, decomps);
                 }
             });
         },
@@ -196,25 +214,51 @@ define([
                         }
                     });
                 },
-                //sentence
+                //contained vocabs
                 function(vocab, callback) {
-                    if (vocab.has('sentenceId')) {
-                        skritter.storage.get('sentences', vocab.get('sentenceId'), function(sentences) {
-                            if (sentences.length > 0) {
-                                callback(null, vocab, skritter.user.data.sentences.add(sentences, {merge: true, silent: true}));
+                    var containedVocabIds = vocab.get('containedVocabIds');
+                    if (containedVocabIds && containedVocabIds.length > 0) {
+                        skritter.storage.get('vocabs', containedVocabIds, function(containedVocabs) {
+                            if (containedVocabIds.length === containedVocabs.length) {
+                                callback(null, vocab, skritter.user.data.vocabs.add(containedVocabs, {merge: true, silent: true, sort: false}));
                             } else {
-                                callback("Sentence is missing.", item);
+                                callback("One or more of the contained vocabs is missing.", vocab);
                             }
                         });
                     } else {
-                        callback(null, vocab,  null);
+                        callback(null, vocab, []);
                     }
+                },
+                //sentence
+                function(vocab, containedVocabs, callback) {
+                    if (vocab.has('sentenceId')) {
+                        skritter.storage.get('sentences', vocab.get('sentenceId'), function(sentences) {
+                            if (sentences.length > 0) {
+                                callback(null, vocab, containedVocabs, skritter.user.data.sentences.add(sentences, {merge: true, silent: true}));
+                            } else {
+                                callback(null, vocab, containedVocabs, null);
+                            }
+                        });
+                    } else {
+                        callback(null, vocab, containedVocabs, null);
+                    }
+                },
+                //decomps
+                function(vocab, containedVocabs, sentence, callback) {
+                    var characters = vocab.getCharacters();
+                    skritter.storage.get('decomps', characters, function(decomps) {
+                        if (characters.length === decomps.length) {
+                            callback(null, vocab, containedVocabs, sentence, skritter.user.data.decomps.add(decomps, {merge: true, silent: true}));
+                        } else {
+                            callback(null, vocab, containedVocabs, sentence, null);
+                        }
+                    });
                 }
-            ], function(error, vocab, sentence) {
+            ], function(error, vocab, containedVocabs, sentence, decomps) {
                 if (error) {
                     callback();
                 } else {
-                    callback(vocab, sentence);
+                    callback(vocab, containedVocabs, sentence, decomps);
                 }
             });
         },
