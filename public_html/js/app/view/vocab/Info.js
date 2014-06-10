@@ -84,12 +84,12 @@ define([
                 this.elements.decomps.closest('.content-block').hide();
                 var containedVocabs = this.vocab.getContainedVocabs();
                 var containedHTML = '';
-                for (var b = 0, lengthB = containedVocabs.length; b < lengthB; b++) {
-                    var vocab = containedVocabs[b];
-                    containedHTML += "<tr id='writing-" + vocab.get('writing') + "'>";
-                    containedHTML += '<td>' + vocab.get('writing') + '</td>';
-                    containedHTML += '<td>' + vocab.getReading() + '</td>';
-                    containedHTML += '<td>' + vocab.getDefinition() + '</td>';
+                for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
+                    var vocabItem = containedVocabs[a];
+                    containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
+                    containedHTML += '<td>' + vocabItem.get('writing') + '</td>';
+                    containedHTML += '<td>' + vocabItem.getReading() + '</td>';
+                    containedHTML += '<td>' + vocabItem.getDefinition() + '</td>';
                     containedHTML += '</tr>';
                 }
                 this.elements.contained.find('tbody').html(containedHTML);

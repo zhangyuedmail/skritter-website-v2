@@ -2142,7 +2142,6 @@ define([], function() {
         for (var i = 0, length = textArray.length; i < length; i++) {
             var textItem = textArray[i];
             var toneItem = textItem.match(/[0-9]+/g);
-            console.log(textItem);
             if (textItem !== ' ... ' && textItem !== "'" && textItem !== ", ") {
                 zhuyinArray.push(map[textItem].zhuyin);
                 if (toneItem) {
