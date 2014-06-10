@@ -2121,10 +2121,10 @@ define([], function() {
      */
     var pinyinToTone = function(text) {
         text = text.toLowerCase();
-        var textArray = text.match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g);
+        var textArray = text.match(/[a-z|A-Z]+[0-9]+|\,\s|\s\.\.\.\s|\'/g);
         for (var i = 0, length = textArray.length; i < length; i++) {
             var textItem = textArray[i];
-            if (textItem !== ' ... ' && textItem !== "'") {
+            if (textItem !== ' ... ' && textItem !== "'" && textItem !== ", ") {
                 textArray[i] = map[textItem].pinyin;
             }
         }
@@ -2138,15 +2138,19 @@ define([], function() {
     var pinyinToZhuyin = function(text) {
         text = text.toLowerCase();
         var zhuyinArray = [];
-        var textArray = text.match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g);
+        var textArray = text.match(/[a-z|A-Z]+[0-9]+|\,\s|\s\.\.\.\s|\'/g);
         for (var i = 0, length = textArray.length; i < length; i++) {
             var textItem = textArray[i];
             var toneItem = textItem.match(/[0-9]+/g);
-            if (textItem !== ' ... ' && textItem !== "'") {
+            console.log(textItem);
+            if (textItem !== ' ... ' && textItem !== "'" && textItem !== ", ") {
                 zhuyinArray.push(map[textItem].zhuyin);
                 if (toneItem) {
                     zhuyinArray.push(map[toneItem].zhuyin);
                 }
+            }
+            if (textItem === ", ") {
+                zhuyinArray.push(textItem);
             }
         }
         return zhuyinArray.join('');
