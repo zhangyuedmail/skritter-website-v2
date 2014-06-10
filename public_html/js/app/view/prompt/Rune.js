@@ -191,7 +191,7 @@ define([
             this.canvas.enableInput();
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
-            this.elements.sentence.html(this.vocab.getSentence().writing);
+            this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition()));
             if (this.vocab.getStyle()) {
                 this.elements.style.text(this.vocab.getStyle().toUpperCase());

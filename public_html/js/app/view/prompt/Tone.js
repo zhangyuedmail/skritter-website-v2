@@ -181,7 +181,7 @@ define([
             this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), true, skritter.user.isUsingZhuyin()));
-            this.elements.sentence.html(this.vocab.getSentence().writing);
+            this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
             this.elements.writing.html(this.vocab.getWriting());
             if (this.vocab.getStyle()) {
                 this.elements.style.text(this.vocab.getStyle().toUpperCase());
