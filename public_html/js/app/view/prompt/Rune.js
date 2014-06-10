@@ -197,7 +197,7 @@ define([
                 this.elements.style.text(this.vocab.getStyle().toUpperCase());
                 this.elements.style.addClass(this.vocab.getStyle());
             }
-            if (this.vocab.has('audio')) {
+            if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
                 this.elements.reading.addClass('has-audio');
                 if (this.review.isFirst()) {
                     this.vocab.playAudio();
