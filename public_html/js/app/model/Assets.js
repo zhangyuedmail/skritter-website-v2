@@ -7,7 +7,7 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            if (window.cordova) {
+            if (skritter.fn.hasCordova()) {
                 navigator.expansion.load(this.get('cordovaMainVersion'), this.get('cordovaPatchVersion'));
             } else {
                 this.audio = new Audio();
@@ -25,7 +25,7 @@ define([], function() {
          * @param {String} filename
          */
         playAudio: function(filename) {
-            if (window.cordova) {
+            if (skritter.fn.hasCordova()) {
                 navigator.expansion.media.play(window.decodeURIComponent(filename));
             } else {
                 if (this.audio.paused) {
