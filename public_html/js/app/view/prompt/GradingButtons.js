@@ -9,7 +9,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.expanded = false;
+            this.expanded = true;
             this.grade = 3;
         },
         /**
