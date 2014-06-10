@@ -141,10 +141,10 @@ define([
         })(window.skritter || {});
         //asynchronously loads all required modules
         async.series([
-            async.apply(loadApi),
-            async.apply(loadAssets),
             async.apply(loadFastClick),
             async.apply(loadFunctions),
+            async.apply(loadApi),
+            async.apply(loadAssets),
             async.apply(loadModal),
             async.apply(loadSchema),
             async.apply(loadSettings),
