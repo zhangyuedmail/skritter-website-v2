@@ -70,6 +70,42 @@ define(function() {
             });
         },
         /**
+         * @method checkReviewErrors
+         * @param {Number} offset
+         * @param {Function} callback
+         */
+        checkReviewErrors: function(offset, callback) {
+            var self = this;
+            var errors = [];
+            offset = offset ? offset : undefined;
+            function request(cursor) {
+                $.ajax({
+                    url: self.base + '/reviews/errors',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor,
+                        offset: offset
+                    }
+                }).done(function(data) {
+                    errors = errors.concat(data.ReviewErrors);
+                    if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 500);
+                    } else {
+                        callback(errors, data.statusCode);
+                    }
+                }).fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request();
+        },
+        /**
          * @method getBatch
          * @param {Number} batchId
          * @param {Function} callback
@@ -119,6 +155,44 @@ define(function() {
             }).fail(function(error) {
                 callback(error, error.status);
             });
+        },
+        /**
+         * @method getItems
+         * @param {Array|String} itemIds
+         * @param {Function} callback
+         */
+        getItems: function(itemIds, callback) {
+            var self = this;
+            var items = [];
+            itemIds = Array.isArray(itemIds) ? itemIds : [itemIds];
+            itemIds = _.uniq(itemIds);
+            function request(batch) {
+                var promise = $.ajax({
+                    url: self.base + 'items',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        ids: batch.join('|')
+                    }
+                });
+                promise.done(function(data) {
+                    items = items.concat(data.Items);
+                    if (itemIds.length > 0) {
+                        window.setTimeout(function() {
+                            request(itemIds.splice(0, 19));
+                        }, 500);
+                    } else {
+                        callback(items, data.statusCode);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request(itemIds.splice(0, 19));
         },
         /**
          * @method getSubscription
@@ -189,6 +263,35 @@ define(function() {
             }).fail(function(error) {
                 callback(error, error.status);
             });
+        },
+        /**
+         * @method postReviews
+         * @param {Array} reviews
+         * @param {Function} callback
+         */
+        postReviews: function(reviews, callback) {
+            var self = this;
+            var postedReviews = [];
+            function postBatch(batch) {
+                $.ajax({
+                    url: self.base + 'reviews?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'POST',
+                    data: JSON.stringify(batch)
+                }).done(function(data) {
+                    postedReviews = postedReviews.concat(batch);
+                    if (reviews.length > 0) {
+                        postBatch(reviews.splice(0, 99));
+                    } else {
+                        callback(postedReviews, data.statusCode);
+                    }
+                }).fail(function(error) {                    
+                    callback(error, error.status);
+                });
+            }
+            postBatch(reviews.splice(0, 99));
         },
         /**
          * @method requestBatch

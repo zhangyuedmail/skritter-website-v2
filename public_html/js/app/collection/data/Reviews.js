@@ -15,6 +15,24 @@ define([
          */
         model: Review,
         /**
+         * @method getReviewArray
+         * @return {Array}
+         */
+        getReviewArray: function() {
+            var reviews = [];
+            for (var i = 0, length = this.length; i < length; i++) {
+                reviews = reviews.concat(this.models[i].attributes.reviews);
+            }
+            return reviews;
+        },
+        /**
+         * @method getReviewCount
+         * @return {Number}
+         */
+        getReviewCount: function() {
+            return this.getReviewArray().length;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

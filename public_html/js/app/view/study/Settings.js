@@ -26,7 +26,7 @@ define([
             this.enabledParts = skritter.user.getEnabledParts();
             this.$('input.bootswitch').bootstrapSwitch();
             this.$('#general #audio').bootstrapSwitch('state', skritter.user.settings.get('audio'));
-            this.$('#general #hide-due-count').bootstrapSwitch('state', skritter.user.settings.get('hideDueCount'));
+            this.$('#general #hide-due-count').bootstrapSwitch('state', skritter.user.settings.get('hideCounter'));
             this.$('#general #hide-timer').bootstrapSwitch('state', skritter.user.settings.get('hideTimer'));
             this.$('#general #raw-squigs').bootstrapSwitch('state', skritter.user.settings.get('squigs'));
             this.$('#general #teaching-mode').bootstrapSwitch('state', skritter.user.settings.get('teachingMode'));
@@ -89,7 +89,7 @@ define([
             this.activeParts = [];
             this.activeStyles = [];
             skritter.user.settings.set('audio', this.$('#general #audio').prop('checked'));
-            skritter.user.settings.set('hideDueCount', this.$('#general #hide-due-count').prop('checked'));
+            skritter.user.settings.set('hideCounter', this.$('#general #hide-due-count').prop('checked'));
             skritter.user.settings.set('hideTimer', this.$('#general #hide-timer').prop('checked'));
             skritter.user.settings.set('squigs', this.$('#general #raw-squigs').prop('checked'));
             skritter.user.settings.set('teachingMode', this.$('#general #teaching-mode').prop('checked'));

@@ -7,6 +7,7 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
+            this.active = false;
             this.on('change', _.bind(this.cache, this));
         },
         /**
@@ -18,6 +19,7 @@ define([], function() {
             downloadedBatchRequests: [],
             lastErrorCheck: 0,
             lastItemSync: 0,
+            lastReviewSync: 0,
             lastSRSConfigSync: 0,
             lastVocabSync: 0
         },
@@ -65,6 +67,7 @@ define([], function() {
                     params: {lang: languageCode}
                 }
             ];
+            this.active = true;
             async.waterfall([
                 function(callback) {
                     skritter.api.requestBatch(requests, function(batch, status) {
@@ -125,6 +128,98 @@ define([], function() {
                     lastSRSConfigSync: now,
                     lastVocabSync: now
                 });
+                this.active = false;
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }, this));
+        },
+        /**
+         * @method itemById
+         * @param {Array|String} itemIds
+         * @param {type} callback
+         */
+        itemById: function(itemIds, callback) {
+            async.waterfall([
+                function(callback) {
+                    skritter.api.getItems(itemIds, function(items, status) {
+                        if (status === 200) {
+                            callback(null, items);
+                        } else {
+                            callback(items);
+                        }
+                    });
+                },
+                function(items, callback) {
+                    skritter.user.data.put(items, callback);
+                }
+            ], function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        /**
+         * @method reviews
+         * @param {Function} callback
+         */
+        reviews: function(callback) {
+            var now = skritter.fn.getUnixTime();
+            var lastErrorCheck = this.get('lastErrorCheck');
+            var reviews = skritter.user.data.reviews.getReviewArray();
+            this.active = true;
+            async.waterfall([
+                function(callback) {
+                    skritter.api.checkReviewErrors(lastErrorCheck, function(reviewErrors, status) {
+                        if (status === 200 && reviewErrors.length === 0) {
+                            callback();
+                        } else if (status === 200) {
+                            if (window.Raygun) {
+                                try {
+                                    throw new Error('Review Error');
+                                } catch (error) {
+                                    console.error('Review Error', reviewErrors);
+                                    Raygun.send(error);
+                                }
+                            }
+                            skritter.user.sync.itemById(_.uniq(_.pluck(reviewErrors, 'itemId')), callback);
+                        } else {
+                            callback(reviewErrors);
+                        }
+                    });
+                },
+                function(callback) {
+                    skritter.api.postReviews(reviews, function(postedReviews, status) {
+                        if (status === 200) {
+                            callback(null, postedReviews);
+                        } else if (status === 403) {
+                            callback(postedReviews);
+                        } else {
+                            if (window.Raygun) {
+                                try {
+                                    throw new Error('Review Format Error');
+                                } catch (error) {
+                                    console.error('Review Format Error', postedReviews);
+                                    Raygun.send(error);
+                                }
+                            }
+                            callback(postedReviews);
+                        }
+                    });
+                },
+                function(postedReviews, callback) {
+                    var reviewIds = _.uniq(_.pluck(postedReviews, 'wordGroup'));
+                    skritter.storage.remove('reviews', reviewIds, function() {
+                        skritter.user.data.reviews.remove(reviewIds);
+                        callback();
+                    });
+                }
+            ], _.bind(function() {
+                this.set({
+                    lastErrorCheck: now,
+                    lastReviewSync: now
+                });
+                this.active = false;
                 if (typeof callback === 'function') {
                     callback();
                 }

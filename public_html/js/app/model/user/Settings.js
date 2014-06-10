@@ -16,13 +16,13 @@ define([], function() {
             addItemAmount: 1,
             audio: true,
             autoSync: true,
-            autoSyncThreshold: 10,
-            hideDueCount: false,
+            autoSyncThreshold: 5,
+            hideCounter: false,
             hideTimer: false,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             readingStyle: 'pinyin',
-            teachingMode: true
+            teachingMode: false
         },
         /**
          * @method cache

@@ -25,6 +25,12 @@ define([
             window.document.title = "Study - Skritter";
             this.$el.html(_.template(template, skritter.strings));
             skritter.timer.setElement(this.$('.study-timer')).render();
+            if (skritter.user.settings.get('hideCounter')) {
+                this.$('.study-counter').hide();
+            }
+            if (skritter.user.settings.get('hideTimer')) {
+                this.$('.study-timer').hide();
+            }
             BaseView.prototype.render.call(this).renderElements();
             this.nextPrompt();
             return this;
@@ -42,6 +48,16 @@ define([
             return _.extend({}, BaseView.prototype.events, {
                 'vclick .button-study-settings': 'handleStudySetttingsClicked'
             });
+        },
+        /**
+         * @method checkAutoSync
+         */
+        checkAutoSync: function() {
+            if (skritter.user.settings.get('autoSync') &&
+                    !skritter.user.sync.active &&
+                    skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
+                skritter.user.sync.reviews();
+            }
         },
         /**
          * @method handleStudySetttingsClicked
@@ -62,12 +78,14 @@ define([
             this.prompt = review.createView();
             this.prompt.setElement(this.$('.prompt-container'));
             this.listenToOnce(this.prompt, 'prompt:next', _.bind(this.nextPrompt, this));
+            this.updateDueCounter();
             this.prompt.render();
         },
         /**
          * @method nextPrompt
          */
         nextPrompt: function() {
+            this.checkAutoSync();
             skritter.user.scheduler.sort();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 this.loadPrompt(item.createReview());
@@ -78,6 +96,12 @@ define([
          */
         previousPrompt: function() {
             
+        },
+        /**
+         * @method updateDueCounter
+         */
+        updateDueCounter: function() {
+            this.$('.study-counter').text(skritter.user.scheduler.getDueCount());
         }
     });
     
