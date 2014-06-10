@@ -178,6 +178,21 @@ define([
             return this.get('reviews')[0];
         },
         /**
+         * @method getScore
+         * @returns {Number}
+         */
+        getScore: function() {
+            return this.getReview().score;
+        },
+        /**
+         * @method getScoreAt
+         * @param {Number} position
+         * @returns {Number}
+         */
+        getScoreAt: function(position) {
+            return this.getReviewAt(position).score;
+        },
+        /**
          * @method getTotalReviewTime
          * @returns {Number}
          */

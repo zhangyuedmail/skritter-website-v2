@@ -76,6 +76,13 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleGradingSelected
+         * @param {Number} score
+         */
+        handleGradingSelected: function(score) {
+            this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[score]);
+        },
+        /**
          * @method handleStrokeDown
          */
         handleStrokeDown: function() {
@@ -180,6 +187,7 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
+            this.grading.hide();
             this.canvas.enableInput();
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
@@ -203,12 +211,15 @@ define([
          */
         showAnswer: function() {
             this.canvas.disableInput();
-            this.grading.show();
             this.review.setReview({finished: true});
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
-            if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
-                this.review.getVocab().playAudio();
-            }
+            window.setTimeout(_.bind(function() {
+                this.grading.select(this.review.getScore()).collapse().show();
+                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);    
+                if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
+                    this.review.getVocab().playAudio();
+                }
+            }, this), 0);
             return this;
         }
     });

@@ -104,6 +104,7 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
+            this.grading.hide();
             this.elements.answer.hide();
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
@@ -127,9 +128,12 @@ define([
             this.elements.question.hide();
             this.review.setReview({finished: true});
             this.elements.answer.fadeIn(300);
-            if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
-                this.vocab.playAudio();
-            }
+            window.setTimeout(_.bind(function() {
+                this.grading.select(this.review.getScore()).show();
+                if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
+                    this.vocab.playAudio();
+                }
+            }, this), 0);
             return this;
         }
     });

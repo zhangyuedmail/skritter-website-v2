@@ -33,6 +33,8 @@ define([
             this.elements.style = this.$('.prompt-style');
             this.elements.writing = this.$('.prompt-writing');
             this.$('.character-font').addClass(this.vocab.getFontClass());
+            this.listenTo(this.grading, 'complete', this.next);
+            this.listenTo(this.grading, 'selected', this.handleGradingSelected);
             this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
         },
@@ -92,6 +94,7 @@ define([
          * @method remove
          */
         remove: function() {
+            this.grading.remove();
             this.removeElements();
             this.stopListening();
             this.undelegateEvents();

@@ -19,10 +19,10 @@ define([], function() {
          */
         defaults: {
             gradingColors: {
-                1: '#f7977a',
-                2: '#fff79a',
-                3: '#82ca9d',
-                4: '#8493ca'
+                1: '#d95757',
+                2: '#efec10',
+                3: '#30a930',
+                4: '#4097d3'
             },
             hintColor: '#87cefa',
             languageCode: '@@languageCode',

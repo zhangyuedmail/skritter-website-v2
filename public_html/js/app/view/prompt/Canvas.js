@@ -303,6 +303,31 @@ define([
             return this.stage.display.getChildByName('layer-' + name);
         },
         /**
+         * @method injectLayerColor
+         * @param {String} layerName
+         * @param {String} color
+         */
+        injectLayerColor: function(layerName, color) {
+            var layer = this.getLayer(layerName);
+            var inject = function() {
+                if (color) {
+                    this.fillStyle = color;
+                }
+            };
+            for (var a in layer.children) {
+                var child = layer.children[a];
+                if (child.children && child.children.length > 0) {
+                    for (var b in child.children) {
+                        if (!child.children[b].children) {
+                            child.children[b].graphics.inject(inject);
+                        }
+                    }
+                } else if (!child.children) {
+                    child.graphics.inject(inject);
+                }
+            }
+        },
+        /**
          * @method remove
          */
         remove: function() {

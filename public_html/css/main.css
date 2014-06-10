@@ -251,12 +251,27 @@ body {
 
 /*** PROMPT: GRADING BUTTONS ***/
 .prompt .grading-container {
-    bottom: 0;
+    bottom: 15px;
     display: none;
     left: 0;
     position: absolute;
-    z-index: 9800;
+    width: 100%;
+    z-index: 9004;
 }
+.prompt .grading-container .grading-buttons div { 
+    background-color: transparent; 
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    opacity: 0.4;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    width: 24%;
+}
+.prompt .grading-container div:hover { opacity: 1; }
+.prompt .grading-container div .selected { opacity: 1; }
+.prompt .grading-container .grading-icon { max-height: 50px; }
 
 
 /*** PROMPT: INFO SECTION ***/
