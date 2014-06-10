@@ -203,8 +203,19 @@ define([
     /**
      * @property {Object} strokes
      */
-    var strokes = StrokeShapeMap;
-
+    var strokes = StrokeShapeMap;    
+    /**
+     * @method textToHTML
+     * @param {String} text
+     */
+    var textToHTML = function(text) {
+        text = text.replace(/img:(http:\/\/\S+)/gi, '<img src="$1"/>')
+                .replace(/_([^ _][^_]*)_(?!\S{4})/gi, '<em>$1</em>')
+                .replace(/\n/gi, '<br/>')
+                .replace(/\*([^*]+)\*/gi, '<strong>$1</strong>');
+        return text;
+    };
+    
     return {
         bootstrap: bootstrap,
         convertArrayToInt: convertArrayToInt,
@@ -224,6 +235,7 @@ define([
         pinyin: pinyin,
         recognizer: recognizer,
         shortstraw: shortstraw,
-        strokes: strokes
+        strokes: strokes,
+        textToHTML: textToHTML
     };
 });
