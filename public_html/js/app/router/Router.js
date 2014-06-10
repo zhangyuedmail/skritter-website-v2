@@ -38,14 +38,12 @@ define([
             if (this.view.elements.sidebar && this.view.elements.sidebar.hasClass('expanded')) {
                 this.view.toggleSidebar();
             } else if (fragment === '') {
-                if (skritter.modal.isVisible()) {
-                    skritter.modal.hide();
-                } else {
-                    skritter.modal.show('exit').set('.modal-title-icon', null, 'fa-sign-out');
-                    skritter.modal.element('.modal-button-ok').on('vclick', function() {
-                        window.navigator.app.exitApp();
-                    });
-                }
+                skritter.modal.show('exit')
+                        .set('.modal-title', 'Are you sure?')
+                        .set('.modal-title-icon', null, 'fa-sign-out');
+                skritter.modal.element('.modal-button-ok').on('vclick', function() {
+                    window.navigator.app.exitApp();
+                });
             } else {
                 window.history.back();
             }
