@@ -28,6 +28,8 @@ define([
          */
         renderElements: function() {
             BaseView.prototype.renderElements.call(this);
+            this.elements.contained = this.$('.vocab-contained');
+            this.elements.decomps = this.$('.vocab-decomps');
             this.elements.definition = this.$('.vocab-definition');
             this.elements.mnemonic = this.$('.vocab-mnemonic');
             this.elements.mnemonicAuthor = this.$('.vocab-mnemonic-author');
@@ -43,7 +45,17 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
+                'vclick .vocab-contained tbody tr': 'handleTableRowClicked'
             });
+        },
+        /**
+         * @method handleTableRowClicked
+         * @param {Object} event
+         */
+        handleTableRowClicked: function(event) {
+            var writing = event.currentTarget.id.replace('writing-', '');
+            skritter.router.navigate('vocab/info/' + skritter.user.getLanguageCode() + '/' + writing, {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method loadVocab
@@ -67,6 +79,34 @@ define([
                 this.elements.mnemonicAuthor.text('Created by: ' + mnemonic.creator);
             } else {
                 this.elements.mnemonic.closest('.content-block').hide();
+            }
+            if (vocab.getCharacterCount() > 1) {
+                this.elements.decomps.closest('.content-block').hide();
+                var containedVocabs = this.vocab.getContainedVocabs();
+                var containedHTML = '';
+                for (var b = 0, lengthB = containedVocabs.length; b < lengthB; b++) {
+                    var vocab = containedVocabs[b];
+                    containedHTML += "<tr id='writing-" + vocab.get('writing') + "'>";
+                    containedHTML += '<td>' + vocab.get('writing') + '</td>';
+                    containedHTML += '<td>' + vocab.getReading() + '</td>';
+                    containedHTML += '<td>' + vocab.getDefinition() + '</td>';
+                    containedHTML += '</tr>';
+                }
+                this.elements.contained.find('tbody').html(containedHTML);
+            } else {
+                this.elements.contained.closest('.content-block').hide();
+                var decomp = this.vocab.getDecomps()[0].get('Children');
+                var decompHTML = '';
+                for (var b = 0, lengthB = decomp.length; b < lengthB; b++) {
+                    var child = decomp[b];
+                    decompHTML += '<tr>';
+                    decompHTML += '<td>' + child.writing + '</td>';
+                    decompHTML += '<td>' + skritter.fn.pinyin.toTone(child.reading) + '</td>';
+                    //TODO: fix this to support other languages
+                    decompHTML += '<td>' + child.definitions.en + '</td>';
+                    decompHTML += '</tr>';
+                }
+                this.elements.decomps.find('tbody').html(decompHTML);
             }
         },
         /**

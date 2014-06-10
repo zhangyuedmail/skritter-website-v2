@@ -80,6 +80,18 @@ define([], function() {
             return containedItemIds;
         },
         /**
+         * @method getContainedVocabs
+         * @returns {Array}
+         */
+        getContainedVocabs: function() {
+            var containedVocabs = [];
+            var containedVocabIds = this.get('containedVocabIds');
+            for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                containedVocabs.push(skritter.user.data.vocabs.get(containedVocabIds[i]));
+            }
+            return containedVocabs;
+        },
+        /**
          * @method getDefinition
          * @returns {String}
          */
@@ -91,6 +103,18 @@ define([], function() {
             } else if (this.get('definitions').en) {
                 return this.get('definitions').en;
             }
+        },
+        /**
+         * @method getDecomps
+         * @returns {Backbone.Model}
+         */
+        getDecomps: function() {
+            var decomps = [];
+            var characters = this.getCharacters();
+            for (var i = 0, length = characters.length; i < length; i++) {
+                decomps.push(skritter.user.data.decomps.get(characters[i]));
+            }
+            return decomps;
         },
         /**
          * @method getFontName

@@ -152,6 +152,7 @@ body {
     padding-left: 0;
     padding-right: 0;
 }
+.cursor { cursor: pointer; }
 .font-preloader { 
     position: fixed;
     visibility: hidden;
