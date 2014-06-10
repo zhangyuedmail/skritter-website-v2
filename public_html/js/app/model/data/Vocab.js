@@ -107,6 +107,18 @@ define([], function() {
             return this.isChinese() ? 'chinese-text' : 'japanese-text';            
         },
         /**
+         * @method getMnemonic
+         * @returns {Object}
+         */
+        getMnemonic: function() {
+            if (this.has('mnemonic') && this.get('mnemonic').text !== '') {
+                return this.get('mnemonic');
+            } else if (this.has('topMnemonic')) {
+                return this.get('topMnemonic');
+            }
+            return null;
+        },
+        /**
          * @method getReading
          * @param {Number} offset
          * @param {Boolean} mask
@@ -159,7 +171,7 @@ define([], function() {
             if (sentence) {
                 return sentence;
             }
-            return {};
+            return null;
         },
         /**
          * @method getStyle

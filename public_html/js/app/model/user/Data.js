@@ -180,6 +180,45 @@ define([
             });
         },
         /**
+         * @method loadVocab
+         * @param {String} vocabId
+         * @param {Function} callback
+         */
+        loadVocab: function(vocabId, callback) {
+            async.waterfall([
+                //intial vocab
+                function(callback) {
+                    skritter.storage.get('vocabs', vocabId, function(vocabs) {
+                        if (vocabs.length > 0) {
+                            callback(null, skritter.user.data.vocabs.add(vocabs[0], {merge: true, silent: true}));
+                        } else {
+                            callback("Initial vocab is missing.");
+                        }
+                    });
+                },
+                //sentence
+                function(vocab, callback) {
+                    if (vocab.has('sentenceId')) {
+                        skritter.storage.get('sentences', vocab.get('sentenceId'), function(sentences) {
+                            if (sentences.length > 0) {
+                                callback(null, vocab, skritter.user.data.sentences.add(sentences, {merge: true, silent: true}));
+                            } else {
+                                callback("Sentence is missing.", item);
+                            }
+                        });
+                    } else {
+                        callback(null, vocab,  null);
+                    }
+                }
+            ], function(error, vocab, sentence) {
+                if (error) {
+                    callback();
+                } else {
+                    callback(vocab, sentence);
+                }
+            });
+        },
+        /**
          * @method put
          * @param {Object} result
          * @param {Function} callback

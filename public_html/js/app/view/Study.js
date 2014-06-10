@@ -46,6 +46,7 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-info': 'handleInfoButtonClicked',
                 'vclick .button-study-settings': 'handleStudySetttingsClicked'
             });
         },
@@ -58,6 +59,14 @@ define([
                     skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
                 skritter.user.sync.reviews();
             }
+        },
+        /**
+         * @method handleInfoButtonClicked
+         * @param {Object} event
+         */
+        handleInfoButtonClicked: function(event) {
+            skritter.router.navigate('vocab/info/' + skritter.user.getLanguageCode() + '/' + this.prompt.vocab.get('writing'), {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method handleStudySetttingsClicked
