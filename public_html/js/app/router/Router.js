@@ -4,8 +4,9 @@ define([
     'view/Login',
     'view/Study',
     'view/study/Settings',
-    'view/Test'
-], function(HomeView, LandingView, LoginView, StudyView, StudySettings, TestView) {
+    'view/Test',
+    'view/vocab/Info'
+], function(HomeView, LandingView, LoginView, StudyView, StudySettings, TestView, VocabInfoView) {
     /**
      * @class Router
      */
@@ -15,6 +16,7 @@ define([
          */
         initialize: function() {
             this.container = $('.skritter-container');
+            this.history = [];
             this.view = null;
             Backbone.history.start();
             window.document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
@@ -27,7 +29,23 @@ define([
             'login': 'showLogin',
             'study': 'showStudy',
             'study/settings': 'showStudySettings',
-            'test': 'showTest'
+            'test': 'showTest',
+            'vocab/info/:languageCode/:writing': 'showVocabInfo'
+        },
+        /**
+         * @method addHistory
+         * @param {String} path
+         */
+        addHistory: function(path) {
+            if (this.history.indexOf(path) === -1) {
+               this.history.unshift(path);
+            }
+        },
+        /**
+         * @method back
+         */
+        back: function() {
+            this.navigate(this.history[0], {replace: true, trigger: true});
         },
         /**
          * @method handleBackButtonPressed
@@ -54,6 +72,7 @@ define([
          */
         showHome: function() {
             this.reset();
+            this.addHistory('');
             if (skritter.user.isLoggedIn()) {
                 this.view = new HomeView({el: this.container});
             } else {
@@ -79,6 +98,7 @@ define([
         showStudy: function() {
             if (skritter.user.isLoggedIn()) {
                 this.reset();
+                this.addHistory('study');
                 this.view = new StudyView({el: this.container});
                 this.view.render();
             } else {
@@ -104,6 +124,21 @@ define([
             this.reset();
             this.view = new TestView({el: this.container});
             this.view.render();
+        },
+        /**
+         * @method showVocabInfo
+         * @param {String} languageCode
+         * @param {String} writing
+         */
+        showVocabInfo: function(languageCode, writing) {
+            if (skritter.user.isLoggedIn()) {
+                this.reset();
+                this.view = new VocabInfoView({el: this.container});
+                this.view.set(languageCode, writing);
+                this.view.render();
+            } else {
+                this.navigate('', {replace: true, trigger: true});
+            }
         },
         /**
          * @method reset

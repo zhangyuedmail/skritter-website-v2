@@ -53,7 +53,7 @@ define(function() {
          * @param {Object} event
          */
         handleBackClicked: function(event) {
-            window.history.back();
+            skritter.router.back();
             event.preventDefault();
         },
         /**
