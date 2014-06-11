@@ -33,10 +33,10 @@ define(function() {
             for (var i = 0, length = children.length; i < length; i++) {
                 var child = children[i];
                 decompHTML += '<tr>';
-                decompHTML += '<td>' + child.writing + '</td>';
-                decompHTML += '<td>' + skritter.fn.pinyin.toTone(child.reading) + '</td>';
+                decompHTML += "<td class='writing'>" + child.writing + '</td>';
+                decompHTML += "<td class='reading'>" + skritter.fn.pinyin.toTone(child.reading) + '</td>';
                 //TODO: fix this to support other languages
-                decompHTML += '<td>' + child.definitions.en + '</td>';
+                decompHTML += "<td class='definition'>" + child.definitions.en + '</td>';
                 decompHTML += '</tr>';
             }
             return decompHTML;

@@ -101,10 +101,10 @@ define([], function() {
             for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
                 var vocabItem = containedVocabs[a];
                 containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
-                containedHTML += '<td>' + vocabItem.get('writing') + '</td>';
-                containedHTML += '<td>' + vocabItem.getReading() + '</td>';
-                containedHTML += '<td>' + vocabItem.getDefinition() + '</td>';
-                containedHTML += '</tr>';
+                containedHTML += "<td class='writing'>" + vocabItem.get('writing') + '</td>';
+                containedHTML += "<td class='reading'>" + vocabItem.getReading() + '</td>';
+                containedHTML += "<td class='definition'>" + vocabItem.getDefinition() + '</td>';
+                containedHTML += "</tr>";
             }
             return containedHTML;
         },

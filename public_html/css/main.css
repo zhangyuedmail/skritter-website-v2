@@ -401,3 +401,10 @@ body {
 
 /*** VIEW: TEST ***/
 .view-test .content-block { background-color: #ffffff; }
+
+
+/*** VIEW: VOCAB INFO ***/
+.view-vocab-info h4 { font-weight: 400; }
+.view-vocab-info table .definition { vertical-align: middle; }
+.view-vocab-info table .reading { vertical-align: middle; }
+.view-vocab-info tbody .writing { font-size: 32px; }
