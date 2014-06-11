@@ -1,37 +1,42 @@
-/**
- * @module Skritter
- * @submodule View
- * @param templateLogin
- * @author Joshua McFarland
- */
 define([
-    'require.text!template/login.html'
-], function(templateLogin) {
+    'require.text!template/login.html',
+    'base/View'
+], function(template, BaseView) {
     /**
      * @class Login
      */
-    var Login = Backbone.View.extend({
+    var View = BaseView.extend({
         /**
          * @method initialize
          */
         initialize: function() {
+            BaseView.prototype.initialize.call(this);
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            document.title = "Skritter - Login";
-            this.$el.html(templateLogin);
+            this.$el.html(_.template(template, skritter.strings));
+            BaseView.prototype.render.call(this).renderElements();
             return this;
+        },
+        /**
+         * @method renderElements
+         */
+        renderElements: function() {
+            this.elements.loginUsername = this.$('#login-username');
+            this.elements.loginPassword = this.$('#login-password');
+            this.elements.message = this.$('#message');
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'keyup #password': 'handleLoginEnter',
-            'vclick #button-home': 'toHome',
-            'vclick #button-login': 'login'
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'keyup #login-password': 'handleEnterPressed',
+                'vclick .button-continue': 'handleLoginClicked'
+            });
         },
         /**
          * @method disableForm
@@ -46,57 +51,37 @@ define([
             this.$(':input').prop('disabled', false);
         },
         /**
-         * @method handleEnterPressed
+         * @method clickLogin
          * @param {Object} event
          */
-        handleLoginEnter: function(event) {
-            if (event.keyCode === 13) {
-                this.login(event);
-            } else {
-                event.preventDefault();
-            }
-        },
-        /**
-         * @method toLogin
-         * @param {Object} event
-         */
-        login: function(event) {
+        handleLoginClicked: function(event) {
             this.disableForm();
-            var username = this.$('#username').val();
-            var password = this.$('#password').val();
-            this.$('#message').empty();
-            skritter.user.login(username, password, _.bind(function(result) {
-                if (result.statusCode === 200) {
-                    skritter.modal.show('download')
-                            .set('.modal-title', 'DOWNLOADING ACCOUNT')
-                            .progress(100);
-                    skritter.user.sync.downloadAccount(function() {
-                        document.location.href = '';
-                    });
+            this.elements.message.empty();
+            var username = this.elements.loginUsername.val();
+            var password = this.elements.loginPassword.val();
+            this.elements.message.html("<i class='fa fa-spin fa-cog'></i> Signing In");
+            skritter.user.login(username, password, _.bind(function(result, status) {
+                if (status === 200) {
+                    document.location.href = '';
                 } else {
-                    this.$('#message').html(result.message ? result.message : skritter.nls.login['message-error']);
+                    this.elements.message.text(result.message);
                     this.enableForm();
                 }
             }, this));
             event.preventDefault();
         },
         /**
-         * @method remove
-         */
-        remove: function() {
-            this.stopListening();
-            this.undelegateEvents();
-            this.$el.empty();
-        },
-        /**
-         * @method toHome
+         * @method handleEnterPressed
          * @param {Object} event
          */
-        toHome: function(event) {
-            skritter.router.navigate('', {replace: true, trigger: true});
-            event.preventDefault();
+        handleEnterPressed: function(event) {
+            if (event.keyCode === 13) {
+                this.handleLoginClicked(event);
+            } else {
+                event.preventDefault();
+            }
         }
     });
     
-    return Login;
+    return View;
 });

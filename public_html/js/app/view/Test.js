@@ -1,39 +1,30 @@
-/**
- * @module Skritter
- * @submodule View
- * @param templateTest
- * @author Joshua McFarland
- */
 define([
-    'require.text!template/test.html'
-], function(templateTest) {
+    'require.text!template/test.html',
+    'base/View',
+    'jasmine-boot'
+], function(template, BaseView) {
     /**
      * @class Test
      */
-    var Test = Backbone.View.extend({
+    var Test = BaseView.extend({
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            document.title = "Skritter - Test";
-            this.$el.html(templateTest);
-            require(['jasmine-boot'], function() {
-                require([
-                    //'specs/models/data/Item'
-                ], function() {
-                    window.runJasmine();
-                });
+            this.$el.html(_.template(template, skritter.strings));
+            BaseView.prototype.render.call(this).renderElements();
+            require([
+                'spec/Functions'
+            ], function() {
+                window.runJasmine();
             });
             return this;
         },
         /**
-         * @method remove
+         * @method renderElements
          */
-        remove: function() {
-            this.stopListening();
-            this.undelegateEvents();
-            this.$el.empty();
+        renderElements: function() {
         }
     });
     

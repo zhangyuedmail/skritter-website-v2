@@ -1,76 +1,92 @@
-/**
- * @module Skritter
- * @submodule View
- * @param templateVocabInfo
- * @author Joshua McFarland
- */
 define([
-    'require.text!template/vocab-info.html'
-], function(templateVocabInfo) {
+    'require.text!template/vocab-info.html',
+    'base/View'
+], function(template, BaseView) {
     /**
      * @class VocabInfo
      */
-    var Info = Backbone.View.extend({
+    var View = BaseView.extend({
         /**
          * @method initialize
          */
         initialize: function() {
+            BaseView.prototype.initialize.call(this);
             this.vocab = null;
-            this.sentence = null;
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            document.title = "Skritter - Info";
-            this.$el.html(templateVocabInfo);
+            window.document.title = "Vocab - Skritter";
+            this.$el.html(_.template(template, skritter.strings));
+            BaseView.prototype.render.call(this).renderElements();
             return this;
+        },
+        /**
+         * @method renderElements
+         */
+        renderElements: function() {
+            BaseView.prototype.renderElements.call(this);
+            this.elements.contained = this.$('.vocab-contained');
+            this.elements.decomps = this.$('.vocab-decomps');
+            this.elements.definition = this.$('.vocab-definition');
+            this.elements.mnemonic = this.$('.vocab-mnemonic');
+            this.elements.mnemonicAuthor = this.$('.vocab-mnemonic-author');
+            this.elements.reading = this.$('.vocab-reading');
+            this.elements.sentence = this.$('.vocab-sentence');
+            this.elements.sentenceDefinition = this.$('.vocab-sentence .definition');
+            this.elements.sentenceReading = this.$('.vocab-sentence .reading');
+            this.elements.sentenceWriting = this.$('.vocab-sentence .writing');
+            this.elements.writing = this.$('.vocab-writing');
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick .button-back': 'navigateBack'
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick .vocab-contained tbody tr': 'handleTableRowClicked'
+            });
+        },
+        /**
+         * @method handleTableRowClicked
+         * @param {Object} event
+         */
+        handleTableRowClicked: function(event) {
+            var writing = event.currentTarget.id.replace('writing-', '');
+            skritter.router.navigate('vocab/info/' + skritter.user.getLanguageCode() + '/' + writing, {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method loadVocab
          */
         loadVocab: function() {
             var vocab = this.vocab;
-            var sentence = this.sentence;
-            this.$('#info-writing').text(vocab.get('writing'));
-            this.$('#info-reading').text(vocab.getReading());
-            this.$('#info-definition').text(vocab.getDefinition());
-            if (sentence) {
-                this.$('#info-sentence .writing').text(sentence.getWriting());
-                this.$('#info-sentence .reading').text(sentence.getReading());
-                this.$('#info-sentence .definition').text(sentence.getDefinition());
-            } else {
-                this.$('#info-sentence').parent().hide();
-            }
             var mnemonic = vocab.getMnemonic();
-            if (mnemonic) {
-                this.$('#info-mnemonic').text(mnemonic);
+            var sentence = vocab.getSentence();
+            this.elements.writing.html(vocab.getWriting());
+            this.elements.reading.html(vocab.getReading());
+            this.elements.definition.text(vocab.getDefinition());
+            if (sentence) {
+                this.elements.sentenceWriting.text(sentence.getWriting());
+                this.elements.sentenceReading.text(sentence.getReading());
+                this.elements.sentenceDefinition.text(sentence.getDefinition());
             } else {
-                this.$('#info-mnemonic').parent().hide();
+                this.elements.sentence.closest('.content-block').hide();
             }
-        },
-        /**
-         * @method navigateBack
-         * @param {Object} event
-         */
-        navigateBack: function(event) {
-            window.history.back();
-            event.preventDefault();
-        },
-        /**
-         * @method remove
-         */
-        remove: function() {
-            this.stopListening();
-            this.undelegateEvents();
-            this.$el.empty();
+            if (mnemonic) {
+                this.elements.mnemonic.html(skritter.fn.textToHTML(mnemonic.text));
+                this.elements.mnemonicAuthor.text('Created by: ' + mnemonic.creator);
+            } else {
+                this.elements.mnemonic.closest('.content-block').hide();
+            }
+            if (vocab.getCharacterCount() > 1) {
+                this.elements.decomps.closest('.content-block').hide();
+                this.elements.contained.find('tbody').html(this.vocab.getContainedRows());
+            } else {
+                this.elements.contained.closest('.content-block').hide();
+                this.elements.decomps.find('tbody').html(this.vocab.getDecomps()[0].getChildrenRows());
+            }
         },
         /**
          * @method set
@@ -78,25 +94,15 @@ define([
          * @param {String} writing
          */
         set: function(languageCode, writing) {
-            var vocabId;
-            document.title = "Skritter - Info - " + writing;
-            if (languageCode === 'zh') {
-                vocabId = skritter.fn.simptrad.toBase(writing);
-                skritter.user.data.vocabs.loadVocab(vocabId, _.bind(function(vocab, sentence) {
-                    this.sentence = sentence;
-                    this.vocab = vocab;
-                    this.loadVocab();
-                }, this));
-            } else if (languageCode === 'ja') {
-                vocabId = 'ja-' + writing + '-0';
-                skritter.user.data.vocabs.loadVocab(vocabId, _.bind(function(vocab, sentence) {
-                    this.sentence = sentence;
-                    this.vocab = vocab;
-                    this.loadVocab();
-                }, this));
-            }
+            document.title = writing + ' - Vocab - Skritter';
+            var vocabId = languageCode === 'zh' ? skritter.fn.mapper.toBase(writing) : 'ja-' + writing + '-0';
+            skritter.user.data.loadVocab(vocabId, _.bind(function(vocab) {
+                console.log('loaded vocab', vocab);
+                this.vocab = vocab;
+                this.loadVocab();
+            }, this));
         }
     });
     
-    return Info;
+    return View;
 });

@@ -21,13 +21,15 @@ define([
          */
         model: Sentence,
         /**
-         * @method insert
-         * @param {Array|Object} sentences
+         * @method cache
          * @param {Function} callback
          */
-        insert: function(sentences, callback) {
-            skritter.storage.put('sentences', sentences, callback);
-            sentences = null;
+        cache: function(callback) {
+            skritter.storage.put('sentences', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method loadAll

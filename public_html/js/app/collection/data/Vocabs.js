@@ -21,13 +21,15 @@ define([
          */
         model: Vocab,
         /**
-         * @method insert
-         * @param {Array|Object} vocabs
+         * @method cache
          * @param {Function} callback
          */
-        insert: function(vocabs, callback) {
-            skritter.storage.put('vocabs', vocabs, callback);
-            vocabs = null;
+        cache: function(callback) {
+            skritter.storage.put('vocabs', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method loadAll
@@ -38,45 +40,6 @@ define([
                 this.add(vocabs, {merge: true, silent: true, sort: false});
                 callback();
             }, this));
-        },
-        /**
-         * @method loadVocab
-         * @param {String} vocabId
-         * @param {Function} callback
-         */
-        loadVocab: function(vocabId, callback) {
-            async.waterfall([
-                function(callback) {
-                    skritter.storage.get('vocabs', vocabId, function(vocab) {
-                        if (vocab.length > 0) {
-                            callback(null, skritter.user.data.vocabs.add(vocab[0], {merge: true, silent: true, sort: false}));
-                        } else {
-                            callback();
-                        }
-                    });
-                },
-                function(vocab, callback) {
-                    if (vocab.has('sentenceId')) {
-                        skritter.storage.get('sentences', vocab.get('sentenceId'), function(sentence) {
-                            if (sentence) {
-                                callback(null, vocab, skritter.user.data.sentences.add(sentence[0], {merge: true, silent: true, sort: false}));
-                            } else {
-                                callback();
-                            }
-                        });
-                    } else {
-                        callback(null, vocab);
-                    }
-                }
-            ], function(error, vocab, sentence) {
-                if (typeof callback === 'function') {
-                    if (error) {
-                        //TODO: add some kind of error handling here
-                    } else {
-                        callback(vocab, sentence);
-                    }
-                }
-            });
         }
     });
 

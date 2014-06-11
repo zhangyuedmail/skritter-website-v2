@@ -1,9 +1,6 @@
-/**
- * @module Skritter
- * @submodule View
- * @author Joshua McFarland
- */
-define(function() {
+define([
+    'require.text!template/prompt-canvas.html'
+], function(template) {
     /**
      * @class PromptCanvas
      */
@@ -12,58 +9,63 @@ define(function() {
          * @method initialize
          */
         initialize: function() {
+            this.elements = {};
             this.grid = true;
-            this.stage = {};
-            this.size = skritter.settings.canvasSize();
-            this.gridColor = 'grey';
+            this.gridColor = '#666666';
             this.lastMouseDownEvent = null;
+            this.layerNames = [];
             this.mouseDownEvent = null;
             this.mouseDownTimer = null;
             this.mouseMoveEvent = null;
             this.mouseUpEvent = null;
+            this.size = 600;
+            this.stage = {};
             this.strokeSize = 8;
             this.strokeCapStyle = 'round';
             this.strokeColor = '#000000';
             this.strokeJointStyle = 'round';
-            this.squigColor = '#000000';
             this.textColor = '#000000';
             this.textFont = 'Arial';
             this.textSize = '12px';
-            this.container = this.createCanvasContainer();
-            this.stage.display = this.createDisplayStage();
-            this.stage.input = this.createInputStage();
-            createjs.Ticker.addEventListener('tick', this.stage.display);
-            createjs.Touch.enable(this.stage.input);
-            createjs.Ticker.setFPS(200);
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.html(this.container);
-            this.$(this.container).append(this.stage.display.canvas);
-            this.$(this.container).append(this.stage.input.canvas);
-            this.$('#canvas-input').on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
-            this.$('#canvas-input').on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
-            this.clear();
+            this.$el.append(template);
+            this.elements.holder = this.$('.canvas-holder')[0];
+            this.elements.display = this.$('.canvas-display')[0];
+            this.elements.input = this.$('.canvas-input')[0];
+            this.stage.display = this.createDisplayStage();
+            this.stage.input = this.createInputStage();
+            this.createLayer('grid');
+            this.createLayer('background');
+            this.createLayer('hint');
+            this.createLayer('stroke');
+            this.$(this.elements.input).on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
+            this.$(this.elements.input).on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
+            createjs.Ticker.addEventListener('tick', this.stage.display);
+            createjs.Touch.enable(this.stage.input);
+            createjs.Ticker.setFPS(60);
+            this.resize();
             return this;
+        },
+        /**
+         * @property {Object} events
+         */
+        events: {
         },
         /**
          * @method clear
          * @returns {Backbone.View}
          */
         clear: function() {
-            this.stage.display.removeAllChildren();
-            this.stage.input.removeAllChildren();
-            this.createLayer('background');
-            this.createLayer('display');
-            this.createLayer('teach');
-            this.createLayer('hint');
-            this.createLayer('marker');
+            for (var i = 0, length = this.layerNames.length; i < length; i++) {
+                this.getLayer(this.layerNames[i]).removeAllChildren();
+            }
+            this.resize();
             this.updateAll();
-            if (this.grid)
-                this.drawGrid();
             return this;
         },
         /**
@@ -77,40 +79,21 @@ define(function() {
             return this;
         },
         /**
-         * @method createDisplayCanvas
+         * @method createDisplayStage
          * @returns {CreateJS.Stage}
          */
         createDisplayStage: function() {
-            var element = document.createElement('canvas');
-            element.id = 'canvas-display';
-            element.width = this.size;
-            element.height = this.size;
-            var stage = new createjs.Stage(element);
+            var stage = new createjs.Stage(this.elements.display);
             stage.autoClear = true;
             stage.enableDOMEvents(false);
             return stage;
-        },
-        /**
-         * @method createCanvasContainer
-         * @returns {DOMElement}
-         */
-        createCanvasContainer: function() {
-            var element = document.createElement('div');
-            element.className = 'canvas-holder';
-            element.style.width = this.size + 'px';
-            element.style.height = this.size + 'px';
-            return element;
         },
         /**
          * @method createInputStage
          * @returns {CreateJS.Stage}
          */
         createInputStage: function() {
-            var element = document.createElement('canvas');
-            element.id = 'canvas-input';
-            element.width = this.size;
-            element.height = this.size;
-            var stage = new createjs.Stage(element);
+            var stage = new createjs.Stage(this.elements.input);
             stage.autoClear = false;
             stage.enableDOMEvents(true);
             return stage;
@@ -118,25 +101,45 @@ define(function() {
         /**
          * @method createLayer
          * @param {String} name
-         * @returns {Container}
+         * @returns {CreateJS.Container}
          */
         createLayer: function(name) {
             var layer = new createjs.Container();
             layer.name = 'layer-' + name;
             this.stage.display.addChild(layer);
+            this.layerNames.push(name);
             return layer;
         },
         /**
-         * @method display
-         * @returns {CreateJS.Stage}
+         * @method destroy
          */
-        display: function() {
-            return this.stage.display;
+        destroy: function() {
+            var keys = _.keys(this);
+            for (var key in keys) {
+                this[keys[key]] = undefined;
+            }
         },
         /**
-         * Draws the to the background using a font rather than assembling
-         * the character strokes.
-         * 
+         * @method disableGrid
+         * @returns {Backbone.View}
+         */
+        disableGrid: function() {
+            this.grid = false;
+            this.clearLayer('grid');
+            return this;
+        },
+        /**
+         * @method disableInput
+         * @returns {Backbone.View}
+         */
+        disableInput: function() {
+            this.$(this.elements.input).off('vmousedown.Input');
+            this.$(this.elements.input).off('vmousemove.Input');
+            this.$(this.elements.input).off('vmouseout.Input');
+            this.$(this.elements.input).off('vmouseup.Input');
+            return this;
+        },
+        /**
          * @method drawCharacterFromFont
          * @param {String} layerName
          * @param {String} character
@@ -159,68 +162,17 @@ define(function() {
          * @param {String} color
          */
         drawGrid: function(color) {
+            this.clearLayer('grid');
+            var grid = new createjs.Shape();
             color = color ? color : this.gridColor;
-            if (!this.stage.display.getChildByName('grid')) {
-                var grid = new createjs.Shape();
-                grid.name = 'grid';
-                grid.graphics.beginStroke(color).setStrokeStyle(this.gridLineWidth, this.strokeCapStyle, this.strokeJointStyle);
-                grid.graphics.moveTo(this.size / 2, 0).lineTo(this.size / 2, this.size);
-                grid.graphics.moveTo(0, this.size / 2).lineTo(this.size, this.size / 2);
-                grid.graphics.moveTo(0, 0).lineTo(this.size, this.size);
-                grid.graphics.moveTo(this.size, 0).lineTo(0, this.size);
-                grid.graphics.endStroke();
-                this.stage.display.addChildAt(grid, 0);
-                this.stage.display.update();
-            }
-        },
-        /**
-         * @method disableInput
-         * @returns {Backbone.View}
-         */
-        disableInput: function() {
-            this.$('#canvas-input').off('vmousedown.Input');
-            this.$('#canvas-input').off('vmousemove.Input');
-            this.$('#canvas-input').off('vmouseout.Input');
-            this.$('#canvas-input').off('vmouseup.Input');
-            return this;
-        },
-        /**
-         * @method drawArrow
-         * @param {String} layerName
-         * @param {Object} point
-         * @param {String} color
-         * @param {String} borderColor
-         * @param {Number} rotation
-         * @returns {CreateJS.Shape}
-         */
-        drawArrow: function(layerName, point, color, borderColor, rotation) {
-            borderColor = borderColor ? borderColor : '#000000';
-            color = color ? color : '#000000';
-            rotation = rotation ? rotation : 0;
-            var arrow = new createjs.Shape();
-            arrow.graphics.f(color).ss(5).s(borderColor).p("AAUAKIHWHqInWHgIAAvK").cp().ef().es().f(color).ss(5).s(borderColor).p("AH+AKIHWHqInWHgIAAvK").cp().ef().es();
-            arrow.setBounds(100, 100);
-            arrow.x = point.x;
-            arrow.y = point.y;
-            arrow.scaleX = 0.3;
-            arrow.scaleY = 0.3;
-            arrow.regX = 100 / 2;
-            arrow.regY = 100 / 2;
-            arrow.rotation = rotation;
-            this.getLayer(layerName).addChild(arrow);
-            return arrow;
-        },
-        /**
-         * @method drawPoint
-         * @param {String} layerName
-         * @param {Object} point
-         * @returns {CreateJS.Shape}
-         */
-        drawPoint: function(layerName, point) {
-            var circle = new createjs.Shape();
-            circle.graphics.beginFill('blue').drawCircle(point.x, point.y, 10);
-            this.getLayer(layerName).addChild(circle);
-            return circle;
+            grid.graphics.beginStroke(color).setStrokeStyle(this.gridLineWidth, this.strokeCapStyle, this.strokeJointStyle);
+            grid.graphics.moveTo(this.size / 2, 0).lineTo(this.size / 2, this.size);
+            grid.graphics.moveTo(0, this.size / 2).lineTo(this.size, this.size / 2);
+            grid.graphics.moveTo(0, 0).lineTo(this.size, this.size);
+            grid.graphics.moveTo(this.size, 0).lineTo(0, this.size);
+            grid.graphics.endStroke();
+            this.getLayer('grid').addChild(grid);
+            this.stage.display.update();
         },
         /**
          * @method drawShape
@@ -236,35 +188,44 @@ define(function() {
             return shape;
         },
         /**
+         * @method enableGrid
+         * @returns {Backbone.View}
+         */
+        enableGrid: function() {
+            this.grid = true;
+            this.drawGrid();
+            return this;
+        },
+        /**
          * @method enableInput
+         * @returns {Backbone.View}
          */
         enableInput: function() {
-            var self = this;
             var stage = this.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
-            this.disableInput().$('#canvas-input').on('vmousedown.Input', down);
-            function down() {
+            this.disableInput().$(this.elements.input).on('vmousedown.Input', _.bind(down, this));
+            function down(event) {
                 points = [];
                 marker = new createjs.Shape();
                 squig = new createjs.Shape();
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
-                self.triggerInputDown(oldPoint);
-                self.$('#canvas-input').on('vmousemove.Input', move);
-                self.$('#canvas-input').on('vmouseout.Input', out);
-                self.$('#canvas-input').on('vmouseup.Input', up);
+                this.triggerInputDown(oldPoint, event);
+                this.$(this.elements.input).on('vmousemove.Input', _.bind(move, this));
+                this.$(this.elements.input).on('vmouseout.Input', _.bind(out, this));
+                this.$(this.elements.input).on('vmouseup.Input', _.bind(up, this));
             }
             function move() {
                 var point = {x: stage.mouseX, y: stage.mouseY};
                 var midPoint = {x: oldPoint.x + point.x >> 1, y: oldPoint.y + point.y >> 1};
                 marker.graphics.clear()
-                        .setStrokeStyle(self.strokeSize, self.strokeCapStyle, self.strokeJointStyle)
-                        .beginStroke(self.strokeColor)
+                        .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
+                        .beginStroke(this.strokeColor)
                         .moveTo(midPoint.x, midPoint.y)
                         .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 squig.graphics
-                        .setStrokeStyle(self.strokeSize, self.strokeCapStyle, self.strokeJointStyle)
-                        .beginStroke(self.strokeColor)
+                        .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
+                        .beginStroke(this.strokeColor)
                         .moveTo(midPoint.x, midPoint.y)
                         .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 stage.update();
@@ -272,24 +233,25 @@ define(function() {
                 oldMidPoint = midPoint;
                 points.push(point);
             }
-            function out() {
-                self.$('#canvas-input').off('vmousemove.Input', move);
-                self.$('#canvas-input').off('vmouseout.Input', out);
-                self.$('#canvas-input').off('vmouseup.Input', up);
-                self.triggerInputUp(null, squig.clone(true));
+            function out(event) {
+                this.$(this.elements.input).off('vmousemove.Input');
+                this.$(this.elements.input).off('vmouseout.Input');
+                this.$(this.elements.input).off('vmouseup.Input');
+                this.triggerInputUp(null, squig.clone(true), event);
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
             }
-            function up() {
-                self.$('#canvas-input').off('vmousemove.Input', move);
-                self.$('#canvas-input').off('vmouseout.Input', up);
-                self.$('#canvas-input').off('vmouseup.Input', up);
-                self.triggerInputUp(points, squig.clone(true));
+            function up(event) {
+                this.$(this.elements.input).off('vmousemove.Input');
+                this.$(this.elements.input).off('vmouseout.Input');
+                this.$(this.elements.input).off('vmouseup.Input');
+                this.triggerInputUp(points, squig.clone(true), event);
                 marker.graphics.clear();
                 squig.graphics.clear();
                 stage.clear();
             }
+            return this;
         },
         /**
          * @method fadeLayer
@@ -301,12 +263,13 @@ define(function() {
             var layer = this.getLayer(layerName);
             if (layer.getNumChildren() > 0) {
                 layer.cache(0, 0, this.size, this.size);
-                createjs.Tween.get(layer).to({alpha: 0}, 500).call(function() {
-                    layer.alpha = 1;
+                createjs.Tween.get(layer).to({alpha: 0}, 300).call(function() {
                     layer.removeAllChildren();
                     layer.uncache();
-                    if (typeof callback === 'function')
+                    layer.alpha = 1;
+                    if (typeof callback === 'function') {
                         callback(layer);
+                    }
                 });
             }
             return layer;
@@ -327,8 +290,9 @@ define(function() {
             createjs.Tween.get(shape).to({alpha: 0}, milliseconds, createjs.Ease.backOut).call(function() {
                 shape.uncache();
                 layer.removeChild(shape);
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             });
         },
         /**
@@ -368,30 +332,54 @@ define(function() {
          * @method remove
          */
         remove: function() {
-            createjs.Touch.disable(this.stage.input);
             createjs.Ticker.removeEventListener('tick', this.stage.display);
-            this.$('#canvas-display').off();
-            this.$('#canvas-input').off();
-            this.stage.display.removeAllChildren();
-            this.stage.input.removeAllChildren();
-            this.$el.empty();
+            this.$(this.elements.input).off();
+            this.removeElements();
             this.stopListening();
             this.undelegateEvents();
+            this.$el.empty();
+            this.destroy();
         },
         /**
-         * @method size
+         * @method removeElements
+         * @returns {Object}
+         */
+        removeElements: function() {
+            for (var i in this.elements) {
+                this.elements[i].remove();
+                this.elements[i] = undefined;
+            }
+            return this.elements;
+        },
+        /**
+         * @method resize
          * @param {Number} size
+         * @returns {Backbone.View}
          */
         resize: function(size) {
-            this.size = size;
-            this.container.style.width = size + 'px';
-            this.container.style.height = size + 'px';
-            this.stage.display.canvas.width = size;
-            this.stage.display.canvas.height = size;
-            this.stage.input.canvas.width = size;
-            this.stage.input.canvas.height = size;
-            this.clear();
+            this.size = size ? size : skritter.settings.getCanvasSize();
+            this.elements.holder.style.height = this.size + 'px';
+            this.elements.holder.style.width = this.size + 'px';
+            this.elements.display.height = this.size;
+            this.elements.display.width = this.size;
+            this.elements.input.height = this.size;
+            this.elements.input.width = this.size;
+            if (this.grid) {
+                this.drawGrid();
+            }
             return this;
+        },
+        /**
+         * @method startSparkling
+         */
+        startSparkling: function() {
+            //TODO: custom animations for pointer sparkling
+        },
+        /**
+         * @method stopSparkling
+         */
+        stopSparkling: function() {
+            //TODO: custom animations for pointer sparkling
         },
         /**
          * @method triggerClick
@@ -426,12 +414,12 @@ define(function() {
                 if (elapsed > 20 && elapsed < 400) {
                     var lastPostion = {x: this.lastMouseDownEvent.pageX, y: this.lastMouseDownEvent.pageY};
                     var currentPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
-                    if (skritter.fn.distance(lastPostion, currentPosition) <= 10) {
+                    if (skritter.fn.getDistance(lastPostion, currentPosition) <= 10) {
                         this.triggerCanvasDoubleClick(event);
                     }
                 }
             }
-            this.$('#canvas-input').on('vmousemove.Canvas', _.bind(function(event) {
+            this.$(this.elements.input).on('vmousemove.Canvas', _.bind(function(event) {
                 this.mouseMoveEvent = event;
             }, this));
             this.mouseDownTimer = window.setTimeout(_.bind(function() {
@@ -439,7 +427,7 @@ define(function() {
                 if (this.mouseMoveEvent) {
                     var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
                     var endPosition = {x: this.mouseMoveEvent.pageX, y: this.mouseMoveEvent.pageY};
-                    distance = skritter.fn.distance(startPosition, endPosition);
+                    distance = skritter.fn.getDistance(startPosition, endPosition);
                 }
                 if (distance <= 10) {
                     this.triggerCanvasClickHold(event);
@@ -452,40 +440,48 @@ define(function() {
          */
         triggerCanvasMouseUp: function(event) {
             window.clearTimeout(this.mouseDownTimer);
-            this.$('#canvas-input').off('vmousemove.Canvas');
+            this.$(this.elements.input).off('vmousemove.Canvas');
             this.lastMouseDownEvent = this.mouseDownEvent;
             this.mouseMoveEvent = null;
             this.mouseUpEvent = event;
             if (this.mouseDownEvent) {
                 var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
                 var endPosition = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
-                var distance = skritter.fn.distance(startPosition, endPosition);
+                var angle = skritter.fn.getAngle(startPosition, endPosition);
+                var distance = skritter.fn.getDistance(startPosition, endPosition);
                 var duration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
                 if (distance <= 10 && (duration > 20 && duration < 400)) {
                     this.triggerCanvasClick(event);
+                } else if (distance > 100 && angle < -70 && angle > -110) {
+                    this.triggerSwipeUp(event);
                 } else {
                     this.trigger('canvas:mouseup', event);
                 }
             }
         },
         /**
-         * Enables the view to fire events when the canvas has been touched.
-         * 
          * @method triggerInputDown
          * @param {Object} point
+         * @param {Object} event
          */
-        triggerInputDown: function(point) {
-            this.trigger('input:down', point);
+        triggerInputDown: function(point, event) {
+            this.trigger('input:down', point, event);
         },
         /**
-         * Enables the view to fire events when the canvas touch has been released.
-         * 
          * @method triggerInputUp
          * @param {Array} points
          * @param {CreateJS.Shape} shape
+         * @param {Object} event
          */
-        triggerInputUp: function(points, shape) {
-            this.trigger('input:up', points, shape);
+        triggerInputUp: function(points, shape, event) {
+            this.trigger('input:up', points, shape, event);
+        },
+        /**
+         * @method triggerSwipeUp
+         * @param {Object} event
+         */
+        triggerSwipeUp: function(event) {
+            this.trigger('canvas:swipeup', event);
         },
         /**
          * @method tweenShape
@@ -507,8 +503,9 @@ define(function() {
                 scaleY: toShape.scaleY,
                 rotation: toShape.rotation
             }, duration, createjs.Ease.backOut).call(function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             });
         },
         /**

@@ -14,9 +14,9 @@ define(function() {
      * @returns {String}
      */
     var alert = function(html, context) {
+        var div = "<div class='alert alert-" + context + "'>";
         context = context ? context : 'default';
         html = html ? html : '';
-        var div = "<div class='alert alert-" + context + "'>";
         div += "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
         div += html;
         div += "</div>";

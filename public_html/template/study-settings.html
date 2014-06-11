@@ -1,7 +1,12 @@
-<div id="view-study-settings" class="padding-top view">
+<div class="view view-study-settings">
+    
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header"> 
+                <div class="navbar-toggle-sidebar">
+                    <i class="fa fa-2x fa-bars"></i>
+                    <span class="user-avatar"></span>
+                </div>
                 <ul class="navbar-nav navbar-text list-inline">
                     <li><a class="button-save" href="#"><i class="fa fa-check"></i> Save</a></li>
                     <li><a class="button-cancel" href="#"><i class="fa fa-times"></i> Cancel</a></li>
@@ -9,7 +14,17 @@
             </div>
         </div>
     </div>
-    <div id="content-container" class="container">
+    
+    <div class="sidebar">
+        <ul>
+            <li class="button-home"><div><i class="fa fa-2x fa-lg fa-home"></i> <span>Home</span></div></li>
+            <li class="button-study"><div><i class="fa fa-2x fa-lg fa-pencil"></i> <span>Study</span></div></li>
+            <li class="button-options"><div><i class="fa fa-2x fa-lg fa-cogs"></i> <span>Options</span></div></li>
+            <li class="button-logout"><div><i class="fa fa-2x fa-lg fa-sign-out"></i> <span>Sign Out</span></div></li>
+        </ul>
+    </div>
+    
+    <div id="content" class="content-container container-fluid">
         <div id="general" class="content-block">
             <h2>General</h2>
             <div class="row">
@@ -32,27 +47,41 @@
                 <div class="col-xs-6">
                     <h5><span class="setting-label">Teaching Mode</span> <input type="checkbox" id="teaching-mode" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h5>
                 </div>
-                <div class="col-xs-6"></div>
+                <div class="col-xs-6">
+                    <h5><span class="setting-label">Reading</span> <input type="checkbox" id="reading-style" class="bootswitch" checked data-on-color="primary" data-on-text="Pinyin" data-off-color="default" data-off-text="Zhuyin"></h5>
+                </div>
             </div>
         </div>
         <div id="parts" class="content-block">
             <h2>Parts</h2>
             <div class="row">
-                <div class="col-md-6">
-                    <h4><span class="setting-label">DEFINITION</span> <input type="checkbox" id="defn" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h4>
+                <div class="col-md-3">
+                    <h5><span class="setting-label">Definition</span><input type="checkbox" id="defn" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h5>
                 </div>
-                <div class="col-md-6">
-                    <h4><span class="setting-label">READING</span> <input type="checkbox" id="rdng" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h4>
+                <div class="col-md-3">
+                    <h5><span class="setting-label">Reading</span><input type="checkbox" id="rdng" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h5>
+                </div>
+                <div class="col-md-3">
+                    <h5><span class="setting-label">Tone</span> <input type="checkbox" id="tone" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h5>
+                </div>  
+                <div class="col-md-3">
+                    <h5><span class="setting-label">Writing</span> <input type="checkbox" id="rune" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h5>
                 </div>
             </div>
+        </div>
+        <div id="styles" class="content-block">
+            <h2>Styles</h2>
             <div class="row">
-                <div class="col-md-6">
-                    <h4><span class="setting-label">TONE</span> <input type="checkbox" id="tone" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h4>
-                </div>  
-                <div class="col-md-6">
-                    <h4><span class="setting-label">WRITING</span> <input type="checkbox" id="rune" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h4>
+                <div class="col-md-3">
+                    <h5><span class="setting-label">Simplified</span><input type="checkbox" id="simp" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h5>
+                </div>
+                <div class="col-md-3">
+                    <h5><span class="setting-label">Traditional</span><input type="checkbox" id="trad" class="bootswitch" checked data-on-color="primary" data-off-color="default"></h5>
                 </div>
             </div>
         </div>
     </div>
+    
+    <div class="font-preloader">力</div>
+    
 </div>

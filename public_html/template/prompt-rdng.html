@@ -1,43 +1,34 @@
-<div id="rdng" class="prompt-container">
-    <div id="info-section" class="content-block no-margin no-shadow">
-        <i class="fa fa-2x fa-chevron-down button-toggle-hint"></i>
-        <div id="prompt-hint-text" class="text-center">(click to show hint)</div>
-        <div id="prompt-hint" class="collapsed">
-            <div class="prompt-row">
-                <div id="prompt-definition"></div>
-            </div>
-            <div class="prompt-row">
-                <div id="prompt-sentence"></div>
-            </div>
-            <div class="prompt-row">
-                <div id="prompt-mnemonic"></div>
+<div id="rdng" class="prompt prompt-rdng">
+    
+    <div class="info-section content-block no-margin">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <span class="prompt-field prompt-definition"></span>
             </div>
         </div>
-        <div id="prompt-stats">
-            <span id="prompt-newness"></span>
-            <span id="prompt-style"></span>
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <span class="character-font prompt-field prompt-sentence"></span>
+            </div>
         </div>
     </div>
-    <div id="input-section" class="content-block no-margin no-padding no-shadow">
-        <div class="navigate navigate-backward">
-            <i class="fa fa-2x fa-chevron-left"></i>
-        </div>
-        <div class="navigate navigate-forward">
-            <i class="fa fa-2x fa-chevron-right"></i>
-        </div>
-        <div id="prompt-text">
-            <div id="question">
-                <h1 class="prompt-writing character-font text-center"></h1>
-                <h2 class="text-center">How do you say it?</h2>
+    
+    <div class="input-section content-block no-margin no-padding">
+        <div class="prompt-style"></div>
+        <div class="prompt-text">
+            <div class="prompt-question">
+                <h1 class="prompt-writing prompt-field character-font text-center"></h1>
+                <h2 class="text-center">What's the reading?</h2>
                 <h4 class="text-center">(click to show answer)</h4>
             </div>
-            <div id="answer">
-                <h1 class="prompt-writing character-font text-center"></h1>
-                <h1 class="text-center">
-                    <span id="prompt-reading"></span>
-                </h1>
+            <div class="prompt-answer">
+                <h1 class="prompt-writing prompt-field character-font text-center"></h1>
+                <h3 class="prompt-reading prompt-field text-center"></h3>
             </div>
         </div>
-        <div id="grading-container"></div>
+        <div class="navigate navigate-left fa fa-chevron-left"></div>
+        <div class="navigate navigate-right fa fa-chevron-right"></div>
+        <div class="grading-container"></div>
     </div>
+    
 </div>

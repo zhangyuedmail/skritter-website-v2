@@ -1,45 +1,23 @@
-/**
- * @module Skritter
- * @submodule Models
- * @param Item
- * @author Joshua McFarland
- */
-define([
-    'model/data/Item'
-], function(Item) {
+define([], function() {
     /**
      * @class DataVocab
      */
     var Vocab = Backbone.Model.extend({
+        /**
+         * @method initialize
+         */
+        initialize: function() {
+        },
         /**
          * @method cache
          * @param {Function} callback
          */
         cache: function(callback) {
             skritter.storage.put('vocabs', this.toJSON(), function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             });
-        },
-        /**
-         * @method isChinese
-         * @returns {Boolean}
-         */
-        isChinese: function() {
-            if (this.get('lang') === 'zh') {
-                return true;
-            }
-            return false;
-        },
-        /**
-         * @method isJapanese
-         * @returns {Boolean}
-         */
-        isJapanese: function() {
-            if (this.get('lang') === 'ja') {
-                return true;
-            }
-            return false;
         },
         /**
          * @method getAudioFileName
@@ -52,7 +30,7 @@ define([
             return null;
         },
         /**
-         * @method characterCount
+         * @method getCharacterCount
          * @returns {Number}
          */
         getCharacterCount: function() {
@@ -66,17 +44,18 @@ define([
             var characters = [];
             var containedVocabIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [];
             if (this.has('containedVocabIds')) {
-                for (var i = 0, length = containedVocabIds.length; i < length; i++)
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
                     if (this.get('lang') === 'zh') {
-                        characters.push(skritter.fn.simptrad.fromBase(containedVocabIds[i]));
+                        characters.push(skritter.fn.mapper.fromBase(containedVocabIds[i]));
                     } else {
                         characters.push(containedVocabIds[i].split('-')[1]);
                     }
+                }
             } else {
                 var splitWriting = this.get('writing').split('');
-                if (splitWriting.length === 1 && !skritter.fn.isKana(splitWriting[0]))
+                if (splitWriting.length === 1 && !skritter.fn.isKana(splitWriting[0])) {
                     characters.push(splitWriting[0]);
-
+                }
             }
             return characters;
         },
@@ -87,17 +66,47 @@ define([
          */
         getContainedItemIds: function(part) {
             var containedItemIds = [];
-            var containedVocabIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [];
-            if (part === 'rune') {
-                for (var a = 0, lengthA = containedVocabIds.length; a < lengthA; a++)
+            var containedVocabIds = this.get('containedVocabIds');
+            if (containedVocabIds && part === 'rune') {
+                for (var a = 0, lengthA = containedVocabIds.length; a < lengthA; a++) {
                     containedItemIds.push(skritter.user.id + '-' + containedVocabIds[a] + '-' + part);
-            } else if (part === 'tone') {
+                }
+            } else if (containedVocabIds && part === 'tone') {
                 for (var b = 0, lengthB = containedVocabIds.length; b < lengthB; b++) {
                     var splitId = containedVocabIds[b].split('-');
                     containedItemIds.push(skritter.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
                 }
             }
             return containedItemIds;
+        },
+        /**
+         * @method getContainedVocabs
+         * @returns {Array}
+         */
+        getContainedVocabs: function() {
+            var containedVocabs = [];
+            var containedVocabIds = this.get('containedVocabIds');
+            for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                containedVocabs.push(skritter.user.data.vocabs.get(containedVocabIds[i]));
+            }
+            return containedVocabs;
+        },
+        /**
+         * @method getContainedRows
+         * @returns {String}
+         */
+        getContainedRows: function() {
+            var containedHTML = '';
+            var containedVocabs = this.getContainedVocabs();
+            for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
+                var vocabItem = containedVocabs[a];
+                containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
+                containedHTML += "<td class='writing'>" + vocabItem.get('writing') + '</td>';
+                containedHTML += "<td class='reading'>" + vocabItem.getReading() + '</td>';
+                containedHTML += "<td class='definition'>" + vocabItem.getDefinition() + '</td>';
+                containedHTML += "</tr>";
+            }
+            return containedHTML;
         },
         /**
          * @method getDefinition
@@ -113,71 +122,51 @@ define([
             }
         },
         /**
+         * @method getDecomps
+         * @returns {Backbone.Model}
+         */
+        getDecomps: function() {
+            var decomps = [];
+            var characters = this.getCharacters();
+            for (var i = 0, length = characters.length; i < length; i++) {
+                decomps.push(skritter.user.data.decomps.get(characters[i]));
+            }
+            return decomps;
+        },
+        /**
          * @method getFontName
          * @returns {String}
          */
         getFontName: function() {
-            if (this.isChinese())
-                return 'simkai';
-            return 'kaisho';
+            return this.isChinese() ? 'simkai' : 'kaisho';
         },
         /**
          * @method fontClass
          * @returns {String}
          */
         getFontClass: function() {
-            if (this.isChinese())
-                return 'chinese-text';
-            return 'japanese-text';
-        },
-        /**
-         * @method getMaskedSentenceWriting
-         * @returns {String}
-         */
-        getMaskedSentenceWriting: function() {
-            var sentence = this.getSentence();
-            if (sentence)
-                return sentence.getMaskedWriting(this.get('writing'));
+            return this.isChinese() ? 'chinese-text' : 'japanese-text';            
         },
         /**
          * @method getMnemonic
-         * @returns {String}
+         * @returns {Object}
          */
         getMnemonic: function() {
             if (this.has('mnemonic') && this.get('mnemonic').text !== '') {
-                return this.get('mnemonic').text;
+                return this.get('mnemonic');
             } else if (this.has('topMnemonic')) {
-                if (this.get('topMnemonic').public)
-                    return this.get('topMnemonic').text;
+                return this.get('topMnemonic');
             }
+            return null;
         },
         /**
          * @method getReading
-         * @returns {String}
-         */
-        getReading: function() {
-            return skritter.fn.pinyin.toTone(this.get('reading'));
-        },
-        /**
-         * @method getReadingAt
-         * @param {Number} position
-         * @returns {String}
-         */
-        getReadingAt: function(position) {
-            position = position === 0 ? 1 : position;
-            if (this.isChinese()) {
-                var reading = this.get('reading').split(', ')[0];
-                return reading.match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g)[position - 1];
-            }
-            return this.get('reading');
-        },
-        /**
-         * @method getReadingBlock
          * @param {Number} offset
          * @param {Boolean} mask
+         * @param {Boolean} zhuyin
          * @returns {String}
          */
-        getReadingBlock: function(offset, mask) {
+        getReading: function(offset, mask, zhuyin) {
             var element = '';
             var reading = this.get('reading');
             if (this.isChinese()) {
@@ -185,18 +174,22 @@ define([
                 for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
                     var position = 1;
                     var pieces = reading[a].match(/[a-z|A-Z]+[0-9]+|\s\.\.\.\s|\'/g);
-                    element += "<span id='reading-" + (a + 1) + "' class='reading' data-reading='" + reading[a] + "'>";
+                    var readingString = reading[a].replace(' ... ', '').replace("'", '').replace(' ', '');
+                    element += "<span id='reading-" + (a + 1) + "' class='reading' data-reading='" + readingString + "'>";
                     for (var b = 0, lengthB = pieces.length; b < lengthB; b++) {
                         var piece = pieces[b];
+                        var nakedPiece = pieces[b].replace(/[0-9]/g, '');
+                        var formattedNakedPiece = zhuyin ? skritter.fn.pinyin.toZhuyin(nakedPiece + '1') : nakedPiece;
+                        var formattedPiece = zhuyin ? skritter.fn.pinyin.toZhuyin(piece) : skritter.fn.pinyin.toTone(piece);
                         if (piece.indexOf(' ... ') === -1 && piece.indexOf("'") === -1) {
                             if (offset && position >= offset) {
                                 if (mask) {
-                                    element += "<span class='position-" + position + " reading-masked'>" + piece.replace(/[0-9]/g, '') + "</span>";
+                                    element += "<span class='position-" + position + " reading-masked'>" + formattedNakedPiece + "</span>";
                                 } else {
-                                    element += "<span class='position-" + position + " reading-hidden'><span>" + skritter.fn.pinyin.toTone(piece) + "</span></span>";
+                                    element += "<span class='position-" + position + " reading-hidden'><span>" + formattedPiece + "</span></span>";
                                 }
                             } else {
-                                element += "<span class='position-" + position + "'>" + skritter.fn.pinyin.toTone(piece) + "</span>";
+                                element += "<span class='position-" + position + "'>" + formattedPiece + "</span>";
                             }
                             position++;
                         } else {
@@ -215,21 +208,23 @@ define([
          * @returns {Backbone.Model}
          */
         getSentence: function() {
-            return skritter.user.data.sentences.get(this.get('sentenceId'));
+            var sentence = skritter.user.data.sentences.get(this.get('sentenceId'));
+            if (sentence) {
+                return sentence;
+            }
+            return null;
         },
         /**
          * @method getStyle
          * @returns {String}
          */
         getStyle: function() {
-            if (this.has('style') && this.get('style') !== 'both')
+            if (this.has('style') && this.get('style') !== 'both') {
                 return this.get('style');
-            return '';
+            }
+            return false;
         },
         /**
-         * Returns an array of unique possible tone numbers in the order they appear in the
-         * reading string. Japanese will just return an empty array since it doesn't have tones.
-         * 
          * @method getTones
          * @param {Number} position
          * @returns {Array}
@@ -240,24 +235,27 @@ define([
             if (this.isChinese()) {
                 if (reading.indexOf(', ') === -1) {
                     reading = reading.match(/[0-9]+/g);
-                    for (var a = 0, lengthA = reading.length; a < lengthA; a++)
+                    for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
                         tones.push([parseInt(reading[a], 10)]);
+                    }
                 } else {
                     reading = reading.split(', ');
-                    for (var b = 0, lengthB = reading.length; b < lengthB; b++)
-                        tones.push([skritter.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
+                    for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                        tones.push([skritter.fn.convertArrayToInt(reading[b].match(/[0-9]+/g))]);
+                    }
                 }
             }
-            if (position && this.getCharacterCount() > 1)
+            if (position && this.getCharacterCount() > 1) {
                 return tones[position - 1];
+            }
             return tones;
         },
         /**
-         * @method getWritingBlock
+         * @method getWriting
          * @param {Number} offset
          * @returns {String}
          */
-        getWritingBlock: function(offset) {
+        getWriting: function(offset) {
             var element = '';
             var position = 1;
             var actualCharacters = this.get('writing').split('');
@@ -278,38 +276,26 @@ define([
             return element;
         },
         /**
-         * @method playAudio
-         * @param {Number} position
+         * @method isChinese
+         * @returns {Boolean}
          */
-        playAudio: function(position) {
-            if (position) {
-                var filename = this.getReadingAt(position) + '.mp3';
-                skritter.assets.playAudio(filename.toLowerCase());
-            } else if (this.has('audio')) {
-                skritter.assets.playAudio(this.getAudioFileName());
-            }
+        isChinese: function() {
+            return this.get('lang') === 'zh' ? true : false;
         },
         /**
-         * @method spawnItem
-         * @param {String} part
-         * @returns {Backbone.Model}
+         * @method isJapanese
+         * @returns {Boolean}
          */
-        spawnItem: function(part) {
-            return new Item({
-                id: this.id + '-' + part,
-                part: part,
-                lang: this.get('lang'),
-                vocabIds: [this.id],
-                style: this.get('style'),
-                next: 0,
-                last: 0,
-                interval: 0,
-                reviews: 0,
-                successes: 0,
-                created: skritter.fn.getUnixTime(),
-                previousSuccess: false,
-                previousInterval: 0
-            });
+        isJapanese: function() {
+            return this.get('lang') === 'ja' ? true : false;
+        },
+        /**
+         * @method playAudio
+         */
+        playAudio: function() {
+            if (this.has('audio')) {
+                skritter.assets.playAudio(this.getAudioFileName());
+            }
         }
     });
 

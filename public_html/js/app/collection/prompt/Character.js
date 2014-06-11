@@ -1,9 +1,3 @@
-/**
- * @module Skritter
- * @submodule Collection
- * @param Stroke
- * @author Joshua McFarland
- */
 define([
     'model/prompt/Stroke'
 ], function(Stroke) {
@@ -40,11 +34,14 @@ define([
             for (var a = 0, lengthA = this.length; a < lengthA; a++) {
                 var id = this.at(a).id;
                 var contains = this.at(a).getContainedIds();
-                if (newId === id)
+                if (newId === id) {
                     return true;
-                for (var b = 0, lengthB = contains.length; b < lengthB; b++)
-                    if (newContained.indexOf(contains[b]) !== -1)
+                }
+                for (var b = 0, lengthB = contains.length; b < lengthB; b++) {
+                    if (newContained.indexOf(contains[b]) !== -1) {
                         return true;
+                    }
+                }
             }
             return false;
         },
@@ -57,8 +54,9 @@ define([
          */
         getExpectedStroke: function() {
             var variation = this.getExpectedVariation();
-            if (this.length === 0)
+            if (this.length === 0) {
                 return variation.at(0);
+            }
             return variation.at(this.length);
         },
         /**
@@ -68,17 +66,20 @@ define([
          * @returns {Backbone.Model}
          */
         getExpectedVariation: function() {
-            if (this.targets.length <= 1)
+            if (this.targets.length <= 1) {
                 return this.targets[0];
+            }
             var targetScores = [];
-            for (var i = 0, length = this.targets.length; i < length; i++)
+            for (var i = 0, length = this.targets.length; i < length; i++) {
                 targetScores[i] = 0;
+            }
             for (var a = 0, lengthA = this.length; a < lengthA; a++) {
                 var strokeId = this.at(a).id;
                 for (var b = 0, lengthB = this.targets.length; b < lengthB; b++) {
                     var target = this.targets[b];
-                    if (target.findWhere({id: strokeId}))
+                    if (target.findWhere({id: strokeId})) {
                         targetScores[b]++;
+                    }
                 }
             }
             return this.targets[targetScores.indexOf(Math.max.apply(Math, targetScores))];
@@ -131,7 +132,7 @@ define([
          */
         getSquig: function(excludeSquigPosition, color) {
             color = (color) ? color : '#000000';
-            var canvasSize = skritter.settings.canvasSize();
+            var canvasSize = skritter.settings.getCanvasSize();
             var squigContainer = new createjs.Container();
             squigContainer.name = 'squig';
             for (var i = 0, length = this.models.length; i < length; i++) {
@@ -151,8 +152,9 @@ define([
          * @returns {Boolean}
          */
         isFinished: function() {
-            if (this.getPosition() >= this.getMax())
+            if (this.getPosition() >= this.getMax()) {
                 return true;
+            }
             return false;
         },
         /**

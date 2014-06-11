@@ -21,13 +21,15 @@ define([
          */
         model: Decomp,
         /**
-         * @method insert
-         * @param {Array|Object} decomps
+         * @method cache
          * @param {Function} callback
          */
-        insert: function(decomps, callback) {
-            skritter.storage.put('decomps', decomps, callback);
-            decomps = null;
+        cache: function(callback) {
+            skritter.storage.put('decomps', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method loadAll

@@ -1,13 +1,8 @@
-/**
- * @module Skritter
- * @submodule Model
- * @author Joshua McFarland
- */
-define(function() {
+define([], function() {
     /**
      * @class UserSubscription
      */
-    var Subscription = Backbone.Model.extend({
+    var Model = Backbone.Model.extend({
         /**
          * @method initialize
          */
@@ -26,20 +21,10 @@ define(function() {
             localStorage.setItem(skritter.user.id + '-subscription', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method fetch
-         * @param {Function} callback
-         */
-        fetch: function(callback) {
-            skritter.api.getSubscription(skritter.user.id, _.bind(function(result) {
-                this.set(result);
-                callback();
-            }, this));
-        },
-        /**
          * @method getPlan
          * @returns {Object}
          */
-        getPlan: function() {
+        getWebsitePlan: function() {
             var plan = null;
             if (this.get('expires') === false) {
                 plan = 'Unlimited';
@@ -85,10 +70,10 @@ define(function() {
             var type = null;
             switch (this.get('subscribed')) {
                 case 'gplay':
-                    type = 'Google';
+                    type = 'Google Play';
                     break;
                 case 'ios':
-                    type = 'iOS';
+                    type = 'iTunes Store';
                     break;
                 case 'skritter':
                     type = 'Website';
@@ -114,7 +99,7 @@ define(function() {
         /**
          * @method subscribe
          */
-        subscribe: function() {
+        subscribeWeb: function() {
             window.location.href = 'https://beta.skritter.com/account/billing/subscribe/mobile';
         },
         /**
@@ -143,8 +128,18 @@ define(function() {
                     callback();
                 }
             });
+        },
+        /**
+         * @method sync
+         * @param {Function} callback
+         */
+        sync: function(callback) {
+            skritter.api.getSubscription(skritter.user.id, _.bind(function(result) {
+                this.set(result);
+                callback();
+            }, this));
         }
     });
     
-    return Subscription;
+    return Model;
 });

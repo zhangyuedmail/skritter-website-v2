@@ -1,30 +1,23 @@
-/**
- * @module Skritter
- * @submodule View
- * @param templateGradingButtons
- * @author Joshua McFarland
- */
 define([
     'require.text!template/prompt-grading-buttons.html'
-], function(templateGradingButtons) {
+], function(template) {
     /**
      * @class PromptGradingButtons
      */
-    var GradingButtons = Backbone.View.extend({
+    var View = Backbone.View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            this.animationSpeed = 100;
             this.expanded = true;
-            this.value = 3;
+            this.grade = 3;
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.html(templateGradingButtons);
+            this.$el.html(_.template(template, skritter.strings));
             return this;
         },
         /**
@@ -43,107 +36,122 @@ define([
         collapse: function() {
             this.expanded = false;
             for (var i = 1; i <= 4; i++) {
-                if (this.$('#grade' + i).hasClass('selected')) {
-                    this.$('#grade' + i).removeClass('hidden');
+                if (i === this.grade) {
+                    this.$('#grade' + i).parent().show();
                 } else {
-                    this.$('#grade' + i).addClass('hidden');
+                    this.$('#grade' + i).parent().hide();
                 }
             }
             return this;
+        },
+        /**
+         * @method destroy
+         */
+        destroy: function() {
+            var keys = _.keys(this);
+            for (var key in keys) {
+                this[keys[key]] = undefined;
+            }
         },
         /**
          * @method expand
          * @returns {Backbone.View}
          */
         expand: function() {
-            this.$('#prompt-grading-buttons').children().removeClass('hidden');
+            for (var i = 1; i <= 4; i++) {
+                if (i === this.grade) {
+                    this.$('#grade' + i).parent().addClass('active');
+                } else {
+                    this.$('#grade' + i).parent().removeClass('active');
+                }
+                this.$('#grade' + i).parent().show();
+            }
             this.expanded = true;
             return this;
-        },
-        /**
-         * @method grade
-         * @param {Number} value
-         * @returns {Number}
-         */
-        grade: function(value) {
-            if (value)
-                this.value = value;
-            return this.value;
         },
         /**
          * @method handleButtonClick
          * @param {Object} event
          */
         handleButtonClick: function(event) {
-            this.select(parseInt(event.currentTarget.id.replace(/[^\d]+/, ''), 10));
+            this.grade = parseInt(event.currentTarget.id.replace(/[^\d]+/, ''), 10);
+            this.select(this.grade);
+            this.triggerSelected();
             if (this.expanded) {
-                this.triggerSelected();
+                this.triggerComplete();
             } else {
-                this.toggle();
+                this.expand();
             }
             event.preventDefault();
         },
         /**
          * @method hide
-         * @param {Boolean} skipAnimation
+         * @param {Function} callback
+         * @returns {Backbone.View}
          */
-        hide: function(skipAnimation) {
-            if (skipAnimation) {
-                this.$('#prompt-grading-buttons').hide();
-            } else {
-                this.$('#prompt-grading-buttons').hide(this.animationSpeed);
-            }
+        hide: function(callback) {
+            this.$el.hide('slide', {direction: 'down'}, 300, callback);
             return this;
         },
         /**
          * @method remove
          */
         remove: function() {
-            this.$el.empty();
+            this.removeElements();
             this.stopListening();
             this.undelegateEvents();
+            this.$el.empty();
+            this.destroy();
+        },
+        /**
+         * @method removeElements
+         * @returns {Object}
+         */
+        removeElements: function() {
+            for (var i in this.elements) {
+                this.elements[i].remove();
+                this.elements[i] = undefined;
+            }
+            return this.elements;
         },
         /**
          * @method select
-         * @param {Number} value
+         * @param {Number} grade
+         * @returns {Backbone.View}
          */
-        select: function(value) {
-            if (value)
-                this.value = value;
+        select: function(grade) {
+            this.grade = grade;
             for (var i = 1; i <= 4; i++) {
-                if (this.value === i) {
-                    this.$('#grade' + i).addClass('selected');
+                if (i === this.grade) {
+                    this.$('#grade' + i).parent().addClass('active');
                 } else {
-                    this.$('#grade' + i).removeClass('selected');
+                    this.$('#grade' + i).parent().removeClass('active');
                 }
             }
             return this;
         },
         /**
          * @method show
+         * @param {Function} callback
+         * @returns {Backbone.View}
          */
-        show: function() {
-            this.$('#prompt-grading-buttons').show(this.animationSpeed);
+        show: function(callback) {
+            this.$el.show('slide', {direction: 'down'}, 300, callback);
             return this;
         },
         /**
-         * @method toggle
+         * @method triggerComplete
          */
-        toggle: function() {
-            if (this.expanded) {
-                this.collapse();
-            } else {
-                this.expand();
-            }
-            return this;
+        triggerComplete: function() {
+            this.trigger('complete', this.grade);
         },
         /**
          * @method triggerSelected
          */
         triggerSelected: function() {
-            this.trigger('selected', this.value);
+            this.trigger('selected', this.grade);
         }
     });
 
-    return GradingButtons;
+    return View;
 });

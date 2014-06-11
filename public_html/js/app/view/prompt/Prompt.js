@@ -1,69 +1,122 @@
-/**
- * @module Skritter
- * @submodule Views
- * @param GradingButtons
- * @author Joshua McFarland
- */
 define([
     'view/prompt/GradingButtons'
 ], function(GradingButtons) {
     /**
      * @class Prompt
      */
-    var Prompt = Backbone.View.extend({
+    var View = Backbone.View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            this.gradingButtons = null;
+            this.elements = {};
+            this.grading = new GradingButtons();
+            this.item = null;
             this.review = null;
+            this.vocab = null;
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            console.log('PROMPT', this.review.getBaseVocab().get('writing'), this.review.get('part'), this.review);
-            this.gradingButtons = new GradingButtons();
-            this.gradingButtons.setElement(this.$('#grading-container')).render();
-            this.gradingButtons.grade(this.review.getReviewAt().score);
-            this.$('.character-font').addClass(this.review.getBaseVocab().getFontClass());
-            this.listenTo(this.gradingButtons, 'selected', this.handleGradingSelected);
+            console.log(this.review.id, this.review.toJSON());
+            this.grading.setElement('.grading-container').render();
+            this.elements.answer = this.$('.prompt-answer');
+            this.elements.canvas = this.$('.canvas-container');
+            this.elements.definition = this.$('.prompt-definition');
+            this.elements.heisig = this.$('.prompt-heisig');
+            this.elements.mnemonic = this.$('.prompt-mnemonic');
+            this.elements.navLeft = this.$('.navigate-left');
+            this.elements.navRight = this.$('.navigate-right');
+            this.elements.question = this.$('.prompt-question');
+            this.elements.reading = this.$('.prompt-reading');
+            this.elements.sentence = this.$('.prompt-sentence');
+            this.elements.style = this.$('.prompt-style');
+            this.elements.writing = this.$('.prompt-writing');
+            this.$('.character-font').addClass(this.vocab.getFontClass());
+            this.listenTo(this.grading, 'complete', this.next);
+            this.listenTo(this.grading, 'selected', this.handleGradingSelected);
             this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
         },
         /**
-         * @method handleGradingSelected
-         * @param {Number} selectedGrade
+         * @property {Object} events
          */
-        handleGradingSelected: function(selectedGrade) {
-            this.review.setReview('score', selectedGrade);
+        events: {
+            'vclick .navigate-left': 'handleNavigateLeftClicked',
+            'vclick .navigate-right': 'handleNavigateRightClicked',
+            'vclick .prompt-reading .reading': 'playAudio'
+        },
+        /**
+         * @method clear
+         * @returns {Backbone.View}
+         */
+        clear: function() {
+            this.show();
+            return this;
+        },
+        /**
+         * @method destroy
+         */
+        destroy: function() {
+            var keys = _.keys(this);
+            for (var key in keys) {
+                this[keys[key]] = undefined;
+            }
+        },
+        /**
+         * @method handleNavigateLeftClicked
+         * @param {Object} event
+         */
+        handleNavigateLeftClicked: function(event) {
+            this.previous();
+            event.preventDefault();
+        },
+        /**
+         * @method handleNavigateRightClicked
+         * @param {Object} event
+         */
+        handleNavigateRightClicked: function(event) {
             this.next();
+            event.preventDefault();
         },
         /**
          * @method hideNavigation
+         * @returns {Backbone.View}
          */
         hideNavigation: function() {
-            this.$('.navigate-backward i').hide();
-            this.$('.navigate-forward i').hide();
+            this.hideNavigationLeft();
+            this.hideNavigationRight();
+            return this;
+        },
+        /**
+         * @method hideNavigationLeft
+         * @returns {Backbone.View}
+         */
+        hideNavigationLeft: function() {
+            this.elements.navLeft.hide();
+            return this;
+        },
+        /**
+         * @method hideNavigationLeft
+         * @returns {Backbone.View}
+         */
+        hideNavigationRight: function() {
+            this.elements.navRight.hide();
+            return this;
         },
         /**
          * @method next
          */
         next: function() {
-            skritter.timer.reset();
-            if (this.review.next()) {
-                this.gradingButtons.grade(this.review.getReviewAt().score);
-                if (this.review.getReview().finished) {
-                    this.clear().show().showAnswer();
-                    this.resize();
-                } else {
-                    skritter.timer.start();
-                    this.clear().show();
-                }
+            if (!this.review.getReview().finished) {
+                this.showAnswer();
+            } else if (this.review.next()) {
+                this.clear();
             } else {
                 this.review.save(_.bind(function() {
-                    this.trigger('prompt:finished');
+                    this.grading.hide(_.bind(this.triggerNext, this));
                 }, this));
             }
         },
@@ -72,12 +125,12 @@ define([
          * @param {Object} event
          */
         playAudio: function(event) {
-            if (this.review.getBaseVocab().has('audio')) {
-                if (skritter.user.settings.isChinese()) {
+            if (this.vocab.has('audio')) {
+                if (skritter.user.isChinese()) {
                     var filename = this.$(event.currentTarget).data('reading') + '.mp3';
                     skritter.assets.playAudio(filename.toLowerCase());
                 } else {
-                    this.review.getBaseVocab().playAudio();
+                    this.vocab.playAudio();
                 }
                 event.stopPropagation();
             }
@@ -86,58 +139,63 @@ define([
          * @method previous
          */
         previous: function() {
-            skritter.timer.stop();
             if (this.review.previous()) {
-                this.gradingButtons.grade(this.review.getReviewAt().score);
-                if (this.review.getReview().finished) {
-                    this.clear().show().showAnswer();
-                    this.resize();
-                } else {
-                    this.clear().show();
-                }
-                this.resize();
+                this.clear();
             } else {
-                this.trigger('prompt:previous');
+                this.grading.hide(_.bind(this.triggerPrevious, this));
             }
         },
         /**
          * @method remove
          */
         remove: function() {
-            this.gradingButtons.remove();
+            this.grading.remove();
+            this.removeElements();
             this.stopListening();
             this.undelegateEvents();
             this.$el.empty();
+            this.destroy();
+        },
+        /**
+         * @method removeElements
+         * @returns {Object}
+         */
+        removeElements: function() {
+            for (var i in this.elements) {
+                this.elements[i].remove();
+                this.elements[i] = undefined;
+            }
+            return this.elements;
         },
         /**
          * @method resize
          */
         resize: function() {
-            if (window.cordova || skritter.settings.appWidth() <= skritter.settings.get('maxCanvasSize')) {
-                $('#content-container').addClass('full-width');
-            } else {
-                $('#content-container').removeClass('full-width');
-            }
         },
         /**
          * @method set
          * @param {Backbone.Model} review
+         * @returns {Backbone.View}
          */
         set: function(review) {
             this.review = review;
+            this.item = review.getBaseItem();
+            this.vocab = review.getBaseVocab();
+            return this;
         },
         /**
-         * @method showNavigation
+         * @method triggerNext
          */
-        showNavigation: function() {
-            if (skritter.user.data.reviews.length > 0) {
-                this.$('.navigate-backward i').show();
-            } else {
-                this.$('.navigate-backward i').hide();
-            }
-            this.$('.navigate-forward').hide();
+        triggerNext: function() {
+            this.trigger('prompt:next');
+        },
+        /**
+         * @method triggerPrevious
+         */
+        triggerPrevious: function() {
+            this.trigger('prompt:previous');
         }
     });
 
-    return Prompt;
+    return View;
 });

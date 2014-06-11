@@ -1,16 +1,10 @@
-/**
- * @module Skritter
- * @submodule Collections
- * @param Review
- * @author Joshua McFarland
- */
 define([
     'model/data/Review'
 ], function(Review) {
     /**
      * @class DataReviews
      */
-    var Reviews = Backbone.Collection.extend({
+    var Collection = Backbone.Collection.extend({
         /**
          * @method initialize
          */
@@ -29,15 +23,22 @@ define([
             return -review.attributes.reviews[0].submitTime;
         },
         /**
-         * @method getReviews
-         * @returns {Array}
+         * @method getReviewArray
+         * @return {Array}
          */
         getReviewArray: function() {
             var reviews = [];
             for (var i = 0, length = this.length; i < length; i++) {
-                reviews = reviews.concat(this.at(i).get('reviews'));
+                reviews = reviews.concat(this.models[i].attributes.reviews);
             }
             return reviews;
+        },
+        /**
+         * @method getReviewCount
+         * @return {Number}
+         */
+        getReviewCount: function() {
+            return this.getReviewArray().length;
         },
         /**
          * @method getTotalTime
@@ -62,5 +63,5 @@ define([
         }
     });
 
-    return Reviews;
+    return Collection;
 });

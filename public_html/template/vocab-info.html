@@ -1,45 +1,79 @@
-<div id="view-vocab-info" class="padding-top view">
+<div class="view view-vocab-info">
+    
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
-                <ul class="navbar-nav navbar-text list-inline pull-left"></ul>
                 <ul class="navbar-nav navbar-text list-inline pull-right">
                     <li><a class="button-back" href="#"><i class="fa fa-times"></i></a></li>
                 </ul>
             </div>
         </div>
     </div>
-    <div id="content-container" class="container">
-        <div id="writing" class="content-block">
-            <h4 class="text-muted">Writing</h4>
-            <div class="row">
-                <div class="col-xs-6">
-                    <h1 id="info-writing"></h1>
-                </div>
-                <div class="col-xs-6">
 
+    <div id="content" class="content-container container-fluid">
+        <div class="content-block">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><small>Writing</small></h4>
+                    <h1 class="vocab-writing character-font"></h1>
                 </div>
             </div>
         </div>
         <div class="content-block">
-            <h4 class="text-muted">Reading</h4>
-            <h4 id="info-reading"></h4>
-        </div>
-        <div class="content-block">
-            <h4 class="text-muted">Definition</h4>
-            <div id="info-definition"></div>
-        </div>
-        <div class="content-block">
-            <h4 class="text-muted">Sentence</h4>
-            <div id="info-sentence">
-                <h4 class="writing"></h4>
-                <h4 class="reading"></h4>
-                <h4 class="definition"></h4>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><small>Reading</small></h4>
+                    <p class="vocab-reading"></p>
+                </div>
             </div>
         </div>
         <div class="content-block">
-            <h4 class="text-muted">Mnemonic</h4>
-            <h4 id="info-mnemonic"></h4>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><small>Definition</small></h4>
+                    <p class="vocab-definition"></p>
+                </div>
+            </div>
+        </div>
+        <div class="content-block">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><small>Mnemonic</small></h4>
+                    <p class="vocab-mnemonic"></p>
+                    <h6 class="vocab-mnemonic-author"></h6>
+                </div>
+            </div>
+        </div>
+        <div class="content-block">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><small>Sentence</small></h4>
+                    <p class="vocab-sentence"></p>
+                </div>
+            </div>
+        </div>
+        <div class="content-block">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><small>Characters</small></h4>
+                    <table class="cursor table table-hover vocab-contained">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="content-block">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><small>Decompositions</small></h4>
+                    <table class="cursor table table-hover vocab-decomps">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+    
+    <div class="font-preloader">力</div>
+    
 </div>

@@ -1,12 +1,7 @@
-/**
- * @module Skritter
- * @submodule Collections
- * @param Param
- * @author Joshua McFarland
- */
 define([
-    'model/data/Param'
-], function(Param) {
+    'model/data/Param',
+    'function/ParamData'
+], function(Param, ParamData) {
     /**
      * @class DataParams
      */
@@ -15,7 +10,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.add(skritter.fn.params);
+            this.add(ParamData);
         },
         /**
          * @property {Backbone.Model} model

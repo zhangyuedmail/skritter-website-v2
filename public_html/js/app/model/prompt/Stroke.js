@@ -1,8 +1,3 @@
-/**
- * @module Skritter
- * @submodule Model
- * @author Joshua McFarland 
- */
 define(function() {
     /**
      * @class PromptStroke
@@ -21,7 +16,7 @@ define(function() {
          * @returns {Number}
          */
         getAngle: function() {
-            return skritter.fn.angle(this.get('corners'));
+            return skritter.fn.getAngle(this.get('corners'));
         },
         /**
          * @method getContainedIds
@@ -45,8 +40,9 @@ define(function() {
         getCornerLength: function() {
             var cornersLength = 0;
             var corners = this.get('corners');
-            for (var i = 0, length = corners.length - 1; i < length; i++)
-                cornersLength += skritter.fn.distance(corners[i], corners[i + 1]);
+            for (var i = 0, length = corners.length - 1; i < length; i++) {
+                cornersLength += skritter.fn.getDistance(corners[i], corners[i + 1]);
+            }
             return cornersLength;
         },
         /**
@@ -64,11 +60,11 @@ define(function() {
                 var curve, point;
                 for (var b = 0, lengthB = segmentPoints.length; b < lengthB; b++) {
                     var direction;
-                    var distance = skritter.fn.distanceToLineSegment(segmentPoints[0], segmentPoints[segmentPoints.length - 1], segmentPoints[b]);
+                    var distance = skritter.fn.getDistanceToLineSegment(segmentPoints[0], segmentPoints[segmentPoints.length - 1], segmentPoints[b]);
                     if (!curve || distance > curve) {
                         point = segmentPoints[b];
                         curve = distance;
-                        direction = skritter.fn.angle(segmentPoints[0], point);
+                        direction = skritter.fn.getAngle(segmentPoints[0], point);
                     }
                 }
                 deviationPoints.push(point);
@@ -80,8 +76,8 @@ define(function() {
          * @returns {Object}
          */
         getRectangle: function() {
-            var size = skritter.settings.contentWidth();
-            return skritter.fn.boundingRectangle(_.clone(this.get('corners')), size, size, 14);
+            var size = skritter.settings.getContentWidth();
+            return skritter.fn.getBoundingRectangle(_.clone(this.get('corners')), size, size, 14);
         },
         /**
          * @method getUserShape
@@ -102,7 +98,7 @@ define(function() {
          * @return {Object}
          */
         inflateData: function() {
-            var size = skritter.settings.canvasSize();
+            var size = skritter.settings.getCanvasSize();
             var bounds = this.get('shape').getBounds();
             var data = this.get('data');
             return {
@@ -123,7 +119,7 @@ define(function() {
         inflateParams: function() {
             var inflatedParams = [];
             var matrix = this.inflateShape().getMatrix();
-            var params = skritter.params.where({bitmapId: this.get('bitmapId')});
+            var params = skritter.user.data.params.where({bitmapId: this.get('bitmapId')});
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
                 var param = params[a].clone();
                 var corners = _.cloneDeep(param.get('corners'));
@@ -151,7 +147,7 @@ define(function() {
          * @return {CreateJS.Shape}
          */
         inflateShape: function(color, alpha) {
-            var shape = skritter.assets.getStroke(this.get('bitmapId'), color);
+            var shape = skritter.fn.strokes.getShape(this.get('bitmapId'), color);
             var data = this.inflateData();
             if (this.get('kana')) {
                 shape.x = data.x;

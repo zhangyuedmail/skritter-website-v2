@@ -1,10 +1,3 @@
-/**
- * @module Skritter
- * @submodule Models
- * @param PromptCharacter
- * @param PromptStroke
- * @author Joshua McFarland
- */
 define([
     'collection/prompt/Character',
     'model/prompt/Stroke'
@@ -13,6 +6,11 @@ define([
      * @class DataStroke
      */
     var Stroke = Backbone.Model.extend({
+        /**
+         * @method initialize
+         */
+        initialize: function() {
+        },
         /**
          * @property {String} idAttribute
          */
@@ -23,8 +21,9 @@ define([
          */
         cache: function(callback) {
             skritter.storage.put('stroke', this.toJSON(), function() {
-                if (typeof callback === 'function')
+                if (typeof callback === 'function') {
                     callback();
+                }
             });
         },
         /**
@@ -46,7 +45,7 @@ define([
                     var stroke = new PromptStroke();
                     var data = variation[b];
                     var bitmapId = data[0];
-                    var params = skritter.params.findWhere({bitmapId: bitmapId});
+                    var params = skritter.user.data.params.findWhere({bitmapId: bitmapId});
                     stroke.set({
                         bitmapId: bitmapId,
                         corners: params ? params.get('corners') : [],
@@ -55,7 +54,7 @@ define([
                         id: position + '|' + bitmapId,
                         kana: bitmapId >= 600 ? true : false,
                         position: position,
-                        shape: skritter.assets.getStroke(bitmapId),
+                        shape: skritter.fn.strokes.getShape(bitmapId),
                         tone: rune === 'tones' ? a + 1 : undefined
                     });
                     if (params && params.has('contains')) {

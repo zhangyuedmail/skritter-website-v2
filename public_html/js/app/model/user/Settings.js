@@ -1,13 +1,8 @@
-/**
- * @module Skritter
- * @submodule Model
- * @author Joshua McFarland
- */
-define(function() {
+define([], function() {
     /**
      * @class UserSettings
      */
-    var Settings = Backbone.Model.extend({
+    var Model = Backbone.Model.extend({
         /**
          * @method initialize
          */
@@ -21,12 +16,13 @@ define(function() {
             addItemAmount: 1,
             audio: true,
             autoSync: true,
-            autoSyncThreshold: 10,
-            hideDueCount: false,
+            autoSyncThreshold: 5,
+            hideCounter: false,
             hideTimer: false,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
-            teachingMode: true
+            readingStyle: 'pinyin',
+            teachingMode: false
         },
         /**
          * @method cache
@@ -35,158 +31,20 @@ define(function() {
             localStorage.setItem(skritter.user.id + '-settings', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method fetch
+         * @method sync
          * @param {Function} callback
          */
-        fetch: function(callback) {
-            skritter.api.getUser(skritter.user.id, _.bind(function(result) {
-                this.set(result);
-                callback();
+        sync: function(callback) {
+            skritter.api.getUser(skritter.user.id, _.bind(function(result, status) {
+                if (status === 200) {
+                    this.set(result);
+                    callback(null, status);
+                } else {
+                    callback(result, status);
+                }
             }, this));
-        },
-        /**
-         * Returns and sets an array of active parts based on the current language being studied.
-         * 
-         * @method getActiveParts
-         * @returns {Array}
-         */
-        getActiveParts: function() {
-            if (this.isChinese())
-                return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
-            return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
-        },
-        /**
-         * Returns the users current avatar and returns it as an image tag using base64 data.
-         * 
-         * @method getAvatar
-         * @param {String} classes
-         * @returns {String}
-         */
-        getAvatar: function(classes) {
-            if (classes)
-                return "<img src='data:image/png;base64," + this.get('avatar') + "' + class='" + classes + "' />";
-            return "<img src='data:image/png;base64," + this.get('avatar') + "' />";
-        },
-        /**
-         * @method getBriefing
-         * @returns {Object}
-         */
-        getBriefing: function() {
-            var data = this.toJSON();
-            delete data.avatar;
-            return data;
-        },
-        /**
-         * @method getEnabledParts
-         * @returns {Array}
-         */
-        getEnabledParts: function() {
-            if (this.isChinese())
-                return this.get('chineseStudyParts');
-            return this.get('japaneseStudyParts');
-        },
-        /**
-         * @method getFontName
-         * @returns {String}
-         */
-        getFontName: function() {
-            if (this.isChinese())
-                return 'simkai';
-            return 'kaisho';
-        },
-        /**
-         * @method getFontClass
-         * @returns {String}
-         */
-        getFontClass: function() {
-            if (this.isChinese())
-                return 'chinese-font';
-            return 'japanese-font';
-        },
-        /**
-         * Returns the current style which really only applies to Chinese as both,
-         * simplified or traditional.
-         * 
-         * @method getStyle
-         * @returns {Array}
-         */
-        getStyle: function() {
-            if (this.isJapanese()) {
-                return ['both'];
-            } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
-                return ['both', 'simp', 'trad'];
-            } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
-                return ['both', 'simp'];
-            } else {
-                return ['both', 'trad'];
-            }
-        },
-        /**
-         * @method getStyleName
-         * @returns {String}
-         */
-        getStyleName: function() {
-            if (this.isJapanese()) {
-                return 'both';
-            } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
-                return 'both';
-            } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
-                return 'simp';
-            } else {
-                return 'trad';
-            }
-        },
-        /**
-         * @method getTags
-         * @returns {Array}
-         */
-        getTags: function() {
-            if (this.isJapanese()) {
-                return ['japanese'];
-            } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
-                return ['chinese', 'simplified', 'traditional'];
-            } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
-                return ['chinese', 'simplified'];
-            } else {
-                return ['chinese', 'traditional'];
-            }
-        },
-        /**
-         * Returns true if the target language is set to Chinese.
-         * 
-         * @method isChinese
-         * @returns {Boolean}
-         */
-        isChinese: function() {
-            if (this.get('targetLang') === 'zh')
-                return true;
-            return false;
-        },
-        /**
-         * Returns true if the target language is set to Japanese.
-         * 
-         * @method isJapanese
-         * @returns {Boolean}
-         */
-        isJapanese: function() {
-            if (this.get('targetLang') === 'ja')
-                return true;
-            return false;
-        },
-        /**
-         * @method setActiveParts
-         * @param {Array} parts
-         * @returns {Array}
-         */
-        setActiveParts: function(parts) {
-            if (this.isChinese()) {
-                this.set('filterChineseParts', parts);
-                return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
-            }
-            this.set('filterJapaneseParts', parts);
-            return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
         }
     });
     
-    return Settings;
+    return Model;
 });
