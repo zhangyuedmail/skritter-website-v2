@@ -163,6 +163,9 @@ define([
             } else {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
             }
+            if (this.review.getReview().finished) {
+                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+            }
             if (skritter.settings.isPortrait()) {
                 inputSection = this.$('.input-section').css({
                     height: canvasSize,
@@ -220,7 +223,7 @@ define([
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             window.setTimeout(_.bind(function() {
                 this.grading.select(this.review.getScore()).collapse().show();
-                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);    
+                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
                 if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
                     this.review.getVocab().playAudio();
                 }

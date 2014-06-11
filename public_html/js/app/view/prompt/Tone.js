@@ -150,6 +150,9 @@ define([
                     .clearLayer('stroke');
             this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
             this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+            if (this.review.getReview().finished) {
+                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+            }
             if (skritter.settings.isPortrait()) {
                 inputSection = this.$('.input-section').css({
                     height: canvasSize,
