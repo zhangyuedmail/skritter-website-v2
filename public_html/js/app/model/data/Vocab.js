@@ -92,6 +92,23 @@ define([], function() {
             return containedVocabs;
         },
         /**
+         * @method getContainedRows
+         * @returns {String}
+         */
+        getContainedRows: function() {
+            var containedHTML = '';
+            var containedVocabs = this.getContainedVocabs();
+            for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
+                var vocabItem = containedVocabs[a];
+                containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
+                containedHTML += '<td>' + vocabItem.get('writing') + '</td>';
+                containedHTML += '<td>' + vocabItem.getReading() + '</td>';
+                containedHTML += '<td>' + vocabItem.getDefinition() + '</td>';
+                containedHTML += '</tr>';
+            }
+            return containedHTML;
+        },
+        /**
          * @method getDefinition
          * @returns {String}
          */

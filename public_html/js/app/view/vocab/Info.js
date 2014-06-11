@@ -82,31 +82,10 @@ define([
             }
             if (vocab.getCharacterCount() > 1) {
                 this.elements.decomps.closest('.content-block').hide();
-                var containedVocabs = this.vocab.getContainedVocabs();
-                var containedHTML = '';
-                for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
-                    var vocabItem = containedVocabs[a];
-                    containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
-                    containedHTML += '<td>' + vocabItem.get('writing') + '</td>';
-                    containedHTML += '<td>' + vocabItem.getReading() + '</td>';
-                    containedHTML += '<td>' + vocabItem.getDefinition() + '</td>';
-                    containedHTML += '</tr>';
-                }
-                this.elements.contained.find('tbody').html(containedHTML);
+                this.elements.contained.find('tbody').html(this.vocab.getContainedRows());
             } else {
                 this.elements.contained.closest('.content-block').hide();
-                var decomp = this.vocab.getDecomps()[0].get('Children');
-                var decompHTML = '';
-                for (var b = 0, lengthB = decomp.length; b < lengthB; b++) {
-                    var child = decomp[b];
-                    decompHTML += '<tr>';
-                    decompHTML += '<td>' + child.writing + '</td>';
-                    decompHTML += '<td>' + skritter.fn.pinyin.toTone(child.reading) + '</td>';
-                    //TODO: fix this to support other languages
-                    decompHTML += '<td>' + child.definitions.en + '</td>';
-                    decompHTML += '</tr>';
-                }
-                this.elements.decomps.find('tbody').html(decompHTML);
+                this.elements.decomps.find('tbody').html(this.vocab.getDecomps()[0].getChildrenRows());
             }
         },
         /**
