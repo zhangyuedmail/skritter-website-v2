@@ -12,6 +12,8 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            skritter.timer.setReviewLimit(15);
+            skritter.timer.setThinkingLimit(10);
             this.canvas = new Canvas();
             this.finished = false;
         },
@@ -54,6 +56,8 @@ define([
         handleClick: function(event) {
             if (this.review.isFinished()) {
                 this.next();
+            } else {
+                skritter.timer.stopThinking();
             }
             event.preventDefault();
         },
@@ -184,6 +188,7 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
+            skritter.timer.start();
             this.grading.hide();
             this.resize();
             this.canvas.disableGrid();
@@ -206,8 +211,15 @@ define([
          * @returns {Backbone.View}
          */
         showAnswer: function() {
+            skritter.timer.stop();
             this.canvas.disableInput();
-            this.review.setReview({finished: true});
+            if (!this.review.getReview().finished) {
+                this.review.setReview({
+                    finished: true,
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true, skritter.user.isUsingZhuyin()));
             window.setTimeout(_.bind(function() {
                 this.grading.select(this.review.getScore()).show();

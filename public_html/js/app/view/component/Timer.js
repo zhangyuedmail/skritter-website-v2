@@ -81,8 +81,9 @@ define(function() {
          */
         getReviewTime: function() {
             var lapTime = this.getLapTime() / 1000;
-            if (lapTime >= this.reviewLimit)
+            if (lapTime >= this.reviewLimit) {
                 return this.reviewLimit;
+            }
             return lapTime;
         },
         /**
@@ -100,12 +101,14 @@ define(function() {
             var lapTime = this.getLapTime() / 1000;
             if (this.thinkingStop) {
                 var thinkingTime = (this.thinkingStop - this.reviewStart) / 1000;
-                if (thinkingTime >= this.thinkingLimit)
+                if (thinkingTime >= this.thinkingLimit) {
                     return this.thinkingLimit;
+                }
                 return thinkingTime;
             }
-            if (lapTime >= this.thinkingLimit)
+            if (lapTime >= this.thinkingLimit) {
                 return this.thinkingLimit;
+            }
             return lapTime;
         },
         /**
@@ -113,8 +116,9 @@ define(function() {
          * @returns {Boolean}
          */
         isReviewLimitReached: function() {
-            if (this.getLapTime() >= this.reviewLimit * 1000)
+            if (this.getLapTime() >= this.reviewLimit * 1000) {
                 return true;
+            }
             return false;
         },
         /**
@@ -122,8 +126,9 @@ define(function() {
          * @returns {Boolean}
          */
         isRunning: function() {
-            if (this.interval)
+            if (this.interval) {
                 return true;
+            }
             return false;
         },
         /**
@@ -131,8 +136,9 @@ define(function() {
          * @returns {Boolean}
          */
         isThinkingLimitReached: function() {
-            if (this.getLapTime() >= this.thinkingLimit * 1000)
+            if (this.getLapTime() >= this.thinkingLimit * 1000) {
                 return true;
+            }
             return false;
         },
         /**
@@ -249,8 +255,9 @@ define(function() {
          * @returns {Backbone.View}
          */
         stopThinking: function() {
-            if (!this.thinkingStop)
+            if (!this.thinkingStop) {
                 this.thinkingStop = skritter.fn.getUnixTime(true);
+            }
             return this;
         },
         /**
@@ -266,8 +273,9 @@ define(function() {
                 self.time = time;
                 self.render();
                 //stop the review timer if exceeds the set limit
-                if (self.isReviewLimitReached())
+                if (self.isReviewLimitReached()) {
                     self.stop();
+                }
             }
         }
     });

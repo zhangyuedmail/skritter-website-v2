@@ -125,6 +125,7 @@ define([
                     }
                 }
             ], function() {
+                skritter.timer.refresh(true);
                 callback();
             });
         } else {

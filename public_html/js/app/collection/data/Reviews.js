@@ -15,6 +15,14 @@ define([
          */
         model: Review,
         /**
+         * @method comparator
+         * @param {Backbone.Model} review
+         * @returns {Number}
+         */
+        comparator: function(review) {
+            return -review.attributes.reviews[0].submitTime;
+        },
+        /**
          * @method getReviewArray
          * @return {Array}
          */
@@ -31,6 +39,17 @@ define([
          */
         getReviewCount: function() {
             return this.getReviewArray().length;
+        },
+        /**
+         * @method getTotalTime
+         * @returns {Number}
+         */
+        getTotalTime: function() {
+            var totalTime = 0;
+            for (var i = 0, length = this.length; i < length; i++) {
+                totalTime += this.at(i).get('reviews')[0].reviewTime;
+            }
+            return totalTime;
         },
         /**
          * @method loadAll

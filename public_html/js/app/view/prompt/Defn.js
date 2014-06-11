@@ -11,6 +11,8 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            skritter.timer.setReviewLimit(30);
+            skritter.timer.setThinkingLimit(15);
         },
         /**
          * @method render
@@ -105,6 +107,7 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
+            skritter.timer.start();
             this.grading.hide();
             this.elements.answer.hide();
             this.elements.definition.html(this.vocab.getDefinition());
@@ -129,6 +132,7 @@ define([
          * @returns {Backbone.View}
          */
         showAnswer: function() {
+            skritter.timer.stop();
             this.elements.question.hide();
             this.review.setReview({finished: true});
             this.elements.answer.fadeIn(300);

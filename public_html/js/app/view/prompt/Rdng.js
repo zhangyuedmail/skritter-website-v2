@@ -11,6 +11,8 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            skritter.timer.setReviewLimit(30);
+            skritter.timer.setThinkingLimit(15);
         },
         /**
          * @method render
@@ -105,6 +107,7 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
+            skritter.timer.start();
             this.elements.answer.hide();
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
@@ -128,6 +131,7 @@ define([
          * @returns {Backbone.View}
          */
         showAnswer: function() {
+            skritter.timer.stop();
             this.elements.question.hide();
             this.review.setReview({finished: true});
             this.elements.answer.fadeIn(300);

@@ -12,6 +12,8 @@ define([
          */
         initialize: function() {
             Prompt.prototype.initialize.call(this);
+            skritter.timer.setReviewLimit(30);
+            skritter.timer.setThinkingLimit(15);
             this.canvas = new Canvas();
             this.maxStrokeAttempts = 3;
             this.strokeAttempts = 0;
@@ -57,6 +59,8 @@ define([
         handleClick: function(event) {
             if (this.review.isFinished()) {
                 this.next();
+            } else {
+                skritter.timer.stopThinking();
             }
             event.preventDefault();
         },
@@ -196,6 +200,7 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
+            skritter.timer.start();
             this.grading.hide();
             this.canvas.enableInput();
             this.elements.definition.html(this.vocab.getDefinition());
@@ -222,8 +227,15 @@ define([
          * @returns {Backbone.View}
          */
         showAnswer: function() {
+            skritter.timer.stop();
             this.canvas.disableInput();
-            this.review.setReview({finished: true});
+            if (!this.review.getReview().finished) {
+                this.review.setReview({
+                    finished: true,
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             window.setTimeout(_.bind(function() {
                 this.grading.select(this.review.getScore()).show();

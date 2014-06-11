@@ -195,6 +195,62 @@ define(function() {
             request(itemIds.splice(0, 19));
         },
         /**
+         * @method getProgStats
+         * @param {Object} options
+         * @param {Function} callback
+         */
+        getProgStats: function(options, callback) {
+            options = options ? options : {};
+            options.start = options.start ? options.start : moment().format('YYYY-MM-DD');
+            options.end = options.end ? options.end : undefined;
+            options.step = options.step ? options.step : undefined;
+            options.lang = options.lang ? options.lang : undefined;
+            options.fields = options.fields ? options.fields : undefined;
+            $.ajax({
+                url: this.base + 'progstats',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'GET',
+                data: {
+                    bearer_token: this.get('token'),
+                    start: options.start,
+                    end: options.end,
+                    step: options.step,
+                    lang: options.lang,
+                    fields: options.fields
+                }
+            }).done(function(data) {
+                callback(data.ProgressStats, data.statusCode);
+            }).fail(function(error) {
+                callback(error, 0);
+            });
+        },
+        /**
+         * @method getServerTime
+         * @param {Function} callback
+         */
+        getServerTime: function(callback) {
+            $.ajax({
+                url: this.base + 'dateinfo',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'GET',
+                data: {
+                    bearer_token: this.get('token')
+                }
+            }).done(function(data) {
+                callback({
+                    serverTime: data.serverTime,
+                    timeLeft: data.timeLeft,
+                    today: data.today
+                }, data.statusCode);
+            }).fail(function(error) {
+                callback(error, 0);
+            });
+        },
+        /**
          * @method getSubscription
          * @param {String} userId
          * @param {Function} callback
@@ -287,7 +343,7 @@ define(function() {
                     } else {
                         callback(postedReviews, data.statusCode);
                     }
-                }).fail(function(error) {                    
+                }).fail(function(error) {
                     callback(error, error.status);
                 });
             }
