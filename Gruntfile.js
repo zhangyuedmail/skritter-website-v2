@@ -206,6 +206,33 @@ module.exports = function(grunt) {
             'root': ['Gruntfile.js', 'public_html/js/app/**/*.js']
         },
         
+        /*** MANIFEST ***/
+        manifest: {
+            root: {
+                options: {
+                    basePath: 'public_html/',
+                    cache: ['index.html'],
+                    network: ['*'],
+                    preferOnline: false,
+                    verbose: false,
+                    timestamp: true,
+                    exclude: ['skritter.appcache', 'version.json']
+                },
+                src: [
+                    '*.*',
+                    '**/*.css',
+                    '**/*.eot',
+                    '**/*.html',
+                    '**/*.js',
+                    '**/*.otf',
+                    '**/*.png',
+                    '**/*.svg',
+                    '**/*.woff'
+                ],
+                dest: 'public_html/skritter.appcache'
+            }
+        },
+        
         /*** REPLACE ***/
         replace: {
             'cordova-chinese': {
