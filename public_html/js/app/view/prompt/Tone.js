@@ -183,6 +183,7 @@ define([
          */
         show: function() {
             this.grading.hide();
+            this.resize();
             this.canvas.disableGrid();
             this.canvas.enableInput();
             this.elements.definition.html(this.vocab.getDefinition());
