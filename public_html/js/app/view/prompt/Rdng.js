@@ -26,9 +26,9 @@ define([
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick .prompt-reading .reading': 'playAudio',
-            'vclick .prompt-text': 'handleClick'
+        events: function() {
+            return _.extend({}, Prompt.prototype.events, {
+            });
         },
         /**
          * @method clear

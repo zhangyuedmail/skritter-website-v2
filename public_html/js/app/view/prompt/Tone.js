@@ -34,8 +34,9 @@ define([
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick .prompt-reading .reading': 'playAudio'
+        events: function() {
+            return _.extend({}, Prompt.prototype.events, {
+            });
         },
         /**
          * @method clear
@@ -133,6 +134,7 @@ define([
          */
         reset: function() {
             this.canvas.clear().enableInput();
+            this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
             this.review.getCharacter().reset();
             return this;
         },

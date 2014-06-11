@@ -87,10 +87,12 @@ define([
         loadPrompt: function(review) {
             if (this.prompt) {
                 this.prompt.remove();
+                this.stopListening(this.prompt);
             }
             this.prompt = review.createView();
             this.prompt.setElement(this.$('.prompt-container'));
-            this.listenToOnce(this.prompt, 'prompt:next', _.bind(this.nextPrompt, this));
+            this.listenTo(this.prompt, 'prompt:next', _.bind(this.nextPrompt, this));
+            this.listenTo(this.prompt, 'prompt:previous', _.bind(this.previousPrompt, this));
             skritter.user.scheduler.review = review;
             this.updateDueCounter();
             this.prompt.render();
@@ -109,7 +111,6 @@ define([
          * @method previousPrompt
          */
         previousPrompt: function() {
-            
         },
         /**
          * @method updateDueCounter

@@ -27,6 +27,8 @@ define([
             this.elements.definition = this.$('.prompt-definition');
             this.elements.heisig = this.$('.prompt-heisig');
             this.elements.mnemonic = this.$('.prompt-mnemonic');
+            this.elements.navLeft = this.$('.navigate-left');
+            this.elements.navRight = this.$('.navigate-right');
             this.elements.question = this.$('.prompt-question');
             this.elements.reading = this.$('.prompt-reading');
             this.elements.sentence = this.$('.prompt-sentence');
@@ -37,6 +39,14 @@ define([
             this.listenTo(this.grading, 'selected', this.handleGradingSelected);
             this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
+        },
+        /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick .navigate-left': 'handleNavigateLeftClicked',
+            'vclick .navigate-right': 'handleNavigateRightClicked',
+            'vclick .prompt-reading .reading': 'playAudio'
         },
         /**
          * @method clear
@@ -56,10 +66,53 @@ define([
             }
         },
         /**
+         * @method handleNavigateLeftClicked
+         * @param {Object} event
+         */
+        handleNavigateLeftClicked: function(event) {
+            this.previous();
+            event.preventDefault();
+        },
+        /**
+         * @method handleNavigateRightClicked
+         * @param {Object} event
+         */
+        handleNavigateRightClicked: function(event) {
+            this.next();
+            event.preventDefault();
+        },
+        /**
+         * @method hideNavigation
+         * @returns {Backbone.View}
+         */
+        hideNavigation: function() {
+            this.hideNavigationLeft();
+            this.hideNavigationRight();
+            return this;
+        },
+        /**
+         * @method hideNavigationLeft
+         * @returns {Backbone.View}
+         */
+        hideNavigationLeft: function() {
+            this.elements.navLeft.hide();
+            return this;
+        },
+        /**
+         * @method hideNavigationLeft
+         * @returns {Backbone.View}
+         */
+        hideNavigationRight: function() {
+            this.elements.navRight.hide();
+            return this;
+        },
+        /**
          * @method next
          */
         next: function() {
-            if (this.review.next()) {
+            if (!this.review.getReview().finished) {
+                this.showAnswer();
+            } else if (this.review.next()) {
                 this.clear();
             } else {
                 this.review.save(_.bind(this.triggerNext, this));
