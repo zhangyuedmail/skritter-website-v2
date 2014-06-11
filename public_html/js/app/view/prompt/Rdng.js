@@ -117,6 +117,9 @@ define([
             if (this.vocab.has('audio')) {
                 this.elements.reading.addClass('has-audio');
             }
+            if (this.review.getReview().finished) {
+                this.showAnswer();
+            }
             return this;
         },
         /**

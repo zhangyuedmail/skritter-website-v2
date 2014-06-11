@@ -194,6 +194,9 @@ define([
                 this.elements.style.text(this.vocab.getStyle().toUpperCase());
                 this.elements.style.addClass(this.vocab.getStyle());
             }
+            if (this.review.getReview().finished) {
+                this.showAnswer();
+            }
             return this;
         },
         /**

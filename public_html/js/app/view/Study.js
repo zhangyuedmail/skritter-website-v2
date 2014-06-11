@@ -24,6 +24,7 @@ define([
         render: function() {
             window.document.title = "Study - Skritter";
             this.$el.html(_.template(template, skritter.strings));
+            BaseView.prototype.render.call(this).renderElements();
             skritter.timer.setElement(this.$('.study-timer')).render();
             if (skritter.user.settings.get('hideCounter')) {
                 this.$('.study-counter').hide();
@@ -31,8 +32,11 @@ define([
             if (skritter.user.settings.get('hideTimer')) {
                 this.$('.study-timer').hide();
             }
-            BaseView.prototype.render.call(this).renderElements();
-            this.nextPrompt();
+            if (skritter.user.scheduler.review) {
+                this.loadPrompt(skritter.user.scheduler.review);
+            } else {
+                this.nextPrompt();
+            }
             return this;
         },
         /**
@@ -87,6 +91,7 @@ define([
             this.prompt = review.createView();
             this.prompt.setElement(this.$('.prompt-container'));
             this.listenToOnce(this.prompt, 'prompt:next', _.bind(this.nextPrompt, this));
+            skritter.user.scheduler.review = review;
             this.updateDueCounter();
             this.prompt.render();
         },

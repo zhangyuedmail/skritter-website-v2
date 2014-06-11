@@ -8,6 +8,7 @@ define([], function() {
          */
         initialize: function() {
             this.data = [];
+            this.review = null;
         },
         /**
          * @property {Object} defaults

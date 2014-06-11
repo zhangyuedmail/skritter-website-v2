@@ -211,6 +211,9 @@ define([
                     this.vocab.playAudio();
                 }
             }
+            if (this.review.getReview().finished) {
+                this.showAnswer();
+            }
             return this;
         },
         /**
