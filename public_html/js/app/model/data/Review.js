@@ -274,7 +274,8 @@ define([
          * @param {Function} callback
          */
         load: function(callback) {
-            skritter.user.data.loadItem(this.get('itemId'), _.bind(function(item) {
+            var itemId = this.get('reviews')[0].itemId;
+            skritter.user.data.loadItem(itemId, _.bind(function(item) {
                 var part = item.get('part');
                 var reviews = this.get('reviews');
                 if (part === 'rune' || part === 'tone') {

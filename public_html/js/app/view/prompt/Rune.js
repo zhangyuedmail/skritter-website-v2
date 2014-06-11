@@ -226,7 +226,7 @@ define([
             this.review.setReview({finished: true});
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             window.setTimeout(_.bind(function() {
-                this.grading.select(this.review.getScore()).collapse().show();
+                this.grading.select(this.review.getScore()).show();
                 this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
                 if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
                     this.review.getVocab().playAudio();

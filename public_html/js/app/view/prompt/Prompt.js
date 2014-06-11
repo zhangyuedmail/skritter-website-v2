@@ -115,7 +115,9 @@ define([
             } else if (this.review.next()) {
                 this.clear();
             } else {
-                this.review.save(_.bind(this.triggerNext, this));
+                this.review.save(_.bind(function() {
+                    this.grading.hide(_.bind(this.triggerNext, this));
+                }, this));
             }
         },
         /**
@@ -140,7 +142,7 @@ define([
             if (this.review.previous()) {
                 this.clear();
             } else {
-                this.triggerPrevious();
+                this.grading.hide(_.bind(this.triggerPrevious, this));
             }
         },
         /**

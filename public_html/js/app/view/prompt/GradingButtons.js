@@ -37,9 +37,9 @@ define([
             this.expanded = false;
             for (var i = 1; i <= 4; i++) {
                 if (i === this.grade) {
-                    this.$('#grade' + i).show();
+                    this.$('#grade' + i).parent().show();
                 } else {
-                    this.$('#grade' + i).hide();
+                    this.$('#grade' + i).parent().hide();
                 }
             }
             return this;
@@ -60,11 +60,11 @@ define([
         expand: function() {
             for (var i = 1; i <= 4; i++) {
                 if (i === this.grade) {
-                    this.$('#grade' + i).addClass('selected');
+                    this.$('#grade' + i).parent().addClass('active');
                 } else {
-                    this.$('#grade' + i).removeClass('selected');
+                    this.$('#grade' + i).parent().removeClass('active');
                 }
-                this.$('#grade' + i).show(300);
+                this.$('#grade' + i).parent().show();
             }
             this.expanded = true;
             return this;
@@ -86,10 +86,11 @@ define([
         },
         /**
          * @method hide
+         * @param {Function} callback
          * @returns {Backbone.View}
          */
-        hide: function() {
-            this.$el.hide();
+        hide: function(callback) {
+            this.$el.hide('slide', {direction: 'down'}, 300, callback);
             return this;
         },
         /**
@@ -122,19 +123,20 @@ define([
             this.grade = grade;
             for (var i = 1; i <= 4; i++) {
                 if (i === this.grade) {
-                    this.$('#grade' + i).addClass('selected');
+                    this.$('#grade' + i).parent().addClass('active');
                 } else {
-                    this.$('#grade' + i).removeClass('selected');
+                    this.$('#grade' + i).parent().removeClass('active');
                 }
             }
             return this;
         },
         /**
          * @method show
+         * @param {Function} callback
          * @returns {Backbone.View}
          */
-        show: function() {
-            this.$el.show();
+        show: function(callback) {
+            this.$el.show('slide', {direction: 'down'}, 300, callback);
             return this;
         },
         /**

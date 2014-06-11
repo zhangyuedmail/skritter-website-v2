@@ -28,6 +28,7 @@ define([
          */
         events: function() {
             return _.extend({}, Prompt.prototype.events, {
+                'vclick .prompt-text': 'handleClick'
             });
         },
         /**
