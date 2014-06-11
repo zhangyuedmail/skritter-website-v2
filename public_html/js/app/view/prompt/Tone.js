@@ -145,7 +145,11 @@ define([
             var contentHeight = skritter.settings.getContentHeight();
             var contentWidth = skritter.settings.getContentWidth();
             var infoSection, inputSection;
-            this.canvas.resize();
+            this.canvas.resize()
+                    .clearLayer('background')
+                    .clearLayer('stroke');
+            this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
+            this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
             if (skritter.settings.isPortrait()) {
                 inputSection = this.$('.input-section').css({
                     height: canvasSize,
@@ -178,7 +182,6 @@ define([
             this.grading.hide();
             this.canvas.disableGrid();
             this.canvas.enableInput();
-            this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), true, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');

@@ -157,7 +157,12 @@ define([
             var contentHeight = skritter.settings.getContentHeight();
             var contentWidth = skritter.settings.getContentWidth();
             var infoSection, inputSection;
-            this.canvas.resize();
+            this.canvas.resize().clearLayer('stroke');
+            if (!skritter.user.settings.get('squigs')) {
+                this.canvas.drawShape('stroke', this.review.getCharacter().getSquig());
+            } else {
+                this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+            }
             if (skritter.settings.isPortrait()) {
                 inputSection = this.$('.input-section').css({
                     height: canvasSize,

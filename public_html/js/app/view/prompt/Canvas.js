@@ -76,6 +76,7 @@ define([
         clearLayer: function(layerName) {
             this.getLayer(layerName).removeAllChildren();
             this.updateAll();
+            return this;
         },
         /**
          * @method createDisplayStage
