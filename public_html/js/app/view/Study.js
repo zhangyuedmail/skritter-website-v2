@@ -111,6 +111,12 @@ define([
          * @method previousPrompt
          */
         previousPrompt: function() {
+            var review = skritter.user.data.reviews.at(0);
+            if (review) {
+                review.load(_.bind(function(review) {
+                    this.loadPrompt(review);
+                }, this));
+            }
         },
         /**
          * @method updateDueCounter

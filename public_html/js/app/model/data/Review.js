@@ -270,6 +270,24 @@ define([
             return this.get('position') === position ? true : false;
         },
         /**
+         * @method load
+         * @param {Function} callback
+         */
+        load: function(callback) {
+            skritter.user.data.loadItem(this.get('itemId'), _.bind(function(item) {
+                var part = item.get('part');
+                var reviews = this.get('reviews');
+                if (part === 'rune' || part === 'tone') {
+                    this.characters = [];
+                    for (var i = reviews.length > 1 ? 1 : 0, length = reviews.length; i < length; i++) {
+                        var itemId = this.getReviewAt(i).itemId;
+                        this.characters.push(skritter.user.data.items.findWhere({id: itemId}).getStroke().getCanvasCharacter());
+                    }
+                }
+                callback(this);
+            }, this));
+        },
+        /**
          * @method next
          * @returns {Boolean}
          */
