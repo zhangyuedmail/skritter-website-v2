@@ -125,7 +125,19 @@ define([
                     }
                 }
             ], function() {
+                //load daily timer prog stats in background
                 skritter.timer.refresh(true);
+                //load raygun javascript error logging module
+                if (skritter.fn.hasCordova() && window.Raygun) {
+                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach();
+                            //.withCustomData(getCustomData)
+                            //.withTags(skritter.user.settings.getTags());
+                    Raygun.setUser(skritter.user.id);
+                    Raygun.setVersion(skritter.settings.getVersion());
+                    Raygun.saveIfOffline(true);
+                } else if (window.Raygun) {
+                    window.Raygun = undefined;
+                }
                 callback();
             });
         } else {

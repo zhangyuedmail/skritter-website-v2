@@ -315,7 +315,6 @@ define([
          * @param {Function} callback
          */
         save: function(callback) {
-            var self = this;
             var reviews = this.get('reviews');
             //updates all of the new review intervals and items
             for (var i = 0, length = reviews.length; i < length; i++) {
@@ -342,15 +341,12 @@ define([
                 skritter.user.scheduler.update(item);
             }
             async.series([
-                function(callback) {
+                _.bind(function(callback) {
                     skritter.user.data.reviews.add(this, {merge: true});
                     callback();
-                },
+                }, this),
                 function(callback) {
                     skritter.user.data.items.cache(callback);
-                },
-                function(callback) {
-                    self.cache(callback);
                 }
             ], function() {
                 callback();
