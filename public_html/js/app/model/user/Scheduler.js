@@ -173,11 +173,6 @@ define([], function() {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;
-                //filter out inactive items
-                if (item.vocabIds.length === 0) {
-                    item.readiness = 0;
-                    return -item.readiness;
-                }
                 //filter out inactive parts and styles
                 if (activeParts.indexOf(item.part) === -1 ||
                         activeStyles.indexOf(item.style) === -1) {
