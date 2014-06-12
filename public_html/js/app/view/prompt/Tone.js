@@ -230,7 +230,7 @@ define([
                 this.grading.select(this.review.getScore()).show();
                 this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);  
                 if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
-                    this.review.getVocab().playAudio();
+                    this.vocab.playAudio(this.review.getPosition());
                 }
             }, this), 0);
             return this;

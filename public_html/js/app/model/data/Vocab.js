@@ -291,9 +291,14 @@ define([], function() {
         },
         /**
          * @method playAudio
+         * @param {Number} position
          */
-        playAudio: function() {
-            if (this.has('audio')) {
+        playAudio: function(position) {
+            if (position && this.isChinese()) {
+                var reading = this.get('reading').split(', ')[0];
+                var filename = reading.match(/[a-z|A-Z]+[0-9]+/g)[position - 1] + '.mp3';
+                skritter.assets.playAudio(filename.toLowerCase());
+            } else if (this.has('audio')) {
                 skritter.assets.playAudio(this.getAudioFileName());
             }
         }

@@ -251,10 +251,10 @@ define([
             } else {
                 this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape(null, skritter.settings.get('gradingColors')[this.review.getReview().score]));
             }
-            this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+            this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
             this.grading.select(this.review.getScore()).show();
             if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
-                this.review.getVocab().playAudio();
+                this.vocab.playAudio(this.review.getPosition());
             }
             return this;
         }
