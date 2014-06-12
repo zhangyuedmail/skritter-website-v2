@@ -107,7 +107,6 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
-            skritter.timer.start();
             this.elements.answer.hide();
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
@@ -123,6 +122,8 @@ define([
             }
             if (this.review.getReview().finished) {
                 this.showAnswer();
+            } else {
+                skritter.timer.start();
             }
             return this;
         },

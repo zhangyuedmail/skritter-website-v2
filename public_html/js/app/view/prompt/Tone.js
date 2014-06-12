@@ -189,10 +189,10 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
-            skritter.timer.start();
             this.resize();
             this.canvas.disableGrid();
             this.canvas.enableInput();
+            this.review.setReview('started', true);
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), true, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
@@ -203,6 +203,8 @@ define([
             }
             if (this.review.getReview().finished) {
                 this.showAnswer();
+            } else {
+                skritter.timer.start();
             }
             return this;
         },

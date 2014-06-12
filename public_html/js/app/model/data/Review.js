@@ -19,7 +19,8 @@ define([
          */
         defaults: {
             position: 1,
-            reviews: []
+            reviews: [],
+            started: false,
         },
         /**
          * @method cache

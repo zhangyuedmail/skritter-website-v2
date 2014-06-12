@@ -120,6 +120,9 @@ define([
             if (!this.review.getReview().finished) {
                 this.showAnswer();
             } else if (this.review.next()) {
+                if (!this.review.getReview().started) {
+                    skritter.timer.reset();
+                }
                 this.grading.hide(_.bind(this.clear, this));
             } else {
                 this.review.save(_.bind(function() {

@@ -219,6 +219,8 @@ define([
             }
             if (this.review.getReview().finished) {
                 this.showAnswer();
+            } else {
+                skritter.timer.start();
             }
             return this;
         },
