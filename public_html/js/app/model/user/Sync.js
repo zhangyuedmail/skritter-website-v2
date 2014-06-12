@@ -40,7 +40,7 @@ define([], function() {
             var numVocabsAdded = 0;
             var offset = this.get('addItemOffset');
             var requests = {
-                path: 'api/v' + skritter.api.get('version') + '/items/add',
+                path: 'api/v' + skritter.api.version + '/items/add',
                 method: 'POST',
                 params: {
                     lang: skritter.user.getLanguageCode(),

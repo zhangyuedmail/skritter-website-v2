@@ -151,6 +151,42 @@ define([], function() {
             }
         },
         /**
+         * @method insert
+         * @param {Array|Object} items
+         */
+        insert: function(items) {
+            items = Array.isArray(items) ? items : [items];
+            var itemsToRemove = [];
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                var position = _.findIndex(this.data, {id: item.id});
+                if (position === -1 && item.vocabIds.length !== 0) {
+                    this.data.push({
+                        id: item.id,
+                        last: item.list,
+                        next: item.next,
+                        part: item.part,
+                        style: item.style
+                    });
+                } else if (item.vocabIds.length !== 0) {
+                    this.data[position] = {
+                        id: item.id,
+                        last: item.list,
+                        next: item.next,
+                        part: item.part,
+                        style: item.style
+                    };
+                } else {
+                    itemsToRemove.push(item.id);
+                }
+            }
+            if (itemsToRemove.length > 0) {
+                _.remove(this.data, function() {
+                    return itemsToRemove.indexOf(item.id) !== -1;
+                });
+            }
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
@@ -214,14 +250,10 @@ define([], function() {
                 last: item.get('last'),
                 next: item.get('next'),
                 part: item.get('part'),
-                reviews: item.get('reviews'),
-                successes: item.get('successes'),
-                style: item.get('style'),
-                timeStudied: item.get('timeStudied'),
-                vocabIds: item.get('vocabIds')
+                style: item.get('style')
             };
         }
     });
-    
+
     return Model;
 });
