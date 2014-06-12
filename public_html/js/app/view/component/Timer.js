@@ -227,18 +227,22 @@ define(function() {
         },
         /**
          * @method start
+         * @returns {Backbone.View}
          */
         start: function() {
-            if (!this.reviewStart)
+            if (!this.reviewStart) {
                 this.reviewStart = skritter.fn.getUnixTime(true);
+            }
             if (!this.isRunning() && !this.isReviewLimitReached()) {
                 this.interval = setInterval(this.update, 10, this);
                 this.lapStartAt = this.lapStartAt ? this.lapStartAt : skritter.fn.getUnixTime(true);
                 this.stopwatch.start();
             }
+            return this;
         },
         /**
          * @method stop
+         * @returns {Backbone.View}
          */
         stop: function() {
             if (this.isRunning()) {
@@ -249,6 +253,7 @@ define(function() {
                 clearInterval(this.interval);
                 this.interval = null;
             }
+            return this;
         },
         /**
          * @method stopThinking
