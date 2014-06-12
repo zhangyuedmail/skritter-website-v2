@@ -55,9 +55,10 @@ define([
             });
         },
         /**
-         * @method checkAutoSync
+         * @method autoSync
          */
-        checkAutoSync: function() {
+        autoSync: function() {
+            console.log(skritter.user.settings.get('autoSync'), !skritter.user.sync.isBusy, skritter.user.data.reviews.length, skritter.user.settings.get('autoSyncThreshold'));
             if (skritter.user.settings.get('autoSync') &&
                     !skritter.user.sync.active &&
                     skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
@@ -101,6 +102,7 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
+            this.autoSync();
             skritter.user.scheduler.sort();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 skritter.timer.reset();

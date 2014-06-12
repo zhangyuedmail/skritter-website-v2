@@ -7,7 +7,6 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            this.active = false;
             this.on('change', _.bind(this.cache, this));
         },
         /**
@@ -67,7 +66,6 @@ define([], function() {
                     params: {lang: languageCode}
                 }
             ];
-            this.active = true;
             async.waterfall([
                 function(callback) {
                     skritter.api.requestBatch(requests, function(batch, status) {
@@ -128,7 +126,6 @@ define([], function() {
                     lastSRSConfigSync: now,
                     lastVocabSync: now
                 });
-                this.active = false;
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -167,6 +164,7 @@ define([], function() {
             var now = skritter.fn.getUnixTime();
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
+            console.log('posting reviews', reviews);
             this.active = true;
             async.waterfall([
                 function(callback) {
