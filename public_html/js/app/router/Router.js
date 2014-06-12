@@ -5,8 +5,10 @@ define([
     'view/Study',
     'view/study/Settings',
     'view/Test',
-    'view/vocab/Info'
-], function(HomeView, LandingView, LoginView, StudyView, StudySettings, TestView, VocabInfoView) {
+    'view/vocab/Info',
+    'view/vocab/List',
+    'view/vocab/Lists'
+], function(HomeView, LandingView, LoginView, StudyView, StudySettings, TestView, VocabInfoView, ListView, ListsView) {
     /**
      * @class Router
      */
@@ -30,7 +32,11 @@ define([
             'study': 'showStudy',
             'study/settings': 'showStudySettings',
             'test': 'showTest',
-            'vocab/info/:languageCode/:writing': 'showVocabInfo'
+            'vocab/info/:languageCode/:writing': 'showVocabInfo',
+            'vocab/list': 'showVocabLists',
+            'vocab/list/category/:category': 'showVocabLists',
+            'vocab/list/:listId': 'showVocabList',
+            'vocab/list/:listId/:sectionId': 'showVocabList'
         },
         /**
          * @method addHistory
@@ -139,6 +145,25 @@ define([
             } else {
                 this.navigate('', {replace: true, trigger: true});
             }
+        },
+        /**
+         * @method showVocabList
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        showVocabList: function(listId, sectionId) {
+            this.reset();
+            this.view = new ListView({el: this.container});
+            this.view.render().set(listId, sectionId);
+        },
+        /**
+         * @method showVocabLists
+         * @param {String} category
+         */
+        showVocabLists: function(category) {
+            this.reset();
+            this.view = new ListsView({el: this.container});
+            this.view.render().set(category);
         },
         /**
          * @method reset

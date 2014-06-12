@@ -21,11 +21,6 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this).renderElements();
             this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
-            if (skritter.user.data.reviews.length > 1) {
-                this.elements.buttonSync.show();
-            } else {
-                this.elements.buttonSync.hide();
-            }
             return this;
         },
         /**
@@ -42,8 +37,17 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-lists': 'handleListsClicked',
                 'vclick .button-sync': 'handleSyncClicked'
             });
+        },
+        /**
+         * @method handleListsClicked
+         * @param {Object} event
+         */
+        handleListsClicked: function(event) {
+            skritter.router.navigate('vocab/list', {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method handleSyncClicked
