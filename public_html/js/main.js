@@ -15,7 +15,6 @@ requirejs.config({
         moment: '../lib/moment-2.6.0.min',
         'moment.timezone': '../lib/moment.timezone-0.0.6.min',
         'moment.timezone.data': '../lib/moment.timezone.data',
-        fastclick: '../lib/fastclick-1.0.2',
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
