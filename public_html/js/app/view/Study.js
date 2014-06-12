@@ -101,7 +101,6 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            this.checkAutoSync();
             skritter.user.scheduler.sort();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 this.loadPrompt(item.createReview());
