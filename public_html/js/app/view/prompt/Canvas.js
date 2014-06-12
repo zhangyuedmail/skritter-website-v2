@@ -47,7 +47,7 @@ define([
             this.$(this.elements.input).on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
             createjs.Ticker.addEventListener('tick', this.stage.display);
             createjs.Touch.enable(this.stage.input);
-            createjs.Ticker.setFPS(60);
+            createjs.Ticker.setFPS(40);
             this.resize();
             return this;
         },
@@ -237,18 +237,16 @@ define([
                 this.$(this.elements.input).off('vmousemove.Input');
                 this.$(this.elements.input).off('vmouseout.Input');
                 this.$(this.elements.input).off('vmouseup.Input');
-                this.triggerInputUp(null, squig.clone(true), event);
+                this.triggerInputUp(null, squig, event);
                 marker.graphics.clear();
-                squig.graphics.clear();
                 stage.clear();
             }
             function up(event) {
                 this.$(this.elements.input).off('vmousemove.Input');
                 this.$(this.elements.input).off('vmouseout.Input');
                 this.$(this.elements.input).off('vmouseup.Input');
-                this.triggerInputUp(points, squig.clone(true), event);
+                this.triggerInputUp(points, squig, event);
                 marker.graphics.clear();
-                squig.graphics.clear();
                 stage.clear();
             }
             return this;
