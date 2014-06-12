@@ -115,7 +115,6 @@ define([
          * @param {Object} event
          */
         handleSwipeUp: function(event) {
-            this.reset();
             event.preventDefault();
         },
         /**
