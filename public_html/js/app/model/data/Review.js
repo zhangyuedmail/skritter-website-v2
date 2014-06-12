@@ -19,7 +19,8 @@ define([
          */
         defaults: {
             position: 1,
-            reviews: []
+            reviews: [],
+            started: false,
         },
         /**
          * @method cache
@@ -347,7 +348,10 @@ define([
                 }, this),
                 function(callback) {
                     skritter.user.data.items.cache(callback);
-                }
+                },
+                _.bind(function(callback) {
+                    this.cache(callback);
+                }, this)
             ], function() {
                 callback();
             });

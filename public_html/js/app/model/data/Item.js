@@ -41,6 +41,7 @@ define([
                 reviews.push({
                     itemId: item.id,
                     finished: false,
+                    started: false,
                     score: 3,
                     bearTime: i === 0 ? true : false,
                     submitTime: now,

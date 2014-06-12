@@ -67,6 +67,7 @@ define([
          */
         handleGradingSelected: function(score) {
             this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[score]);
+            this.review.setReview('score', score);
         },
         /**
          * @method handleStrokeDown
@@ -86,31 +87,23 @@ define([
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
                         this.review.setReview('score', 3);
-                        window.setTimeout(_.bind(function() {
-                            this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
-                        }, this), 0);
+                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
                     } else {
                         this.review.setReview('score', 1);
                         this.review.getCharacter().reset();
                         this.review.getCharacter().add(this.review.getCharacter().targets[possibleTones[0] - 1].models);
-                        window.setTimeout(_.bind(function() {
-                            this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
-                        }, this), 0);
+                        this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
                     }
                 }
             } else {
                 if (possibleTones.indexOf(5) > -1) {
                     this.review.setReview('score', 3);
                     this.review.getCharacter().add(this.review.getCharacter().targets[4].models);
-                    window.setTimeout(_.bind(function() {
-                        this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
-                    }, this), 0);
+                    this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
                 } else {
                     this.review.setReview('score', 1);
                     this.review.getCharacter().add(this.review.getCharacter().targets[possibleTones[0] - 1].models);
-                    window.setTimeout(_.bind(function() {
-                        this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
-                    }, this), 0);
+                    this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
                 }
             }
             if (this.review.getCharacter().isFinished()) {
@@ -122,7 +115,6 @@ define([
          * @param {Object} event
          */
         handleSwipeUp: function(event) {
-            this.reset();
             event.preventDefault();
         },
         /**
@@ -138,7 +130,7 @@ define([
          */
         reset: function() {
             this.canvas.clear().enableInput();
-            this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
+            this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() - 1], this.vocab.getFontName(), 0.5);
             this.review.getCharacter().reset();
             return this;
         },
@@ -154,7 +146,7 @@ define([
             this.canvas.resize()
                     .clearLayer('background')
                     .clearLayer('stroke');
-            this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() -1], this.vocab.getFontName(), 0.5);
+            this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() - 1], this.vocab.getFontName(), 0.5);
             this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
             if (this.review.getReview().finished) {
                 this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
@@ -188,11 +180,10 @@ define([
          * @returns {Backbone.View}
          */
         show: function() {
-            skritter.timer.start();
-            this.grading.hide();
             this.resize();
             this.canvas.disableGrid();
             this.canvas.enableInput();
+            this.review.setReview('started', true);
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), true, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
@@ -203,6 +194,8 @@ define([
             }
             if (this.review.getReview().finished) {
                 this.showAnswer();
+            } else {
+                skritter.timer.start();
             }
             return this;
         },
@@ -219,15 +212,16 @@ define([
                     reviewTime: skritter.timer.getReviewTime(),
                     thinkingTime: skritter.timer.getThinkingTime()
                 });
+            } else {
+                var tone = _.flatten(this.review.getBaseVocab().getTones(this.review.get('position')))[0];
+                this.canvas.drawShape('stroke', this.review.getCharacter().targets[tone - 1].getShape(null, skritter.settings.get('gradingColors')[this.review.getReview().score]));
             }
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true, skritter.user.isUsingZhuyin()));
-            window.setTimeout(_.bind(function() {
-                this.grading.select(this.review.getScore()).show();
-                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);  
-                if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
-                    this.review.getVocab().playAudio();
-                }
-            }, this), 0);
+            this.grading.select(this.review.getScore()).show();
+            this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
+            if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
+                this.vocab.playAudio(this.review.getPosition());
+            }
             return this;
         }
     });

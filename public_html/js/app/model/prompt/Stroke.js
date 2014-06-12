@@ -90,7 +90,6 @@ define(function() {
             shape.name = 'stroke';
             shape.x = rect.x;
             shape.y = rect.y;
-            shape.rotation = this.getAngle() - this.get('param').getAngle();
             return shape;
         },
         /**

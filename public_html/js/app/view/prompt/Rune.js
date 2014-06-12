@@ -85,7 +85,12 @@ define([
          * @param {Number} score
          */
         handleGradingSelected: function(score) {
-            this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[score]);
+            if (skritter.user.settings.get('squigs')) {
+                this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[score]);
+            } else {
+                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[score]);
+            }
+            this.review.setReview('score', score);
         },
         /**
          * @method handleStrokeDown
@@ -104,10 +109,12 @@ define([
                 if (result) {
                     this.strokeAttempts = 0;
                     this.canvas.lastMouseDownEvent = null;
-                    window.setTimeout(_.bind(function() {
+                    if (skritter.user.settings.get('squigs')) {
+                        this.canvas.drawShape('stroke', shape);
+                    } else {
                         this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
-                        this.canvas.fadeLayer('hint');
-                    }, this), 0);
+                    }
+                    this.canvas.fadeLayer('hint');
                     if (this.review.getCharacter().isFinished()) {
                         this.showAnswer();
                     }
@@ -115,18 +122,12 @@ define([
                     this.strokeAttempts++;
                     if (this.strokeAttempts > this.maxStrokeAttempts) {
                         this.review.setReview('score', 1);
-                        window.setTimeout(_.bind(function() {
-                            this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
-                        }, this), 0);
+                        this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(skritter.settings.get('hintColor')), 3000);
                     }
-                    window.setTimeout(_.bind(function() {
-                        this.canvas.fadeShape('background', shape);
-                    }, this), 0);
+                    this.canvas.fadeShape('background', shape);
                 }
             } else {
-                window.setTimeout(_.bind(function() {
-                    this.canvas.fadeShape('background', shape);
-                }, this), 0);
+                this.canvas.fadeShape('background', shape);
             }
         },
         /**
@@ -163,7 +164,7 @@ define([
             var contentWidth = skritter.settings.getContentWidth();
             var infoSection, inputSection;
             this.canvas.resize().clearLayer('stroke');
-            if (!skritter.user.settings.get('squigs')) {
+            if (skritter.user.settings.get('squigs')) {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getSquig());
             } else {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
@@ -201,7 +202,6 @@ define([
          */
         show: function() {
             skritter.timer.start();
-            this.grading.hide();
             this.canvas.enableInput();
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
@@ -219,6 +219,8 @@ define([
             }
             if (this.review.getReview().finished) {
                 this.showAnswer();
+            } else {
+                skritter.timer.start();
             }
             return this;
         },
@@ -237,13 +239,23 @@ define([
                 });
             }
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
-            window.setTimeout(_.bind(function() {
-                this.grading.select(this.review.getScore()).show();
-                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
-                if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
-                    this.review.getVocab().playAudio();
-                }
-            }, this), 0);
+            if (skritter.user.settings.get('squigs') && this.review.getCharacter().length > 0) {
+                var color = skritter.settings.get('gradingColors')[this.review.getReview().score];
+                var character = this.review.getCharacter();
+                window.setTimeout(_.bind(function() {
+                    for (var i = 0, length = character.length; i < length; i++) {
+                        var stroke = character.at(i);
+                        this.canvas.tweenShape('background', stroke.getUserShape(color), stroke.inflateShape());
+                    }
+                }, this), 0);
+            } else {
+                this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape(null, skritter.settings.get('gradingColors')[this.review.getReview().score]));
+            }
+            this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+            this.grading.select(this.review.getScore()).show();
+            if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
+                this.vocab.playAudio(this.review.getPosition());
+            }
             return this;
         }
     });

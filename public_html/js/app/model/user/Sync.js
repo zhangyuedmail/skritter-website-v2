@@ -7,7 +7,6 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            this.active = false;
             this.on('change', _.bind(this.cache, this));
         },
         /**
@@ -28,6 +27,47 @@ define([], function() {
          */
         cache: function() {
             localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
+        },
+        /**
+         * @method changedItems
+         * @param {Function} callback
+         * @param {Number} offset
+         */
+        changedItems: function(callback, offset) {
+            offset = offset ? offset : this.get('lastItemSync');
+            var languageCode = skritter.user.getLanguageCode();
+            var now = skritter.fn.getUnixTime();
+            var requests = [
+                {
+                    path: 'api/v' + skritter.api.get('version') + '/items',
+                    method: 'GET',
+                    params: {
+                        lang: languageCode,
+                        sort: 'changed',
+                        offset: offset,
+                        include_vocabs: 'false',
+                        include_strokes: 'false',
+                        include_sentences: 'false',
+                        include_heisigs: 'false',
+                        include_top_mnemonics: 'false',
+                        include_decomps: 'false'
+                    },
+                    spawner: true
+                }
+            ];
+            async.series([
+                _.bind(function(callback) {
+                    this.reviews(callback);
+                }, this),
+                async.apply(this.processBatch, requests)
+            ], _.bind(function() {
+                this.set({
+                    lastItemSync: now
+                });
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }, this));
         },
         /**
          * @method downloadAll
@@ -67,60 +107,8 @@ define([], function() {
                     params: {lang: languageCode}
                 }
             ];
-            this.active = true;
-            async.waterfall([
-                function(callback) {
-                    skritter.api.requestBatch(requests, function(batch, status) {
-                        if (status === 200) {
-                            callback(null, batch);
-                        } else {
-                            callback(batch);
-                        }
-                    });
-                },
-                function(batch, callback) {
-                    var downloadedRequests = 0;
-                    var requestIds = [];
-                    var responseSize = 0;
-                    var totalRequests = 0;
-                    var request = function() {
-                        skritter.api.getBatch(batch.id, function(result, status) {
-                            if (result && status === 200) {
-                                downloadedRequests += result.downloadedRequests ? result.downloadedRequests : 0;
-                                responseSize += result.responseSize ? result.responseSize : 0;
-                                totalRequests = result.totalRequests ? result.totalRequests : totalRequests;
-                                if (responseSize > 0) {
-                                    skritter.modal.set('.modal-progress-value', skritter.fn.convertBytesToSize(responseSize));
-                                }
-                                if (result.totalRequests > 100) {
-                                    skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));
-                                }
-                                skritter.user.data.put(result, _.bind(function() {
-                                    requestIds = requestIds.concat(_.without(result.requestIds, undefined));
-                                    window.setTimeout(request, 2000);
-                                }, this));
-                            } else {
-                                callback(null, batch, requestIds);
-                            }
-                        });
-                    };
-                    request();
-                },
-                function(batch, requestIds, callback) {
-                    skritter.api.checkBatch(batch.id, function(batch, status) {
-                        if (status === 200) {
-                            var batchRequestIds = _.pluck(batch.Requests, 'id');
-                            var missingRequestIds = _.difference(requestIds, batchRequestIds);
-                            if (missingRequestIds && missingRequestIds.length > 0) {
-                                callback();
-                            } else {
-                                callback();
-                            }
-                        } else {
-                            callback(batch);
-                        }
-                    });
-                }
+            async.series([
+                async.apply(this.processBatch, requests)
             ], _.bind(function() {
                 this.set({
                     lastErrorCheck: now,
@@ -128,7 +116,6 @@ define([], function() {
                     lastSRSConfigSync: now,
                     lastVocabSync: now
                 });
-                this.active = false;
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -160,6 +147,68 @@ define([], function() {
             });
         },
         /**
+         * @method processBatch
+         * @param {Array} requests
+         * @param {Function} callback
+         */
+        processBatch: function(requests, callback) {
+            var downloadedRequests = 0;
+            var requestIds = [];
+            var responseSize = 0;
+            var totalRequests = 0;
+            async.waterfall([
+                function(callback) {
+                    skritter.api.requestBatch(requests, function(batch, status) {
+                        if (status === 200) {
+                            callback(null, batch);
+                        } else {
+                            callback(batch);
+                        }
+                    });
+                },
+                function(batch, callback) {
+                    var request = function() {
+                        skritter.api.getBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                downloadedRequests += result.downloadedRequests ? result.downloadedRequests : 0;
+                                responseSize += result.responseSize ? result.responseSize : 0;
+                                totalRequests = result.totalRequests ? result.totalRequests : totalRequests;
+                                if (responseSize > 0) {
+                                    skritter.modal.set('.modal-progress-value', skritter.fn.convertBytesToSize(responseSize));
+                                }
+                                if (result.totalRequests > 100) {
+                                    console.log('progress', downloadedRequests / totalRequests);
+                                    skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));
+                                }
+                                skritter.user.data.put(result, _.bind(function() {
+                                    requestIds = requestIds.concat(_.without(result.requestIds, undefined));
+                                    window.setTimeout(request, 2000);
+                                }, this));
+                            } else {
+                                callback(null, batch, requestIds);
+                            }
+                        });
+                    };
+                    request();
+                },
+                function(batch, requestIds, callback) {
+                    skritter.api.checkBatch(batch.id, function(batch, status) {
+                        if (status === 200) {
+                            var batchRequestIds = _.pluck(batch.Requests, 'id');
+                            var missingRequestIds = _.difference(requestIds, batchRequestIds);
+                            if (missingRequestIds && missingRequestIds.length > 0) {
+                                callback();
+                            } else {
+                                callback();
+                            }
+                        } else {
+                            callback(batch);
+                        }
+                    });
+                }
+            ], callback);
+        },
+        /**
          * @method reviews
          * @param {Function} callback
          */
@@ -167,6 +216,7 @@ define([], function() {
             var now = skritter.fn.getUnixTime();
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
+            console.log('posting reviews', reviews);
             this.active = true;
             async.waterfall([
                 function(callback) {
@@ -179,7 +229,9 @@ define([], function() {
                                     throw new Error('Review Error');
                                 } catch (error) {
                                     console.error('Review Error', reviewErrors);
-                                    Raygun.send(error);
+                                    Raygun.send(error, {
+                                        reviewErrors: reviewErrors
+                                    });
                                 }
                             }
                             skritter.user.sync.itemById(_.uniq(_.pluck(reviewErrors, 'itemId')), callback);
@@ -233,6 +285,6 @@ define([], function() {
             return this.get('lastItemSync') === 0 ? true : false;
         }
     });
-    
+
     return Model;
 });

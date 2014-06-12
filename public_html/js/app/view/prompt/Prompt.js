@@ -66,6 +66,13 @@ define([
             }
         },
         /**
+         * @method handleGradingSelected
+         * @param {Number} score
+         */
+        handleGradingSelected: function(score) {
+            this.review.setReview('score', score);
+        },
+        /**
          * @method handleNavigateLeftClicked
          * @param {Object} event
          */
@@ -113,7 +120,10 @@ define([
             if (!this.review.getReview().finished) {
                 this.showAnswer();
             } else if (this.review.next()) {
-                this.clear();
+                if (!this.review.getReview().started) {
+                    skritter.timer.reset();
+                }
+                this.grading.hide(_.bind(this.clear, this));
             } else {
                 this.review.save(_.bind(function() {
                     this.grading.hide(_.bind(this.triggerNext, this));

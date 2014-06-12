@@ -45,7 +45,8 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
-                'vclick .vocab-contained tbody tr': 'handleTableRowClicked'
+                'vclick .vocab-contained tbody tr': 'handleTableRowClicked',
+                'vclick .vocab-reading .reading': 'playAudio'
             });
         },
         /**
@@ -66,6 +67,9 @@ define([
             var sentence = vocab.getSentence();
             this.elements.writing.html(vocab.getWriting());
             this.elements.reading.html(vocab.getReading());
+            if (vocab.has('audio')) {
+                this.elements.reading.addClass('has-audio');
+            }
             this.elements.definition.text(vocab.getDefinition());
             if (sentence) {
                 this.elements.sentenceWriting.text(sentence.getWriting());
@@ -86,6 +90,22 @@ define([
             } else {
                 this.elements.contained.closest('.content-block').hide();
                 this.elements.decomps.find('tbody').html(this.vocab.getDecomps()[0].getChildrenRows());
+            }
+            this.$('.character-font').addClass(skritter.user.getFontClass());
+        },
+        /**
+         * @method playAudio
+         * @param {Object} event
+         */
+        playAudio: function(event) {
+            if (this.vocab.has('audio')) {
+                if (skritter.user.isChinese()) {
+                    var filename = this.$(event.currentTarget).data('reading') + '.mp3';
+                    skritter.assets.playAudio(filename.toLowerCase());
+                } else {
+                    this.vocab.playAudio();
+                }
+                event.stopPropagation();
             }
         },
         /**
