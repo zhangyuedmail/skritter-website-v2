@@ -347,7 +347,11 @@ define([
                 }, this),
                 function(callback) {
                     skritter.user.data.items.cache(callback);
-                }
+                },
+                _.bind(function(callback) {
+                    console.log('caching review');
+                    this.cache(callback);
+                }, this)
             ], function() {
                 callback();
             });

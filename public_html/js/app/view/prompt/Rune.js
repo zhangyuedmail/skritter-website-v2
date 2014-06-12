@@ -86,6 +86,7 @@ define([
          */
         handleGradingSelected: function(score) {
             this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[score]);
+            this.review.setReview('score', score);
         },
         /**
          * @method handleStrokeDown
@@ -201,7 +202,6 @@ define([
          */
         show: function() {
             skritter.timer.start();
-            this.grading.hide();
             this.canvas.enableInput();
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
@@ -235,6 +235,8 @@ define([
                     reviewTime: skritter.timer.getReviewTime(),
                     thinkingTime: skritter.timer.getThinkingTime()
                 });
+            } else {
+                this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape(null, skritter.settings.get('gradingColors')[this.review.getReview().score]));
             }
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             window.setTimeout(_.bind(function() {

@@ -108,7 +108,6 @@ define([
          */
         show: function() {
             skritter.timer.start();
-            this.grading.hide();
             this.elements.answer.hide();
             this.elements.definition.html(this.vocab.getDefinition());
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));

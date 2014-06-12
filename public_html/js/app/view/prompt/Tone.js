@@ -67,6 +67,7 @@ define([
          */
         handleGradingSelected: function(score) {
             this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[score]);
+            this.review.setReview('score', score);
         },
         /**
          * @method handleStrokeDown
@@ -189,7 +190,6 @@ define([
          */
         show: function() {
             skritter.timer.start();
-            this.grading.hide();
             this.resize();
             this.canvas.disableGrid();
             this.canvas.enableInput();
@@ -219,6 +219,9 @@ define([
                     reviewTime: skritter.timer.getReviewTime(),
                     thinkingTime: skritter.timer.getThinkingTime()
                 });
+            } else {
+                var tone = _.flatten(this.review.getBaseVocab().getTones(this.review.get('position')))[0];
+                this.canvas.drawShape('stroke', this.review.getCharacter().targets[tone - 1].getShape(null, skritter.settings.get('gradingColors')[this.review.getReview().score]));
             }
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true, skritter.user.isUsingZhuyin()));
             window.setTimeout(_.bind(function() {

@@ -11,6 +11,7 @@ define([
         initialize: function() {
             this.expanded = true;
             this.grade = 3;
+            this.speed = 100;
         },
         /**
          * @method render
@@ -90,7 +91,7 @@ define([
          * @returns {Backbone.View}
          */
         hide: function(callback) {
-            this.$el.hide('slide', {direction: 'down'}, 300, callback);
+            this.$el.hide('slide', {direction: 'down'}, this.speed, callback);
             return this;
         },
         /**
@@ -136,7 +137,7 @@ define([
          * @returns {Backbone.View}
          */
         show: function(callback) {
-            this.$el.show('slide', {direction: 'down'}, 300, callback);
+            this.$el.show('slide', {direction: 'down'}, this.speed, callback);
             return this;
         },
         /**

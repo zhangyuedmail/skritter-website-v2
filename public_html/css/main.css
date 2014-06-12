@@ -261,7 +261,7 @@ body {
     z-index: 9004;
 }
 .prompt .grading-container .btn { padding: 5px; }
-.prompt .grading-container .grading-icon { max-height: 50px; }
+.prompt .grading-container .grading-icon { max-height: 43px; }
 
 
 /*** PROMPT: INFO SECTION ***/
