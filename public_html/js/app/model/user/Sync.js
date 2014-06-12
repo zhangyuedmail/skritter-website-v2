@@ -29,6 +29,70 @@ define([], function() {
             localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
         },
         /**
+         * @method addItems
+         * @param {Number} limit
+         * @param {Function} callback1
+         * @param {Function} callback2
+         */
+        addItems: function(limit, callback1, callback2) {
+            var self = this;
+            var now = skritter.fn.getUnixTime();
+            var numVocabsAdded = 0;
+            var offset = this.get('addItemOffset');
+            var requests = {
+                path: 'api/v' + skritter.api.get('version') + '/items/add',
+                method: 'POST',
+                params: {
+                    lang: skritter.user.getLanguageCode(),
+                    limit: limit,
+                    offset: offset
+                }
+            };
+            this.set('syncing', true);
+            async.waterfall([
+                function(callback) {
+                    skritter.api.requestBatch(requests, function(batch, status) {
+                        if (status === 200) {
+                            callback(null, batch);
+                        } else {
+                            callback(batch);
+                        }
+                    });
+                },
+                function(batch, callback) {
+                    var request = function() {
+                        skritter.api.getBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                if (result.Items) {
+                                    skritter.user.scheduler.insert(result.Items);
+                                }
+                                if (result.numVocabsAdded) {
+                                    numVocabsAdded += result.numVocabsAdded;
+                                }
+                                window.setTimeout(request, 500);
+                            } else {
+                                if (typeof callback2 === 'function') {
+                                    callback2(numVocabsAdded);
+                                }
+                                self.set('addItemOffset', offset + numVocabsAdded);
+                                callback();
+                            }
+                        });
+                    };
+                    request();
+                },
+                _.bind(function(callback) {
+                    this.changedItems(callback, now);
+                }, this)
+            ], _.bind(function() {
+                skritter.user.scheduler.sort();
+                this.set('syncing', false);
+                if (typeof callback1 === 'function') {
+                    callback1();
+                }
+            }, this));
+        },
+        /**
          * @method changedItems
          * @param {Function} callback
          * @param {Number} offset

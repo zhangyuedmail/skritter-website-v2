@@ -454,6 +454,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     
     /*** COMMANDS ***/
+    grunt.registerTask('build-android', [
+        'build-android-chinese',
+        'build-android-japanese'
+    ]);
+    
     grunt.registerTask('build-android-chinese', [
         'validate',
         'clean:cordova-chinese',
@@ -470,6 +475,11 @@ module.exports = function(grunt) {
         'copy:cordova-config-japanese',
         'replace:cordova-japanese',
         'shell:cordova-build-android-japanese'
+    ]);
+    
+    grunt.registerTask('build-run-android', [
+        'build-run-android-chinese',
+        'build-run-android-japanese'
     ]);
     
     grunt.registerTask('build-run-android-chinese', [
