@@ -101,7 +101,7 @@ define([], function() {
             for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
                 var vocabItem = containedVocabs[a];
                 containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
-                containedHTML += "<td class='writing'>" + vocabItem.get('writing') + '</td>';
+                containedHTML += "<td class='writing character-font'>" + vocabItem.get('writing') + '</td>';
                 containedHTML += "<td class='reading'>" + vocabItem.getReading() + '</td>';
                 containedHTML += "<td class='definition'>" + vocabItem.getDefinition() + '</td>';
                 containedHTML += "</tr>";

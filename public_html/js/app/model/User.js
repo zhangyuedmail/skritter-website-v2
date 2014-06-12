@@ -112,6 +112,13 @@ define([
             return this.isChinese() ? this.settings.get('chineseStudyParts') : this.settings.get('japaneseStudyParts');
         },
         /**
+         * @method fontClass
+         * @returns {String}
+         */
+        getFontClass: function() {
+            return this.isChinese() ? 'chinese-text' : 'japanese-text';            
+        },
+        /**
          * @method getLanguageCode
          * @returns {String}
          */

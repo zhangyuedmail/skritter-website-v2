@@ -87,6 +87,7 @@ define([
                 this.elements.contained.closest('.content-block').hide();
                 this.elements.decomps.find('tbody').html(this.vocab.getDecomps()[0].getChildrenRows());
             }
+            this.$('.character-font').addClass(skritter.user.getFontClass());
         },
         /**
          * @method set
