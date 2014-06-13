@@ -71,6 +71,7 @@ define([], function() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
                                 if (result.Items) {
+                                    console.log('adding items'. result.Items);
                                     skritter.user.scheduler.insert(result.Items);
                                 }
                                 if (result.numVocabsAdded) {
@@ -216,12 +217,12 @@ define([], function() {
                 function(items, callback) {
                     skritter.user.data.put(items, callback);
                 }
-            ], function() {
+            ], _.bind(function() {
                 this.active.itemById = false;
                 if (typeof callback === 'function') {
                     callback();
                 }
-            });
+            }, this));
         },
         /**
          * @method processBatch
