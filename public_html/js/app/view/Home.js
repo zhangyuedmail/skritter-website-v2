@@ -19,9 +19,9 @@ define([
         render: function() {
             window.document.title = "Home - Skritter";
             this.$el.html(_.template(template, skritter.strings));
-            this.loadElements();
-            this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
+            BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
+            this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             return this;
         },
@@ -30,19 +30,21 @@ define([
          * @returns {Backbone.View}
          */
         loadElements: function() {
+            BaseView.prototype.loadElements.call(this);
             this.elements.buttonSync = this.$('.button-sync');
             this.elements.dueCount = this.$('.due-count');
             this.elements.listCount = this.$('.list-count');
-            this.elements.userAvatar = this.$('.user-avatar');
-            this.elements.userUsername = this.$('.user-username');
             return this;
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick .button-lists': 'handleListsClick',
-            'vclick .button-study': 'handleStudyClick'
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-lists': 'handleListsClick',
+                'vclick .button-study': 'handleStudyClick',
+                'vclick .button-sync': 'handleSyncClick'
+            });
         },
         /**
          * @method handleListsClick

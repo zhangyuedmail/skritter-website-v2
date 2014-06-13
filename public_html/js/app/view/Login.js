@@ -17,33 +17,30 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
+            window.document.title = "Log In - Skritter";
             this.$el.html(_.template(template, skritter.strings));
-            this.loadElements();
+            BaseView.prototype.render.call(this);
             return this;
         },
         /**
          * @method loadElements
+         * @param {Backbone.View}
          */
         loadElements: function() {
             this.elements.loginUsername = this.$('#login-username');
             this.elements.loginPassword = this.$('#login-password');
             this.elements.message = this.$('#message');
+            return this;
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick #button-back': 'handleBackClick',
-            'vclick #button-next': 'handleLoginClick',
-            'keyup #login-password': 'handleEnterPress'
-        },
-        /**
-         * @method handleBackClick
-         * @param {Object} event
-         */
-        handleBackClick: function(event) {
-            skritter.router.back();
-            event.preventDefault();
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick #button-back': 'handleBackClick',
+                'vclick #button-next': 'handleLoginClick',
+                'keyup #login-password': 'handleEnterPress'
+            });
         },
         /**
          * @method handleLoginClick

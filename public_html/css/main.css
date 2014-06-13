@@ -206,6 +206,7 @@ body {
     cursor: pointer;
     float: left;
     left: 0; 
+    padding: 2px 0px;
     position: absolute;
 }
 .navbar .navbar-back:active { 
@@ -213,7 +214,7 @@ body {
 }
 .navbar .navbar-back i {
     color: #ffffff;
-    padding: 8.5px 6px 7.5px 0;
+    padding: 7.5px 6px 7.5px 0;
 }
 .navbar .navbar-back img {
     margin-top: -12px;
@@ -223,13 +224,13 @@ body {
     cursor: pointer;
     float: left;
     left: -16px; 
-    padding: 0 6px;
+    padding: 2px 6px;
     position: absolute;
 }
 .navbar .navbar-toggle-sidebar:active { background-color: lightblue; }
 .navbar .navbar-toggle-sidebar i {
     color: #ffffff;
-    padding: 8.5px 6px 7.5px 0;
+    padding: 7.5px 6px 7.5px 0;
 }
 .navbar .navbar-toggle-sidebar img {
     margin-top: -12px;

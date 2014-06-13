@@ -24,8 +24,8 @@ define([
         render: function() {
             window.document.title = "Study - Skritter";
             this.$el.html(_.template(template, skritter.strings));
-            this.loadElements();
-            this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));;
+            BaseView.prototype.render.call(this);
+            this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             skritter.timer.setElement(this.$('.study-timer')).render();
             if (skritter.user.settings.get('hideCounter')) {
                 this.$('.study-counter').hide();
@@ -45,17 +45,20 @@ define([
          * @returns {Backbone.View}
          */
         loadElements: function() {
+            BaseView.prototype.loadElements.call(this);
             this.elements.userAvatar = this.$('.user-avatar');
             return this;
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick .button-add-items': 'showAddItemsModal',
-            'vclick .button-info': 'handleInfoButtonClicked',
-            'vclick .button-study-settings': 'handleStudySetttingsClicked',
-            'vclick .navbar-back': 'handleBackClick'
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-add-items': 'showAddItemsModal',
+                'vclick .button-info': 'handleInfoButtonClicked',
+                'vclick .button-study-settings': 'handleStudySetttingsClicked',
+                'vclick .navbar-back': 'handleBackClick'
+            });
         },
         /**
          * @method autoSync

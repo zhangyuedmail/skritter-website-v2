@@ -19,11 +19,12 @@ define([
         render: function() {
             window.document.title = "Sign Up - Skritter";
             this.$el.html(_.template(template, skritter.strings));
-            this.loadElements();
+            BaseView.prototype.render.call(this);
             return this;
         },
         /**
          * @method loadElements
+         * @param {Backbone.View}
          */
         loadElements: function() {
             this.elements.buttonBack = this.$('#button-back');
@@ -32,21 +33,16 @@ define([
             this.elements.signupPassword = this.$('#signup-password');
             this.elements.signupUsername = this.$('#signup-username');
             this.elements.message = this.$('#message');
+            return this;
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick #button-back': 'handleBackClick',
-            'vclick #button-next': 'handleNextClick'
-        },
-        /**
-         * @method handleBackClick
-         * @param {Object} event
-         */
-        handleBackClick: function(event) {
-            skritter.router.back();
-            event.preventDefault();
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick #button-back': 'handleBackClick',
+                'vclick #button-next': 'handleNextClick'
+            });
         },
         /**
          * @method handleNextClick

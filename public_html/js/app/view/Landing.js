@@ -18,21 +18,26 @@ define([
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
-            this.loadElements();
+            BaseView.prototype.render.call(this);
             return this;
         },
         /**
          * @method loadElements
+         * @returns {Backbone.View}
          */
         loadElements: function() {
+            BaseView.prototype.loadElements.call(this);
             this.elements.targetLanguage = this.$('.target-language');
+            return this;
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick .button-existing-user': 'handleExistingUserClick',
-            'vclick .button-new-user': 'handleNewUserClick'
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-existing-user': 'handleExistingUserClick',
+                'vclick .button-new-user': 'handleNewUserClick'
+            });
         },
         /**
          * @method handleExistingUserClick

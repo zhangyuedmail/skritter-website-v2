@@ -25,8 +25,10 @@ define([
         },
         /**
          * @method loadElements
+         * @returns {Backbone.View}
          */
         loadElements: function() {
+            BaseView.prototype.loadElements.call(this);
             this.elements.contained = this.$('.vocab-contained');
             this.elements.decomps = this.$('.vocab-decomps');
             this.elements.definition = this.$('.vocab-definition');
@@ -38,14 +40,16 @@ define([
             this.elements.sentenceReading = this.$('.vocab-sentence .reading');
             this.elements.sentenceWriting = this.$('.vocab-sentence .writing');
             this.elements.writing = this.$('.vocab-writing');
+            return this;
         },
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick .vocab-contained tbody tr': 'handleTableRowClicked',
-            'vclick .vocab-reading .reading': 'playAudio'
-
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+                'vclick .vocab-contained tbody tr': 'handleTableRowClicked',
+                'vclick .vocab-reading .reading': 'playAudio'
+            });
         },
         /**
          * @method handleTableRowClicked

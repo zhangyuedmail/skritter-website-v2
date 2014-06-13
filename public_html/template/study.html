@@ -3,8 +3,8 @@
     <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <div class="navbar-back">
-                    <i class="fa fa-2x fa-chevron-left"></i>
+                <div class="navbar-toggle-sidebar">
+                    <i class="fa fa-2x fa-bars"></i>
                     <span class="user-avatar"></span>
                 </div>
                 <ul class="navbar-nav navbar-text list-inline pull-left">
@@ -20,11 +20,14 @@
         </div>
     </div>
     
-    <ul class="sidebar">
-        <li class="button-home"><div><i class="fa fa-2x fa-lg fa-home"></i> <span>Home</span></div></li>
-        <li class="button-study"><div><i class="fa fa-2x fa-lg fa-pencil"></i> <span>Study</span></div></li>
-        <li class="button-logout"><div><i class="fa fa-2x fa-lg fa-sign-out"></i> <span>Sign Out</span></div></li>
-    </ul>
+    <div class="sidebar">
+        <ul>
+            <li class="button-sidebar-home"><div><i class="fa fa-2x fa-lg fa-home"></i> <span>Home</span></div></li>
+            <li class="button-sidebar-study"><div><i class="fa fa-2x fa-lg fa-pencil"></i> <span>Study</span></div></li>
+            <li class="button-sidebar-lists"><div><i class="fa fa-2x fa-lg fa-list"></i> <span>Lists</span></div></li>
+            <li class="button-sidebar-logout"><div><i class="fa fa-2x fa-lg fa-sign-out"></i> <span>Sign Out</span></div></li>
+        </ul>
+    </div>
     
     <div id="content" class="content-container container-fluid full-width">
         <div class="prompt-container"></div>
