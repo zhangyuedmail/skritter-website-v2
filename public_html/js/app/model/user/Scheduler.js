@@ -240,6 +240,18 @@ define([], function() {
             return Math.round(interval * (0.925 + (Math.random() * 0.15)));
         },
         /**
+         * @method remove
+         * @param {String} itemId
+         * @returns {Object}
+         */
+        remove: function(itemId) {
+            var position = _.findIndex(this.data, {id: itemId});
+            if (position > -1) {
+                return this.data.splice(position, 1);
+            }
+            return null;
+        },
+        /**
          * @method update
          * @param {Backbone.Model} item
          */
