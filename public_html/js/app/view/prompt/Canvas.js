@@ -178,11 +178,24 @@ define([
          * @method drawShape
          * @param {String} layerName
          * @param {CreateJS.Shape} shape
+         * @param {Number} color
          * @param {Number} alpha
          * @returns {CreateJS.Shape}
          */
-        drawShape: function(layerName, shape, alpha) {
-            shape.alpha = alpha ? alpha : 1;
+        drawShape: function(layerName, shape, color, alpha) {
+            if (alpha) {
+                shape.alpha = alpha;
+            }
+            if (color) {
+                if (shape.graphics) {
+                    shape.graphics.inject(this.injectColor, color);
+                }
+                if (shape.children && shape.children.length > 0) {
+                    for (var i in shape.children) {
+                        shape.children[i].graphics.inject(this.injectColor, color);
+                    }
+                }
+            }
             this.getLayer(layerName).addChild(shape);
             this.stage.display.update();
             return shape;
@@ -276,12 +289,23 @@ define([
          * @method fadeShape
          * @param {String} layerName
          * @param {CreateJS.Shape} shape
+         * @param {String} color
          * @param {Number} milliseconds
          * @param {Function} callback
          */
-        fadeShape: function(layerName, shape, milliseconds, callback) {
+        fadeShape: function(layerName, shape, color, milliseconds, callback) {
             var layer = this.getLayer(layerName);
             milliseconds = milliseconds ? milliseconds : 500;
+            if (color) {
+                if (shape.graphics) {
+                    shape.graphics.inject(this.injectColor, color);
+                }
+                if (shape.children && shape.children.length > 0) {
+                    for (var i in shape.children) {
+                        shape.children[i].graphics.inject(this.injectColor, color);
+                    }
+                }
+            }
             layer.addChild(shape);
             this.stage.display.update();
             shape.cache(0, 0, this.size, this.size);
@@ -300,6 +324,13 @@ define([
          */
         getLayer: function(name) {
             return this.stage.display.getChildByName('layer-' + name);
+        },
+        /**
+         * @method inject
+         * @param {String} color
+         */
+        injectColor: function(color) {
+            this.fillStyle = color;
         },
         /**
          * @method injectLayerColor

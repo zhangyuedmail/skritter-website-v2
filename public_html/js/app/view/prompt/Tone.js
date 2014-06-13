@@ -214,7 +214,7 @@ define([
                 });
             } else {
                 var tone = _.flatten(this.review.getBaseVocab().getTones(this.review.get('position')))[0];
-                this.canvas.drawShape('stroke', this.review.getCharacter().targets[tone - 1].getShape(null, skritter.settings.get('gradingColors')[this.review.getReview().score]));
+                this.canvas.drawShape('stroke', this.review.getCharacter().targets[tone - 1].getShape(), skritter.settings.get('gradingColors')[this.review.getReview().score]);
             }
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true, skritter.user.isUsingZhuyin()));
             this.grading.select(this.review.getScore()).show();

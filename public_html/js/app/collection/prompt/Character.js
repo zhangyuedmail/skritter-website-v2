@@ -110,16 +110,14 @@ define([
         /**
          * @method getShape
          * @param {Number} excludeStrokePosition
-         * @param {String} color
          * @returns {CreateJS.Container}
          */
-        getShape: function(excludeStrokePosition, color) {
-            color = (color) ? color : '#000000';
+        getShape: function(excludeStrokePosition) {
             var shapeContainer = new createjs.Container();
             shapeContainer.name = 'character';
             for (var i = 0, length = this.models.length; i < length; i++) {
                 if (i !== excludeStrokePosition - 1) {
-                    shapeContainer.addChild(this.models[i].inflateShape(color));
+                    shapeContainer.addChild(this.models[i].inflateShape());
                 }
             }
             return shapeContainer;
