@@ -200,9 +200,7 @@ body {
     margin-right: auto; 
     width: 100%;
 }
-.navbar .navbar-brand {
-    padding: 12px 8px;
-}
+.navbar .navbar-brand { padding: 12px 8px; }
 .navbar .navbar-back { 
     cursor: pointer;
     float: left;
@@ -396,6 +394,10 @@ body {
     float: left;
     width: 100px;
 }
+
+
+/*** VIEW: STUDY ***/
+.view-study .study-counter, .view-study .study-timer { font-size: 16px; }
 
 
 /*** VIEW: TEST ***/
