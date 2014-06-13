@@ -13,45 +13,40 @@ define([
             BaseView.prototype.initialize.call(this);
         },
         /**
+         * @method loadElements
+         */
+        loadElements: function() {
+            this.elements.targetLanguage = this.$('.target-language');
+        },
+        /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this).renderElements();
-            if (skritter.user.getLanguageCode()) {
-                this.elements.targetLanguage.text(skritter.user.getLanguageCode() === 'zh' ? 'Chinese' : 'Japanese');
-            }
+            this.loadElements();
             return this;
-        },
-        /**
-         * @method renderElements
-         */
-        renderElements: function() {
-            this.elements.targetLanguage = this.$('.target-language');
         },
         /**
          * @property {Object} events
          */
-        events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-                'vclick .button-existing-user': 'clickExistingUser',
-                'vclick .button-new-user': 'clickNewUser'
-            });
+        events: {
+            'vclick .button-existing-user': 'handleExistingUserClick',
+            'vclick .button-new-user': 'handleNewUserClick'
         },
         /**
-         * @method clickExistingUser
+         * @method handleExistingUserClick
          * @param {Object} event
          */
-        clickExistingUser: function(event) {
+        handleExistingUserClick: function(event) {
             skritter.router.navigate('login', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
-         * @method clickNewUser
+         * @method handleNewUserClick
          * @param {Object} event
          */
-        clickNewUser: function(event) {
+        handleNewUserClick: function(event) {
             skritter.router.navigate('signup', {replace: true, trigger: true});
             event.preventDefault();
         }

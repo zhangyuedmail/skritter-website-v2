@@ -13,51 +13,46 @@ define([
             BaseView.prototype.initialize.call(this);
         },
         /**
-         * @method render
-         * @returns {Backbone.View}
-         */
-        render: function() {
-            window.document.title = "Signup - Skritter";
-            this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this).renderElements();
-            return this;
-        },
-        /**
          * @method renderElements
          */
         renderElements: function() {
-            BaseView.prototype.renderElements.call(this);
+            this.elements.buttonBack = this.$('#button-back');
+            this.elements.buttonNext = this.$('#button-next');
             this.elements.signupEmail = this.$('#signup-email');
             this.elements.signupPassword = this.$('#signup-password');
             this.elements.signupUsername = this.$('#signup-username');
             this.elements.message = this.$('#message');
         },
         /**
-         * @method disableForm
+         * @method render
+         * @returns {Backbone.View}
          */
-        disableForm: function() {
-            this.$(':input').prop('disabled', true);
-        },
-        /**
-         * @method enableForm
-         */
-        enableForm: function() {
-            this.$(':input').prop('disabled', false);
+        render: function() {
+            window.document.title = "Sign Up - Skritter";
+            this.$el.html(_.template(template, skritter.strings));
+            this.renderElements();
+            return this;
         },
         /**
          * @property {Object} events
          */
-        events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-                'vclick .button-continue': 'handleContinueClicked',
-                'keyup #login-password': 'handleEnterPressed'
-            });
+        events: {
+            'vclick #button-back': 'handleBackClick',
+            'vclick #button-next': 'handleNextClick'
         },
         /**
-         * @method handleContinueClicked
+         * @method handleBackClick
          * @param {Object} event
          */
-        handleContinueClicked: function(event) {
+        handleBackClick: function(event) {
+            skritter.router.back();
+            event.preventDefault();
+        },
+        /**
+         * @method handleNextClick
+         * @param {Object} event
+         */
+        handleNextClick: function(event) {
             this.disableForm();
             this.elements.message.empty();
             var email = this.elements.signupEmail.val();
@@ -78,17 +73,6 @@ define([
                 this.enableForm();
             }
             event.preventDefault();
-        },
-        /**
-         * @method handleEnterPressed
-         * @param {Object} event
-         */
-        handleEnterPressed: function(event) {
-            if (event.keyCode === 13) {
-                this.handleLoginClicked(event);
-            } else {
-                event.preventDefault();
-            }
         }
     });
 

@@ -13,15 +13,6 @@ define([
             BaseView.prototype.initialize.call(this);
         },
         /**
-         * @method render
-         * @returns {Backbone.View}
-         */
-        render: function() {
-            this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this).renderElements();
-            return this;
-        },
-        /**
          * @method renderElements
          */
         renderElements: function() {
@@ -30,31 +21,35 @@ define([
             this.elements.message = this.$('#message');
         },
         /**
+         * @method render
+         * @returns {Backbone.View}
+         */
+        render: function() {
+            this.$el.html(_.template(template, skritter.strings));
+            this.renderElements();
+            return this;
+        },
+        /**
          * @property {Object} events
          */
-        events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-                'keyup #login-password': 'handleEnterPressed',
-                'vclick .button-continue': 'handleLoginClicked'
-            });
+        events: {
+            'vclick #button-back': 'handleBackClick',
+            'vclick #button-next': 'handleLoginClick',
+            'keyup #login-password': 'handleEnterPress'
         },
         /**
-         * @method disableForm
-         */
-        disableForm: function() {
-            this.$(':input').prop('disabled', true);
-        },
-        /**
-         * @method enableForm
-         */
-        enableForm: function() {
-            this.$(':input').prop('disabled', false);
-        },
-        /**
-         * @method clickLogin
+         * @method handleBackClick
          * @param {Object} event
          */
-        handleLoginClicked: function(event) {
+        handleBackClick: function(event) {
+            skritter.router.back();
+            event.preventDefault();
+        },
+        /**
+         * @method handleLoginClick
+         * @param {Object} event
+         */
+        handleLoginClick: function(event) {
             this.disableForm();
             this.elements.message.empty();
             var username = this.elements.loginUsername.val();
@@ -71,10 +66,10 @@ define([
             event.preventDefault();
         },
         /**
-         * @method handleEnterPressed
+         * @method handleEnterPress
          * @param {Object} event
          */
-        handleEnterPressed: function(event) {
+        handleEnterPress: function(event) {
             if (event.keyCode === 13) {
                 this.handleLoginClicked(event);
             } else {
@@ -82,6 +77,6 @@ define([
             }
         }
     });
-    
+
     return View;
 });
