@@ -547,7 +547,6 @@ define(function() {
                     callback(data.User, data.statusCode);
                 }
             }).fail(function(error) {
-                console.error(error, 0);
                 if (typeof callback === 'function') {
                     callback(error, 0);
                 }
@@ -571,7 +570,9 @@ define(function() {
                     callback(data.VocabList, data.statusCode);
                 }
             }).fail(function(error) {
-                console.error(error, 0);
+                if (typeof callback === 'function') {
+                    callback(error, 0);
+                }
             });
         },
         /**
@@ -593,7 +594,9 @@ define(function() {
                     callback(data.VocabListSection);
                 }
             }).fail(function(error) {
-                console.error(error, 0);
+                if (typeof callback === 'function') {
+                    callback(error, 0);
+                }
             });
         }
     });
