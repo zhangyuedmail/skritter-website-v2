@@ -241,7 +241,6 @@ define([], function() {
                                     skritter.modal.set('.modal-progress-value', skritter.fn.convertBytesToSize(responseSize));
                                 }
                                 if (result.totalRequests > 100) {
-                                    console.log('progress', downloadedRequests / totalRequests);
                                     skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));
                                 }
                                 skritter.user.data.put(result, _.bind(function() {
