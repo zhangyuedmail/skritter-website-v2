@@ -81,11 +81,10 @@ define(function() {
         },
         /**
          * @method getUserShape
-         * @param {String} color
          * @returns {CreateJS.Shape}
          */
-        getUserShape: function(color) {
-            var shape = this.inflateShape(color);
+        getUserShape: function() {
+            var shape = this.inflateShape();
             var rect = this.getRectangle();
             shape.name = 'stroke';
             shape.x = rect.x;
@@ -141,12 +140,10 @@ define(function() {
         },
         /**
          * @method inflatedSprite
-         * @param {String} color
-         * @param {Number} alpha
          * @return {CreateJS.Shape}
          */
-        inflateShape: function(color, alpha) {
-            var shape = skritter.fn.strokes.getShape(this.get('bitmapId'), color);
+        inflateShape: function() {
+            var shape = this.get('shape').clone(true);
             var data = this.inflateData();
             if (this.get('kana')) {
                 shape.x = data.x;
@@ -165,7 +162,6 @@ define(function() {
                 shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
                 var finalBounds = shape.getTransformedBounds();
                 shape.name = 'stroke';
-                shape.alpha = alpha ? alpha : 1;
                 shape.x += finalBounds.width / 2 + data.x;
                 shape.y += finalBounds.height / 2 + data.y;
             }

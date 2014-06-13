@@ -22,6 +22,28 @@ define(function() {
             token: null
         },
         /**
+         * @method authenticateGuest
+         * @param {Function} callback
+         */
+        authenticateGuest: function(callback) {
+            $.ajax({
+                url: this.base + 'oauth2/token',
+                beforeSend: _.bind(function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                }, this),
+                type: 'POST',
+                data: {
+                    suppress_response_codes: true,
+                    grant_type: 'client_credentials',
+                    client_id: this.clientId
+                }
+            }).done(function(data) {
+                callback(data, data.statusCode);
+            }).fail(function(error) {
+                callback(error, error.status);
+            });
+        },
+        /**
          * @method authenticateUser
          * @param {String} username
          * @param {String} password
@@ -104,6 +126,29 @@ define(function() {
                 });
             }
             request();
+        },
+        /**
+         * @method createAnonymousUser
+         * @param {String} languageCode
+         * @param {Function} callback
+         */
+        createAnonymousUser: function(languageCode, callback) {
+            languageCode = languageCode ? languageCode : undefined;
+            $.ajax({
+                url: this.base + 'users',
+                beforeSend: _.bind(function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                }, this),
+                type: 'POST',
+                data: {
+                    bearer_token: this.get('token'),
+                    lang: languageCode
+                }
+            }).done(function(data) {
+                callback(data.User, data.statusCode);
+            }).fail(function(error) {
+                callback(error, error.status);
+            });
         },
         /**
          * @method getBatch
@@ -251,6 +296,28 @@ define(function() {
             });
         },
         /**
+         * @method getSRSConfigs
+         * @param {String} language
+         * @param {Function} callback
+         */
+        getSRSConfigs: function(language, callback) {
+            $.ajax({
+                url: this.base + 'srsconfigs',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'GET',
+                data: {
+                    bearer_token: self.get('token'),
+                    lang: language
+                }
+            }).done(function(data) {
+                callback(data.SRSConfigs, data.statusCode);
+            }).fail(function(error) {
+                callback(error, 0);
+            });
+        },
+        /**
          * @method getSubscription
          * @param {String} userId
          * @param {Function} callback
@@ -321,6 +388,99 @@ define(function() {
             });
         },
         /**
+         * @method getVocabList
+         * @param {String} id
+         * @param {Array} fields
+         * @param {Function} callback
+         */
+        getVocabList: function(id, fields, callback) {
+            fields = fields ? fields : undefined;
+            $.ajax({
+                url: this.base + 'vocablists/' + id,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'GET',
+                data: {
+                    bearer_token: this.get('token'),
+                    fields: fields
+                }
+            }).done(function(data) {
+                callback(data.VocabList, data.statusCode);
+            }).fail(function(error) {
+                callback(error, 0);
+            });
+        },
+        /**
+         * @method getVocabListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         * @param {Function} callback
+         */
+        getVocabListSection: function(listId, sectionId, callback) {
+            $.ajax({
+                url: this.base + 'vocablists/' + listId + '/sections/' + sectionId,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'GET',
+                data: {
+                    bearer_token: this.get('token')
+                }
+            }).done(function(data) {
+                callback(data.VocabListSection, data.statusCode);
+            }).fail(function(error) {
+                callback(error, 0);
+            });
+        },
+        /**
+         * @method getVocabLists
+         * @param {Function} callback
+         * @param {Object} options
+         */
+        getVocabLists: function(callback, options) {
+            var self = this;
+            var lists = [];
+            options = options ? options : {};
+            options.cursor = options.cursor ? options.cursor : undefined;
+            options.fields = options.fields ? options.fields.join(',') : undefined;
+            options.lang = options.lang ? options.lang : undefined;
+            options.sort = options.sort ? options.sort : undefined;
+            function request(cursor) {
+                var promise = $.ajax({
+                    url: self.base + 'vocablists',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor,
+                        lang: options.lang,
+                        sort: options.sort,
+                        fields: options.fields
+                    }
+                });
+                promise.done(function(data) {
+                    if (data.VocabLists)
+                        lists = lists.concat(data.VocabLists);
+                    if (options.cursor) {
+                        callback(lists, data.statusCode);
+                    } else if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 500);
+                    } else {
+                        callback(lists, data.statusCode);
+                    }
+                });
+                promise.fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request(options.cursor);
+        },
+        /**
          * @method postReviews
          * @param {Array} reviews
          * @param {Function} callback
@@ -367,6 +527,76 @@ define(function() {
                 callback(data.Batch, data.statusCode);
             }).fail(function(error) {
                 callback(error, error.status);
+            });
+        },
+        /**
+         * @method updateUser
+         * @param {Object} settings
+         * @param {Function} callback
+         */
+        updateUser: function(settings, callback) {
+            $.ajax({
+                url: this.base + 'users?bearer_token=' + this.get('token'),
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'PUT',
+                data: JSON.stringify(settings)
+            }).done(function(data) {
+                if (typeof callback === 'function') {
+                    callback(data.User, data.statusCode);
+                }
+            }).fail(function(error) {
+                if (typeof callback === 'function') {
+                    callback(error, 0);
+                }
+            });
+        },
+        /**
+         * @method updateVocabList
+         * @param {Object} list
+         * @param {Function} callback
+         */
+        updateVocabList: function(list, callback) {
+            $.ajax({
+                url: this.base + 'vocablists/' + list.id + '?bearer_token=' + this.get('token'),
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'PUT',
+                data: JSON.stringify(list)
+            }).done(function(data) {
+                if (typeof callback === 'function') {
+                    callback(data.VocabList, data.statusCode);
+                }
+            }).fail(function(error) {
+                if (typeof callback === 'function') {
+                    callback(error, 0);
+                }
+            });
+        },
+        /**
+         * @method updateVocabListSection
+         * @param {String} listId
+         * @param {Object} section
+         * @param {Function} callback
+         */
+        updateVocabListSection: function(listId, section, callback) {
+            $.ajax({
+                url: this.base + 'vocablists/' + listId + '/section/' + section.id + '?bearer_token=' + this.get('token'),
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                },
+                type: 'PUT',
+                data: JSON.stringify(section)
+            }).done(function(data) {
+                if (typeof callback === 'function') {
+                    callback(data.VocabListSection);
+                }
+            }).fail(function(error) {
+                if (typeof callback === 'function') {
+                    callback(error, 0);
+                }
             });
         }
     });

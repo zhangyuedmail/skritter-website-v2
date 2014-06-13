@@ -28,8 +28,8 @@ define([
          */
         getReviewArray: function() {
             var reviews = [];
-            for (var i = 0, length = this.length; i < length; i++) {
-                reviews = reviews.concat(this.models[i].attributes.reviews);
+            for (var i = 1, length = this.length; i < length; i++) {
+                reviews = reviews.concat(this.at(i).attributes.reviews);
             }
             return reviews;
         },

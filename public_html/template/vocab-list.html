@@ -1,0 +1,34 @@
+<div id="view-vocab-lists" class="padding-top view">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <ul class="navbar-nav navbar-text list-inline pull-left">
+                    <li><a class="button-home" href="#"><i class="fa fa-home"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="content-container" class="container">
+        <div id="message"></div>
+        <div id="overview" class="content-block hidden">
+            <h2 id="list-name"></h2>
+            <p><em>Categories: <span id="list-categories"></span></em></p>
+            <p id="list-description"></p>
+            <p><em><span id="list-people-studying"></span> other people are studying this list.</em></p>
+        </div>
+        <div id="settings" class="content-block hidden">
+            <button type="button" class="btn btn-sm btn-success button-enable-studying"><i class="fa fa-play-circle"></i> Enable</button>
+            <button type="button" class="btn btn-sm btn-success button-start-studying"><i class="fa fa-play"></i> Start</button>
+            <button type="button" class="btn btn-sm btn-warning button-pause-studying"><i class="fa fa-pause"></i> Pause</button>
+            <button type="button" class="btn btn-sm btn-danger button-disable-studying"><i class="fa fa-stop"></i> Disable</button>
+            <p id="list-status"></p>
+        </div>
+        <div id="sections" class="content-block hidden">
+            <div id="section-table"></div>
+        </div>
+        <div id="rows" class="content-block hidden">
+            <h4>Section: <span id="section-name"></span></h4>
+            <div id="row-table"></div>
+        </div>
+    </div>
+</div>

@@ -52,6 +52,7 @@ define([
          * @param {Object} event
          */
         clickNewUser: function(event) {
+            skritter.router.navigate('signup', {replace: true, trigger: true});
             event.preventDefault();
         }
     });

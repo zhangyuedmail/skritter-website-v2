@@ -50,6 +50,7 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-add-items': 'showAddItemsModal',
                 'vclick .button-info': 'handleInfoButtonClicked',
                 'vclick .button-study-settings': 'handleStudySetttingsClicked'
             });
@@ -58,9 +59,8 @@ define([
          * @method autoSync
          */
         autoSync: function() {
-            console.log(skritter.user.settings.get('autoSync'), !skritter.user.sync.isBusy, skritter.user.data.reviews.length, skritter.user.settings.get('autoSyncThreshold'));
             if (skritter.user.settings.get('autoSync') &&
-                    !skritter.user.sync.active &&
+                    !skritter.user.sync.isActive() &&
                     skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
                 skritter.user.sync.reviews();
             }
@@ -118,6 +118,45 @@ define([
                 review.load(_.bind(function(review) {
                     this.loadPrompt(review);
                 }, this));
+            }
+        },
+        /**
+         * @method showAddItemsModal
+         * @param {Object} event
+         */
+        showAddItemsModal: function(event) {
+            skritter.timer.stop();
+            skritter.modal.show('add-items');
+            skritter.modal.element('.modal-footer').hide();
+            skritter.modal.element('.item-limit').val(skritter.user.settings.get('addItemAmount'));
+            skritter.modal.element('.item-limit').on('vclick', function(event) {
+                $(this).select();
+                event.preventDefault();
+            });
+            skritter.modal.element('.button-add').on('vclick', _.bind(function(event) {
+                var limit = skritter.modal.element('.item-limit').val();
+                skritter.modal.element('.modal-footer').show();
+                if (limit >= 1 && limit <= 100) {
+                    skritter.modal.element(':input').prop('disabled', true);      
+                    skritter.modal.element('.modal-progress-value').html("Looking for new items");
+                    skritter.user.sync.addItems(limit, _.bind(function() {
+                        skritter.user.settings.set('addItemAmount', limit);
+                        this.updateDueCount();
+                        skritter.modal.hide();
+                        skritter.timer.start();
+                    }, this), function(numVocabsAdded) {
+                        if (numVocabsAdded > 0) {
+                            skritter.modal.element('.modal-progress-value').html("Adding " + numVocabsAdded + " items");
+                        }
+                    });
+                } else {
+                    skritter.modal.element('.modal-progress-value').addClass('text-danger');
+                    skritter.modal.element('.modal-progress-value').text('Must be between 1 and 100.');
+                }
+                event.preventDefault();
+            }, this));
+            if (event) {
+                event.preventDefault();
             }
         },
         /**

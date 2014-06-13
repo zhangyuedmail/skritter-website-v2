@@ -28,14 +28,6 @@ define([
         callback();
     };
     /**
-     * @method loadFastClick
-     * @param {Function} callback
-     */
-    var loadFastClick = function(callback) {
-        skritter.fastclick = new window.FastClick(document.body);
-        callback();
-    };
-    /**
      * @method loadFunctions
      * @param {Function} callback
      */
@@ -154,7 +146,6 @@ define([
         })(window.skritter || {});
         //asynchronously loads all required modules
         async.series([
-            async.apply(loadFastClick),
             async.apply(loadFunctions),
             async.apply(loadApi),
             async.apply(loadAssets),

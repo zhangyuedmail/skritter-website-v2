@@ -7,6 +7,13 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
+            this.active = {
+                addItems: false,
+                changedItems: false,
+                downloadAll: false,
+                itemById: false,
+                reviews: false
+            };
             this.on('change', _.bind(this.cache, this));
         },
         /**
@@ -27,6 +34,70 @@ define([], function() {
          */
         cache: function() {
             localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
+        },
+        /**
+         * @method addItems
+         * @param {Number} limit
+         * @param {Function} callback1
+         * @param {Function} callback2
+         */
+        addItems: function(limit, callback1, callback2) {
+            var self = this;
+            var now = skritter.fn.getUnixTime();
+            var numVocabsAdded = 0;
+            var offset = this.get('addItemOffset');
+            var requests = {
+                path: 'api/v' + skritter.api.version + '/items/add',
+                method: 'POST',
+                params: {
+                    lang: skritter.user.getLanguageCode(),
+                    limit: limit,
+                    offset: offset
+                }
+            };
+            this.active.addItems = true;
+            async.waterfall([
+                function(callback) {
+                    skritter.api.requestBatch(requests, function(batch, status) {
+                        if (status === 200) {
+                            callback(null, batch);
+                        } else {
+                            callback(batch);
+                        }
+                    });
+                },
+                function(batch, callback) {
+                    var request = function() {
+                        skritter.api.getBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                if (result.Items) {
+                                    skritter.user.scheduler.insert(result.Items);
+                                }
+                                if (result.numVocabsAdded) {
+                                    numVocabsAdded += result.numVocabsAdded;
+                                }
+                                window.setTimeout(request, 500);
+                            } else {
+                                if (typeof callback2 === 'function') {
+                                    callback2(numVocabsAdded);
+                                }
+                                self.set('addItemOffset', offset + numVocabsAdded);
+                                callback();
+                            }
+                        });
+                    };
+                    request();
+                },
+                _.bind(function(callback) {
+                    this.changedItems(callback, now);
+                }, this)
+            ], _.bind(function() {
+                skritter.user.scheduler.sort();
+                this.active.addItems = false;
+                if (typeof callback1 === 'function') {
+                    callback1();
+                }
+            }, this));
         },
         /**
          * @method changedItems
@@ -55,6 +126,7 @@ define([], function() {
                     spawner: true
                 }
             ];
+            this.active.changedItems = true;
             async.series([
                 _.bind(function(callback) {
                     this.reviews(callback);
@@ -64,6 +136,7 @@ define([], function() {
                 this.set({
                     lastItemSync: now
                 });
+                this.active.changedItems = false;
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -107,6 +180,7 @@ define([], function() {
                     params: {lang: languageCode}
                 }
             ];
+            this.active.downloadAll = true;
             async.series([
                 async.apply(this.processBatch, requests)
             ], _.bind(function() {
@@ -116,6 +190,7 @@ define([], function() {
                     lastSRSConfigSync: now,
                     lastVocabSync: now
                 });
+                this.active.downloadAll = false;
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -127,6 +202,7 @@ define([], function() {
          * @param {type} callback
          */
         itemById: function(itemIds, callback) {
+            this.active.itemById = true;
             async.waterfall([
                 function(callback) {
                     skritter.api.getItems(itemIds, function(items, status) {
@@ -141,6 +217,7 @@ define([], function() {
                     skritter.user.data.put(items, callback);
                 }
             ], function() {
+                this.active.itemById = false;
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -177,7 +254,6 @@ define([], function() {
                                     skritter.modal.set('.modal-progress-value', skritter.fn.convertBytesToSize(responseSize));
                                 }
                                 if (result.totalRequests > 100) {
-                                    console.log('progress', downloadedRequests / totalRequests);
                                     skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));
                                 }
                                 skritter.user.data.put(result, _.bind(function() {
@@ -217,7 +293,7 @@ define([], function() {
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
             console.log('posting reviews', reviews);
-            this.active = true;
+            this.active.reviews = true;
             async.waterfall([
                 function(callback) {
                     skritter.api.checkReviewErrors(lastErrorCheck, function(reviewErrors, status) {
@@ -271,11 +347,19 @@ define([], function() {
                     lastErrorCheck: now,
                     lastReviewSync: now
                 });
-                this.active = false;
+                this.active.reviews = false;
                 if (typeof callback === 'function') {
                     callback();
                 }
             }, this));
+        },
+        isActive: function() {
+            for (var prop in this.active) {
+                if (this.active[prop]) {
+                    return true;
+                }
+            }
+            return false;
         },
         /**
          * @method isFirstSync

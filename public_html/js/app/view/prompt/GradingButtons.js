@@ -11,7 +11,7 @@ define([
         initialize: function() {
             this.expanded = true;
             this.grade = 3;
-            this.speed = 100;
+            this.speed = 50;
         },
         /**
          * @method render

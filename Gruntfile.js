@@ -19,7 +19,6 @@ module.exports = function(grunt) {
         moment: '../lib/moment-2.6.0.min',
         'moment.timezone': '../lib/moment.timezone-0.0.6.min',
         'moment.timezone.data': '../lib/moment.timezone.data',
-        fastclick: '../lib/fastclick-1.0.2',
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
@@ -455,6 +454,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     
     /*** COMMANDS ***/
+    grunt.registerTask('build-android', [
+        'build-android-chinese',
+        'build-android-japanese'
+    ]);
+    
     grunt.registerTask('build-android-chinese', [
         'validate',
         'clean:cordova-chinese',
@@ -471,6 +475,11 @@ module.exports = function(grunt) {
         'copy:cordova-config-japanese',
         'replace:cordova-japanese',
         'shell:cordova-build-android-japanese'
+    ]);
+    
+    grunt.registerTask('build-run-android', [
+        'build-run-android-chinese',
+        'build-run-android-japanese'
     ]);
     
     grunt.registerTask('build-run-android-chinese', [

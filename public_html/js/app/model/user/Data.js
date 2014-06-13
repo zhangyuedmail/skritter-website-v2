@@ -190,7 +190,8 @@ define([
                 }
             ], function(error, item, vocab, containedItems, containedVocabs, sentence, strokes, decomps) {
                 if (error) {
-                    //TODO: add better error handling
+                    console.log('unable to load', item.id, item, error);
+                    skritter.user.scheduler.remove(item.id);
                     callback();
                 } else {
                     callback(item, vocab, containedItems, containedVocabs, sentence, strokes, decomps);

@@ -5,7 +5,6 @@ define([
     'bootstrap.switch',
     'createjs.easel',
     'createjs.tween',
-    'fastclick',
     'jquery',
     'jquery.mobile',
     'jquery.ui',
