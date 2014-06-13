@@ -74,8 +74,7 @@ define([], function() {
          * @method handleContentContainerClicked
          * @param {Object} event
          */
-        handleContentContainerClicked: function(event) {
-            console.log('clicked');
+        handleContentContainerClick: function(event) {
             if (this.elements && this.elements.sidebar.hasClass('expanded')) {
                 this.toggleSidebar();
             }
