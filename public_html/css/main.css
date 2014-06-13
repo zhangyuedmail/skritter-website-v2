@@ -189,6 +189,7 @@ body {
 
 /*** NAVBAR ***/
 .navbar {
+    border-bottom: 2px #232323 solid;
     padding-left: 64px;
     height: 45px;
     min-height: 45px;
@@ -206,12 +207,10 @@ body {
     cursor: pointer;
     float: left;
     left: 0; 
-    padding: 2px 0px;
+    padding: 2px 0;
     position: absolute;
 }
-.navbar .navbar-back:active { 
-    background-color: #2c3e50;
-}
+.navbar .navbar-back:active { background-color: #232323; }
 .navbar .navbar-back i {
     color: #ffffff;
     padding: 7.5px 6px 7.5px 0;
@@ -227,7 +226,7 @@ body {
     padding: 2px 6px;
     position: absolute;
 }
-.navbar .navbar-toggle-sidebar:active { background-color: lightblue; }
+.navbar .navbar-toggle-sidebar:active { background-color: #232323; }
 .navbar .navbar-toggle-sidebar i {
     color: #ffffff;
     padding: 7.5px 6px 7.5px 0;
@@ -363,16 +362,24 @@ body {
     display: none;
     height: 100%;
     left: 0;
+    overflow-y: auto;
     position: fixed;
-    width: 300px;
+    width: 260px;
     z-index: 9900;
 }
 .sidebar div {
+    border-bottom: 1px #232323 solid;
     color: #ffffff;
     cursor: pointer;
     margin-left: -40px;
     padding: 20px 10px;
 }
+.sidebar .spacer {
+    background-color: #232323;
+    height: 10px;
+    padding: 0;
+}
+.sidebar .spacer:hover { background-color: #232323; }
 .sidebar div:hover { background-color: lightblue; }
 .sidebar div span { padding-left: 10px; }
 .sidebar ul { list-style: none; }
