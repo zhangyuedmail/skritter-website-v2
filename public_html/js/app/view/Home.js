@@ -21,6 +21,9 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this).renderElements();
             this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
+            if (!skritter.user.sync.isActive()) {
+                this.sync();
+            }
             return this;
         },
         /**
@@ -54,7 +57,19 @@ define([
          * @param {Object} event
          */
         handleSyncClicked: function(event) {
+            this.sync();
             event.preventDefault();
+        },
+        /**
+         * @method sync
+         */
+        sync: function() {
+            if (!skritter.user.sync.isActive()) {
+                this.elements.buttonSync.addClass('fa-spin');
+                skritter.user.sync.changedItems(_.bind(function() {
+                    this.elements.buttonSync.removeClass('fa-spin');
+                }, this));
+            }
         }
     });
     
