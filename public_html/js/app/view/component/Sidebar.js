@@ -23,11 +23,21 @@ define([
          * @method loadElements
          */
         loadElements: function() {
+            this.elements.sidebar = this.$el;
         },
         /**
-         * @property {Object} events
+         * @method toggle
          */
-        events: {
+        toggle: function() {
+            if (this.elements) {
+                if (this.elements && this.elements.sidebar.hasClass('expanded')) {
+                    this.elements.sidebar.removeClass('expanded');
+                    this.elements.sidebar.hide('slide', {direction: 'left'}, 200);
+                } else {
+                    this.elements.sidebar.addClass('expanded');
+                    this.elements.sidebar.show('slide', {direction: 'left'}, 200);
+                }
+            }
         }
     });
 

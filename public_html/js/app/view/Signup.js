@@ -13,25 +13,25 @@ define([
             BaseView.prototype.initialize.call(this);
         },
         /**
-         * @method renderElements
-         */
-        renderElements: function() {
-            this.elements.buttonBack = this.$('#button-back');
-            this.elements.buttonNext = this.$('#button-next');
-            this.elements.signupEmail = this.$('#signup-email');
-            this.elements.signupPassword = this.$('#signup-password');
-            this.elements.signupUsername = this.$('#signup-username');
-            this.elements.message = this.$('#message');
-        },
-        /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
             window.document.title = "Sign Up - Skritter";
             this.$el.html(_.template(template, skritter.strings));
-            this.renderElements();
+            this.loadElements();
             return this;
+        },
+        /**
+         * @method loadElements
+         */
+        loadElements: function() {
+            this.elements.buttonBack = this.$('#button-back');
+            this.elements.buttonNext = this.$('#button-next');
+            this.elements.signupEmail = this.$('#signup-email');
+            this.elements.signupPassword = this.$('#signup-password');
+            this.elements.signupUsername = this.$('#signup-username');
+            this.elements.message = this.$('#message');
         },
         /**
          * @property {Object} events

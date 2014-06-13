@@ -13,21 +13,21 @@ define([
             BaseView.prototype.initialize.call(this);
         },
         /**
-         * @method renderElements
-         */
-        renderElements: function() {
-            this.elements.loginUsername = this.$('#login-username');
-            this.elements.loginPassword = this.$('#login-password');
-            this.elements.message = this.$('#message');
-        },
-        /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
-            this.renderElements();
+            this.loadElements();
             return this;
+        },
+        /**
+         * @method loadElements
+         */
+        loadElements: function() {
+            this.elements.loginUsername = this.$('#login-username');
+            this.elements.loginPassword = this.$('#login-password');
+            this.elements.message = this.$('#message');
         },
         /**
          * @property {Object} events
@@ -71,7 +71,7 @@ define([
          */
         handleEnterPress: function(event) {
             if (event.keyCode === 13) {
-                this.handleLoginClicked(event);
+                this.handleLoginClick(event);
             } else {
                 event.preventDefault();
             }

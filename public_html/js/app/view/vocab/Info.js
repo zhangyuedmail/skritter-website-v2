@@ -20,14 +20,13 @@ define([
         render: function() {
             window.document.title = "Vocab - Skritter";
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this).renderElements();
+            this.loadElements();
             return this;
         },
         /**
-         * @method renderElements
+         * @method loadElements
          */
-        renderElements: function() {
-            BaseView.prototype.renderElements.call(this);
+        loadElements: function() {
             this.elements.contained = this.$('.vocab-contained');
             this.elements.decomps = this.$('.vocab-decomps');
             this.elements.definition = this.$('.vocab-definition');
@@ -43,11 +42,10 @@ define([
         /**
          * @property {Object} events
          */
-        events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-                'vclick .vocab-contained tbody tr': 'handleTableRowClicked',
-                'vclick .vocab-reading .reading': 'playAudio'
-            });
+        events: {
+            'vclick .vocab-contained tbody tr': 'handleTableRowClicked',
+            'vclick .vocab-reading .reading': 'playAudio'
+
         },
         /**
          * @method handleTableRowClicked
@@ -123,6 +121,6 @@ define([
             }, this));
         }
     });
-    
+
     return View;
 });

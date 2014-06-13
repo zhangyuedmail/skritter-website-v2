@@ -19,60 +19,49 @@ define([
         render: function() {
             window.document.title = "Home - Skritter";
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this).renderElements();
+            this.loadElements();
             this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
-            if (!skritter.user.sync.isActive()) {
-                this.sync();
-            }
+            this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
+            this.elements.userUsername.text(skritter.user.settings.get('name'));
             return this;
         },
         /**
-         * @method renderElements
+         * @method loadElements
+         * @returns {Backbone.View}
          */
-        renderElements: function() {
-            BaseView.prototype.renderElements.call(this);
+        loadElements: function() {
+            this.elements.buttonSync = this.$('.button-sync');
             this.elements.dueCount = this.$('.due-count');
             this.elements.listCount = this.$('.list-count');
-            this.elements.buttonSync = this.$('.button-sync');
+            this.elements.userAvatar = this.$('.user-avatar');
+            this.elements.userUsername = this.$('.user-username');
+            return this;
         },
         /**
          * @property {Object} events
          */
-        events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-                'vclick .button-lists': 'handleListsClicked',
-                'vclick .button-sync': 'handleSyncClicked'
-            });
+        events: {
+            'vclick .button-lists': 'handleListsClick',
+            'vclick .button-study': 'handleStudyClick'
         },
         /**
-         * @method handleListsClicked
+         * @method handleListsClick
          * @param {Object} event
          */
-        handleListsClicked: function(event) {
+        handleListsClick: function(event) {
             skritter.router.navigate('vocab/list', {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
-         * @method handleSyncClicked
+         * @method handleStudyClick
          * @param {Object} event
          */
-        handleSyncClicked: function(event) {
-            this.sync();
+        handleStudyClick: function(event) {
+            skritter.router.navigate('study', {replace: true, trigger: true});
             event.preventDefault();
-        },
-        /**
-         * @method sync
-         */
-        sync: function() {
-            if (!skritter.user.sync.isActive()) {
-                this.elements.buttonSync.addClass('fa-spin');
-                skritter.user.sync.changedItems(_.bind(function() {
-                    this.elements.buttonSync.removeClass('fa-spin');
-                }, this));
-            }
         }
     });
-    
+
     return View;
-    
+
 });

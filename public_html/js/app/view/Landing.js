@@ -13,12 +13,6 @@ define([
             BaseView.prototype.initialize.call(this);
         },
         /**
-         * @method loadElements
-         */
-        loadElements: function() {
-            this.elements.targetLanguage = this.$('.target-language');
-        },
-        /**
          * @method render
          * @returns {Backbone.View}
          */
@@ -26,6 +20,12 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             this.loadElements();
             return this;
+        },
+        /**
+         * @method loadElements
+         */
+        loadElements: function() {
+            this.elements.targetLanguage = this.$('.target-language');
         },
         /**
          * @property {Object} events
