@@ -57,6 +57,81 @@ define([
             localStorage.setItem(this.get('user_id'), JSON.stringify(this.toJSON()));
         },
         /**
+         * @method create
+         * @param {String} username
+         * @param {String} email
+         * @param {String} password
+         * @param {Function} callback
+         */
+        create: function(username, email, password, callback) {
+            async.waterfall([
+                function(callback) {
+                    skritter.api.authenticateGuest(function(guest, status) {
+                        if (status === 200) {
+                            callback(null, guest);
+                        } else {
+                            callback(guest);
+                        }
+                    });
+                },
+                function(guest, callback) {
+                    skritter.api.set('token', guest.access_token);
+                    if (localStorage.getItem('anonymousUser')) {
+                        console.log('existing anon', localStorage.getItem('anonymousUser'));
+                        callback(null, JSON.parse(localStorage.getItem('anonymousUser')));
+                    } else {
+                        skritter.api.createAnonymousUser(null, function(user, status) {
+                            if (status === 200) {
+                                localStorage.setItem('anonymousUser', JSON.stringify(user));
+                                callback(null, user);
+                            } else {
+                                callback(user);
+                            }
+                        });
+                    }
+                },
+                function(user, callback) {
+                    skritter.user.login(user.id, null, function(result, status) {
+                        if (status === 200) {
+                            callback(null, user);
+                        } else {
+                            callback(result);
+                        }
+                    });
+                },
+                function(user, callback) {
+                    user.email = email;
+                    user.name = username;
+                    user.password = password;
+                    skritter.api.updateUser(user, function(updatedUser, status) {
+                        console.log('updated user', updatedUser, status);
+                        if (status === 200) {
+                            callback(null, updatedUser);
+                        } else {
+                            callback(JSON.parse(updatedUser.responseText), status);
+                        }
+                    });
+                },
+                function(updatedUser, callback) {
+                    skritter.user.login(updatedUser.id, password, function(result, status) {
+                        if (status === 200) {
+                            callback(null, result, status);
+                        } else {
+                            callback(result);
+                        }
+                    });
+                }
+            ], function(error, result, status) {
+                if (error) {
+                    localStorage.removeItem('active');
+                    callback(error, status);
+                } else {
+                    localStorage.removeItem('anonymousUser');
+                    callback(result, status);
+                }
+            });
+        },
+        /**
          * @method getActiveParts
          * @returns {Array}
          */
@@ -99,10 +174,16 @@ define([
          * @returns {String}
          */
         getAvatar: function(classes) {
-            if (classes) {
-                return "<img src='data:image/png;base64," + this.settings.get('avatar') + "' + class='" + classes + "' />";
+            var avatar = this.settings.get('avatar');
+            if (avatar) {
+                avatar = "data:image/png;base64," + this.settings.get('avatar');
+            } else {
+                avatar = "img/avatar/default.png";
             }
-            return "<img src='data:image/png;base64," + this.settings.get('avatar') + "' />";
+            if (classes) {
+                return "<img src='" + avatar + "' + class='" + classes + "' />";
+            }
+            return "<img src='" + avatar + "' />";
         },
         /**
          * @method getEnabledParts

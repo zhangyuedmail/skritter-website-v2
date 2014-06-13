@@ -2,13 +2,14 @@ define([
     'view/Home',
     'view/Landing',
     'view/Login',
+    'view/Signup',
     'view/Study',
     'view/study/Settings',
     'view/Test',
     'view/vocab/Info',
     'view/vocab/List',
     'view/vocab/Lists'
-], function(HomeView, LandingView, LoginView, StudyView, StudySettings, TestView, VocabInfoView, ListView, ListsView) {
+], function(HomeView, LandingView, LoginView, SignupView, StudyView, StudySettings, TestView, VocabInfoView, ListView, ListsView) {
     /**
      * @class Router
      */
@@ -29,6 +30,7 @@ define([
         routes: {
             '': 'showHome',
             'login': 'showLogin',
+            'signup': 'showSignup',
             'study': 'showStudy',
             'study/settings': 'showStudySettings',
             'test': 'showTest',
@@ -96,6 +98,18 @@ define([
                 this.view.render();
             } else {
                 this.navigate('login', {replace: true, trigger: true});
+            }
+        },
+        /**
+         * @method showSignup
+         */
+        showSignup: function() {
+            if (!skritter.user.isLoggedIn()) {
+                this.reset();
+                this.view = new SignupView({el: this.container});
+                this.view.render();
+            } else {
+                this.navigate('', {replace: true, trigger: true});
             }
         },
         /**

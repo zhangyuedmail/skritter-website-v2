@@ -22,6 +22,28 @@ define(function() {
             token: null
         },
         /**
+         * @method authenticateGuest
+         * @param {Function} callback
+         */
+        authenticateGuest: function(callback) {
+            $.ajax({
+                url: this.base + 'oauth2/token',
+                beforeSend: _.bind(function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                }, this),
+                type: 'POST',
+                data: {
+                    suppress_response_codes: true,
+                    grant_type: 'client_credentials',
+                    client_id: this.clientId
+                }
+            }).done(function(data) {
+                callback(data, data.statusCode);
+            }).fail(function(error) {
+                callback(error, error.status);
+            });
+        },
+        /**
          * @method authenticateUser
          * @param {String} username
          * @param {String} password
@@ -104,6 +126,29 @@ define(function() {
                 });
             }
             request();
+        },
+        /**
+         * @method createAnonymousUser
+         * @param {String} languageCode
+         * @param {Function} callback
+         */
+        createAnonymousUser: function(languageCode, callback) {
+            languageCode = languageCode ? languageCode : undefined;
+            $.ajax({
+                url: this.base + 'users',
+                beforeSend: _.bind(function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                }, this),
+                type: 'POST',
+                data: {
+                    bearer_token: this.get('token'),
+                    lang: languageCode
+                }
+            }).done(function(data) {
+                callback(data.User, data.statusCode);
+            }).fail(function(error) {
+                callback(error, error.status);
+            });
         },
         /**
          * @method getBatch
@@ -503,6 +548,9 @@ define(function() {
                 }
             }).fail(function(error) {
                 console.error(error, 0);
+                if (typeof callback === 'function') {
+                    callback(error, 0);
+                }
             });
         },
         /**
