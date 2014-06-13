@@ -141,7 +141,7 @@ define([
                     skritter.modal.element('.modal-progress-value').html("Looking for new items");
                     skritter.user.sync.addItems(limit, _.bind(function() {
                         skritter.user.settings.set('addItemAmount', limit);
-                        this.updateDueCount();
+                        this.updateDueCounter();
                         skritter.modal.hide();
                         skritter.timer.start();
                     }, this), function(numVocabsAdded) {

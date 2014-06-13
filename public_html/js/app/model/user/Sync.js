@@ -292,7 +292,6 @@ define([], function() {
             var now = skritter.fn.getUnixTime();
             var lastErrorCheck = this.get('lastErrorCheck');
             var reviews = skritter.user.data.reviews.getReviewArray();
-            console.log('posting reviews', reviews);
             this.active.reviews = true;
             async.waterfall([
                 function(callback) {
@@ -317,30 +316,39 @@ define([], function() {
                     });
                 },
                 function(callback) {
-                    skritter.api.postReviews(reviews, function(postedReviews, status) {
-                        if (status === 200) {
-                            callback(null, postedReviews);
-                        } else if (status === 403) {
-                            callback(postedReviews);
-                        } else {
-                            if (window.Raygun) {
-                                try {
-                                    throw new Error('Review Format Error');
-                                } catch (error) {
-                                    console.error('Review Format Error', postedReviews);
-                                    Raygun.send(error);
+                    if (reviews.length > 0) {
+                        console.log('posting reviews', reviews);
+                        skritter.api.postReviews(reviews, function(postedReviews, status) {
+                            if (status === 200) {
+                                callback(null, postedReviews);
+                            } else if (status === 403) {
+                                callback(postedReviews);
+                            } else {
+                                if (window.Raygun) {
+                                    try {
+                                        throw new Error('Review Format Error');
+                                    } catch (error) {
+                                        console.error('Review Format Error', postedReviews);
+                                        Raygun.send(error);
+                                    }
                                 }
+                                callback(postedReviews);
                             }
-                            callback(postedReviews);
-                        }
-                    });
+                        });
+                    } else {
+                        callback(null, []);
+                    }
                 },
                 function(postedReviews, callback) {
                     var reviewIds = _.uniq(_.pluck(postedReviews, 'wordGroup'));
-                    skritter.storage.remove('reviews', reviewIds, function() {
-                        skritter.user.data.reviews.remove(reviewIds);
+                    if (reviewIds.length > 0) {
+                        skritter.storage.remove('reviews', reviewIds, function() {
+                            skritter.user.data.reviews.remove(reviewIds);
+                            callback();
+                        });
+                    } else {
                         callback();
-                    });
+                    }
                 }
             ], _.bind(function() {
                 this.set({
