@@ -120,7 +120,7 @@
             queryString.setParam("catch", !env.catchingExceptions());
         },
         getContainer: function() {
-            return document.getElementById('content');
+            return document.getElementById('jasmine-container');
         },
         createElement: function() {
             return document.createElement.apply(document, arguments);

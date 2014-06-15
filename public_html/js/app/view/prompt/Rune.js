@@ -237,6 +237,8 @@ define([
                     reviewTime: skritter.timer.getReviewTime(),
                     thinkingTime: skritter.timer.getThinkingTime()
                 });
+            } else {
+                this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape());
             }
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             if (skritter.user.settings.get('squigs') && this.review.getCharacter().length > 0) {

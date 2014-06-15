@@ -53,17 +53,14 @@ define([
             } else {
                 this.$('#styles').hide();
             }
-            BaseView.prototype.render.call(this).renderElements();
             return this;
         },
         /**
          * @property {Object} events
          */
-        events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-                'vclick .button-cancel': 'cancel',
-                'vclick .button-save': 'save'
-            });
+        events: {
+            'vclick .button-cancel': 'cancel',
+            'vclick .button-save': 'save'
         },
         /**
          * @method cancel
@@ -72,14 +69,6 @@ define([
         cancel: function(event) {
             skritter.router.navigate('study', {replace: true, trigger: true});
             event.preventDefault();
-        },
-        /**
-         * @method remove
-         */
-        remove: function() {
-            this.stopListening();
-            this.undelegateEvents();
-            this.$el.empty();
         },
         /**
          * @method save

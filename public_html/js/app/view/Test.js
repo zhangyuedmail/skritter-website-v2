@@ -8,12 +8,18 @@ define([
      */
     var Test = BaseView.extend({
         /**
+         * @method initialize
+         */
+        initialize: function() {
+            BaseView.prototype.initialize.call(this);
+        },
+        /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this).renderElements();
+            BaseView.prototype.render.call(this);
             require([
                 'spec/Functions'
             ], function() {
@@ -22,9 +28,12 @@ define([
             return this;
         },
         /**
-         * @method renderElements
+         * @method loadElements
+         * @returns {Backbone.View}
          */
-        renderElements: function() {
+        loadElements: function() {
+            BaseView.prototype.loadElements.call(this);
+            return this;
         }
     });
     

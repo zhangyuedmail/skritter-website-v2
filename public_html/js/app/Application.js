@@ -121,9 +121,9 @@ define([
                 skritter.timer.refresh(true);
                 //load raygun javascript error logging module
                 if (skritter.fn.hasCordova() && window.Raygun) {
-                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach();
-                            //.withCustomData(getCustomData)
-                            //.withTags(skritter.user.settings.getTags());
+                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach()
+                            .withCustomData(skritter.user.getCustomData)
+                            .withTags(skritter.user.getTags());
                     Raygun.setUser(skritter.user.id);
                     Raygun.setVersion(skritter.settings.getVersion());
                     Raygun.saveIfOffline(true);

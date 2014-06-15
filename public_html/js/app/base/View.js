@@ -1,4 +1,4 @@
-define(function() {
+define([], function() {
     /**
      * @class BaseView
      */
@@ -14,19 +14,32 @@ define(function() {
          * @returns {Backbone.View}
          */
         render: function() {
+            this.loadElements();
+            if (this.elements.fontPreloader) {
+                this.preloadFont();
+            }
+        },
+        /**
+         * @method loadElements
+         * @returns {Backbone.View}
+         */
+        loadElements: function() {
             this.elements.fontPreloader = this.$('.font-preloader');
-            this.elements.avatar = this.$('.user-avatar');
             this.elements.sidebar = this.$('.sidebar');
-            this.elements.username = this.$('.user-username');
-            this.preloadFont();
+            this.elements.userAvatar = this.$('.user-avatar');
+            this.elements.userUsername = this.$('.user-username');
             return this;
         },
         /**
-         * @method renderElements
+         * @property {Object} events
          */
-        renderElements: function() {
-            this.elements.avatar.html(skritter.user.getAvatar('img-circle'));
-            this.elements.username.text(skritter.user.settings.get('name'));
+        events: {
+            'vclick .content-container': 'handleContentContainerClick',
+            'vclick .button-sidebar-home': 'handleHomeClick',
+            'vclick .button-sidebar-lists': 'handleListClick',
+            'vclick .button-sidebar-logout': 'handleLogoutClick',
+            'vclick .button-sidebar-study': 'handleStudyClick',
+            'vclick .navbar-toggle-sidebar': 'handleSidebarToggle'
         },
         /**
          * @method destroy
@@ -38,21 +51,22 @@ define(function() {
             }
         },
         /**
-         * @property {Object} events
+         * @method disableForm
          */
-        events: {
-            'vclick .button-back': 'handleBackClicked',
-            'vclick .button-home': 'handleHomeClicked',
-            'vclick .button-logout': 'handleLogoutClicked',
-            'vclick .button-study': 'handleStudyClicked',
-            'vclick .content-container': 'handleContentContainerClicked',
-            'vclick .navbar-toggle-sidebar': 'handleSidebarToggled'
+        disableForm: function() {
+            this.$(':input').prop('disabled', true);
         },
         /**
-         * @method handleBackClicked
+         * @method enableForm
+         */
+        enableForm: function() {
+            this.$(':input').prop('disabled', false);
+        },
+        /**
+         * @method handleBackClick
          * @param {Object} event
          */
-        handleBackClicked: function(event) {
+        handleBackClick: function(event) {
             skritter.router.back();
             event.preventDefault();
         },
@@ -60,48 +74,55 @@ define(function() {
          * @method handleContentContainerClicked
          * @param {Object} event
          */
-        handleContentContainerClicked: function(event) {
-            if (this.elements && this.elements.sidebar.hasClass('expanded')) {
+        handleContentContainerClick: function(event) {
+            if (this.elements && 
+                    this.elements.sidebar &&
+                    this.elements.sidebar.hasClass('expanded')) {
                 this.toggleSidebar();
             }
             event.preventDefault();
         },
         /**
-         * @method handleHomeClicked
+         * @method handleHomeClick
          * @param {Object} event
          */
-        handleHomeClicked: function(event) {
+        handleHomeClick: function(event) {
             skritter.router.navigate('', {replace: true, trigger: true});
-            this.toggleSidebar();
             event.preventDefault();
         },
         /**
-         * @method handleLogoutClicked
+         * @method handleListClick
          * @param {Object} event
          */
-        handleLogoutClicked: function(event) {
+        handleListClick: function(event) {
+            skritter.router.navigate('vocab/list', {replace: true, trigger: true});
+            event.preventDefault();
+        },
+        /**
+         * @method handleLogoutClick
+         * @param {Object} event
+         */
+        handleLogoutClick: function(event) {
             skritter.user.logout();
+            event.preventDefault();
+        },
+        /**
+         * @method handleSidebarToggle
+         * @param {Object} event
+         */
+        handleSidebarToggle: function(event) {
             this.toggleSidebar();
             event.preventDefault();
         },
         /**
-         * @method handleSidebarToggled
+         * @method handleStudyClick
          * @param {Object} event
          */
-        handleSidebarToggled: function(event) {
-            this.toggleSidebar();
-            event.preventDefault();
-        },
-        /**
-         * @method handleStudyClicked
-         * @param {Object} event
-         */
-        handleStudyClicked: function(event) {
+        handleStudyClick: function(event) {
             skritter.router.navigate('study', {replace: true, trigger: true});
-            this.toggleSidebar();
             event.preventDefault();
         },
-        /**
+         /**
          * @method preloadFont
          */
         preloadFont: function() {
@@ -141,10 +162,10 @@ define(function() {
             if (this.elements) {
                 if (this.elements && this.elements.sidebar.hasClass('expanded')) {
                     this.elements.sidebar.removeClass('expanded');
-                    this.elements.sidebar.hide('slide', {direction: 'left'}, 200);
+                    this.elements.sidebar.hide('slide', {direction: 'left'}, 300);
                 } else {
                     this.elements.sidebar.addClass('expanded');
-                    this.elements.sidebar.show('slide', {direction: 'left'}, 200);
+                    this.elements.sidebar.show('slide', {direction: 'left'}, 300);
                 }
             }
         }

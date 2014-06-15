@@ -163,16 +163,16 @@ define([], function() {
                 if (position === -1 && item.vocabIds.length !== 0) {
                     this.data.push({
                         id: item.id,
-                        last: item.list,
-                        next: item.next,
+                        last: item.last ? item.last : 0,
+                        next: item.next ? item.next : 0,
                         part: item.part,
                         style: item.style
                     });
                 } else if (item.vocabIds.length !== 0) {
                     this.data[position] = {
                         id: item.id,
-                        last: item.list,
-                        next: item.next,
+                        last: item.last ? item.last : 0,
+                        next: item.next ? item.next : 0,
                         part: item.part,
                         style: item.style
                     };

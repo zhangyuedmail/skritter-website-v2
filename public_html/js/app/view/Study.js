@@ -24,7 +24,8 @@ define([
         render: function() {
             window.document.title = "Study - Skritter";
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this).renderElements();
+            BaseView.prototype.render.call(this);
+            this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             skritter.timer.setElement(this.$('.study-timer')).render();
             if (skritter.user.settings.get('hideCounter')) {
                 this.$('.study-counter').hide();
@@ -40,10 +41,13 @@ define([
             return this;
         },
         /**
-         * @method renderElements
+         * @method loadElements
+         * @returns {Backbone.View}
          */
-        renderElements: function() {
-            BaseView.prototype.renderElements.call(this);
+        loadElements: function() {
+            BaseView.prototype.loadElements.call(this);
+            this.elements.userAvatar = this.$('.user-avatar');
+            return this;
         },
         /**
          * @property {Object} events
@@ -52,7 +56,8 @@ define([
             return _.extend({}, BaseView.prototype.events, {
                 'vclick .button-add-items': 'showAddItemsModal',
                 'vclick .button-info': 'handleInfoButtonClicked',
-                'vclick .button-study-settings': 'handleStudySetttingsClicked'
+                'vclick .button-study-settings': 'handleStudySetttingsClicked',
+                'vclick .navbar-back': 'handleBackClick'
             });
         },
         /**
@@ -64,6 +69,14 @@ define([
                     skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
                 skritter.user.sync.reviews();
             }
+        },
+        /**
+         * @method handleBackClick
+         * @param {Object} event
+         */
+        handleBackClick: function(event) {
+            skritter.router.navigate('', {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method handleInfoButtonClicked
@@ -137,11 +150,11 @@ define([
                 var limit = skritter.modal.element('.item-limit').val();
                 skritter.modal.element('.modal-footer').show();
                 if (limit >= 1 && limit <= 100) {
-                    skritter.modal.element(':input').prop('disabled', true);      
+                    skritter.modal.element(':input').prop('disabled', true);
                     skritter.modal.element('.modal-progress-value').html("Looking for new items");
                     skritter.user.sync.addItems(limit, _.bind(function() {
                         skritter.user.settings.set('addItemAmount', limit);
-                        this.updateDueCount();
+                        this.updateDueCounter();
                         skritter.modal.hide();
                         skritter.timer.start();
                     }, this), function(numVocabsAdded) {
@@ -166,6 +179,6 @@ define([
             this.$('.study-counter').text(skritter.user.scheduler.getDueCount());
         }
     });
-    
+
     return View;
 });
