@@ -23,7 +23,7 @@ define([
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             console.log(this.sub.toJSON());
-            if (!skritter.fn.hasCordova() && this.sub.canGplay()) {
+            if (skritter.fn.hasCordova() && this.sub.canGplay()) {
                 this.elements.subExpires.text(this.sub.get('expires'));
                 this.elements.subPlan.text(this.sub.getGplayPlan());
                 if (this.sub.isActive() && this.sub.get('expires') === false) {
@@ -65,7 +65,25 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
+                'vclick #button-sub-one-month': 'handleButtonSubOneMonthClicked',
+                'vclick #button-sub-one-year': 'handleButtonSubOneYearClicked'
             });
+        },
+        /**
+         * @method handleButtonSubOneMonthClicked
+         * @param {Function} event
+         */
+        handleButtonSubOneMonthClicked: function(event) {
+            this.sub.subscribeGplay('one.month.sub');
+            event.preventDefault();
+        },
+        /**
+         * @method handleButtonSubOneYearClicked
+         * @param {Function} event
+         */
+        handleButtonSubOneYearClicked: function(event) {
+            this.sub.subscribeGplay('one.year.sub');
+            event.preventDefault();
         }
     });
 
