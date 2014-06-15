@@ -4,13 +4,14 @@ define([
     'view/vocab/Info',
     'view/Landing',
     'view/vocab/List',
+    'view/vocab/ListSection',
     'view/vocab/Lists',
     'view/Login',
     'view/Signup',
     'view/Study',
     'view/study/Settings',
     'view/Test'
-], function(Account, HomeView, InfoView, LandingView, ListView, ListsView, LoginView, SignupView, StudyView, StudySettings, TestView) {
+], function(Account, HomeView, InfoView, LandingView, ListView, ListSectionView, ListsView, LoginView, SignupView, StudyView, StudySettings, TestView) {
     /**
      * @class Router
      */
@@ -39,8 +40,8 @@ define([
             'vocab/info/:languageCode/:writing': 'showVocabInfo',
             'vocab/list': 'showVocabLists',
             'vocab/list/category/:category': 'showVocabLists',
-            'vocab/list/:listId': 'showVocabList',
-            'vocab/list/:listId/:sectionId': 'showVocabList'
+            'vocab/list/:listId/:sectionId': 'showVocabListSection',
+            'vocab/list/:listId': 'showVocabList'
         },
         /**
          * @method addHistory
@@ -178,10 +179,19 @@ define([
          * @param {String} listId
          * @param {String} sectionId
          */
-        showVocabList: function(listId, sectionId) {
+        showVocabList: function(listId) {
             this.reset();
             this.view = new ListView({el: this.container});
-            this.view.render().set(listId, sectionId);
+            this.view.render();
+        },
+        /**
+         * @method showVocabListSection
+         * @param {String} category
+         */
+        showVocabListSection: function(listId, sectionId) {
+            this.reset();
+            this.view = new ListSectionView({el: this.container});
+            this.view.render();
         },
         /**
          * @method showVocabLists
@@ -190,7 +200,7 @@ define([
         showVocabLists: function(category) {
             this.reset();
             this.view = new ListsView({el: this.container});
-            this.view.render().set(category);
+            this.view.render();
         },
         /**
          * @method reset
