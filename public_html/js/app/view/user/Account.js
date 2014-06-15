@@ -40,6 +40,13 @@ define([
                 }
             } else {
                 this.elements.subOptions.hide();
+                this.elements.subExpires.text(this.sub.get('expires'));
+                this.elements.subPlan.text(this.sub.get('subscribed') ? this.sub.get('subscribed') : 'n/a');
+                if (this.sub.isActive()) {
+                    this.elements.subStatus.text('Active').addClass('text-success');
+                } else {
+                    this.elements.subStatus.text('Inactive').addClass('text-danger');
+                }
             }
             return this;
         },
