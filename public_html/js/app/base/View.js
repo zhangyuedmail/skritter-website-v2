@@ -93,8 +93,8 @@ define([
                     this.elements.sidebar &&
                     this.elements.sidebar.hasClass('expanded')) {
                 this.toggleSidebar();
+                event.preventDefault();
             }
-            event.preventDefault();
         },
         /**
          * @method handleHomeClick
