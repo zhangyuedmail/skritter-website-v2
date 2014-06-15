@@ -367,6 +367,17 @@ define([
                 }
             }
             return this.getActiveStyles();
+        },
+        /**
+         * @method update
+         * @param {Fucntion} callback
+         */
+        update: function(callback) {
+            skritter.api.updateUser(this.settings, function(user) {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         }
     });
 
