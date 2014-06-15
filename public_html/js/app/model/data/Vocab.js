@@ -225,6 +225,23 @@ define([], function() {
             return false;
         },
         /**
+         * @method getStrokes
+         * @returns {Array}
+         */
+        getStrokes: function() {
+            var strokes = [];
+            var containedVocabIds = this.get('containedVocabIds');
+            if (containedVocabIds) {
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    var vocab = skritter.user.data.vocabs.get(containedVocabIds[i]);
+                    strokes.push(skritter.user.data.strokes.get(vocab.get('writing')));
+                }
+            } else {
+                strokes.push(skritter.user.data.strokes.get(this.get('writing')));
+            }
+            return strokes;
+        },
+        /**
          * @method getTones
          * @param {Number} position
          * @returns {Array}

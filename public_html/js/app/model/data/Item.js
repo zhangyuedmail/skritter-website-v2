@@ -34,7 +34,7 @@ define([
             var reviews = [];
             var wordGroup = now + '_' + skritter.fn.getGuid() + '_' + this.id;
             if (part === 'rune' || part === 'tone') {
-                review.characters = [];
+                review.characters = this.getCanvasCharacters();
             }
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
@@ -54,13 +54,6 @@ define([
                     previousInterval: item.has('previousInterval') ? item.get('previousInterval') : 0,
                     previousSuccess: item.has('previousSuccess') ? item.get('previousSuccess') : false
                 });
-                if (review.characters) {
-                    if (items.length === 1) {
-                        review.characters.push(item.getStroke().getCanvasCharacter());
-                    } else if (i > 0) {
-                        review.characters.push(item.getStroke().getCanvasCharacter());
-                    }
-                }
             }
             review.set({
                 id: wordGroup,
@@ -69,6 +62,21 @@ define([
                 reviews: reviews
             });
             return review;
+        },
+        /**
+         * @method getCanvasCharacters
+         * @returns {Array}
+         */
+        getCanvasCharacters: function() {
+            var strokes = this.getStrokes();
+            if (strokes) {
+                var canvasCharacters = [];
+                for (var i = 0, length = strokes.length; i < length; i++) {
+                    canvasCharacters.push(strokes[i].getCanvasCharacter());
+                }
+                return canvasCharacters;
+            }
+            return null;
         },
         /**
          * @method getContainedItems
@@ -87,13 +95,16 @@ define([
         },
         /**
          * @method getStroke
-         * @returns {Backbone.Model}
+         * @returns {Array}
          */
-        getStroke: function() {
-            if (this.get('part') === 'tone') {
+        getStrokes: function() {
+            var part = this.get('part');
+            if (part === 'rune') {
+                return this.getVocab().getStrokes();
+            } else if (part === 'tone') {
                 return skritter.user.data.strokes.get('tones');
             }
-            return skritter.user.data.strokes.get(this.getVocab().get('writing'));
+            return null;
         },
         /**
          * @method getVocab
