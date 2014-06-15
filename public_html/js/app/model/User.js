@@ -241,7 +241,7 @@ define([
          * @returns {Boolean}
          */
         isAudioEnabled: function() {
-            return this.settings.get('audio');
+            return this.settings.get('volume') === 0 ? false : true;
         },
         /**
          * Returns true if the target language is set to Chinese.
