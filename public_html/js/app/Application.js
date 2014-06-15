@@ -120,7 +120,7 @@ define([
                 //load daily timer prog stats in background
                 skritter.timer.refresh(true);
                 //load raygun javascript error logging module
-                if (!skritter.fn.hasCordova() && window.Raygun) {
+                if (skritter.fn.hasCordova() && window.Raygun) {
                     Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach()
                             .withCustomData(skritter.user.getCustomData)
                             .withTags(skritter.user.getTags());
