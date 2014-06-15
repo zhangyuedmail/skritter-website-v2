@@ -1,18 +1,6 @@
 /*** FONTS ***/
 @font-face {
     font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-Hairline.ttf');
-    font-weight: 100;
-    font-style: normal;
-}
-@font-face {
-    font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-HairlineItalic.ttf');
-    font-weight: 100;
-    font-style: italic;
-}
-@font-face {
-    font-family: "Open Sans";
     src: url('../font/opensans/OpenSans-Light.ttf');
     font-weight: 300;
     font-style: normal;
@@ -31,8 +19,20 @@
 }
 @font-face {
     font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-RegularItalic.ttf');
+    src: url('../font/opensans/OpenSans-Italic.ttf');
     font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-Semibold.ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-SemiboldItalic.ttf');
+    font-weight: 600;
     font-style: italic;
 }
 @font-face {
@@ -49,13 +49,13 @@
 }
 @font-face {
     font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-Black.ttf');
+    src: url('../font/opensans/OpenSans-ExtraBold.ttf');
     font-weight: 900;
     font-style: normal;
 }
 @font-face {
     font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-BlackItalic.ttf');
+    src: url('../font/opensans/OpenSans-ExtraBoldItalic.ttf');
     font-weight: 900;
     font-style: italic;
 }
