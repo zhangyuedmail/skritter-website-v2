@@ -20,7 +20,7 @@ define([
         defaults: {
             position: 1,
             reviews: [],
-            started: false,
+            started: false
         },
         /**
          * @method cache

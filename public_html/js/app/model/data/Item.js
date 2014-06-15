@@ -102,7 +102,11 @@ define([
             if (part === 'rune') {
                 return this.getVocab().getStrokes();
             } else if (part === 'tone') {
-                return skritter.user.data.strokes.get('tones');
+                var strokes = [];
+                for (var i = 0, length = this.getVocab().getCharacterCount(); i < length; i++) {
+                    strokes.push(skritter.user.data.strokes.get('tones'));
+                }
+                return strokes;
             }
             return null;
         },
