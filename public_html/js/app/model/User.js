@@ -186,6 +186,17 @@ define([
             return "<img src='" + avatar + "' />";
         },
         /**
+         * @method getCustomData
+         * @returns {Object}
+         */
+        getCustomData: function() {
+            return {
+                activeReview: skritter.user.scheduler.review ? skritter.user.scheduler.review.get('itemId') : null,
+                studyTime: skritter.timer.time / 1000,
+                view: Backbone.history.fragment
+            };
+        },
+        /**
          * @method getEnabledParts
          * @returns {Array}
          */
@@ -209,6 +220,21 @@ define([
                 return applicationLanguageCode;
             }
             return this.settings.get('targetLang');
+        },
+        /**
+         * @method getTags
+         * @returns {Array}
+         */
+        getTags: function() {
+            if (this.isJapanese()) {
+                return ['japanese'];
+            } else if (this.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
+                return ['chinese', 'simplified', 'traditional'];
+            } else if (this.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
+                return ['chinese', 'simplified'];
+            } else {
+                return ['chinese', 'traditional'];
+            }
         },
         /**
          * @method isAudioEnabled
