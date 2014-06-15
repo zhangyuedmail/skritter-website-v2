@@ -22,7 +22,6 @@ define([
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userUsername.text(skritter.user.settings.get('name'));
-            console.log(this.sub.toJSON());
             if (skritter.fn.hasCordova() && this.sub.canGplay()) {
                 this.elements.subExpires.text(this.sub.get('expires'));
                 this.elements.subPlan.text(this.sub.getGplayPlan());
