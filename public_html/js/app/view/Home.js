@@ -22,6 +22,11 @@ define([
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
+            if (!skritter.user.subscription.isActive()) {
+                var expireMessage = "<strong>Your subscription has expired.</strong> That means you'll be unable to add new items to study. ";
+                expireMessage += "Go to <a href='#' class='button-account'>account settings</a> to add a subscription.";
+                this.elements.message.html(skritter.fn.bootstrap.alert(expireMessage, 'danger'));
+            }
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             return this;
         },
@@ -34,6 +39,7 @@ define([
             this.elements.buttonSync = this.$('.button-sync');
             this.elements.dueCount = this.$('.due-count');
             this.elements.listCount = this.$('.list-count');
+            this.elements.message = this.$('#message');
             return this;
         },
         /**
@@ -41,10 +47,19 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-account': 'handleAccountClick',
                 'vclick .button-lists': 'handleListsClick',
                 'vclick .button-study': 'handleStudyClick',
                 'vclick .button-sync': 'handleSyncClick'
             });
+        },
+        /**
+         * @method handleAccountClick
+         * @param {Object} event
+         */
+        handleAccountClick: function(event) {
+            skritter.router.navigate('user/account', {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method handleListsClick
