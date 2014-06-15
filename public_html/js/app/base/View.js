@@ -40,6 +40,7 @@ define([
          */
         events: {
             'vclick .content-container': 'handleContentContainerClick',
+            'vclick .button-sidebar-account': 'handleAccountClick',
             'vclick .button-sidebar-home': 'handleHomeClick',
             'vclick .button-sidebar-lists': 'handleListClick',
             'vclick .button-sidebar-logout': 'handleLogoutClick',
@@ -66,6 +67,14 @@ define([
          */
         enableForm: function() {
             this.$(':input').prop('disabled', false);
+        },
+        /**
+         * @method handleAccountClick
+         * @param {Object} event
+         */
+        handleAccountClick: function(event) {
+            skritter.router.navigate('user/account', {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method handleBackClick

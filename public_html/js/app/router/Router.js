@@ -1,15 +1,16 @@
 define([
+    'view/user/Account',
     'view/Home',
+    'view/vocab/Info',
     'view/Landing',
+    'view/vocab/List',
+    'view/vocab/Lists',
     'view/Login',
     'view/Signup',
     'view/Study',
     'view/study/Settings',
-    'view/Test',
-    'view/vocab/Info',
-    'view/vocab/List',
-    'view/vocab/Lists'
-], function(HomeView, LandingView, LoginView, SignupView, StudyView, StudySettings, TestView, VocabInfoView, ListView, ListsView) {
+    'view/Test'
+], function(Account, HomeView, InfoView, LandingView, ListView, ListsView, LoginView, SignupView, StudyView, StudySettings, TestView) {
     /**
      * @class Router
      */
@@ -34,6 +35,7 @@ define([
             'study': 'showStudy',
             'study/settings': 'showStudySettings',
             'test': 'showTest',
+            'user/account': 'showAccount',
             'vocab/info/:languageCode/:writing': 'showVocabInfo',
             'vocab/list': 'showVocabLists',
             'vocab/list/category/:category': 'showVocabLists',
@@ -74,6 +76,17 @@ define([
                 window.history.back();
             }
             event.preventDefault();
+        },
+        /**
+         * @method showAccount
+         */
+        showAccount: function() {
+            this.reset();
+            this.addHistory('');
+            if (skritter.user.isLoggedIn()) {
+                this.view = new Account({el: this.container});
+            }
+            this.view.render();
         },
         /**
          * @method showHome
@@ -153,7 +166,7 @@ define([
         showVocabInfo: function(languageCode, writing) {
             if (skritter.user.isLoggedIn()) {
                 this.reset();
-                this.view = new VocabInfoView({el: this.container});
+                this.view = new InfoView({el: this.container});
                 this.view.set(languageCode, writing);
                 this.view.render();
             } else {

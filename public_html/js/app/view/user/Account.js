@@ -1,0 +1,73 @@
+define([
+    'require.text!template/user-account.html',
+    'base/View'
+], function(template, BaseView) {
+    /**
+     * @class UserAccount
+     */
+    var View = BaseView.extend({
+        /**
+         * @method initialize
+         */
+        initialize: function() {
+            BaseView.prototype.initialize.call(this);
+            this.sub = skritter.user.subscription;
+        },
+        /**
+         * @method render
+         * @returns {Backbone.View}
+         */
+        render: function() {
+            this.$el.html(_.template(template, skritter.strings));
+            BaseView.prototype.render.call(this);
+            this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
+            this.elements.userUsername.text(skritter.user.settings.get('name'));
+            console.log(this.sub.toJSON());
+            if (!skritter.fn.hasCordova() && this.sub.canGplay()) {
+                this.elements.subExpires.text(this.sub.get('expires'));
+                this.elements.subPlan.text(this.sub.getGplayPlan());
+                if (this.sub.isActive() && this.sub.get('expires') === false) {
+                    this.elements.subStatus.text('Active').addClass('text-success');
+                    this.elements.subOneMonth.hide();
+                    this.elements.subOneYear.hide();
+                    this.elements.subCancel.hide();
+                } else if (this.sub.isActive()) {
+                    this.elements.subStatus.text('Active').addClass('text-success');
+                    this.elements.subOneMonth.hide();
+                    this.elements.subOneYear.hide();
+                } else {
+                    this.elements.subStatus.text('Inactive').addClass('text-danger');
+                    this.elements.subCancel.hide();
+                }
+            } else {
+                this.elements.subOptions.hide();
+            }
+            return this;
+        },
+        /**
+         * @method loadElements
+         * @returns {Backbone.View}
+         */
+        loadElements: function() {
+            BaseView.prototype.loadElements.call(this);
+            this.elements.userUsername = this.$('.user-username');
+            this.elements.subCancel = this.$('#sub-cancel');
+            this.elements.subExpires = this.$('#sub-expires');
+            this.elements.subPlan = this.$('#sub-plan');
+            this.elements.subOneMonth = this.$('#sub-one-month');
+            this.elements.subOneYear = this.$('#sub-one-year');
+            this.elements.subOptions = this.$('#sub-options');
+            this.elements.subStatus = this.$('#sub-status');
+            return this;
+        },
+        /**
+         * @property {Object} events
+         */
+        events: function() {
+            return _.extend({}, BaseView.prototype.events, {
+            });
+        }
+    });
+
+    return View;
+});
