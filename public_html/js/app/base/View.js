@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'require.text!template/sidebar.html'
+], function(templateSidebar) {
     /**
      * @class BaseView
      */
@@ -15,6 +17,9 @@ define([], function() {
          */
         render: function() {
             this.loadElements();
+            if (this.elements.sidebar) {
+                this.elements.sidebar.html(templateSidebar);
+            }
             if (this.elements.fontPreloader) {
                 this.preloadFont();
             }
