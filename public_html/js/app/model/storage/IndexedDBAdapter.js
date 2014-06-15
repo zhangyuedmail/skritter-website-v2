@@ -119,7 +119,8 @@ define(function(Database) {
             transaction.objectStore('items').openCursor().onsuccess = function(event) {
                 var cursor = event.target.result;
                 if (cursor) {
-                    if (cursor.value.vocabIds.length !== 0) {
+                    if (cursor.value.vocabIds.length !== 0 &&
+                            (cursor.value.lang === 'ja' && !skritter.fn.isKana(cursor.value.id.split('-')[2]))) {
                         schedule.push({
                             id: cursor.value.id,
                             last: cursor.value.last ? cursor.value.last : 0,
