@@ -31,6 +31,39 @@ define([
             });
         },
         /**
+         * @method comparator
+         * @param {Backbone.Model} vocablist
+         */
+        comparator: function(vocablist) {
+            if (vocablist.has('name') && vocablist.has('studyingMode')) {
+                var studyingMode = vocablist.attributes.studyingMode;
+                if (studyingMode === 'adding') {
+                    return '1-' + vocablist.attributes.name;
+                } else if (studyingMode === 'reviewing') {
+                    return '2-' + vocablist.attributes.name;
+                } else if (studyingMode === 'not studying') {
+                    return '3-' + vocablist.attributes.name;
+                } else {
+                    return '4-' + vocablist.attributes.name;
+                }
+            } else if (vocablist.has('name')) {
+                return vocablist.attributes.name;
+            }
+            return vocablist.id;
+        },
+        /**
+         * @method filterByStatus
+         * @param {Array|String} status
+         * @returns {Backbone.View}
+         */
+        filterByStatus: function(status) {
+            status = Array.isArray(status) ? status : [status];
+            var filtered = this.filter(function(box) {
+                return status.indexOf(box.attributes.studyingMode) !== -1;
+            });
+            return new VocabLists(filtered);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

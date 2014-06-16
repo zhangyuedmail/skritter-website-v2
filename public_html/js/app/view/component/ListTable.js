@@ -76,6 +76,15 @@ define([
             'vclick table tbody tr': 'handleTableRowClick'
         },
         /**
+         * @method filterByStatus
+         * @param {Array|String} status
+         * @returns {Backbone.View}
+         */
+        filterByStatus: function(status) {
+            this.lists = this.lists.filterByStatus(status);
+            return this.renderTable();
+        },
+        /**
          * @method handleTableRowClick
          * @param {Object} event
          */
