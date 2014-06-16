@@ -44,7 +44,6 @@ define([
             BaseView.prototype.loadElements.call(this);
             this.elements.buttonSync = this.$('.button-sync');
             this.elements.dueCount = this.$('.due-count');
-            this.elements.listCount = this.$('.list-count');
             this.elements.listTable = this.$('#vocab-lists-container');
             this.elements.message = this.$('#message');
             return this;
