@@ -25,7 +25,7 @@ define([
             if (skritter.fn.hasCordova() && this.sub.canGplay()) {
                 this.elements.subExpires.text(this.sub.get('expires'));
                 this.elements.subPlan.text(this.sub.getGplayPlan());
-                if (this.sub.isActive() && this.sub.get('expires') === false) {
+                if (this.sub.get('expires') === false) {
                     this.elements.subStatus.text('Active').addClass('text-success');
                     this.elements.subOneMonth.hide();
                     this.elements.subOneYear.hide();

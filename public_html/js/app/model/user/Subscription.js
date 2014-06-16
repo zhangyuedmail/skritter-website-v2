@@ -27,7 +27,7 @@ define([], function() {
         isActive: function() {
             var date = moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
             var expires = this.get('expires');
-            if (expires === false || expires <= date) {
+            if (expires !== false || expires <= date) {
                 return false;
             }
             return true;
