@@ -1,18 +1,6 @@
 /*** FONTS ***/
 @font-face {
     font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-Hairline.ttf');
-    font-weight: 100;
-    font-style: normal;
-}
-@font-face {
-    font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-HairlineItalic.ttf');
-    font-weight: 100;
-    font-style: italic;
-}
-@font-face {
-    font-family: "Open Sans";
     src: url('../font/opensans/OpenSans-Light.ttf');
     font-weight: 300;
     font-style: normal;
@@ -31,8 +19,20 @@
 }
 @font-face {
     font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-RegularItalic.ttf');
+    src: url('../font/opensans/OpenSans-Italic.ttf');
     font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-Semibold.ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Open Sans";
+    src: url('../font/opensans/OpenSans-SemiboldItalic.ttf');
+    font-weight: 600;
     font-style: italic;
 }
 @font-face {
@@ -49,13 +49,13 @@
 }
 @font-face {
     font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-Black.ttf');
+    src: url('../font/opensans/OpenSans-ExtraBold.ttf');
     font-weight: 900;
     font-style: normal;
 }
 @font-face {
     font-family: "Open Sans";
-    src: url('../font/opensans/OpenSans-BlackItalic.ttf');
+    src: url('../font/opensans/OpenSans-ExtraBoldItalic.ttf');
     font-weight: 900;
     font-style: italic;
 }
@@ -70,6 +70,10 @@
 
 
 /*** BOOTSTRAP OVERRIDES ***/
+.alert {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2,
 .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3,
 .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4,
@@ -147,11 +151,15 @@ body {
     box-shadow: none;
 }
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
-.content-container { height: 100%; }
+.content-container { 
+    height: 100%;
+    overflow-y: auto;
+}
 .content-container.full-width { 
     padding-left: 0;
     padding-right: 0;
 }
+.content-container.no-scroll { overflow-y: hidden; }
 .cursor { cursor: pointer; }
 .font-preloader { 
     position: fixed;

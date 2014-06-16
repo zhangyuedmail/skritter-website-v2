@@ -278,13 +278,8 @@ define([
             var itemId = this.get('reviews')[0].itemId;
             skritter.user.data.loadItem(itemId, _.bind(function(item) {
                 var part = item.get('part');
-                var reviews = this.get('reviews');
                 if (part === 'rune' || part === 'tone') {
-                    this.characters = [];
-                    for (var i = reviews.length > 1 ? 1 : 0, length = reviews.length; i < length; i++) {
-                        var itemId = this.getReviewAt(i).itemId;
-                        this.characters.push(skritter.user.data.items.findWhere({id: itemId}).getStroke().getCanvasCharacter());
-                    }
+                    this.characters = item.getCanvasCharacters();
                 }
                 callback(this);
             }, this));

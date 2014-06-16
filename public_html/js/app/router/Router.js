@@ -1,15 +1,17 @@
 define([
+    'view/user/Account',
     'view/Home',
+    'view/vocab/Info',
     'view/Landing',
+    'view/vocab/List',
+    'view/vocab/ListSection',
+    'view/vocab/Lists',
     'view/Login',
     'view/Signup',
     'view/Study',
     'view/study/Settings',
-    'view/Test',
-    'view/vocab/Info',
-    'view/vocab/List',
-    'view/vocab/Lists'
-], function(HomeView, LandingView, LoginView, SignupView, StudyView, StudySettings, TestView, VocabInfoView, ListView, ListsView) {
+    'view/Test'
+], function(Account, HomeView, InfoView, LandingView, ListView, ListSectionView, ListsView, LoginView, SignupView, StudyView, StudySettings, TestView) {
     /**
      * @class Router
      */
@@ -34,11 +36,12 @@ define([
             'study': 'showStudy',
             'study/settings': 'showStudySettings',
             'test': 'showTest',
+            'user/account': 'showAccount',
             'vocab/info/:languageCode/:writing': 'showVocabInfo',
             'vocab/list': 'showVocabLists',
             'vocab/list/category/:category': 'showVocabLists',
-            'vocab/list/:listId': 'showVocabList',
-            'vocab/list/:listId/:sectionId': 'showVocabList'
+            'vocab/list/:listId/:sectionId': 'showVocabListSection',
+            'vocab/list/:listId': 'showVocabList'
         },
         /**
          * @method addHistory
@@ -74,6 +77,17 @@ define([
                 window.history.back();
             }
             event.preventDefault();
+        },
+        /**
+         * @method showAccount
+         */
+        showAccount: function() {
+            this.reset();
+            this.addHistory('');
+            if (skritter.user.isLoggedIn()) {
+                this.view = new Account({el: this.container});
+            }
+            this.view.render();
         },
         /**
          * @method showHome
@@ -153,7 +167,7 @@ define([
         showVocabInfo: function(languageCode, writing) {
             if (skritter.user.isLoggedIn()) {
                 this.reset();
-                this.view = new VocabInfoView({el: this.container});
+                this.view = new InfoView({el: this.container});
                 this.view.set(languageCode, writing);
                 this.view.render();
             } else {
@@ -163,12 +177,23 @@ define([
         /**
          * @method showVocabList
          * @param {String} listId
-         * @param {String} sectionId
          */
-        showVocabList: function(listId, sectionId) {
+        showVocabList: function(listId) {
             this.reset();
             this.view = new ListView({el: this.container});
-            this.view.render().set(listId, sectionId);
+            this.view.set(listId);
+            this.view.render();
+        },
+        /**
+         * @method showVocabListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        showVocabListSection: function(listId, sectionId) {
+            this.reset();
+            this.view = new ListSectionView({el: this.container});
+            this.view.set(listId, sectionId);
+            this.view.render();
         },
         /**
          * @method showVocabLists
@@ -177,7 +202,7 @@ define([
         showVocabLists: function(category) {
             this.reset();
             this.view = new ListsView({el: this.container});
-            this.view.render().set(category);
+            this.view.render();
         },
         /**
          * @method reset

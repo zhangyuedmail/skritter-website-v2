@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'require.text!template/sidebar.html'
+], function(templateSidebar) {
     /**
      * @class BaseView
      */
@@ -15,6 +17,9 @@ define([], function() {
          */
         render: function() {
             this.loadElements();
+            if (this.elements.sidebar) {
+                this.elements.sidebar.html(templateSidebar);
+            }
             if (this.elements.fontPreloader) {
                 this.preloadFont();
             }
@@ -35,6 +40,7 @@ define([], function() {
          */
         events: {
             'vclick .content-container': 'handleContentContainerClick',
+            'vclick .button-sidebar-account': 'handleAccountClick',
             'vclick .button-sidebar-home': 'handleHomeClick',
             'vclick .button-sidebar-lists': 'handleListClick',
             'vclick .button-sidebar-logout': 'handleLogoutClick',
@@ -63,6 +69,14 @@ define([], function() {
             this.$(':input').prop('disabled', false);
         },
         /**
+         * @method handleAccountClick
+         * @param {Object} event
+         */
+        handleAccountClick: function(event) {
+            skritter.router.navigate('user/account', {replace: true, trigger: true});
+            event.preventDefault();
+        },
+        /**
          * @method handleBackClick
          * @param {Object} event
          */
@@ -79,8 +93,8 @@ define([], function() {
                     this.elements.sidebar &&
                     this.elements.sidebar.hasClass('expanded')) {
                 this.toggleSidebar();
+                event.preventDefault();
             }
-            event.preventDefault();
         },
         /**
          * @method handleHomeClick

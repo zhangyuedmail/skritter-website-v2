@@ -1,146 +1,96 @@
-/**
- * @module Skritter
- * @submodule View
- * @param templateVocabListSectionTable
- * @param VocabLists
- * @author Joshua McFarland
- */
 define([
     'require.text!template/component-list-section-table.html',
-    'collection/data/VocabLists'
-], function(templateVocabListSectionTable, VocabLists) {
+    'model/data/VocabList'
+], function(template, VocabList) {
     /**
-     * @class VocabListsTable
+     * @class VocabListSectionTable
      */
-    var Table = Backbone.View.extend({
+    var View = Backbone.View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            Table.fieldMap = {};
-            Table.message = null;
-            Table.lists = new VocabLists();
+            this.elements = {};
+            this.fields = {};
+            this.listId = null;
+            this.sections = {};
         },
         /**
          * @method render
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.html(templateVocabListSectionTable);
-            Table.listId = null;
-            Table.message = this.$('#message');
-            Table.tableHead = this.$('table thead');
-            Table.tableBody = this.$('table tbody');
+            this.$el.html(template);
+            this.elements.body = this.$('table tbody');
+            this.elements.head = this.$('table thead');
+            this.renderTable();
+            return this;
+        },
+        /**
+         * @method renderTable
+         * @returns {Backbone.View}
+         */
+        renderTable: function() {
+            var divBody = '';
+            var divHead = '';
+            this.elements.body.empty();
+            this.elements.head.empty();
+            if (this.sections.length > 0) {
+                //generates the header section
+                divHead += '<tr>';
+                for (var header in this.fields) {
+                    divHead += "<th>" + this.fields[header] + "</th>";
+                }
+                divHead += '</tr>';
+                //generates the body section
+                for (var i = 0, length = this.sections.length; i < length; i++) {
+                    var section = this.sections[i];
+                    divBody += "<tr id='section-" + section.id + "' class='cursor'>";
+                    for (var field in this.fields) {
+                        var fieldValue = section[field];
+                        if (field === 'rows') {
+                            divBody += "<td class='section-field-" + field + "'>" + fieldValue.length + "</td>";
+                        } else {
+                            divBody += "<td class='section-field-" + field + "'>" + fieldValue + "</td>";
+                        }
+                    }
+                }
+            } else {
+                //TODO: handle lists without any sections
+            }
+            this.elements.body.html(divBody);
+            this.elements.head.html(divHead);
             return this;
         },
         /**
          * @property {Object} function
          */
         events: {
-            'vclick #vocab-list-section-table-container table tr': 'navigateListSection'
+            'vclick table tbody tr': 'handleTableSectionClick'
         },
         /**
-         * @method hide
-         * @returns {Backbone.View}
-         */
-        hide: function() {
-            this.$el.hide();
-            return this;
-        },
-        /**
-         * @method hideLoading
-         * @returns {Backbone.View}
-         */
-        hideLoading: function() {
-            Table.message.hide();
-            return this;
-        },
-        /**
-         * @method navigateList
+         * @method handleTableSectionClick
          * @param {Object} event
          */
-        navigateListSection: function(event) {
+        handleTableSectionClick: function(event) {
             var sectionId = event.currentTarget.id.replace('section-', '');
-            skritter.router.navigate('vocab/list/' + Table.listId + '/' + sectionId, {replace: false, trigger: true});
+            skritter.router.navigate('vocab/list/' + this.listId + '/' + sectionId, {replace: true, trigger: true});
             event.preventDefault();
-        },
-        /**
-         * @method populate
-         * @returns {Backbone.View}
-         */
-        populate: function() {
-            var divHead = '';
-            var divBody = '';
-            Table.tableHead.html(divHead);
-            Table.tableBody.html(divBody);
-            //generates the header section of the table
-            divHead += "<tr>";
-            for (var a in Table.fieldMap)
-                divHead += "<th><h4>" + Table.fieldMap[a] + "</h4></th>";
-            divHead += "</tr>";
-            //checks whether lists were returned and if any of them were active
-            if (Table.sections && Table.sections.length > 0) {
-                //generates the body section of the table
-                for (var b in Table.sections) {
-                    var section = Table.sections[b];
-                    divBody += "<tr id='section-" + section.id + "' class='cursor'>";
-                    for (var field in Table.fieldMap) {
-                        var fieldValue = section[field];
-                        if (field === 'rows') {
-                            divBody += "<td class='list-field-" + field + "'><h6>" + fieldValue.length + " Words</h6></td>";
-                        } else {
-                            divBody += "<td class='list-field-" + field + "'><h6>" + fieldValue + "</h6></td>";
-                        }
-                    }
-                    divBody += "</tr>";
-                }
-            }
-            Table.tableHead.html(divHead);
-            Table.tableBody.html(divBody);
-            return this;
-        },
-        /**
-         * @method remove
-         */
-        remove: function() {
-            this.stopListening();
-            this.undelegateEvents();
-            this.$el.empty();
         },
         /**
          * @method set
          * @param {String} listId
-         * @param {Array} sections
-         * @param {Object} fieldMap
+         * @param {Array|Object} sections
+         * @param {Object} fields
          * @returns {Backbone.View}
          */
-        set: function(listId, sections, fieldMap) {
-            Table.listId = listId;
-            Table.fieldMap = fieldMap ? fieldMap : Table.fieldMap;
-            Table.sections = sections;
-            this.populate();
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {Backbone.View}
-         */
-        show: function() {
-            this.$el.show();
-            return this;
-        },
-        /**
-         * @method showLoading
-         * @param {String} text
-         * @returns {Backbone.View}
-         */
-        showLoading: function(text) {
-            text = text ? text : 'Loading';
-            Table.message.show();
-            Table.message.html("<span class='text-info'><i class='fa fa-spinner fa-spin'></i> " + text + "</span>");
-            return this;
+        set: function(listId, sections, fields) {
+            this.fields = fields;
+            this.listId = listId;
+            this.sections = sections;
+            return this.render();
         }
     });
 
-    return Table;
+    return View;
 });

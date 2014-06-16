@@ -15,12 +15,6 @@
     "grunt-contrib-yuidoc": "~0.5.2",
     "grunt-manifest": "~0.4.0",
     "grunt-replace": "~0.7.7",
-    "grunt-shell": "~0.7.0",
-    "karma": "~0.12.16",
-    "karma-chrome-launcher": "^0.1.4",
-    "karma-cli": "~0.0.4",
-    "karma-jasmine": "^0.1.5",
-    "karma-requirejs": "^0.2.2",
-    "requirejs": "^2.1.14"
+    "grunt-shell": "~0.7.0"
   }
 }

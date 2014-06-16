@@ -21,86 +21,36 @@ define([], function() {
             localStorage.setItem(skritter.user.id + '-subscription', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method getPlan
-         * @returns {Object}
-         */
-        getWebsitePlan: function() {
-            var plan = null;
-            if (this.get('expires') === false) {
-                plan = 'Unlimited';
-            } else {
-                switch (this.get('plan')) {
-                    case 'one_month':
-                        plan = '1 Month';
-                        break;
-                    case 'six_months':
-                        plan = '6 Months';
-                        break;
-                    case 'twelve_months':
-                        plan = '1 Year';
-                        break;
-                    case 'twenty_four_months':
-                        plan = '2 Years';
-                        break;
-                }
-            }
-            return plan;
-        },
-        /**
-         * @method getGplayPlan
-         * @returns {String}
-         */
-        getGplayPlan: function() {
-            var plan = null;
-            switch (this.get('gplay_subscription')) {
-                case 'one.month.sub':
-                    plan = '1 Month';
-                    break;
-                case 'one.year.sub':
-                    plan = '1 Year';
-                    break;
-            }
-            return plan;
-        },
-        /**
-         * @method getType
-         * @returns {String}
-         */
-        getType: function() {
-            var type = null;
-            switch (this.get('subscribed')) {
-                case 'gplay':
-                    type = 'Google Play';
-                    break;
-                case 'ios':
-                    type = 'iTunes Store';
-                    break;
-                case 'skritter':
-                    type = 'Website';
-                    break;
-                default:
-                    type = 'None';
-                    break;
-            }
-            return type;
-        },
-        /**
-         * @method isExpired
+         * @method isActive
          * @returns {Boolean}
          */
-        isExpired: function() {
+        isActive: function() {
             var date = moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
             var expires = this.get('expires');
-            if (expires === false || expires > date) {
+            if (expires !== false || expires <= date) {
                 return false;
             }
             return true;
         },
         /**
-         * @method subscribe
+         * @method canGplay
+         * @returns {Boolean}
          */
-        subscribeWeb: function() {
-            window.location.href = 'https://beta.skritter.com/account/billing/subscribe/mobile';
+        canGplay: function() {
+            if (!this.get('subscribed') || this.get('subscribed') === 'gplay') {
+                return true;
+            }
+            return false;
+        },
+        getGplayPlan: function() {
+            switch (this.get('gplay_subscription').subscription) {
+                case 'one.month.sub':
+                    return '1 Month';
+                case 'one.year.sub':
+                    return '12 Months';
+                default:
+                    return 'None';
+            }
         },
         /**
          * @method subscribeGplay
@@ -113,14 +63,14 @@ define([], function() {
                     navigator.inappbilling.init(function() {
                         callback();
                     }, function(error) {
-                        console.log('SUBSCRIBE ERROR', error);
+                        console.log('subscription error', error);
                     });
                 },
                 function(callback) {
                     navigator.inappbilling.subscribe(function() {
                        callback(); 
                     }, function(error) {
-                        console.log('SUBSCRIBE ERROR', error);
+                        console.log('subscription error', error);
                     }, sku);
                 }
             ], function() {

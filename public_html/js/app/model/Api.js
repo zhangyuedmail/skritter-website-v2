@@ -102,7 +102,7 @@ define(function() {
             offset = offset ? offset : undefined;
             function request(cursor) {
                 $.ajax({
-                    url: self.base + '/reviews/errors',
+                    url: self.base + 'reviews/errors',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', self.credentials);
                     },
@@ -253,9 +253,9 @@ define(function() {
             options.fields = options.fields ? options.fields : undefined;
             $.ajax({
                 url: this.base + 'progstats',
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'GET',
                 data: {
                     bearer_token: this.get('token'),
@@ -278,9 +278,9 @@ define(function() {
         getServerTime: function(callback) {
             $.ajax({
                 url: this.base + 'dateinfo',
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'GET',
                 data: {
                     bearer_token: this.get('token')
@@ -303,9 +303,9 @@ define(function() {
         getSRSConfigs: function(language, callback) {
             $.ajax({
                 url: this.base + 'srsconfigs',
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'GET',
                 data: {
                     bearer_token: self.get('token'),
@@ -325,9 +325,9 @@ define(function() {
         getSubscription: function(userId, callback) {
             $.ajax({
                 url: this.base + 'subscriptions/' + userId,
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'GET',
                 data: {
                     bearer_token: this.get('token')
@@ -397,13 +397,12 @@ define(function() {
             fields = fields ? fields : undefined;
             $.ajax({
                 url: this.base + 'vocablists/' + id,
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'GET',
                 data: {
-                    bearer_token: this.get('token'),
-                    fields: fields
+                    bearer_token: this.get('token')
                 }
             }).done(function(data) {
                 callback(data.VocabList, data.statusCode);
@@ -420,9 +419,9 @@ define(function() {
         getVocabListSection: function(listId, sectionId, callback) {
             $.ajax({
                 url: this.base + 'vocablists/' + listId + '/sections/' + sectionId,
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'GET',
                 data: {
                     bearer_token: this.get('token')
@@ -537,9 +536,9 @@ define(function() {
         updateUser: function(settings, callback) {
             $.ajax({
                 url: this.base + 'users?bearer_token=' + this.get('token'),
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'PUT',
                 data: JSON.stringify(settings)
             }).done(function(data) {
@@ -560,9 +559,9 @@ define(function() {
         updateVocabList: function(list, callback) {
             $.ajax({
                 url: this.base + 'vocablists/' + list.id + '?bearer_token=' + this.get('token'),
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'PUT',
                 data: JSON.stringify(list)
             }).done(function(data) {
@@ -584,9 +583,9 @@ define(function() {
         updateVocabListSection: function(listId, section, callback) {
             $.ajax({
                 url: this.base + 'vocablists/' + listId + '/section/' + section.id + '?bearer_token=' + this.get('token'),
-                beforeSend: function(xhr) {
+                beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                },
+                }, this),
                 type: 'PUT',
                 data: JSON.stringify(section)
             }).done(function(data) {

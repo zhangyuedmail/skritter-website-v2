@@ -76,6 +76,13 @@ define([
         return {x: left, y: bottom, w: width, h: height, c: center};
     };
     /**
+     * @method getDate
+     * @returns {String}
+     */
+    var getDate = function() {
+        return moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
+    };
+    /**
      * @method getDistance
      * @param {Point} point1
      * @param {Point} point2
@@ -227,6 +234,7 @@ define([
         getGuid: getGuid,
         getUnixTime: getUnixTime,
         getRandomNumber: getRandomNumber,
+        getDate: getDate,
         hasCordova: hasCordova,
         isKana: isKana,
         isNumber: isNumber,
