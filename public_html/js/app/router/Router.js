@@ -181,8 +181,8 @@ define([
         showVocabList: function(listId) {
             this.reset();
             this.view = new ListView({el: this.container});
-            this.view.set(listId);
             this.view.render();
+            this.view.set(listId);
         },
         /**
          * @method showVocabListSection
@@ -192,8 +192,8 @@ define([
         showVocabListSection: function(listId, sectionId) {
             this.reset();
             this.view = new ListSectionView({el: this.container});
-            this.view.set(listId, sectionId);
             this.view.render();
+            this.view.set(listId, sectionId);
         },
         /**
          * @method showVocabLists
@@ -203,6 +203,7 @@ define([
             this.reset();
             this.view = new ListsView({el: this.container});
             this.view.render();
+            this.view.set(category);
         },
         /**
          * @method reset

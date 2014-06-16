@@ -165,7 +165,6 @@ define([
             if (skritter.fn.hasCordova()) {
                 window.navigator.splashscreen.hide();
             }
-            skritter.modal.hide();
         });
     };
 

@@ -24,7 +24,7 @@ define([
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
-            this.listTable.setElement(this.elements.listTable).set(skritter.user.data.vocablists.toJSON(), {
+            this.listTable.setElement(this.elements.listTable).render().set(skritter.user.data.vocablists.toJSON(), {
                 name: 'Title',
                 studyingMode: 'Status'
             }).filterByStatus(['adding', 'reviewing']);

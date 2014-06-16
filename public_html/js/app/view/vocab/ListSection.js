@@ -1,7 +1,8 @@
 define([
     'require.text!template/vocab-list-section.html',
-    'base/View'
-], function(template, BaseView) {
+    'base/View',
+    'view/component/ListSectionRowTable'
+], function(template, BaseView, ListSectionRowTable) {
     /**
      * @class VocabListSection
      */
@@ -11,6 +12,9 @@ define([
          */
         initialize: function() {
             BaseView.prototype.initialize.call(this);
+            this.listId = null;
+            this.rows = new ListSectionRowTable();
+            this.sectionId = null;
         },
         /**
          * @method render
@@ -21,6 +25,7 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
+            this.rows.setElement(this.elements.listRows).render();
             return this;
         },
         /**
@@ -29,6 +34,10 @@ define([
          */
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
+            this.elements.listName = this.$('.list-name');
+            this.elements.listRows = this.$('#list-section');
+            this.elements.sectionName = this.$('.section-name');
+            
             return this;
         },
         /**
@@ -39,13 +48,32 @@ define([
             });
         },
         /**
+         * @method loadSection
+         */
+        loadSection: function() {
+            skritter.modal.show('loading').set('.message', 'Loading List');
+            skritter.api.getVocabList(this.listId, null, _.bind(function(list) {
+                this.section = _.find(list.sections, {id: this.sectionId});
+                this.elements.listName.text(list.name);
+                this.elements.sectionName.text(this.section.name);
+                this.rows.set(this.listId, this.section, {
+                    vocabId: 'Simplified',
+                    tradVocabId: 'Traditional'
+                });
+                skritter.modal.hide();
+            }, this));
+            return this;
+        },
+        /**
          * @method set
          * @param {String} listId
+         * @param {String} sectionId
          * @returns {Backbone.View}
          */
         set: function(listId, sectionId) {
             this.listId = listId;
             this.sectionId = sectionId;
+            this.loadSection();
             return this;
         }
     });
