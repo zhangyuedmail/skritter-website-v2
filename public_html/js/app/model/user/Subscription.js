@@ -27,10 +27,13 @@ define([], function() {
         isActive: function() {
             var date = moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
             var expires = this.get('expires');
-            if (expires !== false || expires <= date) {
-                return false;
+            if (expires === false) {
+                return true;
             }
-            return true;
+            if (expires > date) {
+                return true;
+            }
+            return false;
         },
         /**
          * @method canGplay
