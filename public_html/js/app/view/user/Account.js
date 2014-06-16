@@ -57,11 +57,11 @@ define([
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
             this.elements.userUsername = this.$('.user-username');
-            this.elements.subCancel = this.$('#sub-cancel');
+            this.elements.subCancel = this.$('#button-sub-cancel');
             this.elements.subExpires = this.$('#sub-expires');
             this.elements.subPlan = this.$('#sub-plan');
-            this.elements.subOneMonth = this.$('#sub-one-month');
-            this.elements.subOneYear = this.$('#sub-one-year');
+            this.elements.subOneMonth = this.$('#button-sub-one-month');
+            this.elements.subOneYear = this.$('#button-sub-one-year');
             this.elements.subOptions = this.$('#sub-options');
             this.elements.subStatus = this.$('#sub-status');
             return this;
