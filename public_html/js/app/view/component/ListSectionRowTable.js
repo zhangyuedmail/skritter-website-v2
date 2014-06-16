@@ -47,7 +47,16 @@ define([
                     divBody += "<tr id='row-" + row.id + "' class='cursor'>";
                     for (var field in this.fields) {
                         var fieldValue = row[field];
-                        divBody += "<td class='row-field-" + field + "'>" + fieldValue + "</td>";
+                        if (field === 'vocabId') {
+                            divBody += "<td class='row-field-" + field + "'>";
+                            divBody += skritter.fn.mapper.fromBase(fieldValue);
+                            if (fieldValue !== row.tradVocabId) {
+                                divBody += ' (' + skritter.fn.mapper.fromBase(row.tradVocabId) + ')';
+                            }
+                            divBody += "</td>";
+                        } else {
+                            divBody += "<td class='row-field-" + field + "'>" + fieldValue + "</td>";
+                        }
                     }
                 }
             } else {
@@ -61,6 +70,7 @@ define([
          * @property {Object} function
          */
         events: {
+            //TODO: make an event that connects vocabs with the info view
         },
         /**
          * @method set

@@ -14,6 +14,7 @@ define([
             BaseView.prototype.initialize.call(this);
             this.listId = null;
             this.rows = new ListSectionRowTable();
+            this.section = null;
             this.sectionId = null;
         },
         /**
@@ -37,7 +38,7 @@ define([
             this.elements.listName = this.$('.list-name');
             this.elements.listRows = this.$('#list-section');
             this.elements.sectionName = this.$('.section-name');
-            
+
             return this;
         },
         /**
@@ -51,14 +52,15 @@ define([
          * @method loadSection
          */
         loadSection: function() {
-            skritter.modal.show('loading').set('.message', 'Loading List');
-            skritter.api.getVocabList(this.listId, null, _.bind(function(list) {
+            var listId = this.listId;
+            var sectionId = this.sectionId;
+            skritter.modal.show('loading').set('.message', 'Loading Section');
+            skritter.api.getVocabList(listId, null, _.bind(function(list) {
                 this.section = _.find(list.sections, {id: this.sectionId});
                 this.elements.listName.text(list.name);
                 this.elements.sectionName.text(this.section.name);
                 this.rows.set(this.listId, this.section, {
-                    vocabId: 'Simplified',
-                    tradVocabId: 'Traditional'
+                    vocabId: 'Item'
                 });
                 skritter.modal.hide();
             }, this));
