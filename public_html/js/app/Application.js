@@ -101,6 +101,9 @@ define([
                     skritter.user.data.srsconfigs.loadAll(callback);
                 },
                 function(callback) {
+                    skritter.user.data.vocablists.loadAll(callback);
+                },
+                function(callback) {
                     skritter.user.scheduler.loadAll(callback);
                 },
                 function(callback) {

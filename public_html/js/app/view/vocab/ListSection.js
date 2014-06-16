@@ -37,6 +37,16 @@ define([
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
             });
+        },
+        /**
+         * @method set
+         * @param {String} listId
+         * @returns {Backbone.View}
+         */
+        set: function(listId, sectionId) {
+            this.listId = listId;
+            this.sectionId = sectionId;
+            return this;
         }
     });
 

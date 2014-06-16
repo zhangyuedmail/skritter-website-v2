@@ -9,6 +9,8 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.listId = null;
+            this.sectionId = null;
         },
         /**
          * @method render

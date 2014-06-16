@@ -1,7 +1,8 @@
 define([
     'require.text!template/vocab-list.html',
-    'base/View'
-], function(template, BaseView) {
+    'base/View',
+    'view/component/ListSectionTable'
+], function(template, BaseView, ListSectionTable) {
     /**
      * @class VocabList
      */
@@ -11,6 +12,8 @@ define([
          */
         initialize: function() {
             BaseView.prototype.initialize.call(this);
+            this.listId = null;
+            this.sections = new ListSectionTable();
         },
         /**
          * @method render
@@ -21,6 +24,14 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
+            skritter.api.getVocabList(this.listId, null, _.bind(function(list) {
+                this.elements.listDescription.text(list.description);
+                this.elements.listName.text(list.name);
+                this.sections.setElement(this.elements.listSections).set(this.listId, list.sections, {
+                    name: 'Name',
+                    rows: 'Items'
+                });
+            }, this));
             return this;
         },
         /**
@@ -29,6 +40,9 @@ define([
          */
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
+            this.elements.listDescription = this.$('.list-description');
+            this.elements.listName = this.$('.list-name');
+            this.elements.listSections = this.$('#list-sections');
             return this;
         },
         /**
@@ -37,6 +51,15 @@ define([
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
             });
+        },
+        /**
+         * @method set
+         * @param {String} listId
+         * @returns {Backbone.View}
+         */
+        set: function(listId) {
+            this.listId = listId;
+            return this;
         }
     });
 

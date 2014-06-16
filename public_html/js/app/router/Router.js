@@ -177,20 +177,22 @@ define([
         /**
          * @method showVocabList
          * @param {String} listId
-         * @param {String} sectionId
          */
         showVocabList: function(listId) {
             this.reset();
             this.view = new ListView({el: this.container});
+            this.view.set(listId);
             this.view.render();
         },
         /**
          * @method showVocabListSection
-         * @param {String} category
+         * @param {String} listId
+         * @param {String} sectionId
          */
         showVocabListSection: function(listId, sectionId) {
             this.reset();
             this.view = new ListSectionView({el: this.container});
+            this.view.set(listId, sectionId);
             this.view.render();
         },
         /**
