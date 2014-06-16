@@ -92,6 +92,19 @@ define([], function() {
             return containedVocabs;
         },
         /**
+         * @method getContainedAt
+         * @param {Number} position
+         * @returns {Backbone.Model}
+         */
+        getContainedAt: function(position) {
+            position = position === 0 ? 1 : position;
+            var containedVocabsIds = this.get('containedVocabIds');
+            if (containedVocabsIds) {
+                return skritter.user.data.vocabs.get(containedVocabsIds[position - 1]);
+            }
+            return this;
+        },
+        /**
          * @method getContainedRows
          * @returns {String}
          */

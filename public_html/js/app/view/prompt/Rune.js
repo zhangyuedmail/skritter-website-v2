@@ -254,7 +254,7 @@ define([
                 this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
             }
             this.grading.select(this.review.getScore()).show();
-            if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
+            if (skritter.user.isAudioEnabled() && this.vocab.getContainedAt(this.review.getPosition()).has('audio')) {
                 this.vocab.playAudio(this.review.getPosition());
             }
             return this;
