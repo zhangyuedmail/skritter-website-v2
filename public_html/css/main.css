@@ -166,6 +166,11 @@ body {
     visibility: hidden;
 }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
+.page-title {
+    color: #ffffff;
+    font-size: 18px;
+    padding-left: 5px;
+}
 .skritter-container { height: 100%; }
 .view {
     height: 100%; 
