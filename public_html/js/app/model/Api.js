@@ -173,17 +173,7 @@ define(function() {
                         var response = data.Batch.Requests[i].response;
                         if (response) {
                             responseSize += data.Batch.Requests[i].responseSize;
-                            for (var key in response) {
-                                if (result[key]) {
-                                    if (Array.isArray(result[key])) {
-                                        result[key] = result[key].concat(response[key]);
-                                    } else {
-                                        result[key] = response[key];
-                                    }
-                                } else {
-                                    result[key] = response[key];
-                                }
-                            }
+                            skritter.fn.mergeObjectArray(result, response);
                         }
                     }
                     result.downloadedRequests = data.Batch.Requests.length;
@@ -364,28 +354,49 @@ define(function() {
          * @method getVocabs
          * @param {Array} vocabIds
          * @param {Function} callback
+         * @param {Object} options
          */
-        getVocabs: function(vocabIds, callback) {
-            $.ajax({
-                url: this.base + 'vocabs',
-                beforeSend: _.bind(function(xhr) {
-                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
-                }, this),
-                type: 'GET',
-                data: {
-                    bearer_token: this.get('token'),
-                    ids: vocabIds.join('|'),
-                    include_strokes: 'true',
-                    include_sentences: 'true',
-                    include_heisigs: 'true',
-                    include_top_mnemonics: 'true',
-                    include_decomps: 'true'
-                }
-            }).done(function(data) {
-                callback(data, data.statusCode);
-            }).fail(function(error) {
-                callback(error, error.status);
-            });
+        getVocabs: function(vocabIds, callback, options) {
+            var self = this;
+            var result = {};
+            options = options ? options : {};
+            options.fields ? options.fields : undefined;
+            options.includeStroke ? options.includeStroke : undefined;
+            options.includeSentences ? options.includeSentences : undefined;
+            options.includeHeisigs ? options.includeHeisigs : undefined;
+            options.includeTopMnemonics ? options.includeTopMnemonics : undefined;
+            options.includeDecomps ? options.includeDecomps : undefined;
+            function request() {
+                $.ajax({
+                    url: self.base + 'vocabs',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        ids: vocabIds.join('|'),
+                        fields: options.fields,
+                        include_strokes: options.includeStroke,
+                        include_sentences: options.includeSentences,
+                        include_heisigs: options.includeHeisigs,
+                        include_top_mnemonics: options.includeTopMnemonics,
+                        include_decomps: options.includeDecomps
+                    }
+                }).done(function(data) {
+                    if (data) {
+                        skritter.fn.mergeObjectArray(result, data);
+                    }
+                    if (vocabIds.length > 0) {
+                        request(vocabIds.splice(0, 19));
+                    } else {
+                        callback(result, data.statusCode);
+                    }
+                }).fail(function(error) {
+                    callback(error, error.status);
+                });
+            }
+            request(vocabIds.splice(0, 19));
         },
         /**
          * @method getVocabList
