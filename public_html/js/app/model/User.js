@@ -23,6 +23,9 @@ define([
                 var userId = window.localStorage.getItem('active');
                 this.set(JSON.parse(window.localStorage.getItem(userId)), {silent: true});
                 skritter.api.set('token', this.get('access_token'), {silent: true});
+                if (window.localStorage.getItem(userId + '-scheduler')) {
+                    this.scheduler.set(JSON.parse(window.localStorage.getItem(userId + '-scheduler')), {silent: true});
+                }
                 if (window.localStorage.getItem(userId + '-settings')) {
                     this.settings.set(JSON.parse(window.localStorage.getItem(userId + '-settings')), {silent: true});
                 }

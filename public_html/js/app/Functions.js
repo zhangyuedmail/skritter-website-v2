@@ -220,6 +220,15 @@ define([
      */
     var pinyin = PinyinMap;
     /**
+     * @method 
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
+     */
+    var randomDecimal = function(min, max) {
+        return Math.random() * (max - min) + min;
+    };
+    /**
      * @property {Object} strokes
      */
     var recognizer = new Recognizer();
@@ -262,6 +271,7 @@ define([
         mergeObjectArray: mergeObjectArray,
         pad: pad,
         pinyin: pinyin,
+        randomDecimal: randomDecimal,
         recognizer: recognizer,
         shortstraw: shortstraw,
         strokes: strokes,

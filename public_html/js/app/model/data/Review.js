@@ -345,6 +345,7 @@ define([
                     skritter.user.data.items.cache(callback);
                 },
                 _.bind(function(callback) {
+                    skritter.user.scheduler.cache();
                     this.cache(callback);
                 }, this)
             ], function() {

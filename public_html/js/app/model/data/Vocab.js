@@ -320,6 +320,13 @@ define([], function() {
             return this.get('lang') === 'ja' ? true : false;
         },
         /**
+         * @method isNew
+         * @returns {Boolean}
+         */
+        isNew: function() {
+            return this.get('reviews') === 0 ? true : false;
+        },
+        /**
          * @method playAudio
          * @param {Number} position
          */

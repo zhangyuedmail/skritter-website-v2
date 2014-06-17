@@ -29,6 +29,7 @@ define([
             this.elements.mnemonic = this.$('.prompt-mnemonic');
             this.elements.navLeft = this.$('.navigate-left');
             this.elements.navRight = this.$('.navigate-right');
+            this.elements.newness = this.$('.prompt-newness');
             this.elements.question = this.$('.prompt-question');
             this.elements.reading = this.$('.prompt-reading');
             this.elements.sentence = this.$('.prompt-sentence');

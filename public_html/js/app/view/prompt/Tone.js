@@ -185,6 +185,9 @@ define([
             this.canvas.enableInput();
             this.review.setReview('started', true);
             this.elements.definition.html(this.vocab.getDefinition());
+            if (this.item.isNew()) {
+                this.elements.newness.show();
+            }
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), true, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
             this.elements.writing.html(this.vocab.getWriting());
