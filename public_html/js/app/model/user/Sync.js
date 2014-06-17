@@ -345,7 +345,7 @@ define([], function() {
                                     try {
                                         throw new Error('Review Format Error');
                                     } catch (error) {
-                                        console.error('Review Format Error', postedReviews);
+                                        console.error('Review Format Error', {postedReviews: reviews});
                                         Raygun.send(error);
                                     }
                                 }

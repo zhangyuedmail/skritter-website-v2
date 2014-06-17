@@ -199,7 +199,7 @@ define([
                 position: review.get('position')
             } : null;
             return {
-                review: review,
+                activeReview: review,
                 studyTime: skritter.timer.time / 1000,
                 view: Backbone.history.fragment
             };
