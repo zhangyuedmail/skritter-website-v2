@@ -82,6 +82,7 @@ define([], function() {
                     request();
                 },
                 function(itemIds, callback) {
+                    console.log('added items', itemIds);
                     skritter.user.sync.changedItems(function() {
                         callback(null, itemIds);
                     }, now, true);

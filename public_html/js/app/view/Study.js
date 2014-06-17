@@ -26,6 +26,11 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
+            if (skritter.user.scheduler.isEmpty()) {
+                this.showAddItemsModal();
+                skritter.router.navigate('', {replace: true, trigger: true});
+                return false;
+            }
             skritter.timer.setElement(this.$('.study-timer')).render();
             if (skritter.user.settings.get('hideCounter')) {
                 this.$('.study-counter').hide();
@@ -54,7 +59,7 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
-                'vclick .button-add-items': 'showAddItemsModal',
+                'vclick .button-add-items': 'handleAddItemsClicked',
                 'vclick .button-info': 'handleInfoButtonClicked',
                 'vclick .button-study-settings': 'handleStudySetttingsClicked',
                 'vclick .navbar-back': 'handleBackClick'
@@ -69,6 +74,14 @@ define([
                     skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
                 skritter.user.sync.reviews();
             }
+        },
+        /**
+         * @method handleAddItemsClicked
+         * @param {Object} event
+         */
+        handleAddItemsClicked: function(event) {
+            this.showAddItemsModal();
+            event.preventDefault();
         },
         /**
          * @method handleBackClick
@@ -135,9 +148,8 @@ define([
         },
         /**
          * @method showAddItemsModal
-         * @param {Object} event
          */
-        showAddItemsModal: function(event) {
+        showAddItemsModal: function() {
             skritter.timer.stop();
             skritter.modal.show('add-items');
             skritter.modal.element('.modal-footer').hide();
@@ -173,9 +185,6 @@ define([
                 }
                 event.preventDefault();
             }, this));
-            if (event) {
-                event.preventDefault();
-            }
         },
         /**
          * @method updateDueCounter
