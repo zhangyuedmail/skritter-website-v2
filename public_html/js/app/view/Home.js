@@ -82,6 +82,20 @@ define([
         handleStudyClick: function(event) {
             skritter.router.navigate('study', {replace: true, trigger: true});
             event.preventDefault();
+        },
+        /**
+         * @method handleSyncClick
+         * @param {Object} event
+         */
+        handleSyncClick: function(event) {
+            skritter.modal.show('download')
+                    .set('.modal-title', 'Syncing')
+                    .set('.modal-title-icon', null, 'fa-download')
+                    .progress(100);
+            skritter.user.sync.changedItems(function() {
+                skritter.modal.hide();
+            });
+            event.preventDefault();
         }
     });
 
