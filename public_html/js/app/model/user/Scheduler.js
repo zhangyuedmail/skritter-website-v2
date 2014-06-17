@@ -14,6 +14,7 @@ define([], function() {
          * @property {Object} defaults
          */
         defaults: {
+            history: []
         },
         /**
          * @method cache
@@ -203,6 +204,7 @@ define([], function() {
         sort: function() {
             var activeParts = skritter.user.getActiveParts();
             var activeStyles = skritter.user.getActiveStyles();
+            var history = this.get('history');
             var now = skritter.fn.getUnixTime();
             var randomizer = this.randomizeInterval;
             this.data = _.sortBy(this.data, function(item) {
@@ -215,9 +217,14 @@ define([], function() {
                     item.readiness = 0;
                     return -item.readiness;
                 }
+                //deprioritize recently viewed items
+                if (history.indexOf(item.id.split('-')[2]) !== -1) {
+                    item.readiness = randomizer(0.2);
+                    return -item.readiness;
+                }
                 //randomly prioritize new items
                 if (item.last === 0) {
-                    item.readiness = randomizer(9999);
+                    item.readiness = skritter.fn.randomDecimal(0.2, 0.5);
                     return -item.readiness;
                 }
                 //deprioritize overdue items
@@ -256,7 +263,14 @@ define([], function() {
          * @param {Backbone.Model} item
          */
         update: function(item) {
+            var history = this.get('history');
             var position = _.findIndex(this.data, {id: item.id});
+            if (history.length >= 9) {
+                history.unshift(item.id.split('-')[2]);
+                history.pop();
+            } else {
+                history.unshift(item.id.split('-')[2]);
+            }
             this.data[position] = {
                 id: item.id,
                 last: item.get('last'),
