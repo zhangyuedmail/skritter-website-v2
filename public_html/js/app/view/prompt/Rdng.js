@@ -109,6 +109,9 @@ define([
         show: function() {
             this.elements.answer.hide();
             this.elements.definition.html(this.vocab.getDefinition());
+            if (this.item.isNew()) {
+                this.elements.newness.show();
+            }
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
             this.elements.writing.html(this.vocab.getWriting());

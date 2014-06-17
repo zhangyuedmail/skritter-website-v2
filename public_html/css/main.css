@@ -298,6 +298,17 @@ body {
 .info-section .prompt-reading { font-size: 24px }
 .info-section .prompt-sentence { font-size: 18px }
 .info-section .prompt-writing { font-size: 32px }
+.info-section .prompt-newness {
+    background-color: #333333;
+    bottom: 0;
+    color: #ffffff;
+    display: none;
+    font-size: 12px;
+    left: 0;
+    padding: 2px 10px;
+    position: absolute;
+    z-index: 9200;
+}
 @media (max-width: 767px) {
     .info-section { 
         border-bottom: 2px solid #333333;
