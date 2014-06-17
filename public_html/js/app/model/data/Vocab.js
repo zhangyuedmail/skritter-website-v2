@@ -192,7 +192,7 @@ define([], function() {
                     for (var b = 0, lengthB = pieces.length; b < lengthB; b++) {
                         var piece = pieces[b];
                         var nakedPiece = pieces[b].replace(/[0-9]/g, '');
-                        var formattedNakedPiece = zhuyin ? skritter.fn.pinyin.toZhuyin(nakedPiece + '1') : nakedPiece;
+                        var formattedNakedPiece = zhuyin ? skritter.fn.pinyin.toZhuyin(nakedPiece + '5') : skritter.fn.pinyin.toTone(nakedPiece + '5');
                         var formattedPiece = zhuyin ? skritter.fn.pinyin.toZhuyin(piece) : skritter.fn.pinyin.toTone(piece);
                         if (piece.indexOf(' ... ') === -1 && piece.indexOf("'") === -1) {
                             if (offset && position >= offset) {
