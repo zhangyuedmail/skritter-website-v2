@@ -188,6 +188,13 @@ define([], function() {
             }
         },
         /**
+         * @method isEmpty
+         * @returns {Boolean}
+         */
+        isEmpty: function() {
+            return this.data.length === 0 ? true : false;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
@@ -219,12 +226,12 @@ define([], function() {
                 }
                 //deprioritize recently viewed items
                 if (history.indexOf(item.id.split('-')[2]) !== -1) {
-                    item.readiness = randomizer(0.2);
+                    item.readiness = skritter.fn.randomDecimal(0.2, 0.5);
                     return -item.readiness;
                 }
                 //randomly prioritize new items
                 if (item.last === 0) {
-                    item.readiness = skritter.fn.randomDecimal(0.2, 0.5);
+                    item.readiness = randomizer(9999);
                     return -item.readiness;
                 }
                 //deprioritize overdue items
