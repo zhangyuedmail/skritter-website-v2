@@ -143,6 +143,7 @@ body {
     margin-top: 10px;
     padding: 5px 10px;
 }
+.content-block.overflow { overflow-y: auto; }
 .content-block.no-margin { margin: 0; }
 .content-block.no-padding { padding: 0; }
 .content-block.no-shadow {

@@ -15,7 +15,18 @@
     <div class="sidebar"></div>
 
     <div id="content" class="content-container container-fluid">
-        <div class="content-block no-padding">
+        <div id="block-search" class="content-block no-padding">
+            <div class="input-group">
+                <input type="text" class="form-control" disabled="disabled">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+        </div>
+        <div id="block-lists" class="content-block overflow">
+            <div id="lists"></div>
+        </div>
+        <div id="block-sort" class="content-block no-padding">
             <div class="btn-group btn-group-justified">
                 <div class="btn-group">
                     <button type="button" id="button-category-studying" class="button-category btn btn-default">My Lists</button>
@@ -24,9 +35,6 @@
                     <button type="button" id="button-category-textbook" class="button-category btn btn-default">Textbooks</button>
                 </div>
             </div>
-        </div>
-        <div class="content-block">
-            <div id="lists"></div>
         </div>
     </div>
 

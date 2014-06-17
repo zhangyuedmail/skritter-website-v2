@@ -25,6 +25,7 @@ define([
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.lists.setElement(this.elements.lists).render();
+            this.resize();
             return this;
         },
         /**
@@ -33,6 +34,9 @@ define([
          */
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
+            this.elements.blockLists = this.$('#block-lists');
+            this.elements.blockSearch = this.$('#block-search');
+            this.elements.blockSort = this.$('#block-sort');
             this.elements.buttonOfficial = this.$('#button-category-textbook');
             this.elements.buttonStudying = this.$('#button-category-studying');
             this.elements.lists = this.$('#lists');
@@ -86,6 +90,14 @@ define([
                 studyingMode: 'Status'
             });
             return this;
+        },
+        /**
+         * @method resize
+         */
+        resize: function() {
+            var contentHeight = skritter.settings.getContentHeight();
+            var contentWidth = skritter.settings.getContentWidth();
+            this.elements.blockLists.height(contentHeight - this.elements.blockSearch.outerHeight() - this.elements.blockSort.outerHeight() - 50);
         },
         /**
          * @method set
