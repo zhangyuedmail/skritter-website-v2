@@ -265,7 +265,7 @@ module.exports = function(grunt) {
                     {src: 'config.xml', dest: 'build/cordova/japanese', expand: true, cwd: 'build/cordova/japanese'},
                     {src: 'InAppBillingPlugin.java', dest: 'build/cordova/japanese/plugins/com.jernung.cordova.inappbilling/inappbilling', expand: true, cwd: 'build/cordova/japanese/plugins/com.jernung.cordova.inappbilling/inappbilling'},
                     {src: 'Application.js', dest: 'build/cordova/japanese/www/js/app', expand: true, cwd: 'build/cordova/japanese/www/js/app'},
-                    {src: 'Settings.js', dest: 'build/cordova/chinese/www/js/app/model', expand: true, cwd: 'build/cordova/chinese/www/js/app/model'}
+                    {src: 'Settings.js', dest: 'build/cordova/japanese/www/js/app/model', expand: true, cwd: 'build/cordova/japanese/www/js/app/model'}
                 ]
             },
             'web': {
