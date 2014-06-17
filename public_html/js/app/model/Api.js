@@ -195,14 +195,23 @@ define(function() {
          * @method getItems
          * @param {Array|String} itemIds
          * @param {Function} callback
+         * @param {Object} options
          */
-        getItems: function(itemIds, callback) {
+        getItems: function(itemIds, callback, options) {
             var self = this;
-            var items = [];
+            var result = [];
             itemIds = Array.isArray(itemIds) ? itemIds : [itemIds];
             itemIds = _.uniq(itemIds);
+            options = options ? options : {};
+            options.fields ? options.fields : undefined;
+            options.includeVocabs ? options.includeVocabs : undefined;
+            options.includeStroke ? options.includeStroke : undefined;
+            options.includeSentences ? options.includeSentences : undefined;
+            options.includeHeisigs ? options.includeHeisigs : undefined;
+            options.includeTopMnemonics ? options.includeTopMnemonics : undefined;
+            options.includeDecomps ? options.includeDecomps : undefined;
             function request(batch) {
-                var promise = $.ajax({
+                $.ajax({
                     url: self.base + 'items',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', self.credentials);
@@ -210,20 +219,27 @@ define(function() {
                     type: 'GET',
                     data: {
                         bearer_token: self.get('token'),
-                        ids: batch.join('|')
+                        ids: batch.join('|'),
+                        fields: options.fields,
+                        include_vocabs: options.includeVocabs,
+                        include_strokes: options.includeStroke,
+                        include_sentences: options.includeSentences,
+                        include_heisigs: options.includeHeisigs,
+                        include_top_mnemonics: options.includeTopMnemonics,
+                        include_decomps: options.includeDecomps
                     }
-                });
-                promise.done(function(data) {
-                    items = items.concat(data.Items);
+                }).done(function(data) {
+                    if (data) {
+                        skritter.fn.mergeObjectArray(result, data);
+                    }
                     if (itemIds.length > 0) {
                         window.setTimeout(function() {
                             request(itemIds.splice(0, 19));
                         }, 500);
                     } else {
-                        callback(items, data.statusCode);
+                        callback(result, data.statusCode);
                     }
-                });
-                promise.fail(function(error) {
+                }).fail(function(error) {
                     callback(error, 0);
                 });
             }
