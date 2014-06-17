@@ -203,13 +203,13 @@ define(function() {
             itemIds = Array.isArray(itemIds) ? itemIds : [itemIds];
             itemIds = _.uniq(itemIds);
             options = options ? options : {};
-            options.fields ? options.fields : undefined;
-            options.includeVocabs ? options.includeVocabs : undefined;
-            options.includeStroke ? options.includeStroke : undefined;
-            options.includeSentences ? options.includeSentences : undefined;
-            options.includeHeisigs ? options.includeHeisigs : undefined;
-            options.includeTopMnemonics ? options.includeTopMnemonics : undefined;
-            options.includeDecomps ? options.includeDecomps : undefined;
+            options.fields = options.fields ? options.fields : undefined;
+            options.includeVocabs = options.includeVocabs ? options.includeVocabs : undefined;
+            options.includeStroke = options.includeStroke ? options.includeStroke : undefined;
+            options.includeSentences = options.includeSentences ? options.includeSentences : undefined;
+            options.includeHeisigs = options.includeHeisigs ? options.includeHeisigs : undefined;
+            options.includeTopMnemonics = options.includeTopMnemonics ? options.includeTopMnemonics : undefined;
+            options.includeDecomps = options.includeDecomps ? options.includeDecomps : undefined;
             function request(batch) {
                 $.ajax({
                     url: self.base + 'items',
@@ -376,12 +376,12 @@ define(function() {
             var self = this;
             var result = {};
             options = options ? options : {};
-            options.fields ? options.fields : undefined;
-            options.includeStroke ? options.includeStroke : undefined;
-            options.includeSentences ? options.includeSentences : undefined;
-            options.includeHeisigs ? options.includeHeisigs : undefined;
-            options.includeTopMnemonics ? options.includeTopMnemonics : undefined;
-            options.includeDecomps ? options.includeDecomps : undefined;
+            options.fields = options.fields ? options.fields : undefined;
+            options.includeStroke = options.includeStroke ? options.includeStroke : undefined;
+            options.includeSentences = options.includeSentences ? options.includeSentences : undefined;
+            options.includeHeisigs = options.includeHeisigs ? options.includeHeisigs : undefined;
+            options.includeTopMnemonics = options.includeTopMnemonics ? options.includeTopMnemonics : undefined;
+            options.includeDecomps = options.includeDecomps ? options.includeDecomps : undefined;
             function request() {
                 $.ajax({
                     url: self.base + 'vocabs',

@@ -74,7 +74,6 @@ define([
                 sort: 'official'
             });
             return this;
-            return this;
         },
         /**
          * @method loadStudying
