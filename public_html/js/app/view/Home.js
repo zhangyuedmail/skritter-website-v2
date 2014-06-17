@@ -24,7 +24,7 @@ define([
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.dueCount.text(skritter.user.scheduler.getDueCount(true));
-            this.listTable.setElement(this.elements.listTable).set(skritter.user.data.vocablists.toJSON(), {
+            this.listTable.setElement(this.elements.listTable).render().set(skritter.user.data.vocablists.toJSON(), {
                 name: 'Title',
                 studyingMode: 'Status'
             }).filterByStatus(['adding', 'reviewing']);
@@ -44,7 +44,6 @@ define([
             BaseView.prototype.loadElements.call(this);
             this.elements.buttonSync = this.$('.button-sync');
             this.elements.dueCount = this.$('.due-count');
-            this.elements.listCount = this.$('.list-count');
             this.elements.listTable = this.$('#vocab-lists-container');
             this.elements.message = this.$('#message');
             return this;

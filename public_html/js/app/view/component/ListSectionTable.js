@@ -23,7 +23,6 @@ define([
             this.$el.html(template);
             this.elements.body = this.$('table tbody');
             this.elements.head = this.$('table thead');
-            this.renderTable();
             return this;
         },
         /**
@@ -88,7 +87,7 @@ define([
             this.fields = fields;
             this.listId = listId;
             this.sections = sections;
-            return this.render();
+            return this.renderTable();
         }
     });
 

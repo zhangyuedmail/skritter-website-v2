@@ -219,7 +219,7 @@ define([
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, true, skritter.user.isUsingZhuyin()));
             this.grading.select(this.review.getScore()).show();
             this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
-            if (skritter.user.isAudioEnabled() && this.review.getVocab().has('audio')) {
+            if (skritter.user.isAudioEnabled() && this.vocab.getContainedAt(this.review.getPosition()).has('audio')) {
                 this.vocab.playAudio(this.review.getPosition());
             }
             return this;

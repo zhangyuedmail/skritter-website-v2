@@ -22,7 +22,6 @@ define([
             this.$el.html(template);
             this.elements.body = this.$('table tbody');
             this.elements.head = this.$('table thead');
-            this.renderTable();
             return this;
         },
         /**
@@ -101,8 +100,9 @@ define([
          */
         set: function(lists, fields) {
             this.fields = fields;
+            this.lists.reset();
             this.lists.add(lists);
-            return this.render();
+            return this.renderTable();
         }
     });
 

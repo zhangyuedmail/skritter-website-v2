@@ -12,7 +12,8 @@ define([], function() {
                 changedItems: false,
                 downloadAll: false,
                 itemById: false,
-                reviews: false
+                reviews: false,
+                vocabById: false
             };
             this.on('change', _.bind(this.cache, this));
         },
@@ -38,13 +39,10 @@ define([], function() {
         /**
          * @method addItems
          * @param {Number} limit
-         * @param {Function} callback1
-         * @param {Function} callback2
+         * @param {Function} callback
          */
-        addItems: function(limit, callback1, callback2) {
-            var self = this;
+        addItems: function(limit, callback) {
             var now = skritter.fn.getUnixTime();
-            var numVocabsAdded = 0;
             var offset = this.get('addItemOffset');
             var requests = {
                 path: 'api/v' + skritter.api.version + '/items/add',
@@ -52,7 +50,8 @@ define([], function() {
                 params: {
                     lang: skritter.user.getLanguageCode(),
                     limit: limit,
-                    offset: offset
+                    offset: offset,
+                    fields: 'id'
                 }
             };
             this.active.addItems = true;
@@ -67,36 +66,31 @@ define([], function() {
                     });
                 },
                 function(batch, callback) {
+                    var itemIds = [];
                     var request = function() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
                                 if (result.Items) {
-                                    console.log('adding items'. result.Items);
-                                    skritter.user.scheduler.insert(result.Items);
-                                }
-                                if (result.numVocabsAdded) {
-                                    numVocabsAdded += result.numVocabsAdded;
+                                    itemIds = itemIds.concat(_.pluck(result.Items, 'id'));
                                 }
                                 window.setTimeout(request, 500);
                             } else {
-                                if (typeof callback2 === 'function') {
-                                    callback2(numVocabsAdded);
-                                }
-                                self.set('addItemOffset', offset + numVocabsAdded);
-                                callback();
+                                callback(null, itemIds);
                             }
                         });
                     };
                     request();
                 },
-                _.bind(function(callback) {
-                    this.changedItems(callback, now);
-                }, this)
-            ], _.bind(function() {
+                function(itemIds, callback) {
+                    skritter.user.sync.changedItems(function() {
+                        callback(null, itemIds);
+                    }, now, true);
+                }
+            ], _.bind(function(error, itemIds) {
                 skritter.user.scheduler.sort();
                 this.active.addItems = false;
-                if (typeof callback1 === 'function') {
-                    callback1();
+                if (typeof callback === 'function') {
+                    callback(itemIds);
                 }
             }, this));
         },
@@ -104,34 +98,32 @@ define([], function() {
          * @method changedItems
          * @param {Function} callback
          * @param {Number} offset
+         * @param {Boolean} includeResources
          */
-        changedItems: function(callback, offset) {
+        changedItems: function(callback, offset, includeResources) {
             offset = offset ? offset : this.get('lastItemSync');
             var languageCode = skritter.user.getLanguageCode();
             var now = skritter.fn.getUnixTime();
             var requests = [
                 {
-                    path: 'api/v' + skritter.api.get('version') + '/items',
+                    path: 'api/v' + skritter.api.version + '/items',
                     method: 'GET',
                     params: {
                         lang: languageCode,
                         sort: 'changed',
                         offset: offset,
-                        include_vocabs: 'false',
-                        include_strokes: 'false',
+                        include_vocabs: includeResources ? 'true' : 'false',
+                        include_strokes: includeResources ? 'true' : 'false',
                         include_sentences: 'false',
-                        include_heisigs: 'false',
-                        include_top_mnemonics: 'false',
-                        include_decomps: 'false'
+                        include_heisigs: includeResources ? 'true' : 'false',
+                        include_top_mnemonics: includeResources ? 'true' : 'false',
+                        include_decomps: includeResources ? 'true' : 'false'
                     },
                     spawner: true
                 }
             ];
             this.active.changedItems = true;
             async.series([
-                _.bind(function(callback) {
-                    this.reviews(callback);
-                }, this),
                 async.apply(this.processBatch, requests)
             ], _.bind(function() {
                 this.set({
@@ -198,11 +190,31 @@ define([], function() {
             }, this));
         },
         /**
+         * @method isActive
+         * @return {Boolean}
+         */
+        isActive: function() {
+            for (var prop in this.active) {
+                if (this.active[prop]) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        /**
+         * @method isFirstSync
+         * @return {Boolean}
+         */
+        isFirst: function() {
+            return this.get('lastItemSync') === 0 ? true : false;
+        },
+        /**
          * @method itemById
          * @param {Array|String} itemIds
          * @param {type} callback
+         * @param {Object} options
          */
-        itemById: function(itemIds, callback) {
+        itemById: function(itemIds, callback, options) {
             this.active.itemById = true;
             async.waterfall([
                 function(callback) {
@@ -212,7 +224,7 @@ define([], function() {
                         } else {
                             callback(items);
                         }
-                    });
+                    }, options);
                 },
                 function(items, callback) {
                     skritter.user.data.put(items, callback);
@@ -258,6 +270,9 @@ define([], function() {
                                     skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));
                                 }
                                 skritter.user.data.put(result, _.bind(function() {
+                                    if (result.Items && result.Items.length > 0) {
+                                        skritter.user.scheduler.insert(result.Items);
+                                    }
                                     requestIds = requestIds.concat(_.without(result.requestIds, undefined));
                                     window.setTimeout(request, 2000);
                                 }, this));
@@ -362,20 +377,33 @@ define([], function() {
                 }
             }, this));
         },
-        isActive: function() {
-            for (var prop in this.active) {
-                if (this.active[prop]) {
-                    return true;
-                }
-            }
-            return false;
-        },
         /**
-         * @method isFirstSync
-         * @return {Boolean}
+         * @method vocabById
+         * @param {Array|String} vocabIds
+         * @param {type} callback
+         * @param {Object} options
          */
-        isFirst: function() {
-            return this.get('lastItemSync') === 0 ? true : false;
+        vocabById: function(vocabIds, callback, options) {
+            this.active.vocabById = true;
+            async.waterfall([
+                function(callback) {
+                    skritter.api.getVocabs(vocabIds, function(vocabs, status) {
+                        if (status === 200) {
+                            callback(null, vocabs);
+                        } else {
+                            callback(vocabs);
+                        }
+                    }, options);
+                },
+                function(vocabs, callback) {
+                    skritter.user.data.put(vocabs, callback);
+                }
+            ], _.bind(function() {
+                this.active.vocabById = false;
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }, this));
         }
     });
 

@@ -6,6 +6,7 @@
                 <div class="navbar-toggle-sidebar">
                     <i class="fa fa-2x fa-bars"></i>
                     <span class="user-avatar"></span>
+                    <span class="page-title">Lists</span>
                 </div>
             </div>
         </div>
@@ -13,7 +14,21 @@
 
     <div class="sidebar"></div>
 
-    <div id="content" class="content-container container-fluid"></div>
+    <div id="content" class="content-container container-fluid">
+        <div class="content-block no-padding">
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                    <button type="button" id="button-category-studying" class="button-category btn btn-default">My Lists</button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" id="button-category-textbook" class="button-category btn btn-default">Textbooks</button>
+                </div>
+            </div>
+        </div>
+        <div class="content-block">
+            <div id="lists"></div>
+        </div>
+    </div>
 
     <div class="font-preloader">力</div>
 

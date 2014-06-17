@@ -151,20 +151,25 @@ define([
                 skritter.modal.element('.modal-footer').show();
                 if (limit >= 1 && limit <= 100) {
                     skritter.modal.element(':input').prop('disabled', true);
-                    skritter.modal.element('.modal-progress-value').html("Looking for new items");
-                    skritter.user.sync.addItems(limit, _.bind(function() {
+                    skritter.modal.element('.loading-image').show();
+                    skritter.modal.element('.message').html("Looking for new items to add.");
+                    skritter.user.sync.addItems(limit, _.bind(function(itemIds) {
                         skritter.user.settings.set('addItemAmount', limit);
-                        this.updateDueCounter();
-                        skritter.modal.hide();
-                        skritter.timer.start();
-                    }, this), function(numVocabsAdded) {
-                        if (numVocabsAdded > 0) {
-                            skritter.modal.element('.modal-progress-value').html("Adding " + numVocabsAdded + " items");
+                        if (itemIds.length === 0) {
+                            skritter.modal.element(':input').prop('disabled', false);
+                            skritter.modal.element('.loading-image').hide();
+                            skritter.modal.element('.message').addClass('text-warning');
+                            skritter.modal.element('.message').html('No active lists found.');
+                        } else {
+                            this.updateDueCounter();
+                            skritter.modal.hide();
+                            skritter.timer.start();
                         }
-                    });
+                    }, this));
                 } else {
-                    skritter.modal.element('.modal-progress-value').addClass('text-danger');
-                    skritter.modal.element('.modal-progress-value').text('Must be between 1 and 100.');
+                    skritter.modal.element('.loading-image').hide();
+                    skritter.modal.element('.message').addClass('text-danger');
+                    skritter.modal.element('.message').text('Must be between 1 and 100.');
                 }
                 event.preventDefault();
             }, this));

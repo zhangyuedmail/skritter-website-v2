@@ -181,6 +181,26 @@ define([
      */
     var mapper = ChineseMap;
     /**
+     * @method mergeObjectArray
+     * @param {Object} object1
+     * @param {Object} object2
+     * @returns {Object}
+     */
+    var mergeObjectArray = function(object1, object2) {
+        for (var key in object2) {
+            if (object1[key]) {
+                if (Array.isArray(object1[key])) {
+                    object1[key] = object1[key].concat(object2[key]);
+                } else {
+                    object1[key] = object2[key];
+                }
+            } else {
+                object1[key] = object2[key];
+            }
+        }
+        return object1;
+    };
+    /**
      * @method pad
      * @param {String} text The text requiring padding
      * @param {String} value The value to be applied as padding
@@ -239,6 +259,7 @@ define([
         isKana: isKana,
         isNumber: isNumber,
         mapper: mapper,
+        mergeObjectArray: mergeObjectArray,
         pad: pad,
         pinyin: pinyin,
         recognizer: recognizer,
