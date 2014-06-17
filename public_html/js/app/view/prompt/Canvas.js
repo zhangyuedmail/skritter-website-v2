@@ -521,21 +521,23 @@ define([
          * @param {Function} callback
          */
         tweenShape: function(layerName, fromShape, toShape, duration, callback) {
-            duration = duration ? duration : 500;
+            duration = duration ? duration : 300;
             var layer = this.getLayer(layerName);
             layer.addChildAt(fromShape, 0);
             this.stage.display.update();
-            createjs.Tween.get(fromShape).to({
-                x: toShape.x,
-                y: toShape.y,
-                scaleX: toShape.scaleX,
-                scaleY: toShape.scaleY,
-                rotation: toShape.rotation
-            }, duration, createjs.Ease.backOut).call(function() {
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            });
+            window.setTimeout(function() {
+                createjs.Tween.get(fromShape).to({
+                    x: toShape.x,
+                    y: toShape.y,
+                    scaleX: toShape.scaleX,
+                    scaleY: toShape.scaleY,
+                    rotation: toShape.rotation
+                }, duration, createjs.Ease.backOut).call(function() {
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                });
+            }, 0);
         },
         /**
          * @method updateAll
