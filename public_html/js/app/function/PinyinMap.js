@@ -1968,6 +1968,7 @@ define([], function() {
         'er3': {'pinyin': 'ěr', 'zhuyin': 'ㄦ'},
         'er4': {'pinyin': 'èr', 'zhuyin': 'ㄦ'},
         'er5': {'pinyin': 'er', 'zhuyin': 'ㄦ'},
+        'r5': {'pinyin': 'r', 'zhuyin': 'ㄦ'},
         'yi1': {'pinyin': 'yī', 'zhuyin': 'ㄧ'},
         'yi2': {'pinyin': 'yí', 'zhuyin': 'ㄧ'},
         'yi3': {'pinyin': 'yǐ', 'zhuyin': 'ㄧ'},
