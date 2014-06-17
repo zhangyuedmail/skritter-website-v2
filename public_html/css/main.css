@@ -402,7 +402,7 @@ body {
     padding: 0;
 }
 .sidebar .spacer:hover { background-color: #232323; }
-.sidebar div:hover { background-color: lightblue; }
+.sidebar div:hover { background-color: #232323; }
 .sidebar div span { padding-left: 10px; }
 .sidebar ul { list-style: none; }
 
