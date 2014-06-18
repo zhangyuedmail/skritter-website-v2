@@ -138,7 +138,8 @@ define([
                     this.canvas.fadeShape('background', shape);
                 }
             } else {
-                this.canvas.fadeShape('background', shape);
+                this.review.setReview('score', 1);
+                this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(), skritter.settings.get('hintColor'), 3000);
             }
         },
         /**
