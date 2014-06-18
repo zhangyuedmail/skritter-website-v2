@@ -230,6 +230,13 @@ define([
             return this.settings.get('targetLang');
         },
         /**
+         * @method getName
+         * @returns {String}
+         */
+        getName: function() {
+            return this.settings.get('name') ? this.settings.get('name') : this.id;
+        },
+        /**
          * @method getTags
          * @returns {Array}
          */
