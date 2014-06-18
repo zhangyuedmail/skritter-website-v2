@@ -40,6 +40,19 @@ define([
                 this.add(reviews, {merge: true, silent: true, sort: false});
                 callback();
             }, this));
+        },
+        /**
+         * @method loadDefaults
+         */
+        loadDefaults: function() {
+            var lang = skritter.user.getLanguageCode();
+            this.reset();
+            this.add([
+                {"lang": lang, "initialWrongInterval": 600, "wrongFactors": [0.25, 0.25, 0.25, 0.25], "part": "defn", "rightFactors": [2.2, 2.2, 2.2, 2.2], "initialRightInterval": 604800},
+                {"lang": lang, "initialWrongInterval": 600, "wrongFactors": [0.25, 0.25, 0.25, 0.25], "part": "rdng", "rightFactors": [2.2, 2.2, 2.2, 2.2], "initialRightInterval": 604800},
+                {"lang": lang, "initialWrongInterval": 600, "wrongFactors": [0.25, 0.25, 0.25, 0.25], "part": "rune", "rightFactors": [2.2, 2.2, 2.2, 2.2], "initialRightInterval": 604800},
+                {"lang": lang, "initialWrongInterval": 600, "wrongFactors": [0.25, 0.25, 0.25, 0.25], "part": "tone", "rightFactors": [2.2, 2.2, 2.2, 2.2], "initialRightInterval": 604800}
+            ]);
         }
     });
 
