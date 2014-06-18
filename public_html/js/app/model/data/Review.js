@@ -320,7 +320,7 @@ define([
                         skritter.user.sync.srsconfigs(callback);
                     }
                 },
-                function(callback) {
+                _.bind(function(callback) {
                     //updates all of the new review intervals and items
                     for (var i = 0, length = reviews.length; i < length; i++) {
                         var review = reviews[i];
@@ -346,7 +346,7 @@ define([
                         skritter.user.scheduler.update(item);
                         callback();
                     }
-                },
+                }, this),
                 _.bind(function(callback) {
                     skritter.user.data.reviews.add(this, {merge: true});
                     callback();
