@@ -116,8 +116,10 @@ define([
             if (points && points.length > 2) {
                 var result = this.review.getCharacterAt().recognize(points, shape);
                 if (result) {
+                    this.characterRevealed = false;
                     this.strokeAttempts = 0;
                     this.canvas.lastMouseDownEvent = null;
+                    this.elements.reveal.removeClass('selected');
                     if (skritter.user.settings.get('squigs')) {
                         this.canvas.drawShape('stroke', shape);
                     } else {
@@ -212,6 +214,8 @@ define([
         show: function() {
             skritter.timer.start();
             this.canvas.enableInput();
+            this.characterRevealed = false;
+            this.elements.reveal.show().removeClass('selected');
             this.elements.definition.html(this.vocab.getDefinition());
             if (this.item.isNew()) {
                 this.elements.newness.show();
@@ -243,6 +247,8 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             this.canvas.disableInput();
+            this.characterRevealed = false;
+            this.elements.reveal.hide();
             if (!this.review.getReview().finished) {
                 this.review.setReview({
                     finished: true,
