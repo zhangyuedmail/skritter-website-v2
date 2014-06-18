@@ -47,7 +47,7 @@ define([
             this.$(this.elements.input).on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
             createjs.Ticker.addEventListener('tick', this.stage.display);
             createjs.Touch.enable(this.stage.input);
-            createjs.Ticker.setFPS(200);
+            createjs.Ticker.setFPS(24);
             this.resize();
             return this;
         },
