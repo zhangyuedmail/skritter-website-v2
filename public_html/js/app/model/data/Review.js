@@ -344,8 +344,8 @@ define([
                             timeStudied: item.get('timeStudied') + review.reviewTime
                         });
                         skritter.user.scheduler.update(item);
-                        callback();
                     }
+                    callback();
                 }, this),
                 _.bind(function(callback) {
                     skritter.user.data.reviews.add(this, {merge: true});
