@@ -1,10 +1,4 @@
-/**
- * @module Skritter
- * @submodule Storage
- * @param Database
- * @author Joshua McFarland
- */
-define(function(Database) {
+define([], function() {
     /**
      * @class IndexedDBAdapter
      */
