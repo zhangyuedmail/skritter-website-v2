@@ -15,6 +15,7 @@ define([
             skritter.timer.setReviewLimit(30);
             skritter.timer.setThinkingLimit(15);
             this.canvas = new Canvas();
+            this.characterRevealed = false;
             this.maxStrokeAttempts = 3;
             this.strokeAttempts = 0;
         },
@@ -28,7 +29,6 @@ define([
             this.canvas.setElement('.canvas-container').render();
             this.listenTo(this.canvas, 'canvas:click', this.handleClick);
             this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHold);
-            this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClick);
             this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeUp);
@@ -41,6 +41,7 @@ define([
          */
         events: function() {
             return _.extend({}, Prompt.prototype.events, {
+                'vclick .button-reveal': 'handleRevealClick'
             });
         },
         /**
@@ -72,15 +73,6 @@ define([
             event.preventDefault();
         },
         /**
-         * @method handleDoubleClick
-         * @param {Object} event
-         */
-        handleDoubleClick: function(event) {
-            this.review.setReview('score', 1);
-            this.canvas.drawShape('hint', this.review.getCharacter().targets[0].getShape(), '#999999');
-            event.preventDefault();
-        },
-        /**
          * @method handleGradingSelected
          * @param {Number} score
          */
@@ -91,6 +83,23 @@ define([
                 this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[score]);
             }
             this.review.setReview('score', score);
+        },
+        /**
+         * @method handleRevealClick
+         * @param {Object} event
+         */
+        handleRevealClick: function(event) {
+            this.review.setReview('score', 1);
+            if (this.characterRevealed) {
+                this.elements.reveal.removeClass('selected');
+                this.canvas.clearLayer('hint');
+                this.characterRevealed = false;
+            } else {
+                this.elements.reveal.addClass('selected');
+                this.canvas.drawShape('hint', this.review.getCharacter().targets[0].getShape(), '#999999');
+                this.characterRevealed = true;
+            }
+            event.preventDefault();
         },
         /**
          * @method handleStrokeDown

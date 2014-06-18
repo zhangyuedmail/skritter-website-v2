@@ -32,6 +32,7 @@ define([
             this.elements.newness = this.$('.prompt-newness');
             this.elements.question = this.$('.prompt-question');
             this.elements.reading = this.$('.prompt-reading');
+            this.elements.reveal = this.$('.button-reveal');
             this.elements.sentence = this.$('.prompt-sentence');
             this.elements.style = this.$('.prompt-style');
             this.elements.writing = this.$('.prompt-writing');

@@ -172,6 +172,7 @@ body {
     font-size: 18px;
     padding-left: 5px;
 }
+.selected { color: #006d91; }
 .skritter-container { height: 100%; }
 .view {
     height: 100%; 
@@ -309,6 +310,14 @@ body {
     padding: 2px 10px;
     position: absolute;
     z-index: 9200;
+}
+.info-section .button-reveal {
+    bottom: 0;
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    z-index: 9601;
 }
 @media (max-width: 767px) {
     .info-section { 
