@@ -24,7 +24,8 @@ define([
             this.history = [];
             this.view = null;
             Backbone.history.start();
-            window.document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
+            window.document.addEventListener('backbutton', _.bind(this.handleBackButtonPress, this), false);
+            window.document.addEventListener('menubutton', _.bind(this.handleMenuButtonPress, this), false);
         },
         /**
          * @property {Object} routes
@@ -49,7 +50,7 @@ define([
          */
         addHistory: function(path) {
             if (this.history.indexOf(path) === -1) {
-               this.history.unshift(path);
+               this.history.push(path);
             }
         },
         /**
@@ -59,10 +60,10 @@ define([
             this.navigate(this.history[0], {replace: true, trigger: true});
         },
         /**
-         * @method handleBackButtonPressed
+         * @method handleBackButtonPress
          * @param {Object} event
          */
-        handleBackButtonPressed: function(event) {
+        handleBackButtonPress: function(event) {
             var fragment = Backbone.history.fragment;
             if (this.view.elements.sidebar && this.view.elements.sidebar.hasClass('expanded')) {
                 this.view.toggleSidebar();
@@ -74,7 +75,17 @@ define([
                     window.navigator.app.exitApp();
                 });
             } else {
-                window.history.back();
+                this.back();
+            }
+            event.preventDefault();
+        },
+        /**
+         * @method handleMenuButtonPress
+         * @param {Object} event
+         */
+        handleMenuButtonPress: function(event) {
+            if (this.view.elements.sidebar) {
+                this.view.toggleSidebar();
             }
             event.preventDefault();
         },
