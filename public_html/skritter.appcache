@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Tue Jun 17 2014 09:53:41 GMT-0700 (Pacific Daylight Time)
+# Time: Tue Jun 17 2014 23:04:48 GMT-0700 (Pacific Daylight Time)
 
 CACHE:
 index.html
@@ -84,6 +84,7 @@ js/app/model/data/Vocab.js
 js/app/model/data/VocabList.js
 js/app/model/prompt/Stroke.js
 js/app/model/storage/IndexedDBAdapter.js
+js/app/model/storage/WebSQLAdapter.js
 js/app/model/user/Data.js
 js/app/model/user/Scheduler.js
 js/app/model/user/Settings.js
