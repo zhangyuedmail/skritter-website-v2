@@ -312,31 +312,41 @@ define([
          */
         save: function(callback) {
             var reviews = this.get('reviews');
-            //updates all of the new review intervals and items
-            for (var i = 0, length = reviews.length; i < length; i++) {
-                var review = reviews[i];
-                var item = skritter.user.data.items.get(review.itemId);
-                if (reviews.length > 1 && i === 0) {
-                    review.finished = true;
-                    review.reviewTime = this.getTotalReviewTime();
-                    review.score = this.getFinalScore();
-                    review.thinkingTime = this.getTotalThinkingTime();
-                }
-                review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
-                item.set({
-                    changed: review.submitTime,
-                    last: review.submitTime,
-                    interval: review.newInterval,
-                    next: review.submitTime + review.newInterval,
-                    previousInterval: review.currentInterval,
-                    previousSuccess: review.score > 1 ? true : false,
-                    reviews: item.get('reviews') + 1,
-                    successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
-                    timeStudied: item.get('timeStudied') + review.reviewTime
-                });
-                skritter.user.scheduler.update(item);
-            }
             async.series([
+                function(callback) {
+                    if (skritter.user.data.srsconfigs.length >= 3) {
+                        callback();
+                    } else {
+                        skritter.user.sync.srsconfigs(callback);
+                    }
+                },
+                function(callback) {
+                    //updates all of the new review intervals and items
+                    for (var i = 0, length = reviews.length; i < length; i++) {
+                        var review = reviews[i];
+                        var item = skritter.user.data.items.get(review.itemId);
+                        if (reviews.length > 1 && i === 0) {
+                            review.finished = true;
+                            review.reviewTime = this.getTotalReviewTime();
+                            review.score = this.getFinalScore();
+                            review.thinkingTime = this.getTotalThinkingTime();
+                        }
+                        review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
+                        item.set({
+                            changed: review.submitTime,
+                            last: review.submitTime,
+                            interval: review.newInterval,
+                            next: review.submitTime + review.newInterval,
+                            previousInterval: review.currentInterval,
+                            previousSuccess: review.score > 1 ? true : false,
+                            reviews: item.get('reviews') + 1,
+                            successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
+                            timeStudied: item.get('timeStudied') + review.reviewTime
+                        });
+                        skritter.user.scheduler.update(item);
+                        callback();
+                    }
+                },
                 _.bind(function(callback) {
                     skritter.user.data.reviews.add(this, {merge: true});
                     callback();

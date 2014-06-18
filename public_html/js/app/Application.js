@@ -9,8 +9,9 @@ define([
     'model/Settings',
     'require.locale!../../locale/nls/strings',
     'view/component/Timer',
-    'model/User'
-], function(Api, Assets, Functions, IndexedDBAdapter, Modal, Router, Schema, Settings, Strings, Timer, User) {
+    'model/User',
+    'model/storage/WebSQLAdapter'
+], function(Api, Assets, Functions, IndexedDBAdapter, Modal, Router, Schema, Settings, Strings, Timer, User, WebSQLAdapter) {
     /**
      * @method loadApi
      * @param {Function} callback
@@ -65,6 +66,7 @@ define([
      */
     var loadStorage = function(callback) {
         skritter.storage = new IndexedDBAdapter();
+        //skritter.storage = new WebSQLAdapter();
         callback();
     };
     /**

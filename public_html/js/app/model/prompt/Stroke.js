@@ -85,10 +85,13 @@ define(function() {
          */
         getUserShape: function() {
             var shape = this.inflateShape();
+            var bounds = shape.getBounds();
             var rect = this.getRectangle();
             shape.name = 'stroke';
             shape.x = rect.x;
             shape.y = rect.y;
+            shape.scaleX = rect.w / bounds.width;
+            shape.scaleY = rect.h / bounds.height;
             return shape;
         },
         /**

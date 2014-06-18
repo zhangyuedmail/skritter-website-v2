@@ -143,6 +143,7 @@ body {
     margin-top: 10px;
     padding: 5px 10px;
 }
+.content-block.overflow { overflow-y: auto; }
 .content-block.no-margin { margin: 0; }
 .content-block.no-padding { padding: 0; }
 .content-block.no-shadow {
@@ -402,7 +403,7 @@ body {
     padding: 0;
 }
 .sidebar .spacer:hover { background-color: #232323; }
-.sidebar div:hover { background-color: lightblue; }
+.sidebar div:hover { background-color: #232323; }
 .sidebar div span { padding-left: 10px; }
 .sidebar ul { list-style: none; }
 

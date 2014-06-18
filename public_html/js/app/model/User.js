@@ -199,7 +199,7 @@ define([
                 position: review.get('position')
             } : null;
             return {
-                review: review,
+                activeReview: review,
                 studyTime: skritter.timer.time / 1000,
                 view: Backbone.history.fragment
             };
@@ -258,7 +258,7 @@ define([
          * @returns {Boolean}
          */
         isChinese: function() {
-            return this.settings.get('targetLang') === 'zh' ? true : false;
+            return this.getLanguageCode() === 'zh' ? true : false;
         },
         /**
          * Returns true if the target language is set to Japanese.
@@ -267,7 +267,7 @@ define([
          * @returns {Boolean}
          */
         isJapanese: function() {
-            return this.settings.get('targetLang') === 'ja' ? true : false;
+            return this.getLanguageCode() === 'ja' ? true : false;
         },
         /**
          * @method isLoggedIn

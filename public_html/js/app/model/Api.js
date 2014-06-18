@@ -303,10 +303,10 @@ define(function() {
         },
         /**
          * @method getSRSConfigs
-         * @param {String} language
+         * @param {String} languageCode
          * @param {Function} callback
          */
-        getSRSConfigs: function(language, callback) {
+        getSRSConfigs: function(languageCode, callback) {
             $.ajax({
                 url: this.base + 'srsconfigs',
                 beforeSend: _.bind(function(xhr) {
@@ -314,8 +314,8 @@ define(function() {
                 }, this),
                 type: 'GET',
                 data: {
-                    bearer_token: self.get('token'),
-                    lang: language
+                    bearer_token: this.get('token'),
+                    lang: languageCode
                 }
             }).done(function(data) {
                 callback(data.SRSConfigs, data.statusCode);

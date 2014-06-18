@@ -345,7 +345,7 @@ define([], function() {
                                     try {
                                         throw new Error('Review Format Error');
                                     } catch (error) {
-                                        console.error('Review Format Error', postedReviews);
+                                        console.error('Review Format Error', {postedReviews: reviews});
                                         Raygun.send(error);
                                     }
                                 }
@@ -377,6 +377,25 @@ define([], function() {
                     callback();
                 }
             }, this));
+        },
+        /**
+         * @method srsconfigs
+         * @param {Function} callback
+         */
+        srsconfigs: function(callback) {
+            var lang = skritter.user.getLanguageCode();
+            skritter.api.getSRSConfigs(lang, function(configs, status) {
+                if (status === 200) {
+                    skritter.user.data.srsconfigs.reset();
+                    skritter.user.data.srsconfigs.add(configs);
+                    skritter.user.data.srsconfigs.cache(callback);
+                } else if (skritter.user.data.srsconfigs.length === 0) {
+                    skritter.user.data.srsconfigs.loadDefaults();
+                    callback();
+                } else {
+                    callback();
+                }
+            });
         },
         /**
          * @method vocabById
