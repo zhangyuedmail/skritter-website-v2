@@ -281,6 +281,23 @@ body {
 .prompt .grading-container .grading-icon { max-height: 43px; }
 
 
+/*** PROMPT: TEACHING BUTTONS ***/
+.prompt .teaching-container {
+    display: none;
+    bottom: 0;
+    position: absolute;
+    z-index: 9004;
+}
+.prompt .teaching-container .btn { 
+    background-color: #ffffff;
+    padding: 5px;
+}
+.prompt .teaching-container .btn img { opacity: 0.4; }
+.prompt .teaching-container .btn.active img { opacity: 1; }
+.prompt .teaching-container .btn:hover img { opacity: 1; }
+.prompt .teaching-container .grading-icon { max-height: 43px; }
+
+
 /*** PROMPT: INFO SECTION ***/
 .info-section {
     border-bottom: none;

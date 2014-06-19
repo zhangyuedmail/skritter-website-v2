@@ -1,5 +1,6 @@
 define([
-    'view/prompt/GradingButtons'
+    'view/prompt/GradingButtons',
+    
 ], function(GradingButtons) {
     /**
      * @class Prompt
@@ -22,6 +23,7 @@ define([
         render: function() {
             console.log(this.review.id, this.review.toJSON());
             this.grading.setElement('.grading-container').render();
+            this.teachingButtons.setElement('.teaching-container').render();
             this.elements.answer = this.$('.prompt-answer');
             this.elements.canvas = this.$('.canvas-container');
             this.elements.definition = this.$('.prompt-definition');
@@ -161,7 +163,7 @@ define([
          * @method remove
          */
         remove: function() {
-            this.grading.remove();
+            this.teachingButtons.remove();
             this.removeElements();
             this.stopListening();
             this.undelegateEvents();

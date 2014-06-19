@@ -1,8 +1,9 @@
 define([
     'require.text!template/prompt-rune.html',
     'view/prompt/Canvas',
-    'view/prompt/Prompt'
-], function(template, Canvas, Prompt) {
+    'view/prompt/Prompt',
+    'view/prompt/TeachingButtons'
+], function(template, Canvas, Prompt, TeachingButtons) {
     /**
      * @class PromptRune
      */
@@ -19,6 +20,7 @@ define([
             this.maxStrokeAttempts = 3;
             this.strokeAttempts = 0;
             this.teaching = false;
+            this.teachingButtons = new TeachingButtons();
         },
         /**
          * @method render
@@ -33,6 +35,8 @@ define([
             this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeUp);
+            this.listenTo(this.teachingButtons, 'next', this.next);
+            this.listenTo(this.teachingButtons, 'repeat', this.reset);
             this.resize();
             this.show();
             return this;
@@ -129,7 +133,7 @@ define([
                     if (this.review.getCharacter().isFinished()) {
                         this.canvas.clearLayer('teach');
                         this.showAnswer();
-                    } else {
+                    } else if (this.teaching) {
                         this.teach();
                     }
                     
@@ -159,6 +163,7 @@ define([
          */
         remove: function() {
             this.canvas.remove();
+            this.grading.remove();
             Prompt.prototype.remove.call(this);
         },
         /**
@@ -176,6 +181,9 @@ define([
         reset: function() {
             this.canvas.clear().enableInput();
             this.review.getCharacter().reset();
+            if (this.teaching) {
+                this.teach();
+            }
             return this;
         },
         /**
@@ -247,6 +255,7 @@ define([
                 }
             }
             if (this.review.getReview().finished) {
+                this.revealCharacter();
                 this.showAnswer();
             } else {
                 skritter.timer.start();
@@ -277,7 +286,7 @@ define([
                 this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape());
             }
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
-            if (skritter.user.settings.get('squigs') && this.review.getCharacter().length > 0) {
+            if (!this.teaching && skritter.user.settings.get('squigs') && this.review.getCharacter().length > 0) {
                 var character = this.review.getCharacter();
                 window.setTimeout(_.bind(function() {
                     for (var i = 0, length = character.length; i < length; i++) {
@@ -293,7 +302,11 @@ define([
                     this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
                 }
             }
-            this.grading.select(this.review.getScore()).show();
+            if (this.teaching) {
+                this.teachingButtons.show();
+            } else {
+                this.grading.select(this.review.getScore()).show();
+            }
             if (skritter.user.isAudioEnabled() && this.vocab.getContainedAt(this.review.getPosition()).has('audio')) {
                 this.vocab.playAudio(this.review.getPosition());
             }
@@ -304,7 +317,8 @@ define([
          */
         teach: function() {
             this.teaching = true;
-            this.revealCharacter(this.review.getPosition());
+            this.review.setReview('score', 1);
+            this.revealCharacter(this.review.getPosition() - 1);
             var character = this.review.getCharacterAt();
             var stroke = character.getExpectedStroke();
             this.canvas.clearLayer('teach').drawShape('teach', stroke.inflateShape(), skritter.settings.get('hintColor'));
