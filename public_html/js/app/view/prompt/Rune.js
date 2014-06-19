@@ -30,6 +30,7 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             Prompt.prototype.render.call(this);
             this.canvas.setElement('.canvas-container').render();
+            this.teachingButtons.setElement('.teaching-container').render();
             this.listenTo(this.canvas, 'canvas:click', this.handleClick);
             this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHold);
             this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
@@ -129,12 +130,13 @@ define([
                     } else {
                         this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
                     }
-                    this.canvas.fadeLayer('hint');
                     if (this.review.getCharacter().isFinished()) {
                         this.canvas.clearLayer('teach');
                         this.showAnswer();
                     } else if (this.teaching) {
                         this.teach();
+                    } else {
+                        this.canvas.fadeLayer('background');
                     }
                     
                 } else {
@@ -163,7 +165,7 @@ define([
          */
         remove: function() {
             this.canvas.remove();
-            this.grading.remove();
+            this.teachingButtons.remove();
             Prompt.prototype.remove.call(this);
         },
         /**
@@ -173,6 +175,7 @@ define([
         revealCharacter: function(excludePosition) {
             this.canvas.clearLayer('background');
             this.canvas.drawShape('background', this.review.getCharacter().targets[0].getShape(excludePosition), '#999999');
+            this.characterRevealed = true;
         },
         /**
          * @method reset
@@ -238,8 +241,14 @@ define([
             this.characterRevealed = false;
             this.elements.reveal.show().removeClass('selected');
             this.elements.definition.html(this.vocab.getDefinition());
+            this.teachingButtons.hide();
             if (this.item.isNew()) {
                 this.elements.newness.show();
+            }
+            if (skritter.user.settings.get('teachingMode') && this.review.getItem().isNew()) {
+                this.teach();
+            } else {
+                this.teaching = false;
             }
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
@@ -260,11 +269,6 @@ define([
             } else {
                 skritter.timer.start();
             }
-            
-            if (skritter.user.settings.get('teachingMode') && this.review.getItem().isNew()) {
-                this.teach();
-            }
-            
             return this;
         },
         /**
@@ -317,6 +321,7 @@ define([
          */
         teach: function() {
             this.teaching = true;
+            this.elements.reveal.hide();
             this.review.setReview('score', 1);
             this.revealCharacter(this.review.getPosition() - 1);
             var character = this.review.getCharacterAt();
