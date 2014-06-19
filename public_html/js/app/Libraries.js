@@ -1,5 +1,6 @@
 define([
     'async',
+    'moment',
     'backbone',
     'bootstrap',
     'bootstrap.switch',
@@ -8,11 +9,11 @@ define([
     'jquery',
     'jquery.mobile',
     'jquery.ui',
-    'moment',
     'raygun',
     'require.locale',
     'require.text',
     'underscore'
-], function(async) {
+], function(async, moment) {
     window.async = async;
+    window.moment = moment;
 });
