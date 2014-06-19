@@ -127,9 +127,9 @@ define([
                 //load raygun javascript error logging module
                 if (skritter.fn.hasCordova() && window.Raygun) {
                     Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach()
-                            .withCustomData(skritter.user.getName())
+                            .withCustomData(skritter.user.getCustomData())
                             .withTags(skritter.user.getTags());
-                    Raygun.setUser(skritter.user.settings.get('name'));
+                    Raygun.setUser(skritter.user.getName());
                     Raygun.setVersion(skritter.settings.getVersion());
                     Raygun.saveIfOffline(true);
                 } else if (window.Raygun) {
