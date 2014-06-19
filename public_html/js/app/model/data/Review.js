@@ -323,18 +323,6 @@ define([
                             review.score = this.getFinalScore();
                             review.thinkingTime = this.getTotalThinkingTime();
                         }
-                        //TODO: remove this one it has been debugged
-                        if (window.Raygun && !item) {
-                            try {
-                                throw new Error('Review save missing item');
-                            } catch (error) {
-                                Raygun.send(error, {
-                                    reviewItems: skritter.user.data.items.toJSON(),
-                                    reviewSaves: reviews,
-                                    reviewSavePosition: i
-                                });
-                            }
-                        }
                         review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
                         item.set({
                             changed: review.submitTime,
