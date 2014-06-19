@@ -21,7 +21,7 @@ define([
          */
         initialize: function() {
             this.container = $('.skritter-container');
-            this.history = [''];
+            this.history = [];
             this.view = null;
             Backbone.history.start();
             window.document.addEventListener('backbutton', _.bind(this.handleBackButtonPress, this), false);
@@ -68,7 +68,6 @@ define([
                 }
             }
             return this.navigate('', {replace: true, trigger: true});
-            ;
         },
         /**
          * @method handleBackButtonPress

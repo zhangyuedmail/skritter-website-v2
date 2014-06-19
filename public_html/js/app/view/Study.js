@@ -22,7 +22,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            window.document.title = "Study - Skritter";
+            this.setTitle('Study');
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));

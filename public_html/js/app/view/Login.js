@@ -17,7 +17,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            window.document.title = "Log In - Skritter";
+            this.setTitle('Log In');
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             return this;

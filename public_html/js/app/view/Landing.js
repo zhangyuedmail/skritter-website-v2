@@ -17,6 +17,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
+            this.setTitle('Welcome');
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             return this;

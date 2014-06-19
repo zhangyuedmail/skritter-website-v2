@@ -18,6 +18,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
+            this.setTitle('Test');
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             require([
