@@ -21,7 +21,7 @@ define([
          */
         initialize: function() {
             this.container = $('.skritter-container');
-            this.history = [];
+            this.history = [''];
             this.view = null;
             Backbone.history.start();
             window.document.addEventListener('backbutton', _.bind(this.handleBackButtonPress, this), false);
@@ -49,15 +49,22 @@ define([
          * @param {String} path
          */
         addHistory: function(path) {
-            if (this.history.indexOf(path) === -1) {
-               this.history.push(path);
+            var pathIndex = this.history.indexOf(path);       
+            if (pathIndex === -1) {
+                this.history.unshift(path);
             }
         },
         /**
          * @method back
          */
         back: function() {
-            this.navigate(this.history[0], {replace: true, trigger: true});
+            if (this.history.length === 0) {
+                this.navigate('', {replace: true, trigger: true});
+            } else if (Backbone.history.fragment === this.history[0]){
+                this.navigate(this.history[1], {replace: true, trigger: true});
+            } else {
+                this.navigate(this.history[0], {replace: true, trigger: true});
+            }
         },
         /**
          * @method handleBackButtonPress

@@ -39,6 +39,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .button-back': 'handleBackClick',
             'vclick .content-container': 'handleContentContainerClick',
             'vclick .button-sidebar-account': 'handleAccountClick',
             'vclick .button-sidebar-home': 'handleHomeClick',
