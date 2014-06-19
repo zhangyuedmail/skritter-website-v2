@@ -128,6 +128,8 @@ define([
                 }
                 this.grading.hide(_.bind(this.clear, this));
             } else {
+                this.stopListening();
+                this.undelegateEvents();
                 this.review.save(_.bind(function() {
                     this.grading.hide(_.bind(this.triggerNext, this));
                 }, this));
