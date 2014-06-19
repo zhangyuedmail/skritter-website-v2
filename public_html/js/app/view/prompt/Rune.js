@@ -244,11 +244,11 @@ define([
             this.teachingButtons.hide();
             if (this.item.isNew()) {
                 this.elements.newness.show();
-            }
-            if (skritter.user.settings.get('teachingMode') && this.review.getItem().isNew()) {
-                this.teach();
-            } else {
-                this.teaching = false;
+                if (skritter.user.settings.get('teachingMode')) {
+                    this.teach();
+                } else {
+                    this.teaching = false;
+                }
             }
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
