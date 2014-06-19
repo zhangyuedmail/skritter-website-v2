@@ -158,8 +158,9 @@ define([
             console.log('application initialized');
             skritter.router = new Router();
             if (skritter.fn.hasCordova()) {
-                window.navigator.analytics.startTrackerWithId(skritter.getTrackingID());
-                window.navigator.splashscreen.hide();
+                navigator.analytics.startTrackerWithId(skritter.getTrackingID());
+                navigator.analytics.setUserId(skritter.user.getName());
+                navigator.splashscreen.hide();
             }
         });
     };
