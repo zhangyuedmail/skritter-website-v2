@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Tue Jun 17 2014 23:04:48 GMT-0700 (Pacific Daylight Time)
+# Time: Wed Jun 18 2014 22:30:44 GMT-0700 (Pacific Daylight Time)
 
 CACHE:
 index.html
@@ -31,6 +31,7 @@ template/prompt-defn.html
 template/prompt-grading-buttons.html
 template/prompt-rdng.html
 template/prompt-rune.html
+template/prompt-teaching-buttons.html
 template/prompt-tone.html
 template/sidebar.html
 template/signup.html
@@ -108,6 +109,7 @@ js/app/view/prompt/GradingButtons.js
 js/app/view/prompt/Prompt.js
 js/app/view/prompt/Rdng.js
 js/app/view/prompt/Rune.js
+js/app/view/prompt/TeachingButtons.js
 js/app/view/prompt/Tone.js
 js/app/view/study/Settings.js
 js/app/view/user/Account.js
