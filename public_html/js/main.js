@@ -45,9 +45,41 @@ requirejs.config({
     waitSeconds: 120
 });
 
+//creates the global skritter namespace
+window.skritter = (function(skritter) {
+    skritter._vars = {};
+    skritter._vars.languageCode = '@@languageCode';
+    skritter._vars.trackingID = '@@trackingID';
+    skritter._vars.version = '@@version';
+    return skritter;
+})(window.skritter || {});
+window.skritter.getLanguageCode = function() {
+    var languageCode = skritter._vars.languageCode;
+    return languageCode.indexOf('@@') === -1 ? languageCode : undefined;
+};
+window.skritter.getTrackingID = function() {
+    return skritter._vars.trackingID;
+};
+window.skritter.getVersion = function() {
+    var version = skritter._vars.version;
+    return version.indexOf('@@') === -1 ? version : 'edge';
+};
+
+if (window.Raygun) {
+    if (window.cordova) {
+        Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach();
+        Raygun.setUser('guest');
+        Raygun.setVersion(window.skritter.version);
+        Raygun.saveIfOffline(true);
+    } else {
+        //TODO: load tracking for other environments
+    }
+}
+
 requirejs(['Libraries'], function() {
     //main run function that loads application specific files
     var run = function() {
+        //load the application module
         requirejs(['Application'], function(Application) {
             $(document).ready(function() {
                 Application.initialize();

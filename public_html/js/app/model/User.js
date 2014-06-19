@@ -223,8 +223,8 @@ define([
          * @returns {String}
          */
         getLanguageCode: function() {
-            var applicationLanguageCode = skritter.settings.get('languageCode');
-            if (applicationLanguageCode.indexOf('@@') === -1) {
+            var applicationLanguageCode = skritter.getLanguageCode();
+            if (applicationLanguageCode) {
                 return applicationLanguageCode;
             }
             return this.settings.get('targetLang');

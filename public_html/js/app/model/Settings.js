@@ -25,9 +25,7 @@ define([], function() {
                 4: '#4097d3'
             },
             hintColor: '#87cefa',
-            languageCode: '@@languageCode',
-            maxCanvasSize: 1800,
-            version: '@@version'
+            maxCanvasSize: 1800
         },
         /**
          * @method getAppHeight
@@ -78,13 +76,6 @@ define([], function() {
          */
         getContentWidth: function() {
             return $('#content').width();
-        },
-        /**
-         * @method getVersion
-         * @returns {String}
-         */
-        getVersion: function() {
-            return this.get('version').indexOf('@@') === -1 ? this.get('version') : 'edge';
         },
         /**
          * @method isLandscape
