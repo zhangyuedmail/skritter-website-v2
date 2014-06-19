@@ -500,8 +500,8 @@ module.exports = function(grunt) {
     ]);
     
     grunt.registerTask('install', [
-        'clean:build',
         'shell:kill-adb',
+        'clean:build',
         'shell:cordova-prepare',
         'shell:cordova-install-chinese',
         'shell:cordova-install-japanese'
