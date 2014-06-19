@@ -43,6 +43,7 @@ define([
             this.createLayer('background');
             this.createLayer('hint');
             this.createLayer('stroke');
+            this.createLayer('teach');
             this.$(this.elements.input).on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
             this.$(this.elements.input).on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
             createjs.Ticker.addEventListener('tick', this.stage.display);

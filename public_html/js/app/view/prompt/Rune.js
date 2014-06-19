@@ -18,6 +18,7 @@ define([
             this.characterRevealed = false;
             this.maxStrokeAttempts = 3;
             this.strokeAttempts = 0;
+            this.teaching = false;
         },
         /**
          * @method render
@@ -92,12 +93,11 @@ define([
             this.review.setReview('score', 1);
             if (this.characterRevealed) {
                 this.elements.reveal.removeClass('selected');
-                this.canvas.clearLayer('hint');
+                this.canvas.clearLayer('background');
                 this.characterRevealed = false;
             } else {
                 this.elements.reveal.addClass('selected');
-                this.canvas.drawShape('hint', this.review.getCharacter().targets[0].getShape(), '#999999');
-                this.characterRevealed = true;
+                this.revealCharacter();
             }
             event.preventDefault();
         },
@@ -127,8 +127,12 @@ define([
                     }
                     this.canvas.fadeLayer('hint');
                     if (this.review.getCharacter().isFinished()) {
+                        this.canvas.clearLayer('teach');
                         this.showAnswer();
+                    } else {
+                        this.teach();
                     }
+                    
                 } else {
                     this.strokeAttempts++;
                     if (this.strokeAttempts > this.maxStrokeAttempts) {
@@ -156,6 +160,14 @@ define([
         remove: function() {
             this.canvas.remove();
             Prompt.prototype.remove.call(this);
+        },
+        /**
+         * @method revealCharacter
+         * @param {Number} excludePosition
+         */
+        revealCharacter: function(excludePosition) {
+            this.canvas.clearLayer('background');
+            this.canvas.drawShape('background', this.review.getCharacter().targets[0].getShape(excludePosition), '#999999');
         },
         /**
          * @method reset
@@ -239,6 +251,11 @@ define([
             } else {
                 skritter.timer.start();
             }
+            
+            if (skritter.user.settings.get('teachingMode') && this.review.getItem().isNew()) {
+                this.teach();
+            }
+            
             return this;
         },
         /**
@@ -267,16 +284,30 @@ define([
                         var stroke = character.at(i);
                         this.canvas.tweenShape('background', stroke.getUserShape(), stroke.inflateShape());
                     }
-                    this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+                    if (!this.teaching) {
+                        this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+                    }
                 }, this), 0);
             } else {
-                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+                if (!this.teaching) {
+                    this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+                }
             }
             this.grading.select(this.review.getScore()).show();
             if (skritter.user.isAudioEnabled() && this.vocab.getContainedAt(this.review.getPosition()).has('audio')) {
                 this.vocab.playAudio(this.review.getPosition());
             }
             return this;
+        },
+        /**
+         * @method teach
+         */
+        teach: function() {
+            this.teaching = true;
+            this.revealCharacter(this.review.getPosition());
+            var character = this.review.getCharacterAt();
+            var stroke = character.getExpectedStroke();
+            this.canvas.clearLayer('teach').drawShape('teach', stroke.inflateShape(), skritter.settings.get('hintColor'));
         }
     });
 

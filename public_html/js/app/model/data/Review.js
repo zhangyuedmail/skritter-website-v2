@@ -120,11 +120,7 @@ define([
          * @returns {Backbone.Model}
          */
         getItem: function() {
-            var position = this.get('position');
-            if (this.hasContained() && position !== 0) {
-                return this.get('items')[position];
-            }
-            return this.get('items')[0];
+            return skritter.user.data.items.get(this.getReview().itemId);
         },
         /**
          * @method getItemAt
@@ -132,11 +128,7 @@ define([
          * @returns {Backbone.Model}
          */
         getItemAt: function(position) {
-            position = position || position === 0 ? position : this.get('position');
-            if (this.hasContained() && position !== 0) {
-                return this.get('items')[position];
-            }
-            return this.get('items')[0];
+            return skritter.user.data.items.get(this.getReviewAt(position).itemId);
         },
         /**
          * @method getMaxPosition
