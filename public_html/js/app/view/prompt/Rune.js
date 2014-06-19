@@ -1,8 +1,9 @@
 define([
     'require.text!template/prompt-rune.html',
     'view/prompt/Canvas',
-    'view/prompt/Prompt'
-], function(template, Canvas, Prompt) {
+    'view/prompt/Prompt',
+    'view/prompt/TeachingButtons'
+], function(template, Canvas, Prompt, TeachingButtons) {
     /**
      * @class PromptRune
      */
@@ -15,8 +16,11 @@ define([
             skritter.timer.setReviewLimit(30);
             skritter.timer.setThinkingLimit(15);
             this.canvas = new Canvas();
+            this.characterRevealed = false;
             this.maxStrokeAttempts = 3;
             this.strokeAttempts = 0;
+            this.teaching = false;
+            this.teachingButtons = new TeachingButtons();
         },
         /**
          * @method render
@@ -26,12 +30,14 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             Prompt.prototype.render.call(this);
             this.canvas.setElement('.canvas-container').render();
+            this.teachingButtons.setElement('.teaching-container').render();
             this.listenTo(this.canvas, 'canvas:click', this.handleClick);
             this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHold);
-            this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClick);
             this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeUp);
+            this.listenTo(this.teachingButtons, 'next', this.next);
+            this.listenTo(this.teachingButtons, 'repeat', this.reset);
             this.resize();
             this.show();
             return this;
@@ -41,6 +47,7 @@ define([
          */
         events: function() {
             return _.extend({}, Prompt.prototype.events, {
+                'vclick .button-reveal': 'handleRevealClick'
             });
         },
         /**
@@ -72,15 +79,6 @@ define([
             event.preventDefault();
         },
         /**
-         * @method handleDoubleClick
-         * @param {Object} event
-         */
-        handleDoubleClick: function(event) {
-            this.review.setReview('score', 1);
-            this.canvas.drawShape('hint', this.review.getCharacter().targets[0].getShape(), '#999999');
-            event.preventDefault();
-        },
-        /**
          * @method handleGradingSelected
          * @param {Number} score
          */
@@ -91,6 +89,22 @@ define([
                 this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[score]);
             }
             this.review.setReview('score', score);
+        },
+        /**
+         * @method handleRevealClick
+         * @param {Object} event
+         */
+        handleRevealClick: function(event) {
+            this.review.setReview('score', 1);
+            if (this.characterRevealed) {
+                this.elements.reveal.removeClass('selected');
+                this.canvas.clearLayer('background');
+                this.characterRevealed = false;
+            } else {
+                this.elements.reveal.addClass('selected');
+                this.revealCharacter();
+            }
+            event.preventDefault();
         },
         /**
          * @method handleStrokeDown
@@ -107,17 +121,24 @@ define([
             if (points && points.length > 2) {
                 var result = this.review.getCharacterAt().recognize(points, shape);
                 if (result) {
+                    this.characterRevealed = false;
                     this.strokeAttempts = 0;
                     this.canvas.lastMouseDownEvent = null;
+                    this.elements.reveal.removeClass('selected');
                     if (skritter.user.settings.get('squigs')) {
                         this.canvas.drawShape('stroke', shape);
                     } else {
                         this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
                     }
-                    this.canvas.fadeLayer('hint');
                     if (this.review.getCharacter().isFinished()) {
+                        this.canvas.clearLayer('teach');
                         this.showAnswer();
+                    } else if (this.teaching) {
+                        this.teach();
+                    } else {
+                        this.canvas.fadeLayer('background');
                     }
+                    
                 } else {
                     this.strokeAttempts++;
                     if (this.strokeAttempts > this.maxStrokeAttempts) {
@@ -127,7 +148,8 @@ define([
                     this.canvas.fadeShape('background', shape);
                 }
             } else {
-                this.canvas.fadeShape('background', shape);
+                this.review.setReview('score', 1);
+                this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(), skritter.settings.get('hintColor'), 3000);
             }
         },
         /**
@@ -143,7 +165,17 @@ define([
          */
         remove: function() {
             this.canvas.remove();
+            this.teachingButtons.remove();
             Prompt.prototype.remove.call(this);
+        },
+        /**
+         * @method revealCharacter
+         * @param {Number} excludePosition
+         */
+        revealCharacter: function(excludePosition) {
+            this.canvas.clearLayer('background');
+            this.canvas.drawShape('background', this.review.getCharacter().targets[0].getShape(excludePosition), '#999999');
+            this.characterRevealed = true;
         },
         /**
          * @method reset
@@ -152,6 +184,9 @@ define([
         reset: function() {
             this.canvas.clear().enableInput();
             this.review.getCharacter().reset();
+            if (this.teaching) {
+                this.teach();
+            }
             return this;
         },
         /**
@@ -203,9 +238,17 @@ define([
         show: function() {
             skritter.timer.start();
             this.canvas.enableInput();
+            this.characterRevealed = false;
+            this.elements.reveal.show().removeClass('selected');
             this.elements.definition.html(this.vocab.getDefinition());
+            this.teachingButtons.hide();
             if (this.item.isNew()) {
                 this.elements.newness.show();
+            }
+            if (skritter.user.settings.get('teachingMode') && this.review.getItem().isNew()) {
+                this.teach();
+            } else {
+                this.teaching = false;
             }
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
@@ -221,6 +264,7 @@ define([
                 }
             }
             if (this.review.getReview().finished) {
+                this.revealCharacter();
                 this.showAnswer();
             } else {
                 skritter.timer.start();
@@ -234,6 +278,8 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             this.canvas.disableInput();
+            this.characterRevealed = false;
+            this.elements.reveal.hide();
             if (!this.review.getReview().finished) {
                 this.review.setReview({
                     finished: true,
@@ -244,23 +290,43 @@ define([
                 this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape());
             }
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
-            if (skritter.user.settings.get('squigs') && this.review.getCharacter().length > 0) {
+            if (!this.teaching && skritter.user.settings.get('squigs') && this.review.getCharacter().length > 0) {
                 var character = this.review.getCharacter();
                 window.setTimeout(_.bind(function() {
                     for (var i = 0, length = character.length; i < length; i++) {
                         var stroke = character.at(i);
                         this.canvas.tweenShape('background', stroke.getUserShape(), stroke.inflateShape());
                     }
-                    this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+                    if (!this.teaching) {
+                        this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+                    }
                 }, this), 0);
             } else {
-                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+                if (!this.teaching) {
+                    this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
+                }
             }
-            this.grading.select(this.review.getScore()).show();
+            if (this.teaching) {
+                this.teachingButtons.show();
+            } else {
+                this.grading.select(this.review.getScore()).show();
+            }
             if (skritter.user.isAudioEnabled() && this.vocab.getContainedAt(this.review.getPosition()).has('audio')) {
                 this.vocab.playAudio(this.review.getPosition());
             }
             return this;
+        },
+        /**
+         * @method teach
+         */
+        teach: function() {
+            this.teaching = true;
+            this.elements.reveal.hide();
+            this.review.setReview('score', 1);
+            this.revealCharacter(this.review.getPosition() - 1);
+            var character = this.review.getCharacterAt();
+            var stroke = character.getExpectedStroke();
+            this.canvas.clearLayer('teach').drawShape('teach', stroke.inflateShape(), skritter.settings.get('hintColor'));
         }
     });
 

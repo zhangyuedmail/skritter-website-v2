@@ -172,6 +172,7 @@ body {
     font-size: 18px;
     padding-left: 5px;
 }
+.selected { color: #006d91; }
 .skritter-container { height: 100%; }
 .view {
     height: 100%; 
@@ -280,6 +281,23 @@ body {
 .prompt .grading-container .grading-icon { max-height: 43px; }
 
 
+/*** PROMPT: TEACHING BUTTONS ***/
+.prompt .teaching-container {
+    display: none;
+    bottom: 0;
+    position: absolute;
+    z-index: 9004;
+}
+.prompt .teaching-container .btn { 
+    background-color: #ffffff;
+    padding: 5px;
+}
+.prompt .teaching-container .btn img { opacity: 0.4; }
+.prompt .teaching-container .btn.active img { opacity: 1; }
+.prompt .teaching-container .btn:hover img { opacity: 1; }
+.prompt .teaching-container .grading-icon { max-height: 43px; }
+
+
 /*** PROMPT: INFO SECTION ***/
 .info-section {
     border-bottom: none;
@@ -310,7 +328,15 @@ body {
     position: absolute;
     z-index: 9200;
 }
-@media (max-width: 767px) {
+.info-section .button-reveal {
+    bottom: 0;
+    cursor: pointer;
+    padding: 2px 5px;
+    position: absolute;
+    right: 8px;
+    z-index: 9601;
+}
+@media (max-width: 600px) {
     .info-section { 
         border-bottom: 2px solid #333333;
         border-right: none;

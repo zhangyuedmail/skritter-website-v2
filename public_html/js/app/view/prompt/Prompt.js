@@ -1,5 +1,6 @@
 define([
-    'view/prompt/GradingButtons'
+    'view/prompt/GradingButtons',
+    
 ], function(GradingButtons) {
     /**
      * @class Prompt
@@ -32,6 +33,7 @@ define([
             this.elements.newness = this.$('.prompt-newness');
             this.elements.question = this.$('.prompt-question');
             this.elements.reading = this.$('.prompt-reading');
+            this.elements.reveal = this.$('.button-reveal');
             this.elements.sentence = this.$('.prompt-sentence');
             this.elements.style = this.$('.prompt-style');
             this.elements.writing = this.$('.prompt-writing');
@@ -126,6 +128,8 @@ define([
                 }
                 this.grading.hide(_.bind(this.clear, this));
             } else {
+                this.stopListening();
+                this.undelegateEvents();
                 this.review.save(_.bind(function() {
                     this.grading.hide(_.bind(this.triggerNext, this));
                 }, this));

@@ -507,6 +507,11 @@ module.exports = function(grunt) {
         'shell:cordova-install-japanese'
     ]);
     
+    grunt.registerTask('install-build', [
+        'install',
+        'build-android'
+    ]);
+    
     grunt.registerTask('package-android', [
         'package-android-chinese',
         'package-android-japanese'
