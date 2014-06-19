@@ -17,8 +17,6 @@ module.exports = function(grunt) {
         'createjs.easel': '../lib/createjs.easel-NEXT.min',
         'createjs.tween': '../lib/createjs.tween-NEXT.min',
         moment: '../lib/moment-2.6.0.min',
-        'moment.timezone': '../lib/moment.timezone-0.0.6.min',
-        'moment.timezone.data': '../lib/moment.timezone.data',
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',

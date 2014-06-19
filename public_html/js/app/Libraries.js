@@ -8,6 +8,7 @@ define([
     'jquery',
     'jquery.mobile',
     'jquery.ui',
+    'moment',
     'raygun',
     'require.locale',
     'require.text',
