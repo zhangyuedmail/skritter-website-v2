@@ -1,5 +1,6 @@
 define([
     'async',
+    'moment',
     'backbone',
     'bootstrap',
     'bootstrap.switch',
@@ -12,6 +13,7 @@ define([
     'require.locale',
     'require.text',
     'underscore'
-], function(async) {
+], function(async, moment) {
     window.async = async;
+    window.moment = moment;
 });

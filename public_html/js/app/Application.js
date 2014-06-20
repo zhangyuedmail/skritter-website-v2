@@ -124,16 +124,16 @@ define([
             ], function() {
                 //load daily timer prog stats in background
                 skritter.timer.refresh(true);
-                //load raygun javascript error logging module
-                if (skritter.fn.hasCordova() && window.Raygun) {
-                    Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach()
-                            .withCustomData(skritter.user.getCustomData())
-                            .withTags(skritter.user.getTags());
-                    Raygun.setUser(skritter.user.getName());
-                    Raygun.setVersion(skritter.settings.getVersion());
-                    Raygun.saveIfOffline(true);
-                } else if (window.Raygun) {
-                    window.Raygun = undefined;
+                //load raygun and bind userid to analytics
+                if (skritter.fn.hasCordova()) {
+                    navigator.analytics.setUserId(skritter.user.getName());
+                    if (skritter.fn.hasRaygun()) {
+                        Raygun.withCustomData(skritter.user.getCustomData());
+                        Raygun.withTags(skritter.user.getTags());
+                        Raygun.setUser(skritter.user.getName());
+                    } else if (window.Raygun) {
+                        window.Raygun = undefined;
+                    }
                 }
                 callback();
             });
@@ -145,10 +145,6 @@ define([
      * @method initialize
      */
     var initialize = function() {
-        //creates the global skritter namespace
-        window.skritter = (function(skritter) {
-            return skritter;
-        })(window.skritter || {});
         //asynchronously loads all required modules
         async.series([
             async.apply(loadFunctions),
@@ -165,7 +161,7 @@ define([
             console.log('application initialized');
             skritter.router = new Router();
             if (skritter.fn.hasCordova()) {
-                window.navigator.splashscreen.hide();
+                navigator.splashscreen.hide();
             }
         });
     };

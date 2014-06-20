@@ -21,7 +21,7 @@ define([
          */
         initialize: function() {
             this.container = $('.skritter-container');
-            this.history = [''];
+            this.history = [];
             this.view = null;
             Backbone.history.start();
             window.document.addEventListener('backbutton', _.bind(this.handleBackButtonPress, this), false);
@@ -49,7 +49,7 @@ define([
          * @param {String} path
          */
         addHistory: function(path) {
-            var pathIndex = this.history.indexOf(path);       
+            var pathIndex = this.history.indexOf(path);
             if (pathIndex === -1) {
                 this.history.unshift(path);
             }
@@ -58,13 +58,16 @@ define([
          * @method back
          */
         back: function() {
-            if (this.history.length === 0) {
-                this.navigate('', {replace: true, trigger: true});
-            } else if (Backbone.history.fragment === this.history[0]){
-                this.navigate(this.history[1], {replace: true, trigger: true});
-            } else {
-                this.navigate(this.history[0], {replace: true, trigger: true});
+            var fragment = Backbone.history.fragment;
+            if (this.history.length !== 0) {
+                for (var i = 0, length = this.history.length; i < length; i++) {
+                    if (fragment !== this.history[i]) {
+                        this.navigate(this.history[i], {replace: true, trigger: true});
+                        return true;
+                    }
+                }
             }
+            return this.navigate('', {replace: true, trigger: true});
         },
         /**
          * @method handleBackButtonPress
@@ -112,7 +115,7 @@ define([
          */
         showHome: function() {
             this.reset();
-            this.addHistory('');
+            this.history = [];
             if (skritter.user.isLoggedIn()) {
                 this.view = new HomeView({el: this.container});
             } else {

@@ -18,7 +18,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            window.document.title = "Vocab - Skritter";
+            this.setTitle('Vocab');
             this.$el.html(_.template(template, skritter.strings));
             this.loadElements();
             return this;

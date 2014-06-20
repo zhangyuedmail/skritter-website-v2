@@ -20,6 +20,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
+            this.setTitle('Study Settings');
             this.$el.html(templateStudySettings);
             this.activeParts = skritter.user.getActiveParts();
             this.activeStyles = skritter.user.getActiveStyles();

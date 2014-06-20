@@ -17,7 +17,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            window.document.title = "Log In - Skritter";
+            this.setTitle('Log In');
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             return this;
@@ -37,7 +37,6 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
-                'dblclick .navbar': 'handleNavbarDoubleClick',
                 'vclick #button-back': 'handleBackClick',
                 'vclick #button-next': 'handleLoginClick',
                 'keyup #login-password': 'handleEnterPress'
@@ -73,16 +72,6 @@ define([
             } else {
                 event.preventDefault();
             }
-        },
-        /**
-         * @method handleNavbarDoubleClick
-         * @param {Object} event
-         */
-        handleNavbarDoubleClick: function(event) {
-            this.elements.loginUsername.val('mcfarljwtest1');
-            this.elements.loginPassword.val('skrit123');
-                event.preventDefault();
-            
         }
     });
 

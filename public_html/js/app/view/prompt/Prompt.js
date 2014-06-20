@@ -1,6 +1,5 @@
 define([
-    'view/prompt/GradingButtons',
-    
+    'view/prompt/GradingButtons'
 ], function(GradingButtons) {
     /**
      * @class Prompt

@@ -150,6 +150,13 @@ define([
         return window.cordova ? true : false;
     };
     /**
+     * @method hasRaygun
+     * @returns {Boolean}
+     */
+    var hasRaygun = function() {
+        return window.Raygun ? true : false;
+    };
+    /**
      * @method isKana
      * @param {String} text
      * @returns {Boolean}
@@ -265,6 +272,7 @@ define([
         getRandomNumber: getRandomNumber,
         getDate: getDate,
         hasCordova: hasCordova,
+        hasRaygun: hasRaygun,
         isKana: isKana,
         isNumber: isNumber,
         mapper: mapper,

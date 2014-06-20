@@ -171,6 +171,18 @@ define([
             return this.elements;
         },
         /**
+         * @method setTitle
+         * @param {String} title
+         * @returns {Backbone.View}
+         */
+        setTitle: function(title) {
+            window.document.title = title + ' - Skritter';
+            if (skritter.fn.hasCordova()) {
+                navigator.analytics.trackView(title);
+            }
+            return this;
+        },
+        /**
          * @method toggleSidebar
          */
         toggleSidebar: function() {

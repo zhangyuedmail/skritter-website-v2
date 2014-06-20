@@ -18,6 +18,7 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
+            this.setTitle('Account');
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
