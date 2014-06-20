@@ -113,7 +113,11 @@ define([
             if (this.item.isNew()) {
                 this.elements.newness.show();
             }
-            this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
+            if (skritter.user.settings.get('hideReading')) {
+                this.elements.reading.html(this.vocab.getReading(1, false, skritter.user.isUsingZhuyin()));
+            } else {
+                this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
+            }
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
             this.elements.writing.html(this.vocab.getWriting());
             this.elements.question.show('slide', {direction: 'right'}, 300);
@@ -140,6 +144,7 @@ define([
             this.elements.question.hide();
             this.review.setReview({finished: true});
             this.elements.answer.fadeIn(300);
+            this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
             this.grading.select(this.review.getScore()).show();
             if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
                 this.vocab.playAudio();
