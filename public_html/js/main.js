@@ -21,7 +21,7 @@ requirejs.config({
         'jquery.ui': '../lib/jquery.ui.custom-1.10.4.min',
         raygun: '../lib/raygun-1.8.4.min',
         'require.locale': '../lib/require.i18n-2.0.4',
-        'require.text': '../lib/require.text-2.0.10',
+        'require.text': '../lib/require.text-2.0.12',
         underscore: '../lib/lodash.compat-2.4.1.min'
     },
     shim: {

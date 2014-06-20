@@ -16,7 +16,7 @@ module.exports = function(grunt) {
         'bootstrap.switch': '../../bootstrap/components/switch/js/bootstrap-switch.min',
         'createjs.easel': '../lib/createjs.easel-NEXT.min',
         'createjs.tween': '../lib/createjs.tween-NEXT.min',
-        moment: '../lib/moment-2.6.0.min',
+        moment: '../lib/moment-2.7.0.min',
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         'jquery.ui': '../lib/jquery.ui.custom-1.10.4.min',
         raygun: '../lib/raygun-1.8.4.min',
         'require.locale': '../lib/require.i18n-2.0.4',
-        'require.text': '../lib/require.text-2.0.10',
+        'require.text': '../lib/require.text-2.0.12',
         underscore: '../lib/lodash.compat-2.4.1.min'
     };
     
