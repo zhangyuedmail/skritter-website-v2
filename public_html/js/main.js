@@ -69,7 +69,7 @@ if (window.Raygun) {
     if (window.cordova) {
         Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach();
         Raygun.setUser('guest');
-        Raygun.setVersion(window.skritter.version);
+        Raygun.setVersion(window.skritter.getVersion());
         Raygun.saveIfOffline(true);
     } else {
         //TODO: load tracking for other environments
