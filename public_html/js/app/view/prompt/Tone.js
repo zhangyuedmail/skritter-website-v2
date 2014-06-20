@@ -188,7 +188,7 @@ define([
             if (this.item.isNew()) {
                 this.elements.newness.show();
             }
-            this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), skritter.user.settings.get('hideReading'), skritter.user.isUsingZhuyin()));
+            this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), !skritter.user.settings.get('hideReading'), skritter.user.isUsingZhuyin()));
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
             this.elements.writing.html(this.vocab.getWriting());
             if (this.vocab.getStyle()) {
@@ -219,7 +219,7 @@ define([
                 var tone = _.flatten(this.review.getBaseVocab().getTones(this.review.get('position')))[0];
                 this.canvas.drawShape('stroke', this.review.getCharacter().targets[tone - 1].getShape(), skritter.settings.get('gradingColors')[this.review.getReview().score]);
             }
-            this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, skritter.user.settings.get('hideReading'), skritter.user.isUsingZhuyin()));
+            this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, !skritter.user.settings.get('hideReading'), skritter.user.isUsingZhuyin()));
             this.grading.select(this.review.getScore()).show();
             this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
             if (skritter.user.isAudioEnabled() && this.vocab.getContainedAt(this.review.getPosition()).has('audio')) {

@@ -29,6 +29,7 @@ define([
             this.$('#general #audio').bootstrapSwitch('state', skritter.user.isAudioEnabled());
             this.$('#general #hide-due-count').bootstrapSwitch('state', skritter.user.settings.get('hideCounter'));
             this.$('#general #hide-timer').bootstrapSwitch('state', skritter.user.settings.get('hideTimer'));
+            this.$('#general #hide-reading').bootstrapSwitch('state', skritter.user.settings.get('hideReading'));
             this.$('#general #raw-squigs').bootstrapSwitch('state', skritter.user.settings.get('squigs'));
             this.$('#general #teaching-mode').bootstrapSwitch('state', skritter.user.settings.get('teachingMode'));
             if (skritter.user.isChinese()) {
@@ -81,6 +82,7 @@ define([
             skritter.user.settings.set('volume', this.$('#general #audio').prop('checked') ? 1 : 0);
             skritter.user.settings.set('hideCounter', this.$('#general #hide-due-count').prop('checked'));
             skritter.user.settings.set('hideTimer', this.$('#general #hide-timer').prop('checked'));
+            skritter.user.settings.set('hideReading', this.$('#general #hide-reading').prop('checked'));
             skritter.user.settings.set('squigs', this.$('#general #raw-squigs').prop('checked'));
             skritter.user.settings.set('teachingMode', this.$('#general #teaching-mode').prop('checked'));
             skritter.user.settings.set('readingStyle', this.$('#general #reading-style').prop('checked') ? 'pinyin' : 'zhuyin');
