@@ -49,8 +49,8 @@ define([
                         var fieldValue = row[field];
                         if (field === 'vocabId') {
                             divBody += "<td class='row-field-" + field + "'>";
-                            divBody += skritter.fn.mapper.fromBase(fieldValue);
-                            if (fieldValue !== row.tradVocabId) {
+                            divBody += skritter.user.isChinese() ? skritter.fn.mapper.fromBase(fieldValue) : fieldValue.split('-')[1];
+                            if (skritter.user.isChinese() && fieldValue !== row.tradVocabId) {
                                 divBody += ' (' + skritter.fn.mapper.fromBase(row.tradVocabId) + ')';
                             }
                             divBody += "</td>";
