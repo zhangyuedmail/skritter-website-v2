@@ -67,7 +67,6 @@ window.skritter.getVersion = function() {
 
 if (window.Raygun) {
     if (window.cordova) {
-        navigator.analytics.startTrackerWithId(skritter.getTrackingID());
         Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach();
         Raygun.setUser('guest');
         Raygun.setVersion(window.skritter.version);
@@ -80,10 +79,12 @@ if (window.Raygun) {
 requirejs(['Libraries'], function() {
     //main run function that loads application specific files
     var run = function() {
+        //load analytics tracking before initialize
+        if (window.cordova) {
+            navigator.analytics.startTrackerWithId(skritter.getTrackingID());
+        }
         //load the application module
         requirejs(['Application'], function(Application) {
-            //load analytics tracking before initialize
-            
             $(document).ready(function() {
                 Application.initialize();
             });
