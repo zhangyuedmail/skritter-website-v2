@@ -124,13 +124,16 @@ define([
             ], function() {
                 //load daily timer prog stats in background
                 skritter.timer.refresh(true);
-                //load raygun javascript error logging module
-                if (skritter.fn.hasCordova() && skritter.fn.hasRaygun()) {
-                    Raygun.withCustomData(skritter.user.getCustomData());
-                    Raygun.withTags(skritter.user.getTags());
-                    Raygun.setUser(skritter.user.getName());
-                } else if (window.Raygun) {
-                    window.Raygun = undefined;
+                //load raygun and bind userid to analytics
+                if (skritter.fn.hasCordova()) {
+                    navigator.analytics.setUserId(skritter.user.getName());
+                    if (skritter.fn.hasRaygun()) {
+                        Raygun.withCustomData(skritter.user.getCustomData());
+                        Raygun.withTags(skritter.user.getTags());
+                        Raygun.setUser(skritter.user.getName());
+                    } else if (window.Raygun) {
+                        window.Raygun = undefined;
+                    }
                 }
                 callback();
             });
@@ -158,8 +161,6 @@ define([
             console.log('application initialized');
             skritter.router = new Router();
             if (skritter.fn.hasCordova()) {
-                navigator.analytics.startTrackerWithId(skritter.getTrackingID());
-                navigator.analytics.setUserId(skritter.user.getName());
                 navigator.splashscreen.hide();
             }
         });
