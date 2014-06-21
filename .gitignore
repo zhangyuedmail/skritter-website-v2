@@ -1,5 +1,6 @@
 # Directories #
 /build/
+/config/crosswalk/
 /docs/
 /files/
 /nbproject/

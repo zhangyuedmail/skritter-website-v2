@@ -7,7 +7,7 @@
     <author email="josh@skritter.com" href="http://www.skritter.com/">
         Joshua McFarland
     </author>
-    <!--<preference name="AndroidLaunchMode" value="singleTop" />-->
+    <preference name="AndroidLaunchMode" value="singleTop" />
     <preference name="Fullscreen" value="true" />
     <preference name="KeepRunning" value="true"/>
     <preference name="Orientation" value="default" />
