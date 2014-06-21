@@ -1,7 +1,6 @@
 define([
     'async',
     'moment',
-    'pixi',
     'backbone',
     'bootstrap',
     'bootstrap.switch',
@@ -14,8 +13,7 @@ define([
     'require.locale',
     'require.text',
     'underscore'
-], function(async, moment, pixi) {
+], function(async, moment) {
     window.async = async;
     window.moment = moment;
-    window.pixi = pixi;
 });
