@@ -251,7 +251,11 @@ define([
                     this.teaching = false;
                 }
             }
-            this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
+            if (skritter.user.settings.get('hideReading')) {
+                this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), false, skritter.user.isUsingZhuyin()));
+            } else {
+                this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
+            }
             this.elements.sentence.html(this.vocab.getSentence() ? this.vocab.getSentence().writing : '');
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition()));
             if (this.vocab.getStyle()) {
@@ -289,6 +293,9 @@ define([
                 });
             } else {
                 this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape());
+            }
+            if (skritter.user.settings.get('hideReading')) {
+                this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, false, skritter.user.isUsingZhuyin()));
             }
             this.elements.writing.html(this.vocab.getWriting(this.review.getPosition() + 1));
             if (!this.teaching && skritter.user.settings.get('squigs') && this.review.getCharacter().length > 0) {
