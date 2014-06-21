@@ -183,6 +183,7 @@ define([
          */
         reset: function() {
             this.canvas.clear().enableInput();
+            this.elements.reveal.show().removeClass('selected');
             this.grading.hide();
             this.review.getCharacter().reset();
             if (this.teaching) {
