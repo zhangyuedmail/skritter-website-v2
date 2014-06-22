@@ -51,11 +51,12 @@ define([
             this.elements.message.empty();
             var username = this.elements.loginUsername.val();
             var password = this.elements.loginPassword.val();
-            this.elements.message.html("<i class='fa fa-spin fa-cog'></i> Signing In");
+            skritter.modal.show('loading').set('.message', 'Signing In');
             skritter.user.login(username, password, _.bind(function(result, status) {
                 if (status === 200) {
                     document.location.href = '';
                 } else {
+                    skritter.modal.hide();
                     this.elements.message.text(result.message);
                     this.enableForm();
                 }
