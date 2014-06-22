@@ -102,9 +102,9 @@ define([
         /**
          * @method fetchAll         
          * @param {Function} callback
+         * @param {Number} offset
          */
-        fetchAll: function(callback) {
-            var now = skritter.fn.getUnixTime();
+        fetchAll: function(callback, offset) {
             skritter.user.sync.processBatch([
                 {
                     path: 'api/v' + skritter.api.version + '/items',
@@ -112,7 +112,7 @@ define([
                     params: {
                         lang: skritter.user.getLanguageCode(),
                         sort: 'changed',
-                        offset: 0,
+                        offset: offset ? offset : 0,
                         include_vocabs: 'true',
                         include_strokes: 'true',
                         include_sentences: 'false',
@@ -126,15 +126,17 @@ define([
                     path: 'api/v' + skritter.api.version + '/srsconfigs',
                     method: 'GET',
                     params: {lang: skritter.user.getLanguageCode()}
+                },
+                {
+                    path: 'api/v' + skritter.api.version + '/vocablists',
+                    method: 'GET',
+                    params: {
+                        lang: skritter.user.getLanguageCode(),
+                        sort: 'studying'
+                    },
+                    spawner: true
                 }
             ], function() {
-                skritter.user.sync.set({
-                    lastErrorCheck: now,
-                    lastItemSync: now,
-                    lastReviewSync: now,
-                    lastSRSConfigSync: now,
-                    lastVocabSync: now
-                });
                 callback();
             });
         },

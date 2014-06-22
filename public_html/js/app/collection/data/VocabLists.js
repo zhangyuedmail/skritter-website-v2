@@ -54,7 +54,9 @@ define([
                 if (status === 200) {
                     this.insert(lists, callback);
                 } else {
-                    callback(lists);
+                    if (typeof callback === 'function') {
+                        callback(lists);
+                    }
                 }
             }, this), {lang: skritter.user.getLanguageCode(), sort: 'studying'});
         },
@@ -84,7 +86,8 @@ define([
          */
         loadAll: function(callback) {
             skritter.storage.getAll('vocablists', _.bind(function(vocablists) {
-                this.add(vocablists, {merge: true, silent: true, sort: false});
+                this.add(vocablists, {merge: true, silent: true});
+                this.trigger('loaded');
                 callback();
             }, this));
         }

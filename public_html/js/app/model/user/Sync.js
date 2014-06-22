@@ -27,26 +27,59 @@ define([], function() {
             localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method isActive
-         * @return {Boolean}
-         */
-        isActive: function() {
-            return false;
-        },
-        /**
-         * @method initial
+         * @method fetchChanged
          * @param {Function} callback
          */
-        initial: function(callback) {
+        fetchChanged: function(callback) {
+            var now = skritter.fn.getUnixTime();
+            async.series([
+                function(callback) {
+                    skritter.user.data.items.fetchAll(callback, skritter.user.sync.get('lastItemSync'));
+                },
+                function(callback) {
+                    skritter.user.data.vocablists.reset();
+                    skritter.user.data.vocablists.loadAll(callback);
+                }
+            ], function() {
+                skritter.user.sync.set({
+                    lastItemSync: now,
+                    lastSRSConfigSync: now,
+                    lastVocabSync: now
+                });
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        /**
+         * @method downloadAll
+         * @param {Function} callback
+         */
+        fetchAll: function(callback) {
+            var now = skritter.fn.getUnixTime();
             async.series([
                 function(callback) {
                     skritter.user.data.items.fetchAll(callback);
                 }
             ], function() {
+                skritter.user.sync.set({
+                    lastErrorCheck: now,
+                    lastItemSync: now,
+                    lastReviewSync: now,
+                    lastSRSConfigSync: now,
+                    lastVocabSync: now
+                });
                 if (typeof callback === 'function') {
                     callback();
                 }
             });
+        },
+        /**
+         * @method isActive
+         * @return {Boolean}
+         */
+        isActive: function() {
+            return false;
         },
         /**
          * @method isInitial
@@ -77,6 +110,9 @@ define([], function() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
                                 skritter.user.data.put(result, function() {
+                                    if (result.Items) {
+                                        skritter.user.scheduler.insert(result.Items);
+                                    }
                                     window.setTimeout(request, 1000);
                                 });
                             } else if (status === 200) {

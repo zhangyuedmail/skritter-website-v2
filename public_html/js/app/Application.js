@@ -114,9 +114,12 @@ define([
                 //checks if user has downloaded account
                 if (skritter.user.sync.isInitial()) {
                     skritter.modal.show('download').set('.modal-title', 'Downloading').set('.modal-title-icon', null, 'fa-download').progress(100);
-                    skritter.user.sync.initial(function() {
+                    skritter.user.sync.fetchAll(function() {
+                        skritter.user.scheduler.sort();
                         skritter.modal.hide();
                     });
+                } else {
+                    skritter.user.sync.fetchChanged();
                 }
                 //load raygun and bind userid to analytics
                 if (skritter.fn.hasCordova()) {
