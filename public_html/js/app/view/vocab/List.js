@@ -93,11 +93,10 @@ define([
             skritter.api.updateVocabList({id: this.listId, studyingMode: 'not studying'}, _.bind(function(list, status) {
                 if (status === 200) {
                     this.list = list;
-                    var list = skritter.user.data.vocablists.remove(list);
-                    this.renderList();
-                    list.uncache(function() {
+                    skritter.user.data.vocablists.remove(list).uncache(function() {
                         skritter.modal.hide();
                     });
+                    this.renderList();
                     return;
                 }
                 skritter.modal.hide();
