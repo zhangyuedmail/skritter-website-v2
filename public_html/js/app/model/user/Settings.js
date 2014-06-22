@@ -31,10 +31,10 @@ define([], function() {
             localStorage.setItem(skritter.user.id + '-settings', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method sync
+         * @method fetch
          * @param {Function} callback
          */
-        sync: function(callback) {
+        fetch: function(callback) {
             skritter.api.getUser(skritter.user.id, _.bind(function(result, status) {
                 if (status === 200) {
                     this.set(result);
