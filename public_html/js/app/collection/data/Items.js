@@ -100,13 +100,11 @@ define([
             }, this));
         },
         /**
-         * @method fetchChanged         
+         * @method fetchAll         
          * @param {Function} callback
-         * @param {Number} offset
-         * @param {Boolean} includeResources
          */
-        fetchChanged: function(callback, offset, includeResources) {
-            offset = offset ? offset : skritter.user.sync.get('lastItemSync');
+        fetchAll: function(callback) {
+            var now = skritter.fn.getUnixTime();
             skritter.user.sync.processBatch([
                 {
                     path: 'api/v' + skritter.api.version + '/items',
@@ -114,17 +112,29 @@ define([
                     params: {
                         lang: skritter.user.getLanguageCode(),
                         sort: 'changed',
-                        offset: offset,
-                        include_vocabs: includeResources ? 'true' : 'false',
-                        include_strokes: includeResources ? 'true' : 'false',
+                        offset: 0,
+                        include_vocabs: 'true',
+                        include_strokes: 'true',
                         include_sentences: 'false',
-                        include_heisigs: includeResources ? 'true' : 'false',
-                        include_top_mnemonics: includeResources ? 'true' : 'false',
-                        include_decomps: includeResources ? 'true' : 'false'
+                        include_heisigs: 'true',
+                        include_top_mnemonics: 'true',
+                        include_decomps: 'true'
                     },
                     spawner: true
+                },
+                {
+                    path: 'api/v' + skritter.api.version + '/srsconfigs',
+                    method: 'GET',
+                    params: {lang: skritter.user.getLanguageCode()}
                 }
             ], function() {
+                skritter.user.sync.set({
+                    lastErrorCheck: now,
+                    lastItemSync: now,
+                    lastReviewSync: now,
+                    lastSRSConfigSync: now,
+                    lastVocabSync: now
+                });
                 callback();
             });
         },

@@ -107,23 +107,17 @@ define([
                 },
                 function(callback) {
                     skritter.user.scheduler.loadAll(callback);
-                },
-                function(callback) {
-                    if (skritter.user.sync.isFirst()) {
-                        skritter.modal.show('download')
-                                .set('.modal-title', 'Initial Download')
-                                .set('.modal-title-icon', null, 'fa-download')
-                                .progress(100);
-                        skritter.user.sync.downloadAll(function() {
-                            window.location.reload(true);
-                        });
-                    } else {
-                        callback();
-                    }
                 }
             ], function() {
                 //load daily timer prog stats in background
                 skritter.timer.refresh(true);
+                //checks if user has downloaded account
+                if (skritter.user.sync.isInitial()) {
+                    skritter.modal.show('download').set('.modal-title', 'Downloading').set('.modal-title-icon', null, 'fa-download').progress(100);
+                    skritter.user.sync.initial(function() {
+                        skritter.modal.hide();
+                    });
+                }
                 //load raygun and bind userid to analytics
                 if (skritter.fn.hasCordova()) {
                     navigator.analytics.setUserId(skritter.user.getName());
@@ -145,7 +139,6 @@ define([
      * @method initialize
      */
     var initialize = function() {
-        //asynchronously loads all required modules
         async.series([
             async.apply(loadFunctions),
             async.apply(loadApi),
