@@ -7,23 +7,12 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            this.active = {
-                addItems: false,
-                changedItems: false,
-                downloadAll: false,
-                itemById: false,
-                reviews: false,
-                vocabById: false
-            };
             this.on('change', _.bind(this.cache, this));
         },
         /**
          * @property {Object} defaults
          */
         defaults: {
-            addItemOffset: 0,
-            downloadBatchId: null,
-            downloadedBatchRequests: [],
             lastErrorCheck: 0,
             lastItemSync: 0,
             lastReviewSync: 0,
@@ -56,12 +45,9 @@ define([], function() {
                     var request = function() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
-                                skritter.user.data.put(result, _.bind(function() {
-                                    if (result.Items && result.Items.length > 0) {
-                                        skritter.user.scheduler.insert(result.Items);
-                                    }
-                                    window.setTimeout(request, 2000);
-                                }, this));
+                                skritter.user.data.put(result, function() {
+                                    window.setTimeout(request, 1000);
+                                });
                             } else {
                                 callback(null, batch);
                             }
