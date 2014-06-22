@@ -119,8 +119,7 @@ define([
                         skritter.modal.hide();
                     });
                 } else {
-                    //TODO: enable after more testing has been done
-                    //skritter.user.sync.fetchChanged();
+                    skritter.user.sync.fetchChanged();
                 }
                 //load raygun and bind userid to analytics
                 if (skritter.fn.hasCordova()) {

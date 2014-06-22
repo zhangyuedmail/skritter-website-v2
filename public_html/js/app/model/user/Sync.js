@@ -7,6 +7,7 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
+            this.syncing = false;
             this.on('change', _.bind(this.cache, this));
         },
         /**
@@ -31,63 +32,83 @@ define([], function() {
          * @param {Function} callback
          */
         fetchAll: function(callback) {
-            var now = skritter.fn.getUnixTime();
-            async.series([
-                function(callback) {
-                    skritter.user.data.items.fetch(callback, 0, true);
-                },
-                function(callback) {
-                    skritter.user.data.vocablists.fetch(callback);
-                },
-                function(callback) {
-                    skritter.user.data.srsconfigs.fetch(callback);
-                }
-            ], function() {
-                skritter.user.sync.set({
-                    lastErrorCheck: now,
-                    lastItemSync: now,
-                    lastReviewSync: now,
-                    lastSRSConfigSync: now,
-                    lastVocabSync: now
-                });
+            if (this.syncing) {
                 if (typeof callback === 'function') {
                     callback();
                 }
-            });
+            } else {
+                this.syncing = true;
+                this.trigger('status', true);
+                var now = skritter.fn.getUnixTime();
+                async.series([
+                    function(callback) {
+                        skritter.user.data.items.fetch(callback, 0, true);
+                    },
+                    function(callback) {
+                        skritter.user.data.vocablists.fetch(callback);
+                    },
+                    function(callback) {
+                        skritter.user.data.srsconfigs.fetch(callback);
+                    }
+                ], _.bind(function() {
+                    skritter.user.sync.set({
+                        lastErrorCheck: now,
+                        lastItemSync: now,
+                        lastReviewSync: now,
+                        lastSRSConfigSync: now,
+                        lastVocabSync: now
+                    });
+                    this.syncing = false;
+                    this.trigger('status', false);
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                }, this));
+            }
         },
         /**
          * @method fetchChanged
          * @param {Function} callback
          */
         fetchChanged: function(callback) {
-            var now = skritter.fn.getUnixTime();
-            async.series([
-                function(callback) {
-                    skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true);
-                },
-                function(callback) {
-                    skritter.user.data.vocablists.fetch(callback);
-                },
-                function(callback) {
-                    skritter.user.data.srsconfigs.fetch(callback);
-                }
-            ], function() {
-                skritter.user.sync.set({
-                    lastItemSync: now,
-                    lastSRSConfigSync: now,
-                    lastVocabSync: now
-                });
+            if (this.syncing) {
                 if (typeof callback === 'function') {
                     callback();
                 }
-            });
+            } else {
+                this.syncing = true;
+                this.trigger('status', true);
+                var now = skritter.fn.getUnixTime();
+                async.series([
+                    function(callback) {
+                        skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true);
+                    },
+                    function(callback) {
+                        skritter.user.data.vocablists.fetch(callback);
+                    },
+                    function(callback) {
+                        skritter.user.data.srsconfigs.fetch(callback);
+                    }
+                ], _.bind(function() {
+                    skritter.user.sync.set({
+                        lastItemSync: now,
+                        lastSRSConfigSync: now,
+                        lastVocabSync: now
+                    });
+                    this.syncing = false;
+                    this.trigger('status', false);
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                }, this));
+            }
         },
         /**
          * @method isActive
          * @return {Boolean}
          */
         isActive: function() {
-            return false;
+            return this.syncing;
         },
         /**
          * @method isInitial

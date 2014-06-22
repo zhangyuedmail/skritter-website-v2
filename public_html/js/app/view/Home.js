@@ -13,8 +13,9 @@ define([
         initialize: function() {
             BaseView.prototype.initialize.call(this);
             this.listTable = new ListTable();
-            this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
             this.listenTo(skritter.user.data.vocablists, 'loaded', _.bind(this.updateLists, this));
+            this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
+            this.listenTo(skritter.user.sync, 'status', _.bind(this.toggleSyncButton, this));
         },
         /**
          * @method render
@@ -30,6 +31,9 @@ define([
                 var expireMessage = "<strong>Your subscription has expired.</strong> That means you'll be unable to add new items to study. ";
                 expireMessage += "Go to <a href='#' class='button-account'>account settings</a> to add a subscription.";
                 this.elements.message.html(skritter.fn.bootstrap.alert(expireMessage, 'danger'));
+            }
+            if (skritter.user.sync.isActive()) {
+                this.toggleSyncButton(true);
             }
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.updateDueCounter();
@@ -88,14 +92,19 @@ define([
          * @param {Object} event
          */
         handleSyncClick: function(event) {
-            skritter.modal.show('download')
-                    .set('.modal-title', 'Syncing')
-                    .set('.modal-title-icon', null, 'fa-download')
-                    .progress(100);
-            skritter.user.sync.fetchChanged(function() {
-                skritter.modal.hide();
-            });
+            skritter.user.sync.fetchChanged();
             event.preventDefault();
+        },
+        /**
+         * @method toggleSyncButton
+         * @param {Boolean} spin
+         */
+        toggleSyncButton: function(spin) {
+            if (spin) {
+                this.elements.buttonSync.children('i').addClass('fa-spin');
+            } else {
+                this.elements.buttonSync.children('i').removeClass('fa-spin');
+            }
         },
         /**
          * @method updateDueCounter
