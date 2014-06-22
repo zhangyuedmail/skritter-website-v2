@@ -1,9 +1,3 @@
-/**
- * @module Skritter
- * @submodule Collections
- * @param SRSConfig
- * @author Joshua McFarland
- */
 define([
     'model/data/SRSConfig'
 ], function(SRSConfig) {
@@ -30,6 +24,32 @@ define([
                     callback();
                 }
             });
+        },
+        /**
+         * @method fetch
+         * @param {Function} callback
+         */
+        fetch: function(callback) {
+            skritter.api.getSRSConfigs(skritter.user.getLanguageCode(), function(configs, status) {
+                if (status === 200) {
+                    skritter.user.data.srsconfigs.reset();
+                    skritter.user.data.srsconfigs.add(configs);
+                    skritter.user.data.srsconfigs.cache(callback);
+                } else if (skritter.user.data.srsconfigs.length === 0) {
+                    skritter.user.data.srsconfigs.loadDefaults();
+                    callback();
+                } else {
+                    callback();
+                }
+            });
+        },
+        /**
+         * @method insert
+         * @param {Array|Object} srsconfigs
+         * @param {Function} callback
+         */
+        insert: function(srsconfigs, callback) {
+            skritter.storage.put('srsconfigs', srsconfigs, callback);
         },
         /**
          * @method loadAll

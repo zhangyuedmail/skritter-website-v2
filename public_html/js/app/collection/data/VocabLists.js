@@ -1,9 +1,3 @@
-/**
- * @module Skritter
- * @submodule Collections
- * @param VocabList
- * @author Joshua McFarland
- */
 define([
     'model/data/VocabList'
 ], function(VocabList) {
@@ -52,16 +46,37 @@ define([
             return vocablist.id;
         },
         /**
+         * @method fetchStudying
+         * @param {Function} callback
+         */
+        fetchStudying: function(callback) {
+            skritter.api.getVocabLists(_.bind(function(lists, status) {
+                if (status === 200) {
+                    this.insert(lists, callback);
+                } else {
+                    callback(lists);
+                }
+            }, this), {lang: skritter.user.getLanguageCode(), sort: 'studying'});
+        },
+        /**
          * @method filterByStatus
          * @param {Array|String} status
          * @returns {Backbone.View}
          */
         filterByStatus: function(status) {
             status = Array.isArray(status) ? status : [status];
-            var filtered = this.filter(function(box) {
-                return status.indexOf(box.attributes.studyingMode) !== -1;
+            var filtered = this.filter(function(list) {
+                return status.indexOf(list.attributes.studyingMode) !== -1;
             });
             return new VocabLists(filtered);
+        },
+        /**
+         * @method insert
+         * @param {Array|Object} lists
+         * @param {Function} callback
+         */
+        insert: function(lists, callback) {
+            skritter.storage.put('vocablists', lists, callback);
         },
         /**
          * @method loadAll

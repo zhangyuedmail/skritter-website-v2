@@ -1,9 +1,3 @@
-/**
- * @module Skritter
- * @submodule Collections
- * @param Sentence
- * @author Joshua McFarland
- */
 define([
     'model/data/Sentence'
 ], function(Sentence) {
@@ -30,6 +24,14 @@ define([
                     callback();
                 }
             });
+        },
+        /**
+         * @method insert
+         * @param {Array|Object} sentences
+         * @param {Function} callback
+         */
+        insert: function(sentences, callback) {
+            skritter.storage.put('sentences', sentences, callback);
         },
         /**
          * @method loadAll
