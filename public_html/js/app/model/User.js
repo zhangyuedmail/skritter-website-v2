@@ -291,6 +291,13 @@ define([
             return this.settings.get('readingStyle') === 'pinyin' ? true : false;
         },
         /**
+         * @method isUsingSentences
+         * @returns {Boolean}
+         */
+        isUsingSentences: function() {
+            return false;
+        },
+        /**
          * @method isUsingZhuyin
          * @returns {Boolean}
          */

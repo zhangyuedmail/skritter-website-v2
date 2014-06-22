@@ -85,6 +85,34 @@ define([
             }, this));
         },
         /**
+         * @method fetch         
+         * @param {Function} callback
+         * @param {Number} offset
+         * @param {Boolean} includeResources
+         */
+        fetch: function(callback, offset, includeResources) {
+            skritter.user.sync.processBatch([
+                {
+                    path: 'api/v' + skritter.api.version + '/items',
+                    method: 'GET',
+                    params: {
+                        lang: skritter.user.getLanguageCode(),
+                        sort: 'changed',
+                        offset: offset ? offset : 0,
+                        include_vocabs: includeResources ? 'true' : undefined,
+                        include_strokes: includeResources ? 'true' : undefined,
+                        include_sentences: includeResources && skritter.user.isUsingSentences() ? 'true' : undefined,
+                        include_heisigs: includeResources ? 'true' : undefined,
+                        include_top_mnemonics: includeResources ? 'true' : undefined,
+                        include_decomps: includeResources ? 'true' : undefined
+                    },
+                    spawner: true
+                }
+            ], function() {
+                callback();
+            });
+        },
+        /**
          * @method fetchById
          * @param {Array|String} itemIds
          * @param {Function} callback
@@ -98,47 +126,6 @@ define([
                     callback(items);
                 }
             }, this));
-        },
-        /**
-         * @method fetchAll         
-         * @param {Function} callback
-         * @param {Number} offset
-         */
-        fetchAll: function(callback, offset) {
-            skritter.user.sync.processBatch([
-                {
-                    path: 'api/v' + skritter.api.version + '/items',
-                    method: 'GET',
-                    params: {
-                        lang: skritter.user.getLanguageCode(),
-                        sort: 'changed',
-                        offset: offset ? offset : 0,
-                        include_vocabs: 'true',
-                        include_strokes: 'true',
-                        include_sentences: 'false',
-                        include_heisigs: 'true',
-                        include_top_mnemonics: 'true',
-                        include_decomps: 'true'
-                    },
-                    spawner: true
-                },
-                {
-                    path: 'api/v' + skritter.api.version + '/srsconfigs',
-                    method: 'GET',
-                    params: {lang: skritter.user.getLanguageCode()}
-                },
-                {
-                    path: 'api/v' + skritter.api.version + '/vocablists',
-                    method: 'GET',
-                    params: {
-                        lang: skritter.user.getLanguageCode(),
-                        sort: 'studying'
-                    },
-                    spawner: true
-                }
-            ], function() {
-                callback();
-            });
         },
         /**
          * @method insert

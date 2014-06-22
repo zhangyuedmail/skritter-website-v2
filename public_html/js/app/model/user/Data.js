@@ -271,28 +271,25 @@ define([
         put: function(result, callback) {
             async.series([
                 function(callback) {
-                    skritter.storage.put('decomps', result.Decomps, callback);
+                    skritter.user.data.decomps.insert(result.Decomps, callback);
                 },
                 function(callback) {
-                    skritter.storage.put('items', result.Items, callback);
+                    skritter.user.data.items.insert(result.Items, callback);
                 },
                 function(callback) {
-                    skritter.storage.put('reviews', result.Reviews, callback);
+                    skritter.user.data.sentences.insert(result.Sentences, callback);
                 },
                 function(callback) {
-                    skritter.storage.put('sentences', result.Sentences, callback);
+                    skritter.user.data.srsconfigs.insert(result.SRSConfigs, callback);
                 },
                 function(callback) {
-                    skritter.storage.put('srsconfigs', result.SRSConfigs, callback);
+                    skritter.user.data.strokes.insert(result.Strokes, callback);
                 },
                 function(callback) {
-                    skritter.storage.put('strokes', result.Strokes, callback);
+                    skritter.user.data.vocablists.insert(result.VocabLists, callback);
                 },
                 function(callback) {
-                    skritter.storage.put('vocablists', result.VocabLists, callback);
-                },
-                function(callback) {
-                    skritter.storage.put('vocabs', result.Vocabs, callback);
+                    skritter.user.data.vocabs.insert(result.Vocabs, callback);
                 }
             ], function() {
                 if (typeof callback === 'function') {

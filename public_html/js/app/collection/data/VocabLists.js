@@ -46,19 +46,30 @@ define([
             return vocablist.id;
         },
         /**
-         * @method fetchStudying
+         * @method fetch
          * @param {Function} callback
          */
-        fetchStudying: function(callback) {
-            skritter.api.getVocabLists(_.bind(function(lists, status) {
-                if (status === 200) {
-                    this.insert(lists, callback);
-                } else {
-                    if (typeof callback === 'function') {
-                        callback(lists);
-                    }
+        fetch: function(callback) {
+            async.waterfall([
+                function(callback) {
+                    skritter.api.getVocabLists(function(lists, status) {
+                        if (status === 200) {
+                            callback(null, lists);
+                        } else {
+                            callback(lists);
+                        }
+                    }, {lang: skritter.user.getLanguageCode(), sort: 'studying'});
+                },
+                function(lists, callback) {
+                    skritter.storage.clear('vocablists', function() {
+                        skritter.user.data.vocablists.reset();
+                        skritter.user.data.vocablists.insert(lists, callback);
+                    });
+                },
+                function(callback) {
+                    skritter.user.data.vocablists.loadAll(callback);
                 }
-            }, this), {lang: skritter.user.getLanguageCode(), sort: 'studying'});
+            ], callback);
         },
         /**
          * @method filterByStatus

@@ -27,22 +27,26 @@ define([], function() {
             localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method fetchChanged
+         * @method fetchAll
          * @param {Function} callback
          */
-        fetchChanged: function(callback) {
+        fetchAll: function(callback) {
             var now = skritter.fn.getUnixTime();
             async.series([
                 function(callback) {
-                    skritter.user.data.items.fetchAll(callback, skritter.user.sync.get('lastItemSync'));
+                    skritter.user.data.items.fetch(callback, 0, true);
                 },
                 function(callback) {
-                    skritter.user.data.vocablists.reset();
-                    skritter.user.data.vocablists.loadAll(callback);
+                    skritter.user.data.vocablists.fetch(callback);
+                },
+                function(callback) {
+                    skritter.user.data.srsconfigs.fetch(callback);
                 }
             ], function() {
                 skritter.user.sync.set({
+                    lastErrorCheck: now,
                     lastItemSync: now,
+                    lastReviewSync: now,
                     lastSRSConfigSync: now,
                     lastVocabSync: now
                 });
@@ -52,20 +56,24 @@ define([], function() {
             });
         },
         /**
-         * @method downloadAll
+         * @method fetchChanged
          * @param {Function} callback
          */
-        fetchAll: function(callback) {
+        fetchChanged: function(callback) {
             var now = skritter.fn.getUnixTime();
             async.series([
                 function(callback) {
-                    skritter.user.data.items.fetchAll(callback);
+                    skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true);
+                },
+                function(callback) {
+                    skritter.user.data.vocablists.fetch(callback);
+                },
+                function(callback) {
+                    skritter.user.data.srsconfigs.fetch(callback);
                 }
             ], function() {
                 skritter.user.sync.set({
-                    lastErrorCheck: now,
                     lastItemSync: now,
-                    lastReviewSync: now,
                     lastSRSConfigSync: now,
                     lastVocabSync: now
                 });
