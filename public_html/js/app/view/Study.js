@@ -16,6 +16,7 @@ define([
         initialize: function() {
             BaseView.prototype.initialize.call(this);
             this.prompt = null;
+            this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
         },
         /**
          * @method render
@@ -51,6 +52,7 @@ define([
          */
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
+            this.elements.buttonAdditems = this.$('.button-add-items');
             this.elements.userAvatar = this.$('.user-avatar');
             return this;
         },
@@ -64,16 +66,6 @@ define([
                 'vclick .button-study-settings': 'handleStudySetttingsClicked',
                 'vclick .navbar-back': 'handleBackClick'
             });
-        },
-        /**
-         * @method autoSync
-         */
-        autoSync: function() {
-            if (skritter.user.settings.get('autoSync') &&
-                    !skritter.user.sync.isActive() &&
-                    skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
-                skritter.user.sync.reviews();
-            }
         },
         /**
          * @method handleAddItemsClicked
@@ -121,14 +113,12 @@ define([
             this.listenTo(this.prompt, 'prompt:next', _.bind(this.nextPrompt, this));
             this.listenTo(this.prompt, 'prompt:previous', _.bind(this.previousPrompt, this));
             skritter.user.scheduler.review = review;
-            this.updateDueCounter();
             this.prompt.render();
         },
         /**
          * @method nextPrompt
          */
         nextPrompt: function() {
-            this.autoSync();
             skritter.user.scheduler.sort();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 skritter.timer.reset();
@@ -150,41 +140,43 @@ define([
          * @method showAddItemsModal
          */
         showAddItemsModal: function() {
-            skritter.timer.stop();
+            var buttonAddItems = this.elements.buttonAdditems;
             skritter.modal.show('add-items');
             skritter.modal.element('.modal-footer').hide();
-            skritter.modal.element('.item-limit').val(skritter.user.settings.get('addItemAmount'));
             skritter.modal.element('.item-limit').on('vclick', function(event) {
-                $(this).select();
+                this.select();
                 event.preventDefault();
             });
-            skritter.modal.element('.button-add').on('vclick', _.bind(function(event) {
+            skritter.modal.element('.button-add').on('vclick', function(event) {
+                buttonAddItems.notify('Looking for items to add.', {
+                    className: 'info',
+                    position: 'bottom left'
+                });
                 var limit = skritter.modal.element('.item-limit').val();
-                skritter.modal.element('.modal-footer').show();
-                if (limit >= 1 && limit <= 100) {
-                    skritter.modal.element(':input').prop('disabled', true);
-                    skritter.modal.element('.loading-image').show();
-                    skritter.modal.element('.message').html("Looking for new items to add.");
-                    skritter.user.sync.addItems(limit, _.bind(function(itemIds) {
-                        skritter.user.settings.set('addItemAmount', limit);
-                        if (itemIds.length === 0) {
-                            skritter.modal.element(':input').prop('disabled', false);
-                            skritter.modal.element('.loading-image').hide();
-                            skritter.modal.element('.message').addClass('text-warning');
-                            skritter.modal.element('.message').html('No active lists found.');
+                if (limit >= 1 && limit <= 20) {
+                    skritter.user.data.items.addItems(function(addCount) {
+                        if (addCount > 0) {
+                            skritter.user.scheduler.sort();
+                            buttonAddItems.notify('Added ' + addCount + ' items!', {
+                                className: 'success',
+                                position: 'bottom left'
+                            });
                         } else {
-                            this.updateDueCounter();
-                            skritter.modal.hide();
-                            skritter.timer.start();
+                            buttonAddItems.notify('No items to add.', {
+                                className: 'warn',
+                                position: 'bottom left'
+                            });
                         }
-                    }, this));
+                        
+                    }, limit);
+                    skritter.modal.hide();
                 } else {
-                    skritter.modal.element('.loading-image').hide();
+                    skritter.modal.element('.modal-footer').show('fade', 200);
                     skritter.modal.element('.message').addClass('text-danger');
                     skritter.modal.element('.message').text('Must be between 1 and 100.');
                 }
                 event.preventDefault();
-            }, this));
+            });
         },
         /**
          * @method updateDueCounter

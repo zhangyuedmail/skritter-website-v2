@@ -14,6 +14,7 @@ define([], function() {
          */
         defaults: {
             addItemAmount: 1,
+            addItemOffset: 0,
             audio: true,
             autoSync: true,
             autoSyncThreshold: 5,

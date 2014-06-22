@@ -31,19 +31,19 @@ define([
          * @param {Number} limit
          */
         addItems: function(callback, limit) {
+            var itemIds = [];
             var now = skritter.fn.getUnixTime();
-            var offset = this.get('addItemOffset');
+            var offset = skritter.user.settings.get('addItemOffset');
             var requests = {
                 path: 'api/v' + skritter.api.version + '/items/add',
                 method: 'POST',
                 params: {
                     lang: skritter.user.getLanguageCode(),
-                    limit: limit,
+                    limit: limit ? limit : 1,
                     offset: offset,
                     fields: 'id'
                 }
             };
-            this.active.addItems = true;
             async.waterfall([
                 function(callback) {
                     skritter.api.requestBatch(requests, function(batch, status) {
@@ -55,34 +55,34 @@ define([
                     });
                 },
                 function(batch, callback) {
-                    var itemIds = [];
-                    var request = function() {
+                    function request() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
+                                console.log(result);
                                 if (result.Items) {
                                     itemIds = itemIds.concat(_.pluck(result.Items, 'id'));
                                 }
-                                window.setTimeout(request, 500);
+                                window.setTimeout(request, 1000);
+                            } else if (status === 200){
+                                callback();
                             } else {
-                                callback(null, itemIds);
+                                callback(result);
                             }
                         });
-                    };
+                    }
                     request();
                 },
-                function(itemIds, callback) {
-                    console.log('added items', itemIds);
-                    skritter.user.sync.changedItems(function() {
-                        callback(null, itemIds);
+                function(callback) {
+                    skritter.user.settings.set('addItemOffset', offset + itemIds.length);
+                    skritter.user.data.items.fetch(function() {
+                        callback();
                     }, now, true);
                 }
-            ], _.bind(function(error, itemIds) {
-                skritter.user.scheduler.sort();
-                this.active.addItems = false;
+            ], function() {
                 if (typeof callback === 'function') {
-                    callback(itemIds);
+                    callback(itemIds.length);
                 }
-            }, this));
+            });
         },
         /**
          * @method fetch         

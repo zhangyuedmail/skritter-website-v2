@@ -199,6 +199,7 @@ body {
     position: absolute;
     top: -2.5px;
 }
+.modal-container .message { clear: both; }
 
 
 /*** NAVBAR ***/
