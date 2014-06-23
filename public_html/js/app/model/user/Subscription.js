@@ -45,6 +45,20 @@ define([], function() {
             }
             return false;
         },
+        /**
+         * @method fetch
+         * @param {Function} callback
+         */
+        fetch: function(callback) {
+            skritter.api.getSubscription(skritter.user.id, _.bind(function(result) {
+                this.set(result);
+                callback();
+            }, this));
+        },
+        /**
+         * @method getGplayPlan
+         * @returns {String}
+         */
         getGplayPlan: function() {
             switch (this.get('gplay_subscription').subscription) {
                 case 'one.month.sub':
@@ -81,16 +95,6 @@ define([], function() {
                     callback();
                 }
             });
-        },
-        /**
-         * @method sync
-         * @param {Function} callback
-         */
-        sync: function(callback) {
-            skritter.api.getSubscription(skritter.user.id, _.bind(function(result) {
-                this.set(result);
-                callback();
-            }, this));
         }
     });
     

@@ -209,6 +209,28 @@ module.exports = function(grunt) {
                     }
                 ]
             },
+            'cordova-apksigner-chinese': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/chinese/platforms/android/ant-build/',
+                        src: 'Skritter-release-unsigned.apk',
+                        dest: 'utils/apksigner/unsigned/',
+                        rename: function(dest, src) { return dest + src.replace('Skritter', 'SkritterChinese'); }
+                    }
+                ]
+            },
+            'cordova-apksigner-japanese': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/japanese/platforms/android/ant-build/',
+                        src: 'Skritter-release-unsigned.apk',
+                        dest: 'utils/apksigner/unsigned/',
+                        rename: function(dest, src) { return dest + src.replace('Skritter', 'SkritterJapanese'); }
+                    }
+                ]
+            },
             'cordova-apktool-chinese': {
                 files: [
                     {
@@ -404,10 +426,30 @@ module.exports = function(grunt) {
                     stderr: true
                 }
             },
+            'cordova-build-android-chinese-release': {
+                command: [
+                    'cd build/cordova/chinese',
+                    'cordova build android --release',
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
             'cordova-build-android-japanese': {
                 command: [
                     'cd build/cordova/japanese',
                     'cordova build android',
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'cordova-build-android-japanese-release': {
+                command: [
+                    'cd build/cordova/japanese',
+                    'cordova build android --release',
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -536,6 +578,15 @@ module.exports = function(grunt) {
         'shell:cordova-build-android-chinese'
     ]);
     
+    grunt.registerTask('build-android-chinese-release', [
+        'validate',
+        'clean:cordova-chinese',
+        'copy:cordova-chinese',
+        'copy:cordova-config-chinese',
+        'replace:cordova-chinese',
+        'shell:cordova-build-android-chinese-release'
+    ]);
+    
     grunt.registerTask('build-android-japanese', [
         'validate',
         'clean:cordova-japanese',
@@ -543,6 +594,15 @@ module.exports = function(grunt) {
         'copy:cordova-config-japanese',
         'replace:cordova-japanese',
         'shell:cordova-build-android-japanese'
+    ]);
+    
+    grunt.registerTask('build-android-japanese-release', [
+        'validate',
+        'clean:cordova-japanese',
+        'copy:cordova-japanese',
+        'copy:cordova-config-japanese',
+        'replace:cordova-japanese',
+        'shell:cordova-build-android-japanese-release'
     ]);
     
     grunt.registerTask('build-run-android', [
@@ -592,20 +652,16 @@ module.exports = function(grunt) {
     ]);
     
     grunt.registerTask('package-android-chinese', [
-        'build-android-chinese',
+        'build-android-chinese-release',
         'clean:utils-chinese',
-        'copy:cordova-apktool-chinese',
-        'shell:apktool-compile-chinese',
-        'copy:apktool-apksigner-chinese',
+        'copy:cordova-apksigner-chinese',
         'shell:apksigner-build-chinese'
     ]);
     
     grunt.registerTask('package-android-japanese', [
-        'build-android-japanese',
+        'build-android-japanese-release',
         'clean:utils-japanese',
-        'copy:cordova-apktool-japanese',
-        'shell:apktool-compile-japanese',
-        'copy:apktool-apksigner-japanese',
+        'copy:cordova-apksigner-japanese',
         'shell:apksigner-build-japanese'
     ]);
     

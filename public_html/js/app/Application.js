@@ -107,23 +107,20 @@ define([
                 },
                 function(callback) {
                     skritter.user.scheduler.loadAll(callback);
-                },
-                function(callback) {
-                    if (skritter.user.sync.isFirst()) {
-                        skritter.modal.show('download')
-                                .set('.modal-title', 'Initial Download')
-                                .set('.modal-title-icon', null, 'fa-download')
-                                .progress(100);
-                        skritter.user.sync.downloadAll(function() {
-                            window.location.reload(true);
-                        });
-                    } else {
-                        callback();
-                    }
                 }
             ], function() {
                 //load daily timer prog stats in background
                 skritter.timer.refresh(true);
+                //checks if user has downloaded account
+                if (skritter.user.sync.isInitial()) {
+                    skritter.modal.show('download').set('.modal-title', 'Downloading').set('.modal-title-icon', null, 'fa-download').progress(100);
+                    skritter.user.sync.fetchAll(function() {
+                        skritter.user.scheduler.sort();
+                        skritter.modal.hide();
+                    });
+                } else {
+                    skritter.user.sync.fetchChanged();
+                }
                 //load raygun and bind userid to analytics
                 if (skritter.fn.hasCordova()) {
                     navigator.analytics.setUserId(skritter.user.getName());
@@ -131,9 +128,9 @@ define([
                         Raygun.withCustomData(skritter.user.getCustomData());
                         Raygun.withTags(skritter.user.getTags());
                         Raygun.setUser(skritter.user.getName());
-                    } else if (window.Raygun) {
-                        window.Raygun = undefined;
                     }
+                } else {
+                    window.Raygun = undefined;
                 }
                 callback();
             });
@@ -145,7 +142,6 @@ define([
      * @method initialize
      */
     var initialize = function() {
-        //asynchronously loads all required modules
         async.series([
             async.apply(loadFunctions),
             async.apply(loadApi),

@@ -1,9 +1,3 @@
-/**
- * @module Skritter
- * @submodule Collections
- * @param VocabList
- * @author Joshua McFarland
- */
 define([
     'model/data/VocabList'
 ], function(VocabList) {
@@ -52,16 +46,50 @@ define([
             return vocablist.id;
         },
         /**
+         * @method fetch
+         * @param {Function} callback
+         */
+        fetch: function(callback) {
+            async.waterfall([
+                function(callback) {
+                    skritter.api.getVocabLists(function(lists, status) {
+                        if (status === 200) {
+                            callback(null, lists);
+                        } else {
+                            callback(lists);
+                        }
+                    }, {lang: skritter.user.getLanguageCode(), sort: 'studying'});
+                },
+                function(lists, callback) {
+                    skritter.storage.clear('vocablists', function() {
+                        skritter.user.data.vocablists.reset();
+                        skritter.user.data.vocablists.insert(lists, callback);
+                    });
+                },
+                function(callback) {
+                    skritter.user.data.vocablists.loadAll(callback);
+                }
+            ], callback);
+        },
+        /**
          * @method filterByStatus
          * @param {Array|String} status
          * @returns {Backbone.View}
          */
         filterByStatus: function(status) {
             status = Array.isArray(status) ? status : [status];
-            var filtered = this.filter(function(box) {
-                return status.indexOf(box.attributes.studyingMode) !== -1;
+            var filtered = this.filter(function(list) {
+                return status.indexOf(list.attributes.studyingMode) !== -1;
             });
             return new VocabLists(filtered);
+        },
+        /**
+         * @method insert
+         * @param {Array|Object} lists
+         * @param {Function} callback
+         */
+        insert: function(lists, callback) {
+            skritter.storage.put('vocablists', lists, callback);
         },
         /**
          * @method loadAll
@@ -69,7 +97,8 @@ define([
          */
         loadAll: function(callback) {
             skritter.storage.getAll('vocablists', _.bind(function(vocablists) {
-                this.add(vocablists, {merge: true, silent: true, sort: false});
+                this.add(vocablists, {merge: true, silent: true});
+                this.trigger('loaded');
                 callback();
             }, this));
         }

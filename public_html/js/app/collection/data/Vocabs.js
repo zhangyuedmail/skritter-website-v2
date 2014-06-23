@@ -1,9 +1,3 @@
-/**
- * @module Skritter
- * @submodule Collections
- * @param Vocab
- * @author Joshua McFarland
- */
 define([
     'model/data/Vocab'
 ], function(Vocab) {
@@ -30,6 +24,28 @@ define([
                     callback();
                 }
             });
+        },
+        /**
+         * @method fetchById
+         * @param {Array|String} vocabIds
+         * @param {Function} callback
+         */
+        fetchById: function(vocabIds, callback) {
+            skritter.api.getVocabs(vocabIds, _.bind(function(vocabs, status) {
+                if (status === 200) {
+                    this.insert(vocabs,callback);
+                } else {
+                    callback(vocabs);
+                }
+            }, this));
+        },
+        /**
+         * @method insert
+         * @param {Array|Object} vocabs
+         * @param {Function} callback
+         */
+        insert: function(vocabs, callback) {
+            skritter.storage.put('vocabs', vocabs, callback);
         },
         /**
          * @method loadAll

@@ -1,4 +1,4 @@
-define(function() {
+define([], function() {
     /**
      * @class Api
      */
@@ -468,12 +468,11 @@ define(function() {
             var self = this;
             var lists = [];
             options = options ? options : {};
-            options.cursor = options.cursor ? options.cursor : undefined;
             options.fields = options.fields ? options.fields.join(',') : undefined;
             options.lang = options.lang ? options.lang : undefined;
             options.sort = options.sort ? options.sort : undefined;
             function request(cursor) {
-                var promise = $.ajax({
+                $.ajax({
                     url: self.base + 'vocablists',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('AUTHORIZATION', self.credentials);
@@ -486,8 +485,7 @@ define(function() {
                         sort: options.sort,
                         fields: options.fields
                     }
-                });
-                promise.done(function(data) {
+                }).done(function(data) {
                     if (data.VocabLists)
                         lists = lists.concat(data.VocabLists);
                     if (options.cursor) {
@@ -499,8 +497,7 @@ define(function() {
                     } else {
                         callback(lists, data.statusCode);
                     }
-                });
-                promise.fail(function(error) {
+                }).fail(function(error) {
                     callback(error, 0);
                 });
             }

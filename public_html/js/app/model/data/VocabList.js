@@ -18,6 +18,17 @@ define(function() {
                     callback();
                 }
             });
+        },
+        /**
+         * @method uncache
+         * @param {Function} callback
+         */
+        uncache: function(callback) {
+            skritter.storage.remove('vocablists', this.id, function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         }
     });
     

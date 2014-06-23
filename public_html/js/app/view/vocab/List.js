@@ -93,7 +93,11 @@ define([
             skritter.api.updateVocabList({id: this.listId, studyingMode: 'not studying'}, _.bind(function(list, status) {
                 if (status === 200) {
                     this.list = list;
+                    skritter.user.data.vocablists.remove(list).uncache(function() {
+                        skritter.modal.hide();
+                    });
                     this.renderList();
+                    return;
                 }
                 skritter.modal.hide();
             }, this));
@@ -106,9 +110,12 @@ define([
             skritter.api.updateVocabList({id: this.listId, studyingMode: 'adding'}, _.bind(function(list, status) {
                 if (status === 200) {
                     this.list = list;
+                    skritter.user.data.vocablists.add(list, {merge: true});
                     this.renderList();
                 }
-                skritter.modal.hide();
+                skritter.user.data.vocablists.cache(function() {
+                    skritter.modal.hide();
+                });
             }, this));
         },
         /**
@@ -164,9 +171,12 @@ define([
             skritter.api.updateVocabList({id: this.listId, studyingMode: 'reviewing'}, _.bind(function(list, status) {
                 if (status === 200) {
                     this.list = list;
+                    skritter.user.data.vocablists.add(list, {merge: true});
                     this.renderList();
                 }
-                skritter.modal.hide();
+                skritter.user.data.vocablists.cache(function() {
+                    skritter.modal.hide();
+                });
             }, this));
         },
         /**
@@ -187,9 +197,12 @@ define([
             skritter.api.updateVocabList({id: this.listId, studyingMode: 'adding'}, _.bind(function(list, status) {
                 if (status === 200) {
                     this.list = list;
+                    skritter.user.data.vocablists.add(list, {merge: true});
                     this.renderList();
                 }
-                skritter.modal.hide();
+                skritter.user.data.vocablists.cache(function() {
+                    skritter.modal.hide();
+                });
             }, this));
         }
     });

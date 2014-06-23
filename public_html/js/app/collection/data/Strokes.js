@@ -28,6 +28,14 @@ define([
             });
         },
         /**
+         * @method insert
+         * @param {Array|Object} strokes
+         * @param {Function} callback
+         */
+        insert: function(strokes, callback) {
+            skritter.storage.put('strokes', strokes, callback);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

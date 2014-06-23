@@ -291,6 +291,13 @@ define([
             return this.settings.get('readingStyle') === 'pinyin' ? true : false;
         },
         /**
+         * @method isUsingSentences
+         * @returns {Boolean}
+         */
+        isUsingSentences: function() {
+            return false;
+        },
+        /**
          * @method isUsingZhuyin
          * @returns {Boolean}
          */
@@ -308,16 +315,16 @@ define([
                 if (status === 200) {
                     this.set(result);
                     async.series([
-                        _.bind(function(callback) {
-                            this.settings.sync(callback);
-                        }, this),
-                        _.bind(function(callback) {
-                            this.subscription.sync(callback);
-                        }, this)
-                    ], _.bind(function() {
-                        window.localStorage.setItem('active', result.user_id);
+                        function(callback) {
+                            skritter.user.settings.fetch(callback);
+                        },
+                        function(callback) {
+                            skritter.user.subscription.fetch(callback);
+                        }
+                    ], function() {
+                        localStorage.setItem('active', result.user_id);
                         callback(result, status);
-                    }, this));
+                    });
                 } else {
                     callback(result, status);
                 }
@@ -334,7 +341,6 @@ define([
             skritter.modal.element('.modal-button-logout').on('vclick', function() {
                 skritter.modal.element('.modal-options').hide(500);
                 skritter.modal.element(':input').prop('disabled', true);
-                skritter.modal.element('.message').addClass('text-info');
                 skritter.modal.element('.message').html("<i class='fa fa-spin fa-cog'></i> Signing Out");
                 async.series([
                     function(callback) {
@@ -344,9 +350,9 @@ define([
                         window.setTimeout(callback, 2000);
                     }
                 ], function() {
-                    window.localStorage.removeItem('active');
-                    window.localStorage.removeItem(skritter.user.id + '-sync');
-                    window.document.location.href = '';
+                    localStorage.removeItem('active');
+                    localStorage.removeItem(skritter.user.id + '-sync');
+                    document.location.href = '';
                 });
             });
         },

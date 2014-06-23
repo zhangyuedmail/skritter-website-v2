@@ -9,10 +9,13 @@ requirejs.config({
         async: '../lib/async-0.9.0',
         backbone: '../lib/backbone-1.1.2.min',
         bootstrap: '../../bootstrap/js/bootstrap.min',
+        'bootstrap.notify': '../../bootstrap/components/notify/bootstrap-notify.min',
         'bootstrap.switch': '../../bootstrap/components/switch/js/bootstrap-switch.min',
         'createjs.easel': '../lib/createjs.easel-NEXT.min',
         'createjs.tween': '../lib/createjs.tween-NEXT.min',
         moment: '../lib/moment-2.7.0.min',
+        'moment-timezone': '../lib/moment.timezone-0.0.6.min',
+        'moment-timezone-data': '../lib/moment.timezone.data',
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
@@ -26,6 +29,7 @@ requirejs.config({
     },
     shim: {
         bootstrap: ['jquery'],
+        'bootstrap.notify': ['bootstrap'],
         'bootstrap.switch': ['bootstrap'],
         jasmine: {
             exports: 'jasmine'

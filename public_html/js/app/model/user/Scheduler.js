@@ -154,14 +154,14 @@ define([], function() {
         /**
          * @method insert
          * @param {Array|Object} items
+         * @returns {Backbone.Model}
          */
         insert: function(items) {
             items = Array.isArray(items) ? items : [items];
-            var itemsToRemove = [];
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
                 var position = _.findIndex(this.data, {id: item.id});
-                if (position === -1 && item.vocabIds.length !== 0) {
+                if (position === -1 && item.vocabIds.length > 0) {
                     this.data.push({
                         id: item.id,
                         last: item.last ? item.last : 0,
@@ -169,7 +169,7 @@ define([], function() {
                         part: item.part,
                         style: item.style
                     });
-                } else if (item.vocabIds.length !== 0) {
+                } else {
                     this.data[position] = {
                         id: item.id,
                         last: item.last ? item.last : 0,
@@ -177,15 +177,9 @@ define([], function() {
                         part: item.part,
                         style: item.style
                     };
-                } else {
-                    itemsToRemove.push(item.id);
                 }
             }
-            if (itemsToRemove.length > 0) {
-                _.remove(this.data, function() {
-                    return itemsToRemove.indexOf(item.id) !== -1;
-                });
-            }
+            return this;
         },
         /**
          * @method isEmpty
@@ -201,6 +195,7 @@ define([], function() {
         loadAll: function(callback) {
             skritter.storage.getSchedule(_.bind(function(schedule) {
                 this.data = schedule;
+                this.sort();
                 callback();
             }, this));
         },

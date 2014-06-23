@@ -9,6 +9,13 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.saving = false;
+            this.on('add', _.bind(function() {
+                if (!this.saving && skritter.user.settings.get('autoSync') &&
+                        this.length >= skritter.user.settings.get('autoSyncThreshold')) {
+                    this.save();
+                }
+            }, this));
         },
         /**
          * @property {Backbone.Model} model
@@ -60,6 +67,93 @@ define([
                 this.add(reviews, {merge: true, silent: true});
                 callback();
             }, this));
+        },
+        /**
+         * @method save
+         * @param {Function} callback
+         */
+        save: function(callback) {
+            if (this.saving) {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            } else {
+                this.saving = true;
+                this.trigger('saving', true);
+                var lastErrorCheck = skritter.user.sync.get('lastErrorCheck');
+                var now = skritter.fn.getUnixTime();
+                var reviews = this.getReviewArray();
+                async.waterfall([
+                    function(callback) {
+                        console.log('saving reviews', reviews);
+                        skritter.api.postReviews(reviews, function(postedReviews, status) {
+                            if (status === 200) {
+                                callback(null, postedReviews);
+                            } else if (status === 403) {
+                                callback(postedReviews);
+                            } else {
+                                if (skritter.fn.hasRaygun()) {
+                                    try {
+                                        throw new Error('Review Format Error');
+                                    } catch (error) {
+                                        console.error('Review Format Error', postedReviews);
+                                        Raygun.send(error, {reviewFormatErrors: postedReviews});
+                                    }
+                                }
+                                callback(postedReviews);
+                            }
+                        });
+                    },
+                    function(postedReviews, callback) {
+                        var postedReviewIds = _.uniq(_.pluck(postedReviews, 'wordGroup'));
+                        if (postedReviewIds.length > 0) {
+                            skritter.storage.remove('reviews', postedReviewIds, function() {
+                                skritter.user.data.reviews.remove(postedReviewIds);
+                                callback();
+                            });
+                        } else {
+                            callback();
+                        }
+                    },
+                    function(callback) {
+                        skritter.api.checkReviewErrors(lastErrorCheck, function(reviewErrors, status) {
+                            if (status === 200 && reviewErrors.length > 0) {
+                                if (skritter.fn.hasRaygun()) {
+                                    try {
+                                        throw new Error('Review Error');
+                                    } catch (error) {
+                                        console.error('Review Error', reviewErrors);
+                                        Raygun.send(error, {reviewErrors: reviewErrors});
+                                    }
+                                }
+                                callback(null, reviewErrors);
+                            } else if (status === 200) {
+                                callback(null, reviewErrors);
+                            } else {
+                                callback(reviewErrors);
+                            }
+                        });
+                    },
+                    function(reviewErrors, callback) {
+                        var reviewErrorIds = _.uniq(_.pluck(reviewErrors, 'itemId'));
+                        if (reviewErrorIds.length > 0) {
+                            skritter.user.data.items.fetchById(reviewErrorIds, callback);
+                        } else {
+                            callback();
+                        }
+                    }
+                ], _.bind(function() {
+                    skritter.user.sync.set({
+                        lastErrorCheck: now,
+                        lastReviewSync: now
+                    });
+                    this.saving = false;
+                    this.trigger('saving', false);
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                }, this));
+            }
         }
     });
 

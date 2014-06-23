@@ -3,6 +3,7 @@ define([
     'moment',
     'backbone',
     'bootstrap',
+    'bootstrap.notify',
     'bootstrap.switch',
     'createjs.easel',
     'createjs.tween',
