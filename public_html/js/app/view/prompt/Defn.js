@@ -142,7 +142,13 @@ define([
         showAnswer: function() {
             skritter.timer.stop();
             this.elements.question.hide();
-            this.review.setReview({finished: true});
+            if (!this.review.getReview().finished) {
+                this.review.setReview({
+                    finished: true,
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }   
             this.elements.answer.fadeIn(300);
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
             this.grading.select(this.review.getScore()).show();
