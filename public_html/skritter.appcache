@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Thu Jun 19 2014 21:56:04 GMT-0700 (Pacific Daylight Time)
+# Time: Sun Jun 22 2014 22:43:45 GMT-0700 (Pacific Daylight Time)
 
 CACHE:
 index.html
@@ -43,6 +43,7 @@ template/vocab-info.html
 template/vocab-list-section.html
 template/vocab-list.html
 template/vocab-lists.html
+bootstrap/components/notify/bootstrap-notify.min.js
 bootstrap/components/switch/js/bootstrap-switch.min.js
 bootstrap/js/bootstrap.min.js
 js/app/Application.js
