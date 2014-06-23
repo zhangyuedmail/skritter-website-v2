@@ -69,23 +69,22 @@ window.skritter.getVersion = function() {
     return version.indexOf('@@') === -1 ? version : 'edge';
 };
 
-if (window.Raygun) {
-    if (window.cordova) {
-        Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach();
-        Raygun.setUser('guest');
-        Raygun.setVersion(window.skritter.getVersion());
-        Raygun.saveIfOffline(true);
-    } else {
-        //TODO: load tracking for other environments
-    }
-}
-
 requirejs(['Libraries'], function() {
     //main run function that loads application specific files
     var run = function() {
         //load analytics tracking before initialize
         if (window.cordova) {
             navigator.analytics.startTrackerWithId(skritter.getTrackingID());
+        }
+        //load raygun error tracking as guest
+        if (window.Raygun) {
+            if (window.cordova) {
+                Raygun.init('906oc84z1U8uZga3IJ9uPw==').attach();
+                Raygun.setUser('guest');
+                Raygun.setVersion(window.skritter.getVersion());
+            } else {
+                //TODO: load tracking for other environments
+            }
         }
         //load the application module
         requirejs(['Application'], function(Application) {

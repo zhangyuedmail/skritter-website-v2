@@ -128,6 +128,7 @@ define([
                         Raygun.withCustomData(skritter.user.getCustomData());
                         Raygun.withTags(skritter.user.getTags());
                         Raygun.setUser(skritter.user.getName());
+                        Raygun.saveIfOffline(true);
                     }
                 } else {
                     window.Raygun = undefined;
