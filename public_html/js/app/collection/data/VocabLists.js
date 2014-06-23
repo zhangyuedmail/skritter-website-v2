@@ -91,7 +91,8 @@ define([
         filterByTitle: function(title) {
             status = Array.isArray(status) ? status : [status];
             var filtered = this.filter(function(list) {
-                return list.attributes.name.indexOf(title) !== -1;
+                var listName = list.attributes.name.toLowerCase();
+                return listName.indexOf(title.toLowerCase()) !== -1;
             });
             return new VocabLists(filtered);
         },
