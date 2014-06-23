@@ -75,6 +75,7 @@ define([
          * @method loadOfficial
          */
         loadOfficial: function() {
+            this.elements.inputSearch.val('');
             this.elements.buttonOfficial.addClass('active');
             this.elements.buttonStudying.removeClass('active');
             skritter.modal.show('loading').set('.message', 'Loading Textbooks');
@@ -94,6 +95,7 @@ define([
          * @method loadStudying
          */
         loadStudying: function() {
+            this.elements.inputSearch.val('');
             this.elements.buttonOfficial.removeClass('active');
             this.elements.buttonStudying.addClass('active');
             this.lists.set(skritter.user.data.vocablists.toJSON(), {

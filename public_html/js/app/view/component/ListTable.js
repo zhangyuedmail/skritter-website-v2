@@ -120,6 +120,7 @@ define([
          */
         set: function(lists, fields) {
             this.fields = fields;
+            this.filteredLists = null;
             this.lists.reset();
             this.lists.add(lists);
             return this.renderTable();
