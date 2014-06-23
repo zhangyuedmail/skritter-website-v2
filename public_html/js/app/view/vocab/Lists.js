@@ -39,6 +39,7 @@ define([
             this.elements.blockSort = this.$('#block-sort');
             this.elements.buttonOfficial = this.$('#button-category-textbook');
             this.elements.buttonStudying = this.$('#button-category-studying');
+            this.elements.inputSearch = this.$('#input-search');
             this.elements.lists = this.$('#lists');
             return this;
         },
@@ -47,7 +48,8 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
-                'vclick .button-category': 'handleCategoryClick'
+                'vclick .button-category': 'handleCategoryClick',
+                'vclick .button-search': 'handleSearchClick'
             });
         },
         /**
@@ -58,6 +60,15 @@ define([
             var category = event.currentTarget.id.replace('button-category-', '');
             this.set(category);
             skritter.router.navigate('vocab/list/category/' + category, {replace: true, trigger: false});
+            event.preventDefault();
+        },
+        /**
+         * @method handleSearchClick
+         * @param {Object} event
+         */
+        handleSearchClick: function(event) {
+            var title = this.elements.inputSearch.val();
+            this.lists.filterByTitle(title);
             event.preventDefault();
         },
         /**
@@ -96,7 +107,6 @@ define([
          */
         resize: function() {
             var contentHeight = skritter.settings.getContentHeight();
-            var contentWidth = skritter.settings.getContentWidth();
             this.elements.blockLists.height(contentHeight - this.elements.blockSearch.outerHeight() - this.elements.blockSort.outerHeight() - 50);
         },
         /**
