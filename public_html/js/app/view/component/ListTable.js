@@ -35,13 +35,15 @@ define([
             var divHead = '';
             this.elements.body.empty();
             this.elements.head.empty();
-            if (lists.length > 0) {
+            if (this.fields) {
                 //generates the header section
                 divHead += '<tr>';
                 for (var header in this.fields) {
                     divHead += "<th>" + this.fields[header] + "</th>";
                 }
                 divHead += '</tr>';
+            }
+            if (lists.length > 0) {
                 //generates the body section
                 for (var i = 0, length = lists.length; i < length; i++) {
                     var list = lists.at(i);
