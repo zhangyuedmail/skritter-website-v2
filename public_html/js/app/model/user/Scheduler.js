@@ -182,13 +182,6 @@ define([], function() {
             return this;
         },
         /**
-         * @method isEmpty
-         * @returns {Boolean}
-         */
-        isEmpty: function() {
-            return this.data.length === 0 ? true : false;
-        },
-        /**
          * @method loadAll
          * @param {Function} callback
          */

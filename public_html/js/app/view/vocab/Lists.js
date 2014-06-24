@@ -39,6 +39,7 @@ define([
             this.elements.blockSort = this.$('#block-sort');
             this.elements.buttonOfficial = this.$('#button-category-textbook');
             this.elements.buttonStudying = this.$('#button-category-studying');
+            this.elements.inputSearch = this.$('#input-search');
             this.elements.lists = this.$('#lists');
             return this;
         },
@@ -47,7 +48,8 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
-                'vclick .button-category': 'handleCategoryClick'
+                'vclick .button-category': 'handleCategoryClick',
+                'vclick .button-search': 'handleSearchClick'
             });
         },
         /**
@@ -61,9 +63,19 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleSearchClick
+         * @param {Object} event
+         */
+        handleSearchClick: function(event) {
+            var title = this.elements.inputSearch.val();
+            this.lists.filterByTitle(title);
+            event.preventDefault();
+        },
+        /**
          * @method loadOfficial
          */
         loadOfficial: function() {
+            this.elements.inputSearch.val('');
             this.elements.buttonOfficial.addClass('active');
             this.elements.buttonStudying.removeClass('active');
             skritter.modal.show('loading').set('.message', 'Loading Textbooks');
@@ -83,6 +95,7 @@ define([
          * @method loadStudying
          */
         loadStudying: function() {
+            this.elements.inputSearch.val('');
             this.elements.buttonOfficial.removeClass('active');
             this.elements.buttonStudying.addClass('active');
             this.lists.set(skritter.user.data.vocablists.toJSON(), {
@@ -96,7 +109,6 @@ define([
          */
         resize: function() {
             var contentHeight = skritter.settings.getContentHeight();
-            var contentWidth = skritter.settings.getContentWidth();
             this.elements.blockLists.height(contentHeight - this.elements.blockSearch.outerHeight() - this.elements.blockSort.outerHeight() - 50);
         },
         /**

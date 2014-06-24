@@ -27,7 +27,7 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
-            if (skritter.user.scheduler.isEmpty()) {
+            if (skritter.user.scheduler.length === 0) {
                 this.showAddItemsModal();
                 skritter.router.navigate('', {replace: true, trigger: true});
                 return false;

@@ -12,6 +12,7 @@ define([
         initialize: function() {
             this.elements = {};
             this.fields = {};
+            this.filteredLists = null;
             this.lists = new VocabLists();
         },
         /**
@@ -29,20 +30,23 @@ define([
          * @returns {Backbone.View}
          */
         renderTable: function() {
+            var lists = this.getLists();
             var divBody = '';
             var divHead = '';
             this.elements.body.empty();
             this.elements.head.empty();
-            if (this.lists.length > 0) {
+            if (this.fields) {
                 //generates the header section
                 divHead += '<tr>';
                 for (var header in this.fields) {
                     divHead += "<th>" + this.fields[header] + "</th>";
                 }
                 divHead += '</tr>';
+            }
+            if (lists.length > 0) {
                 //generates the body section
-                for (var i = 0, length = this.lists.length; i < length; i++) {
-                    var list = this.lists.at(i);
+                for (var i = 0, length = lists.length; i < length; i++) {
+                    var list = lists.at(i);
                     divBody += "<tr id='list-" + list.id + "' class='cursor'>";
                     for (var field in this.fields) {
                         var fieldValue = list.get(field);
@@ -80,8 +84,24 @@ define([
          * @returns {Backbone.View}
          */
         filterByStatus: function(status) {
-            this.lists = this.lists.filterByStatus(status);
+            this.filteredLists = this.lists.filterByStatus(status);
             return this.renderTable();
+        },
+        /**
+         * @method filterByTitle
+         * @param {Array|String} title
+         * @returns {Backbone.View}
+         */
+        filterByTitle: function(title) {
+            this.filteredLists = this.lists.filterByTitle(title);
+            return this.renderTable();
+        },
+        /**
+         * @method getLists
+         * @returns {Backbone.Collection}
+         */
+        getLists: function() {
+            return this.filteredLists ? this.filteredLists : this.lists;
         },
         /**
          * @method handleTableRowClick
@@ -100,6 +120,7 @@ define([
          */
         set: function(lists, fields) {
             this.fields = fields;
+            this.filteredLists = null;
             this.lists.reset();
             this.lists.add(lists);
             return this.renderTable();

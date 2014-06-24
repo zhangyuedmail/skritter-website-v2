@@ -84,6 +84,19 @@ define([
             return new VocabLists(filtered);
         },
         /**
+         * @method filterByTitle
+         * @param {Array|String} title
+         * @returns {Backbone.View}
+         */
+        filterByTitle: function(title) {
+            status = Array.isArray(status) ? status : [status];
+            var filtered = this.filter(function(list) {
+                var listName = list.attributes.name.toLowerCase();
+                return listName.indexOf(title.toLowerCase()) !== -1;
+            });
+            return new VocabLists(filtered);
+        },
+        /**
          * @method insert
          * @param {Array|Object} lists
          * @param {Function} callback
