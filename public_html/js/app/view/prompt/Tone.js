@@ -82,7 +82,7 @@ define([
          */
         handleStrokeUp: function(points, shape) {
             var possibleTones = _.flatten(this.review.getBaseVocab().getTones(this.review.get('position')));
-            if (points && points.length > 2) {
+            if (points && points.length > 5) {
                 var result = this.review.getCharacterAt().recognize(points, shape);
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
