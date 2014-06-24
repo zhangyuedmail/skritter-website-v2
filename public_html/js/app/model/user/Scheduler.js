@@ -271,7 +271,7 @@ define([], function() {
                         } else if (next < UserScheduler.minIncrease) {
                             next = UserScheduler.minIncrease;
                         }
-                        spacedItems.push({id: dataItem.id, until: next});
+                        spacedItems.push({id: dataItem.id, until: now + next});
                     }
                 }
             }
