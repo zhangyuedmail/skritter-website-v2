@@ -58,7 +58,6 @@ define([
                     function request() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
-                                console.log(result);
                                 if (result.Items) {
                                     itemIds = itemIds.concat(_.pluck(result.Items, 'id'));
                                 }
