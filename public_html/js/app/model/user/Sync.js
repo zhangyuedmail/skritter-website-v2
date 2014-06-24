@@ -81,6 +81,9 @@ define([], function() {
                 var now = skritter.fn.getUnixTime();
                 async.series([
                     function(callback) {
+                        skritter.user.data.reviews.save(callback);
+                    },
+                    function(callback) {
                         skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true);
                     },
                     function(callback) {
