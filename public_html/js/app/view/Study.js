@@ -140,7 +140,6 @@ define([
          * @method showAddItemsModal
          */
         showAddItemsModal: function() {
-            var buttonAddItems = this.elements.buttonAdditems;
             skritter.modal.show('add-items');
             skritter.modal.element('.modal-footer').hide();
             skritter.modal.element('.item-limit').on('vclick', function(event) {
@@ -148,23 +147,23 @@ define([
                 event.preventDefault();
             });
             skritter.modal.element('.button-add').on('vclick', function(event) {
-                buttonAddItems.notify('Looking for items to add.', {
+                $.notify('Looking for items to add.', {
                     className: 'info',
-                    position: 'bottom left'
+                    position: 'top right'
                 });
                 var limit = skritter.modal.element('.item-limit').val();
                 if (limit >= 1 && limit <= 20) {
                     skritter.user.data.items.addItems(function(addCount) {
                         if (addCount > 0) {
                             skritter.user.scheduler.sort();
-                            buttonAddItems.notify('Added ' + addCount + ' items!', {
+                            $.notify('Added ' + addCount + ' items!', {
                                 className: 'success',
-                                position: 'bottom left'
+                                position: 'top right'
                             });
                         } else {
-                            buttonAddItems.notify('No items to add.', {
+                            $.notify('No items to add.', {
                                 className: 'warn',
-                                position: 'bottom left'
+                                position: 'top right'
                             });
                         }
                         
