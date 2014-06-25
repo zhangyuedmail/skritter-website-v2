@@ -81,6 +81,21 @@ define([
             ], callback);
         },
         /**
+         * @method fetchById
+         * @param {String} listId
+         * @param {String} studyingMode
+         * @param {Function} callback
+         */
+        fetchById: function(listId, studyingMode, callback) {
+            studyingMode = studyingMode ? studyingMode : undefined;
+            skritter.api.updateVocabList({id: listId, studyingMode: studyingMode}, function(list, status) {
+                if (status === 200) {
+                    skritter.user.data.vocablists.add(list, {merge: true});
+                }
+                skritter.user.data.vocablists.cache(callback);
+            });
+        },
+        /**
          * @method filterByStatus
          * @param {Array|String} status
          * @returns {Backbone.View}
@@ -104,6 +119,23 @@ define([
                 return listName.indexOf(title.toLowerCase()) !== -1;
             });
             return new VocabLists(filtered);
+        },
+        /**
+         * @method getActive
+         * @returns {Array}
+         */
+        getActive: function() {
+            return this.models.filter(function(list) {
+                var studyingMode = list.attributes.studyingMode;
+                return studyingMode === 'adding' || studyingMode === 'reviewing';
+            });
+        },
+        /**
+         * @method getActiveCount
+         * @returns {Number}
+         */
+        getActiveCount: function() {
+            return this.getActive().length;
         },
         /**
          * @method insert

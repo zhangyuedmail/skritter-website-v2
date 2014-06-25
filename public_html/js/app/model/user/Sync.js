@@ -48,6 +48,14 @@ define([], function() {
                         skritter.user.data.vocablists.fetch(callback);
                     },
                     function(callback) {
+                        if (skritter.user.data.vocablists.getActiveCount() === 0) {
+                            var defaultListId = skritter.user.isChinese() ? '47872248' : '87370940';
+                            skritter.user.data.vocablists.fetchById(defaultListId, 'adding', callback);
+                        } else {
+                            callback();
+                        }
+                    },
+                    function(callback) {
                         skritter.user.data.srsconfigs.fetch(callback);
                     }
                 ], _.bind(function() {

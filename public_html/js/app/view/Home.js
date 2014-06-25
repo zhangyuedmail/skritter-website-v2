@@ -13,7 +13,7 @@ define([
         initialize: function() {
             BaseView.prototype.initialize.call(this);
             this.listTable = new ListTable();
-            this.listenTo(skritter.user.data.vocablists, 'loaded', _.bind(this.updateLists, this));
+            this.listenTo(skritter.user.data.vocablists, 'add loaded', _.bind(this.updateLists, this));
             this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
             this.listenTo(skritter.user.sync, 'status', _.bind(this.toggleSyncButton, this));
         },
