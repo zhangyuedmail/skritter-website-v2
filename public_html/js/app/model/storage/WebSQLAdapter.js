@@ -195,8 +195,8 @@ define([], function() {
                                 (lang === 'ja' && !skritter.fn.isKana(id.split('-')[2]))) {
                             schedule.push({
                                 id: id,
-                                last: last ? last : 0,
-                                next: next ? next : 0,
+                                last: last,
+                                next: next,
                                 part: part,
                                 style: style
                             });

@@ -117,8 +117,8 @@ define([], function() {
                         if (cursor.value.lang === 'zh' || (cursor.value.lang === 'ja' && !skritter.fn.isKana(cursor.value.id.split('-')[2]))) {
                             schedule.push({
                                 id: cursor.value.id,
-                                last: cursor.value.last ? cursor.value.last : 0,
-                                next: cursor.value.next ? cursor.value.next : 0,
+                                last: cursor.value.last,
+                                next: cursor.value.next,
                                 part: cursor.value.part,
                                 style: cursor.value.style
                             });

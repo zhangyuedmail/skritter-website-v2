@@ -232,8 +232,13 @@ define([], function() {
                         spacedItems.splice(spacedItemIndex, 1);
                     }
                 }
+                //randomly deprioritize new spaced items
+                if (!item.last && item.next - now > 600) {
+                    item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
+                    return -item.readiness;
+                }
                 //randomly prioritize new items
-                if (item.last === 0) {
+                if (!item.last || item.next - item.last === 1) {
                     item.readiness = randomizer(9999);
                     return -item.readiness;
                 }
