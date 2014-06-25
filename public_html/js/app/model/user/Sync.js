@@ -75,6 +75,7 @@ define([], function() {
                         lastSRSConfigSync: now,
                         lastVocabSync: now
                     });
+                    skritter.user.scheduler.sort();
                     this.syncing = false;
                     this.trigger('status', false);
                     if (typeof callback === 'function') {
@@ -115,6 +116,7 @@ define([], function() {
                         lastSRSConfigSync: now,
                         lastVocabSync: now
                     });
+                    skritter.user.scheduler.sort();
                     this.syncing = false;
                     this.trigger('status', false);
                     if (typeof callback === 'function') {

@@ -36,7 +36,6 @@ define([
          */
         getReviewArray: function(startFrom) {
             var reviews = [];
-            console.log('starting from', startFrom);
             for (var i = startFrom === undefined ? 1 : startFrom, length = this.length; i < length; i++) {
                 reviews = reviews.concat(this.at(i).attributes.reviews);
             }

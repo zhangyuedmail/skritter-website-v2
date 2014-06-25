@@ -104,6 +104,7 @@ define([
                 this.elements.buttonSync.children('i').addClass('fa-spin');
             } else {
                 this.elements.buttonSync.children('i').removeClass('fa-spin');
+                this.updateDueCounter();
             }
         },
         /**
