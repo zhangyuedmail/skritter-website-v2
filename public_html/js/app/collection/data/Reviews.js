@@ -31,11 +31,13 @@ define([
         },
         /**
          * @method getReviewArray
+         * @param {Number} startFrom
          * @return {Array}
          */
-        getReviewArray: function() {
+        getReviewArray: function(startFrom) {
             var reviews = [];
-            for (var i = 1, length = this.length; i < length; i++) {
+            console.log('starting from', startFrom);
+            for (var i = startFrom === undefined ? 1 : startFrom, length = this.length; i < length; i++) {
                 reviews = reviews.concat(this.at(i).attributes.reviews);
             }
             return reviews;
@@ -71,8 +73,9 @@ define([
         /**
          * @method save
          * @param {Function} callback
+         * @param {Boolean} saveAll
          */
-        save: function(callback) {
+        save: function(callback, saveAll) {
             if (this.saving) {
                 if (typeof callback === 'function') {
                     callback();
@@ -82,7 +85,7 @@ define([
                 this.trigger('saving', true);
                 var lastErrorCheck = skritter.user.sync.get('lastErrorCheck');
                 var now = skritter.fn.getUnixTime();
-                var reviews = this.getReviewArray();
+                var reviews = this.getReviewArray(saveAll ? 0 : 1);
                 async.waterfall([
                     function(callback) {
                         console.log('saving reviews', reviews);
@@ -90,6 +93,8 @@ define([
                             if (status === 200) {
                                 callback(null, postedReviews);
                             } else if (status === 403) {
+                                callback(postedReviews);
+                            } else if (status === 0) {
                                 callback(postedReviews);
                             } else {
                                 if (skritter.fn.hasRaygun()) {

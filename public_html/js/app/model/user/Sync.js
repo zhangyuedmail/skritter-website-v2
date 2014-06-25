@@ -81,6 +81,9 @@ define([], function() {
                 var now = skritter.fn.getUnixTime();
                 async.series([
                     function(callback) {
+                        skritter.user.data.reviews.save(callback, true);
+                    },
+                    function(callback) {
                         skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true);
                     },
                     function(callback) {
@@ -135,10 +138,15 @@ define([], function() {
                     });
                 },
                 function(batch, callback) {
+                    var totalResponseSize = 0;
                     function request() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
+                                totalResponseSize += result.responseSize;
                                 skritter.user.data.put(result, function() {
+                                    if (totalResponseSize > 1024) {
+                                        skritter.modal.set('.modal-sub-title', skritter.fn.convertBytesToSize(totalResponseSize));
+                                    }
                                     if (result.Items) {
                                         skritter.user.scheduler.insert(result.Items);
                                     }

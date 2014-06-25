@@ -2,11 +2,13 @@ define([], function() {
     /**
      * @class UserScheduler
      */
-    var Model = Backbone.Model.extend({
+    var UserScheduler = Backbone.Model.extend({
         /**
          * @method initialize
          */
         initialize: function() {
+            UserScheduler.minIncrease = 10 * 60;
+            UserScheduler.maxIncrease = 12 * 60 * 60;
             this.data = [];
             this.review = null;
         },
@@ -14,7 +16,8 @@ define([], function() {
          * @property {Object} defaults
          */
         defaults: {
-            history: []
+            history: [],
+            spacedItems: []
         },
         /**
          * @method cache
@@ -202,6 +205,7 @@ define([], function() {
             var history = this.get('history');
             var now = skritter.fn.getUnixTime();
             var randomizer = this.randomizeInterval;
+            var spacedItems = this.get('spacedItems');
             this.data = _.sortBy(this.data, function(item) {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
@@ -214,11 +218,27 @@ define([], function() {
                 }
                 //deprioritize recently viewed items
                 if (history.indexOf(item.id.split('-')[2]) !== -1) {
-                    item.readiness = skritter.fn.randomDecimal(0.2, 0.5);
+                    item.readiness = 0;
+                    return -item.readiness;
+                }
+                //deprioritize items currently being spaced
+                var spacedItemIndex = _.findIndex(spacedItems, {id: item.id});
+                if (spacedItemIndex !== -1) {
+                    var spacedItem = spacedItems[spacedItemIndex];
+                    if (spacedItem.until > now) {
+                        item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
+                        return -item.readiness;
+                    } else {
+                        spacedItems.splice(spacedItemIndex, 1);
+                    }
+                }
+                //randomly deprioritize new spaced items
+                if (!item.last && item.next - now > 600) {
+                    item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
                     return -item.readiness;
                 }
                 //randomly prioritize new items
-                if (item.last === 0) {
+                if (!item.last || item.next - item.last === 1) {
                     item.readiness = randomizer(9999);
                     return -item.readiness;
                 }
@@ -232,6 +252,34 @@ define([], function() {
             });
             this.trigger('sorted', this.data);
             return this.data;
+        },
+        /**
+         * @method spaceRelatedItems
+         * @param {Backbone.Model} item
+         */
+        spaceRelatedItems: function(item) {
+            var baseWriting = item.id.split('-')[2];
+            var basePart = item.get('part');
+            var now = skritter.fn.getUnixTime();
+            var spacedItems = this.get('spacedItems');
+            for (var i = 0, length = this.data.length; i < length; i++) {
+                var dataItem = this.data[i];
+                var dataRTD = dataItem.next - dataItem.last;
+                var dataWriting = dataItem.id.split('-')[2];
+                if (dataWriting === baseWriting && dataItem.part !== basePart) {
+                    var spacedItem = _.find(spacedItems, {id: dataItem.id});
+                    if (!spacedItem) {
+                        var increase = dataItem.last === 0 ? UserScheduler.maxIncrease : dataRTD * 0.2;
+                        var next = Math.round(now + Math.max(UserScheduler.minIncrease, increase));
+                        if (next > UserScheduler.maxIncrease) {
+                            next = UserScheduler.maxIncrease;
+                        } else if (next < UserScheduler.minIncrease) {
+                            next = UserScheduler.minIncrease;
+                        }
+                        spacedItems.push({id: dataItem.id, until: now + next});
+                    }
+                }
+            }
         },
         /**
          * @method randomizeInterval
@@ -256,16 +304,21 @@ define([], function() {
         /**
          * @method update
          * @param {Backbone.Model} item
+         * @param {Boolean} space
          */
-        update: function(item) {
+        update: function(item, space) {
             var history = this.get('history');
             var position = _.findIndex(this.data, {id: item.id});
-            if (history.length >= 9) {
-                history.unshift(item.id.split('-')[2]);
-                history.pop();
-            } else {
-                history.unshift(item.id.split('-')[2]);
+            //add and pop item from recent history
+            history.unshift(item.id.split('-')[2]);
+            if (history.length >= 4) {
+               history.pop();
             }
+            //add related item spacing
+            if (space) {
+                this.spaceRelatedItems(item);
+            }
+            //update scheduler item directory
             this.data[position] = {
                 id: item.id,
                 last: item.get('last'),
@@ -276,5 +329,5 @@ define([], function() {
         }
     });
 
-    return Model;
+    return UserScheduler;
 });

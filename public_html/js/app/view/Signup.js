@@ -3,9 +3,9 @@ define([
     'base/View'
 ], function(template, BaseView) {
     /**
-     * @class Signup
+     * @class SignupView
      */
-    var View = BaseView.extend({
+    var SignupView = BaseView.extend({
         /**
          * @method initialize
          */
@@ -72,6 +72,6 @@ define([
         }
     });
 
-    return View;
+    return SignupView;
 
 });

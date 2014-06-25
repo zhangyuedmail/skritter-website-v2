@@ -75,7 +75,9 @@ define([
          */
         handleBackButtonPress: function(event) {
             var fragment = Backbone.history.fragment;
-            if (this.view.elements.sidebar && this.view.elements.sidebar.hasClass('expanded')) {
+            if (skritter.user.sync.isActive()) {
+                return false;
+            } else if (this.view.elements.sidebar && this.view.elements.sidebar.hasClass('expanded')) {
                 this.view.toggleSidebar();
             } else if (fragment === '') {
                 skritter.modal.show('exit')

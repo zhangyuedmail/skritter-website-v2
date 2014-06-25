@@ -17,6 +17,7 @@ define([
             BaseView.prototype.initialize.call(this);
             this.prompt = null;
             this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
+            this.listenTo(skritter.user.sync, 'status', _.bind(this.toggleAddButton, this));
         },
         /**
          * @method render
@@ -27,7 +28,10 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
-            if (skritter.user.scheduler.length === 0) {
+            if (skritter.user.sync.isActive()) {
+                this.toggleAddButton(true);
+            }
+            if (skritter.user.scheduler.data.length === 0) {
                 this.showAddItemsModal();
                 skritter.router.navigate('', {replace: true, trigger: true});
                 return false;
@@ -137,10 +141,21 @@ define([
             }
         },
         /**
+         * @method toggleAddButton
+         * @param {Boolean} active
+         */
+        toggleAddButton: function(active) {
+            if (active) {
+                this.elements.buttonAdditems.addClass('invisible');
+            } else {
+                this.elements.buttonAdditems.removeClass('invisible');
+            }
+        },
+        /**
          * @method showAddItemsModal
          */
         showAddItemsModal: function() {
-            var buttonAddItems = this.elements.buttonAdditems;
+            var addItemsButton = this.elements.buttonAdditems;
             skritter.modal.show('add-items');
             skritter.modal.element('.modal-footer').hide();
             skritter.modal.element('.item-limit').on('vclick', function(event) {
@@ -148,29 +163,31 @@ define([
                 event.preventDefault();
             });
             skritter.modal.element('.button-add').on('vclick', function(event) {
-                buttonAddItems.notify('Looking for items to add.', {
+                addItemsButton.addClass('invisible');
+                $.notify('Looking for items to add.', {
                     className: 'info',
-                    position: 'bottom left'
+                    position: 'top right'
                 });
                 var limit = skritter.modal.element('.item-limit').val();
                 if (limit >= 1 && limit <= 20) {
                     skritter.user.data.items.addItems(function(addCount) {
                         if (addCount > 0) {
                             skritter.user.scheduler.sort();
-                            buttonAddItems.notify('Added ' + addCount + ' items!', {
+                            $.notify('Added ' + addCount + ' items!', {
                                 className: 'success',
-                                position: 'bottom left'
+                                position: 'top right'
                             });
                         } else {
-                            buttonAddItems.notify('No items to add.', {
+                            $.notify('No items to add.', {
                                 className: 'warn',
-                                position: 'bottom left'
+                                position: 'top right'
                             });
                         }
-                        
+                        addItemsButton.removeClass('invisible');
                     }, limit);
                     skritter.modal.hide();
                 } else {
+                    addItemsButton.removeClass('invisible');
                     skritter.modal.element('.modal-footer').show('fade', 200);
                     skritter.modal.element('.message').addClass('text-danger');
                     skritter.modal.element('.message').text('Must be between 1 and 100.');
