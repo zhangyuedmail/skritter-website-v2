@@ -52,11 +52,20 @@ define([
         fetch: function(callback) {
             async.waterfall([
                 function(callback) {
-                    skritter.api.getVocabLists(function(lists, status) {
+                    skritter.api.getVocabLists(function(customLists, status) {
                         if (status === 200) {
-                            callback(null, lists);
+                            callback(null, customLists);
                         } else {
-                            callback(lists);
+                            callback(customLists);
+                        }
+                    }, {lang: skritter.user.getLanguageCode(), sort: 'custom'});
+                },
+                function(customLists, callback) {
+                    skritter.api.getVocabLists(function(studyingLists, status) {
+                        if (status === 200) {
+                            callback(null, customLists.concat(studyingLists));
+                        } else {
+                            callback(studyingLists);
                         }
                     }, {lang: skritter.user.getLanguageCode(), sort: 'studying'});
                 },
