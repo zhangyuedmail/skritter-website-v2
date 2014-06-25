@@ -94,6 +94,8 @@ define([
                                 callback(null, postedReviews);
                             } else if (status === 403) {
                                 callback(postedReviews);
+                            } else if (status === 0) {
+                                callback(postedReviews);
                             } else {
                                 if (skritter.fn.hasRaygun()) {
                                     try {
