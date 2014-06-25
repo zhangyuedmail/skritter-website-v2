@@ -161,9 +161,16 @@ define([], function() {
          */
         insert: function(items) {
             items = Array.isArray(items) ? items : [items];
+            var spacedItems = this.get('spacedItems');
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
                 var position = _.findIndex(this.data, {id: item.id});
+                //remove local spacing in favor of server data
+                var spacingIndex = _.findIndex(spacedItems, {id: item.id});
+                if (spacingIndex !== -1) {
+                    spacedItems.splice(spacingIndex, 1);
+                }
+                //update or insert item into scheduler data
                 if (position === -1 && item.vocabIds.length > 0) {
                     this.data.push({
                         id: item.id,
