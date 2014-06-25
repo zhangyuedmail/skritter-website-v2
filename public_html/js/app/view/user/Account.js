@@ -23,9 +23,12 @@ define([
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userUsername.text(skritter.user.settings.get('name'));
+            this.elements.userTimezone.text(skritter.user.settings.get('timezone'));
+
             if (skritter.fn.hasCordova() && this.sub.canGplay()) {
                 this.elements.subExpires.text(this.sub.get('expires'));
                 this.elements.subPlan.text(this.sub.getGplayPlan());
+
                 if (this.sub.get('expires') === false) {
                     this.elements.subStatus.text('Active').addClass('text-success');
                     this.elements.subOneMonth.hide();
@@ -65,6 +68,8 @@ define([
             this.elements.subOneYear = this.$('#button-sub-one-year');
             this.elements.subOptions = this.$('#sub-options');
             this.elements.subStatus = this.$('#sub-status');
+
+            this.elements.userTimezone = this.$('#user-timezone');
             return this;
         },
         /**
