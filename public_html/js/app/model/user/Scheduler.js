@@ -316,7 +316,6 @@ define([], function() {
             }
             //add related item spacing
             if (space) {
-                console.log('spacing item', item);
                 this.spaceRelatedItems(item);
             }
             //update scheduler item directory
