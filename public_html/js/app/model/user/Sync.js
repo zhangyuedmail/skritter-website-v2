@@ -42,7 +42,7 @@ define([], function() {
                 var now = skritter.fn.getUnixTime();
                 async.series([
                     function(callback) {
-                        skritter.user.data.items.fetch(callback, 0, true);
+                        skritter.user.data.items.fetch(callback, 0, true, true);
                     },
                     function(callback) {
                         skritter.user.data.vocablists.fetch(callback);
@@ -66,6 +66,9 @@ define([], function() {
                     },
                     function(callback) {
                         skritter.user.data.srsconfigs.fetch(callback);
+                    },
+                    function(callback) {
+                        skritter.user.scheduler.clear().loadAll(callback);
                     }
                 ], _.bind(function() {
                     skritter.user.sync.set({
@@ -102,7 +105,7 @@ define([], function() {
                         skritter.user.data.reviews.save(callback, true);
                     },
                     function(callback) {
-                        skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true);
+                        skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true, false);
                     },
                     function(callback) {
                         skritter.user.data.vocablists.fetch(callback);
@@ -143,8 +146,9 @@ define([], function() {
          * @method processBatch
          * @param {Array} requests
          * @param {Function} callback
+         * @param {Boolean} skipScheduler
          */
-        processBatch: function(requests, callback) {
+        processBatch: function(requests, callback, skipScheduler) {
             async.waterfall([
                 function(callback) {
                     skritter.api.requestBatch(requests, function(batch, status) {
@@ -166,7 +170,7 @@ define([], function() {
                                     if (totalResponseSize > 1024) {
                                         skritter.modal.set('.modal-sub-title', skritter.fn.convertBytesToSize(totalResponseSize));
                                     }
-                                    if (result.Items) {
+                                    if (!skipScheduler && result.Items) {
                                         skritter.user.scheduler.insert(result.Items);
                                     }
                                     window.setTimeout(request, 1000);

@@ -88,8 +88,9 @@ define([
          * @param {Function} callback
          * @param {Number} offset
          * @param {Boolean} includeResources
+         * @param {Boolean} skipScheduler
          */
-        fetch: function(callback, offset, includeResources) {
+        fetch: function(callback, offset, includeResources, skipScheduler) {
             skritter.user.sync.processBatch([
                 {
                     path: 'api/v' + skritter.api.version + '/items',
@@ -109,7 +110,7 @@ define([
                 }
             ], function() {
                 callback();
-            });
+            }, skipScheduler);
         },
         /**
          * @method fetchById

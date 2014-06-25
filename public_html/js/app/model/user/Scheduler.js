@@ -25,6 +25,20 @@ define([], function() {
         cache: function() {
             localStorage.setItem(skritter.user.id + '-scheduler', JSON.stringify(this.toJSON()));
         },
+
+        /**
+         * @method clear
+         * @returns {Backbone.Model}
+         */
+        clear: function() {
+            this.data = [];
+            this.set({
+                history: [],
+                spacedItems: []
+            });
+            return this;
+        },
+
         /**
          * @method calculateInterval
          * @param {Backbone.Model} item
