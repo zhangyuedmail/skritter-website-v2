@@ -87,7 +87,6 @@ define([
                 var reviews = this.getReviewArray(saveAll ? 0 : 1);
                 async.waterfall([
                     function(callback) {
-                        console.log('saving reviews', reviews);
                         skritter.api.postReviews(reviews, function(postedReviews, status) {
                             if (status === 200) {
                                 callback(null, postedReviews);
@@ -113,6 +112,7 @@ define([
                         if (postedReviewIds.length > 0) {
                             skritter.storage.remove('reviews', postedReviewIds, function() {
                                 skritter.user.data.reviews.remove(postedReviewIds);
+                                console.log('saved', postedReviewIds.length, 'reviews');
                                 callback();
                             });
                         } else {

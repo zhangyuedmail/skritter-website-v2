@@ -150,18 +150,34 @@ define([], function() {
          */
         getNext: function(callback) {
             var data = this.data;
+            var history = this.get('history');
             var position = 0;
-            var next = function() {
+            function next() {
                 var item = data[position];
+                //if no item try and get the first
+                if (!item) {
+                    item = data[0];
+                    return false;
+                }
+                //temporarily ban items from recent history
+                if (history.indexOf(item.id.split('-')[2]) !== -1) {
+                    position++;
+                    next();
+                    return false;
+                }
+                //attempt to load item and related resources
                 skritter.user.data.loadItem(item.id, function(item) {
                     if (item) {
                         callback(item);
+                        return true;
                     } else {
                         position++;
                         next();
+                        return false;
                     }
                 });
             };
+            //check if scheduler items exist
             if (data.length > 0) {
                 next();
             } else {
@@ -223,7 +239,6 @@ define([], function() {
         sort: function() {
             var activeParts = skritter.user.getActiveParts();
             var activeStyles = skritter.user.getActiveStyles();
-            var history = this.get('history');
             var now = skritter.fn.getUnixTime();
             var randomizer = this.randomizeInterval;
             var spacedItems = this.get('spacedItems');
@@ -234,11 +249,6 @@ define([], function() {
                 //filter out inactive parts and styles
                 if (activeParts.indexOf(item.part) === -1 ||
                         activeStyles.indexOf(item.style) === -1) {
-                    item.readiness = 0;
-                    return -item.readiness;
-                }
-                //deprioritize recently viewed items
-                if (history.indexOf(item.id.split('-')[2]) !== -1) {
                     item.readiness = 0;
                     return -item.readiness;
                 }
