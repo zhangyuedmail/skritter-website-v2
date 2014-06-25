@@ -49,8 +49,17 @@ define([], function() {
                     },
                     function(callback) {
                         if (skritter.user.data.vocablists.getActiveCount() === 0) {
-                            var defaultListId = skritter.user.isChinese() ? '47872248' : '87370940';
+                            var chinese101 = 'agtzfndyaXRlLXdheXIWCxINVm9jYWJMaXN0SW5mbxjfn_lNDA';
+                            var japanese101 = '198299172';
+                            var defaultListId = skritter.user.isChinese() ? chinese101 : japanese101;
                             skritter.user.data.vocablists.fetchById(defaultListId, 'adding', callback);
+                        } else {
+                            callback();
+                        }
+                    },
+                    function(callback) {
+                        if (skritter.user.scheduler.data.length === 0) {
+                            skritter.user.data.items.addItems(callback, 5);
                         } else {
                             callback();
                         }
