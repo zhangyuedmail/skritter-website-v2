@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Tue Jun 24 2014 20:53:19 GMT-0700 (Pacific Daylight Time)
+# Time: Wed Jun 25 2014 21:01:09 GMT-0700 (Pacific Daylight Time)
 
 CACHE:
 index.html
@@ -127,7 +127,7 @@ js/lib/jquery.mobile.custom.min.js
 js/lib/jquery.ui.custom-1.10.4.min.js
 js/lib/lodash.compat-2.4.1.min.js
 js/lib/moment-2.7.0.min.js
-js/lib/moment.timezone-0.0.6.min.js
+js/lib/moment.timezone-0.1.0.min.js
 js/lib/moment.timezone.data.js
 js/lib/raygun-1.8.4.min.js
 js/lib/require-2.1.14.min.js
