@@ -14,8 +14,7 @@ requirejs.config({
         'createjs.easel': '../lib/createjs.easel-NEXT.min',
         'createjs.tween': '../lib/createjs.tween-NEXT.min',
         moment: '../lib/moment-2.7.0.min',
-        'moment-timezone': '../lib/moment.timezone-0.0.6.min',
-        'moment-timezone-data': '../lib/moment.timezone.data',
+        'moment-timezone': '../lib/moment.timezone-0.1.0.min',
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
@@ -43,7 +42,8 @@ requirejs.config({
             exports: 'jasmine'
         },
         'jquery.mobile': ['jquery'],
-        'jquery.ui': ['jquery']
+        'jquery.ui': ['jquery'],
+        'moment-timezone': ['moment']
     },
     urlArgs: "bust=" +  (new Date()).getTime(),
     waitSeconds: 120
