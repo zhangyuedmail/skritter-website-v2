@@ -25,6 +25,10 @@ define([
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userCreated.text(skritter.user.settings.get('created'));
             this.elements.userPrivate.text(skritter.user.settings.get('private'));
+            this.elements.userShowHeisig.text(skritter.user.settings.get('showHeisig'));
+            this.elements.userSourceLang.text(skritter.user.settings.get('sourceLang'));
+            this.elements.userStudyAllListWritings.text(skritter.user.settings.get('studyAllListWritings'));
+            this.elements.userStudyRareWritings.text(skritter.user.settings.get('studyRareWritings'));
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.elements.userTimezone.text(skritter.user.settings.get('timezone'));
             this.elements.userEmail.text(skritter.user.settings.get('email'));
@@ -68,6 +72,10 @@ define([
             this.elements.userCreated = this.$('#user-created');
             this.elements.userEmail = this.$('#user-email');
             this.elements.userPrivate = this.$('#user-private');
+            this.elements.userShowHeisig = this.$('#user-show-heisig');
+            this.elements.userSourceLang = this.$('#user-source-lang');
+            this.elements.userStudyAllListWritings = this.$('#user-study-all-list-writings');
+            this.elements.userStudyRareWritings = this.$('#user-study-rare-writings');
             this.elements.userTimezone = this.$('#user-timezone');
             this.elements.userUsername = this.$('.user-username');
             this.elements.subCancel = this.$('#button-sub-cancel');
