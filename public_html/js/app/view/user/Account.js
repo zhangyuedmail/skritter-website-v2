@@ -21,6 +21,7 @@ define([
             this.setTitle('Account');
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
+            this.elements.userAboutMe.text(skritter.user.settings.get('aboutMe'));
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.elements.userTimezone.text(skritter.user.settings.get('timezone'));
