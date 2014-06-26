@@ -33,10 +33,10 @@ define([
             this.elements.userTimezone.text(skritter.user.settings.get('timezone'));
             this.elements.userEmail.text(skritter.user.settings.get('email'));
 
-            if (skritter.fn.hasCordova() && this.sub.canGplay()) {
-                this.elements.subExpires.text(this.sub.get('expires'));
-                this.elements.subPlan.text(this.sub.getGplayPlan());
+            this.elements.subExpires.text(this.sub.get('expires') ? this.sub.get('expires') : 'Never!');
 
+            if (skritter.fn.hasCordova() && this.sub.canGplay()) {
+                this.elements.subPlan.text(this.sub.getGplayPlan());
                 if (this.sub.get('expires') === false) {
                     this.elements.subStatus.text('Active').addClass('text-success');
                     this.elements.subOneMonth.hide();
@@ -47,12 +47,12 @@ define([
                     this.elements.subOneMonth.hide();
                     this.elements.subOneYear.hide();
                 } else {
+
                     this.elements.subStatus.text('Inactive').addClass('text-danger');
                     this.elements.subCancel.hide();
                 }
             } else {
                 this.elements.subOptions.hide();
-                this.elements.subExpires.text(this.sub.get('expires'));
                 this.elements.subPlan.text(this.sub.get('subscribed') ? this.sub.get('subscribed') : 'n/a');
                 if (this.sub.isActive()) {
                     this.elements.subStatus.text('Active').addClass('text-success');
@@ -60,11 +60,6 @@ define([
                     this.elements.subStatus.text('Inactive').addClass('text-danger');
                 }
             }
-
-            if (this.sub.get('expires') === false) {
-                this.elements.subExpires.text("Never!");
-            }
-
             return this;
         },
         /**
