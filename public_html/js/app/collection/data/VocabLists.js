@@ -52,11 +52,20 @@ define([
         fetch: function(callback) {
             async.waterfall([
                 function(callback) {
-                    skritter.api.getVocabLists(function(lists, status) {
+                    skritter.api.getVocabLists(function(customLists, status) {
                         if (status === 200) {
-                            callback(null, lists);
+                            callback(null, customLists);
                         } else {
-                            callback(lists);
+                            callback(customLists);
+                        }
+                    }, {lang: skritter.user.getLanguageCode(), sort: 'custom'});
+                },
+                function(customLists, callback) {
+                    skritter.api.getVocabLists(function(studyingLists, status) {
+                        if (status === 200) {
+                            callback(null, customLists.concat(studyingLists));
+                        } else {
+                            callback(studyingLists);
                         }
                     }, {lang: skritter.user.getLanguageCode(), sort: 'studying'});
                 },
@@ -70,6 +79,21 @@ define([
                     skritter.user.data.vocablists.loadAll(callback);
                 }
             ], callback);
+        },
+        /**
+         * @method fetchById
+         * @param {String} listId
+         * @param {String} studyingMode
+         * @param {Function} callback
+         */
+        fetchById: function(listId, studyingMode, callback) {
+            studyingMode = studyingMode ? studyingMode : undefined;
+            skritter.api.updateVocabList({id: listId, studyingMode: studyingMode}, function(list, status) {
+                if (status === 200) {
+                    skritter.user.data.vocablists.add(list, {merge: true});
+                }
+                skritter.user.data.vocablists.cache(callback);
+            });
         },
         /**
          * @method filterByStatus
@@ -95,6 +119,23 @@ define([
                 return listName.indexOf(title.toLowerCase()) !== -1;
             });
             return new VocabLists(filtered);
+        },
+        /**
+         * @method getActive
+         * @returns {Array}
+         */
+        getActive: function() {
+            return this.models.filter(function(list) {
+                var studyingMode = list.attributes.studyingMode;
+                return studyingMode === 'adding' || studyingMode === 'reviewing';
+            });
+        },
+        /**
+         * @method getActiveCount
+         * @returns {Number}
+         */
+        getActiveCount: function() {
+            return this.getActive().length;
         },
         /**
          * @method insert

@@ -1,6 +1,7 @@
 define([
     'async',
     'moment',
+    'moment-timezone',
     'backbone',
     'bootstrap',
     'bootstrap.notify',

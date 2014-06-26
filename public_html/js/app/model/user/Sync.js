@@ -15,6 +15,7 @@ define([], function() {
          */
         defaults: {
             batchId: null,
+            batchRequestIds: [],
             lastErrorCheck: 0,
             lastItemSync: 0,
             lastReviewSync: 0,
@@ -42,13 +43,33 @@ define([], function() {
                 var now = skritter.fn.getUnixTime();
                 async.series([
                     function(callback) {
-                        skritter.user.data.items.fetch(callback, 0, true);
+                        skritter.user.data.items.fetch(callback, 0, true, true);
                     },
                     function(callback) {
                         skritter.user.data.vocablists.fetch(callback);
                     },
                     function(callback) {
+                        if (skritter.user.data.vocablists.getActiveCount() === 0) {
+                            var chinese101 = 'agtzfndyaXRlLXdheXIWCxINVm9jYWJMaXN0SW5mbxjfn_lNDA';
+                            var japanese101 = '198299172';
+                            var defaultListId = skritter.user.isChinese() ? chinese101 : japanese101;
+                            skritter.user.data.vocablists.fetchById(defaultListId, 'adding', callback);
+                        } else {
+                            callback();
+                        }
+                    },
+                    function(callback) {
                         skritter.user.data.srsconfigs.fetch(callback);
+                    },
+                    function(callback) {
+                        skritter.user.scheduler.clear().loadAll(callback);
+                    },
+                    function(callback) {
+                        if (skritter.user.scheduler.data.length === 0) {
+                            skritter.user.data.items.addItems(callback, 5);
+                        } else {
+                            callback();
+                        }
                     }
                 ], _.bind(function() {
                     skritter.user.sync.set({
@@ -58,6 +79,7 @@ define([], function() {
                         lastSRSConfigSync: now,
                         lastVocabSync: now
                     });
+                    skritter.user.scheduler.sort();
                     this.syncing = false;
                     this.trigger('status', false);
                     if (typeof callback === 'function') {
@@ -84,7 +106,7 @@ define([], function() {
                         skritter.user.data.reviews.save(callback, true);
                     },
                     function(callback) {
-                        skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true);
+                        skritter.user.data.items.fetch(callback, skritter.user.sync.get('lastItemSync'), true, false);
                     },
                     function(callback) {
                         skritter.user.data.vocablists.fetch(callback);
@@ -98,6 +120,7 @@ define([], function() {
                         lastSRSConfigSync: now,
                         lastVocabSync: now
                     });
+                    skritter.user.scheduler.sort();
                     this.syncing = false;
                     this.trigger('status', false);
                     if (typeof callback === 'function') {
@@ -124,36 +147,60 @@ define([], function() {
          * @method processBatch
          * @param {Array} requests
          * @param {Function} callback
+         * @param {Boolean} skipScheduler
          */
-        processBatch: function(requests, callback) {
+        processBatch: function(requests, callback, skipScheduler) {
             async.waterfall([
                 function(callback) {
-                    skritter.api.requestBatch(requests, function(batch, status) {
-                        if (status === 200) {
-                            skritter.user.sync.set('batchId', batch.id);
-                            callback(null, batch);
-                        } else {
-                            callback(batch);
-                        }
-                    });
+                    var retryCount = 0;
+                    function request() {
+                        skritter.api.requestBatch(requests, function(batch, status) {
+                            if (status === 200) {
+                                skritter.user.sync.set('batchId', batch.id);
+                                callback(null, batch);
+                            } else if (status === 0) {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
+                            } else {
+                                callback(batch);
+                            }
+                        });
+
+                    }
+                    request();
                 },
                 function(batch, callback) {
+                    var batchRequestIds = [];
+                    var retryCount = 0;
                     var totalResponseSize = 0;
                     function request() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
+                                batchRequestIds = batchRequestIds.concat(result.requestIds);
                                 totalResponseSize += result.responseSize;
                                 skritter.user.data.put(result, function() {
                                     if (totalResponseSize > 1024) {
                                         skritter.modal.set('.modal-sub-title', skritter.fn.convertBytesToSize(totalResponseSize));
                                     }
-                                    if (result.Items) {
+                                    if (!skipScheduler && result.Items) {
                                         skritter.user.scheduler.insert(result.Items);
                                     }
-                                    window.setTimeout(request, 1000);
+                                    skritter.user.sync.set('batchRequestIds', batchRequestIds);
+                                    window.setTimeout(request, 500);
                                 });
                             } else if (status === 200) {
                                 callback(null, batch);
+                            } else if (status === 0) {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
                             } else {
                                 callback(batch);
                             }
@@ -163,6 +210,7 @@ define([], function() {
                 }
             ], function() {
                 skritter.user.sync.unset('batchId');
+                skritter.user.sync.unset('batchRequestIds');
                 callback();
             });
         }

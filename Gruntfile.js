@@ -4,7 +4,7 @@
  * @author Joshua McFarland
  */
 module.exports = function(grunt) {
-    
+
     var paths = {
         //directories
         spec: '../../test/spec',
@@ -13,10 +13,12 @@ module.exports = function(grunt) {
         async: '../lib/async-0.9.0',
         backbone: '../lib/backbone-1.1.2.min',
         bootstrap: '../../bootstrap/js/bootstrap.min',
+        'bootstrap.notify': '../../bootstrap/components/notify/bootstrap-notify.min',
         'bootstrap.switch': '../../bootstrap/components/switch/js/bootstrap-switch.min',
         'createjs.easel': '../lib/createjs.easel-NEXT.min',
         'createjs.tween': '../lib/createjs.tween-NEXT.min',
         moment: '../lib/moment-2.7.0.min',
+        'moment-timezone': '../lib/moment.timezone-0.1.0.min',
         jasmine: '../../test/lib/jasmine',
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
@@ -28,9 +30,11 @@ module.exports = function(grunt) {
         'require.text': '../lib/require.text-2.0.12',
         underscore: '../lib/lodash.compat-2.4.1.min'
     };
-    
+
     var shim = {
         bootstrap: ['jquery'],
+        'bootstrap.notify': ['bootstrap'],
+        'bootstrap.switch': ['bootstrap'],
         jasmine: {
             exports: 'jasmine'
         },
@@ -43,12 +47,13 @@ module.exports = function(grunt) {
             exports: 'jasmine'
         },
         'jquery.mobile': ['jquery'],
-        'jquery.ui': ['jquery']
+        'jquery.ui': ['jquery'],
+        'moment-timezone': ['moment']
     };
-    
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        
+
         /*** CLEAN ***/
         clean: {
             'cordova-chinese': {
@@ -69,17 +74,17 @@ module.exports = function(grunt) {
                     force: true
                 }
             },
-             'cordova-japanese-cordovalib': {
+            'cordova-japanese-cordovalib': {
                 src: ['build/cordova/japanese/platforms/android/CordovaLib'],
                 options: {
                     force: true
                 }
             },
             'build': {
-               src: ['build'],
+                src: ['build'],
                 options: {
                     force: true
-                } 
+                }
             },
             'utils-chinese': {
                 src: [
@@ -108,7 +113,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
+
         /*** COPY ***/
         copy: {
             'apktool-apksigner-chinese': {
@@ -252,7 +257,7 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        
+
         /*** CSSLINT ***/
         csslint: {
             'root': {
@@ -263,12 +268,12 @@ module.exports = function(grunt) {
                 src: ['public_html/css/**/*.css']
             }
         },
-        
+
         /*** JSHINT ***/
         jshint: {
             'root': ['Gruntfile.js', 'public_html/js/app/**/*.js']
         },
-        
+
         /*** MANIFEST ***/
         manifest: {
             root: {
@@ -295,7 +300,7 @@ module.exports = function(grunt) {
                 dest: 'public_html/skritter.appcache'
             }
         },
-        
+
         /*** REPLACE ***/
         replace: {
             'cordova-chinese': {
@@ -346,7 +351,7 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        
+
         /*** REQUIREJS ***/
         requirejs: {
             'web': {
@@ -373,7 +378,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
+
         /*** SHELL ***/
         shell: {
             'apktool-compile-chinese': {
@@ -551,7 +556,7 @@ module.exports = function(grunt) {
             }
         }
     });
-    
+
     /*** PACKAGES ***/
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -562,13 +567,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-manifest');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-shell');
-    
+
     /*** COMMANDS ***/
     grunt.registerTask('build-android', [
         'build-android-chinese',
         'build-android-japanese'
     ]);
-    
+
     grunt.registerTask('build-android-chinese', [
         'validate',
         'clean:cordova-chinese',
@@ -577,7 +582,7 @@ module.exports = function(grunt) {
         'replace:cordova-chinese',
         'shell:cordova-build-android-chinese'
     ]);
-    
+
     grunt.registerTask('build-android-chinese-release', [
         'validate',
         'clean:cordova-chinese',
@@ -586,7 +591,7 @@ module.exports = function(grunt) {
         'replace:cordova-chinese',
         'shell:cordova-build-android-chinese-release'
     ]);
-    
+
     grunt.registerTask('build-android-japanese', [
         'validate',
         'clean:cordova-japanese',
@@ -595,7 +600,7 @@ module.exports = function(grunt) {
         'replace:cordova-japanese',
         'shell:cordova-build-android-japanese'
     ]);
-    
+
     grunt.registerTask('build-android-japanese-release', [
         'validate',
         'clean:cordova-japanese',
@@ -604,29 +609,29 @@ module.exports = function(grunt) {
         'replace:cordova-japanese',
         'shell:cordova-build-android-japanese-release'
     ]);
-    
+
     grunt.registerTask('build-run-android', [
         'build-run-android-chinese',
         'build-run-android-japanese'
     ]);
-    
+
     grunt.registerTask('build-run-android-chinese', [
         'build-android-chinese',
         'run-android-chinese'
     ]);
-    
+
     grunt.registerTask('build-run-android-japanese', [
         'build-android-japanese',
         'run-android-japanese'
     ]);
-    
+
     grunt.registerTask('build-web', [
         'validate',
         'clean:web',
         'requirejs:web',
         'replace:web'
     ]);
-    
+
     grunt.registerTask('install', [
         'shell:kill-adb',
         'clean:build',
@@ -640,39 +645,39 @@ module.exports = function(grunt) {
         'copy:cordova-japanese-cordovalib',
         'shell:cordova-install-japanese-crosswalk'
     ]);
-    
+
     grunt.registerTask('install-build', [
         'install',
         'build-android'
     ]);
-    
+
     grunt.registerTask('package-android', [
         'package-android-chinese',
         'package-android-japanese'
     ]);
-    
+
     grunt.registerTask('package-android-chinese', [
         'build-android-chinese-release',
         'clean:utils-chinese',
         'copy:cordova-apksigner-chinese',
         'shell:apksigner-build-chinese'
     ]);
-    
+
     grunt.registerTask('package-android-japanese', [
         'build-android-japanese-release',
         'clean:utils-japanese',
         'copy:cordova-apksigner-japanese',
         'shell:apksigner-build-japanese'
     ]);
-    
+
     grunt.registerTask('run-android-chinese', [
         'shell:cordova-run-android-chinese'
     ]);
-    
+
     grunt.registerTask('run-android-japanese', [
         'shell:cordova-run-android-japanese'
     ]);
-    
+
     grunt.registerTask('validate', [
         'csslint:root',
         'jshint:root'
