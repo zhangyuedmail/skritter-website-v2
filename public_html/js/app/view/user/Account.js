@@ -61,9 +61,10 @@ define([
          */
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
-            this.elements.userUsername = this.$('.user-username');
-            this.elements.userTimezone = this.$('#user-timezone');
+            this.elements.userAboutMe = this.$('#user-about-me');
             this.elements.userEmail = this.$('#user-email');
+            this.elements.userTimezone = this.$('#user-timezone');
+            this.elements.userUsername = this.$('.user-username');
             this.elements.subCancel = this.$('#button-sub-cancel');
             this.elements.subExpires = this.$('#sub-expires');
             this.elements.subPlan = this.$('#sub-plan');
