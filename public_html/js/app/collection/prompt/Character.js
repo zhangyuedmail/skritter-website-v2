@@ -46,9 +46,6 @@ define([
             return false;
         },
         /**
-         * Returns the expected next stroke based on the predicted variation and current position
-         * within the user character.
-         * 
          * @method expectedStroke
          * @returns {Backbone.Model}
          */
@@ -60,29 +57,32 @@ define([
             return variation.at(this.length);
         },
         /**
-         * Returns the expected variation from the array possible targets.
-         * 
-         * @method expectedVariation
-         * @returns {Backbone.Model}
+         * @method expectedVariations
+         * @returns {Array}
          */
-        getExpectedVariation: function() {
-            if (this.targets.length <= 1) {
+        getExpectedVariations: function() {
+            if (this.targets.length === 1) {
                 return this.targets[0];
             }
+            var expectedTargets = [];
             var targetScores = [];
-            for (var i = 0, length = this.targets.length; i < length; i++) {
-                targetScores[i] = 0;
-            }
-            for (var a = 0, lengthA = this.length; a < lengthA; a++) {
-                var strokeId = this.at(a).id;
-                for (var b = 0, lengthB = this.targets.length; b < lengthB; b++) {
-                    var target = this.targets[b];
+            for (var a = 0, lengthA = this.targets.length; a < lengthA; a++) {
+                targetScores[a] = 0;
+                var target = this.targets[a];
+                for (var b = 0, lengthB = this.length; b < lengthB; b++) {
+                    var strokeId = this.at(b).id;
                     if (target.findWhere({id: strokeId})) {
-                        targetScores[b]++;
+                        targetScores[a]++;
                     }
                 }
             }
-            return this.targets[targetScores.indexOf(Math.max.apply(Math, targetScores))];
+            var targetScore = targetScores[targetScores.indexOf(Math.max.apply(Math, targetScores))];
+            for (var i = 0, length = targetScores.length; i < length; i++) {
+                if (targetScores[i] === targetScore) {
+                    expectedTargets.push(this.targets[i]);
+                }
+            }
+            return expectedTargets;
         },
         /**
          * @method getPosition
