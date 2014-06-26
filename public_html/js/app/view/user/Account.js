@@ -32,9 +32,8 @@ define([
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.elements.userTimezone.text(skritter.user.settings.get('timezone'));
             this.elements.userEmail.text(skritter.user.settings.get('email'));
-
+            //subscription content block
             this.elements.subExpires.text(this.sub.get('expires') ? this.sub.get('expires') : 'Never!');
-
             if (skritter.fn.hasCordova() && this.sub.canGplay()) {
                 this.elements.subPlan.text(this.sub.getGplayPlan());
                 if (this.sub.get('expires') === false) {
