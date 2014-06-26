@@ -48,6 +48,7 @@ define([
             } else {
                 this.nextPrompt();
             }
+            this.updateDueCounter();
             return this;
         },
         /**

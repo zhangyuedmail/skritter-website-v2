@@ -176,7 +176,7 @@ define([], function() {
                         return false;
                     }
                 });
-            };
+            }
             //check if scheduler items exist
             if (data.length > 0) {
                 next();
