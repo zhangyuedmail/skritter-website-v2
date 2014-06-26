@@ -150,19 +150,32 @@ define([], function() {
          * @param {Boolean} skipScheduler
          */
         processBatch: function(requests, callback, skipScheduler) {
+            var retryCount = 0;
             async.waterfall([
                 function(callback) {
-                    skritter.api.requestBatch(requests, function(batch, status) {
-                        if (status === 200) {
-                            skritter.user.sync.set('batchId', batch.id);
-                            callback(null, batch);
-                        } else {
-                            callback(batch);
-                        }
-                    });
+                    function request() {
+                        skritter.api.requestBatch(requests, function(batch, status) {
+                            if (status === 200) {
+                                skritter.user.sync.set('batchId', batch.id);
+                                callback(null, batch);
+                            } else if (status === 0) {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
+                            } else {
+                                callback(batch);
+                            }
+                        });
+
+                    }
+                    request();
                 },
                 function(batch, callback) {
                     var batchRequestIds = [];
+                    var retryCount = 0;
                     var totalResponseSize = 0;
                     function request() {
                         skritter.api.getBatch(batch.id, function(result, status) {
@@ -177,10 +190,17 @@ define([], function() {
                                         skritter.user.scheduler.insert(result.Items);
                                     }
                                     skritter.user.sync.set('batchRequestIds', batchRequestIds);
-                                    window.setTimeout(request, 1000);
+                                    window.setTimeout(request, 500);
                                 });
                             } else if (status === 200) {
                                 callback(null, batch);
+                            } else if (status === 0) {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
                             } else {
                                 callback(batch);
                             }
