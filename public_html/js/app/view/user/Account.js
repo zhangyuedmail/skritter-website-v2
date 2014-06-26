@@ -25,10 +25,10 @@ define([
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userCreated.text(skritter.user.settings.get('created'));
             this.elements.userPrivate.text(skritter.user.settings.get('private'));
-            this.elements.userShowHeisig.text(skritter.user.settings.get('showHeisig'));
+            //this.elements.userShowHeisig.text(skritter.user.settings.get('showHeisig'));
             this.elements.userSourceLang.text(skritter.user.settings.get('sourceLang'));
-            this.elements.userStudyAllListWritings.text(skritter.user.settings.get('studyAllListWritings'));
-            this.elements.userStudyRareWritings.text(skritter.user.settings.get('studyRareWritings'));
+            //this.elements.userStudyAllListWritings.text(skritter.user.settings.get('studyAllListWritings'));
+            //this.elements.userStudyRareWritings.text(skritter.user.settings.get('studyRareWritings'));
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.elements.userTimezone.text(skritter.user.settings.get('timezone'));
             this.elements.userEmail.text(skritter.user.settings.get('email'));
@@ -60,6 +60,11 @@ define([
                     this.elements.subStatus.text('Inactive').addClass('text-danger');
                 }
             }
+
+            if (this.sub.get('expires') === false) {
+                this.elements.subExpires.text("Never!");
+            }
+
             return this;
         },
         /**
