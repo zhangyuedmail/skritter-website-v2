@@ -49,6 +49,7 @@ define([
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
                 'vclick .button-category': 'handleCategoryClick',
+                'keyup #input-search': 'handleEnterPress',
                 'vclick .button-search': 'handleSearchClick'
             });
         },
@@ -61,6 +62,17 @@ define([
             this.set(category);
             skritter.router.navigate('vocab/list/category/' + category, {replace: true, trigger: false});
             event.preventDefault();
+        },
+        /**
+         * @method handleEnterPress
+         * @param {Object} event
+         */
+        handleEnterPress: function(event) {
+            if (event.keyCode === 13) {
+                this.handleSearchClick(event);
+            } else {
+                event.preventDefault();
+            }
         },
         /**
          * @method handleSearchClick
