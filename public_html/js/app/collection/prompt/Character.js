@@ -50,7 +50,7 @@ define([
          * @returns {Backbone.Model}
          */
         getExpectedStroke: function() {
-            var variation = this.getExpectedVariation();
+            var variation = this.getExpectedVariations()[0];
             if (this.length === 0) {
                 return variation.at(0);
             }
@@ -61,9 +61,6 @@ define([
          * @returns {Array}
          */
         getExpectedVariations: function() {
-            if (this.targets.length === 1) {
-                return this.targets[0];
-            }
             var expectedTargets = [];
             var targetScores = [];
             for (var a = 0, lengthA = this.targets.length; a < lengthA; a++) {
