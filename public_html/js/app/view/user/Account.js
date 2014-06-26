@@ -24,6 +24,8 @@ define([
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.elements.userTimezone.text(skritter.user.settings.get('timezone'));
+            this.elements.userEmail.text(skritter.user.settings.get('email'));
+
             if (skritter.fn.hasCordova() && this.sub.canGplay()) {
                 this.elements.subExpires.text(this.sub.get('expires'));
                 this.elements.subPlan.text(this.sub.getGplayPlan());
@@ -60,6 +62,8 @@ define([
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
             this.elements.userUsername = this.$('.user-username');
+            this.elements.userTimezone = this.$('#user-timezone');
+            this.elements.userEmail = this.$('#user-email');
             this.elements.subCancel = this.$('#button-sub-cancel');
             this.elements.subExpires = this.$('#sub-expires');
             this.elements.subPlan = this.$('#sub-plan');
@@ -67,7 +71,6 @@ define([
             this.elements.subOneYear = this.$('#button-sub-one-year');
             this.elements.subOptions = this.$('#sub-options');
             this.elements.subStatus = this.$('#sub-status');
-            this.elements.userTimezone = this.$('#user-timezone');
             return this;
         },
         /**
