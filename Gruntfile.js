@@ -57,7 +57,17 @@ module.exports = function(grunt) {
         /*** CLEAN ***/
         clean: {
             'cordova-chinese': {
-                src: ['build/cordova/chinese/www/**/*'],
+                src: [
+                    'build/cordova/chinese/platforms/android/res/drawable-land-hdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-ldpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-mdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-xhdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-hdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-ldpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-mdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-xhdpi',
+                    'build/cordova/chinese/www/**/*'
+                ],
                 options: {
                     force: true
                 }
@@ -69,7 +79,17 @@ module.exports = function(grunt) {
                 }
             },
             'cordova-japanese': {
-                src: ['build/cordova/japanese/www/**/*'],
+                src: [
+                    'build/cordova/japanese/platforms/android/res/drawable-land-hdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-ldpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-mdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-xhdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-hdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-ldpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-mdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-xhdpi',
+                    'build/cordova/japanese/www/**/*'
+                ],
                 options: {
                     force: true
                 }
