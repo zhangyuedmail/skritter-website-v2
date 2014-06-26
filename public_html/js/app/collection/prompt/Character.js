@@ -125,11 +125,9 @@ define([
         /**
          * @method getSquig
          * @param {Number} excludeSquigPosition
-         * @param {String} color
          * @returns {CreateJS.Container}
          */
-        getSquig: function(excludeSquigPosition, color) {
-            color = (color) ? color : '#000000';
+        getSquig: function(excludeSquigPosition) {
             var canvasSize = skritter.settings.getCanvasSize();
             var squigContainer = new createjs.Container();
             squigContainer.name = 'squig';
