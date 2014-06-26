@@ -59,17 +59,17 @@ define([], function() {
                         }
                     },
                     function(callback) {
+                        skritter.user.data.srsconfigs.fetch(callback);
+                    },
+                    function(callback) {
+                        skritter.user.scheduler.clear().loadAll(callback);
+                    },
+                    function(callback) {
                         if (skritter.user.scheduler.data.length === 0) {
                             skritter.user.data.items.addItems(callback, 5);
                         } else {
                             callback();
                         }
-                    },
-                    function(callback) {
-                        skritter.user.data.srsconfigs.fetch(callback);
-                    },
-                    function(callback) {
-                        skritter.user.scheduler.clear().loadAll(callback);
                     }
                 ], _.bind(function() {
                     skritter.user.sync.set({
@@ -150,9 +150,9 @@ define([], function() {
          * @param {Boolean} skipScheduler
          */
         processBatch: function(requests, callback, skipScheduler) {
-            var retryCount = 0;
             async.waterfall([
                 function(callback) {
+                    var retryCount = 0;
                     function request() {
                         skritter.api.requestBatch(requests, function(batch, status) {
                             if (status === 200) {
