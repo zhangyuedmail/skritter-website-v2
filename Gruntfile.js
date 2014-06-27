@@ -57,7 +57,17 @@ module.exports = function(grunt) {
         /*** CLEAN ***/
         clean: {
             'cordova-chinese': {
-                src: ['build/cordova/chinese/www/**/*'],
+                src: [
+                    'build/cordova/chinese/platforms/android/res/drawable-land-hdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-ldpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-mdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-xhdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-hdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-ldpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-mdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-xhdpi',
+                    'build/cordova/chinese/www/**/*'
+                ],
                 options: {
                     force: true
                 }
@@ -69,7 +79,17 @@ module.exports = function(grunt) {
                 }
             },
             'cordova-japanese': {
-                src: ['build/cordova/japanese/www/**/*'],
+                src: [
+                    'build/cordova/japanese/platforms/android/res/drawable-land-hdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-ldpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-mdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-xhdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-hdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-ldpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-mdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-xhdpi',
+                    'build/cordova/japanese/www/**/*'
+                ],
                 options: {
                     force: true
                 }
@@ -306,7 +326,6 @@ module.exports = function(grunt) {
             'cordova-chinese': {
                 options: {
                     variables: {
-                        'androidPublicKey': 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwfbJgVyApOKSfeNtWqQPdikWCWYzNfh4ujKVxv5QZRTFxAKlfZnhT563Ttv1tUSS5OOBHiC+FJfTWKowcWTwRpT0+3WAD+5GiFpCE2khivssSrKxvL3A3dU+MhNp+CndVzMX/jIYTq5WPakV74oEATJT1MUCrWNklQTirt8H2cwtMZ7A7Nlhw8dn3gLyThEMyFSQN/J8au9H9NvPyQA8g9HjVJbC6EBQxotfnwWxTkmcD4nFStS5oelKCWrvmyzceYrsDTYGAL8wXNd+5RZ62B7w1jVnUS6JMBVCnpfTN/BeH80KcLmr3gBVDEbyjKoH6Ov47FgwLJWQc/+fKjNJvwIDAQAB',
                         'date': new Date().toUTCString().substr(0, 25),
                         'languageCode': 'zh',
                         'trackingID': 'UA-52116701-1',
@@ -317,14 +336,12 @@ module.exports = function(grunt) {
                 files: [
                     {src: 'config.xml', dest: 'build/cordova/chinese', expand: true, cwd: 'build/cordova/chinese'},
                     {src: 'config.xml', dest: 'build/cordova/chinese/www', expand: true, cwd: 'build/cordova/chinese/www'},
-                    {src: 'main.js', dest: 'build/cordova/chinese/www/js', expand: true, cwd: 'build/cordova/chinese/www/js'},
-                    {src: 'InAppBillingPlugin.java', dest: 'build/cordova/chinese/plugins/com.jernung.cordova.inappbilling/inappbilling', expand: true, cwd: 'build/cordova/chinese/plugins/com.jernung.cordova.inappbilling/inappbilling'}
+                    {src: 'main.js', dest: 'build/cordova/chinese/www/js', expand: true, cwd: 'build/cordova/chinese/www/js'}
                 ]
             },
             'cordova-japanese': {
                 options: {
                     variables: {
-                        'androidPublicKey': 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqO6YEuVqO+E7OmrSU7HEp1mi4hAoIKcMB/WyS7XGbPEZ9t/E+XjIv7MqlhVe9ROsoT7YS3kSlp19XX6uaiibgwbi6TDifyFMVjtOLqSEVcd9XrL6kk22JB8Z/6g8L/lEsLGWdBWyeEpWLpJ+pgewDnA3JsulmGvzo6qoAF5nRUitlYBcFDpFs1asfYh0cLiLO77D+TtIrz3T9bgdO/Hcz7pykiPYW5yuoe6RGKpoI3RNvbfO5aItAcXa3dKeReHx9YgfyASSYZvcmKLXyNAlHgadU0jQ1KoA/fJV429Qx8ACBmecJolT/ydMXbu1X9PWlh02bdvYiMfVPK2GZ/1xawIDAQAB',
                         'date': new Date().toUTCString().substr(0, 25),
                         'languageCode': 'ja',
                         'trackingID': 'UA-52116701-2',
@@ -335,8 +352,7 @@ module.exports = function(grunt) {
                 files: [
                     {src: 'config.xml', dest: 'build/cordova/japanese', expand: true, cwd: 'build/cordova/japanese'},
                     {src: 'config.xml', dest: 'build/cordova/japanese/www', expand: true, cwd: 'build/cordova/japanese/www'},
-                    {src: 'main.js', dest: 'build/cordova/japanese/www/js', expand: true, cwd: 'build/cordova/japanese/www/js'},
-                    {src: 'InAppBillingPlugin.java', dest: 'build/cordova/japanese/plugins/com.jernung.cordova.inappbilling/inappbilling', expand: true, cwd: 'build/cordova/japanese/plugins/com.jernung.cordova.inappbilling/inappbilling'}
+                    {src: 'main.js', dest: 'build/cordova/japanese/www/js', expand: true, cwd: 'build/cordova/japanese/www/js'}
                 ]
             },
             'web': {

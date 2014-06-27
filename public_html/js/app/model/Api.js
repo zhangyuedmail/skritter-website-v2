@@ -553,6 +553,29 @@ define([], function() {
             });
         },
         /**
+         * @method updateSubscription
+         * @param {Object} subscription
+         * @param {Function} callback
+         */
+        updateSubscription: function(userId, subscription, callback) {
+            $.ajax({
+                url: this.base + 'subscriptions/' + userId + '?bearer_token=' + this.get('token'),
+                beforeSend: _.bind(function(xhr) {
+                    xhr.setRequestHeader('AUTHORIZATION', this.credentials);
+                }, this),
+                type: 'PUT',
+                data: JSON.stringify(subscription)
+            }).done(function(data) {
+                if (typeof callback === 'function') {
+                    callback(data.Subscription, data.statusCode);
+                }
+            }).fail(function(error) {
+                if (typeof callback === 'function') {
+                    callback(error, 0);
+                }
+            });
+        },
+        /**
          * @method updateUser
          * @param {Object} settings
          * @param {Function} callback

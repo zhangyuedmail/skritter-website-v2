@@ -1,8 +1,3 @@
-/**
- * @module Skritter
- * @submodule Functions
- * @author Joshua McFarland
- */
 define(function() {
     /**
      * @class Recognizer
@@ -39,10 +34,11 @@ define(function() {
     Recognizer.prototype.analyze = function(userStroke, character) {
         var results = [];
         var size = skritter.settings.getCanvasSize();
-        for (var a = 0, lengthA = character.targets.length; a < lengthA; a++) {
-            var target = character.targets[a];
+        var targets = character.getExpectedVariations();
+        for (var a = 0, lengthA = targets.length; a < lengthA; a++) {
+            var target = targets[a];
             for (var b = 0, lengthB = target.length; b < lengthB; b++) {
-                var stroke = target.at(b);                
+                var stroke = target.at(b);
                 if (stroke.get('position') === character.getPosition()) {
                     var bitmapId = stroke.get('bitmapId');
                     var contains = stroke.get('contains');
@@ -111,7 +107,6 @@ define(function() {
             return score;
         }
         return -1;
-
     };
     /**
      * @method checkCorners
@@ -126,7 +121,6 @@ define(function() {
             return score === 0 ? score : score * this.cornersPenalty;
         }
         return -1;
-
     };
     /**
      * @method checkDistance
@@ -142,7 +136,6 @@ define(function() {
             return score;
         }
         return -1;
-
     };
     /**
      * @method checkCornersLength
@@ -158,7 +151,6 @@ define(function() {
             return score;
         }
         return -1;
-
     };
 
     return Recognizer;
