@@ -69,7 +69,7 @@ define([
             this.elements.buttonStartList = this.$('.button-start-list');
             this.elements.buttonDisableList = this.$('.button-disable-list');
             this.elements.buttonPauseList = this.$('.button-pause-list');
-            this.elements.listCreator = this.$('.list-creator');
+            this.elements.listCreator = this.$('#list-creator');
             this.elements.listDescription = this.$('.list-description');
             this.elements.listName = this.$('.list-name');
             this.elements.listSections = this.$('#list-sections');
