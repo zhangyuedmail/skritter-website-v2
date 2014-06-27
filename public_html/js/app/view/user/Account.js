@@ -23,7 +23,8 @@ define([
             BaseView.prototype.render.call(this);
             this.elements.userAboutMe.text(skritter.user.settings.get('aboutMe'));
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
-            this.elements.userCreated.text(skritter.user.settings.get('created'));
+            var created_moment = moment(skritter.user.settings.get('created')*1000).format();
+            this.elements.userCreated.text(created_moment.substring(0, 10));
             this.elements.userPrivate.text(skritter.user.settings.get('private'));
             //this.elements.userShowHeisig.text(skritter.user.settings.get('showHeisig'));
             this.elements.userSourceLang.text(skritter.user.settings.get('sourceLang'));
@@ -46,7 +47,6 @@ define([
                     this.elements.subOneMonth.hide();
                     this.elements.subOneYear.hide();
                 } else {
-
                     this.elements.subStatus.text('Inactive').addClass('text-danger');
                     this.elements.subCancel.hide();
                 }
