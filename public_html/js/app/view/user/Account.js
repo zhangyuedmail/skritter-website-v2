@@ -23,6 +23,7 @@ define([
             BaseView.prototype.render.call(this);
             this.elements.userAboutMe.text(skritter.user.settings.get('aboutMe'));
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
+            console.log(moment(skritter.user.settings.get('created')*1000).format("MMMM Do, YYYY");
             this.elements.userCreated.text(moment(skritter.user.settings.get('created')*1000).format("MMMM Do, YYYY"));
             this.elements.userPrivate.text(skritter.user.settings.get('private'));
             //this.elements.userShowHeisig.text(skritter.user.settings.get('showHeisig'));
