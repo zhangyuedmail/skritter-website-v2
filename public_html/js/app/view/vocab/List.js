@@ -52,6 +52,7 @@ define([
             }
             this.elements.listDescription.text(this.list.description);
             this.elements.listName.text(this.list.name);
+            this.elements.listCreator.text(this.list.creator);
             this.sections.set(this.listId, this.list.sections, {
                 name: 'Name',
                 rows: 'Items'
@@ -68,10 +69,12 @@ define([
             this.elements.buttonStartList = this.$('.button-start-list');
             this.elements.buttonDisableList = this.$('.button-disable-list');
             this.elements.buttonPauseList = this.$('.button-pause-list');
+            this.elements.listCreator = this.$('.list-creator');
             this.elements.listDescription = this.$('.list-description');
             this.elements.listName = this.$('.list-name');
-            this.elements.listOptions = this.$('.button-list-options');
             this.elements.listSections = this.$('#list-sections');
+            this.elements.listOptions = this.$('.button-list-options');
+            
             return this;
         },
         /**
