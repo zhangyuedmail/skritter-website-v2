@@ -557,9 +557,9 @@ define([], function() {
          * @param {Object} subscription
          * @param {Function} callback
          */
-        updateSubscription: function(subscription, callback) {
+        updateSubscription: function(userId, subscription, callback) {
             $.ajax({
-                url: this.base + 'users?bearer_token=' + this.get('token'),
+                url: this.base + 'subscriptions/' + userId + '?bearer_token=' + this.get('token'),
                 beforeSend: _.bind(function(xhr) {
                     xhr.setRequestHeader('AUTHORIZATION', this.credentials);
                 }, this),
