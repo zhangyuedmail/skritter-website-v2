@@ -80,15 +80,56 @@ define([], function() {
                     navigator.inappbilling.init(function() {
                         callback();
                     }, function(error) {
-                        console.log('subscription error', error);
+                        callback(error);
                     });
                 },
                 function(callback) {
                     navigator.inappbilling.subscribe(function() {
-                       callback(); 
+                        callback();
                     }, function(error) {
-                        console.log('subscription error', error);
+                        callback(error);
                     }, sku);
+                },
+                function(callback) {
+                    skritter.user.subscription.updateGplaySubscription(callback);
+                }
+            ], function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        updateGplaySubscription: function(callback) {
+            async.waterfall([
+                function(callback) {
+                    navigator.inappbilling.init(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    navigator.inappbilling.getPurchases(function(subscription) {
+                        callback(null, subscription[0]);
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(subscription, callback) {
+                    skritter.api.updateSubscription(skritter.user.id, {
+                        gplay_subscription: {
+                            subscription: subscription.productId,
+                            package: subscription.packageName,
+                            token: subscription.purchaseToken
+                        }
+                    }, function(subscription, status) {
+                        if (status === 200) {
+                            skritter.user.subscription.set(subscription);
+                            callback();
+                        } else {
+                            callback(subscription);
+                        }
+                    });
                 }
             ], function() {
                 if (typeof callback === 'function') {
@@ -97,6 +138,6 @@ define([], function() {
             });
         }
     });
-    
+
     return Model;
 });
