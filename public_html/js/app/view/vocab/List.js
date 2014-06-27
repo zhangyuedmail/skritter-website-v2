@@ -52,7 +52,11 @@ define([
             }
             this.elements.listDescription.text(this.list.description);
             this.elements.listName.text(this.list.name);
-            this.elements.listCreator.text(this.list.creator);
+            if (this.list.creator) {
+                this.elements.listCreator.text(this.list.creator);
+            } else {
+                this.elements.listCreator.parent().hide();
+            }
             this.sections.set(this.listId, this.list.sections, {
                 name: 'Name',
                 rows: 'Items'
