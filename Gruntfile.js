@@ -62,17 +62,157 @@ module.exports = function(grunt) {
                 src: ['build/cordova/chinese'],
                 options: {force: true}
             },
+            'cordova-chinese-config': {
+                src: [
+                    'build/cordova/chinese/www/**/*',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-hdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-ldpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-mdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-land-xhdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-hdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-ldpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-mdpi',
+                    'build/cordova/chinese/platforms/android/res/drawable-port-xhdpi'
+                ],
+                options: {force: true}
+            },
+            'cordova-chinese-cordovalib': {
+                src: ['build/cordova/chinese/platforms/android/CordovaLib/**/*'],
+                options: {force: true}
+            },
             'cordova-japanese': {
                 src: ['build/cordova/japanese'],
+                options: {force: true}
+            },
+            'cordova-japanese-config': {
+                src: [
+                    'build/cordova/japanese/www/**/*',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-hdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-ldpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-mdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-land-xhdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-hdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-ldpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-mdpi',
+                    'build/cordova/japanese/platforms/android/res/drawable-port-xhdpi'
+                ],
+                options: {force: true}
+            },
+            'cordova-japanese-cordovalib': {
+                src: ['build/cordova/chinese/platforms/android/CordovaLib/**/*'],
                 options: {force: true}
             }
         },
         /*** COPY ***/
         copy: {
+            'cordova-chinese-config': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'config/chinese',
+                        src: '**/*',
+                        dest: 'build/cordova/chinese'
+                    }
+                ]
+            },
+            'cordova-chinese-crosswalk-arm': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'config/crosswalk/arm/framework',
+                        src: '**/*',
+                        dest: 'build/cordova/chinese/platforms/android/CordovaLib'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'config/android/arm',
+                        src: '**/*',
+                        dest: 'build/cordova/chinese/platforms/android'
+                    }
+                ]
+            },
+            'cordova-chinese-crosswalk-x86': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'config/crosswalk/x86/framework',
+                        src: '**/*',
+                        dest: 'build/cordova/chinese/platforms/android/CordovaLib'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'config/android/x86',
+                        src: '**/*',
+                        dest: 'build/cordova/chinese/platforms/android'
+                    }
+                ]
+            },
+            'cordova-chinese-www': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'public_html',
+                        src: ['**', '!font/japanese/**'],
+                        dest: 'build/cordova/chinese/www'
+                    }
+                ]
+            },
+            'cordova-japanese-config': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'config/japanese',
+                        src: '**/*',
+                        dest: 'build/cordova/japanese'
+                    }
+                ]
+            },
+            'cordova-japanese-crosswalk-arm': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'config/crosswalk/arm/framework',
+                        src: '**/*',
+                        dest: 'build/cordova/japanese/platforms/android/CordovaLib'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'config/android/arm',
+                        src: '**/*',
+                        dest: 'build/cordova/japanese/platforms/android'
+                    }
+                ]
+            },
+            'cordova-japanese-crosswalk-x86': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'config/crosswalk/x86/framework',
+                        src: '**/*',
+                        dest: 'build/cordova/japanese/platforms/android/CordovaLib'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'config/android/x86',
+                        src: '**/*',
+                        dest: 'build/cordova/japanese/platforms/android'
+                    }
+                ]
+            },
+            'cordova-japanese-www': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'public_html',
+                        src: ['**', '!font/chinese/**'],
+                        dest: 'build/cordova/japanese/www'
+                    }
+                ]
+            }
         },
         /*** CSSLINT ***/
         csslint: {
-            'root': {
+            'public-html': {
                 options: {
                     csslintrc: 'csslintrc.json',
                     import: 2
@@ -82,11 +222,11 @@ module.exports = function(grunt) {
         },
         /*** JSHINT ***/
         jshint: {
-            'root': ['Gruntfile.js', 'public_html/js/app/**/*.js']
+            'public-html': ['Gruntfile.js', 'public_html/js/app/**/*.js']
         },
         /*** MANIFEST ***/
         manifest: {
-            root: {
+            'public-html': {
                 options: {
                     basePath: 'public_html/',
                     cache: ['index.html'],
@@ -149,6 +289,46 @@ module.exports = function(grunt) {
         },
         /*** SHELL ***/
         shell: {
+            'build-cordova-chinese': {
+                command: [
+                    'cd build/cordova/chinese',
+                    'cordova build android'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'build-cordova-chinese-release': {
+                command: [
+                    'cd build/cordova/chinese',
+                    'cordova build android --release'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'build-cordova-japanese': {
+                command: [
+                    'cd build/cordova/japanese',
+                    'cordova build android'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'build-cordova-japanese-release': {
+                command: [
+                    'cd build/cordova/japanese',
+                    'cordova build android --release'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
             'install-cordova-chinese': {
                 command: [
                     'cordova create build/cordova/chinese com.inkren.skritter.chinese Skritter',
@@ -158,6 +338,17 @@ module.exports = function(grunt) {
                     'cordova plugin add https://github.com/mcfarljw/cordova-plugin-analytics.git',
                     'cordova plugin add https://github.com/mcfarljw/cordova-plugin-inappbilling.git',
                     'cordova plugin add https://github.com/mcfarljw/cordova-plugin-expansion.git'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'install-cordova-chinese-crosswalk': {
+                command: [
+                    'cd build/cordova/chinese/platforms/android/CordovaLib',
+                    'android update project --subprojects --path . --target android-19',
+                    'ant debug'
                 ].join('&&'),
                 options: {
                     stdout: true,
@@ -178,6 +369,25 @@ module.exports = function(grunt) {
                     stdout: true,
                     stderr: true
                 }
+            },
+            'install-cordova-japanese-crosswalk': {
+                command: [
+                    'cd build/cordova/japanese/platforms/android/CordovaLib',
+                    'android update project --subprojects --path . --target android-19',
+                    'ant debug'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'kill-adb': {
+                command: 'taskkill /F /IM adb.exe',
+                options: {
+                    failOnError: false,
+                    stderr: true,
+                    stdout: true
+                }
             }
         }
     });
@@ -194,19 +404,65 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-shell');
 
-    /*** TASKS ***/
-    grunt.registerTask('install-cordova', [
-        'install-cordova-chinese',
-        'install-cordova-japanese'
+    /*** TASKS: BUILD ***/
+    grunt.registerTask('build-cordova-chinese', [
+        'copy:cordova-chinese-config',
+        'copy:cordova-chinese-www',
+        'shell:build-cordova-chinese'
     ]);
-    grunt.registerTask('install-cordova-chinese', [
+    grunt.registerTask('build-cordova-japanese', [
+        'copy:cordova-japanese-config',
+        'copy:cordova-japanese-www',
+        'shell:build-cordova-japanese'
+    ]);
+
+    /*** TASKS: INSTALL ***/
+    grunt.registerTask('install-cordova-arm', [
+        'install-cordova-chinese-arm',
+        'install-cordova-japanese-arm'
+    ]);
+    grunt.registerTask('install-cordova-x86', [
+        'install-cordova-chinese-x86',
+        'install-cordova-japanese-x86'
+    ]);
+    grunt.registerTask('install-cordova-chinese-arm', [
         'mkdir:cordova',
         'clean:cordova-chinese',
-        'shell:install-cordova-chinese'
+        'shell:install-cordova-chinese',
+        'clean:cordova-chinese-config',
+        'clean:cordova-chinese-cordovalib',
+        'copy:cordova-chinese-config',
+        'copy:cordova-chinese-crosswalk-arm',
+        'shell:install-cordova-chinese-crosswalk'
     ]);
-    grunt.registerTask('install-cordova-japanese', [
+    grunt.registerTask('install-cordova-chinese-x86', [
+        'mkdir:cordova',
+        'clean:cordova-chinese',
+        'shell:install-cordova-chinese',
+        'clean:cordova-chinese-cordovalib',
+        'clean:cordova-chinese-config',
+        'copy:cordova-chinese-config',
+        'copy:cordova-chinese-crosswalk-x86',
+        'shell:install-cordova-chinese-crosswalk'
+    ]);
+    grunt.registerTask('install-cordova-japanese-arm', [
         'mkdir:cordova',
         'clean:cordova-japanese',
-        'shell:install-cordova-japanese'
+        'shell:install-cordova-japanese',
+        'clean:cordova-japanese-config',
+        'clean:cordova-japanese-cordovalib',
+        'copy:cordova-japanese-config',
+        'copy:cordova-japanese-crosswalk-arm',
+        'shell:install-cordova-japanese-crosswalk'
+    ]);
+    grunt.registerTask('install-cordova-japanese-x86', [
+        'mkdir:cordova',
+        'clean:cordova-japanese',
+        'shell:install-cordova-japanese',
+        'clean:cordova-japanese-cordovalib',
+        'clean:cordova-japanese-config',
+        'copy:cordova-japanese-config',
+        'copy:cordova-japanese-crosswalk-x86',
+        'shell:install-cordova-japanese-crosswalk'
     ]);
 };
