@@ -101,10 +101,47 @@ module.exports = function(grunt) {
             'cordova-japanese-cordovalib': {
                 src: ['build/cordova/chinese/platforms/android/CordovaLib/**/*'],
                 options: {force: true}
+            },
+            'utils-apksigner': {
+                src: [
+                    'utils/apksigner/signed/**/*',
+                    'utils/apksigner/unsigned/**/*'
+                ],
+                options: {force: true}
             }
         },
         /*** COPY ***/
         copy: {
+            'cordova-chinese-apksigner-arm': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/chinese/platforms/android/ant-build/',
+                        src: 'Skritter-release-unsigned.apk',
+                        dest: 'utils/apksigner/unsigned/',
+                        rename: function(dest, src) {
+                            src = src.replace('Skritter', 'SkritterChinese');
+                            src = src.replace('.apk', '-arm.apk');
+                            return dest + src;
+                        }
+                    }
+                ]
+            },
+            'cordova-chinese-apksigner-x86': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/chinese/platforms/android/ant-build/',
+                        src: 'Skritter-release-unsigned.apk',
+                        dest: 'utils/apksigner/unsigned/',
+                        rename: function(dest, src) {
+                            src = src.replace('Skritter', 'SkritterChinese');
+                            src = src.replace('.apk', '-x86.apk');
+                            return dest + src;
+                        }
+                    }
+                ]
+            },
             'cordova-chinese-config': {
                 files: [
                     {
@@ -154,6 +191,36 @@ module.exports = function(grunt) {
                         cwd: 'public_html',
                         src: ['**', '!font/japanese/**'],
                         dest: 'build/cordova/chinese/www'
+                    }
+                ]
+            },
+            'cordova-japanese-apksigner-arm': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/japanese/platforms/android/ant-build/',
+                        src: 'Skritter-release-unsigned.apk',
+                        dest: 'utils/apksigner/unsigned/',
+                        rename: function(dest, src) {
+                            src = src.replace('Skritter', 'SkritterJapanese');
+                            src = src.replace('.apk', '-arm.apk');
+                            return dest + src;
+                        }
+                    }
+                ]
+            },
+            'cordova-japanese-apksigner-x86': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'build/cordova/japanese/platforms/android/ant-build/',
+                        src: 'Skritter-release-unsigned.apk',
+                        dest: 'utils/apksigner/unsigned/',
+                        rename: function(dest, src) {
+                            src = src.replace('Skritter', 'SkritterJapanese');
+                            src = src.replace('.apk', '-x86.apk');
+                            return dest + src;
+                        }
                     }
                 ]
             },
@@ -208,6 +275,16 @@ module.exports = function(grunt) {
                         dest: 'build/cordova/japanese/www'
                     }
                 ]
+            },
+            'utils-apksigner-build-android': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'utils/apksigner/signed',
+                        src: ['**'],
+                        dest: 'build/android'
+                    }
+                ]
             }
         },
         /*** CSSLINT ***/
@@ -254,7 +331,10 @@ module.exports = function(grunt) {
         mkdir: {
             'cordova': {
                 options: {
-                    create: ['build/cordova']
+                    create: [
+                        'build/android',
+                        'build/cordova'
+                    ]
                 }
             }
         },
@@ -440,6 +520,46 @@ module.exports = function(grunt) {
                     stdout: true,
                     stderr: true
                 }
+            },
+            'utils-apksigner-chinese-arm': {
+                command: [
+                    'cd utils/apksigner',
+                    'sign-skritter_chinese_arm'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'utils-apksigner-chinese-x86': {
+                command: [
+                    'cd utils/apksigner',
+                    'sign-skritter_chinese_x86'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'utils-apksigner-japanese-arm': {
+                command: [
+                    'cd utils/apksigner',
+                    'sign-skritter_japanese_arm'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'utils-apksigner-japanese-x86': {
+                command: [
+                    'cd utils/apksigner',
+                    'sign-skritter_japanese_x86'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
             }
         }
     });
@@ -463,11 +583,23 @@ module.exports = function(grunt) {
         'replace:cordova-chinese-config',
         'shell:build-cordova-chinese'
     ]);
+    grunt.registerTask('build-cordova-chinese-release', [
+        'copy:cordova-chinese-config',
+        'copy:cordova-chinese-www',
+        'replace:cordova-chinese-config',
+        'shell:build-cordova-chinese-release'
+    ]);
     grunt.registerTask('build-cordova-japanese', [
         'copy:cordova-japanese-config',
         'copy:cordova-japanese-www',
         'replace:cordova-japanese-config',
         'shell:build-cordova-japanese'
+    ]);
+    grunt.registerTask('build-cordova-japanese-release', [
+        'copy:cordova-japanese-config',
+        'copy:cordova-japanese-www',
+        'replace:cordova-japanese-config',
+        'shell:build-cordova-japanese-release'
     ]);
 
     /*** TASKS: INSTALL ***/
@@ -518,6 +650,56 @@ module.exports = function(grunt) {
         'copy:cordova-japanese-config',
         'copy:cordova-japanese-crosswalk-x86',
         'shell:install-cordova-japanese-crosswalk'
+    ]);
+
+    /*** PACKAGE ***/
+    grunt.registerTask('package-cordova', [
+        'package-cordova-chinese',
+        'package-cordova-japanese'
+    ]);
+    grunt.registerTask('package-cordova-chinese', [
+        'package-cordova-chinese-arm',
+        'package-cordova-chinese-x86'
+    ]);
+    grunt.registerTask('package-cordova-japanese', [
+        'package-cordova-japanese-arm',
+        'package-cordova-japanese-x86'
+    ]);
+    grunt.registerTask('package-cordova-chinese-arm', [
+        'install-cordova-chinese-arm',
+        'build-cordova-chinese-release',
+        'clean:utils-apksigner',
+        'copy:cordova-chinese-apksigner-arm',
+        'shell:utils-apksigner-chinese-arm',
+        'copy:utils-apksigner-build-android',
+        'clean:utils-apksigner'
+    ]);
+    grunt.registerTask('package-cordova-chinese-x86', [
+        'install-cordova-chinese-x86',
+        'build-cordova-chinese-release',
+        'clean:utils-apksigner',
+        'copy:cordova-chinese-apksigner-x86',
+        'shell:utils-apksigner-chinese-x86',
+        'copy:utils-apksigner-build-android',
+        'clean:utils-apksigner'
+    ]);
+    grunt.registerTask('package-cordova-japanese-arm', [
+        'install-cordova-japanese-arm',
+        'build-cordova-japanese-release',
+        'clean:utils-apksigner',
+        'copy:cordova-japanese-apksigner-arm',
+        'shell:utils-apksigner-japanese-arm',
+        'copy:utils-apksigner-build-android',
+        'clean:utils-apksigner'
+    ]);
+    grunt.registerTask('package-cordova-japanese-x86', [
+        'install-cordova-japanese-x86',
+        'build-cordova-japanese-release',
+        'clean:utils-apksigner',
+        'copy:cordova-japanese-apksigner-x86',
+        'shell:utils-apksigner-japanese-x86',
+        'copy:utils-apksigner-build-android',
+        'clean:utils-apksigner'
     ]);
 
     /*** TASKS: RUN ***/
