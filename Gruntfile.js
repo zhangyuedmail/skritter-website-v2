@@ -260,6 +260,38 @@ module.exports = function(grunt) {
         },
         /*** REPLACE ***/
         replace: {
+            'cordova-chinese-config': {
+                options: {
+                    variables: {
+                        'date': new Date().toUTCString().substr(0, 25),
+                        'languageCode': 'zh',
+                        'trackingID': 'UA-52116701-1',
+                        'version': '<%= pkg.version %>',
+                        'versionCode': '<%= pkg.versionCode %>'
+                    }
+                },
+                files: [
+                    {src: 'config.xml', dest: 'build/cordova/chinese', expand: true, cwd: 'build/cordova/chinese'},
+                    {src: 'config.xml', dest: 'build/cordova/chinese/www', expand: true, cwd: 'build/cordova/chinese/www'},
+                    {src: 'main.js', dest: 'build/cordova/chinese/www/js', expand: true, cwd: 'build/cordova/chinese/www/js'}
+                ]
+            },
+            'cordova-japanese-config': {
+                options: {
+                    variables: {
+                        'date': new Date().toUTCString().substr(0, 25),
+                        'languageCode': 'ja',
+                        'trackingID': 'UA-52116701-2',
+                        'version': '<%= pkg.version %>',
+                        'versionCode': '<%= pkg.versionCode %>'
+                    }
+                },
+                files: [
+                    {src: 'config.xml', dest: 'build/cordova/japanese', expand: true, cwd: 'build/cordova/japanese'},
+                    {src: 'config.xml', dest: 'build/cordova/japanese/www', expand: true, cwd: 'build/cordova/japanese/www'},
+                    {src: 'main.js', dest: 'build/cordova/japanese/www/js', expand: true, cwd: 'build/cordova/japanese/www/js'}
+                ]
+            }
         },
         /*** REQUIREJS ***/
         requirejs: {
@@ -388,6 +420,26 @@ module.exports = function(grunt) {
                     stderr: true,
                     stdout: true
                 }
+            },
+            'run-cordova-chinese': {
+                command: [
+                    'cd build/cordova/chinese',
+                    'cordova run android'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
+            },
+            'run-cordova-japanese': {
+                command: [
+                    'cd build/cordova/japanese',
+                    'cordova run android'
+                ].join('&&'),
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
             }
         }
     });
@@ -408,11 +460,13 @@ module.exports = function(grunt) {
     grunt.registerTask('build-cordova-chinese', [
         'copy:cordova-chinese-config',
         'copy:cordova-chinese-www',
+        'replace:cordova-chinese-config',
         'shell:build-cordova-chinese'
     ]);
     grunt.registerTask('build-cordova-japanese', [
         'copy:cordova-japanese-config',
         'copy:cordova-japanese-www',
+        'replace:cordova-japanese-config',
         'shell:build-cordova-japanese'
     ]);
 
@@ -464,5 +518,21 @@ module.exports = function(grunt) {
         'copy:cordova-japanese-config',
         'copy:cordova-japanese-crosswalk-x86',
         'shell:install-cordova-japanese-crosswalk'
+    ]);
+
+    /*** TASKS: RUN ***/
+    grunt.registerTask('build-run-cordova-chinese', [
+        'build-cordova-chinese',
+        'shell:run-cordova-chinese'
+    ]);
+    grunt.registerTask('build-run-cordova-japanese', [
+        'build-cordova-japanese',
+        'shell:run-cordova-japanese'
+    ]);
+    grunt.registerTask('run-cordova-chinese', [
+        'shell:run-cordova-chinese'
+    ]);
+    grunt.registerTask('run-cordova-japanese', [
+        'shell:run-cordova-japanese'
     ]);
 };
