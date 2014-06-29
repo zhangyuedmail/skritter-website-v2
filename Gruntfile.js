@@ -340,14 +340,14 @@ module.exports = function(grunt) {
         },
         /*** REPLACE ***/
         replace: {
-            'cordova-chinese-config': {
+            'cordova-chinese-config-arm': {
                 options: {
                     variables: {
                         'date': new Date().toUTCString().substr(0, 25),
                         'languageCode': 'zh',
                         'trackingID': 'UA-52116701-1',
                         'version': '<%= pkg.version %>',
-                        'versionCode': '<%= pkg.versionCode %>'
+                        'versionCode': '<%= pkg.versionCodeArm %>'
                     }
                 },
                 files: [
@@ -356,14 +356,46 @@ module.exports = function(grunt) {
                     {src: 'main.js', dest: 'build/cordova/chinese/www/js', expand: true, cwd: 'build/cordova/chinese/www/js'}
                 ]
             },
-            'cordova-japanese-config': {
+            'cordova-chinese-config-x86': {
+                options: {
+                    variables: {
+                        'date': new Date().toUTCString().substr(0, 25),
+                        'languageCode': 'zh',
+                        'trackingID': 'UA-52116701-1',
+                        'version': '<%= pkg.version %>',
+                        'versionCode': '<%= pkg.versionCodeX86 %>'
+                    }
+                },
+                files: [
+                    {src: 'config.xml', dest: 'build/cordova/chinese', expand: true, cwd: 'build/cordova/chinese'},
+                    {src: 'config.xml', dest: 'build/cordova/chinese/www', expand: true, cwd: 'build/cordova/chinese/www'},
+                    {src: 'main.js', dest: 'build/cordova/chinese/www/js', expand: true, cwd: 'build/cordova/chinese/www/js'}
+                ]
+            },
+            'cordova-japanese-config-arm': {
                 options: {
                     variables: {
                         'date': new Date().toUTCString().substr(0, 25),
                         'languageCode': 'ja',
                         'trackingID': 'UA-52116701-2',
                         'version': '<%= pkg.version %>',
-                        'versionCode': '<%= pkg.versionCode %>'
+                        'versionCode': '<%= pkg.versionCodeArm %>'
+                    }
+                },
+                files: [
+                    {src: 'config.xml', dest: 'build/cordova/japanese', expand: true, cwd: 'build/cordova/japanese'},
+                    {src: 'config.xml', dest: 'build/cordova/japanese/www', expand: true, cwd: 'build/cordova/japanese/www'},
+                    {src: 'main.js', dest: 'build/cordova/japanese/www/js', expand: true, cwd: 'build/cordova/japanese/www/js'}
+                ]
+            },
+            'cordova-japanese-config-x86': {
+                options: {
+                    variables: {
+                        'date': new Date().toUTCString().substr(0, 25),
+                        'languageCode': 'ja',
+                        'trackingID': 'UA-52116701-2',
+                        'version': '<%= pkg.version %>',
+                        'versionCode': '<%= pkg.versionCodeX86 %>'
                     }
                 },
                 files: [
@@ -577,28 +609,52 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     /*** TASKS: BUILD ***/
-    grunt.registerTask('build-cordova-chinese', [
+    grunt.registerTask('build-cordova-chinese-arm', [
         'copy:cordova-chinese-config',
         'copy:cordova-chinese-www',
-        'replace:cordova-chinese-config',
+        'replace:cordova-chinese-config-arm',
         'shell:build-cordova-chinese'
     ]);
-    grunt.registerTask('build-cordova-chinese-release', [
+    grunt.registerTask('build-cordova-chinese-x86', [
         'copy:cordova-chinese-config',
         'copy:cordova-chinese-www',
-        'replace:cordova-chinese-config',
+        'replace:cordova-chinese-config-x86',
+        'shell:build-cordova-chinese'
+    ]);
+    grunt.registerTask('build-cordova-chinese-release-arm', [
+        'copy:cordova-chinese-config',
+        'copy:cordova-chinese-www',
+        'replace:cordova-chinese-config-arm',
         'shell:build-cordova-chinese-release'
     ]);
-    grunt.registerTask('build-cordova-japanese', [
+    grunt.registerTask('build-cordova-chinese-release-x86', [
+        'copy:cordova-chinese-config',
+        'copy:cordova-chinese-www',
+        'replace:cordova-chinese-config-x86',
+        'shell:build-cordova-chinese-release'
+    ]);
+    grunt.registerTask('build-cordova-japanese-arm', [
         'copy:cordova-japanese-config',
         'copy:cordova-japanese-www',
-        'replace:cordova-japanese-config',
+        'replace:cordova-japanese-config-arm',
         'shell:build-cordova-japanese'
     ]);
-    grunt.registerTask('build-cordova-japanese-release', [
+    grunt.registerTask('build-cordova-japanese-x86', [
         'copy:cordova-japanese-config',
         'copy:cordova-japanese-www',
-        'replace:cordova-japanese-config',
+        'replace:cordova-japanese-config-x86',
+        'shell:build-cordova-japanese'
+    ]);
+    grunt.registerTask('build-cordova-japanese-release-arm', [
+        'copy:cordova-japanese-config',
+        'copy:cordova-japanese-www',
+        'replace:cordova-japanese-config-arm',
+        'shell:build-cordova-japanese-release'
+    ]);
+    grunt.registerTask('build-cordova-japanese-release-x86', [
+        'copy:cordova-japanese-config',
+        'copy:cordova-japanese-www',
+        'replace:cordova-japanese-config-x86',
         'shell:build-cordova-japanese-release'
     ]);
 
@@ -667,7 +723,7 @@ module.exports = function(grunt) {
     ]);
     grunt.registerTask('package-cordova-chinese-arm', [
         'install-cordova-chinese-arm',
-        'build-cordova-chinese-release',
+        'build-cordova-chinese-release-arm',
         'clean:utils-apksigner',
         'copy:cordova-chinese-apksigner-arm',
         'shell:utils-apksigner-chinese-arm',
@@ -676,7 +732,7 @@ module.exports = function(grunt) {
     ]);
     grunt.registerTask('package-cordova-chinese-x86', [
         'install-cordova-chinese-x86',
-        'build-cordova-chinese-release',
+        'build-cordova-chinese-release-x86',
         'clean:utils-apksigner',
         'copy:cordova-chinese-apksigner-x86',
         'shell:utils-apksigner-chinese-x86',
@@ -685,7 +741,7 @@ module.exports = function(grunt) {
     ]);
     grunt.registerTask('package-cordova-japanese-arm', [
         'install-cordova-japanese-arm',
-        'build-cordova-japanese-release',
+        'build-cordova-japanese-release-arm',
         'clean:utils-apksigner',
         'copy:cordova-japanese-apksigner-arm',
         'shell:utils-apksigner-japanese-arm',
@@ -694,7 +750,7 @@ module.exports = function(grunt) {
     ]);
     grunt.registerTask('package-cordova-japanese-x86', [
         'install-cordova-japanese-x86',
-        'build-cordova-japanese-release',
+        'build-cordova-japanese-release-x86',
         'clean:utils-apksigner',
         'copy:cordova-japanese-apksigner-x86',
         'shell:utils-apksigner-japanese-x86',
@@ -703,12 +759,20 @@ module.exports = function(grunt) {
     ]);
 
     /*** TASKS: RUN ***/
-    grunt.registerTask('build-run-cordova-chinese', [
-        'build-cordova-chinese',
+    grunt.registerTask('build-run-cordova-chinese-arm', [
+        'build-cordova-chinese-arm',
         'shell:run-cordova-chinese'
     ]);
-    grunt.registerTask('build-run-cordova-japanese', [
-        'build-cordova-japanese',
+    grunt.registerTask('build-run-cordova-chinese-x86', [
+        'build-cordova-chinese-x86',
+        'shell:run-cordova-chinese'
+    ]);
+    grunt.registerTask('build-run-cordova-japanese-arm', [
+        'build-cordova-japanese-arm',
+        'shell:run-cordova-japanese'
+    ]);
+    grunt.registerTask('build-run-cordova-japanese-x86', [
+        'build-cordova-japanese-x86',
         'shell:run-cordova-japanese'
     ]);
     grunt.registerTask('run-cordova-chinese', [
