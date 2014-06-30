@@ -223,7 +223,7 @@ define([
                             if (containedVocabIds.length === containedVocabs.length) {
                                 callback(null, vocab, skritter.user.data.vocabs.add(containedVocabs, {merge: true, silent: true, sort: false}));
                             } else {
-                                callback("One or more of the contained vocabs is missing.", vocab);
+                                callback(null, vocab, skritter.user.data.vocabs.add(containedVocabs, {merge: true, silent: true, sort: false}));
                             }
                         });
                     } else {
@@ -257,7 +257,7 @@ define([
                 }
             ], function(error, vocab, containedVocabs, sentence, decomps) {
                 if (error) {
-                    callback();
+                    callback(vocab, containedVocabs, sentence, decomps);
                 } else {
                     callback(vocab, containedVocabs, sentence, decomps);
                 }
