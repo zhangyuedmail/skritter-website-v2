@@ -4,7 +4,7 @@ define([
     /**
      * @class PromptGradingButtons
      */
-    var View = Backbone.View.extend({
+    var PromptGradingButtons = Backbone.View.extend({
         /**
          * @method initialize
          */
@@ -154,5 +154,5 @@ define([
         }
     });
 
-    return View;
+    return PromptGradingButtons;
 });

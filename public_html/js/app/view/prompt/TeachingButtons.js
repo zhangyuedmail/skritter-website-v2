@@ -2,9 +2,9 @@ define([
     'require.text!template/prompt-teaching-buttons.html'
 ], function(template) {
     /**
-     * @class TeachingGradingButtons
+     * @class TeachingButtons
      */
-    var View = Backbone.View.extend({
+    var TeachingButtons = Backbone.View.extend({
         /**
          * @method initialize
          */
@@ -104,5 +104,5 @@ define([
         }
     });
 
-    return View;
+    return TeachingButtons;
 });
