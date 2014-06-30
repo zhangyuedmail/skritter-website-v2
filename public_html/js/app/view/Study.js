@@ -112,6 +112,7 @@ define([
             if (this.prompt) {
                 this.prompt.remove();
                 this.stopListening(this.prompt);
+                this.prompt = null;
             }
             this.prompt = review.createView();
             this.prompt.setElement(this.$('.prompt-container'));
