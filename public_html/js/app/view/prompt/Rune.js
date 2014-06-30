@@ -184,7 +184,7 @@ define([
         reset: function() {
             this.canvas.clear().enableInput();
             this.elements.reveal.show().removeClass('selected');
-            this.grading.hide();
+            this.gradingButtons.hide();
             this.teachingButtons.hide();
             this.review.getCharacter().reset();
             if (this.teaching) {
@@ -319,7 +319,7 @@ define([
             if (this.teaching) {
                 this.teachingButtons.show();
             } else {
-                this.grading.select(this.review.getScore()).show();
+                this.gradingButtons.select(this.review.getScore()).show();
             }
             if (skritter.user.isAudioEnabled() && this.vocab.getContainedAt(this.review.getPosition()).has('audio')) {
                 this.vocab.playAudio(this.review.getPosition());

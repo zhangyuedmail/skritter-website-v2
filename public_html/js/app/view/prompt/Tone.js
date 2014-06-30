@@ -220,7 +220,7 @@ define([
                 this.canvas.drawShape('stroke', this.review.getCharacter().targets[tone - 1].getShape(), skritter.settings.get('gradingColors')[this.review.getReview().score]);
             }
             this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, !skritter.user.settings.get('hideReading'), skritter.user.isUsingZhuyin()));
-            this.grading.select(this.review.getScore()).show();
+            this.gradingButtons.select(this.review.getScore()).show();
             this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReviewAt().score]);
             if (skritter.user.isAudioEnabled() && this.vocab.getContainedAt(this.review.getPosition()).has('audio')) {
                 this.vocab.playAudio(this.review.getPosition());

@@ -146,7 +146,7 @@ define([
             }            
             this.elements.answer.fadeIn(300);
             window.setTimeout(_.bind(function() {
-                this.grading.select(this.review.getScore()).show();
+                this.gradingButtons.select(this.review.getScore()).show();
                 if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
                     this.vocab.playAudio();
                 }
