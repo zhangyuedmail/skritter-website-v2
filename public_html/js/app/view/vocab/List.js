@@ -57,6 +57,11 @@ define([
             } else {
                 this.elements.listCreator.parent().hide();
             }
+            if (this.list.peopleStudying) {
+                this.elements.peopleStudying.text(this.peopleStudying);
+            } else {
+                this.elements.peopleStudying.parent().hide();
+            }
             this.sections.set(this.listId, this.list.sections, {
                 name: 'Name',
                 rows: 'Items'
@@ -78,6 +83,7 @@ define([
             this.elements.listName = this.$('.list-name');
             this.elements.listSections = this.$('#list-sections');
             this.elements.listOptions = this.$('.button-list-options');
+            this.elements.peopleStudying = this.$('#people-studying');
             
             return this;
         },
