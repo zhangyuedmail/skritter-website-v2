@@ -26,6 +26,8 @@ define([
             this.elements.canvas = this.$('.canvas-container');
             this.elements.definition = this.$('.prompt-definition');
             this.elements.heisig = this.$('.prompt-heisig');
+            this.elements.infoSection = this.$('.info-section');
+            this.elements.inputSection = this.$('.input-section');
             this.elements.mnemonic = this.$('.prompt-mnemonic');
             this.elements.navLeft = this.$('.navigate-left');
             this.elements.navRight = this.$('.navigate-right');

@@ -9,6 +9,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.elements = {};
             this.expanded = true;
             this.grade = 3;
             this.speed = 50;
@@ -101,7 +102,7 @@ define([
             this.removeElements();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.empty();
+            this.$el.remove();
             this.destroy();
         },
         /**

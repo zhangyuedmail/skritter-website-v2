@@ -367,7 +367,7 @@ define([
             this.removeElements();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.empty();
+            this.$el.remove();
             this.destroy();
         },
         /**
