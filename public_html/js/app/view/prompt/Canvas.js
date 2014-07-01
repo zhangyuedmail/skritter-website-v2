@@ -33,10 +33,10 @@ define([
          * @returns {Backbone.View}
          */
         render: function() {
-            this.$el.append(template);
-            this.elements.holder = this.$('.canvas-holder')[0];
-            this.elements.display = this.$('.canvas-display')[0];
-            this.elements.input = this.$('.canvas-input')[0];
+            this.$el.html(template);
+            this.elements.holder = this.$('.canvas-holder');
+            this.elements.display = this.$('.canvas-display');
+            this.elements.input = this.$('.canvas-input');
             this.stage.display = this.createDisplayStage();
             this.stage.input = this.createInputStage();
             this.createLayer('grid');
@@ -84,7 +84,7 @@ define([
          * @returns {CreateJS.Stage}
          */
         createDisplayStage: function() {
-            var stage = new createjs.Stage(this.elements.display);
+            var stage = new createjs.Stage(this.elements.display[0]);
             stage.autoClear = true;
             stage.enableDOMEvents(false);
             return stage;
@@ -94,7 +94,7 @@ define([
          * @returns {CreateJS.Stage}
          */
         createInputStage: function() {
-            var stage = new createjs.Stage(this.elements.input);
+            var stage = new createjs.Stage(this.elements.input[0]);
             stage.autoClear = false;
             stage.enableDOMEvents(true);
             return stage;
@@ -363,11 +363,11 @@ define([
          */
         remove: function() {
             createjs.Ticker.removeEventListener('tick', this.stage.display);
-            this.$(this.elements.input).off();
+            this.removeStages();
             this.removeElements();
+            this.$el.remove();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.empty();
             this.destroy();
         },
         /**
@@ -376,10 +376,22 @@ define([
          */
         removeElements: function() {
             for (var i in this.elements) {
+                this.elements[i].off();
                 this.elements[i].remove();
                 this.elements[i] = undefined;
             }
             return this.elements;
+        },
+        /**
+         * @method removeStages
+         * @returns {Object}
+         */
+        removeStages: function() {
+            for (var i in this.stage) {
+                this.stage[i].enableDOMEvents(false);
+                this.stage[i].canvas = undefined;
+            }
+            return this.stage;
         },
         /**
          * @method resize
@@ -388,12 +400,12 @@ define([
          */
         resize: function(size) {
             this.size = size ? size : skritter.settings.getCanvasSize();
-            this.elements.holder.style.height = this.size + 'px';
-            this.elements.holder.style.width = this.size + 'px';
-            this.elements.display.height = this.size;
-            this.elements.display.width = this.size;
-            this.elements.input.height = this.size;
-            this.elements.input.width = this.size;
+            this.elements.holder[0].style.height = this.size + 'px';
+            this.elements.holder[0].style.width = this.size + 'px';
+            this.elements.display[0].height = this.size;
+            this.elements.display[0].width = this.size;
+            this.elements.input[0].height = this.size;
+            this.elements.input[0].width = this.size;
             if (this.grid) {
                 this.drawGrid();
             }

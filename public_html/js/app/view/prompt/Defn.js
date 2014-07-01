@@ -151,7 +151,7 @@ define([
             }   
             this.elements.answer.fadeIn(300);
             this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
-            this.grading.select(this.review.getScore()).show();
+            this.gradingButtons.select(this.review.getScore()).show();
             if (skritter.user.isAudioEnabled() && this.vocab.has('audio')) {
                 this.vocab.playAudio();
             }

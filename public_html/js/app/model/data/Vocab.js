@@ -110,7 +110,7 @@ define([], function() {
          */
         getContainedRows: function() {
             var containedHTML = '';
-            var containedVocabs = this.getContainedVocabs();
+            var containedVocabs = _.without(this.getContainedVocabs(), undefined);
             for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
                 var vocabItem = containedVocabs[a];
                 containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";

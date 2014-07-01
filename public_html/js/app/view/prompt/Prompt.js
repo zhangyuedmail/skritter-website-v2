@@ -10,7 +10,7 @@ define([
          */
         initialize: function() {
             this.elements = {};
-            this.grading = new GradingButtons();
+            this.gradingButtons = new GradingButtons();
             this.item = null;
             this.review = null;
             this.vocab = null;
@@ -21,11 +21,13 @@ define([
          */
         render: function() {
             console.log(this.review.id, this.review.toJSON());
-            this.grading.setElement('.grading-container').render();
+            this.gradingButtons.setElement('.grading-container').render();
             this.elements.answer = this.$('.prompt-answer');
             this.elements.canvas = this.$('.canvas-container');
             this.elements.definition = this.$('.prompt-definition');
             this.elements.heisig = this.$('.prompt-heisig');
+            this.elements.infoSection = this.$('.info-section');
+            this.elements.inputSection = this.$('.input-section');
             this.elements.mnemonic = this.$('.prompt-mnemonic');
             this.elements.navLeft = this.$('.navigate-left');
             this.elements.navRight = this.$('.navigate-right');
@@ -37,8 +39,8 @@ define([
             this.elements.style = this.$('.prompt-style');
             this.elements.writing = this.$('.prompt-writing');
             this.$('.character-font').addClass(this.vocab.getFontClass());
-            this.listenTo(this.grading, 'complete', this.next);
-            this.listenTo(this.grading, 'selected', this.handleGradingSelected);
+            this.listenTo(this.gradingButtons, 'complete', this.next);
+            this.listenTo(this.gradingButtons, 'selected', this.handleGradingSelected);
             this.listenTo(skritter.settings, 'resize', this.resize);
             return this;
         },
@@ -125,12 +127,12 @@ define([
                 if (!this.review.getReview().started) {
                     skritter.timer.reset();
                 }
-                this.grading.hide(_.bind(this.clear, this));
+                this.gradingButtons.hide(_.bind(this.clear, this));
             } else {
                 this.stopListening();
                 this.undelegateEvents();
                 this.review.save(_.bind(function() {
-                    this.grading.hide(_.bind(this.triggerNext, this));
+                    this.gradingButtons.hide(_.bind(this.triggerNext, this));
                 }, this));
             }
         },
@@ -156,18 +158,18 @@ define([
             if (this.review.previous()) {
                 this.clear();
             } else {
-                this.grading.hide(_.bind(this.triggerPrevious, this));
+                this.gradingButtons.hide(_.bind(this.triggerPrevious, this));
             }
         },
         /**
          * @method remove
          */
         remove: function() {
-            this.grading.remove();
+            this.gradingButtons.remove();
             this.removeElements();
+            this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.empty();
             this.destroy();
         },
         /**

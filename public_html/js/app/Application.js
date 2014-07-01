@@ -125,7 +125,7 @@ define([
                 if (skritter.fn.hasCordova()) {
                     navigator.analytics.setUserId(skritter.user.getName());
                     if (skritter.fn.hasRaygun()) {
-                        Raygun.withCustomData(skritter.user.getCustomData());
+                        Raygun.withCustomData(skritter.user.getCustomData);
                         Raygun.withTags(skritter.user.getTags());
                         Raygun.setUser(skritter.user.getName());
                         Raygun.saveIfOffline(true);

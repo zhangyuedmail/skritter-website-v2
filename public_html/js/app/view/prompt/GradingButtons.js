@@ -4,11 +4,12 @@ define([
     /**
      * @class PromptGradingButtons
      */
-    var View = Backbone.View.extend({
+    var PromptGradingButtons = Backbone.View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
+            this.elements = {};
             this.expanded = true;
             this.grade = 3;
             this.speed = 50;
@@ -99,9 +100,9 @@ define([
          */
         remove: function() {
             this.removeElements();
+            this.$el.remove();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.empty();
             this.destroy();
         },
         /**
@@ -154,5 +155,5 @@ define([
         }
     });
 
-    return View;
+    return PromptGradingButtons;
 });
