@@ -65,9 +65,9 @@ define([
          */
         remove: function() {
             this.removeElements();
+            this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.empty();
             this.destroy();
         },
         /**

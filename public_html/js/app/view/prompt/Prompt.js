@@ -167,9 +167,9 @@ define([
         remove: function() {
             this.gradingButtons.remove();
             this.removeElements();
+            this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.empty();
             this.destroy();
         },
         /**

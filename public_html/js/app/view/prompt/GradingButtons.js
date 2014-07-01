@@ -100,9 +100,9 @@ define([
          */
         remove: function() {
             this.removeElements();
+            this.$el.remove();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.remove();
             this.destroy();
         },
         /**

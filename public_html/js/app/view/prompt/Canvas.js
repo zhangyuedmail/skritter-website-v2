@@ -365,9 +365,9 @@ define([
             createjs.Ticker.removeEventListener('tick', this.stage.display);
             this.removeStages();
             this.removeElements();
+            this.$el.remove();
             this.stopListening();
             this.undelegateEvents();
-            this.$el.remove();
             this.destroy();
         },
         /**
