@@ -11,6 +11,7 @@ define([
     'jquery',
     'jquery.mobile',
     'jquery.ui',
+    'modernizr',
     'raygun',
     'require.locale',
     'require.text',

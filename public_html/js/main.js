@@ -13,6 +13,7 @@ requirejs.config({
         'bootstrap.switch': '../../bootstrap/components/switch/js/bootstrap-switch.min',
         'createjs.easel': '../lib/createjs.easel-NEXT.min',
         'createjs.tween': '../lib/createjs.tween-NEXT.min',
+        modernizr: '../lib/modernizr.custom-2.8.2.min',
         moment: '../lib/moment-2.7.0.min',
         'moment-timezone': '../lib/moment.timezone-0.1.0.min',
         jasmine: '../../test/lib/jasmine',
