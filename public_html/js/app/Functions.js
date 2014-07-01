@@ -227,13 +227,22 @@ define([
      */
     var pinyin = PinyinMap;
     /**
-     * @method 
+     * @method randomDecimal
      * @param {Number} min
      * @param {Number} max
      * @returns {Number}
      */
     var randomDecimal = function(min, max) {
         return Math.random() * (max - min) + min;
+    };
+    /**
+     * @method randomInterval
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
+     */
+    var randomInterval = function(value) {
+        return Math.round(value * (0.925 + (Math.random() * 0.15)));
     };
     /**
      * @property {Object} strokes
@@ -280,6 +289,7 @@ define([
         pad: pad,
         pinyin: pinyin,
         randomDecimal: randomDecimal,
+        randomInterval: randomInterval,
         recognizer: recognizer,
         shortstraw: shortstraw,
         strokes: strokes,
