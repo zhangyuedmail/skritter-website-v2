@@ -99,7 +99,7 @@ module.exports = function(grunt) {
                 options: {force: true}
             },
             'cordova-japanese-cordovalib': {
-                src: ['build/cordova/chinese/platforms/android/CordovaLib/**/*'],
+                src: ['build/cordova/japanese/platforms/android/CordovaLib/**/*'],
                 options: {force: true}
             },
             'utils-apksigner': {
