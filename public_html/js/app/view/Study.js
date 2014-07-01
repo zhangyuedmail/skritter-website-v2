@@ -125,10 +125,10 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            skritter.user.scheduler.sort();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 skritter.timer.reset();
                 this.loadPrompt(item.createReview());
+                skritter.user.scheduler.sort(true);
             }, this));
         },
         /**

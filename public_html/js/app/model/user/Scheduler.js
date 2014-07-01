@@ -11,6 +11,12 @@ define([], function() {
             UserScheduler.maxIncrease = 12 * 60 * 60;
             this.data = [];
             this.review = null;
+            if (Modernizr.webworkers) {
+                this.sortWorker = new Worker('js/app/worker/SortSchedule.js');
+                this.sortWorker.addEventListener('message', _.bind(this.handleSortWorkerFinished, this), false);
+            } else {
+                this.sortWorker = null;
+            }
         },
         /**
          * @property {Object} defaults
@@ -64,7 +70,7 @@ define([], function() {
                         newInterval = config.get('initialRightInterval') * 4;
                         break;
                 }
-                return this.randomizeInterval(newInterval);
+                return skritter.fn.randomInterval(newInterval);
             }
             //set values for further calculations
             var actualInterval = skritter.fn.getUnixTime() - item.get('last');
@@ -104,7 +110,7 @@ define([], function() {
                 }
             }
             //multiple by the factor and randomize the interval
-            newInterval = this.randomizeInterval(item.get('interval') * factor);
+            newInterval = skritter.fn.randomInterval(item.get('interval') * factor);
             //bound the interval
             if (score === 1) {
                 if (newInterval > 604800) {
@@ -185,6 +191,16 @@ define([], function() {
             }
         },
         /**
+         * @method handleSortWorkerFinished
+         * @param {Object} event
+         */
+        handleSortWorkerFinished: function(event) {
+            this.data = event.data.schedule;
+            this.set('spacedItems', event.data.spacedItems);
+            this.trigger('sorted', this.data);
+            event.preventDefault();
+        },
+        /**
          * @method insert
          * @param {Array|Object} items
          * @returns {Backbone.Model}
@@ -234,54 +250,65 @@ define([], function() {
         },
         /**
          * @method sort
+         * @param {Boolean} useWorker
          * @returns {Array}
          */
-        sort: function() {
+        sort: function(useWorker) {
             var activeParts = skritter.user.getActiveParts();
             var activeStyles = skritter.user.getActiveStyles();
             var now = skritter.fn.getUnixTime();
-            var randomizer = this.randomizeInterval;
+            var randomizer = skritter.fn.randomInterval;
             var spacedItems = this.get('spacedItems');
-            this.data = _.sortBy(this.data, function(item) {
-                var seenAgo = now - item.last;
-                var rtd = item.next - item.last;
-                var readiness = seenAgo / rtd;
-                //filter out inactive parts and styles
-                if (activeParts.indexOf(item.part) === -1 ||
+            if (useWorker && this.sortWorker) {
+                this.sortWorker.postMessage({
+                    activeParts: skritter.user.getActiveParts(),
+                    activeStyles: skritter.user.getActiveStyles(),
+                    now: skritter.fn.getUnixTime(),
+                    schedule: this.data,
+                    spacedItems: this.get('spacedItems')
+                });
+            } else {
+                this.data = _.sortBy(this.data, function(item) {
+                    var seenAgo = now - item.last;
+                    var rtd = item.next - item.last;
+                    var readiness = seenAgo / rtd;
+                    //filter out inactive parts and styles
+                    if (activeParts.indexOf(item.part) === -1 ||
                         activeStyles.indexOf(item.style) === -1) {
-                    item.readiness = 0;
-                    return -item.readiness;
-                }
-                //deprioritize items currently being spaced
-                var spacedItemIndex = _.findIndex(spacedItems, {id: item.id});
-                if (spacedItemIndex !== -1) {
-                    var spacedItem = spacedItems[spacedItemIndex];
-                    if (spacedItem.until > now) {
+                        item.readiness = 0;
+                        return -item.readiness;
+                    }
+                    //deprioritize items currently being spaced
+                    var spacedItemIndex = _.findIndex(spacedItems, {id: item.id});
+                    if (spacedItemIndex !== -1) {
+                        var spacedItem = spacedItems[spacedItemIndex];
+                        if (spacedItem.until > now) {
+                            item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
+                            return -item.readiness;
+                        } else {
+                            spacedItems.splice(spacedItemIndex, 1);
+                        }
+                    }
+                    //randomly deprioritize new spaced items
+                    if (!item.last && item.next - now > 600) {
                         item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
                         return -item.readiness;
-                    } else {
-                        spacedItems.splice(spacedItemIndex, 1);
                     }
-                }
-                //randomly deprioritize new spaced items
-                if (!item.last && item.next - now > 600) {
-                    item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
+                    //randomly prioritize new items
+                    if (!item.last || item.next - item.last === 1) {
+                        item.readiness = randomizer(9999);
+                        return -item.readiness;
+                    }
+                    //deprioritize overdue items
+                    if (readiness > 9999) {
+                        item.readiness = randomizer(9999);
+                        return -item.readiness;
+                    }
+                    item.readiness = readiness;
                     return -item.readiness;
-                }
-                //randomly prioritize new items
-                if (!item.last || item.next - item.last === 1) {
-                    item.readiness = randomizer(9999);
-                    return -item.readiness;
-                }
-                //deprioritize overdue items
-                if (readiness > 9999) {
-                    item.readiness = randomizer(9999);
-                    return -item.readiness;
-                }
-                item.readiness = readiness;
-                return -item.readiness;
-            });
-            this.trigger('sorted', this.data);
+                });
+                this.trigger('sorted', this.data);
+            }
             return this.data;
         },
         /**
@@ -311,14 +338,6 @@ define([], function() {
                     }
                 }
             }
-        },
-        /**
-         * @method randomizeInterval
-         * @param {Number} interval
-         * @returns {Number}
-         */
-        randomizeInterval: function(interval) {
-            return Math.round(interval * (0.925 + (Math.random() * 0.15)));
         },
         /**
          * @method remove
