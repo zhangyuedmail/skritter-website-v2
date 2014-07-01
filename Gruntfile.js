@@ -781,4 +781,8 @@ module.exports = function(grunt) {
     grunt.registerTask('run-cordova-japanese', [
         'shell:run-cordova-japanese'
     ]);
+    grunt.registerTask('validate', [
+        'csslint:public-html',
+        'jshint:public-html'
+    ]);
 };

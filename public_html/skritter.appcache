@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Sat Jun 28 2014 15:53:34 GMT-0700 (Pacific Daylight Time)
+# Time: Mon Jun 30 2014 19:49:48 GMT-0700 (Pacific Daylight Time)
 
 CACHE:
 index.html
@@ -12,7 +12,6 @@ index-cordova.html
 index.html
 bootstrap/components/switch/css/bootstrap-switch.css
 bootstrap/css/bootstrap.css
-bootstrap/themes/simplex/bootstrap.css
 bootstrap/themes/yeti/bootstrap.css
 css/main.css
 font/fontawesome/css/font-awesome.css
