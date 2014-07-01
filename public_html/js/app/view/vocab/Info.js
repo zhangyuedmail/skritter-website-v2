@@ -91,8 +91,9 @@ define([
                 this.elements.contained.find('tbody').html(this.vocab.getContainedRows());
             } else {
                 this.elements.contained.closest('.content-block').hide();
-                if (this.vocab.getDecomps().length > 0) {
-                    this.elements.decomps.find('tbody').html(this.vocab.getDecomps()[0].getChildrenRows());
+                var decomps = this.vocab.getDecomps();
+                if (decomps.length > 0 && !decomps[0].get('atomic')) {
+                    this.elements.decomps.find('tbody').html(decomps[0].getChildrenRows());
                 } else {
                     this.elements.decomps.closest('.content-block').hide();
                 }
