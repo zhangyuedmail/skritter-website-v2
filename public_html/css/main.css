@@ -243,6 +243,7 @@ body { background: url('../img/background/ricepaper1.png') repeat; }
 }
 .navbar .navbar-toggle-sidebar img {
     margin-top: -12px;
+    max-height: 36px;
     width: 36px;
 }
 .navbar .navbar-nav { margin: 0; }
