@@ -91,7 +91,11 @@ define([
                 this.elements.contained.find('tbody').html(this.vocab.getContainedRows());
             } else {
                 this.elements.contained.closest('.content-block').hide();
-                this.elements.decomps.find('tbody').html(this.vocab.getDecomps()[0].getChildrenRows());
+                if (this.vocab.getDecomps().length > 0) {
+                    this.elements.decomps.find('tbody').html(this.vocab.getDecomps()[0].getChildrenRows());
+                } else {
+                    this.elements.decomps.closest('.content-block').hide();
+                }
             }
             this.$('.character-font').addClass(skritter.user.getFontClass());
         },
