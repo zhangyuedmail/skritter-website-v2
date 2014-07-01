@@ -294,7 +294,9 @@ define([
                     thinkingTime: skritter.timer.getThinkingTime()
                 });
             } else {
-                this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape());
+                if (!skritter.user.settings.get('squigs')) {
+                    this.canvas.drawShape('stroke', this.review.getCharacter().targets[0].getShape());
+                }
             }
             if (skritter.user.settings.get('hideReading')) {
                 this.elements.reading.html(this.vocab.getReading(this.review.getPosition() + 1, false, skritter.user.isUsingZhuyin()));
