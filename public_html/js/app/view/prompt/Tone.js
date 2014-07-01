@@ -29,8 +29,8 @@ define([
             this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleStrokeDown);
             this.listenTo(this.canvas, 'input:up', this.handleStrokeUp);
-            this.resize();
             this.show();
+            this.resize();
             return this;
         },
         /**
@@ -142,7 +142,6 @@ define([
             var canvasSize = skritter.settings.getCanvasSize();
             var contentHeight = skritter.settings.getContentHeight();
             var contentWidth = skritter.settings.getContentWidth();
-            var infoSection, inputSection;
             this.canvas.resize()
                     .clearLayer('background')
                     .clearLayer('stroke');
@@ -152,23 +151,23 @@ define([
                 this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
             }
             if (skritter.settings.isPortrait()) {
-                inputSection = this.$('.input-section').css({
+                this.$('.input-section').css({
                     height: canvasSize,
                     float: 'none',
                     width: contentWidth
                 });
-                infoSection = this.$('.info-section').css({
+                this.$('.info-section').css({
                     height: contentHeight - canvasSize,
                     float: 'none',
                     width: contentWidth
                 });
             } else {
-                inputSection = this.$('.input-section').css({
+                this.$('.input-section').css({
                     height: canvasSize,
                     float: 'left',
                     width: canvasSize
                 });
-                infoSection = this.$('.info-section').css({
+                this.$('.info-section').css({
                     height: contentHeight,
                     float: 'left',
                     width: contentWidth - canvasSize
