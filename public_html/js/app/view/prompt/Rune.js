@@ -187,6 +187,12 @@ define([
             this.gradingButtons.hide();
             this.teachingButtons.hide();
             this.review.getCharacter().reset();
+            if (skritter.user.settings.get('hideReading')) {
+                this.elements.reading.html(this.vocab.getReading(this.review.getPosition(), false, skritter.user.isUsingZhuyin()));
+            } else {
+                this.elements.reading.html(this.vocab.getReading(null, null, skritter.user.isUsingZhuyin()));
+            }
+            this.elements.writing.html(this.vocab.getWriting(this.review.getPosition()));
             if (this.teaching) {
                 this.teach();
             }
