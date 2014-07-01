@@ -58,7 +58,7 @@ define([
                 this.elements.listCreator.parent().hide();
             }
             if (this.list.peopleStudying) {
-                this.elements.peopleStudying.text(this.peopleStudying);
+                this.elements.peopleStudying.text(this.list.peopleStudying);
             } else {
                 this.elements.peopleStudying.parent().hide();
             }
