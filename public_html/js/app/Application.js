@@ -115,7 +115,6 @@ define([
                 if (skritter.user.sync.isInitial()) {
                     skritter.modal.show('download').set('.modal-title', 'Downloading').set('.modal-title-icon', null, 'fa-download').progress(100);
                     skritter.user.sync.fetchAll(function() {
-                        skritter.user.scheduler.sort();
                         skritter.modal.hide();
                     });
                 } else {

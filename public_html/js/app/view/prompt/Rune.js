@@ -206,7 +206,6 @@ define([
             var canvasSize = skritter.settings.getCanvasSize();
             var contentHeight = skritter.settings.getContentHeight();
             var contentWidth = skritter.settings.getContentWidth();
-            var infoSection, inputSection;
             this.canvas.resize().clearLayer('stroke');
             if (skritter.user.settings.get('squigs')) {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getSquig());
@@ -217,23 +216,23 @@ define([
                 this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getReview().score]);
             }
             if (skritter.settings.isPortrait()) {
-                inputSection = this.$('.input-section').css({
+                this.$('.input-section').css({
                     height: canvasSize,
                     float: 'none',
                     width: contentWidth
                 });
-                infoSection = this.$('.info-section').css({
+                this.$('.info-section').css({
                     height: contentHeight - canvasSize,
                     float: 'none',
                     width: contentWidth
                 });
             } else {
-                inputSection = this.$('.input-section').css({
+                this.$('.input-section').css({
                     height: canvasSize,
                     float: 'left',
                     width: canvasSize
                 });
-                infoSection = this.$('.info-section').css({
+                this.$('.info-section').css({
                     height: contentHeight,
                     float: 'left',
                     width: contentWidth - canvasSize

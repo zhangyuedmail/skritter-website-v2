@@ -144,7 +144,7 @@ define([], function() {
             for (var i = 0, length = characters.length; i < length; i++) {
                 decomps.push(skritter.user.data.decomps.get(characters[i]));
             }
-            return decomps;
+            return _.without(decomps, undefined);
         },
         /**
          * @method getFontName
