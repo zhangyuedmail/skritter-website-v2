@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Mon Jun 30 2014 19:49:48 GMT-0700 (Pacific Daylight Time)
+# Time: Tue Jul 01 2014 18:46:50 GMT-0700 (Pacific Daylight Time)
 
 CACHE:
 index.html
@@ -117,6 +117,7 @@ js/app/view/vocab/Info.js
 js/app/view/vocab/List.js
 js/app/view/vocab/ListSection.js
 js/app/view/vocab/Lists.js
+js/app/worker/SortSchedule.js
 js/lib/async-0.9.0.js
 js/lib/backbone-1.1.2.min.js
 js/lib/createjs.easel-NEXT.min.js
@@ -125,6 +126,7 @@ js/lib/jquery-1.11.1.min.js
 js/lib/jquery.mobile.custom.min.js
 js/lib/jquery.ui.custom-1.10.4.min.js
 js/lib/lodash.compat-2.4.1.min.js
+js/lib/modernizr.custom-2.8.2.min.js
 js/lib/moment-2.7.0.min.js
 js/lib/moment.timezone-0.1.0.min.js
 js/lib/moment.timezone.data.js
