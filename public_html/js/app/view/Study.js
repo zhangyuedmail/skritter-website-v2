@@ -31,7 +31,7 @@ define([
             if (skritter.user.sync.isActive()) {
                 this.toggleAddButton(true);
             }
-            if (skritter.user.scheduler.data.length === 0) {
+            if (!skritter.user.scheduler.hasData()) {
                 this.showAddItemsModal();
                 skritter.router.navigate('', {replace: true, trigger: true});
                 return false;

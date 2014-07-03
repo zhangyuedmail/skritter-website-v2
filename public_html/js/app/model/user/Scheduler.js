@@ -79,6 +79,13 @@ define([], function() {
             event.preventDefault();
         },
         /**
+         * @method hasData
+         * @returns {Boolean}
+         */
+        hasData: function() {
+            return this.get('data').length > 0;
+        },
+        /**
          * @method update
          * @param {Array|Object} items
          * @returns {UserScheduler}
