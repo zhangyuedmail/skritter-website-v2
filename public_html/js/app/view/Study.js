@@ -125,9 +125,10 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
+            skritter.timer.reset();
             skritter.user.scheduler.sort();
+            skritter.user.data.reset();
             skritter.user.scheduler.getNext(_.bind(function(item) {
-                skritter.timer.reset();
                 this.loadPrompt(item.createReview());
             }, this));
         },
@@ -137,6 +138,7 @@ define([
         previousPrompt: function() {
             var review = skritter.user.data.reviews.at(0);
             if (review) {
+                skritter.user.data.reset();
                 review.load(_.bind(function(review) {
                     this.loadPrompt(review);
                 }, this));
