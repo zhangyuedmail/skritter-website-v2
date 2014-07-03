@@ -65,8 +65,11 @@ define([
      * @param {Function} callback
      */
     var loadStorage = function(callback) {
-        skritter.storage = new IndexedDBAdapter();
-        //skritter.storage = new WebSQLAdapter();
+        if (Modernizr.indexedDB) {
+            skritter.storage = new IndexedDBAdapter();
+        } else {
+            skritter.storage = new WebSQLAdapter();
+        }
         callback();
     };
     /**
