@@ -65,7 +65,7 @@ define([
      * @param {Function} callback
      */
     var loadStorage = function(callback) {
-        if (Modernizr.indexedDB) {
+        if (Modernizr.indexeddb) {
             skritter.storage = new IndexedDBAdapter();
         } else {
             skritter.storage = new WebSQLAdapter();
