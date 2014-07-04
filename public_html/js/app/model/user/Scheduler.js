@@ -7,7 +7,6 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            this.inserts = [];
             this.running = false;
             this.worker = null;
             if (Modernizr.webworkers) {
@@ -20,7 +19,8 @@ define([], function() {
          */
         defaults: {
             data: [],
-            history: []
+            history: [],
+            inserts: []
         },
         /**
          * @method clear
@@ -93,7 +93,8 @@ define([], function() {
          * @returns {UserScheduler}
          */
         insert: function(items) {
-            this.inserts = this.inserts.concat(items);
+            items = Array.isArray(items) ? items : [items];
+            this.set('inserts', this.get('inserts').concat(items));
             return this;
         },
         /**
@@ -114,15 +115,13 @@ define([], function() {
          * @method mergeInserts
          */
         mergeInserts: function() {
-            items = Array.isArray(items) ? items : [items];
-            var data = this.get('data');
-            for (var i = 0, length = items.length; i < length; i++) {
-                var item = items[i];
+            for (var i = 0, length = this.get('inserts').length; i < length; i++) {
+                var item = this.get('inserts')[i];
                 var itemPosition = _.findIndex(data, {id: item.id});
                 if (item.vocabIds.length === 0) {
                     continue;
                 } else if (itemPosition === -1) {
-                    data.push({
+                    this.get('data').push({
                         id: item.id,
                         last: item.last ? item.last : 0,
                         next: item.next ? item.next : 0,
@@ -130,7 +129,7 @@ define([], function() {
                         style: item.style
                     });
                 } else {
-                    data[itemPosition] = {
+                    this.get('data')[itemPosition] = {
                         id: item.id,
                         last: item.last ? item.last : 0,
                         next: item.next ? item.next : 0,
@@ -139,7 +138,6 @@ define([], function() {
                     };
                 }
             }
-            this.set('data', data);
         },
         /**
          * @method remove
@@ -148,13 +146,11 @@ define([], function() {
          */
         remove: function(items) {
             items = Array.isArray(items) ? items : [items];
-            var data = this.get('data');
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
-                var itemPosition = _.findIndex(this.data, {id: item.id});
-                data.splice(itemPosition, 1);
+                var itemPosition = _.findIndex(this.get('data'), {id: item.id});
+                this.get('data').splice(itemPosition, 1);
             }
-            this.set('data', data);
             return this;
         },
         /**
