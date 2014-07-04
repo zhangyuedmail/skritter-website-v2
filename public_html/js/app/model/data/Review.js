@@ -28,6 +28,7 @@ define([
          */
         cache: function(callback) {
             skritter.storage.put('reviews', this.toJSON(), function() {
+                console.log('caching review');
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -314,7 +315,6 @@ define([
                     }
                 },
                 _.bind(function(callback) {
-                    //updates all of the new review intervals and items
                     for (var i = 0, length = reviews.length; i < length; i++) {
                         var review = reviews[i];
                         var item = skritter.user.data.items.get(review.itemId);
@@ -336,20 +336,17 @@ define([
                             successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                             timeStudied: item.get('timeStudied') + review.reviewTime
                         });
-                        skritter.user.scheduler.insert(item.toJSON());
+                        skritter.user.scheduler.update(item.toJSON());
                     }
                     callback();
                 }, this),
-                _.bind(function(callback) {
+                _.bind(function() {
                     skritter.user.data.reviews.add(this, {merge: true});
-                    callback();
+                    this.cache(callback);
                 }, this),
                 function(callback) {
                     skritter.user.data.items.cache(callback);
-                },
-                _.bind(function(callback) {
-                    this.cache(callback);
-                }, this)
+                }
             ], function() {
                 skritter.user.scheduler.sort();
                 callback();

@@ -19,9 +19,47 @@ define([], function() {
          */
         defaults: {
             data: [],
-            deletes: [],
             history: [],
-            inserts: []
+            insert: [],
+            remove: []
+        },
+        /**
+         * @method addHistory
+         * @param {Array|Object} items
+         * @returns {UserScheduler}
+         */
+        addHistory: function(items) {
+            items = Array.isArray(items) ? items : [items];
+            var now = skritter.fn.getUnixTime();
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                var itemBaseWriting = item.id.split('-')[2];
+                var historyItem = _.findIndex(this.get('history'), {baseWriting: itemBaseWriting});
+                if (historyItem === -1) {
+                    console.log('add history', itemBaseWriting, now + 600);
+                    this.get('history').push({
+                        baseWriting: itemBaseWriting,
+                        heldUntil: now + 600
+                    });
+                }
+            }
+            return this;
+        },
+        /**
+         * @method checkHistory
+         * @param {Object} item
+         * @returns {Boolean}
+         */
+        checkHistory: function(item) {
+            var historyItem = _.find(this.get('history'), {baseWriting: item.id.split('-')[2]});
+            console.log('history check', historyItem);
+            var now = skritter.fn.getUnixTime();
+            if (historyItem && historyItem.heldUntil < now) {
+                return true;
+            } else if (historyItem) {
+                this.removeHistory(historyItem);
+            }
+            return false;
         },
         /**
          * @method clear
@@ -49,7 +87,7 @@ define([], function() {
         },
         /**
          * @method getNext
-         * @param {Function}callback
+         * @param {Function} callback
          */
         getNext: function(callback) {
             var data = this.get('data');
@@ -57,7 +95,12 @@ define([], function() {
             function next() {
                 var item = data[position];
                 if (!item) {
-                    return null;
+                    return false;
+                }
+                if (skritter.user.scheduler.checkHistory(item)) {
+                    position++;
+                    next();
+                    return false;
                 }
                 skritter.user.data.loadItem(item.id, function(item) {
                     if (item) {
@@ -95,7 +138,7 @@ define([], function() {
          */
         insert: function(items) {
             items = Array.isArray(items) ? items : [items];
-            this.set('inserts', this.get('inserts').concat(items));
+            this.set('insert', this.get('insert').concat(items));
             return this;
         },
         /**
@@ -117,9 +160,9 @@ define([], function() {
          */
         mergeUpdates: function() {
             //merge inserts
-            for (var i = 0, length = this.get('inserts').length; i < length; i++) {
-                var item = this.get('inserts')[i];
-                var itemPosition = _.findIndex(data, {id: item.id});
+            for (var i = 0, length = this.get('insert').length; i < length; i++) {
+                var item = this.get('insert')[i];
+                var itemPosition = _.findIndex(this.get('data'), {id: item.id});
                 if (item.vocabIds.length === 0) {
                     continue;
                 } else if (itemPosition === -1) {
@@ -141,11 +184,13 @@ define([], function() {
                 }
             }
             //merge deletes
-            for (var i = 0, length = this.get('deletes').length; i < length; i++) {
-                var item = this.get('deletes')[i];
+            for (var i = 0, length = this.get('remove').length; i < length; i++) {
+                var item = this.get('remove')[i];
                 var itemPosition = _.findIndex(this.get('data'), {id: item.id});
                 this.get('data').splice(itemPosition, 1);
             }
+            //clear updates
+            this.set({insert: [], remove: []});
         },
         /**
          * @method remove
@@ -154,7 +199,19 @@ define([], function() {
          */
         remove: function(items) {
             items = Array.isArray(items) ? items : [items];
-            this.set('deletes', this.get('deletes').concat(items));
+            this.set('remove', this.get('remove').concat(items));
+            return this;
+        },
+        /**
+         * @method removeHistory
+         * @param {String} baseWriting
+         * @returns {UserScheduler}
+         */
+        removeHistory: function(baseWriting) {
+            var historyPosition = _.findIndex(this.get('history'), {baseWriting: baseWriting});
+            if (historyPosition !== -1) {
+                this.get('history').splice(historyPosition, 1);
+            }
             return this;
         },
         /**
@@ -215,6 +272,16 @@ define([], function() {
             });
             this.running = false;
             this.trigger('sorted', data);
+        },
+        /**
+         * @method update
+         * @param {Array|Object} items
+         * @returns {UserScheduler}
+         */
+        update: function(items) {
+            this.addHistory(items);
+            this.insert(items);
+            return this;
         }
     });
 

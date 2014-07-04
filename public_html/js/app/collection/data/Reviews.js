@@ -10,12 +10,6 @@ define([
          */
         initialize: function() {
             this.saving = false;
-            this.on('add', _.bind(function() {
-                if (!this.saving && skritter.user.settings.get('autoSync') &&
-                        this.length >= skritter.user.settings.get('autoSyncThreshold')) {
-                    this.save();
-                }
-            }, this));
         },
         /**
          * @property {Backbone.Model} model
