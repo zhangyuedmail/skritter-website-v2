@@ -304,6 +304,7 @@ define([
          */
         save: function(callback) {
             var reviews = this.get('reviews');
+            var srsconfigs = skritter.user.data.srsconfigs.get(this.get('part')).toJSON();
             async.series([
                 function(callback) {
                     if (skritter.user.data.srsconfigs.length >= 3) {
@@ -323,7 +324,7 @@ define([
                             review.score = this.getFinalScore();
                             review.thinkingTime = this.getTotalThinkingTime();
                         }
-                        review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
+                        review.newInterval = skritter.fn.calculateInterval(item.toJSON(), review.score, srsconfigs);
                         item.set({
                             changed: review.submitTime,
                             last: review.submitTime,
@@ -335,7 +336,7 @@ define([
                             successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                             timeStudied: item.get('timeStudied') + review.reviewTime
                         });
-                        skritter.user.scheduler.update(item, i === 0);
+                        skritter.user.scheduler.insert(item.toJSON());
                     }
                     callback();
                 }, this),
@@ -347,10 +348,10 @@ define([
                     skritter.user.data.items.cache(callback);
                 },
                 _.bind(function(callback) {
-                    skritter.user.scheduler.cache();
                     this.cache(callback);
                 }, this)
             ], function() {
+                skritter.user.scheduler.sort();
                 callback();
             });
         },

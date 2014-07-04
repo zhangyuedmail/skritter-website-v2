@@ -126,7 +126,6 @@ define([
          */
         nextPrompt: function() {
             skritter.timer.reset();
-            skritter.user.scheduler.sort();
             skritter.user.data.reset();
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 this.loadPrompt(item.createReview());

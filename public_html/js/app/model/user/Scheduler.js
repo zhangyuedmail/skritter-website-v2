@@ -153,7 +153,6 @@ define([], function() {
          * @method sort
          */
         sort: function() {
-            console.log('scheduler: sorting');
             this.running = true;
             if (this.worker) {
                 this.sortAsync();
