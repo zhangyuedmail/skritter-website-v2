@@ -7,6 +7,7 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
+            this.inserts = [];
             this.running = false;
             this.worker = null;
             if (Modernizr.webworkers) {
@@ -18,7 +19,8 @@ define([], function() {
          * @property {Object} defaults
          */
         defaults: {
-            data: []
+            data: [],
+            history: []
         },
         /**
          * @method clear
@@ -91,6 +93,27 @@ define([], function() {
          * @returns {UserScheduler}
          */
         insert: function(items) {
+            this.inserts = this.inserts.concat(items);
+            return this;
+        },
+        /**
+         * @method loadAll
+         * @param {Function} callback
+         */
+        loadAll: function(callback) {
+            skritter.storage.getSchedule(_.bind(function(data) {
+                this.set('data', data);
+                this.trigger('loaded', data);
+                this.sort();
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }, this));
+        },
+        /**
+         * @method mergeInserts
+         */
+        mergeInserts: function() {
             items = Array.isArray(items) ? items : [items];
             var data = this.get('data');
             for (var i = 0, length = items.length; i < length; i++) {
@@ -117,21 +140,6 @@ define([], function() {
                 }
             }
             this.set('data', data);
-            return this;
-        },
-        /**
-         * @method loadAll
-         * @param {Function} callback
-         */
-        loadAll: function(callback) {
-            skritter.storage.getSchedule(_.bind(function(data) {
-                this.set('data', data);
-                this.trigger('loaded', data);
-                this.sort();
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            }, this));
         },
         /**
          * @method remove
@@ -154,6 +162,7 @@ define([], function() {
          */
         sort: function() {
             this.running = true;
+            this.mergeInserts();
             if (this.worker) {
                 this.sortAsync();
             } else {
