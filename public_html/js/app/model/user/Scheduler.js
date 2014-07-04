@@ -19,6 +19,7 @@ define([], function() {
          */
         defaults: {
             data: [],
+            deletes: [],
             history: [],
             inserts: []
         },
@@ -112,9 +113,10 @@ define([], function() {
             }, this));
         },
         /**
-         * @method mergeInserts
+         * @method mergeUpdates
          */
-        mergeInserts: function() {
+        mergeUpdates: function() {
+            //merge inserts
             for (var i = 0, length = this.get('inserts').length; i < length; i++) {
                 var item = this.get('inserts')[i];
                 var itemPosition = _.findIndex(data, {id: item.id});
@@ -138,6 +140,12 @@ define([], function() {
                     };
                 }
             }
+            //merge deletes
+            for (var i = 0, length = this.get('deletes').length; i < length; i++) {
+                var item = this.get('deletes')[i];
+                var itemPosition = _.findIndex(this.get('data'), {id: item.id});
+                this.get('data').splice(itemPosition, 1);
+            }
         },
         /**
          * @method remove
@@ -146,11 +154,7 @@ define([], function() {
          */
         remove: function(items) {
             items = Array.isArray(items) ? items : [items];
-            for (var i = 0, length = items.length; i < length; i++) {
-                var item = items[i];
-                var itemPosition = _.findIndex(this.get('data'), {id: item.id});
-                this.get('data').splice(itemPosition, 1);
-            }
+            this.set('deletes', this.get('deletes').concat(items));
             return this;
         },
         /**
@@ -158,7 +162,7 @@ define([], function() {
          */
         sort: function() {
             this.running = true;
-            this.mergeInserts();
+            this.mergeUpdates();
             if (this.worker) {
                 this.sortAsync();
             } else {
