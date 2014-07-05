@@ -28,7 +28,6 @@ define([
          */
         cache: function(callback) {
             skritter.storage.put('reviews', this.toJSON(), function() {
-                console.log('caching review');
                 if (typeof callback === 'function') {
                     callback();
                 }

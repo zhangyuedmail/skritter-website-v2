@@ -65,7 +65,7 @@ define([], function() {
                         skritter.user.scheduler.clear().loadAll(callback);
                     },
                     function(callback) {
-                        if (skritter.user.scheduler.data.length === 0) {
+                        if (skritter.user.scheduler.get('data').length === 0) {
                             skritter.user.data.items.addItems(callback, 5);
                         } else {
                             callback();

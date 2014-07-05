@@ -36,7 +36,6 @@ define([], function() {
                 var itemBaseWriting = item.id.split('-')[2];
                 var historyItem = _.findIndex(this.get('history'), {baseWriting: itemBaseWriting});
                 if (historyItem === -1) {
-                    console.log('add history', itemBaseWriting, now + 600);
                     this.get('history').push({
                         baseWriting: itemBaseWriting,
                         heldUntil: now + 600
@@ -52,9 +51,8 @@ define([], function() {
          */
         checkHistory: function(item) {
             var historyItem = _.find(this.get('history'), {baseWriting: item.id.split('-')[2]});
-            console.log('history check', historyItem);
             var now = skritter.fn.getUnixTime();
-            if (historyItem && historyItem.heldUntil < now) {
+            if (historyItem && historyItem.heldUntil > now) {
                 return true;
             } else if (historyItem) {
                 this.removeHistory(historyItem);
@@ -149,7 +147,7 @@ define([], function() {
             skritter.storage.getSchedule(_.bind(function(data) {
                 this.set('data', data);
                 this.trigger('loaded', data);
-                this.sort();
+                this.sort(true);
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -216,11 +214,12 @@ define([], function() {
         },
         /**
          * @method sort
+         * @param {Boolean} forceSync
          */
-        sort: function() {
+        sort: function(forceSync) {
             this.running = true;
             this.mergeUpdates();
-            if (this.worker) {
+            if (!forceSync && this.worker) {
                 this.sortAsync();
             } else {
                 this.sortSync();
@@ -242,6 +241,7 @@ define([], function() {
         sortSync: function() {
             var activeParts = skritter.user.getActiveParts();
             var activeStyles = skritter.user.getActiveStyles();
+            var now = skritter.fn.getUnixTime();
             var data = this.get('data').sort(function(item) {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
