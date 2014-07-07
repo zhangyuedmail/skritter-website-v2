@@ -15,7 +15,10 @@ define([
     var addAll = function(array, attribute) {
         var total = 0;
         for (var i = 0, length = array.length; i < length; i++) {
-            total += array[i][attribute];
+            var value = array[i][attribute];
+            if (value) {
+                total += value;
+            }
         }
         return total;
     };
