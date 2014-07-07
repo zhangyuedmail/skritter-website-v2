@@ -105,17 +105,20 @@ define([
          * @method set
          * @param {String} findBy
          * @param {String} html
-         * @param {Array|String} atrribute
+         * @param {Array|String} attribute
          * @returns {Backbone.View}
          */
-        set: function(findBy, html, atrribute) {
-            var atributes = Array.isArray(atrribute) ? atrribute : [atrribute];
+        set: function(findBy, html, attribute) {
+            var attributes = Array.isArray(attribute) ? attribute : [attribute];
             var element = this.element().find(findBy);
             if (html === false) {
                 element.hide();
             } else {
-                element.addClass(atributes.join(' '));
-                element.html(html);
+                element.addClass(attributes.join(' '));
+                if (html) {
+                    element.html(html);
+                }
+                element.show();
             }
             return this;
         },
