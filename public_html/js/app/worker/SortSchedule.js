@@ -1,3 +1,5 @@
+importScripts('../../lib/lodash.compat-2.4.1.min.js');
+
 self.addEventListener('message', function(event) {
     //declarations
     var activeParts = event.data.activeParts;
@@ -15,7 +17,7 @@ self.addEventListener('message', function(event) {
         return Math.round(value * (0.925 + (Math.random() * 0.15)));
     }
     //actions
-    data.sort(function(item) {
+    data = _.sortBy(data, function(item) {
         var seenAgo = now - item.last;
         var rtd = item.next - item.last;
         var readiness = seenAgo / rtd;
@@ -42,7 +44,6 @@ self.addEventListener('message', function(event) {
         }
         item.readiness = readiness;
         return -item.readiness;
-
     });
     //results
     self.postMessage(data);

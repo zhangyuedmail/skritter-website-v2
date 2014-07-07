@@ -242,7 +242,7 @@ define([], function() {
             var activeParts = skritter.user.getActiveParts();
             var activeStyles = skritter.user.getActiveStyles();
             var now = skritter.fn.getUnixTime();
-            var data = this.get('data').sort(function(item) {
+            var data = _.sortBy(this.get('data'), function(item) {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;
@@ -271,6 +271,7 @@ define([], function() {
                 return -item.readiness;
             });
             this.running = false;
+            this.set('data', data);
             this.trigger('sorted', data);
         },
         /**
