@@ -174,35 +174,56 @@ define([], function() {
                     request();
                 },
                 function(batch, callback) {
-                    var batchRequestIds = [];
                     var retryCount = 0;
-                    var totalResponseSize = 0;
                     function request() {
-                        skritter.api.getBatch(batch.id, function(result, status) {
+                        skritter.api.checkBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
-                                batchRequestIds = batchRequestIds.concat(result.requestIds);
-                                totalResponseSize += result.responseSize;
-                                skritter.user.data.put(result, function() {
-                                    if (totalResponseSize > 1024) {
-                                        skritter.modal.set('.modal-sub-title', skritter.fn.convertBytesToSize(totalResponseSize));
-                                    }
-                                    if (!skipScheduler && result.Items) {
-                                        skritter.user.scheduler.insert(result.Items);
-                                    }
-                                    skritter.user.sync.set('batchRequestIds', batchRequestIds);
-                                    window.setTimeout(request, 500);
-                                });
-                            } else if (status === 200) {
-                                callback(null, batch);
-                            } else if (status === 0) {
+                                if (result.totalRequests > 0 && result.runningRequests === 0) {
+                                    callback(null, result);
+                                } else {
+                                    var responseSizeTotal = skritter.fn.addAll(result.Requests, 'responseSize');
+                                    var responseSizeString = skritter.fn.convertBytesToSize(responseSizeTotal);
+                                    skritter.modal.set('.modal-sub-title', responseSizeString);
+                                    window.setTimeout(request, 2000);
+                                }
+                            } else {
                                 if (retryCount < 5) {
                                     retryCount++;
                                     window.setTimeout(request, 2000);
                                 } else {
                                     callback(batch);
                                 }
+                            }
+                        }, true);
+                    }
+                    request();
+                },
+                function(batch, callback) {
+                    var retryCount = 0;
+                    var downloadedRequests = 0;
+                    var totalRequests = batch.totalRequests;
+                    skritter.modal.progress(0);
+                    skritter.modal.set('.modal-sub-title', 'retrieving');
+                    function request() {
+                        skritter.api.getBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                downloadedRequests += result.downloadedRequests;
+                                skritter.user.data.put(result, function() {
+                                    skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));
+                                    if (!skipScheduler && result.Items) {
+                                        skritter.user.scheduler.insert(result.Items);
+                                    }
+                                    window.setTimeout(request, 500);
+                                });
+                            } else if (status === 200) {
+                                callback(null, batch);
                             } else {
-                                callback(batch);
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
                             }
                         });
                     }
