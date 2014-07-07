@@ -7,6 +7,19 @@ define([
     'function/StrokeShapeMap'
 ], function(Bootstrap, ChineseMap, PinyinMap, Recognizer, Shortstraw, StrokeShapeMap) {
     /**
+     * @method addAll
+     * @param {Array} array
+     * @param {String} attribute
+     * @returns {Number}
+     */
+    var addAll = function(array, attribute) {
+        var total = 0;
+        for (var i = 0, length = array.length; i < length; i++) {
+            total += array[i][attribute];
+        }
+        return total;
+    };
+    /**
      * @property {Object} bootstrap
      */
     var bootstrap = Bootstrap;
@@ -353,6 +366,7 @@ define([
     };
     
     return {
+        addAll: addAll,
         bootstrap: bootstrap,
         calculateInterval: calculateInterval,
         convertArrayToInt: convertArrayToInt,
