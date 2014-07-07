@@ -29,10 +29,10 @@ define([], function() {
             localStorage.setItem(skritter.user.id + '-sync', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method fetchAll
+         * @method downloadAll
          * @param {Function} callback
          */
-        fetchAll: function(callback) {
+        downloadAll: function(callback) {
             if (this.syncing) {
                 if (typeof callback === 'function') {
                     callback();
@@ -43,7 +43,7 @@ define([], function() {
                 var now = skritter.fn.getUnixTime();
                 async.series([
                     function(callback) {
-                        skritter.user.data.items.fetch(callback, 0, true, true);
+                        skritter.user.data.items.fetchAll(callback);
                     },
                     function(callback) {
                         skritter.user.data.vocablists.fetch(callback);
@@ -183,7 +183,10 @@ define([], function() {
                                 } else {
                                     var responseSizeTotal = skritter.fn.addAll(result.Requests, 'responseSize');
                                     var responseSizeString = skritter.fn.convertBytesToSize(responseSizeTotal);
-                                    skritter.modal.set('.modal-sub-title', responseSizeString);
+                                    if (responseSizeTotal) {
+                                        skritter.modal.set('.preparing .message', 'Preparing Download')
+                                            .set('.preparing .message-value', responseSizeString);
+                                    }
                                     window.setTimeout(request, 2000);
                                 }
                             } else {
@@ -194,7 +197,7 @@ define([], function() {
                                     callback(batch);
                                 }
                             }
-                        }, true);
+                        });
                     }
                     request();
                 },
@@ -202,14 +205,19 @@ define([], function() {
                     var retryCount = 0;
                     var downloadedRequests = 0;
                     var totalRequests = batch.totalRequests;
-                    skritter.modal.progress(0);
-                    skritter.modal.set('.modal-sub-title', 'retrieving');
+                    skritter.modal.set('.preparing', false)
+                        .set('.modal-title', 'Downloading')
+                        .set('.modal-title-icon', null, 'fa-download')
+                        .set('.modal-body')
+                        .progress(0);
                     function request() {
                         skritter.api.getBatch(batch.id, function(result, status) {
                             if (result && status === 200) {
                                 downloadedRequests += result.downloadedRequests;
                                 skritter.user.data.put(result, function() {
-                                    skritter.modal.progress(Math.round((downloadedRequests / totalRequests) * 100));
+                                    var downloadPercent = Math.round((downloadedRequests / totalRequests) * 100);
+                                    skritter.modal.set('.modal-sub-title', downloadPercent + '%');
+                                    skritter.modal.progress(downloadPercent);
                                     if (!skipScheduler && result.Items) {
                                         skritter.user.scheduler.insert(result.Items);
                                     }

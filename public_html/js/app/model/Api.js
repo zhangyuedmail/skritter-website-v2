@@ -74,8 +74,7 @@ define([], function() {
          * @param {String} batchId
          * @param {Function} callback
          */
-        checkBatch: function(batchId, callback, detailed) {
-            detailed = detailed ? 'true' : undefined;
+        checkBatch: function(batchId, callback) {
             $.ajax({
                 url: this.base + 'batch/' + batchId + '/status',
                 beforeSend: _.bind(function(xhr) {
@@ -84,7 +83,7 @@ define([], function() {
                 type: 'GET',
                 data: {
                     bearer_token: this.get('token'),
-                    detailed: detailed
+                    detailed: true
                 }
             }).done(function(data) {
                 callback(data.Batch, data.statusCode);

@@ -84,13 +84,10 @@ define([
             });
         },
         /**
-         * @method fetch         
+         * @method fetchAll
          * @param {Function} callback
-         * @param {Number} offset
-         * @param {Boolean} includeResources
-         * @param {Boolean} skipScheduler
          */
-        fetch: function(callback, offset, includeResources, skipScheduler) {
+        fetchAll: function(callback) {
             skritter.user.sync.processBatch([
                 {
                     path: 'api/v' + skritter.api.version + '/items',
@@ -98,19 +95,19 @@ define([
                     params: {
                         lang: skritter.user.getLanguageCode(),
                         sort: 'changed',
-                        offset: offset ? offset : 0,
-                        include_vocabs: includeResources ? 'true' : undefined,
-                        include_strokes: includeResources ? 'true' : undefined,
-                        include_sentences: includeResources && skritter.user.isUsingSentences() ? 'true' : undefined,
-                        include_heisigs: includeResources ? 'true' : undefined,
-                        include_top_mnemonics: includeResources ? 'true' : undefined,
-                        include_decomps: includeResources ? 'true' : undefined
+                        offset: 0,
+                        include_vocabs: 'true',
+                        include_strokes: 'true',
+                        include_sentences: 'false',
+                        include_heisigs: 'true',
+                        include_top_mnemonics: 'true',
+                        include_decomps: 'true'
                     },
                     spawner: true
                 }
             ], function() {
                 callback();
-            }, skipScheduler);
+            }, true);
         },
         /**
          * @method fetchById
