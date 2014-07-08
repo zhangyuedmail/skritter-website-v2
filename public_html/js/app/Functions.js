@@ -183,6 +183,13 @@ define([
         return moment(skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD');
     };
     /**
+     * @method getDateTime
+     * @returns {String}
+     */
+    var getDateTime = function(time) {
+        return moment(time ? time : skritter.fn.getUnixTime() * 1000).format('YYYY-MM-DD, h:mm:ss A');
+    };
+    /**
      * @method getDistance
      * @param {Point} point1
      * @param {Point} point2
@@ -382,6 +389,7 @@ define([
         getUnixTime: getUnixTime,
         getRandomNumber: getRandomNumber,
         getDate: getDate,
+        getDateTime: getDateTime,
         hasCordova: hasCordova,
         hasRaygun: hasRaygun,
         isKana: isKana,

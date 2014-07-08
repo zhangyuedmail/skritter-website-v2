@@ -507,6 +507,7 @@ define([
             var lastSRSConfigSync = this.get('lastSRSConfigSync');
             var lastVocabSync = this.get('lastVocabSync');
             var now = skritter.fn.getUnixTime();
+            console.log('syncing: started at', skritter.fn.getDateTime(now * 1000));
             async.waterfall([
                 function(callback) {
                     console.log('syncing: items');
@@ -536,6 +537,7 @@ define([
                     lastVocabSync: now,
                     syncing: false
                 });
+                console.log('syncing: finished in', moment().diff(now * 1000, 'seconds', true), 'seconds');
                 if (typeof callback === 'function') {
                     callback();
                 }

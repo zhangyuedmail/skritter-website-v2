@@ -123,8 +123,6 @@ define([
                     skritter.user.data.downloadAll(function() {
                         skritter.modal.hide();
                     });
-                } else {
-                    //skritter.user.sync.fetchChanged();
                 }
                 //load raygun and bind userid to analytics
                 if (skritter.fn.hasCordova()) {
@@ -162,6 +160,9 @@ define([
         ], function() {
             console.log('application initialized');
             skritter.router = new Router();
+            if (skritter.user.isLoggedIn()) {
+                skritter.user.data.sync();
+            }
             if (skritter.fn.hasCordova()) {
                 navigator.splashscreen.hide();
             }

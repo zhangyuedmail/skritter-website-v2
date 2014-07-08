@@ -92,7 +92,7 @@ define([
          * @param {Object} event
          */
         handleSyncClick: function(event) {
-            skritter.user.sync.fetchChanged();
+            skritter.user.data.sync();
             event.preventDefault();
         },
         /**
