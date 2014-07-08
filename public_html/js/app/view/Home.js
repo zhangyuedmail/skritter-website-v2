@@ -37,7 +37,7 @@ define([
             }
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.updateDueCounter();
-            this.updateLists();
+            this.updateVocabLists();
             return this;
         },
         /**
