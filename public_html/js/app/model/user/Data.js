@@ -105,16 +105,18 @@ define([
                     skritter.user.scheduler.clear().loadAll(callback);
                 }
             ], _.bind(function() {
-                skritter.user.data.set({
+                this.set({
                     downloadBatchId: null,
                     lastErrorCheck: now,
                     lastItemSync: now,
                     lastReviewSync: now,
                     lastSRSConfigSync: now,
-                    lastVocabSync: now
+                    lastVocabSync: now,
+                    syncing: false
                 });
-                this.set('syncing', false);
-                callback();
+                if (typeof callback === 'function') {
+                    callback();
+                }
             }, this));
         },
         /**
@@ -371,7 +373,6 @@ define([
                                 }
                             }
                         });
-
                     }
                     if (skritter.user.data.get('downloadBatchId')) {
                         callback(null, {id: skritter.user.data.get('downloadBatchId')});
@@ -494,6 +495,52 @@ define([
             this.strokes.reset();
             this.vocabs.reset();
             return this;
+        },
+        /**
+         * @method sync
+         * @param {Function} callback
+         */
+        sync: function(callback) {
+            this.set('syncing', true);
+            var lastErrorCheck = this.get('lastErrorCheck');
+            var lastItemSync = this.get('lastItemSync');
+            var lastReviewSync = this.get('lastReviewSync');
+            var lastSRSConfigSync = this.get('lastSRSConfigSync');
+            var lastVocabSync = this.get('lastVocabSync');
+            var now = skritter.fn.getUnixTime();
+            async.waterfall([
+                function(callback) {
+                    console.log('syncing: items');
+                    skritter.api.getItemByOffset(lastItemSync, function(result, status) {
+                        if (status === 200) {
+                            skritter.user.data.put(result, function() {
+                                if (result.Items) {
+                                    skritter.user.scheduler.insert(result.Items);
+                                }
+                                callback();
+                            });
+                        } else {
+                            callback(result);
+                        }
+                    });
+                },
+                function(callback) {
+                    console.log('syncing: reviews');
+                    skritter.user.data.reviews.sync(callback);
+                }
+            ], _.bind(function() {
+                this.set({
+                    lastErrorCheck: now,
+                    lastItemSync: now,
+                    lastReviewSync: now,
+                    lastSRSConfigSync: now,
+                    lastVocabSync: now,
+                    syncing: false
+                });
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }, this));
         }
     });
 

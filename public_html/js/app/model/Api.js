@@ -216,7 +216,7 @@ define([], function() {
                         offset: offset,
                         fields: options.fields,
                         include_vocabs: options.includeVocabs,
-                        include_strokes: options.includeStroke,
+                        include_strokes: options.includeStrokes,
                         include_sentences: options.includeSentences,
                         include_heisigs: options.includeHeisigs,
                         include_top_mnemonics: options.includeTopMnemonics,
@@ -231,7 +231,6 @@ define([], function() {
                             request(data.cursor);
                         }, 500);
                     } else {
-                        console.log('fetched items', result);
                         callback(result, data.statusCode);
                     }
                 }).fail(function(error) {
@@ -264,7 +263,7 @@ define([], function() {
                         ids: batch.join('|'),
                         fields: options.fields,
                         include_vocabs: options.includeVocabs,
-                        include_strokes: options.includeStroke,
+                        include_strokes: options.includeStrokes,
                         include_sentences: options.includeSentences,
                         include_heisigs: options.includeHeisigs,
                         include_top_mnemonics: options.includeTopMnemonics,

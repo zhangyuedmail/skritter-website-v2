@@ -339,7 +339,7 @@ define([
                     }
                     callback();
                 }, this),
-                _.bind(function() {
+                _.bind(function(callback) {
                     skritter.user.data.reviews.add(this, {merge: true});
                     this.cache(callback);
                 }, this),
