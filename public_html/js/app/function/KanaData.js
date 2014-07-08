@@ -11,6 +11,7 @@ define(function() {
 		var strokes = [{
 		"lang": "ja",
 			"rune": "あ",
+			"kana": true,
 			"strokes": [
 			[
 				[600, 0.23, 0.318, 1, 1, 0],
@@ -21,6 +22,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "い",
+			"kana": true,
 			"strokes": [
 			[
 				[603, 0.144, 0.238, 1, 1, 0],
@@ -30,6 +32,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "う",
+			"kana": true,
 			"strokes": [
 			[
 				[605, 0.408, 0.092, 1, 1, 0],
@@ -39,6 +42,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "え",
+			"kana": true,
 			"strokes": [
 			[
 				[607, 0.408, 0.154, 1, 1, 0],
@@ -48,6 +52,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "お",
+			"kana": true,
 			"strokes": [
 			[
 				[609, 0.168, 0.354, 1, 1, 0],
@@ -58,6 +63,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "か",
+			"kana": true,
 			"strokes": [
 			[
 				[612, 0.138, 0.428, 1, 1, 0],
@@ -68,6 +74,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "が",
+			"kana": true,
 			"strokes": [
 			[
 				[612, 0.138, 0.428, 1, 1, 0],
@@ -80,6 +87,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "き",
+			"kana": true,
 			"strokes": [
 			[
 				[615, 0.254, 0.24, 1, 1, 0],
@@ -91,6 +99,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "ぎ",
+			"kana": true,
 			"strokes": [
 			[
 				[615, 0.138, 0.428, 1, 1, 0],
@@ -104,6 +113,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "く",
+			"kana": true,
 			"strokes": [
 			[
 				[619, 0.392, 0.112, 1, 1, 0]
@@ -112,6 +122,7 @@ define(function() {
 	}{
 		"lang": "ja",
 			"rune": "ぐ",
+			"kana": true,
 			"strokes": [
 			[
 				[619, 0.392, 0.112, 1, 1, 0],
@@ -122,6 +133,7 @@ define(function() {
 	}{
 		"lang": "ja",
 			"rune": "け",
+			"kana": true,
 			"strokes": [
 			[
 				[620, 0.184, 0.146, 1, 1, 0],
@@ -132,6 +144,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "げ",
+			"kana": true,
 			"strokes": [
 			[
 				[620, 0.184, 0.146, 1, 1, 0],
@@ -144,6 +157,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "こ",
+			"kana": true,
 			"strokes": [
 			[
 				[623, 0.294, 0.03, 1, 1, 0],
@@ -153,6 +167,7 @@ define(function() {
 	}, {
 		"lang": "ja",
 			"rune": "ご",
+			"kana": true,
 			"strokes": [
 			[
 				[623, 0.294, 0.03, 1, 1, 0],
@@ -163,7 +178,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "さ",   
+			"rune": "さ",
+			"kana": true,			
 			"strokes": [
 			[
 				[625, 0.282, 0.27, 1, 1, 0],
@@ -173,7 +189,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ざ",   
+			"rune": "ざ",
+			"kana": true,			
 			"strokes": [
 			[
 				[625, 0.282, 0.27, 1, 1, 0],
@@ -185,7 +202,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "し",   
+			"rune": "し",
+			"kana": true,
 			"strokes": [
 			[
 				[628, 0.296, 0.124, 1, 1, 0]
@@ -193,7 +211,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "じ",   
+			"rune": "じ",
+			"kana": true,			
 			"strokes": [
 			[
 				[628, 0.296, 0.124, 1, 1, 0],
@@ -203,7 +222,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "す",   
+			"rune": "す",
+			"kana": true,			
 			"strokes": [
 			[
 				[629, 0.156, 0.262, 1, 1, 0],
@@ -212,7 +232,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ず",   
+			"rune": "ず",
+			"kana": true,
 			"strokes": [
 			[
 				[629, 0.156, 0.262, 1, 1, 0],
@@ -223,7 +244,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "せ",   
+			"rune": "せ",
+			"kana": true,
 			"strokes": [
 			[
 				[631, 0.104, 0.55, 1, 1, 0],
@@ -233,7 +255,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぜ",   
+			"rune": "ぜ",
+			"kana": true,
 			"strokes": [
 			[
 				[631, 0.104, 0.55, 1, 1, 0],
@@ -245,7 +268,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "そ",   
+			"rune": "そ",
+			"kana": true,
 			"strokes": [
 			[
 				[634, 0.302, 0.252, 1, 1, 0],
@@ -253,7 +277,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぞ",   
+			"rune": "ぞ",
+			"kana": true,
 			"strokes": [
 			[
 				[634, 0.316, 0.252, 1, 1, 0],
@@ -263,7 +288,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "た",  
+			"rune": "た",
+			"kana": true,
 			"strokes": [
 			[
 				[636, 0.198, 0.247, 1, 1, 0],
@@ -273,7 +299,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "だ",  
+			"rune": "だ",
+			"kana": true,
 			"strokes": [
 			[
 				[636, 0.198, 0.247, 1, 1, 0],
@@ -285,7 +312,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ち",  
+			"rune": "ち",
+			"kana": true,
 			"strokes": [
 			[
 				[640, 0.204, 0.256, 1, 1, 0],
@@ -294,7 +322,8 @@ define(function() {
 	}
 	}, {
 		"lang": "ja",
-			"rune": "ぢ",  
+			"rune": "ぢ",
+			"kana": true,
 			"strokes": [
 			[
 				[640, 0.204, 0.256, 1, 1, 0],
@@ -304,14 +333,16 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "つ",  
+			"rune": "つ",
+			"kana": true,
 			"strokes": [
 			[
 				[642, 0.132, 0.28, 1, 1, 0]
 		]
 	}, {
 		"lang": "ja",
-			"rune": "づ",  
+			"rune": "づ",
+			"kana": true,
 			"strokes": [
 			[
 				[642, 0.076, 0.276, 1, 1, 0],
@@ -320,14 +351,16 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "て",  
+			"rune": "て",
+			"kana": true,
 			"strokes": [
 			[
 				[643, 0.134, 0.142, 1, 1, 0],
 		]
 	}, {
 		"lang": "ja",
-			"rune": "で",  
+			"rune": "で",
+			"kana": true,
 			"strokes": [
 			[
 				[643, 0.134, 0.142, 1, 1, 0],
@@ -336,7 +369,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "と",  
+			"rune": "と",
+			"kana": true,
 			"strokes": [
 			[
 				[644, 0.24, 0.172, 1, 1, 0],
@@ -344,7 +378,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ど",  
+			"rune": "ど",
+			"kana": true,
 			"strokes": [
 			[
 				[644, 0.24, 0.172, 1, 1, 0],
@@ -354,7 +389,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "な",  
+			"rune": "な",
+			"kana": true,
 			"strokes": [
 			[
 				[646, 0.158, 0.24, 1, 1, 0],
@@ -364,7 +400,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "に",  
+			"rune": "に",
+			"kana": true,
 			"strokes": [
 			[
 				[650, 0.178, 0.17, 1, 1, 0],
@@ -373,7 +410,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぬ",  
+			"rune": "ぬ",
+			"kana": true,
 			"strokes": [
 			[
 				[653, 0.224, 0.224, 1, 1, 0],
@@ -381,7 +419,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ね",  
+			"rune": "ね",
+			"kana": true,
 			"strokes": [
 			[
 				[655, 0.282, 0.14, 1, 1, 0],
@@ -389,14 +428,16 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "の",  
+			"rune": "の",
+			"kana": true,
 			"strokes": [
 			[
 				[657, 0.148, 0.208, 1, 1, 0]
 		]
 	}, {
 		"lang": "ja",
-			"rune": "は",  
+			"rune": "は",
+			"kana": true,
 			"strokes": [
 			[
 				[658, 0.156, 0.156, 1, 1, 0],
@@ -405,7 +446,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ば",  
+			"rune": "ば",
+			"kana": true,
 			"strokes": [
 			[
 				[658, 0.156, 0.156, 1, 1, 0],
@@ -416,7 +458,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぱ",  
+			"rune": "ぱ",
+			"kana": true,
 			"strokes": [
 			[
 				[658, 0.156, 0.156, 1, 1, 0],
@@ -426,14 +469,16 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ひ",  
+			"rune": "ひ",
+			"kana": true,
 			"strokes": [
 			[
 				[661, 0.144, 0.182, 1, 1, 0]
 		]
 	}, {
 		"lang": "ja",
-			"rune": "び",  
+			"rune": "び",
+			"kana": true,
 			"strokes": [
 			[
 				[661, 0.144, 0.182, 1, 1, 0], 
@@ -442,7 +487,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぴ",  
+			"rune": "ぴ",
+			"kana": true,
 			"strokes": [
 			[
 				[661, 0.144, 0.182, 1, 1, 0], 
@@ -450,7 +496,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ふ",  
+			"rune": "ふ",
+			"kana": true,
 			"strokes": [
 			[
 				[662, 0.442, 0.168, 1, 1, 0], 
@@ -460,7 +507,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぷ",  
+			"rune": "ぷ",
+			"kana": true,
 			"strokes": [
 			[
 				[662, 0.442, 0.168, 1, 1, 0], 
@@ -471,14 +519,16 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "へ",  
+			"rune": "へ",
+			"kana": true,
 			"strokes": [
 			[
 				[666, 0.104, 0.314, 1, 1, 0]
 		]
 	}, {
 		"lang": "ja",
-			"rune": "べ",  
+			"rune": "べ",
+			"kana": true,
 			"strokes": [
 			[
 				[666, 0.104, 0.314, 1, 1, 0],
@@ -487,7 +537,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぺ",  
+			"rune": "ぺ",
+			"kana": true,
 			"strokes": [
 			[
 				[666, 0.104, 0.314, 1, 1, 0],
@@ -495,7 +546,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ほ",  
+			"rune": "ほ", 
+			"kana": true,
 			"strokes": [
 			[
 				[667, 0.156, 0.146, 1, 1, 0],
@@ -505,7 +557,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぼ",  
+			"rune": "ぼ",
+			"kana": true,
 			"strokes": [
 			[
 				[667, 0.156, 0.146, 1, 1, 0],
@@ -517,7 +570,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ぽ",  
+			"rune": "ぽ",
+			"kana": true,
 			"strokes": [
 			[
 				[667, 0.156, 0.146, 1, 1, 0],
@@ -528,7 +582,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ま",  
+			"rune": "ま",
+			"kana": true,
 			"strokes": [
 			[
 				[671, 0.198, 0.224, 1, 1, 0],
@@ -537,7 +592,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "み",  
+			"rune": "み",
+			"kana": true,
 			"strokes": [
 			[
 				[674, 0.128, 0.16, 1, 1, 0],
@@ -545,7 +601,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "む",  
+			"rune": "む",
+			"kana": true,
 			"strokes": [
 			[
 				[676, 0.16, 0.272, 1, 1, 0],
@@ -554,7 +611,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": め",  
+			"rune": め",
+			"kana": true,			
 			"strokes": [
 			[
 				[679, 0.224, 0.246, 1, 1, 0],
@@ -562,7 +620,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": も",  
+			"rune": も",
+			"kana": true,
 			"strokes": [
 			[
 				[681, 0.258, 0.264, 1, 1, 0],
@@ -571,7 +630,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "や",  
+			"rune": "や",
+			"kana": true,
 			"strokes": [
 			[
 				[684, 0.104, 0.3, 1, 1, 0],
@@ -580,7 +640,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ゆ",  
+			"rune": "ゆ",
+			"kana": true,
 			"strokes": [
 			[
 				[687, 0.166, 0.228, 1, 1, 0],
@@ -588,7 +649,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "よ",  
+			"rune": "よ",
+			"kana": true,
 			"strokes": [
 			[
 				[689, 0.528, 0.302, 1, 1, 0],
@@ -596,7 +658,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ら",  
+			"rune": "ら",
+			"kana": true,
 			"strokes": [
 			[
 				[691, 0.382, 0.086, 1, 1, 0],
@@ -604,7 +667,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "り",  
+			"rune": "り",
+			"kana": true,
 			"strokes": [
 			[
 				[693, 0.32, 0.104, 1, 1, 0],
@@ -612,14 +676,16 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "る",  
+			"rune": "る",
+			"kana": true,
 			"strokes": [
 			[
 				[695, 0.228, 0.156, 1, 1, 0]
 		]
 	}, {
 		"lang": "ja",
-			"rune": "れ",  
+			"rune": "れ",
+			"kana": true,
 			"strokes": [
 			[
 				[696, 0.288, 0.126, 1, 1, 0],
@@ -627,14 +693,16 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ろ",  
+			"rune": "ろ",
+			"kana": true,
 			"strokes": [
 			[
 				[698, 0.208, 0.146, 1, 1, 0]
 		]
 	}, {
 		"lang": "ja",
-			"rune": "わ",  
+			"rune": "わ",
+			"kana": true,
 			"strokes": [
 			[
 				[699, 0.288, 0.128, 1, 1, 0],
@@ -642,21 +710,24 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ゐ",  
+			"rune": "ゐ",
+			"kana": true,
 			"strokes": [
 			[
 				[701, 0.164, 0.176, 1, 1, 0]
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ゑ",  
+			"rune": "ゑ",
+			"kana": true,
 			"strokes": [
 			[
 				[702, 0.146, 0.134, 1, 1, 0]
 		]
 	}, {
 		"lang": "ja",
-			"rune": "を",  
+			"rune": "を",
+			"kana": true,
 			"strokes": [
 			[
 				[703, 0.234, 0.228, 1, 1, 0],
@@ -665,7 +736,8 @@ define(function() {
 		]
 	}, {
 		"lang": "ja",
-			"rune": "ん",  
+			"rune": "ん", 
+			"kana": true,
 			"strokes": [
 			[
 				[708, 0.168, 0.136, 1, 1, 0]
