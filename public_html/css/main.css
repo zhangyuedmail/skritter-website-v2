@@ -187,16 +187,11 @@ body { background: url('../img/background/ricepaper1.png') repeat; }
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.modal-container .modal-title-icon {
-    float: left;
-    margin: 10.5px;
-}
 .modal-container .progress-bar { position: relative; }
 .modal-container .modal-progress-value { 
     position: absolute;
     top: -2.5px;
 }
-.modal-container .message { clear: both; }
 
 
 /*** NAVBAR ***/

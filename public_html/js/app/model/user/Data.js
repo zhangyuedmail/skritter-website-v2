@@ -391,8 +391,7 @@ define([
                                     var responseSizeTotal = skritter.fn.addAll(result.Requests, 'responseSize');
                                     var responseSizeString = skritter.fn.convertBytesToSize(responseSizeTotal);
                                     if (responseSizeTotal && responseSizeString) {
-                                        skritter.modal.set('.preparing .message', 'Preparing Download')
-                                            .set('.preparing .message-value', responseSizeString);
+                                        skritter.modal.set('.modal-title-secondary', responseSizeString);
                                     }
                                     window.setTimeout(request, 2000);
                                 }
@@ -412,8 +411,8 @@ define([
                     var retryCount = 0;
                     var downloadedRequests = 0;
                     var totalRequests = batch.totalRequests;
-                    skritter.modal.set('.preparing', false)
-                        .set('.modal-title', 'Downloading')
+                    skritter.modal.set('.modal-title', 'Downloading')
+                        .set('.modal-loading-image', false)
                         .set('.modal-title-icon', null, 'fa-download')
                         .set('.modal-body')
                         .progress(0);
