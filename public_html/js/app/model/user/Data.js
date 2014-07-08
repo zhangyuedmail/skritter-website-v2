@@ -17,7 +17,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            UserData.syncing = false;
             this.decomps = new Decomps();
             this.items = new Items();
             this.params = new Params();
@@ -38,24 +37,24 @@ define([
             lastItemSync: 0,
             lastReviewSync: 0,
             lastSRSConfigSync: 0,
-            lastVocabSync: 0
+            lastVocabSync: 0,
+            syncing: false
         },
         /**
          * @method cache
          */
         cache: function() {
-            localStorage.setItem(skritter.user.id + '-data', JSON.stringify(this.toJSON()));
+            var data = this.toJSON();
+            data.syncing = false;
+            localStorage.setItem(skritter.user.id + '-data', JSON.stringify(data));
         },
         /**
          * @method downloadAll
          * @param {Function} callback
          */
         downloadAll: function(callback) {
-
-            UserData.syncing = true;
-            this.trigger('status', true);
+            this.set('syncing', true);
             var now = skritter.fn.getUnixTime();
-
             async.waterfall([
                 function(callback) {
                     skritter.user.data.processBatch([
@@ -100,6 +99,9 @@ define([
                     ], callback);
                 },
                 function(callback) {
+                    skritter.user.data.vocablists.loadAll(callback);
+                },
+                function(callback) {
                     skritter.user.scheduler.clear().loadAll(callback);
                 }
             ], _.bind(function() {
@@ -111,8 +113,7 @@ define([
                     lastSRSConfigSync: now,
                     lastVocabSync: now
                 });
-                UserData.syncing = false;
-                this.trigger('status', false);
+                this.set('syncing', false);
                 callback();
             }, this));
         },

@@ -119,7 +119,7 @@ define([
                     skritter.modal.show('download')
                         .set('.modal-body', false)
                         .set('.preparing .message', 'Preparing Download')
-                        .set('.preparing .message-value', '0 KB');
+                        .set('.preparing .message-value', '0.0 B');
                     skritter.user.data.downloadAll(function() {
                         skritter.modal.hide();
                     });

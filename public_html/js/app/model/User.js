@@ -337,6 +337,7 @@ define([
                 ], function() {
                     localStorage.removeItem('active');
                     localStorage.removeItem(skritter.user.id);
+                    localStorage.removeItem(skritter.user.id + '-data');
                     localStorage.removeItem(skritter.user.id + '-scheduler');
                     localStorage.removeItem(skritter.user.id + '-subscription');
                     localStorage.removeItem(skritter.user.id + '-sync');
