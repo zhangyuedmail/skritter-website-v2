@@ -115,12 +115,12 @@ define([
                 //load daily timer prog stats in background
                 skritter.timer.refresh(true);
                 //checks if user has downloaded account
-                if (skritter.user.sync.isInitial()) {
+                if (skritter.user.data.isInitial()) {
                     skritter.modal.show('download')
                         .set('.modal-body', false)
                         .set('.preparing .message', 'Preparing Download')
                         .set('.preparing .message-value', '0 KB');
-                    skritter.user.sync.downloadAll(function() {
+                    skritter.user.data.downloadAll(function() {
                         skritter.modal.hide();
                     });
                 } else {

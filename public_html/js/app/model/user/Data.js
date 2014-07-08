@@ -12,11 +12,12 @@ define([
     /**
      * @class UserData
      */
-    var Model = Backbone.Model.extend({
+    var UserData = Backbone.Model.extend({
         /**
          * @method initialize
          */
         initialize: function() {
+            UserData.syncing = false;
             this.decomps = new Decomps();
             this.items = new Items();
             this.params = new Params();
@@ -26,17 +27,101 @@ define([
             this.strokes = new Strokes();
             this.vocablists = new VocabLists();
             this.vocabs = new Vocabs();
+            this.on('change', _.bind(this.cache, this));
         },
         /**
          * @property {Object} defaults
          */
         defaults: {
+            downloadBatchId: null,
+            lastErrorCheck: 0,
+            lastItemSync: 0,
+            lastReviewSync: 0,
+            lastSRSConfigSync: 0,
+            lastVocabSync: 0
         },
         /**
          * @method cache
          */
         cache: function() {
             localStorage.setItem(skritter.user.id + '-data', JSON.stringify(this.toJSON()));
+        },
+        /**
+         * @method downloadAll
+         * @param {Function} callback
+         */
+        downloadAll: function(callback) {
+
+            UserData.syncing = true;
+            this.trigger('status', true);
+            var now = skritter.fn.getUnixTime();
+
+            async.waterfall([
+                function(callback) {
+                    skritter.user.data.processBatch([
+                        {
+                            path: 'api/v' + skritter.api.version + '/items',
+                            method: 'GET',
+                            params: {
+                                lang: skritter.user.getLanguageCode(),
+                                sort: 'changed',
+                                offset: 0,
+                                include_vocabs: 'true',
+                                include_strokes: 'true',
+                                include_heisigs: 'true',
+                                include_top_mnemonics: 'true',
+                                include_decomps: 'true'
+                            },
+                            spawner: true
+                        },
+                        {
+                            path: 'api/v' + skritter.api.version + '/srsconfigs',
+                            method: 'GET',
+                            params: {lang: skritter.user.getLanguageCode()}
+                        },
+                        {
+                            path: 'api/v' + skritter.api.version + '/vocablists',
+                            method: 'GET',
+                            params: {
+                                lang: skritter.user.getLanguageCode(),
+                                sort: 'custom'
+                            },
+                            spawner: true
+                        },
+                        {
+                            path: 'api/v' + skritter.api.version + '/vocablists',
+                            method: 'GET',
+                            params: {
+                                lang: skritter.user.getLanguageCode(),
+                                sort: 'studying'
+                            },
+                            spawner: true
+                        }
+                    ], callback);
+                },
+                function(callback) {
+                    skritter.user.scheduler.clear().loadAll(callback);
+                }
+            ], _.bind(function() {
+                skritter.user.data.set({
+                    downloadBatchId: null,
+                    lastErrorCheck: now,
+                    lastItemSync: now,
+                    lastReviewSync: now,
+                    lastSRSConfigSync: now,
+                    lastVocabSync: now
+                });
+                UserData.syncing = false;
+                this.trigger('status', false);
+                callback();
+            }, this));
+        },
+        /**
+         * @method isInitial
+         * @return {Boolean}
+         */
+        isInitial: function() {
+            return this.get('lastItemSync') === 0 ? true : false;
         },
         /**
          * @method loadAll
@@ -263,6 +348,107 @@ define([
             });
         },
         /**
+         * @method processBatch
+         * @param {Array} requests
+         * @param {Function} callback
+         */
+        processBatch: function(requests, callback) {
+            async.waterfall([
+                function(callback) {
+                    var retryCount = 0;
+                    function request() {
+                        skritter.api.requestBatch(requests, function(batch, status) {
+                            if (status === 200) {
+                                skritter.user.data.set('downloadBatchId', batch.id);
+                                callback(null, batch);
+                            } else {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
+                            }
+                        });
+
+                    }
+                    if (skritter.user.data.get('downloadBatchId')) {
+                        callback(null, {id: skritter.user.data.get('downloadBatchId')});
+                    } else {
+                        request();
+                    }
+                },
+                function(batch, callback) {
+                    var retryCount = 0;
+                    function request() {
+                        skritter.api.checkBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                if (result.totalRequests > 0 && result.runningRequests === 0) {
+                                    callback(null, result);
+                                } else {
+                                    var responseSizeTotal = skritter.fn.addAll(result.Requests, 'responseSize');
+                                    var responseSizeString = skritter.fn.convertBytesToSize(responseSizeTotal);
+                                    if (responseSizeTotal && responseSizeString) {
+                                        skritter.modal.set('.preparing .message', 'Preparing Download')
+                                            .set('.preparing .message-value', responseSizeString);
+                                    }
+                                    window.setTimeout(request, 2000);
+                                }
+                            } else {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
+                            }
+                        });
+                    }
+                    request();
+                },
+                function(batch, callback) {
+                    var retryCount = 0;
+                    var downloadedRequests = 0;
+                    var totalRequests = batch.totalRequests;
+                    skritter.modal.set('.preparing', false)
+                        .set('.modal-title', 'Downloading')
+                        .set('.modal-title-icon', null, 'fa-download')
+                        .set('.modal-body')
+                        .progress(0);
+                    function request() {
+                        skritter.api.getBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                downloadedRequests += result.downloadedRequests;
+                                skritter.user.data.put(result, function() {
+                                    var downloadPercent = Math.round((downloadedRequests / totalRequests) * 100);
+                                    skritter.modal.set('.modal-sub-title', downloadPercent + '%');
+                                    skritter.modal.progress(downloadPercent);
+                                    window.setTimeout(request, 500);
+                                });
+                            } else if (!result && status === 200) {
+                                callback(null, batch);
+                            } else {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
+                            }
+                        });
+                    }
+                    request();
+                }
+            ], function(error) {
+                if (error) {
+                    //TODO: handle batch processing errors
+                } else {
+
+                    callback();
+                }
+            });
+        },
+        /**
          * @method put
          * @param {Object} result
          * @param {Function} callback
@@ -310,5 +496,5 @@ define([
         }
     });
 
-    return Model;
+    return UserData;
 });

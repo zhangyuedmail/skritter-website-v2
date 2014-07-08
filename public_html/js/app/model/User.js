@@ -2,13 +2,12 @@ define([
     'model/user/Data',
     'model/user/Scheduler',
     'model/user/Settings',
-    'model/user/Subscription',
-    'model/user/Sync'
-], function(Data, Scheduler, Settings, Subscription, Sync) {
+    'model/user/Subscription'
+], function(Data, Scheduler, Settings, Subscription) {
     /**
      * @class User
      */
-    var Model = Backbone.Model.extend({
+    var User = Backbone.Model.extend({
         /**
          * @method initialize
          */
@@ -17,25 +16,21 @@ define([
             this.scheduler = new Scheduler();
             this.settings = new Settings();
             this.subscription = new Subscription();
-            this.sync = new Sync();
-            //loads models for authenticated active user
             if (window.localStorage.getItem('active')) {
                 var userId = window.localStorage.getItem('active');
                 this.set(JSON.parse(window.localStorage.getItem(userId)), {silent: true});
                 skritter.api.set('token', this.get('access_token'), {silent: true});
+                if (window.localStorage.getItem(userId + '-data')) {
+                    this.data.set(JSON.parse(window.localStorage.getItem(userId + '-data')), {silent: true});
+                }
                 if (window.localStorage.getItem(userId + '-settings')) {
                     this.settings.set(JSON.parse(window.localStorage.getItem(userId + '-settings')), {silent: true});
                 }
                 if (window.localStorage.getItem(userId + '-subscription')) {
                     this.subscription.set(JSON.parse(window.localStorage.getItem(userId + '-subscription')), {silent: true});
                 }
-                if (window.localStorage.getItem(userId + '-sync')) {
-                    this.sync.set(JSON.parse(window.localStorage.getItem(userId + '-sync')), {silent: true});
-                }
             }
-            //set the id identical to the user_id
             this.set('id', this.get('user_id'), {silent: true});
-            //immediately cache user settings on change
             this.on('change', _.bind(this.cache, this));
         },
         /**
@@ -288,13 +283,6 @@ define([
             return this.settings.get('readingStyle') === 'pinyin' ? true : false;
         },
         /**
-         * @method isUsingSentences
-         * @returns {Boolean}
-         */
-        isUsingSentences: function() {
-            return false;
-        },
-        /**
          * @method isUsingZhuyin
          * @returns {Boolean}
          */
@@ -402,5 +390,5 @@ define([
         }
     });
 
-    return Model;
+    return User;
 });
