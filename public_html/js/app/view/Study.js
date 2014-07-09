@@ -174,7 +174,7 @@ define([
                 });
                 var limit = skritter.modal.element('.item-limit').val();
                 if (limit >= 1 && limit <= 20) {
-                    skritter.user.data.items.addItems(function(addCount) {
+                    skritter.user.data.addItems(limit, function(addCount) {
                         if (addCount > 0) {
                             skritter.user.scheduler.sort();
                             $.notify('Added ' + addCount + ' items!', {
@@ -188,7 +188,7 @@ define([
                             });
                         }
                         addItemsButton.removeClass('invisible');
-                    }, limit);
+                    });
                     skritter.modal.hide();
                 } else {
                     addItemsButton.removeClass('invisible');

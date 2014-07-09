@@ -49,6 +49,100 @@ define([
             localStorage.setItem(skritter.user.id + '-data', JSON.stringify(data));
         },
         /**
+         * @method addItems
+         * @param {Number} limit
+         * @param {Function} callback
+         */
+        addItems: function(limit, callback) {
+            var addedItemIds = [];
+            var offset = skritter.user.settings.get('addItemOffset');
+            async.waterfall([
+                function(callback) {
+                    var retryCount = 0;
+                    function request() {
+                        skritter.api.requestBatch([
+                            {
+                                path: 'api/v' + skritter.api.version + '/items/add',
+                                method: 'POST',
+                                params: {
+                                    lang: skritter.user.getLanguageCode(),
+                                    limit: limit ? limit : 1,
+                                    offset: offset,
+                                    fields: 'id'
+                                }
+                            }
+                        ], function(batch, status) {
+                            if (status === 200) {
+                                callback(null, batch);
+                            } else {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
+                            }
+                        });
+                    }
+                    request();
+                },
+                function(batch, callback) {
+                    var retryCount = 0;
+                    function request() {
+                        skritter.api.checkBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                if (result.totalRequests > 0 && result.runningRequests === 0) {
+                                    callback(null, result);
+                                } else {
+                                    window.setTimeout(request, 2000);
+                                }
+                            } else {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
+                            }
+                        });
+                    }
+                    request();
+                },
+                function(batch, callback) {
+                    var retryCount = 0;
+                    function request() {
+                        skritter.api.getBatch(batch.id, function(result, status) {
+                            if (result && status === 200) {
+                                if (result.Items) {
+                                    addedItemIds = addedItemIds.concat(_.pluck(result.Items, 'id'));
+                                }
+                                window.setTimeout(request, 500);
+                            } else if (!result && status === 200) {
+                                callback(null, batch);
+                            } else {
+                                if (retryCount < 5) {
+                                    retryCount++;
+                                    window.setTimeout(request, 2000);
+                                } else {
+                                    callback(batch);
+                                }
+                            }
+                        });
+                    }
+                    request();
+                },
+                function(callback) {
+                    console.log('items: adding', addedItemIds.length);
+                    skritter.user.data.sync(callback, true);
+                }
+            ], _.bind(function() {
+                console.log('items: added', addedItemIds);
+                if (typeof callback === 'function') {
+                    callback(addedItemIds.length);
+                }
+            }, this));
+        },
+        /**
          * @method downloadAll
          * @param {Function} callback
          */
@@ -66,6 +160,7 @@ define([
                                 sort: 'changed',
                                 offset: 0,
                                 include_vocabs: 'true',
+                                include_sentences: 'false',
                                 include_strokes: 'true',
                                 include_heisigs: 'true',
                                 include_top_mnemonics: 'true',
@@ -97,6 +192,9 @@ define([
                             spawner: true
                         }
                     ], callback);
+                },
+                function(callback) {
+                    skritter.user.data.srsconfigs.loadAll(callback);
                 },
                 function(callback) {
                     skritter.user.data.vocablists.loadAll(callback);
@@ -444,7 +542,6 @@ define([
                 if (error) {
                     //TODO: handle batch processing errors
                 } else {
-
                     callback();
                 }
             });
@@ -498,8 +595,9 @@ define([
         /**
          * @method sync
          * @param {Function} callback
+         * @param {Boolean} includeResources
          */
-        sync: function(callback) {
+        sync: function(callback, includeResources) {
             this.set('syncing', true);
             var lastErrorCheck = this.get('lastErrorCheck');
             var lastItemSync = this.get('lastItemSync');
@@ -509,6 +607,9 @@ define([
             var now = skritter.fn.getUnixTime();
             console.log('syncing: started at', skritter.fn.getDateTime(now * 1000));
             async.waterfall([
+                function(callback) {
+                    callback();
+                },
                 function(callback) {
                     console.log('syncing: items');
                     skritter.api.getItemByOffset(lastItemSync, function(result, status) {
@@ -522,6 +623,13 @@ define([
                         } else {
                             callback(result);
                         }
+                    }, {
+                        includeVocabs: includeResources,
+                        includeSentences: false,
+                        includeStrokes: includeResources,
+                        includeHeisigs: includeResources,
+                        includeTopMnemonics: includeResources,
+                        includeDecomps: includeResources
                     });
                 },
                 function(callback) {
