@@ -160,11 +160,13 @@ define([
         ], function() {
             console.log('application initialized');
             skritter.router = new Router();
-            if (skritter.user.isLoggedIn()) {
-                skritter.user.data.sync();
-            }
             if (skritter.fn.hasCordova()) {
                 navigator.splashscreen.hide();
+            }
+            if (skritter.user.isLoggedIn()) {
+                if (!skritter.user.data.isInitial()) {
+                    skritter.user.data.sync();
+                }
             }
         });
     };

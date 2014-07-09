@@ -32,8 +32,6 @@ define([
             if (!skritter.user.data.get('syncing') &&
                 collection.length > skritter.user.settings.get('autoSyncThreshold')) {
                 skritter.user.data.sync();
-            } else {
-                console.log('no auto');
             }
         },
         /**
