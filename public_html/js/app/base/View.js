@@ -19,6 +19,7 @@ define([
             this.loadElements();
             if (this.elements.sidebar) {
                 this.elements.sidebar.html(templateSidebar);
+                this.elements.sidebar.find('.app-version').text(skritter.getVersion());
             }
             if (this.elements.fontPreloader) {
                 this.preloadFont();
