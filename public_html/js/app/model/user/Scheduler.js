@@ -97,11 +97,12 @@ define([], function() {
                 var item = data[position];
                 if (!item) {
                     item = data[0];
-                }
-                if (skritter.user.scheduler.checkHistory(item)) {
-                    position++;
-                    next();
-                    return false;
+                } else {
+                    if (skritter.user.scheduler.checkHistory(item)) {
+                        position++;
+                        next();
+                        return false;
+                    }
                 }
                 skritter.user.data.loadItem(item.id, function(item) {
                     if (item) {
