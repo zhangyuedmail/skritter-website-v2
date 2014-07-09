@@ -215,11 +215,11 @@ define([], function() {
                         cursor: cursor,
                         offset: offset,
                         fields: options.fields,
-                        include_vocabs: options.includeVocabs,
-                        include_strokes: options.includeStrokes,
-                        include_sentences: options.includeSentences,
-                        include_heisigs: options.includeHeisigs,
-                        include_top_mnemonics: options.includeTopMnemonics,
+                        include_vocabs: options.includeVocabs ? 'true' : undefined,
+                        include_strokes: options.includeStrokes ? 'true' : undefined,
+                        include_sentences: options.includeSentences ? 'true' : undefined,
+                        include_heisigs: options.includeHeisigs ? 'true' : undefined,
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : undefined,
                         include_decomps: options.includeDecomps
                     }
                 }).done(function(data) {
@@ -262,11 +262,11 @@ define([], function() {
                         bearer_token: self.get('token'),
                         ids: batch.join('|'),
                         fields: options.fields,
-                        include_vocabs: options.includeVocabs,
-                        include_strokes: options.includeStrokes,
-                        include_sentences: options.includeSentences,
-                        include_heisigs: options.includeHeisigs,
-                        include_top_mnemonics: options.includeTopMnemonics,
+                        include_vocabs: options.includeVocabs ? 'true' : undefined,
+                        include_strokes: options.includeStrokes ? 'true' : undefined,
+                        include_sentences: options.includeSentences ? 'true' : undefined,
+                        include_heisigs: options.includeHeisigs ? 'true' : undefined,
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : undefined,
                         include_decomps: options.includeDecomps
                     }
                 }).done(function(data) {
