@@ -7,218 +7,168 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            UserScheduler.minIncrease = 10 * 60;
-            UserScheduler.maxIncrease = 12 * 60 * 60;
-            this.data = [];
-            this.review = null;
+            this.running = false;
+            this.worker = null;
             if (Modernizr.webworkers) {
-                this.sortWorker = new Worker('js/app/worker/SortSchedule.js');
-                this.sortWorker.addEventListener('message', _.bind(this.handleSortWorkerFinished, this), false);
-            } else {
-                this.sortWorker = null;
+                this.worker = new Worker('js/app/worker/SortSchedule.js');
+                this.worker.addEventListener('message', _.bind(this.handleWorkerFinished, this), false);
             }
         },
         /**
          * @property {Object} defaults
          */
         defaults: {
+            data: [],
             history: [],
-            spacedItems: []
+            insert: [],
+            remove: []
         },
         /**
-         * @method cache
+         * @method addHistory
+         * @param {Array|Object} items
+         * @returns {UserScheduler}
          */
-        cache: function() {
-            localStorage.setItem(skritter.user.id + '-scheduler', JSON.stringify(this.toJSON()));
-        },
-
-        /**
-         * @method clear
-         * @returns {Backbone.Model}
-         */
-        clear: function() {
-            this.data = [];
-            this.set({
-                history: [],
-                spacedItems: []
-            });
+        addHistory: function(items) {
+            items = Array.isArray(items) ? items : [items];
+            var now = skritter.fn.getUnixTime();
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                var itemBaseWriting = item.id.split('-')[2];
+                var historyItem = _.findIndex(this.get('history'), {baseWriting: itemBaseWriting});
+                if (historyItem === -1) {
+                    this.get('history').push({
+                        baseWriting: itemBaseWriting,
+                        heldUntil: now + 600
+                    });
+                }
+            }
             return this;
         },
-
         /**
-         * @method calculateInterval
-         * @param {Backbone.Model} item
-         * @param {Number} score
-         * @returns {Number}
+         * @method checkHistory
+         * @param {Object} item
+         * @returns {Boolean}
          */
-        calculateInterval: function(item, score) {
-            var config = skritter.user.data.srsconfigs.get(item.get('part'));
-            var newInterval;
-            //return new items with randomized default config values
-            if (!item.has('last')) {
-                switch (score) {
-                    case 1:
-                        newInterval = config.get('initialWrongInterval');
-                        break;
-                    case 2:
-                        newInterval = config.get('initialRightInterval') / 5;
-                        break;
-                    case 3:
-                        newInterval = config.get('initialRightInterval');
-                        break;
-                    case 4:
-                        newInterval = config.get('initialRightInterval') * 4;
-                        break;
-                }
-                return skritter.fn.randomInterval(newInterval);
+        checkHistory: function(item) {
+            var historyItem = _.find(this.get('history'), {baseWriting: item.id.split('-')[2]});
+            var now = skritter.fn.getUnixTime();
+            if (historyItem && historyItem.heldUntil > now) {
+                return true;
+            } else if (historyItem) {
+                this.removeHistory(historyItem);
             }
-            //set values for further calculations
-            var actualInterval = skritter.fn.getUnixTime() - item.get('last');
-            var factor;
-            var pctRight = item.get('successes') / item.get('reviews');
-            var scheduledInterval = item.get('next') - item.get('last');
-            //get the factor 
-            if (score === 2) {
-                factor = 0.9;
-            } else if (score === 4) {
-                factor = 3.5;
-            } else {
-                var factorsList = (score === 1) ? config.get('wrongFactors') : config.get('rightFactors');
-                var divisions = [2, 1200, 18000, 691200];
-                var index;
-                for (var i in divisions) {
-                    if (item.get('interval') > divisions[i]) {
-                        index = i;
-                    }
-                }
-                factor = factorsList[index];
-            }
-            //adjust the factor based on readiness
-            if (score > 2) {
-                factor -= 1;
-                factor *= actualInterval / scheduledInterval;
-                factor += 1;
-            }
-            //accelerate new items that appear to be known
-            if (item.get('successes') === item.get('reviews') && item.get('reviews') < 5) {
-                factor *= 1.5;
-            }
-            //decelerate hard items consistently marked wrong
-            if (item.get('reviews') > 8) {
-                if (pctRight < 0.5) {
-                    factor *= Math.pow(pctRight, 0.7);
-                }
-            }
-            //multiple by the factor and randomize the interval
-            newInterval = skritter.fn.randomInterval(item.get('interval') * factor);
-            //bound the interval
-            if (score === 1) {
-                if (newInterval > 604800) {
-                    newInterval = 604800;
-                } else if (newInterval < 30) {
-                    newInterval = 30;
-                }
-            } else {
-                if (newInterval > 315569260) {
-                    newInterval = 315569260;
-                } else if (score === 2 && newInterval < 300) {
-                    newInterval = 300;
-                } else if (newInterval < 30) {
-                    newInterval = 30;
-                }
-            }
-            return newInterval;
+            return false;
+        },
+        /**
+         * @method clear
+         * @returns {UserScheduler}
+         */
+        clear: function() {
+            this.set('data', []);
+            return this;
         },
         /**
          * @method getDue
-         * @param {Boolean} sort
          * @returns {Array}
          */
-        getDue: function(sort) {
-            if (sort) {
-                this.sort();
-            }
-            return this.data.filter(function(item) {
-                return item.readiness >= 1;
+        getDue: function() {
+            return this.get('data').filter(function(item) {
+                return item.readiness >= 1.0;
             });
         },
         /**
          * @method getDueCount
-         * @param {Boolean} sort
          * @returns {Number}
          */
-        getDueCount: function(sort) {
-            return this.getDue(sort).length;
+        getDueCount: function() {
+            return this.getDue().length;
         },
         /**
          * @method getNext
          * @param {Function} callback
          */
         getNext: function(callback) {
-            var data = this.data;
-            var history = this.get('history');
+            var data = this.get('data');
             var position = 0;
+            if (data.length === 0) {
+                return false;
+            }
             function next() {
                 var item = data[position];
-                //if no item try and get the first
                 if (!item) {
                     item = data[0];
-                    return false;
-                }
-                //temporarily ban items from recent history
-                if (history.indexOf(item.id.split('-')[2]) !== -1) {
-                    position++;
-                    next();
-                    return false;
-                }
-                //attempt to load item and related resources
-                skritter.user.data.loadItem(item.id, function(item) {
-                    if (item) {
-                        callback(item);
-                        return true;
-                    } else {
+                } else {
+                    if (skritter.user.scheduler.checkHistory(item)) {
                         position++;
                         next();
                         return false;
                     }
+                }
+                skritter.user.data.loadItem(item.id, function(item) {
+                    if (item) {
+                        callback(item);
+                    } else {
+                        position++;
+                        next();
+                    }
                 });
             }
-            //check if scheduler items exist
-            if (data.length > 0) {
-                next();
-            } else {
-                callback();
-            }
+            next();
         },
         /**
-         * @method handleSortWorkerFinished
+         * @method handleWorkerFinished
          * @param {Object} event
          */
-        handleSortWorkerFinished: function(event) {
-            this.data = event.data.schedule;
-            this.set('spacedItems', event.data.spacedItems);
-            this.trigger('sorted', this.data);
+        handleWorkerFinished: function(event) {
+            var data = event.data;
+            this.set('data', data);
+            this.running = false;
+            this.trigger('sorted', data);
             event.preventDefault();
         },
         /**
-         * @method insert
+         * @method hasData
+         * @returns {Boolean}
+         */
+        hasData: function() {
+            return this.get('data').length > 0;
+        },
+        /**
+         * @method update
          * @param {Array|Object} items
-         * @returns {Backbone.Model}
+         * @returns {UserScheduler}
          */
         insert: function(items) {
             items = Array.isArray(items) ? items : [items];
-            var spacedItems = this.get('spacedItems');
-            for (var i = 0, length = items.length; i < length; i++) {
-                var item = items[i];
-                var position = _.findIndex(this.data, {id: item.id});
-                //remove local spacing in favor of server data
-                var spacingIndex = _.findIndex(spacedItems, {id: item.id});
-                if (spacingIndex !== -1) {
-                    spacedItems.splice(spacingIndex, 1);
+            this.set('insert', this.get('insert').concat(items));
+            return this;
+        },
+        /**
+         * @method loadAll
+         * @param {Function} callback
+         */
+        loadAll: function(callback) {
+            skritter.storage.getSchedule(_.bind(function(data) {
+                this.set('data', data);
+                this.trigger('loaded', data);
+                this.sort(true);
+                if (typeof callback === 'function') {
+                    callback();
                 }
-                //update or insert item into scheduler data
-                if (position === -1 && item.vocabIds.length > 0) {
-                    this.data.push({
+            }, this));
+        },
+        /**
+         * @method mergeUpdates
+         */
+        mergeUpdates: function() {
+            //merge inserts
+            for (var i = 0, length = this.get('insert').length; i < length; i++) {
+                var item = this.get('insert')[i];
+                var itemPosition = _.findIndex(this.get('data'), {id: item.id});
+                if (item.vocabIds.length === 0) {
+                    continue;
+                } else if (itemPosition === -1) {
+                    this.get('data').push({
                         id: item.id,
                         last: item.last ? item.last : 0,
                         next: item.next ? item.next : 0,
@@ -226,7 +176,7 @@ define([], function() {
                         style: item.style
                     });
                 } else {
-                    this.data[position] = {
+                    this.get('data')[itemPosition] = {
                         id: item.id,
                         last: item.last ? item.last : 0,
                         next: item.next ? item.next : 0,
@@ -235,147 +185,108 @@ define([], function() {
                     };
                 }
             }
-            return this;
-        },
-        /**
-         * @method loadAll
-         * @param {Function} callback
-         */
-        loadAll: function(callback) {
-            skritter.storage.getSchedule(_.bind(function(schedule) {
-                this.data = schedule;
-                this.sort();
-                callback();
-            }, this));
-        },
-        /**
-         * @method sort
-         * @param {Boolean} useWorker
-         * @returns {Array}
-         */
-        sort: function(useWorker) {
-            var activeParts = skritter.user.getActiveParts();
-            var activeStyles = skritter.user.getActiveStyles();
-            var now = skritter.fn.getUnixTime();
-            var randomizer = skritter.fn.randomInterval;
-            var spacedItems = this.get('spacedItems');
-            if (useWorker && this.sortWorker) {
-                this.sortWorker.postMessage({
-                    activeParts: skritter.user.getActiveParts(),
-                    activeStyles: skritter.user.getActiveStyles(),
-                    now: skritter.fn.getUnixTime(),
-                    schedule: this.data,
-                    spacedItems: this.get('spacedItems')
-                });
-            } else {
-                this.data = _.sortBy(this.data, function(item) {
-                    var seenAgo = now - item.last;
-                    var rtd = item.next - item.last;
-                    var readiness = seenAgo / rtd;
-                    //filter out inactive parts and styles
-                    if (activeParts.indexOf(item.part) === -1 ||
-                        activeStyles.indexOf(item.style) === -1) {
-                        item.readiness = 0;
-                        return -item.readiness;
-                    }
-                    //deprioritize items currently being spaced
-                    var spacedItemIndex = _.findIndex(spacedItems, {id: item.id});
-                    if (spacedItemIndex !== -1) {
-                        var spacedItem = spacedItems[spacedItemIndex];
-                        if (spacedItem.until > now) {
-                            item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
-                            return -item.readiness;
-                        } else {
-                            spacedItems.splice(spacedItemIndex, 1);
-                        }
-                    }
-                    //randomly deprioritize new spaced items
-                    if (!item.last && item.next - now > 600) {
-                        item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
-                        return -item.readiness;
-                    }
-                    //randomly prioritize new items
-                    if (!item.last || item.next - item.last === 1) {
-                        item.readiness = randomizer(9999);
-                        return -item.readiness;
-                    }
-                    //deprioritize overdue items
-                    if (readiness > 9999) {
-                        item.readiness = randomizer(9999);
-                        return -item.readiness;
-                    }
-                    item.readiness = readiness;
-                    return -item.readiness;
-                });
-                this.trigger('sorted', this.data);
+            //merge deletes
+            for (var i = 0, length = this.get('remove').length; i < length; i++) {
+                var item = this.get('remove')[i];
+                var itemPosition = _.findIndex(this.get('data'), {id: item.id});
+                this.get('data').splice(itemPosition, 1);
             }
-            return this.data;
-        },
-        /**
-         * @method spaceRelatedItems
-         * @param {Backbone.Model} item
-         */
-        spaceRelatedItems: function(item) {
-            var baseWriting = item.id.split('-')[2];
-            var basePart = item.get('part');
-            var now = skritter.fn.getUnixTime();
-            var spacedItems = this.get('spacedItems');
-            for (var i = 0, length = this.data.length; i < length; i++) {
-                var dataItem = this.data[i];
-                var dataRTD = dataItem.next - dataItem.last;
-                var dataWriting = dataItem.id.split('-')[2];
-                if (dataWriting === baseWriting && dataItem.part !== basePart) {
-                    var spacedItem = _.find(spacedItems, {id: dataItem.id});
-                    if (!spacedItem) {
-                        var increase = dataItem.last === 0 ? UserScheduler.maxIncrease : dataRTD * 0.2;
-                        var next = Math.round(now + Math.max(UserScheduler.minIncrease, increase));
-                        if (next > UserScheduler.maxIncrease) {
-                            next = UserScheduler.maxIncrease;
-                        } else if (next < UserScheduler.minIncrease) {
-                            next = UserScheduler.minIncrease;
-                        }
-                        spacedItems.push({id: dataItem.id, until: now + next});
-                    }
-                }
-            }
+            //clear updates
+            this.set({insert: [], remove: []});
         },
         /**
          * @method remove
-         * @param {String} itemId
-         * @returns {Object}
+         * @param {Array|Object} items
+         * @returns {UserScheduler}
          */
-        remove: function(itemId) {
-            var position = _.findIndex(this.data, {id: itemId});
-            if (position > -1) {
-                return this.data.splice(position, 1);
+        remove: function(items) {
+            items = Array.isArray(items) ? items : [items];
+            this.set('remove', this.get('remove').concat(items));
+            return this;
+        },
+        /**
+         * @method removeHistory
+         * @param {String} baseWriting
+         * @returns {UserScheduler}
+         */
+        removeHistory: function(baseWriting) {
+            var historyPosition = _.findIndex(this.get('history'), {baseWriting: baseWriting});
+            if (historyPosition !== -1) {
+                this.get('history').splice(historyPosition, 1);
             }
-            return null;
+            return this;
+        },
+        /**
+         * @method sort
+         * @param {Boolean} forceSync
+         */
+        sort: function(forceSync) {
+            this.running = true;
+            this.mergeUpdates();
+            if (!forceSync && this.worker) {
+                this.sortAsync();
+            } else {
+                this.sortSync();
+            }
+        },
+        /**
+         * @method sortAsync
+         */
+        sortAsync: function() {
+            this.worker.postMessage({
+                activeParts: skritter.user.getActiveParts(),
+                activeStyles: skritter.user.getActiveStyles(),
+                data: this.get('data')
+            });
+        },
+        /**
+         * @method sortSync
+         */
+        sortSync: function() {
+            var activeParts = skritter.user.getActiveParts();
+            var activeStyles = skritter.user.getActiveStyles();
+            var now = skritter.fn.getUnixTime();
+            var data = _.sortBy(this.get('data'), function(item) {
+                var seenAgo = now - item.last;
+                var rtd = item.next - item.last;
+                var readiness = seenAgo / rtd;
+                //filter out inactive parts and styles
+                if (activeParts.indexOf(item.part) === -1 ||
+                    activeStyles.indexOf(item.style) === -1) {
+                    item.readiness = 0;
+                    return -item.readiness;
+                }
+                //randomly deprioritize new spaced items
+                if (!item.last && item.next - now > 600) {
+                    item.readiness = skritter.fn.randomDecimal(0.1, 0.3);
+                    return -item.readiness;
+                }
+                //randomly prioritize new items
+                if (!item.last || item.next - item.last === 1) {
+                    item.readiness = skritter.fn.randomInterval(9999);
+                    return -item.readiness;
+                }
+                //deprioritize overdue items
+                if (readiness > 9999) {
+                    item.readiness = skritter.fn.randomInterval(9999);
+                    return -item.readiness;
+                }
+                item.readiness = readiness;
+                return -item.readiness;
+            });
+            this.running = false;
+            this.set('data', data);
+            this.trigger('sorted', data);
         },
         /**
          * @method update
-         * @param {Backbone.Model} item
-         * @param {Boolean} space
+         * @param {Array|Object} items
+         * @returns {UserScheduler}
          */
-        update: function(item, space) {
-            var history = this.get('history');
-            var position = _.findIndex(this.data, {id: item.id});
-            //add and pop item from recent history
-            history.unshift(item.id.split('-')[2]);
-            if (history.length >= 4) {
-               history.pop();
-            }
-            //add related item spacing
-            if (space) {
-                this.spaceRelatedItems(item);
-            }
-            //update scheduler item directory
-            this.data[position] = {
-                id: item.id,
-                last: item.get('last'),
-                next: item.get('next'),
-                part: item.get('part'),
-                style: item.get('style')
-            };
+        update: function(items) {
+            this.addHistory(items);
+            this.insert(items);
+            return this;
         }
     });
 

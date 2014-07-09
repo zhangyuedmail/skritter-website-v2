@@ -17,7 +17,7 @@ define([], function() {
             addItemOffset: 0,
             audio: true,
             autoSync: true,
-            autoSyncThreshold: 10,
+            autoSyncThreshold: 5,
             hideCounter: false,
             hideTimer: false,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],

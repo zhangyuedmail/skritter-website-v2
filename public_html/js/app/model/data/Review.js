@@ -304,6 +304,7 @@ define([
          */
         save: function(callback) {
             var reviews = this.get('reviews');
+            var srsconfigs = skritter.user.data.srsconfigs.get(this.get('part')).toJSON();
             async.series([
                 function(callback) {
                     if (skritter.user.data.srsconfigs.length >= 3) {
@@ -313,7 +314,6 @@ define([
                     }
                 },
                 _.bind(function(callback) {
-                    //updates all of the new review intervals and items
                     for (var i = 0, length = reviews.length; i < length; i++) {
                         var review = reviews[i];
                         var item = skritter.user.data.items.get(review.itemId);
@@ -323,7 +323,7 @@ define([
                             review.score = this.getFinalScore();
                             review.thinkingTime = this.getTotalThinkingTime();
                         }
-                        review.newInterval = skritter.user.scheduler.calculateInterval(item, review.score);
+                        review.newInterval = skritter.fn.calculateInterval(item.toJSON(), review.score, srsconfigs);
                         item.set({
                             changed: review.submitTime,
                             last: review.submitTime,
@@ -335,22 +335,21 @@ define([
                             successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                             timeStudied: item.get('timeStudied') + review.reviewTime
                         });
-                        skritter.user.scheduler.update(item, i === 0);
+                        if (i === 0) {
+                            skritter.user.scheduler.update(item.toJSON());
+                        }
                     }
                     callback();
                 }, this),
                 _.bind(function(callback) {
                     skritter.user.data.reviews.add(this, {merge: true});
-                    callback();
+                    this.cache(callback);
                 }, this),
                 function(callback) {
                     skritter.user.data.items.cache(callback);
-                },
-                _.bind(function(callback) {
-                    skritter.user.scheduler.cache();
-                    this.cache(callback);
-                }, this)
+                }
             ], function() {
+                skritter.user.scheduler.sort();
                 callback();
             });
         },

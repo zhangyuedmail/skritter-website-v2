@@ -9,7 +9,7 @@ define([
     /**
      * @class Study
      */
-    var View = BaseView.extend({
+    var Study = BaseView.extend({
         /**
          * @method initialize
          */
@@ -17,21 +17,21 @@ define([
             BaseView.prototype.initialize.call(this);
             this.prompt = null;
             this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
-            this.listenTo(skritter.user.sync, 'status', _.bind(this.toggleAddButton, this));
+            this.listenTo(skritter.user.data, 'change:syncing', _.bind(this.toggleAddButton, this));
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Study}
          */
         render: function() {
             this.setTitle('Study');
             this.$el.html(_.template(template, skritter.strings));
             BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
-            if (skritter.user.sync.isActive()) {
+            if (skritter.user.data.get('syncing')) {
                 this.toggleAddButton(true);
             }
-            if (skritter.user.scheduler.data.length === 0) {
+            if (!skritter.user.scheduler.hasData()) {
                 this.showAddItemsModal();
                 skritter.router.navigate('', {replace: true, trigger: true});
                 return false;
@@ -53,7 +53,7 @@ define([
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
+         * @returns {Study}
          */
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
@@ -125,9 +125,9 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            skritter.user.scheduler.sort();
+            skritter.timer.reset();
+            skritter.user.data.reset();
             skritter.user.scheduler.getNext(_.bind(function(item) {
-                skritter.timer.reset();
                 this.loadPrompt(item.createReview());
             }, this));
         },
@@ -137,6 +137,7 @@ define([
         previousPrompt: function() {
             var review = skritter.user.data.reviews.at(0);
             if (review) {
+                skritter.user.data.reset();
                 review.load(_.bind(function(review) {
                     this.loadPrompt(review);
                 }, this));
@@ -144,10 +145,11 @@ define([
         },
         /**
          * @method toggleAddButton
-         * @param {Boolean} active
+         * @param {Backbone.Model} model
+         * @param {Boolean} value
          */
-        toggleAddButton: function(active) {
-            if (active) {
+        toggleAddButton: function(model, value) {
+            if (value) {
                 this.elements.buttonAdditems.addClass('invisible');
             } else {
                 this.elements.buttonAdditems.removeClass('invisible');
@@ -172,7 +174,7 @@ define([
                 });
                 var limit = skritter.modal.element('.item-limit').val();
                 if (limit >= 1 && limit <= 20) {
-                    skritter.user.data.items.addItems(function(addCount) {
+                    skritter.user.data.addItems(limit, function(addCount) {
                         if (addCount > 0) {
                             skritter.user.scheduler.sort();
                             $.notify('Added ' + addCount + ' items!', {
@@ -186,7 +188,7 @@ define([
                             });
                         }
                         addItemsButton.removeClass('invisible');
-                    }, limit);
+                    });
                     skritter.modal.hide();
                 } else {
                     addItemsButton.removeClass('invisible');
@@ -205,5 +207,5 @@ define([
         }
     });
 
-    return View;
+    return Study;
 });

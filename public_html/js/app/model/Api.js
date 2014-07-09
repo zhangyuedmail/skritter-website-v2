@@ -192,24 +192,65 @@ define([], function() {
             });
         },
         /**
-         * @method getItems
+         * @method getItemByOffset
+         * @param {Number} offset
+         * @param {Function} callback
+         * @param {Object} options
+         */
+        getItemByOffset: function(offset, callback, options) {
+            var self = this;
+            var result = [];
+            options = options ? options : {};
+            function request(cursor) {
+                $.ajax({
+                    url: self.base + 'items',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'GET',
+                    cache: false,
+                    data: {
+                        bearer_token: self.get('token'),
+                        sort: 'changed',
+                        cursor: cursor,
+                        offset: offset,
+                        fields: options.fields,
+                        include_vocabs: options.includeVocabs ? 'true' : undefined,
+                        include_strokes: options.includeStrokes ? 'true' : undefined,
+                        include_sentences: options.includeSentences ? 'true' : undefined,
+                        include_heisigs: options.includeHeisigs ? 'true' : undefined,
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : undefined,
+                        include_decomps: options.includeDecomps
+                    }
+                }).done(function(data) {
+                    if (data) {
+                        skritter.fn.mergeObjectArray(result, data);
+                    }
+                    if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 500);
+                    } else {
+                        callback(result, data.statusCode);
+                    }
+                }).fail(function(error) {
+                    callback(error, 0);
+                });
+            }
+            request();
+        },
+        /**
+         * @method getItemById
          * @param {Array|String} itemIds
          * @param {Function} callback
          * @param {Object} options
          */
-        getItems: function(itemIds, callback, options) {
+        getItemById: function(itemIds, callback, options) {
             var self = this;
             var result = [];
             itemIds = Array.isArray(itemIds) ? itemIds : [itemIds];
             itemIds = _.uniq(itemIds);
             options = options ? options : {};
-            options.fields = options.fields ? options.fields : undefined;
-            options.includeVocabs = options.includeVocabs ? options.includeVocabs : undefined;
-            options.includeStroke = options.includeStroke ? options.includeStroke : undefined;
-            options.includeSentences = options.includeSentences ? options.includeSentences : undefined;
-            options.includeHeisigs = options.includeHeisigs ? options.includeHeisigs : undefined;
-            options.includeTopMnemonics = options.includeTopMnemonics ? options.includeTopMnemonics : undefined;
-            options.includeDecomps = options.includeDecomps ? options.includeDecomps : undefined;
             function request(batch) {
                 $.ajax({
                     url: self.base + 'items',
@@ -221,11 +262,11 @@ define([], function() {
                         bearer_token: self.get('token'),
                         ids: batch.join('|'),
                         fields: options.fields,
-                        include_vocabs: options.includeVocabs,
-                        include_strokes: options.includeStroke,
-                        include_sentences: options.includeSentences,
-                        include_heisigs: options.includeHeisigs,
-                        include_top_mnemonics: options.includeTopMnemonics,
+                        include_vocabs: options.includeVocabs ? 'true' : undefined,
+                        include_strokes: options.includeStrokes ? 'true' : undefined,
+                        include_sentences: options.includeSentences ? 'true' : undefined,
+                        include_heisigs: options.includeHeisigs ? 'true' : undefined,
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : undefined,
                         include_decomps: options.includeDecomps
                     }
                 }).done(function(data) {
@@ -253,10 +294,6 @@ define([], function() {
         getProgStats: function(options, callback) {
             options = options ? options : {};
             options.start = options.start ? options.start : moment().format('YYYY-MM-DD');
-            options.end = options.end ? options.end : undefined;
-            options.step = options.step ? options.step : undefined;
-            options.lang = options.lang ? options.lang : undefined;
-            options.fields = options.fields ? options.fields : undefined;
             $.ajax({
                 url: this.base + 'progstats',
                 beforeSend: _.bind(function(xhr) {
@@ -376,12 +413,6 @@ define([], function() {
             var self = this;
             var result = {};
             options = options ? options : {};
-            options.fields = options.fields ? options.fields : undefined;
-            options.includeStroke = options.includeStroke ? options.includeStroke : undefined;
-            options.includeSentences = options.includeSentences ? options.includeSentences : undefined;
-            options.includeHeisigs = options.includeHeisigs ? options.includeHeisigs : undefined;
-            options.includeTopMnemonics = options.includeTopMnemonics ? options.includeTopMnemonics : undefined;
-            options.includeDecomps = options.includeDecomps ? options.includeDecomps : undefined;
             function request() {
                 $.ajax({
                     url: self.base + 'vocabs',
@@ -468,9 +499,6 @@ define([], function() {
             var self = this;
             var lists = [];
             options = options ? options : {};
-            options.fields = options.fields ? options.fields.join(',') : undefined;
-            options.lang = options.lang ? options.lang : undefined;
-            options.sort = options.sort ? options.sort : undefined;
             function request(cursor) {
                 $.ajax({
                     url: self.base + 'vocablists',

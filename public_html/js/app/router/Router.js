@@ -75,7 +75,7 @@ define([
          */
         handleBackButtonPress: function(event) {
             var fragment = Backbone.history.fragment;
-            if (skritter.user.sync.isActive()) {
+            if (skritter.user.data.get('syncing')) {
                 return false;
             } else if (this.view.elements.sidebar && this.view.elements.sidebar.hasClass('expanded')) {
                 this.view.toggleSidebar();

@@ -54,12 +54,20 @@
 </div>
 
 <!-- /MODAL: download -->
-<div id="download" class="modal modal-download fade" tabindex="-1" role="dialog" aria-labelledby="download" aria-hidden="true">
+<div id="download" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="download" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <i class="modal-title-icon fa fa-2x"></i>
-                <h4> <span class="modal-title"></span> <small class="modal-sub-title"></small></h4>
+                <div class="media">
+                    <div class="pull-left">
+                        <img class="modal-loading-image media-object" src="img/ajax-loader.gif" alt="">
+                        <i class="modal-title-icon fa fa-2x"></i>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading modal-title"></h4>
+                        <small class="modal-title-secondary"></small>
+                    </div>
+                </div>
             </div>
             <div class="modal-body">
                 <div class="progress">
@@ -93,9 +101,15 @@
 <div id="loading" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loading" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body text-center">
-                <img src="img/ajax-loader.gif"> 
-                <h5 class="message"></h5>
+            <div class="modal-header">
+                <div class="media">
+                    <div class="pull-left">
+                        <img class="media-object" src="img/ajax-loader.gif" alt="">
+                    </div>
+                    <div class="media-body">
+                        <h3 class="media-heading message"></h3>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -106,8 +120,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <i class="modal-title-icon fa fa-2x"></i>
-                <h4><span class="modal-title"></span></h4>
+                <div class="media">
+                    <div class="pull-left">
+                        <i class="modal-title-icon fa fa-2x"></i>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading modal-title"></h4>
+                    </div>
+                </div>
             </div>
             <div class="modal-body">
                 <div class="modal-options">

@@ -4,18 +4,12 @@ define([
     /**
      * @class DataReviews
      */
-    var Collection = Backbone.Collection.extend({
+    var DataReviews = Backbone.Collection.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            this.saving = false;
-            this.on('add', _.bind(function() {
-                if (!this.saving && skritter.user.settings.get('autoSync') &&
-                        this.length >= skritter.user.settings.get('autoSyncThreshold')) {
-                    this.save();
-                }
-            }, this));
+            this.on('add change', this.autoSync);
         },
         /**
          * @property {Backbone.Model} model
@@ -30,23 +24,26 @@ define([
             return -review.attributes.reviews[0].submitTime;
         },
         /**
-         * @method getReviewArray
-         * @param {Number} startFrom
-         * @return {Array}
+         * @method autoSync
+         * @param {Backbone.Model} model
+         * @param {Backbone.Collection} collection
          */
-        getReviewArray: function(startFrom) {
-            var reviews = [];
-            for (var i = startFrom === undefined ? 1 : startFrom, length = this.length; i < length; i++) {
-                reviews = reviews.concat(this.at(i).attributes.reviews);
+        autoSync: function(model, collection) {
+            if (!skritter.user.data.get('syncing') &&
+                collection.length > skritter.user.settings.get('autoSyncThreshold')) {
+                skritter.user.data.sync();
             }
-            return reviews;
         },
         /**
-         * @method getReviewCount
-         * @return {Number}
+         * @method getArray
+         * @returns {Array}
          */
-        getReviewCount: function() {
-            return this.getReviewArray().length;
+        getArray: function() {
+            var reviews = [];
+            for (var i = 0, length = this.length; i < length; i++) {
+                reviews = reviews.concat(this.at(i).toJSON().reviews);
+            }
+            return reviews;
         },
         /**
          * @method getTotalTime
@@ -70,96 +67,23 @@ define([
             }, this));
         },
         /**
-         * @method save
+         * @method sync
          * @param {Function} callback
-         * @param {Boolean} saveAll
          */
-        save: function(callback, saveAll) {
-            if (this.saving) {
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            } else {
-                this.saving = true;
-                this.trigger('saving', true);
-                var lastErrorCheck = skritter.user.sync.get('lastErrorCheck');
-                var now = skritter.fn.getUnixTime();
-                var reviews = this.getReviewArray(saveAll ? 0 : 1);
-                async.waterfall([
-                    function(callback) {
-                        skritter.api.postReviews(reviews, function(postedReviews, status) {
-                            if (status === 200) {
-                                callback(null, postedReviews);
-                            } else if (status === 403) {
-                                callback(postedReviews);
-                            } else if (status === 0) {
-                                callback(postedReviews);
-                            } else {
-                                if (skritter.fn.hasRaygun()) {
-                                    try {
-                                        throw new Error('Review Format Error');
-                                    } catch (error) {
-                                        console.error('Review Format Error', postedReviews);
-                                        Raygun.send(error, {reviewFormatErrors: postedReviews});
-                                    }
-                                }
-                                callback(postedReviews);
-                            }
-                        });
-                    },
-                    function(postedReviews, callback) {
-                        var postedReviewIds = _.uniq(_.pluck(postedReviews, 'wordGroup'));
-                        if (postedReviewIds.length > 0) {
-                            skritter.storage.remove('reviews', postedReviewIds, function() {
-                                skritter.user.data.reviews.remove(postedReviewIds);
-                                console.log('saved', postedReviewIds.length, 'reviews');
-                                callback();
-                            });
-                        } else {
-                            callback();
-                        }
-                    },
-                    function(callback) {
-                        skritter.api.checkReviewErrors(lastErrorCheck, function(reviewErrors, status) {
-                            if (status === 200 && reviewErrors.length > 0) {
-                                if (skritter.fn.hasRaygun()) {
-                                    try {
-                                        throw new Error('Review Error');
-                                    } catch (error) {
-                                        console.error('Review Error', reviewErrors);
-                                        Raygun.send(error, {reviewErrors: reviewErrors});
-                                    }
-                                }
-                                callback(null, reviewErrors);
-                            } else if (status === 200) {
-                                callback(null, reviewErrors);
-                            } else {
-                                callback(reviewErrors);
-                            }
-                        });
-                    },
-                    function(reviewErrors, callback) {
-                        var reviewErrorIds = _.uniq(_.pluck(reviewErrors, 'itemId'));
-                        if (reviewErrorIds.length > 0) {
-                            skritter.user.data.items.fetchById(reviewErrorIds, callback);
-                        } else {
-                            callback();
-                        }
-                    }
-                ], _.bind(function() {
-                    skritter.user.sync.set({
-                        lastErrorCheck: now,
-                        lastReviewSync: now
-                    });
-                    this.saving = false;
-                    this.trigger('saving', false);
-                    if (typeof callback === 'function') {
+        sync: function(callback) {
+            skritter.api.postReviews(this.getArray(), function(result, status) {
+                if (status === 200) {
+                    var postedReviewIds = _.uniq(_.pluck(result, 'wordGroup'));
+                    skritter.storage.remove('reviews', postedReviewIds, function() {
+                        skritter.user.data.reviews.remove(postedReviewIds);
                         callback();
-                    }
-                }, this));
-            }
+                    });
+                } else {
+                    callback(result);
+                }
+            });
         }
     });
 
-    return Collection;
+    return DataReviews;
 });

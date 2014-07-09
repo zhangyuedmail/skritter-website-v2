@@ -16,7 +16,7 @@
         "grunt-contrib-yuidoc": "~0.5.2",
         "grunt-manifest": "~0.4.0",
         "grunt-mkdir": "~0.1.1",
-        "grunt-replace": "~0.7.7",
+        "grunt-replace": "~0.7.8",
         "grunt-shell": "~0.7.0"
     }
 }

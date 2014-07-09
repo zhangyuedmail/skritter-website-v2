@@ -65,8 +65,11 @@ define([
      * @param {Function} callback
      */
     var loadStorage = function(callback) {
-        skritter.storage = new IndexedDBAdapter();
-        //skritter.storage = new WebSQLAdapter();
+        if (Modernizr.indexeddb) {
+            skritter.storage = new IndexedDBAdapter();
+        } else {
+            skritter.storage = new WebSQLAdapter();
+        }
         callback();
     };
     /**
@@ -112,13 +115,14 @@ define([
                 //load daily timer prog stats in background
                 skritter.timer.refresh(true);
                 //checks if user has downloaded account
-                if (skritter.user.sync.isInitial()) {
-                    skritter.modal.show('download').set('.modal-title', 'Downloading').set('.modal-title-icon', null, 'fa-download').progress(100);
-                    skritter.user.sync.fetchAll(function() {
+                if (skritter.user.data.isInitial()) {
+                    skritter.modal.show('download')
+                        .set('.modal-body', false)
+                        .set('.modal-title', 'Preparing Download')
+                        .set('.modal-title-secondary', '0.0 B');
+                    skritter.user.data.downloadAll(function() {
                         skritter.modal.hide();
                     });
-                } else {
-                    skritter.user.sync.fetchChanged();
                 }
                 //load raygun and bind userid to analytics
                 if (skritter.fn.hasCordova()) {
@@ -158,6 +162,11 @@ define([
             skritter.router = new Router();
             if (skritter.fn.hasCordova()) {
                 navigator.splashscreen.hide();
+            }
+            if (skritter.user.isLoggedIn()) {
+                if (!skritter.user.data.isInitial()) {
+                    skritter.user.data.sync();
+                }
             }
         });
     };

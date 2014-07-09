@@ -13,9 +13,9 @@ define([
         initialize: function() {
             BaseView.prototype.initialize.call(this);
             this.listTable = new ListTable();
-            this.listenTo(skritter.user.data.vocablists, 'add loaded', _.bind(this.updateLists, this));
+            this.listenTo(skritter.user.data.vocablists, 'add loaded', _.bind(this.updateVocabLists, this));
             this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
-            this.listenTo(skritter.user.sync, 'status', _.bind(this.toggleSyncButton, this));
+            this.listenTo(skritter.user.data, 'change:syncing', _.bind(this.toggleSyncButton, this));
         },
         /**
          * @method render
@@ -32,12 +32,12 @@ define([
                 expireMessage += "Go to <a href='#' class='button-account'>account settings</a> to add a subscription.";
                 this.elements.message.html(skritter.fn.bootstrap.alert(expireMessage, 'danger'));
             }
-            if (skritter.user.sync.isActive()) {
-                this.toggleSyncButton(true);
+            if (skritter.user.data.get('syncing')) {
+                this.toggleSyncButton(null, true);
             }
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.updateDueCounter();
-            this.updateLists();
+            this.updateVocabLists();
             return this;
         },
         /**
@@ -92,19 +92,20 @@ define([
          * @param {Object} event
          */
         handleSyncClick: function(event) {
-            skritter.user.sync.fetchChanged();
+            skritter.user.data.sync();
             event.preventDefault();
         },
         /**
          * @method toggleSyncButton
-         * @param {Boolean} spin
+         * @param {Backbone.Model} model
+         * @param {Boolean} value
          */
-        toggleSyncButton: function(spin) {
-            if (spin) {
+        toggleSyncButton: function(model, value) {
+            if (value) {
                 this.elements.buttonSync.children('i').addClass('fa-spin');
             } else {
                 this.elements.buttonSync.children('i').removeClass('fa-spin');
-                this.updateDueCounter();
+                skritter.user.scheduler.sort();
             }
         },
         /**
@@ -114,9 +115,9 @@ define([
             this.elements.dueCount.text(skritter.user.scheduler.getDueCount());
         },
         /**
-         * @method updateLists
+         * @method updateVocabLists
          */
-        updateLists: function() {
+        updateVocabLists: function() {
             this.listTable.set(skritter.user.data.vocablists.toJSON(), {
                 name: 'Title',
                 studyingMode: 'Status'
