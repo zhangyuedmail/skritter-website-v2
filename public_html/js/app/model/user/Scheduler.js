@@ -90,10 +90,13 @@ define([], function() {
         getNext: function(callback) {
             var data = this.get('data');
             var position = 0;
+            if (data.length === 0) {
+                return false;
+            }
             function next() {
                 var item = data[position];
                 if (!item) {
-                    return false;
+                    item = data[0];
                 }
                 if (skritter.user.scheduler.checkHistory(item)) {
                     position++;

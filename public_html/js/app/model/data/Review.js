@@ -335,7 +335,9 @@ define([
                             successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                             timeStudied: item.get('timeStudied') + review.reviewTime
                         });
-                        skritter.user.scheduler.update(item.toJSON());
+                        if (i === 0) {
+                            skritter.user.scheduler.update(item.toJSON());
+                        }
                     }
                     callback();
                 }, this),
