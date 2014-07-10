@@ -56,6 +56,7 @@ define([
         addItems: function(limit, callback) {
             var addedItemIds = [];
             var offset = skritter.user.settings.get('addItemOffset');
+            this.set('syncing', true);
             async.waterfall([
                 function(callback) {
                     var retryCount = 0;

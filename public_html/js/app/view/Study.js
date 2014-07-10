@@ -150,9 +150,9 @@ define([
          */
         toggleAddButton: function(model, value) {
             if (value) {
-                this.elements.buttonAdditems.addClass('invisible');
+                this.elements.buttonAdditems.hide();
             } else {
-                this.elements.buttonAdditems.removeClass('invisible');
+                this.elements.buttonAdditems.show();
             }
         },
         /**
