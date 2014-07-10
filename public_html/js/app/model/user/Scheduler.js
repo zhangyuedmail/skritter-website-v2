@@ -200,7 +200,9 @@ define([], function() {
             for (var i = 0, length = this.get('remove').length; i < length; i++) {
                 var item = this.get('remove')[i];
                 var itemPosition = _.findIndex(this.get('data'), {id: item.id});
-                this.get('data').splice(itemPosition, 1);
+                if (itemPosition !== -1) {
+                    this.get('data').splice(itemPosition, 1);
+                }
             }
             //clean up held items
             this.cleanHeld();
@@ -219,13 +221,16 @@ define([], function() {
         },
         /**
          * @method removeHeld
-         * @param {String} baseWriting
+         * @param {Array|Object} items
          * @returns {UserScheduler}
          */
-        removeHeld: function(baseWriting) {
-            var heldPosition = _.findIndex(this.get('held'), {baseWriting: baseWriting});
-            if (heldPosition !== -1) {
-                this.get('held').splice(heldPosition, 1);
+        removeHeld: function(items) {
+            items = Array.isArray(items) ? items : [items];
+            for (var i = 0, length = items.length; i < length; i++) {
+                var heldPosition = _.findIndex(this.get('held'), {baseWriting: items[i].id.split('-')[2]});
+                if (heldPosition !== -1) {
+                    this.get('held').splice(heldPosition, 1);
+                }
             }
             return this;
         },
