@@ -19,9 +19,31 @@ define([], function() {
          */
         defaults: {
             data: [],
+            held: [],
             history: [],
             insert: [],
             remove: []
+        },
+        /**
+         * @method addHeld
+         * @param {Array|Object} items
+         * @returns {UserScheduler}
+         */
+        addHeld: function(items) {
+            items = Array.isArray(items) ? items : [items];
+            var now = skritter.fn.getUnixTime();
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                var itemBaseWriting = item.id.split('-')[2];
+                var heldItem = _.findIndex(this.get('held'), {baseWriting: itemBaseWriting});
+                if (heldItem === -1) {
+                    this.get('held').push({
+                        baseWriting: itemBaseWriting,
+                        until: now + 600
+                    });
+                }
+            }
+            return this;
         },
         /**
          * @method addHistory
@@ -30,34 +52,23 @@ define([], function() {
          */
         addHistory: function(items) {
             items = Array.isArray(items) ? items : [items];
-            var now = skritter.fn.getUnixTime();
             for (var i = 0, length = items.length; i < length; i++) {
-                var item = items[i];
-                var itemBaseWriting = item.id.split('-')[2];
-                var historyItem = _.findIndex(this.get('history'), {baseWriting: itemBaseWriting});
-                if (historyItem === -1) {
-                    this.get('history').push({
-                        baseWriting: itemBaseWriting,
-                        heldUntil: now + 600
-                    });
+                this.get('history').unshift(items[i].id.split('-')[2]);
+                if (this.get('history').length > 5) {
+                    this.get('history').pop();
                 }
             }
             return this;
         },
         /**
-         * @method checkHistory
-         * @param {Object} item
-         * @returns {Boolean}
+         * @method cleanHeld
+         * @returns {Array}
          */
-        checkHistory: function(item) {
-            var historyItem = _.find(this.get('history'), {baseWriting: item.id.split('-')[2]});
+        cleanHeld: function() {
             var now = skritter.fn.getUnixTime();
-            if (historyItem && historyItem.heldUntil > now) {
-                return true;
-            } else if (historyItem) {
-                this.removeHistory(historyItem);
-            }
-            return false;
+            return _.remove(this.get('held'), function(heldItem) {
+                return heldItem.until < now;
+            });
         },
         /**
          * @method clear
@@ -89,6 +100,7 @@ define([], function() {
          */
         getNext: function(callback) {
             var data = this.get('data');
+            var history = this.get('history');
             var position = 0;
             if (data.length === 0) {
                 return false;
@@ -97,21 +109,20 @@ define([], function() {
                 var item = data[position];
                 if (!item) {
                     item = data[0];
-                } else {
-                    if (skritter.user.scheduler.checkHistory(item)) {
-                        position++;
-                        next();
-                        return false;
-                    }
                 }
-                skritter.user.data.loadItem(item.id, function(item) {
-                    if (item) {
-                        callback(item);
-                    } else {
-                        position++;
-                        next();
-                    }
-                });
+                if (history.indexOf(item.id.split('-')[2]) !== -1) {
+                    position++;
+                    next();
+                } else {
+                    skritter.user.data.loadItem(item.id, function(item) {
+                        if (item) {
+                            callback(item);
+                        } else {
+                            position++;
+                            next();
+                        }
+                    });
+                }
             }
             next();
         },
@@ -191,6 +202,8 @@ define([], function() {
                 var itemPosition = _.findIndex(this.get('data'), {id: item.id});
                 this.get('data').splice(itemPosition, 1);
             }
+            //clean up held items
+            this.cleanHeld();
             //clear updates
             this.set({insert: [], remove: []});
         },
@@ -205,14 +218,14 @@ define([], function() {
             return this;
         },
         /**
-         * @method removeHistory
+         * @method removeHeld
          * @param {String} baseWriting
          * @returns {UserScheduler}
          */
-        removeHistory: function(baseWriting) {
-            var historyPosition = _.findIndex(this.get('history'), {baseWriting: baseWriting});
-            if (historyPosition !== -1) {
-                this.get('history').splice(historyPosition, 1);
+        removeHeld: function(baseWriting) {
+            var heldPosition = _.findIndex(this.get('held'), {baseWriting: baseWriting});
+            if (heldPosition !== -1) {
+                this.get('held').splice(heldPosition, 1);
             }
             return this;
         },
@@ -236,7 +249,8 @@ define([], function() {
             this.worker.postMessage({
                 activeParts: skritter.user.getActiveParts(),
                 activeStyles: skritter.user.getActiveStyles(),
-                data: this.get('data')
+                data: this.get('data'),
+                held: this.get('held')
             });
         },
         /**
@@ -245,6 +259,7 @@ define([], function() {
         sortSync: function() {
             var activeParts = skritter.user.getActiveParts();
             var activeStyles = skritter.user.getActiveStyles();
+            var held = this.get('held');
             var now = skritter.fn.getUnixTime();
             var data = _.sortBy(this.get('data'), function(item) {
                 var seenAgo = now - item.last;
@@ -253,6 +268,11 @@ define([], function() {
                 //filter out inactive parts and styles
                 if (activeParts.indexOf(item.part) === -1 ||
                     activeStyles.indexOf(item.style) === -1) {
+                    item.readiness = 0;
+                    return -item.readiness;
+                }
+                //filter out items currently being held
+                if (_.findIndex(held, {baseWriting: item.id.split('-')[2]}) !== -1) {
                     item.readiness = 0;
                     return -item.readiness;
                 }
@@ -284,7 +304,7 @@ define([], function() {
          * @returns {UserScheduler}
          */
         update: function(items) {
-            this.addHistory(items);
+            this.addHeld(items);
             this.insert(items);
             return this;
         }

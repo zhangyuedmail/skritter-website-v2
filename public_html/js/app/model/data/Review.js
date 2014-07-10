@@ -340,6 +340,7 @@ define([
                         items.push(item.toJSON());
                     }
                     skritter.user.scheduler.update(items);
+                    skritter.user.scheduler.addHistory(items[0]);
                     callback();
                 },
                 function(callback) {

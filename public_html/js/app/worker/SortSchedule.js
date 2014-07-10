@@ -5,6 +5,7 @@ self.addEventListener('message', function(event) {
     var activeParts = event.data.activeParts;
     var activeStyles = event.data.activeStyles;
     var data = event.data.data;
+    var held = event.data.held;
     var now = getUnixTime();
     //functions
     function getUnixTime() {
@@ -24,6 +25,11 @@ self.addEventListener('message', function(event) {
         //filter out inactive parts and styles
         if (activeParts.indexOf(item.part) === -1 ||
             activeStyles.indexOf(item.style) === -1) {
+            item.readiness = 0;
+            return -item.readiness;
+        }
+        //filter out items currently being held
+        if (_.findIndex(held, {baseWriting: item.id.split('-')[2]}) !== -1) {
             item.readiness = 0;
             return -item.readiness;
         }
