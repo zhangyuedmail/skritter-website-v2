@@ -616,8 +616,9 @@ define([
                     skritter.api.getItemByOffset(lastItemSync, function(result, status) {
                         if (status === 200) {
                             skritter.user.data.put(result, function() {
-                                if (result.Items) {
+                                if (result.Items && result.Items.length > 0) {
                                     skritter.user.scheduler.insert(result.Items);
+                                    skritter.user.scheduler.removeHeld(result.Items);
                                 }
                                 callback();
                             });
