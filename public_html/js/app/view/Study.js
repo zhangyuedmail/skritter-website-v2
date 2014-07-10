@@ -77,7 +77,7 @@ define([
          * @param {Object} event
          */
         handleAddItemsClicked: function(event) {
-            this.showAddItemsModal();
+            skritter.modal.showAddItems();
             event.preventDefault();
         },
         /**
@@ -154,50 +154,6 @@ define([
             } else {
                 this.elements.buttonAdditems.removeClass('invisible');
             }
-        },
-        /**
-         * @method showAddItemsModal
-         */
-        showAddItemsModal: function() {
-            var addItemsButton = this.elements.buttonAdditems;
-            skritter.modal.show('add-items');
-            skritter.modal.element('.modal-footer').hide();
-            skritter.modal.element('.item-limit').on('vclick', function(event) {
-                this.select();
-                event.preventDefault();
-            });
-            skritter.modal.element('.button-add').on('vclick', function(event) {
-                addItemsButton.addClass('invisible');
-                $.notify('Looking for items to add.', {
-                    className: 'info',
-                    position: 'top right'
-                });
-                var limit = skritter.modal.element('.item-limit').val();
-                if (limit >= 1 && limit <= 20) {
-                    skritter.user.data.addItems(limit, function(addCount) {
-                        if (addCount > 0) {
-                            skritter.user.scheduler.sort();
-                            $.notify('Added ' + addCount + ' items!', {
-                                className: 'success',
-                                position: 'top right'
-                            });
-                        } else {
-                            $.notify('No items to add.', {
-                                className: 'warn',
-                                position: 'top right'
-                            });
-                        }
-                        addItemsButton.removeClass('invisible');
-                    });
-                    skritter.modal.hide();
-                } else {
-                    addItemsButton.removeClass('invisible');
-                    skritter.modal.element('.modal-footer').show('fade', 200);
-                    skritter.modal.element('.message').addClass('text-danger');
-                    skritter.modal.element('.message').text('Must be between 1 and 100.');
-                }
-                event.preventDefault();
-            });
         },
         /**
          * @method updateDueCounter
