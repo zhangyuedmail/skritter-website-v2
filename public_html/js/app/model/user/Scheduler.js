@@ -21,8 +21,8 @@ define([], function() {
             data: [],
             held: [],
             history: [],
-            insert: [],
-            remove: []
+            mergeInsert: [],
+            mergeRemove: []
         },
         /**
          * @method addHeld
@@ -133,6 +133,7 @@ define([], function() {
         handleWorkerFinished: function(event) {
             var data = event.data;
             this.set('data', data);
+            this.set({mergeInsert: [], mergeRemove: []});
             this.running = false;
             this.trigger('sorted', data);
             event.preventDefault();
@@ -151,7 +152,7 @@ define([], function() {
          */
         insert: function(items) {
             items = Array.isArray(items) ? items : [items];
-            this.set('insert', this.get('insert').concat(items));
+            this.set('mergeInsert', this.get('mergeInsert').concat(items));
             return this;
         },
         /**
@@ -169,54 +170,13 @@ define([], function() {
             }, this));
         },
         /**
-         * @method mergeUpdates
-         */
-        mergeUpdates: function() {
-            //merge inserts
-            for (var i = 0, length = this.get('insert').length; i < length; i++) {
-                var item = this.get('insert')[i];
-                var itemPosition = _.findIndex(this.get('data'), {id: item.id});
-                if (item.vocabIds.length === 0) {
-                    continue;
-                } else if (itemPosition === -1) {
-                    this.get('data').push({
-                        id: item.id,
-                        last: item.last ? item.last : 0,
-                        next: item.next ? item.next : 0,
-                        part: item.part,
-                        style: item.style
-                    });
-                } else {
-                    this.get('data')[itemPosition] = {
-                        id: item.id,
-                        last: item.last ? item.last : 0,
-                        next: item.next ? item.next : 0,
-                        part: item.part,
-                        style: item.style
-                    };
-                }
-            }
-            //merge deletes
-            for (var i = 0, length = this.get('remove').length; i < length; i++) {
-                var item = this.get('remove')[i];
-                var itemPosition = _.findIndex(this.get('data'), {id: item.id});
-                if (itemPosition !== -1) {
-                    this.get('data').splice(itemPosition, 1);
-                }
-            }
-            //clean up held items
-            this.cleanHeld();
-            //clear updates
-            this.set({insert: [], remove: []});
-        },
-        /**
          * @method remove
          * @param {Array|Object} items
          * @returns {UserScheduler}
          */
         remove: function(items) {
             items = Array.isArray(items) ? items : [items];
-            this.set('remove', this.get('remove').concat(items));
+            this.set('mergeRemove', this.get('mergeRemove').concat(items));
             return this;
         },
         /**
@@ -240,7 +200,9 @@ define([], function() {
          */
         sort: function(forceSync) {
             this.running = true;
-            this.mergeUpdates();
+            //clean up held items
+            this.cleanHeld();
+            //start sync or async sorting
             if (!forceSync && this.worker) {
                 this.sortAsync();
             } else {
@@ -255,7 +217,9 @@ define([], function() {
                 activeParts: skritter.user.getActiveParts(),
                 activeStyles: skritter.user.getActiveStyles(),
                 data: this.get('data'),
-                held: this.get('held')
+                held: this.get('held'),
+                mergeInsert: JSON.stringify(this.get('mergeInsert')),
+                mergeRemove: JSON.stringify(this.get('mergeRemove'))
             });
         },
         /**
@@ -265,7 +229,44 @@ define([], function() {
             var activeParts = skritter.user.getActiveParts();
             var activeStyles = skritter.user.getActiveStyles();
             var held = this.get('held');
+            var mergeInsert = this.get('mergeInsert');
+            var mergeRemove = this.get('mergeRemove');
             var now = skritter.fn.getUnixTime();
+            //merge inserts
+            for (var i = 0, length = mergeInsert.length; i < length; i++) {
+                var item = mergeInsert[i];
+                console.log('merge: inserting');
+                var itemPosition = _.findIndex(data, {id: item.id});
+                if (item.vocabIds.length === 0) {
+                    continue;
+                } else if (itemPosition === -1) {
+                    data.push({
+                        id: item.id,
+                        last: item.last ? item.last : 0,
+                        next: item.next ? item.next : 0,
+                        part: item.part,
+                        style: item.style
+                    });
+                } else {
+                    data[itemPosition] = {
+                        id: item.id,
+                        last: item.last ? item.last : 0,
+                        next: item.next ? item.next : 0,
+                        part: item.part,
+                        style: item.style
+                    };
+                }
+            }
+            //merge deletes
+            for (var i = 0, length = mergeRemove.length; i < length; i++) {
+                var item = mergeRemove[i];
+                console.log('merge: removing');
+                var itemPosition = _.findIndex(data, {id: item.id});
+                if (itemPosition !== -1) {
+                    data.splice(itemPosition, 1);
+                }
+            }
+            //sort data
             var data = _.sortBy(this.get('data'), function(item) {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
@@ -301,6 +302,7 @@ define([], function() {
             });
             this.running = false;
             this.set('data', data);
+            this.set({mergeInsert: [], mergeRemove: []});
             this.trigger('sorted', data);
         },
         /**

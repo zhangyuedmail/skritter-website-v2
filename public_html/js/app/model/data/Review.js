@@ -308,13 +308,6 @@ define([
             var srsconfigs = skritter.user.data.srsconfigs.get(this.get('part')).toJSON();
             async.series([
                 function(callback) {
-                    if (skritter.user.data.srsconfigs.length >= 3) {
-                        callback();
-                    } else {
-                        skritter.user.sync.srsconfigs(callback);
-                    }
-                },
-                function(callback) {
                     var items = [];
                     for (var i = 0, length = reviews.length; i < length; i++) {
                         var review = reviews[i];
