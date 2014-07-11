@@ -80,7 +80,17 @@ define([
                     });
                 } else if (status === 403) {
                     callback();
+                } else if (status === 0){
+                    callback(result);
                 } else {
+                    if (skritter.fn.hasRaygun()) {
+                        try {
+                            throw new Error('Review Format Error');
+                        } catch (error) {
+                            console.error('Review Format Error', result);
+                            Raygun.send(error, {reviewFormatErrors: result});
+                        }
+                    }
                     callback(result);
                 }
             });

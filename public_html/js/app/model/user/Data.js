@@ -609,7 +609,7 @@ define([
             var lastVocabSync = this.get('lastVocabSync');
             var now = skritter.fn.getUnixTime();
             console.log('syncing: started at', skritter.fn.getDateTime(now * 1000));
-            async.waterfall([
+            async.series([
                 function(callback) {
                     callback();
                 },
@@ -639,6 +639,38 @@ define([
                 function(callback) {
                     console.log('syncing: reviews');
                     skritter.user.data.reviews.sync(callback);
+                },
+                function(callback) {
+                    skritter.api.checkReviewErrors(lastErrorCheck, function(reviewErrors, status) {
+                        if (status === 200 && reviewErrors.length > 0) {
+                            console.log('fixing: review errors', reviewErrors);
+                            if (skritter.fn.hasRaygun()) {
+                                try {
+                                    throw new Error('Review Error');
+                                } catch (error) {
+                                    console.error('Review Error', reviewErrors);
+                                    Raygun.send(error, {reviewErrors: reviewErrors});
+                                }
+                            }
+                            skritter.api.getItemById(_.pluck(reviewErrors, 'itemId'), function(result, status) {
+                                if (status === 200) {
+                                    skritter.user.data.put(result, function() {
+                                        if (result.Items && result.Items.length > 0) {
+                                            skritter.user.scheduler.insert(result.Items);
+                                            skritter.user.scheduler.removeHeld(result.Items);
+                                        }
+                                        callback();
+                                    });
+                                } else {
+                                    callback(result);
+                                }
+                            });
+                        } else if (status === 200) {
+                            callback();
+                        } else {
+                            callback(reviewErrors);
+                        }
+                    });
                 }
             ], _.bind(function() {
                 this.set({

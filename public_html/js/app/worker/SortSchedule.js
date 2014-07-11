@@ -22,7 +22,6 @@ self.addEventListener('message', function(event) {
     //merge inserts
     for (var i = 0, length = mergeInsert.length; i < length; i++) {
         var item = mergeInsert[i];
-        console.log('merge: inserting');
         var itemPosition = _.findIndex(data, {id: item.id});
         if (item.vocabIds.length === 0) {
             continue;
@@ -47,7 +46,6 @@ self.addEventListener('message', function(event) {
     //merge deletes
     for (var i = 0, length = mergeRemove.length; i < length; i++) {
         var item = mergeRemove[i];
-        console.log('merge: removing');
         var itemPosition = _.findIndex(data, {id: item.id});
         if (itemPosition !== -1) {
             data.splice(itemPosition, 1);
