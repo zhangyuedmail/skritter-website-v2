@@ -161,6 +161,7 @@ define([
                 event.preventDefault();
             });
             this.element('.button-add').on('vclick', function(event) {
+                event.preventDefault();
                 $.notify('Looking for items to add.', {
                     className: 'info',
                     position: 'top right'
@@ -186,7 +187,26 @@ define([
                     self.element('.message').addClass('text-danger');
                     self.element('.message').text('Must be between 1 and 100.');
                 }
+
+            });
+        },
+        /**
+         * @method showEditDefinition
+         * @param {Backbobe.Model} vocab
+         */
+        showEditDefinition: function(vocab) {
+            var self = this;
+            var definition = vocab.getDefinition();
+            this.show('edit-definition').set('.field-definition', definition);
+            this.element('.button-save').on('vclick', function(event) {
                 event.preventDefault();
+                var newDefinition = self.element('.field-definition').val();
+                if (newDefinition === '') {
+                    vocab.set('customDefinition', '');
+                } else if (newDefinition !== definition) {
+                    vocab.set('customDefinition', newDefinition);
+                }
+                self.hide();
             });
         }
     });

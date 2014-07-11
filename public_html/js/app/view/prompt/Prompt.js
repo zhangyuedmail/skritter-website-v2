@@ -48,6 +48,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .button-edit-definition': 'handleEditDefinitionClicked',
             'vclick .navigate-left': 'handleNavigateLeftClicked',
             'vclick .navigate-right': 'handleNavigateRightClicked',
             'vclick .prompt-reading .reading': 'playAudio'
@@ -68,6 +69,14 @@ define([
             for (var key in keys) {
                 this[keys[key]] = undefined;
             }
+        },
+        /**
+         * @method handleEditDefinitionClicked
+         * @param {Object} event
+         */
+        handleEditDefinitionClicked: function(event) {
+            skritter.modal.showEditDefinition(this.vocab);
+            event.preventDefault();
         },
         /**
          * @method handleGradingSelected

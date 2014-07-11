@@ -32,6 +32,7 @@ define([
          * @property {Object} defaults
          */
         defaults: {
+            changedVocabIds: [],
             downloadBatchId: null,
             lastErrorCheck: 0,
             lastItemSync: 0,

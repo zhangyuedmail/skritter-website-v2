@@ -47,9 +47,18 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
+                'vclick .button-edit-definition': 'handleEditDefinitionClicked',
                 'vclick .vocab-contained tbody tr': 'handleTableRowClicked',
                 'vclick .vocab-reading .reading': 'playAudio'
             });
+        },
+        /**
+         * @method handleEditDefinitionClicked
+         * @param {Object} event
+         */
+        handleEditDefinitionClicked: function(event) {
+            skritter.modal.showEditDefinition(this.vocab);
+            event.preventDefault();
         },
         /**
          * @method handleTableRowClicked
