@@ -603,6 +603,7 @@ define([
          */
         sync: function(callback, includeResources) {
             this.set('syncing', true);
+            var changedVocabIds = this.get('changedVocabIds');
             var lastErrorCheck = this.get('lastErrorCheck');
             var lastItemSync = this.get('lastItemSync');
             var lastReviewSync = this.get('lastReviewSync');
@@ -636,6 +637,20 @@ define([
                         includeTopMnemonics: includeResources,
                         includeDecomps: includeResources
                     });
+                },
+                function(callback) {
+                    if (changedVocabIds.length > 0) {
+                        console.log('syncing: vocabs');
+                        skritter.user.data.updateVocab(changedVocabIds, function(error) {
+                            if (!error) {
+                                skritter.user.data.set('changedVocabIds', []);
+                                skritter.user.data.cache();
+                            }
+                            callback();
+                        });
+                    } else {
+                        callback();
+                    }
                 },
                 function(callback) {
                     console.log('syncing: reviews');
@@ -673,20 +688,63 @@ define([
                         }
                     });
                 }
-            ], _.bind(function() {
-                this.set({
-                    lastErrorCheck: now,
-                    lastItemSync: now,
-                    lastReviewSync: now,
-                    lastSRSConfigSync: now,
-                    lastVocabSync: now,
-                    syncing: false
-                });
-                console.log('syncing: finished in', moment().diff(now * 1000, 'seconds', true), 'seconds');
-                if (typeof callback === 'function') {
+            ], _.bind(function(error) {
+                if (error) {
+                    //TODO: handle when a sync error occurs
+                    console.log('syncing: failed after', moment().diff(now * 1000, 'seconds', true), 'seconds');
                     callback();
+                } else {
+                    this.set({
+                        lastErrorCheck: now,
+                        lastItemSync: now,
+                        lastReviewSync: now,
+                        lastSRSConfigSync: now,
+                        lastVocabSync: now,
+                        syncing: false
+                    });
+                    console.log('syncing: finished in', moment().diff(now * 1000, 'seconds', true), 'seconds');
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
                 }
             }, this));
+        },
+        /**
+         * @method updateVocab
+         * @param {Array|String} vocabIds
+         */
+        updateVocab: function(vocabIds, callback) {
+            vocabIds = Array.isArray(vocabIds) ? vocabIds : [vocabIds];
+            async.waterfall([
+                function(callback) {
+                    skritter.storage.get('vocabs', vocabIds, function(vocabs) {
+                        callback(null, vocabs);
+                    });
+                },
+                function(vocabs, callback) {
+                    skritter.api.updateVocab(vocabs, function(result, status) {
+                        if (status === 200) {
+                            callback(null, result);
+                        } else {
+                            callback(result);
+                        }
+                    });
+                },
+                function(result, callback) {
+                    skritter.user.data.put(result, function() {
+                        if (result.Items) {
+                            skritter.user.scheduler.insert(result.Items);
+                        }
+                        callback();
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    callback(error);
+                } else {
+                    callback();
+                }
+            });
         }
     });
 
