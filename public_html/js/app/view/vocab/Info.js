@@ -29,6 +29,7 @@ define([
          */
         loadElements: function() {
             BaseView.prototype.loadElements.call(this);
+            this.elements.buttonStar = this.$('.button-star i');
             this.elements.contained = this.$('.vocab-contained');
             this.elements.decomps = this.$('.vocab-decomps');
             this.elements.definition = this.$('.vocab-definition');
@@ -48,6 +49,7 @@ define([
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
                 'vclick .button-edit-definition': 'handleEditDefinitionClicked',
+                'vclick .button-star': 'handleStarClicked',
                 'vclick .vocab-contained tbody tr': 'handleTableRowClicked',
                 'vclick .vocab-reading .reading': 'playAudio'
             });
@@ -58,6 +60,19 @@ define([
          */
         handleEditDefinitionClicked: function(event) {
             skritter.modal.showEditDefinition(this.vocab);
+            event.preventDefault();
+        },
+        /**
+         * @method handleStarClicked
+         * @param {Object} event
+         */
+        handleStarClicked: function(event) {
+            if (this.vocab.get('starred')) {
+                this.vocab.set('starred', false);
+            } else {
+                this.vocab.set('starred', true);
+            }
+            this.toggleStar();
             event.preventDefault();
         },
         /**
@@ -80,6 +95,9 @@ define([
             this.elements.reading.html(vocab.getReading());
             if (vocab.has('audio')) {
                 this.elements.reading.addClass('has-audio');
+            }
+            if (vocab.get('starred')) {
+                this.toggleStar();
             }
             this.elements.definition.text(vocab.getDefinition());
             if (sentence) {
@@ -137,6 +155,18 @@ define([
                 this.vocab = vocab;
                 this.loadVocab();
             }, this));
+        },
+        /**
+         * @method toggleStar
+         */
+        toggleStar: function() {
+            if (this.elements.buttonStar.hasClass('fa-star-o')) {
+                this.elements.buttonStar.addClass('fa-star');
+                this.elements.buttonStar.removeClass('fa-star-o');
+            } else {
+                this.elements.buttonStar.addClass('fa-star-o');
+                this.elements.buttonStar.removeClass('fa-star');
+            }
         }
     });
 
