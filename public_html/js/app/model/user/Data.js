@@ -376,8 +376,10 @@ define([
                 }
             ], function(error, item, vocab, containedItems, containedVocabs, sentence, strokes, decomps) {
                 if (error) {
-                    console.log('unable to load', item.id, item, error);
-                    skritter.user.scheduler.remove(item.id);
+                    if (item) {
+                        console.log('unable to load', item.id, item, error);
+                        skritter.user.scheduler.remove(item);
+                    }
                     callback();
                 } else {
                     callback(item, vocab, containedItems, containedVocabs, sentence, strokes, decomps);
