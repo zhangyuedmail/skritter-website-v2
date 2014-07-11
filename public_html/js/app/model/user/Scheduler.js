@@ -132,10 +132,11 @@ define([], function() {
          */
         handleWorkerFinished: function(event) {
             var data = event.data;
-            this.set('data', data);
+            this.attributes.data = data;
             this.set({mergeInsert: [], mergeRemove: []});
+            this.cleanHeld();
             this.running = false;
-            this.trigger('sorted', data);
+            this.trigger('sorted');
             event.preventDefault();
         },
         /**
@@ -200,9 +201,6 @@ define([], function() {
          */
         sort: function(forceSync) {
             this.running = true;
-            //clean up held items
-            this.cleanHeld();
-            //start sync or async sorting
             if (!forceSync && this.worker) {
                 this.sortAsync();
             } else {
@@ -216,10 +214,10 @@ define([], function() {
             this.worker.postMessage({
                 activeParts: skritter.user.getActiveParts(),
                 activeStyles: skritter.user.getActiveStyles(),
-                data: this.get('data'),
-                held: this.get('held'),
-                mergeInsert: JSON.stringify(this.get('mergeInsert')),
-                mergeRemove: JSON.stringify(this.get('mergeRemove'))
+                data: this.attributes.data,
+                held: this.attributes.held,
+                mergeInsert: JSON.stringify(this.attributes.mergeInsert),
+                mergeRemove: JSON.stringify(this.attributes.mergeRemove)
             });
         },
         /**
@@ -301,9 +299,10 @@ define([], function() {
                 return -item.readiness;
             });
             this.running = false;
-            this.set('data', data);
+            this.attributes.data = data;
             this.set({mergeInsert: [], mergeRemove: []});
-            this.trigger('sorted', data);
+            this.cleanHeld();
+            this.trigger('sorted');
         },
         /**
          * @method update
