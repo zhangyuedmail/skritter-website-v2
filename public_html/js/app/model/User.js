@@ -208,7 +208,7 @@ define([
          * @returns {String}
          */
         getFontClass: function() {
-            return this.isChinese() ? 'chinese-text' : 'japanese-text';            
+            return this.isChinese() ? 'chinese-text' : 'japanese-text';
         },
         /**
          * @method getLanguageCode
@@ -252,7 +252,7 @@ define([
         },
         /**
          * Returns true if the target language is set to Chinese.
-         * 
+         *
          * @method isChinese
          * @returns {Boolean}
          */
@@ -261,7 +261,7 @@ define([
         },
         /**
          * Returns true if the target language is set to Japanese.
-         * 
+         *
          * @method isJapanese
          * @returns {Boolean}
          */
@@ -318,15 +318,8 @@ define([
         /**
          * @method logout
          */
-        logout: function() {
-            skritter.modal.show('logout')
-                    .set('.modal-title', 'Are you sure?')
-                    .set('.modal-title-icon', null, 'fa-sign-out');
-            skritter.modal.element('.modal-footer').hide();
-            skritter.modal.element('.modal-button-logout').on('vclick', function() {
-                skritter.modal.element('.modal-options').hide(500);
-                skritter.modal.element(':input').prop('disabled', true);
-                skritter.modal.element('.message').html("<i class='fa fa-spin fa-cog'></i> Signing Out");
+        logout: function(skipModal) {
+            function performLogout() {
                 async.series([
                     function(callback) {
                         skritter.storage.destroy(callback);
@@ -343,7 +336,21 @@ define([
                     localStorage.removeItem(skritter.user.id + '-sync');
                     document.location.href = '';
                 });
-            });
+            }
+            if (skipModal) {
+                performLogout();
+            } else {
+                skritter.modal.show('logout')
+                    .set('.modal-title', 'Are you sure?')
+                    .set('.modal-title-icon', null, 'fa-sign-out');
+                skritter.modal.element('.modal-footer').hide();
+                skritter.modal.element('.modal-button-logout').on('vclick', function() {
+                    skritter.modal.element('.modal-options').hide(500);
+                    skritter.modal.element(':input').prop('disabled', true);
+                    skritter.modal.element('.message').html("<i class='fa fa-spin fa-cog'></i> Signing Out");
+                    performLogout();
+                });
+            }
         },
         /**
          * @method setActiveParts

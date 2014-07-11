@@ -502,7 +502,7 @@ define([
                                     retryCount++;
                                     window.setTimeout(request, 2000);
                                 } else {
-                                    callback(batch);
+                                    callback(result);
                                 }
                             }
                         });
@@ -515,6 +515,7 @@ define([
                     var totalRequests = batch.totalRequests;
                     skritter.modal.set('.modal-title', 'Downloading')
                         .set('.modal-loading-image', false)
+                        .set('.message-error', false)
                         .set('.modal-title-icon', null, 'fa-download')
                         .set('.modal-body')
                         .progress(0);
@@ -524,7 +525,7 @@ define([
                                 downloadedRequests += result.downloadedRequests;
                                 skritter.user.data.put(result, function() {
                                     var downloadPercent = Math.round((downloadedRequests / totalRequests) * 100);
-                                    skritter.modal.set('.modal-sub-title', downloadPercent + '%');
+                                    skritter.modal.set('.modal-title-secondary', downloadPercent + '%');
                                     skritter.modal.progress(downloadPercent);
                                     window.setTimeout(request, 500);
                                 });
@@ -535,7 +536,7 @@ define([
                                     retryCount++;
                                     window.setTimeout(request, 2000);
                                 } else {
-                                    callback(batch);
+                                    callback(result);
                                 }
                             }
                         });
@@ -544,7 +545,13 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    //TODO: handle batch processing errors
+                    skritter.modal.set('.modal-body').set('.message-error').set('.progress', false);
+                    skritter.modal.element('.button-try-again').on('vclick', function() {
+                        document.location.reload(true);
+                    });
+                    skritter.modal.element('.button-logout').on('vclick', function() {
+                        skritter.user.logout(true);
+                    });
                 } else {
                     callback();
                 }
