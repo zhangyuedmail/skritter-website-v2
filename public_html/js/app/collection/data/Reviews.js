@@ -74,10 +74,12 @@ define([
             skritter.api.postReviews(this.getArray(), function(result, status) {
                 if (status === 200) {
                     var postedReviewIds = _.uniq(_.pluck(result, 'wordGroup'));
-                    skritter.storage.remove('reviews', postedReviewIds, function() {
+                    skritter.storage.remove('reviews', postedReviewIds, function () {
                         skritter.user.data.reviews.remove(postedReviewIds);
                         callback();
                     });
+                } else if (status === 403) {
+                    callback();
                 } else {
                     callback(result);
                 }
