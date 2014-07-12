@@ -226,15 +226,16 @@ define([], function() {
         sortSync: function() {
             var activeParts = skritter.user.getActiveParts();
             var activeStyles = skritter.user.getActiveStyles();
+            var data = this.get('data');
             var held = this.get('held');
+            var item, itemPosition;
             var mergeInsert = this.get('mergeInsert');
             var mergeRemove = this.get('mergeRemove');
             var now = skritter.fn.getUnixTime();
             //merge inserts
-            for (var i = 0, length = mergeInsert.length; i < length; i++) {
-                var item = mergeInsert[i];
-                console.log('merge: inserting');
-                var itemPosition = _.findIndex(data, {id: item.id});
+            for (var a = 0, lengthA = mergeInsert.length; a < lengthA; a++) {
+                item = mergeInsert[a];
+                itemPosition = _.findIndex(data, {id: item.id});
                 if (item.vocabIds.length === 0) {
                     continue;
                 } else if (itemPosition === -1) {
@@ -256,16 +257,15 @@ define([], function() {
                 }
             }
             //merge deletes
-            for (var i = 0, length = mergeRemove.length; i < length; i++) {
-                var item = mergeRemove[i];
-                console.log('merge: removing');
-                var itemPosition = _.findIndex(data, {id: item.id});
+            for (var b = 0, lengthB = mergeRemove.length; b < lengthB; b++) {
+                item = mergeRemove[b];
+                itemPosition = _.findIndex(data, {id: item.id});
                 if (itemPosition !== -1) {
                     data.splice(itemPosition, 1);
                 }
             }
             //sort data
-            var data = _.sortBy(this.get('data'), function(item) {
+            data = _.sortBy(this.get('data'), function(item) {
                 var seenAgo = now - item.last;
                 var rtd = item.next - item.last;
                 var readiness = seenAgo / rtd;

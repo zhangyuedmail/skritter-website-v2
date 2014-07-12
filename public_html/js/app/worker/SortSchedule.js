@@ -6,13 +6,14 @@ self.addEventListener('message', function(event) {
     var activeStyles = event.data.activeStyles;
     var data = event.data.data;
     var held = event.data.held;
+    var item, itemPosition;
     var mergeInsert = JSON.parse(event.data.mergeInsert);
     var mergeRemove = JSON.parse(event.data.mergeRemove);
     var now = getUnixTime();
     //functions
     function getUnixTime() {
         return Math.round(new Date().getTime() / 1000);
-    };
+    }
     function randomDecimal(min, max) {
         return Math.random() * (max - min) + min;
     }
@@ -20,9 +21,9 @@ self.addEventListener('message', function(event) {
         return Math.round(value * (0.925 + (Math.random() * 0.15)));
     }
     //merge inserts
-    for (var i = 0, length = mergeInsert.length; i < length; i++) {
-        var item = mergeInsert[i];
-        var itemPosition = _.findIndex(data, {id: item.id});
+    for (var a = 0, lengthA = mergeInsert.length; a < lengthA; a++) {
+        item = mergeInsert[a];
+        itemPosition = _.findIndex(data, {id: item.id});
         if (item.vocabIds.length === 0) {
             continue;
         } else if (itemPosition === -1) {
@@ -44,9 +45,9 @@ self.addEventListener('message', function(event) {
         }
     }
     //merge deletes
-    for (var i = 0, length = mergeRemove.length; i < length; i++) {
-        var item = mergeRemove[i];
-        var itemPosition = _.findIndex(data, {id: item.id});
+    for (var b = 0, lengthB = mergeRemove.length; b < lengthB; b++) {
+        item = mergeRemove[b];
+        itemPosition = _.findIndex(data, {id: item.id});
         if (itemPosition !== -1) {
             data.splice(itemPosition, 1);
         }
