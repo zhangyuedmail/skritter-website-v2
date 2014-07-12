@@ -118,7 +118,7 @@ define([
                 if (skritter.user.data.isInitial()) {
                     skritter.modal.show('download')
                         .set('.modal-body', false)
-                        .set('.modal-title', 'Preparing Download')
+                        .set('.modal-title', 'Assembling Data')
                         .set('.modal-title-secondary', '0.0 B');
                     skritter.user.data.downloadAll(function() {
                         skritter.modal.hide();
