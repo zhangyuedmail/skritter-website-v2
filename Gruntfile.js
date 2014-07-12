@@ -505,7 +505,6 @@ module.exports = function(grunt) {
                     'cordova create build/cordova/japanese com.inkren.skritter.japanese Skritter',
                     'cd build/cordova/japanese',
                     'cordova platforms add android',
-                    'cordova plugin add org.apache.cordova.splashscreen',
                     'cordova plugin add ../../../plugins/analytics',
                     'cordova plugin add ../../../plugins/inappbilling',
                     'cordova plugin add ../../../plugins/expansion',
