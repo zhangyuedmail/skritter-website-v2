@@ -303,25 +303,20 @@ define([
          * @param {Function} callback
          */
         save: function(callback) {
+            var self = this;
             var reviews = this.get('reviews');
             var srsconfigs = skritter.user.data.srsconfigs.get(this.get('part')).toJSON();
             async.series([
                 function(callback) {
-                    if (skritter.user.data.srsconfigs.length >= 3) {
-                        callback();
-                    } else {
-                        skritter.user.sync.srsconfigs(callback);
-                    }
-                },
-                _.bind(function(callback) {
+                    var items = [];
                     for (var i = 0, length = reviews.length; i < length; i++) {
                         var review = reviews[i];
                         var item = skritter.user.data.items.get(review.itemId);
                         if (reviews.length > 1 && i === 0) {
                             review.finished = true;
-                            review.reviewTime = this.getTotalReviewTime();
-                            review.score = this.getFinalScore();
-                            review.thinkingTime = this.getTotalThinkingTime();
+                            review.reviewTime = self.getTotalReviewTime();
+                            review.score = self.getFinalScore();
+                            review.thinkingTime = self.getTotalThinkingTime();
                         }
                         review.newInterval = skritter.fn.calculateInterval(item.toJSON(), review.score, srsconfigs);
                         item.set({
@@ -335,16 +330,16 @@ define([
                             successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                             timeStudied: item.get('timeStudied') + review.reviewTime
                         });
-                        if (i === 0) {
-                            skritter.user.scheduler.update(item.toJSON());
-                        }
+                        items.push(item.toJSON());
                     }
+                    skritter.user.scheduler.update(items);
+                    skritter.user.scheduler.addHistory(items[0]);
                     callback();
-                }, this),
-                _.bind(function(callback) {
-                    skritter.user.data.reviews.add(this, {merge: true});
-                    this.cache(callback);
-                }, this),
+                },
+                function(callback) {
+                    skritter.user.data.reviews.add(self, {merge: true});
+                    self.cache(callback);
+                },
                 function(callback) {
                     skritter.user.data.items.cache(callback);
                 }

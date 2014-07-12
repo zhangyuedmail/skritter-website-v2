@@ -32,7 +32,7 @@ define([
         el: $('.modal-container'),
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Modal}
          */
         render: function() {
             this.$el.html(_.template(template));
@@ -81,7 +81,7 @@ define([
         /**
          * @method progress
          * @param {Number} percent
-         * @returns {Backbone.View}
+         * @returns {Modal}
          */
         progress: function(percent) {
             percent = percent ? Math.round(percent) : 0;
@@ -93,7 +93,7 @@ define([
          * Resets the active modals display and classes to the defaults.
          * 
          * @method reset
-         * @returns {Backbone.View}
+         * @returns {Modal}
          */
         reset: function() {
             this.element().find('*').show();
@@ -106,7 +106,7 @@ define([
          * @param {String} findBy
          * @param {String} html
          * @param {Array|String} attribute
-         * @returns {Backbone.View}
+         * @returns {Modal}
          */
         set: function(findBy, html, attribute) {
             var attributes = Array.isArray(attribute) ? attribute : [attribute];
@@ -130,7 +130,7 @@ define([
          * @param {String} id
          * @param {Function} callback
          * @param {Object} options
-         * @returns {Backbone.View}
+         * @returns {Modal}
          */
         show: function(id, callback, options) {
             id = id ? id : 'default';
@@ -148,6 +148,66 @@ define([
             }, this));
             this.reset();
             return this;
+        },
+        /**
+         * @method showAddItems
+         */
+        showAddItems: function() {
+            var self = this;
+            this.show('add-items');
+            this.element('.modal-footer').hide();
+            this.element('.item-limit').on('vclick', function(event) {
+                this.select();
+                event.preventDefault();
+            });
+            this.element('.button-add').on('vclick', function(event) {
+                event.preventDefault();
+                $.notify('Looking for items to add.', {
+                    className: 'info',
+                    position: 'top right'
+                });
+                var limit = self.element('.item-limit').val();
+                if (limit >= 1 && limit <= 20) {
+                    skritter.user.data.addItems(limit, function(addCount) {
+                        if (addCount > 0) {
+                            $.notify('Added ' + addCount + ' items!', {
+                                className: 'success',
+                                position: 'top right'
+                            });
+                        } else {
+                            $.notify('No items to add.', {
+                                className: 'warn',
+                                position: 'top right'
+                            });
+                        }
+                    });
+                    self.hide();
+                } else {
+                    self.element('.modal-footer').show('fade', 200);
+                    self.element('.message').addClass('text-danger');
+                    self.element('.message').text('Must be between 1 and 100.');
+                }
+
+            });
+        },
+        /**
+         * @method showEditDefinition
+         * @param {Backbobe.Model} vocab
+         */
+        showEditDefinition: function(vocab) {
+            var self = this;
+            var definition = vocab.getDefinition();
+            this.show('edit-definition').set('.field-definition', definition);
+            this.element('.button-save').on('vclick', function(event) {
+                event.preventDefault();
+                var newDefinition = self.element('.field-definition').val();
+                if (newDefinition === '') {
+                    vocab.set('customDefinition', '');
+                } else if (newDefinition !== definition) {
+                    vocab.set('customDefinition', newDefinition);
+                }
+                self.hide();
+            });
         }
     });
     

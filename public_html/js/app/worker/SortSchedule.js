@@ -5,18 +5,54 @@ self.addEventListener('message', function(event) {
     var activeParts = event.data.activeParts;
     var activeStyles = event.data.activeStyles;
     var data = event.data.data;
+    var held = event.data.held;
+    var item, itemPosition;
+    var mergeInsert = JSON.parse(event.data.mergeInsert);
+    var mergeRemove = JSON.parse(event.data.mergeRemove);
     var now = getUnixTime();
     //functions
     function getUnixTime() {
         return Math.round(new Date().getTime() / 1000);
-    };
+    }
     function randomDecimal(min, max) {
         return Math.random() * (max - min) + min;
     }
     function randomInterval(value) {
         return Math.round(value * (0.925 + (Math.random() * 0.15)));
     }
-    //actions
+    //merge inserts
+    for (var a = 0, lengthA = mergeInsert.length; a < lengthA; a++) {
+        item = mergeInsert[a];
+        itemPosition = _.findIndex(data, {id: item.id});
+        if (item.vocabIds.length === 0) {
+            continue;
+        } else if (itemPosition === -1) {
+            data.push({
+                id: item.id,
+                last: item.last ? item.last : 0,
+                next: item.next ? item.next : 0,
+                part: item.part,
+                style: item.style
+            });
+        } else {
+            data[itemPosition] = {
+                id: item.id,
+                last: item.last ? item.last : 0,
+                next: item.next ? item.next : 0,
+                part: item.part,
+                style: item.style
+            };
+        }
+    }
+    //merge deletes
+    for (var b = 0, lengthB = mergeRemove.length; b < lengthB; b++) {
+        item = mergeRemove[b];
+        itemPosition = _.findIndex(data, {id: item.id});
+        if (itemPosition !== -1) {
+            data.splice(itemPosition, 1);
+        }
+    }
+    //sort data
     data = _.sortBy(data, function(item) {
         var seenAgo = now - item.last;
         var rtd = item.next - item.last;
@@ -24,6 +60,11 @@ self.addEventListener('message', function(event) {
         //filter out inactive parts and styles
         if (activeParts.indexOf(item.part) === -1 ||
             activeStyles.indexOf(item.style) === -1) {
+            item.readiness = 0;
+            return -item.readiness;
+        }
+        //filter out items currently being held
+        if (_.findIndex(held, {baseWriting: item.id.split('-')[2]}) !== -1) {
             item.readiness = 0;
             return -item.readiness;
         }

@@ -74,11 +74,23 @@ define([
             skritter.api.postReviews(this.getArray(), function(result, status) {
                 if (status === 200) {
                     var postedReviewIds = _.uniq(_.pluck(result, 'wordGroup'));
-                    skritter.storage.remove('reviews', postedReviewIds, function() {
+                    skritter.storage.remove('reviews', postedReviewIds, function () {
                         skritter.user.data.reviews.remove(postedReviewIds);
                         callback();
                     });
+                } else if (status === 403) {
+                    callback();
+                } else if (status === 0){
+                    callback(result);
                 } else {
+                    if (skritter.fn.hasRaygun()) {
+                        try {
+                            throw new Error('Review Format Error');
+                        } catch (error) {
+                            console.error('Review Format Error', result);
+                            Raygun.send(error, {reviewFormatErrors: result});
+                        }
+                    }
                     callback(result);
                 }
             });

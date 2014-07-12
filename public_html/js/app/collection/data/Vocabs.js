@@ -9,6 +9,11 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.on('change', function(vocab) {
+                skritter.user.data.get('changedVocabIds').push(vocab.id);
+                skritter.user.data.cache();
+                vocab.cache();
+            });
         },
         /**
          * @property {Vocab} model

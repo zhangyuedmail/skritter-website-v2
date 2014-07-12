@@ -192,6 +192,10 @@ body { background: url('../img/background/ricepaper1.png') repeat; }
     position: absolute;
     top: -2.5px;
 }
+.modal-container .textarea-full {
+    height: 150px;
+    width: 100%;
+}
 
 
 /*** NAVBAR ***/

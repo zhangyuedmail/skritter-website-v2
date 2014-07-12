@@ -627,6 +627,47 @@ define([], function() {
             });
         },
         /**
+         * @method updateVocab
+         * @param {Array|Object} vocabs
+         * @param {Function} callback
+         */
+        updateVocab: function(vocabs, callback) {
+            vocabs = Array.isArray(vocabs) ? vocabs : [vocabs];
+            var self = this;
+            var result = {};
+            result.Items = [];
+            result.Vocabs = [];
+            function update(vocab) {
+                $.ajax({
+                    url: self.base + 'vocabs/' + vocab.id + '?bearer_token=' + self.get('token'),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'PUT',
+                    data: JSON.stringify(vocab)
+                }).done(function(data) {
+                    if (data.Items) {
+                        result.Items = result.Items.concat(data.Items);
+                    }
+                    if (data.Vocab) {
+                        result.Vocabs.push(data.Vocab);
+                    }
+                    if (vocabs.length > 0) {
+                        update(vocabs.splice(0, 1)[0]);
+                    } else {
+                        if (typeof callback === 'function') {
+                            callback(result, data.statusCode);
+                        }
+                    }
+                }).fail(function(error) {
+                    if (typeof callback === 'function') {
+                        callback(error, 0);
+                    }
+                });
+            }
+            update(vocabs.splice(0, 1)[0]);
+        },
+        /**
          * @method updateVocabList
          * @param {Object} list
          * @param {Function} callback

@@ -46,7 +46,11 @@ requirejs.config({
         'jquery.ui': ['jquery'],
         'moment-timezone': ['moment']
     },
-    urlArgs: "bust=" +  (new Date()).getTime(),
+    urlArgs: function() {
+        if (document.location.hostname === 'localhost') {
+            return "bust=" + (new Date()).getTime();
+        }
+    }(),
     waitSeconds: 120
 });
 
