@@ -3,9 +3,9 @@ define([
     'view/View'
 ], function(template, View) {
     /**
-     * @class LoginView
+     * @class Login
      */
-    var LoginView = View.extend({
+    var Login = View.extend({
         /**
          * @method initialize
          */
@@ -14,7 +14,7 @@ define([
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Login}
          */
         render: function() {
             this.setTitle('Log In');
@@ -44,7 +44,7 @@ define([
          * @param {Object} event
          */
         handleLoginClick: function(event) {
-            this.disableForm();
+            this.disableForm('#form-login');
             this.elements.message.empty();
             var username = this.elements.loginUsername.val();
             var password = this.elements.loginPassword.val();
@@ -55,7 +55,7 @@ define([
                 } else {
                     skritter.modal.hide();
                     this.elements.message.text(result.message);
-                    this.enableForm();
+                    this.enableForm('#form-login');
                 }
             }, this));
             event.preventDefault();
@@ -73,5 +73,5 @@ define([
         }
     });
 
-    return LoginView;
+    return Login;
 });

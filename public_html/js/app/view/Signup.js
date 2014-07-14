@@ -3,9 +3,9 @@ define([
     'view/View'
 ], function(template, View) {
     /**
-     * @class SignupView
+     * @class Signup
      */
-    var SignupView = View.extend({
+    var Signup = View.extend({
         /**
          * @method initialize
          */
@@ -14,7 +14,7 @@ define([
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Signup}
          */
         render: function() {
             this.setTitle('Sign Up');
@@ -37,7 +37,6 @@ define([
          */
         events: function() {
             return _.extend({}, View.prototype.events, {
-                'vclick #button-back': 'handleBackClick',
                 'vclick #button-next': 'handleNextClick'
             });
         },
@@ -46,7 +45,7 @@ define([
          * @param {Object} event
          */
         handleNextClick: function(event) {
-            this.disableForm();
+            this.disableForm('#form-signup');
             this.elements.message.empty();
             var email = this.elements.signupEmail.val();
             var password = this.elements.signupPassword.val();
@@ -58,17 +57,17 @@ define([
                         document.location.href = '';
                     } else {
                         this.elements.message.text(result.message);
-                        this.enableForm();
+                        this.enableForm('#form-signup');
                     }
                 }, this));
             } else {
                 this.elements.message.text('Please fill in all fields.');
-                this.enableForm();
+                this.enableForm('#form-signup');
             }
             event.preventDefault();
         }
     });
 
-    return SignupView;
+    return Signup;
 
 });

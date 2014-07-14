@@ -10,6 +10,12 @@ define([], function() {
             this.elements = {};
         },
         /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick .button-back': 'handleClickButtonBack'
+        },
+        /**
          * @method preloadFont
          */
         preloadFont: function() {
@@ -24,15 +30,26 @@ define([], function() {
         },
         /**
          * @method disableForm
+         * @param {String} selector
          */
-        disableForm: function() {
-            this.$(':input').prop('disabled', true);
+        disableForm: function(selector) {
+            this.$((selector ? selector + ' ': '') + ':input').prop('disabled', true);
         },
         /**
          * @method enableForm
+         * @param {String} selector
          */
-        enableForm: function() {
-            this.$(':input').prop('disabled', false);
+        enableForm: function(selector) {
+            this.$((selector ? selector: '') + ':input').prop('disabled', false);
+        },
+        /**
+         * @method handleClickButtonBack
+         * @param {Object} event
+         */
+        handleClickButtonBack: function(event) {
+            console.log('button back');
+            skritter.router.back();
+            event.preventDefault();
         },
         /**
          * @method remove
