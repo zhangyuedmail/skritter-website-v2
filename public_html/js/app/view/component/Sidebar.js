@@ -37,6 +37,14 @@ define([
             });
         },
         /**
+         * @method handleAccountClick
+         * @param {Object} event
+         */
+        handleAccountClick: function(event) {
+            skritter.router.navigate('user/account', {replace: true, trigger: true});
+            event.preventDefault();
+        },
+        /**
          * @method handleContentContainerClicked
          * @param {Object} event
          */
@@ -45,6 +53,38 @@ define([
                 this.toggle();
                 event.preventDefault();
             }
+        },
+        /**
+         * @method handleHomeClick
+         * @param {Object} event
+         */
+        handleHomeClick: function(event) {
+            skritter.router.navigate('', {replace: true, trigger: true});
+            event.preventDefault();
+        },
+        /**
+         * @method handleListClick
+         * @param {Object} event
+         */
+        handleListClick: function(event) {
+            skritter.router.navigate('vocab/list', {replace: true, trigger: true});
+            event.preventDefault();
+        },
+        /**
+         * @method handleLogoutClick
+         * @param {Object} event
+         */
+        handleLogoutClick: function(event) {
+            skritter.user.logout();
+            event.preventDefault();
+        },
+        /**
+         * @method handleStudyClick
+         * @param {Object} event
+         */
+        handleStudyClick: function(event) {
+            skritter.router.navigate('study', {replace: true, trigger: true});
+            event.preventDefault();
         },
         /**
          * @method handleSidebarToggle
