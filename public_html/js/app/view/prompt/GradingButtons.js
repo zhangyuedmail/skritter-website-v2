@@ -1,14 +1,16 @@
 define([
-    'require.text!template/prompt-grading-buttons.html'
-], function(template) {
+    'require.text!template/prompt-grading-buttons.html',
+    'view/View'
+], function(template, View) {
     /**
      * @class PromptGradingButtons
      */
-    var PromptGradingButtons = Backbone.View.extend({
+    var PromptGradingButtons = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
+            View.prototype.initialize.call(this);
             this.elements = {};
             this.expanded = true;
             this.grade = 3;
@@ -16,7 +18,7 @@ define([
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
@@ -25,15 +27,17 @@ define([
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick.GradingButtons #grade1': 'handleButtonClick',
-            'vclick.GradingButtons #grade2': 'handleButtonClick',
-            'vclick.GradingButtons #grade3': 'handleButtonClick',
-            'vclick.GradingButtons #grade4': 'handleButtonClick'
+        events: function() {
+            return _.extend({}, View.prototype.events, {
+                'vclick.GradingButtons #grade1': 'handleButtonClick',
+                'vclick.GradingButtons #grade2': 'handleButtonClick',
+                'vclick.GradingButtons #grade3': 'handleButtonClick',
+                'vclick.GradingButtons #grade4': 'handleButtonClick'
+            });
         },
         /**
          * @method collapse
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         collapse: function() {
             this.expanded = false;
@@ -47,17 +51,8 @@ define([
             return this;
         },
         /**
-         * @method destroy
-         */
-        destroy: function() {
-            var keys = _.keys(this);
-            for (var key in keys) {
-                this[keys[key]] = undefined;
-            }
-        },
-        /**
          * @method expand
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         expand: function() {
             for (var i = 1; i <= 4; i++) {
@@ -89,37 +84,16 @@ define([
         /**
          * @method hide
          * @param {Function} callback
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         hide: function(callback) {
             this.$el.hide('slide', {direction: 'down'}, this.speed, callback);
             return this;
         },
         /**
-         * @method remove
-         */
-        remove: function() {
-            this.removeElements();
-            this.$el.remove();
-            this.stopListening();
-            this.undelegateEvents();
-            this.destroy();
-        },
-        /**
-         * @method removeElements
-         * @returns {Object}
-         */
-        removeElements: function() {
-            for (var i in this.elements) {
-                this.elements[i].remove();
-                this.elements[i] = undefined;
-            }
-            return this.elements;
-        },
-        /**
          * @method select
          * @param {Number} grade
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         select: function(grade) {
             this.grade = grade;
@@ -135,7 +109,7 @@ define([
         /**
          * @method show
          * @param {Function} callback
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         show: function(callback) {
             this.$el.show('slide', {direction: 'down'}, this.speed, callback);

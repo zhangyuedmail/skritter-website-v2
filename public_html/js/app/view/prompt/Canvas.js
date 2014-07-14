@@ -1,15 +1,16 @@
 define([
-    'require.text!template/prompt-canvas.html'
-], function(template) {
+    'require.text!template/prompt-canvas.html',
+    'view/View'
+], function(template, View) {
     /**
      * @class PromptCanvas
      */
-    var Canvas = Backbone.View.extend({
+    var PromptCanvas = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            this.elements = {};
+            View.prototype.initialize.call(this);
             this.grid = true;
             this.gridColor = '#666666';
             this.lastMouseDownEvent = null;
@@ -30,7 +31,7 @@ define([
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {PromptCanvas}
          */
         render: function() {
             this.$el.html(template);
@@ -55,11 +56,13 @@ define([
         /**
          * @property {Object} events
          */
-        events: {
+        events: function() {
+            return _.extend({}, View.prototype.events, {
+            });
         },
         /**
          * @method clear
-         * @returns {Backbone.View}
+         * @returns {PromptCanvas}
          */
         clear: function() {
             for (var i = 0, length = this.layerNames.length; i < length; i++) {
@@ -72,7 +75,7 @@ define([
         /**
          * @method clearLayer
          * @param {String} layerName
-         * @returns {Backbone.View}
+         * @returns {PromptCanvas}
          */
         clearLayer: function(layerName) {
             this.getLayer(layerName).removeAllChildren();
@@ -122,7 +125,7 @@ define([
         },
         /**
          * @method disableGrid
-         * @returns {Backbone.View}
+         * @returns {PromptCanvas}
          */
         disableGrid: function() {
             this.grid = false;
@@ -131,7 +134,7 @@ define([
         },
         /**
          * @method disableInput
-         * @returns {Backbone.View}
+         * @returns {PromptCanvas}
          */
         disableInput: function() {
             this.$(this.elements.input).off('vmousedown.Input');
@@ -203,7 +206,7 @@ define([
         },
         /**
          * @method enableGrid
-         * @returns {Backbone.View}
+         * @returns {PromptCanvas}
          */
         enableGrid: function() {
             this.grid = true;
@@ -212,7 +215,7 @@ define([
         },
         /**
          * @method enableInput
-         * @returns {Backbone.View}
+         * @returns {PromptCanvas}
          */
         enableInput: function() {
             var stage = this.stage.input;
@@ -396,7 +399,7 @@ define([
         /**
          * @method resize
          * @param {Number} size
-         * @returns {Backbone.View}
+         * @returns {PromptCanvas}
          */
         resize: function(size) {
             this.size = size ? size : skritter.settings.getCanvasSize();
@@ -563,5 +566,5 @@ define([
         }
     });
 
-    return Canvas;
+    return PromptCanvas;
 });
