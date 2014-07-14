@@ -228,19 +228,19 @@ body { background: url('../img/background/ricepaper1.png') repeat; }
     margin-top: -12px;
     width: 36px;
 }
-.navbar .navbar-toggle-sidebar { 
+.navbar .navbar-sidebar-toggle {
     cursor: pointer;
     float: left;
     left: -16px; 
     padding: 2px 6px;
     position: absolute;
 }
-.navbar .navbar-toggle-sidebar:active { background-color: #232323; }
-.navbar .navbar-toggle-sidebar i {
+.navbar .navbar-sidebar-toggle:active { background-color: #232323; }
+.navbar .navbar-sidebar-toggle i {
     color: #ffffff;
     padding: 7.5px 6px 7.5px 0;
 }
-.navbar .navbar-toggle-sidebar img {
+.navbar .navbar-sidebar-toggle img {
     margin-top: -12px;
     max-height: 36px;
     width: 36px;
