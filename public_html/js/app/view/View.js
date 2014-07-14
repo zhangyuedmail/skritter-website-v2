@@ -20,12 +20,14 @@ define([], function() {
          */
         preloadFont: function() {
             if (!this.$('#font-preloader').length) {
-                this.$el.append("<div id='font-preloader'></div>");
+                this.$el.append("<div class='font-preloader'></div>");
             }
             if (skritter.user.getLanguageCode() === 'zh') {
-                this.$('#font-preloader').text('力').addClass('chinese-text');
+                this.$('#font-preloader').text('力');
+                this.$('#font-preloader').addClass('chinese-text');
             } else {
-                this.$('#font-preloader').text('力').addClass('japanese-text');
+                this.$('#font-preloader').text('力');
+                this.$('#font-preloader').addClass('japanese-text');
             }
         },
         /**
