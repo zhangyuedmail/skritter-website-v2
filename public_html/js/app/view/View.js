@@ -42,7 +42,7 @@ define([], function() {
          * @param {String} selector
          */
         enableForm: function(selector) {
-            this.$((selector ? selector: '') + ':input').prop('disabled', false);
+            this.$((selector ? selector: ' ') + ':input').prop('disabled', false);
         },
         /**
          * @method handleClickButtonBack
