@@ -1,23 +1,23 @@
 define([
     'require.text!template/study-settings.html',
-    'base/View'
-], function(templateStudySettings, BaseView) {
+    'view/View'
+], function(templateStudySettings, View) {
     /**
      * @class StudySettings
      */
-    var Settings = BaseView.extend({
+    var StudySettings = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
             this.activeParts = [];
             this.activeStyles = [];
             this.enabledParts = [];
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {StudySettings}
          */
         render: function() {
             this.setTitle('Study Settings');
@@ -60,9 +60,11 @@ define([
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick .button-cancel': 'cancel',
-            'vclick .button-save': 'save'
+        events: function() {
+            return _.extend({}, View.prototype.events, {
+                'vclick .button-cancel': 'cancel',
+                'vclick .button-save': 'save'
+            });
         },
         /**
          * @method cancel
@@ -120,6 +122,6 @@ define([
         }
     });
 
-    return Settings;
+    return StudySettings;
 });
 

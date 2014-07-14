@@ -1,20 +1,16 @@
 define([
     'require.text!template/study.html',
-    'base/View',
-    'view/prompt/Defn',
-    'view/prompt/Rdng',
-    'view/prompt/Rune',
-    'view/prompt/Tone'
-], function(template, BaseView) {
+    'view/View'
+], function(template, View) {
     /**
      * @class Study
      */
-    var Study = BaseView.extend({
+    var Study = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
             this.prompt = null;
             this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
             this.listenTo(skritter.user.data, 'change:syncing', _.bind(this.toggleAddButton, this));
@@ -53,19 +49,16 @@ define([
         },
         /**
          * @method loadElements
-         * @returns {Study}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
             this.elements.buttonAdditems = this.$('.button-add-items');
             this.elements.userAvatar = this.$('.user-avatar');
-            return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick .button-add-items': 'handleAddItemsClicked',
                 'vclick .button-info': 'handleInfoButtonClicked',
                 'vclick .button-study-settings': 'handleStudySetttingsClicked',

@@ -1,16 +1,16 @@
 define([
     'require.text!template/signup.html',
-    'base/View'
-], function(template, BaseView) {
+    'view/View'
+], function(template, View) {
     /**
      * @class SignupView
      */
-    var SignupView = BaseView.extend({
+    var SignupView = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
         },
         /**
          * @method render
@@ -19,12 +19,10 @@ define([
         render: function() {
             this.setTitle('Sign Up');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
             return this;
         },
         /**
          * @method loadElements
-         * @param {Backbone.View}
          */
         loadElements: function() {
             this.elements.buttonBack = this.$('#button-back');
@@ -33,13 +31,12 @@ define([
             this.elements.signupPassword = this.$('#signup-password');
             this.elements.signupUsername = this.$('#signup-username');
             this.elements.message = this.$('#message');
-            return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick #button-back': 'handleBackClick',
                 'vclick #button-next': 'handleNextClick'
             });

@@ -1,10 +1,11 @@
 define([
-    'require.text!template/modals.html'
-], function(template) {
+    'require.text!template/modals.html',
+    'view/View'
+], function(template, View) {
     /**
      * @class Modal
      */
-    var Modal = Backbone.View.extend({
+    var Modal = View.extend({
         /**
          * @method initialize
          */

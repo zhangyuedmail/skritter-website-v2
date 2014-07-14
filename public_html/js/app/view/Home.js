@@ -1,30 +1,33 @@
 define([
     'require.text!template/home.html',
-    'base/View',
-    'view/component/ListTable'
-], function(template, BaseView, ListTable) {
+    'view/View',
+    'view/component/ListTable',
+    'view/component/Sidebar'
+], function(template, View, ListTable, Sidebar) {
     /**
      * @class Home
      */
-    var View = BaseView.extend({
+    var Home = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
             this.listTable = new ListTable();
+            this.sidebar = new Sidebar();
             this.listenTo(skritter.user.data.vocablists, 'add loaded', _.bind(this.updateVocabLists, this));
             this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
             this.listenTo(skritter.user.data, 'change:syncing', _.bind(this.toggleSyncButton, this));
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Home}
          */
         render: function() {
             this.setTitle('Home');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
+            this.sidebar.setElement(this.$('.sidebar')).render();
+            this.loadElements();
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.listTable.setElement(this.elements.listTable).render();
             if (!skritter.user.subscription.isActive()) {
@@ -42,21 +45,20 @@ define([
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
             this.elements.buttonSync = this.$('.button-sync');
             this.elements.dueCount = this.$('.due-count');
             this.elements.listTable = this.$('#vocab-lists-container');
             this.elements.message = this.$('#message');
-            return this;
+            this.elements.userAvatar = this.$('.user-avatar');
+            this.elements.userUsername = this.$('.user-username');
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick .button-account': 'handleAccountClick',
                 'vclick .button-lists': 'handleListsClick',
                 'vclick .button-study': 'handleStudyClick',
@@ -125,6 +127,6 @@ define([
         }
     });
 
-    return View;
+    return Home;
 
 });

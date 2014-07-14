@@ -1,11 +1,6 @@
-/**
- * @module Skritter
- * @submodule Views
- * @author Joshua McFarland
- */
-define(function() {
+define([], function() {
     /**
-     * @class Stopwatch
+     * @class TimerStopwatch
      * @param {Number} offset
      */
     var Stopwatch = function(offset) {

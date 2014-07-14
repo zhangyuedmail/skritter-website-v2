@@ -1,28 +1,27 @@
 define([
     'require.text!template/vocab-lists.html',
-    'base/View',
+    'view/View',
     'view/component/ListTable'
-], function(template, BaseView, ListTable) {
+], function(template, View, ListTable) {
     /**
      * @class VocabLists
      */
-    var View = BaseView.extend({
+    var VocabLists = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
             this.category = null;
             this.lists = new ListTable();
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {VocabLists}
          */
         render: function() {
             this.setTitle('Lists');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.lists.setElement(this.elements.lists).render();
             this.resize();
@@ -30,10 +29,8 @@ define([
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
             this.elements.blockLists = this.$('#block-lists');
             this.elements.blockSearch = this.$('#block-search');
             this.elements.blockSort = this.$('#block-sort');
@@ -41,13 +38,12 @@ define([
             this.elements.buttonStudying = this.$('#button-category-studying');
             this.elements.inputSearch = this.$('#input-search');
             this.elements.lists = this.$('#lists');
-            return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick .button-category': 'handleCategoryClick',
                 'keyup #input-search': 'handleEnterPress',
                 'vclick .button-search': 'handleSearchClick'
@@ -145,5 +141,5 @@ define([
         }
     });
 
-    return View;
+    return VocabLists;
 });

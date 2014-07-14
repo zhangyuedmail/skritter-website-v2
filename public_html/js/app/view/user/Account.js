@@ -1,16 +1,16 @@
 define([
     'require.text!template/user-account.html',
-    'base/View'
-], function(template, BaseView) {
+    'view/View'
+], function(template, View) {
     /**
      * @class UserAccount
      */
-    var View = BaseView.extend({
+    var UserAccount = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
             this.sub = skritter.user.subscription;
         },
         /**
@@ -20,7 +20,6 @@ define([
         render: function() {
             this.setTitle('Account');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
             this.elements.userAboutMe.text(skritter.user.settings.get('aboutMe'));
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userCreated.text(moment(skritter.user.settings.get('created')*1000).format("MMMM Do, YYYY"));
@@ -62,10 +61,8 @@ define([
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
             this.elements.userAboutMe = this.$('#user-about-me');
             this.elements.userCreated = this.$('#user-created');
             this.elements.userEmail = this.$('#user-email');
@@ -83,13 +80,12 @@ define([
             this.elements.subOneYear = this.$('#button-sub-one-year');
             this.elements.subOptions = this.$('#sub-options');
             this.elements.subStatus = this.$('#sub-status');
-            return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick #button-sub-one-month': 'handleButtonSubOneMonthClicked',
                 'vclick #button-sub-one-year': 'handleButtonSubOneYearClicked'
             });
@@ -112,5 +108,5 @@ define([
         }
     });
 
-    return View;
+    return UserAccount;
 });
