@@ -19,7 +19,6 @@ define([
          * @param {Prompt}
          */
         clear: function() {
-            this.container.$('.prompt-field').text('');
             return this;
         },
         /**
@@ -41,6 +40,20 @@ define([
          * @param {Object} event
          */
         handleDoubleClickCanvas: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleInputDown
+         * @param {Object} event
+         */
+        handleInputDown: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleInputUp
+         * @param {Object} event
+         */
+        handleInputUp: function(event) {
             event.preventDefault();
         },
         /**
@@ -92,6 +105,8 @@ define([
             this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
             this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHoldCanvas);
             this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClickCanvas);
+            this.listenTo(this.canvas, 'input:down', this.handleInputDown);
+            this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             return this;
         },
         /**

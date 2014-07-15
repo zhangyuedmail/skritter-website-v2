@@ -39,6 +39,47 @@ define([
             return this;
         },
         /**
+         * @method clear
+         * @returns {PromptContainer}
+         */
+        clear: function() {
+            this.$('.prompt-field').empty();
+            return this;
+        },
+        /**
+         * @method loadPrompt
+         */
+        loadPrompt: function(review) {
+            console.log('review', review.id, review.toJSON());
+            this.reset();
+            switch (review.get('part')) {
+                case 'defn':
+                    this.prompt = this.promptDefn;
+                    break;
+                case 'rdng':
+                    this.prompt = this.promptRdng;
+                    break;
+                case 'rune':
+                    this.prompt = this.promptRune;
+                    break;
+                case 'tone':
+                    this.prompt = this.promptTone;
+                    break;
+            }
+            this.prompt.canvas = this.canvas;
+            this.prompt.review = review;
+            this.prompt.vocab = review.getBaseVocab();
+            this.prompt.show();
+        },
+        /**
+         * @method reset
+         * @returns {PromptContainer}
+         */
+        reset: function() {
+            this.clear();
+            return this;
+        },
+        /**
          * @method resize
          */
         resize: function() {
@@ -68,30 +109,6 @@ define([
                     width: contentWidth - canvasSize
                 });
             }
-        },
-        /**
-         * @method loadPrompt
-         */
-        loadPrompt: function(review) {
-            console.log('review', review.id, review.toJSON());
-            switch (review.get('part')) {
-                case 'defn':
-                    this.prompt = this.promptDefn;
-                    break;
-                case 'rdng':
-                    this.prompt = this.promptRdng;
-                    break;
-                case 'rune':
-                    this.prompt = this.promptRune;
-                    break;
-                case 'tone':
-                    this.prompt = this.promptTone;
-                    break;
-            }
-            this.prompt.canvas = this.canvas;
-            this.prompt.review = review;
-            this.prompt.vocab = review.getBaseVocab();
-            this.prompt.show();
         },
         /**
          * @method triggerNext

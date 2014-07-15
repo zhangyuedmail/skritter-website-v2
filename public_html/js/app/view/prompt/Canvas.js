@@ -227,7 +227,7 @@ define([
                 squig = new createjs.Shape();
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
-                this.triggerInputDown(oldPoint, event);
+                this.triggerInputDown(event, oldPoint);
                 this.$(this.elements.input).on('vmousemove.Input', _.bind(move, this));
                 this.$(this.elements.input).on('vmouseout.Input', _.bind(out, this));
                 this.$(this.elements.input).on('vmouseup.Input', _.bind(up, this));
@@ -254,7 +254,7 @@ define([
                 this.$(this.elements.input).off('vmousemove.Input');
                 this.$(this.elements.input).off('vmouseout.Input');
                 this.$(this.elements.input).off('vmouseup.Input');
-                this.triggerInputUp(null, squig, event);
+                this.triggerInputUp(event, null, squig);
                 marker.graphics.clear();
                 stage.clear();
             }
@@ -262,7 +262,7 @@ define([
                 this.$(this.elements.input).off('vmousemove.Input');
                 this.$(this.elements.input).off('vmouseout.Input');
                 this.$(this.elements.input).off('vmouseup.Input');
-                this.triggerInputUp(points, squig, event);
+                this.triggerInputUp(event, points, squig);
                 marker.graphics.clear();
                 stage.clear();
             }
@@ -300,6 +300,7 @@ define([
         fadeShape: function(layerName, shape, color, milliseconds, callback) {
             var layer = this.getLayer(layerName);
             milliseconds = milliseconds ? milliseconds : 500;
+            console.log('fadeShape', this, color, shape)
             if (color) {
                 if (shape.graphics) {
                     shape.graphics.inject(this.injectColor, color);
@@ -512,20 +513,20 @@ define([
         },
         /**
          * @method triggerInputDown
-         * @param {Object} point
          * @param {Object} event
+         * @param {Object} point
          */
-        triggerInputDown: function(point, event) {
-            this.trigger('input:down', point, event);
+        triggerInputDown: function(event, point) {
+            this.trigger('input:down', event, point);
         },
         /**
          * @method triggerInputUp
+         * @param {Object} event
          * @param {Array} points
          * @param {CreateJS.Shape} shape
-         * @param {Object} event
          */
-        triggerInputUp: function(points, shape, event) {
-            this.trigger('input:up', points, shape, event);
+        triggerInputUp: function(event, points, shape) {
+            this.trigger('input:up', event, points, shape);
         },
         /**
          * @method triggerSwipeUp
