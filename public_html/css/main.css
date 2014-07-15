@@ -106,6 +106,7 @@
 /*** GENERAL ***/
 html, body { height: 100%; }
 body { background: url('../img/background/ricepaper1.png') repeat; }
+.canvas-container {display: none;}
 .canvas-holder {
     -moz-user-select: none;
     -ms-text-size-adjust: none;
@@ -364,18 +365,12 @@ body { background: url('../img/background/ricepaper1.png') repeat; }
 .input-section .navigate:hover, .input-section .navigate:active { opacity: 1; }
 .input-section .navigate-left { left: 0; }
 .input-section .navigate-right { right: 0; }
-.input-section .prompt-text {
-    height: 100%;
-    padding-top: 20%;
-    position: relative;
-    width: 100%;
-}
-.input-section .prompt-text .prompt-answer {
+.input-section .prompt-answer {
     display: none;
     position: absolute;
     width: 100%;
 }
-.input-section .prompt-text .prompt-question {
+.input-section .prompt-question {
     display: none;
     position: absolute;
     width: 100%;

@@ -1,0 +1,113 @@
+define([
+    'require.text!template/prompt.html',
+    'view/View',
+    'view/prompt/Canvas',
+    'view/prompt/GradingButtons',
+    'view/prompt/PromptDefn',
+    'view/prompt/PromptRdng',
+    'view/prompt/PromptRune',
+    'view/prompt/PromptTone',
+    'view/prompt/TeachingButtons'
+], function(template, View, Canvas, GradingButtons, PromptDefn, PromptRdng, PromptRune, PromptTone, TeachingButtons) {
+    /**
+     * @class PromptContainer
+     */
+    var PromptContainer = View.extend({
+        /**
+         * @method initialize
+         */
+        initialize: function() {
+            this.canvas = new Canvas();
+            this.gradingButtons = new GradingButtons();
+            this.prompt = null;
+            this.promptDefn = new PromptDefn(this);
+            this.promptRdng = new PromptRdng(this);
+            this.promptRune = new PromptRune(this);
+            this.promptTone = new PromptTone(this);
+            this.teachingButtons = new TeachingButtons();
+        },
+        /**
+         * @method render
+         * @returns {PromptContainer}
+         */
+        render: function() {
+            this.$el.html(_.template(template, skritter.strings));
+            this.canvas.setElement('.canvas-container').render();
+            this.gradingButtons.setElement(this.$('.grading-container')).render();
+            this.teachingButtons.setElement(this.$('.teaching-container')).render();
+            this.resize();
+            return this;
+        },
+        /**
+         * @method resize
+         */
+        resize: function() {
+            var canvasSize = skritter.settings.getCanvasSize();
+            var contentHeight = skritter.settings.getContentHeight();
+            var contentWidth = skritter.settings.getContentWidth();
+            if (skritter.settings.isPortrait()) {
+                this.$('.input-section').css({
+                    height: canvasSize,
+                    float: 'none',
+                    width: contentWidth
+                });
+                this.$('.info-section').css({
+                    height: contentHeight - canvasSize,
+                    float: 'none',
+                    width: contentWidth
+                });
+            } else {
+                this.$('.input-section').css({
+                    height: canvasSize,
+                    float: 'left',
+                    width: canvasSize
+                });
+                this.$('.info-section').css({
+                    height: contentHeight,
+                    float: 'left',
+                    width: contentWidth - canvasSize
+                });
+            }
+        },
+        /**
+         * @method loadPrompt
+         */
+        loadPrompt: function(review) {
+            console.log('review', review.id, review.toJSON());
+            switch (review.get('part')) {
+                case 'defn':
+                    this.prompt = this.promptDefn;
+                    break;
+                case 'rdng':
+                    this.prompt = this.promptRdng;
+                    break;
+                case 'rune':
+                    this.prompt = this.promptRune;
+                    break;
+                case 'tone':
+                    this.prompt = this.promptTone;
+                    break;
+            }
+            this.prompt.canvas = this.canvas;
+            this.prompt.review = review;
+            this.prompt.vocab = review.getBaseVocab();
+            this.prompt.show();
+        },
+        /**
+         * @method triggerNext
+         */
+        triggerNext: function() {
+            this.prompt.hide();
+            this.trigger('next');
+        },
+        /**
+         * @method triggerPrevious
+         */
+        triggerPrevious: function() {
+            this.prompt.hide();
+            this.trigger('previous');
+        }
+    });
+
+    return PromptContainer;
+});
