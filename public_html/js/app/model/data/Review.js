@@ -126,10 +126,10 @@ define([], function() {
             return this.get('position');
         },
         /**
-         * @method getReview
+         * @method getContained
          * @returns {Object}
          */
-        getReview: function() {
+        getContained: function() {
             var position = this.get('position');
             if (this.hasContained() && position !== 0) {
                 return this.get('reviews')[position];
@@ -137,11 +137,11 @@ define([], function() {
             return this.get('reviews')[0];
         },
         /**
-         * @method getReviewAt
+         * @method getContainedAt
          * @param {Number} position
          * @returns {Object}
          */
-        getReviewAt: function(position) {
+        getContainedAt: function(position) {
             position = position || position === 0 ? position : this.get('position');
             if (this.hasContained() && position !== 0) {
                 return this.get('reviews')[position];
@@ -327,12 +327,12 @@ define([], function() {
             });
         },
         /**
-         * @method setReview
+         * @method setContained
          * @param {String|Object} key
          * @param {Array|Number|Object|String} value
          * @returns {Object}
          */
-        setReview: function(key, value) {
+        setContained: function(key, value) {
             var position = this.get('position');
             var review = this.hasContained() ? this.get('reviews')[position] : this.get('reviews')[0];
             var data = {};
