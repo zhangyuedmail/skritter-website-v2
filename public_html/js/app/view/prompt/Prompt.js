@@ -11,8 +11,17 @@ define([
         initialize: function(container) {
             this.canvas = null;
             this.container = container;
+            this.gradingButtons = null;
             this.review = null;
+            this.teachingButtons = null;
             this.vocab = null;
+        },
+        /**
+         * @method renderFields
+         * @param {Prompt}
+         */
+        renderFields: function() {
+            return this;
         },
         /**
          * @method clear
@@ -70,6 +79,7 @@ define([
         next: function() {
             if (this.review.next()) {
                 console.log('next', true);
+                this.reset().renderFields();
             } else {
                 console.log('next', false);
                 //this.review.save(_.bind(this.container.triggerNext, this));
@@ -82,6 +92,7 @@ define([
         previous: function() {
             if (this.review.previous()) {
                 console.log('previous', true);
+                this.reset().renderFields();
             } else {
                 console.log('previous', false);
                 //this.review.save(_.bind(this.container.triggerPrevious, this));
@@ -93,8 +104,9 @@ define([
          * @param {Prompt}
          */
         reset: function() {
-            this.container.$('.prompt-answer').hide();
-            this.container.$('.prompt-question').hide();
+            this.clear();
+            this.gradingButtons.hide();
+            this.teachingButtons.hide();
             return this;
         },
         /**

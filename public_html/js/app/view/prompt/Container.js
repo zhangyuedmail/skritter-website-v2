@@ -43,6 +43,8 @@ define([
          * @returns {PromptContainer}
          */
         clear: function() {
+            this.$('.prompt-answer').hide();
+            this.$('.prompt-question').hide();
             this.$('.prompt-field').empty();
             return this;
         },
@@ -67,7 +69,9 @@ define([
                     break;
             }
             this.prompt.canvas = this.canvas;
+            this.prompt.gradingButtons = this.gradingButtons;
             this.prompt.review = review;
+            this.prompt.teachingButtons = this.teachingButtons;
             this.prompt.vocab = review.getBaseVocab();
             this.prompt.show();
         },
@@ -77,6 +81,8 @@ define([
          */
         reset: function() {
             this.clear();
+            this.gradingButtons.hide();
+            this.teachingButtons.hide();
             return this;
         },
         /**

@@ -14,6 +14,16 @@ define([
             this.strokeAttempts = 0;
         },
         /**
+         * @method renderFields
+         * @param {PromptRune}
+         */
+        renderFields: function() {
+            Prompt.prototype.renderFields.call(this);
+            this.container.$('.info-section .prompt-writing').html(this.vocab.getWriting(this.review.getPosition()));
+            this.container.$('.info-section .prompt-reading').html(this.vocab.getReading());
+            return this;
+        },
+        /**
          * @method clear
          * @param {PromptRune}
          */
@@ -49,23 +59,24 @@ define([
          * @param {createjs.Shape} shape
          */
         handleInputUp: function(event, points, shape) {
-            if (points && points.length > 5) {
+            if (points && points.length > 1) {
+                this.canvas.lastMouseDownEvent = null;
                 var result = this.review.getCharacter().recognize(points, shape);
                 if (result) {
-                    this.canvas.lastMouseDownEvent = null;
-                    this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
+                    this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), _.bind(function() {
+                        if (this.review.getCharacter().isFinished()) {
+                            this.showAnswer();
+                        }
+                    }, this));
+                    if (this.review.getCharacter().isFinished()) {
+                        this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getContained().score]);
+                    }
                 } else {
                     this.strokeAttempts++;
-                    this.canvas.fadeShape('background', shape);
                     if (this.strokeAttempts > this.maxStrokeAttempts) {
                         this.review.setContained('score', 1);
                     }
                 }
-                if (this.review.getCharacter().isFinished()) {
-                    this.showAnswer();
-                }
-            } else {
-                this.canvas.fadeShape('background', shape);
             }
             event.preventDefault();
         },
@@ -82,8 +93,7 @@ define([
         show: function() {
             Prompt.prototype.show.call(this);
             this.canvas.show().enableGrid().enableInput();
-            this.container.$('.info-section .prompt-writing').html(this.vocab.getWriting(this.review.getPosition()));
-            this.container.$('.info-section .prompt-reading').html(this.vocab.getReading());
+            this.renderFields();
             return this;
         },
         /**
@@ -95,6 +105,8 @@ define([
             this.review.setContained({
                 finished: true
             });
+            this.container.$('.info-section .prompt-writing').html(this.vocab.getWriting(this.review.getPosition() + 1));
+            this.gradingButtons.show().select(3);
             return this;
         }
     });
