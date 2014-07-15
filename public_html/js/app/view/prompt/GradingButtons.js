@@ -11,10 +11,8 @@ define([
          */
         initialize: function() {
             View.prototype.initialize.call(this);
-            this.elements = {};
             this.expanded = true;
             this.grade = 3;
-            this.speed = 50;
         },
         /**
          * @method render
@@ -87,7 +85,7 @@ define([
          * @returns {PromptGradingButtons}
          */
         hide: function(callback) {
-            this.$el.hide('slide', {direction: 'down'}, this.speed, callback);
+            this.$el.hide(0, callback);
             return this;
         },
         /**
@@ -112,7 +110,7 @@ define([
          * @returns {PromptGradingButtons}
          */
         show: function(callback) {
-            this.$el.show('slide', {direction: 'down'}, this.speed, callback);
+            this.$el.show(0, callback);
             return this;
         },
         /**

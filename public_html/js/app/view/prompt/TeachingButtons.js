@@ -11,7 +11,6 @@ define([
          */
         initialize: function() {
             View.prototype.initialize.call(this);
-            this.speed = 50;
         },
         /**
          * @method render
@@ -52,7 +51,7 @@ define([
          * @returns {TeachingButtons}
          */
         hide: function(callback) {
-            this.$el.hide('slide', {direction: 'down'}, this.speed, callback);
+            this.$el.hide(0, callback);
             return this;
         },
         /**
@@ -61,7 +60,7 @@ define([
          * @returns {TeachingButtons}
          */
         show: function(callback) {
-            this.$el.show('slide', {direction: 'down'}, this.speed, callback);
+            this.$el.show(0, callback);
             return this;
         },
         /**

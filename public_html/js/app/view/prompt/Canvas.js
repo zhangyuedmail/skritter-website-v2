@@ -330,6 +330,15 @@ define([
             return this.stage.display.getChildByName('layer-' + name);
         },
         /**
+         * @method hide
+         * @param {Function} callback
+         * @returns {PromptCanvas}
+         */
+        hide: function(callback) {
+            this.$el.hide(0, callback);
+            return this;
+        },
+        /**
          * @method inject
          * @param {String} color
          */
@@ -415,16 +424,13 @@ define([
             return this;
         },
         /**
-         * @method startSparkling
+         * @method show
+         * @param {Function} callback
+         * @returns {PromptCanvas}
          */
-        startSparkling: function() {
-            //TODO: custom animations for pointer sparkling
-        },
-        /**
-         * @method stopSparkling
-         */
-        stopSparkling: function() {
-            //TODO: custom animations for pointer sparkling
+        show: function(callback) {
+            this.$el.show(0, callback);
+            return this;
         },
         /**
          * @method triggerClick
