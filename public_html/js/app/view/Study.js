@@ -1,7 +1,8 @@
 define([
     'require.text!template/study.html',
-    'view/View'
-], function(template, View) {
+    'view/View',
+    'view/prompt/Container'
+], function(template, View, PromptContainer) {
     /**
      * @class Study
      */
@@ -11,7 +12,7 @@ define([
          */
         initialize: function() {
             View.prototype.initialize.call(this);
-            this.prompt = null;
+            this.promptContainer = new PromptContainer();
             this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
             this.listenTo(skritter.user.data, 'change:syncing', _.bind(this.toggleAddButton, this));
         },
@@ -22,7 +23,15 @@ define([
         render: function() {
             this.setTitle('Study');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
+            skritter.timer.setElement(this.$('.study-timer')).render();
+            this.promptContainer.setElement(this.$('#content')).render();
+
+            this.listenTo(this.promptContainer, 'next', this.nextPrompt);
+            this.listenTo(this.promptContainer, 'previous', this.previousPrompt);
+
+            this.preloadFont();
+            this.loadElements();
+
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             if (skritter.user.data.get('syncing')) {
                 this.toggleAddButton(true);
@@ -32,18 +41,16 @@ define([
                 skritter.router.navigate('', {replace: true, trigger: true});
                 return false;
             }
-            skritter.timer.setElement(this.$('.study-timer')).render();
             if (skritter.user.settings.get('hideCounter')) {
                 this.$('.study-counter').hide();
             }
             if (skritter.user.settings.get('hideTimer')) {
                 this.$('.study-timer').hide();
             }
-            if (skritter.user.scheduler.review) {
-                this.loadPrompt(skritter.user.scheduler.review);
-            } else {
-                this.nextPrompt();
-            }
+
+            //TODO: load prompt stuff here
+            this.nextPrompt();
+
             this.updateDueCounter();
             return this;
         },
@@ -61,7 +68,7 @@ define([
             return _.extend({}, View.prototype.events, {
                 'vclick .button-add-items': 'handleAddItemsClicked',
                 'vclick .button-info': 'handleInfoButtonClicked',
-                'vclick .button-study-settings': 'handleStudySetttingsClicked',
+                'vclick .button-study-settings': 'handleStudySettingsClicked',
                 'vclick .navbar-back': 'handleBackClick'
             });
         },
@@ -90,51 +97,27 @@ define([
             event.preventDefault();
         },
         /**
-         * @method handleStudySetttingsClicked
+         * @method handleStudySettingsClicked
          * @param {Object} event
          */
-        handleStudySetttingsClicked: function(event) {
+        handleStudySettingsClicked: function(event) {
             skritter.router.navigate('study/settings', {replace: true, trigger: true});
             event.preventDefault();
-        },
-        /**
-         * @method loadPrompt
-         * @param {Backbone.Model} review
-         */
-        loadPrompt: function(review) {
-            if (this.prompt) {
-                this.prompt.remove();
-                this.stopListening(this.prompt);
-                this.prompt = null;
-            }
-            this.prompt = review.createView();
-            this.prompt.setElement(this.$('.prompt-container'));
-            this.listenTo(this.prompt, 'prompt:next', _.bind(this.nextPrompt, this));
-            this.listenTo(this.prompt, 'prompt:previous', _.bind(this.previousPrompt, this));
-            skritter.user.scheduler.review = review;
-            this.prompt.render();
         },
         /**
          * @method nextPrompt
          */
         nextPrompt: function() {
-            skritter.timer.reset();
-            skritter.user.data.reset();
+            console.log('nexting');
             skritter.user.scheduler.getNext(_.bind(function(item) {
-                this.loadPrompt(item.createReview());
+                this.promptContainer.loadPrompt(item.createReview());
             }, this));
         },
         /**
          * @method previousPrompt
          */
         previousPrompt: function() {
-            var review = skritter.user.data.reviews.at(0);
-            if (review) {
-                skritter.user.data.reset();
-                review.load(_.bind(function(review) {
-                    this.loadPrompt(review);
-                }, this));
-            }
+            console.log('previousing');
         },
         /**
          * @method toggleAddButton
