@@ -1,13 +1,8 @@
-define([
-    'view/prompt/Defn',
-    'view/prompt/Rdng',
-    'view/prompt/Rune',
-    'view/prompt/Tone'
-], function(PromptDefn, PromptRdng, PromptRune, PromptTone) {
+define([], function() {
     /**
      * @class DataReview
      */
-    var Model = Backbone.Model.extend({
+    var DataReview = Backbone.Model.extend({
         /**
          * @method initialize
          */
@@ -32,23 +27,6 @@ define([
                     callback();
                 }
             });
-        },
-        /**
-         * @method createView
-         * @return {Backbone.View}
-         */
-        createView: function() {
-            switch (this.get('part')) {
-                case 'defn':
-                    return new PromptDefn().set(this);
-                case 'rdng':
-                    return new PromptRdng().set(this);
-                case 'rune':
-                    return new PromptRune().set(this);
-                case 'tone':
-                    return new PromptTone().set(this);
-            }
-            return null;
         },
         /**
          * @method getBaseItem
@@ -406,5 +384,5 @@ define([
         }
     });
 
-    return Model;
+    return DataReview;
 });

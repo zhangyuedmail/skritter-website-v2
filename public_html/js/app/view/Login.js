@@ -19,6 +19,7 @@ define([
         render: function() {
             this.setTitle('Log In');
             this.$el.html(_.template(template, skritter.strings));
+            this.loadElements();
             return this;
         },
         /**
