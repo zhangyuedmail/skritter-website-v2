@@ -43,6 +43,14 @@ define([
             Prompt.prototype.hide.call(this);
         },
         /**
+         * @method reset
+         * @returns {PromptDefn}
+         */
+        reset: function() {
+            Prompt.prototype.reset.call(this);
+            return this;
+        },
+        /**
          * @method show
          * @returns {PromptDefn}
          */

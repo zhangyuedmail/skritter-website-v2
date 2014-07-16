@@ -43,6 +43,7 @@ define([
          * @returns {PromptContainer}
          */
         clear: function() {
+            this.canvas.clear();
             this.$('.prompt-answer').hide();
             this.$('.prompt-question').hide();
             this.$('.prompt-field').empty();
@@ -81,6 +82,7 @@ define([
          */
         reset: function() {
             this.clear();
+            this.canvas.hide();
             this.gradingButtons.hide();
             this.teachingButtons.hide();
             return this;

@@ -24,13 +24,6 @@ define([
             return this;
         },
         /**
-         * @method clear
-         * @param {Prompt}
-         */
-        clear: function() {
-            return this;
-        },
-        /**
          * @method handleClickCanvas
          * @param {Object} event
          */
@@ -69,7 +62,6 @@ define([
          * @method hide
          */
         hide: function() {
-            this.clear().reset();
             this.stopListening();
             this.undelegateEvents();
         },
@@ -101,10 +93,9 @@ define([
         },
         /**
          * @method reset
-         * @param {Prompt}
+         * @returns {Prompt}
          */
         reset: function() {
-            this.clear();
             this.gradingButtons.hide();
             this.teachingButtons.hide();
             return this;

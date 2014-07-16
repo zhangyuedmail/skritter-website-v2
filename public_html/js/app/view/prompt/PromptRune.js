@@ -24,15 +24,6 @@ define([
             return this;
         },
         /**
-         * @method clear
-         * @param {PromptRune}
-         */
-        clear: function() {
-            Prompt.prototype.clear.call(this);
-            this.canvas.clear();
-            return this;
-        },
-        /**
          * @method handleClickCanvas
          * @param {Object} event
          */
@@ -69,7 +60,7 @@ define([
                         }
                     }, this));
                     if (this.review.getCharacter().isFinished()) {
-                        this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getContained().score]);
+                        this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
                     }
                 } else {
                     this.strokeAttempts++;
@@ -85,6 +76,15 @@ define([
          */
         hide: function() {
             Prompt.prototype.hide.call(this);
+        },
+        /**
+         * @method reset
+         * @returns {PromptRune}
+         */
+        reset: function() {
+            Prompt.prototype.reset.call(this);
+            this.canvas.clear();
+            return this;
         },
         /**
          * @method show
@@ -106,7 +106,7 @@ define([
                 finished: true
             });
             this.container.$('.info-section .prompt-writing').html(this.vocab.getWriting(this.review.getPosition() + 1));
-            this.gradingButtons.show().select(3);
+            this.gradingButtons.show().select(this.review.getScore());
             return this;
         }
     });
