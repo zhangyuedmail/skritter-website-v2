@@ -316,8 +316,8 @@ define([
     };
     /**
      * @method pad
-     * @param {String} text The text requiring padding
-     * @param {String} value The value to be applied as padding
+     * @param {Number|String} text The text requiring padding
+     * @param {Number|String} value The value to be applied as padding
      * @param {Number} size The number of spaces of padding to be applied
      * @return {String}
      */
