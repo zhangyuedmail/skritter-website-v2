@@ -16,21 +16,6 @@ define([], function() {
             'vclick .button-back': 'handleClickButtonBack'
         },
         /**
-         * @method preloadFont
-         */
-        preloadFont: function() {
-            if (!this.$('#font-preloader').length) {
-                this.$el.append("<div class='font-preloader'></div>");
-            }
-            if (skritter.user.getLanguageCode() === 'zh') {
-                this.$('#font-preloader').text('力');
-                this.$('#font-preloader').addClass('chinese-text');
-            } else {
-                this.$('#font-preloader').text('力');
-                this.$('#font-preloader').addClass('japanese-text');
-            }
-        },
-        /**
          * @method disableForm
          * @param {String} selector
          */
@@ -52,6 +37,23 @@ define([], function() {
             console.log('button back');
             skritter.router.back();
             event.preventDefault();
+        },
+        /**
+         * @method preloadFont
+         * @returns {View}
+         */
+        preloadFont: function() {
+            if (!this.$('#font-preloader').length) {
+                this.$el.append("<div class='font-preloader'></div>");
+            }
+            if (skritter.user.getLanguageCode() === 'zh') {
+                this.$('.font-preloader').text('力');
+                this.$('.font-preloader').addClass('chinese-text');
+            } else {
+                this.$('.font-preloader').text('力');
+                this.$('.font-preloader').addClass('japanese-text');
+            }
+            return this;
         },
         /**
          * @method remove
