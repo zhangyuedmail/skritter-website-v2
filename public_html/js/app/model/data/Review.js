@@ -153,7 +153,7 @@ define([], function() {
          * @returns {Number}
          */
         getScore: function() {
-            return this.getReview().score;
+            return this.getContained().score;
         },
         /**
          * @method getScoreAt
@@ -161,7 +161,7 @@ define([], function() {
          * @returns {Number}
          */
         getScoreAt: function(position) {
-            return this.getReviewAt(position).score;
+            return this.getContainedAt(position).score;
         },
         /**
          * @method getTotalReviewTime
