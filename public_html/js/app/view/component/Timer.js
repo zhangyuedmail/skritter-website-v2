@@ -1,16 +1,13 @@
 define([], function() {
     /**
      * @class TimerStopwatch
-     * @param {Number} offset
      */
-    var Stopwatch = function(offset) {
-        offset = (offset) ? offset : 0;
+    function Stopwatch() {
         var startAt = 0;
-        var lapTime = 0 + offset;
-        var now = function() {
-            var date = new Date();
-            return date.getTime();
-        };
+        var lapTime = 0;
+        function now() {
+            return new Date().getTime();
+        }
         this.start = function() {
             startAt = startAt ? startAt : now();
         };
@@ -24,7 +21,7 @@ define([], function() {
         this.time = function() {
             return lapTime + (startAt ? now() - startAt : 0);
         };
-    };
+    }
     /**
      * @class Timer
      */
@@ -33,248 +30,149 @@ define([], function() {
          * @method initialize
          */
         initialize: function() {
-            this.interval = null;
-            this.getLapTime = function() {
-                return this.lapStartAt ? this.lapTime + skritter.fn.getUnixTime(true) - this.lapStartAt : this.lapTime;
-            };
-            this.lapStartAt = 0;
-            this.lapTime = 0;
-            this.reviewLimit = 30;
-            this.reviewStart = null;
-            this.reviewStop = null;
+            this.interval = undefined;
+            this.lap = 0;
+            this.lapOffset = 0;
+            this.lapStart = 0;
             this.offset = 0;
+            this.reviewLimit = 30000;
             this.stopwatch = new Stopwatch();
-            this.thinkingLimit = 15;
-            this.thinkingStop = null;
+            this.thinkingLimit = 15000;
+            this.thinkingValue = 0;
             this.time = 0;
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Timer}
          */
         render: function() {
-            var time = (time) ? time : this.time;
-            //adjusts the rendered time for the offset
-            time += this.offset * 1000;
-            //switched to bitwise operations for better performance across browsers
-            var hours = (time / (3600 * 1000)) >> 0;
-            time = time % (3600 * 1000);
-            var minutes = (time / (60 * 1000)) >> 0;
-            time = time % (60 * 1000);
-            var seconds = (time / 1000) >> 0;
-            //var milliseconds = time % 1000;
-            if (hours > 0) {
-                this.$el.html(hours + ':' + skritter.fn.pad(minutes, 0, 2) + ':' + skritter.fn.pad(seconds, 0, 2));
-            } else {
-                this.$el.html(minutes + ':' + skritter.fn.pad(seconds, 0, 2));
-            }
+            this.$el.text('0:00');
             return this;
+        },
+        /**
+         * @method getLapTime
+         * @returns {Number}
+         */
+        getLapTime: function() {
+            return this.lap + this.lapOffset;
         },
         /**
          * @method getReviewTime
          * @returns {Number}
          */
         getReviewTime: function() {
-            var lapTime = this.getLapTime() / 1000;
-            if (lapTime >= this.reviewLimit) {
-                return this.reviewLimit;
-            }
-            return lapTime;
-        },
-        /**
-         * @method getStartTime
-         * @returns {Number}
-         */
-        getStartTime: function() {
-            return parseInt(this.reviewStart / 1000, 10);
+            var lapTime = this.getLapTime();
+            return lapTime > this.reviewLimit ? this.reviewLimit / 1000 : lapTime / 1000;
         },
         /**
          * @method getThinkingTime
          * @returns {Number}
          */
         getThinkingTime: function() {
-            var lapTime = this.getLapTime() / 1000;
-            if (this.thinkingStop) {
-                var thinkingTime = (this.thinkingStop - this.reviewStart) / 1000;
-                if (thinkingTime >= this.thinkingLimit) {
-                    return this.thinkingLimit;
-                }
-                return thinkingTime;
+            var lapTime = this.getLapTime();
+            if (this.thinkingValue) {
+                return this.thinkingValue;
             }
-            if (lapTime >= this.thinkingLimit) {
-                return this.thinkingLimit;
-            }
-            return lapTime;
+            return lapTime > this.thinkingLimit ? this.thinkingLimit / 1000 : lapTime / 1000;
         },
         /**
-         * @method isReviewLimitReached
-         * @returns {Boolean}
+         * @method isLimit
+         * @return {Boolean}
          */
-        isReviewLimitReached: function() {
-            if (this.getLapTime() >= this.reviewLimit * 1000) {
-                return true;
-            }
-            return false;
+        isLimit: function() {
+            return this.getLapTime() >= this.reviewLimit ? true : false;
         },
         /**
          * @method isRunning
          * @returns {Boolean}
          */
         isRunning: function() {
-            if (this.interval) {
-                return true;
-            }
-            return false;
-        },
-        /**
-         * @method isThinkingLimitReached
-         * @returns {Boolean}
-         */
-        isThinkingLimitReached: function() {
-            if (this.getLapTime() >= this.thinkingLimit * 1000) {
-                return true;
-            }
-            return false;
-        },
-        /**
-         * Refreshes the offset based on the gathered total study time for the day.
-         * 
-         * @method refresh
-         * @param {Boolean} includeServer
-         * @param {Function} callback
-         */
-        refresh: function(includeServer, callback) {
-            this.offset = skritter.user.data.reviews.getTotalTime();
-            if (includeServer) {
-                async.waterfall([
-                    function(callback) {
-                        skritter.api.getServerTime(function(time, status) {
-                            if (status === 200) {
-                                callback(null, time.today);
-                            } else {
-                                callback(time);
-                            }
-                        });
-                    },
-                    _.bind(function(today, callback) {
-                        skritter.api.getProgStats({
-                            start: today
-                        }, _.bind(function(progstats, status) {
-                            if (status === 200) {
-                                this.offset += progstats[0].timeStudied.day;
-                                callback();
-                            } else {
-                                callback(progstats);
-                            }
-                        }, this));
-                    }, this)
-                ],function() {
-                    if (typeof callback === 'function') {
-                        callback();
-                    }
-                });
-            } else {
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            }
+            return this.interval ? true : false;
         },
         /**
          * @method reset
-         * @returns {Backbone.View}
+         * @returns {Timer}
          */
         reset: function() {
-            if (!this.isRunning()) {
-                this.lapStartAt = 0;
-                this.lapTime = 0;
-                this.reviewStart = null;
-                this.reviewStop = null;
-                this.thinkingStop = null;
-            }
+            this.lap = this.lapOffset = this.lapStart = 0;
+            this.thinkingValue = 0;
             return this;
         },
         /**
-         * @method setReviewLimit
-         * @param {Number} value
-         * @returns {Backbone.View}
+         * @method setLimit
+         * @param {Number} reviewLimit
+         * @param {Number} thinkingLimit
+         * @return {Timer}
          */
-        setReviewLimit: function(value) {
-            this.reviewLimit = value;
+        setLimit: function(reviewLimit, thinkingLimit) {
+            this.reviewLimit = reviewLimit ? reviewLimit * 1000 : 0;
+            this.thinkingLimit = thinkingLimit ? thinkingLimit * 1000 : 0;
             return this;
         },
         /**
-         * @method setOffset
-         * @param {Number} value
-         * @returns {Backbone.View}
+         * @method setLapOffset
+         * @param {Number} lapOffset
+         * @return {Timer}
          */
-        setOffset: function(value) {
-            this.offset = value;
+        setLapOffset: function(lapOffset) {
+            this.lapOffset = lapOffset ? lapOffset : 0;
             return this;
         },
         /**
-         * @method setThinkingLimit
-         * @param {Number} value
-         * @returns {Backbone.View}
+         * @method setThinkingValue
+         * @param {Number} lapOffset
+         * @return {Timer}
          */
-        setThinkingLimit: function(value) {
-            this.thinkingLimit = value;
+        setThinkingValue: function(thinkingValue) {
+            this.thinkingValue = thinkingValue ? thinkingValue : 0;
             return this;
         },
         /**
          * @method start
-         * @returns {Backbone.View}
+         * @returns {Timer}
          */
         start: function() {
-            if (!this.reviewStart) {
-                this.reviewStart = skritter.fn.getUnixTime(true);
-            }
-            if (!this.isRunning() && !this.isReviewLimitReached()) {
-                this.interval = setInterval(this.update, 10, this);
-                this.lapStartAt = this.lapStartAt ? this.lapStartAt : skritter.fn.getUnixTime(true);
+            if (!this.isRunning() && !this.isLimit()) {
+                this.lapStart = new Date().getTime();
                 this.stopwatch.start();
+                this.interval = setInterval(_.bind(this.update, this), 10);
             }
             return this;
         },
         /**
          * @method stop
-         * @returns {Backbone.View}
+         * @returns {Timer}
          */
         stop: function() {
             if (this.isRunning()) {
-                this.lapTime = this.lapStartAt ? this.lapTime + skritter.fn.getUnixTime(true) - this.lapStartAt : this.lapTime;
-                this.lapStartAt = 0;
-                this.reviewStop = skritter.fn.getUnixTime(true);
+                this.lapOffset += this.lap;
                 this.stopwatch.stop();
-                clearInterval(this.interval);
-                this.interval = null;
-            }
-            return this;
-        },
-        /**
-         * @method stopThinking
-         * @returns {Backbone.View}
-         */
-        stopThinking: function() {
-            if (!this.thinkingStop) {
-                this.thinkingStop = skritter.fn.getUnixTime(true);
+                this.interval = clearInterval(this.interval);
+                this.lap = 0;
             }
             return this;
         },
         /**
          * @method update
-         * @param {Backbone.View} self
          */
-        update: function(self) {
-            //get the new time to check in milliseconds and seconds
-            var time = self.stopwatch.time();
-            var seconds = (time / 1000) >> 0;
-            //only check and update things when a full second has elapsed
-            if ((this.time / 1000) >> 0 !== seconds) {
-                self.time = time;
-                self.render();
-                //stop the review timer if exceeds the set limit
-                if (self.isReviewLimitReached()) {
-                    self.stop();
+        update: function() {
+            var now = new Date().getTime();
+            var time = this.stopwatch.time() + this.offset;
+            this.lap = now - this.lapStart;
+            if (time / 1000 >> 0 !== this.time / 1000 >> 0) {
+                this.time = time;
+                var hours = (time / (3600 * 1000)) >> 0;
+                time = time % (3600 * 1000);
+                var minutes = (time / (60 * 1000)) >> 0;
+                time = time % (60 * 1000);
+                var seconds = (time / 1000) >> 0;
+                if (hours > 0) {
+                    this.$el.text(hours + ':' + skritter.fn.pad(minutes, 0, 2) + ':' + skritter.fn.pad(seconds, 0, 2));
+                } else {
+                    this.$el.text(minutes + ':' + skritter.fn.pad(seconds, 0, 2));
+                }
+                if (this.isLimit()) {
+                    this.stop();
                 }
             }
         }
