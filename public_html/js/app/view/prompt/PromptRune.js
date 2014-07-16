@@ -50,7 +50,7 @@ define([
          * @param {createjs.Shape} shape
          */
         handleInputUp: function(event, points, shape) {
-            if (points && points.length > 1) {
+            if (points && points.length > 2) {
                 this.canvas.lastMouseDownEvent = null;
                 var result = this.review.getCharacter().recognize(points, shape);
                 if (result) {
@@ -85,6 +85,12 @@ define([
             Prompt.prototype.reset.call(this);
             this.canvas.clear();
             return this;
+        },
+        /**
+         * @method resize
+         */
+        resize: function() {
+            Prompt.prototype.resize.call(this);
         },
         /**
          * @method show

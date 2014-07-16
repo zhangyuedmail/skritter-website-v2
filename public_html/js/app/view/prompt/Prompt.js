@@ -101,6 +101,11 @@ define([
             return this;
         },
         /**
+         * @method resize
+         */
+        resize: function() {
+        },
+        /**
          * @method show
          * @returns {Prompt}
          */
