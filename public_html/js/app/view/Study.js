@@ -1,8 +1,9 @@
 define([
     'require.text!template/study.html',
     'view/View',
-    'view/prompt/Container'
-], function(template, View, PromptContainer) {
+    'view/prompt/Container',
+    'view/component/Sidebar'
+], function(template, View, PromptContainer, Sidebar) {
     /**
      * @class Study
      */
@@ -13,6 +14,7 @@ define([
         initialize: function() {
             View.prototype.initialize.call(this);
             this.promptContainer = new PromptContainer();
+            this.sidebar = new Sidebar();
             this.listenTo(skritter.user.scheduler, 'sorted', _.bind(this.updateDueCounter, this));
             this.listenTo(skritter.user.data, 'change:syncing', _.bind(this.toggleAddButton, this));
         },
@@ -25,13 +27,9 @@ define([
             this.$el.html(_.template(template, skritter.strings));
             skritter.timer.setElement(this.$('.study-timer')).render();
             this.promptContainer.setElement(this.$('#content')).render();
-
-            this.listenTo(this.promptContainer, 'next', this.nextPrompt);
-            this.listenTo(this.promptContainer, 'previous', this.previousPrompt);
-
-            this.preloadFont();
+            this.sidebar.setElement(this.$('.sidebar')).render();
             this.loadElements();
-
+            this.preloadFont();
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             if (skritter.user.data.get('syncing')) {
                 this.toggleAddButton(true);
@@ -47,11 +45,11 @@ define([
             if (skritter.user.settings.get('hideTimer')) {
                 this.$('.study-timer').hide();
             }
-
             //TODO: load prompt stuff here
             this.nextPrompt();
-
             this.updateDueCounter();
+            this.listenTo(this.promptContainer, 'next', this.nextPrompt);
+            this.listenTo(this.promptContainer, 'previous', this.previousPrompt);
             return this;
         },
         /**
