@@ -97,6 +97,7 @@ define([
          * @returns {PromptRune}
          */
         show: function() {
+            skritter.timer.setLimit(30, 15);
             Prompt.prototype.show.call(this);
             this.canvas.show().enableGrid().enableInput();
             this.renderFields();

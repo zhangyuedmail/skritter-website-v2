@@ -74,7 +74,7 @@ define([
             this.prompt.review = review;
             this.prompt.teachingButtons = this.teachingButtons;
             this.prompt.vocab = review.getBaseVocab();
-            this.prompt.show();
+            this.prompt.show().enableListeners();
         },
         /**
          * @method reset

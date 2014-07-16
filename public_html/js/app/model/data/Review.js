@@ -109,6 +109,13 @@ define([], function() {
             return skritter.user.data.items.get(this.getReviewAt(position).itemId);
         },
         /**
+         * @method getLapOffset
+         * @returns {Number}
+         */
+        getLapOffset: function() {
+            return this.getContained().reviewTime;
+        },
+        /**
          * @method getMaxPosition
          * @returns {Number}
          */
@@ -162,6 +169,20 @@ define([], function() {
          */
         getScoreAt: function(position) {
             return this.getContainedAt(position).score;
+        },
+        /**
+         * @method getReviewTime
+         * @returns {Number}
+         */
+        getReviewTime: function() {
+            return this.getContained().reviewTime;
+        },
+        /**
+         * @method getTotalReviewTime
+         * @returns {Number}
+         */
+        getThinkingTime: function() {
+            return this.getContained().thinkingTime;
         },
         /**
          * @method getTotalReviewTime

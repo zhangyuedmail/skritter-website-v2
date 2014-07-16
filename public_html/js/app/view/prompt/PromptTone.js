@@ -112,6 +112,7 @@ define([
          * @returns {PromptTone}
          */
         show: function() {
+            skritter.timer.setLimit(15, 10);
             Prompt.prototype.show.call(this);
             this.canvas.show().disableGrid().enableInput();
             this.renderFields();

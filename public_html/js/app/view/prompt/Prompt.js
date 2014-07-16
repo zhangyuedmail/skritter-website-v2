@@ -24,6 +24,22 @@ define([
             return this;
         },
         /**
+         * @method disableListeners
+         */
+        disableListeners: function() {
+            this.stopListening();
+        },
+        /**
+         * @method enableListeners
+         */
+        enableListeners: function() {
+            this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
+            this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHoldCanvas);
+            this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClickCanvas);
+            this.listenTo(this.canvas, 'input:down', this.handleInputDown);
+            this.listenTo(this.canvas, 'input:up', this.handleInputUp);
+        },
+        /**
          * @method handleClickCanvas
          * @param {Object} event
          */
@@ -62,7 +78,7 @@ define([
          * @method hide
          */
         hide: function() {
-            this.stopListening();
+            this.disableListeners();
             this.undelegateEvents();
         },
         /**
@@ -110,11 +126,9 @@ define([
          * @returns {Prompt}
          */
         show: function() {
-            this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
-            this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHoldCanvas);
-            this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClickCanvas);
-            this.listenTo(this.canvas, 'input:down', this.handleInputDown);
-            this.listenTo(this.canvas, 'input:up', this.handleInputUp);
+            skritter.timer.setLapOffset(this.review.getLapOffset())
+            skritter.timer.setThinkingValue(this.review.getThinkingTime());
+            skritter.timer.start();
             return this;
         },
         /**
@@ -122,6 +136,12 @@ define([
          * @returns {Prompt}
          */
         showAnswer: function() {
+            skritter.timer.stop();
+            this.review.setContained({
+                finished: true,
+                reviewTime: skritter.timer.getReviewTime(),
+                thinkingTime: skritter.timer.getThinkingTime()
+            });
             return this;
         }
     });

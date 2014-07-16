@@ -55,6 +55,7 @@ define([
          * @returns {PromptDefn}
          */
         show: function() {
+            skritter.timer.setLimit(30, 15);
             Prompt.prototype.show.call(this);
             this.canvas.show().disableGrid();
             this.renderFields();
@@ -68,9 +69,6 @@ define([
             Prompt.prototype.showAnswer.call(this);
             this.container.$('.input-section .prompt-question').hide();
             this.container.$('.input-section .prompt-answer').show();
-            this.review.setContained({
-                finished: true
-            });
             this.gradingButtons.show();
             return this;
         }
