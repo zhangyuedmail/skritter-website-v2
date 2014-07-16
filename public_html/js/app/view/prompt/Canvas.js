@@ -140,6 +140,23 @@ define([
             return this;
         },
         /**
+         * @method drawCharacterFromFont
+         * @param {String} layerName
+         * @param {String} character
+         * @param {String} font
+         * @param {String} color
+         * @param {Number} alpha
+         */
+        drawCharacterFromFont: function(layerName, character, font, color, alpha) {
+            var layer = this.getLayer(layerName);
+            var text = new createjs.Text(character, this.size + 'px ' + font, color);
+            if (alpha) {
+                text.alpha = alpha;
+            }
+            layer.addChild(text);
+            this.stage.display.update();
+        },
+        /**
          * @method drawGrid
          * @param {String} color
          */
@@ -155,6 +172,25 @@ define([
             grid.graphics.endStroke();
             this.getLayer('grid').addChild(grid);
             this.stage.display.update();
+        },
+        /**
+         * @method drawShape
+         * @param {String} layerName
+         * @param {createjs.Shape} shape
+         * @param {String} color
+         * @param {Number} alpha
+         * @returns {PromptCanvas}
+         */
+        drawShape: function(layerName, shape, color, alpha) {
+            if (alpha) {
+                shape.alpha = alpha;
+            }
+            if (color) {
+                shape.graphics._fill.style = color;
+            }
+            this.getLayer(layerName).addChild(shape);
+            this.stage.display.update();
+            return this;
         },
         /**
          * @method enableGrid
@@ -189,15 +225,15 @@ define([
                 var point = {x: stage.mouseX, y: stage.mouseY};
                 var midPoint = {x: oldPoint.x + point.x >> 1, y: oldPoint.y + point.y >> 1};
                 marker.graphics.clear()
-                        .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
-                        .beginStroke(this.strokeColor)
-                        .moveTo(midPoint.x, midPoint.y)
-                        .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+                    .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
+                    .beginStroke(this.strokeColor)
+                    .moveTo(midPoint.x, midPoint.y)
+                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 squig.graphics
-                        .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
-                        .beginStroke(this.strokeColor)
-                        .moveTo(midPoint.x, midPoint.y)
-                        .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+                    .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
+                    .beginStroke(this.strokeColor)
+                    .moveTo(midPoint.x, midPoint.y)
+                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 stage.update();
                 oldPoint = point;
                 oldMidPoint = midPoint;
@@ -228,10 +264,16 @@ define([
          */
         injectLayer: function(layerName, color) {
             var layer = this.getLayer(layerName);
-            for (var i = 0, length = layer.children.length; i < length; i++) {
-                var child = layer.children[i];
-                if (child.name = 'stroke') {
+            for (var a = 0, lengthA = layer.children.length; a < lengthA; a++) {
+                var child = layer.children[a];
+                if (child.graphics) {
                     child.graphics._fill.style = color;
+                } else {
+                    for (var b = 0, lengthB = child.children.length; b < lengthB; b++) {
+                        if (child.children[b].graphics) {
+                            child.children[b].graphics._fill.style = color;
+                        }
+                    }
                 }
             }
         },
@@ -398,6 +440,7 @@ define([
         tweenShape: function(layerName, fromShape, toShape, callback) {
             var layer = this.getLayer(layerName);
             layer.addChild(fromShape);
+            this.stage.display.update();
             createjs.Tween.get(fromShape).to({
                 x: toShape.x,
                 y: toShape.y,
