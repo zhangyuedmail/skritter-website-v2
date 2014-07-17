@@ -39,6 +39,12 @@ define([
             return this;
         },
         /**
+         * @method loadElements
+         * @returns {PromptContainer}
+         */
+        loadElements: function() {
+        },
+        /**
          * @method clear
          * @returns {PromptContainer}
          */

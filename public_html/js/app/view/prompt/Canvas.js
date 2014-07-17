@@ -274,6 +274,36 @@ define([
             return this;
         },
         /**
+         * @method fadeShapeOut
+         * @param {String} layerName
+         * @param {createjs.Shape} shape
+         * @param {String} color
+         * @param {Number} milliseconds
+         * @param {Function} callback
+         */
+        fadeShape: function(layerName, shape, color, milliseconds, callback) {
+            var layer = this.getLayer(layerName);
+            milliseconds = milliseconds ? milliseconds : 500;
+            if (color) {
+                if (shape.graphics._fill) {
+                    shape.graphics._fill.style = color;
+                }
+                if (shape.graphics._stroke) {
+                    shape.graphics._stroke.style = color;
+                }
+            }
+            layer.addChild(shape);
+            this.stage.display.update();
+            shape.cache(0, 0, this.size, this.size);
+            createjs.Tween.get(shape).to({alpha: 0}, milliseconds, createjs.Ease.sineOut).call(function() {
+                shape.uncache();
+                layer.removeChild(shape);
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        /**
          * @method injectLayer
          * @param {String} layerName
          * @param color
@@ -291,12 +321,13 @@ define([
                     }
                 } else {
                     for (var b = 0, lengthB = child.children.length; b < lengthB; b++) {
-                        if (child.children[b].graphics) {
-                            if (child.graphics._fill) {
-                                child.graphics._fill.style = color;
+                        var childChild = child.children[b];
+                        if (childChild.graphics) {
+                            if (childChild.graphics._fill) {
+                                childChild.graphics._fill.style = color;
                             }
-                            if (child.graphics._stroke) {
-                                child.graphics._stroke.style = color;
+                            if (childChild.graphics._stroke) {
+                                childChild.graphics._stroke.style = color;
                             }
                         }
                     }
@@ -473,11 +504,11 @@ define([
                 scaleX: toShape.scaleX,
                 scaleY: toShape.scaleY,
                 rotation: toShape.rotation
-            }, 300, createjs.Ease.backOut).call(_.bind(function() {
+            }, 300, createjs.Ease.backOut).call(function() {
                 if (typeof callback === 'function') {
-                    callback(this);
+                    callback();
                 }
-            }, this));
+            });
         },
         /**
          * @method tweenCharacter
@@ -489,11 +520,11 @@ define([
             var position = 0;
             for (var i = 0, length = character.length; i < length; i++) {
                 var stroke = character.at(i);
-                this.tweenShape(layerName, stroke.getUserShape(), stroke.inflateShape(), function(canvas) {
+                this.tweenShape(layerName, stroke.getUserShape(), stroke.inflateShape(), function() {
                     position++;
                     if (position >= character.length) {
                         if (typeof callback === 'function') {
-                            callback(canvas);
+                            callback();
                         }
                     }
                 });

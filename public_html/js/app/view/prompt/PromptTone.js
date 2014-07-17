@@ -59,9 +59,9 @@ define([
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
                         this.review.setContained('score', 3);
-                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), function(canvas) {
-                            canvas.disableTicker();
-                        });
+                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), _.bind(function() {
+                            this.canvas.disableTicker();
+                        }, this));
                         this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
                     } else {
                         this.review.setContained('score', 1);
@@ -127,9 +127,6 @@ define([
         showAnswer: function() {
             Prompt.prototype.showAnswer.call(this);
             this.canvas.disableInput();
-            this.review.setContained({
-                finished: true
-            });
             this.container.$('.info-section .prompt-reading').html(this.vocab.getReading(
                 this.review.getPosition() + 1,
                 !skritter.user.settings.get('hideReading'),
