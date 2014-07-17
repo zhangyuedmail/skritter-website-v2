@@ -22,6 +22,7 @@ define([
         render: function() {
             this.setTitle('Lists');
             this.$el.html(_.template(template, skritter.strings));
+            this.loadElements();
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.lists.setElement(this.elements.lists).render();
             this.resize();
@@ -38,6 +39,7 @@ define([
             this.elements.buttonStudying = this.$('#button-category-studying');
             this.elements.inputSearch = this.$('#input-search');
             this.elements.lists = this.$('#lists');
+            this.elements.userAvatar = this.$('.user-avatar');
         },
         /**
          * @property {Object} events
