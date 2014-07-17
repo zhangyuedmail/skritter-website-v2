@@ -22,6 +22,17 @@ define([
          * @param {Prompt}
          */
         renderFields: function() {
+            if (this.vocab.isNew()) {
+                this.elements.promptNewness.show();
+            } else {
+                this.elements.promptNewness.hide();
+            }
+            if (this.vocab.getStyle()) {
+                this.elements.promptStyle.text(this.vocab.getStyle().toUpperCase());
+                this.elements.promptStyle.show();
+            } else {
+                this.elements.promptStyle.hide();
+            }
             return this;
         },
         /**
