@@ -72,7 +72,7 @@ define([
             this.review.setContained({
                 finished: true
             });
-            this.gradingButtons.show();
+            this.gradingButtons.show().select(3);
             return this;
         }
     });

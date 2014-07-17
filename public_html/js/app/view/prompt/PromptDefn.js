@@ -69,7 +69,7 @@ define([
             Prompt.prototype.showAnswer.call(this);
             this.container.$('.input-section .prompt-question').hide();
             this.container.$('.input-section .prompt-answer').show();
-            this.gradingButtons.show();
+            this.gradingButtons.show().select(3);
             return this;
         }
     });

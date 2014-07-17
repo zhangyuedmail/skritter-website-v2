@@ -62,6 +62,19 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleGradingSelected
+         * @param {Object} event
+         */
+        handleGradingSelected: function(event, score) {
+            this.review.setContained('score', score);
+            if (skritter.user.isUsingSquigs()) {
+                this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[this.review.getScore()]);
+            } else {
+                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
+            }
+            event.preventDefault();
+        },
+        /**
          * @method handleInputUp
          * @param {Object} event
          * @param {Array} points

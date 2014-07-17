@@ -38,6 +38,15 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleGradingSelected
+         * @param {Object} event
+         */
+        handleGradingSelected: function(event, score) {
+            this.review.setContained('score', score);
+            this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
+            event.preventDefault();
+        },
+        /**
          * @method handleInputDown
          * @param {Object} event
          */

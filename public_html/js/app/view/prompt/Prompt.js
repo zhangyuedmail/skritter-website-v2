@@ -38,6 +38,8 @@ define([
             this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClickCanvas);
             this.listenTo(this.canvas, 'input:down', this.handleInputDown);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
+            this.listenTo(this.gradingButtons, 'complete', this.handleGradingComplete);
+            this.listenTo(this.gradingButtons, 'selected', this.handleGradingSelected);
         },
         /**
          * @method handleClickCanvas
@@ -65,6 +67,23 @@ define([
          * @param event
          */
         handleClickEraser: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleGradingComplete
+         * @param {Object} event
+         */
+        handleGradingComplete: function(event) {
+            this.next();
+            event.preventDefault();
+        },
+        /**
+         * @method handleGradingSelected
+         * @param {Object} event
+         * @param {Number} score
+         */
+        handleGradingSelected: function(event, score) {
+            this.review.setContained('score', score);
             event.preventDefault();
         },
         /**

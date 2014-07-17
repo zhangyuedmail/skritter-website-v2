@@ -51,8 +51,8 @@ define([
         handleContentContainerClick: function(event) {
             if (this.$el.hasClass('expanded')) {
                 this.toggle();
-                event.preventDefault();
             }
+            event.preventDefault();
         },
         /**
          * @method handleHomeClick
