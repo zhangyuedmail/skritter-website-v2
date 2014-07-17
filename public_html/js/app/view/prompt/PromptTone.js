@@ -32,7 +32,7 @@ define([
          * @param {Object} event
          */
         handleClickCanvas: function(event) {
-            if (this.review.getContained().finished) {
+            if (this.review.isFinished()) {
                 this.next();
             }
             event.preventDefault();
@@ -116,6 +116,9 @@ define([
         resize: function() {
             Prompt.prototype.resize.call(this);
             this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() - 1], this.vocab.getFontName());
+            if (this.review.getCharacter().length) {
+                this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+            }
         },
         /**
          * @method show
@@ -126,6 +129,9 @@ define([
             Prompt.prototype.show.call(this);
             this.canvas.show().enableTicker().disableGrid().enableInput();
             this.renderFields();
+            if (this.review.isFinished()) {
+                this.showAnswer();
+            }
             this.resize();
             return this;
         },

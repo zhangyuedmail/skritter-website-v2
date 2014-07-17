@@ -43,7 +43,9 @@ define([
          */
         events: {
             'vclick .button-eraser': 'handleClickEraser',
-            'vclick .button-reveal': 'handleClickReveal'
+            'vclick .button-reveal': 'handleClickReveal',
+            'vclick .navigate-left': 'handleClickNavigateLeft',
+            'vclick .navigate-right': 'handleClickNavigateRight'
         },
         /**
          * @method loadElements
@@ -78,6 +80,22 @@ define([
          */
         handleClickReveal: function(event) {
             this.prompt.handleClickReveal(event);
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickNavigateLeft
+         * @param {Object} event
+         */
+        handleClickNavigateLeft: function(event) {
+            this.prompt.previous();
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickNavigateRight
+         * @param {Object} event
+         */
+        handleClickNavigateRight: function(event) {
+            this.prompt.next();
             event.preventDefault();
         },
         /**

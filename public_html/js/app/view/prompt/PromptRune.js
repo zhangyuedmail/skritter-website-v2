@@ -39,7 +39,7 @@ define([
          * @param {Object} event
          */
         handleClickCanvas: function(event) {
-            if (this.review.getContained().finished) {
+            if (this.review.isFinished()) {
                 this.next();
             }
             event.preventDefault();
@@ -146,6 +146,9 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
+            if (this.review.getCharacter().length) {
+                this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+            }
         },
         /**
          * @method revealCharacter
@@ -164,6 +167,10 @@ define([
             Prompt.prototype.show.call(this);
             this.canvas.show().enableTicker().enableGrid().enableInput();
             this.renderFields();
+            if (this.review.isFinished()) {
+                this.showAnswer();
+            }
+            this.resize();
             return this;
         },
         /**
