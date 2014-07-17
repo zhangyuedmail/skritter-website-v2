@@ -308,6 +308,16 @@ define([
                     this.set(result);
                     async.series([
                         function(callback) {
+                            if (Modernizr.indexeddb) {
+                                var request = indexedDB.deleteDatabase(result.user_id);
+                                request.onsuccess = function() {
+                                    callback();
+                                };
+                            } else {
+                                callback();
+                            }
+                        },
+                        function(callback) {
                             skritter.user.settings.fetch(callback);
                         },
                         function(callback) {

@@ -34,7 +34,7 @@ define([], function() {
          */
         destroy: function(callback) {
             this.database.close();
-            var request = window.indexedDB.deleteDatabase(this.name);
+            var request = indexedDB.deleteDatabase(this.name);
             request.onsuccess = _.bind(function() {
                 if (typeof callback === 'function') {
                     callback();
@@ -134,8 +134,7 @@ define([], function() {
          * @param {Function} callback
          */
         open: function(name, callback) {
-            var tables = this.tables;
-            var request = window.indexedDB.open(name, this.version);
+            var request = indexedDB.open(name, this.version);
             request.onerror = function(event) {
                 console.error(event);
             };
