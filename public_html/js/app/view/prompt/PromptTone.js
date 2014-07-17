@@ -19,12 +19,13 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
-            this.container.$('.info-section .prompt-writing').html(this.vocab.getWriting());
-            this.container.$('.info-section .prompt-reading').html(this.vocab.getReading(
+            this.elements.promptDefinition.html(this.vocab.getDefinition());
+            this.elements.promptReading.html(this.vocab.getReading(
                 this.review.getPosition(),
                 !skritter.user.settings.get('hideReading'),
                 skritter.user.isUsingZhuyin()
             ));
+            this.elements.promptWriting.html(this.vocab.getWriting());
             return this;
         },
         /**

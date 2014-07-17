@@ -17,11 +17,11 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
-            this.container.$('.input-section .prompt-writing').html(this.vocab.getWriting());
-            this.container.$('.input-section .prompt-answer-text').html(this.vocab.getDefinition());
-            this.container.$('.input-section .prompt-question-text').text("What's the definition?");
-            this.container.$('.input-section .prompt-question-help').text("(tap to reveal)");
-            this.container.$('.input-section .prompt-question').show();
+            this.elements.promptAnswerText.html(this.vocab.getDefinition());
+            this.elements.promptQuestion.show();
+            this.elements.promptQuestionHelp.text("(tap to reveal)");
+            this.elements.promptQuestionText.text("What's the definition?");
+            this.elements.promptQuestionTitle.html(this.vocab.getWriting());
             return this;
         },
         /**
@@ -67,8 +67,8 @@ define([
          */
         showAnswer: function() {
             Prompt.prototype.showAnswer.call(this);
-            this.container.$('.input-section .prompt-question').hide();
-            this.container.$('.input-section .prompt-answer').show();
+            this.elements.promptAnswer.show();
+            this.elements.promptQuestion.hide();
             this.gradingButtons.show().select(3);
             return this;
         }

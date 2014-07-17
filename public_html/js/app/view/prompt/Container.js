@@ -17,6 +17,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            View.prototype.initialize.call(this);
             this.canvas = new Canvas();
             this.gradingButtons = new GradingButtons();
             this.prompt = null;
@@ -35,6 +36,7 @@ define([
             this.canvas.setElement('.canvas-container').render();
             this.gradingButtons.setElement(this.$('.grading-container')).render();
             this.teachingButtons.setElement(this.$('.teaching-container')).render();
+            this.loadElements();
             this.resize();
             return this;
         },
@@ -52,6 +54,23 @@ define([
          * @returns {PromptContainer}
          */
         loadElements: function() {
+            this.elements.buttonEraser = this.$('.button-eraser');
+            this.elements.buttonReveal = this.$('.button-reveal');
+            this.elements.navigateLeft = this.$('.navigate-left');
+            this.elements.navigateRight = this.$('.navigate-right');
+            this.elements.promptAnswer = this.$('.input-section .prompt-answer');
+            this.elements.promptAnswerText = this.$('.input-section .prompt-answer-text');
+            this.elements.promptDefinition = this.$('.prompt-definition');
+            this.elements.promptMnemonic = this.$('.prompt-mnemonic');
+            this.elements.promptNewness = this.$('.prompt-newness');
+            this.elements.promptQuestion = this.$('.input-section .prompt-question');
+            this.elements.promptQuestionHelp = this.$('.input-section .prompt-question-help');
+            this.elements.promptQuestionText = this.$('.input-section .prompt-question-text');
+            this.elements.promptQuestionTitle = this.$('.input-section .prompt-question-title');
+            this.elements.promptReading = this.$('.prompt-reading');
+            this.elements.promptSentence = this.$('.prompt-sentence');
+            this.elements.promptStyle = this.$('.prompt-style');
+            this.elements.promptWriting = this.$('.prompt-writing');
         },
         /**
          * @method clear
@@ -119,6 +138,7 @@ define([
                     break;
             }
             this.prompt.canvas = this.canvas;
+            this.prompt.elements = this.elements;
             this.prompt.gradingButtons = this.gradingButtons;
             this.prompt.review = review;
             this.prompt.teachingButtons = this.teachingButtons;

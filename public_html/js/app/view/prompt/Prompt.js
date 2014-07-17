@@ -9,6 +9,7 @@ define([
          * @method initialize
          */
         initialize: function(container) {
+            View.prototype.initialize.call(this);
             this.canvas = null;
             this.container = container;
             this.gradingButtons = null;

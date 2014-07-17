@@ -19,10 +19,11 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
-            this.container.$('.info-section .button-eraser').show();
-            this.container.$('.info-section .button-reveal').show();
-            this.container.$('.info-section .prompt-writing').html(this.vocab.getWriting(this.review.getPosition()));
-            this.container.$('.info-section .prompt-reading').html(this.vocab.getReading());
+            this.elements.buttonEraser.show();
+            this.elements.buttonReveal.show();
+            this.elements.promptDefinition.html(this.vocab.getDefinition());
+            this.elements.promptReading.html(this.vocab.getReading());
+            this.elements.promptWriting.html(this.vocab.getWriting(this.review.getPosition()));
             return this;
         },
         /**
