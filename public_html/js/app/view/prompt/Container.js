@@ -39,6 +39,13 @@ define([
             return this;
         },
         /**
+         * @property {Object} events
+         */
+        events: {
+            'vclick .button-eraser': 'handleClickEraser',
+            'vclick .button-reveal': 'handleClickReveal'
+        },
+        /**
          * @method loadElements
          * @returns {PromptContainer}
          */
@@ -50,10 +57,28 @@ define([
          */
         clear: function() {
             this.canvas.clear();
+            this.$('.info-section .button-eraser').show();
+            this.$('.info-section .button-reveal').show();
             this.$('.prompt-answer').hide();
             this.$('.prompt-question').hide();
             this.$('.prompt-field').empty();
             return this;
+        },
+        /**
+         * @method handleClickEraser
+         * @param {Object} event
+         */
+        handleClickEraser: function(event) {
+            this.prompt.handleClickEraser(event);
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickReveal
+         * @param {Object} event
+         */
+        handleClickReveal: function(event) {
+            this.prompt.handleClickReveal(event);
+            event.preventDefault();
         },
         /**
          * @method loadPrompt

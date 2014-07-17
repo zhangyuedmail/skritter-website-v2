@@ -61,6 +61,13 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleClickEraser
+         * @param event
+         */
+        handleClickEraser: function(event) {
+            event.preventDefault();
+        },
+        /**
          * @method handleInputDown
          * @param {Object} event
          */
@@ -72,6 +79,13 @@ define([
          * @param {Object} event
          */
         handleInputUp: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickReveal
+         * @param event
+         */
+        handleClickReveal: function(event) {
             event.preventDefault();
         },
         /**

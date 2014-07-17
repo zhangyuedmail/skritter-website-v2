@@ -26,6 +26,15 @@ define([
             return this;
         },
         /**
+         * @method eraseCharacter
+         */
+        eraseCharacter: function() {
+            this.gradingButtons.hide();
+            this.teachingButtons.hide();
+            this.review.getCharacter().reset();
+            this.canvas.clear().enableInput();
+        },
+        /**
          * @method handleClickCanvas
          * @param {Object} event
          */
@@ -42,6 +51,14 @@ define([
          */
         handleInputDown: function(event) {
             skritter.timer.stopThinking();
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickEraser
+         * @param event
+         */
+        handleClickEraser: function(event) {
+            this.eraseCharacter();
             event.preventDefault();
         },
         /**
@@ -65,7 +82,7 @@ define([
                             this.canvas.tweenCharacter('background', this.review.getCharacter(), _.bind(function() {
                                 this.canvas.disableTicker();
                             }, this));
-                            this.canvas.injectLayer('background', skritter.settings.get('gradingColors')[this.review.getScore()]);
+                            this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[this.review.getScore()]);
                             this.canvas.getLayer('stroke').alpha = 0.6;
                         }
                     } else {
@@ -75,7 +92,7 @@ define([
                             }
                         }, this));
                         if (this.review.getCharacter().isFinished()) {
-                            this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
+                            this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
                         }
                     }
                 } else {
@@ -86,6 +103,14 @@ define([
                     }
                 }
             }
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickReveal
+         * @param event
+         */
+        handleClickReveal: function(event) {
+            this.revealCharacter();
             event.preventDefault();
         },
         /**
@@ -108,6 +133,14 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
+        },
+        /**
+         * @method revealCharacter
+         * @param {Number} excludeStroke
+         */
+        revealCharacter: function(excludeStroke) {
+            this.canvas.clearLayer('background');
+            this.canvas.drawShape('background', this.review.getCharacter().targets[0].getShape(excludeStroke), '#999999');
         },
         /**
          * @method show

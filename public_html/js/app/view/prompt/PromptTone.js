@@ -62,13 +62,13 @@ define([
                         this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), _.bind(function() {
                             this.canvas.disableTicker();
                         }, this));
-                        this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
+                        this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
                     } else {
                         this.review.setContained('score', 1);
                         this.review.getCharacter().reset();
                         this.review.getCharacter().add(this.review.getCharacter().targets[possibleTones[0] - 1].models);
                         this.canvas.drawShape('stroke', this.review.getCharacter().getShape(), null, null);
-                        this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
+                        this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
                     }
                 }
             } else {
@@ -81,7 +81,7 @@ define([
                     this.review.getCharacter().add(this.review.getCharacter().targets[possibleTones[0] - 1].models);
                     this.canvas.drawShape('stroke', this.review.getCharacter().getShape(), null, null);
                 }
-                this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
+                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
             }
             this.showAnswer();
             event.preventDefault();

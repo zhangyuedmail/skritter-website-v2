@@ -72,8 +72,8 @@ define([
             for (var i = 0, length = this.layerNames.length; i < length; i++) {
                 this.getLayer(this.layerNames[i]).removeAllChildren();
             }
-            this.resize();
             this.updateAll();
+            this.resize();
             return this;
         },
         /**
@@ -185,11 +185,25 @@ define([
                 shape.alpha = alpha;
             }
             if (color) {
-                if (shape.graphics._fill) {
-                    shape.graphics._fill.style = color;
-                }
-                if (shape.graphics._stroke) {
-                    shape.graphics._stroke.style = color;
+                if (shape.graphics) {
+                    if (shape.graphics._fill) {
+                        shape.graphics._fill.style = color;
+                    }
+                    if (shape.graphics._stroke) {
+                        shape.graphics._stroke.style = color;
+                    }
+                } else {
+                    for (var a = 0, lengthA = shape.children.length; a < lengthA; a++) {
+                        var child = shape.children[a];
+                        if (child.graphics) {
+                            if (child.graphics._fill) {
+                                child.graphics._fill.style = color;
+                            }
+                            if (child.graphics._stroke) {
+                                child.graphics._stroke.style = color;
+                            }
+                        }
+                    }
                 }
             }
             this.getLayer(layerName).addChild(shape);
@@ -308,7 +322,7 @@ define([
          * @param {String} layerName
          * @param color
          */
-        injectLayer: function(layerName, color) {
+        injectLayerColor: function(layerName, color) {
             var layer = this.getLayer(layerName);
             for (var a = 0, lengthA = layer.children.length; a < lengthA; a++) {
                 var child = layer.children[a];
