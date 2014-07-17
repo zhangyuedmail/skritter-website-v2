@@ -11,7 +11,6 @@ define([
          */
         initialize: function() {
             View.prototype.initialize.call(this);
-            this.expanded = true;
             this.grade = 3;
         },
         /**
@@ -27,57 +26,21 @@ define([
          */
         events: function() {
             return _.extend({}, View.prototype.events, {
-                'vclick.GradingButtons #grade1': 'handleButtonClick',
-                'vclick.GradingButtons #grade2': 'handleButtonClick',
-                'vclick.GradingButtons #grade3': 'handleButtonClick',
-                'vclick.GradingButtons #grade4': 'handleButtonClick'
+                'vclick .button-grading': 'handleClickGrading'
             });
         },
         /**
-         * @method collapse
-         * @returns {PromptGradingButtons}
-         */
-        collapse: function() {
-            this.expanded = false;
-            for (var i = 1; i <= 4; i++) {
-                if (i === this.grade) {
-                    this.$('#grade' + i).parent().show();
-                } else {
-                    this.$('#grade' + i).parent().hide();
-                }
-            }
-            return this;
-        },
-        /**
-         * @method expand
-         * @returns {PromptGradingButtons}
-         */
-        expand: function() {
-            for (var i = 1; i <= 4; i++) {
-                if (i === this.grade) {
-                    this.$('#grade' + i).parent().addClass('active');
-                } else {
-                    this.$('#grade' + i).parent().removeClass('active');
-                }
-                this.$('#grade' + i).parent().show();
-            }
-            this.expanded = true;
-            return this;
-        },
-        /**
-         * @method handleButtonClick
+         * @method handleClickGrading
          * @param {Object} event
          */
-        handleButtonClick: function(event) {
-            this.grade = parseInt(event.currentTarget.id.replace(/[^\d]+/, ''), 10);
-            this.select(this.grade);
-            this.triggerSelected();
-            if (this.expanded) {
-                this.triggerComplete();
-            } else {
-                this.expand();
+        handleClickGrading: function(event) {
+            var grade = parseInt(event.currentTarget.id.replace('grade', ''), 10);
+            this.triggerSelected(event, grade);
+            if (this.grade === grade) {
+                this.triggerComplete(event, grade);
             }
-            event.preventDefault();
+            this.select(grade);
+            event.stopPropagation();
         },
         /**
          * @method hide
@@ -94,14 +57,14 @@ define([
          * @returns {PromptGradingButtons}
          */
         select: function(grade) {
-            this.grade = grade;
             for (var i = 1; i <= 4; i++) {
-                if (i === this.grade) {
-                    this.$('#grade' + i).parent().addClass('active');
+                if (i === grade) {
+                    this.$('#grade' + i).addClass('active');
                 } else {
-                    this.$('#grade' + i).parent().removeClass('active');
+                    this.$('#grade' + i).removeClass('active');
                 }
             }
+            this.grade = grade;
             return this;
         },
         /**
@@ -115,15 +78,19 @@ define([
         },
         /**
          * @method triggerComplete
+         * @param {Object} event
+         * @param {Number] grade
          */
-        triggerComplete: function() {
-            this.trigger('complete', this.grade);
+        triggerComplete: function(event, grade) {
+            this.trigger('complete', event, grade);
         },
         /**
          * @method triggerSelected
+         * @param {Object} event
+         * @param {Number] grade
          */
-        triggerSelected: function() {
-            this.trigger('selected', this.grade);
+        triggerSelected: function(event, grade) {
+            this.trigger('selected', event, grade);
         }
     });
 
