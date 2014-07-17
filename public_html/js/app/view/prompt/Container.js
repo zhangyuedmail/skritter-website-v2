@@ -75,6 +75,7 @@ define([
             this.prompt.teachingButtons = this.teachingButtons;
             this.prompt.vocab = review.getBaseVocab();
             this.prompt.show().enableListeners();
+            skritter.user.scheduler.sort();
         },
         /**
          * @method reset

@@ -132,7 +132,6 @@ define([
          * @returns {PromptCanvas}
          */
         disableInput: function() {
-            createjs.Ticker.setPaused(true);
             this.$(this.elements.input).off('vmousedown.Input');
             this.$(this.elements.input).off('vmousemove.Input');
             this.$(this.elements.input).off('vmouseout.Input');
@@ -186,7 +185,12 @@ define([
                 shape.alpha = alpha;
             }
             if (color) {
-                shape.graphics._fill.style = color;
+                if (shape.graphics._fill) {
+                    shape.graphics._fill.style = color;
+                }
+                if (shape.graphics._stroke) {
+                    shape.graphics._stroke.style = color;
+                }
             }
             this.getLayer(layerName).addChild(shape);
             this.stage.display.update();
@@ -209,11 +213,11 @@ define([
             var stage = this.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
             this.disableInput().$(this.elements.input).on('vmousedown.Input', _.bind(down, this));
-            createjs.Ticker.setPaused(false);
             function down(event) {
                 points = [];
                 marker = new createjs.Shape();
                 squig = new createjs.Shape();
+                squig.graphics.setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle).beginStroke(this.strokeColor);
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
                 this.triggerInputDown(event, oldPoint);
@@ -229,11 +233,7 @@ define([
                     .beginStroke(this.strokeColor)
                     .moveTo(midPoint.x, midPoint.y)
                     .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
-                squig.graphics
-                    .setStrokeStyle(this.strokeSize, this.strokeCapStyle, this.strokeJointStyle)
-                    .beginStroke(this.strokeColor)
-                    .moveTo(midPoint.x, midPoint.y)
-                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+                squig.graphics.moveTo(midPoint.x, midPoint.y).curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 stage.update();
                 oldPoint = point;
                 oldMidPoint = midPoint;
@@ -243,7 +243,7 @@ define([
                 this.$(this.elements.input).off('vmousemove.Input');
                 this.$(this.elements.input).off('vmouseout.Input');
                 this.$(this.elements.input).off('vmouseup.Input');
-                this.triggerInputUp(event, null, squig);
+                this.triggerInputUp(event, null, squig.clone(true));
                 marker.graphics.clear();
                 stage.clear();
             }
@@ -251,15 +251,31 @@ define([
                 this.$(this.elements.input).off('vmousemove.Input');
                 this.$(this.elements.input).off('vmouseout.Input');
                 this.$(this.elements.input).off('vmouseup.Input');
-                this.triggerInputUp(event, points, squig);
+                this.triggerInputUp(event, points, squig.clone(true));
                 marker.graphics.clear();
                 stage.clear();
             }
             return this;
         },
         /**
+         * @method disableTicker
+         * @returns {PromptCanvas}
+         */
+        disableTicker: function() {
+            createjs.Ticker.setPaused(true);
+            return this;
+        },
+        /**
+         * @method enableTicker
+         * @returns {PromptCanvas}
+         */
+        enableTicker: function() {
+            createjs.Ticker.setPaused(false);
+            return this;
+        },
+        /**
          * @method injectLayer
-         * @param {}layerName
+         * @param {String} layerName
          * @param color
          */
         injectLayer: function(layerName, color) {
@@ -267,11 +283,21 @@ define([
             for (var a = 0, lengthA = layer.children.length; a < lengthA; a++) {
                 var child = layer.children[a];
                 if (child.graphics) {
-                    child.graphics._fill.style = color;
+                    if (child.graphics._fill) {
+                        child.graphics._fill.style = color;
+                    }
+                    if (child.graphics._stroke) {
+                        child.graphics._stroke.style = color;
+                    }
                 } else {
                     for (var b = 0, lengthB = child.children.length; b < lengthB; b++) {
                         if (child.children[b].graphics) {
-                            child.children[b].graphics._fill.style = color;
+                            if (child.graphics._fill) {
+                                child.graphics._fill.style = color;
+                            }
+                            if (child.graphics._stroke) {
+                                child.graphics._stroke.style = color;
+                            }
                         }
                     }
                 }
@@ -447,11 +473,31 @@ define([
                 scaleX: toShape.scaleX,
                 scaleY: toShape.scaleY,
                 rotation: toShape.rotation
-            }, 300, createjs.Ease.backOut).call(function(var1, var2, var3) {
+            }, 300, createjs.Ease.backOut).call(_.bind(function() {
                 if (typeof callback === 'function') {
-                    callback();
+                    callback(this);
                 }
-            });
+            }, this));
+        },
+        /**
+         * @method tweenCharacter
+         * @param {String} layerName
+         * @param {Backbone.Collection} character
+         * @param {Function} callback
+         */
+        tweenCharacter: function(layerName, character, callback) {
+            var position = 0;
+            for (var i = 0, length = character.length; i < length; i++) {
+                var stroke = character.at(i);
+                this.tweenShape(layerName, stroke.getUserShape(), stroke.inflateShape(), function(canvas) {
+                    position++;
+                    if (position >= character.length) {
+                        if (typeof callback === 'function') {
+                            callback(canvas);
+                        }
+                    }
+                });
+            }
         },
         /**
          * @method updateAll

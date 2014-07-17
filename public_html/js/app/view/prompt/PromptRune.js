@@ -54,13 +54,27 @@ define([
                 this.canvas.lastMouseDownEvent = null;
                 var result = this.review.getCharacter().recognize(points, shape);
                 if (result) {
-                    this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), _.bind(function() {
-                        if (this.review.getCharacter().isFinished()) {
-                            this.showAnswer();
-                        }
-                    }, this));
                     if (this.review.getCharacter().isFinished()) {
-                        this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
+                        this.showAnswer();
+                    }
+                    if (skritter.user.isUsingSquigs()) {
+                        this.canvas.drawShape('stroke', shape);
+                        if (this.review.getCharacter().isFinished()) {
+                            this.canvas.tweenCharacter('background', this.review.getCharacter(), function(canvas) {
+                                canvas.disableTicker();
+                            });
+                            this.canvas.injectLayer('background', skritter.settings.get('gradingColors')[this.review.getScore()]);
+                            this.canvas.getLayer('stroke').alpha = 0.6;
+                        }
+                    } else {
+                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), function(canvas) {
+                            if (this.review.getCharacter().isFinished()) {
+                                canvas.disableTicker();
+                            }
+                        });
+                        if (this.review.getCharacter().isFinished()) {
+                            this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
+                        }
                     }
                 } else {
                     this.strokeAttempts++;
@@ -99,7 +113,7 @@ define([
         show: function() {
             skritter.timer.setLimit(30, 15);
             Prompt.prototype.show.call(this);
-            this.canvas.show().enableGrid().enableInput();
+            this.canvas.show().enableTicker().enableGrid().enableInput();
             this.renderFields();
             return this;
         },
@@ -109,6 +123,7 @@ define([
          */
         showAnswer: function() {
             Prompt.prototype.showAnswer.call(this);
+            this.canvas.disableInput();
             this.review.setContained({
                 finished: true
             });

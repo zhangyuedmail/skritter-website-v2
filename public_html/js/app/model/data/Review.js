@@ -343,7 +343,6 @@ define([], function() {
                     skritter.user.data.items.cache(callback);
                 }
             ], function() {
-                skritter.user.scheduler.sort();
                 callback();
             });
         },

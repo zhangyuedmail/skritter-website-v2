@@ -59,7 +59,9 @@ define([
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
                         this.review.setContained('score', 3);
-                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), _.bind(this.showAnswer, this));
+                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), function(canvas) {
+                            canvas.disableTicker();
+                        });
                         this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
                     } else {
                         this.review.setContained('score', 1);
@@ -67,7 +69,6 @@ define([
                         this.review.getCharacter().add(this.review.getCharacter().targets[possibleTones[0] - 1].models);
                         this.canvas.drawShape('stroke', this.review.getCharacter().getShape(), null, null);
                         this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
-                        this.showAnswer();
                     }
                 }
             } else {
@@ -81,8 +82,8 @@ define([
                     this.canvas.drawShape('stroke', this.review.getCharacter().getShape(), null, null);
                 }
                 this.canvas.injectLayer('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
-                this.showAnswer();
             }
+            this.showAnswer();
             event.preventDefault();
         },
         /**
@@ -114,7 +115,7 @@ define([
         show: function() {
             skritter.timer.setLimit(15, 10);
             Prompt.prototype.show.call(this);
-            this.canvas.show().disableGrid().enableInput();
+            this.canvas.show().enableTicker().disableGrid().enableInput();
             this.renderFields();
             this.resize();
             return this;
