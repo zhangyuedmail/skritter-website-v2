@@ -203,6 +203,23 @@ define([
         return Math.sqrt(xs + ys);
     };
     /**
+     * @method getDistanceFromArray
+     * @param {Array} points
+     * @return {Number} The distance between the first and last points
+     */
+    var getDistanceFromArray = function(points) {
+        if (points && points.length > 1) {
+            var point1 = {x: points[0].x, y: points[0].y};
+            var point2 = {x: points[points.length - 1].x, y: points[points.length - 1].y}
+            var xs = point2.x - point1.x;
+            xs = xs * xs;
+            var ys = point2.y - point1.y;
+            ys = ys * ys;
+            return Math.sqrt(xs + ys);
+        }
+        return 0;
+    };
+    /**
      * @method getDistanceToLineSegment
      * @param {Object} start The starting point of a line segment
      * @param {Object} end The ending point of a line segment
@@ -384,6 +401,7 @@ define([
         getAngle: getAngle,
         getBoundingRectangle: getBoundingRectangle,
         getDistance: getDistance,
+        getDistanceFromArray: getDistanceFromArray,
         getDistanceToLineSegment: getDistanceToLineSegment,
         getGuid: getGuid,
         getUnixTime: getUnixTime,

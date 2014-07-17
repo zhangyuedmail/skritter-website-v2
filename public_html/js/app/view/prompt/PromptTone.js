@@ -65,7 +65,7 @@ define([
          */
         handleInputUp: function(event, points, shape) {
             var possibleTones = _.flatten(this.review.getBaseVocab().getTones(this.review.getPosition()));
-            if (points && points.length > 2) {
+            if (points && skritter.fn.getDistanceFromArray(points) > 20) {
                 this.canvas.lastMouseDownEvent = null;
                 var result = this.review.getCharacter().recognize(points, shape);
                 if (result) {
