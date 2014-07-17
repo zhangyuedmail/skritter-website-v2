@@ -25,7 +25,8 @@ define([], function() {
                 4: '#4097d3'
             },
             hintColor: '#87cefa',
-            maxCanvasSize: 1800
+            maxCanvasSize: 1800,
+            webWorkers: false
         },
         /**
          * @method getAppHeight
