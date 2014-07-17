@@ -118,6 +118,7 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
+            this.canvas.clear().resize();
             this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() - 1], this.vocab.getFontName());
             if (this.review.getCharacter().length) {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getShape());

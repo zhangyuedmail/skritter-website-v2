@@ -147,6 +147,7 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
+            this.canvas.clear().resize();
             if (this.review.getCharacter().length) {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
             }

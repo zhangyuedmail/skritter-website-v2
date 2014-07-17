@@ -2,7 +2,7 @@ define([], function() {
     /**
      * @model Settings
      */
-    var Model = Backbone.Model.extend({
+    var Settings = Backbone.Model.extend({
         /**
          * @method initialize
          */
@@ -94,5 +94,5 @@ define([], function() {
         }
     });
     
-    return Model;
+    return Settings;
 });

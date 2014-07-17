@@ -26,6 +26,7 @@ define([
             this.promptRune = new PromptRune(this);
             this.promptTone = new PromptTone(this);
             this.teachingButtons = new TeachingButtons();
+            this.listenTo(skritter.settings, 'resize', _.bind(this.resize, this));
         },
         /**
          * @method render
@@ -186,6 +187,9 @@ define([
                     float: 'left',
                     width: contentWidth - canvasSize
                 });
+            }
+            if (this.prompt) {
+                this.prompt.resize();
             }
         },
         /**
