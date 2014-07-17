@@ -283,6 +283,13 @@ define([
             return this.settings.get('readingStyle') === 'pinyin' ? true : false;
         },
         /**
+         * @method isUsingSquigs
+         * @returns {Boolean}
+         */
+        isUsingSquigs: function() {
+            return this.settings.get('squigs');
+        },
+        /**
          * @method isUsingZhuyin
          * @returns {Boolean}
          */

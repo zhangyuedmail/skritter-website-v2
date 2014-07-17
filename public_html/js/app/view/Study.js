@@ -24,6 +24,11 @@ define([
          */
         render: function() {
             this.setTitle('Study');
+            if (!skritter.user.scheduler.hasData()) {
+                this.showAddItemsModal();
+                skritter.router.navigate('', {replace: true, trigger: true});
+                return false;
+            }
             this.$el.html(_.template(template, skritter.strings));
             skritter.timer.setElement(this.$('.study-timer')).render();
             this.promptContainer.setElement(this.$('#content')).render();
@@ -33,11 +38,6 @@ define([
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             if (skritter.user.data.get('syncing')) {
                 this.toggleAddButton(true);
-            }
-            if (!skritter.user.scheduler.hasData()) {
-                this.showAddItemsModal();
-                skritter.router.navigate('', {replace: true, trigger: true});
-                return false;
             }
             if (skritter.user.settings.get('hideCounter')) {
                 this.$('.study-counter').hide();
@@ -91,7 +91,8 @@ define([
          * @param {Object} event
          */
         handleInfoButtonClicked: function(event) {
-            skritter.router.navigate('vocab/info/' + skritter.user.getLanguageCode() + '/' + this.prompt.vocab.get('writing'), {replace: true, trigger: true});
+            var vocabWriting = this.promptContainer.prompt.vocab.get('writing');
+            skritter.router.navigate('vocab/info/' + skritter.user.getLanguageCode() + '/' + vocabWriting, {replace: true, trigger: true});
             event.preventDefault();
         },
         /**
@@ -106,7 +107,6 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            console.log('nexting');
             skritter.user.scheduler.getNext(_.bind(function(item) {
                 this.promptContainer.loadPrompt(item.createReview());
             }, this));
@@ -115,7 +115,6 @@ define([
          * @method previousPrompt
          */
         previousPrompt: function() {
-            console.log('previousing');
         },
         /**
          * @method toggleAddButton
