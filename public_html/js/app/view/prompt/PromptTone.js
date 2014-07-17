@@ -19,6 +19,8 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
+            this.elements.buttonEraser.hide();
+            this.elements.buttonReveal.hide();
             this.elements.promptDefinition.html(this.vocab.getDefinition());
             this.elements.promptReading.html(this.vocab.getReading(
                 this.review.getPosition(),

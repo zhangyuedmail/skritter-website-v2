@@ -17,6 +17,8 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
+            this.elements.buttonEraser.hide();
+            this.elements.buttonReveal.hide();
             this.elements.promptAnswerText.html(this.vocab.getDefinition());
             this.elements.promptQuestion.show();
             this.elements.promptQuestionHelp.text("(tap to reveal)");
