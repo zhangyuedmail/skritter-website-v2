@@ -39,7 +39,6 @@ define([
          * @param {Object} event
          */
         handleClickCanvas: function(event) {
-            console.log('click through', this.review.getContained());
             if (this.review.getContained().finished) {
                 this.next();
             }
@@ -50,6 +49,7 @@ define([
          * @param {Object} event
          */
         handleInputDown: function(event) {
+            this.canvas.fadeLayer('background');
             skritter.timer.stopThinking();
             event.preventDefault();
         },
