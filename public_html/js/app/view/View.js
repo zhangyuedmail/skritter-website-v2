@@ -34,7 +34,6 @@ define([], function() {
          * @param {Object} event
          */
         handleClickButtonBack: function(event) {
-            console.log('button back');
             skritter.router.back();
             event.preventDefault();
         },

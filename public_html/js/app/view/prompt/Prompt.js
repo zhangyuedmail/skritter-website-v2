@@ -86,12 +86,9 @@ define([
          */
         next: function() {
             if (this.review.next()) {
-                console.log('next', true);
-                this.reset().renderFields();
+                this.reset().show();
             } else {
-                console.log('next', false);
-                //this.review.save(_.bind(this.container.triggerNext, this));
-                this.container.triggerNext();
+                this.review.save(_.bind(this.container.triggerNext, this.container));
             }
         },
         /**
@@ -99,12 +96,9 @@ define([
          */
         previous: function() {
             if (this.review.previous()) {
-                console.log('previous', true);
-                this.reset().renderFields();
+                this.reset().show();
             } else {
-                console.log('previous', false);
-                //this.review.save(_.bind(this.container.triggerPrevious, this));
-                this.container.triggerPrevious();
+                this.review.save(_.bind(this.container.triggerNext, this.container));
             }
         },
         /**

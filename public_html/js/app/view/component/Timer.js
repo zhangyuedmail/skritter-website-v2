@@ -71,7 +71,7 @@ define([], function() {
         getThinkingTime: function() {
             var lapTime = this.getLapTime();
             if (this.thinkingValue) {
-                return this.thinkingValue;
+                return this.thinkingValue / 1000;
             }
             return lapTime > this.thinkingLimit ? this.thinkingLimit / 1000 : lapTime / 1000;
         },
@@ -124,7 +124,7 @@ define([], function() {
          * @return {Timer}
          */
         setThinkingValue: function(thinkingValue) {
-            this.thinkingValue = thinkingValue ? thinkingValue : 0;
+            this.thinkingValue = thinkingValue ? thinkingValue * 1000 : 0;
             return this;
         },
         /**
@@ -151,6 +151,14 @@ define([], function() {
                 this.lap = 0;
             }
             return this;
+        },
+        /**
+         * @method stopThinking
+         */
+        stopThinking: function() {
+            if (!this.thinkingValue) {
+                this.thinkingValue = this.getLapTime();
+            }
         },
         /**
          * @method update
