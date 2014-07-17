@@ -107,14 +107,32 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            skritter.user.scheduler.getNext(_.bind(function(item) {
-                this.promptContainer.loadPrompt(item.createReview());
-            }, this));
+            var self = this;
+            var active = skritter.user.data.reviews.getActive();
+            if (active) {
+                active.load(_.bind(function(review) {
+                    this.promptContainer.loadPrompt(review);
+                }, this));
+            } else {
+                skritter.user.scheduler.getNext(function(item) {
+                    var review = item.createReview();
+                    review.save(function() {
+                        self.promptContainer.loadPrompt(review);
+                    });
+                });
+            }
         },
         /**
          * @method previousPrompt
          */
         previousPrompt: function() {
+            if (skritter.user.data.reviews.length > 1) {
+                skritter.user.data.reviews.at(1).load(_.bind(function(review) {
+                    this.promptContainer.loadPrompt(review);
+                }, this));
+            } else {
+                this.nextPrompt();
+            }
         },
         /**
          * @method toggleAddButton

@@ -150,6 +150,11 @@ define([
             this.canvas.clear().resize();
             if (this.review.getCharacter().length) {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+            } else if (this.review.isFinished()) {
+                this.canvas.drawCharacterFromFont('stroke',
+                    this.vocab.getCharacters()[this.review.getPosition() - 1],
+                    this.vocab.getFontName(), skritter.settings.get('gradingColors')[this.review.getScore()]
+                );
             }
         },
         /**

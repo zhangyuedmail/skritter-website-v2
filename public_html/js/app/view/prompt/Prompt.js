@@ -133,6 +133,7 @@ define([
             if (this.review.next()) {
                 this.reset().show();
             } else {
+                this.review.set('done', true);
                 this.review.save(_.bind(this.container.triggerNext, this.container));
             }
         },
@@ -143,7 +144,7 @@ define([
             if (this.review.previous()) {
                 this.reset().show();
             } else {
-                this.review.save(_.bind(this.container.triggerNext, this.container));
+                this.review.save(_.bind(this.container.triggerPrevious, this.container));
             }
         },
         /**

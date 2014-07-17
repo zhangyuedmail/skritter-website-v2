@@ -347,12 +347,17 @@ define([
             var layer = this.getLayer(layerName);
             for (var a = 0, lengthA = layer.children.length; a < lengthA; a++) {
                 var child = layer.children[a];
-                if (child.graphics) {
-                    if (child.graphics._fill) {
-                        child.graphics._fill.style = color;
-                    }
-                    if (child.graphics._stroke) {
-                        child.graphics._stroke.style = color;
+                if (child.graphics || child.text) {
+                    if (child.text) {
+                        child.color = color;
+                    } else {
+                        if (child.graphics._fill) {
+                            child.graphics._fill.style = color;
+                        }
+                        if (child.graphics._stroke) {
+                            child.graphics._stroke.style = color;
+                        }
+
                     }
                 } else {
                     for (var b = 0, lengthB = child.children.length; b < lengthB; b++) {

@@ -122,6 +122,12 @@ define([
             this.canvas.drawCharacterFromFont('background', this.vocab.getCharacters()[this.review.getPosition() - 1], this.vocab.getFontName());
             if (this.review.getCharacter().length) {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
+            } else if (this.review.isFinished()) {
+                //TODO: save selected correct tone with review data
+                var possibleTones = _.flatten(this.review.getBaseVocab().getTones(this.review.getPosition()));
+                this.review.getCharacter().add(this.review.getCharacter().targets[possibleTones[0] - 1].models);
+                this.canvas.drawShape('stroke', this.review.getCharacter().getShape(), null, null);
+                this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
             }
         },
         /**

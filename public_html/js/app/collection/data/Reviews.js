@@ -9,7 +9,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.on('add change', this.autoSync);
+            this.on('add', this.autoSync);
         },
         /**
          * @property {Backbone.Model} model
@@ -33,6 +33,16 @@ define([
                 collection.length > skritter.user.settings.get('autoSyncThreshold')) {
                 skritter.user.data.sync();
             }
+        },
+        /**
+         * @method getActive
+         * @param {Boolean|Backbone.Model}
+         */
+        getActive: function() {
+            if (this.length && !this.at(0).has('done')) {
+                return this.at(0);
+            }
+            return false;
         },
         /**
          * @method getArray

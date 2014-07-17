@@ -14,8 +14,7 @@ define([], function() {
          */
         defaults: {
             position: 1,
-            reviews: [],
-            started: false
+            reviews: []
         },
         /**
          * @method cache
@@ -312,7 +311,6 @@ define([], function() {
                         var review = reviews[i];
                         var item = skritter.user.data.items.get(review.itemId);
                         if (reviews.length > 1 && i === 0) {
-                            review.finished = true;
                             review.reviewTime = self.getTotalReviewTime();
                             review.score = self.getFinalScore();
                             review.thinkingTime = self.getTotalThinkingTime();
