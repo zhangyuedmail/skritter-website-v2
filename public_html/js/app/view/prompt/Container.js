@@ -148,6 +148,20 @@ define([
             skritter.user.scheduler.sort();
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.canvas.remove();
+            this.gradingButtons.remove();
+            this.teachingButtons.remove();
+            this.promptDefn.remove();
+            this.promptRdng.remove();
+            this.promptRune.remove();
+            this.promptTone.remove();
+            this.prompt = null;
+            View.prototype.remove.call(this);
+        },
+        /**
          * @method reset
          * @returns {PromptContainer}
          */

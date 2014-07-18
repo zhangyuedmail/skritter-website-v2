@@ -22,6 +22,8 @@ define([
          * @param {Prompt}
          */
         renderFields: function() {
+            this.elements.navigateLeft.hide();
+            this.elements.navigateRight.hide();
             if (this.vocab.isNew()) {
                 this.elements.promptNewness.show();
             } else {
@@ -183,6 +185,7 @@ define([
                     reviewTime: skritter.timer.getReviewTime(),
                     thinkingTime: skritter.timer.getThinkingTime()
                 });
+                skritter.timer.reset();
             }
             return this;
         }
