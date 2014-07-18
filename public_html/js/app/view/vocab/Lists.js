@@ -1,8 +1,9 @@
 define([
     'require.text!template/vocab-lists.html',
     'view/View',
-    'view/component/ListTable'
-], function(template, View, ListTable) {
+    'view/component/ListTable',
+    'view/component/Sidebar'
+], function(template, View, ListTable, Sidebar) {
     /**
      * @class VocabLists
      */
@@ -14,6 +15,7 @@ define([
             View.prototype.initialize.call(this);
             this.category = null;
             this.lists = new ListTable();
+            this.sidebar = new Sidebar();
         },
         /**
          * @method render
@@ -22,6 +24,7 @@ define([
         render: function() {
             this.setTitle('Lists');
             this.$el.html(_.template(template, skritter.strings));
+            this.sidebar.setElement(this.$('.sidebar')).render();
             this.loadElements();
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.lists.setElement(this.elements.lists).render();

@@ -1,8 +1,9 @@
 define([
     'require.text!template/vocab-list.html',
     'view/View',
-    'view/component/ListSectionTable'
-], function(template, View, ListSectionTable) {
+    'view/component/ListSectionTable',
+    'view/component/Sidebar'
+], function(template, View, ListSectionTable, Sidebar) {
     /**
      * @class VocabList
      */
@@ -15,6 +16,7 @@ define([
             this.list = null;
             this.listId = null;
             this.sections = new ListSectionTable();
+            this.sidebar = new Sidebar();
         },
         /**
          * @method render
@@ -23,6 +25,8 @@ define([
         render: function() {
             this.setTitle('List');
             this.$el.html(_.template(template, skritter.strings));
+            this.sidebar.setElement(this.$('.sidebar')).render();
+            this.loadElements();
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.sections.setElement(this.elements.listSections).render();
             return this;
@@ -81,6 +85,7 @@ define([
             this.elements.listSections = this.$('#list-sections');
             this.elements.listOptions = this.$('.button-list-options');
             this.elements.peopleStudying = this.$('#people-studying');
+            this.elements.userAvatar = this.$('.user-avatar');
         },
         /**
          * @property {Object} events
