@@ -45,7 +45,6 @@ define([
             if (skritter.user.settings.get('hideTimer')) {
                 this.$('.study-timer').hide();
             }
-            //TODO: load prompt stuff here
             this.nextPrompt();
             this.updateDueCounter();
             this.listenTo(this.promptContainer, 'next', this.nextPrompt);

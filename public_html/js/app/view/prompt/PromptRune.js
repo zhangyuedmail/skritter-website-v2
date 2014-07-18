@@ -159,13 +159,11 @@ define([
         resize: function() {
             Prompt.prototype.resize.call(this);
             this.canvas.clear().resize();
-            if (this.review.getCharacter().length) {
+            if (this.review.isFinished()) {
+                this.review.getCharacter().models = this.review.getCharacter().targets[0].models;
+                this.canvas.drawShape('stroke', this.review.getCharacter().getShape(), skritter.settings.get('gradingColors')[this.review.getScore()]);
+            } else if (this.review.getCharacter().length) {
                 this.canvas.drawShape('stroke', this.review.getCharacter().getShape());
-            } else if (this.review.isFinished()) {
-                this.canvas.drawCharacterFromFont('stroke',
-                    this.vocab.getCharacters()[this.review.getPosition() - 1],
-                    this.vocab.getFontName(), skritter.settings.get('gradingColors')[this.review.getScore()]
-                );
             }
         },
         /**

@@ -277,7 +277,7 @@ define([], function() {
             var itemId = this.get('reviews')[0].itemId;
             skritter.user.data.loadItem(itemId, _.bind(function(item) {
                 var part = item.get('part');
-                if (part === 'rune' || part === 'tone') {
+                if (!this.characters && (part === 'rune' || part === 'tone')) {
                     this.characters = item.getCanvasCharacters();
                 }
                 callback(this);
