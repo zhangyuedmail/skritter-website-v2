@@ -116,7 +116,7 @@ define([
                 }
             ], function() {
                 //load daily timer prog stats in background
-                //skritter.timer.refresh(true);
+                skritter.timer.sync();
                 //checks if user has downloaded account
                 if (skritter.user.data.isInitial()) {
                     skritter.modal.show('download')

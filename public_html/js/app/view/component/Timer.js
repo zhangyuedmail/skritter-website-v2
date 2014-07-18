@@ -158,6 +158,10 @@ define([], function() {
         sync: function(callback) {
             async.waterfall([
                 function(callback) {
+                    this.localOffset = skritter.user.data.reviews.getTotalTime();
+                    callback();
+                },
+                function(callback) {
                     skritter.api.getServerTime(function(time, status) {
                         if (status === 200) {
                             callback(null, time.today);
@@ -176,7 +180,6 @@ define([], function() {
                     });
                 }
             ], _.bind(function(error, time) {
-                this.localOffset = skritter.user.data.reviews.getTotalTime();
                 if (!error && time) {
                     this.serverOffset = time;
                 }
