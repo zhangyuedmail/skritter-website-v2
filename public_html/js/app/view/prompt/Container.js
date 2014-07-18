@@ -38,6 +38,8 @@ define([
             this.gradingButtons.setElement(this.$('.grading-container')).render();
             this.teachingButtons.setElement(this.$('.teaching-container')).render();
             this.loadElements();
+            this.elements.navigateLeft.hide();
+            this.elements.navigateRight.hide();
             this.resize();
             return this;
         },

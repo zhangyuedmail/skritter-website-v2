@@ -27,7 +27,7 @@ define([
             if (!skritter.user.scheduler.hasData()) {
                 this.showAddItemsModal();
                 skritter.router.navigate('', {replace: true, trigger: true});
-                return false;
+                return this;
             }
             this.$el.html(_.template(template, skritter.strings));
             skritter.timer.setElement(this.$('.study-timer')).render();

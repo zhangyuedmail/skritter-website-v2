@@ -33,7 +33,7 @@ define([
             this.gradingButtons.hide();
             this.teachingButtons.hide();
             this.review.getCharacter().reset();
-            this.canvas.clear().enableInput();
+            this.canvas.clear().enableTicker().enableInput();
         },
         /**
          * @method handleClickCanvas
