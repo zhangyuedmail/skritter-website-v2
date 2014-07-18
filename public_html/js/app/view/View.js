@@ -46,11 +46,11 @@ define([], function() {
                 this.$el.append("<div class='font-preloader'></div>");
             }
             if (skritter.user.getLanguageCode() === 'zh') {
-                this.$('.font-preloader').text('力');
                 this.$('.font-preloader').addClass('chinese-text');
-            } else {
                 this.$('.font-preloader').text('力');
+            } else {
                 this.$('.font-preloader').addClass('japanese-text');
+                this.$('.font-preloader').text('力');
             }
             return this;
         },
@@ -61,6 +61,12 @@ define([], function() {
             this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
+        },
+        /**
+         * @method replaceCharacterFont
+         */
+        replaceCharacterFont: function() {
+            $('.character-font').addClass(skritter.user.getFontClass());
         },
         /**
          * @method setTitle

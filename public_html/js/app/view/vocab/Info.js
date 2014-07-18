@@ -20,6 +20,7 @@ define([
         render: function() {
             this.setTitle('Vocab');
             this.$el.html(_.template(template, skritter.strings));
+            this.replaceCharacterFont();
             this.loadElements();
             return this;
         },
@@ -122,7 +123,7 @@ define([
                     this.elements.decomps.closest('.content-block').hide();
                 }
             }
-            this.$('.character-font').addClass(skritter.user.getFontClass());
+            this.replaceCharacterFont();
         },
         /**
          * @method playAudio
