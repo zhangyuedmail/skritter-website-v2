@@ -12,6 +12,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.activeReview = null;
             this.data = new Data();
             this.scheduler = new Scheduler();
             this.settings = new Settings();

@@ -31,15 +31,16 @@ define([], function() {
          */
         initialize: function() {
             this.interval = undefined;
-            this.lap = 0;
             this.lapOffset = 0;
-            this.lapStart = 0;
+            this.lapStart = 0
+            this.lapTime = 0;
             this.offset = 0;
             this.reviewLimit = 30000;
             this.stopwatch = new Stopwatch();
             this.thinkingLimit = 15000;
-            this.thinkingValue = 0;
+            this.thinkingTime = 0;
             this.time = 0;
+            this.timeSecond = 0;
         },
         /**
          * @method render
@@ -54,7 +55,7 @@ define([], function() {
          * @returns {Number}
          */
         getLapTime: function() {
-            return this.lap + this.lapOffset;
+            return this.lapTime + this.lapOffset;
         },
         /**
          * @method getReviewTime
@@ -70,8 +71,8 @@ define([], function() {
          */
         getThinkingTime: function() {
             var lapTime = this.getLapTime();
-            if (this.thinkingValue) {
-                return this.thinkingValue / 1000;
+            if (this.thinkingTime) {
+                return this.thinkingTime / 1000;
             }
             return lapTime > this.thinkingLimit ? this.thinkingLimit / 1000 : lapTime / 1000;
         },
@@ -94,8 +95,8 @@ define([], function() {
          * @returns {Timer}
          */
         reset: function() {
-            this.lap = this.lapOffset = this.lapStart = 0;
-            this.thinkingValue = 0;
+            this.lapOffset = this.lapStart = this.lapTime = 0;
+            this.thinkingTime = 0;
             return this;
         },
         /**
@@ -107,24 +108,6 @@ define([], function() {
         setLimit: function(reviewLimit, thinkingLimit) {
             this.reviewLimit = reviewLimit ? reviewLimit * 1000 : 0;
             this.thinkingLimit = thinkingLimit ? thinkingLimit * 1000 : 0;
-            return this;
-        },
-        /**
-         * @method setLapOffset
-         * @param {Number} lapOffset
-         * @return {Timer}
-         */
-        setLapOffset: function(lapOffset) {
-            this.lapOffset = lapOffset ? lapOffset : 0;
-            return this;
-        },
-        /**
-         * @method setThinkingValue
-         * @param {Number} lapOffset
-         * @return {Timer}
-         */
-        setThinkingValue: function(thinkingValue) {
-            this.thinkingValue = thinkingValue ? thinkingValue * 1000 : 0;
             return this;
         },
         /**
@@ -145,10 +128,10 @@ define([], function() {
          */
         stop: function() {
             if (this.isRunning()) {
-                this.lapOffset += this.lap;
                 this.stopwatch.stop();
                 this.interval = clearInterval(this.interval);
-                this.lap = 0;
+                this.lapOffset += this.lapTime;
+                this.lapTime = 0;
             }
             return this;
         },
@@ -156,8 +139,8 @@ define([], function() {
          * @method stopThinking
          */
         stopThinking: function() {
-            if (!this.thinkingValue) {
-                this.thinkingValue = this.getLapTime();
+            if (!this.thinkingTime) {
+                this.thinkingTime = this.getLapTime();
             }
         },
         /**
@@ -165,15 +148,15 @@ define([], function() {
          */
         update: function() {
             var now = new Date().getTime();
-            var time = this.stopwatch.time() + this.offset;
-            this.lap = now - this.lapStart;
-            if (time / 1000 >> 0 !== this.time / 1000 >> 0) {
-                this.time = time;
-                var hours = (time / (3600 * 1000)) >> 0;
-                time = time % (3600 * 1000);
-                var minutes = (time / (60 * 1000)) >> 0;
-                time = time % (60 * 1000);
-                var seconds = (time / 1000) >> 0;
+            this.time = this.stopwatch.time() + this.offset;
+            this.lapTime = now - this.lapStart;
+            if (this.time / 1000 >> 0 !== this.timeSecond) {
+                this.timeSecond = this.time / 1000 >> 0;
+                var hours = (this.time / (3600 * 1000)) >> 0;
+                this.time = this.time % (3600 * 1000);
+                var minutes = (this.time / (60 * 1000)) >> 0;
+                this.time = this.time % (60 * 1000);
+                var seconds = (this.time / 1000) >> 0;
                 if (hours > 0) {
                     this.$el.text(hours + ':' + skritter.fn.pad(minutes, 0, 2) + ':' + skritter.fn.pad(seconds, 0, 2));
                 } else {

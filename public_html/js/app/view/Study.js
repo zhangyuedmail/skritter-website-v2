@@ -107,27 +107,24 @@ define([
          * @method nextPrompt
          */
         nextPrompt: function() {
-            var self = this;
-            var active = skritter.user.data.reviews.getActive();
-            if (active) {
-                active.load(_.bind(function(review) {
+            if (skritter.user.activeReview) {
+                skritter.user.activeReview.load(_.bind(function(review) {
                     this.promptContainer.loadPrompt(review);
                 }, this));
             } else {
-                skritter.user.scheduler.getNext(function(item) {
+                skritter.user.scheduler.getNext(_.bind(function(item) {
                     var review = item.createReview();
-                    review.save(function() {
-                        self.promptContainer.loadPrompt(review);
-                    });
-                });
+                    skritter.user.activeReview = review;
+                    this.promptContainer.loadPrompt(review);
+                }, this));
             }
         },
         /**
          * @method previousPrompt
          */
         previousPrompt: function() {
-            if (skritter.user.data.reviews.length > 1) {
-                skritter.user.data.reviews.at(1).load(_.bind(function(review) {
+            if (skritter.user.data.reviews.length) {
+                skritter.user.data.reviews.at(0).load(_.bind(function(review) {
                     this.promptContainer.loadPrompt(review);
                 }, this));
             } else {

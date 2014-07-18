@@ -61,6 +61,10 @@ define([
             Prompt.prototype.show.call(this);
             this.canvas.show().disableGrid();
             this.renderFields();
+            if (this.review.isFinished()) {
+                this.showAnswer();
+            }
+            this.resize();
             return this;
         },
         /**

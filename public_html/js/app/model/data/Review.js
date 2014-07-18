@@ -301,19 +301,18 @@ define([], function() {
          * @param {Function} callback
          */
         save: function(callback) {
-            var self = this;
             var reviews = this.get('reviews');
             var srsconfigs = skritter.user.data.srsconfigs.get(this.get('part')).toJSON();
             async.series([
-                function(callback) {
+                _.bind(function(callback) {
                     var items = [];
                     for (var i = 0, length = reviews.length; i < length; i++) {
                         var review = reviews[i];
                         var item = skritter.user.data.items.get(review.itemId);
                         if (reviews.length > 1 && i === 0) {
-                            review.reviewTime = self.getTotalReviewTime();
-                            review.score = self.getFinalScore();
-                            review.thinkingTime = self.getTotalThinkingTime();
+                            review.reviewTime = this.getTotalReviewTime();
+                            review.score = this.getFinalScore();
+                            review.thinkingTime = this.getTotalThinkingTime();
                         }
                         review.newInterval = skritter.fn.calculateInterval(item.toJSON(), review.score, srsconfigs);
                         item.set({
@@ -331,18 +330,13 @@ define([], function() {
                     }
                     skritter.user.scheduler.update(items);
                     skritter.user.scheduler.addHistory(items[0]);
-                    callback();
-                },
-                function(callback) {
-                    skritter.user.data.reviews.add(self, {merge: true});
-                    self.cache(callback);
-                },
-                function(callback) {
                     skritter.user.data.items.cache(callback);
-                }
-            ], function() {
-                callback();
-            });
+                }, this),
+            ], _.bind(function() {
+                skritter.user.data.reviews.add(this, {merge: true});
+                skritter.user.activeReview = null;
+                this.cache(callback);
+            }, this));
         },
         /**
          * @method setContained

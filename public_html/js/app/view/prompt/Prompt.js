@@ -144,7 +144,7 @@ define([
             if (this.review.previous()) {
                 this.reset().show();
             } else {
-                this.review.save(_.bind(this.container.triggerPrevious, this.container));
+                this.container.triggerPrevious();
             }
         },
         /**
@@ -166,9 +166,9 @@ define([
          * @returns {Prompt}
          */
         show: function() {
-            skritter.timer.setLapOffset(this.review.getLapOffset())
-            skritter.timer.setThinkingValue(this.review.getThinkingTime());
-            skritter.timer.start();
+            if (!this.review.isFinished()) {
+                skritter.timer.start();
+            }
             return this;
         },
         /**
@@ -177,11 +177,13 @@ define([
          */
         showAnswer: function() {
             skritter.timer.stop();
-            this.review.setContained({
-                finished: true,
-                reviewTime: skritter.timer.getReviewTime(),
-                thinkingTime: skritter.timer.getThinkingTime()
-            });
+            if (!this.review.isFinished()) {
+                this.review.setContained({
+                    finished: true,
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
             return this;
         }
     });

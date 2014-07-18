@@ -117,6 +117,7 @@ define([
             skritter.user.setActiveParts(this.activeParts);
             skritter.user.setActiveStyles(['both'].concat(this.activeStyles));
             skritter.user.update();
+            skritter.user.activeReview = null;
             skritter.user.scheduler.sort();
             skritter.router.navigate('study', {replace: true, trigger: true});
             event.preventDefault();
