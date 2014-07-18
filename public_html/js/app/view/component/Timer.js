@@ -34,8 +34,9 @@ define([], function() {
             this.lapOffset = 0;
             this.lapStart = 0
             this.lapTime = 0;
-            this.offset = 0;
+            this.localOffset = 0;
             this.reviewLimit = 30000;
+            this.serverOffset = 0;
             this.stopwatch = new Stopwatch();
             this.thinkingLimit = 15000;
             this.thinkingTime = 0;
@@ -56,6 +57,13 @@ define([], function() {
          */
         getLapTime: function() {
             return this.lapTime + this.lapOffset;
+        },
+        /**
+         * @method getOffset
+         * @returns {number}
+         */
+        getOffset: function() {
+            return (this.localOffset + this.serverOffset) * 1000;
         },
         /**
          * @method getReviewTime
@@ -144,11 +152,46 @@ define([], function() {
             }
         },
         /**
+         * @method sync
+         * @param {Function} callback
+         */
+        sync: function(callback) {
+            async.waterfall([
+                function(callback) {
+                    skritter.api.getServerTime(function(time, status) {
+                        if (status === 200) {
+                            callback(null, time.today);
+                        } else {
+                            callback(time);
+                        }
+                    });
+                },
+                function(today, callback) {
+                    skritter.api.getProgStats({start: today}, function(progstats, status) {
+                        if (status === 200) {
+                            callback(null, progstats[0].timeStudied.day);
+                        } else {
+                            callback(progstats);
+                        }
+                    });
+                }
+            ], _.bind(function(error, time) {
+                this.localOffset = skritter.user.data.reviews.getTotalTime();
+                if (!error && time) {
+                    this.serverOffset = time;
+                }
+                console.log(this.localOffset, this.serverOffset);
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }, this));
+        },
+        /**
          * @method update
          */
         update: function() {
             var now = new Date().getTime();
-            this.time = this.stopwatch.time() + this.offset;
+            this.time = this.stopwatch.time() + this.getOffset();
             this.lapTime = now - this.lapStart;
             if (this.time / 1000 >> 0 !== this.timeSecond) {
                 this.timeSecond = this.time / 1000 >> 0;
