@@ -125,6 +125,13 @@ define([
          * @method hide
          */
         hide: function() {
+            if (this.review.isActive()) {
+                skritter.timer.stop();
+                this.review.setContained({
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
             this.disableListeners();
             this.undelegateEvents();
         },
@@ -168,8 +175,13 @@ define([
          * @returns {Prompt}
          */
         show: function() {
-            if (!this.review.isFinished()) {
+            if (this.review.isActive()) {
+                skritter.timer.setLapOffset(this.review.getLapOffset());
+                skritter.timer.setThinking(this.review.getContained().thinkingTime);
                 skritter.timer.start();
+            }
+            if (this.review.isFinished()) {
+                this.showAnswer();
             }
             return this;
         },
@@ -178,14 +190,14 @@ define([
          * @returns {Prompt}
          */
         showAnswer: function() {
-            skritter.timer.stop();
-            if (!this.review.isFinished()) {
+            if (this.review.isActive()) {
+                console.log('thinking', skritter.timer.getThinkingTime());
                 this.review.setContained({
                     finished: true,
                     reviewTime: skritter.timer.getReviewTime(),
                     thinkingTime: skritter.timer.getThinkingTime()
                 });
-                skritter.timer.reset();
+                skritter.timer.stop().reset();
             }
             return this;
         }

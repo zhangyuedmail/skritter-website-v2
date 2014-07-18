@@ -133,6 +133,21 @@ define([
         }
     };
     /**
+     * @method convertTimeToClock
+     * @param {Number} time
+     */
+    var convertTimeToClock = function(time) {
+        var hours = (time / (3600 * 1000)) >> 0;
+        time = time % (3600 * 1000);
+        var minutes = (time / (60 * 1000)) >> 0;
+        time = time % (60 * 1000);
+        var seconds = (time / 1000) >> 0;
+        if (hours > 0) {
+            return hours + ':' + skritter.fn.pad(minutes, 0, 2) + ':' + skritter.fn.pad(seconds, 0, 2);
+        }
+        return minutes + ':' + pad(seconds, 0, 2);
+    };
+    /**
      * @method getAngle
      * @param {Array|Object} point1 An array of point values
      * @param {Object} point2 An array of point values
@@ -398,6 +413,7 @@ define([
         calculateInterval: calculateInterval,
         convertArrayToInt: convertArrayToInt,
         convertBytesToSize: convertBytesToSize,
+        convertTimeToClock: convertTimeToClock,
         getAngle: getAngle,
         getBoundingRectangle: getBoundingRectangle,
         getDistance: getDistance,

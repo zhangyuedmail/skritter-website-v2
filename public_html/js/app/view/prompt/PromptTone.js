@@ -54,7 +54,9 @@ define([
          * @param {Object} event
          */
         handleInputDown: function(event) {
-            skritter.timer.stopThinking();
+            if (skritter.timer.isThinking()) {
+                skritter.timer.stopThinking();
+            }
             event.preventDefault();
         },
         /**
@@ -136,12 +138,9 @@ define([
          */
         show: function() {
             skritter.timer.setLimit(15, 10);
-            Prompt.prototype.show.call(this);
             this.canvas.show().enableTicker().disableGrid().enableInput();
             this.renderFields();
-            if (this.review.isFinished()) {
-                this.showAnswer();
-            }
+            Prompt.prototype.show.call(this);
             this.resize();
             return this;
         },

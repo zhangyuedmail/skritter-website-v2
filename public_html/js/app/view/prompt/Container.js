@@ -151,6 +151,7 @@ define([
          * @method remove
          */
         remove: function() {
+            this.prompt.hide();
             this.canvas.remove();
             this.gradingButtons.remove();
             this.teachingButtons.remove();
@@ -158,7 +159,7 @@ define([
             this.promptRdng.remove();
             this.promptRune.remove();
             this.promptTone.remove();
-            this.prompt = null;
+            this.prompt = undefined;
             View.prototype.remove.call(this);
         },
         /**

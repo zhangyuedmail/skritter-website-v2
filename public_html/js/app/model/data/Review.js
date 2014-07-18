@@ -237,6 +237,15 @@ define([], function() {
             return this.get('reviews').length > 1 ? true : false;
         },
         /**
+         * @method isActive
+         * @returns {Boolean}
+         */
+        isActive: function() {
+            var position = this.get('position');
+            var review = this.hasContained() ? this.get('reviews')[position] : this.get('reviews')[0];
+            return !review.finished;
+        },
+        /**
          * @method isFinished
          * @returns {Boolean}
          */

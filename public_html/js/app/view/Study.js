@@ -132,6 +132,14 @@ define([
             }
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.promptContainer.remove();
+            this.sidebar.remove();
+            View.prototype.remove.call(this);
+        },
+        /**
          * @method toggleAddButton
          * @param {Backbone.Model} model
          * @param {Boolean} value

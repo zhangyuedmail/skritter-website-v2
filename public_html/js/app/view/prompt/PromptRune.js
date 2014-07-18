@@ -51,7 +51,9 @@ define([
          */
         handleInputDown: function(event) {
             this.canvas.fadeLayer('background');
-            skritter.timer.stopThinking();
+            if (skritter.timer.isThinking()) {
+                skritter.timer.stopThinking();
+            }
             event.preventDefault();
         },
         /**
@@ -171,13 +173,10 @@ define([
          * @returns {PromptRune}
          */
         show: function() {
-            skritter.timer.setLimit(30, 15);
-            Prompt.prototype.show.call(this);
+            skritter.timer.setLimit(10, 5);
             this.canvas.show().enableTicker().enableGrid().enableInput();
             this.renderFields();
-            if (this.review.isFinished()) {
-                this.showAnswer();
-            }
+            Prompt.prototype.show.call(this);
             this.resize();
             return this;
         },

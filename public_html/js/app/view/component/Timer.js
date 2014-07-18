@@ -48,7 +48,7 @@ define([], function() {
          * @returns {Timer}
          */
         render: function() {
-            this.$el.text('0:00');
+            this.$el.text(skritter.fn.convertTimeToClock(this.time));
             return this;
         },
         /**
@@ -99,6 +99,12 @@ define([], function() {
             return this.interval ? true : false;
         },
         /**
+         * @method isThinking
+         */
+        isThinking: function() {
+            return this.thinkingTime ? false : true;
+        },
+        /**
          * @method reset
          * @returns {Timer}
          */
@@ -106,6 +112,13 @@ define([], function() {
             this.lapOffset = this.lapStart = this.lapTime = 0;
             this.thinkingTime = 0;
             return this;
+        },
+        /**
+         * @method setLapOffset
+         * @param {Number} offset
+         */
+        setLapOffset: function(offset) {
+            this.lapOffset = offset * 1000;
         },
         /**
          * @method setLimit
@@ -119,6 +132,15 @@ define([], function() {
             return this;
         },
         /**
+         * @method setThinking
+         * @param {Number} thinkingTime
+         * @return {Timer}
+         */
+        setThinking: function(thinkingTime, thinkingLimit) {
+            this.thinkingTime = thinkingTime ? thinkingTime * 1000 : 0;
+            return this;
+        },
+        /**
          * @method start
          * @returns {Timer}
          */
@@ -126,7 +148,7 @@ define([], function() {
             if (!this.isRunning() && !this.isLimit()) {
                 this.lapStart = new Date().getTime();
                 this.stopwatch.start();
-                this.interval = setInterval(_.bind(this.update, this), 10);
+                this.interval = setInterval(_.bind(this.update, this), 100);
             }
             return this;
         },
@@ -147,9 +169,7 @@ define([], function() {
          * @method stopThinking
          */
         stopThinking: function() {
-            if (!this.thinkingTime) {
-                this.thinkingTime = this.getLapTime();
-            }
+            this.thinkingTime = this.getLapTime();
         },
         /**
          * @method sync
@@ -195,21 +215,10 @@ define([], function() {
             var now = new Date().getTime();
             this.time = this.stopwatch.time() + this.getOffset();
             this.lapTime = now - this.lapStart;
+            if (this.isLimit()) this.stop();
             if (this.time / 1000 >> 0 !== this.timeSecond) {
                 this.timeSecond = this.time / 1000 >> 0;
-                var hours = (this.time / (3600 * 1000)) >> 0;
-                this.time = this.time % (3600 * 1000);
-                var minutes = (this.time / (60 * 1000)) >> 0;
-                this.time = this.time % (60 * 1000);
-                var seconds = (this.time / 1000) >> 0;
-                if (hours > 0) {
-                    this.$el.text(hours + ':' + skritter.fn.pad(minutes, 0, 2) + ':' + skritter.fn.pad(seconds, 0, 2));
-                } else {
-                    this.$el.text(minutes + ':' + skritter.fn.pad(seconds, 0, 2));
-                }
-                if (this.isLimit()) {
-                    this.stop();
-                }
+                this.$el.text(skritter.fn.convertTimeToClock(this.time));
             }
         }
     });

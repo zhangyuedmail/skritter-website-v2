@@ -58,12 +58,9 @@ define([
          */
         show: function() {
             skritter.timer.setLimit(30, 15);
-            Prompt.prototype.show.call(this);
             this.canvas.show().disableGrid();
             this.renderFields();
-            if (this.review.isFinished()) {
-                this.showAnswer();
-            }
+            Prompt.prototype.show.call(this);
             this.resize();
             return this;
         },
