@@ -90,7 +90,6 @@ define([
                         this.showAnswer();
                     }
                     if (skritter.user.isUsingSquigs()) {
-                        this.canvas.drawShape('stroke', shape);
                         this.canvas.getLayer('stroke').alpha = 1;
                         if (this.review.getCharacter().isFinished()) {
                             this.canvas.tweenCharacter('background', this.review.getCharacter(), _.bind(function() {
@@ -114,6 +113,8 @@ define([
                     this.canvas.fadeShape('background', shape);
                     if (this.strokeAttempts > this.maxStrokeAttempts) {
                         this.review.setContained('score', 1);
+                        this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(),
+                            skritter.settings.get('hintColor'), 2000);
                     }
                 }
             }
@@ -187,8 +188,8 @@ define([
         showAnswer: function() {
             Prompt.prototype.showAnswer.call(this);
             this.canvas.disableInput();
-            this.container.$('.info-section .button-reveal').hide();
-            this.container.$('.info-section .prompt-writing').html(this.vocab.getWriting(this.review.getPosition() + 1));
+            this.elements.buttonReveal.hide();
+            this.elements.promptWriting.html(this.vocab.getWriting(this.review.getPosition() + 1));
             this.gradingButtons.show().select(this.review.getScore());
             return this;
         }

@@ -152,7 +152,7 @@ define([
         showAnswer: function() {
             Prompt.prototype.showAnswer.call(this);
             this.canvas.disableInput();
-            this.container.$('.info-section .prompt-reading').html(this.vocab.getReading(
+            this.elements.promptReading.html(this.vocab.getReading(
                 this.review.getPosition() + 1,
                 !skritter.user.settings.get('hideReading'),
                 skritter.user.isUsingZhuyin()
