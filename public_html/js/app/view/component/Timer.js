@@ -183,7 +183,6 @@ define([], function() {
                 if (!error && time) {
                     this.serverOffset = time;
                 }
-                console.log(this.localOffset, this.serverOffset);
                 if (typeof callback === 'function') {
                     callback();
                 }

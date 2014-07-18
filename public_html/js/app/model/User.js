@@ -186,13 +186,12 @@ define([
          * @returns {Object}
          */
         getCustomData: function() {
-            var review = skritter.user.scheduler.review;
-            review = skritter.user.scheduler.review ? {
-                itemId: review.get('itemId'),
-                position: review.get('position')
+            var activeReview = this.activeReview ? {
+                itemId: this.activeReview.get('itemId'),
+                position: this.activeReview.get('position')
             } : null;
             return {
-                activeReview: review,
+                activeReview: activeReview,
                 studyTime: skritter.timer.time / 1000,
                 view: Backbone.history.fragment
             };
