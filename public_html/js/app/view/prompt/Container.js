@@ -34,10 +34,10 @@ define([
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
-            this.replaceCharacterFont();
             this.canvas.setElement('.canvas-container').render();
             this.gradingButtons.setElement(this.$('.grading-container')).render();
             this.teachingButtons.setElement(this.$('.teaching-container')).render();
+            this.replaceCharacterFont();
             this.loadElements();
             this.elements.navigateLeft.hide();
             this.elements.navigateRight.hide();
@@ -159,6 +159,7 @@ define([
             this.prompt.canvas = this.canvas;
             this.prompt.elements = this.elements;
             this.prompt.gradingButtons = this.gradingButtons;
+            this.prompt.item = review.getBaseItem();
             this.prompt.review = review;
             this.prompt.teachingButtons = this.teachingButtons;
             this.prompt.vocab = review.getBaseVocab();

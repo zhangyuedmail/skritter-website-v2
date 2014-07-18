@@ -73,9 +73,7 @@ define([
                 if (result) {
                     if (possibleTones.indexOf(result.get('tone')) > -1) {
                         this.review.setContained('score', 3);
-                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), _.bind(function() {
-                            this.canvas.disableTicker();
-                        }, this));
+                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
                         this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
                     } else {
                         this.review.setContained('score', 1);

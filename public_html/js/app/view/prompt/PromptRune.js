@@ -40,7 +40,7 @@ define([
             this.gradingButtons.hide();
             this.teachingButtons.hide();
             this.review.getCharacter().reset();
-            this.canvas.clear().enableTicker().enableInput();
+            this.canvas.clear().enableInput();
         },
         /**
          * @method handleClickCanvas
@@ -102,18 +102,12 @@ define([
                     if (skritter.user.isUsingSquigs()) {
                         this.canvas.getLayer('stroke').alpha = 1;
                         if (this.review.getCharacter().isFinished()) {
-                            this.canvas.tweenCharacter('background', this.review.getCharacter(), _.bind(function() {
-                                this.canvas.disableTicker();
-                            }, this));
+                            this.canvas.tweenCharacter('background', this.review.getCharacter());
                             this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[this.review.getScore()]);
                             this.canvas.getLayer('stroke').alpha = 0.6;
                         }
                     } else {
-                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape(), _.bind(function() {
-                            if (this.review.getCharacter().isFinished()) {
-                                this.canvas.disableTicker();
-                            }
-                        }, this));
+                        this.canvas.tweenShape('stroke', result.getUserShape(), result.inflateShape());
                         if (this.review.getCharacter().isFinished()) {
                             this.canvas.injectLayerColor('stroke', skritter.settings.get('gradingColors')[this.review.getScore()]);
                         }

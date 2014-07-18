@@ -36,7 +36,7 @@ define([
          * @param {Function} callback
          */
         fetchById: function(vocabIds, callback) {
-            skritter.api.getVocabs(vocabIds, _.bind(function(vocabs, status) {
+            skritter.api.getVocabById(vocabIds, _.bind(function(vocabs, status) {
                 if (status === 200) {
                     this.insert(vocabs,callback);
                 } else {

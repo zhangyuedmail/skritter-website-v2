@@ -111,6 +111,7 @@ define([
                     this.promptContainer.loadPrompt(review);
                 }, this));
             } else {
+                skritter.user.data.autoSync();
                 skritter.user.scheduler.getNext(_.bind(function(item) {
                     var review = item.createReview();
                     skritter.user.activeReview = review;

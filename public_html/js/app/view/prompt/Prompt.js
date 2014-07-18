@@ -13,6 +13,7 @@ define([
             this.canvas = null;
             this.container = container;
             this.gradingButtons = null;
+            this.item = null;
             this.review = null;
             this.teachingButtons = null;
             this.vocab = null;
@@ -22,7 +23,7 @@ define([
          * @param {Prompt}
          */
         renderFields: function() {
-            if (this.vocab.isNew()) {
+            if (this.item.isNew()) {
                 this.elements.promptNewness.show();
             } else {
                 this.elements.promptNewness.hide();
@@ -130,6 +131,7 @@ define([
                     thinkingTime: skritter.timer.getThinkingTime()
                 });
             }
+            this.canvas.disableTicker();
             this.disableListeners();
             this.undelegateEvents();
         },

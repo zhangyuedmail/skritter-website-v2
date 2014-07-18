@@ -23,17 +23,6 @@ define([
             return -review.attributes.reviews[0].submitTime;
         },
         /**
-         * @method autoSync
-         * @param {Backbone.Model} model
-         * @param {Backbone.Collection} collection
-         */
-        autoSync: function(model, collection) {
-            if (!skritter.user.data.get('syncing') &&
-                collection.length > skritter.user.settings.get('autoSyncThreshold')) {
-                skritter.user.data.sync();
-            }
-        },
-        /**
          * @method getArray
          * @returns {Array}
          */

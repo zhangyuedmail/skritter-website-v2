@@ -145,6 +145,15 @@ define([
             }, this));
         },
         /**
+         * @method autoSync
+         */
+        autoSync: function() {
+            if (!this.get('syncing') &&
+                skritter.user.data.reviews.length > skritter.user.settings.get('autoSyncThreshold')) {
+                this.sync(null, true);
+            }
+        },
+        /**
          * @method downloadAll
          * @param {Function} callback
          */
@@ -620,7 +629,15 @@ define([
             console.log('syncing: started at', skritter.fn.getDateTime(now * 1000));
             async.series([
                 function(callback) {
-                    callback();
+                    if (lastSRSConfigSync < moment(now * 1000).subtract('10', 'minutes').unix()) {
+                        console.log('syncing: srsconfigs');
+                        skritter.user.data.srsconfigs.fetch(function() {
+                            lastSRSConfigSync = now;
+                            callback();
+                        });
+                    } else {
+                        callback();
+                    }
                 },
                 function(callback) {
                     console.log('syncing: items');
@@ -646,8 +663,31 @@ define([
                     });
                 },
                 function(callback) {
+                    if (lastVocabSync < moment(now * 1000).subtract('12', 'hours').unix()) {
+                        console.log('syncing: vocabs from server');
+                        skritter.api.getVocabByOffset(lastVocabSync, function(result, status) {
+                            if (status === 200) {
+                                skritter.user.data.put(result, function() {
+                                    lastVocabSync = now;
+                                    callback();
+                                });
+                            } else {
+                                callback(result);
+                            }
+                        }, {
+                            includeSentences: false,
+                            includeStrokes: includeResources,
+                            includeHeisigs: includeResources,
+                            includeTopMnemonics: includeResources,
+                            includeDecomps: includeResources
+                        });
+                    } else {
+                        callback();
+                    }
+                },
+                function(callback) {
                     if (changedVocabIds.length > 0) {
-                        console.log('syncing: vocabs');
+                        console.log('syncing: vocabs to server');
                         skritter.user.data.updateVocab(changedVocabIds, function(error) {
                             if (!error) {
                                 skritter.user.data.set('changedVocabIds', []);
@@ -698,15 +738,18 @@ define([
             ], _.bind(function(error) {
                 if (error) {
                     //TODO: handle when a sync error occurs
+                    this.set('syncing', false);
                     console.log('syncing: failed after', moment().diff(now * 1000, 'seconds', true), 'seconds');
-                    callback();
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
                 } else {
                     this.set({
                         lastErrorCheck: now,
                         lastItemSync: now,
                         lastReviewSync: now,
-                        lastSRSConfigSync: now,
-                        lastVocabSync: now,
+                        lastSRSConfigSync: lastSRSConfigSync,
+                        lastVocabSync: lastVocabSync,
                         syncing: false
                     });
                     console.log('syncing: finished in', moment().diff(now * 1000, 'seconds', true), 'seconds');
