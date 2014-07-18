@@ -105,19 +105,21 @@
 
 /*** GENERAL ***/
 html, body { height: 100%; }
-body { background: url('../img/background/ricepaper1.png') repeat; }
-.canvas-container {display: none;}
-.canvas-holder {
+body {
     -moz-user-select: none;
     -ms-text-size-adjust: none;
     -ms-user-select: none;
     -webkit-touch-callout: none;
     -webkit-text-size-adjust: none;
     -webkit-user-select: none;
+    background: url('../img/background/ricepaper1.png') repeat;
+    user-select: none;
+}
+.canvas-container {display: none;}
+.canvas-holder {
     background-color: #ffffff;
     margin: 0 auto;
     position: relative;
-    user-select: none;
 }
 .canvas-holder .canvas-display {
     left: 0;
