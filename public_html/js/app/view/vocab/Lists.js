@@ -118,6 +118,13 @@ define([
             return this;
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.sidebar.remove();
+            View.prototype.remove.call(this);
+        },
+        /**
          * @method resize
          */
         resize: function() {

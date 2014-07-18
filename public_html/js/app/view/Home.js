@@ -98,6 +98,13 @@ define([
             event.preventDefault();
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.sidebar.remove();
+            View.prototype.remove.call(this);
+        },
+        /**
          * @method toggleSyncButton
          * @param {Backbone.Model} model
          * @param {Boolean} value
