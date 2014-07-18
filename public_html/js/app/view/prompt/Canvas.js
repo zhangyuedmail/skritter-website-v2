@@ -305,9 +305,7 @@ define([
             }
             layer.addChild(shape);
             this.stage.display.update();
-            shape.cache(0, 0, this.size, this.size);
             createjs.Tween.get(shape).to({alpha: 0}, milliseconds, createjs.Ease.sineOut).call(function() {
-                shape.uncache();
                 layer.removeChild(shape);
                 if (typeof callback === 'function') {
                     callback();
