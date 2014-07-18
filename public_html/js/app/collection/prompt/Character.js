@@ -107,7 +107,7 @@ define([
         /**
          * @method getShape
          * @param {Number} excludeStrokePosition
-         * @returns {CreateJS.Container}
+         * @returns {createjs.Container}
          */
         getShape: function(excludeStrokePosition) {
             var shapeContainer = new createjs.Container();
@@ -122,7 +122,7 @@ define([
         /**
          * @method getSquig
          * @param {Number} excludeSquigPosition
-         * @returns {CreateJS.Container}
+         * @returns {createjs.Container}
          */
         getSquig: function(excludeSquigPosition) {
             var canvasSize = skritter.settings.getCanvasSize();
@@ -153,7 +153,7 @@ define([
         /**
          * @method recognize
          * @param {Array} points
-         * @param {CreateJS.Shape} shape
+         * @param {createjs.Shape} shape
          * @returns {Backbone.Model}
          */
         recognize: function(points, shape) {

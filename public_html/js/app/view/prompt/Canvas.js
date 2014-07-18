@@ -185,26 +185,7 @@ define([
                 shape.alpha = alpha;
             }
             if (color) {
-                if (shape.graphics) {
-                    if (shape.graphics._fill) {
-                        shape.graphics._fill.style = color;
-                    }
-                    if (shape.graphics._stroke) {
-                        shape.graphics._stroke.style = color;
-                    }
-                } else {
-                    for (var a = 0, lengthA = shape.children.length; a < lengthA; a++) {
-                        var child = shape.children[a];
-                        if (child.graphics) {
-                            if (child.graphics._fill) {
-                                child.graphics._fill.style = color;
-                            }
-                            if (child.graphics._stroke) {
-                                child.graphics._stroke.style = color;
-                            }
-                        }
-                    }
-                }
+                this.injectColor(shape, color);
             }
             this.getLayer(layerName).addChild(shape);
             this.stage.display.update();
@@ -320,12 +301,7 @@ define([
             var layer = this.getLayer(layerName);
             milliseconds = milliseconds ? milliseconds : 500;
             if (color) {
-                if (shape.graphics._fill) {
-                    shape.graphics._fill.style = color;
-                }
-                if (shape.graphics._stroke) {
-                    shape.graphics._stroke.style = color;
-                }
+                this.injectColor(shape, color);
             }
             layer.addChild(shape);
             this.stage.display.update();
@@ -339,40 +315,32 @@ define([
             });
         },
         /**
+         * @method injectColor
+         * @param {createjs.Container|createjs.Shape} object
+         * @param {String} string
+         */
+        injectColor: function(object, color) {
+            var customFill = new createjs.Graphics.Fill(color);
+            var customStroke = new createjs.Graphics.Stroke(color);
+            function inject(object) {
+                if (object.children) {
+                    for (var i = 0, length = object.children.length; i < length; i++) {
+                        inject(object.children[i]);
+                    }
+                } else if (object.graphics) {
+                    object.graphics._fill = customFill;
+                    object.graphics._stroke = customStroke;
+                }
+            }
+            inject(object);
+        },
+        /**
          * @method injectLayer
          * @param {String} layerName
          * @param color
          */
         injectLayerColor: function(layerName, color) {
-            var layer = this.getLayer(layerName);
-            for (var a = 0, lengthA = layer.children.length; a < lengthA; a++) {
-                var child = layer.children[a];
-                if (child.graphics || child.text) {
-                    if (child.text) {
-                        child.color = color;
-                    } else {
-                        if (child.graphics._fill) {
-                            child.graphics._fill.style = color;
-                        }
-                        if (child.graphics._stroke) {
-                            child.graphics._stroke.style = color;
-                        }
-
-                    }
-                } else {
-                    for (var b = 0, lengthB = child.children.length; b < lengthB; b++) {
-                        var childChild = child.children[b];
-                        if (childChild.graphics) {
-                            if (childChild.graphics._fill) {
-                                childChild.graphics._fill.style = color;
-                            }
-                            if (childChild.graphics._stroke) {
-                                childChild.graphics._stroke.style = color;
-                            }
-                        }
-                    }
-                }
-            }
+            this.injectColor(this.getLayer(layerName), color);
         },
         /**
          * @method getLayer
