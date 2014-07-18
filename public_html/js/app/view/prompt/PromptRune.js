@@ -30,6 +30,9 @@ define([
          * @method eraseCharacter
          */
         eraseCharacter: function() {
+            this.renderFields();
+            this.strokeAttempts = 0;
+            this.elements.buttonReveal.show();
             this.gradingButtons.hide();
             this.teachingButtons.hide();
             this.review.getCharacter().reset();
@@ -88,6 +91,7 @@ define([
                 this.canvas.lastMouseDownEvent = null;
                 var result = this.review.getCharacter().recognize(points, shape);
                 if (result) {
+                    this.strokeAttempts = 0;
                     if (this.review.getCharacter().isFinished()) {
                         this.showAnswer();
                     }
@@ -175,6 +179,7 @@ define([
         show: function() {
             skritter.timer.setLimit(10, 5);
             this.canvas.show().enableTicker().enableGrid().enableInput();
+            this.strokeAttempts = 0;
             this.renderFields();
             Prompt.prototype.show.call(this);
             this.resize();
