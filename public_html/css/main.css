@@ -310,9 +310,18 @@ body {
 .info-section .prompt-writing span { margin-right: 5px; }
 .info-section .writing-hidden { border: 2px #333333 dashed; }
 .info-section .writing-hidden span { visibility: hidden; }
-.info-section .prompt-reading span { margin-right: 5px; }
-.info-section .reading-hidden { border: 2px #333333 dashed; }
-.info-section .reading-hidden span { visibility: hidden; }
+.info-section .prompt-reading div {
+    margin-right: 5px;
+    display: inline-block;
+    min-width: 30px;
+}
+.info-section .reading-hidden {
+    border: 2px #333333 solid;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.info-section .reading-hidden div { visibility: hidden; }
+
 .info-section .prompt-definition { font-size: 18px }
 .info-section .prompt-reading { font-size: 24px }
 .info-section .prompt-sentence { font-size: 18px }

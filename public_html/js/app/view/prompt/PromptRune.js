@@ -22,7 +22,11 @@ define([
             this.elements.buttonEraser.show();
             this.elements.buttonReveal.show();
             this.elements.promptDefinition.html(this.vocab.getDefinition());
-            this.elements.promptReading.html(this.vocab.getReading());
+            if (skritter.user.settings.get('hideReading')) {
+                this.elements.promptReading.html(this.vocab.getReading(this.review.getPosition(), false, true, skritter.user.isUsingZhuyin()));
+            } else {
+                this.elements.promptReading.html(this.vocab.getReading(null, null, null, skritter.user.isUsingZhuyin()));
+            }
             this.elements.promptWriting.html(this.vocab.getWriting(this.review.getPosition()));
             return this;
         },
@@ -193,6 +197,9 @@ define([
             Prompt.prototype.showAnswer.call(this);
             this.canvas.disableInput();
             this.elements.buttonReveal.hide();
+            if (skritter.user.settings.get('hideReading')) {
+                this.elements.promptReading.html(this.vocab.getReading(this.review.getPosition() + 1, false, true, skritter.user.isUsingZhuyin()));
+            }
             this.elements.promptWriting.html(this.vocab.getWriting(this.review.getPosition() + 1));
             this.gradingButtons.show().select(this.review.getScore());
             return this;

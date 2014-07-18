@@ -189,7 +189,6 @@ define([
          */
         showAnswer: function() {
             if (this.review.isActive()) {
-                console.log('thinking', skritter.timer.getThinkingTime());
                 this.review.setContained({
                     finished: true,
                     reviewTime: skritter.timer.getReviewTime(),

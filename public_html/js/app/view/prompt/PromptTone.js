@@ -22,11 +22,11 @@ define([
             this.elements.buttonEraser.hide();
             this.elements.buttonReveal.hide();
             this.elements.promptDefinition.html(this.vocab.getDefinition());
-            this.elements.promptReading.html(this.vocab.getReading(
-                this.review.getPosition(),
-                !skritter.user.settings.get('hideReading'),
-                skritter.user.isUsingZhuyin()
-            ));
+            if (skritter.user.settings.get('hideReading')) {
+                this.elements.promptReading.html(this.vocab.getReading(this.review.getPosition(), true, true, skritter.user.isUsingZhuyin()));
+            } else {
+                this.elements.promptReading.html(this.vocab.getReading(this.review.getPosition(), true, false, skritter.user.isUsingZhuyin()));
+            }
             this.elements.promptWriting.html(this.vocab.getWriting());
             return this;
         },
@@ -151,11 +151,11 @@ define([
         showAnswer: function() {
             Prompt.prototype.showAnswer.call(this);
             this.canvas.disableInput();
-            this.elements.promptReading.html(this.vocab.getReading(
-                this.review.getPosition() + 1,
-                !skritter.user.settings.get('hideReading'),
-                skritter.user.isUsingZhuyin()
-            ));
+            if (skritter.user.settings.get('hideReading')) {
+                this.elements.promptReading.html(this.vocab.getReading(this.review.getPosition() + 1, true, true, skritter.user.isUsingZhuyin()));
+            } else {
+                this.elements.promptReading.html(this.vocab.getReading(this.review.getPosition() + 1, true, false, skritter.user.isUsingZhuyin()));
+            }
             this.gradingButtons.show().select(this.review.getScore());
             return this;
         }

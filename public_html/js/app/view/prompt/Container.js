@@ -34,6 +34,7 @@ define([
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
+            this.replaceCharacterFont();
             this.canvas.setElement('.canvas-container').render();
             this.gradingButtons.setElement(this.$('.grading-container')).render();
             this.teachingButtons.setElement(this.$('.teaching-container')).render();
@@ -50,7 +51,8 @@ define([
             'vclick .button-eraser': 'handleClickEraser',
             'vclick .button-reveal': 'handleClickReveal',
             'vclick .navigate-left': 'handleClickNavigateLeft',
-            'vclick .navigate-right': 'handleClickNavigateRight'
+            'vclick .navigate-right': 'handleClickNavigateRight',
+            'vclick .reading-hidden': 'handleClickReadingHidden'
         },
         /**
          * @method loadElements
@@ -88,6 +90,20 @@ define([
             this.$('.prompt-field').empty();
             return this;
         },
+
+
+        /**
+         * @method handleClickReadingHidden
+         * @param {Object} event
+         */
+        handleClickReadingHidden: function(event) {
+            var reading = this.$(event.currentTarget);
+            if (reading.hasClass('reading-hidden')) {
+                reading.removeClass('reading-hidden');
+            }
+            event.stopPropagation();
+        },
+
         /**
          * @method handleClickEraser
          * @param {Object} event
