@@ -50,6 +50,7 @@ define([
          * @param {Function} callback
          */
         fetch: function(callback) {
+            console.log('updating: vocablists');
             async.waterfall([
                 function(callback) {
                     skritter.api.getVocabLists(function(customLists, status) {
@@ -78,7 +79,11 @@ define([
                 function(callback) {
                     skritter.user.data.vocablists.loadAll(callback);
                 }
-            ], callback);
+            ], function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method fetchById

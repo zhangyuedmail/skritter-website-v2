@@ -41,6 +41,7 @@ define([
             this.elements.userUsername.text(skritter.user.settings.get('name'));
             this.updateDueCounter();
             this.updateVocabLists();
+            skritter.user.data.vocablists.fetch();
             return this;
         },
         /**

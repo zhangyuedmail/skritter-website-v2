@@ -369,7 +369,7 @@ body {
     float: right;
     z-index: 9601;
 }
-@media (max-width: 767px) {
+@media (max-width: 767px) and (orientation: portrait) {
     .info-section { 
         border-bottom: 2px solid #333333;
         border-right: none;
