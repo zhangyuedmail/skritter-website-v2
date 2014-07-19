@@ -20,7 +20,7 @@ define([
         render: function() {
             this.setTitle('Vocab');
             this.$el.html(_.template(template, skritter.strings));
-            this.preloadFonts();
+            this.preloadFont();
             this.replaceCharacterFont();
             this.loadElements();
             return this;

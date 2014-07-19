@@ -1,7 +1,8 @@
 define([
     'require.text!template/user-account.html',
-    'view/View'
-], function(template, View) {
+    'view/View',
+    'view/component/Sidebar'
+], function(template, View, Sidebar) {
     /**
      * @class UserAccount
      */
@@ -11,6 +12,7 @@ define([
          */
         initialize: function() {
             View.prototype.initialize.call(this);
+            this.sidebar = new Sidebar();
             this.sub = skritter.user.subscription;
         },
         /**
@@ -20,6 +22,8 @@ define([
         render: function() {
             this.setTitle('Account');
             this.$el.html(_.template(template, skritter.strings));
+            this.sidebar.setElement(this.$('.sidebar')).render();
+            this.loadElements();
             this.elements.userAboutMe.text(skritter.user.settings.get('aboutMe'));
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userCreated.text(moment(skritter.user.settings.get('created')*1000).format("MMMM Do, YYYY"));
@@ -64,6 +68,7 @@ define([
          */
         loadElements: function() {
             this.elements.userAboutMe = this.$('#user-about-me');
+            this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userCreated = this.$('#user-created');
             this.elements.userEmail = this.$('#user-email');
             this.elements.userPrivate = this.$('#user-private');
@@ -105,7 +110,14 @@ define([
         handleButtonSubOneYearClicked: function(event) {
             this.sub.subscribeGplay('one.year.sub');
             event.preventDefault();
-        }
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.sidebar.remove();
+            View.prototype.remove.call(this);
+        },
     });
 
     return UserAccount;
