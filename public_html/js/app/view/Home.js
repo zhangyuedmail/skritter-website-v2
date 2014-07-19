@@ -113,6 +113,7 @@ define([
          */
         toggleSyncButton: function(model, value) {
             if (value) {
+                skritter.user.data.vocablists.fetch();
                 this.elements.buttonSync.children('i').addClass('fa-spin');
             } else {
                 this.elements.buttonSync.children('i').removeClass('fa-spin');

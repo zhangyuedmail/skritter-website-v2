@@ -173,6 +173,7 @@ define([
         revealCharacter: function(excludeStroke) {
             this.canvas.clearLayer('background');
             this.canvas.drawShape('background', this.review.getCharacter().targets[0].getShape(excludeStroke), '#999999');
+            this.review.setContained('score', 1);
         },
         /**
          * @method show
