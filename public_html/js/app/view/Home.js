@@ -27,6 +27,7 @@ define([
             this.setTitle('Home');
             this.$el.html(_.template(template, skritter.strings));
             this.sidebar.setElement(this.$('.sidebar')).render();
+            this.preloadFont();
             this.loadElements();
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.listTable.setElement(this.elements.listTable).render();
