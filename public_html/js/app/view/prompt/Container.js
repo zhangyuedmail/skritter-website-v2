@@ -48,6 +48,7 @@ define([
          * @property {Object} events
          */
         events: {
+            'vclick .button-audio': 'handleClickAudio',
             'vclick .button-eraser': 'handleClickEraser',
             'vclick .button-reveal': 'handleClickReveal',
             'vclick .navigate-left': 'handleClickNavigateLeft',
@@ -59,6 +60,7 @@ define([
          * @returns {PromptContainer}
          */
         loadElements: function() {
+            this.elements.buttonAudio = this.$('.button-audio');
             this.elements.buttonEraser = this.$('.button-eraser');
             this.elements.buttonReveal = this.$('.button-reveal');
             this.elements.navigateLeft = this.$('.navigate-left');
@@ -91,7 +93,22 @@ define([
             return this;
         },
 
-
+        /**
+         * @method handleClickAudio
+         * @param {Object} event
+         */
+        handleClickAudio: function(event) {
+            this.prompt.playAudio();
+            event.stopPropagation();
+        },
+        /**
+         * @method handleClickEraser
+         * @param {Object} event
+         */
+        handleClickEraser: function(event) {
+            this.prompt.handleClickEraser(event);
+            event.preventDefault();
+        },
         /**
          * @method handleClickReadingHidden
          * @param {Object} event
@@ -102,15 +119,6 @@ define([
                 reading.removeClass('reading-hidden');
             }
             event.stopPropagation();
-        },
-
-        /**
-         * @method handleClickEraser
-         * @param {Object} event
-         */
-        handleClickEraser: function(event) {
-            this.prompt.handleClickEraser(event);
-            event.preventDefault();
         },
         /**
          * @method handleClickReveal

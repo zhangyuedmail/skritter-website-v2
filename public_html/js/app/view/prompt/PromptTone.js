@@ -19,6 +19,11 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
+            if (this.vocab.has('audio')) {
+                this.elements.buttonAudio.show();
+            } else {
+                this.elements.buttonAudio.hide();
+            }
             this.elements.buttonEraser.hide();
             this.elements.buttonReveal.hide();
             this.elements.promptDefinition.html(this.vocab.getDefinition());

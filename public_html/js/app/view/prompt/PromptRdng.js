@@ -17,6 +17,7 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
+            this.elements.buttonAudio.hide();
             this.elements.buttonEraser.hide();
             this.elements.buttonReveal.hide();
             this.elements.promptAnswerText.html(this.vocab.getReading());
@@ -70,6 +71,9 @@ define([
          */
         showAnswer: function() {
             Prompt.prototype.showAnswer.call(this);
+            if (this.vocab.has('audio')) {
+                this.elements.buttonAudio.show();
+            }
             this.elements.promptAnswer.show();
             this.elements.promptQuestion.hide();
             this.gradingButtons.show().select(3);

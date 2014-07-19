@@ -170,7 +170,6 @@ define([], function() {
             } else if (this.has('topMnemonic')) {
                 return this.get('topMnemonic');
             }
-            return null;
         },
         /**
          * @method getReading

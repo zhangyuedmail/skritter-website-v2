@@ -147,6 +147,14 @@ define([
             }
         },
         /**
+         * @method playAudio
+         */
+        playAudio: function() {
+            if (this.vocab.has('audio')) {
+                this.vocab.playAudio();
+            }
+        },
+        /**
          * @method previous
          */
         previous: function() {

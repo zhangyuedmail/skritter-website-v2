@@ -19,6 +19,11 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
+            if (this.vocab.has('audio')) {
+                this.elements.buttonAudio.show();
+            } else {
+                this.elements.buttonAudio.hide();
+            }
             this.elements.buttonEraser.show();
             this.elements.buttonReveal.show();
             this.elements.promptDefinition.html(this.vocab.getDefinition());
@@ -101,6 +106,7 @@ define([
                     }
                     if (skritter.user.isUsingSquigs()) {
                         this.canvas.getLayer('stroke').alpha = 1;
+                        this.canvas.drawShape('stroke', shape);
                         if (this.review.getCharacter().isFinished()) {
                             this.canvas.tweenCharacter('background', this.review.getCharacter());
                             this.canvas.injectLayerColor('background', skritter.settings.get('gradingColors')[this.review.getScore()]);
