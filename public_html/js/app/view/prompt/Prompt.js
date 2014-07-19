@@ -183,6 +183,12 @@ define([
          * @returns {Prompt}
          */
         show: function() {
+            if (skritter.user.data.reviews.length) {
+                this.elements.navigateLeft.show();
+            } else {
+                this.elements.navigateLeft.hide();
+            }
+            this.elements.navigateRight.hide();
             if (this.review.isActive()) {
                 skritter.timer.setLapOffset(this.review.getLapOffset());
                 skritter.timer.setThinking(this.review.getContained().thinkingTime);
@@ -206,6 +212,7 @@ define([
                 });
                 skritter.timer.stop().reset();
             }
+            this.elements.navigateRight.show();
             return this;
         }
     });
