@@ -133,6 +133,21 @@ define([
         }
     };
     /**
+     * @method convertTimeToClock
+     * @param {Number} time
+     */
+    var convertTimeToClock = function(time) {
+        var hours = (time / (3600 * 1000)) >> 0;
+        time = time % (3600 * 1000);
+        var minutes = (time / (60 * 1000)) >> 0;
+        time = time % (60 * 1000);
+        var seconds = (time / 1000) >> 0;
+        if (hours > 0) {
+            return hours + ':' + skritter.fn.pad(minutes, 0, 2) + ':' + skritter.fn.pad(seconds, 0, 2);
+        }
+        return minutes + ':' + pad(seconds, 0, 2);
+    };
+    /**
      * @method getAngle
      * @param {Array|Object} point1 An array of point values
      * @param {Object} point2 An array of point values
@@ -201,6 +216,23 @@ define([
         var ys = point2.y - point1.y;
         ys = ys * ys;
         return Math.sqrt(xs + ys);
+    };
+    /**
+     * @method getDistanceFromArray
+     * @param {Array} points
+     * @return {Number} The distance between the first and last points
+     */
+    var getDistanceFromArray = function(points) {
+        if (points && points.length > 1) {
+            var point1 = {x: points[0].x, y: points[0].y};
+            var point2 = {x: points[points.length - 1].x, y: points[points.length - 1].y}
+            var xs = point2.x - point1.x;
+            xs = xs * xs;
+            var ys = point2.y - point1.y;
+            ys = ys * ys;
+            return Math.sqrt(xs + ys);
+        }
+        return 0;
     };
     /**
      * @method getDistanceToLineSegment
@@ -316,8 +348,8 @@ define([
     };
     /**
      * @method pad
-     * @param {String} text The text requiring padding
-     * @param {String} value The value to be applied as padding
+     * @param {Number|String} text The text requiring padding
+     * @param {Number|String} value The value to be applied as padding
      * @param {Number} size The number of spaces of padding to be applied
      * @return {String}
      */
@@ -381,9 +413,11 @@ define([
         calculateInterval: calculateInterval,
         convertArrayToInt: convertArrayToInt,
         convertBytesToSize: convertBytesToSize,
+        convertTimeToClock: convertTimeToClock,
         getAngle: getAngle,
         getBoundingRectangle: getBoundingRectangle,
         getDistance: getDistance,
+        getDistanceFromArray: getDistanceFromArray,
         getDistanceToLineSegment: getDistanceToLineSegment,
         getGuid: getGuid,
         getUnixTime: getUnixTime,

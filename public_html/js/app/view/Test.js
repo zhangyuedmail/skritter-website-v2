@@ -1,21 +1,21 @@
 define([
     'require.text!template/test.html',
-    'base/View',
+    'view/View',
     'jasmine-boot'
-], function(template, BaseView) {
+], function(template, View) {
     /**
      * @class Test
      */
-    var Test = BaseView.extend({
+    var Test = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Test}
          */
         render: function() {
             this.setTitle('Test');
@@ -30,11 +30,8 @@ define([
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
-            return this;
         }
     });
     

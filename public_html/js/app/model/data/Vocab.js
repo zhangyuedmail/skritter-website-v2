@@ -170,7 +170,6 @@ define([], function() {
             } else if (this.has('topMnemonic')) {
                 return this.get('topMnemonic');
             }
-            return null;
         },
         /**
          * @method getReading
@@ -179,7 +178,7 @@ define([], function() {
          * @param {Boolean} zhuyin
          * @returns {String}
          */
-        getReading: function(offset, mask, zhuyin) {
+        getReading: function(offset, mask, hide, zhuyin) {
             var element = '';
             var reading = this.get('reading');
             if (this.isChinese()) {
@@ -196,23 +195,27 @@ define([], function() {
                         var formattedPiece = zhuyin ? skritter.fn.pinyin.toZhuyin(piece) : skritter.fn.pinyin.toTone(piece);
                         if (piece.indexOf(' ... ') === -1 && piece.indexOf("'") === -1) {
                             if (offset && position >= offset) {
-                                if (mask) {
-                                    element += "<span class='position-" + position + " reading-masked'>" + formattedNakedPiece + "</span>";
+                                if (hide && mask) {
+                                    element += "<div class='position-" + position + " reading-hidden'><div>" + formattedNakedPiece + "</div></div>";
+                                } else if (hide && !mask) {
+                                    element += "<div class='position-" + position + " reading-hidden'><div>" + formattedPiece + "</div></div>";
+                                } else if (mask) {
+                                    element += "<div class='position-" + position + " reading-masked'>" + formattedNakedPiece + "</div>";
                                 } else {
-                                    element += "<span class='position-" + position + " reading-hidden'><span>" + formattedPiece + "</span></span>";
+
                                 }
                             } else {
-                                element += "<span class='position-" + position + "'>" + formattedPiece + "</span>";
+                                element += "<div class='position-" + position + "'>" + formattedPiece + "</div>";
                             }
                             position++;
                         } else {
-                            element += "<span class='reading-filler'>" + piece + "</span>";
+                            element += "<div class='reading-filler'>" + piece + "</div>";
                         }
                     }
-                    element += a + 1 >= reading.length ? "</span>" : "</span> , ";
+                    element += a + 1 >= reading.length ? "</div>" : "</div> , ";
                 }
             } else {
-                element += "<span class='reading-kana reading' data-reading='" + reading + "'>" + reading + "</span>";
+                element += "<div class='reading-kana reading' data-reading='" + reading + "'>" + reading + "</div>";
             }
             return element;
         },

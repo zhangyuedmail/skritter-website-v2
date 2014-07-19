@@ -1,16 +1,18 @@
 define([
     'require.text!template/user-account.html',
-    'base/View'
-], function(template, BaseView) {
+    'view/View',
+    'view/component/Sidebar'
+], function(template, View, Sidebar) {
     /**
      * @class UserAccount
      */
-    var View = BaseView.extend({
+    var UserAccount = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
+            this.sidebar = new Sidebar();
             this.sub = skritter.user.subscription;
         },
         /**
@@ -20,7 +22,8 @@ define([
         render: function() {
             this.setTitle('Account');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
+            this.sidebar.setElement(this.$('.sidebar')).render();
+            this.loadElements();
             this.elements.userAboutMe.text(skritter.user.settings.get('aboutMe'));
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.elements.userCreated.text(moment(skritter.user.settings.get('created')*1000).format("MMMM Do, YYYY"));
@@ -62,11 +65,10 @@ define([
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
             this.elements.userAboutMe = this.$('#user-about-me');
+            this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userCreated = this.$('#user-created');
             this.elements.userEmail = this.$('#user-email');
             this.elements.userPrivate = this.$('#user-private');
@@ -83,13 +85,12 @@ define([
             this.elements.subOneYear = this.$('#button-sub-one-year');
             this.elements.subOptions = this.$('#sub-options');
             this.elements.subStatus = this.$('#sub-status');
-            return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick #button-sub-one-month': 'handleButtonSubOneMonthClicked',
                 'vclick #button-sub-one-year': 'handleButtonSubOneYearClicked'
             });
@@ -109,8 +110,15 @@ define([
         handleButtonSubOneYearClicked: function(event) {
             this.sub.subscribeGplay('one.year.sub');
             event.preventDefault();
-        }
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            this.sidebar.remove();
+            View.prototype.remove.call(this);
+        },
     });
 
-    return View;
+    return UserAccount;
 });

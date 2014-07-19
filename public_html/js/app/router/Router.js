@@ -24,8 +24,10 @@ define([
             this.history = [];
             this.view = null;
             Backbone.history.start();
-            window.document.addEventListener('backbutton', _.bind(this.handleBackButtonPress, this), false);
-            window.document.addEventListener('menubutton', _.bind(this.handleMenuButtonPress, this), false);
+            if (skritter.fn.hasCordova()) {
+                document.addEventListener('backbutton', _.bind(this.handleBackButtonPress, this), false);
+                document.addEventListener('menubutton', _.bind(this.handleMenuButtonPress, this), false);
+            }
         },
         /**
          * @property {Object} routes

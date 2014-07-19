@@ -100,6 +100,9 @@ define([
                     skritter.storage.open(skritter.user.id, callback);
                 },
                 function(callback) {
+                    skritter.user.subscription.fetch(callback);
+                },
+                function(callback) {
                     skritter.user.data.reviews.loadAll(callback);
                 },
                 function(callback) {
@@ -113,7 +116,7 @@ define([
                 }
             ], function() {
                 //load daily timer prog stats in background
-                skritter.timer.refresh(true);
+                skritter.timer.sync();
                 //checks if user has downloaded account
                 if (skritter.user.data.isInitial()) {
                     skritter.modal.show('download')

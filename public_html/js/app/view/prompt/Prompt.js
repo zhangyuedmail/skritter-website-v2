@@ -1,163 +1,157 @@
 define([
-    'view/prompt/GradingButtons'
-], function(GradingButtons) {
+    'view/View'
+], function(View) {
     /**
      * @class Prompt
      */
-    var View = Backbone.View.extend({
+    var Prompt = View.extend({
         /**
          * @method initialize
          */
-        initialize: function() {
-            this.elements = {};
-            this.gradingButtons = new GradingButtons();
+        initialize: function(container) {
+            View.prototype.initialize.call(this);
+            this.canvas = null;
+            this.container = container;
+            this.gradingButtons = null;
             this.item = null;
             this.review = null;
+            this.teachingButtons = null;
             this.vocab = null;
         },
         /**
-         * @method render
-         * @returns {Backbone.View}
+         * @method renderFields
+         * @param {Prompt}
          */
-        render: function() {
-            console.log(this.review.id, this.review.toJSON());
-            this.gradingButtons.setElement('.grading-container').render();
-            this.elements.answer = this.$('.prompt-answer');
-            this.elements.canvas = this.$('.canvas-container');
-            this.elements.definition = this.$('.prompt-definition');
-            this.elements.heisig = this.$('.prompt-heisig');
-            this.elements.infoSection = this.$('.info-section');
-            this.elements.inputSection = this.$('.input-section');
-            this.elements.mnemonic = this.$('.prompt-mnemonic');
-            this.elements.navLeft = this.$('.navigate-left');
-            this.elements.navRight = this.$('.navigate-right');
-            this.elements.newness = this.$('.prompt-newness');
-            this.elements.question = this.$('.prompt-question');
-            this.elements.reading = this.$('.prompt-reading');
-            this.elements.reveal = this.$('.button-reveal');
-            this.elements.sentence = this.$('.prompt-sentence');
-            this.elements.style = this.$('.prompt-style');
-            this.elements.writing = this.$('.prompt-writing');
-            this.$('.character-font').addClass(this.vocab.getFontClass());
-            this.listenTo(this.gradingButtons, 'complete', this.next);
-            this.listenTo(this.gradingButtons, 'selected', this.handleGradingSelected);
-            this.listenTo(skritter.settings, 'resize', this.resize);
-            return this;
-        },
-        /**
-         * @property {Object} events
-         */
-        events: {
-            'vclick .button-edit-definition': 'handleEditDefinitionClicked',
-            'vclick .navigate-left': 'handleNavigateLeftClicked',
-            'vclick .navigate-right': 'handleNavigateRightClicked',
-            'vclick .prompt-reading .reading': 'playAudio'
-        },
-        /**
-         * @method clear
-         * @returns {Backbone.View}
-         */
-        clear: function() {
-            this.show();
-            return this;
-        },
-        /**
-         * @method destroy
-         */
-        destroy: function() {
-            var keys = _.keys(this);
-            for (var key in keys) {
-                this[keys[key]] = undefined;
+        renderFields: function() {
+            if (this.item.isNew()) {
+                this.elements.promptNewness.show();
+            } else {
+                this.elements.promptNewness.hide();
             }
+            if (this.vocab.getStyle()) {
+                this.elements.promptStyle.text(this.vocab.getStyle().toUpperCase());
+                this.elements.promptStyle.show();
+            } else {
+                this.elements.promptStyle.hide();
+            }
+            return this;
         },
         /**
-         * @method handleEditDefinitionClicked
+         * @method disableListeners
+         */
+        disableListeners: function() {
+            this.stopListening();
+        },
+        /**
+         * @method enableListeners
+         */
+        enableListeners: function() {
+            this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
+            this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHoldCanvas);
+            this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClickCanvas);
+            this.listenTo(this.canvas, 'input:down', this.handleInputDown);
+            this.listenTo(this.canvas, 'input:up', this.handleInputUp);
+            this.listenTo(this.gradingButtons, 'complete', this.handleGradingComplete);
+            this.listenTo(this.gradingButtons, 'selected', this.handleGradingSelected);
+        },
+        /**
+         * @method handleClickCanvas
          * @param {Object} event
          */
-        handleEditDefinitionClicked: function(event) {
-            skritter.modal.showEditDefinition(this.vocab);
+        handleClickCanvas: function(event) {
             event.preventDefault();
         },
         /**
-         * @method handleGradingSelected
-         * @param {Number} score
-         */
-        handleGradingSelected: function(score) {
-            this.review.setReview('score', score);
-        },
-        /**
-         * @method handleNavigateLeftClicked
+         * @method handleClickHoldCanvas
          * @param {Object} event
          */
-        handleNavigateLeftClicked: function(event) {
-            this.previous();
+        handleClickHoldCanvas: function(event) {
             event.preventDefault();
         },
         /**
-         * @method handleNavigateRightClicked
+         * @method handleDoubleClickCanvas
          * @param {Object} event
          */
-        handleNavigateRightClicked: function(event) {
+        handleDoubleClickCanvas: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickEraser
+         * @param event
+         */
+        handleClickEraser: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleGradingComplete
+         * @param {Object} event
+         */
+        handleGradingComplete: function(event) {
             this.next();
             event.preventDefault();
         },
         /**
-         * @method hideNavigation
-         * @returns {Backbone.View}
+         * @method handleGradingSelected
+         * @param {Object} event
+         * @param {Number} score
          */
-        hideNavigation: function() {
-            this.hideNavigationLeft();
-            this.hideNavigationRight();
-            return this;
+        handleGradingSelected: function(event, score) {
+            this.review.setContained('score', score);
+            event.preventDefault();
         },
         /**
-         * @method hideNavigationLeft
-         * @returns {Backbone.View}
+         * @method handleInputDown
+         * @param {Object} event
          */
-        hideNavigationLeft: function() {
-            this.elements.navLeft.hide();
-            return this;
+        handleInputDown: function(event) {
+            event.preventDefault();
         },
         /**
-         * @method hideNavigationLeft
-         * @returns {Backbone.View}
+         * @method handleInputUp
+         * @param {Object} event
          */
-        hideNavigationRight: function() {
-            this.elements.navRight.hide();
-            return this;
+        handleInputUp: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickReveal
+         * @param event
+         */
+        handleClickReveal: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method hide
+         */
+        hide: function() {
+            if (this.review.isActive()) {
+                skritter.timer.stop();
+                this.review.setContained({
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+            }
+            this.canvas.disableTicker();
+            this.disableListeners();
+            this.undelegateEvents();
         },
         /**
          * @method next
          */
         next: function() {
-            if (!this.review.getReview().finished) {
-                this.showAnswer();
-            } else if (this.review.next()) {
-                if (!this.review.getReview().started) {
-                    skritter.timer.reset();
-                }
-                this.gradingButtons.hide(_.bind(this.clear, this));
+            if (this.review.next()) {
+                this.reset().show();
             } else {
-                this.stopListening();
-                this.undelegateEvents();
-                this.review.save(_.bind(function() {
-                    this.gradingButtons.hide(_.bind(this.triggerNext, this));
-                }, this));
+                this.review.set('done', true);
+                this.review.save(_.bind(this.container.triggerNext, this.container));
             }
         },
         /**
          * @method playAudio
-         * @param {Object} event
          */
-        playAudio: function(event) {
+        playAudio: function() {
             if (this.vocab.has('audio')) {
-                if (skritter.user.isChinese()) {
-                    var filename = this.$(event.currentTarget).data('reading') + '.mp3';
-                    skritter.assets.playAudio(filename.toLowerCase());
-                } else {
-                    this.vocab.playAudio();
-                }
-                event.stopPropagation();
+                this.vocab.playAudio();
             }
         },
         /**
@@ -165,32 +159,19 @@ define([
          */
         previous: function() {
             if (this.review.previous()) {
-                this.clear();
+                this.reset().show();
             } else {
-                this.gradingButtons.hide(_.bind(this.triggerPrevious, this));
+                this.container.triggerPrevious();
             }
         },
         /**
-         * @method remove
+         * @method reset
+         * @returns {Prompt}
          */
-        remove: function() {
-            this.gradingButtons.remove();
-            this.removeElements();
-            this.$el.empty();
-            this.stopListening();
-            this.undelegateEvents();
-            this.destroy();
-        },
-        /**
-         * @method removeElements
-         * @returns {Object}
-         */
-        removeElements: function() {
-            for (var i in this.elements) {
-                this.elements[i].remove();
-                this.elements[i] = undefined;
-            }
-            return this.elements;
+        reset: function() {
+            this.gradingButtons.hide();
+            this.teachingButtons.hide();
+            return this;
         },
         /**
          * @method resize
@@ -198,29 +179,43 @@ define([
         resize: function() {
         },
         /**
-         * @method set
-         * @param {Backbone.Model} review
-         * @returns {Backbone.View}
+         * @method show
+         * @returns {Prompt}
          */
-        set: function(review) {
-            this.review = review;
-            this.item = review.getBaseItem();
-            this.vocab = review.getBaseVocab();
+        show: function() {
+            if (skritter.user.data.reviews.length) {
+                this.elements.navigateLeft.show();
+            } else {
+                this.elements.navigateLeft.hide();
+            }
+            this.elements.navigateRight.hide();
+            if (this.review.isActive()) {
+                skritter.timer.setLapOffset(this.review.getLapOffset());
+                skritter.timer.setThinking(this.review.getContained().thinkingTime);
+                skritter.timer.start();
+            }
+            if (this.review.isFinished()) {
+                this.showAnswer();
+            }
             return this;
         },
         /**
-         * @method triggerNext
+         * @method showAnswer
+         * @returns {Prompt}
          */
-        triggerNext: function() {
-            this.trigger('prompt:next');
-        },
-        /**
-         * @method triggerPrevious
-         */
-        triggerPrevious: function() {
-            this.trigger('prompt:previous');
+        showAnswer: function() {
+            if (this.review.isActive()) {
+                this.review.setContained({
+                    finished: true,
+                    reviewTime: skritter.timer.getReviewTime(),
+                    thinkingTime: skritter.timer.getThinkingTime()
+                });
+                skritter.timer.stop().reset();
+            }
+            this.elements.navigateRight.show();
+            return this;
         }
     });
 
-    return View;
+    return Prompt;
 });

@@ -1,19 +1,20 @@
 define([
-    'require.text!template/prompt-teaching-buttons.html'
-], function(template) {
+    'require.text!template/prompt-teaching-buttons.html',
+    'view/View'
+], function(template, View) {
     /**
      * @class TeachingButtons
      */
-    var TeachingButtons = Backbone.View.extend({
+    var TeachingButtons = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            this.speed = 50;
+            View.prototype.initialize.call(this);
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {TeachingButtons}
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
@@ -22,72 +23,44 @@ define([
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick #button-next': 'handleTeachingNextClick',
-            'vclick #button-repeat': 'handleTeachingRepeatClick'
+        events: function() {
+            return _.extend({}, View.prototype.events, {
+                'vclick #button-next': 'handleClickTeachingNext',
+                'vclick #button-repeat': 'handleClickTeachingRepeat'
+            });
         },
         /**
-         * @method destroy
-         */
-        destroy: function() {
-            var keys = _.keys(this);
-            for (var key in keys) {
-                this[keys[key]] = undefined;
-            }
-        },
-        /**
-         * @method handleTeachingNextClick
+         * @method handleClickTeachingNext
          * @param {Object} event
          */
-        handleTeachingNextClick: function(event) {
+        handleClickTeachingNext: function(event) {
             this.triggerNext();
             event.preventDefault();
         },
         /**
-         * @method handleTeachingRepeatClick
+         * @method handleClickTeachingRepeat
          * @param {Object} event
          */
-        handleTeachingRepeatClick: function(event) {
+        handleClickTeachingRepeat: function(event) {
             this.triggerRepeat();
             event.preventDefault();
         },
         /**
          * @method hide
          * @param {Function} callback
-         * @returns {Backbone.View}
+         * @returns {TeachingButtons}
          */
         hide: function(callback) {
-            this.$el.hide('slide', {direction: 'down'}, this.speed, callback);
+            this.$el.hide(0, callback);
             return this;
-        },
-        /**
-         * @method remove
-         */
-        remove: function() {
-            this.removeElements();
-            this.$el.empty();
-            this.stopListening();
-            this.undelegateEvents();
-            this.destroy();
-        },
-        /**
-         * @method removeElements
-         * @returns {Object}
-         */
-        removeElements: function() {
-            for (var i in this.elements) {
-                this.elements[i].remove();
-                this.elements[i] = undefined;
-            }
-            return this.elements;
         },
         /**
          * @method show
          * @param {Function} callback
-         * @returns {Backbone.View}
+         * @returns {TeachingButtons}
          */
         show: function(callback) {
-            this.$el.show('slide', {direction: 'down'}, this.speed, callback);
+            this.$el.show(0, callback);
             return this;
         },
         /**

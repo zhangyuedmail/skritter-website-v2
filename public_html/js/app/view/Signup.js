@@ -1,30 +1,29 @@
 define([
     'require.text!template/signup.html',
-    'base/View'
-], function(template, BaseView) {
+    'view/View'
+], function(template, View) {
     /**
-     * @class SignupView
+     * @class Signup
      */
-    var SignupView = BaseView.extend({
+    var Signup = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Signup}
          */
         render: function() {
             this.setTitle('Sign Up');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
+            this.loadElements();
             return this;
         },
         /**
          * @method loadElements
-         * @param {Backbone.View}
          */
         loadElements: function() {
             this.elements.buttonBack = this.$('#button-back');
@@ -33,14 +32,12 @@ define([
             this.elements.signupPassword = this.$('#signup-password');
             this.elements.signupUsername = this.$('#signup-username');
             this.elements.message = this.$('#message');
-            return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-                'vclick #button-back': 'handleBackClick',
+            return _.extend({}, View.prototype.events, {
                 'vclick #button-next': 'handleNextClick'
             });
         },
@@ -49,7 +46,7 @@ define([
          * @param {Object} event
          */
         handleNextClick: function(event) {
-            this.disableForm();
+            this.disableForm('#form-signup');
             this.elements.message.empty();
             var email = this.elements.signupEmail.val();
             var password = this.elements.signupPassword.val();
@@ -61,17 +58,17 @@ define([
                         document.location.href = '';
                     } else {
                         this.elements.message.text(result.message);
-                        this.enableForm();
+                        this.enableForm('#form-signup');
                     }
                 }, this));
             } else {
                 this.elements.message.text('Please fill in all fields.');
-                this.enableForm();
+                this.enableForm('#form-signup');
             }
             event.preventDefault();
         }
     });
 
-    return SignupView;
+    return Signup;
 
 });

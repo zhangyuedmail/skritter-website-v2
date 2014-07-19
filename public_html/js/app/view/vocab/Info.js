@@ -1,34 +1,34 @@
 define([
     'require.text!template/vocab-info.html',
-    'base/View'
-], function(template, BaseView) {
+    'view/View'
+], function(template, View) {
     /**
      * @class VocabInfo
      */
-    var View = BaseView.extend({
+    var VocabInfo = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
             this.vocab = null;
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {VocabInfo}
          */
         render: function() {
             this.setTitle('Vocab');
             this.$el.html(_.template(template, skritter.strings));
+            this.preloadFont();
+            this.replaceCharacterFont();
             this.loadElements();
             return this;
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
             this.elements.buttonStar = this.$('.button-star i');
             this.elements.contained = this.$('.vocab-contained');
             this.elements.decomps = this.$('.vocab-decomps');
@@ -41,13 +41,12 @@ define([
             this.elements.sentenceReading = this.$('.vocab-sentence .reading');
             this.elements.sentenceWriting = this.$('.vocab-sentence .writing');
             this.elements.writing = this.$('.vocab-writing');
-            return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick .button-edit-definition': 'handleEditDefinitionClicked',
                 'vclick .button-star': 'handleStarClicked',
                 'vclick .vocab-contained tbody tr': 'handleTableRowClicked',
@@ -125,7 +124,7 @@ define([
                     this.elements.decomps.closest('.content-block').hide();
                 }
             }
-            this.$('.character-font').addClass(skritter.user.getFontClass());
+            this.replaceCharacterFont();
         },
         /**
          * @method playAudio
@@ -170,5 +169,5 @@ define([
         }
     });
 
-    return View;
+    return VocabInfo;
 });

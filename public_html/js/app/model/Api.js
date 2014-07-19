@@ -2,7 +2,7 @@ define([], function() {
     /**
      * @class Api
      */
-    var Model = Backbone.Model.extend({
+    var Api = Backbone.Model.extend({
         /**
          * @method initialize
          */
@@ -220,7 +220,7 @@ define([], function() {
                         include_sentences: options.includeSentences ? 'true' : undefined,
                         include_heisigs: options.includeHeisigs ? 'true' : undefined,
                         include_top_mnemonics: options.includeTopMnemonics ? 'true' : undefined,
-                        include_decomps: options.includeDecomps
+                        include_decomps: options.includeDecomps ? 'true' : undefined
                     }
                 }).done(function(data) {
                     if (data) {
@@ -267,7 +267,7 @@ define([], function() {
                         include_sentences: options.includeSentences ? 'true' : undefined,
                         include_heisigs: options.includeHeisigs ? 'true' : undefined,
                         include_top_mnemonics: options.includeTopMnemonics ? 'true' : undefined,
-                        include_decomps: options.includeDecomps
+                        include_decomps: options.includeDecomps ? 'true' : undefined
                     }
                 }).done(function(data) {
                     if (data) {
@@ -404,12 +404,12 @@ define([], function() {
             });
         },
         /**
-         * @method getVocabs
+         * @method getVocabById
          * @param {Array} vocabIds
          * @param {Function} callback
          * @param {Object} options
          */
-        getVocabs: function(vocabIds, callback, options) {
+        getVocabById: function(vocabIds, callback, options) {
             var self = this;
             var result = {};
             options = options ? options : {};
@@ -424,18 +424,20 @@ define([], function() {
                         bearer_token: self.get('token'),
                         ids: vocabIds.join('|'),
                         fields: options.fields,
-                        include_strokes: options.includeStroke,
-                        include_sentences: options.includeSentences,
-                        include_heisigs: options.includeHeisigs,
-                        include_top_mnemonics: options.includeTopMnemonics,
-                        include_decomps: options.includeDecomps
+                        include_strokes: options.includeStrokes ? 'true' : undefined,
+                        include_sentences: options.includeSentences ? 'true' : undefined,
+                        include_heisigs: options.includeHeisigs ? 'true' : undefined,
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : undefined,
+                        include_decomps: options.includeDecomps ? 'true' : undefined
                     }
                 }).done(function(data) {
                     if (data) {
                         skritter.fn.mergeObjectArray(result, data);
                     }
                     if (vocabIds.length > 0) {
-                        request(vocabIds.splice(0, 19));
+                        window.setTimeout(function() {
+                            request(vocabIds.splice(0, 19));
+                        }, 500);
                     } else {
                         callback(result, data.statusCode);
                     }
@@ -444,6 +446,51 @@ define([], function() {
                 });
             }
             request(vocabIds.splice(0, 19));
+        },
+        /**
+         * @method getVocabByOffset
+         * @param {Number} offset
+         * @param {Function} callback
+         * @param {Object} options
+         */
+        getVocabByOffset: function(offset, callback, options) {
+            var self = this;
+            var result = {};
+            options = options ? options : {};
+            function request(cursor) {
+                $.ajax({
+                    url: self.base + 'vocabs',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('AUTHORIZATION', self.credentials);
+                    },
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.get('token'),
+                        cursor: cursor,
+                        offset: offset ? offset : 0,
+                        fields: options.fields,
+                        include_strokes: options.includeStrokes ? 'true' : undefined,
+                        include_sentences: options.includeSentences ? 'true' : undefined,
+                        include_heisigs: options.includeHeisigs ? 'true' : undefined,
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : undefined,
+                        include_decomps: options.includeDecomps ? 'true' : undefined
+                    }
+                }).done(function(data) {
+                    if (data) {
+                        skritter.fn.mergeObjectArray(result, data);
+                    }
+                    if (data.cursor) {
+                        window.setTimeout(function() {
+                            request(data.cursor);
+                        }, 500);
+                    } else {
+                        callback(result, data.statusCode);
+                    }
+                }).fail(function(error) {
+                    callback(error, error.status);
+                });
+            }
+            request();
         },
         /**
          * @method getVocabList
@@ -716,5 +763,5 @@ define([], function() {
         }
     });
 
-    return Model;
+    return Api;
 });

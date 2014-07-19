@@ -1,42 +1,40 @@
 define([
     'require.text!template/login.html',
-    'base/View'
-], function(template, BaseView) {
+    'view/View'
+], function(template, View) {
     /**
-     * @class LoginView
+     * @class Login
      */
-    var LoginView = BaseView.extend({
+    var Login = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {Login}
          */
         render: function() {
             this.setTitle('Log In');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
+            this.loadElements();
             return this;
         },
         /**
          * @method loadElements
-         * @param {Backbone.View}
          */
         loadElements: function() {
             this.elements.loginUsername = this.$('#login-username');
             this.elements.loginPassword = this.$('#login-password');
             this.elements.message = this.$('#message');
-            return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick #button-back': 'handleBackClick',
                 'vclick #button-next': 'handleLoginClick',
                 'keyup #login-password': 'handleEnterPress'
@@ -47,7 +45,7 @@ define([
          * @param {Object} event
          */
         handleLoginClick: function(event) {
-            this.disableForm();
+            this.disableForm('#form-login');
             this.elements.message.empty();
             var username = this.elements.loginUsername.val();
             var password = this.elements.loginPassword.val();
@@ -58,7 +56,7 @@ define([
                 } else {
                     skritter.modal.hide();
                     this.elements.message.text(result.message);
-                    this.enableForm();
+                    this.enableForm('#form-login');
                 }
             }, this));
             event.preventDefault();
@@ -76,5 +74,5 @@ define([
         }
     });
 
-    return LoginView;
+    return Login;
 });

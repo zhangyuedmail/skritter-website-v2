@@ -1,13 +1,8 @@
-define([
-    'view/prompt/Defn',
-    'view/prompt/Rdng',
-    'view/prompt/Rune',
-    'view/prompt/Tone'
-], function(PromptDefn, PromptRdng, PromptRune, PromptTone) {
+define([], function() {
     /**
      * @class DataReview
      */
-    var Model = Backbone.Model.extend({
+    var DataReview = Backbone.Model.extend({
         /**
          * @method initialize
          */
@@ -19,8 +14,7 @@ define([
          */
         defaults: {
             position: 1,
-            reviews: [],
-            started: false
+            reviews: []
         },
         /**
          * @method cache
@@ -32,23 +26,6 @@ define([
                     callback();
                 }
             });
-        },
-        /**
-         * @method createView
-         * @return {Backbone.View}
-         */
-        createView: function() {
-            switch (this.get('part')) {
-                case 'defn':
-                    return new PromptDefn().set(this);
-                case 'rdng':
-                    return new PromptRdng().set(this);
-                case 'rune':
-                    return new PromptRune().set(this);
-                case 'tone':
-                    return new PromptTone().set(this);
-            }
-            return null;
         },
         /**
          * @method getBaseItem
@@ -131,6 +108,13 @@ define([
             return skritter.user.data.items.get(this.getReviewAt(position).itemId);
         },
         /**
+         * @method getLapOffset
+         * @returns {Number}
+         */
+        getLapOffset: function() {
+            return this.getContained().reviewTime;
+        },
+        /**
          * @method getMaxPosition
          * @returns {Number}
          */
@@ -148,10 +132,10 @@ define([
             return this.get('position');
         },
         /**
-         * @method getReview
+         * @method getContained
          * @returns {Object}
          */
-        getReview: function() {
+        getContained: function() {
             var position = this.get('position');
             if (this.hasContained() && position !== 0) {
                 return this.get('reviews')[position];
@@ -159,11 +143,11 @@ define([
             return this.get('reviews')[0];
         },
         /**
-         * @method getReviewAt
+         * @method getContainedAt
          * @param {Number} position
          * @returns {Object}
          */
-        getReviewAt: function(position) {
+        getContainedAt: function(position) {
             position = position || position === 0 ? position : this.get('position');
             if (this.hasContained() && position !== 0) {
                 return this.get('reviews')[position];
@@ -175,7 +159,7 @@ define([
          * @returns {Number}
          */
         getScore: function() {
-            return this.getReview().score;
+            return this.getContained().score;
         },
         /**
          * @method getScoreAt
@@ -183,7 +167,21 @@ define([
          * @returns {Number}
          */
         getScoreAt: function(position) {
-            return this.getReviewAt(position).score;
+            return this.getContainedAt(position).score;
+        },
+        /**
+         * @method getReviewTime
+         * @returns {Number}
+         */
+        getReviewTime: function() {
+            return this.getContained().reviewTime;
+        },
+        /**
+         * @method getTotalReviewTime
+         * @returns {Number}
+         */
+        getThinkingTime: function() {
+            return this.getContained().thinkingTime;
         },
         /**
          * @method getTotalReviewTime
@@ -239,6 +237,15 @@ define([
             return this.get('reviews').length > 1 ? true : false;
         },
         /**
+         * @method isActive
+         * @returns {Boolean}
+         */
+        isActive: function() {
+            var position = this.get('position');
+            var review = this.hasContained() ? this.get('reviews')[position] : this.get('reviews')[0];
+            return !review.finished;
+        },
+        /**
          * @method isFinished
          * @returns {Boolean}
          */
@@ -270,7 +277,7 @@ define([
             var itemId = this.get('reviews')[0].itemId;
             skritter.user.data.loadItem(itemId, _.bind(function(item) {
                 var part = item.get('part');
-                if (part === 'rune' || part === 'tone') {
+                if (!this.characters && (part === 'rune' || part === 'tone')) {
                     this.characters = item.getCanvasCharacters();
                 }
                 callback(this);
@@ -303,20 +310,18 @@ define([
          * @param {Function} callback
          */
         save: function(callback) {
-            var self = this;
             var reviews = this.get('reviews');
             var srsconfigs = skritter.user.data.srsconfigs.get(this.get('part')).toJSON();
             async.series([
-                function(callback) {
+                _.bind(function(callback) {
                     var items = [];
                     for (var i = 0, length = reviews.length; i < length; i++) {
                         var review = reviews[i];
                         var item = skritter.user.data.items.get(review.itemId);
                         if (reviews.length > 1 && i === 0) {
-                            review.finished = true;
-                            review.reviewTime = self.getTotalReviewTime();
-                            review.score = self.getFinalScore();
-                            review.thinkingTime = self.getTotalThinkingTime();
+                            review.reviewTime = this.getTotalReviewTime();
+                            review.score = this.getFinalScore();
+                            review.thinkingTime = this.getTotalThinkingTime();
                         }
                         review.newInterval = skritter.fn.calculateInterval(item.toJSON(), review.score, srsconfigs);
                         item.set({
@@ -334,27 +339,21 @@ define([
                     }
                     skritter.user.scheduler.update(items);
                     skritter.user.scheduler.addHistory(items[0]);
-                    callback();
-                },
-                function(callback) {
-                    skritter.user.data.reviews.add(self, {merge: true});
-                    self.cache(callback);
-                },
-                function(callback) {
                     skritter.user.data.items.cache(callback);
-                }
-            ], function() {
-                skritter.user.scheduler.sort();
-                callback();
-            });
+                }, this),
+            ], _.bind(function() {
+                skritter.user.data.reviews.add(this, {merge: true});
+                skritter.user.activeReview = null;
+                this.cache(callback);
+            }, this));
         },
         /**
-         * @method setReview
+         * @method setContained
          * @param {String|Object} key
          * @param {Array|Number|Object|String} value
          * @returns {Object}
          */
-        setReview: function(key, value) {
+        setContained: function(key, value) {
             var position = this.get('position');
             var review = this.hasContained() ? this.get('reviews')[position] : this.get('reviews')[0];
             var data = {};
@@ -406,5 +405,5 @@ define([
         }
     });
 
-    return Model;
+    return DataReview;
 });

@@ -1,36 +1,39 @@
 define([
     'require.text!template/vocab-list.html',
-    'base/View',
-    'view/component/ListSectionTable'
-], function(template, BaseView, ListSectionTable) {
+    'view/View',
+    'view/component/ListSectionTable',
+    'view/component/Sidebar'
+], function(template, View, ListSectionTable, Sidebar) {
     /**
      * @class VocabList
      */
-    var View = BaseView.extend({
+    var VocabList = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
             this.list = null;
             this.listId = null;
             this.sections = new ListSectionTable();
+            this.sidebar = new Sidebar();
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {VocabList}
          */
         render: function() {
             this.setTitle('List');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
+            this.sidebar.setElement(this.$('.sidebar')).render();
+            this.loadElements();
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.sections.setElement(this.elements.listSections).render();
             return this;
         },
         /**
          * @method renderList
-         * @returns {Backbone.View}
+         * @returns {VocabList}
          */
         renderList: function() {
             this.elements.listOptions.hide();
@@ -70,10 +73,8 @@ define([
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
             this.elements.buttonEnableList = this.$('.button-enable-list');
             this.elements.buttonStartList = this.$('.button-start-list');
             this.elements.buttonDisableList = this.$('.button-disable-list');
@@ -84,14 +85,13 @@ define([
             this.elements.listSections = this.$('#list-sections');
             this.elements.listOptions = this.$('.button-list-options');
             this.elements.peopleStudying = this.$('#people-studying');
-            
-            return this;
+            this.elements.userAvatar = this.$('.user-avatar');
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
                 'vclick .button-start-list': 'handleStartListClick',
                 'vclick .button-pause-list': 'handlePauseListClick',
                 'vclick .button-enable-list': 'handleEnableListClick',
@@ -193,6 +193,13 @@ define([
             }, this));
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.sidebar.remove();
+            View.prototype.remove.call(this);
+        },
+        /**
          * @method set
          * @param {String} listId
          * @returns {Backbone.View}
@@ -220,5 +227,5 @@ define([
         }
     });
 
-    return View;
+    return VocabList;
 });

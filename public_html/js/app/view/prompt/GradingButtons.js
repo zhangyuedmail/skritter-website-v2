@@ -1,22 +1,21 @@
 define([
-    'require.text!template/prompt-grading-buttons.html'
-], function(template) {
+    'require.text!template/prompt-grading-buttons.html',
+    'view/View'
+], function(template, View) {
     /**
      * @class PromptGradingButtons
      */
-    var PromptGradingButtons = Backbone.View.extend({
+    var PromptGradingButtons = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            this.elements = {};
-            this.expanded = true;
+            View.prototype.initialize.call(this);
             this.grade = 3;
-            this.speed = 50;
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         render: function() {
             this.$el.html(_.template(template, skritter.strings));
@@ -25,133 +24,73 @@ define([
         /**
          * @property {Object} events
          */
-        events: {
-            'vclick.GradingButtons #grade1': 'handleButtonClick',
-            'vclick.GradingButtons #grade2': 'handleButtonClick',
-            'vclick.GradingButtons #grade3': 'handleButtonClick',
-            'vclick.GradingButtons #grade4': 'handleButtonClick'
+        events: function() {
+            return _.extend({}, View.prototype.events, {
+                'vclick .button-grading': 'handleClickGrading'
+            });
         },
         /**
-         * @method collapse
-         * @returns {Backbone.View}
-         */
-        collapse: function() {
-            this.expanded = false;
-            for (var i = 1; i <= 4; i++) {
-                if (i === this.grade) {
-                    this.$('#grade' + i).parent().show();
-                } else {
-                    this.$('#grade' + i).parent().hide();
-                }
-            }
-            return this;
-        },
-        /**
-         * @method destroy
-         */
-        destroy: function() {
-            var keys = _.keys(this);
-            for (var key in keys) {
-                this[keys[key]] = undefined;
-            }
-        },
-        /**
-         * @method expand
-         * @returns {Backbone.View}
-         */
-        expand: function() {
-            for (var i = 1; i <= 4; i++) {
-                if (i === this.grade) {
-                    this.$('#grade' + i).parent().addClass('active');
-                } else {
-                    this.$('#grade' + i).parent().removeClass('active');
-                }
-                this.$('#grade' + i).parent().show();
-            }
-            this.expanded = true;
-            return this;
-        },
-        /**
-         * @method handleButtonClick
+         * @method handleClickGrading
          * @param {Object} event
          */
-        handleButtonClick: function(event) {
-            this.grade = parseInt(event.currentTarget.id.replace(/[^\d]+/, ''), 10);
-            this.select(this.grade);
-            this.triggerSelected();
-            if (this.expanded) {
-                this.triggerComplete();
-            } else {
-                this.expand();
+        handleClickGrading: function(event) {
+            var grade = parseInt(event.currentTarget.id.replace('grade', ''), 10);
+            this.triggerSelected(event, grade);
+            if (this.grade === grade) {
+                this.triggerComplete(event, grade);
             }
-            event.preventDefault();
+            this.select(grade);
+            event.stopPropagation();
         },
         /**
          * @method hide
          * @param {Function} callback
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         hide: function(callback) {
-            this.$el.hide('slide', {direction: 'down'}, this.speed, callback);
+            this.$el.hide(0, callback);
             return this;
-        },
-        /**
-         * @method remove
-         */
-        remove: function() {
-            this.removeElements();
-            this.$el.remove();
-            this.stopListening();
-            this.undelegateEvents();
-            this.destroy();
-        },
-        /**
-         * @method removeElements
-         * @returns {Object}
-         */
-        removeElements: function() {
-            for (var i in this.elements) {
-                this.elements[i].remove();
-                this.elements[i] = undefined;
-            }
-            return this.elements;
         },
         /**
          * @method select
          * @param {Number} grade
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         select: function(grade) {
-            this.grade = grade;
             for (var i = 1; i <= 4; i++) {
-                if (i === this.grade) {
-                    this.$('#grade' + i).parent().addClass('active');
+                if (i === grade) {
+                    this.$('#grade' + i).addClass('active');
                 } else {
-                    this.$('#grade' + i).parent().removeClass('active');
+                    this.$('#grade' + i).removeClass('active');
                 }
             }
+            this.grade = grade;
             return this;
         },
         /**
          * @method show
          * @param {Function} callback
-         * @returns {Backbone.View}
+         * @returns {PromptGradingButtons}
          */
         show: function(callback) {
-            this.$el.show('slide', {direction: 'down'}, this.speed, callback);
+            this.$el.show(0, callback);
             return this;
         },
         /**
          * @method triggerComplete
+         * @param {Object} event
+         * @param {Number] grade
          */
-        triggerComplete: function() {
-            this.trigger('complete', this.grade);
+        triggerComplete: function(event, grade) {
+            this.trigger('complete', event, grade);
         },
         /**
          * @method triggerSelected
+         * @param {Object} event
+         * @param {Number] grade
          */
-        triggerSelected: function() {
-            this.trigger('selected', this.grade);
+        triggerSelected: function(event, grade) {
+            this.trigger('selected', event, grade);
         }
     });
 

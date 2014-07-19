@@ -28,7 +28,7 @@ module.exports = function(grunt) {
             jquery: '../lib/jquery-1.11.1.min',
             'jquery.mobile': '../lib/jquery.mobile.custom.min',
             'jquery.ui': '../lib/jquery.ui.custom-1.10.4.min',
-            raygun: '../lib/raygun-1.8.4.min',
+            raygun: '../lib/raygun-1.9.2.min',
             'require.locale': '../lib/require.i18n-2.0.4',
             'require.text': '../lib/require.text-2.0.12',
             underscore: '../lib/lodash.compat-2.4.1.min'
@@ -505,7 +505,6 @@ module.exports = function(grunt) {
                     'cordova create build/cordova/japanese com.inkren.skritter.japanese Skritter',
                     'cd build/cordova/japanese',
                     'cordova platforms add android',
-                    'cordova plugin add org.apache.cordova.splashscreen',
                     'cordova plugin add ../../../plugins/analytics',
                     'cordova plugin add ../../../plugins/inappbilling',
                     'cordova plugin add ../../../plugins/expansion',

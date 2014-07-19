@@ -12,6 +12,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.activeReview = null;
             this.data = new Data();
             this.scheduler = new Scheduler();
             this.settings = new Settings();
@@ -185,13 +186,12 @@ define([
          * @returns {Object}
          */
         getCustomData: function() {
-            var review = skritter.user.scheduler.review;
-            review = skritter.user.scheduler.review ? {
-                itemId: review.get('itemId'),
-                position: review.get('position')
+            var activeReview = this.activeReview ? {
+                itemId: this.activeReview.get('itemId'),
+                position: this.activeReview.get('position')
             } : null;
             return {
-                activeReview: review,
+                activeReview: activeReview,
                 studyTime: skritter.timer.time / 1000,
                 view: Backbone.history.fragment
             };
@@ -283,6 +283,13 @@ define([
             return this.settings.get('readingStyle') === 'pinyin' ? true : false;
         },
         /**
+         * @method isUsingSquigs
+         * @returns {Boolean}
+         */
+        isUsingSquigs: function() {
+            return this.settings.get('squigs');
+        },
+        /**
          * @method isUsingZhuyin
          * @returns {Boolean}
          */
@@ -300,6 +307,16 @@ define([
                 if (status === 200) {
                     this.set(result);
                     async.series([
+                        function(callback) {
+                            if (Modernizr.indexeddb) {
+                                var request = indexedDB.deleteDatabase(result.user_id);
+                                request.onsuccess = function() {
+                                    callback();
+                                };
+                            } else {
+                                callback();
+                            }
+                        },
                         function(callback) {
                             skritter.user.settings.fetch(callback);
                         },

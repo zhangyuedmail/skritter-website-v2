@@ -9,7 +9,7 @@ define([], function() {
         initialize: function() {
             this.running = false;
             this.worker = null;
-            if (Modernizr.webworkers) {
+            if (skritter.settings.get('webWorkers') && Modernizr.webworkers) {
                 this.worker = new Worker('js/app/worker/SortSchedule.js');
                 this.worker.addEventListener('message', _.bind(this.handleWorkerFinished, this), false);
             }

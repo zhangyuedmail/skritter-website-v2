@@ -1,51 +1,51 @@
 define([
     'require.text!template/vocab-list-section.html',
-    'base/View',
-    'view/component/ListSectionRowTable'
-], function(template, BaseView, ListSectionRowTable) {
+    'view/View',
+    'view/component/ListSectionRowTable',
+    'view/component/Sidebar'
+], function(template, View, ListSectionRowTable, Sidebar) {
     /**
      * @class VocabListSection
      */
-    var View = BaseView.extend({
+    var VocabListSection = View.extend({
         /**
          * @method initialize
          */
         initialize: function() {
-            BaseView.prototype.initialize.call(this);
+            View.prototype.initialize.call(this);
             this.listId = null;
             this.rows = new ListSectionRowTable();
             this.section = null;
             this.sectionId = null;
+            this.sidebar = new Sidebar();
         },
         /**
          * @method render
-         * @returns {Backbone.View}
+         * @returns {VocabListSection}
          */
         render: function() {
             this.setTitle('Section');
             this.$el.html(_.template(template, skritter.strings));
-            BaseView.prototype.render.call(this);
+            this.sidebar.setElement(this.$('.sidebar')).render();
+            this.loadElements();
             this.elements.userAvatar.html(skritter.user.getAvatar('img-circle'));
             this.rows.setElement(this.elements.listRows).render();
             return this;
         },
         /**
          * @method loadElements
-         * @returns {Backbone.View}
          */
         loadElements: function() {
-            BaseView.prototype.loadElements.call(this);
             this.elements.listName = this.$('.list-name');
             this.elements.listRows = this.$('#list-section');
             this.elements.sectionName = this.$('.section-name');
-
-            return this;
+            this.elements.userAvatar = this.$('.user-avatar');
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
+            return _.extend({}, View.prototype.events, {
             });
         },
         /**
@@ -67,6 +67,13 @@ define([
             return this;
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.sidebar.remove();
+            View.prototype.remove.call(this);
+        },
+        /**
          * @method set
          * @param {String} listId
          * @param {String} sectionId
@@ -80,5 +87,5 @@ define([
         }
     });
 
-    return View;
+    return VocabListSection;
 });
