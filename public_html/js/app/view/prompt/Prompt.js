@@ -49,6 +49,7 @@ define([
             this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
             this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHoldCanvas);
             this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClickCanvas);
+            this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleInputDown);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             this.listenTo(this.gradingButtons, 'complete', this.handleGradingComplete);
@@ -83,6 +84,13 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleClickReveal
+         * @param event
+         */
+        handleClickReveal: function(event) {
+            event.preventDefault();
+        },
+        /**
          * @method handleGradingComplete
          * @param {Object} event
          */
@@ -114,10 +122,10 @@ define([
             event.preventDefault();
         },
         /**
-         * @method handleClickReveal
-         * @param event
+         * @method handleSwipeUp
+         * @param {Object} event
          */
-        handleClickReveal: function(event) {
+        handleSwipeUp: function(event) {
             event.preventDefault();
         },
         /**

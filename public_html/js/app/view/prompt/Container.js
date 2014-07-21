@@ -63,6 +63,8 @@ define([
             this.elements.buttonAudio = this.$('.button-audio');
             this.elements.buttonEraser = this.$('.button-eraser');
             this.elements.buttonReveal = this.$('.button-reveal');
+            this.elements.infoSection = this.$('.info-section');
+            this.elements.inputSection = this.$('.input-section');
             this.elements.navigateLeft = this.$('.navigate-left');
             this.elements.navigateRight = this.$('.navigate-right');
             this.elements.promptAnswer = this.$('.input-section .prompt-answer');

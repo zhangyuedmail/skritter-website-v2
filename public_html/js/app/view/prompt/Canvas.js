@@ -72,6 +72,7 @@ define([
             for (var i = 0, length = this.layerNames.length; i < length; i++) {
                 this.getLayer(this.layerNames[i]).removeAllChildren();
             }
+            this.stage.input.removeAllChildren();
             this.updateAll();
             this.resize();
             return this;

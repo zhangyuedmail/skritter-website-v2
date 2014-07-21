@@ -17,16 +17,22 @@ define([], function() {
          * @param {Function} callback
          */
         clear: function(tableName, callback) {
-            var transaction = this.database.transaction(tableName, 'readwrite');
-            transaction.oncomplete = function() {
+            if (this.database) {
+                var transaction = this.database.transaction(tableName, 'readwrite');
+                transaction.oncomplete = function() {
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                };
+                transaction.onerror = function(event) {
+                    console.error(event);
+                };
+                transaction.objectStore(tableName).clear();
+            } else {
                 if (typeof callback === 'function') {
                     callback();
                 }
-            };
-            transaction.onerror = function(event) {
-                console.error(event);
-            };
-            transaction.objectStore(tableName).clear();
+            }
         },
         /**
          * @method destroy
