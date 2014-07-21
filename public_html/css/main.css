@@ -467,6 +467,12 @@ body {
 .view-login input[type="password"] { border-radius: 0; }
 
 
+/*** VIEW: HOME ***/
+.view-home #vocab-lists-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
 /*** VIEW: SETTINGS ***/
 .view-study-settings .setting-label {
     float: left;
