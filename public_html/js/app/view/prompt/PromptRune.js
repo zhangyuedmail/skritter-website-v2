@@ -129,6 +129,8 @@ define([
                         this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(), skritter.settings.get('hintColor'), 2000);
                     }
                 }
+            } else if (shape) {
+                this.canvas.fadeShape('background', shape);
             }
             event.preventDefault();
         },
