@@ -40,6 +40,7 @@ define([
          */
         eraseCharacter: function() {
             this.renderFields();
+            this.review.setContained('finished', false);
             this.strokeAttempts = 0;
             this.elements.buttonReveal.show();
             this.gradingButtons.hide();
@@ -54,6 +55,8 @@ define([
         handleClickCanvas: function(event) {
             if (this.review.isFinished()) {
                 this.next();
+            } else {
+                this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(), skritter.settings.get('hintColor'), 2000);
             }
             event.preventDefault();
         },
@@ -123,8 +126,7 @@ define([
                     this.canvas.fadeShape('background', shape);
                     if (this.strokeAttempts > this.maxStrokeAttempts) {
                         this.review.setContained('score', 1);
-                        this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(),
-                            skritter.settings.get('hintColor'), 2000);
+                        this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(), skritter.settings.get('hintColor'), 2000);
                     }
                 }
             }
