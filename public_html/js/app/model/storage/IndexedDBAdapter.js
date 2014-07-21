@@ -28,6 +28,10 @@ define([], function() {
                     console.error(event);
                 };
                 transaction.objectStore(tableName).clear();
+            } else {
+                if (typeof callback === 'function') {
+                    callback();
+                }
             }
         },
         /**
