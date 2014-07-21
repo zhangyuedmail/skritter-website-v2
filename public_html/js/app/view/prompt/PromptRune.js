@@ -139,6 +139,14 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleSwipeUp
+         * @param {Object} event
+         */
+        handleSwipeUp: function(event) {
+            this.eraseCharacter();
+            event.preventDefault();
+        },
+        /**
          * @method hide
          */
         hide: function() {
