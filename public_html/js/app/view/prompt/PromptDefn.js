@@ -17,7 +17,12 @@ define([
          */
         renderFields: function() {
             Prompt.prototype.renderFields.call(this);
-            this.elements.buttonEraser.hide();
+            if (this.vocab.has('audio')) {
+                this.elements.buttonAudio.show();
+            } else {
+                this.elements.buttonAudio.hide();
+            }
+            this.elements.buttonEraser.hide()
             this.elements.buttonReveal.hide();
             this.elements.promptAnswerText.html(this.vocab.getDefinition());
             this.elements.promptQuestion.show();
