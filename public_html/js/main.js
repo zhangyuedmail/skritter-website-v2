@@ -79,6 +79,7 @@ requirejs(['Libraries'], function() {
     var run = function() {
         //load analytics tracking before initialize
         if (window.cordova) {
+            navigator.app.clearCache();
             navigator.analytics.startTrackerWithId(skritter.getTrackingID());
         }
         //load raygun error tracking as guest
