@@ -22,7 +22,7 @@ define([
             } else {
                 this.elements.buttonAudio.hide();
             }
-            this.elements.buttonEraser.hide()
+            this.elements.buttonEraser.hide();
             this.elements.buttonReveal.hide();
             this.elements.promptAnswerText.html(this.vocab.getDefinition());
             this.elements.promptQuestion.show();

@@ -32,7 +32,7 @@ define([], function() {
         initialize: function() {
             this.interval = undefined;
             this.lapOffset = 0;
-            this.lapStart = 0
+            this.lapStart = 0;
             this.lapTime = 0;
             this.localOffset = 0;
             this.reviewLimit = 30000;

@@ -225,7 +225,7 @@ define([
     var getDistanceFromArray = function(points) {
         if (points && points.length > 1) {
             var point1 = {x: points[0].x, y: points[0].y};
-            var point2 = {x: points[points.length - 1].x, y: points[points.length - 1].y}
+            var point2 = {x: points[points.length - 1].x, y: points[points.length - 1].y};
             var xs = point2.x - point1.x;
             xs = xs * xs;
             var ys = point2.y - point1.y;
