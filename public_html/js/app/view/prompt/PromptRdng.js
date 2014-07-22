@@ -68,6 +68,7 @@ define([
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
+            this.canvas.resize();
         },
         /**
          * @method show
