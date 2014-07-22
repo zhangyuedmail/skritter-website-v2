@@ -160,6 +160,9 @@ define([
                 this.elements.promptReading.html(this.vocab.getReading(this.review.getPosition() + 1, true, false, skritter.user.isUsingZhuyin()));
             }
             this.gradingButtons.show().select(this.review.getScore());
+            if (skritter.user.isAudioEnabled() && this.review.isLast()) {
+                this.vocab.playAudio()
+            }
             return this;
         }
     });

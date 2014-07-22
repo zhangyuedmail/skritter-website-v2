@@ -197,6 +197,9 @@ define([
             this.strokeAttempts = 0;
             this.renderFields();
             Prompt.prototype.show.call(this);
+            if (skritter.user.isAudioEnabled() && this.review.getVocab()) {
+                this.review.getVocab().playAudio();
+            }
             this.resize();
             return this;
         },
@@ -213,6 +216,9 @@ define([
             }
             this.elements.promptWriting.html(this.vocab.getWriting(this.review.getPosition() + 1));
             this.gradingButtons.show().select(this.review.getScore());
+            if (skritter.user.isAudioEnabled() && this.review.isLast()) {
+                this.vocab.playAudio()
+            }
             return this;
         }
     });

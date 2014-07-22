@@ -83,6 +83,9 @@ define([
             this.elements.promptAnswer.show();
             this.elements.promptQuestion.hide();
             this.gradingButtons.show().select(3);
+            if (skritter.user.isAudioEnabled()) {
+                this.vocab.playAudio();
+            }
             return this;
         }
     });
