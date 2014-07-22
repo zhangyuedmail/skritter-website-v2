@@ -22,6 +22,7 @@ define([
                 this.elements.buttonAudio.hide();
             }
             this.elements.buttonEraser.hide();
+            this.elements.buttonHint.show();
             this.elements.buttonReveal.hide();
             this.elements.promptAnswerText.html(this.vocab.getDefinition());
             this.elements.promptQuestion.show();

@@ -311,15 +311,13 @@ body {
 }
 .info-section .prompt-detail { overflow-y: auto; }
 .info-section .prompt-row { padding-bottom: 10px; }
-
-.info-section .button-hint { margin-top: 75px; }
-
+.info-section .button-hint { display: none; margin-top: 50px; }
 .info-section .prompt-writing span { margin-right: 5px; }
 .info-section .writing-hidden { border: 2px #333333 dashed; }
 .info-section .writing-hidden span { visibility: hidden; }
 .info-section .prompt-reading div {
-    margin-right: 5px;
     display: inline-block;
+    margin-right: 5px;
     min-width: 30px;
 }
 .info-section .reading-hidden {
@@ -337,6 +335,7 @@ body {
     background-color: #ffffff;
     border-top: 2px solid #000000;
     bottom: 0;
+    min-height: 36px;
     position: absolute;
     width: 100%;
 }
@@ -392,6 +391,11 @@ body {
 .input-section .navigate:hover, .input-section .navigate:active { opacity: 1; }
 .input-section .navigate-left { left: 0; }
 .input-section .navigate-right { right: 0; }
+.input-section .prompt-answer .reading div {
+    display: inline-block;
+    margin-right: 5px;
+    min-width: 30px;
+}
 .input-section .prompt-answer {
     display: none;
     position: absolute;

@@ -19,6 +19,7 @@ define([
             Prompt.prototype.renderFields.call(this);
             this.elements.buttonAudio.hide();
             this.elements.buttonEraser.hide();
+            this.elements.buttonHint.show();
             this.elements.buttonReveal.hide();
             this.elements.promptAnswerText.html(this.vocab.getReading());
             this.elements.promptDefinition.hide().html(this.vocab.getDefinition());
