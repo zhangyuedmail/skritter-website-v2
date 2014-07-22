@@ -26,7 +26,6 @@ define([
             this.promptRune = new PromptRune(this);
             this.promptTone = new PromptTone(this);
             this.teachingButtons = new TeachingButtons();
-            this.listenTo(skritter.settings, 'resize', _.bind(this.resize, this));
         },
         /**
          * @method render
@@ -41,7 +40,6 @@ define([
             this.loadElements();
             this.elements.navigateLeft.hide();
             this.elements.navigateRight.hide();
-            this.resize();
             return this;
         },
         /**
@@ -201,40 +199,6 @@ define([
             this.gradingButtons.hide();
             this.teachingButtons.hide();
             return this;
-        },
-        /**
-         * @method resize
-         */
-        resize: function() {
-            var canvasSize = skritter.settings.getCanvasSize();
-            var contentHeight = skritter.settings.getContentHeight();
-            var contentWidth = skritter.settings.getContentWidth();
-            if (skritter.settings.isPortrait()) {
-                this.$('.input-section').css({
-                    height: canvasSize,
-                    float: 'none',
-                    width: contentWidth
-                });
-                this.$('.info-section').css({
-                    height: contentHeight - canvasSize,
-                    float: 'none',
-                    width: contentWidth
-                });
-            } else {
-                this.$('.input-section').css({
-                    height: canvasSize,
-                    float: 'left',
-                    width: canvasSize
-                });
-                this.$('.info-section').css({
-                    height: contentHeight,
-                    float: 'left',
-                    width: contentWidth - canvasSize
-                });
-            }
-            if (this.prompt) {
-                this.prompt.resize();
-            }
         },
         /**
          * @method triggerNext

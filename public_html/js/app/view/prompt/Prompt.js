@@ -54,6 +54,7 @@ define([
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             this.listenTo(this.gradingButtons, 'complete', this.handleGradingComplete);
             this.listenTo(this.gradingButtons, 'selected', this.handleGradingSelected);
+            this.listenTo(skritter.settings, 'resize', _.bind(this.resize, this));
         },
         /**
          * @method handleClickCanvas
@@ -185,6 +186,32 @@ define([
          * @method resize
          */
         resize: function() {
+            var canvasSize = skritter.settings.getCanvasSize();
+            var contentHeight = skritter.settings.getContentHeight();
+            var contentWidth = skritter.settings.getContentWidth();
+            if (skritter.settings.isPortrait()) {
+                this.elements.inputSection.css({
+                    height: canvasSize,
+                    float: 'none',
+                    width: contentWidth
+                });
+                this.elements.infoSection.css({
+                    height: contentHeight - canvasSize,
+                    float: 'none',
+                    width: contentWidth
+                });
+            } else {
+                this.elements.inputSection.css({
+                    height: canvasSize,
+                    float: 'left',
+                    width: canvasSize
+                });
+                this.elements.infoSection.css({
+                    height: contentHeight,
+                    float: 'left',
+                    width: contentWidth - canvasSize
+                });
+            }
         },
         /**
          * @method show

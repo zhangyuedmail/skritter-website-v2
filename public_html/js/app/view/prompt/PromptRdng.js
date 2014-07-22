@@ -54,6 +54,12 @@ define([
             return this;
         },
         /**
+         * @method resize
+         */
+        resize: function() {
+            Prompt.prototype.resize.call(this);
+        },
+        /**
          * @method show
          * @returns {PromptRdng}
          */

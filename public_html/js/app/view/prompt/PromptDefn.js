@@ -16,7 +16,6 @@ define([
          * @returns {PromptRdng}
          */
         renderFields: function() {
-            Prompt.prototype.renderFields.call(this);
             if (this.vocab.has('audio')) {
                 this.elements.buttonAudio.show();
             } else {
@@ -56,6 +55,12 @@ define([
         reset: function() {
             Prompt.prototype.reset.call(this);
             return this;
+        },
+        /**
+         * @method resize
+         */
+        resize: function() {
+            Prompt.prototype.resize.call(this);
         },
         /**
          * @method show
