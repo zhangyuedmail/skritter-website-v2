@@ -109,6 +109,13 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleClickHint
+         * @param {Object} event
+         */
+        handleClickHint: function(event) {
+            event.preventDefault();
+        },
+        /**
          * @method handleInputDown
          * @param {Object} event
          */

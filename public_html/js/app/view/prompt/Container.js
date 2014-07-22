@@ -48,6 +48,7 @@ define([
         events: {
             'vclick .button-audio': 'handleClickAudio',
             'vclick .button-eraser': 'handleClickEraser',
+            'vclick .button-hint': 'handleClickHint',
             'vclick .button-reveal': 'handleClickReveal',
             'vclick .navigate-left': 'handleClickNavigateLeft',
             'vclick .navigate-right': 'handleClickNavigateRight',
@@ -60,6 +61,7 @@ define([
         loadElements: function() {
             this.elements.buttonAudio = this.$('.button-audio');
             this.elements.buttonEraser = this.$('.button-eraser');
+            this.elements.buttonHint = this.$('.button-hint');
             this.elements.buttonReveal = this.$('.button-reveal');
             this.elements.infoSection = this.$('.info-section');
             this.elements.inputSection = this.$('.input-section');
@@ -108,6 +110,14 @@ define([
          */
         handleClickEraser: function(event) {
             this.prompt.handleClickEraser(event);
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickHint
+         * @param {Object} event
+         */
+        handleClickHint: function(event) {
+            this.prompt.handleClickHint(event);
             event.preventDefault();
         },
         /**

@@ -21,6 +21,7 @@ define([
             this.elements.buttonEraser.hide();
             this.elements.buttonReveal.hide();
             this.elements.promptAnswerText.html(this.vocab.getReading());
+            this.elements.promptDefinition.hide().html(this.vocab.getDefinition());
             this.elements.promptQuestion.show();
             this.elements.promptQuestionHelp.text("(tap to reveal)");
             this.elements.promptQuestionText.text("What's the reading?");
@@ -37,6 +38,14 @@ define([
             } else {
                 this.showAnswer();
             }
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickHint
+         * @param {Object} event
+         */
+        handleClickHint: function(event) {
+            this.showHint();
             event.preventDefault();
         },
         /**
@@ -82,11 +91,20 @@ define([
             }
             this.elements.promptAnswer.show();
             this.elements.promptQuestion.hide();
+            this.showHint();
             this.gradingButtons.show().select(3);
             if (skritter.user.isAudioEnabled()) {
                 this.vocab.playAudio();
             }
             return this;
+        },
+        /**
+         * @method showHint
+         */
+        showHint: function() {
+            this.elements.buttonHint.hide();
+            this.elements.promptDefinition.show();
+            this.elements.promptSentence.show();
         }
     });
 

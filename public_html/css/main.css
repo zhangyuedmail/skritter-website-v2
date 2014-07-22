@@ -311,6 +311,9 @@ body {
 }
 .info-section .prompt-detail { overflow-y: auto; }
 .info-section .prompt-row { padding-bottom: 10px; }
+
+.info-section .button-hint { margin-top: 75px; }
+
 .info-section .prompt-writing span { margin-right: 5px; }
 .info-section .writing-hidden { border: 2px #333333 dashed; }
 .info-section .writing-hidden span { visibility: hidden; }

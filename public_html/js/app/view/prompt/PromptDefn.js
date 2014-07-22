@@ -13,7 +13,7 @@ define([
         },
         /**
          * @method renderFields
-         * @returns {PromptRdng}
+         * @returns {PromptDefn}
          */
         renderFields: function() {
             if (this.vocab.has('audio')) {
@@ -28,6 +28,9 @@ define([
             this.elements.promptQuestionHelp.text("(tap to reveal)");
             this.elements.promptQuestionText.text("What's the definition?");
             this.elements.promptQuestionTitle.html(this.vocab.getWriting());
+            this.elements.promptReading.hide().html(this.vocab.getReading());
+            this.elements.promptSentence.hide().text(this.vocab.getSentence() ? this.vocab.getSentence() : undefined);
+
             return this;
         },
         /**
@@ -40,6 +43,14 @@ define([
             } else {
                 this.showAnswer();
             }
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickHint
+         * @param {Object} event
+         */
+        handleClickHint: function(event) {
+            this.showHint();
             event.preventDefault();
         },
         /**
@@ -82,11 +93,20 @@ define([
             Prompt.prototype.showAnswer.call(this);
             this.elements.promptAnswer.show();
             this.elements.promptQuestion.hide();
+            this.showHint();
             this.gradingButtons.show().select(3);
             if (skritter.user.isAudioEnabled()) {
                 this.vocab.playAudio();
             }
             return this;
+        },
+        /**
+         * @method showHint
+         */
+        showHint: function() {
+            this.elements.buttonHint.hide();
+            this.elements.promptReading.show();
+            this.elements.promptSentence.show();
         }
     });
 
