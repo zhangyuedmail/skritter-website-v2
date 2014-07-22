@@ -192,7 +192,7 @@ define([
          * @returns {PromptRune}
          */
         show: function() {
-            skritter.timer.setLimit(10, 5);
+            skritter.timer.setLimit(30, 15);
             this.canvas.show().enableTicker().enableGrid().enableInput();
             this.strokeAttempts = 0;
             this.renderFields();
