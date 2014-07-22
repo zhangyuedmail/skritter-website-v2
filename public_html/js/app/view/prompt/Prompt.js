@@ -200,6 +200,7 @@ define([
                     float: 'none',
                     width: contentWidth
                 });
+                this.elements.promptDetail.css('max-height', contentHeight - canvasSize - 42);
             } else {
                 this.elements.inputSection.css({
                     height: canvasSize,
@@ -211,7 +212,9 @@ define([
                     float: 'left',
                     width: contentWidth - canvasSize
                 });
+                this.elements.promptDetail.css('max-height', contentHeight - 42);
             }
+
         },
         /**
          * @method show

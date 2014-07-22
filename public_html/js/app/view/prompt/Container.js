@@ -67,6 +67,7 @@ define([
             this.elements.navigateRight = this.$('.navigate-right');
             this.elements.promptAnswer = this.$('.input-section .prompt-answer');
             this.elements.promptAnswerText = this.$('.input-section .prompt-answer-text');
+            this.elements.promptDetail = this.$('.info-section .prompt-detail');
             this.elements.promptDefinition = this.$('.prompt-definition');
             this.elements.promptMnemonic = this.$('.prompt-mnemonic');
             this.elements.promptNewness = this.$('.prompt-newness');
