@@ -161,7 +161,7 @@ define([
             }
             this.gradingButtons.show().select(this.review.getScore());
             if (skritter.user.isAudioEnabled() && this.review.isLast()) {
-                this.vocab.playAudio()
+                this.vocab.playAudio();
             }
             return this;
         }

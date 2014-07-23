@@ -50,7 +50,7 @@ define([
         loadElements: function() {
             this.elements.buttonSync = this.$('.button-sync');
             this.elements.dueCount = this.$('.due-count');
-            this.elements.listTable = this.$('#vocab-lists-container');
+            this.elements.listTable = this.$('.vocab-lists-container');
             this.elements.message = this.$('#message');
             this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userUsername = this.$('.user-username');

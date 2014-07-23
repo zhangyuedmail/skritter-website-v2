@@ -525,16 +525,17 @@ define([
          */
         tweenCharacter: function(layerName, character, callback) {
             var position = 0;
+            function tweenComplete() {
+                position++;
+                if (position >= character.length) {
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                }
+            }
             for (var i = 0, length = character.length; i < length; i++) {
                 var stroke = character.at(i);
-                this.tweenShape(layerName, stroke.getUserShape(), stroke.inflateShape(), function() {
-                    position++;
-                    if (position >= character.length) {
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    }
-                });
+                this.tweenShape(layerName, stroke.getUserShape(), stroke.inflateShape(), tweenComplete);
             }
         },
         /**
