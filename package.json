@@ -2,9 +2,9 @@
     "name": "skritter-html5",
     "appName": "Skritter HTML5",
     "description": "Learn to write Chinese and Japanese characters.",
-    "version": "0.0.1823",
-    "versionCodeArm": "50",
-    "versionCodeX86": "51",
+    "version": "0.0.1841",
+    "versionCodeArm": "52",
+    "versionCodeX86": "53",
     "devDependencies": {
         "cordova": "~3.5.0-0.2.6",
         "grunt": "~0.4.5",

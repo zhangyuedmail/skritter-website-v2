@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Mon Jul 21 2014 11:43:26 GMT-0400 (Eastern Daylight Time)
+# Time: Tue Jul 22 2014 22:36:34 GMT-0400 (Eastern Daylight Time)
 
 CACHE:
 index.html
@@ -122,8 +122,8 @@ js/lib/backbone-1.1.2.min.js
 js/lib/createjs.easel-NEXT.min.js
 js/lib/createjs.tween-NEXT.min.js
 js/lib/jquery-1.11.1.min.js
-js/lib/jquery.mobile.custom.min.js
-js/lib/jquery.ui.custom-1.10.4.min.js
+js/lib/jquery.mobile.custom-1.4.3.min.js
+js/lib/jquery.ui.custom-1.11.0.min.js
 js/lib/lodash.compat-2.4.1.min.js
 js/lib/modernizr.custom-2.8.2.min.js
 js/lib/moment-2.7.0.min.js
