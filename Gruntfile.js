@@ -723,6 +723,7 @@ module.exports = function(grunt) {
         'package-cordova-japanese-x86'
     ]);
     grunt.registerTask('package-cordova-chinese-arm', [
+        'shell:kill-adb',
         'install-cordova-chinese-arm',
         'build-cordova-chinese-release-arm',
         'clean:utils-apksigner',
@@ -732,6 +733,7 @@ module.exports = function(grunt) {
         'clean:utils-apksigner'
     ]);
     grunt.registerTask('package-cordova-chinese-x86', [
+        'shell:kill-adb',
         'install-cordova-chinese-x86',
         'build-cordova-chinese-release-x86',
         'clean:utils-apksigner',
@@ -741,6 +743,7 @@ module.exports = function(grunt) {
         'clean:utils-apksigner'
     ]);
     grunt.registerTask('package-cordova-japanese-arm', [
+        'shell:kill-adb',
         'install-cordova-japanese-arm',
         'build-cordova-japanese-release-arm',
         'clean:utils-apksigner',
@@ -750,6 +753,7 @@ module.exports = function(grunt) {
         'clean:utils-apksigner'
     ]);
     grunt.registerTask('package-cordova-japanese-x86', [
+        'shell:kill-adb',
         'install-cordova-japanese-x86',
         'build-cordova-japanese-release-x86',
         'clean:utils-apksigner',

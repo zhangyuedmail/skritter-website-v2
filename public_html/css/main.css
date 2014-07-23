@@ -479,7 +479,7 @@ body {
 
 
 /*** VIEW: HOME ***/
-.view-home #vocab-lists-container {
+.view-home .vocab-lists-container {
     max-height: 300px;
     overflow-y: auto;
 }
