@@ -19,8 +19,10 @@ define([
             Prompt.prototype.renderFields.call(this);
             this.elements.buttonAudio.hide();
             this.elements.buttonEraser.hide();
+            this.elements.buttonHint.show();
             this.elements.buttonReveal.hide();
             this.elements.promptAnswerText.html(this.vocab.getReading());
+            this.elements.promptDefinition.hide().html(this.vocab.getDefinition());
             this.elements.promptQuestion.show();
             this.elements.promptQuestionHelp.text("(tap to reveal)");
             this.elements.promptQuestionText.text("What's the reading?");
@@ -40,6 +42,14 @@ define([
             event.preventDefault();
         },
         /**
+         * @method handleClickHint
+         * @param {Object} event
+         */
+        handleClickHint: function(event) {
+            this.showHint();
+            event.preventDefault();
+        },
+        /**
          * @method hide
          */
         hide: function() {
@@ -52,6 +62,13 @@ define([
         reset: function() {
             Prompt.prototype.reset.call(this);
             return this;
+        },
+        /**
+         * @method resize
+         */
+        resize: function() {
+            Prompt.prototype.resize.call(this);
+            this.canvas.resize();
         },
         /**
          * @method show
@@ -76,8 +93,20 @@ define([
             }
             this.elements.promptAnswer.show();
             this.elements.promptQuestion.hide();
+            this.showHint();
             this.gradingButtons.show().select(3);
+            if (skritter.user.isAudioEnabled()) {
+                this.vocab.playAudio();
+            }
             return this;
+        },
+        /**
+         * @method showHint
+         */
+        showHint: function() {
+            this.elements.buttonHint.hide();
+            this.elements.promptDefinition.show();
+            this.elements.promptSentence.show();
         }
     });
 

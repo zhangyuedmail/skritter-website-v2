@@ -129,6 +129,8 @@ define([
                         this.canvas.fadeShape('hint', this.review.getCharacter().getExpectedStroke().inflateShape(), skritter.settings.get('hintColor'), 2000);
                     }
                 }
+            } else if (shape) {
+                this.canvas.fadeShape('background', shape);
             }
             event.preventDefault();
         },
@@ -190,11 +192,14 @@ define([
          * @returns {PromptRune}
          */
         show: function() {
-            skritter.timer.setLimit(10, 5);
+            skritter.timer.setLimit(30, 15);
             this.canvas.show().enableTicker().enableGrid().enableInput();
             this.strokeAttempts = 0;
             this.renderFields();
             Prompt.prototype.show.call(this);
+            if (skritter.user.isAudioEnabled() && this.review.getVocab()) {
+                this.review.getVocab().playAudio();
+            }
             this.resize();
             return this;
         },
@@ -211,6 +216,9 @@ define([
             }
             this.elements.promptWriting.html(this.vocab.getWriting(this.review.getPosition() + 1));
             this.gradingButtons.show().select(this.review.getScore());
+            if (skritter.user.isAudioEnabled() && this.review.isLast()) {
+                this.vocab.playAudio()
+            }
             return this;
         }
     });

@@ -307,16 +307,17 @@ body {
 .info-section {
     border-bottom: none;
     border-right: 2px solid #333333;
-    overflow-y: auto;
     position: relative;
 }
+.info-section .prompt-detail { overflow-y: auto; }
 .info-section .prompt-row { padding-bottom: 10px; }
+.info-section .button-hint { display: none; margin-top: 50px; }
 .info-section .prompt-writing span { margin-right: 5px; }
 .info-section .writing-hidden { border: 2px #333333 dashed; }
 .info-section .writing-hidden span { visibility: hidden; }
 .info-section .prompt-reading div {
-    margin-right: 5px;
     display: inline-block;
+    margin-right: 5px;
     min-width: 30px;
 }
 .info-section .reading-hidden {
@@ -325,39 +326,29 @@ body {
     cursor: pointer;
 }
 .info-section .reading-hidden div { visibility: hidden; }
-
 .info-section .prompt-definition { font-size: 16px }
 .info-section .prompt-mnemonic { font-size: 16px }
 .info-section .prompt-reading { font-size: 24px }
 .info-section .prompt-sentence { font-size: 16px }
 .info-section .prompt-writing { font-size: 32px }
-
 .info-section .prompt-toolbar {
+    background-color: #ffffff;
+    border-top: 2px solid #000000;
     bottom: 0;
+    min-height: 36px;
     position: absolute;
     width: 100%;
-}
-.info-section .prompt-newness {
-    background-color: #333333;
-    bottom: 0;
-    color: #ffffff;
-    display: none;
-    font-size: 12px;
-    left: 0;
-    padding: 2px 10px;
-    position: absolute;
-    z-index: 9200;
 }
 .info-section .button-audio {
     cursor: pointer;
     display: none;
     padding: 2px 10px;
-    float: right;
+    float: left;
     z-index: 9601;
 }
 .info-section .button-eraser {
     cursor: pointer;
-    //display: none;
+    display: none;
     padding: 2px 10px;
     float: right;
     z-index: 9601;
@@ -369,7 +360,7 @@ body {
     float: right;
     z-index: 9601;
 }
-@media (max-width: 767px) and (orientation: portrait) {
+@media (max-width: 991px) and (orientation: portrait) {
     .info-section { 
         border-bottom: 2px solid #333333;
         border-right: none;
@@ -400,6 +391,11 @@ body {
 .input-section .navigate:hover, .input-section .navigate:active { opacity: 1; }
 .input-section .navigate-left { left: 0; }
 .input-section .navigate-right { right: 0; }
+.input-section .prompt-answer .reading div {
+    display: inline-block;
+    margin-right: 5px;
+    min-width: 30px;
+}
 .input-section .prompt-answer {
     display: none;
     position: absolute;
@@ -410,15 +406,30 @@ body {
     position: absolute;
     width: 100%;
 }
+.input-section .prompt-status {
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+.input-section .prompt-newness {
+    background-color: #333333;
+    color: #ffffff;
+    display: none;
+    float: left;
+    font-size: 12px;
+    padding: 2px 5px;
+    position: relative;
+    z-index: 9200;
+}
 .input-section .prompt-style {
     background-color: #333333;
     color: #ffffff;
     display: none;
+    float: left;
     font-size: 12px;
-    padding: 2px 10px;
-    position: absolute;
-    top: 0;
-    z-index: 9200;
+    padding: 2px 5px;
+    position: relative;
+    z-index: 9201;
 }
 .input-section .prompt-style.simp {
     display: block;

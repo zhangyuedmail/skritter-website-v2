@@ -218,7 +218,7 @@ define([], function() {
          * @returns {Backbone.Model}
          */
         getVocab: function() {
-            return skritter.user.data.items.get(this.getReview().itemId).getVocab();
+            return skritter.user.data.items.get(this.getContained().itemId).getVocab();
         },
         /**
          * @method getVocabAt
@@ -227,7 +227,7 @@ define([], function() {
          */
         getVocabAt: function(position) {
             position = position || position === 0 ? position : this.get('position');
-            return skritter.user.data.items.get(this.getReviewAt(position).itemId).getVocab();
+            return skritter.user.data.items.get(this.getContainedAt(position).itemId).getVocab();
         },
         /**
          * @method hasContained

@@ -26,7 +26,6 @@ define([
             this.promptRune = new PromptRune(this);
             this.promptTone = new PromptTone(this);
             this.teachingButtons = new TeachingButtons();
-            this.listenTo(skritter.settings, 'resize', _.bind(this.resize, this));
         },
         /**
          * @method render
@@ -41,7 +40,6 @@ define([
             this.loadElements();
             this.elements.navigateLeft.hide();
             this.elements.navigateRight.hide();
-            this.resize();
             return this;
         },
         /**
@@ -50,6 +48,7 @@ define([
         events: {
             'vclick .button-audio': 'handleClickAudio',
             'vclick .button-eraser': 'handleClickEraser',
+            'vclick .button-hint': 'handleClickHint',
             'vclick .button-reveal': 'handleClickReveal',
             'vclick .navigate-left': 'handleClickNavigateLeft',
             'vclick .navigate-right': 'handleClickNavigateRight',
@@ -62,6 +61,7 @@ define([
         loadElements: function() {
             this.elements.buttonAudio = this.$('.button-audio');
             this.elements.buttonEraser = this.$('.button-eraser');
+            this.elements.buttonHint = this.$('.button-hint');
             this.elements.buttonReveal = this.$('.button-reveal');
             this.elements.infoSection = this.$('.info-section');
             this.elements.inputSection = this.$('.input-section');
@@ -69,6 +69,7 @@ define([
             this.elements.navigateRight = this.$('.navigate-right');
             this.elements.promptAnswer = this.$('.input-section .prompt-answer');
             this.elements.promptAnswerText = this.$('.input-section .prompt-answer-text');
+            this.elements.promptDetail = this.$('.info-section .prompt-detail');
             this.elements.promptDefinition = this.$('.prompt-definition');
             this.elements.promptMnemonic = this.$('.prompt-mnemonic');
             this.elements.promptNewness = this.$('.prompt-newness');
@@ -109,6 +110,14 @@ define([
          */
         handleClickEraser: function(event) {
             this.prompt.handleClickEraser(event);
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickHint
+         * @param {Object} event
+         */
+        handleClickHint: function(event) {
+            this.prompt.handleClickHint(event);
             event.preventDefault();
         },
         /**
@@ -201,40 +210,6 @@ define([
             this.gradingButtons.hide();
             this.teachingButtons.hide();
             return this;
-        },
-        /**
-         * @method resize
-         */
-        resize: function() {
-            var canvasSize = skritter.settings.getCanvasSize();
-            var contentHeight = skritter.settings.getContentHeight();
-            var contentWidth = skritter.settings.getContentWidth();
-            if (skritter.settings.isPortrait()) {
-                this.$('.input-section').css({
-                    height: canvasSize,
-                    float: 'none',
-                    width: contentWidth
-                });
-                this.$('.info-section').css({
-                    height: contentHeight - canvasSize,
-                    float: 'none',
-                    width: contentWidth
-                });
-            } else {
-                this.$('.input-section').css({
-                    height: canvasSize,
-                    float: 'left',
-                    width: canvasSize
-                });
-                this.$('.info-section').css({
-                    height: contentHeight,
-                    float: 'left',
-                    width: contentWidth - canvasSize
-                });
-            }
-            if (this.prompt) {
-                this.prompt.resize();
-            }
         },
         /**
          * @method triggerNext

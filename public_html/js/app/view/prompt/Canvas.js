@@ -39,8 +39,8 @@ define([
             this.createLayer('background');
             this.createLayer('hint');
             this.createLayer('stroke');
-            this.$(this.elements.input).on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
-            this.$(this.elements.input).on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
+            this.$(this.elements.holder).on('vmousedown.Canvas', _.bind(this.triggerCanvasMouseDown, this));
+            this.$(this.elements.holder).on('vmouseup.Canvas', _.bind(this.triggerCanvasMouseUp, this));
             createjs.Ticker.addEventListener('tick', this.stage.display);
             createjs.Touch.enable(this.stage.input);
             createjs.Ticker.setFPS(24);
@@ -133,10 +133,10 @@ define([
          * @returns {PromptCanvas}
          */
         disableInput: function() {
-            this.$(this.elements.input).off('vmousedown.Input');
-            this.$(this.elements.input).off('vmousemove.Input');
-            this.$(this.elements.input).off('vmouseout.Input');
-            this.$(this.elements.input).off('vmouseup.Input');
+            this.$(this.elements.holder).off('vmousedown.Input');
+            this.$(this.elements.holder).off('vmousemove.Input');
+            this.$(this.elements.holder).off('vmouseout.Input');
+            this.$(this.elements.holder).off('vmouseup.Input');
             return this;
         },
         /**
@@ -208,7 +208,7 @@ define([
         enableInput: function() {
             var stage = this.stage.input;
             var oldPoint, oldMidPoint, points, marker, squig;
-            this.disableInput().$(this.elements.input).on('vmousedown.Input', _.bind(down, this));
+            this.disableInput().$(this.elements.holder).on('vmousedown.Input', _.bind(down, this));
             function down(event) {
                 points = [];
                 marker = new createjs.Shape();
@@ -217,9 +217,9 @@ define([
                 stage.addChild(marker);
                 oldPoint = oldMidPoint = new createjs.Point(stage.mouseX, stage.mouseY);
                 this.triggerInputDown(event, oldPoint);
-                this.$(this.elements.input).on('vmousemove.Input', _.bind(move, this));
-                this.$(this.elements.input).on('vmouseout.Input', _.bind(out, this));
-                this.$(this.elements.input).on('vmouseup.Input', _.bind(up, this));
+                this.$(this.elements.holder).on('vmousemove.Input', _.bind(move, this));
+                this.$(this.elements.holder).on('vmouseout.Input', _.bind(out, this));
+                this.$(this.elements.holder).on('vmouseup.Input', _.bind(up, this));
             }
             function move() {
                 var point = {x: stage.mouseX, y: stage.mouseY};
@@ -236,17 +236,17 @@ define([
                 points.push(point);
             }
             function out(event) {
-                this.$(this.elements.input).off('vmousemove.Input');
-                this.$(this.elements.input).off('vmouseout.Input');
-                this.$(this.elements.input).off('vmouseup.Input');
+                this.$(this.elements.holder).off('vmousemove.Input');
+                this.$(this.elements.holder).off('vmouseout.Input');
+                this.$(this.elements.holder).off('vmouseup.Input');
                 this.triggerInputUp(event, null, squig.clone(true));
                 marker.graphics.clear();
                 stage.clear();
             }
             function up(event) {
-                this.$(this.elements.input).off('vmousemove.Input');
-                this.$(this.elements.input).off('vmouseout.Input');
-                this.$(this.elements.input).off('vmouseup.Input');
+                this.$(this.elements.holder).off('vmousemove.Input');
+                this.$(this.elements.holder).off('vmouseout.Input');
+                this.$(this.elements.holder).off('vmouseup.Input');
                 this.triggerInputUp(event, points, squig.clone(true));
                 marker.graphics.clear();
                 stage.clear();
@@ -362,7 +362,7 @@ define([
          * @method remove
          */
         remove: function() {
-            this.$(this.elements.input).off();
+            this.$(this.elements.holder).off();
             View.prototype.remove.call(this);
         },
         /**
@@ -430,7 +430,7 @@ define([
                     }
                 }
             }
-            this.$(this.elements.input).on('vmousemove.Canvas', _.bind(function(event) {
+            this.$(this.elements.holder).on('vmousemove.Canvas', _.bind(function(event) {
                 this.mouseMoveEvent = event;
             }, this));
             this.mouseDownTimer = window.setTimeout(_.bind(function() {
@@ -451,7 +451,7 @@ define([
          */
         triggerCanvasMouseUp: function(event) {
             window.clearTimeout(this.mouseDownTimer);
-            this.$(this.elements.input).off('vmousemove.Canvas');
+            this.$(this.elements.holder).off('vmousemove.Canvas');
             this.lastMouseDownEvent = this.mouseDownEvent;
             this.mouseMoveEvent = null;
             this.mouseUpEvent = event;

@@ -20,8 +20,8 @@ requirejs.config({
         'jasmine-html': '../../test/lib/jasmine-html',
         'jasmine-boot': '../../test/lib/boot',
         jquery: '../lib/jquery-1.11.1.min',
-        'jquery.mobile': '../lib/jquery.mobile.custom.min',
-        'jquery.ui': '../lib/jquery.ui.custom-1.10.4.min',
+        'jquery.mobile': '../lib/jquery.mobile.custom-1.4.3.min',
+        'jquery.ui': '../lib/jquery.ui.custom-1.11.0.min',
         raygun: '../lib/raygun-1.9.2.min',
         'require.locale': '../lib/require.i18n-2.0.4',
         'require.text': '../lib/require.text-2.0.12',
@@ -79,6 +79,7 @@ requirejs(['Libraries'], function() {
     var run = function() {
         //load analytics tracking before initialize
         if (window.cordova) {
+            navigator.app.clearCache();
             navigator.analytics.startTrackerWithId(skritter.getTrackingID());
         }
         //load raygun error tracking as guest
