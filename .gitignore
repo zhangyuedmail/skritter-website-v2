@@ -1,15 +1,6 @@
 # Directories #
 .idea/
-build/
-config/crosswalk/
+coverage/
 docs/
-files/
-nbproject/
 node_modules/
-scripts/
-utils/
-
-# Files #
-*.DS_Store
-*.keystore
-*.log
+nbproject/
