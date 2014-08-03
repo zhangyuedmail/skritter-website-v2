@@ -3,11 +3,11 @@
  */
 define([
     "framework/GelatoPage",
-    "requirejs.text!templates/home.html"
+    "requirejs.text!templates/team.html"
 ], function(GelatoPage, template) {
     return GelatoPage.extend({
         /**
-         * @class ViewHome
+         * @class ViewTeam
          * @extends GelatoPage
          * @constructor
          */
@@ -16,7 +16,7 @@ define([
          * @property title
          * @type String
          */
-        title: "Home",
+        title: "Team",
         /**
          * @method render
          * @returns {GelatoPage}

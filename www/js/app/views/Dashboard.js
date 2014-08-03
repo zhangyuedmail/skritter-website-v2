@@ -8,7 +8,7 @@ define([
     return GelatoPage.extend({
         /**
          * @class ViewDashboard
-         * @extends GelatoView
+         * @extends GelatoPage
          * @constructor
          */
         initialize: function() {},

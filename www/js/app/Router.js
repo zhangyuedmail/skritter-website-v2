@@ -3,9 +3,11 @@
  */
 define([
     "framework/GelatoRouter",
+    "app/views/About",
     "app/views/Home",
-    "app/views/Login"
-], function(GelatoRouter, HomeView, LoginView) {
+    "app/views/Login",
+    "app/views/Team"
+], function(GelatoRouter, AboutView, HomeView, LoginView, TeamView) {
     /**
      * @class Router
      * @extend GelatoRouter
@@ -17,7 +19,16 @@ define([
          */
         routes: {
             "": "showHome",
-            "login": "showLogin"
+            "about": "showAbout",
+            "login": "showLogin",
+            "team": "showTeam"
+        },
+        /**
+         * @method showAbout
+         */
+        showAbout: function() {
+            this.currentView = new AboutView();
+            this.currentView.render();
         },
         /**
          * @method showHome
@@ -35,6 +46,13 @@ define([
          */
         showLogin: function() {
             this.currentView = new LoginView();
+            this.currentView.render();
+        },
+        /**
+         * @method showTeam
+         */
+        showTeam: function() {
+            this.currentView = new TeamView();
             this.currentView.render();
         }
     });
