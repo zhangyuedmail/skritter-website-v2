@@ -30,6 +30,11 @@ define([
             return this;
         },
         /**
+         * @property events
+         * @type Object
+         */
+        events: {},
+        /**
          * @method element
          * @param {String} selector
          * @returns {jQuery}
@@ -59,7 +64,7 @@ define([
          * @returns {GelatoDialog}
          */
         show: function(dialogId, callback, options) {
-            this.id = dialogId ? dialogId : "default";
+            this.id = dialogId ? "dialog-" + dialogId : "dialog-default";
             options = options ? options : this.options;
             options.backdrop = options.backdrop ? options.backdrop : "static";
             options.keyboard = options.keyboard ? options.keyboard : false;
