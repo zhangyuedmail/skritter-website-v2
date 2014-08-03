@@ -3,11 +3,12 @@
  */
 define([
     "framework/GelatoApplication",
-    "app/views/components/Dialog",
-    "app/views/components/Sidebar",
+    "app/Functions",
     "app/models/Assets",
-    "app/models/User"
-], function(GelatoApplication, Dialog, Sidebar, Assets, User) {
+    "app/models/User",
+    "app/views/components/Dialog",
+    "app/views/components/Sidebar"
+], function(GelatoApplication, Functions, Assets, User, DialogView, SidebarView) {
     return GelatoApplication.extend({
         /**
          * @class Application
@@ -16,8 +17,9 @@ define([
          */
         initialize: function() {
             _.bindAll(this);
-            this.dialog = new Dialog();
-            this.sidebar = new Sidebar();
+            this.fn = Functions;
+            this.dialog = new DialogView();
+            this.sidebar = new SidebarView();
             async.series([
                 async.apply(this.loadAssets),
                 async.apply(this.loadUser)

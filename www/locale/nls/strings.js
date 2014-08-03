@@ -3,6 +3,9 @@ define({
         "application": {
             "name": "Skritter"
         },
+        "dashboard": {
+            "title": "Dashboard"
+        },
         "home": {
             "intro-title": "Learn to write characters.",
             "intro-body": "Skritter is a tool for learning Chinese and Japanese writing with stroke-level feedback, tone practice, audio playback, definition practice, and progress feedback.",
