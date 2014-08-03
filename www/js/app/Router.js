@@ -3,8 +3,9 @@
  */
 define([
     "framework/GelatoRouter",
-    "app/views/Home"
-], function(GelatoRouter, HomeView) {
+    "app/views/Home",
+    "app/views/Login"
+], function(GelatoRouter, HomeView, LoginView) {
     /**
      * @class Router
      * @extend GelatoRouter
@@ -15,13 +16,21 @@ define([
          * @type Object
          */
         routes: {
-            "": "showHome"
+            "": "showHome",
+            "login": "showLogin"
         },
         /**
          * @method showHome
          */
         showHome: function() {
             this.currentView = new HomeView();
+            this.currentView.render();
+        },
+        /**
+         * @method showLogin
+         */
+        showLogin: function() {
+            this.currentView = new LoginView();
             this.currentView.render();
         }
     });

@@ -17,6 +17,11 @@ define([], function() {
         after: function() {
             if (this.currentView) {
                 this.currentView.$("input[type='checkbox']").bootstrapSwitch();
+                if (this.currentView.title) {
+                    document.title = this.currentView.title + " - " + app.strings.application.name;
+                } else {
+                    document.title = app.strings.application.name;
+                }
             }
         },
         /**

@@ -15,6 +15,11 @@ define([
          */
         el: "#application",
         /**
+         * @property title
+         * @type String
+         */
+        title: undefined,
+        /**
          * @property events
          * @type Object
          */
@@ -39,20 +44,16 @@ define([
         },
         /**
          * @method handleClickContent
-         * @param {Event} event
          */
-        handleClickContent: function(event) {
-            event.preventDefault();
+        handleClickContent: function() {
             if (app.sidebar && app.sidebar.isExpanded()) {
                 app.sidebar.toggle();
             }
         },
         /**
          * @method handleClickSidebarToggle
-         * @param {Event} event
          */
-        handleClickSidebarToggle: function(event) {
-            event.preventDefault();
+        handleClickSidebarToggle: function() {
             if (app.sidebar) {
                 app.sidebar.toggle();
             }
