@@ -23,7 +23,11 @@ define([
          * @method showHome
          */
         showHome: function() {
-            this.currentView = new HomeView();
+            if (gelato.isNative()) {
+                this.showLogin();
+            } else {
+                this.currentView = new HomeView();
+            }
             this.currentView.render();
         },
         /**
