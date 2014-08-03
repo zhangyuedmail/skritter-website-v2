@@ -7,7 +7,6 @@
         </div>
 
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#login">LOG IN</a></li>
             <li><a href="https://github.com/skritter/skritter-html5" target="_blank" class="navbar-icon fa fa-github"></a></li>
         </ul>
 
@@ -21,7 +20,11 @@
         <div class="container">
             <h1>{{home.intro-title}}</h1>
             <p>{{home.intro-body}}</p>
-            <p><a class="btn btn-primary btn-lg vertical-margin" role="button">{{home.study-chinese}} &raquo;</a> <a class="btn btn-primary btn-lg vertical-margin" role="button">{{home.study-japanese}} &raquo;</a></p>
+            <p>
+                <a class="btn btn-primary btn-lg vertical-margin" role="button">{{home.study-chinese}} &raquo;</a>
+                <a class="btn btn-primary btn-lg vertical-margin" role="button">{{home.study-japanese}} &raquo;</a>
+                <a href="#login" class="btn btn-success btn-lg vertical-margin" role="button">{{login.title}}</a>
+            </p>
         </div>
     </div>
 
