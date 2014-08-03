@@ -8,6 +8,11 @@ define([], function() {
      */
     return Backbone.View.extend({
         /**
+         * @property elements
+         * @type Object
+         */
+        elements: {},
+        /**
          * @method compile
          * @param {String} template
          * @returns {String}

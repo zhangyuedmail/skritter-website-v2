@@ -14,12 +14,20 @@ define([
          * @constructor
          */
         initialize: function() {
+            _.bindAll(this);
             this.dialog = new GelatoDialog();
             this.sidebar = new GelatoSidebar();
-            this.loadUser();
+            async.series([
+                async.apply(this.loadUser)
+            ]);
         },
-        loadUser: function() {
+        /**
+         * @method loadUser
+         * @param {Function} callback
+         */
+        loadUser: function(callback) {
             this.user = new User();
+            callback();
         }
     });
 });

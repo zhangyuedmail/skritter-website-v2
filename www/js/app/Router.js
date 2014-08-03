@@ -4,10 +4,11 @@
 define([
     "framework/GelatoRouter",
     "app/views/About",
+    "app/views/Dashboard",
     "app/views/Home",
     "app/views/Login",
     "app/views/Team"
-], function(GelatoRouter, AboutView, HomeView, LoginView, TeamView) {
+], function(GelatoRouter, AboutView, DashboardView, HomeView, LoginView, TeamView) {
     /**
      * @class Router
      * @extend GelatoRouter
@@ -20,8 +21,16 @@ define([
         routes: {
             "": "showHome",
             "about": "showAbout",
+            "dashboard": "showDashboard",
             "login": "showLogin",
-            "team": "showTeam"
+            "team": "showTeam",
+            "*route": "defaultRoute"
+        },
+        /**
+         * @method defaultRoute
+         */
+        defaultRoute: function() {
+            this.navigate("", {replace: true, trigger: true});
         },
         /**
          * @method showAbout
@@ -31,13 +40,24 @@ define([
             this.currentView.render();
         },
         /**
+         * @method showDashboard
+         */
+        showDashboard: function() {
+            this.currentView = new DashboardView();
+            this.currentView.render();
+        },
+        /**
          * @method showHome
          */
         showHome: function() {
-            if (gelato.isNative()) {
-                this.showLogin();
+            if (app.user.isLoggedIn()) {
+                this.showDashboard();
             } else {
-                this.currentView = new HomeView();
+                if (gelato.isNative()) {
+                    this.showLogin();
+                } else {
+                    this.currentView = new HomeView();
+                }
             }
             this.currentView.render();
         },

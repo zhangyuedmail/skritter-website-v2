@@ -13,6 +13,11 @@ define([
          */
         initialize: function() {},
         /**
+         * @property title
+         * @type String
+         */
+        title: "Dashboard",
+        /**
          * @method render
          * @returns {GelatoPage}
          */
