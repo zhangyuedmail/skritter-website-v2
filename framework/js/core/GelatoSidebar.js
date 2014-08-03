@@ -89,6 +89,16 @@ define([
             return this;
         },
         /**
+         * @method switch
+         * @param {String} name
+         * @returns {GelatoSidebar}
+         */
+        switch: function(name) {
+            this.$(".sidebar-template").removeClass("active");
+            this.$("#sidebar-" + name).addClass("active");
+            return this;
+        },
+        /**
          * @method toggle
          */
         toggle: function() {

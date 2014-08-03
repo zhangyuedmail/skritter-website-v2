@@ -34,9 +34,11 @@ html, body {
     float: left;
     height: 45px;
     padding: 0;
-    width: 100px;
 }
-.gelato-sidebar-toggle.active .icon-bars { margin-left: -10px; }
+.gelato-sidebar-toggle.active .icon-bars {
+    margin-left: -10px;
+    margin-right: 5px;
+}
 .gelato-sidebar-toggle:focus {
     border: none;
     outline: none;
@@ -50,6 +52,7 @@ html, body {
 .gelato-sidebar-toggle .icon-text {
     float: right;
     font-size: 18px;
+    margin-left: 5px;
 }
 
 
@@ -65,6 +68,8 @@ html, body {
     top: 0;
     width: 250px;
 }
+.sidebar-template { display: none; }
+.sidebar-template.active { display: block; }
 
 
 /*** VIEW ***/
