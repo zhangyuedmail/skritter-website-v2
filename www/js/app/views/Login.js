@@ -16,7 +16,7 @@ define([
          * @property title
          * @type String
          */
-        title: "Login",
+        title: "Log In",
         /**
          * @method render
          * @returns {GelatoPage}

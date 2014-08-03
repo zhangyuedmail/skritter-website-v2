@@ -12,22 +12,24 @@
 
 <div id="content" class="gelato-content container">
 
+    <h2>{{login.title}}</h2>
+
+    <hr>
+
     <form class="login-form" role="form">
         <fieldset>
-            <h2>Log In</h2>
-            <hr>
             <div class="form-group">
-                <h4>Username:</h4>
+                <h4>{{login.username}}:</h4>
                 <input type="text" name="login-username" id="login-username" class="form-control input-lg">
-                <h4>Password:</h4>
+                <h4>{{login.password}}:</h4>
                 <input type="password" name="login-password" id="login-password" class="form-control input-lg">
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
-                    <button id="button-new" class="btn btn-lg btn-primary btn-block vertical-margin">New User</button>
+                    <button id="button-new" class="btn btn-lg btn-primary btn-block vertical-margin">{{login.new-user}}</button>
                 </div>
                 <div class="col-xs-12 col-sm-6">
-                    <button id="button-login" class="btn btn-lg btn-success btn-block vertical-margin">Log In &raquo;</button>
+                    <button id="button-login" class="btn btn-lg btn-success btn-block vertical-margin">{{login.title}} &raquo;</button>
                 </div>
             </div>
         </fieldset>
