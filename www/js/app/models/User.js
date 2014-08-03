@@ -4,8 +4,9 @@
 define([
     "framework/GelatoModel",
     "app/models/user/Api",
+    "app/models/user/Data",
     "app/models/user/Settings"
-], function(GelatoModel, UserApi, UserSettings) {
+], function(GelatoModel, UserApi, UserData, UserSettings) {
     return GelatoModel.extend({
         /**
          * @class User
@@ -14,11 +15,15 @@ define([
          */
         initialize: function() {
             this.api = new UserApi();
+            this.data = new UserData();
             this.settings = new UserSettings();
             if (localStorage.getItem("_active")) {
                 this.set("id", localStorage.getItem("_active"));
                 if (localStorage.getItem(this.id + "-api")) {
                     this.api.set(JSON.parse(localStorage.getItem(this.id + "-api")), {silent: true});
+                }
+                if (localStorage.getItem(this.id + "-data")) {
+                    this.data.set(JSON.parse(localStorage.getItem(this.id + "-data")), {silent: true});
                 }
                 if (localStorage.getItem(this.id + "-settings")) {
                     this.settings.set(JSON.parse(localStorage.getItem(this.id + "-settings")), {silent: true});
