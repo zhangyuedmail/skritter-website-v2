@@ -15,6 +15,20 @@ define([], function() {
             return $("#application");
         },
         /**
+         * @method getContentHeight
+         * @returns {Number}
+         */
+        getContentHeight: function() {
+            return $(".gelato-content").height();
+        },
+        /**
+         * @method getContentWidth
+         * @returns {Number}
+         */
+        getContentWidth: function() {
+            return $(".gelato-content").width();
+        },
+        /**
          * @method getHeight
          * @returns {Number}
          */
