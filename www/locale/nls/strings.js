@@ -3,6 +3,9 @@ define({
         "application": {
             "name": "Skritter"
         },
+        "about": {
+            "title": "About"
+        },
         "dashboard": {
             "title": "Dashboard"
         },
@@ -17,6 +20,9 @@ define({
             "password": "Password",
             "title": "Log In",
             "username": "Username"
+        },
+        "team": {
+            "title": "Team"
         }
     }
 });
