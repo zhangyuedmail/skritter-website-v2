@@ -3,7 +3,7 @@
  */
 define([
     "framework/GelatoPage",
-    "requirejs.text!templates/about.html"
+    "require.text!templates/about.html"
 ], function(GelatoPage, template) {
     return GelatoPage.extend({
         /**

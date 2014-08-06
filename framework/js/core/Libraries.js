@@ -5,6 +5,6 @@ define([
     "jquery.mobile.touch",
     "jquery.ui.effects",
     "modernizr",
-    "requirejs.i18n",
-    "requirejs.text"
+    "require.i18n",
+    "require.text"
 ]);

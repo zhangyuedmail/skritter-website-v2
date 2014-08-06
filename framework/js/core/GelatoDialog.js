@@ -3,7 +3,7 @@
  */
 define([
     "framework/GelatoView",
-    "requirejs.text!templates/dialogs.html"
+    "require.text!templates/dialogs.html"
 ], function(GelatoView, template) {
     return GelatoView.extend({
         /**

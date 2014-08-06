@@ -23,7 +23,7 @@
                 window.gelato = new Gelato();
                 requirejs([
                     "app/Application",
-                    "requirejs.i18n!www/locale/nls/strings"
+                    "require.i18n!www/locale/nls/strings"
                 ], function(Application, i18n) {
                     window.app.strings = i18n;
                     window.app = $.extend(new Application(), window.app);

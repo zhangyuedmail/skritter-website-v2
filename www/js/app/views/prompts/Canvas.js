@@ -3,7 +3,7 @@
  */
 define([
     "framework/GelatoView",
-    "requirejs.text!templates/prompts-canvas.html"
+    "require.text!templates/prompts-canvas.html"
 ], function(GelatoView, template) {
     return GelatoView.extend({
         /**

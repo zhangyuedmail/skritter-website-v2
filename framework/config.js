@@ -21,8 +21,8 @@ window.app = (function() {
                     "jquery.mobile.touch": "framework/js/libs/jquery.mobile.touch-1.4.3.min",
                     "jquery.ui.effects": "framework/js/libs/jquery.ui.effects-1.11.0.min",
                     "modernizr": "framework/js/libs/modernizr.custom-2.8.3.min",
-                    "requirejs.i18n": "framework/js/libs/requirejs.i18n-2.0.4",
-                    "requirejs.text": "framework/js/libs/requirejs.text-2.0.12",
+                    "require.i18n": "framework/js/libs/requirejs.i18n-2.0.4",
+                    "require.text": "framework/js/libs/requirejs.text-2.0.12",
                     "underscore": "framework/js/libs/lodash-2.4.1.min"
                 },
                 shim: {

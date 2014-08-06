@@ -3,7 +3,7 @@
  */
 define([
     "framework/GelatoView",
-    "requirejs.text!templates/sidebars.html"
+    "require.text!templates/sidebars.html"
 ], function(GelatoView, template) {
     return GelatoView.extend({
         /**
