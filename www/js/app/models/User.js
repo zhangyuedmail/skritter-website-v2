@@ -55,10 +55,8 @@ define([
          */
         login: function(username, password, callback) {
             app.user.api.authenticateUser(username, password, function(data, status) {
-                delete data.statusCode;
                 if (status === 200) {
                     app.user.set("id", data.user_id);
-                    app.user.api.set(data);
                     async.series([
                         async.apply(app.user.settings.sync),
                         async.apply(app.user.subscription.sync)
