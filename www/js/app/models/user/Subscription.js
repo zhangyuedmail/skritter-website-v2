@@ -24,9 +24,10 @@ define([
          * @param {Function} callback
          */
         sync: function(callback) {
-            app.user.api.getUserSubscription(app.user.id, function(data, status) {
+            var self = this;
+            app.user.api.getUserSubscription(function(data, status) {
                 if (status === 200) {
-                    app.user.subscription.set(data);
+                    self.set(data);
                     callback();
                 } else {
                     callback(data, status);

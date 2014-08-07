@@ -24,9 +24,10 @@ define([
          * @param {Function} callback
          */
         sync: function(callback) {
-            app.user.api.getUserSettings(app.user.id, function(data, status) {
+            var self = this;
+            app.user.api.getUserSettings(function(data, status) {
                 if (status === 200) {
-                    app.user.settings.set(data);
+                    self.set(data);
                     callback();
                 } else {
                     callback(data, status);

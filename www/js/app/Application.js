@@ -6,9 +6,10 @@ define([
     "app/Functions",
     "app/models/Assets",
     "app/models/User",
+    "app/models/storage/IndexedDBAdapter",
     "app/views/components/Dialog",
     "app/views/components/Sidebar"
-], function(GelatoApplication, Functions, Assets, User, DialogView, SidebarView) {
+], function(GelatoApplication, Functions, Assets, User, IndexedDBAdapter, DialogView, SidebarView) {
     return GelatoApplication.extend({
         /**
          * @class Application
@@ -22,6 +23,7 @@ define([
             this.sidebar = new SidebarView();
             async.series([
                 async.apply(this.loadAssets),
+                async.apply(this.loadStorage),
                 async.apply(this.loadUser)
             ]);
         },
@@ -34,12 +36,24 @@ define([
             this.assets.loadAll(callback);
         },
         /**
+         * @method loadStorage
+         * @param {Function} callback
+         */
+        loadStorage: function(callback) {
+            this.storage = new IndexedDBAdapter();
+            callback();
+        },
+        /**
          * @method loadUser
          * @param {Function} callback
          */
         loadUser: function(callback) {
             this.user = new User();
-            callback();
+            if (this.user.isLoggedIn()) {
+                this.storage.open(this.user.id, callback);
+            } else {
+                callback();
+            }
         }
     });
 });

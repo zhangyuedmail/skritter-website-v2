@@ -57,9 +57,14 @@ define([
             app.user.api.authenticateUser(username, password, function(data, status) {
                 if (status === 200) {
                     app.user.set("id", data.user_id);
-                    async.series([
-                        async.apply(app.user.settings.sync),
-                        async.apply(app.user.subscription.sync)
+                    app.user.api.set(data);
+                    async.parallel([
+                        function(callback) {
+                            app.user.settings.sync(callback);
+                        },
+                        function(callback) {
+                            app.user.subscription.sync(callback);
+                        }
                     ], function() {
                         localStorage.setItem("_active", data.user_id);
                         callback(data, status);
@@ -75,11 +80,13 @@ define([
         logout: function() {
             app.dialog.show("logout");
             app.dialog.element("button.logout").on("vclick", function() {
-                localStorage.removeItem(app.user.id + "-api");
-                localStorage.removeItem(app.user.id + "-settings");
-                localStorage.removeItem(app.user.id + "-subscription");
-                localStorage.removeItem("_active");
-                location.reload(true);
+                app.storage.destroy(function() {
+                    localStorage.removeItem(app.user.id + "-api");
+                    localStorage.removeItem(app.user.id + "-settings");
+                    localStorage.removeItem(app.user.id + "-subscription");
+                    localStorage.removeItem("_active");
+                    location.reload(true);
+                });
             });
         }
     });
