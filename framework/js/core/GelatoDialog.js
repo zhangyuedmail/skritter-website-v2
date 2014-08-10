@@ -57,6 +57,17 @@ define([
             return this;
         },
         /**
+         * @method progress
+         * @param {Number} percent
+         * @returns {GelatoDialog}
+         */
+        progress: function(percent) {
+            this.element(".progress .progress-bar").width(percent + "%");
+            this.element(".progress .progress-bar").attr("aria-valuenow", percent);
+            this.element(".progress .sr-only").text(percent + "% Complete");
+            return this;
+        },
+        /**
          * @method show
          * @param {String} dialogId
          * @param {Function} callback
