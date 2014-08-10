@@ -25,7 +25,7 @@ define([
          */
         sync: function(callback) {
             var self = this;
-            app.user.api.getUserSubscription(function(data, status) {
+            app.api.getSubscription(app.user.id, function(data, status) {
                 if (status === 200) {
                     self.set(data);
                     callback();

@@ -4,12 +4,13 @@
 define([
     "framework/GelatoApplication",
     "app/Functions",
+    "app/models/Api",
     "app/models/Assets",
     "app/models/User",
     "app/models/storage/IndexedDBAdapter",
     "app/views/components/Dialog",
     "app/views/components/Sidebar"
-], function(GelatoApplication, Functions, Assets, User, IndexedDBAdapter, DialogView, SidebarView) {
+], function(GelatoApplication, Functions, Api, Assets, User, IndexedDBAdapter, DialogView, SidebarView) {
     return GelatoApplication.extend({
         /**
          * @class Application
@@ -22,10 +23,19 @@ define([
             this.dialog = new DialogView();
             this.sidebar = new SidebarView();
             async.series([
+                async.apply(this.loadApi),
                 async.apply(this.loadAssets),
                 async.apply(this.loadStorage),
                 async.apply(this.loadUser)
             ]);
+        },
+        /**
+         * @method loadApi
+         * @param {Function} callback
+         */
+        loadApi: function(callback) {
+            this.api = new Api();
+            callback();
         },
         /**
          * @method loadAssets

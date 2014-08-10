@@ -45,19 +45,19 @@ define([
          */
         handleClickLogin: function(event) {
             event.preventDefault();
+            var self = this;
             var password = this.elements.loginPassword.val();
             var username = this.elements.loginUsername.val();
             this.disableForm();
             this.elements.message.empty();
-            app.user.login(username, password, _.bind(function(data, status) {
+            app.user.login(username, password, function(data, status) {
                 if (status === 200) {
-                    app.router.navigate("", {replace: true});
-                    location.reload(true);
+                    location.href = "";
                 } else {
-                    this.elements.message.html(data.message);
-                    this.enableForm();
+                    self.elements.message.text(data.responseJSON.message);
+                    self.enableForm();
                 }
-            }, this));
+            });
         },
         /**
          * @method handleClickRegister
