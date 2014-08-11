@@ -1,6 +1,6 @@
 # Directories #
 .idea/
-coverage/
+build/
 docs/
 node_modules/
 nbproject/
