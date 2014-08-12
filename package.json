@@ -6,6 +6,8 @@
         "url": "http://www.joshmcfarland.net/"
     },
     "version": "0.0.1",
+    "versionCode": "1",
+    "package": "com.inkren.skritter",
     "repository": {
         "type" : "git",
         "url" : "https://github.com/skritter/skritter-html5.git"

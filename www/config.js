@@ -1,4 +1,4 @@
-window.app ? window.app.config.optional = {
+app ? app.configs.optional = {
     deps: [],
     paths: {
         //optional libraries

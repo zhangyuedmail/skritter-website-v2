@@ -2,15 +2,17 @@
  * @module Application
  */
 define([
+    "require.i18n!www/locale/nls/strings",
     "framework/GelatoApplication",
     "app/Functions",
+    "app/Router",
     "app/models/Api",
     "app/models/Assets",
     "app/models/User",
     "app/models/storage/IndexedDBAdapter",
     "app/views/components/Dialog",
     "app/views/components/Sidebar"
-], function(GelatoApplication, Functions, Api, Assets, User, IndexedDBAdapter, DialogView, SidebarView) {
+], function(i18n, GelatoApplication, Functions, Router, Api, Assets, User, IndexedDBAdapter, DialogView, SidebarView) {
     return GelatoApplication.extend({
         /**
          * @class Application
@@ -21,7 +23,9 @@ define([
             _.bindAll(this);
             this.fn = Functions;
             this.dialog = new DialogView();
+            this.router = new Router();
             this.sidebar = new SidebarView();
+            this.strings = i18n;
             async.series([
                 async.apply(this.loadApi),
                 async.apply(this.loadAssets),

@@ -2,5 +2,7 @@
 .idea/
 build/
 docs/
+framework/crosswalk/arm
+framework/crosswalk/x86
 node_modules/
 nbproject/
