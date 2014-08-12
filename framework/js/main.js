@@ -1,19 +1,14 @@
 (function() {
 
-    function mergeConfigs(config1, config2) {
-        for (var key in config2) {
-            config1[key] = config2[key];
-        }
-        return config1;
-    }
+    var config = app.configs.getCombined();
 
     requirejs.config({
         baseUrl: "./",
         callback: loaded,
-        deps: app.config.core.deps.concat(app.config.optional.deps),
+        deps: config.deps,
         locale: "en-us",
-        paths: mergeConfigs(app.config.core.paths, app.config.optional.paths),
-        shim: mergeConfigs(app.config.core.shim, app.config.optional.shim),
+        paths: config.paths,
+        shim: config.shim,
         urlArgs: function() {
             if (document.location.hostname === "localhost") {
                 return "bust=" + (new Date()).getTime();
@@ -26,22 +21,16 @@
         requirejs(["framework/Libraries"], function() {
             function initializeApplication() {
                 requirejs([
-                    "app/Application",
-                    "app/Router",
-                    "require.i18n!www/locale/nls/strings"
-                ], function(Application, Router, i18n) {
-                    window.app.strings = i18n;
-                    window.app.router = new Router();
+                    "app/Application"
+                ], function(Application) {
                     window.app = $.extend(new Application(), window.app);
                     Backbone.history.start();
                 });
             }
             function initializeTests() {
                 requirejs([
-                    "app/Application",
-                    "require.i18n!www/locale/nls/strings"
-                ], function(Application, i18n) {
-                    window.app.strings = i18n;
+                    "app/Application"
+                ], function(Application) {
                     window.app = $.extend(new Application(), window.app);
                     requirejs([
                         "framework.specs/runner",

@@ -1,8 +1,20 @@
-window.app = (function() {
+app = (function() {
     return {
-        config: {
+        configs: {
             core: {
                 deps: ["jquery", "underscore"],
+                modules: [
+                    {
+                        name: "framework/Libraries",
+                        exclude: ["jquery", "underscore"]
+                    },
+                    {
+                        name: "app/Application"
+                    },
+                    {
+                        name: "app/Libraries"
+                    }
+                ],
                 paths: {
                     //directories
                     "app": "www/js/app",
@@ -30,6 +42,33 @@ window.app = (function() {
                     "backbone.routefilter": ["backbone"],
                     "bootstrap.switch": ["bootstrap"]
                 }
+            },
+            getCombined: function() {
+                function clone(object) {
+                    var clonedObject = {};
+                    for (var key in object) {
+                        clonedObject[key] = object[key];
+                    }
+                    return clonedObject;
+                }
+                function merge(object1, object2) {
+                    for (var key in object2) {
+                        if (["deps"].indexOf(key) > -1) {
+                            object1[key] = object1[key].concat(object2[key]);
+                        } else if (object2[key]) {
+                            if (object1[key] && typeof object2[key] === "object") {
+                                merge(object1[key], object2[key]);
+                            } else {
+                                object1[key] = object2[key];
+                            }
+                        } else {
+                            object1[key] = object2[key];
+                        }
+                    }
+
+                    return object1;
+                }
+                return merge(clone(this.core), clone(this.optional));
             }
         }
     };

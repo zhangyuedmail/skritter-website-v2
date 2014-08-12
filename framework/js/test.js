@@ -1,19 +1,14 @@
 (function() {
 
-    function mergeConfigs(config1, config2) {
-        for (var key in config2) {
-            config1[key] = config2[key];
-        }
-        return config1;
-    }
+    var config = app.configs.getCombined();
 
     require.config({
         baseUrl: '/base',
         callback: loaded,
-        deps: app.config.core.deps.concat(app.config.optional.deps),
+        deps: config.deps,
         locale: "en-us",
-        paths: mergeConfigs(app.config.core.paths, app.config.optional.paths),
-        shim: mergeConfigs(app.config.core.shim, app.config.optional.shim),
+        paths: config.paths,
+        shim: config.shim,
         waitSeconds: 60
     });
 
