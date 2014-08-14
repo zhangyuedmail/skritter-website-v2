@@ -9,11 +9,43 @@ define([
      * @class DataItems
      * @extend GelatoCollection
      */
-    return GelatoCollection.extend({
+    var DataItems = GelatoCollection.extend({
         /**
          * @property model
          * @type DataItem
          */
-        model: Item
-    })
+        model: Item,
+        /**
+         * @method comparator
+         * @param {DataItem} item
+         * @returns {Number}
+         */
+        comparator: function(item) {
+            return -item.attributes.next;
+        },
+        /**
+         * @method getDue
+         * @returns {DataItems}
+         */
+        getDue: function() {
+            var now = moment().unix();
+            return new DataItems(this.filter(function(item) {
+                if (!item.attributes.vocabIds.length ||
+                    app.user.settings.getActiveParts().indexOf(item.attributes.part) === -1 ||
+                    app.user.settings.getActiveStyles().indexOf(item.attributes.style) === -1) {
+                    return false;
+                }
+                return item.attributes.next < now;
+            }));
+        },
+        /**
+         * @method getDueCount
+         * @returns {Number}
+         */
+        getDueCount: function() {
+            return this.getDue().length;
+        }
+    });
+
+    return DataItems;
 });

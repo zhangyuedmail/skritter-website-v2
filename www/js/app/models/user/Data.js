@@ -3,9 +3,11 @@
  */
 define([
     "framework/GelatoModel",
+    "app/collections/data/Decomps",
     "app/collections/data/Items",
+    "app/collections/data/Strokes",
     "app/collections/data/Vocabs"
-], function(GelatoModel, DataItems, DataVocabs) {
+], function(GelatoModel, DataDecomps, DataItems, DataStrokes, DataVocabs) {
     return GelatoModel.extend({
         /**
          * @class UserData
@@ -13,7 +15,9 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.decomps = new DataDecomps();
             this.items = new DataItems();
+            this.strokes = new DataStrokes();
             this.vocabs = new DataVocabs();
             this.on("change", this.cache);
         },
@@ -157,6 +161,20 @@ define([
                     app.dialog.element(".message-text").text("vocabs".toUpperCase());
                     app.storage.getAll("vocabs", function(vocabs) {
                         self.vocabs.add(vocabs);
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.dialog.element(".message-text").text("strokes".toUpperCase());
+                    app.storage.getAll("strokes", function(strokes) {
+                        self.strokes.add(strokes);
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.dialog.element(".message-text").text("decomps".toUpperCase());
+                    app.storage.getAll("decomps", function(decomps) {
+                        self.decomps.add(decomps);
                         callback();
                     });
                 }

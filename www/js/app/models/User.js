@@ -3,10 +3,11 @@
  */
 define([
     "framework/GelatoModel",
+    "app/data/Levels",
     "app/models/user/Data",
     "app/models/user/Settings",
     "app/models/user/Subscription"
-], function(GelatoModel, UserData, UserSettings, UserSubscription) {
+], function(GelatoModel, Levels, UserData, UserSettings, UserSubscription) {
     return GelatoModel.extend({
         /**
          * @class User
@@ -34,7 +35,55 @@ define([
          * @property defaults
          * @type Object
          */
-        defaults: {"id": "guest"},
+        defaults: {
+            "id": "guest",
+            "lang": "@@language"
+        },
+        /**
+         * @method getAvatar
+         * @param {String} classes
+         * @returns {String}
+         */
+        getAvatar: function(classes) {
+            var avatar = this.settings.get('avatar');
+            if (avatar) {
+                avatar = "data:image/png;base64," + this.settings.get('avatar');
+            } else {
+                avatar = "img/avatar/default.png";
+            }
+            if (classes) {
+                return "<img src='" + avatar + "' + class='" + classes + "' />";
+            }
+            return "<img src='" + avatar + "' />";
+        },
+        /**
+         * @method getLanguageCode
+         * @returns {String}
+         */
+        getLanguageCode: function() {
+            return this.get("lang") === "@@language" ? this.settings.get('targetLang') : this.get("lang");
+        },
+        /**
+         * @method isChinese
+         * @returns {Boolean}
+         */
+        isChinese: function() {
+            return this.getLanguageCode() === 'zh' ? true : false;
+        },
+        /**
+         * @method isJapanese
+         * @returns {Boolean}
+         */
+        isJapanese: function() {
+            return this.getLanguageCode() === 'ja' ? true : false;
+        },
+        /**
+         * @method getLevel
+         * @returns {Object}
+         */
+        getLevel: function() {
+            return Levels.getLevel(this.data.items.length);
+        },
         /**
          * @method isLoggedIn
          * @returns {Boolean}
