@@ -1,6 +1,7 @@
 define([
     "async",
     "moment.timezone",
+    "chart",
     "createjs.easel",
     "createjs.tween"
 ], function(async, moment) {
