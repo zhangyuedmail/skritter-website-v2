@@ -126,6 +126,7 @@ define([
                                     downloadedRequests++;
                                 }
                                 delete result.cursor;
+                                delete result.statusCode;
                                 result.downloadedRequests = downloadedRequests;
                                 result.totalRequests = data.Batch.totalRequests;
                                 callbackResult(result, "download");

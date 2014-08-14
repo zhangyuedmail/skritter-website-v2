@@ -62,9 +62,28 @@ define([
          * @param {Function} callback
          */
         loadUser: function(callback) {
+            var self = this;
             this.user = new User();
             if (this.user.isLoggedIn()) {
-                this.storage.open(this.user.id, callback);
+                async.series([
+                    function(callback) {
+                        self.storage.open(self.user.id, callback);
+                    },
+                    function(callback) {
+                        if (!self.user.data.get("lastItemSync")) {
+                            self.user.data.downloadAll();
+                            callback();
+                        } else {
+                            self.dialog.show();
+                            self.dialog.element(".message-title").text("Loading:");
+                            self.user.data.loadAll(function() {
+                                self.dialog.hide();
+                                callback();
+                            });
+                        }
+                    }
+                ], callback)
+
             } else {
                 callback();
             }

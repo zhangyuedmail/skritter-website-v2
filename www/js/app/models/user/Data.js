@@ -25,6 +25,11 @@ define([
             "access_token": undefined,
             "batchId": undefined,
             "expires_in": undefined,
+            "lastErrorCheck": 0,
+            "lastItemSync": 0,
+            "lastReviewSync": 0,
+            "lastSRSConfigSync": 0,
+            "lastVocabSync": 0,
             "refresh_token": undefined,
             "token_type": undefined,
             "user_id": "guest"
@@ -42,7 +47,16 @@ define([
          */
         downloadAll: function(callback) {
             var self = this;
+            var now = moment().unix();
             app.dialog.show("download").element(".download-title").text("Requesting");
+            self.set({
+                "batchId": undefined,
+                "lastErrorCheck": 0,
+                "lastItemSync": 0,
+                "lastReviewSync": 0,
+                "lastSRSConfigSync": 0,
+                "lastVocabSync": 0
+            });
             async.series([
                 function(callback) {
                     app.storage.destroy(callback);
@@ -54,21 +68,30 @@ define([
                     if (self.get("batchId")) {
                         callback();
                     } else {
-                        app.api.requestBatch({
-                            path: "api/v" + app.api.get("version") + "/items",
-                            method: "GET",
-                            params: {
-                                sort: "changed",
-                                offset: 0,
-                                include_vocabs: "true",
-                                include_sentences: "false",
-                                include_strokes: "true",
-                                include_heisigs: "true",
-                                include_top_mnemonics: "true",
-                                include_decomps: "true"
+                        app.api.requestBatch([
+                            {
+                                path: "api/v" + app.api.get("version") + "/items",
+                                method: "GET",
+                                params: {
+                                    sort: "changed",
+                                    offset: 0,
+                                    include_vocabs: "true",
+                                    include_sentences: "true",
+                                    include_strokes: "true",
+                                    include_heisigs: "true",
+                                    include_top_mnemonics: "true",
+                                    include_decomps: "true"
+                                },
+                                spawner: true
                             },
-                            spawner: true
-                        }, function(result, status) {
+                            {
+                                path: "api/v" + app.api.get("version") + "/srsconfigs",
+                                method: "GET",
+                                params: {
+                                    lang: undefined
+                                }
+                            }
+                        ], function(result, status) {
                             if (status === 200) {
                                 self.set("batchId", result.id);
                                 callback();
@@ -80,7 +103,6 @@ define([
                 },
                 function(callback) {
                     app.api.getBatch(self.get("batchId"), function(result, status) {
-                        console.log(status, result);
                         if (status === "wait") {
                             app.dialog.element(".download-title").text("Assembling");
                             app.dialog.element(".download-status-text").text(app.fn.convertBytesToSize(result.responseSize));
@@ -95,35 +117,50 @@ define([
                         callback();
                     });
                 }
-            ], function() {
-                app.dialog.hide();
-                if (typeof callback === "function") {
-                    callback();
+            ], function(error) {
+                if (error) {
+                    if (typeof callback === "function") {
+                        callback(error);
+                    }
+                } else {
+                    self.loadAll(function() {
+                        self.set({
+                            "batchId": undefined,
+                            "lastErrorCheck": now,
+                            "lastItemSync": now,
+                            "lastReviewSync": now,
+                            "lastSRSConfigSync": now,
+                            "lastVocabSync": now
+                        });
+                        app.dialog.hide();
+                    });
                 }
             });
         },
         /**
-         * @method getAll
+         * @method loadAll
+         * @param {Function} callback
          */
-        getAll: function(callback) {
+        loadAll: function(callback) {
             var self = this;
             self.items.reset();
             self.vocabs.reset();
             async.series([
                 function(callback) {
+                    app.dialog.element(".message-text").text("items".toUpperCase());
                     app.storage.getAll("items", function(items) {
-                        self.items.add(items, {silent: true});
+                        self.items.add(items);
                         callback();
                     });
                 },
                 function(callback) {
+                    app.dialog.element(".message-text").text("vocabs".toUpperCase());
                     app.storage.getAll("vocabs", function(vocabs) {
-                        self.vocabs.add(vocabs, {silent: true});
+                        self.vocabs.add(vocabs);
                         callback();
                     });
                 }
             ], function() {
-                console.log("getAll: complete");
                 if (typeof callback === "function") {
                     callback();
                 }

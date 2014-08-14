@@ -100,7 +100,7 @@ define([
             request.onupgradeneeded = function(event) {
                 var database = event.target.result;
                 database.createObjectStore("decomps", {keyPath: "writing"});
-                database.createObjectStore("items", {keyPath: "id"}).createIndex("next", "next", {unique: false});
+                database.createObjectStore("items", {keyPath: "id"});
                 database.createObjectStore("reviews", {keyPath: "id"});
                 database.createObjectStore("sentences", {keyPath: "id"});
                 database.createObjectStore("srsconfigs", {keyPath: "part"});
