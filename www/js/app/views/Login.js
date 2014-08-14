@@ -50,10 +50,13 @@ define([
             var username = this.elements.loginUsername.val();
             this.disableForm();
             this.elements.message.empty();
+            app.dialog.show();
+            app.dialog.element(".message-title").text("Logging In");
             app.user.login(username, password, function(data, status) {
                 if (status === 200) {
                     location.href = "";
                 } else {
+                    app.dialog.hide();
                     self.elements.message.text(data.responseJSON.message);
                     self.enableForm();
                 }
