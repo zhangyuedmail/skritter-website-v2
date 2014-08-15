@@ -22,6 +22,10 @@ define([], function() {
                 } else {
                     document.title = app.strings.application.name;
                 }
+                if ($("#sidebar").hasClass("expanded")) {
+                    $("#sidebar").hide("slide", {direction: "left"}, 300);
+                    $("#sidebar").removeClass("expanded");
+                }
             }
         },
         /**
