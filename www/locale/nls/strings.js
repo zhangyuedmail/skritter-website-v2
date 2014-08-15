@@ -23,6 +23,9 @@ define({
         },
         "team": {
             "title": "Team"
+        },
+        "vocab": {
+            "title": "Vocab"
         }
     }
 });
