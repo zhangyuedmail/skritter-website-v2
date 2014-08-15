@@ -54,7 +54,7 @@ define([
          * @returns {GelatoSidebar}
          */
         hide: function() {
-            $(".gelato-sidebar-toggle").removeClass("active");
+            $(".gelato-sidebar-button").removeClass("active");
             this.$el.removeClass("expanded");
             this.$el.hide("slide", {direction: "left"}, 300);
             app.router.currentView.getContent().css("opacity", 1.0);
@@ -82,7 +82,7 @@ define([
          * @returns {GelatoSidebar}
          */
         show: function() {
-            $(".gelato-sidebar-toggle").addClass("active");
+            $(".gelato-sidebar-button").addClass("active");
             this.$el.addClass("expanded");
             this.$el.show("slide", {direction: "left"}, 300);
             app.router.currentView.getContent().css("opacity", 0.5);

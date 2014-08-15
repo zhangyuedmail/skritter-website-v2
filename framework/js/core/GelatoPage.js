@@ -24,8 +24,9 @@ define([
          * @type Object
          */
         events: {
+            "vclick .action-back": "handleClickBack",
             "vclick .gelato-content": "handleClickContent",
-            "vclick .gelato-sidebar-toggle": "handleClickSidebarToggle"
+            "vclick .gelato-sidebar-button.action-toggle": "handleClickSidebarToggle"
         },
         /**
          * @method compile
@@ -55,6 +56,12 @@ define([
          */
         getContent: function() {
             return this.$("#content");
+        },
+        /**
+         * @method handleClickBack
+         */
+        handleClickBack: function() {
+            history.back();
         },
         /**
          * @method handleClickContent

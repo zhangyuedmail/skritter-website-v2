@@ -35,7 +35,7 @@ html, body {
 
 
 /*** NAVBAR: TOGGLE ***/
-.gelato-sidebar-toggle {
+.gelato-sidebar-button {
     background-color: transparent;
     border: none;
     color: #ffffff;
@@ -43,26 +43,30 @@ html, body {
     height: 45px;
     padding: 0;
 }
-.gelato-sidebar-toggle.active .icon-bars {
+.gelato-sidebar-button.active .icon-bars {
     margin-left: -10px;
     margin-right: 5px;
 }
-.gelato-sidebar-toggle:focus {
+.gelato-sidebar-button:focus {
     border: none;
     outline: none;
 }
-
-.gelato-sidebar-toggle .icon-bars {
+.gelato-sidebar-button .icon-bars {
     float: left;
     font-size: 24px;
     margin-left: -5px;
 }
-.gelato-sidebar-toggle .icon-image {
+.gelato-sidebar-button .icon-back {
+    float: left;
+    font-size: 24px;
+    margin-left: 10px;
+}
+.gelato-sidebar-button .icon-image {
     float: left;
     margin-left: 5px;
 }
-.gelato-sidebar-toggle .icon-image img { height: 30px; }
-.gelato-sidebar-toggle .icon-text {
+.gelato-sidebar-button .icon-image img { height: 30px; }
+.gelato-sidebar-button .icon-text {
     float: right;
     font-size: 18px;
     margin-left: 5px;
