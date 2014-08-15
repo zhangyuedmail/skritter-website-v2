@@ -125,6 +125,7 @@ define([
         logout: function() {
             app.dialog.show("logout");
             app.dialog.element("button.logout").on("vclick", function() {
+                app.dialog.element("button").prop("disabled", "disabled");
                 app.storage.destroy(function() {
                     localStorage.removeItem(app.user.id + "-data");
                     localStorage.removeItem(app.user.id + "-settings");
