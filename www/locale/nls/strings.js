@@ -6,6 +6,9 @@ define({
         "about": {
             "title": "About"
         },
+        "admin-stroke": {
+            "title": "Stroke Editor"
+        },
         "dashboard": {
             "title": "Dashboard"
         },

@@ -3,12 +3,13 @@
  */
 define([
     "framework/GelatoRouter",
+    "app/views/admin/Stroke",
     "app/views/About",
     "app/views/Dashboard",
     "app/views/Home",
     "app/views/Login",
     "app/views/Team"
-], function(GelatoRouter, AboutView, DashboardView, HomeView, LoginView, TeamView) {
+], function(GelatoRouter, AdminStrokeView, AboutView, DashboardView, HomeView, LoginView, TeamView) {
     /**
      * @class Router
      * @extend GelatoRouter
@@ -24,6 +25,7 @@ define([
             "dashboard": "showDashboard",
             "login": "showLogin",
             "team": "showTeam",
+            "admin/stroke": "showAdminStroke",
             "*route": "defaultRoute"
         },
         /**
@@ -31,6 +33,13 @@ define([
          */
         defaultRoute: function() {
             this.navigate("", {replace: true, trigger: true});
+        },
+        /**
+         * @method showAdminStroke
+         */
+        showAdminStroke: function() {
+            this.currentView = new AdminStrokeView();
+            this.currentView.render();
         },
         /**
          * @method showAbout
