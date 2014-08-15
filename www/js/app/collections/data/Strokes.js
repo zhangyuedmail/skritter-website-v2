@@ -15,5 +15,5 @@ define([
          * @type DataStroke
          */
         model: Stroke
-    })
+    });
 });

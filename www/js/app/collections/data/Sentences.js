@@ -15,5 +15,5 @@ define([
          * @type DataSentence
          */
         model: Sentence
-    })
+    });
 });

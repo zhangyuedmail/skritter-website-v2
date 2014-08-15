@@ -3,7 +3,7 @@
  */
 define([
     "framework/GelatoModel",
-    "app/data/Levels",
+    "app/Levels",
     "app/models/user/Data",
     "app/models/user/Settings",
     "app/models/user/Subscription"

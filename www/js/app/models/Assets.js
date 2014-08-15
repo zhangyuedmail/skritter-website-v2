@@ -3,7 +3,7 @@
  */
 define([
     "framework/GelatoModel",
-    "app/data/Strokes"
+    "app/Strokes"
 ], function(GelatoModel, Strokes) {
     return GelatoModel.extend({
         /**
@@ -34,9 +34,10 @@ define([
          * @method loadStrokes
          */
         loadStrokes: function() {
+            var data = Strokes.getData();
             this.strokes = {};
-            for (var strokeId in Strokes) {
-                this.strokes[strokeId] = Strokes[strokeId]("#000000");
+            for (var strokeId in data) {
+                this.strokes[strokeId] = data[strokeId]("#000000");
                 this.strokes[strokeId].name = "stroke-" + strokeId;
             }
         }

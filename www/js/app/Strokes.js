@@ -3,7 +3,11 @@
  * @class Strokes
  */
 define([], function() {
-    return {
+    /**
+     * @property data
+     * @type Object
+     */
+    var data = {
         0: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EA1IAAKYg8AKloA8iqAeYhkAKi+AUjmAUYgeAAhuAKhuAKYhkAKjmAUi+AUYi+AUjSAUhGAKYkYAeiWAKkYAKIksAAIgUAeYgUAUAAAKAAAeYAKBGBQBQCgBGYCCA8AoAKBageYBkgeAoAAC0geYBagUCggUBagUYEigyFKgoF8gUYBaAAC0gUB4gKYFUgUGGAAE2AeYCMAKCWAUAyAAYBGAAAKgKAUgUYAegoAAgogegoYgeg8igh4iqhaYhGgogUAAg8AAYgoAAg8AAgeAK").cp());
             stroke.setBounds(0, 0, 407, 71);
@@ -1959,5 +1963,17 @@ define([], function() {
             stroke.setBounds(0, 0, 332, 235);
             return stroke;
         }
+    };
+
+    /**
+     * @method getData
+     * @returns {Object}
+     */
+    function getData() {
+        return data;
+    }
+
+    return {
+        getData: getData
     };
 });

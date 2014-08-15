@@ -154,6 +154,7 @@ define([
                     app.dialog.element(".message-text").text("items".toUpperCase());
                     app.storage.getAll("items", function(items) {
                         self.items.add(items);
+                        self.trigger("load:items");
                         callback();
                     });
                 },
@@ -161,6 +162,7 @@ define([
                     app.dialog.element(".message-text").text("vocabs".toUpperCase());
                     app.storage.getAll("vocabs", function(vocabs) {
                         self.vocabs.add(vocabs);
+                        self.trigger("load:vocabs");
                         callback();
                     });
                 },
@@ -168,6 +170,7 @@ define([
                     app.dialog.element(".message-text").text("strokes".toUpperCase());
                     app.storage.getAll("strokes", function(strokes) {
                         self.strokes.add(strokes);
+                        self.trigger("load:strokes");
                         callback();
                     });
                 },
@@ -175,10 +178,12 @@ define([
                     app.dialog.element(".message-text").text("decomps".toUpperCase());
                     app.storage.getAll("decomps", function(decomps) {
                         self.decomps.add(decomps);
+                        self.trigger("load:decomps");
                         callback();
                     });
                 }
             ], function() {
+                self.trigger("load");
                 if (typeof callback === "function") {
                     callback();
                 }

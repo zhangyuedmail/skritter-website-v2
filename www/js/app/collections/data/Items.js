@@ -21,7 +21,7 @@ define([
          * @returns {Number}
          */
         comparator: function(item) {
-            return -item.attributes.next;
+            return -(item.attributes.last + item.attributes.interval);
         },
         /**
          * @method getDue
@@ -35,7 +35,7 @@ define([
                     app.user.settings.getActiveStyles().indexOf(item.attributes.style) === -1) {
                     return false;
                 }
-                return item.attributes.next < now;
+                return item.attributes.last + item.attributes.interval < now;
             }));
         },
         /**

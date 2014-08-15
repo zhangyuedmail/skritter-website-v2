@@ -32,6 +32,7 @@ define([
             this.elements.userLevelTitle = this.$(".user-level-title");
             this.elements.userName = this.$(".user-name");
             this.renderElements();
+            this.updateDueCount();
             return this;
         },
         /**

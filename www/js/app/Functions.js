@@ -1,7 +1,9 @@
 /**
  * @module Application
  */
-define([], function() {
+define([
+    "app/PinyinConverter"
+], function(PinyinConverter) {
     /**
      * @method addAllObjectAttributes
      * @param {Array} array
@@ -54,6 +56,7 @@ define([], function() {
     return {
         addAllObjectAttributes: addAllObjectAttributes,
         convertBytesToSize: convertBytesToSize,
-        mergeObjectArrays: mergeObjectArrays
+        mergeObjectArrays: mergeObjectArrays,
+        pinyin: PinyinConverter
     };
 });

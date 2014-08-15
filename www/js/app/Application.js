@@ -82,7 +82,7 @@ define([
                             });
                         }
                     }
-                ], callback)
+                ], callback);
 
             } else {
                 callback();

@@ -15,5 +15,5 @@ define([
          * @type DataVocabList
          */
         model: VocabList
-    })
+    });
 });

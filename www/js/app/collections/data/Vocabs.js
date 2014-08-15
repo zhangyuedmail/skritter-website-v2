@@ -15,5 +15,5 @@ define([
          * @type DataVocab
          */
         model: Vocab
-    })
+    });
 });

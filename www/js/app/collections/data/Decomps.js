@@ -15,5 +15,5 @@ define([
          * @type DataDecomp
          */
         model: Decomp
-    })
+    });
 });

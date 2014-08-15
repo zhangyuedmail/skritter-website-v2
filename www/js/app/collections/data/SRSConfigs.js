@@ -15,5 +15,5 @@ define([
          * @type DataSRSConfig
          */
         model: SRSConfig
-    })
+    });
 });
