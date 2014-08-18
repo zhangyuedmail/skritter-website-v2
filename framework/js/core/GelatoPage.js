@@ -55,7 +55,7 @@ define([
          * @returns {jQuery}
          */
         getContent: function() {
-            return this.$("#content");
+            return this.$(".gelato-content");
         },
         /**
          * @method handleClickBack
@@ -78,6 +78,24 @@ define([
             if (app.sidebar) {
                 app.sidebar.toggle();
             }
+        },
+        /**
+         * @method isContentLandscape
+         * @returns {Boolean}
+         */
+        isContentLandscape: function() {
+            var height = this.getContent().height();
+            var width = this.getContent().width();
+            return width > height;
+        },
+        /**
+         * @method isContentPortrait
+         * @returns {Boolean}
+         */
+        isContentPortrait: function() {
+            var height = this.getContent().height();
+            var width = this.getContent().width();
+            return height >= width;
         },
         /**
          * @method remove
