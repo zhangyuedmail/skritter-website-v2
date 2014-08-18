@@ -6,8 +6,8 @@ app ? app.configs.optional = {
         "chart": "www/js/libs/chartjs-1.0.1.min",
         "createjs.easel": "www/js/libs/createjs.easel-NEXT.min",
         "createjs.tween": "www/js/libs/createjs.tween-NEXT.min",
-        "moment": "www/js/libs/moment-2.7.0.min",
-        "moment.timezone": "www/js/libs/moment.timezone-0.1.0.min"
+        "moment": "www/js/libs/moment-2.8.1",
+        "moment.timezone": "www/js/libs/moment.timezone-0.2.1"
     },
     shim: {
         //optional shims
