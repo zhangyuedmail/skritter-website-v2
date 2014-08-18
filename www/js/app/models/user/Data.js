@@ -5,9 +5,10 @@ define([
     "framework/GelatoModel",
     "app/collections/data/Decomps",
     "app/collections/data/Items",
+    "app/collections/data/Params",
     "app/collections/data/Strokes",
     "app/collections/data/Vocabs"
-], function(GelatoModel, DataDecomps, DataItems, DataStrokes, DataVocabs) {
+], function(GelatoModel, DataDecomps, DataItems, DataParams, DataStrokes, DataVocabs) {
     return GelatoModel.extend({
         /**
          * @class UserData
@@ -17,6 +18,7 @@ define([
         initialize: function() {
             this.decomps = new DataDecomps();
             this.items = new DataItems();
+            this.params = new DataParams().loadAll();
             this.strokes = new DataStrokes();
             this.vocabs = new DataVocabs();
             this.on("change", this.cache);
@@ -147,8 +149,6 @@ define([
          */
         loadAll: function(callback) {
             var self = this;
-            self.items.reset();
-            self.vocabs.reset();
             async.series([
                 function(callback) {
                     app.dialog.element(".message-text").text("items".toUpperCase());

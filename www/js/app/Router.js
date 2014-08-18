@@ -26,6 +26,8 @@ define([
             "login": "showLogin",
             "team": "showTeam",
             "admin/stroke": "showAdminStroke",
+            "admin/stroke/:strokeId": "showAdminStroke",
+            "admin/stroke/:strokeId/:paramIndex": "showAdminStroke",
             "*route": "defaultRoute"
         },
         /**
@@ -36,9 +38,11 @@ define([
         },
         /**
          * @method showAdminStroke
+         * @param {Number} strokeId
          */
-        showAdminStroke: function() {
+        showAdminStroke: function(strokeId, paramIndex) {
             this.currentView = new AdminStrokeView();
+            this.currentView.set(strokeId, paramIndex);
             this.currentView.render();
         },
         /**

@@ -1949,22 +1949,58 @@ define([], function() {
             return stroke;
         },
         600: function(defaultColor) {
-            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAhwACMYAAgegegegogeYjIh3iqB3i+AyYhkAehaAUhaAUYjIAyjIAojIAUYi0AUjcAoiqh4YhZhGAACCAdA8YBuDIC0AADSgUYEEgUEEgyEEgyYCggeCggeCWgeYBGgUFKgygKhk").cp().ef());
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAhwACMYAAgegegegogeYjIh3iqB3i+AyYhkAehaAUhaAUYjIAyjIAojIAUYi0AUjcAoiqh4YhZhGAACCAdA8YBuDIC0AADSgUYEEgUEEgyEEgyYCggeCggeCWgeYBGgUFKgygKhk").cp());
             stroke.setBounds(0, 0, 218, 55);
             return stroke;
         },
         601: function(defaultColor) {
-            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AE2BGYgegUh4g7goAJYg8AUA8BGAUAeYAeAeAeAoAKAKYAKAygKAyAAAyYgKBGAABGgKBGYgeC0geC0geC+YgyEsgoE2gKFAYAABaAABaAABkYAAE2AKFABGE2YAeB4AeC0BkBaYAeAeAUAKAUgKYAegKAogyAUgyYAehugohugehkYgehugehugehuYhGlAgKlAAUlAYAKhaAKhaAKhkYAKhQAKhaAKhQYAokYAykOA8kOYAKg8AKgyAUg8YAKgyAegygUgyYgUhahQhQhGgy").cp().ef());
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AE2BGYgegUh4g7goAJYg8AUA8BGAUAeYAeAeAeAoAKAKYAKAygKAyAAAyYgKBGAABGgKBGYgeC0geC0geC+YgyEsgoE2gKFAYAABaAABaAABkYAAE2AKFABGE2YAeB4AeC0BkBaYAeAeAUAKAUgKYAegKAogyAUgyYAehugohugehkYgehugehugehuYhGlAgKlAAUlAYAKhaAKhaAKhkYAKhQAKhaAKhQYAokYAykOA8kOYAKg8AKgyAUg8YAKgyAegygUgyYgUhahQhQhGgy").cp());
             stroke.setBounds(0, 0, 50, 370);
             return stroke;
         },
         602: function(defaultColor) {
-            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAuaAHgYiWhkjIg8kOgUIhQgKYgKAAgeh4gKgUYgUgygUgygogoYhGg7AKCfAAAoYAAAeAAAygUAeYgUAygyAAgyAAYleA8lUB4lAC0YiCBQiMBQiCBkYhkBQjSDIgyBGYiCCqgoC0AADIYAADSA8BkB4AoYBQAUAyAAB4geYE2hQE2iqDwjcYCWiMCCigCCigYBGhaBQhkBGhkYAegoAUgoAegoYAyhQAyhGAyhQYAegyAogyAegyYDcAUDwAeCWC0YAoAoAeAoAUAyYAoBkAKAyAKCqYAKDSgUBkhGCCYgyB4g8A8h4BkYi0CWjcB4jcBQYgeAKiCAeAeBGYAeAyBkgyAygKYGQhuEYiCC+i0YDSjIBkjmAAksYAAkshkjSjwig").p("AeAI6YgKAKgKAUAAAAYgyBQgyBQgyBQYhuCWhuCMh4CMYh4B4huCMiMBaYiqBujSBujIAeYhuAUh4gKgUh4YgeiCBQiWBGhkYC0kYFKi+EiiWYBQgyBagoBagoYBugyBkgeBugeYAogKAegKAogKYAegKBugoAAAyYAKAUgeAogUAU").cp().ef());
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAuaAHgYiWhkjIg8kOgUIhQgKYgKAAgeh4gKgUYgUgygUgygogoYhGg7AKCfAAAoYAAAeAAAygUAeYgUAygyAAgyAAYleA8lUB4lAC0YiCBQiMBQiCBkYhkBQjSDIgyBGYiCCqgoC0AADIYAADSA8BkB4AoYBQAUAyAAB4geYE2hQE2iqDwjcYCWiMCCigCCigYBGhaBQhkBGhkYAegoAUgoAegoYAyhQAyhGAyhQYAegyAogyAegyYDcAUDwAeCWC0YAoAoAeAoAUAyYAoBkAKAyAKCqYAKDSgUBkhGCCYgyB4g8A8h4BkYi0CWjcB4jcBQYgeAKiCAeAeBGYAeAyBkgyAygKYGQhuEYiCC+i0YDSjIBkjmAAksYAAkshkjSjwig").p("AeAI6YgKAKgKAUAAAAYgyBQgyBQgyBQYhuCWhuCMh4CMYh4B4huCMiMBaYiqBujSBujIAeYhuAUh4gKgUh4YgeiCBQiWBGhkYC0kYFKi+EiiWYBQgyBagoBagoYBugyBkgeBugeYAogKAegKAogKYAegKBugoAAAyYAKAUgeAogUAU").cp());
             stroke.setBounds(0, 0, 332, 235);
             return stroke;
+        },
+        603: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AAKAKYAegnBaBPAUAUYA8A8AyA8AoBGYAKAeAAAyAAAeYAKAyAAAyAKAyYAeCqAoC0AyCqYA8DIAoDSBkC+YAUAyAeAyAUAoYA8BaA8BGBGBQYAyAyBGBaBQhGYBGhGAohkAyhaYAKgUAUgUAKgUYAKgeAUgUAKgUYAKgUAUgUAeAKYAAAeAAAegUAoYgeAygKBGgUA8YgKA8gUBGgKBGYgUA8AKA8AAAyYAABQBGBkhaAyYh4A8iWighGhGYlUlAignCh4muYgoiCgeiCgeh4YgyjIgejIg8i+YgKgyg7haAJgyYAAgKAAAAAKAA").cp());
+            stroke.setBounds(0, 0, 142, 257);
+            return stroke;
+        },
+        604: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AQQYYYAAA8gKA8geA8YgKAUgUAUgoAKYgyAKgegegUgoYhQhugUiMgUiMYgUiMgeiMg8iCYhQjmiCjSiWi0YgogygogygygyYgegehQhGAAgyYAAgnCCBZAUAKYAUAUAUAUAeAKYBkBaBkBaBaBkYAoAeAeAyAeAoYAUAeAUAUAUAeYAUAeAUAUAKAeYAUAUAKAUAUAeYAyBQAyBQAeBaYAUAyAUAoAUAyYAyB4AoCggKCM").cp());
+            stroke.setBounds(0, 0, 106, 181);
+            return stroke;
+        },
+        605: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("APAHCYAAAegKAegeAeYgUAUgoAKgegUYgegKgogKgegKYgegKgegUgogKYiChGiMhGh4haYgogogogegogoYgegUhjhGAJgoYAUgdBkAxAeAUYBGAeBQAeBaAUYAKAKAUAAAKAKYAUAAAKAKAUAAYAUAAAUAKAUAAYAUAAAKAKAUAAYAoAKAeAAAoAKYAoAKAyAAAeAeYAyAyBQBQAKBQ").cp());
+            stroke.setBounds(0, 0, 97, 58);
+            return stroke;
+        },
+        700: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EA4GAQ4YgoiWhQiCiChaYiMhkiggeigAAYh4gKh4AKh4AKYjIAUjIBGi0BaYlUCglUC+lAC+YhaAyhGAyhQAyYhQAyhQAyhQAyYgoAegoAegoAUYgKAAgeAUgKgUYgKgKAAgKAKgKYAegeAUgeAUgeYAUgeAUgeAUgUYAUgeAUgeAUgUYAogyAog8AogyYAogyAogyAeg8YAogyAogyAog8YAKAAAKgKAAgKYAAAAAAAAAAgKYBGhaBQhaBGhkYBGhaBGhQBQhaYAegoAygoAygeYAogUBQgUAegoYA8hkkYhGgyAAYhGAKgyAeg8AeYg8Aeg8AUg8AUYiqBGi0BaigBQYhuA8hkBGhuA8YgKAKAAAUgKAUYAKAAAUAKAKAAYBkgKBkgUBagyYCWhGCghGCgg8YAegUAyAAAKAoYAKAyhaCCgUAoYg8BagKAAg8BaYg8Bkg8Bag8BkYhaCChQCMhaCCYhGBug8CCh4BQYhZA8AdBkAUBkYAeCWB4iMA8goYCChuCChkCChkYDmi0EOiWD6iWYBQgyBGgoBQgyYDciCDmh4D6hQYDmhGDmgKDmAyYCqAoCCBkBGCgYBaDmgeDmhkDcYhaDcigCMi+CCYh4BaiCBQh4BQYgKAKgKAUgKAKYAUAAAUAKAKgKYBkgoBugyBkgyYDmh4DSiWCgjIYCCiWAyi0AKi+YAAhagUhagUha").cp());
+            stroke.setBounds(0, 0, 364, 250);
+            return stroke;
+        },
+        701: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EArwAvMYCChaBGhuBGh4YBGh4A8iCAKiMYAUkEgej6jci+YhQg8hkgehkgUYhagKhkgUhaAAYiCAKiCAKiCAUYiMAUiMAoiMAeYgKAKgeAKAAAUYhGCWg8CghGCWYg8CWhQCWhGCWYhaDSiCC0iqCWYhkBkh4A8iMAUYhuAUhug8g8huYg8iCgoiMgeiMYgTigBFh4BkhuYDIjSDwi0EEiMYCghQCghQCghGYAogUAUgUAKgoYB4lKBklKBQlUYAKhGAKhQAKhGYAKgygogegyAeYiCA8iMBGiCBQYhQAog8AyhGAoYgeAKgoAKgegKYhkgehkg8hQhQYAAgKAAAAgKgKYAAgKAAgKgKgeYAoAUAeAKAeAKYBQAUBagKBQgoYC0hGCqhGC0hGYBGgeA8gyBGgeYAUgKAeAAAKAAYBaAoBaAoBaAoYAeAUAAAegUAUYhQBQgKBkgoBkYgoB4goCCgoB4Yg8C+g8C0g8C+YAAAKgKAUAAAUYBQgUBQgUBQgUYBugUBkgUBugKYCWgKCWgKCWAAYC+AAC0A8CWCCYCWB4BQCgAeC+YAoDSgKDIhQDIYg8CqhuCMiCBuYhkBahuBGiCAoYhaAehkAUhkAKYiMAKiMgKiMgyYh4gogyhagKhkYgUjSC0igDSgKYC+gKCgBGCWBkYBQA8AeBQgKBu").p("AUobCYgKgKAAAAAAAAYg8AUgyAUg8AeYhkA8huA8hkA8YjIB4i0CCiWC0YiCCqgeC0A8DSYAeBQAoBGBaAUYBuAUBagoBGhGYCCh4BaiWBQiWYBki+BQjIBai+YAohkAohuAohk").p("EArSAv0YhGgog8gUgygoYhGhGhQhGhkgoYhagohkgUhkAoYhGAUg8BaAKCMYAKBGBQBaBaAKYCWAUCgAKCWg8YBGgeA8geBGge").cp());
+            stroke.setBounds(0, 0, 345, 329);
+            return stroke;
+        },
+        702: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAVGAk4YgegKgogKgegKYhGgehGgogKhQYgUhaAehQBGgoYCWhQCqgKCgBGYBkAoAyBkg8BuYgKAAAAAKAAAUYBugeBkgUBugoYBugeBkg8BQhaYBQhaA8hkAKiCYAAhag8gyhGgoYhug8h4gKh4AUYhuAUh4AKhkAeYiqAyiWBGiWBQYi0BkiWB4igB4YAAAAAAAAAAAKYgoAAgoAKgeAKYgKgogKgeAKgoYAUhkAehkAehaYAAgeAUgUAUgUYDSiWC0iqCqi0YCWiqCWiqCWiqYBGhQBGhQA8hQYAKgUAKgUAAgUYgUgKgUgKgUAAYhaAUhkAUhaAoYjIA8i+BQi+BGYgyAUgygKgogeYgygegygogygoYgKgKgKgUAAgUYAKAAAUAAAKAAYCWAoCWgeCMgoYDIg8C+hGDIhGYA8gUAygoA8goYAogUAogJAyAdYBaAyBaAoBaAyYAoAeAAAygoAUYhQAeg8Ayg8A8YmaGkmkGamaGkYgUAKgKAUAAAeYB4g8CCg8B4g8YDchkDmhQDwgyYDIgeC+AAC+BkYBaAyBQAyAUBuYAoCCgeCChkBuYhkB4iMA8iWA8Yh4AyiCAeiCAoYgyAKg8AKg8AAYhQAAg8Ayg8AyYh4BkiCBkiCBkYhkBahuBQhkBaYhQBGhQBGhQA8YgKAKgUAKAAAKYBGgKBGgUBGgUYBQgUBGAKBGAeYCCAyB4BGB4A8YAyAUAygKAygeYDwiCDwiWEEhQYCWgyCMgoCWAKYEYAAEEBGC+DcYAyA8A8A8AKBQYAKAoAAAogoAUYgoAUg8gKgegeYhkh4hkh4iChaYhQg8hQgUhagUYi0gei0AeiqAyYigAyiWBGiMBaYiCBQhuBkhuBkYgeAogyAUgyAKYgUAAgogUgUgUYg8hGgohQg8hGYg8hGhQgyhkAAYjSAAiqBQigBuYhGAyhGA8hQAyYg8AegUgUAAhGYAKhkAKhuBQhaYAUgUAogUAogUYCgg8CMhkCChkYCWh4Cgh4CWhuYBQhQBahGBahGYAAgKAAAAAAgK").p("AWgeyYhGAAg8AUg8AoYgoAegKA8AKAoYAUA8B4BQBGgUIAKgKYAogoAygoAegyYAUgeAKg8gKgeYgKgyg8AAgoAAYgKAAgKAAAAAA").cp());
+            stroke.setBounds(0, 0, 353, 367);
+            return stroke;
         }
+        /**
+         605: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().);
+            stroke.setBounds(0, 0, 0, 0);
+            return stroke;
+        }
+         **/
     };
-
     /**
      * @method getData
      * @returns {Object}

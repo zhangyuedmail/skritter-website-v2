@@ -9,14 +9,10 @@ define([
          * @class PromptCanvas
          */
         initialize: function() {
-            this.size = undefined;
+            this.gridEnabled = true;
+            this.size = 600;
             this.stage = undefined;
         },
-        /**
-         * @property el
-         * @type String
-         */
-        el: ".canvas-container",
         /**
          * @method render
          * @returns {PromptCanvas}
@@ -29,9 +25,10 @@ define([
             createjs.Ticker.setFPS(24);
             this.createLayer("grid");
             this.createLayer("background");
+            this.createLayer("stroke");
+            this.createLayer("overlay");
             this.createLayer("input");
             this.resize();
-            this.drawGrid();
             return this;
         },
         /**
@@ -40,6 +37,18 @@ define([
         events: function() {
             return _.extend({}, GelatoView.prototype.events, {
             });
+        },
+        /**
+         * @method clearAll
+         * @returns {PromptCanvas}
+         */
+        clearAll: function() {
+            for (var i = 0, length = this.stage.children.length; i < length; i++) {
+                this.stage.children[i].removeAllChildren();
+            }
+            this.resize();
+            this.stage.update();
+            return this;
         },
         /**
          * @method clearLayer
@@ -83,12 +92,29 @@ define([
             return this;
         },
         /**
+         * @method drawCircle
+         * @param {String} layerName
+         * @param {Object} options
+         * @returns {PromptCanvas}
+         */
+        drawCircle: function(layerName, x, y, radius, options) {
+            var layer = this.getLayer(layerName);
+            var circle = new createjs.Shape();
+            options = options ? options : {};
+            circle.graphics.beginFill(options.fill ? options.fill : "#000000");
+            circle.graphics.drawCircle(x, y, radius);
+            this.getLayer(layerName).addChild(circle);
+            this.stage.update();
+            return this;
+        },
+        /**
          * @method drawGrid
          * @param {Object} options
+         * @returns {PromptCanvas}
          */
         drawGrid: function(options) {
             var grid = new createjs.Shape();
-            this.clearLayer('grid');
+            this.clearLayer("grid");
             options = options ? options : {};
             options.gridLineWidth= options.gridLineWidth ? options.gridLineWidth : "round";
             options.strokeJointStyle= options.strokeJointStyle ? options.strokeJointStyle : "round";
@@ -102,6 +128,7 @@ define([
             grid.cache(0, 0, this.size, this.size);
             this.getLayer("grid").addChild(grid);
             this.stage.update();
+            return this;
         },
         /**
          * @method drawShape
@@ -133,14 +160,13 @@ define([
             var oldPoint, oldMidPoint, points, marker;
             this.disableInput();
             this.$el.on("vmousedown.Input", down);
-            this.$el.on("vmouseup.Input", up);
             function down() {
                 points = [];
                 marker = new createjs.Shape();
                 marker.graphics.setStrokeStyle(12, "round", "round").beginStroke("#000000");
                 oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
                 self.getLayer("input").addChild(marker);
-                self.$el.on("vmouseout.Input", up);
+                self.$el.on("vmouseout.Input vmouseup.Input", up);
                 self.$el.on("vmousemove.Input", move);
             }
             function move() {
@@ -154,8 +180,8 @@ define([
             }
             function up() {
                 marker.graphics.endStroke();
-                self.$el.off("vmouseout.Input", up);
                 self.$el.off("vmousemove.Input", move);
+                self.$el.off("vmouseout.Input vmouseup.Input", up);
                 self.fadeShape("background", marker.clone(true));
                 self.getLayer("input").removeAllChildren();
             }
@@ -221,12 +247,17 @@ define([
          * @returns {PromptCanvas}
          */
         resize: function(size) {
-            size = size ? size : this.$el.width();
+            size = size ? size : this.size;
             this.el.style.height = size + "px";
             this.el.style.width = size + "px";
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
             this.size = size;
+            if (this.gridEnabled) {
+                this.drawGrid();
+            } else {
+                this.clearLayer("grid");
+            }
             return this;
         }
     });

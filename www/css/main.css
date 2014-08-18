@@ -8,10 +8,25 @@
 .padding-top { padding-top: 15px; }
 .team-avatar { max-height: 100px; }
 
-/*** PROMPTS: CANVAS ***/
-.canvas-holder { position: relative; border: 2px solid #000000; }
-.canvas-holder canvas {
-    left: 0;
-    position: absolute;
-    top: 0;
+
+/*** ADMIN: STROKE EDITOR ***/
+.stroke-json {
+    min-height: 200px;
+    resize: none;
+    width: 90%;
 }
+
+
+/*** PROMPT: CANVAS ***/
+.canvas-container {
+    cursor: pointer;
+    margin: 0 auto;
+}
+.canvas-container canvas { background-color: #ffffff; }
+.gelato-panel-left {
+    border-right: 2px solid #000000;
+    float: left;
+    height: 100%;
+    width: 400px;
+}
+.gelato-panel-right { float: left; }
