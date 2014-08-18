@@ -3,17 +3,17 @@
  */
 define([
     "framework/GelatoCollection",
-    "app/models/data/Decomp"
-], function(GelatoCollection, Decomp) {
+    "app/models/data/DataSRSConfig"
+], function(GelatoCollection, DataSRSConfig) {
     /**
-     * @class DataDecomps
+     * @class DataSRSConfigs
      * @extend GelatoCollection
      */
     return GelatoCollection.extend({
         /**
          * @property model
-         * @type DataDecomp
+         * @type DataSRSConfig
          */
-        model: Decomp
+        model: DataSRSConfig
     });
 });

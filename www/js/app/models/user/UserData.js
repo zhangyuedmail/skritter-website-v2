@@ -3,11 +3,11 @@
  */
 define([
     "framework/GelatoModel",
-    "app/collections/data/Decomps",
-    "app/collections/data/Items",
-    "app/collections/data/Params",
-    "app/collections/data/Strokes",
-    "app/collections/data/Vocabs"
+    "app/collections/data/DataDecomps",
+    "app/collections/data/DataItems",
+    "app/collections/data/DataParams",
+    "app/collections/data/DataStrokes",
+    "app/collections/data/DataVocabs"
 ], function(GelatoModel, DataDecomps, DataItems, DataParams, DataStrokes, DataVocabs) {
     return GelatoModel.extend({
         /**

@@ -3,7 +3,7 @@
  */
 define([
     "framework/GelatoCollection",
-    "app/models/data/Param",
+    "app/models/data/DataParam",
     "app/Params"
 ], function(GelatoCollection, DataParam, Params) {
     /**

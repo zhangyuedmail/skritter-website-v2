@@ -6,14 +6,13 @@ define([
     "framework/GelatoApplication",
     "app/Functions",
     "app/Router",
+    "app/components/Dialog",
+    "app/components/Sidebar",
     "app/models/Api",
     "app/models/Assets",
     "app/models/User",
-    "app/models/storage/IndexedDBAdapter",
-    "app/views/components/Dialog",
-    "app/views/components/Sidebar",
-    "app/Params"
-], function(i18n, GelatoApplication, Functions, Router, Api, Assets, User, IndexedDBAdapter, DialogView, SidebarView, Params) {
+    "app/storage/IndexedDBAdapter"
+], function(i18n, GelatoApplication, Functions, Router, DialogView, SidebarView, Api, Assets, User, IndexedDBAdapter) {
     return GelatoApplication.extend({
         /**
          * @class Application
@@ -24,9 +23,6 @@ define([
             _.bindAll(this);
             this.fn = Functions;
             this.dialog = new DialogView();
-
-            this.params = Params;
-
             this.router = new Router();
             this.sidebar = new SidebarView();
             this.strings = i18n;

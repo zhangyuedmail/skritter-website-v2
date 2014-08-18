@@ -3,17 +3,17 @@
  */
 define([
     "framework/GelatoCollection",
-    "app/models/data/Sentence"
-], function(GelatoCollection, Sentence) {
+    "app/models/data/DataDecomp"
+], function(GelatoCollection, DataDecomp) {
     /**
-     * @class DataSentences
+     * @class DataDecomps
      * @extend GelatoCollection
      */
     return GelatoCollection.extend({
         /**
          * @property model
-         * @type DataSentence
+         * @type DataDecomp
          */
-        model: Sentence
+        model: DataDecomp
     });
 });

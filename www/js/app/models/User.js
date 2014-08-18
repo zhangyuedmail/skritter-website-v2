@@ -4,9 +4,9 @@
 define([
     "framework/GelatoModel",
     "app/Levels",
-    "app/models/user/Data",
-    "app/models/user/Settings",
-    "app/models/user/Subscription"
+    "app/models/user/UserData",
+    "app/models/user/UserSettings",
+    "app/models/user/UserSubscription"
 ], function(GelatoModel, Levels, UserData, UserSettings, UserSubscription) {
     return GelatoModel.extend({
         /**

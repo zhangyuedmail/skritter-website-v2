@@ -3,8 +3,8 @@
  */
 define([
     "framework/GelatoCollection",
-    "app/models/data/Item"
-], function(GelatoCollection, Item) {
+    "app/models/data/DataItem"
+], function(GelatoCollection, DataItem) {
     /**
      * @class DataItems
      * @extend GelatoCollection
@@ -14,7 +14,7 @@ define([
          * @property model
          * @type DataItem
          */
-        model: Item,
+        model: DataItem,
         /**
          * @method comparator
          * @param {DataItem} item

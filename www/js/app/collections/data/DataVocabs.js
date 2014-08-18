@@ -3,17 +3,17 @@
  */
 define([
     "framework/GelatoCollection",
-    "app/models/data/SRSConfig"
-], function(GelatoCollection, SRSConfig) {
+    "app/models/data/DataVocab"
+], function(GelatoCollection, DataVocab) {
     /**
-     * @class DataSRSConfigs
+     * @class DataVocabs
      * @extend GelatoCollection
      */
     return GelatoCollection.extend({
         /**
          * @property model
-         * @type DataSRSConfig
+         * @type DataVocab
          */
-        model: SRSConfig
+        model: DataVocab
     });
 });

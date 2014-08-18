@@ -1,10 +1,10 @@
 define([
-    "framework/GelatoModel"
-], function(GelatoModel) {
-    return GelatoModel.extend({
+    "framework/GelatoClass"
+], function(GelatoClass) {
+    return GelatoClass.extend({
         /**
          * @class IndexedDBAdapter
-         * @extends GelatoModel
+         * @extends GelatoClass
          * @constructor
          */
         initialize: function() {

@@ -3,17 +3,17 @@
  */
 define([
     "framework/GelatoCollection",
-    "app/models/data/Stroke"
-], function(GelatoCollection, Stroke) {
+    "app/models/data/DataVocabList"
+], function(GelatoCollection, DataVocabList) {
     /**
-     * @class DataStrokes
+     * @class DataVocabLists
      * @extend GelatoCollection
      */
     return GelatoCollection.extend({
         /**
          * @property model
-         * @type DataStroke
+         * @type DataVocabList
          */
-        model: Stroke
+        model: DataVocabList
     });
 });
