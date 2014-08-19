@@ -2,7 +2,7 @@ require('../framework/config.js');
 require('../www/config.js');
 
 var configs = app.configs.getCombined();
-var crosswalkVersion = '8.37.189.1';
+var crosswalkVersion = '8.37.189.2';
 var exclude = new RegExp(
         "(csslintrc.json|Gruntfile.js|karma.conf.js|LICENSE|README.md)|" +
         "(.git$|.gitignore$|.idea$|build$|crosswalk$|node_modules$|plugin$)"
