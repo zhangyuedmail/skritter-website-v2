@@ -3,13 +3,13 @@
  */
 define([
     "framework/GelatoRouter",
-    "app/views/admin/Stroke",
+    "app/views/admin/StrokeEditor",
     "app/views/About",
     "app/views/Dashboard",
     "app/views/Home",
     "app/views/Login",
     "app/views/Team"
-], function(GelatoRouter, AdminStrokeView, AboutView, DashboardView, HomeView, LoginView, TeamView) {
+], function(GelatoRouter, StrokeEditorView, AboutView, DashboardView, HomeView, LoginView, TeamView) {
     /**
      * @class Router
      * @extend GelatoRouter
@@ -22,12 +22,12 @@ define([
         routes: {
             "": "showHome",
             "about": "showAbout",
+            "admin/stroke": "showStrokeEditor",
+            "admin/stroke/:strokeId": "showStrokeEditor",
+            "admin/stroke/:strokeId/:paramIndex": "showStrokeEditor",
             "dashboard": "showDashboard",
             "login": "showLogin",
             "team": "showTeam",
-            "admin/stroke": "showAdminStroke",
-            "admin/stroke/:strokeId": "showAdminStroke",
-            "admin/stroke/:strokeId/:paramIndex": "showAdminStroke",
             "*route": "defaultRoute"
         },
         /**
@@ -35,15 +35,6 @@ define([
          */
         defaultRoute: function() {
             this.navigate("", {replace: true, trigger: true});
-        },
-        /**
-         * @method showAdminStroke
-         * @param {Number} strokeId
-         */
-        showAdminStroke: function(strokeId, paramIndex) {
-            this.currentView = new AdminStrokeView();
-            this.currentView.set(strokeId, paramIndex);
-            this.currentView.render();
         },
         /**
          * @method showAbout
@@ -79,6 +70,16 @@ define([
          */
         showLogin: function() {
             this.currentView = new LoginView();
+            this.currentView.render();
+        },
+        /**
+         * @method showStrokeEditor
+         * @param {String} strokeId
+         * @param {String} paramIndex
+         */
+        showStrokeEditor: function(strokeId, paramIndex) {
+            this.currentView = new StrokeEditorView();
+            this.currentView.set(strokeId, paramIndex);
             this.currentView.render();
         },
         /**

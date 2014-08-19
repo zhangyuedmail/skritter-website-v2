@@ -3,12 +3,12 @@
  */
 define([
     "framework/GelatoPage",
-    "require.text!templates/admin-stroke.html",
+    "require.text!templates/admin-stroke-editor.html",
     "app/views/prompts/Canvas"
 ], function(GelatoPage, template, PromptCanvas) {
     return GelatoPage.extend({
         /**
-         * @class ViewAdminStroke
+         * @class ViewStrokeEditor
          * @extends GelatoPage
          * @constructor
          */
@@ -25,7 +25,7 @@ define([
         title: "Stroke Editor",
         /**
          * @method render
-         * @returns {ViewAdminStroke}
+         * @returns {ViewStrokeEditor}
          */
         render: function() {
             this.$el.html(this.compile(template));
@@ -36,7 +36,7 @@ define([
         },
         /**
          * @method renderStroke
-         * @returns {ViewAdminStroke}
+         * @returns {ViewStrokeEditor}
          */
         renderStroke: function() {
             app.router.navigate("admin/stroke/" + this.strokeId);
@@ -74,7 +74,7 @@ define([
         },
         /**
          * @method resize
-         * @returns {ViewAdminStroke}
+         * @returns {ViewStrokeEditor}
          */
         resize: function() {
             this.canvas.resize(this.getContent().height() - 4);
@@ -82,7 +82,7 @@ define([
         },
         /**
          * @method set
-         * @returns {ViewAdminStroke}
+         * @returns {ViewStrokeEditor}
          */
         set: function(strokeId, paramIndex) {
             this.strokeId = strokeId ? parseInt(strokeId, 10) : 0;

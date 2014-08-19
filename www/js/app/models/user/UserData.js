@@ -79,6 +79,7 @@ define([
                                 path: "api/v" + app.api.get("version") + "/items",
                                 method: "GET",
                                 params: {
+                                    lang: app.user.getLanguageCode(),
                                     sort: "changed",
                                     offset: 0,
                                     include_vocabs: "true",
@@ -94,7 +95,15 @@ define([
                                 path: "api/v" + app.api.get("version") + "/srsconfigs",
                                 method: "GET",
                                 params: {
-                                    lang: undefined
+                                    lang: app.user.getLanguageCode()
+                                }
+                            },
+                            {
+                                path: "api/v" + app.api.get("version") + "/vocablists",
+                                method: "GET",
+                                params: {
+                                    lang: app.user.getLanguageCode(),
+                                    sort: "studying"
                                 }
                             }
                         ], function(result, status) {
