@@ -222,6 +222,36 @@ define([
             }).call(this);
         },
         /**
+         * @method getVocabByQuery
+         * @param {String} q
+         * @param {Function} callback
+         * @param {Object} options
+         */
+        getVocabByQuery: function(q, callback, options) {
+            options = options ? options : {};
+            $.ajax({
+                url: this.getBaseUrl() + "vocabs",
+                beforeSend: this.beforeSend,
+                context: this,
+                type: "GET",
+                data: {
+                    bearer_token: this.getToken(),
+                    q: q,
+                    lang: options.lang,
+                    include_containing: options.include_containing,
+                    include_decomps: options.include_decomps,
+                    include_heisigs: options.include_heisigs,
+                    include_sentences: options.include_sentences,
+                    include_strokes: options.include_strokes,
+                    include_top_mnemonics: options.include_top_mnemonics
+                }
+            }).done(function(data) {
+                callback(data, data.statusCode);
+            }).fail(function(error) {
+                callback(error, error.status);
+            });
+        },
+        /**
          * @method refreshToken
          * @param {Function} callback
          */
