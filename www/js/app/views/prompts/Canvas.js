@@ -222,6 +222,13 @@ define([
             return this.stage.getChildByName("layer-" + layerName);
         },
         /**
+         * @method getSize
+         * @returns {Number}
+         */
+        getSize: function() {
+            return this.stage.canvas.width;
+        },
+        /**
          * @method injectColor
          * @param {createjs.Container|createjs.Shape} object
          * @param {String} color
