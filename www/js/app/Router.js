@@ -3,13 +3,14 @@
  */
 define([
     "framework/GelatoRouter",
+    "app/views/admin/CharacterEditor",
     "app/views/admin/StrokeEditor",
     "app/views/About",
     "app/views/Dashboard",
     "app/views/Home",
     "app/views/Login",
     "app/views/Team"
-], function(GelatoRouter, StrokeEditorView, AboutView, DashboardView, HomeView, LoginView, TeamView) {
+], function(GelatoRouter, CharacterEditorView, StrokeEditorView, AboutView, DashboardView, HomeView, LoginView, TeamView) {
     /**
      * @class Router
      * @extend GelatoRouter
@@ -22,6 +23,7 @@ define([
         routes: {
             "": "showHome",
             "about": "showAbout",
+            "admin/character/:writing": "showCharacterEditor",
             "admin/stroke": "showStrokeEditor",
             "admin/stroke/:strokeId": "showStrokeEditor",
             "admin/stroke/:strokeId/:paramIndex": "showStrokeEditor",
@@ -41,6 +43,15 @@ define([
          */
         showAbout: function() {
             this.currentView = new AboutView();
+            this.currentView.render();
+        },
+        /**
+         * @method showCharacterEditor
+         * @param {String} writing
+         */
+        showCharacterEditor: function(writing) {
+            this.currentView = new CharacterEditorView();
+            this.currentView.set(writing);
             this.currentView.render();
         },
         /**
