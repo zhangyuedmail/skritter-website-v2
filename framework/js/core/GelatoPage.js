@@ -25,6 +25,7 @@ define([
          */
         events: {
             "vclick .action-back": "handleClickBack",
+            "vclick .action-home": "handleClickHome",
             "vclick .gelato-content": "handleClickContent",
             "vclick .gelato-sidebar-button.action-toggle": "handleClickSidebarToggle"
         },
@@ -70,6 +71,12 @@ define([
             if (app.sidebar && app.sidebar.isExpanded()) {
                 app.sidebar.toggle();
             }
+        },
+        /**
+         * @method handleClickHome
+         */
+        handleClickHome: function() {
+            app.router.navigate("", {replace: true, trigger: true});
         },
         /**
          * @method handleClickSidebarToggle
