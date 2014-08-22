@@ -3,13 +3,18 @@
  */
 define([
     "framework/GelatoCollection",
+    "app/Kana",
     "app/models/data/DataStroke"
-], function(GelatoCollection, DataStroke) {
-    /**
-     * @class DataStrokes
-     * @extend GelatoCollection
-     */
+], function(GelatoCollection, Kana, DataStroke) {
     return GelatoCollection.extend({
+        /**
+         * @class DataStrokes
+         * @extend GelatoCollection
+         * @constructor
+         */
+        initialize: function() {
+            this.add(Kana.getData());
+        },
         /**
          * @property model
          * @type DataStroke

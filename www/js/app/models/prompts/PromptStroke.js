@@ -55,16 +55,14 @@ define([
         inflateShape: function(size) {
             var shape = this.get("shape").clone(true);
             var data = this.inflateData(size);
-            var spriteBounds = shape.getBounds();
+            var bounds = shape.getBounds();
             var ms = shape.getMatrix();
-            //apply rotation based on newly sized shape
-            var sx = data.w / spriteBounds.width;
-            var sy = data.h / spriteBounds.height;
+            var sx = data.w / bounds.width;
+            var sy = data.h / bounds.height;
             ms.scale(sx, sy);
             ms.translate(-data.w / 2, -data.h / 2);
             ms.rotate(data.rot * Math.PI / 180);
             var t = ms.decompose();
-            //find the actual position based on prior transformations
             shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
             var finalBounds = shape.getTransformedBounds();
             shape.x += finalBounds.width / 2 + data.x;

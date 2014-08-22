@@ -63,11 +63,16 @@ define([
         set: function(writing) {
             var self = this;
             this.writing = writing;
-            app.api.getVocabByQuery(this.writing, function(result) {
-                self.stroke.set(result.Strokes[0]);
-                self.vocab.set(result.Vocabs[0]);
-                self.renderStroke();
-            }, {include_strokes: true});
+            if (app.fn.isKana(writing)) {
+                this.stroke = app.user.data.strokes.get(writing);
+                this.renderStroke();
+            } else {
+                app.api.getVocabByQuery(this.writing, function(result) {
+                    self.stroke.set(result.Strokes[0]);
+                    self.vocab.set(result.Vocabs[0]);
+                    self.renderStroke();
+                }, {include_strokes: true});
+            }
             return this;
         }
     });
