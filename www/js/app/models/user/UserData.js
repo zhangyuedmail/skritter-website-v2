@@ -7,8 +7,9 @@ define([
     "app/collections/data/DataItems",
     "app/collections/data/DataParams",
     "app/collections/data/DataStrokes",
-    "app/collections/data/DataVocabs"
-], function(GelatoModel, DataDecomps, DataItems, DataParams, DataStrokes, DataVocabs) {
+    "app/collections/data/DataVocabs",
+    "app/collections/data/DataVocabLists"
+], function(GelatoModel, DataDecomps, DataItems, DataParams, DataStrokes, DataVocabs, DataVocabLists) {
     return GelatoModel.extend({
         /**
          * @class UserData
@@ -21,6 +22,7 @@ define([
             this.params = new DataParams().loadAll();
             this.strokes = new DataStrokes();
             this.vocabs = new DataVocabs();
+            this.vocablists = new DataVocabLists();
             this.on("change", this.cache);
         },
         /**
