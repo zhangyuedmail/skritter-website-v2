@@ -19,7 +19,7 @@ define([
          * @extends GelatoApplication
          * @constructor
          */
-        initialize: function() {
+        initialize: function(callback) {
             _.bindAll(this);
             this.fn = Functions;
             this.dialog = new DialogView();
@@ -31,7 +31,9 @@ define([
                 async.apply(this.loadAssets),
                 async.apply(this.loadStorage),
                 async.apply(this.loadUser)
-            ]);
+            ], function() {
+                Backbone.history.start();
+            });
         },
         /**
          * @method loadApi

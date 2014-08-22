@@ -24,7 +24,7 @@
                     "app/Application"
                 ], function(Application) {
                     window.app = $.extend(new Application(), window.app);
-                    Backbone.history.start();
+
                 });
             }
             function initializeTests() {
