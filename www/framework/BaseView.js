@@ -20,6 +20,14 @@ define([], function() {
             'click .navigate': 'handleNavigateClicked'
         },
         /**
+         * @method compile
+         * @param {String} template
+         * @returns {String}
+         */
+        compile: function(template) {
+            return Handlebars.compile(template)(app.strings);
+        },
+        /**
          * @method handleNavigateClicked
          * @param {Event}
          */

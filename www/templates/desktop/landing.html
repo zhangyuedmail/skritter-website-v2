@@ -1,14 +1,11 @@
 <div class="desktop page page-landing">
 
-    <div class="container">
-
-        <div class="text-center">
-            <h1>{{application.name}}</h1>
-            <p class="lead">Learn to write Chinese and Japanese characters.</p>
-            <button type="button" class="btn btn-primary navigate" data-url="signin">Existing User </button>
-            <button type="button" class="btn btn-success navigate" data-url="signup">New User &raquo;</button>
-        </div>
-
+    <div class="container text-center">
+        <img src="images/skritter-critter.png" class="img-responsive landing-logo" alt="">
+        <h1>{{application.name}}</h1>
+        <p class="lead">{{landing.tagline}}</p>
+        <button type="button" class="btn btn-primary navigate" data-url="signin">{{landing.existing-user}}</button>
+        <button type="button" class="btn btn-success navigate" data-url="signup">{{landing.new-user}} &raquo;</button>
     </div>
 
 </div>

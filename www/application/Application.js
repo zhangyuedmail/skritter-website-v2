@@ -4,8 +4,9 @@
 define([
     'framework/BaseApplication',
     'require.i18n!locale/nls/strings',
-    'application/Router'
-], function(BaseApplication, Strings, Router) {
+    'application/Router',
+    'application/components/Sidebars'
+], function(BaseApplication, Strings, Router, Sidebars) {
     /**
      * @class Application
      * @extends BaseApplication
@@ -16,6 +17,7 @@ define([
          */
         start: function() {
             this.router = new Router();
+            this.sidebars = new Sidebars();
             this.strings = Strings;
             Backbone.history.start();
         }

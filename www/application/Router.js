@@ -29,7 +29,7 @@ define([
          * @method showHome
          */
         showHome: function() {
-            if (true) {
+            if (!true) {
                 this.showLanding();
             } else {
                 this.currentPage = new PageHome();

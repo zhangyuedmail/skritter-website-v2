@@ -24,15 +24,9 @@ define([
          * @returns {Object}
          */
         events: function(){
-            return _.extend({}, BaseView.prototype.events, {});
-        },
-        /**
-         * @method compile
-         * @param {String} template
-         * @returns {String}
-         */
-        compile: function(template) {
-            return Handlebars.compile(template)(app.strings);
+            return _.extend({}, BaseView.prototype.events, {
+                'click .navbar-sidebar-toggle': 'handleSidebarToggleClicked'
+            });
         },
         /**
          * @method disableForm
@@ -47,6 +41,19 @@ define([
          */
         enableForm: function(selector) {
             this.$((selector ? selector: ' ') + ':input').prop('disabled', false);
+        },
+        /**
+         * @method handleSidebarToggleClicked
+         * @param {Event} event
+         */
+        handleSidebarToggleClicked: function(event) {
+            event.preventDefault();
+            if (app.sidebars) {
+                app.sidebars.toggle();
+            } else {
+                event.preventDefault();
+            }
         }
+
     });
 });

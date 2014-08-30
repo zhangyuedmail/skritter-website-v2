@@ -1,7 +1,12 @@
 define([], {
     root: {
         application: {
-            name: "Skritter"
+            'name': 'Skritter'
+        },
+        landing: {
+            'existing-user': 'Existing User',
+            'new-user': 'New User',
+            'tagline': 'Learn to write Chinese and Japanese characters.'
         }
     },
     ja: true,
