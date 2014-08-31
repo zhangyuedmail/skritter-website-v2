@@ -38,7 +38,17 @@ define([
          * @returns {Object}
          */
         events: function(){
-            return _.extend({}, BaseView.prototype.events, {});
+            return _.extend({}, BaseView.prototype.events, {
+                'swipeleft .sidebar': 'handleSidebarSwipeLeft'
+            });
+        },
+        /**
+         * @method handleSidebarSwipeLeft
+         * @param {Event} event
+         */
+        handleSidebarSwipeLeft: function(event) {
+            event.preventDefault();
+            this.hide();
         },
         /**
          * @method hide

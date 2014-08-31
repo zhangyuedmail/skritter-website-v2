@@ -72,9 +72,15 @@ body { padding-top: 45px; }
 
 
 /*** SIDEBARS ***/
+.sidebars-container a { color: #000000; }
+.sidebars-container hr {
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+.sidebars-container i { width: 30px; }
 .sidebar {
     background-color: #ffffff;
-    border-right: 2px solid #222222;
+    border-right: 2px solid #006687;
     display: none;
     height: 100%;
     overflow-y: auto;

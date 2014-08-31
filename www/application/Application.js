@@ -13,12 +13,17 @@ define([
      */
     var Application = BaseApplication.extend({
         /**
+         * @method initialize
+         */
+        initialize: function() {
+            this.router = new Router();
+            this.strings = Strings;
+        },
+        /**
          * @method start
          */
         start: function() {
-            this.router = new Router();
             this.sidebars = new Sidebars();
-            this.strings = Strings;
             Backbone.history.start();
         }
     });
