@@ -4,6 +4,8 @@ define([
     'moment.timezone',
     'backbone.routefilter',
     'bootstrap.switch',
+    'createjs.easel',
+    'createjs.tween',
     'handlebars',
     'jquery.mobile',
     'jquery.ui',

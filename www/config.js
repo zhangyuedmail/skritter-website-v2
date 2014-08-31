@@ -2,12 +2,20 @@ app = (function() {
     return {
         configs: {
             paths: {
+                //directories
+                collections: 'application/collections',
+                components: 'application/components',
+                models: 'application/models',
+                pages: 'application/pages',
+                storage: 'application/storage',
                 //libraries
                 async: 'libraries/async-0.9.0.min',
                 backbone: 'libraries/backbone-1.1.2.min',
                 'backbone.routefilter': 'libraries/backbone.routefilter-0.2.0.min',
                 bootstrap: 'libraries/bootstrap-3.2.0.min',
                 'bootstrap.switch': 'libraries/bootstrap.switch-3.0.2.min',
+                'createjs.easel': 'libraries/createjs.easel-NEXT.min',
+                'createjs.tween': 'libraries/createjs.tween-NEXT.min',
                 fastclick: 'libraries/fastclick-1.0.3.min',
                 jquery: 'libraries/jquery-1.11.1.min',
                 'jquery.ui': 'libraries/jquery.ui-1.11.1.min',

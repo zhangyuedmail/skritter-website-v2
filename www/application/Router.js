@@ -3,8 +3,8 @@
  */
 define([
     'framework/BaseRouter',
-    'application/pages/Home',
-    'application/pages/Landing'
+    'pages/Home',
+    'pages/Landing'
 ], function(BaseRouter, PageHome, PageLanding) {
     /**
      * @class Router

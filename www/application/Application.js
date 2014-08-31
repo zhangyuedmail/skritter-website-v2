@@ -5,8 +5,10 @@ define([
     'framework/BaseApplication',
     'require.i18n!locale/nls/strings',
     'application/Router',
-    'application/components/Sidebars'
-], function(BaseApplication, Strings, Router, Sidebars) {
+    'components/Sidebars',
+    'models/Assets',
+    'models/User'
+], function(BaseApplication, Strings, Router, Sidebars, Assets, User) {
     /**
      * @class Application
      * @extends BaseApplication
@@ -16,8 +18,10 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.assets = new Assets();
             this.router = new Router();
             this.strings = Strings;
+            this.user = new User();
         },
         /**
          * @method start
