@@ -10,9 +10,7 @@
     });
 
     function loadLibraries() {
-        requirejs(['application/Libraries'], function() {
-            $(document).ready(loadApplication);
-        });
+        requirejs(['application/Libraries'], loadApplication);
     }
 
     function loadApplication() {

@@ -8,7 +8,10 @@ app = (function() {
                 'backbone.routefilter': 'libraries/backbone.routefilter-0.2.0.min',
                 bootstrap: 'libraries/bootstrap-3.2.0.min',
                 'bootstrap.switch': 'libraries/bootstrap.switch-3.0.2.min',
+                fastclick: 'libraries/fastclick-1.0.3.min',
                 jquery: 'libraries/jquery-1.11.1.min',
+                'jquery.ui': 'libraries/jquery.ui-1.11.1.min',
+                'jquery.mobile': 'libraries/jquery.mobile-1.4.3.min',
                 handlebars: 'libraries/handlebars-1.3.0.min',
                 modernizr: 'libraries/modernizr.custom-2.8.3.min',
                 moment: 'libraries/moment-2.8.2.min',
@@ -22,11 +25,13 @@ app = (function() {
                 'backbone.routefilter': ['backbone'],
                 bootstrap: ['jquery'],
                 'bootstrap.switch': ['bootstrap'],
+                'jquery.ui': ['jquery'],
+                'jquery.mobile': ['jquery'],
                 'moment.timezone': ['moment']
             }
         },
         isLocalhost: function() {
-            return location.hostname === 'localhost';
+            return location.hostname === 'localhost' || location.port === '1987';
         }
     };
 })();

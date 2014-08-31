@@ -11,11 +11,11 @@ body { padding-top: 45px; }
 .navbar-icon {
     color: #ffffff;
     font-size: 28px;
+    padding-top: 7.5px;
 }
 .navbar ul > li {
     cursor: pointer;
     height: 45px;
-    padding-top: 7.5px;
     text-align: center;
     width: 55px;
 }
@@ -41,28 +41,26 @@ body { padding-top: 45px; }
 .navbar-sidebar-toggle {
     background: transparent none;
     border: none;
-    float: left;
-    margin: 5.5px 15px 5.5px -20px;
-    padding: 9px 10px;
-    position: relative;
-}
-.navbar-sidebar-toggle .icon-bar {
-    display: block;
-    width: 22px;
-    height: 2px;
-    border-radius: 1px;
+    color: #ffffff;
+    height: 45px;
+    min-width: 100px;
+    padding: 0 10px 0 0;
 }
 .navbar-sidebar-toggle:focus {
     border: none;
     outline: none;
 }
-.navbar-sidebar-toggle .icon-bar + .icon-bar { margin-top: 4px; }
-.navbar-sidebar-toggle.active { margin: 5.5px 20px 5.5px -25px; }
-.navbar-inverse .navbar-sidebar-toggle .icon-bar { background-color: #ffffff; }
-.navbar-inverse .navbar-sidebar-toggle { border-color: transparent; }
-.navbar-inverse .navbar-sidebar-toggle:hover,
-.navbar-inverse .navbar-sidebar-toggle:focus { background-color: transparent; }
-.navbar .navbar-sidebar-toggle:hover .icon-bar { background-color: #ffffff; }
+.navbar-sidebar-toggle .toggle-bars {
+    font-size: 24px;
+    margin-left: -10px;
+}
+.navbar-sidebar-toggle .toggle-text {
+    float: right;
+    font-size: 16px;
+    margin-left: 20px;
+}
+.navbar-sidebar-toggle.active .toggle-bars { margin-left: -15px; }
+.navbar-sidebar-toggle.active .toggle-text { margin-left: 30px; }
 
 
 /*** PAGES: LANDING ***/
@@ -80,6 +78,7 @@ body { padding-top: 45px; }
     display: none;
     height: 100%;
     overflow-y: auto;
+    padding-bottom: 45px;
     margin-top: 45px;
     position: fixed;
     top: 0;

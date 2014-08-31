@@ -25,7 +25,8 @@ define([
          */
         events: function(){
             return _.extend({}, BaseView.prototype.events, {
-                'click .navbar-sidebar-toggle': 'handleSidebarToggleClicked'
+                'vclick .navbar-sidebar-toggle': 'handleSidebarToggleClicked',
+                'vclick .navbar-item': 'handleNavbarItemClicked'
             });
         },
         /**
@@ -41,6 +42,13 @@ define([
          */
         enableForm: function(selector) {
             this.$((selector ? selector: ' ') + ':input').prop('disabled', false);
+        },
+        /**
+         * @method handleNavbarItemClicked
+         * @param {Event} event
+         */
+        handleNavbarItemClicked: function(event) {
+            event.preventDefault();
         },
         /**
          * @method handleSidebarToggleClicked

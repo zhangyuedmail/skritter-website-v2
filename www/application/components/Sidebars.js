@@ -3,7 +3,7 @@
  */
 define([
     'framework/BaseView',
-    "require.text!templates/sidebars.html"
+    'require.text!templates/sidebars.html'
 ], function(BaseView, template) {
     /**
      * @class Sidebars
@@ -14,20 +14,23 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.selected = 'default';
+            this.name = 'default';
+            this.sidebar = undefined;
+            this.speed = 300;
             this.render();
         },
         /**
          * @property el
          * @type String
          */
-        el: "#sidebars",
+        el: '#sidebars',
         /**
          * @method render
          * @returns {Sidebars}
          */
         render: function() {
             this.$el.html(this.compile(template));
+            this.select();
             return this;
         },
         /**
@@ -42,9 +45,9 @@ define([
          * @returns {Sidebars}
          */
         hide: function() {
-            $(".navbar-sidebar-toggle").removeClass("active");
-            this.$('#sidebar-' + this.selected).removeClass('expanded');
-            this.$('#sidebar-' + this.selected).hide();
+            $('.navbar-sidebar-toggle').removeClass('active');
+            this.sidebar.removeClass('expanded');
+            this.sidebar.hide('slide', {direction: 'left'}, this.speed);
             return this;
         },
         /**
@@ -52,16 +55,22 @@ define([
          * @returns {Boolean}
          */
         isExpanded: function() {
-            return this.$('#sidebar-' + this.selected).hasClass('expanded') ? true : false;
+            return this.sidebar.hasClass('expanded') ? true : false;
         },
         /**
          * @method select
-         * @param {String} name
+         * @param {String} [name]
          * @returns {Sidebars}
          */
         select: function(name) {
-            var select = this.$el.find('#sidebar-' + name);
-            console.log(select);
+            var sidebar = this.$('#sidebar-' + name);
+            if (sidebar.length) {
+                this.name = name;
+                this.sidebar = sidebar;
+            } else {
+                this.name = 'default';
+                this.sidebar = this.$('#sidebar-default');
+            }
             return this;
         },
         /**
@@ -69,9 +78,9 @@ define([
          * @returns {Sidebars}
          */
         show: function() {
-            $(".navbar-sidebar-toggle").addClass("active");
-            this.$('#sidebar-' + this.selected).addClass('expanded');
-            this.$('#sidebar-' + this.selected).show();
+            $('.navbar-sidebar-toggle').addClass('active');
+            this.sidebar.addClass('expanded');
+            this.sidebar.show('slide', {direction: 'left'}, this.speed);
             return this;
         },
         /**
