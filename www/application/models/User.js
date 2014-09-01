@@ -71,8 +71,7 @@ define([
                 if (error) {
                     callback(error);
                 } else {
-                    callback('created user', self.id);
-                    //callback();
+                    callback();
                 }
             });
         },

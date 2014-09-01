@@ -1,8 +1,10 @@
 module.exports = function(grunt) {
+    require('./www/config.js');
 
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-csslint');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
@@ -18,6 +20,10 @@ module.exports = function(grunt) {
         clean: {
             'build-docs': {
                 src: ['build/docs'],
+                options: {force: true}
+            },
+            'build-web': {
+                src: ['build/web'],
                 options: {force: true}
             },
             'nodemodules': {
@@ -49,6 +55,42 @@ module.exports = function(grunt) {
             }
         },
         /**
+         * HTMLMIN
+         */
+        htmlmin: {
+            'build-web': {
+                options: {
+                    collapseWhitespace: true,
+                    removeComments: true
+                },
+                expand: true,
+                cwd: 'build/web/templates',
+                src: ['**/*.html'],
+                dest: 'build/web/templates'
+            }
+        },
+        /**
+         * REQUIREJS
+         */
+        requirejs: {
+            'build-web': {
+                options: {
+                    baseUrl: 'www',
+                    dir: 'build/web',
+                    fileExclusionRegExp: undefined,
+                    generateSourceMaps: false,
+                    keepBuildDir: false,
+                    modules: app.configs.modules,
+                    optimize: 'uglify',
+                    optimizeCss: 'standard',
+                    paths: app.configs.paths,
+                    preserveLicenseComments: false,
+                    removeCombined: true,
+                    shim: app.configs.shim
+                }
+            }
+        },
+        /**
          * YUIDOC
          */
         yuidoc: {
@@ -71,7 +113,8 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('clean-build', [
-        'clean:build-docs'
+        'clean:build-docs',
+        'clean:build-web'
     ]);
 
     grunt.registerTask('clean-dev', [
@@ -81,6 +124,12 @@ module.exports = function(grunt) {
     grunt.registerTask('build-docs', [
         'clean:build-docs',
         'yuidoc:default'
+    ]);
+
+    grunt.registerTask('build-web', [
+        'clean:build-web',
+        'requirejs:build-web',
+        'htmlmin:build-web'
     ]);
 
     grunt.registerTask('validate', [

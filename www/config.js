@@ -1,6 +1,15 @@
 app = (function() {
     return {
         configs: {
+            modules: [
+                {
+                    name: "application/Application",
+                    exclude: ["require.i18n", "require.text"]
+                },
+                {
+                    name: "application/Libraries"
+                }
+            ],
             paths: {
                 //directories
                 collections: 'application/collections',
