@@ -10,6 +10,7 @@ define([
     'jquery.mobile',
     'jquery.ui',
     'modernizr',
+    'raygun',
     'require.i18n',
     'require.text'
 ], function(Async, FastClick, Moment) {
