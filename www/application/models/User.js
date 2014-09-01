@@ -3,10 +3,11 @@
  */
 define([
     'framework/BaseModel',
+    'collections/schedule/ScheduleItems',
     'models/user/UserData',
     'models/user/UserSettings',
     'models/user/UserSubscription'
-], function(BaseModel, UserData, UserSettings, UserSubscription) {
+], function(BaseModel, ScheduleItems, UserData, UserSettings, UserSubscription) {
     /**
      * @class User
      * @extends BaseModel
@@ -18,6 +19,7 @@ define([
          */
         initialize: function() {
             this.data = new UserData(this);
+            this.schedule = new ScheduleItems();
             this.settings = new UserSettings(this);
             this.subscription = new UserSubscription(this);
             this.load();

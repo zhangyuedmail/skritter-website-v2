@@ -34,7 +34,7 @@ module.exports = function(grunt) {
                     csslintrc: '.csslintrc',
                     import: 2
                 },
-                src: ['www/styles/skritter.css']
+                src: ['www/styles/style.css']
             }
         },
         /**

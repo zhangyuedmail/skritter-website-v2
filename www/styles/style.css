@@ -44,7 +44,7 @@ body { padding-top: 45px; }
     color: #ffffff;
     height: 45px;
     min-width: 100px;
-    padding: 0 10px 0 0;
+    margin: 0 10px 0 -15px;
 }
 .navbar-sidebar-toggle:focus {
     border: none;
@@ -52,14 +52,14 @@ body { padding-top: 45px; }
 }
 .navbar-sidebar-toggle .toggle-bars {
     font-size: 24px;
-    margin-left: -10px;
+    margin-left: 5px;
 }
 .navbar-sidebar-toggle .toggle-text {
     float: right;
     font-size: 16px;
     margin-left: 20px;
 }
-.navbar-sidebar-toggle.active .toggle-bars { margin-left: -15px; }
+.navbar-sidebar-toggle.active .toggle-bars { margin-left: -5px; }
 .navbar-sidebar-toggle.active .toggle-text { margin-left: 30px; }
 
 
