@@ -29,11 +29,11 @@ define([
          * @method showHome
          */
         showHome: function() {
-            if (!true) {
-                this.showLanding();
-            } else {
+            if (app.user.isAuthenticated()) {
                 this.currentPage = new PageHome();
                 this.currentPage.render();
+            } else {
+                this.showLanding();
             }
         },
         /**

@@ -11,16 +11,33 @@ define([
     var UserSubscription = BaseModel.extend({
         /**
          * @method initialize
+         * @param {User} user
          * @constructor
          */
-        initialize: function() {
+        initialize: function(user) {
+            this.user = user;
             this.on('change', this.cache);
         },
         /**
          * @method cache
          */
         cache: function() {
-            localStorage.setItem(app.user.id + '-subscription', JSON.stringify(this.toJSON()));
+            localStorage.setItem(this.user.id + '-subscription', JSON.stringify(this.toJSON()));
+        },
+        /**
+         * @method sync
+         * @param {Function} callback
+         */
+        sync: function(callback) {
+            var self = this;
+            app.api.getSubscription(this.user.id, function(data, status) {
+                if (status === 200) {
+                    self.set(data);
+                    callback();
+                } else {
+                    callback(data, status);
+                }
+            });
         }
     });
 

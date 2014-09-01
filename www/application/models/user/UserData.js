@@ -17,13 +17,15 @@ define([
     var UserData = BaseModel.extend({
         /**
          * @method initialize
+         * @param {User} user
          * @constructor
          */
-        initialize: function() {
+        initialize: function(user) {
             this.decomps = new DataDecomps();
             this.items = new DataItems();
             this.params = new DataParams();
             this.strokes = new DataStrokes();
+            this.user = user;
             this.vocabs = new DataVocabs();
             this.vocablists = new DataVocabLists();
             this.on('change', this.cache);
@@ -43,14 +45,13 @@ define([
             lastVocabSync: 0,
             refresh_token: undefined,
             token_type: undefined,
-            user_id: 'guest'
+            user_id: undefined
         },
         /**
          * @method cache
          */
         cache: function() {
-            app.api.set('token', this.get('access_token'));
-            localStorage.setItem(app.user.id + '-data', JSON.stringify(this.toJSON()));
+            localStorage.setItem(this.user.id + '-data', JSON.stringify(this.toJSON()));
         }
     });
 
