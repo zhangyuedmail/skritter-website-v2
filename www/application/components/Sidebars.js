@@ -52,12 +52,13 @@ define([
         },
         /**
          * @method hide
+         * @param {Number} [speed]
          * @returns {Sidebars}
          */
-        hide: function() {
+        hide: function(speed) {
             $('.navbar-sidebar-toggle').removeClass('active');
             this.sidebar.removeClass('expanded');
-            this.sidebar.hide('slide', {direction: 'left'}, this.speed);
+            this.sidebar.hide('slide', {direction: 'left'}, speed ? speed : this.speed);
             return this;
         },
         /**
@@ -85,12 +86,13 @@ define([
         },
         /**
          * @method show
+         * @param {Number} [speed]
          * @returns {Sidebars}
          */
-        show: function() {
+        show: function(speed) {
             $('.navbar-sidebar-toggle').addClass('active');
             this.sidebar.addClass('expanded');
-            this.sidebar.show('slide', {direction: 'left'}, this.speed);
+            this.sidebar.show('slide', {direction: 'left'}, speed ? speed : this.speed);
             return this;
         },
         /**
