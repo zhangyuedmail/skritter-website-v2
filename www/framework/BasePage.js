@@ -30,14 +30,14 @@ define([
         ),
         /**
          * @method disableForm
-         * @param {String} selector
+         * @param {String} [selector]
          */
         disableForm: function(selector) {
             this.$((selector ? selector + ' ': '') + ':input').prop('disabled', true);
         },
         /**
          * @method enableForm
-         * @param {String} selector
+         * @param {String} [selector]
          */
         enableForm: function(selector) {
             this.$((selector ? selector: ' ') + ':input').prop('disabled', false);

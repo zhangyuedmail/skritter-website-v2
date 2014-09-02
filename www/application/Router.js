@@ -19,6 +19,7 @@ define([
         routes: {
             '': 'showHome',
             'login': 'showLogin',
+            'logout': 'handleLogout',
             '*route': 'defaultRoute'
         },
         /**
@@ -26,6 +27,12 @@ define([
          */
         defaultRoute: function() {
             this.navigate('', {replace: true, trigger: true});
+        },
+        /**
+         * @method handleLogout
+         */
+        handleLogout: function() {
+            app.user.logout();
         },
         /**
          * @method showHome

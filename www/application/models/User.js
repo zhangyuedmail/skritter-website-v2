@@ -116,7 +116,7 @@ define([
             var self = this;
             app.api.authenticateUser(username, password, function(data, status) {
                 if (status === 200) {
-                    self.set("id", data.user_id);
+                    self.set('id', data.user_id);
                     self.data.set(data);
                     async.parallel([
                         function(callback) {
@@ -126,7 +126,7 @@ define([
                             self.subscription.sync(callback);
                         }
                     ], function() {
-                        localStorage.setItem("_active", data.user_id);
+                        localStorage.setItem('_active', data.user_id);
                         callback(data, status);
                     });
                 } else {
@@ -137,7 +137,16 @@ define([
         /**
          * @method logout
          */
-        logout: function() {}
+        logout: function() {
+            if (this.isAuthenticated()) {
+                localStorage.removeItem(this.id + '-data');
+                localStorage.removeItem(this.id + '-settings');
+                localStorage.removeItem(this.id + '-subscription');
+                localStorage.removeItem('_active');
+            }
+            app.router.navigate('');
+            location.reload(true);
+        }
     });
 
     return User;
