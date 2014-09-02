@@ -14,9 +14,8 @@ define([
          * @method initialize
          */
         initialize: function() {
-
+            this.title = app.strings.home.title;
         },
-        title: 'Home',
         /**
          * @method render
          * @returns {PageHome}

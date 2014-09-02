@@ -13,8 +13,9 @@ define([
         /**
          * @method initialize
          */
-        initialize: function() {},
-        title: 'Landing',
+        initialize: function() {
+            this.title = app.strings.landing.title;
+        },
         /**
          * @method render
          * @returns {PageLanding}

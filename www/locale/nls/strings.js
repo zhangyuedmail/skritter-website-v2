@@ -3,10 +3,20 @@ define([], {
         application: {
             'name': 'Skritter'
         },
+        home: {
+            'title': 'Home'
+        },
         landing: {
             'existing-user': 'Existing User',
             'new-user': 'New User',
-            'tagline': 'Learn to write Chinese and Japanese characters.'
+            'tagline': 'Learn to write Chinese and Japanese characters.',
+            'title': 'Landing'
+        },
+        login: {
+            'new-user': 'New User',
+            'password': 'Password',
+            'title': 'Log In',
+            'username': 'Username'
         },
         sidebar: {
             'account': 'Account',

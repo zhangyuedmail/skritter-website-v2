@@ -56,7 +56,7 @@ define([
          * @returns {Sidebars}
          */
         hide: function(speed) {
-            $('.navbar-sidebar-toggle').removeClass('active');
+            $('.navbar-menu.toggle').removeClass('active');
             this.sidebar.removeClass('expanded');
             this.sidebar.hide('slide', {direction: 'left'}, speed ? speed : this.speed);
             return this;
@@ -90,7 +90,7 @@ define([
          * @returns {Sidebars}
          */
         show: function(speed) {
-            $('.navbar-sidebar-toggle').addClass('active');
+            $('.navbar-menu.toggle').addClass('active');
             this.sidebar.addClass('expanded');
             this.sidebar.show('slide', {direction: 'left'}, speed ? speed : this.speed);
             return this;

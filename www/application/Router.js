@@ -4,8 +4,9 @@
 define([
     'framework/BaseRouter',
     'pages/Home',
-    'pages/Landing'
-], function(BaseRouter, PageHome, PageLanding) {
+    'pages/Landing',
+    'pages/Login'
+], function(BaseRouter, PageHome, PageLanding, PageLogin) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -17,6 +18,7 @@ define([
          */
         routes: {
             '': 'showHome',
+            'login': 'showLogin',
             '*route': 'defaultRoute'
         },
         /**
@@ -41,6 +43,13 @@ define([
          */
         showLanding: function() {
             this.currentPage = new PageLanding();
+            this.currentPage.render();
+        },
+        /**
+         * @method showLogin
+         */
+        showLogin: function() {
+            this.currentPage = new PageLogin();
             this.currentPage.render();
         }
     });

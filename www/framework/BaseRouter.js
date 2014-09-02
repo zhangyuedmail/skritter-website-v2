@@ -25,9 +25,18 @@ define([], function() {
             }
         },
         /**
+         * @method back
+         */
+        back: function() {
+            history.back();
+        },
+        /**
          * @method before
          */
         before: function() {
+            if (app.sidebars && app.sidebars.isExpanded()) {
+                app.sidebars.hide();
+            }
             if (this.currentPage) {
                 this.currentPage.remove();
             }

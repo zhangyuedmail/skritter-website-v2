@@ -23,12 +23,11 @@ define([
          * @method events
          * @returns {Object}
          */
-        events: function(){
-            return _.extend({}, BaseView.prototype.events, {
-                'vclick .navbar-sidebar-toggle': 'handleSidebarToggleClicked',
+        events: _.extend({}, BaseView.prototype.events, {
+                'vclick .navbar-menu.toggle': 'handleSidebarToggleClicked',
                 'vclick .navbar-item': 'handleNavbarItemClicked'
-            });
-        },
+            }
+        ),
         /**
          * @method disableForm
          * @param {String} selector
@@ -44,18 +43,10 @@ define([
             this.$((selector ? selector: ' ') + ':input').prop('disabled', false);
         },
         /**
-         * @method handleNavbarItemClicked
-         * @param {Event} event
-         */
-        handleNavbarItemClicked: function(event) {
-            event.preventDefault();
-        },
-        /**
          * @method handleSidebarToggleClicked
          * @param {Event} event
          */
         handleSidebarToggleClicked: function(event) {
-            event.preventDefault();
             if (app.sidebars) {
                 app.sidebars.toggle();
             } else {

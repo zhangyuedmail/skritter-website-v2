@@ -17,7 +17,7 @@ define([], function() {
          * @type Object
          */
         events: {
-            'click .navigate': 'handleNavigateClicked'
+            'vclick .navigate': 'handleNavigateClicked'
         },
         /**
          * @method compile
@@ -33,7 +33,7 @@ define([], function() {
          */
         handleNavigateClicked: function(event) {
             event.preventDefault();
-            var url = $(event.currentTarget).data('url');
+            var url = $(event.currentTarget).data('url').replace('#', '');
             var replace = $(event.currentTarget).data('replace');
             var trigger = $(event.currentTarget).data('trigger');
             app.router.navigate(url, {
