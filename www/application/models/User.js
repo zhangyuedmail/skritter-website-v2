@@ -136,16 +136,29 @@ define([
         },
         /**
          * @method logout
+         * @param {Boolean} [skipDialog]
          */
-        logout: function() {
+        logout: function(skipDialog) {
             if (this.isAuthenticated()) {
-                localStorage.removeItem(this.id + '-data');
-                localStorage.removeItem(this.id + '-settings');
-                localStorage.removeItem(this.id + '-subscription');
-                localStorage.removeItem('_active');
+                if (skipDialog) {
+                    this.remove();
+                } else {
+                    app.dialogs.show('logout');
+                    app.dialogs.element('button.logout').on('vclick', this.remove);
+                }
+            } else {
+                app.reload();
             }
-            app.router.navigate('');
-            location.reload(true);
+        },
+        /**
+         * @method remove
+         */
+        remove: function() {
+            localStorage.removeItem(this.id + '-data');
+            localStorage.removeItem(this.id + '-settings');
+            localStorage.removeItem(this.id + '-subscription');
+            localStorage.removeItem('_active');
+            app.reload();
         }
     });
 

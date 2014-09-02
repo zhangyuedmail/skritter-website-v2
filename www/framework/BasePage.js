@@ -31,16 +31,20 @@ define([
         /**
          * @method disableForm
          * @param {String} [selector]
+         * @returns {BasePage}
          */
         disableForm: function(selector) {
             this.$((selector ? selector + ' ': '') + ':input').prop('disabled', true);
+            return this;
         },
         /**
          * @method enableForm
          * @param {String} [selector]
+         * @returns {BasePage}
          */
         enableForm: function(selector) {
             this.$((selector ? selector: ' ') + ':input').prop('disabled', false);
+            return this;
         },
         /**
          * @method handleSidebarToggleClicked

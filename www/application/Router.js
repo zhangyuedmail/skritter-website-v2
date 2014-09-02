@@ -3,10 +3,10 @@
  */
 define([
     'framework/BaseRouter',
-    'pages/Home',
+    'pages/Dashboard',
     'pages/Landing',
     'pages/Login'
-], function(BaseRouter, PageHome, PageLanding, PageLogin) {
+], function(BaseRouter, PageDashboard, PageLanding, PageLogin) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -32,15 +32,21 @@ define([
          * @method handleLogout
          */
         handleLogout: function() {
-            app.user.logout();
+            app.user.logout(true);
+        },
+        /**
+         * @method showDashboard
+         */
+        showDashboard: function() {
+            this.currentPage = new PageDashboard();
+            this.currentPage.render();
         },
         /**
          * @method showHome
          */
         showHome: function() {
             if (app.user.isAuthenticated()) {
-                this.currentPage = new PageHome();
-                this.currentPage.render();
+                this.showDashboard();
             } else {
                 this.showLanding();
             }

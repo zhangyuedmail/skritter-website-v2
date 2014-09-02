@@ -3,8 +3,8 @@ define([], {
         application: {
             'name': 'Skritter'
         },
-        home: {
-            'title': 'Home'
+        dashboard: {
+            'title': 'Dashboard'
         },
         landing: {
             'existing-user': 'Existing User',

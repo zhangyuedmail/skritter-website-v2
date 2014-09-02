@@ -3,10 +3,10 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/home.html'
+    'require.text!templates/desktop/dashboard.html'
 ], function(BasePage, TemplateDesktop) {
     /**
-     * @class PageHome
+     * @class PageDashboard
      * @extends BasePage
      */
     var PageHome = BasePage.extend({
@@ -14,11 +14,11 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.title = app.strings.home.title;
+            this.title = app.strings.dashboard.title;
         },
         /**
          * @method render
-         * @returns {PageHome}
+         * @returns {PageDashboard}
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));

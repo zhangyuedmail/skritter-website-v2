@@ -45,15 +45,14 @@ define([
             var self = this;
             var password = this.elements.loginPassword.val();
             var username = this.elements.loginUsername.val();
-            this.disableForm();
-            this.elements.message.empty();
+            app.dialogs.show().element('.message-title').text('Logging In');
+            this.disableForm().elements.message.empty();
             app.user.login(username, password, function(data, status) {
                 if (status === 200) {
-                    app.router.navigate('');
-                    location.reload(true);
+                    app.reload();
                 } else {
-                    self.elements.message.text(data.responseJSON.message);
-                    self.enableForm();
+                    self.enableForm().message.text(data.responseJSON.message);
+                    app.dialog.hide();
                 }
             });
         },

@@ -17,6 +17,8 @@ define([], function() {
          * @type Object
          */
         events: {
+            'vclick .action-back': 'handleActionBackClicked',
+            'vclick .action-logout': 'handleActionLogoutClicked',
             'vclick .navigate': 'handleNavigateClicked'
         },
         /**
@@ -26,6 +28,35 @@ define([], function() {
          */
         compile: function(template) {
             return Handlebars.compile(template)(app.strings);
+        },
+        /**
+         * @method destroy
+         */
+        destroy: function() {
+            var keys = _.keys(this);
+            for (var key in keys) {
+                this[keys[key]] = undefined;
+            }
+        },
+        /**
+         * @method handleActionBackClicked
+         * @param {Event} event
+         */
+        handleActionBackClicked: function(event) {
+            event.preventDefault();
+            if (app.router) {
+                app.router.back();
+            } else {
+                location.back();
+            }
+        },
+        /**
+         * @method handleActionLogoutClicked
+         * @param {Event} event
+         */
+        handleActionLogoutClicked: function(event) {
+            event.preventDefault();
+            app.user.logout();
         },
         /**
          * @method handleNavigateClicked
@@ -49,6 +80,7 @@ define([], function() {
             this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
+            this.destroy();
             return this;
         }
     });
