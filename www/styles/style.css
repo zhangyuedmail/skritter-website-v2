@@ -86,6 +86,13 @@ body { padding-top: 45px; }
 }
 
 
+/*** PAGES: LOGIN ***/
+.page-login .login-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+
 /*** SIDEBARS ***/
 .sidebars-container a { color: #000000; }
 .sidebars-container hr {
