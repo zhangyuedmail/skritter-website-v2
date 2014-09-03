@@ -8,6 +8,7 @@ body { padding-top: 45px; }
 
 
 /*** NAVBAR ***/
+.navbar, .navbar-header { height: 45px; }
 .navbar-icon {
     color: #ffffff;
     font-size: 28px;
@@ -46,10 +47,15 @@ body { padding-top: 45px; }
     min-width: 100px;
     margin: 0 10px 0 -15px;
 }
+.navbar-menu:focus {
+    border: none;
+    outline: none;
+}
 
 
 /*** NAVBAR: MENU BACK ***/
 .navbar-menu .back-icon {
+    float: left;
     font-size: 24px;
     margin-left: 15px;
 }
@@ -58,14 +64,11 @@ body { padding-top: 45px; }
     font-size: 16px;
     margin-left: 10px;
 }
-.navbar-menu:focus {
-    border: none;
-    outline: none;
-}
 
 
 /*** NAVBAR: MENU SIDEBAR ***/
 .navbar-menu .toggle-bars {
+    float: left;
     font-size: 24px;
     margin-left: 5px;
 }

@@ -9,8 +9,9 @@ define([
     'components/Sidebars',
     'models/Api',
     'models/Assets',
-    'models/User'
-], function(BaseApplication, Strings, Router, Dialogs, Sidebars, Api, Assets, User) {
+    'models/User',
+    'storage/IndexedDBAdapter'
+], function(BaseApplication, Strings, Router, Dialogs, Sidebars, Api, Assets, User, IndexedDBAdapter) {
     /**
      * @class Application
      * @extends BaseApplication
@@ -23,6 +24,7 @@ define([
             this.api = new Api();
             this.assets = new Assets();
             this.router = new Router();
+            this.storage = new IndexedDBAdapter();
             this.strings = Strings;
         },
         /**
