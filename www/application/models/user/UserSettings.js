@@ -14,8 +14,8 @@ define([
          * @param {User} user
          * @constructor
          */
-        initialize: function(user) {
-            this.user = user;
+        initialize: function(attributes, options) {
+            this.user = options.user;
             this.on('change', this.cache);
         },
         /**

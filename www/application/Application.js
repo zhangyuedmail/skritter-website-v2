@@ -4,6 +4,7 @@
 define([
     'framework/BaseApplication',
     'require.i18n!locale/nls/strings',
+    'application/Functions',
     'application/Router',
     'components/Dialogs',
     'components/Sidebars',
@@ -11,7 +12,7 @@ define([
     'models/Assets',
     'models/User',
     'storage/IndexedDBAdapter'
-], function(BaseApplication, Strings, Router, Dialogs, Sidebars, Api, Assets, User, IndexedDBAdapter) {
+], function(BaseApplication, Strings, Functions, Router, Dialogs, Sidebars, Api, Assets, User, IndexedDBAdapter) {
     /**
      * @class Application
      * @extends BaseApplication
@@ -23,6 +24,7 @@ define([
         initialize: function() {
             this.api = new Api();
             this.assets = new Assets();
+            this.fn = Functions;
             this.router = new Router();
             this.storage = new IndexedDBAdapter();
             this.strings = Strings;
@@ -34,7 +36,9 @@ define([
             this.dialogs = new Dialogs();
             this.sidebars = new Sidebars();
             this.user = new User();
-            Backbone.history.start();
+            this.user.load(function() {
+                Backbone.history.start({pushState: true, root: app.isLocalhost() ? '/skritter-html5/www/' : '/'});
+            });
         }
     });
 

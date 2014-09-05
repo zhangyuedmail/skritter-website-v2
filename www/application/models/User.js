@@ -18,11 +18,10 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.data = new UserData(this);
+            this.data = new UserData(null, {user: this});
             this.schedule = new ScheduleItems();
-            this.settings = new UserSettings(this);
-            this.subscription = new UserSubscription(this);
-            this.load();
+            this.settings = new UserSettings(null, {user: this});
+            this.subscription = new UserSubscription(null, {user: this});
         },
         /**
          * @property defaults
@@ -76,6 +75,12 @@ define([
             });
         },
         /**
+         * @method getLanguageCode
+         */
+        getLanguageCode: function() {
+            return 'zh';
+        },
+        /**
          * @method isAuthenticated
          * @returns {Boolean}
          */
@@ -91,19 +96,23 @@ define([
         },
         /**
          * @method load
+         * @param {Function} callback
          */
-        load: function() {
+        load: function(callback) {
             if (localStorage.getItem('_active')) {
                 this.set('id', localStorage.getItem('_active'));
                 if (localStorage.getItem(this.id + '-data')) {
-                    this.data.set(JSON.parse(localStorage.getItem(this.id + '-data')));
+                    this.data.set(JSON.parse(localStorage.getItem(this.id + '-data')), {silent: true});
                 }
                 if (localStorage.getItem(this.id + '-settings')) {
-                    this.settings.set(JSON.parse(localStorage.getItem(this.id + '-settings')));
+                    this.settings.set(JSON.parse(localStorage.getItem(this.id + '-settings')), {silent: true});
                 }
                 if (localStorage.getItem(this.id + '-subscription')) {
-                    this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')));
+                    this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')), {silent: true});
                 }
+                app.storage.open(this.id, callback);
+            } else {
+                callback();
             }
         },
         /**
@@ -158,7 +167,13 @@ define([
             localStorage.removeItem(this.id + '-settings');
             localStorage.removeItem(this.id + '-subscription');
             localStorage.removeItem('_active');
-            app.reload();
+            async.series([
+                function(callback) {
+                    app.storage.destroy(callback);
+                }
+            ], function() {
+                app.reload();
+            });
         }
     });
 

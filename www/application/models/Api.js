@@ -79,6 +79,45 @@ define([
             xhr.setRequestHeader('Authorization', this.getCredentials());
         },
         /**
+         * @method getBatch
+         * @param {String} batchId
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         * @param {Function} [callbackResult]
+         */
+        checkBatch: function(batchId, callbackComplete, callbackError, callbackResult) {
+            var self = this;
+            (function wait() {
+                $.ajax({
+                    url: self.getBaseUrl() + 'batch/' + batchId + '/status',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        detailed: true
+                    }
+                }).done(function(data) {
+                    if (data.Batch && data.statusCode === 200) {
+                        data.Batch.responseSize = app.fn.addAllObjectAttributes(data.Batch.Requests, 'responseSize');
+                        if (data.Batch.runningRequests > 0) {
+                            callbackResult(data.Batch);
+                            setTimeout(wait, 5000);
+                        } else {
+                            if (typeof callbackResult === 'function') {
+                                callbackResult(data.Batch);
+                            }
+                            callbackComplete(_.pluck(data.Batch.Requests, 'id'));
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+        /**
          * @method createUser
          * @param {String} token
          * @param {Function} callback
@@ -110,6 +149,72 @@ define([
             return this.get('root') + this.get('tld') + '/api/v' + this.get('version') + '/';
         },
         /**
+         * @method getBatch
+         * @param {String} batchId
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         * @param {Function} callbackResult
+         */
+        getBatch: function(batchId, callbackComplete, callbackError, callbackResult) {
+            var self = this;
+            var downloadedRequests = 0;
+            async.waterfall([
+                function(callback) {
+                    self.checkBatch(batchId, function(requestIds) {
+                        callback(null, requestIds);
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(requestIds, callback) {
+                    (function download() {
+                        $.ajax({
+                            url: self.getBaseUrl() + 'batch/' + batchId,
+                            beforeSend: self.beforeSend,
+                            context: self,
+                            type: 'GET',
+                            data: {
+                                bearer_token: self.getToken(),
+                                request_ids: requestIds.splice(0, 49).join(',')
+                            }
+                        }).done(function(data) {
+                            var result = {};
+                            result.responseSize = 0;
+                            if (data.statusCode === 200) {
+                                for (var i = 0, length = data.Batch.Requests.length; i < length; i++) {
+                                    if (typeof data.Batch.Requests[i].response === 'object') {
+                                        result = app.fn.mergeObjectArrays(result, data.Batch.Requests[i].response);
+                                        result.responseSize += data.Batch.Requests[i].responseSize;
+                                    }
+                                    downloadedRequests++;
+                                }
+                                delete result.cursor;
+                                delete result.statusCode;
+                                result.downloadedRequests = downloadedRequests;
+                                result.totalRequests = data.Batch.totalRequests;
+                                callbackResult(result);
+                                if (requestIds.length > 0) {
+                                    setTimeout(download, 500);
+                                } else {
+                                    callback();
+                                }
+                            } else {
+                                callback(data);
+                            }
+                        }).fail(function(error) {
+                            callback(error);
+                        });
+                    })();
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackComplete();
+                }
+            });
+        },
+        /**
          * @method getCredentials
          * @returns {String}
          */
@@ -125,10 +230,10 @@ define([
         getSubscription: function(userId, callback, options) {
             options = options ? options : {};
             $.ajax({
-                url: this.getBaseUrl() + "subscriptions/" + userId,
+                url: this.getBaseUrl() + 'subscriptions/' + userId,
                 beforeSend: this.beforeSend,
                 context: this,
-                type: "GET",
+                type: 'GET',
                 data: {
                     bearer_token: this.getToken(),
                     fields: options.fields
@@ -152,24 +257,25 @@ define([
          * @param {Object} [options]
          */
         getUsers: function(userIds, callback, options) {
+            var self = this;
             var users = [];
             options = options ? option : {};
             userIds = Array.isArray(userIds) ? userIds : [userIds];
             (function next() {
                 $.ajax({
-                    url: this.getBaseUrl() + 'users',
-                    beforeSend: this.beforeSend,
-                    context: this,
+                    url: self.getBaseUrl() + 'users',
+                    beforeSend: self.beforeSend,
+                    context: self,
                     type: 'GET',
                     data: {
-                        bearer_token: this.getToken(),
+                        bearer_token: self.getToken(),
                         ids: userIds.splice(0, 9).join(','),
                         fields: options.fields
                     }
                 }).done(function(data) {
                     users = users.concat(data.Users);
                     if (userIds.length > 0) {
-                        next.call(this);
+                        setTimeout(next, 500);
                     } else {
                         if (users.length === 1) {
                             callback(users[0], data.statusCode);
@@ -180,7 +286,30 @@ define([
                 }).fail(function(error) {
                     callback(error, error.status);
                 });
-            }).call(this);
+            })();
+        },
+        /**
+         * @method requestBatch
+         * @param {Array|Object} requests
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        requestBatch: function(requests, callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl() + 'batch?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'POST',
+                data: JSON.stringify(Array.isArray(requests) ? requests : [requests])
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.Batch);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         }
     });
 

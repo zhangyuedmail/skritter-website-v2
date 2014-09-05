@@ -48,17 +48,21 @@ define([
          */
         destroy: function(callback) {
             var self = this;
-            if (this.database) {
-                this.database.close();
-                var request = indexedDB.deleteDatabase(this.get('databaseName'));
-                request.onsuccess = function() {
-                    self.database = undefined;
-                    self.databaseName = undefined;
-                    setTimeout(callback, 1000);
-                };
-                request.onerror = function(error) {
-                    callback(error);
-                };
+            if (this.isLoaded()) {
+                try {
+                    this.database.close();
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    var request = indexedDB.deleteDatabase(this.get('databaseName'));
+                    request.onsuccess = function() {
+                        self.database = undefined;
+                        setTimeout(callback, 500);
+                    };
+                    request.onerror = function(error) {
+                        callback(error);
+                    };
+                }
             } else {
                 callback();
             }
@@ -117,6 +121,13 @@ define([
                     cursor.continue();
                 }
             };
+        },
+        /**
+         * @method isLoaded
+         * @returns {Boolean}
+         */
+        isLoaded: function() {
+            return this.get('database') ? true : false;
         },
         /**
          * @method open
@@ -193,6 +204,23 @@ define([
             } else {
                 callback();
             }
+        },
+        /**
+         * @method clearAll
+         * @param {Function} callback
+         */
+        reset: function(callback) {
+            var self = this;
+            async.series([
+                function(callback) {
+                    self.destroy(callback);
+                },
+                function(callback) {
+                    self.open(self.get('databaseName'), callback);
+                }
+            ], function() {
+                callback();
+            });
         }
     });
 
