@@ -64,7 +64,7 @@ define([], function() {
          */
         handleNavigateClicked: function(event) {
             event.preventDefault();
-            var url = $(event.currentTarget).data('url').replace('#', '');
+            var url = $(event.currentTarget).data('url').replace('#', app.isLocalhost() ? '/#' : '');
             var replace = $(event.currentTarget).data('replace');
             var trigger = $(event.currentTarget).data('trigger');
             app.router.navigate(url, {
