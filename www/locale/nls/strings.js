@@ -26,6 +26,9 @@ define([], {
             'queue': 'Queue',
             'settings': 'Settings',
             'study': 'Study'
+        },
+        tests: {
+            'title': 'Tests'
         }
     },
     ja: true,

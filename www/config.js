@@ -26,6 +26,9 @@ app = (function() {
                 'createjs.easel': 'libraries/createjs.easel-NEXT.min',
                 'createjs.tween': 'libraries/createjs.tween-NEXT.min',
                 fastclick: 'libraries/fastclick-1.0.3.min',
+                jasmine: 'libraries/jasmine-2.0.3',
+                'jasmine.boot': 'libraries/jasmine.boot-2.0.3',
+                'jasmine.html': 'libraries/jasmine.html-2.0.3',
                 jquery: 'libraries/jquery-1.11.1.min',
                 'jquery.ui': 'libraries/jquery.ui-1.11.1.min',
                 'jquery.mobile': 'libraries/jquery.mobile-1.4.3.min',
@@ -43,6 +46,8 @@ app = (function() {
                 'backbone.routefilter': ['backbone'],
                 bootstrap: ['jquery'],
                 'bootstrap.switch': ['bootstrap'],
+                'jasmine.html': ['jasmine'],
+                'jasmine.boot': ['jasmine.html'],
                 'jquery.ui': ['jquery'],
                 'jquery.mobile': ['jquery'],
                 'moment.timezone': ['moment']

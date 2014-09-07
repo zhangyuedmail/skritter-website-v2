@@ -25,7 +25,7 @@ define([
             this.items = new DataItems();
             this.params = new DataParams();
             this.strokes = new DataStrokes();
-            this.user = options.user;;
+            this.user = options.user;
             this.vocabs = new DataVocabs();
             this.vocablists = new DataVocabLists();
             this.on('change', this.cache);

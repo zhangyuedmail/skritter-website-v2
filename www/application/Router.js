@@ -5,8 +5,9 @@ define([
     'framework/BaseRouter',
     'pages/Dashboard',
     'pages/Landing',
-    'pages/Login'
-], function(BaseRouter, PageDashboard, PageLanding, PageLogin) {
+    'pages/Login',
+    'pages/Tests'
+], function(BaseRouter, PageDashboard, PageLanding, PageLogin, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -20,13 +21,14 @@ define([
             '': 'showHome',
             'login': 'showLogin',
             'logout': 'handleLogout',
+            'tests': 'showTests',
             '*route': 'defaultRoute'
         },
         /**
          * @method defaultRoute
          */
         defaultRoute: function() {
-            this.navigate('', {replace: true, trigger: true});
+            this.navigate(app.isLocalhost() ? '/#' : '', {replace: true, trigger: true});
         },
         /**
          * @method handleLogout
@@ -63,6 +65,13 @@ define([
          */
         showLogin: function() {
             this.currentPage = new PageLogin();
+            this.currentPage.render();
+        },
+        /**
+         * @method showTests
+         */
+        showTests: function() {
+            this.currentPage = new PageTests();
             this.currentPage.render();
         }
     });
