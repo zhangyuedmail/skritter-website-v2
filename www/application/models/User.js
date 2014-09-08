@@ -29,7 +29,7 @@ define([
          */
         defaults: {
             id: 'guest',
-            lang: '@@language'
+            languageCode: '@@languageCode'
         },
         /**
          * @method createNew
@@ -75,10 +75,24 @@ define([
             });
         },
         /**
+         * @method getAvatar
+         * @param {Array|String} classes
+         * @returns {String}
+         */
+        getAvatar: function(classes) {
+            var avatar = this.settings.get('avatar') ? 'data:image/png;base64,' + this.settings.get('avatar') : 'images/avatars/default.png';
+            if (classes) {
+                classes = Array.isArray(classes) ? classes.join(' ') : classes;
+                return "<img src='" + avatar + "' " + "class='" + classes + "'" + " />";
+            } else {
+                return "<img src='" + avatar + "' />";
+            }
+        },
+        /**
          * @method getLanguageCode
          */
         getLanguageCode: function() {
-            return 'zh';
+            return this.get('languageCode') === '@@languageCode' ? this.settings.get('targetLang') : this.get('languageCode');
         },
         /**
          * @method isAuthenticated
@@ -88,6 +102,13 @@ define([
             return this.id !== 'guest';
         },
         /**
+         * @method isChinese
+         * @returns {Boolean}
+         */
+        isChinese: function() {
+            return this.getLanguageCode() === 'zh' ? true : false;
+        },
+        /**
          * @method isGuest
          * @returns {Boolean}
          */
@@ -95,10 +116,18 @@ define([
             return this.id === 'guest';
         },
         /**
+         * @method isJapanese
+         * @returns {Boolean}
+         */
+        isJapanese: function() {
+            return this.getLanguageCode() === 'ja' ? true : false;
+        },
+        /**
          * @method load
          * @param {Function} callback
          */
         load: function(callback) {
+            var self = this;
             if (localStorage.getItem('_active')) {
                 this.set('id', localStorage.getItem('_active'));
                 if (localStorage.getItem(this.id + '-data')) {
@@ -110,7 +139,23 @@ define([
                 if (localStorage.getItem(this.id + '-subscription')) {
                     this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')), {silent: true});
                 }
-                app.storage.open(this.id, callback);
+                async.series([
+                    function(callback) {
+                        app.storage.open(self.id, callback);
+                    },
+                    function(callback) {
+                        if (self.data.get('lastItemSync')) {
+                            callback();
+                        } else {
+                            self.data.downloadAll(callback);
+                        }
+                    },
+                    function(callback) {
+                        self.schedule.loadAll(callback);
+                    }
+                ], function() {
+                    callback();
+                });
             } else {
                 callback();
             }
