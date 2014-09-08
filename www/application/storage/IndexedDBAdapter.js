@@ -43,26 +43,31 @@ define([
             }
         },
         /**
+         * @method clearAll
+         * @param {Function} callback
+         */
+        clearAll: function(callback) {
+            var tables = [];
+            for (var i = 0, length = this.get('database').objectStoreNames.length; i < length; i++) {
+                tables.push(this.get('database').objectStoreNames[i]);
+            }
+            this.clear(tables, callback);
+        },
+        /**
          * @method destroy
          * @param {Function} callback
          */
         destroy: function(callback) {
-            var self = this;
             if (this.isLoaded()) {
-                try {
-                    this.database.close();
-                } catch (error) {
-                    console.log(error);
-                } finally {
-                    var request = indexedDB.deleteDatabase(this.get('databaseName'));
-                    request.onsuccess = function() {
-                        self.database = undefined;
-                        setTimeout(callback, 500);
-                    };
-                    request.onerror = function(error) {
-                        callback(error);
-                    };
-                }
+                this.get('database').close();
+                var request = indexedDB.deleteDatabase(this.get('databaseName'));
+                request.onsuccess = function() {
+                    self.set({database: undefined, databaseName: undefined});
+                    callback();
+                };
+                request.onerror = function(error) {
+                    callback(error);
+                };
             } else {
                 callback();
             }
@@ -76,13 +81,13 @@ define([
             var data = [];
             if (table) {
                 var transaction = this.get('database').transaction(table, 'readonly');
-                transaction.oncomplete = function() {
+                transaction.oncomplete = function () {
                     callback(data);
                 };
-                transaction.onerror = function(error) {
+                transaction.onerror = function (error) {
                     callback(undefined, error);
                 };
-                transaction.objectStore(table).openCursor().onsuccess = function(event) {
+                transaction.objectStore(table).openCursor().onsuccess = function (event) {
                     var cursor = event.target.result;
                     if (cursor) {
                         data.push(cursor.value);
@@ -91,6 +96,37 @@ define([
                 };
             } else {
                 callback(data);
+            }
+        },
+        /**
+         * @method getItem
+         * @param {String} table
+         * @param {Array|String} ids
+         * @param {Function} callback
+         */
+        getItems: function(table, ids, callback) {
+            var items = [];
+            if (table && ids) {
+                ids = Array.isArray(ids) ? ids : [ids];
+                var transaction = this.get('database').transaction(table, 'readonly');
+                var objectStore = transaction.objectStore(table);
+                var push = function(event) {
+                    if (event.target.result) {
+                        items.push(event.target.result);
+                    }
+                };
+                transaction.oncomplete = function() {
+                    callback(items);
+                };
+                transaction.onerror = function(event) {
+                    console.error(event);
+                };
+                for (var i = 0, length = ids.length; i < length; i++) {
+                    var request = objectStore.get(ids[i]);
+                    request.onsuccess = push;
+                }
+            } else {
+                callback(items);
             }
         },
         /**
@@ -158,12 +194,12 @@ define([
             };
         },
         /**
-         * @method put
+         * @method putItems
          * @param {String} table
          * @param {Array|Object} items
          * @param {Function} callback
          */
-        put: function(table, items, callback) {
+        putItems: function(table, items, callback) {
             if (table && items) {
                 var transaction = this.get('database').transaction(table, 'readwrite');
                 var objectStore = transaction.objectStore(table);
@@ -182,12 +218,12 @@ define([
             }
         },
         /**
-         * @method remove
+         * @method removeItems
          * @param {String} table
          * @param {Array|String} ids
          * @param {Function} callback
          */
-        remove: function(table, ids, callback) {
+        removeItems: function(table, ids, callback) {
             if (table && ids) {
                 ids = Array.isArray(ids) ? ids : [ids];
                 var transaction = this.get('database').transaction(table, 'readwrite');
@@ -204,23 +240,6 @@ define([
             } else {
                 callback();
             }
-        },
-        /**
-         * @method clearAll
-         * @param {Function} callback
-         */
-        reset: function(callback) {
-            var self = this;
-            async.series([
-                function(callback) {
-                    self.destroy(callback);
-                },
-                function(callback) {
-                    self.open(self.get('databaseName'), callback);
-                }
-            ], function() {
-                callback();
-            });
         }
     });
 
