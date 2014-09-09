@@ -289,6 +289,33 @@ define([
             })();
         },
         /**
+         * @method refreshToken
+         * @param {String} token
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        refreshToken: function(token, callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl() + 'oauth2/token',
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'POST',
+                data: {
+                    grant_type: 'refresh_token',
+                    client_id: this.get('clientId'),
+                    refresh_token: token
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method requestBatch
          * @param {Array|Object} requests
          * @param {Function} callbackComplete

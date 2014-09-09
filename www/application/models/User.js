@@ -140,9 +140,24 @@ define([
                     this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')), {silent: true});
                 }
                 async.series([
+                    //load user storage instance
                     function(callback) {
                         app.storage.open(self.id, callback);
                     },
+                    //check token expiration and refresh
+                    function(callback) {
+                        if (self.data.get('expires') - moment().unix() < 604800) {
+                            app.api.refreshToken(self.data.get('refresh_token'), function(data) {
+                                self.data.set(data);
+                                callback();
+                            }, function() {
+                                callback();
+                            });
+                        } else {
+                            callback();
+                        }
+                    },
+                    //perform initial item sync
                     function(callback) {
                         if (self.data.get('lastItemSync')) {
                             callback();
@@ -150,6 +165,7 @@ define([
                             self.data.downloadAll(callback);
                         }
                     },
+                    //load all schedule items
                     function(callback) {
                         self.schedule.loadAll(callback);
                     }

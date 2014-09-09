@@ -6,10 +6,11 @@ define([
     'collections/data/DataDecomps',
     'collections/data/DataItems',
     'collections/data/DataParams',
+    'collections/data/DataSentences',
     'collections/data/DataStrokes',
     'collections/data/DataVocabs',
     'collections/data/DataVocabLists'
-], function(BaseModel, DataDecomps, DataItems, DataParams, DataStrokes, DataVocabs, DataVocabLists) {
+], function(BaseModel, DataDecomps, DataItems, DataParams, DataSentences, DataStrokes, DataVocabs, DataVocabLists) {
     /**
      * @class UserData
      * @extends BaseModel
@@ -24,10 +25,12 @@ define([
             this.decomps = new DataDecomps();
             this.items = new DataItems();
             this.params = new DataParams();
+            this.sentences = new DataSentences();
             this.strokes = new DataStrokes();
             this.user = options.user;
             this.vocabs = new DataVocabs();
             this.vocablists = new DataVocabLists();
+            this.on('change:access_token', this.updateExpires);
             this.on('change', this.cache);
         },
         /**
@@ -37,6 +40,7 @@ define([
         defaults: {
             access_token: undefined,
             batchId: undefined,
+            expires: undefined,
             expires_in: undefined,
             lastErrorCheck: 0,
             lastItemSync: 0,
@@ -63,7 +67,7 @@ define([
             app.dialogs.show('download').element('.download-title').text('Requesting');
             async.series([
                 function(callback) {
-                    app.storage.reset(callback);
+                    app.storage.clearAll(callback);
                 },
                 function(callback) {
                     app.api.requestBatch([
@@ -128,9 +132,20 @@ define([
                         self.put(result);
                     });
                 }
-            ], function() {
+            ], function(error) {
                 app.dialogs.hide();
-                callback();
+                if (error) {
+                    callback(error);
+                } else {
+                    self.set({
+                        lastErrorCheck: now,
+                        lastItemSync: now,
+                        lastReviewSync: now,
+                        lastSRSConfigSync: now,
+                        lastVocabSync: now
+                    });
+                    callback();
+                }
             });
         },
         /**
@@ -141,31 +156,37 @@ define([
         put: function(result, callback) {
             async.series([
                 function(callback) {
-                    app.storage.put('decomps', result.Decomps, callback);
+                    app.storage.putItems('decomps', result.Decomps, callback);
                 },
                 function(callback) {
-                    app.storage.put('items', result.Items, callback);
+                    app.storage.putItems('items', result.Items, callback);
                 },
                 function(callback) {
-                    app.storage.put('sentences', result.Sentences, callback);
+                    app.storage.putItems('sentences', result.Sentences, callback);
                 },
                 function(callback) {
-                    app.storage.put('srsconfigs', result.SRSConfigs, callback);
+                    app.storage.putItems('srsconfigs', result.SRSConfigs, callback);
                 },
                 function(callback) {
-                    app.storage.put('strokes', result.Strokes, callback);
+                    app.storage.putItems('strokes', result.Strokes, callback);
                 },
                 function(callback) {
-                    app.storage.put('vocablists', result.VocabLists, callback);
+                    app.storage.putItems('vocablists', result.VocabLists, callback);
                 },
                 function(callback) {
-                    app.storage.put('vocabs', result.Vocabs, callback);
+                    app.storage.putItems('vocabs', result.Vocabs, callback);
                 }
             ], function() {
                 if (typeof callback === 'function') {
                     callback();
                 }
             });
+        },
+        /**
+         * @method updateExpires
+         */
+        updateExpires: function() {
+            this.set('expires', moment().unix() + this.get('expires_in'));
         }
     });
 
