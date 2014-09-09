@@ -51,13 +51,13 @@ define([
          */
         getActiveStyles: function() {
             if (this.user.isJapanese()) {
-                return ['both'];
+                return ['both', 'none'];
             } else if (this.user.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
-                return ['both', 'simp', 'trad'];
+                return ['both', 'none', 'simp', 'trad'];
             } else if (this.user.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
-                return ['both', 'simp'];
+                return ['both', 'none', 'simp'];
             } else {
-                return ['both', 'trad'];
+                return ['both', 'none', 'trad'];
             }
         },
         /**
