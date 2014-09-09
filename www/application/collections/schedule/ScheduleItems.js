@@ -11,6 +11,14 @@ define([
      */
     var ScheduleItems = BaseCollection.extend({
         /**
+         * @method initialize
+         * @param {User} user
+         * @constructor
+         */
+        initialize: function(attributes, options) {
+            this.user = options.user;
+        },
+        /**
          * @property model
          * @type ScheduleItem
          */
@@ -28,13 +36,21 @@ define([
          * @returns {DataItem}
          */
         getNext: function() {
-            var next = undefined;
+            var activeParts = this.user.settings.getActiveParts();
+            var activeStyles = this.user.settings.getActiveStyles();
             for (var i = 0, length = this.length; i < length; i++) {
-
-
-
+                var item = this.at(i);
+                if (!item.attributes.active) {
+                    continue;
+                }
+                if (activeParts.indexOf(item.attributes.part) === -1) {
+                    continue;
+                }
+                if (activeStyles.indexOf(item.attributes.style) === -1) {
+                    continue;
+                }
+                return item;
             }
-            return next;
         },
         /**
          * @method loadAll

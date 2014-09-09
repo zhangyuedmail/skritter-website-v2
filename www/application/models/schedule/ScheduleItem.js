@@ -19,6 +19,7 @@ define([
          * @type Object
          */
         defaults: {
+            active: false,
             interval: 0,
             last: 0,
             next: 0,
@@ -29,14 +30,14 @@ define([
         },
         /**
          * @method loadItem
-         * @param {Function} callback
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        loadItem: function(callback) {
+        loadItem: function(callbackSuccess, callbackError) {
             var self = this;
             var part = self.get('part');
             var result = {};
             async.series([
-
                 //initial item
                 function(callback) {
                     app.storage.getItems('items', self.id, function(items) {
@@ -48,7 +49,6 @@ define([
                         }
                     });
                 },
-
                 //initial vocab
                 function(callback) {
                     app.storage.getItems('vocabs', result.item.getVocabId(), function(vocabs) {
@@ -60,7 +60,6 @@ define([
                         }
                     });
                 },
-
                 //contained items
                 function(callback) {
                     if (part === 'rune' || part === 'tone') {
@@ -79,7 +78,6 @@ define([
                         callback();
                     }
                 },
-
                 //contained vocabs
                 function(callback) {
                     if (result.containedItems.length > 0) {
@@ -97,7 +95,6 @@ define([
                         callback();
                     }
                 },
-
                 //sentences
                 function(callback) {
                     if (result.vocab.has('sentenceId')) {
@@ -114,7 +111,6 @@ define([
                         callback();
                     }
                 },
-
                 //strokes
                 function(callback) {
                     if (part === 'rune') {
@@ -135,19 +131,18 @@ define([
                             }
                         });
                     } else {
-                        result.strokes = undefined;
+                        result.strokes = [];
                         callback();
                     }
                 },
-
                 //decomps
                 function(callback) {
                     var strokeWritings = null;
                     if (result.containedVocabs.length === 0) {
-                        strokeWritings = vocab.get('writing');
+                        strokeWritings = result.vocab.get('writing');
                     } else {
                         strokeWritings = _.pluck(result.containedVocabs, function(vocab) {
-                            return vocab.attributes.writing;
+                            return result.vocab.attributes.writing;
                         });
                     }
                     app.storage.getItems('decomps', strokeWritings, function(decomps) {
@@ -155,18 +150,17 @@ define([
                             result.decomps = app.user.data.decomps.add(decomps, {merge: true, silent: true, sort: false});
                             callback();
                         } else {
-                            result.decomps = undefined;
+                            result.decomps = [];
                             callback();
                         }
                     });
                 }
-
             ], function(error) {
-                console.log('RESULT', result);
                 if (error) {
+                    callbackError(error, self);
                 } else {
+                    callbackSuccess(result);
                 }
-                callback();
             });
         }
     });
