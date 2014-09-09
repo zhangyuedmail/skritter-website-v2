@@ -51,12 +51,13 @@ define([
                 },
                 //initial vocab
                 function(callback) {
-                    app.storage.getItems('vocabs', result.item.getVocabId(), function(vocabs) {
+                    app.storage.getItems('vocabs', result.item.get('vocabIds'), function(vocabs) {
                         if (vocabs.length > 0) {
-                            result.vocab = app.user.data.vocabs.add(vocabs[0], {merge: true, silent: true, sort: false});
+                            app.user.data.vocabs.add(vocabs, {merge: true, silent: true, sort: false});
+                            result.vocab = result.item.getVocab();
                             callback();
                         } else {
-                            callback('Initial vocab is missing.');
+                            callback('Initial vocabs are missing.');
                         }
                     });
                 },
@@ -107,7 +108,7 @@ define([
                             }
                         });
                     } else {
-                        result.sentences = undefined;
+                        result.sentences = [];
                         callback();
                     }
                 },
@@ -142,7 +143,7 @@ define([
                         strokeWritings = result.vocab.get('writing');
                     } else {
                         strokeWritings = _.pluck(result.containedVocabs, function(vocab) {
-                            return result.vocab.attributes.writing;
+                            return vocab.attributes.writing;
                         });
                     }
                     app.storage.getItems('decomps', strokeWritings, function(decomps) {

@@ -19,7 +19,7 @@ define([
          */
         initialize: function() {
             this.data = new UserData(null, {user: this});
-            this.schedule = new ScheduleItems();
+            this.schedule = new ScheduleItems(null, {user: this});
             this.settings = new UserSettings(null, {user: this});
             this.subscription = new UserSubscription(null, {user: this});
         },

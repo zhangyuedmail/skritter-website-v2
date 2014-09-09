@@ -35,6 +35,32 @@ define([
             timeStudied: 0,
             vocabIds: [],
             vocabListIds: []
+        },
+        /**
+         * @method getVocab
+         * @returns {DataVocab}
+         */
+        getVocab: function() {
+            var vocabs = this.getVocabs();
+            if (app.user.isChinese()) {
+                return vocabs[this.get('reviews') % vocabs.length];
+            }
+            return vocabs[0];
+        },
+        /**
+         * @method getVocabs
+         * @returns {Array}
+         */
+        getVocabs: function() {
+            var vocabs = [];
+            var activeStyles = app.user.settings.getActiveStyles();
+            for (var i = 0, length = this.get('vocabIds').length; i < length; i++) {
+                var vocab = app.user.data.vocabs.get(this.get('vocabIds')[i]);
+                if (vocab && activeStyles.indexOf(vocab.attributes.style) !== -1) {
+                    vocabs.push(vocab);
+                }
+            }
+            return vocabs;
         }
     });
 
