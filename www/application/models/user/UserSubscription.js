@@ -30,13 +30,11 @@ define([
          */
         sync: function(callback) {
             var self = this;
-            app.api.getSubscription(this.user.id, function(data, status) {
-                if (status === 200) {
-                    self.set(data);
-                    callback();
-                } else {
-                    callback(data, status);
-                }
+            app.api.getSubscription(this.user.id, null, function(data) {
+                self.set(data);
+                callback();
+            }, function(error) {
+                callback(error);
             });
         }
     });

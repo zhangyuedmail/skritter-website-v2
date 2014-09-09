@@ -33,18 +33,51 @@ define([
             filterJapaneseParts: ['defn', 'rdng', 'rune']
         },
         /**
+         * @method getActiveParts
+         * @returns {Array}
+         */
+        getActiveParts: function() {
+            var parts = [];
+            if (this.user.isChinese()) {
+                parts = _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
+            } else {
+                parts = _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
+            }
+            return parts;
+        },
+        /**
+         * @method getActiveStyles
+         * @returns {Array}
+         */
+        getActiveStyles: function() {
+            if (this.user.isJapanese()) {
+                return ['both'];
+            } else if (this.user.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
+                return ['both', 'simp', 'trad'];
+            } else if (this.user.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
+                return ['both', 'simp'];
+            } else {
+                return ['both', 'trad'];
+            }
+        },
+        /**
+         * @method getEnabledParts
+         * @returns {Array}
+         */
+        getEnabledParts: function() {
+            return this.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+        },
+        /**
          * @method sync
          * @param {Function} callback
          */
         sync: function(callback) {
             var self = this;
-            app.api.getUsers(this.user.id, function(data, status) {
-                if (status === 200) {
-                    self.set(data);
-                    callback();
-                } else {
-                    callback(data, status);
-                }
+            app.api.getUsers(this.user.id, null, function(data) {
+                self.set(data);
+                callback();
+            }, function(error) {
+                callback(error);
             });
         }
     });

@@ -58,6 +58,7 @@ define([
          * @param {Function} callback
          */
         destroy: function(callback) {
+            var self = this;
             if (this.isLoaded()) {
                 this.get('database').close();
                 var request = indexedDB.deleteDatabase(this.get('databaseName'));

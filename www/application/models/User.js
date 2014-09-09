@@ -180,28 +180,27 @@ define([
          * @method login
          * @param {String} username
          * @param {String} password
-         * @param {Function} callback
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
          */
-        login: function(username, password, callback) {
+        login: function(username, password, callbackComplete, callbackError) {
             var self = this;
-            app.api.authenticateUser(username, password, function(data, status) {
-                if (status === 200) {
-                    self.set('id', data.user_id);
-                    self.data.set(data);
-                    async.parallel([
-                        function(callback) {
-                            self.settings.sync(callback);
-                        },
-                        function(callback) {
-                            self.subscription.sync(callback);
-                        }
-                    ], function() {
-                        localStorage.setItem('_active', data.user_id);
-                        callback(data, status);
-                    });
-                } else {
-                    callback(data, status);
-                }
+            app.api.authenticateUser(username, password, function(data) {
+                self.set('id', data.user_id);
+                self.data.set(data);
+                async.parallel([
+                    function(callback) {
+                        self.settings.sync(callback);
+                    },
+                    function(callback) {
+                        self.subscription.sync(callback);
+                    }
+                ], function() {
+                    localStorage.setItem('_active', data.user_id);
+                    callbackComplete(data);
+                });
+            }, function(error) {
+                callbackError(error);
             });
         },
         /**

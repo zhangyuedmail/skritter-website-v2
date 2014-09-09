@@ -26,12 +26,11 @@ define([
             version: 0
         },
         /**
-         * @method authenticateUser
-         * @param {String} username
-         * @param {String} password
-         * @param {Function} callback
+         * @method authenticateGuest
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
          */
-        authenticateGuest: function(callback) {
+        authenticateGuest: function(callbackComplete, callbackError) {
             $.ajax({
                 url: this.getBaseUrl() + 'oauth2/token',
                 beforeSend: this.beforeSend,
@@ -42,18 +41,24 @@ define([
                     client_id: this.get('clientId')
                 }
             }).done(function(data) {
-                callback(data, data.statusCode);
+                if (data.statusCode === 200) {
+                    callbackComplete(data);
+                } else {
+                    callbackError(data);
+                }
+
             }).fail(function(error) {
-                callback(error, error.status);
+                callbackError(error);
             });
         },
         /**
          * @method authenticateUser
          * @param {String} username
          * @param {String} password
-         * @param {Function} callback
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
          */
-        authenticateUser: function(username, password, callback) {
+        authenticateUser: function(username, password, callbackComplete, callbackError) {
             $.ajax({
                 url: this.getBaseUrl() + 'oauth2/token',
                 beforeSend: this.beforeSend,
@@ -66,9 +71,13 @@ define([
                     password: password
                 }
             }).done(function(data) {
-                callback(data, data.statusCode);
+                if (data.statusCode === 200) {
+                    callbackComplete(data);
+                } else {
+                    callbackError(data);
+                }
             }).fail(function(error) {
-                callback(error, error.status);
+                callbackError(error);
             });
         },
         /**
@@ -120,10 +129,11 @@ define([
         /**
          * @method createUser
          * @param {String} token
-         * @param {Function} callback
          * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
          */
-        createUser: function(token, callback, options) {
+        createUser: function(token, options, callbackComplete, callbackError) {
             options = options ? options : {};
             $.ajax({
                 url: this.getBaseUrl() + 'users',
@@ -136,9 +146,13 @@ define([
                     lang: options.lang
                 }
             }).done(function(data) {
-                callback(data.User, data.statusCode);
+                if (data.statusCode === 200) {
+                    callbackComplete(data.User);
+                } else {
+                    callbackError(data);
+                }
             }).fail(function(error) {
-                callback(error, error.status);
+                callbackError(error);
             });
         },
         /**
@@ -224,10 +238,11 @@ define([
         /**
          * @method getUserSubscription
          * @param {String} userId
-         * @param {Function} callback
          * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
          */
-        getSubscription: function(userId, callback, options) {
+        getSubscription: function(userId, options, callbackComplete, callbackError) {
             options = options ? options : {};
             $.ajax({
                 url: this.getBaseUrl() + 'subscriptions/' + userId,
@@ -239,9 +254,13 @@ define([
                     fields: options.fields
                 }
             }).done(function(data) {
-                callback(data.Subscription, data.statusCode);
+                if (data.statusCode === 200) {
+                    callbackComplete(data.Subscription);
+                } else {
+                    callbackError(data);
+                }
             }).fail(function(error) {
-                callback(error, error.status);
+                callbackError(error);
             });
         },
         /**
@@ -253,10 +272,11 @@ define([
         /**
          * @method getUsers
          * @param {Array|String} userIds
-         * @param {Function} callback
          * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
          */
-        getUsers: function(userIds, callback, options) {
+        getUsers: function(userIds, options, callbackComplete, callbackError) {
             var self = this;
             var users = [];
             options = options ? option : {};
@@ -273,18 +293,22 @@ define([
                         fields: options.fields
                     }
                 }).done(function(data) {
-                    users = users.concat(data.Users);
-                    if (userIds.length > 0) {
-                        setTimeout(next, 500);
-                    } else {
-                        if (users.length === 1) {
-                            callback(users[0], data.statusCode);
+                    if (data.statusCode === 200) {
+                        users = users.concat(data.Users);
+                        if (userIds.length > 0) {
+                            setTimeout(next, 500);
                         } else {
-                            callback(users, data.statusCode);
+                            if (users.length === 1) {
+                                callbackComplete(users[0]);
+                            } else {
+                                callbackComplete(users);
+                            }
                         }
+                    } else {
+                        callbackError(data);
                     }
                 }).fail(function(error) {
-                    callback(error, error.status);
+                    callbackError(error);
                 });
             })();
         },

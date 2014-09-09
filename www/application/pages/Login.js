@@ -47,13 +47,11 @@ define([
             var username = this.elements.loginUsername.val();
             app.dialogs.show().element('.message-title').text('Logging In');
             this.disableForm().elements.message.empty();
-            app.user.login(username, password, function(data, status) {
-                if (status === 200) {
-                    app.reload();
-                } else {
-                    self.enableForm().message.text(data.responseJSON.message);
-                    app.dialog.hide();
-                }
+            app.user.login(username, password, function(data) {
+                app.reload();
+            }, function(error) {
+                self.enableForm().elements.message.text(error.responseJSON.message);
+                app.dialogs.hide();
             });
         },
         /**
