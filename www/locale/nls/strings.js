@@ -6,6 +6,9 @@ define([], {
         dashboard: {
             'title': 'Dashboard'
         },
+        global: {
+            'back': 'Back'
+        },
         landing: {
             'existing-user': 'Existing User',
             'new-user': 'New User',
@@ -17,6 +20,14 @@ define([], {
             'password': 'Password',
             'title': 'Log In',
             'username': 'Username'
+        },
+        onboarding: {
+            'select-language-question': 'Which language are you studying?',
+            'select-chinese-both': 'Chinese (Simplified/Traditional)',
+            'select-chinese-simp': 'Chinese (Simplified)',
+            'select-chinese-trad': 'Chinese (Traditional)',
+            'select-japanese': 'Japanese',
+            'title': 'Getting Started'
         },
         sidebar: {
             'account': 'Account',

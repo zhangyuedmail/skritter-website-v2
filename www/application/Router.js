@@ -5,9 +5,10 @@ define([
     'framework/BaseRouter',
     'pages/Dashboard',
     'pages/Landing',
+    'pages/LanguageSelect',
     'pages/Login',
     'pages/Tests'
-], function(BaseRouter, PageDashboard, PageLanding, PageLogin, PageTests) {
+], function(BaseRouter, PageDashboard, PageLanding, PageLanguageSelect, PageLogin, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -19,6 +20,7 @@ define([
          */
         routes: {
             '': 'showHome',
+            'getting-started': 'showGettingStarted',
             'login': 'showLogin',
             'logout': 'handleLogout',
             'tests': 'showTests',
@@ -41,6 +43,13 @@ define([
          */
         showDashboard: function() {
             this.currentPage = new PageDashboard();
+            this.currentPage.render();
+        },
+        /**
+         * @method showGettingStarted
+         */
+        showGettingStarted: function() {
+            this.currentPage = new PageLanguageSelect();
             this.currentPage.render();
         },
         /**
