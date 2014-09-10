@@ -5,7 +5,12 @@ body { padding-top: 45px; }
     height: 100%;
     position: relative;
 }
+
+
+/*** GLOBAL ***/
+.cursor { cursor: pointer; }
 .loading-box { margin-top: 25px; }
+
 
 
 /*** NAVBAR ***/

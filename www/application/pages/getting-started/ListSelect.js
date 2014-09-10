@@ -65,11 +65,19 @@ define([
         filterLists: function(criteria) {
             this.listsFiltered = _.filter(this.lists, function(list) {
                 for (var criterion in criteria) {
-                    if (list[criterion].toLowerCase().indexOf(criteria[criterion].toLowerCase()) === -1) {
-                        return false;
+                    if (Array.isArray(list[criterion])) {
+                        var normalizedArray = list[criterion].map(function(value) {
+                            return value.toLowerCase();
+                        });
+                        if (normalizedArray.indexOf(criteria[criterion]) > -1) {
+                            return true;
+                        }
+                    } else {
+                        if (list[criterion].toLowerCase().indexOf(criteria[criterion].toLowerCase()) > -1) {
+                            return true;
+                        }
                     }
                 }
-                return true;
             });
             return this;
         },
@@ -88,7 +96,12 @@ define([
          */
         handleListClicked: function(event) {
             event.preventDefault();
-            console.log(_.find(this.lists, {id: event.currentTarget.id.replace('list-', '')}));
+            var list = _.find(this.lists, {id: event.currentTarget.id.replace('list-', '')});
+            app.dialogs.show('list-confirmation');
+            app.dialogs.element('.list-name').text(list.shortName);
+            app.dialogs.element('.list-description').text(list.description);
+            app.dialogs.element('.list-categories').text(list.categories.join(', '));
+            app.dialogs.element('.list-studying').text(list.peopleStudying);
         },
         /**
          * @method handleRecommendedClicked
@@ -96,6 +109,7 @@ define([
         handleRecommendedClicked: function(event) {
             event.preventDefault();
             this.elements.searchBox.val($(event.currentTarget).data('search'));
+            this.handleSearchBoxChanged(event);
         },
         /**
          * @method handleSearchBoxChanged
@@ -104,6 +118,7 @@ define([
             event.preventDefault();
             var searchText = this.elements.searchBox.val();
             this.filterLists({
+                categories: searchText,
                 name: searchText,
                 shortName: searchText
             });
