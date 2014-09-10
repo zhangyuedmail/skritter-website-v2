@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/language-select.html'
+    'require.text!templates/desktop/getting-started/language-select.html'
 ], function(BasePage, TemplateDesktop) {
     /**
      * @class PageLanguageSelect
@@ -23,6 +23,21 @@ define([
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
             return this;
+        },
+        /**
+         * @method events
+         * @returns {Object}
+         */
+        events: _.extend({}, BasePage.prototype.events, {
+            'vclick .language-select': 'handleLanguageSelected'
+        }),
+        /**
+         * @method handleLanguageSelected
+         * @param {Function} event
+         */
+        handleLanguageSelected: function(event) {
+            event.preventDefault();
+            app.router.showListSelect();
         }
     });
 

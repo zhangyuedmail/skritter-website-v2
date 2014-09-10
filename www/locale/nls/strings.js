@@ -22,11 +22,12 @@ define([], {
             'username': 'Username'
         },
         onboarding: {
-            'select-language-question': 'Which language are you studying?',
+            'select-language-title': 'Which language are you studying?',
             'select-chinese-both': 'Chinese (Simplified/Traditional)',
             'select-chinese-simp': 'Chinese (Simplified)',
             'select-chinese-trad': 'Chinese (Traditional)',
             'select-japanese': 'Japanese',
+            'select-list-title': 'Select a list.',
             'title': 'Getting Started'
         },
         sidebar: {

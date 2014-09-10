@@ -22,6 +22,7 @@ define([
             clientId: 'mcfarljwapiclient',
             clientSecret: 'e3872517fed90a820e441531548b8c',
             root: 'https://beta.skritter',
+            timeout: 100,
             tld: location.host.indexOf('.cn') === -1 ? '.com' : '.cn',
             version: 0
         },
@@ -42,6 +43,8 @@ define([
                 }
             }).done(function(data) {
                 if (data.statusCode === 200) {
+                    data.expires = moment().unix() + data['expires_in'];
+                    localStorage.setItem('_guest', JSON.stringify(data));
                     callbackComplete(data);
                 } else {
                     callbackError(data);
@@ -208,7 +211,7 @@ define([
                                 result.totalRequests = data.Batch.totalRequests;
                                 callbackResult(result);
                                 if (requestIds.length > 0) {
-                                    setTimeout(download, 500);
+                                    setTimeout(download, self.get('timeout'));
                                 } else {
                                     callback();
                                 }
@@ -235,6 +238,47 @@ define([
         getCredentials: function() {
             return 'basic ' + btoa(this.get('clientId') + ':' + this.get('clientSecret'));
         },
+
+        /**
+         * @method getVocabLists
+         * @param {Object} [callback]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getVocabLists: function(options, callbackComplete, callbackError) {
+            var self = this;
+            var lists = [];
+            options = options ? options : {};
+            (function next(cursor) {
+                $.ajax({
+                    url: self.getBaseUrl() + 'vocablists',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        cursor: cursor,
+                        lang: options.lang,
+                        sort: options.sort,
+                        fields: options.fields
+                    }
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        lists = lists.concat(data.VocabLists);
+                        if (data.cursor) {
+                            setTimeout(next, self.get('timeout'), data.cursor);
+                        } else {
+                            callbackComplete(lists);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+
         /**
          * @method getUserSubscription
          * @param {String} userId
@@ -267,7 +311,19 @@ define([
          * @method getToken
          */
         getToken: function() {
-            return app.user ? app.user.data.get('access_token') : undefined;
+            if (app.user.data.get('access_token')) {
+                //return token for registered user if logged in
+                return app.user.data.get('access_token');
+            } else if (localStorage.getItem('_guest')) {
+                //return token for guest user if not expired
+                var data = JSON.parse(localStorage.getItem('_guest'));
+                if (data.expires > moment().unix()) {
+                    return data['access_token'];
+                } else {
+                    localStorage.removeItem('_guest');
+                }
+            }
+            return undefined;
         },
         /**
          * @method getUsers
@@ -296,7 +352,7 @@ define([
                     if (data.statusCode === 200) {
                         users = users.concat(data.Users);
                         if (userIds.length > 0) {
-                            setTimeout(next, 500);
+                            setTimeout(next, self.get('timeout'));
                         } else {
                             if (users.length === 1) {
                                 callbackComplete(users[0]);

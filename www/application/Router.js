@@ -5,10 +5,11 @@ define([
     'framework/BaseRouter',
     'pages/Dashboard',
     'pages/Landing',
-    'pages/LanguageSelect',
     'pages/Login',
-    'pages/Tests'
-], function(BaseRouter, PageDashboard, PageLanding, PageLanguageSelect, PageLogin, PageTests) {
+    'pages/Tests',
+    'pages/getting-started/LanguageSelect',
+    'pages/getting-started/ListSelect'
+], function(BaseRouter, PageDashboard, PageLanding, PageLogin, PageTests, PageLanguageSelect, PageListSelect) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -49,7 +50,20 @@ define([
          * @method showGettingStarted
          */
         showGettingStarted: function() {
+            this.showLanguageSelect();
+        },
+        /**
+         * @method showLanguageSelect
+         */
+        showLanguageSelect: function() {
             this.currentPage = new PageLanguageSelect();
+            this.currentPage.render();
+        },
+        /**
+         * @method showListSelect
+         */
+        showListSelect: function() {
+            this.currentPage = new PageListSelect();
             this.currentPage.render();
         },
         /**
