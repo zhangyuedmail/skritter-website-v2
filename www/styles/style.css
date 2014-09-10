@@ -87,12 +87,23 @@ body { padding-top: 45px; }
 .navbar-menu.active .toggle-text { margin-left: 30px; }
 
 
+/*** PAGES ***/
+.page.no-navbar { margin-top: auto; }
+@media (max-width: 991px) {
+    .page.no-navbar { margin-top: -55px; }
+}
+
+
 /*** PAGES: LANDING ***/
 .landing-logo {
     margin: 0 auto;
     max-height: 300px;
     padding-left: 10%;
 }
+
+
+/*** PAGES: LIST SELECT ***/
+.page-list-select table { font-size: 2em; }
 
 
 /*** PAGES: LOGIN ***/

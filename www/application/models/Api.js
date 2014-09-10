@@ -13,7 +13,9 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.set('guest', JSON.parse(localStorage.getItem('_guest')));
+        },
         /**
          * @property defaults
          * @type Object
@@ -21,6 +23,7 @@ define([
         defaults: {
             clientId: 'mcfarljwapiclient',
             clientSecret: 'e3872517fed90a820e441531548b8c',
+            guest: undefined,
             root: 'https://beta.skritter',
             timeout: 100,
             tld: location.host.indexOf('.cn') === -1 ? '.com' : '.cn',
@@ -45,6 +48,7 @@ define([
                 if (data.statusCode === 200) {
                     data.expires = moment().unix() + data['expires_in'];
                     localStorage.setItem('_guest', JSON.stringify(data));
+                    this.set('guest', data);
                     callbackComplete(data);
                 } else {
                     callbackError(data);
@@ -314,14 +318,9 @@ define([
             if (app.user.data.get('access_token')) {
                 //return token for registered user if logged in
                 return app.user.data.get('access_token');
-            } else if (localStorage.getItem('_guest')) {
+            } else if (this.isGuestValid()) {
                 //return token for guest user if not expired
-                var data = JSON.parse(localStorage.getItem('_guest'));
-                if (data.expires > moment().unix()) {
-                    return data['access_token'];
-                } else {
-                    localStorage.removeItem('_guest');
-                }
+                return this.get('guest')['access_token'];
             }
             return undefined;
         },
@@ -367,6 +366,16 @@ define([
                     callbackError(error);
                 });
             })();
+        },
+        /**
+         * @method isGuestValid
+         */
+        isGuestValid: function() {
+            if (this.get('guest') && (this.get('guest').expires > moment().unix())) {
+                return true;
+            }
+            localStorage.removeItem('_guest');
+            return false;
         },
         /**
          * @method refreshToken

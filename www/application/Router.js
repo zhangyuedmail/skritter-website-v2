@@ -50,7 +50,16 @@ define([
          * @method showGettingStarted
          */
         showGettingStarted: function() {
-            this.showLanguageSelect();
+            var self = this;
+            if (app.api.isGuestValid()) {
+                this.showLanguageSelect();
+            } else {
+                app.api.authenticateGuest(function() {
+                    self.showLanguageSelect();
+                }, function() {
+                    self.defaultRoute();
+                });
+            }
         },
         /**
          * @method showLanguageSelect

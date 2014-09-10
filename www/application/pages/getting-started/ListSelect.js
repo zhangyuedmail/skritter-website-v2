@@ -24,6 +24,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
+            this.elements.listsContainer = this.$('.lists-container');
             this.elements.listTable = this.$('#list-table');
             this.elements.loadingBox = this.$('.loading-box');
             this.elements.searchBox = this.$('#search-box');
@@ -40,12 +41,11 @@ define([
             for (var i = 0, length = lists.length; i < length; i++) {
                 var list = lists[i];
                 divBody += "<tr id='list-" + list.id + "' class='list'>";
-                divBody += "<td>" + list.name + "</td>";
+                divBody += "<td style='font-size: 18px;'>" + list.name + "</td>";
                 divBody += "</tr>";
 
             }
             this.elements.listTable.find('tbody').html(divBody);
-            this.elements.loadingBox.hide();
             return this;
         },
         /**
@@ -99,7 +99,7 @@ define([
             var list = _.find(this.lists, {id: event.currentTarget.id.replace('list-', '')});
             app.dialogs.show('list-confirmation');
             app.dialogs.element('.list-name').text(list.shortName);
-            app.dialogs.element('.list-description').text(list.description);
+            app.dialogs.element('.list-description').html(list.description);
             app.dialogs.element('.list-categories').text(list.categories.join(', '));
             app.dialogs.element('.list-studying').text(list.peopleStudying);
         },
@@ -130,12 +130,15 @@ define([
          */
         loadLists: function() {
             var self = this;
+            this.elements.listsContainer.hide();
             app.api.getVocabLists({
                 sort: 'official'
             }, function(lists) {
-                self.lists = lists;
+                self.lists = _.filter(lists, function(list) { return list.categories.length; });
                 self.sortLists();
                 self.renderListTable();
+                self.elements.loadingBox.hide();
+                self.elements.listsContainer.show();
             }, function(error) {
                 console.error(error);
             });
