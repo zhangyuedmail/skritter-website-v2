@@ -60,6 +60,12 @@ define([
             return this;
         },
         /**
+         * @method isOpen
+         */
+        isOpen: function() {
+            return this.id ? true : false;
+        },
+        /**
          * @method progress
          * @param {Number} percent
          * @returns {Dialogs}
@@ -88,6 +94,9 @@ define([
                 if (typeof callback === 'function') {
                     callback();
                 }
+            });
+            this.element().one('hidden.bs.modal', function(event) {
+                $(event.target).find('*').off();
             });
             return this;
         }
