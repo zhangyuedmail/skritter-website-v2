@@ -3,9 +3,10 @@
  */
 define([
     'framework/BaseRouter',
+    'pages/account-creation/CreateAccount',
     'pages/account-creation/LanguageSelect',
     'pages/account-creation/ListSelect'
-], function(BaseRouter, PageLanguageSelect, PageListSelect) {
+], function(BaseRouter, PageCreateAccount, PageLanguageSelect, PageListSelect) {
     /**
      * @class RouterAccountCreation
      * @extends BaseRouter
@@ -37,6 +38,13 @@ define([
                     self.defaultRoute();
                 });
             }
+        },
+        /**
+         * @method showCreateAccount
+         */
+        showCreateAccount: function() {
+            this.currentPage = new PageCreateAccount();
+            this.currentPage.render();
         },
         /**
          * @method showLanguageSelect

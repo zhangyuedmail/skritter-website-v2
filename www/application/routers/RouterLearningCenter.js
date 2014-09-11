@@ -2,8 +2,10 @@
  * @module Application
  */
 define([
-    'framework/BaseRouter'
-], function(BaseRouter) {
+    'framework/BaseRouter',
+    'pages/LearningCenter',
+    'pages/learning-center/StrokeOrder'
+], function(BaseRouter, PageLearningCenter, PageStrokeOrder) {
     /**
      * @class RouterLearningCenter
      * @extends BaseRouter
@@ -18,7 +20,24 @@ define([
          * @property routes
          * @type Object
          */
-        routes: {}
+        routes: {
+            'learning-center': 'showLearningCenter',
+            'learning-center/stroke-order': 'showStrokeOrder'
+        },
+        /**
+         * @method showLearningCenter
+         */
+        showLearningCenter: function() {
+            this.currentPage = new PageLearningCenter();
+            this.currentPage.render();
+        },
+        /**
+         * @method showStrokeOrder
+         */
+        showStrokeOrder: function() {
+            this.currentPage = new PageStrokeOrder();
+            this.currentPage.render();
+        }
     });
 
     return RouterLearningCenter;

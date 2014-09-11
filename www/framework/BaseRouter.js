@@ -23,6 +23,9 @@ define([], function() {
                 }
                 this.currentPage.$("input[type='checkbox']").bootstrapSwitch();
             }
+            if (app.dialogs && app.dialogs.isOpen()) {
+                app.dialogs.hide();
+            }
         },
         /**
          * @method back
@@ -47,6 +50,15 @@ define([], function() {
          */
         defaultRoute: function() {
             this.navigate(app.isLocalhost() ? '/#' : '', {replace: true, trigger: true});
+        },
+        /**
+         * @method switch
+         * @param {String} page
+         */
+        switch: function(page) {
+            this.before();
+            this['show' + page]();
+            this.after();
         }
     });
 });
