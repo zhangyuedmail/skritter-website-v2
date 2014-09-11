@@ -37,7 +37,10 @@ define([
             this.sidebars = new Sidebars();
             this.user = new User();
             this.user.load(function() {
-                Backbone.history.start({pushState: true, root: app.isLocalhost() ? '/skritter-html5/www/' : '/'});
+                Backbone.history.start({
+                    pushState: app.isLocalhost() ? false : true,
+                    root: app.isLocalhost() ? '/skritter-html5/www/' : '/'
+                });
             });
         }
     });

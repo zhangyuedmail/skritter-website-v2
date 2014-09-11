@@ -95,6 +95,12 @@ define([
             return this.get('languageCode') === '@@languageCode' ? this.settings.get('targetLang') : this.get('languageCode');
         },
         /**
+         * @method getLanguageName
+         */
+        getLanguageName: function() {
+            return this.isChinese() ? app.strings.global.chinese : app.strings.global.japanese;
+        },
+        /**
          * @method isAuthenticated
          * @returns {Boolean}
          */

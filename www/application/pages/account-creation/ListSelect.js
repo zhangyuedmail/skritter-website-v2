@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/getting-started/list-select.html'
+    'require.text!templates/desktop/account-creation/list-select.html'
 ], function(BasePage, TemplateDesktop) {
     /**
      * @class PageListSelect
@@ -14,7 +14,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.title = app.strings.onboarding.title;
+            this.title = app.strings['account-creation'].title;
             this.lists = [];
             this.listsFiltered = undefined;
         },

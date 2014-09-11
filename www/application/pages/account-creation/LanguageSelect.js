@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/getting-started/language-select.html'
+    'require.text!templates/desktop/account-creation/language-select.html'
 ], function(BasePage, TemplateDesktop) {
     /**
      * @class PageLanguageSelect
@@ -14,7 +14,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.title = app.strings.onboarding.title;
+            this.title = app.strings['account-creation'].title;
         },
         /**
          * @method render
@@ -37,7 +37,7 @@ define([
          */
         handleLanguageSelected: function(event) {
             event.preventDefault();
-            app.router.showListSelect();
+            app.router.accountCreation.showListSelect();
         }
     });
 

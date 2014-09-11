@@ -16,6 +16,7 @@ app = (function() {
                 components: 'application/components',
                 models: 'application/models',
                 pages: 'application/pages',
+                routers: 'application/routers',
                 storage: 'application/storage',
                 //libraries
                 async: 'libraries/async-0.9.0.min',
