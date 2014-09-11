@@ -86,10 +86,7 @@ define([
          * @returns {Array}
          */
         getLists: function() {
-            if (this.listsFiltered) {
-                return this.listsFiltered;
-            }
-            return this.lists;
+            return this.listsFiltered ? this.listsFiltered : this.lists;
         },
         /**
          * @method handleListClicked
@@ -102,6 +99,14 @@ define([
             app.dialogs.element('.list-description').html(list.description);
             app.dialogs.element('.list-categories').text(list.categories.join(', '));
             app.dialogs.element('.list-studying').text(list.peopleStudying);
+            app.dialogs.element('.select').on('vclick', this.handleListSelected);
+        },
+        /**
+         * @method handleListSelected
+         */
+        handleListSelected: function(event) {
+            event.preventDefault();
+            app.router.accountCreation.switch('CreateAccount');
         },
         /**
          * @method handleRecommendedClicked

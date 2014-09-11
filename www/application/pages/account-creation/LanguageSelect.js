@@ -37,7 +37,7 @@ define([
          */
         handleLanguageSelected: function(event) {
             event.preventDefault();
-            app.router.accountCreation.showListSelect();
+            app.router.accountCreation.switch('ListSelect');
         }
     });
 

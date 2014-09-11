@@ -29,10 +29,10 @@ define([], {
             title: 'Dashboard'
         },
         landing: {
+            title: 'Landing',
             'existing-user': 'Existing User',
             'new-user': 'New User',
-            tagline: 'Learn to write Chinese and Japanese characters.',
-            title: 'Landing'
+            tagline: 'Learn to write Chinese and Japanese characters.'
         },
         'learning-center': {
             title: 'Learning Center',
@@ -41,9 +41,9 @@ define([], {
             }
         },
         login: {
+            title: 'Log In',
             'new-user': 'New User',
             password: 'Password',
-            title: 'Log In',
             username: 'Username'
         },
         sidebar: {
