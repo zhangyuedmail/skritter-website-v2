@@ -41,6 +41,12 @@ define([], function() {
                 this.currentPage.remove();
             }
             this.currentPage = undefined;
+        },
+        /**
+         * @method defaultRoute
+         */
+        defaultRoute: function() {
+            this.navigate(app.isLocalhost() ? '/#' : '', {replace: true, trigger: true});
         }
     });
 });
