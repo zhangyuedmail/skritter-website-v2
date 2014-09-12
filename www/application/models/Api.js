@@ -14,7 +14,8 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.set('guest', JSON.parse(localStorage.getItem('_guest')));
+            this.set('guest', JSON.parse(localStorage.getItem('_guest')), {silent: true});
+            this.on('change:guest', this.cache);
         },
         /**
          * @property defaults
@@ -28,6 +29,12 @@ define([
             timeout: 100,
             tld: location.host.indexOf('.cn') === -1 ? '.com' : '.cn',
             version: 0
+        },
+        /**
+         * @method cache
+         */
+        cache: function() {
+            localStorage.setItem('_guest', JSON.stringify(this.toJSON().guest));
         },
         /**
          * @method authenticateGuest
@@ -47,7 +54,6 @@ define([
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     data.expires = moment().unix() + data['expires_in'];
-                    localStorage.setItem('_guest', JSON.stringify(data));
                     this.set('guest', data);
                     callbackComplete(data);
                 } else {
@@ -368,12 +374,21 @@ define([
             })();
         },
         /**
+         * @method getGuest
+         * @param {String} key
+         * @returns {Object}
+         */
+        getGuest: function(key) {
+            return this.get('guest') ? this.get('guest')[key] : undefined;
+        },
+        /**
          * @method isGuestValid
          */
         isGuestValid: function() {
             if (this.get('guest') && (this.get('guest').expires > moment().unix())) {
                 return true;
             }
+            this.set('guest', undefined, {silent: true});
             localStorage.removeItem('_guest');
             return false;
         },
@@ -426,6 +441,17 @@ define([
             }).fail(function(error) {
                 callbackError(error);
             });
+        },
+        /**
+         * @method setGuest
+         * @param {String} key
+         * @param {Array|Object|String} value
+         * @returns {Api}
+         */
+        setGuest: function(key, value) {
+            this.attributes.guest[key] = value;
+            this.trigger('change:guest');
+            return this;
         }
     });
 
