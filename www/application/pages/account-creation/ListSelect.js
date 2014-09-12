@@ -41,7 +41,8 @@ define([
             for (var i = 0, length = lists.length; i < length; i++) {
                 var list = lists[i];
                 divBody += "<tr id='list-" + list.id + "' class='list'>";
-                divBody += "<td style='font-size: 18px;'>" + list.name + "</td>";
+                divBody += "<td class='list-image'><img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''></td>";
+                divBody += "<td class='list-name'>" + list.name + "</td>";
                 divBody += "</tr>";
 
             }
@@ -94,8 +95,10 @@ define([
         handleListClicked: function(event) {
             event.preventDefault();
             var list = _.find(this.lists, {id: event.currentTarget.id.replace('list-', '')});
+            app.api.setGuest('list', list.id);
             app.dialogs.show('list-confirmation');
             app.dialogs.element('.list-name').text(list.shortName);
+            app.dialogs.element('.list-image').html("<img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''>");
             app.dialogs.element('.list-description').html(list.description);
             app.dialogs.element('.list-categories').text(list.categories.join(', '));
             app.dialogs.element('.list-studying').text(list.peopleStudying);
@@ -137,7 +140,8 @@ define([
             var self = this;
             this.elements.listsContainer.hide();
             app.api.getVocabLists({
-                sort: 'official'
+                sort: 'official',
+                lang: app.api.getGuest('lang') ? app.api.getGuest('lang') : 'zh'
             }, function(lists) {
                 self.lists = _.filter(lists, function(list) { return list.categories.length; });
                 self.sortLists();

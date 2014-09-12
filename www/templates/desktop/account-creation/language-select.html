@@ -3,11 +3,28 @@
     <div class="container text-center">
 
         <h1>{{account-creation.language-select.header}}</h1>
-        <div class="btn-group-vertical">
-            <button id="select-chinese-simp" type="button" class="btn btn-default language-select">{{account-creation.select-chinese-simp}} &raquo;</button>
-            <button id="select-chinese-trad" type="button" class="btn btn-default language-select">{{account-creation.select-chinese-trad}} &raquo;</button>
-            <button id="select-chinese-both" type="button" class="btn btn-default language-select">{{account-creation.select-chinese-both}} &raquo;</button>
-            <button id="select-japanese" type="button" class="btn btn-default language-select">{{account-creation.select-japanese}} &raquo;</button>
+
+        <hr>
+
+        <div id="language-container">
+            <button id="select-chinese" type="button" class="btn btn-primary btn-lg language-select">
+                {{account-creation.select-chinese}}
+            </button>
+            <button id="select-japanese" type="button" class="btn btn-primary btn-lg language-select">
+                {{account-creation.select-japanese}}
+            </button>
+        </div>
+
+        <div id="chinese-options-container">
+            <button id="select-chinese-simp" type="button" class="btn btn-primary btn-lg language-select">
+                {{account-creation.select-chinese-simp}}
+            </button>
+            <button id="select-chinese-trad" type="button" class="btn btn-primary btn-lg language-select">
+                {{account-creation.select-chinese-trad}}
+            </button>
+            <button id="select-chinese-both" type="button" class="btn btn-primary btn-lg language-select">
+                {{account-creation.select-chinese-both}}
+            </button>
         </div>
 
     </div>

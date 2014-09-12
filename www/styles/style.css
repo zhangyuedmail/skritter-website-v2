@@ -13,6 +13,10 @@ body { padding-top: 45px; }
 
 
 
+/*** DIALOGS: LIST CONFIRMATION ***/
+#dialog-list-confirmation .list-image img { max-width: 100px; }
+
+
 /*** NAVBAR ***/
 .navbar, .navbar-header { height: 45px; }
 .navbar-icon {
@@ -91,6 +95,22 @@ body { padding-top: 45px; }
 .page.no-navbar { margin-top: auto; }
 @media (max-width: 991px) {
     .page.no-navbar { margin-top: -55px; }
+}
+
+
+/*** PAGES: ACCOUNT CREATION ***/
+.page-create-account .create-account-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+.page-list-select .list-image img {
+    max-width: 50px;
+}
+.page-list-select .list-name {
+    font-size: 0.6em;
+    padding-left: 25px;
+    text-align: left;
+    vertical-align: middle;
 }
 
 

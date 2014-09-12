@@ -10,13 +10,19 @@ define([], {
         },
         'account-creation': {
             title: 'Account Creation',
-            'select-chinese-both': 'Chinese (Simplified/Traditional)',
-            'select-chinese-simp': 'Chinese (Simplified)',
-            'select-chinese-trad': 'Chinese (Traditional)',
-            'select-japanese': 'Japanese',
+            'select-chinese': 'Chinese 中文',
+            'select-chinese-both': 'Both 简繁体字',
+            'select-chinese-simp': 'Simplified 简体字',
+            'select-chinese-trad': 'Traditional 繁体字',
+            'select-japanese': 'Japanese 日本語',
+            'create-account': {
+                email: 'E-mail',
+                password: 'Password',
+                username: 'Username'
+            },
             'language-select': {
                 title: 'Language Select',
-                header: 'Which language are you studying?'
+                header: 'Which language to study?'
             },
             'list-select': {
                 title: 'List Select',
