@@ -1,20 +1,21 @@
 define([
     'async',
     'fastclick',
+    'handlebars',
     'moment.timezone',
     'backbone.routefilter',
     'bootstrap.switch',
     'createjs.easel',
     'createjs.tween',
-    'handlebars',
     'jquery.mobile',
     'jquery.ui',
     'modernizr',
     'raygun',
     'require.i18n',
     'require.text'
-], function(Async, FastClick, Moment) {
+], function(Async, FastClick, Handlebars, Moment) {
     window.async = Async;
     window.fastclick = new FastClick(document.body);
+    window.handlebars = Handlebars;
     window.moment = Moment;
 });

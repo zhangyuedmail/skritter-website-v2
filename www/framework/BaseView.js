@@ -27,7 +27,7 @@ define([], function() {
          * @returns {String}
          */
         compile: function(template) {
-            return Handlebars.compile(template)(app.strings);
+            return handlebars.compile(template)(app.strings);
         },
         /**
          * @method destroy

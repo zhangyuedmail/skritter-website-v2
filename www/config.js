@@ -33,7 +33,7 @@ app = (function() {
                 jquery: 'libraries/jquery-1.11.1.min',
                 'jquery.ui': 'libraries/jquery.ui-1.11.1.min',
                 'jquery.mobile': 'libraries/jquery.mobile-1.4.3.min',
-                handlebars: 'libraries/handlebars-1.3.0.min',
+                handlebars: 'libraries/handlebars-2.0.0.min',
                 modernizr: 'libraries/modernizr.custom-2.8.3.min',
                 moment: 'libraries/moment-2.8.2.min',
                 'moment.timezone': 'libraries/moment.timezone-0.2.1.min',
