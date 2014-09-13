@@ -133,6 +133,14 @@ define([
             this.renderListTable();
         },
         /**
+         * @method initialListFilter
+         * @param {Object} list
+         * @returns {Boolean}
+         */
+        initialListFilter: function(list) {
+            return list.categories.length;
+        },
+        /**
          * @method loadLists
          * @returns {PageListSelect}
          */
@@ -143,7 +151,7 @@ define([
                 sort: 'official',
                 lang: app.api.getGuest('lang') ? app.api.getGuest('lang') : 'zh'
             }, function(lists) {
-                self.lists = _.filter(lists, function(list) { return list.categories.length; });
+                self.lists = _.filter(lists, this.initialListFilter);
                 self.sortLists();
                 self.renderListTable();
                 self.elements.loadingBox.hide();
