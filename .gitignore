@@ -1,15 +1,8 @@
 # Directories #
 .idea/
 build/
-config/crosswalk/
 docs/
-files/
-nbproject/
+framework/crosswalk/arm
+framework/crosswalk/x86
 node_modules/
-scripts/
-utils/
-
-# Files #
-*.DS_Store
-*.keystore
-*.log
+nbproject/
