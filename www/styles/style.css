@@ -120,9 +120,9 @@ body { padding-top: 45px; }
 
 /*** PAGES: LANDING ***/
 .landing-logo {
-    margin: 0 auto;
-    max-height: 300px;
+    margin: 25px auto 0 auto;
     padding-left: 10%;
+    width: 50%;
 }
 
 

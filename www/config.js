@@ -32,7 +32,7 @@ app = (function() {
                 'jasmine.html': 'libraries/jasmine.html-2.0.3',
                 jquery: 'libraries/jquery-1.11.1.min',
                 'jquery.ui': 'libraries/jquery.ui-1.11.1.min',
-                'jquery.mobile': 'libraries/jquery.mobile-1.4.3.min',
+                'jquery.mobile': 'libraries/jquery.mobile-1.4.4.min',
                 handlebars: 'libraries/handlebars-2.0.0.min',
                 modernizr: 'libraries/modernizr.custom-2.8.3.min',
                 moment: 'libraries/moment-2.8.2.min',
