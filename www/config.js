@@ -55,7 +55,7 @@ app = (function() {
             }
         },
         isLocalhost: function() {
-            return location.hostname === 'localhost' || location.port === '1987';
+            return location.hostname === 'localhost' || location.port === '1987' || location.protocol === 'file:';
         }
     };
 })();
