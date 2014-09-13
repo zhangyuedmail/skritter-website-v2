@@ -16,18 +16,21 @@ define([], {
             'select-chinese-trad': 'Traditional 繁体字',
             'select-japanese': 'Japanese 日本語',
             'create-account': {
+                title: 'Create Account',
                 email: 'E-mail',
+                message: 'Register your new account so that it never gets lost.',
                 password: 'Password',
                 username: 'Username'
             },
             'language-select': {
                 title: 'Language Select',
-                header: 'Which language to study?'
+                header: 'Choose a language.',
+                message: 'Your language journey starts here.'
             },
             'list-select': {
                 title: 'List Select',
                 header: 'Select a list.',
-                message: "You'll need to select one list to get things started. You'll be able to add more lists later.",
+                message: 'You need to select one list to get things started.',
                 'search-placeholder': 'Search for list by name'
             }
         },
@@ -48,13 +51,14 @@ define([], {
         },
         login: {
             title: 'Log In',
+            message: 'Fill in your credentials and get studying.',
             'new-user': 'New User',
             password: 'Password',
             username: 'Username'
         },
         sidebar: {
             account: 'Account',
-            home: 'Home',
+            dashboard: 'Dashboard',
             lists: 'Lists',
             logout: 'Log Out',
             queue: 'Queue',
