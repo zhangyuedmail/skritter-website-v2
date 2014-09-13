@@ -140,13 +140,19 @@ define([
             })();
         },
         /**
+         * @method clearGuest
+         */
+        clearGuest: function(key) {
+            this.set('guest', undefined, {silent: true});
+            localStorage.removeItem('_guest');
+        },
+        /**
          * @method createUser
-         * @param {String} token
          * @param {Object} [options]
          * @param {Function} callbackComplete
          * @param {Function} callbackError
          */
-        createUser: function(token, options, callbackComplete, callbackError) {
+        createUser: function(options, callbackComplete, callbackError) {
             options = options ? options : {};
             $.ajax({
                 url: this.getBaseUrl() + 'users',
@@ -154,7 +160,7 @@ define([
                 context: this,
                 type: 'POST',
                 data: {
-                    bearer_token: token,
+                    bearer_token: this.getToken(),
                     fields: options.fields,
                     lang: options.lang
                 }
@@ -452,6 +458,29 @@ define([
             this.attributes.guest[key] = value;
             this.trigger('change:guest');
             return this;
+        },
+        /**
+         * @method updateUser
+         * @param {Object} settings
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        updateUser: function(settings, callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl() + 'users?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(settings)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.User);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         }
     });
 

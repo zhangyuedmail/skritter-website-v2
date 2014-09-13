@@ -33,44 +33,53 @@ define([
         },
         /**
          * @method createNew
-         * @param {Function} callback
-         * @param {Object} [options]
+         * @param {Object} [settings]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
          */
-        createNew: function(callback, options) {
+        createNew: function(settings, callbackComplete, callbackError) {
             var self = this;
             async.waterfall([
                 function(callback) {
-                    app.api.authenticateGuest(function(result, status) {
-                        if (status === 200) {
-                            callback(null, result);
-                        } else {
-                            callback(result);
-                        }
-                    });
-                },
-                function(result, callback) {
-                    app.api.createUser(result.access_token, function(user, status) {
-                        if (status === 200) {
+                    if (self.isAuthenticated()) {
+                        callback(null, self.settings.toJSON());
+                    } else {
+                        app.api.createUser({
+                            lang: app.api.getGuest('lang')
+                        }, function(user) {
                             callback(null, user);
-                        } else {
-                            callback(user);
-                        }
-                    }, options);
+                        }, function(error) {
+                            callback(error);
+                        });
+                    }
                 },
                 function(user, callback) {
-                    self.login(user.id, '', function(data, status) {
-                        if (status === 200) {
-                            callback(null, data);
-                        } else {
-                            callback(data);
-                        }
-                    });
+                    if (self.isAuthenticated()) {
+                        callback(null, user);
+                    } else {
+                        self.login(user.id, '', function() {
+                            callback(null, user);
+                        }, function(error) {
+                            callback(error);
+                        });
+                    }
+                },
+                function(user, callback) {
+                    if (settings) {
+                        app.api.updateUser($.extend(user, settings), function() {
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    } else {
+                        callback();
+                    }
                 }
             ], function(error) {
                 if (error) {
-                    callback(error);
+                    callbackError(error);
                 } else {
-                    callback();
+                    callbackComplete();
                 }
             });
         },
@@ -229,15 +238,16 @@ define([
          * @method remove
          */
         remove: function() {
-            localStorage.removeItem(this.id + '-data');
-            localStorage.removeItem(this.id + '-settings');
-            localStorage.removeItem(this.id + '-subscription');
+            localStorage.removeItem(app.user.id + '-data');
+            localStorage.removeItem(app.user.id + '-settings');
+            localStorage.removeItem(app.user.id + '-subscription');
             localStorage.removeItem('_active');
             async.series([
                 function(callback) {
                     app.storage.destroy(callback);
                 }
             ], function() {
+                app.api.clearGuest();
                 app.reload();
             });
         }

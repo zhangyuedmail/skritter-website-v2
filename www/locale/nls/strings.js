@@ -6,7 +6,9 @@ define([], {
         global: {
             back: 'Back',
             chinese: 'Chinese',
-            japanese: 'Japanese'
+            create: 'Create',
+            japanese: 'Japanese',
+            skip: 'Skip'
         },
         'account-creation': {
             title: 'Account Creation',
