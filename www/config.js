@@ -1,5 +1,9 @@
 app = (function() {
     return {
+        /**
+         * @property configs
+         * @type {Object}
+         */
         configs: {
             modules: [
                 {
@@ -54,8 +58,19 @@ app = (function() {
                 'moment.timezone': ['moment']
             }
         },
+        /**
+         * @method isLocalHost
+         * @returns {Boolean}
+         */
         isLocalhost: function() {
-            return location.hostname === 'localhost' || location.port === '1987' || location.protocol === 'file:';
+            return location.hostname === 'localhost' || location.port === '1987';
+        },
+        /**
+         * @method isNative
+         * @returns {Boolean}
+         */
+        isNative: function() {
+            return location.protocol === 'file:';
         }
     };
 })();

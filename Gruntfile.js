@@ -107,11 +107,6 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('clean-all', [
-        'clean-build',
-        'clean-dev'
-    ]);
-
     grunt.registerTask('clean-build', [
         'clean:build-docs',
         'clean:build-web'
@@ -135,6 +130,11 @@ module.exports = function(grunt) {
     grunt.registerTask('validate', [
         'csslint:all',
         'jshint:all'
+    ]);
+
+    grunt.registerTask('wipe', [
+        'clean-build',
+        'clean-dev'
     ]);
 
 };
