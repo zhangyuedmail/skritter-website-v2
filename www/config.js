@@ -63,7 +63,7 @@ app = (function() {
          * @returns {Boolean}
          */
         isLocalhost: function() {
-            return location.hostname === 'localhost' || location.port === '1987';
+            return this.isNative() || location.hostname === 'localhost' || location.port === '1987';
         },
         /**
          * @method isNative
