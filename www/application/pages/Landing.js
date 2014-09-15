@@ -22,6 +22,18 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
+            this.elements.tagline = this.$('.tagline');
+            switch (app.get('languageCode')) {
+                case 'zh':
+                    this.elements.tagline.text(app.strings.landing['tagline-chinese']);
+                    break;
+                case 'ja':
+                    this.elements.tagline.text(app.strings.landing['tagline-japanese']);
+                    break;
+                default:
+                    this.elements.tagline.text(app.strings.landing.tagline);
+                    break;
+            }
             return this;
         }
     });

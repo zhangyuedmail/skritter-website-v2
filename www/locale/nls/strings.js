@@ -43,7 +43,9 @@ define([], {
             title: 'Landing',
             'existing-user': 'Existing User',
             'new-user': 'New User',
-            tagline: 'Learn to write Chinese and Japanese characters.'
+            tagline: 'Learn to write Chinese and Japanese characters.',
+            'tagline-chinese': 'Learn to write Chinese characters.',
+            'tagline-japanese': 'Learn to write Japanese characters.'
         },
         'learning-center': {
             title: 'Learning Center',
