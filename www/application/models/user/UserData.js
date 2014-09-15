@@ -7,10 +7,11 @@ define([
     'collections/data/DataItems',
     'collections/data/DataParams',
     'collections/data/DataSentences',
+    'collections/data/DataSRSConfigs',
     'collections/data/DataStrokes',
     'collections/data/DataVocabs',
     'collections/data/DataVocabLists'
-], function(BaseModel, DataDecomps, DataItems, DataParams, DataSentences, DataStrokes, DataVocabs, DataVocabLists) {
+], function(BaseModel, DataDecomps, DataItems, DataParams, DataSentences, DataSRSConfigs, DataStrokes, DataVocabs, DataVocabLists) {
     /**
      * @class UserData
      * @extends BaseModel
@@ -26,6 +27,7 @@ define([
             this.items = new DataItems();
             this.params = new DataParams();
             this.sentences = new DataSentences();
+            this.srsconfigs = new DataSRSConfigs();
             this.strokes = new DataStrokes();
             this.user = options.user;
             this.vocabs = new DataVocabs();

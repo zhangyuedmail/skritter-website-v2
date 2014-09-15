@@ -30,6 +30,15 @@ define([
             this.strings = Strings;
         },
         /**
+         * @property defaults
+         * @type Object
+         */
+        defaults: {
+            timestamp: parseInt('@@timestamp', 10),
+            version: '@@version',
+            versionCode: '@@versionCode'
+        },
+        /**
          * @method start
          */
         start: function() {

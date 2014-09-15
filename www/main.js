@@ -13,11 +13,9 @@
         requirejs(['application/Libraries'], function() {
             if (app.isNative()) {
                 requirejs(['cordova.js'], function() {
-                    console.log('cordova application');
                     document.addEventListener('deviceready', loadApplication, false);
                 });
             } else {
-                console.log('web application');
                 loadApplication();
             }
         });

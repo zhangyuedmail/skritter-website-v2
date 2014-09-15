@@ -28,8 +28,7 @@ define([
          * @type Object
          */
         defaults: {
-            id: 'guest',
-            languageCode: '@@languageCode'
+            id: 'guest'
         },
         /**
          * @method createNew
@@ -101,7 +100,7 @@ define([
          * @method getLanguageCode
          */
         getLanguageCode: function() {
-            return this.get('languageCode') === '@@languageCode' ? this.settings.get('targetLang') : this.get('languageCode');
+            return app.get('languageCode') ? app.get('languageCode') : this.settings.get('targetLang');
         },
         /**
          * @method getLanguageName
