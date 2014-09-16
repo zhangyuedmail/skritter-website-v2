@@ -22,7 +22,27 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
+            this.elements.scheduleDueCount = this.$('.schedule-duecount');
+            this.elements.userAvatar = this.$('.user-avatar');
+            this.elements.userDisplayName = this.$('.user-displayname');
+            this.renderElements();
             return this;
+        },
+        /**
+         * @method renderElements
+         * @returns {PageDashboard}
+         */
+        renderElements: function() {
+            this.elements.userAvatar.html(app.user.getAvatar());
+            this.elements.userDisplayName.text(app.user.settings.get('name'));
+            this.updateDueCount();
+        },
+        /**
+         * @method updateDueCount
+         * @returns {PageDashboard}
+         */
+        updateDueCount: function() {
+            this.elements.scheduleDueCount.text(app.user.schedule.getDueCount());
         }
     });
 

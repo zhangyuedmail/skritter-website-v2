@@ -16,6 +16,7 @@ define([
          * @constructor
          */
         initialize: function(attributes, options) {
+            options = options ? options : {};
             this.user = options.user;
         },
         /**
@@ -30,6 +31,43 @@ define([
          */
         comparator: function(item) {
             return item.attributes.next;
+        },
+        /**
+         * @method getActive
+         * @param {ScheduleItems}
+         */
+        getActive: function() {
+            var activeParts = this.user.settings.getActiveParts();
+            var activeStyles = this.user.settings.getActiveStyles();
+            return new ScheduleItems(this.models.filter(function(item) {
+                if (!item.attributes.active) {
+                    return false;
+                }
+                if (activeParts.indexOf(item.attributes.part) === -1) {
+                    return false;
+                }
+                if (activeStyles.indexOf(item.attributes.style) === -1) {
+                    return false;
+                }
+                return true;
+            }), {user: this.user});
+        },
+        /**
+         * @method getDue
+         * @returns {ScheduleItems}
+         */
+        getDue: function() {
+            var now = moment().unix();
+            return new ScheduleItems(this.getActive().models.filter(function(item) {
+                return item.attributes.next < now;
+            }), {user: this.user});
+        },
+        /**
+         * @method getDueCount
+         * @returns {Number}
+         */
+        getDueCount: function() {
+            return this.getDue().length;
         },
         /**
          * @method getNext
