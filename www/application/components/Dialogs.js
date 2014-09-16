@@ -47,7 +47,7 @@ define([
         },
         /**
          * @method hide
-         * @param {Function} callback
+         * @param {Function} [callback]
          * @returns {Dialogs}
          */
         hide: function(callback) {
@@ -78,9 +78,9 @@ define([
         },
         /**
          * @method show
-         * @param {String} dialogId
-         * @param {Function} callback
-         * @param {Object} options
+         * @param {String} [dialogId]
+         * @param {Function} [callback]
+         * @param {Object} [options]
          * @returns {Dialogs}
          */
         show: function(dialogId, callback, options) {
