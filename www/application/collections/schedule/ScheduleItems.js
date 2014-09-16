@@ -33,11 +33,13 @@ define([
         },
         /**
          * @method getNext
+         * @param {Number} [index]
          * @returns {DataItem}
          */
-        getNext: function() {
+        getNext: function(index) {
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
+            index = index ? index : 0;
             for (var i = 0, length = this.length; i < length; i++) {
                 var item = this.at(i);
                 if (!item.attributes.active) {
@@ -47,6 +49,10 @@ define([
                     continue;
                 }
                 if (activeStyles.indexOf(item.attributes.style) === -1) {
+                    continue;
+                }
+                if (index > 0) {
+                    index--;
                     continue;
                 }
                 return item;

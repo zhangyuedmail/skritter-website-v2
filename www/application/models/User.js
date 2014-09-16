@@ -100,7 +100,10 @@ define([
          * @method getLanguageCode
          */
         getLanguageCode: function() {
-            return app.get('languageCode') ? app.get('languageCode') : this.settings.get('targetLang');
+            if (app.get('languageCode') && app.get('languageCode') !== '@@languageCode') {
+                return app.get('languageCode');
+            }
+            return this.settings.get('targetLang');
         },
         /**
          * @method getLanguageName

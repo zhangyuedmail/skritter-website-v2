@@ -34,6 +34,7 @@ define([
          * @type Object
          */
         defaults: {
+            languageCode: '@@languageCode',
             timestamp: parseInt('@@timestamp', 10),
             version: '@@version',
             versionCode: '@@versionCode'
@@ -45,11 +46,13 @@ define([
             this.dialogs = new Dialogs();
             this.sidebars = new Sidebars();
             this.user = new User();
+            app.dialogs.show().element('.message-title').text('Loading');
             this.user.load(function() {
                 Backbone.history.start({
                     pushState: app.isLocalhost() ? false : true,
                     root: app.isLocalhost() ? '/skritter-html5/www/' : '/'
                 });
+                app.dialogs.hide();
             });
         }
     });
