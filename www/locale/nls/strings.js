@@ -70,6 +70,9 @@ define([], {
             password: 'Password',
             username: 'Username'
         },
+        settings: {
+            title: 'Settings'
+        },
         sidebar: {
             account: 'Account',
             dashboard: 'Dashboard',

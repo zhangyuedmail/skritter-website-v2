@@ -9,9 +9,10 @@ define([
     'pages/Dashboard',
     'pages/Landing',
     'pages/Login',
+    'pages/Settings',
     'pages/Tests'
 ], function(BaseRouter, RouterAccountCreation, RouterLearningCenter,
-            PageAccount, PageDashboard, PageLanding, PageLogin, PageTests) {
+            PageAccount, PageDashboard, PageLanding, PageLogin, PageSettings, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -34,6 +35,7 @@ define([
             'account': 'showAccount',
             'login': 'showLogin',
             'logout': 'handleLogout',
+            'settings': 'showSettings',
             'tests': 'showTests',
             '*route': 'defaultRoute'
         },
@@ -79,6 +81,13 @@ define([
          */
         showLogin: function() {
             this.currentPage = new PageLogin();
+            this.currentPage.render();
+        },
+        /**
+         * @method showSettings
+         */
+        showSettings: function() {
+            this.currentPage = new PageSettings();
             this.currentPage.render();
         },
         /**
