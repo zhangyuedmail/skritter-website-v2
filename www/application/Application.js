@@ -24,7 +24,6 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.analytics = new Analytics();
             this.api = new Api();
             this.assets = new Assets();
             this.fn = Functions;
@@ -46,6 +45,7 @@ define([
          * @method start
          */
         start: function() {
+            this.analytics = new Analytics();
             this.dialogs = new Dialogs();
             this.sidebars = new Sidebars();
             this.user = new User();
