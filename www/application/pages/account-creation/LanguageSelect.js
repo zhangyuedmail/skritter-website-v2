@@ -24,7 +24,23 @@ define([
             this.$el.html(this.compile(TemplateDesktop));
             this.elements.languageContainer = this.$('#language-container');
             this.elements.chineseOptions = this.$('#chinese-options-container');
-            this.elements.chineseOptions.hide();
+            this.elements.selectChinese = this.$('#select-chinese');
+            this.elements.selectJapanese = this.$('#select-japanese');
+            this.renderElements();
+            return this;
+        },
+        /**
+         * @method renderElements
+         * @returns {PageLanguageSelect}
+         */
+        renderElements: function() {
+            if (app.get('languageCode') === 'ja') {
+                this.next();
+            } else if (app.get('languageCode') === 'zh') {
+                this.elements.languageContainer.hide();
+            } else {
+                this.elements.chineseOptions.hide();
+            }
             return this;
         },
         /**
