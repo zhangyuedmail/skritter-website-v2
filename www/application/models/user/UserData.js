@@ -135,9 +135,9 @@ define([
                     });
                 }
             ], function(error) {
-                app.dialogs.hide();
                 if (error) {
                     callback(error);
+                    app.dialogs.hide();
                 } else {
                     self.set({
                         lastErrorCheck: now,
@@ -146,7 +146,7 @@ define([
                         lastSRSConfigSync: now,
                         lastVocabSync: now
                     });
-                    callback();
+                    app.dialogs.hide(callback);
                 }
             });
         },

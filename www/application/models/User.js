@@ -184,10 +184,11 @@ define([
                     },
                     //load all schedule items
                     function(callback) {
+                        app.dialogs.show().element('.message-title').text('Loading');
                         self.schedule.loadAll(callback);
                     }
                 ], function() {
-                    callback();
+                    app.dialogs.hide(callback);
                 });
             } else {
                 callback();

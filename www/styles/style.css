@@ -97,12 +97,13 @@ body {
 /*** NAVBAR: MENU SIDEBAR ***/
 .navbar-menu .toggle-bars {
     float: left;
-    font-size: 24px;
+    font-size: 26px;
     margin-left: 5px;
+    margin-top: 2px;
 }
 .navbar-menu .toggle-text {
     float: right;
-    font-size: 16px;
+    font-size: 22px;
     margin-left: 20px;
 }
 .navbar-menu.active .toggle-bars { margin-left: -5px; }
@@ -156,7 +157,7 @@ body {
 /*** SIDEBARS ***/
 .sidebars-container a {
     color: #000000;
-    font-size: 22px;
+    font-size: 20px;
 }
 .sidebars-container hr {
     margin-bottom: 8px;

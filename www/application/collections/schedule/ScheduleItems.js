@@ -104,8 +104,7 @@ define([
             var self = this;
             app.storage.getSchedule(function(data) {
                 self.reset();
-                self.add(data);
-                callback();
+                self.lazyAdd(data, callback);
             });
         }
     });
