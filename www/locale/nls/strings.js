@@ -10,6 +10,16 @@ define([], {
             japanese: 'Japanese',
             skip: 'Skip'
         },
+        'account': {
+            title: 'Account',
+            'account-id': 'Account ID',
+            country: 'Country',
+            displayname: 'Display Name',
+            email: 'E-mail',
+            general: 'General',
+            region: 'Region',
+            timezone: 'Region / Timezone'
+        },
         'account-creation': {
             title: 'Account Creation',
             'select-chinese': 'Chinese 中文',
