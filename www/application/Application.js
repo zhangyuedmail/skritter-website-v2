@@ -8,11 +8,13 @@ define([
     'application/Router',
     'components/Dialogs',
     'components/Sidebars',
+    'models/Analytics',
     'models/Api',
     'models/Assets',
     'models/User',
     'storage/IndexedDBAdapter'
-], function(BaseApplication, Strings, Functions, Router, Dialogs, Sidebars, Api, Assets, User, IndexedDBAdapter) {
+], function(BaseApplication, Strings,
+            Functions, Router, Dialogs, Sidebars, Analytics, Api, Assets, User, IndexedDBAdapter) {
     /**
      * @class Application
      * @extends BaseApplication
@@ -22,6 +24,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.analytics = new Analytics();
             this.api = new Api();
             this.assets = new Assets();
             this.fn = Functions;

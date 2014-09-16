@@ -156,6 +156,9 @@ define([
                 if (localStorage.getItem(this.id + '-subscription')) {
                     this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')), {silent: true});
                 }
+                if (app.analytics) {
+                    app.analytics.setUserId(this.settings.get('name'));
+                }
                 async.series([
                     //load user storage instance
                     function(callback) {
@@ -188,10 +191,12 @@ define([
                         self.schedule.loadAll(callback);
                     }
                 ], function() {
-                    app.dialogs.hide(callback);
+                    app.dialogs.hide(function() {
+                        callback(self);
+                    });
                 });
             } else {
-                callback();
+                callback(this);
             }
         },
         /**
