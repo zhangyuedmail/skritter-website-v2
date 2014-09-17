@@ -39,6 +39,20 @@ define([], function() {
             }
         },
         /**
+         * @method getHeight
+         * @returns {Number}
+         */
+        getHeight: function() {
+            return this.$el.height();
+        },
+        /**
+         * @method getWidth
+         * @returns {Number}
+         */
+        getWidth: function() {
+            return this.$el.width();
+        },
+        /**
          * @method handleActionBackClicked
          * @param {Event} event
          */
@@ -60,7 +74,7 @@ define([], function() {
         },
         /**
          * @method handleNavigateClicked
-         * @param {Event}
+         * @param {Event} event
          */
         handleNavigateClicked: function(event) {
             event.preventDefault();
