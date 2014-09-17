@@ -15,8 +15,8 @@ define([
         initialize: function() {
             this.canvasSize = 0;
             this.containerSize = 0;
+            this.baseStrokeSize = 12;
             this.grid = true;
-            this.layerNames = [];
             this.maxCanvasSize = 600;
             this.mouseDownEvent = null;
             this.mouseDownTimer = null;
@@ -24,6 +24,10 @@ define([
             this.mouseUpEvent = null;
             this.previousMouseDownEvent = null;
             this.stage = undefined;
+            this.strokeCaps = 'round';
+            this.strokeColor = '#000000';
+            this.strokeJoints = 'round';
+            this.strokeSize = 12;
         },
         /**
          * @method render
@@ -40,7 +44,7 @@ define([
             this.createLayer('stroke');
             this.createLayer('overlay');
             this.createLayer('input');
-            this.resize();
+            this.resize().hide();
             return this;
         },
         /**
@@ -177,7 +181,7 @@ define([
             function down() {
                 points = [];
                 marker = new createjs.Shape();
-                marker.graphics.setStrokeStyle(12, 'round', 'round').beginStroke('#000000');
+                marker.graphics.setStrokeStyle(self.strokeSize, self.strokeCaps, self.strokeJoints).beginStroke(self.strokeColor);
                 oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
                 self.getLayer('input').addChild(marker);
                 self.$el.on('vmouseout.Input vmouseup.Input', up);
@@ -226,6 +230,13 @@ define([
                     callback();
                 }
             });
+        },
+        /**
+         * @method getScaledStrokeSize
+         * @returns {Number}
+         */
+        getScaledStrokeSize: function() {
+            return this.baseStrokeSize * (this.canvasSize / this.maxCanvasSize);
         },
         /**
          * @method getLayer
@@ -282,6 +293,7 @@ define([
             this.el.style.width = this.containerSize + 'px';
             this.stage.canvas.height = this.canvasSize;
             this.stage.canvas.width = this.canvasSize;
+            this.strokeSize = this.getScaledStrokeSize();
             if (this.grid) {
                 this.drawGrid();
             } else {
