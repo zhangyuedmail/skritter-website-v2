@@ -2,34 +2,38 @@
  * @module Application
  */
 define([
-    'prompts/Prompt'
-], function(Prompt) {
+    'prompts/Prompt',
+    'require.text!templates/desktop/prompts/prompt-rdng.html'
+], function(Prompt, DesktopTemplate) {
     /**
-     * @class PromptDefn
+     * @class PromptRdng
      * @extends {Prompt}
      */
-    var PromptDefn = Prompt.extend({
+    var PromptRdng = Prompt.extend({
         /**
          * @method initialize
+         * @param {PromptController} controller
          * @constructor
          */
-        initialize: function() {
+        initialize: function(controller) {
+            Prompt.prototype.initialize.call(this, controller);
         },
         /**
          * @method render
-         * @returns {PromptDefn}
+         * @returns {PromptRdng}
          */
         render: function() {
+            this.$el.prepend(this.compile(DesktopTemplate));
             return this;
         },
         /**
          * @method renderElements
-         * @returns {PromptDefn}
+         * @returns {PromptRdng}
          */
         renderElements: function() {
             return this;
         }
     });
 
-    return PromptDefn;
+    return PromptRdng;
 });

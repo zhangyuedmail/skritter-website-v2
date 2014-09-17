@@ -16,6 +16,7 @@ define([
             this.canvasSize = 0;
             this.containerSize = 0;
             this.baseStrokeSize = 12;
+            this.fadeSpeed = 200;
             this.grid = true;
             this.maxCanvasSize = 600;
             this.mouseDownEvent = null;
@@ -216,7 +217,7 @@ define([
             options = options ? options : {};
             options.alpha = options.alpha ? options.alpha : undefined;
             options.color = options.color ? options.color : undefined;
-            options.milliseconds = options.milliseconds ? options.milliseconds : 500;
+            options.milliseconds = options.milliseconds ? options.milliseconds : this.fadeSpeed;
             if (options.alpha) {
                 shape.alpha = options.alpha;
             }

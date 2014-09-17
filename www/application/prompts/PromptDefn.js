@@ -2,34 +2,38 @@
  * @module Application
  */
 define([
-    'prompts/Prompt'
-], function(Prompt) {
+    'prompts/Prompt',
+    'require.text!templates/desktop/prompts/prompt-defn.html'
+], function(Prompt, DesktopTemplate) {
     /**
-     * @class PromptRune
+     * @class PromptDefn
      * @extends {Prompt}
      */
-    var PromptRune = Prompt.extend({
+    var PromptDefn = Prompt.extend({
         /**
          * @method initialize
+         * @param {PromptController} controller
          * @constructor
          */
-        initialize: function() {
+        initialize: function(controller) {
+            Prompt.prototype.initialize.call(this, controller);
         },
         /**
          * @method render
-         * @returns {PromptRune}
+         * @returns {PromptDefn}
          */
         render: function() {
+            this.$el.prepend(this.compile(DesktopTemplate));
             return this;
         },
         /**
          * @method renderElements
-         * @returns {PromptRune}
+         * @returns {PromptDefn}
          */
         renderElements: function() {
             return this;
         }
     });
 
-    return PromptRune;
+    return PromptDefn;
 });

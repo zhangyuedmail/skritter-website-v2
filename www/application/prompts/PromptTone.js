@@ -2,8 +2,9 @@
  * @module Application
  */
 define([
-    'prompts/Prompt'
-], function(Prompt) {
+    'prompts/Prompt',
+    'require.text!templates/desktop/prompts/prompt-tone.html'
+], function(Prompt, DesktopTemplate) {
     /**
      * @class PromptTone
      * @extends {Prompt}
@@ -11,15 +12,18 @@ define([
     var PromptTone = Prompt.extend({
         /**
          * @method initialize
+         * @param {PromptController} controller
          * @constructor
          */
-        initialize: function() {
+        initialize: function(controller) {
+            Prompt.prototype.initialize.call(this, controller);
         },
         /**
          * @method render
          * @returns {PromptTone}
          */
         render: function() {
+            this.$el.prepend(this.compile(DesktopTemplate));
             return this;
         },
         /**

@@ -174,7 +174,6 @@ body {
 /*** PROMPTS: CANVAS ***/
 .canvas-container {
     bottom: 0;
-    display: none;
     position: absolute;
     text-align: center;
 }
@@ -188,9 +187,9 @@ body {
 /*** PROMPTS: GRADING BUTTONS ***/
 .grading-buttons-container {
     bottom: 0;
+    display: none;
     position: absolute;
 }
-.grading-buttons-container .grading-buttons { display: none; }
 
 
 /*** SIDEBARS ***/

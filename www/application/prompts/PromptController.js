@@ -11,15 +11,16 @@ define([
     'prompts/PromptTone',
 ], function(BaseView, PromptCanvas, PromptGradingButtons, PromptDefn, PromptRdng, PromptRune, PromptTone) {
     /**
-     * @class PromptContainer
+     * @class PromptController
      * @extends {BaseView}
      */
-    var PromptContainer = BaseView.extend({
+    var PromptController = BaseView.extend({
         /**
          * @method initialize
          * @constructor
          */
         initialize: function() {
+            this.active = undefined;
             this.canvas = new PromptCanvas();
             this.gradingButtons = new PromptGradingButtons();
             this.review = undefined;
@@ -27,18 +28,25 @@ define([
         },
         /**
          * @method render
-         * @returns {PromptContainer}
+         * @returns {PromptController}
          */
         render: function() {
-            this.canvas.setElement(this.$('.canvas-container')).render();
+            this.canvas.setElement(this.$('.canvas-container')).render().show().enableInput();
             this.gradingButtons.setElement(this.$('.grading-buttons-container')).render();
+            this.types = {
+                defn: new PromptDefn(this),
+                rdng: new PromptRdng(this),
+                rune: new PromptRune(this),
+                tone: new PromptTone(this)
+            };
             this.renderElements();
             this.resize();
+            this.reset();
             return this;
         },
         /**
          * @method renderElements
-         * @returns {PromptContainer}
+         * @returns {PromptController}
          */
         renderElements: function() {
             return this;
@@ -46,15 +54,25 @@ define([
         /**
          * @method loadPrompt
          * @param {Review} review
-         * @returns {PromptContainer}
+         * @returns {PromptController}
          */
         loadPrompt: function(review) {
             this.review = review;
             return this;
         },
         /**
+         * @method reset
+         * @returns {PromptController}
+         */
+        reset: function() {
+            for (var type in this.types) {
+                this.types[type].reset();
+            }
+            return this;
+        },
+        /**
          * @method resize
-         * @returns {PromptContainer}
+         * @returns {PromptController}
          */
         resize: function() {
             this.canvas.resize(this.getWidth());
@@ -62,5 +80,5 @@ define([
         }
     });
 
-    return PromptContainer;
+    return PromptController;
 });

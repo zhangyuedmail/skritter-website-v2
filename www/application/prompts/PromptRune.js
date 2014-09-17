@@ -6,19 +6,21 @@ define([
     'require.text!templates/desktop/prompts/prompt-rune.html'
 ], function(Prompt, DesktopTemplate) {
     /**
-     * @class PromptDefn
+     * @class PromptRune
      * @extends {Prompt}
      */
-    var PromptDefn = Prompt.extend({
+    var PromptRune = Prompt.extend({
         /**
          * @method initialize
+         * @param {PromptController} controller
          * @constructor
          */
-        initialize: function() {
+        initialize: function(controller) {
+            Prompt.prototype.initialize.call(this, controller);
         },
         /**
          * @method render
-         * @returns {PromptDefn}
+         * @returns {PromptRune}
          */
         render: function() {
             this.$el.prepend(this.compile(DesktopTemplate));
@@ -26,12 +28,12 @@ define([
         },
         /**
          * @method renderElements
-         * @returns {PromptDefn}
+         * @returns {PromptRune}
          */
         renderElements: function() {
             return this;
         }
     });
 
-    return PromptDefn;
+    return PromptRune;
 });
