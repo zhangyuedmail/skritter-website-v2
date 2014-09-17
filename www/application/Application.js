@@ -24,6 +24,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            BaseApplication.prototype.initialize.call(this);
             this.api = new Api();
             this.assets = new Assets();
             this.fn = Functions;

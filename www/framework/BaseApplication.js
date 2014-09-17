@@ -8,6 +8,13 @@ define([], function() {
      */
     return Backbone.Model.extend({
         /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {
+            $(window).on('throttledresize', _.bind(this.triggerResize, this));
+        },
+        /**
          * @method reload
          */
         reload: function() {
@@ -17,6 +24,13 @@ define([], function() {
             } else {
                 location.href = '';
             }
+        },
+        /**
+         * @method triggerResize
+         * @param {Event} event
+         */
+        triggerResize: function(event) {
+            this.trigger('resize', event);
         }
     });
 });
