@@ -20,6 +20,7 @@ app = (function() {
                 components: 'application/components',
                 models: 'application/models',
                 pages: 'application/pages',
+                prompts: 'application/prompts',
                 routers: 'application/routers',
                 storage: 'application/storage',
                 //libraries

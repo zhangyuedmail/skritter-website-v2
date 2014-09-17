@@ -113,6 +113,7 @@ body {
 /*** PAGES ***/
 .page { height: 100%; }
 .page.no-navbar { margin-top: auto; }
+.page.no-overflow { overflow: hidden; }
 .page .content-container { height: 100%; }
 @media (max-width: 991px) {
     .page.no-navbar { margin-top: -55px; }
@@ -159,6 +160,37 @@ body {
     float: left;
     width: 100px;
 }
+
+
+/*** PROMPTS ***/
+.prompt-container {
+    height: 100%;
+    margin-left: -15px;
+    margin-right: -15px;
+    position: relative;
+}
+
+
+/*** PROMPTS: CANVAS ***/
+.canvas-container {
+    bottom: 0;
+    display: none;
+    position: absolute;
+    text-align: center;
+}
+.prompt-canvas {
+    background-color: #ffffff;
+    display: inline;
+    margin: 0 auto;
+}
+
+
+/*** PROMPTS: GRADING BUTTONS ***/
+.grading-buttons-container {
+    bottom: 0;
+    position: absolute;
+}
+.grading-buttons-container .grading-buttons { display: none; }
 
 
 /*** SIDEBARS ***/

@@ -82,6 +82,9 @@ define([], {
             settings: 'Settings',
             study: 'Study'
         },
+        study: {
+            title: 'Study'
+        },
         tests: {
             title: 'Tests'
         }
