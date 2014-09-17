@@ -33,7 +33,7 @@ define([
          * @returns {PageDashboard}
          */
         renderElements: function() {
-            this.elements.userAvatar.html(app.user.getAvatar());
+            this.elements.userAvatar.html(app.user.getAvatar('img-thumbnail'));
             this.elements.userDisplayName.text(app.user.settings.get('name'));
             this.updateDueCount();
         },
