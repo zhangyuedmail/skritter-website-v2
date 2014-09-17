@@ -34,8 +34,8 @@ define([
     }
     /**
      * @method getAngle
-     * @param {Array|Point} point1
-     * @param {Point} point2
+     * @param {Array|createjs.Point} point1
+     * @param {createjs.Point} point2
      * @return {Number}
      */
     function getAngle(point1, point2) {
@@ -77,11 +77,11 @@ define([
     }
     /**
      * @method getDistance
-     * @param {Point} point1
-     * @param {Point} point2
+     * @param {createjs.Point} point1
+     * @param {createjs.Point} point2
      * @return {Number}
      */
-    function getDistance() {
+    function getDistance(point1, point2) {
         var xs = point2.x - point1.x;
         xs = xs * xs;
         var ys = point2.y - point1.y;
