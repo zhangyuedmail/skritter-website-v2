@@ -89,6 +89,13 @@ define([
         return Math.sqrt(xs + ys);
     }
     /**
+     * @method getGuid
+     * @returns {String}
+     */
+    function getGuid() {
+        return Math.floor((1 + Math.random()) * 0x100000000).toString(16).substring(1);
+    }
+    /**
      * @method isKana
      * @param {String} text
      * @returns {Boolean}
@@ -141,6 +148,7 @@ define([
         getAngle: getAngle,
         getBoundingRectangle: getBoundingRectangle,
         getDistance: getDistance,
+        getGuid: getGuid,
         isKana: isKana,
         isNumber: isNumber,
         mergeObjectArrays: mergeObjectArrays,
