@@ -82,10 +82,11 @@ define([
          */
         getContainedItems: function() {
             var items = [];
-            if (['rune', 'tone'].indexOf(this.get('part')) !== -1) {
+            var part = this.get('part');
+            if (['rune', 'tone'].indexOf(part) !== -1) {
                 var containedIds = this.getVocab().getContainedItemIds(part);
                 for (var i = 0, length = containedIds.length; i < length; i++) {
-                    items.push(skritter.user.data.items.get(containedIds[i]));
+                    items.push(app.user.data.items.get(containedIds[i]));
                 }
             }
             return items;

@@ -70,6 +70,10 @@ define([], {
             password: 'Password',
             username: 'Username'
         },
+        prompt: {
+            'definition-question': 'What is the definition?',
+            'reading-question': 'How do you pronounce it?'
+        },
         settings: {
             title: 'Settings'
         },

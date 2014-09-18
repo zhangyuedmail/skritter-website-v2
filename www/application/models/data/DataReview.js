@@ -104,14 +104,22 @@ define([
          * @returns {Boolean}
          */
         next: function() {
-            return this.isLast() ? false : true;
+            if (this.isLast()) {
+                return fale;
+            }
+            this.attributes.position++;
+            return true;
         },
         /**
          * @method previous
          * @returns {Boolean}
          */
         previous: function() {
-            return this.isFirst() ? false : true;
+            if (this.isFirst()) {
+                return false;
+            }
+            this.attributes.position--;
+            return true;
         },
         /**
          * @method setAt

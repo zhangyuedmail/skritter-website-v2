@@ -24,7 +24,6 @@ define([
             this.active = undefined;
             this.canvas = new PromptCanvas();
             this.gradingButtons = new PromptGradingButtons();
-            this.review = undefined;
             this.listenTo(app, 'resize', this.resize);
         },
         /**
@@ -77,7 +76,7 @@ define([
          */
         reset: function() {
             if (this.active) {
-                this.active.reset();
+                this.active.remove();
                 this.active = undefined;
             }
             return this;
@@ -89,6 +88,18 @@ define([
         resize: function() {
             this.canvas.resize(this.getWidth());
             return this;
+        },
+        /**
+         * @method triggerNext
+         */
+        triggerNext: function() {
+            this.trigger('next');
+        },
+        /**
+         * @method triggerPrevious
+         */
+        triggerPrevious: function() {
+            this.trigger('previous');
         }
     });
 

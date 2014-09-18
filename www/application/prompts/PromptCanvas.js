@@ -256,6 +256,14 @@ define([
             return this;
         },
         /**
+         * @method hideGrid
+         * @returns {PromptCanvas}
+         */
+        hideGrid: function() {
+            this.getLayer('grid').visible = false;
+            return this;
+        },
+        /**
          * @method injectColor
          * @param {createjs.Container|createjs.Shape} object
          * @param {String} color
@@ -308,6 +316,14 @@ define([
          */
         show: function() {
             this.el.style.display = 'block';
+            return this;
+        },
+        /**
+         * @method showGrid
+         * @returns {PromptCanvas}
+         */
+        showGrid: function() {
+            this.getLayer('grid').visible = true;
             return this;
         },
         /**

@@ -14,6 +14,9 @@ define([
          * @type String
          */
         idAttribute: 'id',
+        defaults: {
+            containedVocabIds: []
+        },
         /**
          * @method getContainedItemIds
          * @param {String} part

@@ -11,7 +11,9 @@ define([
     var Prompt = BaseView.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
          * @param {PromptController} controller
+         * @param {DataReview} review
          * @constructor
          */
         initialize: function(options, controller, review) {
@@ -24,12 +26,13 @@ define([
          * @property el
          * @type String
          */
-        el: '.prompt',
+        el: '.details-container',
         /**
          * @method render
          * @returns {Prompt}
          */
         render: function() {
+            console.log(this.review.getItem().id.split('-')[2], this.review.getPosition());
             return this;
         },
         /**
@@ -37,6 +40,7 @@ define([
          * @returns {Prompt}
          */
         renderElements: function() {
+            console.log('POSITION', this.review.getPosition());
             return this;
         },
         /**
@@ -77,11 +81,23 @@ define([
             event.preventDefault();
         },
         /**
+         * @method next
+         */
+        next: function() {
+            if (this.review.isLast()) {
+                this.controller.triggerNext();
+            } else {
+                this.review.next();
+                this.reset().render();
+            }
+        },
+        /**
          * @method reset
          * @returns {Prompt}
          */
         reset: function() {
-            this.remove();
+            this.canvas.hide();
+            this.gradingButtons.hide();
             return this;
         },
         /**

@@ -18,6 +18,7 @@ define([
             this.title = app.strings.study.title;
             this.prompt = undefined;
             this.schedule = app.user.schedule;
+            this.scheduleIndex = -1
         },
         /**
          * @method render
@@ -26,6 +27,7 @@ define([
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
             this.prompt = new PromptController({el: this.$('.prompt-container')}).render();
+            this.listenTo(this.prompt, 'next', this.next);
             this.renderElements();
             this.next();
             return this;
@@ -42,7 +44,8 @@ define([
          */
         next: function() {
             var self = this;
-            this.schedule.getNext().load(function(result) {
+            this.scheduleIndex++;
+            this.schedule.getNext(this.scheduleIndex).load(function(result) {
                 self.prompt.load(result.item.createReview());
             }, function() {
                 self.next();
