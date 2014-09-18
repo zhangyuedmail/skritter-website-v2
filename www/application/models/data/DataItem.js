@@ -2,8 +2,9 @@
  * @module Application
  */
 define([
-    'framework/BaseModel'
-], function(BaseModel) {
+    'framework/BaseModel',
+    'models/data/DataReview'
+], function(BaseModel, DataReview) {
     /**
      * @class DataItem
      * @extends BaseModel
@@ -35,6 +36,59 @@ define([
             timeStudied: 0,
             vocabIds: [],
             vocabListIds: []
+        },
+        /**
+         * @method createReview
+         * @returns {DataReview}
+         */
+        createReview: function() {
+            var review = new DataReview();
+            var items = [this].concat(this.getContainedItems());
+            var now = moment().unix();
+            var part = this.get('part');
+            var reviews = [];
+            var wordGroup = now + app.fn.getGuid() + '_' + this.id;
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                reviews.push({
+                    itemId: item.id,
+                    finished: false,
+                    started: false,
+                    score: 3,
+                    bearTime: i === 0 ? true : false,
+                    submitTime: now,
+                    reviewTime: 0,
+                    thinkingTime: 0,
+                    currentInterval: item.get('interval'),
+                    actualInterval: item.get('last'),
+                    newInterval: undefined,
+                    wordGroup: wordGroup,
+                    previousInterval: item.get('previousInterval'),
+                    previousSuccess: item.get('previousSuccess')
+                });
+            }
+            return review.set({
+                id: wordGroup,
+                itemId: items[0].id,
+                item: this,
+                part: part,
+                reviews: reviews,
+                vocab: this.getVocab()
+            }, {silent: true});
+        },
+        /**
+         * @method getContainedItems
+         * @returns {Array}
+         */
+        getContainedItems: function() {
+            var items = [];
+            if (['rune', 'tone'].indexOf(this.get('part')) !== -1) {
+                var containedIds = this.getVocab().getContainedItemIds(part);
+                for (var i = 0, length = containedIds.length; i < length; i++) {
+                    items.push(skritter.user.data.items.get(containedIds[i]));
+                }
+            }
+            return items;
         },
         /**
          * @method getVocab

@@ -14,11 +14,17 @@ define([
          * @param {PromptController} controller
          * @constructor
          */
-        initialize: function(controller) {
+        initialize: function(options, controller, review) {
             this.canvas = controller.canvas;
             this.controller = controller;
             this.gradingButtons = controller.gradingButtons;
+            this.review = review;
         },
+        /**
+         * @property el
+         * @type String
+         */
+        el: '.prompt',
         /**
          * @method render
          * @returns {Prompt}
@@ -34,6 +40,13 @@ define([
             return this;
         },
         /**
+         * @method events
+         * @returns {Object}
+         */
+        events: _.extend({}, BaseView.prototype.events, {
+            'vclick': 'handlePromptClicked'
+        }),
+        /**
          * @method disableListeners
          * @returns {Prompt}
          */
@@ -46,10 +59,10 @@ define([
          * @returns {Prompt}
          */
         enableListeners: function() {
-            this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
-            this.listenTo(this.canvas, 'canvas:clickhold', this.handleClickHoldCanvas);
-            this.listenTo(this.canvas, 'canvas:doubleclick', this.handleDoubleClickCanvas);
-            this.listenTo(this.canvas, 'canvas:swipeup', this.handleSwipeUp);
+            this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClicked);
+            this.listenTo(this.canvas, 'canvas:clickhold', this.handleCanvasHeld);
+            this.listenTo(this.canvas, 'canvas:doubleclick', this.handleCanvasDoubleClicked);
+            this.listenTo(this.canvas, 'canvas:swipeup', this.handleCanvasSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleInputDown);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             this.listenTo(this.gradingButtons, 'complete', this.handleGradingComplete);
@@ -57,10 +70,18 @@ define([
             return this;
         },
         /**
+         * @method handlePromptClicked
+         * @param {Event} event
+         */
+        handlePromptClicked: function(event) {
+            event.preventDefault();
+        },
+        /**
          * @method reset
          * @returns {Prompt}
          */
         reset: function() {
+            this.remove();
             return this;
         },
         /**

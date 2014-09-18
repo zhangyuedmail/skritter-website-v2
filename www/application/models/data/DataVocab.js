@@ -31,6 +31,21 @@ define([
                 }
             }
             return containedItemIds;
+        },
+        /**
+         * @method getDefinition
+         * @returns {String}
+         */
+        getDefinition: function() {
+            var customDefinition = this.get('customDefinition');
+            var definition = this.get('definitions')[app.user.settings.get('sourceLang')];
+            if (customDefinition && customDefinition !== '') {
+                return this.get('customDefinition');
+            } else if (definition) {
+                return definition;
+            } else {
+                return this.get('definitions').en;
+            }
         }
     });
 

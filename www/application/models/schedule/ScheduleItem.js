@@ -29,11 +29,11 @@ define([
             successes: 0
         },
         /**
-         * @method loadItem
+         * @method load
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
-        loadItem: function(callbackSuccess, callbackError) {
+        load: function(callbackSuccess, callbackError) {
             var self = this;
             var part = self.get('part');
             var result = {};
@@ -158,7 +158,11 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    callbackError(error, self);
+                    if (result.item) {
+                        self.set('flag', error ? error : 'Unable to load item.');
+                    }
+                    console.error('schedule load error', error, self);
+                    callbackError(error);
                 } else {
                     callbackSuccess(result);
                 }

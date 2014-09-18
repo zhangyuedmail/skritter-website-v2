@@ -14,7 +14,18 @@ define([
          * @property model
          * @type DataItem
          */
-        model: DataItem
+        model: DataItem,
+        /**
+         * @method loadAll
+         * @param {Function} callback
+         */
+        loadAll: function(callback) {
+            var self = this;
+            app.storage.getAll('items', function(data) {
+                self.reset();
+                self.lazyAdd(data, callback);
+            });
+        }
     });
 
     return DataItems;

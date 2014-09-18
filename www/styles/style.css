@@ -115,6 +115,10 @@ body {
 .page.no-navbar { margin-top: auto; }
 .page.no-overflow { overflow: hidden; }
 .page .content-container { height: 100%; }
+.page .no-margins {
+    margin-left: -15px;
+    margin-right: -15px;
+}
 @media (max-width: 991px) {
     .page.no-navbar { margin-top: -55px; }
 }
@@ -163,10 +167,9 @@ body {
 
 
 /*** PROMPTS ***/
-.prompt-container {
+.prompt-container, .prompt {
+    cursor: pointer;
     height: 100%;
-    margin-left: -15px;
-    margin-right: -15px;
     position: relative;
 }
 
@@ -185,7 +188,7 @@ body {
 
 
 /*** PROMPTS: GRADING BUTTONS ***/
-.grading-buttons-container {
+.grading-container {
     bottom: 0;
     display: none;
     position: absolute;

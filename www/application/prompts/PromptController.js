@@ -3,13 +3,14 @@
  */
 define([
     'framework/BaseView',
+    'require.text!templates/desktop/prompts/prompt.html',
     'prompts/PromptCanvas',
     'prompts/PromptGradingButtons',
     'prompts/PromptDefn',
     'prompts/PromptRdng',
     'prompts/PromptRune',
     'prompts/PromptTone',
-], function(BaseView, PromptCanvas, PromptGradingButtons, PromptDefn, PromptRdng, PromptRune, PromptTone) {
+], function(BaseView, DesktopTemplate, PromptCanvas, PromptGradingButtons, PromptDefn, PromptRdng, PromptRune, PromptTone) {
     /**
      * @class PromptController
      * @extends {BaseView}
@@ -31,17 +32,11 @@ define([
          * @returns {PromptController}
          */
         render: function() {
-            this.canvas.setElement(this.$('.canvas-container')).render().show().enableInput();
-            this.gradingButtons.setElement(this.$('.grading-buttons-container')).render();
-            this.types = {
-                defn: new PromptDefn(this),
-                rdng: new PromptRdng(this),
-                rune: new PromptRune(this),
-                tone: new PromptTone(this)
-            };
+            this.$el.append(this.compile(DesktopTemplate));
+            this.canvas.setElement(this.$('.canvas-container')).render();
+            this.gradingButtons.setElement(this.$('.grading-container')).render();
             this.renderElements();
             this.resize();
-            this.reset();
             return this;
         },
         /**
@@ -52,12 +47,28 @@ define([
             return this;
         },
         /**
-         * @method loadPrompt
+         * @method load
          * @param {Review} review
          * @returns {PromptController}
          */
-        loadPrompt: function(review) {
-            this.review = review;
+        load: function(review) {
+            this.reset();
+            console.log('PROMPT:', review.get('itemId'), this);
+            switch (review.get('part')) {
+                case 'defn':
+                    this.active = new PromptDefn(null, this, review);
+                    break;
+                case 'rdng':
+                    this.active = new PromptRdng(null, this, review);
+                    break;
+                case 'rune':
+                    this.active = new PromptRune(null, this, review);
+                    break;
+                case 'tone':
+                    this.active = new PromptTone(null, this, review);
+                    break;
+            }
+            this.active.render();
             return this;
         },
         /**
@@ -65,8 +76,9 @@ define([
          * @returns {PromptController}
          */
         reset: function() {
-            for (var type in this.types) {
-                this.types[type].reset();
+            if (this.active) {
+                this.active.reset();
+                this.active = undefined;
             }
             return this;
         },

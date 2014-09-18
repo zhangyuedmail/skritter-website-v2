@@ -17,6 +17,7 @@ define([
         initialize: function() {
             this.title = app.strings.study.title;
             this.prompt = undefined;
+            this.schedule = app.user.schedule;
         },
         /**
          * @method render
@@ -26,6 +27,7 @@ define([
             this.$el.html(this.compile(TemplateDesktop));
             this.prompt = new PromptController({el: this.$('.prompt-container')}).render();
             this.renderElements();
+            this.next();
             return this;
         },
         /**
@@ -34,7 +36,22 @@ define([
          */
         renderElements: function() {
             return this;
-        }
+        },
+        /**
+         * @method next
+         */
+        next: function() {
+            var self = this;
+            this.schedule.getNext().load(function(result) {
+                self.prompt.load(result.item.createReview());
+            }, function() {
+                self.next();
+            });
+        },
+        /**
+         * @method previous
+         */
+        previous: function() {}
     });
 
     return PageHome;
