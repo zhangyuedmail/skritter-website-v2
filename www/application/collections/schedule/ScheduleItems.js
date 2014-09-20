@@ -12,10 +12,11 @@ define([
     var ScheduleItems = BaseCollection.extend({
         /**
          * @method initialize
+         * @param {Array} models
          * @param {User} user
          * @constructor
          */
-        initialize: function(attributes, options) {
+        initialize: function(models, options) {
             options = options ? options : {};
             this.user = options.user;
         },
@@ -68,6 +69,15 @@ define([
          */
         getDueCount: function() {
             return this.getDue().length;
+        },
+        /**
+         * @method getNew
+         * @returns {ScheduleItems}
+         */
+        getNew: function() {
+            return new ScheduleItems(this.getActive().models.filter(function(item) {
+                return item.isNew();
+            }), {options: this.user});
         },
         /**
          * @method getNext

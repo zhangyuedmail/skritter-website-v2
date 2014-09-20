@@ -29,6 +29,13 @@ define([
             successes: 0
         },
         /**
+         * @method isNew
+         * @returns {Boolean}
+         */
+        isNew: function() {
+            return this.attributes.reviews === 0;
+        },
+        /**
          * @method load
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
