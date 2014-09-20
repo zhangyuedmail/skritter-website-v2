@@ -35,17 +35,24 @@ define([
             });
         },
         /**
+         * @method getScore
+         * @returns {Number}
+         */
+        getScore: function() {
+            return this.grade;
+        },
+        /**
          * @method handleGradingButtonClicked
          * @param {Object} event
          */
         handleGradingButtonClicked: function(event) {
+            event.stopPropagation();
             var grade = parseInt(event.currentTarget.id.replace('grade', ''), 10);
-            this.triggerSelected(event, grade);
+            this.triggerSelected();
             if (this.grade === grade) {
-                this.triggerComplete(event, grade);
+                this.triggerComplete();
             }
             this.select(grade);
-            event.stopPropagation();
         },
         /**
          * @method hide
@@ -54,6 +61,14 @@ define([
          */
         hide: function(callback) {
             this.$el.hide(0, callback);
+            return this;
+        },
+        /**
+         * @method reset
+         * @returns {PromptGradingButtons}
+         */
+        reset: function() {
+            this.grade = 3;
             return this;
         },
         /**
@@ -83,19 +98,15 @@ define([
         },
         /**
          * @method triggerComplete
-         * @param {Object} event
-         * @param {Number] grade
          */
-        triggerComplete: function(event, grade) {
-            this.trigger('complete', event, grade);
+        triggerComplete: function() {
+            this.trigger('complete', this.grade);
         },
         /**
          * @method triggerSelected
-         * @param {Object} event
-         * @param {Number] grade
          */
-        triggerSelected: function(event, grade) {
-            this.trigger('selected', event, grade);
+        triggerSelected: function() {
+            this.trigger('selected', this.grade);
         }
     });
 

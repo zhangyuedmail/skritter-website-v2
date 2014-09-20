@@ -43,7 +43,7 @@ define([
          * @returns {PromptRdng}
          */
         renderAnswer: function() {
-            this.gradingButtons.show();
+            this.gradingButtons.select(this.review.getAt('score')).show();
             this.review.setAt('newInterval', 1000);
             this.elements.fieldAnswer.text(this.review.get('vocab').get('reading'));
             this.elements.fieldQuestion.hide();
@@ -66,6 +66,7 @@ define([
         handlePromptClicked: function(event) {
             event.preventDefault();
             if (this.review.isAnswered()) {
+                this.gradingButtons.triggerSelected();
                 this.next();
             } else {
                 this.renderAnswer();

@@ -33,6 +33,7 @@ define([
          */
         render: function() {
             console.log(this.review.getItem().id.split('-')[2], this.review.getPosition());
+            this.enableGradingListeners();
             this.resize();
             return this;
         },
@@ -52,27 +53,38 @@ define([
             'vclick': 'handlePromptClicked'
         }),
         /**
-         * @method disableListeners
+         * @method enableCanvasListeners
          * @returns {Prompt}
          */
-        disableListeners: function() {
-            this.stopListening();
-            return this;
-        },
-        /**
-         * @method enableListeners
-         * @returns {Prompt}
-         */
-        enableListeners: function() {
+        enableCanvasListeners: function() {
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClicked);
             this.listenTo(this.canvas, 'canvas:clickhold', this.handleCanvasHeld);
             this.listenTo(this.canvas, 'canvas:doubleclick', this.handleCanvasDoubleClicked);
             this.listenTo(this.canvas, 'canvas:swipeup', this.handleCanvasSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleInputDown);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
-            this.listenTo(this.gradingButtons, 'complete', this.handleGradingComplete);
-            this.listenTo(this.gradingButtons, 'selected', this.handleGradingSelected);
             return this;
+        },
+        /**
+         * @method enableGradingListeners
+         * @returns {Prompt}
+         */
+        enableGradingListeners: function() {
+            this.listenTo(this.gradingButtons, 'complete', this.handleGradingButtonsCompleted);
+            this.listenTo(this.gradingButtons, 'selected', this.handleGradingButtonsSelected);
+            return this;
+        },
+        /**
+         * @method handleGradingButtonsCompleted
+         */
+        handleGradingButtonsCompleted: function() {
+            this.next();
+        },
+        /**
+         * @method handleGradingButtonsSelected
+         */
+        handleGradingButtonsSelected: function(grade) {
+            this.review.setAt('score', grade);
         },
         /**
          * @method handlePromptClicked

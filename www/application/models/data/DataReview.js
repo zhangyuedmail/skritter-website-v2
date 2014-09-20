@@ -24,9 +24,13 @@ define([
         },
         /**
          * @method getAt
-         * @returns {Object}
+         * @param {String} [key]
+         * @returns {Number|String}
          */
-        getAt: function() {
+        getAt: function(key) {
+            if (key) {
+                return this.get('reviews')[this.hasContained() ? this.getPosition() : 0][key];
+            }
             return this.get('reviews')[this.hasContained() ? this.getPosition() : 0];
         },
         /**
@@ -48,7 +52,7 @@ define([
          * @returns {DataItem}
          */
         getItem: function() {
-            return app.user.data.items.get(this.getAt().itemId);
+            return app.user.data.items.get(this.getAt('itemId'));
         },
         /**
          * @method getVocab
@@ -83,7 +87,7 @@ define([
          * @returns {Boolean}
          */
         isAnswered: function() {
-            return this.getAt().newInterval ? true : false;
+            return this.getAt('newInterval') ? true : false;
         },
         /**
          * @method isFirst

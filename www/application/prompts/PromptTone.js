@@ -28,6 +28,7 @@ define([
             Prompt.prototype.render.call(this);
             this.$el.html(this.compile(DesktopTemplate));
             this.canvas.hideGrid().show();
+            this.enableCanvasListeners();
             this.elements.fieldWriting = this.$('.field-writing');
             if (this.review.isAnswered()) {
                 this.renderAnswer();
@@ -49,7 +50,7 @@ define([
          */
         renderAnswer: function() {
             this.canvas.disableInput();
-            this.gradingButtons.show();
+            this.gradingButtons.select(this.review.getAt('score')).show();
             this.review.setAt('newInterval', 1000);
             return this;
         },
@@ -70,6 +71,7 @@ define([
         handlePromptClicked: function(event) {
             event.preventDefault();
             if (this.review.isAnswered()) {
+                this.gradingButtons.triggerSelected();
                 this.next();
             } else {
                 this.renderAnswer();
