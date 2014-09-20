@@ -122,6 +122,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('build-web', [
+        'validate',
         'clean:build-web',
         'requirejs:build-web',
         'htmlmin:build-web'
