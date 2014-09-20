@@ -34,6 +34,9 @@ define([
             this.$el.append(this.compile(DesktopTemplate));
             this.canvas.setElement(this.$('.canvas-container')).render();
             this.gradingButtons.setElement(this.$('.grading-container')).render();
+            this.elements.canvasContainer = this.$('.canvas-container');
+            this.elements.gradingContainer = this.$('.grading-container');
+            this.elements.prompt = this.$('.prompt');
             this.renderElements();
             this.resize();
             return this;
@@ -86,7 +89,18 @@ define([
          * @returns {PromptController}
          */
         resize: function() {
-            this.canvas.resize(this.getWidth());
+            var contentHeight = app.router.currentPage.getContentHeight();
+            var contentWidth = app.router.currentPage.getContentWidth();
+            if (app.isPortrait()) {
+                this.canvas.resize(contentWidth);
+                this.elements.prompt.height(contentHeight);
+            } else {
+                this.canvas.resize(contentHeight);
+                this.elements.prompt.height(this.canvas.getWidth());
+            }
+            if (this.active) {
+                this.active.resize();
+            }
             return this;
         },
         /**

@@ -124,12 +124,14 @@ body {
 .page.no-navbar { margin-top: auto; }
 .page.no-overflow { overflow: hidden; }
 .page .content-container { height: 100%; }
-.page .no-margins {
-    margin-left: -15px;
-    margin-right: -15px;
-}
 @media (max-width: 991px) {
     .page.no-navbar { margin-top: -55px; }
+}
+@media (max-width: 767px) {
+    .page .no-margins {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
 }
 
 
@@ -176,30 +178,36 @@ body {
 
 
 /*** PROMPTS ***/
-.prompt-container, .prompt {
+.prompt-container {
     cursor: pointer;
     height: 100%;
     position: relative;
 }
+.prompt-container .prompt { position: relative; }
 
 
 /*** PROMPTS: CANVAS ***/
-.canvas-container {
-    bottom: 0;
-    position: absolute;
+.prompt-container .canvas-container {
+    float: left;
     text-align: center;
 }
-.prompt-canvas {
+.prompt-container .prompt-canvas {
     background-color: #ffffff;
     display: inline;
     margin: 0 auto;
 }
 
 
+/*** PROMPTS: DETAIL ***/
+.prompt-container .detail-container {
+    background-color: #ffffff;
+    float: left;
+}
+
+
 /*** PROMPTS: GRADING BUTTONS ***/
-.grading-container {
+.prompt-container .grading-container {
     bottom: 0;
-    display: none;
     position: absolute;
 }
 

@@ -14,7 +14,6 @@ define([
          */
         initialize: function() {
             this.canvasSize = 0;
-            this.containerSize = 0;
             this.baseStrokeSize = 12;
             this.fadeSpeed = 200;
             this.grid = true;
@@ -296,10 +295,7 @@ define([
          * @returns {PromptCanvas}
          */
         resize: function(size) {
-            this.containerSize = size ? size : this.size;;
             this.canvasSize = size > this.maxCanvasSize ? this.maxCanvasSize : size;
-            this.el.style.height = this.canvasSize + 'px';
-            this.el.style.width = this.containerSize + 'px';
             this.stage.canvas.height = this.canvasSize;
             this.stage.canvas.width = this.canvasSize;
             this.strokeSize = this.getScaledStrokeSize();

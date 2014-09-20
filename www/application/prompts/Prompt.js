@@ -26,13 +26,14 @@ define([
          * @property el
          * @type String
          */
-        el: '.details-container',
+        el: '.detail-container',
         /**
          * @method render
          * @returns {Prompt}
          */
         render: function() {
             console.log(this.review.getItem().id.split('-')[2], this.review.getPosition());
+            this.resize();
             return this;
         },
         /**

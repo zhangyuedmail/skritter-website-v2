@@ -27,8 +27,8 @@ define([
         render: function() {
             Prompt.prototype.render.call(this);
             this.$el.html(this.compile(DesktopTemplate));
-            this.elements.fieldWriting = this.$('.field-writing');
             this.canvas.hideGrid().show();
+            this.elements.fieldWriting = this.$('.field-writing');
             if (this.review.isAnswered()) {
                 this.renderAnswer();
             } else {
@@ -48,6 +48,8 @@ define([
          * @returns {PromptTone}
          */
         renderAnswer: function() {
+            this.canvas.disableInput();
+            this.gradingButtons.show();
             this.review.setAt('newInterval', 1000);
             return this;
         },
@@ -56,6 +58,8 @@ define([
          * @returns {PromptTone}
          */
         renderQuestion: function() {
+            this.canvas.enableInput();
+            this.gradingButtons.hide();
             this.elements.fieldWriting.text(this.review.get('vocab').get('writing'));
             return this;
         },
@@ -70,6 +74,32 @@ define([
             } else {
                 this.renderAnswer();
             }
+        },
+        /**
+         * @method resize
+         * @returns {PromptTone}
+         */
+        resize: function() {
+            Prompt.prototype.resize.call(this);
+            var canvasSize = this.canvas.getWidth();
+            var contentHeight = app.router.currentPage.getContentHeight();
+            var contentWidth = app.router.currentPage.getContentWidth();
+            if (app.isPortrait()) {
+                this.$el.css({
+                    'border-bottom': '1px solid #000000',
+                    'border-right': 'none',
+                    height: contentHeight - canvasSize - 1,
+                    width: contentWidth
+                });
+            } else {
+                this.$el.css({
+                    'border-bottom': 'none',
+                    'border-right': '1px solid #000000',
+                    height: canvasSize,
+                    width: contentWidth - canvasSize - 1
+                });
+            }
+            return this;
         }
     });
 
