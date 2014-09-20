@@ -14,7 +14,18 @@ define([
          * @property model
          * @type DataVocabList
          */
-        model: DataVocabList
+        model: DataVocabList,
+        /**
+         * @method loadAll
+         * @param {Function} callback
+         */
+        loadAll: function(callback) {
+            var self = this;
+            app.storage.getAll('vocablists', function(data) {
+                self.reset();
+                self.lazyAdd(data, callback);
+            });
+        }
     });
 
     return DataVocabLists;

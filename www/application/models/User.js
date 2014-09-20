@@ -180,14 +180,22 @@ define([
                     //perform initial item sync
                     function(callback) {
                         if (self.data.get('lastItemSync')) {
+                            app.dialogs.show().element('.message-title').text('Loading');
                             callback();
                         } else {
                             self.data.downloadAll(callback);
                         }
                     },
+                    //load all schedule vocablists
+                    function(callback) {
+                        self.data.vocablists.loadAll(callback);
+                    },
+                    //load all schedule srsconfigs
+                    function(callback) {
+                        self.data.srsconfigs.loadAll(callback);
+                    },
                     //load all schedule items
                     function(callback) {
-                        app.dialogs.show().element('.message-title').text('Loading');
                         self.schedule.loadAll(callback);
                     }
                 ], function() {

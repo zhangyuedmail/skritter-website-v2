@@ -14,7 +14,18 @@ define([
          * @property model
          * @type DataSRSConfig
          */
-        model: DataSRSConfig
+        model: DataSRSConfig,
+        /**
+         * @method loadAll
+         * @param {Function} callback
+         */
+        loadAll: function(callback) {
+            var self = this;
+            app.storage.getAll('srsconfigs', function(data) {
+                self.reset();
+                self.lazyAdd(data, callback);
+            });
+        }
     });
 
     return DataSRSConfigs;
