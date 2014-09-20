@@ -67,9 +67,7 @@ define([
             this.listsFiltered = _.filter(this.lists, function(list) {
                 for (var criterion in criteria) {
                     if (Array.isArray(list[criterion])) {
-                        var normalizedArray = list[criterion].map(function(value) {
-                            return value.toLowerCase();
-                        });
+                        var normalizedArray = list[criterion].map(app.fn.toLowerCase);
                         if (normalizedArray.indexOf(criteria[criterion]) > -1) {
                             return true;
                         }

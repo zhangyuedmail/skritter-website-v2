@@ -41,7 +41,7 @@ body {
 
 
 /*** DIALOGS: LIST CONFIRMATION ***/
-#dialog-list-confirmation .list-image img { max-width: 100px; }
+.dialog-list-confirmation .list-image img { max-width: 100px; }
 
 
 /*** NAVBAR ***/
@@ -194,7 +194,6 @@ body {
 .prompt-container .prompt-canvas {
     background-color: #ffffff;
     display: inline;
-    margin: 0 auto;
 }
 
 

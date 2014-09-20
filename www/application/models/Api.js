@@ -53,7 +53,7 @@ define([
                 }
             }).done(function(data) {
                 if (data.statusCode === 200) {
-                    data.expires = moment().unix() + data['expires_in'];
+                    data.expires = moment().unix() + data.expires_in;
                     this.set('guest', data);
                     callbackComplete(data);
                 } else {
@@ -332,7 +332,7 @@ define([
                 return app.user.data.get('access_token');
             } else if (this.isGuestValid()) {
                 //return token for guest user if not expired
-                return this.get('guest')['access_token'];
+                return this.get('guest').access_token;
             }
             return undefined;
         },

@@ -43,7 +43,7 @@ define([
          * @returns {jQuery}
          */
         element: function(selector) {
-            return this.$el.find('#' + this.id + (selector ? ' ' + selector : ''));
+            return this.$el.find('.' + this.id + (selector ? ' ' + selector : ''));
         },
         /**
          * @method hide

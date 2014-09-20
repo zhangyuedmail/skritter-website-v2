@@ -18,7 +18,7 @@ define([
             this.title = app.strings.study.title;
             this.prompt = undefined;
             this.schedule = app.user.schedule;
-            this.scheduleIndex = -1
+            this.scheduleIndex = -1;
         },
         /**
          * @method render

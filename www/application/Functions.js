@@ -141,6 +141,22 @@ define([
         }
         return object1;
     }
+    /**
+     * @method toLowerCase
+     * @param {String} value
+     * @returns {String}
+     */
+    function toLowerCase(value) {
+        return value.toLowerCase();
+    }
+    /**
+     * @method toUpperCase
+     * @param {String} value
+     * @returns {String}
+     */
+    function toUpperCase(value) {
+        return value.toUpperCase();
+    }
 
     return {
         addAllObjectAttributes: addAllObjectAttributes,
@@ -152,6 +168,8 @@ define([
         isKana: isKana,
         isNumber: isNumber,
         mergeObjectArrays: mergeObjectArrays,
-        pinyin: PinyinConverter
+        pinyin: PinyinConverter,
+        toLowerCase: toLowerCase,
+        toUpperCase: toUpperCase
     };
 });
