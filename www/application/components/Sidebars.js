@@ -1,5 +1,6 @@
 /**
  * @module Application
+ * @submodule Components
  */
 define([
     'framework/BaseView',
