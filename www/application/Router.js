@@ -26,6 +26,8 @@ define([
         initialize: function() {
             this.accountCreation = new RouterAccountCreation();
             this.learningCenter = new RouterLearningCenter();
+            document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
+            document.addEventListener('menubutton', _.bind(this.handleMenuButtonPressed, this), false);
         },
         /**
          * @property routes
@@ -42,10 +44,31 @@ define([
             '*route': 'defaultRoute'
         },
         /**
+         * @method handleBackButtonPressed
+         */
+        handleBackButtonPressed: function() {
+            if (Backbone.history.fragment === '') {
+                app.dialogs.show('logout');
+                app.dialogs.element('.logout').one('vclick', function() {
+                    navigator.app.exitApp();
+                });
+            } else {
+                this.back();
+            }
+        },
+        /**
          * @method handleLogout
          */
         handleLogout: function() {
             app.user.logout(true);
+        },
+        /**
+         * @method handleMenuButtonPressed
+         */
+        handleMenuButtonPressed: function() {
+            if (app.sidebars) {
+                app.sidebars.toggle();
+            }
         },
         /**
          * @method showAccount

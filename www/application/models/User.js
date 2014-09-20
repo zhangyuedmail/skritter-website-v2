@@ -180,11 +180,13 @@ define([
                     //perform initial item sync
                     function(callback) {
                         if (self.data.get('lastItemSync')) {
-                            app.dialogs.show().element('.message-title').text('Loading');
                             callback();
                         } else {
                             self.data.downloadAll(callback);
                         }
+                    },
+                    function(callback) {
+                        app.dialogs.show('default', callback).element('.message-title').text('Loading');
                     },
                     //load all schedule vocablists
                     function(callback) {

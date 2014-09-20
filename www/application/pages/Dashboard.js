@@ -23,6 +23,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
+            app.sidebars.enable();
             this.elements.listContainer = this.$('.list-container');
             this.elements.scheduleDueCount = this.$('.schedule-duecount');
             this.elements.userAvatar = this.$('.user-avatar');

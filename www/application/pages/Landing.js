@@ -22,6 +22,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
+            app.sidebars.disable();
             this.elements.tagline = this.$('.tagline');
             switch (app.get('languageCode')) {
                 case 'zh':

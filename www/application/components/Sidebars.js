@@ -15,6 +15,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.enabled = true;
             this.name = 'default';
             this.sidebar = undefined;
             this.speed = 300;
@@ -42,6 +43,23 @@ define([
             'swipeleft .sidebar': 'handleSidebarSwipeLeft'
         }),
         /**
+         * @method disable
+         * returns {Sidebars}
+         */
+        disable: function() {
+            if (this.isExpanded()) {
+                this.hide();
+            }
+            this.enabled = false;
+        },
+        /**
+         * @method enable
+         * returns {Sidebars}
+         */
+        enable: function() {
+            this.enabled = true;
+        },
+        /**
          * @method handleSidebarSwipeLeft
          * @param {Event} event
          */
@@ -55,9 +73,11 @@ define([
          * @returns {Sidebars}
          */
         hide: function(speed) {
-            $('.navbar-menu.toggle').removeClass('active');
-            this.sidebar.removeClass('expanded');
-            this.sidebar.hide('slide', {direction: 'left'}, speed ? speed : this.speed);
+            if (this.enabled) {
+                $('.navbar-menu.toggle').removeClass('active');
+                this.sidebar.removeClass('expanded');
+                this.sidebar.hide('slide', {direction: 'left'}, speed ? speed : this.speed);
+            }
             return this;
         },
         /**
@@ -89,9 +109,11 @@ define([
          * @returns {Sidebars}
          */
         show: function(speed) {
-            $('.navbar-menu.toggle').addClass('active');
-            this.sidebar.addClass('expanded');
-            this.sidebar.show('slide', {direction: 'left'}, speed ? speed : this.speed);
+            if (this.enabled) {
+                $('.navbar-menu.toggle').addClass('active');
+                this.sidebar.addClass('expanded');
+                this.sidebar.show('slide', {direction: 'left'}, speed ? speed : this.speed);
+            }
             return this;
         },
         /**

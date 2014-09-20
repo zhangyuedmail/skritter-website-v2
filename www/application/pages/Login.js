@@ -22,6 +22,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
+            app.sidebars.disable();
             this.elements.loginPassword = this.$("#login-password");
             this.elements.loginUsername = this.$("#login-username");
             this.elements.message = this.$("#message");
