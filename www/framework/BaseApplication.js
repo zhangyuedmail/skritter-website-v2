@@ -12,7 +12,27 @@ define([], function() {
          * @constructor
          */
         initialize: function() {
-            $(window).on('throttledresize', _.bind(this.triggerResize, this));
+            var resize = null;
+            $(window).resize(_.bind(function(event) {
+                clearTimeout(resize);
+                resize = setTimeout(_.bind(function() {
+                    this.trigger('resize', event);
+                }, this), 100);
+            }, this));
+        },
+        /**
+         * @method isLandscape
+         * @returns {Boolean}
+         */
+        isLandscape: function() {
+            return $(window).width() > $(window).height();
+        },
+        /**
+         * @method isPortrait
+         * @returns {Boolean}
+         */
+        isPortrait: function() {
+            return $(window).height() >= $(window).width();
         },
         /**
          * @method reload
