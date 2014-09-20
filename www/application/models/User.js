@@ -166,15 +166,15 @@ define([
                     },
                     //check token expiration and refresh
                     function(callback) {
-                        if (self.data.get('expires') - moment().unix() < 604800) {
+                        if (self.data.get('expires') - moment().unix() > 604800) {
+                            callback();
+                        } else {
                             app.api.refreshToken(self.data.get('refresh_token'), function(data) {
                                 self.data.set(data);
                                 callback();
                             }, function() {
                                 callback();
                             });
-                        } else {
-                            callback();
                         }
                     },
                     //perform initial item sync
@@ -185,6 +185,7 @@ define([
                             self.data.downloadAll(callback);
                         }
                     },
+                    //display general loading message
                     function(callback) {
                         app.dialogs.show('default', callback).element('.message-title').text('Loading');
                     },
