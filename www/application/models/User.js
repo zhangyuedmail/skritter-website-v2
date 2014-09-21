@@ -72,7 +72,8 @@ define([
                 },
                 function(user, callback) {
                     if (settings) {
-                        app.api.updateUser($.extend(user, settings), function() {
+                        app.api.updateUser($.extend(user, settings), function(settings) {
+                            self.settings.set(settings);
                             callback(null, user);
                         }, function(error) {
                             callback(error);
