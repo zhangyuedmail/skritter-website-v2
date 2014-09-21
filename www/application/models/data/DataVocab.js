@@ -14,8 +14,23 @@ define([
          * @type String
          */
         idAttribute: 'id',
+        /**
+         * @property defaults
+         * @type Object
+         */
         defaults: {
             containedVocabIds: []
+        },
+        /**
+         * @method getCanvasCharacter
+         * @returns {CanvasCharacter}
+         */
+        getCanvasCharacter: function() {
+            var stroke = this.getStroke();
+            if (stroke) {
+                return stroke.getCanvasCharacter();
+            }
+            return null;
         },
         /**
          * @method getContainedItemIds
@@ -49,6 +64,13 @@ define([
             } else {
                 return this.get('definitions').en;
             }
+        },
+        /**
+         * @method getStroke
+         * @returns {DataStroke}
+         */
+        getStroke: function() {
+            return app.user.data.strokes.get(this.get('writing'));
         }
     });
 

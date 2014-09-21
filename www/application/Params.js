@@ -1198,7 +1198,7 @@ define([], function() {
     }
     /**
      * @method getParams
-     * @param strokeId
+     * @param [strokeId]
      * @returns {Array}
      */
     function getParams(strokeId) {

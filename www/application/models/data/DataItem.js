@@ -52,8 +52,6 @@ define([
                 var item = items[i];
                 reviews.push({
                     itemId: item.id,
-                    finished: false,
-                    started: false,
                     score: 3,
                     bearTime: i === 0 ? true : false,
                     submitTime: now,
@@ -74,7 +72,7 @@ define([
                 part: part,
                 reviews: reviews,
                 vocab: this.getVocab()
-            }, {silent: true});
+            });
         },
         /**
          * @method getContainedItems

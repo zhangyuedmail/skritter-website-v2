@@ -156,6 +156,7 @@ define([
          * @returns {PromptCanvas}
          */
         drawShape: function(layerName, shape, options) {
+            console.log(layerName, shape, this.stage);
             options = options ? options : {};
             options.alpha= options.alpha ? options.alpha : undefined;
             options.color= options.color ? options.color : undefined;
@@ -183,6 +184,7 @@ define([
                 marker = new createjs.Shape();
                 marker.graphics.setStrokeStyle(self.strokeSize, self.strokeCaps, self.strokeJoints).beginStroke(self.strokeColor);
                 oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
+                self.triggerInputDown(event, oldPoint);
                 self.getLayer('input').addChild(marker);
                 self.$el.on('vmouseout.Input vmouseup.Input', up);
                 self.$el.on('vmousemove.Input', move);
@@ -196,11 +198,15 @@ define([
                 points.push(point);
                 self.stage.update();
             }
-            function up() {
+            function up(event) {
                 marker.graphics.endStroke();
                 self.$el.off('vmousemove.Input', move);
                 self.$el.off('vmouseout.Input vmouseup.Input', up);
-                self.fadeShape('background', marker.clone(true));
+                if (event.type === 'vmouseout') {
+                    self.fadeShape('background', marker.clone(true));
+                } else {
+                    self.triggerInputUp(event, points, marker.clone(true));
+                }
                 self.getLayer('input').removeAllChildren();
             }
         },
@@ -245,6 +251,13 @@ define([
          */
         getLayer: function(layerName) {
             return this.stage.getChildByName('layer-' + layerName);
+        },
+        /**
+         * @method getSize
+         * @returns {Number}
+         */
+        getSize: function() {
+            return this.getWidth();
         },
         /**
          * @method hide
@@ -366,8 +379,8 @@ define([
             this.mouseDownTimer = window.setTimeout(_.bind(function() {
                 var distance = 0;
                 if (this.mouseMoveEvent) {
-                    var startPosition = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
-                    var endPosition = {x: this.mouseMoveEvent.pageX, y: this.mouseMoveEvent.pageY};
+                    var startPosition = new createjs.Point(this.mouseDownEvent.pageX, this.mouseDownEvent.pageY);
+                    var endPosition = new createjs.Point(this.mouseMoveEvent.pageX, this.mouseMoveEvent.pageY);
                     distance = app.fn.getDistance(startPosition, endPosition);
                 }
                 if (distance <= 10) {
@@ -431,6 +444,7 @@ define([
          * @param {Function} [callback]
          */
         tweenCharacter: function(layerName, character, callback) {
+            var canvasSize = this.getSize();
             var position = 0;
             function tweenComplete() {
                 position++;
@@ -442,7 +456,7 @@ define([
             }
             for (var i = 0, length = character.length; i < length; i++) {
                 var stroke = character.at(i);
-                this.tweenShape(layerName, stroke.getUserShape(), stroke.inflateShape(), tweenComplete);
+                this.tweenShape(layerName, stroke.getUserShape(canvasSize), stroke.getShape(canvasSize), tweenComplete);
             }
         },
         /**

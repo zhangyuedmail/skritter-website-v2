@@ -68,14 +68,21 @@ define([
          * @method handlePromptClicked
          * @param {Event} event
          */
-        handlePromptClicked: function(event) {
+        handleCanvasClicked: function(event) {
             event.preventDefault();
             if (this.review.isAnswered()) {
                 this.gradingButtons.triggerSelected();
                 this.next();
             } else {
-                this.renderAnswer();
+                //TODO: show single stroke hint
             }
+        },
+        /**
+         * @method handleInputUp
+         */
+        handleInputUp: function(event, points, shape) {
+            event.preventDefault();
+            console.log(points, shape);
         },
         /**
          * @method resize

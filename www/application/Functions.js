@@ -2,8 +2,9 @@
  * @module Application
  */
 define([
-    "application/PinyinConverter"
-], function(PinyinConverter) {
+    'application/PinyinConverter',
+    'application/Shortstraw'
+], function(PinyinConverter, Shortstraw) {
     /**
      * @method addAllObjectAttributes
      * @param {Array} array
@@ -25,12 +26,12 @@ define([
      * @returns {String}
      */
     function convertBytesToSize(bytes) {
-        var sizes = ["B", "KB", "MB", "GB", "TB"];
+        var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
         if (bytes > 0) {
             var value = parseFloat(Math.floor(Math.log(bytes) / Math.log(1024)));
-            return (bytes / Math.pow(1024, value)).toFixed(2) + " " + sizes[value];
+            return (bytes / Math.pow(1024, value)).toFixed(2) + ' ' + sizes[value];
         }
-        return "0 B";
+        return '0 B';
     }
     /**
      * @method getAngle
@@ -101,7 +102,7 @@ define([
      * @returns {Boolean}
      */
     function isKana(text) {
-        var chars = text.split("");
+        var chars = text.split('');
         if (chars.length > 0) {
             for (var i = 0, length = chars.length; i < length; i++) {
                 var charCode = text.charCodeAt(i);
@@ -142,6 +143,16 @@ define([
         return object1;
     }
     /**
+     * @property pinyin
+     * @type {PinyinConverter}
+     */
+    var pinyin = PinyinConverter;
+    /**
+     * @property shortstraw
+     * @type Shortstraw
+     */
+    var shortstraw = new Shortstraw();
+    /**
      * @method toLowerCase
      * @param {String} value
      * @returns {String}
@@ -168,7 +179,8 @@ define([
         isKana: isKana,
         isNumber: isNumber,
         mergeObjectArrays: mergeObjectArrays,
-        pinyin: PinyinConverter,
+        pinyin: pinyin,
+        shortstraw: shortstraw,
         toLowerCase: toLowerCase,
         toUpperCase: toUpperCase
     };
