@@ -45,7 +45,7 @@ app = (function() {
                 raygun: 'libraries/raygun-1.11.1.min',
                 'require.i18n': 'libraries/require.i18n-2.0.4',
                 'require.text': 'libraries/require.text-2.0.12',
-                underscore: 'libraries/lodash.underscore-2.4.1.min'
+                underscore: 'libraries/lodash.compat-2.4.1.min'
             },
             shim: {
                 backbone: ['jquery', 'underscore'],
