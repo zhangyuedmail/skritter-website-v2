@@ -59,6 +59,10 @@ define([
          * @returns {DataVocab}
          */
         getVocab: function() {
+            if (this.hasContained()) {
+                var vocabId = this.getBaseVocab().get('containedVocabIds')[this.getPosition() - 1];
+                return app.user.data.vocabs.get(vocabId);
+            }
             return this.getItem().getVocab();
         },
         /**

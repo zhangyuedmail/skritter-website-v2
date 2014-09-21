@@ -65,7 +65,7 @@ define([
                 request.onsuccess = function() {
                     indexedDB.deleteDatabase(self.get('databaseName'));
                     self.set({database: undefined, databaseName: undefined});
-                    setTimeout(callback, 1000);
+                    setTimeout(callback, 0);
                 };
                 request.onerror = function(error) {
                     callback(error);
