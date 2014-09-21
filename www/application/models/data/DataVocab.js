@@ -22,15 +22,28 @@ define([
             containedVocabIds: []
         },
         /**
-         * @method getCanvasCharacter
-         * @returns {CanvasCharacter}
+         * @method getCanvasCharacters
+         * @returns {Array}
          */
-        getCanvasCharacter: function() {
-            var stroke = this.getStroke();
-            if (stroke) {
-                return stroke.getCanvasCharacter();
+        getCanvasCharacters: function() {
+            //TODO: clean this up and handle errors
+            var canvasCharacters = [];
+            var stroke;
+            var containedVocabIds = this.get('containedVocabIds');
+            if (containedVocabIds.length) {
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    stroke = app.user.data.vocabs.get(containedVocabIds[i]).getStroke();
+                    if (stroke) {
+                        canvasCharacters.push(stroke.getCanvasCharacter());
+                    }
+                }
+            } else {
+                stroke = this.getStroke();
+                if (stroke) {
+                    canvasCharacters.push(stroke.getCanvasCharacter());
+                }
             }
-            return null;
+            return canvasCharacters;
         },
         /**
          * @method getContainedItemIds

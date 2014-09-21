@@ -46,7 +46,7 @@ define([
             var matrix = this.getShape().getMatrix();
             var params = app.user.data.params.where({strokeId: this.get('strokeId')});
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
-                var param = params[a].clone()
+                var param = params[a].clone();
                 var corners = _.cloneDeep(param.get('corners'));
                 for (var b = 0, lengthB = corners.length; b < lengthB; b++) {
                     var inflatedCorner = matrix.transformPoint(corners[b].x, corners[b].y);
@@ -97,14 +97,14 @@ define([
          * @returns {createjs.Shape}
          */
         getUserShape: function() {
-            var shape = this.getShape();
+            var shape = app.assets.getStroke(this.get('strokeId'));
             var bounds = shape.getBounds();
             var rect = this.getRectangle();
             shape.name = 'stroke';
             shape.x = rect.x;
             shape.y = rect.y;
-            shape.scaleX = rect.w / bounds.width;
-            shape.scaleY = rect.h / bounds.height;
+            shape.scaleX = rect.width / bounds.width;
+            shape.scaleY = rect.height / bounds.height;
             return shape;
         },
         /**

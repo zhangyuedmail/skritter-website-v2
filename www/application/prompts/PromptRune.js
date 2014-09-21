@@ -82,8 +82,7 @@ define([
          */
         handleInputUp: function(event, points, shape) {
             event.preventDefault();
-            var character = this.review.getVocab().getCanvasCharacter();
-            character.recognizeStroke(points, shape);
+            this.canvas.lastMouseDownEvent = null;
         },
         /**
          * @method resize

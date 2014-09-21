@@ -18,10 +18,10 @@ define([], function() {
      */
     Recognizer.prototype.recognize = function(character, stroke) {
         var results = this.getResults(character, stroke);
-        console.log(results);
         results = _.filter(results, 'total');
         results = _.sortBy(results, 'total');
-        if (!results.length || character.contains(results[0])) {
+        console.log('results', results);
+        if (results.length === 0) {
             return false;
         }
         return results[0];
@@ -58,7 +58,7 @@ define([], function() {
      * @method runChecks
      * @param {CanvasStroke} targetStroke
      * @param {CanvasStroke} userStroke
-     * @returns {Array}
+;;     * @returns {Array}
      */
     Recognizer.prototype.runChecks = function(targetStroke, userStroke) {
         var results = [];
@@ -70,7 +70,7 @@ define([], function() {
             var total = 0;
             var scores = {
                 distance: this.checkDistance(param, userStroke)
-            }
+            };
             for (var check in scores) {
                 var score = scores[check];
                 if (isNaN(score)) {
@@ -80,7 +80,7 @@ define([], function() {
                     total += score;
                 }
             }
-            $.extend(result.attributes, targetStroke.attributes);
+            $.extend(true, result.attributes, targetStroke.attributes);
             result.total = total;
             results.push(result);
         }

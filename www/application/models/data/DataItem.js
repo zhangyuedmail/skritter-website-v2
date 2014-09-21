@@ -65,6 +65,9 @@ define([
                     previousSuccess: item.get('previousSuccess')
                 });
             }
+            if (['rune', 'tone'].indexOf(part) !== -1) {
+                review.characters = this.getVocab().getCanvasCharacters();
+            }
             return review.set({
                 id: wordGroup,
                 itemId: items[0].id,

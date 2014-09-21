@@ -105,14 +105,27 @@ define([
             return max;
         },
         /**
+         * @method isComplete
+         * @returns {Boolean}
+         */
+        isComplete: function() {
+            return this.getPosition() >= this.getMax();
+        },
+        /**
          * @method recognizeStroke
          * @param {Array} points
          * @param {createjs.Shape} shape
-         * @returns {CanvasStroke}
+         * @returns {Boolean|CanvasStroke}
          */
         recognizeStroke: function(points, shape) {
             var stroke = app.fn.recognizer.recognize(this, new CanvasStroke({points: points}));
             console.log('recognized', stroke);
+            if (stroke) {
+                stroke.set('squig', shape);
+                this.add(stroke);
+                return stroke;
+            }
+            return false;
         }
     });
 

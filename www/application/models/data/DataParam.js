@@ -47,10 +47,7 @@ define([
          * @returns {Number}
          */
         getStartingAngle: function() {
-            var corners = [];
-            corners.push(this.get('corners')[0]);
-            corners.push(this.get('corners')[1]);
-            return app.fn.getAngle(corners);
+            return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
         }
     });
 

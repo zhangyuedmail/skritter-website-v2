@@ -10,6 +10,12 @@ define([
      */
     var DataReview = BaseModel.extend({
         /**
+         * @method initalize
+         */
+        initalize: function() {
+            this.characters = [];
+        },
+        /**
          * @property idAttribute
          * @type String
          */
@@ -19,6 +25,7 @@ define([
          * @type Object
          */
         defaults: {
+            part: undefined,
             position: 1,
             reviews: []
         },
@@ -48,22 +55,18 @@ define([
             return this.getBaseItem().getVocab();
         },
         /**
+         * @method getCharacter
+         * @returns {CanvasCharacter}
+         */
+        getCharacter: function() {
+            return this.characters[this.getPosition() - 1];
+        },
+        /**
          * @method getItem
          * @returns {DataItem}
          */
         getItem: function() {
             return app.user.data.items.get(this.getAt('itemId'));
-        },
-        /**
-         * @method getVocab
-         * @returns {DataVocab}
-         */
-        getVocab: function() {
-            if (this.hasContained()) {
-                var vocabId = this.getBaseVocab().get('containedVocabIds')[this.getPosition() - 1];
-                return app.user.data.vocabs.get(vocabId);
-            }
-            return this.getItem().getVocab();
         },
         /**
          * @method getMaxPosition
@@ -78,6 +81,17 @@ define([
          */
         getPosition: function() {
             return this.hasContained() ? this.get('position') : 1;
+        },
+        /**
+         * @method getVocab
+         * @returns {DataVocab}
+         */
+        getVocab: function() {
+            if (this.hasContained()) {
+                var vocabId = this.getBaseVocab().get('containedVocabIds')[this.getPosition() - 1];
+                return app.user.data.vocabs.get(vocabId);
+            }
+            return this.getItem().getVocab();
         },
         /**
          * @method hasContained

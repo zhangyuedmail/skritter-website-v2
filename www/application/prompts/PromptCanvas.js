@@ -156,7 +156,6 @@ define([
          * @returns {PromptCanvas}
          */
         drawShape: function(layerName, shape, options) {
-            console.log(layerName, shape, this.stage);
             options = options ? options : {};
             options.alpha= options.alpha ? options.alpha : undefined;
             options.color= options.color ? options.color : undefined;
@@ -445,7 +444,6 @@ define([
          * @param {Function} [callback]
          */
         tweenCharacter: function(layerName, character, callback) {
-            var canvasSize = this.getSize();
             var position = 0;
             function tweenComplete() {
                 position++;
@@ -457,7 +455,7 @@ define([
             }
             for (var i = 0, length = character.length; i < length; i++) {
                 var stroke = character.at(i);
-                this.tweenShape(layerName, stroke.getUserShape(canvasSize), stroke.getShape(canvasSize), tweenComplete);
+                this.tweenShape(layerName, stroke.getUserShape(), stroke.getShape(), tweenComplete);
             }
         },
         /**
