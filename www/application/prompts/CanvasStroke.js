@@ -28,7 +28,7 @@ define([
          */
         getContainedIds: function() {
             var ids = [];
-            var contains = this.has('contains') ? this.get('contains') : [];
+            var contains = this.get('contains');
             var position = this.get('position');
             for (var i = 0, length = contains.length; i < length; i++) {
                 var contained = contains[i];
@@ -73,8 +73,8 @@ define([
          */
         getShape: function() {
             //load shape, bounds and matrix
-            var shape = app.assets.getStroke(this.get('strokeId'));
-            var data = this.inflateData(shape);
+            var data = this.inflateData();
+            var shape = this.get('shape').clone(true);
             var spriteBounds = shape.getBounds();
             var ms = shape.getMatrix();
             //apply rotation based on newly sized shape
@@ -97,7 +97,7 @@ define([
          * @returns {createjs.Shape}
          */
         getUserShape: function() {
-            var shape = app.assets.getStroke(this.get('strokeId'));
+            var shape = this.getShape();
             var bounds = shape.getBounds();
             var rect = this.getRectangle();
             shape.name = 'stroke';
@@ -109,11 +109,10 @@ define([
         },
         /**
          * @method inflatedData
-         * @param {createjs.Shape} shape
          * @return {Object}
          */
-        inflateData: function(shape) {
-            var bounds = shape.getBounds();
+        inflateData: function() {
+            var bounds = this.get('shape').getBounds();
             var canvasSize = app.get('canvasSize');
             var data = this.get('data');
             return {

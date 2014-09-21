@@ -23,7 +23,7 @@ define([
         getCanvasCharacter: function() {
             var character = new CanvasCharacter();
             var targets = [];
-            var variations = this.get('strokes');
+            var variations = _.clone(this.get('strokes'));
             var rune = this.get('rune');
             for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
                 var target = new CanvasCharacter();
@@ -36,18 +36,16 @@ define([
                     var stroke = new CanvasStroke();
                     var strokeId = data[0];
                     var param = app.user.data.params.findWhere({strokeId: strokeId});
+                    var contains = param.get('contains');
                     stroke.set({
+                        contains: contains,
                         data: data,
                         id: position + '|' + strokeId,
                         position: position,
+                        shape: app.assets.getStroke(strokeId),
                         strokeId: strokeId
                     });
-                    if (param && param.has('contains')) {
-                        stroke.set('contains', param.get('contains'));
-                        position += 2;
-                    } else {
-                        position += 1;
-                    }
+                    position += contains.length ? contains.length : 1;
                     target.add(stroke);
                 }
                 targets.push(target);

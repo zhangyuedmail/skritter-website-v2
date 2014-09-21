@@ -15,6 +15,15 @@ define([
          */
         idAttribute: 'id',
         /**
+         * @property defaults
+         * @type Object
+         */
+        defaults: {
+            contains: [],
+            corners: [],
+            strokeId: undefined
+        },
+        /**
          * @method angle
          * @returns {Number}
          */

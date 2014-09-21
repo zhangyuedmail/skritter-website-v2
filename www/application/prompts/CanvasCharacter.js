@@ -88,7 +88,8 @@ define([
         getPosition: function() {
             var position = 1;
             for (var i = 0, length = this.length; i < length; i++) {
-                position += this.at(i).has('contains') ? 2 : 1;
+                var contains = this.at(i).get('contains');
+                position += contains.length ? contains.length : 1;
             }
             return position;
         },
@@ -105,6 +106,21 @@ define([
             return max;
         },
         /**
+         * @method getShape
+         * @param {Number} excludeStrokePosition
+         * @returns {createjs.Container}
+         */
+        getShape: function(excludeStrokePosition) {
+            var shapeContainer = new createjs.Container();
+            shapeContainer.name = 'character';
+            for (var i = 0, length = this.models.length; i < length; i++) {
+                if (i !== excludeStrokePosition - 1) {
+                    shapeContainer.addChild(this.models[i].getShape());
+                }
+            }
+            return shapeContainer;
+        },
+        /**
          * @method isComplete
          * @returns {Boolean}
          */
@@ -119,8 +135,7 @@ define([
          */
         recognizeStroke: function(points, shape) {
             var stroke = app.fn.recognizer.recognize(this, new CanvasStroke({points: points}));
-            console.log('recognized', stroke);
-            if (stroke) {
+            if (stroke && !this.contains(stroke)) {
                 stroke.set('squig', shape);
                 this.add(stroke);
                 return stroke;

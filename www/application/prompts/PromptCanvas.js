@@ -14,10 +14,10 @@ define([
          */
         initialize: function() {
             this.canvasSize = 0;
-            this.baseStrokeSize = 12;
+            this.baseStrokeSize = 28;
             this.fadeSpeed = 200;
             this.grid = true;
-            this.maxCanvasSize = 600;
+            this.maxCanvasSize = 1800;
             this.mouseDownEvent = null;
             this.mouseDownTimer = null;
             this.mouseMoveEvent = null;
@@ -183,7 +183,7 @@ define([
                 marker = new createjs.Shape();
                 marker.graphics.setStrokeStyle(self.strokeSize, self.strokeCaps, self.strokeJoints).beginStroke(self.strokeColor);
                 oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
-                self.triggerInputDown(event, oldPoint);
+                self.triggerInputDown(oldPoint, event);
                 self.getLayer('input').addChild(marker);
                 self.$el.on('vmouseout.Input vmouseup.Input', up);
                 self.$el.on('vmousemove.Input', move);
@@ -204,7 +204,7 @@ define([
                 if (event.type === 'vmouseout') {
                     self.fadeShape('background', marker.clone(true));
                 } else {
-                    self.triggerInputUp(event, points, marker.clone(true));
+                    self.triggerInputUp(points, marker.clone(true), event);
                 }
                 self.getLayer('input').removeAllChildren();
             }
@@ -472,7 +472,6 @@ define([
          */
         tweenShape: function(layerName, fromShape, toShape, callback) {
             this.getLayer(layerName).addChild(fromShape);
-            this.stage.update();
             createjs.Tween.get(fromShape).to({
                 x: toShape.x,
                 y: toShape.y,

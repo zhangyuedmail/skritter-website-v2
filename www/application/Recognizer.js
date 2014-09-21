@@ -20,11 +20,10 @@ define([], function() {
         var results = this.getResults(character, stroke);
         results = _.filter(results, 'total');
         results = _.sortBy(results, 'total');
-        console.log('results', results);
-        if (results.length === 0) {
-            return false;
+        if (results.length) {
+            return results[0];
         }
-        return results[0];
+        return false;
     };
     /**
      * @method getResults
@@ -80,7 +79,14 @@ define([], function() {
                     total += score;
                 }
             }
-            $.extend(true, result.attributes, targetStroke.attributes);
+            result.set({
+                contains: targetStroke.get('contains'),
+                data: targetStroke.get('data'),
+                id: targetStroke.id,
+                position: targetStroke.get('position'),
+                shape: targetStroke.get('shape'),
+                strokeId: targetStroke.get('strokeId')
+            });
             result.total = total;
             results.push(result);
         }
