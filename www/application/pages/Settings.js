@@ -68,6 +68,50 @@ define([
                 this.$('#styles').hide();
             }
             return this;
+        },
+        /**
+         * @method events
+         * @returns {Object}
+         */
+        events: _.extend({}, BasePage.prototype.events, {
+            'vclick #parts': 'updateParts',
+            'vclick #styles': 'updateStyles'
+        }),
+        /**
+         * @method updateParts
+         * @param {Event} event
+         */
+        updateParts: function(event) {
+            event.preventDefault();
+            this.activeParts = [];
+            if (this.$('#parts #defn').bootstrapSwitch('state')) {
+                this.activeParts.push('defn');
+            }
+            if (this.$('#parts #rdng').bootstrapSwitch('state')) {
+                this.activeParts.push('rdng');
+            }
+            if (this.$('#parts #rune').bootstrapSwitch('state')) {
+                this.activeParts.push('rune');
+            }
+            if (this.$('#parts #tone').bootstrapSwitch('state')) {
+                this.activeParts.push('tone');
+            }
+            this.settings.setActiveParts(this.activeParts);
+        },
+        /**
+         * @method updateParts
+         * @param {Event} event
+         */
+        updateStyles: function(event) {
+            event.preventDefault();
+            this.activeStyles = [];
+            if (this.$('#styles #simp').bootstrapSwitch('state')) {
+                this.activeStyles.push('simp');
+            }
+            if (this.$('#styles #trad').bootstrapSwitch('state')) {
+                this.activeStyles.push('trad');
+            }
+            this.settings.setActiveStyles(['both'].concat(this.activeStyles));
         }
     });
 

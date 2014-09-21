@@ -68,6 +68,39 @@ define([
             return this.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
         },
         /**
+         * @method setActiveParts
+         * @param {Array} parts
+         * @returns {Array}
+         */
+        setActiveParts: function(parts) {
+            if (this.user.isChinese()) {
+                this.set('filterChineseParts', parts);
+                return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
+            }
+            this.set('filterJapaneseParts', parts);
+            return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
+        },
+        /**
+         * @method setActiveStyles
+         * @param {Array} styles
+         * @returns {Array}
+         */
+        setActiveStyles: function(styles) {
+            if (this.user.isChinese()) {
+                if (styles.indexOf('simp') === -1) {
+                    this.set('reviewSimplified', false);
+                } else {
+                    this.set('reviewSimplified', true);
+                }
+                if (styles.indexOf('trad') === -1) {
+                    this.set('reviewTraditional', false);
+                } else {
+                    this.set('reviewTraditional', true);
+                }
+            }
+            return this.getActiveStyles();
+        },
+        /**
          * @method sync
          * @param {Function} callback
          */
