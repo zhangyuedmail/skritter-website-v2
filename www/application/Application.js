@@ -37,6 +37,7 @@ define([
          * @type Object
          */
         defaults: {
+            canvasSize: 600,
             languageCode: '@@languageCode',
             timestamp: parseInt('@@timestamp', 10),
             version: '@@version',

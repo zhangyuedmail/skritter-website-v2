@@ -3,8 +3,9 @@
  */
 define([
     'application/PinyinConverter',
+    'application/Recognizer',
     'application/Shortstraw'
-], function(PinyinConverter, Shortstraw) {
+], function(PinyinConverter, Recognizer, Shortstraw) {
     /**
      * @method addAllObjectAttributes
      * @param {Array} array
@@ -35,8 +36,8 @@ define([
     }
     /**
      * @method getAngle
-     * @param {Array|createjs.Point} point1
-     * @param {createjs.Point} point2
+     * @param {Array|createjs.Point|Object} point1
+     * @param {createjs.Point|Object} point2
      * @return {Number}
      */
     function getAngle(point1, point2) {
@@ -54,7 +55,7 @@ define([
      * @param {Number} pointRadius
      * @return {Object}
      */
-    function getBoundingRectangle() {
+    function getBoundingRectangle(points, areaWidth, areaHeight, pointRadius) {
         var left = areaWidth;
         var top = 0.0;
         var right = 0.0;
@@ -74,12 +75,12 @@ define([
         var width = right - left;
         var height = top - bottom;
         var center = {x: width / 2 + left, y: height / 2 + bottom};
-        return {x: left, y: bottom, w: width, h: height, c: center};
+        return {x: left, y: bottom, width: width, height: height, center: center};
     }
     /**
      * @method getDistance
-     * @param {createjs.Point} point1
-     * @param {createjs.Point} point2
+     * @param {createjs.Point|Object} point1
+     * @param {createjs.Point|Object} point2
      * @return {Number}
      */
     function getDistance(point1, point2) {
@@ -148,6 +149,11 @@ define([
      */
     var pinyin = PinyinConverter;
     /**
+     * @property recognizer
+     * @type {Recognizer}
+     */
+    var recognizer = new Recognizer();
+    /**
      * @property shortstraw
      * @type Shortstraw
      */
@@ -180,6 +186,7 @@ define([
         isNumber: isNumber,
         mergeObjectArrays: mergeObjectArrays,
         pinyin: pinyin,
+        recognizer: recognizer,
         shortstraw: shortstraw,
         toLowerCase: toLowerCase,
         toUpperCase: toUpperCase

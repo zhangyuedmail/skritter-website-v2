@@ -103,6 +103,16 @@ define([
                 max = targetMax > max ? targetMax : max;
             }
             return max;
+        },
+        /**
+         * @method recognizeStroke
+         * @param {Array} points
+         * @param {createjs.Shape} shape
+         * @returns {CanvasStroke}
+         */
+        recognizeStroke: function(points, shape) {
+            var stroke = app.fn.recognizer.recognize(this, new CanvasStroke({points: points}));
+            console.log('recognized', stroke);
         }
     });
 

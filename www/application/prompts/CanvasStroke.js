@@ -15,6 +15,7 @@ define([
          */
         initialize: function() {
             this.on('change:points', this.updateCorners);
+            this.updateCorners();
         },
         /**
          * @property idAttribute
@@ -37,13 +38,43 @@ define([
             return ids;
         },
         /**
+         * @method getParams
+         * @returns {Array}
+         */
+        getParams: function() {
+            var inflatedParams = [];
+            var matrix = this.getShape().getMatrix();
+            var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+            for (var a = 0, lengthA = params.length; a < lengthA; a++) {
+                var param = params[a].clone()
+                var corners = _.cloneDeep(param.get('corners'));
+                for (var b = 0, lengthB = corners.length; b < lengthB; b++) {
+                    var inflatedCorner = matrix.transformPoint(corners[b].x, corners[b].y);
+                    corners[b].x = inflatedCorner.x;
+                    corners[b].y = inflatedCorner.y;
+                }
+                param.set('corners', corners);
+                inflatedParams.push(param);
+            }
+            return inflatedParams;
+        },
+        /**
+         * @method getRectangle
+         * @returns {Object}
+         */
+        getRectangle: function() {
+            var canvasSize = app.get('canvasSize');
+            var corners = _.clone(this.get('corners'));
+            return app.fn.getBoundingRectangle(corners, canvasSize, canvasSize, 12);
+        },
+        /**
          * @method getShape
-         * @param {Number} canvasSize
          * @return {createjs.Shape}
          */
-        getShape: function(canvasSize) {
-            var shape = this.get('shape').clone(true);
-            var data = this.inflateData(canvasSize);
+        getShape: function() {
+            //load shape, bounds and matrix
+            var shape = app.assets.getStroke(this.get('strokeId'));
+            var data = this.inflateData(shape);
             var spriteBounds = shape.getBounds();
             var ms = shape.getMatrix();
             //apply rotation based on newly sized shape
@@ -63,11 +94,10 @@ define([
         },
         /**
          * @method getUserShape
-         * @param {Number} canvasSize
          * @returns {createjs.Shape}
          */
-        getUserShape: function(canvasSize) {
-            var shape = this.inflateShape(canvasSize);
+        getUserShape: function() {
+            var shape = this.getShape();
             var bounds = shape.getBounds();
             var rect = this.getRectangle();
             shape.name = 'stroke';
@@ -79,11 +109,12 @@ define([
         },
         /**
          * @method inflatedData
-         * @param {Number} canvasSize
+         * @param {createjs.Shape} shape
          * @return {Object}
          */
-        inflateData: function(canvasSize) {
-            var bounds = this.get('shape').getBounds();
+        inflateData: function(shape) {
+            var bounds = shape.getBounds();
+            var canvasSize = app.get('canvasSize');
             var data = this.get('data');
             return {
                 n: data[0],

@@ -179,7 +179,7 @@ define([
             var oldPoint, oldMidPoint, points, marker;
             this.disableInput();
             this.$el.on('vmousedown.Input', down);
-            function down() {
+            function down(event) {
                 points = [];
                 marker = new createjs.Shape();
                 marker.graphics.setStrokeStyle(self.strokeSize, self.strokeCaps, self.strokeJoints).beginStroke(self.strokeColor);
@@ -191,7 +191,7 @@ define([
             }
             function move() {
                 var point = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
-                var midPoint = {x: oldPoint.x + point.x >> 1, y: oldPoint.y + point.y >> 1};
+                var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
                 marker.graphics.moveTo(midPoint.x, midPoint.y).curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 oldPoint = point;
                 oldMidPoint = midPoint;
@@ -309,6 +309,7 @@ define([
          */
         resize: function(size) {
             this.canvasSize = size > this.maxCanvasSize ? this.maxCanvasSize : size;
+            app.attributes.canvasSize = this.canvasSize;
             this.stage.canvas.height = this.canvasSize;
             this.stage.canvas.width = this.canvasSize;
             this.strokeSize = this.getScaledStrokeSize();
@@ -416,7 +417,7 @@ define([
         /**
          * @method triggerInputDown
          * @param {Object} event
-         * @param {Object} point
+         * @param {createjs.Point} point
          */
         triggerInputDown: function(event, point) {
             this.trigger('input:down', event, point);
