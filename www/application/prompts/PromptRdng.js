@@ -61,10 +61,8 @@ define([
         },
         /**
          * @method handlePromptClicked
-         * @param {Event} event
          */
-        handlePromptClicked: function(event) {
-            event.preventDefault();
+        handlePromptClicked: function() {
             if (this.review.isAnswered()) {
                 this.gradingButtons.triggerSelected();
                 this.next();

@@ -337,30 +337,31 @@ define([
         },
         /**
          * @method triggerClick
-         * @param {Object} event
+         * @param {Object} [event]
          */
         triggerCanvasClick: function(event) {
             this.trigger('canvas:click', event);
         },
         /**
          * @method triggerCanvasClickHold
-         * @param {Object} event
+         * @param {Object} [event]
          */
         triggerCanvasClickHold: function(event) {
             this.trigger('canvas:clickhold', event);
         },
         /**
          * @method triggerCanvasDoubleClick
-         * @param {Object} event
+         * @param {Object} [event]
          */
         triggerCanvasDoubleClick: function(event) {
             this.trigger('canvas:doubleclick', event);
         },
         /**
          * @method triggerCanvasMouseDown
-         * @param {Object} event
+         * @param {Object} [event]
          */
         triggerCanvasMouseDown: function(event) {
+            event.preventDefault();
             this.mouseDownEvent = event;
             this.trigger('canvas:mousedown', event);
             if (this.previousMouseDownEvent) {
@@ -390,9 +391,10 @@ define([
         },
         /**
          * @method triggerClick
-         * @param {Object} event
+         * @param {Object} [event]
          */
         triggerCanvasMouseUp: function(event) {
+            event.preventDefault();
             window.clearTimeout(this.mouseDownTimer);
             this.$(this.elements.holder).off('vmousemove.Canvas');
             this.previousMouseDownEvent = this.mouseDownEvent;
@@ -415,26 +417,29 @@ define([
         },
         /**
          * @method triggerInputDown
-         * @param {Object} event
          * @param {createjs.Point} point
+         * @param {Object} [event]
          */
-        triggerInputDown: function(event, point) {
-            this.trigger('input:down', event, point);
+        triggerInputDown: function(point, event) {
+            event.preventDefault();
+            this.trigger('input:down', point, event);
         },
         /**
          * @method triggerInputUp
-         * @param {Object} event
          * @param {Array} points
          * @param {createjs.Shape} shape
+         * @param {Object} [event]
          */
-        triggerInputUp: function(event, points, shape) {
-            this.trigger('input:up', event, points, shape);
+        triggerInputUp: function(points, shape, event) {
+            event.preventDefault();
+            this.trigger('input:up', points, shape, event);
         },
         /**
          * @method triggerSwipeUp
-         * @param {Object} event
+         * @param {Object} [event]
          */
         triggerSwipeUp: function(event) {
+            event.preventDefault();
             this.trigger('canvas:swipeup', event);
         },
         /**

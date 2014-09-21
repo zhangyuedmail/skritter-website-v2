@@ -68,8 +68,7 @@ define([
          * @method handlePromptClicked
          * @param {Event} event
          */
-        handleCanvasClicked: function(event) {
-            event.preventDefault();
+        handleCanvasClicked: function() {
             if (this.review.isAnswered()) {
                 this.gradingButtons.triggerSelected();
                 this.next();
@@ -80,8 +79,7 @@ define([
         /**
          * @method handleInputUp
          */
-        handleInputUp: function(event, points, shape) {
-            event.preventDefault();
+        handleInputUp: function(points, shape) {
             this.canvas.lastMouseDownEvent = null;
         },
         /**
