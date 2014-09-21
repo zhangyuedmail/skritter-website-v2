@@ -14,7 +14,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.title = app.strings['account-creation'].title;
+            this.title = 'Language Select';
         },
         /**
          * @method render
@@ -86,7 +86,7 @@ define([
          * @method next
          */
         next: function() {
-            app.router.accountCreation.switch('ListSelect');
+            app.router.navigate('getting-started/list-select', {trigger: true});
         }
     });
 

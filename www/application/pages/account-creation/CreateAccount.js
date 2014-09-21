@@ -14,7 +14,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.title = app.strings['account-creation'].title;
+            this.title = 'Sign Up';
         },
         /**
          * @method render
@@ -50,7 +50,7 @@ define([
                 name: this.elements.username.val(),
                 password: this.elements.password.val()
             }, function() {
-                app.api.clearGuest();
+                //app.api.clearGuest();
                 app.reload();
             }, function(error) {
                 self.enableForm().elements.message.text(error.responseJSON.message);
@@ -63,6 +63,16 @@ define([
          */
         handleButtonSkipClicked: function(event) {
             event.preventDefault();
+            var self = this;
+            app.dialogs.show().element('.message-title').text('Loading');
+            this.disableForm().elements.message.empty();
+            app.user.createNew(null, function() {
+                //app.api.clearGuest();
+                app.reload();
+            }, function(error) {
+                self.enableForm().elements.message.text(error.responseJSON.message);
+                app.dialogs.hide();
+            });
         }
     });
 

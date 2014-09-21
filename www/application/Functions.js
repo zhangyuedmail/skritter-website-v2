@@ -2,10 +2,11 @@
  * @module Application
  */
 define([
+    'application/Bootstrap',
     'application/PinyinConverter',
     'application/Recognizer',
     'application/Shortstraw'
-], function(PinyinConverter, Recognizer, Shortstraw) {
+], function(Bootstrap, PinyinConverter, Recognizer, Shortstraw) {
     /**
      * @method addAllObjectAttributes
      * @param {Array} array
@@ -21,6 +22,11 @@ define([
         }
         return total;
     }
+    /**
+     * @property bootstrap
+     * @type Bootstrap
+     */
+    var bootstrap = Bootstrap;
     /**
      * @method convertBytesToSize
      * @param {Number} bytes
@@ -177,6 +183,7 @@ define([
 
     return {
         addAllObjectAttributes: addAllObjectAttributes,
+        bootstrap: bootstrap,
         convertBytesToSize: convertBytesToSize,
         getAngle: getAngle,
         getBoundingRectangle: getBoundingRectangle,

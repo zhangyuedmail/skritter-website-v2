@@ -38,13 +38,20 @@ define([
          */
         createNew: function(settings, callbackComplete, callbackError) {
             var self = this;
+            var lang = app.api.getGuest('lang');
+            var list = app.api.getGuest('list');
+            var style = app.api.getGuest('style');
             async.waterfall([
                 function(callback) {
                     if (self.isAuthenticated()) {
                         callback(null, self.settings.toJSON());
                     } else {
                         app.api.createUser({
-                            lang: app.api.getGuest('lang')
+                            addSimplified: ['both', 'simp'].indexOf(style) !== -1,
+                            addTraditional: ['both', 'trad'].indexOf(style) !== -1,
+                            reviewSimplified: ['both', 'simp'].indexOf(style) !== -1,
+                            reviewTraditional: ['both', 'trad'].indexOf(style) !== -1,
+                            lang: lang
                         }, function(user) {
                             callback(null, user);
                         }, function(error) {
@@ -66,6 +73,20 @@ define([
                 function(user, callback) {
                     if (settings) {
                         app.api.updateUser($.extend(user, settings), function() {
+                            callback(null, user);
+                        }, function(error) {
+                            callback(error);
+                        });
+                    } else {
+                        callback(null, user);
+                    }
+                },
+                function(user, callback) {
+                    if (list) {
+                        app.api.updateVocabList({
+                            id: list,
+                            studyingMode: 'adding'
+                        }, function() {
                             callback();
                         }, function(error) {
                             callback(error);
@@ -95,6 +116,12 @@ define([
             } else {
                 return "<img src='" + avatar + "' />";
             }
+        },
+        /**
+         * @method getDisplayName
+         */
+        getDisplayName: function() {
+            return this.isRegistered() ? this.settings.get('name') : 'guest';
         },
         /**
          * @method getLanguageCode
@@ -138,6 +165,13 @@ define([
          */
         isJapanese: function() {
             return this.getLanguageCode() === 'ja' ? true : false;
+        },
+        /**
+         * @method isRegistered
+         * @returns {Boolean}
+         */
+        isRegistered: function() {
+            return this.settings.has('name');
         },
         /**
          * @method load

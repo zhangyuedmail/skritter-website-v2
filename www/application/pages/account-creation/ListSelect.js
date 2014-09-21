@@ -14,7 +14,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.title = app.strings['account-creation'].title;
+            this.title = 'List Select';
             this.lists = [];
             this.listsFiltered = undefined;
         },
@@ -107,7 +107,7 @@ define([
          */
         handleListSelected: function(event) {
             event.preventDefault();
-            app.router.accountCreation.switch('CreateAccount');
+            app.router.navigate('getting-started/signup', {trigger: true});
         },
         /**
          * @method handleRecommendedClicked

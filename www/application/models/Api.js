@@ -460,6 +460,29 @@ define([
             return this;
         },
         /**
+         * @method updateVocabList
+         * @param {Object} list
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        updateVocabList: function(list, callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl()  + 'vocablists/' + list.id + '?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(list)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method updateUser
          * @param {Object} settings
          * @param {Function} callbackComplete

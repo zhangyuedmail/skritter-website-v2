@@ -3,7 +3,7 @@
  */
 define([
     'framework/BaseRouter',
-    'routers/RouterAccountCreation',
+    'routers/RouterGettingStarted',
     'routers/RouterLearningCenter',
     'pages/Account',
     'pages/Dashboard',
@@ -12,7 +12,7 @@ define([
     'pages/Settings',
     'pages/Study',
     'pages/Tests'
-], function(BaseRouter, RouterAccountCreation, RouterLearningCenter,
+], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
             PageAccount, PageDashboard, PageLanding, PageLogin, PageSettings, PageStudy, PageTests) {
     /**
      * @class Router
@@ -24,7 +24,7 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.accountCreation = new RouterAccountCreation();
+            this.gettingStarted = new RouterGettingStarted();
             this.learningCenter = new RouterLearningCenter();
             document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
             document.addEventListener('menubutton', _.bind(this.handleMenuButtonPressed, this), false);

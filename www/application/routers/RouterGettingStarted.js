@@ -22,12 +22,15 @@ define([
          * @type Object
          */
         routes: {
-            'account-creation': 'showAccountCreation'
+            'getting-started': 'showGettingStarted',
+            'getting-started/language-select': 'showLanguageSelect',
+            'getting-started/list-select': 'showListSelect',
+            'getting-started/signup': 'showSignup'
         },
         /**
          * @method showAccountCreation
          */
-        showAccountCreation: function() {
+        showGettingStarted: function() {
             var self = this;
             if (app.api.isGuestValid()) {
                 this.showLanguageSelect();
@@ -40,9 +43,9 @@ define([
             }
         },
         /**
-         * @method showCreateAccount
+         * @method showSignup
          */
-        showCreateAccount: function() {
+        showSignup: function() {
             this.currentPage = new PageCreateAccount();
             this.currentPage.render();
         },

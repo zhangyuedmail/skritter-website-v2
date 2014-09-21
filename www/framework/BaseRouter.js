@@ -57,11 +57,13 @@ define([], function() {
         /**
          * @method switch
          * @param {String} page
+         * @returns {BaseRouter}
          */
         switch: function(page) {
             this.before();
             this['show' + page]();
             this.after();
+            return this;
         }
     });
 });
