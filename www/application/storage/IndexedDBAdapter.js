@@ -177,9 +177,14 @@ define([
             var self = this;
             var request = indexedDB.open(databaseName, this.get('databaseVersion'));
             request.onsuccess = function(event) {
-                self.set('database', event.target.result);
-                self.set('databaseName', databaseName);
-                callback();
+                if (event.target.result.objectStoreNames.length > 0) {
+                    self.set('database', event.target.result);
+                    self.set('databaseName', databaseName);
+                    callback();
+                } else {
+                    indexedDB.deleteDatabase(databaseName);
+                    app.reload();
+                }
             };
             request.onerror = function(error) {
                 callback(error);
