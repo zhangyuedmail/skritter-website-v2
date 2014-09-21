@@ -188,6 +188,7 @@ body {
 
 /*** PROMPTS: CANVAS ***/
 .prompt-container .canvas-container {
+    display: none;
     float: left;
     text-align: center;
 }
@@ -207,6 +208,7 @@ body {
 /*** PROMPTS: GRADING BUTTONS ***/
 .prompt-container .grading-container {
     bottom: 0;
+    display: none;
     position: absolute;
 }
 

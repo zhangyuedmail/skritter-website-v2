@@ -33,8 +33,7 @@ define([
          */
         render: function() {
             console.log(this.review.getItem().id.split('-')[2], this.review.getPosition());
-            this.enableGradingListeners();
-            this.resize();
+            this.reset().resize();
             return this;
         },
         /**
@@ -101,7 +100,18 @@ define([
                 this.controller.triggerNext();
             } else {
                 this.review.next();
-                this.reset().render();
+                this.render();
+            }
+        },
+        /**
+         * @method previous
+         */
+        previous: function() {
+            if (this.review.isFirst()) {
+                this.controller.triggerPrevious();
+            } else {
+                this.review.previous();
+                this.render();
             }
         },
         /**
@@ -109,8 +119,7 @@ define([
          * @returns {Prompt}
          */
         reset: function() {
-            this.canvas.hide();
-            this.gradingButtons.hide();
+            this.stopListening();
             return this;
         },
         /**

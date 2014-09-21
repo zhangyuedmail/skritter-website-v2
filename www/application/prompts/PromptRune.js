@@ -19,6 +19,7 @@ define([
          */
         initialize: function(options, controller, review) {
             Prompt.prototype.initialize.call(this, options, controller, review);
+            this.character = undefined;
         },
         /**
          * @method render
@@ -27,13 +28,10 @@ define([
         render: function() {
             Prompt.prototype.render.call(this);
             this.$el.html(this.compile(DesktopTemplate));
-            this.canvas.showGrid().show();
-            this.enableCanvasListeners();
             this.elements.fieldWriting = this.$('.field-writing');
+            this.renderQuestion();
             if (this.review.isAnswered()) {
                 this.renderAnswer();
-            } else {
-                this.renderQuestion();
             }
             return this;
         },
@@ -60,6 +58,7 @@ define([
          */
         renderQuestion: function() {
             this.canvas.enableInput();
+            this.character = this.review.getCharacter();
             this.gradingButtons.hide();
             this.elements.fieldWriting.text(this.review.get('vocab').get('writing'));
             return this;
@@ -80,7 +79,28 @@ define([
          * @method handleInputUp
          */
         handleInputUp: function(points, shape) {
-            this.canvas.lastMouseDownEvent = null;
+            var stroke = this.character.recognizeStroke(points, shape);
+            if (stroke) {
+                this.canvas.lastMouseDownEvent = null;
+                this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
+                if (this.character.isComplete()) {
+                    this.renderAnswer();
+                }
+            } else {
+                //TODO: handle incorrect character input
+            }
+        },
+        /**
+         * @method reset
+         * @returns {PromptRune}
+         */
+        reset: function() {
+            Prompt.prototype.reset.call(this);
+            this.canvas.clearAll().showGrid().show();
+            this.character = undefined;
+            this.enableCanvasListeners();
+            this.enableGradingListeners();
+            return this;
         },
         /**
          * @method resize

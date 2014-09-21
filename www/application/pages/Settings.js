@@ -53,7 +53,7 @@ define([
             this.elements.partRdng.bootstrapSwitch('state', this.activeParts.indexOf('rdng') > -1);
             this.elements.partRune.bootstrapSwitch('state', this.activeParts.indexOf('rune') > -1);
             if (app.user.isJapanese()) {
-                this.elements.partTone.parent().parent().parent().hide();
+                this.elements.partTone.parent().parent().hide();
             } else {
                 this.elements.partTone.bootstrapSwitch('state', this.activeParts.indexOf('tone') > -1);
             }

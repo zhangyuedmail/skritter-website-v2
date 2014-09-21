@@ -112,8 +112,12 @@ define([
             var activeStyles = app.user.settings.getActiveStyles();
             for (var i = 0, length = this.get('vocabIds').length; i < length; i++) {
                 var vocab = app.user.data.vocabs.get(this.get('vocabIds')[i]);
-                if (vocab && activeStyles.indexOf(vocab.attributes.style) !== -1) {
-                    vocabs.push(vocab);
+                if (vocab) {
+                    if (app.user.isChinese() && activeStyles.indexOf(vocab.attributes.style) !== -1) {
+                        vocabs.push(vocab);
+                    } else if (app.user.isJapanese()) {
+                        vocabs.push(vocab);
+                    }
                 }
             }
             return vocabs;

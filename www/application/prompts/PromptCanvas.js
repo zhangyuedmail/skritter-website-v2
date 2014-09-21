@@ -64,8 +64,9 @@ define([
             for (var i = 0, length = this.stage.children.length; i < length; i++) {
                 this.stage.children[i].removeAllChildren();
             }
-            this.resize();
-            this.stage.update();
+            if (this.grid) {
+                this.drawGrid();
+            }
             return this;
         },
         /**

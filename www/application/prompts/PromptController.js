@@ -82,6 +82,8 @@ define([
                 this.active.remove();
                 this.active = undefined;
             }
+            this.canvas.hide().clearAll();
+            this.gradingButtons.hide().select(3);
             return this;
         },
         /**
