@@ -26,6 +26,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
+            this.undelegateEvents();
             this.activeParts = this.settings.getActiveParts();
             this.activeStyles = this.settings.getActiveStyles();
             this.enabledParts = this.settings.getEnabledParts();
@@ -37,6 +38,7 @@ define([
             this.elements.styleSimp = this.$('#parts #simp');
             this.elements.styleTrad = this.$('#parts #trad');
             this.renderElements();
+            this.delegateEvents();
             return this;
         },
         /**
@@ -74,14 +76,15 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick #parts': 'updateParts',
-            'vclick #styles': 'updateStyles'
+            'switchChange.bootstrapSwitch #parts': 'updateParts',
+            'switchChange.bootstrapSwitch #styles': 'updateStyles'
         }),
         /**
          * @method updateParts
          * @param {Event} event
          */
         updateParts: function(event) {
+            console.log('uuu');
             event.preventDefault();
             this.activeParts = [];
             if (this.$('#parts #defn').bootstrapSwitch('state')) {

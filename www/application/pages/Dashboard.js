@@ -32,7 +32,7 @@ define([
             this.elements.scheduleDueCount = this.$('.schedule-duecount');
             this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userDisplayName = this.$('.user-displayname');
-            this.listTable.setElement(this.elements.listContainer).render()
+            this.listTable.setElement(this.elements.listContainer).render();
             this.renderElements();
             return this;
         },
