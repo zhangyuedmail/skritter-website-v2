@@ -16,6 +16,25 @@ define([
          */
         model: DataSRSConfig,
         /**
+         * @method getConfigs
+         * @param {String} part
+         */
+        getConfigs: function(part) {
+            return this.get(part) ? this.get(part).toJSON() : this.getDefault();
+        },
+        /**
+         * @method getDefault
+         * @param {Object}
+         */
+        getDefault: function() {
+            return {
+                'initialWrongInterval': 600,
+                'wrongFactors': [0.25, 0.25, 0.25, 0.25],
+                'rightFactors': [2.2, 2.2, 2.2, 2.2],
+                'initialRightInterval': 604800
+            };
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
