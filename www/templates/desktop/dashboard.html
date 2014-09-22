@@ -17,13 +17,37 @@
     <div class="container content-container padding-top">
 
         <div class="row">
-            <div class="col-md-12">
-                <div class="content-box">
+            <div class="col-md-6">
+                <div class="content-box fixed-150">
                     <div class="media">
                         <div class="pull-left user-avatar"></div>
                         <div class="media-body">
                             <h3 class="media-heading user-displayname"></h3>
-                            <p>You have <strong class="schedule-duecount"></strong> ready for review.</p>
+                            <button type="button" class="btn btn-info navigate spacing" data-url="study">Study</button>
+                            <button type="button" class="btn btn-default navigate spacing" data-url="settings">Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="content-box fixed-150">
+                    <h3><i class="fa fa-line-chart"></i> Stats</h3>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <h4 class="text-muted">DUE</h4>
+                            <h2 class="schedule-duecount"></h2>
+                        </div>
+                        <div class="col-xs-3">
+                            <h4 class="text-muted">NEW</h4>
+                            <h2 class="schedule-newcount"></h2>
+                        </div>
+                        <div class="col-xs-3">
+                            <h4 class="text-muted">TIME</h4>
+                            <h2 class="stats-time">0:00</h2>
+                        </div>
+                        <div class="col-xs-3">
+                            <h4 class="text-muted">STUDIED</h4>
+                            <h2 class="stats-studied">0</h2>
                         </div>
                     </div>
                 </div>
@@ -33,7 +57,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="content-box">
-                    <h3><i class="fa fa-book"></i> Lists</h3>
+                    <h3><i class="fa fa-book"></i> Lists <button type="button" class="btn btn-sm btn-default">Manage</button></h3>
                     <div class="list-container"></div>
                 </div>
             </div>

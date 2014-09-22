@@ -28,6 +28,9 @@ body {
     margin-bottom: 10px;
     padding: 10px;
 }
+.content-box.fixed-150 { height: 150px; }
+.content-box h1, .content-box h2, .content-box h3,
+.content-box h4, .content-box h5, .content-box h6 { margin-top: 5px; }
 .padding-top { padding-top: 10px; }
 
 

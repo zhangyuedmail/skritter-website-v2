@@ -61,13 +61,16 @@ define([
         },
         /**
          * @method addItems
-         * @param {Number} limit
+         * @param {Object} [options]
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
-        addItems: function(limit, callbackSuccess, callbackError) {
+        addItems: function(options, callbackSuccess, callbackError) {
             var self = this;
-            app.dialogs.show().element('.message-title').text('Searching');
+            options = options ? options : {};
+            if (options.showDialog) {
+                app.dialogs.show().element('.message-title').text('Searching');
+            }
             async.waterfall([
                 function(callback) {
                     app.api.requestBatch([
@@ -76,7 +79,7 @@ define([
                             method: 'POST',
                             params: {
                                 lang: app.user.getLanguageCode(),
-                                limit: limit ? limit : 1,
+                                limit: options.limit ? options.limit : 1,
                                 offset: 0,
                                 fields: 'id'
                             }
@@ -105,7 +108,10 @@ define([
                         totalItems += result.Items ? result.Items.length : 0;
                         totalVocabs += result.numVocabsAdded ? result.numVocabsAdded : 0;
                         self.vocablists.add(result.VocabLists, {merge: true});
-                        app.dialogs.show().element('.message-title').text('Adding: ' + totalVocabs);
+                        console.log('ADDING: ', totalVocabs);
+                        if (options.showDialog) {
+                            app.dialogs.show().element('.message-title').text('Adding: ' + totalVocabs);
+                        }
                     });
                 },
                 function(callback) {
@@ -117,12 +123,20 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    app.dialogs.hide(function() {
+                    if (options.showDialog) {
+                        app.dialogs.hide(function() {
+                            callbackError(error);
+                        });
+                    } else {
                         callbackError(error);
-                    });
+                    }
                 } else {
-                    console.log('added items');
-                    app.dialogs.hide(callbackSuccess);
+                    if (options.showDialog) {
+                        app.dialogs.hide(callbackSuccess);
+                    } else {
+                        callbackSuccess();
+                    }
+
                 }
             });
         },
@@ -297,6 +311,7 @@ define([
                     }, function(error) {
                         callback(error);
                     }, function(result) {
+                        console.log('SYNCING: ', result.Items ? result.Items.length : 0);
                         self.user.schedule.insert(result.Items, {merge: true, sort: false});
                         self.put(result);
                     });

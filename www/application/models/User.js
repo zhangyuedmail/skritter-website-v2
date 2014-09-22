@@ -226,15 +226,27 @@ define([
                     },
                     //load all schedule vocablists
                     function(callback) {
+                        app.dialogs.element('.message-text').text('vocablists');
                         self.data.vocablists.loadAll(callback);
                     },
                     //load all schedule srsconfigs
                     function(callback) {
+                        app.dialogs.element('.message-text').text('srsconfigs');
                         self.data.srsconfigs.loadAll(callback);
                     },
                     //load all schedule items
                     function(callback) {
+                        app.dialogs.element('.message-text').text('schedule');
                         self.schedule.loadAll(callback);
+                    },
+                    //check user has items to study
+                    function(callback) {
+                        if (self.schedule.getActiveCount() === 0) {
+                            app.dialogs.element('.message-text').text('initial items');
+                            self.data.addItems({limit: 10, showDialog: false}, callback, callback);
+                        } else {
+                            callback();
+                        }
                     }
                 ], function() {
                     app.dialogs.hide(function() {
