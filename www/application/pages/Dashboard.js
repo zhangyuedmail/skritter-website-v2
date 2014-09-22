@@ -30,6 +30,7 @@ define([
             this.elements.messageExpired = this.$('.message-expired');
             this.elements.messageRegister = this.$('.message-register');
             this.elements.scheduleDueCount = this.$('.schedule-duecount');
+            this.elements.scheduleNewCount = this.$('.schedule-newcount');
             this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userDisplayName = this.$('.user-displayname');
             this.listTable.setElement(this.elements.listContainer).render();
@@ -66,6 +67,7 @@ define([
          */
         updateDueCount: function() {
             this.elements.scheduleDueCount.text(app.user.schedule.getDueCount());
+            this.elements.scheduleNewCount.text(app.user.schedule.getNewCount());
         },
         /**
          * @method updateListTable

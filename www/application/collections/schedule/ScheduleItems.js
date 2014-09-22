@@ -35,7 +35,7 @@ define([
         },
         /**
          * @method getActive
-         * @param {Array}12yA
+         * @param {Array}
          */
         getActive: function() {
             var activeParts = this.user.settings.getActiveParts();
@@ -52,6 +52,13 @@ define([
                 }
                 return true;
             });
+        },
+        /**
+         * @method getActiveCount
+         * @param {Number}
+         */
+        getActiveCount: function() {
+            return this.getActive().length;
         },
         /**
          * @method getDue
@@ -78,6 +85,13 @@ define([
             return this.getActive().filter(function(item) {
                 return item.isNew();
             });
+        },
+        /**
+         * @method getNewCount
+         * @returns {ScheduleItems}
+         */
+        getNewCount: function() {
+            return this.getNew().length;
         },
         /**
          * @method getNext
