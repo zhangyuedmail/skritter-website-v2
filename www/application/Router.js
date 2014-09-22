@@ -48,8 +48,8 @@ define([
          */
         handleBackButtonPressed: function() {
             if (Backbone.history.fragment === '') {
-                app.dialogs.show('logout');
-                app.dialogs.element('.logout').one('vclick', function() {
+                app.dialogs.show('exit');
+                app.dialogs.element('.exit').one('vclick', function() {
                     navigator.app.exitApp();
                 });
             } else {
