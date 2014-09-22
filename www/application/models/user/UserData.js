@@ -60,6 +60,72 @@ define([
             localStorage.setItem(this.user.id + '-data', JSON.stringify(this.toJSON()));
         },
         /**
+         * @method addItems
+         * @param {Number} limit
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        addItems: function(limit, callbackSuccess, callbackError) {
+            var self = this;
+            app.dialogs.show().element('.message-title').text('Searching');
+            async.waterfall([
+                function(callback) {
+                    app.api.requestBatch([
+                        {
+                            path: 'api/v' + app.api.get('version') + '/items/add',
+                            method: 'POST',
+                            params: {
+                                lang: app.user.getLanguageCode(),
+                                limit: limit ? limit : 1,
+                                offset: 0,
+                                fields: 'id'
+                            }
+                        }
+                    ], function(result) {
+                        callback(null, result);
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(batch, callback) {
+                    app.api.checkBatch(batch.id, function() {
+                        callback(null, batch);
+                    }, function(error) {
+                        callback(error);
+                    }, function(result) {});
+                },
+                function(batch, callback) {
+                    var totalItems = 0;
+                    var totalVocabs = 0;
+                    app.api.getBatch(batch.id, function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    }, function(result) {
+                        totalItems += result.Items ? result.Items.length : 0;
+                        totalVocabs += result.numVocabsAdded ? result.numVocabsAdded : 0;
+                        app.dialogs.show().element('.message-title').text('Adding: ' + totalVocabs);
+                    });
+                },
+                function(callback) {
+                    self.sync(function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    app.dialogs.hide(function() {
+                        callbackError(error);
+                    });
+                } else {
+                    console.log('added items');
+                    app.dialogs.hide(callbackSuccess);
+                }
+            });
+        },
+        /**
          * @method downloadAll
          * @param {Function} callback
          */
@@ -81,7 +147,7 @@ define([
                                 sort: 'changed',
                                 offset: 0,
                                 include_vocabs: 'true',
-                                include_sentences: 'true',
+                                include_sentences: 'false',
                                 include_strokes: 'true',
                                 include_heisigs: 'true',
                                 include_top_mnemonics: 'true',
@@ -181,6 +247,66 @@ define([
             ], function() {
                 if (typeof callback === 'function') {
                     callback();
+                }
+            });
+        },
+        /**
+         * @method sync
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        sync: function(callbackSuccess, callbackError) {
+            var self = this;
+            var now = moment().unix();
+            async.waterfall([
+                function(callback) {
+                    app.api.requestBatch([
+                        {
+                            path: 'api/v' + app.api.get('version') + '/items',
+                            method: 'GET',
+                            params: {
+                                lang: app.user.getLanguageCode(),
+                                sort: 'changed',
+                                offset: self.get('lastItemSync'),
+                                include_vocabs: 'true',
+                                include_sentences: 'false',
+                                include_strokes: 'true',
+                                include_heisigs: 'true',
+                                include_top_mnemonics: 'true',
+                                include_decomps: 'true'
+                            },
+                            spawner: true
+                        }
+                    ], function(result) {
+                        callback(null, result);
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(batch, callback) {
+                    app.api.checkBatch(batch.id, function() {
+                        callback(null, batch);
+                    }, function(error) {
+                        callback(error);
+                    }, function(result) {});
+                },
+                function(batch, callback) {
+                    app.api.getBatch(batch.id, function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    }, function(result) {
+                        self.user.schedule.insert(result.Items, {merge: true, sort: false});
+                        self.put(result);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    self.set('lastItemSync', now);
+                    self.user.schedule.sort();
+                    callbackSuccess();
                 }
             });
         },
