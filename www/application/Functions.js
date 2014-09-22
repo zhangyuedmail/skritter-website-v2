@@ -61,7 +61,7 @@ define([
                 return randomInterval(newInterval);
             }
             //set values for further calculations
-            var actualInterval = getUnixTime() - item.last;
+            var actualInterval = moment().unix() - item.last;
             var factor = 0.9;
             var pctRight = item.successes / item.reviews;
             var scheduledInterval = item.next - item.last;
