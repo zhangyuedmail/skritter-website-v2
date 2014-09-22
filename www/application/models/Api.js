@@ -254,47 +254,71 @@ define([
         getCredentials: function() {
             return 'basic ' + btoa(this.get('clientId') + ':' + this.get('clientSecret'));
         },
-
         /**
-         * @method getVocabLists
-         * @param {Object} [callback]
+         * @method getDate
          * @param {Function} callbackComplete
          * @param {Function} callbackError
          */
-        getVocabLists: function(options, callbackComplete, callbackError) {
-            var self = this;
-            var lists = [];
-            options = options ? options : {};
-            (function next(cursor) {
-                $.ajax({
-                    url: self.getBaseUrl() + 'vocablists',
-                    beforeSend: self.beforeSend,
-                    context: self,
-                    type: 'GET',
-                    data: {
-                        bearer_token: self.getToken(),
-                        cursor: cursor,
-                        lang: options.lang,
-                        sort: options.sort,
-                        fields: options.fields
-                    }
-                }).done(function(data) {
-                    if (data.statusCode === 200) {
-                        lists = lists.concat(data.VocabLists);
-                        if (data.cursor) {
-                            setTimeout(next, self.get('timeout'), data.cursor);
-                        } else {
-                            callbackComplete(lists);
-                        }
-                    } else {
-                        callbackError(data);
-                    }
-                }).fail(function(error) {
-                    callbackError(error);
-                });
-            })();
+        getDate: function(callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl() + 'dateinfo',
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken()
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackComplete(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         },
-
+        /**
+         * @method getGuest
+         * @param {String} key
+         * @returns {Object}
+         */
+        getGuest: function(key) {
+            return this.get('guest') ? this.get('guest')[key] : undefined;
+        },
+        /**
+         * @method getStats
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getStats: function(options, callbackComplete, callbackError) {
+            options = options ? options : {};
+            options.start = options.start ? options.start : moment().format('YYYY-MM-DD');
+            $.ajax({
+                url: this.getBaseUrl() + 'progstats',
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    start: options.start,
+                    end: options.end,
+                    step: options.step,
+                    lang: options.lang,
+                    fields: options.fields
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.ProgressStats);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
         /**
          * @method getUserSubscription
          * @param {String} userId
@@ -380,12 +404,43 @@ define([
             })();
         },
         /**
-         * @method getGuest
-         * @param {String} key
-         * @returns {Object}
+         * @method getVocabLists
+         * @param {Object} [callback]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
          */
-        getGuest: function(key) {
-            return this.get('guest') ? this.get('guest')[key] : undefined;
+        getVocabLists: function(options, callbackComplete, callbackError) {
+            var self = this;
+            var lists = [];
+            options = options ? options : {};
+            (function next(cursor) {
+                $.ajax({
+                    url: self.getBaseUrl() + 'vocablists',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        cursor: cursor,
+                        lang: options.lang,
+                        sort: options.sort,
+                        fields: options.fields
+                    }
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        lists = lists.concat(data.VocabLists);
+                        if (data.cursor) {
+                            setTimeout(next, self.get('timeout'), data.cursor);
+                        } else {
+                            callbackComplete(lists);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
         },
         /**
          * @method isGuestValid
@@ -397,6 +452,39 @@ define([
             this.set('guest', undefined, {silent: true});
             localStorage.removeItem('_guest');
             return false;
+        },
+        /**
+         * @method postReviews
+         * @param {Array|Object} reviews
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        postReviews: function(reviews, callbackComplete, callbackError) {
+            var self = this;
+            var postedReviews = [];
+            reviews = Array.isArray(reviews) ? reviews : [reviews];
+            (function postBatch(batch) {
+                $.ajax({
+                    url: this.getBaseUrl() + 'reviews?bearer_token=' + self.getToken(),
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'POST',
+                    data: JSON.stringify(batch)
+                }).done(function(data) {
+                    postedReviews = postedReviews.concat(batch);
+                    if (data.statusCode === 200) {
+                        if (reviews.length > 0) {
+                            postBatch(reviews.splice(0, 99));
+                        } else {
+                            callbackComplete(postedReviews);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })(reviews.splice(0, 99));
         },
         /**
          * @method refreshToken

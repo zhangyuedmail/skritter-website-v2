@@ -6,8 +6,9 @@ define([
     'collections/schedule/ScheduleItems',
     'models/user/UserData',
     'models/user/UserSettings',
+    'models/user/UserStats',
     'models/user/UserSubscription'
-], function(BaseModel, ScheduleItems, UserData, UserSettings, UserSubscription) {
+], function(BaseModel, ScheduleItems, UserData, UserSettings, UserStats, UserSubscription) {
     /**
      * @class User
      * @extends BaseModel
@@ -21,6 +22,7 @@ define([
             this.data = new UserData(null, {user: this});
             this.schedule = new ScheduleItems(null, {user: this});
             this.settings = new UserSettings(null, {user: this});
+            this.stats = new UserStats(null, {user: this});
             this.subscription = new UserSubscription(null, {user: this});
         },
         /**
@@ -188,6 +190,9 @@ define([
                 if (localStorage.getItem(this.id + '-settings')) {
                     this.settings.set(JSON.parse(localStorage.getItem(this.id + '-settings')), {silent: true});
                 }
+                if (localStorage.getItem(this.id + '-stats')) {
+                    this.stats.set(JSON.parse(localStorage.getItem(this.id + '-stats')), {silent: true});
+                }
                 if (localStorage.getItem(this.id + '-subscription')) {
                     this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')), {silent: true});
                 }
@@ -249,6 +254,7 @@ define([
                         }
                     }
                 ], function() {
+                    self.stats.sync();
                     app.dialogs.hide(function() {
                         callback(self);
                     });
@@ -306,6 +312,7 @@ define([
         remove: function() {
             localStorage.removeItem(app.user.id + '-data');
             localStorage.removeItem(app.user.id + '-settings');
+            localStorage.removeItem(app.user.id + '-stats');
             localStorage.removeItem(app.user.id + '-subscription');
             localStorage.removeItem('_active');
             async.series([
