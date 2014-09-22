@@ -35,6 +35,7 @@ define([
          */
         renderElements: function() {
             if (app.get('languageCode') === 'ja') {
+                app.api.setGuest('lang', 'ja');
                 this.next();
             } else if (app.get('languageCode') === 'zh') {
                 this.elements.languageContainer.hide();
