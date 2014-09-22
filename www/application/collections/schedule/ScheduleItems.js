@@ -88,7 +88,7 @@ define([
         },
         /**
          * @method getNewCount
-         * @returns {ScheduleItems}
+         * @returns {Number}
          */
         getNewCount: function() {
             return this.getNew().length;
@@ -127,6 +127,10 @@ define([
          */
         insert: function(items, options) {
             items = Array.isArray(items) ? items : [items];
+            options = options ? options : {};
+            options.merge = options.merge ? options.merge : true;
+            options.silent = options.silent ? options.silent : true;
+            options.sort = options.sort ? options.sort : false;
             var scheduleItems = [];
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];

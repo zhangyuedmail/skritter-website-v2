@@ -25,8 +25,9 @@ define([
          * @returns {PromptTone}
          */
         render: function() {
-            Prompt.prototype.render.call(this);
             this.$el.html(this.compile(DesktopTemplate));
+            Prompt.prototype.render.call(this);
+            app.timer.setLimits(15, 10);
             this.canvas.hideGrid().show();
             this.enableCanvasListeners();
             if (this.review.isAnswered()) {

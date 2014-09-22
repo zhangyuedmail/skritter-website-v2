@@ -28,6 +28,7 @@ define([
         render: function() {
             this.$el.html(this.compile(DesktopTemplate));
             Prompt.prototype.render.call(this);
+            app.timer.setLimits(30, 15);
             this.renderQuestion();
             if (this.review.isAnswered()) {
                 this.renderAnswer();

@@ -229,15 +229,20 @@ define([
                     function(callback) {
                         app.dialogs.show('default', callback).element('.message-title').text('Loading');
                     },
-                    //load all schedule vocablists
+                    //load all vocablists
                     function(callback) {
                         app.dialogs.element('.message-text').text('vocablists');
                         self.data.vocablists.loadAll(callback);
                     },
-                    //load all schedule srsconfigs
+                    //load all srsconfigs
                     function(callback) {
                         app.dialogs.element('.message-text').text('srsconfigs');
                         self.data.srsconfigs.loadAll(callback);
+                    },
+                    //load all reviews
+                    function(callback) {
+                        app.dialogs.element('.message-text').text('reviews');
+                        self.data.reviews.loadAll(callback);
                     },
                     //load all schedule items
                     function(callback) {

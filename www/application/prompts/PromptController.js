@@ -109,6 +109,9 @@ define([
          * @method triggerNext
          */
         triggerNext: function() {
+            var review = this.active.review.update();
+            console.log('REVIEW:', review);
+            app.user.data.reviews.add(review);
             this.trigger('next');
         },
         /**

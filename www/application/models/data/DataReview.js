@@ -10,9 +10,10 @@ define([
      */
     var DataReview = BaseModel.extend({
         /**
-         * @method initalize
+         * @method initialize
+         * @constructor
          */
-        initalize: function() {
+        initialize: function() {
             this.characters = [];
         },
         /**
@@ -25,9 +26,23 @@ define([
          * @type Object
          */
         defaults: {
-            part: undefined,
+            currentReviewTime: 0,
+            currentThinkingTime: 0,
+            finished: false,
+            originalItems: [],
             position: 1,
             reviews: []
+        },
+        /**
+         * @method cache
+         * @param {Function} [callback]
+         */
+        cache: function(callback) {
+            app.storage.putItems('vocablists', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
         },
         /**
          * @method getAt
@@ -62,6 +77,34 @@ define([
             return this.characters[this.getPosition() - 1];
         },
         /**
+         * @method getFinalScore
+         * @returns {Number}
+         */
+        getFinalScore: function() {
+            var reviews = this.get('reviews');
+            var score = reviews[0].score;
+            if (this.hasContained()) {
+                var max = this.get('reviews').length - 1;
+                var totalScore = 0;
+                var totalWrong = 0;
+                for (var i = 1, length = reviews.length; i < length; i++) {
+                    var review = reviews[i];
+                    totalScore += review.score;
+                    if (review.score === 1) {
+                        totalWrong++;
+                    }
+                }
+                if (max === 2 && totalWrong === 1) {
+                    score = 1;
+                } else if (totalWrong > 1) {
+                    score = 1;
+                } else {
+                    score = Math.floor(totalScore / max);
+                }
+            }
+            return score;
+        },
+        /**
          * @method getItem
          * @returns {DataItem}
          */
@@ -81,6 +124,36 @@ define([
          */
         getPosition: function() {
             return this.hasContained() ? this.get('position') : 1;
+        },
+        /**
+         * @method getTotalReviewTime
+         * @returns {Number}
+         */
+        getTotalReviewTime: function() {
+            var reviewTime = 0;
+            if (this.hasContained()) {
+                for (var i = 1, length = this.get('reviews').length; i < length; i++) {
+                    reviewTime += this.get('reviews')[i].reviewTime;
+                }
+            } else {
+                reviewTime = this.get('reviews')[0].reviewTime;
+            }
+            return reviewTime;
+        },
+        /**
+         * @method getTotalThinkingTime
+         * @returns {Number}
+         */
+        getTotalThinkingTime: function() {
+            var thinkingTime = 0;
+            if (this.hasContained()) {
+                for (var i = 1, length = this.get('reviews').length; i < length; i++) {
+                    thinkingTime += this.get('reviews')[i].thinkingTime;
+                }
+            } else {
+                thinkingTime = this.get('reviews')[0].thinkingTime;
+            }
+            return thinkingTime;
         },
         /**
          * @method getVocab
@@ -105,7 +178,7 @@ define([
          * @returns {Boolean}
          */
         isAnswered: function() {
-            return this.getAt('newInterval') ? true : false;
+            return this.get('finished');
         },
         /**
          * @method isFirst
@@ -146,7 +219,7 @@ define([
         /**
          * @method setAt
          * @param {Object|String} key
-         * @param {Number|String} value
+         * @param {Boolean|Number|String} value
          * @returns {Object}
          */
         setAt: function(key, value) {
@@ -159,6 +232,46 @@ define([
                 review[key] = value;
             }
             return review;
+        },
+        /**
+         * @method update
+         * @returns {DataReview}
+         */
+        update: function() {
+            var configs = app.user.data.srsconfigs.getConfigs(this.get('part'));
+            for (var i = 0, length = this.get('reviews').length; i < length; i++) {
+                //load required resources for updating
+                var review = this.get('reviews')[i];
+                var originalItem = _.find(this.get('originalItems'), {id: review.itemId});
+                var item = app.user.data.items.get(review.itemId);
+                //check if all required resources are available
+                if (review && originalItem && item) {
+                    //update values for base review
+                    if (this.get('reviews').length > 1 && i === 0) {
+                        review.reviewTime = this.getTotalReviewTime();
+                        review.score = this.getFinalScore();
+                        review.thinkingTime = this.getTotalThinkingTime();
+                    }
+                    //update interval based on item and score
+                    review.newInterval = app.fn.calculateInterval(originalItem, review.score, configs);
+                    //update local item based on review
+                    item.set({
+                        changed: review.submitTime,
+                        last: review.submitTime,
+                        interval: review.newInterval,
+                        next: review.submitTime + review.newInterval,
+                        previousInterval: review.currentInterval,
+                        previousSuccess: review.score > 1 ? true : false,
+                        reviews: originalItem.reviews + 1,
+                        successes: review.score > 1 ? originalItem.successes + 1 : originalItem.successes,
+                        timeStudied: originalItem.reviewTime + review.reviewTime
+                    });
+                } else {
+                    console.error('REVIEW:', 'Unable to locate all resources.');
+                }
+            }
+            app.user.schedule.sort();
+            return this;
         }
     });
 

@@ -19,6 +19,7 @@ define([
             this.prompt = undefined;
             this.schedule = app.user.schedule;
             this.scheduleIndex = -1;
+            this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
         },
         /**
          * @method render
@@ -27,6 +28,7 @@ define([
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
             app.timer.setElement(this.$('#study-timer'));
+            this.elements.studyCount = this.$('#study-count');
             this.prompt = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.prompt, 'next', this.next);
             this.renderElements();
@@ -38,6 +40,7 @@ define([
          * @returns {PageStudy}
          */
         renderElements: function() {
+            this.updateDueCount();
             return this;
         },
         /**
@@ -55,7 +58,14 @@ define([
         /**
          * @method previous
          */
-        previous: function() {}
+        previous: function() {},
+        /**
+         * @method updateDueCount
+         */
+        updateDueCount: function() {
+            console.log('STUDY:', 'updating due');
+            this.elements.studyCount.text(app.user.schedule.getDueCount());
+        }
     });
 
     return PageHome;

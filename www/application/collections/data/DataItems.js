@@ -14,7 +14,11 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.on('change', function(item) {
+                item.updateSchedule();
+            });
+        },
         /**
          * @property model
          * @type DataItem

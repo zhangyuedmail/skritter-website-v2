@@ -6,12 +6,13 @@ define([
     'collections/data/DataDecomps',
     'collections/data/DataItems',
     'collections/data/DataParams',
+    'collections/data/DataReviews',
     'collections/data/DataSentences',
     'collections/data/DataSRSConfigs',
     'collections/data/DataStrokes',
     'collections/data/DataVocabs',
     'collections/data/DataVocabLists'
-], function(BaseModel, DataDecomps, DataItems, DataParams, DataSentences, DataSRSConfigs, DataStrokes, DataVocabs, DataVocabLists) {
+], function(BaseModel, DataDecomps, DataItems, DataParams, DataReviews, DataSentences, DataSRSConfigs, DataStrokes, DataVocabs, DataVocabLists) {
     /**
      * @class UserData
      * @extends BaseModel
@@ -26,6 +27,7 @@ define([
             this.decomps = new DataDecomps();
             this.items = new DataItems();
             this.params = new DataParams();
+            this.reviews = new DataReviews();
             this.sentences = new DataSentences();
             this.srsconfigs = new DataSRSConfigs();
             this.strokes = new DataStrokes();
@@ -108,7 +110,7 @@ define([
                         totalItems += result.Items ? result.Items.length : 0;
                         totalVocabs += result.numVocabsAdded ? result.numVocabsAdded : 0;
                         self.vocablists.add(result.VocabLists, {merge: true});
-                        console.log('ADDING: ', totalVocabs);
+                        console.log('ADDING:', totalVocabs);
                         if (options.showDialog) {
                             app.dialogs.show().element('.message-title').text('Adding: ' + totalVocabs);
                         }
@@ -311,8 +313,8 @@ define([
                     }, function(error) {
                         callback(error);
                     }, function(result) {
-                        console.log('SYNCING: ', result.Items ? result.Items.length : 0);
-                        self.user.schedule.insert(result.Items, {merge: true, sort: false});
+                        console.log('SYNCING:', result.Items ? result.Items.length : 0);
+                        self.user.schedule.insert(result.Items);
                         self.put(result);
                     });
                 }

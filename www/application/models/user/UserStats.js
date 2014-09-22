@@ -32,7 +32,7 @@ define([
             var studiedCount = 0;
             var word =  this.get('word') ? this.get('word') : {};
             for (var part in word) {
-                studiedCount += word[part].studied.day
+                studiedCount += word[part].studied.day;
             }
             return studiedCount;
         },

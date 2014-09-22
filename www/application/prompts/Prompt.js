@@ -34,18 +34,25 @@ define([
          * @returns {Prompt}
          */
         render: function() {
-            console.log(this.review.getItem().id.split('-')[2], this.review.getPosition());
             this.item = this.review.getBaseItem();
             this.vocab = this.review.getBaseVocab();
-            this.renderFields();
+            this.renderElements();
+
+            this.renderQuestion();
+            if (this.review.isAnswered()) {
+                this.renderAnswer();
+            } else {
+                app.timer.start();
+            }
+
             this.reset().resize();
             return this;
         },
         /**
-         * @method renderFields
+         * @method renderElements
          * @returns {Prompt}
          */
-        renderFields: function() {
+        renderElements: function() {
             this.elements.fieldAnswer = this.$('.field-answer');
             this.elements.fieldDefinition = this.$('.field-definition');
             this.elements.fieldQuestion = this.$('.field-question');
@@ -64,20 +71,13 @@ define([
          * @method enableCanvasListeners
          * @returns {Prompt}
          */
-        enableCanvasListeners: function() {
+        enableListeners: function() {
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClicked);
             this.listenTo(this.canvas, 'canvas:clickhold', this.handleCanvasHeld);
             this.listenTo(this.canvas, 'canvas:doubleclick', this.handleCanvasDoubleClicked);
             this.listenTo(this.canvas, 'canvas:swipeup', this.handleCanvasSwipeUp);
             this.listenTo(this.canvas, 'input:down', this.handleInputDown);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
-            return this;
-        },
-        /**
-         * @method enableGradingListeners
-         * @returns {Prompt}
-         */
-        enableGradingListeners: function() {
             this.listenTo(this.gradingButtons, 'complete', this.handleGradingButtonsCompleted);
             this.listenTo(this.gradingButtons, 'selected', this.handleGradingButtonsSelected);
             return this;
@@ -129,6 +129,7 @@ define([
          */
         reset: function() {
             this.stopListening();
+            this.enableListeners();
             return this;
         },
         /**

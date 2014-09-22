@@ -22,6 +22,101 @@ define([
         }
         return total;
     }
+
+    /**
+     * @method arrayToJSON
+     * @param {Array} array
+     * @returns {Array}
+     */
+    function arrayToJSON(array) {
+        return array.map(function(data) {
+            return data.toJSON();
+        });
+    }
+    /**
+     * @method calculateInterval
+     * @param {Object} item
+     * @param {Number} score
+     * @param {Object} configs
+     * @returns {Number}
+     */
+    function calculateInterval(item, score, configs) {
+            var newInterval = null;
+            //return new items with randomized default config values
+            if (!item.last) {
+                switch (score) {
+                    case 1:
+                        newInterval = configs.initialWrongInterval;
+                        break;
+                    case 2:
+                        newInterval = configs.initialRightInterval / 5;
+                        break;
+                    case 3:
+                        newInterval = configs.initialRightInterval;
+                        break;
+                    case 4:
+                        newInterval = configs.initialRightInterval * 4;
+                        break;
+                }
+                return randomInterval(newInterval);
+            }
+            //set values for further calculations
+            var actualInterval = getUnixTime() - item.last;
+            var factor = 0.9;
+            var pctRight = item.successes / item.reviews;
+            var scheduledInterval = item.next - item.last;
+            //get the factor
+            if (score === 2) {
+                factor = 0.9;
+            } else if (score === 4) {
+                factor = 3.5;
+            } else {
+                var factorsList = (score === 1) ? configs.wrongFactors : configs.rightFactors;
+                var divisions = [2, 1200, 18000, 691200];
+                var index;
+                for (var i in divisions) {
+                    if (item.interval > divisions[i]) {
+                        index = i;
+                    }
+                }
+                factor = factorsList[index];
+            }
+            //adjust the factor based on readiness
+            if (score > 2) {
+                factor -= 1;
+                factor *= actualInterval / scheduledInterval;
+                factor += 1;
+            }
+            //accelerate new items that appear to be known
+            if (item.successes === item.reviews && item.reviews < 5) {
+                factor *= 1.5;
+            }
+            //decelerate hard items consistently marked wrong
+            if (item.reviews > 8) {
+                if (pctRight < 0.5) {
+                    factor *= Math.pow(pctRight, 0.7);
+                }
+            }
+            //multiple by the factor and randomize the interval
+            newInterval = randomInterval(item.interval * factor);
+            //bound the interval
+            if (score === 1) {
+                if (newInterval > 604800) {
+                    newInterval = 604800;
+                } else if (newInterval < 30) {
+                    newInterval = 30;
+                }
+            } else {
+                if (newInterval > 315569260) {
+                    newInterval = 315569260;
+                } else if (score === 2 && newInterval < 300) {
+                    newInterval = 300;
+                } else if (newInterval < 30) {
+                    newInterval = 30;
+                }
+            }
+            return newInterval;
+    }
     /**
      * @property bootstrap
      * @type Bootstrap
@@ -185,6 +280,24 @@ define([
      */
     var pinyin = PinyinConverter;
     /**
+     * @method randomDecimal
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
+     */
+    function randomDecimal(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    /**
+     * @method randomInterval
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
+     */
+    function randomInterval(value) {
+        return Math.round(value * (0.925 + (Math.random() * 0.15)));
+    }
+    /**
      * @property recognizer
      * @type {Recognizer}
      */
@@ -213,7 +326,9 @@ define([
 
     return {
         addAllObjectAttributes: addAllObjectAttributes,
+        arrayToJSON: arrayToJSON,
         bootstrap: bootstrap,
+        calculateInterval: calculateInterval,
         convertTimeToClock: convertTimeToClock,
         convertBytesToSize: convertBytesToSize,
         getAngle: getAngle,
@@ -225,6 +340,8 @@ define([
         mergeObjectArrays: mergeObjectArrays,
         pad: pad,
         pinyin: pinyin,
+        randomDecimal: randomDecimal,
+        randomInterval: randomInterval,
         recognizer: recognizer,
         shortstraw: shortstraw,
         toLowerCase: toLowerCase,

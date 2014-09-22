@@ -71,6 +71,7 @@ define([
             return review.set({
                 id: wordGroup,
                 itemId: items[0].id,
+                originalItems: app.fn.arrayToJSON(items),
                 part: part,
                 reviews: reviews
             });
@@ -119,6 +120,12 @@ define([
                 }
             }
             return vocabs;
+        },
+        /**
+         * @method updateSchedule
+         */
+        updateSchedule: function() {
+            app.user.schedule.insert(this.toJSON());
         }
     });
 

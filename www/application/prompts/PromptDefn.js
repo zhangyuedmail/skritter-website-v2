@@ -25,14 +25,10 @@ define([
          * @returns {PromptDefn}
          */
         render: function() {
+            app.timer.setLimits(30, 15);
             this.$el.html(this.compile(DesktopTemplate));
             Prompt.prototype.render.call(this);
             this.canvas.hideGrid().hide();
-            if (this.review.isAnswered()) {
-                this.renderAnswer();
-            } else {
-                this.renderQuestion();
-            }
             return this;
         },
         /**
@@ -40,8 +36,9 @@ define([
          * @returns {PromptDefn}
          */
         renderAnswer: function() {
+            app.timer.stop();
+            this.review.setAt('finished', true);
             this.gradingButtons.select(this.review.getAt('score')).show();
-            this.review.setAt('newInterval', 1000);
             this.elements.fieldDefinition.text(this.vocab.getDefinition());
             this.elements.fieldQuestion.hide();
             return this;
