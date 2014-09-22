@@ -16,8 +16,9 @@ define([
         initialize: function() {
             this.title = app.strings.dashboard.title;
             this.listTable = app.user.data.vocablists.getTable();
-            this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
-            this.listenTo(app.user.data.vocablists, 'add change', this.updateListTable);
+            this.listenTo(app.user.schedule, 'sort', this.updateStatSection);
+            this.listenTo(app.user.stats, 'change', this.updateStatSection);
+            this.listenTo(app.user.data.vocablists, 'add change', this.updateListSection);
         },
         /**
          * @method render
@@ -29,8 +30,10 @@ define([
             this.elements.listContainer = this.$('.list-container');
             this.elements.messageExpired = this.$('.message-expired');
             this.elements.messageRegister = this.$('.message-register');
-            this.elements.scheduleDueCount = this.$('.schedule-duecount');
-            this.elements.scheduleNewCount = this.$('.schedule-newcount');
+            this.elements.statsDue = this.$('.stats-due');
+            this.elements.statsNew = this.$('.stats-new');
+            this.elements.statsTime = this.$('.stats-time');
+            this.elements.statsStudied = this.$('.stats-studied');
             this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userDisplayName = this.$('.user-displayname');
             this.listTable.setElement(this.elements.listContainer).render();
@@ -44,8 +47,8 @@ define([
         renderElements: function() {
             this.elements.userAvatar.html(app.user.getAvatar('img-thumbnail'));
             this.elements.userDisplayName.text(app.user.getDisplayName());
-            this.updateDueCount();
-            this.updateListTable();
+            this.updateStatSection();
+            this.updateListSection();
         },
         /**
          * @method events
@@ -63,16 +66,18 @@ define([
             app.router.navigate('getting-started/signup', {trigger: true});
         },
         /**
-         * @method updateDueCount
+         * @method updateStatSection
          */
-        updateDueCount: function() {
-            this.elements.scheduleDueCount.text(app.user.schedule.getDueCount());
-            this.elements.scheduleNewCount.text(app.user.schedule.getNewCount());
+        updateStatSection: function() {
+            this.elements.statsDue.text(app.user.schedule.getDueCount());
+            this.elements.statsNew.text(app.user.schedule.getNewCount());
+            this.elements.statsStudied.text(app.user.stats.getStudied());
+            this.elements.statsTime.text(app.user.stats.getTime());
         },
         /**
-         * @method updateListTable
+         * @method updateListSection
          */
-        updateListTable: function() {
+        updateListSection: function() {
             this.listTable.setFields({
                 name: 'Title',
                 studyingMode: 'Status'
