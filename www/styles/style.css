@@ -51,13 +51,22 @@ body {
     font-size: 28px;
     padding-top: 7.5px;
 }
+.navbar-text {
+    float: none;
+    font-size: 22px;
+    margin: auto;
+    padding-left: 5px;
+}
 .navbar ul > li {
     cursor: pointer;
     height: 45px;
+    min-width: 55px;
+    padding-left: 5px;
+    padding-right: 5px;
     text-align: center;
-    width: 55px;
 }
 .navbar ul > li:hover { background-color: #009fd4; }
+.navbar ul > li.no-hover:hover { background-color: transparent; }
 @media (max-width: 767px) {
     .navbar {
         margin-left: auto;

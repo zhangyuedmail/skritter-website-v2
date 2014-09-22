@@ -41,6 +41,21 @@ define([
         return '0 B';
     }
     /**
+     * @method convertTimeToClock
+     * @param {Number} time
+     */
+    function convertTimeToClock(time) {
+        var hours = (time / (3600 * 1000)) >> 0;
+        time = time % (3600 * 1000);
+        var minutes = (time / (60 * 1000)) >> 0;
+        time = time % (60 * 1000);
+        var seconds = (time / 1000) >> 0;
+        if (hours > 0) {
+            return hours + ':' + pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
+        }
+        return minutes + ':' + pad(seconds, 0, 2);
+    }
+    /**
      * @method getAngle
      * @param {Array|createjs.Point|Object} point1
      * @param {createjs.Point|Object} point2
@@ -150,6 +165,21 @@ define([
         return object1;
     }
     /**
+     * @method pad
+     * @param {Number|String}
+     * @param {Number|String}
+     * @param {Number}
+     * @return {String}
+     */
+    function pad(text, value, size) {
+        value = '' + value;
+        var string = text + '';
+        while (string.length < size) {
+            string = value + '' + string;
+        }
+        return string;
+    }
+    /**
      * @property pinyin
      * @type {PinyinConverter}
      */
@@ -184,6 +214,7 @@ define([
     return {
         addAllObjectAttributes: addAllObjectAttributes,
         bootstrap: bootstrap,
+        convertTimeToClock: convertTimeToClock,
         convertBytesToSize: convertBytesToSize,
         getAngle: getAngle,
         getBoundingRectangle: getBoundingRectangle,
@@ -192,6 +223,7 @@ define([
         isKana: isKana,
         isNumber: isNumber,
         mergeObjectArrays: mergeObjectArrays,
+        pad: pad,
         pinyin: pinyin,
         recognizer: recognizer,
         shortstraw: shortstraw,

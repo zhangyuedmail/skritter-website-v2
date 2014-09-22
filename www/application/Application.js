@@ -8,13 +8,14 @@ define([
     'application/Router',
     'components/Dialogs',
     'components/Sidebars',
+    'components/Timer',
     'models/Analytics',
     'models/Api',
     'models/Assets',
     'models/User',
     'storage/IndexedDBAdapter'
 ], function(BaseApplication, Strings,
-            Functions, Router, Dialogs, Sidebars, Analytics, Api, Assets, User, IndexedDBAdapter) {
+            Functions, Router, Dialogs, Sidebars, Timer, Analytics, Api, Assets, User, IndexedDBAdapter) {
     /**
      * @class Application
      * @extends BaseApplication
@@ -50,6 +51,7 @@ define([
             this.analytics = new Analytics();
             this.dialogs = new Dialogs();
             this.sidebars = new Sidebars();
+            this.timer = new Timer();
             this.user = new User();
             this.user.load(function() {
                 Backbone.history.start({

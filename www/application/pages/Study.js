@@ -26,6 +26,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
+            app.timer.setElement(this.$('#study-timer'));
             this.prompt = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.prompt, 'next', this.next);
             this.renderElements();
