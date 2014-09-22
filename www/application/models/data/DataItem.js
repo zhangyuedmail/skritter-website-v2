@@ -71,10 +71,8 @@ define([
             return review.set({
                 id: wordGroup,
                 itemId: items[0].id,
-                item: this,
                 part: part,
-                reviews: reviews,
-                vocab: this.getVocab()
+                reviews: reviews
             });
         },
         /**

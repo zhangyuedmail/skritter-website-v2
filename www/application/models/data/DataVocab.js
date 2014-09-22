@@ -79,11 +79,25 @@ define([
             }
         },
         /**
+         * @method getReading
+         * @returns {String}
+         */
+        getReading: function() {
+            return app.fn.pinyin.toTone(this.get('reading'));
+        },
+        /**
          * @method getStroke
          * @returns {DataStroke}
          */
         getStroke: function() {
             return app.user.data.strokes.get(this.get('writing'));
+        },
+        /**
+         * @method getWriting
+         * @returns {String}
+         */
+        getWriting: function() {
+            return this.get('writing');
         }
     });
 

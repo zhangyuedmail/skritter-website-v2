@@ -20,7 +20,9 @@ define([
             this.canvas = controller.canvas;
             this.controller = controller;
             this.gradingButtons = controller.gradingButtons;
+            this.item = undefined;
             this.review = review;
+            this.vocab = undefined;
         },
         /**
          * @property el
@@ -33,15 +35,22 @@ define([
          */
         render: function() {
             console.log(this.review.getItem().id.split('-')[2], this.review.getPosition());
+            this.item = this.review.getBaseItem();
+            this.vocab = this.review.getBaseVocab();
+            this.renderFields();
             this.reset().resize();
             return this;
         },
         /**
-         * @method renderElements
+         * @method renderFields
          * @returns {Prompt}
          */
-        renderElements: function() {
-            console.log('POSITION', this.review.getPosition());
+        renderFields: function() {
+            this.elements.fieldAnswer = this.$('.field-answer');
+            this.elements.fieldDefinition = this.$('.field-definition');
+            this.elements.fieldQuestion = this.$('.field-question');
+            this.elements.fieldReading = this.$('.field-reading');
+            this.elements.fieldWriting = this.$('.field-writing');
             return this;
         },
         /**

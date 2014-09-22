@@ -29,7 +29,6 @@ define([
             this.$el.html(this.compile(DesktopTemplate));
             this.canvas.hideGrid().show();
             this.enableCanvasListeners();
-            this.elements.fieldWriting = this.$('.field-writing');
             if (this.review.isAnswered()) {
                 this.renderAnswer();
             } else {
@@ -50,6 +49,7 @@ define([
          */
         renderAnswer: function() {
             this.canvas.disableInput();
+            this.elements.fieldReading.text(this.vocab.getReading());
             this.gradingButtons.select(this.review.getAt('score')).show();
             this.review.setAt('newInterval', 1000);
             return this;
@@ -61,7 +61,8 @@ define([
         renderQuestion: function() {
             this.canvas.enableInput();
             this.gradingButtons.hide();
-            this.elements.fieldWriting.text(this.review.get('vocab').get('writing'));
+            this.elements.fieldDefinition.text(this.vocab.getDefinition());
+            this.elements.fieldWriting.text(this.vocab.getWriting());
             return this;
         },
         /**
