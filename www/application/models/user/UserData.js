@@ -104,6 +104,7 @@ define([
                     }, function(result) {
                         totalItems += result.Items ? result.Items.length : 0;
                         totalVocabs += result.numVocabsAdded ? result.numVocabsAdded : 0;
+                        self.vocablists.add(result.VocabLists, {merge: true});
                         app.dialogs.show().element('.message-title').text('Adding: ' + totalVocabs);
                     });
                 },

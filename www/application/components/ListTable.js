@@ -5,9 +5,8 @@
  */
 define([
     'framework/BaseView',
-    'require.text!templates/table.html',
-    'collections/data/DataVocabLists'
-], function(BaseView, Template, DataVocabLists) {
+    'require.text!templates/table.html'
+], function(BaseView, Template) {
     /**
      * @class ListTable
      * @extend BaseView
@@ -15,11 +14,14 @@ define([
     var ListTable = BaseView.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
+         * @param {DataVocabLists} lists
          * @constructor
          */
-        initialize: function() {
+        initialize: function(options, lists) {
             this.fields = {};
-            this.lists = undefined;
+            this.lists = [];
+            this.vocablists = lists;
         },
         /**
          * @method render
@@ -30,7 +32,6 @@ define([
             this.$('table').addClass('table-hover');
             this.elements.body = this.$('table tbody');
             this.elements.head = this.$('table thead');
-            this.renderTable();
             return this;
         },
         /**
@@ -53,7 +54,7 @@ define([
             //generates the body section
             if (this.lists.length > 0) {
                 for (var i = 0, length = this.lists.length; i < length; i++) {
-                    var list = this.lists.at(i);
+                    var list = this.lists[i];
                     divBody += "<tr id='list-" + list.id + "' class='cursor'>";
                     for (var field in this.fields) {
                         var fieldValue = list.get(field);
@@ -77,10 +78,8 @@ define([
                 divBody += "You don't have any active lists!";
                 divBody += "</td></tr>";
             }
-
             this.elements.body.html(divBody);
             this.elements.head.html(divHead);
-
             return this;
         },
         /**
@@ -91,14 +90,23 @@ define([
             });
         },
         /**
+         * @method filterActive
+         * @returns {ListTable}
+         */
+        filterActive: function() {
+            this.filter = this.filterActive;
+            this.lists = this.vocablists.getActive();
+            this.renderTable();
+            return this;
+        },
+        /**
          * @method set
-         * @param {DataVocabLists} lists
          * @param {Object} fields
          * @returns {ListTable}
          */
-        set: function(lists, fields) {
+        setFields: function(fields) {
             this.fields = fields ? fields : {};
-            this.lists = lists;
+            this.renderTable();
             return this;
         }
     });

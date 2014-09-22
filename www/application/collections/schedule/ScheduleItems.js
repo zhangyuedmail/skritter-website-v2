@@ -35,12 +35,12 @@ define([
         },
         /**
          * @method getActive
-         * @param {ScheduleItems}
+         * @param {Array}12yA
          */
         getActive: function() {
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
-            return new ScheduleItems(this.models.filter(function(item) {
+            return this.models.filter(function(item) {
                 if (!item.attributes.active) {
                     return false;
                 }
@@ -51,17 +51,17 @@ define([
                     return false;
                 }
                 return true;
-            }), {user: this.user});
+            });
         },
         /**
          * @method getDue
-         * @returns {ScheduleItems}
+         * @returns {Array}
          */
         getDue: function() {
-            var now = moment().unix();
-            return new ScheduleItems(this.getActive().models.filter(function(item) {
+            var now = moment().add(1, 'minutes').unix();
+            return this.getActive().filter(function(item) {
                 return item.attributes.next < now;
-            }), {user: this.user});
+            });
         },
         /**
          * @method getDueCount
@@ -75,9 +75,9 @@ define([
          * @returns {ScheduleItems}
          */
         getNew: function() {
-            return new ScheduleItems(this.getActive().models.filter(function(item) {
+            return this.getActive().filter(function(item) {
                 return item.isNew();
-            }), {options: this.user});
+            });
         },
         /**
          * @method getNext
@@ -107,6 +107,30 @@ define([
             }
         },
         /**
+         * @method insert
+         * @param {Array|Object} items
+         * @param {Object} [options]
+         */
+        insert: function(items, options) {
+            items = Array.isArray(items) ? items : [items];
+            var scheduleItems = [];
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                scheduleItems.push({
+                    active: item.vocabIds.length ? true : false,
+                    id: item.id,
+                    interval: item.interval ? item.interval : 0,
+                    last: item.last ? item.last : 0,
+                    next: item.next ? item.next : 0,
+                    part: item.part,
+                    reviews: item.reviews ? item.reviews : 0,
+                    style: item.style,
+                    successes: item.successes ? item.successes : 0
+                });
+            }
+            return this.add(scheduleItems, options);
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */
@@ -114,7 +138,7 @@ define([
             var self = this;
             app.storage.getSchedule(function(data) {
                 self.reset();
-                self.lazyAdd(data, callback);
+                self.lazyAdd(data, callback, {silent: true});
             });
         }
     });

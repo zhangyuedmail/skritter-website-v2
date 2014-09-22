@@ -13,7 +13,18 @@ define([
          * @property idAttribute
          * @type String
          */
-        idAttribute: 'id'
+        idAttribute: 'id',
+        /**
+         * @method cache
+         * @param {Function} [callback]
+         */
+        cache: function(callback) {
+            app.storage.putItems('vocablists', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        }
     });
 
     return DataVocabList;

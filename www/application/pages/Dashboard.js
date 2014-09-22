@@ -15,7 +15,9 @@ define([
          */
         initialize: function() {
             this.title = app.strings.dashboard.title;
-            this.listTable = undefined;
+            this.listTable = app.user.data.vocablists.getTable();
+            this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
+            this.listenTo(app.user.data.vocablists, 'add change', this.updateListTable);
         },
         /**
          * @method render
@@ -30,6 +32,7 @@ define([
             this.elements.scheduleDueCount = this.$('.schedule-duecount');
             this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userDisplayName = this.$('.user-displayname');
+            this.listTable.setElement(this.elements.listContainer).render()
             this.renderElements();
             return this;
         },
@@ -38,24 +41,10 @@ define([
          * @returns {PageDashboard}
          */
         renderElements: function() {
-            if (false) {
-                this.elements.messageExpired.show();
-            } else {
-                this.elements.messageExpired.hide();
-            }
-            if (app.user.isRegistered()) {
-                this.elements.messageRegister.hide();
-            } else {
-                this.elements.messageRegister.show();
-            }
             this.elements.userAvatar.html(app.user.getAvatar('img-thumbnail'));
             this.elements.userDisplayName.text(app.user.getDisplayName());
-            this.listTable = app.user.data.vocablists.getActive()
-                .getTable(this.elements.listContainer, {
-                    name: 'Title',
-                    studyingMode: 'Status'
-                }).render();
             this.updateDueCount();
+            this.updateListTable();
         },
         /**
          * @method events
@@ -74,10 +63,18 @@ define([
         },
         /**
          * @method updateDueCount
-         * @returns {PageDashboard}
          */
         updateDueCount: function() {
             this.elements.scheduleDueCount.text(app.user.schedule.getDueCount());
+        },
+        /**
+         * @method updateListTable
+         */
+        updateListTable: function() {
+            this.listTable.setFields({
+                name: 'Title',
+                studyingMode: 'Status'
+            }).filterActive();
         }
     });
 

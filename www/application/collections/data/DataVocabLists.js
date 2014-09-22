@@ -12,24 +12,44 @@ define([
      */
     var DataVocabLists = BaseCollection.extend({
         /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {
+            this.on('add change', function(vocablist) {
+                vocablist.cache();
+            });
+        },
+        /**
          * @property model
          * @type DataVocabList
          */
         model: DataVocabList,
         /**
+         * @method cache
+         * @param {Function} [callback]
+         */
+        cache: function(callback) {
+            app.storage.putItems('vocablists', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        /**
          * @method getActive
          * @returns {DataVocabLists}
          */
         getActive: function() {
-            return new DataVocabLists(this.models.filter(function(list) {
+            return this.models.filter(function(list) {
                 return ['adding', 'reviewing'].indexOf(list.attributes.studyingMode) !== -1;
-            }));
+            });
         },
         /**
-         * @method loadTable
+         * @method getTable
          */
-        getTable: function(el, fields) {
-            return new ListTable({el: el}).set(this, fields);
+        getTable: function() {
+            return new ListTable(null, this);
         },
         /**
          * @method loadAll
@@ -39,7 +59,7 @@ define([
             var self = this;
             app.storage.getAll('vocablists', function(data) {
                 self.reset();
-                self.lazyAdd(data, callback);
+                self.lazyAdd(data, callback, {silent: true});
             });
         }
     });

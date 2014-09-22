@@ -11,6 +11,11 @@ define([
      */
     var DataItems = BaseCollection.extend({
         /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {},
+        /**
          * @property model
          * @type DataItem
          */
@@ -23,7 +28,7 @@ define([
             var self = this;
             app.storage.getAll('items', function(data) {
                 self.reset();
-                self.lazyAdd(data, callback);
+                self.lazyAdd(data, callback, {silent: true});
             });
         }
     });
