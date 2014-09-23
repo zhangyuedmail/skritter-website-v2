@@ -149,7 +149,7 @@ define([
         downloadAll: function(callback) {
             var self = this;
             var now = moment().unix();
-            app.dialogs.show('download').element('.download-title').text('Requesting');
+            app.dialogs.show().element('.message-title').text('Downloading');
             async.series([
                 function(callback) {
                     app.storage.clearAll(callback);
@@ -200,8 +200,7 @@ define([
                     }, function(error) {
                         callback(error);
                     }, function(result) {
-                        app.dialogs.element('.download-title').text('Assembling');
-                        app.dialogs.element('.download-status-text').text(app.fn.convertBytesToSize(result.responseSize));
+                        app.dialogs.show().element('.message-text').text('ASSEMBLING: ' + app.fn.convertBytesToSize(result.responseSize));
                     });
                 },
                 function(callback) {
@@ -211,9 +210,7 @@ define([
                         callback(error);
                     }, function(result) {
                         var percent = Math.floor((result.downloadedRequests / result.totalRequests) * 100);
-                        app.dialogs.element('.download-title').text('Downloading');
-                        app.dialogs.element('.download-status-text').text(percent + '%');
-                        app.dialogs.progress(percent);
+                        app.dialogs.show().element('.message-text').text('FETCHING: ' + percent + '%');
                         self.put(result);
                     });
                 }

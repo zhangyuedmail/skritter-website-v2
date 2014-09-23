@@ -231,22 +231,22 @@ define([
                     },
                     //load all vocablists
                     function(callback) {
-                        app.dialogs.element('.message-text').text('vocablists');
+                        app.dialogs.element('.message-text').text('VOCABLISTS');
                         self.data.vocablists.loadAll(callback);
                     },
                     //load all srsconfigs
                     function(callback) {
-                        app.dialogs.element('.message-text').text('srsconfigs');
+                        app.dialogs.element('.message-text').text('SRSCONFIGS');
                         self.data.srsconfigs.loadAll(callback);
                     },
                     //load all reviews
                     function(callback) {
-                        app.dialogs.element('.message-text').text('reviews');
+                        app.dialogs.element('.message-text').text('REVIEWS');
                         self.data.reviews.loadAll(callback);
                     },
                     //load all schedule items
                     function(callback) {
-                        app.dialogs.element('.message-text').text('schedule');
+                        app.dialogs.element('.message-text').text('SCHEDULE');
                         self.schedule.loadAll(callback);
                     },
                     //check user has items to study
