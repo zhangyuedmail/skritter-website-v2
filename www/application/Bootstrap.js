@@ -33,7 +33,7 @@ define(function() {
         options = options ? options : {};
         options.level = options.level ? options.level : 'default';
         options.size = options.size ? 'btn-' + options.size + ' ' : '';
-        return "<button type='button' class='btn " + options.size + "btn-" + options.level + "'>" + text + "</button>"
+        return "<button type='button' class='btn " + options.size + "btn-" + options.level + "'>" + text + "</button>";
     }
 
     return {

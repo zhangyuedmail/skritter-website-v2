@@ -65,6 +65,43 @@ define([
             });
         },
         /**
+         * @method addMissing
+         * @param {Array|String} vocabIds
+         * @param {Object} [options]
+         * @param {Function} [callbackComplete]
+         * @param {Function} [callbackError]
+         * @param {Function} [callbackResult]
+         */
+        addMissing: function(vocabIds, options, callbackComplete, callbackError, callbackResult) {
+            var self = this;
+            vocabIds = Array.isArray(vocabIds) ? vocabIds : [vocabIds];
+            (function next() {
+                $.ajax({
+                    url: self.getBaseUrl() + 'items/addmissing?bearer_token=' + self.getToken() + '&vocabId=' + vocabIds.splice(0, 1)[0],
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'POST'
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        delete data.statusCode;
+                        if (typeof callbackResult === 'function') {
+                            callbackResult(data);
+                        }
+                        if (vocabIds.length) {
+                            setTimeout(next, this.timeout);
+                        } else {
+                            callbackComplete();
+                        }
+
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                })
+            })();
+        },
+        /**
          * @method authenticateUser
          * @param {String} username
          * @param {String} password

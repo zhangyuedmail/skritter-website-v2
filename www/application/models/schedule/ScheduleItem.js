@@ -166,9 +166,9 @@ define([
             ], function(error) {
                 if (error) {
                     if (result.item) {
-                        self.set('flag', error ? error : 'Unable to load item.');
+                        self.set({active: false, flag: error ? error : 'Unable to load item.'});
                     }
-                    console.error('schedule load error', error, self);
+                    console.error('SCHEDULE ERROR:', error, self);
                     callbackError(error);
                 } else {
                     callbackSuccess(result);
