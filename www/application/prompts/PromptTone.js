@@ -31,6 +31,9 @@ define([
             this.$el.html(this.compile(DesktopTemplate));
             Prompt.prototype.render.call(this);
             this.canvas.hideGrid().show();
+            this.canvas.drawFontCharacter('background', this.review.getVocab().get('writing'), {
+                alpha: 0.4
+            });
             return this;
         },
         /**
@@ -40,7 +43,9 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
-            this.elements.fieldReading.text(this.vocab.getReading());
+            this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
         },
         /**
@@ -50,13 +55,11 @@ define([
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
             this.character = this.review.getCharacter();
-            this.tones = this.vocab.getTones(this.review.getPosition());
+            this.tones = this.vocab.getTones(this.position);
             this.canvas.enableInput();
-            this.elements.fieldDefinition.text(this.vocab.getDefinition());
-            this.elements.fieldWriting.text(this.vocab.getWriting());
-
-            console.log('tones', this.tones);
-
+            this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
         },
         /**

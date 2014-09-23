@@ -115,10 +115,19 @@ define([
         },
         /**
          * @method getReading
+         * @param {Boolean} zhuyin
          * @returns {String}
          */
         getReading: function() {
-            return app.fn.pinyin.toTone(this.get('reading'));
+            //TODO: refactor this into sanity
+            var html = '';
+            var reading = this.get('reading');
+            if (this.isChinese()) {
+                html += app.fn.pinyin.toTone(reading);
+            } else {
+                html += reading;
+            }
+            return html;
         },
         /**
          * @method getStroke
@@ -150,10 +159,43 @@ define([
         },
         /**
          * @method getWriting
+         * @param {Number} [startFrom]
          * @returns {String}
          */
-        getWriting: function() {
-            return this.get('writing');
+        getWriting: function(startFrom) {
+            var html = '';
+            var position = 1;
+            var allCharacters = this.get('writing').split('');
+            var containedCharacters = this.getCharacters();
+            for (var i = 0, length = allCharacters.length; i < length; i++) {
+                var character = allCharacters[i];
+                if (containedCharacters.indexOf(character) === -1) {
+                    html += "<span class='writing-filler'>" + character + "</span>";
+                } else {
+                    if (startFrom && position >= startFrom) {
+                        html += "<span id='writing-" + position + "' class='writing-hidden'>";
+                        html += "<span>" + character + "</span></span>";
+                    } else {
+                        html += "<span id='writing-" + position + "'>" + character + "</span>";
+                    }
+                    position++;
+                }
+            }
+            return html;
+        },
+        /**
+         * @method isChinese
+         * @returns {Boolean}
+         */
+        isChinese: function() {
+            return this.get('lang') === 'zh';
+        },
+        /**
+         * @method isJapanese
+         * @returns {Boolean}
+         */
+        isJapanese: function() {
+            return this.get('lang') === 'ja';
         }
     });
 

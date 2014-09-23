@@ -21,6 +21,7 @@ define([
             this.controller = controller;
             this.gradingButtons = controller.gradingButtons;
             this.item = undefined;
+            this.position = 1;
             this.review = review;
             this.vocab = undefined;
         },
@@ -35,6 +36,7 @@ define([
          */
         render: function() {
             this.item = this.review.getBaseItem();
+            this.position = this.review.getPosition();
             this.vocab = this.review.getBaseVocab();
             this.renderElements();
             if (this.review.getAt('answered')) {

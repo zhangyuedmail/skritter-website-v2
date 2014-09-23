@@ -39,7 +39,9 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
-            this.elements.fieldWriting.text(this.vocab.getWriting());
+            this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldWriting.html(this.vocab.getWriting(this.position + 1));
             return this;
         },
         /**
@@ -50,8 +52,9 @@ define([
             Prompt.prototype.renderQuestion.call(this);
             this.character = this.review.getCharacter();
             this.canvas.enableInput();
-            this.elements.fieldDefinition.text(this.vocab.getDefinition());
-            this.elements.fieldReading.text(this.vocab.getReading());
+            this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
             return this;
         },
         /**

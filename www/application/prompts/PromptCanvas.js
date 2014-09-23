@@ -127,6 +127,24 @@ define([
             return this;
         },
         /**
+         * @method drawFontCharacter
+         * @param {String} layerName
+         * @param {String} character
+         * @param {Object} [options]
+         */
+        drawFontCharacter: function(layerName, character, options) {
+            var layer = this.getLayer(layerName);
+            options = options ? options : {};
+            options.color = options.color ? options.color : '#333333';
+            options.font = options.font ? options.font : 'simkai';
+            var text = new createjs.Text(character, this.canvasSize + 'px ' + options.font, options.color);
+            if (options.alpha) {
+                text.alpha = options.alpha;
+            }
+            layer.addChild(text);
+            this.stage.update();
+        },
+        /**
          * @method drawGrid
          * @param {Object} [options]
          * @returns {PromptCanvas}

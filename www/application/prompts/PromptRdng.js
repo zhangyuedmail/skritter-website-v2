@@ -38,7 +38,8 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.elements.fieldQuestion.hide();
-            this.elements.fieldReading.text(this.vocab.getReading());
+            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
         },
         /**
@@ -47,9 +48,9 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            this.elements.fieldDefinition.text(this.vocab.getDefinition());
-            this.elements.fieldQuestion.text(app.strings.prompt['reading-question']);
-            this.elements.fieldWriting.text(this.vocab.getWriting());
+            this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldQuestion.html(app.strings.prompt['reading-question']);
+            this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
         },
         /**
