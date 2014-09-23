@@ -71,6 +71,7 @@ define([
             options = options ? options : {};
             if (options.showDialog) {
                 app.dialogs.show().element('.message-title').text('Searching');
+                app.dialogs.element('.message-text').text('');
             }
             async.waterfall([
                 function(callback) {
@@ -219,8 +220,10 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    callback(error);
-                    app.dialogs.hide();
+                    app.dialogs.element('.message-title').text('Connection interrupted.');
+                    app.dialogs.element('.message-text').text('Check your connection and click reload.');
+                    app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                    app.dialogs.element('.message-other button').on('vclick', app.reload);
                 } else {
                     self.set({
                         lastErrorCheck: now,

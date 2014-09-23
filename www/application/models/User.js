@@ -228,6 +228,7 @@ define([
                     //display general loading message
                     function(callback) {
                         app.dialogs.show('default', callback).element('.message-title').text('Loading');
+                        app.dialogs.element('.message-text').text('');
                     },
                     //load all vocablists
                     function(callback) {
@@ -252,17 +253,26 @@ define([
                     //check user has items to study
                     function(callback) {
                         if (self.schedule.getActiveCount() === 0) {
-                            app.dialogs.element('.message-text').text('initial items');
-                            self.data.addItems({limit: 10, showDialog: false}, callback, callback);
+                            app.dialogs.element('.message-text').text('INITIAL ITEMS');
+                            self.data.addItems({limit: 10, showDialog: false}, callback, function() {
+                                app.dialogs.element('.message-title').text('Connection interrupted.');
+                                app.dialogs.element('.message-text').text('Check your connection and click reload.');
+                                app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                                app.dialogs.element('.message-other button').on('vclick', app.reload);
+                            });
                         } else {
                             callback();
                         }
                     }
-                ], function() {
-                    self.stats.sync();
-                    app.dialogs.hide(function() {
-                        callback(self);
-                    });
+                ], function(error) {
+                    if (error) {
+                        console.error('USER ERROR:', error);
+                    } else {
+                        self.stats.sync();
+                        app.dialogs.hide(function() {
+                            callback(self);
+                        });
+                    }
                 });
             } else {
                 callback(this);
