@@ -48,12 +48,12 @@ define([
             var part = this.get('part');
             var reviews = [];
             var wordGroup = now + app.fn.getGuid() + '_' + this.id;
-            for (var i = 0, length = items.length; i < length; i++) {
-                var item = items[i];
+            for (var a = 0, lengthA = items.length; a < lengthA; a++) {
+                var item = items[a];
                 reviews.push({
                     itemId: item.id,
                     score: 3,
-                    bearTime: i === 0 ? true : false,
+                    bearTime: a === 0 ? true : false,
                     submitTime: now,
                     reviewTime: 0,
                     thinkingTime: 0,
@@ -65,8 +65,12 @@ define([
                     previousSuccess: item.get('previousSuccess')
                 });
             }
-            if (['rune', 'tone'].indexOf(part) !== -1) {
+            if (part === 'rune') {
                 review.characters = this.getVocab().getCanvasCharacters();
+            } else if (part === 'tone') {
+                for (var b = 0, lengthB = items.length; b < lengthB; b++) {
+                    review.characters.push(app.user.data.strokes.get('tones').getCanvasCharacter());
+                }
             }
             return review.set({
                 id: wordGroup,

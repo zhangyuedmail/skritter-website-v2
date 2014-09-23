@@ -122,11 +122,12 @@ define([
         },
         /**
          * @method setLapOffset
-         * @param {Number} offset
+         * @param {Number} seconds
+         * @returns {Timer}
          */
-        setLapOffset: function(offset) {
-            this.localOffset = offset;
-            this.update();
+        setLapOffset: function(seconds) {
+            this.lapOffset = seconds * 1000;
+            return this;
         },
         /**
          * @method setLimits

@@ -31,6 +31,13 @@ define([
             return app.fn.getAngle(this.get('corners'));
         },
         /**
+         * @method getFirstAngle
+         * @returns {Number}
+         */
+        getFirstAngle: function() {
+            return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
+        },
+        /**
          * @method getCornerLength
          * @returns {Number}
          */
@@ -50,13 +57,6 @@ define([
             var canvasSize = app.get('canvasSize');
             var corners = _.clone(this.get('corners'));
             return app.fn.getBoundingRectangle(corners, canvasSize, canvasSize, 12);
-        },
-        /**
-         * @method getStartingAngle
-         * @returns {Number}
-         */
-        getStartingAngle: function() {
-            return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
         }
     });
 

@@ -102,6 +102,9 @@ define([
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
             index = index ? index : 0;
+
+            return this.get('mcfarljwtest2-zh-天天向上-0-tone');
+
             for (var i = 0, length = this.length; i < length; i++) {
                 var item = this.at(i);
                 if (!item.attributes.active) {

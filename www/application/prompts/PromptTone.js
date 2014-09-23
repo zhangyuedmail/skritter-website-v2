@@ -19,29 +19,18 @@ define([
          */
         initialize: function(options, controller, review) {
             Prompt.prototype.initialize.call(this, options, controller, review);
+            this.character = undefined;
+            this.tones = undefined;
         },
         /**
          * @method render
          * @returns {PromptTone}
          */
         render: function() {
+            app.timer.setLimits(15, 10);
             this.$el.html(this.compile(DesktopTemplate));
             Prompt.prototype.render.call(this);
-            app.timer.setLimits(15, 10);
             this.canvas.hideGrid().show();
-            this.enableCanvasListeners();
-            if (this.review.isAnswered()) {
-                this.renderAnswer();
-            } else {
-                this.renderQuestion();
-            }
-            return this;
-        },
-        /**
-         * @method renderElements
-         * @returns {PromptTone}
-         */
-        renderElements: function() {
             return this;
         },
         /**
@@ -49,10 +38,9 @@ define([
          * @returns {PromptTone}
          */
         renderAnswer: function() {
+            Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
             this.elements.fieldReading.text(this.vocab.getReading());
-            this.gradingButtons.select(this.review.getAt('score')).show();
-            this.review.setAt('newInterval', 1000);
             return this;
         },
         /**
@@ -60,22 +48,52 @@ define([
          * @returns {PromptTone}
          */
         renderQuestion: function() {
+            Prompt.prototype.renderQuestion.call(this);
+            this.character = this.review.getCharacter();
+            this.tones = this.vocab.getTones(this.review.getPosition() - 1);
             this.canvas.enableInput();
-            this.gradingButtons.hide();
             this.elements.fieldDefinition.text(this.vocab.getDefinition());
             this.elements.fieldWriting.text(this.vocab.getWriting());
             return this;
         },
         /**
          * @method handlePromptClicked
+         * @param {Event} event
          */
-        handlePromptClicked: function() {
-            if (this.review.isAnswered()) {
-                this.gradingButtons.triggerSelected();
+        handleCanvasClicked: function() {
+            if (this.review.getAt('answered')) {
                 this.next();
-            } else {
-                this.renderAnswer();
             }
+        },
+        /**
+         * @method handleInputUp
+         */
+        handleInputUp: function(points, shape) {
+            var stroke = this.character.recognizeStroke(points, shape);
+            if (stroke) {
+                this.canvas.lastMouseDownEvent = null;
+                if (this.tones.indexOf(stroke.get('tone')) > -1) {
+                    this.review.setAt('score', 3);
+                    this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
+                } else {
+                    this.review.setAt('score', 1);
+                    this.character.reset();
+                    this.character.add(this.character.getTone(this.tones[0]));
+                    this.canvas.drawShape('stroke', this.character.getShape());
+                }
+                if (this.character.isComplete()) {
+                    this.renderAnswer();
+                }
+            }
+        },
+        /**
+         * @method reset
+         * @returns {PromptTone}
+         */
+        reset: function() {
+            Prompt.prototype.reset.call(this);
+            this.canvas.clearAll();
+            return this;
         },
         /**
          * @method resize

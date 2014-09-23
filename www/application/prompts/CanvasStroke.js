@@ -38,6 +38,13 @@ define([
             return ids;
         },
         /**
+         * @method getFirstAngle
+         * @returns {Number}
+         */
+        getFirstAngle: function() {
+            return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
+        },
+        /**
          * @method getParams
          * @returns {Array}
          */

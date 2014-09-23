@@ -36,11 +36,10 @@ define([
          * @returns {PromptDefn}
          */
         renderAnswer: function() {
-            app.timer.stop();
-            this.review.setAt('finished', true);
-            this.gradingButtons.select(this.review.getAt('score')).show();
+            Prompt.prototype.renderAnswer.call(this);
             this.elements.fieldDefinition.text(this.vocab.getDefinition());
             this.elements.fieldQuestion.hide();
+            this.elements.fieldWriting.text(this.vocab.getWriting());
             return this;
         },
         /**
@@ -48,16 +47,18 @@ define([
          * @returns {PromptDefn}
          */
         renderQuestion: function() {
-            this.gradingButtons.hide();
+            Prompt.prototype.renderQuestion.call(this);
             this.elements.fieldWriting.text(this.vocab.getWriting());
             this.elements.fieldQuestion.text(app.strings.prompt['definition-question']);
             return this;
         },
         /**
          * @method handlePromptClicked
+         * @param {Event} event
          */
-        handlePromptClicked: function() {
-            if (this.review.isAnswered()) {
+        handlePromptClicked: function(event) {
+            Prompt.prototype.handlePromptClicked.call(this, event);
+            if (this.review.getAt('answered')) {
                 this.gradingButtons.triggerSelected();
                 this.next();
             } else {

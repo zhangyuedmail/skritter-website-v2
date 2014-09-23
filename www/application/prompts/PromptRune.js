@@ -26,13 +26,10 @@ define([
          * @returns {PromptRune}
          */
         render: function() {
+            app.timer.setLimits(30, 15);
             this.$el.html(this.compile(DesktopTemplate));
             Prompt.prototype.render.call(this);
-            app.timer.setLimits(30, 15);
-            this.renderQuestion();
-            if (this.review.isAnswered()) {
-                this.renderAnswer();
-            }
+            this.canvas.showGrid().show();
             return this;
         },
         /**
@@ -40,10 +37,9 @@ define([
          * @returns {PromptRune}
          */
         renderAnswer: function() {
+            Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
             this.elements.fieldWriting.text(this.vocab.getWriting());
-            this.gradingButtons.select(this.review.getAt('score')).show();
-            this.review.setAt('newInterval', 1000);
             return this;
         },
         /**
@@ -51,11 +47,11 @@ define([
          * @returns {PromptRune}
          */
         renderQuestion: function() {
+            Prompt.prototype.renderQuestion.call(this);
+            this.character = this.review.getCharacter();
             this.canvas.enableInput();
             this.elements.fieldDefinition.text(this.vocab.getDefinition());
             this.elements.fieldReading.text(this.vocab.getReading());
-            this.character = this.review.getCharacter();
-            this.gradingButtons.hide();
             return this;
         },
         /**
@@ -63,11 +59,8 @@ define([
          * @param {Event} event
          */
         handleCanvasClicked: function() {
-            if (this.review.isAnswered()) {
-                this.gradingButtons.triggerSelected();
+            if (this.review.getAt('answered')) {
                 this.next();
-            } else {
-                //TODO: show single stroke hint
             }
         },
         /**
@@ -81,8 +74,6 @@ define([
                 if (this.character.isComplete()) {
                     this.renderAnswer();
                 }
-            } else {
-                //TODO: handle incorrect character input
             }
         },
         /**
@@ -91,10 +82,7 @@ define([
          */
         reset: function() {
             Prompt.prototype.reset.call(this);
-            this.canvas.clearAll().showGrid().show();
-            this.character = undefined;
-            this.enableCanvasListeners();
-            this.enableGradingListeners();
+            this.canvas.clearAll();
             return this;
         },
         /**

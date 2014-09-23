@@ -84,7 +84,6 @@ define([
          * @param {Event} event
          */
         updateParts: function(event) {
-            console.log('uuu');
             event.preventDefault();
             this.activeParts = [];
             if (this.$('#parts #defn').bootstrapSwitch('state')) {

@@ -37,15 +37,26 @@ define([
             this.item = this.review.getBaseItem();
             this.vocab = this.review.getBaseVocab();
             this.renderElements();
-
-            this.renderQuestion();
-            if (this.review.isAnswered()) {
+            if (this.review.getAt('answered')) {
                 this.renderAnswer();
             } else {
-                app.timer.start();
+                this.renderQuestion();
             }
-
             this.reset().resize();
+            return this;
+        },
+        /**
+         * @method renderAnswer
+         * @returns {Prompt}
+         */
+        renderAnswer: function() {
+            app.timer.stop();
+            this.review.setAt({
+                answered: true,
+                reviewTime: app.timer.getReviewTime(),
+                thinkingTime: app.timer.getThinkingTime()
+            });
+            this.gradingButtons.select(this.review.getAt('score')).show();
             return this;
         },
         /**
@@ -58,6 +69,17 @@ define([
             this.elements.fieldQuestion = this.$('.field-question');
             this.elements.fieldReading = this.$('.field-reading');
             this.elements.fieldWriting = this.$('.field-writing');
+            return this;
+        },
+        /**
+         * @method renderQuestion
+         * @returns {Prompt}
+         */
+        renderQuestion: function() {
+            app.timer.setLapOffset(this.review.getAt('reviewTime'));
+            app.timer.start();
+            this.review.setAt('answered', false);
+            this.gradingButtons.hide();
             return this;
         },
         /**

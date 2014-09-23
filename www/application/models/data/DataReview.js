@@ -26,9 +26,6 @@ define([
          * @type Object
          */
         defaults: {
-            currentReviewTime: 0,
-            currentThinkingTime: 0,
-            finished: false,
             originalItems: [],
             position: 1,
             reviews: []
@@ -174,13 +171,6 @@ define([
             return this.get('reviews').length > 1 ? true : false;
         },
         /**
-         * @method isAnswered
-         * @returns {Boolean}
-         */
-        isAnswered: function() {
-            return this.get('finished');
-        },
-        /**
          * @method isFirst
          * @returns {Boolean}
          */
@@ -219,7 +209,7 @@ define([
         /**
          * @method setAt
          * @param {Object|String} key
-         * @param {Boolean|Number|String} value
+         * @param {Boolean|Number|String} [value]
          * @returns {Object}
          */
         setAt: function(key, value) {

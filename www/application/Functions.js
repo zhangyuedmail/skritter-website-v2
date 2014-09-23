@@ -22,7 +22,6 @@ define([
         }
         return total;
     }
-
     /**
      * @method arrayToJSON
      * @param {Array} array
@@ -31,6 +30,16 @@ define([
     function arrayToJSON(array) {
         return array.map(function(data) {
             return data.toJSON();
+        });
+    }
+    /**
+     * @method arrayToInt
+     * @param {Array} array
+     * @returns {Array}
+     */
+    function arrayToInt(array) {
+        return array.map(function(value) {
+            return parseInt(value, 10);
         });
     }
     /**
@@ -326,6 +335,7 @@ define([
 
     return {
         addAllObjectAttributes: addAllObjectAttributes,
+        arrayToInt: arrayToInt,
         arrayToJSON: arrayToJSON,
         bootstrap: bootstrap,
         calculateInterval: calculateInterval,

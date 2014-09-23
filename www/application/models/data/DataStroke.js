@@ -43,13 +43,15 @@ define([
                         id: position + '|' + strokeId,
                         position: position,
                         shape: app.assets.getStroke(strokeId),
-                        strokeId: strokeId
+                        strokeId: strokeId,
+                        tone: rune === 'tones' ? a + 1 : undefined
                     });
                     position += contains.length ? contains.length : 1;
                     target.add(stroke);
                 }
                 targets.push(target);
             }
+            character.name = rune;
             character.targets = targets;
             return character;
         }

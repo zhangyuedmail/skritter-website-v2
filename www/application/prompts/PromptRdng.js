@@ -25,15 +25,10 @@ define([
          * @returns {PromptRdng}
          */
         render: function() {
+            app.timer.setLimits(30, 15);
             this.$el.html(this.compile(DesktopTemplate));
             Prompt.prototype.render.call(this);
-            app.timer.setLimits(30, 15);
             this.canvas.hideGrid().hide();
-            if (this.review.isAnswered()) {
-                this.renderAnswer();
-            } else {
-                this.renderQuestion();
-            }
             return this;
         },
         /**
@@ -41,10 +36,9 @@ define([
          * @returns {PromptRdng}
          */
         renderAnswer: function() {
-            this.gradingButtons.select(this.review.getAt('score')).show();
-            this.review.setAt('newInterval', 1000);
-            this.elements.fieldReading.text(this.vocab.getReading());
+            Prompt.prototype.renderAnswer.call(this);
             this.elements.fieldQuestion.hide();
+            this.elements.fieldReading.text(this.vocab.getReading());
             return this;
         },
         /**
@@ -52,18 +46,19 @@ define([
          * @returns {PromptRdng}
          */
         renderQuestion: function() {
-            this.gradingButtons.hide();
+            Prompt.prototype.renderQuestion.call(this);
             this.elements.fieldDefinition.text(this.vocab.getDefinition());
-            this.elements.fieldWriting.text(this.vocab.getWriting());
             this.elements.fieldQuestion.text(app.strings.prompt['reading-question']);
+            this.elements.fieldWriting.text(this.vocab.getWriting());
             return this;
         },
         /**
          * @method handlePromptClicked
+         * @param {Event} event
          */
-        handlePromptClicked: function() {
-            if (this.review.isAnswered()) {
-                this.gradingButtons.triggerSelected();
+        handlePromptClicked: function(event) {
+            Prompt.prototype.handlePromptClicked.call(this, event);
+            if (this.review.getAt('answered')) {
                 this.next();
             } else {
                 this.renderAnswer();

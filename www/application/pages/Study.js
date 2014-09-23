@@ -18,7 +18,7 @@ define([
             this.title = app.strings.study.title;
             this.prompt = undefined;
             this.schedule = app.user.schedule;
-            this.scheduleIndex = -1;
+            this.scheduleIndex = 1;
             this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
         },
         /**
@@ -63,7 +63,6 @@ define([
          * @method updateDueCount
          */
         updateDueCount: function() {
-            console.log('STUDY:', 'updating due');
             this.elements.studyCount.text(app.user.schedule.getDueCount());
         }
     });

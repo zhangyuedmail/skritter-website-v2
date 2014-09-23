@@ -121,6 +121,17 @@ define([
             return shapeContainer;
         },
         /**
+         * @method getTone
+         * @param {Number} tone
+         * @returns {CanvasStroke}
+         */
+        getTone: function(tone) {
+            if (this.name === 'tones') {
+                return this.targets[tone - 1].models[0];
+            }
+            return null;
+        },
+        /**
          * @method isComplete
          * @returns {Boolean}
          */

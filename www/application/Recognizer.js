@@ -6,6 +6,7 @@ define([], function() {
      * @class Recognizer
      */
     function Recognizer() {
+        this.baseAngleThreshold = 60;
         this.baseDistanceThreshold = 200;
         this.baseSize = 600;
         this.canvasSize = 600;
@@ -68,15 +69,16 @@ define([], function() {
             var result = userStroke.clone();
             var total = 0;
             var scores = {
+                angle: this.checkAngle(param, userStroke),
                 distance: this.checkDistance(param, userStroke)
             };
             for (var check in scores) {
                 var score = scores[check];
-                if (isNaN(score)) {
+                if (score > -1) {
+                    total += score;
+                } else {
                     total = false;
                     break;
-                } else {
-                    total += score;
                 }
             }
             result.set({
@@ -85,25 +87,40 @@ define([], function() {
                 id: targetStroke.id,
                 position: targetStroke.get('position'),
                 shape: targetStroke.get('shape'),
-                strokeId: targetStroke.get('strokeId')
+                strokeId: targetStroke.get('strokeId'),
+                tone: targetStroke.get('tone')
             });
+            result.scores = scores;
             result.total = total;
             results.push(result);
         }
         return results;
     };
     /**
+     * @method checkAngle
+     * @param {DataParam} targetParam
+     * @param {CanvasStroke} userStroke
+     * @returns {Number}
+     */
+    Recognizer.prototype.checkAngle = function(targetParam, userStroke) {
+        var score = Math.abs(targetParam.getFirstAngle() - userStroke.getFirstAngle());
+        if (score < this.baseAngleThreshold) {
+            return score;
+        }
+        return -1;
+    };
+    /**
      * @method checkDistance
      * @param {DataParam} targetParam
      * @param {CanvasStroke} userStroke
-     * @returns {Boolean|Number}
+     * @returns {Number}
      */
     Recognizer.prototype.checkDistance = function(targetParam, userStroke) {
         var score = app.fn.getDistance(targetParam.getRectangle().center, userStroke.getRectangle().center);
         if (score < this.scaleThreshold(this.baseDistanceThreshold)) {
             return score;
         }
-        return false;
+        return -1;
     };
 
     return Recognizer;
