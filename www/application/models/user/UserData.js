@@ -43,7 +43,6 @@ define([
          */
         defaults: {
             access_token: undefined,
-            batchId: undefined,
             expires: undefined,
             expires_in: undefined,
             lastErrorCheck: 0,
@@ -155,47 +154,51 @@ define([
                     app.storage.clearAll(callback);
                 },
                 function(callback) {
-                    app.api.requestBatch([
-                        {
-                            path: 'api/v' + app.api.get('version') + '/items',
-                            method: 'GET',
-                            params: {
-                                lang: app.user.getLanguageCode(),
-                                sort: 'changed',
-                                offset: 0,
-                                include_vocabs: 'true',
-                                include_sentences: 'false',
-                                include_strokes: 'true',
-                                include_heisigs: 'true',
-                                include_top_mnemonics: 'true',
-                                include_decomps: 'true'
-                            },
-                            spawner: true
-                        },
-                        {
-                            path: 'api/v' + app.api.get('version') + '/srsconfigs',
-                            method: 'GET',
-                            params: {
-                                lang: app.user.getLanguageCode()
-                            }
-                        },
-                        {
-                            path: 'api/v' + app.api.get('version') + '/vocablists',
-                            method: 'GET',
-                            params: {
-                                lang: app.user.getLanguageCode(),
-                                sort: 'studying'
-                            }
-                        }
-                    ], function(result) {
-                        self.set('batchId', result.id);
+                    if (self.has('downloadId')) {
                         callback();
-                    }, function(error) {
-                        callback(error);
-                    });
+                    } else {
+                        app.api.requestBatch([
+                            {
+                                path: 'api/v' + app.api.get('version') + '/items',
+                                method: 'GET',
+                                params: {
+                                    lang: app.user.getLanguageCode(),
+                                    sort: 'changed',
+                                    offset: 0,
+                                    include_vocabs: 'true',
+                                    include_sentences: 'false',
+                                    include_strokes: 'true',
+                                    include_heisigs: 'true',
+                                    include_top_mnemonics: 'true',
+                                    include_decomps: 'true'
+                                },
+                                spawner: true
+                            },
+                            {
+                                path: 'api/v' + app.api.get('version') + '/srsconfigs',
+                                method: 'GET',
+                                params: {
+                                    lang: app.user.getLanguageCode()
+                                }
+                            },
+                            {
+                                path: 'api/v' + app.api.get('version') + '/vocablists',
+                                method: 'GET',
+                                params: {
+                                    lang: app.user.getLanguageCode(),
+                                    sort: 'studying'
+                                }
+                            }
+                        ], function(result) {
+                            self.set('downloadId', result.id);
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    }
                 },
                 function(callback) {
-                    app.api.checkBatch(self.get('batchId'), function() {
+                    app.api.checkBatch(self.get('downloadId'), function() {
                         callback();
                     }, function(error) {
                         callback(error);
@@ -204,7 +207,7 @@ define([
                     });
                 },
                 function(callback) {
-                    app.api.getBatch(self.get('batchId'), function() {
+                    app.api.getBatch(self.get('downloadId'), function() {
                         callback();
                     }, function(error) {
                         callback(error);
@@ -226,6 +229,7 @@ define([
                         lastSRSConfigSync: now,
                         lastVocabSync: now
                     });
+                    self.unset('downloadId');
                     app.dialogs.hide(callback);
                 }
             });
