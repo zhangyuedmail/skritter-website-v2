@@ -2,7 +2,7 @@
  * @module Application
  */
 define([
-   'framework/BaseModel'
+    'framework/BaseModel'
 ], function(BaseModel) {
     /**
      * @class DataVocab
@@ -46,6 +46,29 @@ define([
             return canvasCharacters;
         },
         /**
+         * @method getCharacterCount
+         * @returns {Number}
+         */
+        getCharacterCount: function() {
+            return this.getCharacters().length;
+        },
+        /**
+         * @method getCharacters
+         * @returns {Array}
+         */
+        getCharacters: function() {
+            var characters = [];
+            if (this.has('containedVocabIds')) {
+                var containedVocabs = this.getContainedVocabs();
+                for (var i = 0, length = containedVocabs.length; i < length; i++) {
+                    characters.push(containedVocabs[i].get('writing'));
+                }
+            } else {
+                characters.push(this.get('writing'));
+            }
+            return characters;
+        },
+        /**
          * @method getContainedItemIds
          * @param {String} part
          * @returns {Array}
@@ -62,6 +85,18 @@ define([
                 }
             }
             return containedItemIds;
+        },
+        /**
+         * @method getContainedVocabs
+         * @returns {Array}
+         */
+        getContainedVocabs: function() {
+            var vocabs = [];
+            var containedIds = this.get('containedVocabIds');
+            for (var i = 0, length = containedIds.length; i < length; i++) {
+                vocabs.push(app.user.data.vocabs.get(containedIds[i]));
+            }
+            return vocabs;
         },
         /**
          * @method getDefinition
@@ -91,6 +126,27 @@ define([
          */
         getStroke: function() {
             return app.user.data.strokes.get(this.get('writing'));
+        },
+        /**
+         * @method getTones
+         * @param {Number} position
+         * @returns {Array}
+         */
+        getTones: function(position) {
+            var tones = [];
+            var reading = this.get('reading');
+            if (reading.indexOf(', ') === -1) {
+                reading = reading.match(/[0-9]+/g);
+                for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
+                    tones.push([parseInt(reading[a], 10)]);
+                }
+            } else {
+                reading = reading.split(', ');
+                for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                    tones.push([app.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
+                }
+            }
+            return _.flatten(this.getCharacterCount() > 1 ? tones[position - 1] : tones);
         },
         /**
          * @method getWriting

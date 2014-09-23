@@ -50,10 +50,13 @@ define([
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
             this.character = this.review.getCharacter();
-            this.tones = this.vocab.getTones(this.review.getPosition() - 1);
+            this.tones = this.vocab.getTones(this.review.getPosition());
             this.canvas.enableInput();
             this.elements.fieldDefinition.text(this.vocab.getDefinition());
             this.elements.fieldWriting.text(this.vocab.getWriting());
+
+            console.log('tones', this.tones);
+
             return this;
         },
         /**
