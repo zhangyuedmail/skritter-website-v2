@@ -142,7 +142,7 @@ define([
         /**
          * @method clearGuest
          */
-        clearGuest: function(key) {
+        clearGuest: function() {
             this.set('guest', undefined, {silent: true});
             localStorage.removeItem('_guest');
         },

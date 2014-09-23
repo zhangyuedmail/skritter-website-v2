@@ -50,7 +50,7 @@ define([
                 name: this.elements.username.val(),
                 password: this.elements.password.val()
             }, function() {
-                //app.api.clearGuest();
+                app.api.clearGuest();
                 app.reload();
             }, function(error) {
                 self.enableForm().elements.message.text(error.responseJSON.message);
@@ -67,7 +67,7 @@ define([
             app.dialogs.show().element('.message-title').text('Loading');
             this.disableForm().elements.message.empty();
             app.user.createNew(null, function() {
-                //app.api.clearGuest();
+                app.api.clearGuest();
                 app.reload();
             }, function(error) {
                 self.enableForm().elements.message.text(error.responseJSON.message);
