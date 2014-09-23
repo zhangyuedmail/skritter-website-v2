@@ -198,9 +198,6 @@ body {
     position: relative;
 }
 .prompt-container .prompt { position: relative; }
-.prompt-container .field-writing span { margin-right: 5px; }
-.prompt-container .field-writing .writing-hidden { border-bottom: 1px solid #000000; }
-.prompt-container .field-writing .writing-hidden span { visibility: hidden; }
 
 
 /*** PROMPTS: CANVAS ***/
@@ -220,6 +217,20 @@ body {
     background-color: #ffffff;
     float: left;
 }
+
+.prompt-container .field-reading span { margin-right: 5px; }
+.prompt-container .field-reading .reading-hidden { border-bottom: 1px solid #000000; }
+.prompt-container .field-reading .reading-hidden span { visibility: hidden; }
+.prompt-container .field-reading .reading-button {
+    background-color: #d3d3d3;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}
+.prompt-container .field-reading .reading-button span { visibility: hidden; }
+.prompt-container .field-reading .reading-button.reveal span { visibility: visible; }
+.prompt-container .field-writing span { margin-right: 5px; }
+.prompt-container .field-writing .writing-hidden { border-bottom: 1px solid #000000; }
+.prompt-container .field-writing .writing-hidden span { visibility: hidden; }
 
 
 /*** PROMPTS: GRADING BUTTONS ***/

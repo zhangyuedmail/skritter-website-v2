@@ -44,7 +44,9 @@ define([
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
-            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldReading.html(this.vocab.getReading(this.position + 1, {
+                mask: true
+            }));
             this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
         },
@@ -58,7 +60,9 @@ define([
             this.tones = this.vocab.getTones(this.position);
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
-            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldReading.html(this.vocab.getReading(this.position, {
+                mask: true
+            }));
             this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
         },

@@ -312,6 +312,20 @@ define([
      */
     var recognizer = new Recognizer();
     /**
+     * @method segmentReading
+     * @param {String} reading
+     * @returns {Array}
+     */
+    function segmentReading(reading) {
+        var segments = [];
+        var variations = reading.split(', ');
+        for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
+            var variation = variations[a];
+            segments.push(variation.match(/[a-z|A-Z]+[1-5]+| ... |'/g));
+        }
+        return segments;
+    }
+    /**
      * @property shortstraw
      * @type Shortstraw
      */
@@ -353,6 +367,7 @@ define([
         randomDecimal: randomDecimal,
         randomInterval: randomInterval,
         recognizer: recognizer,
+        segmentReading: segmentReading,
         shortstraw: shortstraw,
         toLowerCase: toLowerCase,
         toUpperCase: toUpperCase

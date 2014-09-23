@@ -115,17 +115,54 @@ define([
         },
         /**
          * @method getReading
-         * @param {Boolean} zhuyin
+         * @param {Number} [startFrom]
+         * @param {Object} [options]
          * @returns {String}
          */
-        getReading: function() {
-            //TODO: refactor this into sanity
+        getReading: function(startFrom, options) {
             var html = '';
-            var reading = this.get('reading');
-            if (this.isChinese()) {
-                html += app.fn.pinyin.toTone(reading);
-            } else {
-                html += reading;
+            var position = 1;
+            var fillers = [" ... ", "'"];
+            options = options ? options : {};
+            options.hide = options.hide ? options.hide : false;
+            options.mask = options.mask ? options.mask : false;
+            options.zhuyin = options.zhuyin ? options.zhuyin : false;
+            var segments = app.fn.segmentReading(this.get('reading'));
+            for (var a = 0, lengthA = segments.length; a < lengthA; a++) {
+                var segment = segments[a];
+                html += "<div class='reading-" + (a + 1) + "'>";
+                for (var b = 0, lengthB = segment.length; b < lengthB; b++) {
+                    var piece = segment[b];
+                    if (fillers.indexOf(piece) === -1) {
+                        var pieceMasked = piece.replace(/[1-5]/g, '');
+                        var pieceMaskedZhuyin = app.fn.pinyin.toZhuyin(pieceMasked + '5');
+                        var pieceTone = app.fn.pinyin.toTone(piece);
+                        var pieceZhuyin = app.fn.pinyin.toZhuyin(piece);
+                        if (!startFrom || startFrom > position) {
+                            html += "<span class='position-" + position + "'>";
+                            html += options.zhuyin ? pieceZhuyin : pieceTone;
+                            html += "</span>";
+                        } else {
+                            if (options.hide) {
+                                html += "<span class='position-" + position + " reading-button'><span>";
+                                html += options.zhuyin ? pieceMaskedZhuyin : pieceMasked;
+                                html += "</span></span>";
+                            } else if (options.mask) {
+                                html += "<span class='position-" + position + " reading-masked'><span>";
+                                html += options.zhuyin ? pieceMaskedZhuyin : pieceMasked;
+                                html += "</span></span>";
+                            } else {
+                                html += "<span class='position-" + position + " reading-hidden'>";
+                                html += "<span>" + piece + "</span></span>";
+                            }
+                        }
+                        position++;
+                    } else {
+                        html += "<span class='reading-filler'>" + piece + "</span>";
+                    }
+
+                }
+                html += "</div>";
             }
             return html;
         },
@@ -169,16 +206,16 @@ define([
             var containedCharacters = this.getCharacters();
             for (var i = 0, length = allCharacters.length; i < length; i++) {
                 var character = allCharacters[i];
-                if (containedCharacters.indexOf(character) === -1) {
-                    html += "<span class='writing-filler'>" + character + "</span>";
-                } else {
-                    if (startFrom && position >= startFrom) {
+                if (containedCharacters.indexOf(character) > -1) {
+                    if (!startFrom || startFrom > position) {
+                        html += "<span id='writing-" + position + "'>" + character + "</span>";
+                    } else {
                         html += "<span id='writing-" + position + "' class='writing-hidden'>";
                         html += "<span>" + character + "</span></span>";
-                    } else {
-                        html += "<span id='writing-" + position + "'>" + character + "</span>";
                     }
                     position++;
+                } else {
+                    html += "<span class='writing-filler'>" + character + "</span>";
                 }
             }
             return html;
