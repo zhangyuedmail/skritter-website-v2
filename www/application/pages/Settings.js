@@ -35,8 +35,8 @@ define([
             this.elements.partRune = this.$('#parts #rune');
             this.elements.partTone = this.$('#parts #tone');
             this.elements.readingStyle = this.$('#general #reading-style');
-            this.elements.styleSimp = this.$('#parts #simp');
-            this.elements.styleTrad = this.$('#parts #trad');
+            this.elements.styleSimp = this.$('#styles #simp');
+            this.elements.styleTrad = this.$('#styles #trad');
             this.renderElements();
             this.delegateEvents();
             return this;
@@ -51,9 +51,9 @@ define([
             } else {
                 this.elements.readingStyle.parent().parent().parent().hide();
             }
-            this.elements.partDefn.bootstrapSwitch('state', this.activeParts.indexOf('defn') > -1);
-            this.elements.partRdng.bootstrapSwitch('state', this.activeParts.indexOf('rdng') > -1);
-            this.elements.partRune.bootstrapSwitch('state', this.activeParts.indexOf('rune') > -1);
+            this.elements.partDefn.bootstrapSwitch('state', this.activeParts.indexOf('defn') !== -1);
+            this.elements.partRdng.bootstrapSwitch('state', this.activeParts.indexOf('rdng') !== -1);
+            this.elements.partRune.bootstrapSwitch('state', this.activeParts.indexOf('rune') !== -1);
             if (app.user.isJapanese()) {
                 this.elements.partTone.parent().parent().hide();
             } else {
@@ -64,8 +64,8 @@ define([
             this.elements.partRune.bootstrapSwitch('disabled', this.enabledParts.indexOf('rune') === -1);
             this.elements.partTone.bootstrapSwitch('disabled', this.enabledParts.indexOf('tone') === -1);
             if (app.user.isChinese()) {
-                this.elements.styleSimp.bootstrapSwitch('state', this.activeStyles.indexOf('simp') > -1);
-                this.elements.styleTrad.bootstrapSwitch('state', this.activeStyles.indexOf('trad') > -1);
+                this.elements.styleSimp.bootstrapSwitch('state', this.activeStyles.indexOf('simp') !== -1);
+                this.elements.styleTrad.bootstrapSwitch('state', this.activeStyles.indexOf('trad') !== -1);
             } else {
                 this.$('#styles').hide();
             }
