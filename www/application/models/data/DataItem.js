@@ -92,7 +92,7 @@ define([
          * @return {Array}
          */
         getAllVocabIds: function() {
-            var vocabIds = []
+            var vocabIds = [];
             var vocabs = this.getVocabs();
             for (var i = 0, length = vocabs.length; i < length; i++) {
                 var vocab = vocabs[i];

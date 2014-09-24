@@ -140,7 +140,6 @@ define([
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
                 scheduleItems.push({
-                    active: item.vocabIds.length ? true : false,
                     id: item.id,
                     interval: item.interval ? item.interval : 0,
                     last: item.last ? item.last : 0,
@@ -148,7 +147,8 @@ define([
                     part: item.part,
                     reviews: item.reviews ? item.reviews : 0,
                     style: item.style,
-                    successes: item.successes ? item.successes : 0
+                    successes: item.successes ? item.successes : 0,
+                    vocabIds: item.vocabIds
                 });
             }
             return this.add(scheduleItems, options);
