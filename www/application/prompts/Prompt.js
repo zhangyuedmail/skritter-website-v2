@@ -131,6 +131,7 @@ define([
          * @method next
          */
         next: function() {
+            this.updateScore();
             if (this.review.isLast()) {
                 this.controller.triggerPromptComplete(this.review);
             } else {
@@ -142,6 +143,7 @@ define([
          * @method previous
          */
         previous: function() {
+            this.updateScore();
             if (this.review.isFirst()) {
                 //TODO: allow for previous prompt navigation
                 console.log('PROMPT: previous');
@@ -164,6 +166,14 @@ define([
          * @returns {Prompt}
          */
         resize: function() {
+            return this;
+        },
+        /**
+         * @method updateScore
+         * @returns {Prompt}
+         */
+        updateScore: function() {
+            this.review.setAt('score', this.gradingButtons.getScore());
             return this;
         }
     });
