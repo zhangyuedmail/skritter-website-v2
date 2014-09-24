@@ -32,6 +32,17 @@ define([
             return -item.id;
         },
         /**
+         * @method flattenReviews
+         * @param {Number} start
+         * @param {Number} end
+         * @returns {Array}
+         */
+        flattenReviews: function(start, end) {
+            return _.flatten(this.models.map(function(review) {
+                return review.attributes.reviews;
+            }));
+        },
+        /**
          * @method getTotalTime
          * @returns {Number}
          */
@@ -58,7 +69,11 @@ define([
          * @param {Function} callback
          */
         sync: function(callback) {
-
+            app.api.postReviews(this.pluck('reviews'), function(posted) {
+                console.log('POSTED:', posted);
+            }, function(error, posted) {
+                console.error('POST ERROR', error, posted);
+            });
         }
     });
 

@@ -77,7 +77,9 @@ define([
             vocabIds = Array.isArray(vocabIds) ? vocabIds : [vocabIds];
             (function next() {
                 $.ajax({
-                    url: self.getBaseUrl() + 'items/addmissing?bearer_token=' + self.getToken() + '&vocabId=' + vocabIds.splice(0, 1)[0],
+                    url: self.getBaseUrl() + 'items/addmissing' +
+                        '?bearer_token=' + self.getToken() +
+                        '&vocabId=' + vocabIds.splice(0, 1)[0],
                     beforeSend: self.beforeSend,
                     context: self,
                     type: 'POST'
@@ -98,7 +100,7 @@ define([
                     }
                 }).fail(function(error) {
                     callbackError(error);
-                })
+                });
             })();
         },
         /**
@@ -492,36 +494,37 @@ define([
         },
         /**
          * @method postReviews
-         * @param {Array|Object} reviews
+         * @param {Array} reviews
          * @param {Function} callbackComplete
          * @param {Function} callbackError
          */
         postReviews: function(reviews, callbackComplete, callbackError) {
             var self = this;
-            var postedReviews = [];
-            reviews = Array.isArray(reviews) ? reviews : [reviews];
-            (function postBatch(batch) {
+            var posted = [];
+            (function next() {
+                var batch = _.flatten(reviews.splice(0, 49));
                 $.ajax({
-                    url: this.getBaseUrl() + 'reviews?bearer_token=' + self.getToken(),
+                    url: self.getBaseUrl() + 'reviews' +
+                        '?bearer_token=' + self.getToken(),
                     beforeSend: self.beforeSend,
                     context: self,
                     type: 'POST',
                     data: JSON.stringify(batch)
                 }).done(function(data) {
-                    postedReviews = postedReviews.concat(batch);
+                    posted = posted.concat(batch);
                     if (data.statusCode === 200) {
                         if (reviews.length > 0) {
-                            postBatch(reviews.splice(0, 99));
+                            setTimeout(next, self.timeout);
                         } else {
-                            callbackComplete(postedReviews);
+                            callbackComplete(posted);
                         }
                     } else {
-                        callbackError(data);
+                        callbackError(data, posted);
                     }
                 }).fail(function(error) {
-                    callbackError(error);
+                    callbackError(error, posted);
                 });
-            })(reviews.splice(0, 99));
+            })();
         },
         /**
          * @method refreshToken
@@ -558,7 +561,8 @@ define([
          */
         requestBatch: function(requests, callbackComplete, callbackError) {
             $.ajax({
-                url: this.getBaseUrl() + 'batch?bearer_token=' + this.getToken(),
+                url: this.getBaseUrl() + 'batch' +
+                    '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'POST',
@@ -592,7 +596,8 @@ define([
          */
         updateVocabList: function(list, callbackComplete, callbackError) {
             $.ajax({
-                url: this.getBaseUrl()  + 'vocablists/' + list.id + '?bearer_token=' + this.getToken(),
+                url: this.getBaseUrl()  + 'vocablists/' + list.id +
+                    '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'PUT',
@@ -615,7 +620,8 @@ define([
          */
         updateUser: function(settings, callbackComplete, callbackError) {
             $.ajax({
-                url: this.getBaseUrl() + 'users?bearer_token=' + this.getToken(),
+                url: this.getBaseUrl() + 'users' +
+                    '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'PUT',

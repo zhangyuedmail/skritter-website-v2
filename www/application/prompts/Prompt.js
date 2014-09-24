@@ -144,7 +144,7 @@ define([
         previous: function() {
             if (this.review.isFirst()) {
                 //TODO: allow for previous prompt navigation
-                console.log('PROMPT: previous')
+                console.log('PROMPT: previous');
             } else {
                 this.review.previous();
                 this.render();
