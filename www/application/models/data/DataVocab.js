@@ -60,11 +60,11 @@ define([
             var containedItemIds = [];
             var containedVocabIds = this.get('containedVocabIds');
             for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                if (part === 'tone') {
+                if (part === 'rune') {
+                    containedItemIds.push(app.user.id + '-' + containedVocabIds[i] + '-' + part);
+                } else {
                     var splitId = containedVocabIds[i].split('-');
                     containedItemIds.push(app.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
-                } else {
-                    containedItemIds.push(app.user.id + '-' + containedVocabIds[i] + '-' + part);
                 }
             }
             return containedItemIds;
