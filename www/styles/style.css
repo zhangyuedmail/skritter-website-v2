@@ -96,7 +96,7 @@ body {
     color: #ffffff;
     height: 45px;
     min-width: 100px;
-    margin: 0 10px 0 -15px;
+    margin: 0 20px 0 -15px;
 }
 .navbar-menu:focus {
     border: none;
