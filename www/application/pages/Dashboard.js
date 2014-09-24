@@ -27,6 +27,7 @@ define([
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
             app.sidebars.enable();
+            this.elements.buttonSync = this.$('#sync-button');
             this.elements.listContainer = this.$('.list-container');
             this.elements.messageExpired = this.$('.message-expired');
             this.elements.messageRegister = this.$('.message-register');
@@ -55,15 +56,21 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick #button-register': 'handleButtonRegisterClicked'
+            'vclick #button-sync': 'handleButtonSyncClicked'
         }),
         /**
-         * @method handleButtonRegisterClicked
+         * @method handleButtonSyncClicked
          * @param {Event} event
          */
-        handleButtonRegisterClicked: function(event) {
+        handleButtonSyncClicked: function(event) {
             event.preventDefault();
-            app.router.navigate('getting-started/signup', {trigger: true});
+            app.dialogs.show().element('.message-title').text('Syncing');
+            app.dialogs.element('.message-text').text('');
+            app.user.data.sync(function() {
+                app.dialogs.hide();
+            }, function() {
+                app.dialogs.hide();
+            });
         },
         /**
          * @method updateStatSection

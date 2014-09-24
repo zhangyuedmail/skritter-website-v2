@@ -275,7 +275,7 @@ define([
         /**
          * @method sync
          * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackError]
          */
         sync: function(callbackSuccess, callbackError) {
             var self = this;
@@ -325,7 +325,9 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 } else {
                     self.set('lastItemSync', now);
                     self.user.schedule.sort();

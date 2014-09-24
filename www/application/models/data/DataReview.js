@@ -29,6 +29,7 @@ define([
             finished: false,
             originalItems: [],
             position: 1,
+            posted: false,
             reviews: [],
             vocabIds: []
         },
@@ -284,6 +285,17 @@ define([
                     app.user.data.reviews.add(self, {merge: true});
                     app.user.schedule.sort();
                     self.cache(callback);
+                }
+            });
+        },
+        /**
+         * @method uncache
+         * @param {Function} callback
+         */
+        uncache: function(callback) {
+            app.storage.removeItems('reviews', this.id, function() {
+                if (typeof callback === 'function') {
+                    callback();
                 }
             });
         }
