@@ -22,28 +22,11 @@ define([
             containedVocabIds: []
         },
         /**
-         * @method getCanvasCharacters
-         * @returns {Array}
+         * @method getCanvasCharacter
+         * @returns {CanvasCharacter}
          */
-        getCanvasCharacters: function() {
-            //TODO: clean this up and handle errors
-            var canvasCharacters = [];
-            var stroke;
-            var containedVocabIds = this.get('containedVocabIds');
-            if (containedVocabIds.length) {
-                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                    stroke = app.user.data.vocabs.get(containedVocabIds[i]).getStroke();
-                    if (stroke) {
-                        canvasCharacters.push(stroke.getCanvasCharacter());
-                    }
-                }
-            } else {
-                stroke = this.getStroke();
-                if (stroke) {
-                    canvasCharacters.push(stroke.getCanvasCharacter());
-                }
-            }
-            return canvasCharacters;
+        getCanvasCharacter: function() {
+            return this.getStroke() ? this.getStroke().getCanvasCharacter() : undefined;
         },
         /**
          * @method getCharacterCount
@@ -92,9 +75,9 @@ define([
          */
         getContainedVocabs: function() {
             var vocabs = [];
-            var containedIds = this.get('containedVocabIds');
+            var containedIds = this.get('containedVocabIds').length ? this.get('containedVocabIds') :[this.id];
             for (var i = 0, length = containedIds.length; i < length; i++) {
-                vocabs.push(app.user.data.vocabs.get(containedIds[i]));
+                vocabs.push(this.collection.get(containedIds[i]));
             }
             return vocabs;
         },

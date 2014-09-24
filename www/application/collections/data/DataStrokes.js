@@ -22,7 +22,14 @@ define([
          * @property model
          * @type DataStroke
          */
-        model: DataStroke
+        model: DataStroke,
+        /**
+         * @method getTones
+         * @returns {CanvasCharacter}
+         */
+        getCanvasTones: function() {
+            return this.get('tones').getCanvasCharacter();
+        }
     });
 
     return DataStrokes;

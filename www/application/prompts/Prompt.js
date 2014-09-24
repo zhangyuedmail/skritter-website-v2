@@ -20,10 +20,14 @@ define([
             this.canvas = controller.canvas;
             this.controller = controller;
             this.gradingButtons = controller.gradingButtons;
-            this.item = undefined;
+            this.item = review.getBaseItem();
             this.position = 1;
             this.review = review;
-            this.vocab = undefined;
+            this.vocab = review.getBaseVocab();
+            //load canvas characters for rune and tone prompts
+            if (['rune', 'tone'].indexOf(review.get('part')) !== -1) {
+                review.characters = this.item.getCanvasCharacters();
+            }
         },
         /**
          * @property el
@@ -35,9 +39,7 @@ define([
          * @returns {Prompt}
          */
         render: function() {
-            this.item = this.review.getBaseItem();
             this.position = this.review.getPosition();
-            this.vocab = this.review.getBaseVocab();
             this.renderElements();
             if (this.review.getAt('answered')) {
                 this.renderAnswer();

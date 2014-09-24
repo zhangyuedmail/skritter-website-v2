@@ -38,6 +38,17 @@ define([
             vocabListIds: []
         },
         /**
+         * @method cache
+         * @param {Function} [callback]
+         */
+        cache: function(callback) {
+            app.storage.putItems('items', this.updateSchedule().toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        /**
          * @method createReview
          * @returns {DataReview}
          */
@@ -47,7 +58,7 @@ define([
             var now = moment().unix();
             var part = this.get('part');
             var reviews = [];
-            var wordGroup = now + app.fn.getGuid() + '_' + this.id;
+            var wordGroup = new Date().getTime() + '_' + this.id;
             for (var a = 0, lengthA = items.length; a < lengthA; a++) {
                 var item = items[a];
                 reviews.push({
@@ -65,13 +76,6 @@ define([
                     previousSuccess: item.get('previousSuccess')
                 });
             }
-            if (part === 'rune') {
-                review.characters = this.getVocab().getCanvasCharacters();
-            } else if (part === 'tone') {
-                for (var b = 0, lengthB = items.length; b < lengthB; b++) {
-                    review.characters.push(app.user.data.strokes.get('tones').getCanvasCharacter());
-                }
-            }
             return review.set({
                 id: wordGroup,
                 itemId: items[0].id,
@@ -79,6 +83,22 @@ define([
                 part: part,
                 reviews: reviews
             });
+        },
+        /**
+         * @method getCanvasCharacters
+         * @returns {Array}
+         */
+        getCanvasCharacters: function() {
+            var characters = [];
+            var containedVocabs = this.getVocab().getContainedVocabs();
+            for (var i = 0, length = containedVocabs.length; i < length; i++) {
+                if (this.get('part') === 'rune') {
+                    characters.push(containedVocabs[i].getCanvasCharacter());
+                } else if (this.get('part') === 'tone') {
+                    characters.push(app.user.data.strokes.getCanvasTones());
+                }
+            }
+            return characters;
         },
         /**
          * @method getContainedItems
@@ -127,9 +147,11 @@ define([
         },
         /**
          * @method updateSchedule
+         * @returns {DataItem}
          */
         updateSchedule: function() {
             app.user.schedule.insert(this.toJSON());
+            return this;
         }
     });
 
