@@ -43,14 +43,12 @@ define([
         handleButtonCreateClicked: function(event) {
             event.preventDefault();
             var self = this;
-            app.dialogs.show().element('.message-title').text('Creating Account');
             this.disableForm().elements.message.empty();
             app.user.createNew({
                 email: this.elements.email.val(),
                 name: this.elements.username.val(),
                 password: this.elements.password.val()
             }, function() {
-                app.api.clearGuest();
                 app.reload();
             }, function(error) {
                 self.enableForm().elements.message.text(error.responseJSON.message);
@@ -64,10 +62,8 @@ define([
         handleButtonSkipClicked: function(event) {
             event.preventDefault();
             var self = this;
-            app.dialogs.show().element('.message-title').text('Loading');
             this.disableForm().elements.message.empty();
             app.user.createNew(null, function() {
-                app.api.clearGuest();
                 app.reload();
             }, function(error) {
                 self.enableForm().elements.message.text(error.responseJSON.message);

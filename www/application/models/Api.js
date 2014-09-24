@@ -14,7 +14,9 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.set('guest', JSON.parse(localStorage.getItem('_guest')), {silent: true});
+            if (JSON.parse(localStorage.getItem('_guest'))) {
+                this.set('guest', JSON.parse(localStorage.getItem('_guest')), {silent: true});
+            }
             this.on('change:guest', this.cache);
         },
         /**
@@ -24,7 +26,7 @@ define([
         defaults: {
             clientId: 'mcfarljwapiclient',
             clientSecret: 'e3872517fed90a820e441531548b8c',
-            guest: undefined,
+            guest: false,
             root: 'https://beta.skritter',
             timeout: 100,
             tld: location.host.indexOf('.cn') === -1 ? '.com' : '.cn',
@@ -182,7 +184,7 @@ define([
          * @method clearGuest
          */
         clearGuest: function() {
-            this.set('guest', undefined, {silent: true});
+            this.set('guest', false);
             localStorage.removeItem('_guest');
         },
         /**
@@ -607,6 +609,13 @@ define([
                     callbackError(error);
                 });
             })();
+        },
+        /**
+         * @method hasGuest
+         * @returns {Boolean}
+         */
+        hasGuest: function() {
+            return this.get('guest');
         },
         /**
          * @method isGuestValid

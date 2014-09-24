@@ -43,16 +43,14 @@ define([
             var lang = app.api.getGuest('lang');
             var list = app.api.getGuest('list');
             var style = app.api.getGuest('style');
+            app.dialogs.show().element('.message-title').text('Creating Account');
             async.waterfall([
                 function(callback) {
                     if (self.isAuthenticated()) {
                         callback(null, self.settings.toJSON());
                     } else {
+                        app.dialogs.element('.message-text').text('CREATING USER');
                         app.api.createUser({
-                            addSimplified: ['both', 'simp'].indexOf(style) !== -1,
-                            addTraditional: ['both', 'trad'].indexOf(style) !== -1,
-                            reviewSimplified: ['both', 'simp'].indexOf(style) !== -1,
-                            reviewTraditional: ['both', 'trad'].indexOf(style) !== -1,
                             lang: lang
                         }, function(user) {
                             callback(null, user);
@@ -65,6 +63,7 @@ define([
                     if (self.isAuthenticated()) {
                         callback(null, user);
                     } else {
+                        app.dialogs.element('.message-text').text('SIGNING IN');
                         self.login(user.id, '', function() {
                             callback(null, user);
                         }, function(error) {
@@ -73,30 +72,21 @@ define([
                     }
                 },
                 function(user, callback) {
-                    if (settings) {
-                        app.api.updateUser($.extend(user, settings), function(settings) {
-                            self.settings.set(settings);
-                            callback(null, user);
-                        }, function(error) {
-                            callback(error);
-                        });
-                    } else {
+                    app.dialogs.element('.message-text').text('CONFIGURING SETTINGS');
+                    if (lang === 'zh') {
+                        settings.addSimplified = ['both', 'simp'].indexOf(style) !== -1;
+                        settings.addTraditional = ['both', 'trad'].indexOf(style) !== -1;
+                        settings.reviewSimplified = ['both', 'simp'].indexOf(style) !== -1;
+                        settings.reviewTraditional = ['both', 'trad'].indexOf(style) !== -1;
+                    }
+                    settings.targetLang = lang;
+                    app.api.updateUser($.extend(user, settings), function(settings) {
+                        self.set('id', settings.id);
+                        self.settings.set(settings);
                         callback(null, user);
-                    }
-                },
-                function(user, callback) {
-                    if (list) {
-                        app.api.updateVocabList({
-                            id: list,
-                            studyingMode: 'adding'
-                        }, function() {
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
-                    } else {
-                        callback();
-                    }
+                    }, function(error) {
+                        callback(error);
+                    });
                 }
             ], function(error) {
                 if (error) {
@@ -200,6 +190,11 @@ define([
                     app.analytics.setUserId(this.settings.get('name'));
                 }
                 async.series([
+                    //display general loading message
+                    function(callback) {
+                        app.dialogs.show('default', callback).element('.message-title').text('Getting Started');
+                        app.dialogs.element('.message-text').text('');
+                    },
                     //load user storage instance
                     function(callback) {
                         app.storage.open(self.id, callback);
@@ -217,18 +212,44 @@ define([
                             });
                         }
                     },
+                    //enable list selected by new users
+                    function(callback) {
+                        if (app.api.hasGuest() && app.api.getGuest('list') && !app.api.getGuest('enabledList')) {
+                            app.dialogs.element('.message-text').text('ENABLING LIST');
+                            app.api.updateVocabList({
+                                id: app.api.getGuest('list'),
+                                studyingMode: 'adding'
+                            }, function() {
+                                app.api.setGuest('enabledList', true);
+                                callback();
+                            }, function(error) {
+                                callback(error);
+                            });
+                        } else {
+                            callback();
+                        }
+                    },
+                    //added initial items for new users
+                    function(callback) {
+                        if (app.api.hasGuest() && !app.api.getGuest('addedItems')) {
+                            app.dialogs.element('.message-text').text('ADDING ITEMS');
+                            self.data.addItems({limit: 10, skipSync: true}, function() {
+                                app.api.setGuest('addedItems', true);
+                                callback();
+                            }, function(error) {
+                                callback(error);
+                            });
+                        } else {
+                            callback();
+                        }
+                    },
                     //perform initial item sync
                     function(callback) {
                         if (self.data.get('lastItemSync')) {
                             callback();
                         } else {
-                            self.data.downloadAll(callback);
+                            self.data.downloadAll(callback, callback);
                         }
-                    },
-                    //display general loading message
-                    function(callback) {
-                        app.dialogs.show('default', callback).element('.message-title').text('Loading');
-                        app.dialogs.element('.message-text').text('');
                     },
                     //load all vocablists
                     function(callback) {
@@ -249,27 +270,18 @@ define([
                     function(callback) {
                         app.dialogs.element('.message-text').text('SCHEDULE');
                         self.schedule.loadAll(callback);
-                    },
-                    //check user has items to study
-                    function(callback) {
-                        if (self.schedule.getActiveCount() === 0) {
-                            app.dialogs.element('.message-text').text('INITIAL ITEMS');
-                            self.data.addItems({limit: 10, showDialog: false}, callback, function() {
-                                app.dialogs.element('.message-title').text('Connection interrupted.');
-                                app.dialogs.element('.message-text').text('Check your connection and click reload.');
-                                app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
-                                app.dialogs.element('.message-other button').on('vclick', app.reload);
-                            });
-                        } else {
-                            callback();
-                        }
                     }
                 ], function(error) {
                     if (error) {
+                        app.dialogs.element('.message-title').text('Something went wrong.');
+                        app.dialogs.element('.message-text').text('Check your connection and click reload.');
+                        app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                        app.dialogs.element('.message-other button').on('vclick', app.reload);
                         console.error('USER ERROR:', error);
                     } else {
                         self.stats.sync();
                         app.dialogs.hide(function() {
+                            app.api.clearGuest();
                             callback(self);
                         });
                     }

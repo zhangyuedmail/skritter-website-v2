@@ -69,6 +69,7 @@ define([
         addItems: function(options, callbackSuccess, callbackError) {
             var self = this;
             options = options ? options : {};
+            options.limit = options.limit ? options.limit : 1;
             if (options.showDialog) {
                 app.dialogs.show().element('.message-title').text('Searching');
                 app.dialogs.element('.message-text').text('');
@@ -81,7 +82,7 @@ define([
                             method: 'POST',
                             params: {
                                 lang: app.user.getLanguageCode(),
-                                limit: options.limit ? options.limit : 1,
+                                limit: options.limit,
                                 offset: 0,
                                 fields: 'id'
                             }
@@ -117,11 +118,15 @@ define([
                     });
                 },
                 function(callback) {
-                    self.sync(function() {
+                    if (options.skipSync) {
                         callback();
-                    }, function(error) {
-                        callback(error);
-                    });
+                    } else {
+                        self.sync(function() {
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    }
                 }
             ], function(error) {
                 if (error) {
@@ -144,19 +149,18 @@ define([
         },
         /**
          * @method downloadAll
-         * @param {Function} callback
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        downloadAll: function(callback) {
+        downloadAll: function(callbackSuccess, callbackError) {
             var self = this;
             var now = moment().unix();
-            app.dialogs.show().element('.message-title').text('Downloading');
-            app.dialogs.element('.message-text').text('');
             async.series([
                 function(callback) {
                     app.storage.clearAll(callback);
                 },
                 function(callback) {
-                    if (self.has('downloadId')) {
+                    if (self.get('downloadId')) {
                         callback();
                     } else {
                         app.api.requestBatch([
@@ -205,7 +209,7 @@ define([
                     }, function(error) {
                         callback(error);
                     }, function(result) {
-                        app.dialogs.show().element('.message-text').text('ASSEMBLING: ' + app.fn.convertBytesToSize(result.responseSize));
+                        app.dialogs.element('.message-text').text('ASSEMBLING: ' + app.fn.convertBytesToSize(result.responseSize));
                     });
                 },
                 function(callback) {
@@ -215,26 +219,23 @@ define([
                         callback(error);
                     }, function(result) {
                         var percent = Math.floor((result.downloadedRequests / result.totalRequests) * 100);
-                        app.dialogs.show().element('.message-text').text('FETCHING: ' + percent + '%');
+                        app.dialogs.element('.message-text').text('FETCHING: ' + percent + '%');
                         self.put(result);
                     });
                 }
             ], function(error) {
                 if (error) {
-                    app.dialogs.element('.message-title').text('Connection interrupted.');
-                    app.dialogs.element('.message-text').text('Check your connection and click reload.');
-                    app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
-                    app.dialogs.element('.message-other button').on('vclick', app.reload);
+                    callbackError(error);
                 } else {
                     self.set({
+                        downloadId: undefined,
                         lastErrorCheck: now,
                         lastItemSync: now,
                         lastReviewSync: now,
                         lastSRSConfigSync: now,
                         lastVocabSync: now
                     });
-                    self.unset('downloadId');
-                    app.dialogs.hide(callback);
+                    callbackSuccess();
                 }
             });
         },
@@ -274,12 +275,14 @@ define([
         },
         /**
          * @method sync
+         * @param {}
          * @param {Function} callbackSuccess
          * @param {Function} [callbackError]
          */
-        sync: function(callbackSuccess, callbackError) {
+        sync: function(options, callbackSuccess, callbackError) {
             var self = this;
-            var now = moment().unix();
+            var now = moment().unix()
+            options = options ? options : {}
             async.waterfall([
                 function(callback) {
                     app.api.requestBatch([
