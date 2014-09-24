@@ -327,6 +327,88 @@ define([
             return this.get('guest') ? this.get('guest')[key] : undefined;
         },
         /**
+         * @method getItemById
+         * @param {Array|String} itemIds
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getItemById: function(itemIds, options, callbackComplete, callbackError) {
+            var self = this;
+            var result = {};
+            options = options ? options : {};
+            itemIds = _.uniq(Array.isArray(itemIds) ? itemIds : [itemIds]);
+            (function next() {
+                $.ajax({
+                    url: self.getBaseUrl() + 'items',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        ids: itemIds.splice(0, 19).join('|'),
+                        fields: options.fields,
+                        include_vocabs: options.includeVocabs,
+                        include_strokes: options.includeStrokes,
+                        include_sentences: options.includeSentences,
+                        include_heisigs: options.includeHeisigs,
+                        include_top_mnemonics: options.includeTopMnemonics,
+                        include_decomps: options.includeDecomps
+                    }
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        delete data.statusCode;
+                        result = app.fn.mergeObjectArrays(result, data);
+                        if (itemIds.length > 0) {
+                            setTimeout(next, self.timeout);
+                        } else {
+                            callbackComplete(result);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+        /**
+         * @method getReviewErrors
+         * @param {Number} [offset]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getReviewErrors: function(offset, callbackComplete, callbackError) {
+            var self = this;
+            var errors = [];
+            (function next(cursor) {
+                $.ajax({
+                    url: self.getBaseUrl() + 'reviews/errors',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        cursor: cursor,
+                        offset: offset
+                    }
+                }).done(function(data) {
+                    errors = errors.concat(data.ReviewErrors);
+                    if (data.statusCode === 200) {
+                        if (data.cursor) {
+                            setTimeout(next, self.timeout, data.cursor);
+                        } else {
+                            callbackComplete(errors);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+        /**
          * @method getStats
          * @param {Object} [options]
          * @param {Function} callbackComplete
@@ -433,6 +515,51 @@ define([
                             } else {
                                 callbackComplete(users);
                             }
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+        /**
+         * @method getVocabById
+         * @param {Array|String} vocabIds
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getVocabById: function(vocabIds, options, callbackComplete, callbackError) {
+            var self = this;
+            var result = {};
+            options = options ? options : {};
+            vocabIds = _.uniq(Array.isArray(vocabIds) ? vocabIds : [vocabIds]);
+            (function next() {
+                $.ajax({
+                    url: self.getBaseUrl() + 'vocabs',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        ids: vocabIds.splice(0, 19).join('|'),
+                        fields: options.fields,
+                        include_strokes: options.includeStrokes,
+                        include_sentences: options.includeSentences,
+                        include_heisigs: options.includeHeisigs,
+                        include_top_mnemonics: options.includeTopMnemonics,
+                        include_decomps: options.includeDecomps
+                    }
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        delete data.statusCode;
+                        result = app.fn.mergeObjectArrays(result, data);
+                        if (vocabIds.length > 0) {
+                            setTimeout(next, self.timeout);
+                        } else {
+                            callbackComplete(result);
                         }
                     } else {
                         callbackError(data);
