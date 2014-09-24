@@ -43,6 +43,7 @@ define([
          */
         defaults: {
             access_token: undefined,
+            downloadId: undefined,
             expires: undefined,
             expires_in: undefined,
             lastErrorCheck: 0,
@@ -157,6 +158,13 @@ define([
             var now = moment().unix();
             async.series([
                 function(callback) {
+                    self.set({
+                        lastErrorCheck: 0,
+                        lastItemSync: 0,
+                        lastReviewSync: 0,
+                        lastSRSConfigSync: 0,
+                        lastVocabSync: 0
+                    });
                     app.storage.clearAll(callback);
                 },
                 function(callback) {
@@ -275,14 +283,14 @@ define([
         },
         /**
          * @method sync
-         * @param {}
+         * @param {Object} [options]
          * @param {Function} callbackSuccess
          * @param {Function} [callbackError]
          */
         sync: function(options, callbackSuccess, callbackError) {
             var self = this;
-            var now = moment().unix()
-            options = options ? options : {}
+            var now = moment().unix();
+            options = options ? options : {};
             async.waterfall([
                 function(callback) {
                     app.api.requestBatch([
