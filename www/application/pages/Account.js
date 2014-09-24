@@ -44,6 +44,21 @@ define([
             return this;
         },
         /**
+         * @method events
+         * @returns {Object}
+         */
+        events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-download-all': 'handleButtonDownloadAllClicked'
+        }),
+        /**
+         * @method handleButtonDownloadAllClicked
+         * @param {Event} event
+         */
+        handleButtonDownloadAllClicked: function(event) {
+            event.preventDefault();
+            app.user.data.downloadAll(app.reload);
+        },
+        /**
          * @method loadTimezones
          * @returns {PageAccount}
          */
