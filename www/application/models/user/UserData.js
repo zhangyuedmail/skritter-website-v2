@@ -112,7 +112,7 @@ define([
                         self.vocablists.add(result.VocabLists, {merge: true});
                         console.log('ADDING:', totalVocabs);
                         if (options.showDialog) {
-                            app.dialogs.show().element('.message-title').text('Adding: ' + totalVocabs);
+                            app.dialogs.element('.message-title').text('Adding: ' + totalVocabs);
                         }
                     });
                 },
@@ -150,6 +150,7 @@ define([
             var self = this;
             var now = moment().unix();
             app.dialogs.show().element('.message-title').text('Downloading');
+            app.dialogs.element('.message-text').text('');
             async.series([
                 function(callback) {
                     app.storage.clearAll(callback);
