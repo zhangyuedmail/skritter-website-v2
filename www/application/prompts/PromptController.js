@@ -49,11 +49,11 @@ define([
             return this;
         },
         /**
-         * @method load
-         * @param {Review} review
+         * @method loadPrompt
+         * @param {DataReview} review
          * @returns {PromptController}
          */
-        load: function(review) {
+        loadPrompt: function(review) {
             this.reset();
             console.log('PROMPT:', review.get('itemId'), this);
             switch (review.get('part')) {
@@ -70,8 +70,7 @@ define([
                     this.active = new PromptTone(null, this, review);
                     break;
             }
-            this.active.render();
-            return this;
+            return this.active.render();
         },
         /**
          * @method reset
@@ -106,19 +105,11 @@ define([
             return this;
         },
         /**
-         * @method triggerNext
+         * @method triggerPromptComplete
+         * @param {DataReview} review
          */
-        triggerNext: function() {
-            var review = this.active.review.update();
-            console.log('REVIEW:', review);
-            app.user.data.reviews.add(review);
-            this.trigger('next');
-        },
-        /**
-         * @method triggerPrevious
-         */
-        triggerPrevious: function() {
-            this.trigger('previous');
+        triggerPromptComplete: function(review) {
+            this.trigger('prompt:complete', review);
         }
     });
 

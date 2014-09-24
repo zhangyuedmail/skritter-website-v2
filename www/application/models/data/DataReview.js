@@ -26,6 +26,7 @@ define([
          * @type Object
          */
         defaults: {
+            finished: false,
             originalItems: [],
             position: 1,
             reviews: []
@@ -35,7 +36,7 @@ define([
          * @param {Function} [callback]
          */
         cache: function(callback) {
-            app.storage.putItems('vocablists', this.toJSON(), function() {
+            app.storage.putItems('reviews', this.toJSON(), function() {
                 if (typeof callback === 'function') {
                     callback();
                 }
@@ -58,6 +59,13 @@ define([
          */
         getBaseItem: function() {
             return app.user.data.items.get(this.get('reviews')[0].itemId);
+        },
+        /**
+         * @method getBaseReview
+         * @returns {Object}
+         */
+        getBaseReview: function() {
+            return this.get('reviews')[0];
         },
         /**
          * @method getBaseVocab
@@ -121,6 +129,13 @@ define([
          */
         getPosition: function() {
             return this.hasContained() ? this.get('position') : 1;
+        },
+        /**
+         * @method getScheduleItem
+         * @returns {ScheduleItem}
+         */
+        getScheduleItem: function() {
+            return app.user.schedule.get(this.getBaseReview().itemId);
         },
         /**
          * @method getTotalReviewTime
@@ -224,44 +239,52 @@ define([
             return review;
         },
         /**
-         * @method update
-         * @returns {DataReview}
+         * @method save
+         * @param {Function} callback
          */
-        update: function() {
+        save: function(callback) {
+            var self = this;
             var configs = app.user.data.srsconfigs.getConfigs(this.get('part'));
+            var updatedItems = [];
             for (var i = 0, length = this.get('reviews').length; i < length; i++) {
                 //load required resources for updating
                 var review = this.get('reviews')[i];
                 var originalItem = _.find(this.get('originalItems'), {id: review.itemId});
                 var item = app.user.data.items.get(review.itemId);
-                //check if all required resources are available
-                if (review && originalItem && item) {
-                    //update values for base review
-                    if (this.get('reviews').length > 1 && i === 0) {
-                        review.reviewTime = this.getTotalReviewTime();
-                        review.score = this.getFinalScore();
-                        review.thinkingTime = this.getTotalThinkingTime();
-                    }
-                    //update interval based on item and score
-                    review.newInterval = app.fn.calculateInterval(originalItem, review.score, configs);
-                    //update local item based on review
-                    item.set({
-                        changed: review.submitTime,
-                        last: review.submitTime,
-                        interval: review.newInterval,
-                        next: review.submitTime + review.newInterval,
-                        previousInterval: review.currentInterval,
-                        previousSuccess: review.score > 1 ? true : false,
-                        reviews: originalItem.reviews + 1,
-                        successes: review.score > 1 ? originalItem.successes + 1 : originalItem.successes,
-                        timeStudied: originalItem.reviewTime + review.reviewTime
-                    });
-                } else {
-                    console.error('REVIEW:', 'Unable to locate all resources.');
+                //update values for base review
+                if (this.get('reviews').length > 1 && i === 0) {
+                    review.reviewTime = this.getTotalReviewTime();
+                    review.score = this.getFinalScore();
+                    review.thinkingTime = this.getTotalThinkingTime();
                 }
+                //update interval based on item and score
+                review.newInterval = app.fn.calculateInterval(originalItem, review.score, configs);
+                //update local item based on review
+                item.set({
+                    changed: review.submitTime,
+                    last: review.submitTime,
+                    interval: review.newInterval,
+                    next: review.submitTime + review.newInterval,
+                    previousInterval: review.currentInterval,
+                    previousSuccess: review.score > 1 ? true : false,
+                    reviews: originalItem.reviews + 1,
+                    successes: review.score > 1 ? originalItem.successes + 1 : originalItem.successes,
+                    timeStudied: originalItem.reviewTime + review.reviewTime
+                });
+                updatedItems.push(item);
             }
-            app.user.schedule.sort();
-            return this;
+            async.each(updatedItems, function(item, callback) {
+                item.updateSchedule();
+                item.cache(callback);
+            }, function(error) {
+                if (error) {
+                    console.error('REVIEW: Unable to save review.');
+                } else {
+                    app.user.data.reviews.add(self);
+                    app.user.schedule.sort();
+                    self.cache(callback);
+                }
+            });
         }
     });
 

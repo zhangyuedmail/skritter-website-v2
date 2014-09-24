@@ -132,7 +132,7 @@ define([
          */
         next: function() {
             if (this.review.isLast()) {
-                this.controller.triggerNext();
+                this.controller.triggerPromptComplete(this.review);
             } else {
                 this.review.next();
                 this.render();
@@ -143,7 +143,8 @@ define([
          */
         previous: function() {
             if (this.review.isFirst()) {
-                this.controller.triggerPrevious();
+                //TODO: allow for previous prompt navigation
+                console.log('PROMPT: previous')
             } else {
                 this.review.previous();
                 this.render();

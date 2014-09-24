@@ -14,22 +14,33 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.current = undefined;
+            this.previous = undefined;
+        },
         /**
          * @property model
          * @type DataReview
          */
         model: DataReview,
         /**
-         * @method cache
-         * @param {Function} [callback]
+         * @method comparator
+         * @param {ScheduleItem} item
+         * @returns {Number}
          */
-        cache: function(callback) {
-            app.storage.putItems('vocablists', this.toJSON(), function() {
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            });
+        comparator: function(item) {
+            return -item.id;
+        },
+        /**
+         * @method getTotalTime
+         * @returns {Number}
+         */
+        getTotalTime: function() {
+            var totalTime = 0;
+            for (var i = 0, length = this.length; i < length; i++) {
+                totalTime += this.at(i).get('reviews')[0].reviewTime;
+            }
+            return totalTime;
         },
         /**
          * @method loadAll
@@ -41,6 +52,13 @@ define([
                 self.reset();
                 self.lazyAdd(data, callback, {silent: true});
             });
+        },
+        /**
+         * @method sync
+         * @param {Function} callback
+         */
+        sync: function(callback) {
+
         }
     });
 

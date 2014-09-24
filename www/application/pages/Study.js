@@ -17,8 +17,10 @@ define([
         initialize: function() {
             this.title = app.strings.study.title;
             this.prompt = undefined;
+            this.promptController = undefined;
+            this.reviews = app.user.data.reviews;
             this.schedule = app.user.schedule;
-            this.scheduleIndex = 1;
+            this.scheduleIndex = 0;
             this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
         },
         /**
@@ -29,8 +31,8 @@ define([
             this.$el.html(this.compile(TemplateDesktop));
             app.timer.setElement(this.$('#study-timer'));
             this.elements.studyCount = this.$('#study-count');
-            this.prompt = new PromptController({el: this.$('.prompt-container')}).render();
-            this.listenTo(this.prompt, 'next', this.next);
+            this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
+            this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);
             this.renderElements();
             this.next();
             return this;
@@ -44,21 +46,25 @@ define([
             return this;
         },
         /**
+         * @method handlePromptComplete
+         * @param {DataReview} review
+         */
+        handlePromptComplete: function(review) {
+            console.log('REVIEW:', review);
+            review.save(_.bind(this.next, this));
+        },
+        /**
          * @method next
          */
         next: function() {
             var self = this;
-            this.scheduleIndex++;
             this.schedule.getNext(this.scheduleIndex).load(function(result) {
-                self.prompt.load(result.item.createReview());
+                self.prompt = self.promptController.loadPrompt(result.item.createReview());
             }, function() {
+                self.scheduleIndex++;
                 self.next();
             });
         },
-        /**
-         * @method previous
-         */
-        previous: function() {},
         /**
          * @method updateDueCount
          */
