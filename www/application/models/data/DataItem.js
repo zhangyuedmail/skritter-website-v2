@@ -56,9 +56,10 @@ define([
             var review = new DataReview();
             var items = [this].concat(this.getContainedItems());
             var now = moment().unix();
+            var timestamp = new Date().getTime();
             var part = this.get('part');
             var reviews = [];
-            var wordGroup = new Date().getTime() + '_' + this.id;
+            var wordGroup =  timestamp + '_' + this.id;
             for (var a = 0, lengthA = items.length; a < lengthA; a++) {
                 var item = items[a];
                 reviews.push({
@@ -81,7 +82,8 @@ define([
                 itemId: items[0].id,
                 originalItems: app.fn.arrayToJSON(items),
                 part: part,
-                reviews: reviews
+                reviews: reviews,
+                timestamp: timestamp
             });
         },
         /**

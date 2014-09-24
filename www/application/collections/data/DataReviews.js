@@ -29,18 +29,27 @@ define([
          * @returns {Number}
          */
         comparator: function(item) {
-            return -item.id;
+            return -item.attributes.timestamp;
         },
         /**
-         * @method flattenReviews
-         * @param {Number} start
-         * @param {Number} end
+         * @method exclude
+         * @param {Array|String} ids
          * @returns {Array}
          */
-        flattenReviews: function(start, end) {
-            return _.flatten(this.models.map(function(review) {
+        exclude: function(ids) {
+            ids = Array.isArray(ids) ? ids : [ids];
+            return this.filter(function(review) {
+                return ids.indexOf(review.id) === -1;
+            });
+        },
+        /**
+         * @method getBatch
+         * @returns {Array}
+         */
+        getBatch: function() {
+            return this.exclude(this.at(0).id).map(function(review) {
                 return review.attributes.reviews;
-            }));
+            });
         },
         /**
          * @method getTotalTime
@@ -61,7 +70,8 @@ define([
             var self = this;
             app.storage.getAll('reviews', function(data) {
                 self.reset();
-                self.lazyAdd(data, callback, {silent: true});
+                self.lazyAdd(data, callback, {silent: true, sort: false});
+                self.sort();
             });
         },
         /**
@@ -69,10 +79,13 @@ define([
          * @param {Function} callback
          */
         sync: function(callback) {
-            app.api.postReviews(this.pluck('reviews'), function(posted) {
+            var batch = this.getBatch();
+            app.api.postReviews(batch, function(posted) {
                 console.log('POSTED:', posted);
+                callback();
             }, function(error, posted) {
                 console.error('POST ERROR', error, posted);
+                callback(error);
             });
         }
     });

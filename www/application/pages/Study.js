@@ -50,7 +50,7 @@ define([
          * @param {DataReview} review
          */
         handlePromptComplete: function(review) {
-            console.log('REVIEW:', review);
+            console.log('REVIEW:', review.id, review);
             review.save(_.bind(this.next, this));
         },
         /**
