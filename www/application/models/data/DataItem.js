@@ -71,7 +71,7 @@ define([
                     thinkingTime: 0,
                     currentInterval: item.get('interval'),
                     actualInterval: item.get('last'),
-                    newInterval: undefined,
+                    newInterval: null,
                     wordGroup: wordGroup,
                     previousInterval: item.get('previousInterval'),
                     previousSuccess: item.get('previousSuccess')
@@ -79,12 +79,26 @@ define([
             }
             return review.set({
                 id: wordGroup,
-                itemId: items[0].id,
+                itemId: this.id,
                 originalItems: app.fn.arrayToJSON(items),
                 part: part,
                 reviews: reviews,
-                timestamp: timestamp
+                timestamp: timestamp,
+                vocabIds: this.getAllVocabIds()
             });
+        },
+        /**
+         * @method getAllVocabIds
+         * @return {Array}
+         */
+        getAllVocabIds: function() {
+            var vocabIds = []
+            var vocabs = this.getVocabs();
+            for (var i = 0, length = vocabs.length; i < length; i++) {
+                var vocab = vocabs[i];
+                vocabIds = vocabIds.concat([vocab.id].concat(vocab.get('containedVocabIds')));
+            }
+            return _.uniq(vocabIds);
         },
         /**
          * @method getCanvasCharacters

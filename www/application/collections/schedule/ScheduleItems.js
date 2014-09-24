@@ -18,6 +18,7 @@ define([
          */
         initialize: function(models, options) {
             options = options ? options : {};
+            this.data = options.data;
             this.user = options.user;
         },
         /**
@@ -41,7 +42,7 @@ define([
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
             return this.models.filter(function(item) {
-                if (!item.attributes.active) {
+                if (!item.attributes.vocabIds.length) {
                     return false;
                 }
                 if (activeParts.indexOf(item.attributes.part) === -1) {
@@ -104,13 +105,17 @@ define([
             index = index ? index : 0;
             for (var i = 0, length = this.length; i < length; i++) {
                 var item = this.at(i);
-                if (!item.attributes.active) {
+                if (!item.attributes.vocabIds.length) {
                     continue;
                 }
                 if (activeParts.indexOf(item.attributes.part) === -1) {
                     continue;
                 }
                 if (activeStyles.indexOf(item.attributes.style) === -1) {
+                    continue;
+                }
+                if (this.length > 5 &&
+                    this.data.reviews.isRecent(item, 5)) {
                     continue;
                 }
                 if (index > 0) {

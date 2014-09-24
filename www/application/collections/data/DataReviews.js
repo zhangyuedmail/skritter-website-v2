@@ -63,6 +63,25 @@ define([
             return totalTime;
         },
         /**
+         * @method canBeNext
+         * @param {DataItem|ScheduleItem} item
+         * @param {Number} [max]
+         * @returns {Boolean}
+         */
+        isRecent: function(item, max) {
+            var itemVocabIds = item ? item.get('vocabIds') : [];
+            var reviewVocabIds = [];
+            for (var i = 0, length = max || 1; i < length; i++) {
+                var review = this.at(i);
+                if (review) {
+                    reviewVocabIds = reviewVocabIds.concat(review.get('vocabIds'));
+                } else {
+                    break;
+                }
+            }
+            return _.intersection(itemVocabIds, reviewVocabIds).length ? true : false;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

@@ -29,7 +29,8 @@ define([
             finished: false,
             originalItems: [],
             position: 1,
-            reviews: []
+            reviews: [],
+            vocabIds: []
         },
         /**
          * @method cache

@@ -149,13 +149,13 @@ define([
                 if (cursor) {
                     data.push({
                         id: cursor.value.id,
-                        active: cursor.value.vocabIds.length ? true : false,
                         part: cursor.value.part,
                         style: cursor.value.style,
                         next: cursor.value.next,
                         last: cursor.value.last,
                         reviews: cursor.value.reviews,
-                        successes: cursor.value.successes
+                        successes: cursor.value.successes,
+                        vocabIds: cursor.value.vocabIds
                     });
                     cursor.continue();
                 }
