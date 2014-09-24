@@ -119,8 +119,8 @@ define([
                 function(callback) {
                     self.sync(function() {
                         callback();
-                    }, function() {
-                        callback();
+                    }, function(error) {
+                        callback(error);
                     });
                 }
             ], function(error) {
