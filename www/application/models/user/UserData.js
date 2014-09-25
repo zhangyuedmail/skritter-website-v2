@@ -158,13 +158,6 @@ define([
             var now = moment().unix();
             async.series([
                 function(callback) {
-                    self.set({
-                        lastErrorCheck: 0,
-                        lastItemSync: 0,
-                        lastReviewSync: 0,
-                        lastSRSConfigSync: 0,
-                        lastVocabSync: 0
-                    });
                     app.storage.clearAll(callback);
                 },
                 function(callback) {

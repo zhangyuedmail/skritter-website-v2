@@ -25,13 +25,26 @@ define([
             localStorage.setItem(this.user.id + '-subscription', JSON.stringify(this.toJSON()));
         },
         /**
-         * @method sync
+         * @method fetch
          * @param {Function} callback
          */
-        sync: function(callback) {
+        fetch: function(callback) {
             var self = this;
             app.api.getSubscription(this.user.id, null, function(data) {
                 self.set(data);
+                callback();
+            }, function(error) {
+                callback(error);
+            });
+        },
+        /**
+         * @method update
+         * @param {Function} callback
+         */
+        update: function(callback) {
+            var self = this;
+            app.api.updateSubscription(this.toJSON(), function(subscription) {
+                self.set(subscription);
                 callback();
             }, function(error) {
                 callback(error);

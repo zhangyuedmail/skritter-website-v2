@@ -725,6 +725,30 @@ define([
             return this;
         },
         /**
+         * @method updateSubscription
+         * @param {Object} subscription
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        updateSubscription: function(subscription, callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl() + 'subscriptions' +
+                    '?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(subscription)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.Subscription);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method updateVocabList
          * @param {Object} list
          * @param {Function} callbackComplete

@@ -304,10 +304,10 @@ define([
                 self.data.set(data);
                 async.parallel([
                     function(callback) {
-                        self.settings.sync(callback);
+                        self.settings.fetch(callback);
                     },
                     function(callback) {
-                        self.subscription.sync(callback);
+                        self.subscription.fetch(callback);
                     }
                 ], function() {
                     localStorage.setItem('_active', data.user_id);

@@ -33,6 +33,19 @@ define([
             filterJapaneseParts: ['defn', 'rdng', 'rune']
         },
         /**
+         * @method fetch
+         * @param {Function} callback
+         */
+        fetch: function(callback) {
+            var self = this;
+            app.api.getUsers(this.user.id, null, function(data) {
+                self.set(data);
+                callback();
+            }, function(error) {
+                callback(error);
+            });
+        },
+        /**
          * @method getActiveParts
          * @returns {Array}
          */
@@ -75,9 +88,11 @@ define([
         setActiveParts: function(parts) {
             if (this.user.isChinese()) {
                 this.set('filterChineseParts', parts);
+                this.update();
                 return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
             }
             this.set('filterJapaneseParts', parts);
+            this.update();
             return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
         },
         /**
@@ -98,19 +113,24 @@ define([
                     this.set('reviewTraditional', true);
                 }
             }
+            this.update();
             return this.getActiveStyles();
         },
         /**
-         * @method sync
-         * @param {Function} callback
+         * @method update
+         * @param {Function} [callback]
          */
-        sync: function(callback) {
+        update: function(callback) {
             var self = this;
-            app.api.getUsers(this.user.id, null, function(data) {
-                self.set(data);
-                callback();
+            app.api.updateUser(this.toJSON(), function(user) {
+                self.set(user);
+                if (typeof callback === 'function') {
+                    callback();
+                }
             }, function(error) {
-                callback(error);
+                if (typeof callback === 'function') {
+                    callback(error);
+                }
             });
         }
     });
