@@ -114,6 +114,9 @@ define([
                 if (activeStyles.indexOf(item.attributes.style) === -1) {
                     continue;
                 }
+                if (this.user.history.hasBase(item.id.split('-')[2])) {
+                    continue;
+                }
                 if (index > 0) {
                     index--;
                     continue;

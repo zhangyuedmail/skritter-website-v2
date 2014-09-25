@@ -103,6 +103,7 @@ define([
         updateHistory: function(review) {
             this.user.history.add({
                 id: review.id,
+                base: review.id.split('-')[2],
                 part: review.get('part'),
                 timestamp: review.get('timestamp')
             }, {merge: true});

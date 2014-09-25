@@ -159,6 +159,9 @@ define([
             async.series([
                 //clear all locally stored data
                 function(callback) {
+                    localStorage.removeItem(self.user.id + '-data');
+                    localStorage.removeItem(self.user.id + '-history');
+                    localStorage.removeItem(self.user.id + '-stats');
                     app.storage.clearAll(callback);
                 },
                 //send batch request to fetch all data
@@ -225,7 +228,7 @@ define([
                     }, function(result) {
                         var percent = Math.floor((result.downloadedRequests / result.totalRequests) * 100);
                         app.dialogs.element('.message-text').text('FETCHING: ' + percent + '%');
-                        resultStarted++
+                        resultStarted++;
                         self.put(result, function() {
                             resultFinished++;
                         });
@@ -239,7 +242,7 @@ define([
                         } else {
                             setTimeout(wait, 1000);
                         }
-                    })()
+                    })();
                 }
             ], function(error) {
                 if (error) {
@@ -357,7 +360,7 @@ define([
                         } else {
                             setTimeout(wait, 1000);
                         }
-                    })()
+                    })();
                 }
             ], function(error) {
                 if (error) {

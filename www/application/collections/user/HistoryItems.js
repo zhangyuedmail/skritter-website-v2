@@ -30,6 +30,9 @@ define([
          * @method cache
          */
         cache: function() {
+            if (this.length > 5) {
+                this.pop();
+            }
             localStorage.setItem(this.user.id + '-history', JSON.stringify(this.toJSON()));
         },
         /**
@@ -39,6 +42,13 @@ define([
          */
         comparator: function(item) {
             return -item.attributes.timestamp;
+        },
+        /**
+         * @method hasBase
+         * @returns {Boolean}
+         */
+        hasBase: function(base) {
+            return this.where({base: base}).length ? true : false;
         }
     });
 

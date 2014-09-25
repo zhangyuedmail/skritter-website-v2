@@ -20,7 +20,7 @@ define([
             this.promptController = undefined;
             this.reviews = app.user.reviews;
             this.schedule = app.user.schedule;
-            this.scheduleIndex = 0;
+            this.scheduleIndex = -1;
             this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
         },
         /**

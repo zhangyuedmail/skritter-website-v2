@@ -21,6 +21,24 @@ define([], function() {
             }, this));
         },
         /**
+         * @method getLocalStorageMaxSize
+         * @returns {Number}
+         */
+        getLocalStorageMaxSize: function() {
+            return 1024 * 1024 * 5 - encodeURIComponent(JSON.stringify(localStorage)).length;
+        },
+        /**
+         * @method getLocalStorageUsedSize
+         * @returns {Number}
+         */
+        getLocalStorageUsedSize: function() {
+            var totalSize = 0;
+            for (var entry in localStorage) {
+                totalSize += localStorage[entry].length * 5;
+            }
+            return totalSize;
+        },
+        /**
          * @method isLandscape
          * @returns {Boolean}
          */

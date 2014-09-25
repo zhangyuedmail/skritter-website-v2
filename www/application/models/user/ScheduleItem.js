@@ -19,14 +19,14 @@ define([
          * @type Object
          */
         defaults: {
-            active: false,
             interval: 0,
             last: 0,
             next: 0,
             part: undefined,
             reviews: 0,
             style: undefined,
-            successes: 0
+            successes: 0,
+            vocabIds: []
         },
         /**
          * @method getReadiness
@@ -35,15 +35,15 @@ define([
          */
         getReadiness: function(time) {
             var now = time || moment().unix();
-            var timeSince =  now - this.attributes.last;
-            var untilNext = this.attributes.next - this.attributes.last;
+            var timePast =  now - this.attributes.last;
+            var timeInterval = this.attributes.next - this.attributes.last;
             if (this.attributes.part === 'rune') {
-                timeSince += 2;
+                timePast += 2;
             }
             if (this.attributes.part === 'tone') {
-                timeSince += 1;
+                timePast += 1;
             }
-            return timeSince / untilNext;
+            return timePast / timeInterval;
         },
         /**
          * @method isNew
@@ -178,7 +178,7 @@ define([
             ], function(error) {
                 if (error) {
                     if (result.item) {
-                        self.set({active: false, flag: error ? error : 'Unable to load item.'});
+                        self.set({vocabIds: [], flag: error ? error : 'Unable to load item.'});
                     }
                     console.error('SCHEDULE ERROR:', error, self);
                     callbackError(error);
