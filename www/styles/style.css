@@ -242,6 +242,7 @@ body {
 
 
 /*** SIDEBARS ***/
+.sidebars-container {  }
 .sidebars-container a {
     color: #000000;
     font-size: 20px;
@@ -264,5 +265,6 @@ body {
     margin-top: 45px;
     position: fixed;
     top: 0;
+    z-index: 9000;
     width: 300px;
 }

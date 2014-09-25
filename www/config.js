@@ -54,8 +54,8 @@ app = (function() {
                 'bootstrap.switch': ['bootstrap'],
                 'jasmine.html': ['jasmine'],
                 'jasmine.boot': ['jasmine.html'],
-                'jquery.ui': ['jquery'],
                 'jquery.mobile': ['jquery'],
+                'jquery.ui': ['jquery'],
                 'moment.timezone': ['moment']
             }
         },
