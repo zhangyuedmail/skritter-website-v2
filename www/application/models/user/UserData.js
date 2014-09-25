@@ -302,6 +302,8 @@ define([
         sync: function(options, callbackSuccess, callbackError) {
             var self = this;
             var now = moment().unix();
+            var resultStarted = 0;
+            var resultFinished = 0;
             options = options ? options : {};
             async.waterfall([
                 function(callback) {
@@ -342,9 +344,22 @@ define([
                         callback(error);
                     }, function(result) {
                         console.log('SYNCING:', result.Items ? result.Items.length : 0);
+                        resultStarted++;
                         self.user.schedule.insert(result.Items);
-                        self.put(result);
+                        self.put(result, function() {
+                            resultFinished++;
+                        });
                     });
+                },
+                //wait for database put operation to finish
+                function(callback) {
+                    (function wait() {
+                        if (resultStarted === resultFinished) {
+                            callback();
+                        } else {
+                            setTimeout(wait, 1000);
+                        }
+                    })()
                 }
             ], function(error) {
                 if (error) {
