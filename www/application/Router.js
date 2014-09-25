@@ -47,7 +47,9 @@ define([
          * @method handleBackButtonPressed
          */
         handleBackButtonPressed: function() {
-            if (Backbone.history.fragment === '') {
+            if (app.sidebars.isExpanded()) {
+                app.sidebars.hide();
+            } else if (Backbone.history.fragment === '') {
                 app.dialogs.show('exit');
                 app.dialogs.element('.exit').one('vclick', function() {
                     navigator.app.exitApp();
