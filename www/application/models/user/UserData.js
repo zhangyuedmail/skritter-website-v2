@@ -6,13 +6,12 @@ define([
     'collections/data/DataDecomps',
     'collections/data/DataItems',
     'collections/data/DataParams',
-    'collections/data/DataReviews',
     'collections/data/DataSentences',
     'collections/data/DataSRSConfigs',
     'collections/data/DataStrokes',
     'collections/data/DataVocabs',
     'collections/data/DataVocabLists'
-], function(BaseModel, DataDecomps, DataItems, DataParams, DataReviews, DataSentences, DataSRSConfigs, DataStrokes, DataVocabs, DataVocabLists) {
+], function(BaseModel, DataDecomps, DataItems, DataParams, DataSentences, DataSRSConfigs, DataStrokes, DataVocabs, DataVocabLists) {
     /**
      * @class UserData
      * @extends BaseModel
@@ -27,7 +26,6 @@ define([
             this.decomps = new DataDecomps();
             this.items = new DataItems();
             this.params = new DataParams();
-            this.reviews = new DataReviews();
             this.sentences = new DataSentences();
             this.srsconfigs = new DataSRSConfigs();
             this.strokes = new DataStrokes();

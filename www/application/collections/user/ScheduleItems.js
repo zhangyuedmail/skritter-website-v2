@@ -3,7 +3,7 @@
  */
 define([
     'framework/BaseCollection',
-    'models/schedule/ScheduleItem'
+    'models/user/ScheduleItem'
 ], function(BaseCollection, ScheduleItem) {
     /**
      * @class ScheduleItems
@@ -13,12 +13,11 @@ define([
         /**
          * @method initialize
          * @param {Array} models
-         * @param {User} user
+         * @param {Object} options
          * @constructor
          */
         initialize: function(models, options) {
             options = options ? options : {};
-            this.data = options.data;
             this.sorted = undefined;
             this.user = options.user;
         },
@@ -115,10 +114,6 @@ define([
                 if (activeStyles.indexOf(item.attributes.style) === -1) {
                     continue;
                 }
-                if (this.length > 5 &&
-                    this.data.reviews.isRecent(item, 5)) {
-                    continue;
-                }
                 if (index > 0) {
                     index--;
                     continue;
@@ -184,7 +179,6 @@ define([
          * @returns {ScheduleItems}
          */
         sort: function() {
-            console.log('SCHEDULE:', 'sorting');
             this.sorted = moment().unix();
             return BaseCollection.prototype.sort.call(this);
         }

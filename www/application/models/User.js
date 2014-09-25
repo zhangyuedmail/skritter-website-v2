@@ -3,12 +3,14 @@
  */
 define([
     'framework/BaseModel',
-    'collections/schedule/ScheduleItems',
+    'collections/data/DataReviews',
+    'collections/user/HistoryItems',
+    'collections/user/ScheduleItems',
     'models/user/UserData',
     'models/user/UserSettings',
     'models/user/UserStats',
     'models/user/UserSubscription'
-], function(BaseModel, ScheduleItems, UserData, UserSettings, UserStats, UserSubscription) {
+], function(BaseModel, DataReviews, HistoryItems, ScheduleItems, UserData, UserSettings, UserStats, UserSubscription) {
     /**
      * @class User
      * @extends BaseModel
@@ -20,7 +22,9 @@ define([
          */
         initialize: function() {
             this.data = new UserData(null, {user: this});
-            this.schedule = new ScheduleItems(null, {data: this.data, user: this});
+            this.history = new HistoryItems(null, {user: this});
+            this.schedule = new ScheduleItems(null, {user: this});
+            this.reviews = new DataReviews(null, {user: this});
             this.settings = new UserSettings(null, {user: this});
             this.stats = new UserStats(null, {user: this});
             this.subscription = new UserSubscription(null, {user: this});
@@ -177,6 +181,9 @@ define([
                 if (localStorage.getItem(this.id + '-data')) {
                     this.data.set(JSON.parse(localStorage.getItem(this.id + '-data')), {silent: true});
                 }
+                if (localStorage.getItem(this.id + '-history')) {
+                    this.history.add(JSON.parse(localStorage.getItem(this.id + '-history')), {silent: true});
+                }
                 if (localStorage.getItem(this.id + '-settings')) {
                     this.settings.set(JSON.parse(localStorage.getItem(this.id + '-settings')), {silent: true});
                 }
@@ -280,6 +287,11 @@ define([
                             app.user.data.sync(null, callback);
                         }
                     },
+                    //load all schedule items
+                    function(callback) {
+                        app.dialogs.element('.message-text').text('SCHEDULING');
+                        self.schedule.loadAll(callback);
+                    },
                     //load all vocablists
                     function(callback) {
                         self.data.vocablists.loadAll(callback);
@@ -290,13 +302,8 @@ define([
                     },
                     //load all reviews
                     function(callback) {
-                        self.data.reviews.loadAll(callback);
+                        self.reviews.loadAll(callback);
                     },
-                    //load all schedule items
-                    function(callback) {
-                        app.dialogs.element('.message-text').text('SCHEDULING');
-                        self.schedule.loadAll(callback);
-                    }
                 ], function(error) {
                     if (error) {
                         app.dialogs.element('.message-title').text('Something went wrong.');
