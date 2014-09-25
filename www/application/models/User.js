@@ -251,24 +251,39 @@ define([
                             self.data.downloadAll(callback, callback);
                         }
                     },
+                    //update user from server
+                    function(callback) {
+                        if (app.isLocalhost()) {
+                            callback();
+                        } else {
+                            app.dialogs.element('.message-text').text('UPDATING USER');
+                            app.user.settings.fetch(callback);
+                        }
+                    },
+                    //update subscription from server
+                    function(callback) {
+                        if (app.isLocalhost()) {
+                            callback();
+                        } else {
+                            app.dialogs.element('.message-text').text('CHECKING SUBSCRIPTION');
+                            app.user.subscription.fetch(callback);
+                        }
+                    },
                     //load all vocablists
                     function(callback) {
-                        app.dialogs.element('.message-text').text('VOCABLISTS');
                         self.data.vocablists.loadAll(callback);
                     },
                     //load all srsconfigs
                     function(callback) {
-                        app.dialogs.element('.message-text').text('SRSCONFIGS');
                         self.data.srsconfigs.loadAll(callback);
                     },
                     //load all reviews
                     function(callback) {
-                        app.dialogs.element('.message-text').text('REVIEWS');
                         self.data.reviews.loadAll(callback);
                     },
                     //load all schedule items
                     function(callback) {
-                        app.dialogs.element('.message-text').text('SCHEDULE');
+                        app.dialogs.element('.message-text').text('SCHEDULING');
                         self.schedule.loadAll(callback);
                     }
                 ], function(error) {
