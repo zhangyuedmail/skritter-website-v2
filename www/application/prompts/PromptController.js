@@ -55,7 +55,7 @@ define([
          */
         loadPrompt: function(review) {
             this.reset();
-            console.log('PROMPT:', review.get('itemId'), this);
+            console.log('PROMPT:', review.get('itemId'), review);
             switch (review.get('part')) {
                 case 'defn':
                     this.active = new PromptDefn(null, this, review);

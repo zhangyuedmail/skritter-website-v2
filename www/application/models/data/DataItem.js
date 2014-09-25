@@ -205,7 +205,6 @@ define([
          * @returns {DataItem}
          */
         updateSchedule: function() {
-            console.log('updating schedule', new Error().stack);
             app.user.schedule.insert(this.toJSON());
             return this;
         }

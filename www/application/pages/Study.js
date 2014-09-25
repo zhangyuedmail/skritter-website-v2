@@ -18,7 +18,7 @@ define([
             this.title = app.strings.study.title;
             this.prompt = undefined;
             this.promptController = undefined;
-            this.reviews = app.user.data.reviews;
+            this.reviews = app.user.reviews;
             this.schedule = app.user.schedule;
             this.scheduleIndex = 0;
             this.listenTo(app.user.schedule, 'sort', this.updateDueCount);

@@ -8,7 +8,7 @@ define([], function() {
     function Recognizer() {
         this.baseAngleThreshold = 60;
         this.baseCornerPenalty = 30;
-        this.baseCornerThreshold = 5;
+        this.baseCornerThreshold = 2;
         this.baseDistanceThreshold = 200;
         this.baseSize = 600;
         this.canvasSize = 600;

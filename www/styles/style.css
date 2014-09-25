@@ -1,3 +1,9 @@
+/***
+Z-INDEX:
+9900: modals
+9100: sidebars
+***/
+
 /*** APPLICATION ***/
 html, body { height: 100%; }
 body {
@@ -31,6 +37,7 @@ body {
 .content-box.fixed-150 { height: 150px; }
 .content-box h1, .content-box h2, .content-box h3,
 .content-box h4, .content-box h5, .content-box h6 { margin-top: 5px; }
+.modal { z-index: 9900; }
 .padding-top { padding-top: 10px; }
 @media (max-width: 991px) {
     .content-box.fixed-150 { height: auto; }
@@ -265,6 +272,6 @@ body {
     margin-top: 45px;
     position: fixed;
     top: 0;
-    z-index: 9000;
+    z-index: 9100;
     width: 300px;
 }

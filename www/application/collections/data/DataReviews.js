@@ -12,11 +12,14 @@ define([
     var DataReviews = BaseCollection.extend({
         /**
          * @method initialize
+         * @param {Array} models
+         * @param {Object} options
          * @constructor
          */
-        initialize: function() {
-            this.current = undefined;
-            this.previous = undefined;
+        initialize: function(models, options) {
+            options = options ? options : {};
+            this.user = options.user;
+            this.on('add change', this.updateHistory);
         },
         /**
          * @property model
@@ -63,26 +66,6 @@ define([
             return totalTime;
         },
         /**
-         * @method canBeNext
-         * @param {DataItem|ScheduleItem} item
-         * @param {Number} [max]
-         * @returns {Boolean}
-         */
-        isRecent: function(item, max) {
-            //TODO: track recent vocab in another way
-            var itemVocabIds = item ? item.get('vocabIds') : [];
-            var reviewVocabIds = [];
-            for (var i = 0, length = max || 1; i < length; i++) {
-                var review = this.at(i);
-                if (review) {
-                    reviewVocabIds = reviewVocabIds.concat(review.get('vocabIds'));
-                } else {
-                    break;
-                }
-            }
-            return _.intersection(itemVocabIds, reviewVocabIds).length ? true : false;
-        },
-        /**
          * @method loadAll
          * @param {Function} callback
          */
@@ -112,6 +95,17 @@ define([
                 console.error('POST ERROR:', error, posted);
                 callback(error);
             });
+        },
+        /**
+         * @method updateHistory
+         * @param {DataReview} review
+         */
+        updateHistory: function(review) {
+            this.user.history.add({
+                id: review.id,
+                part: review.get('part'),
+                timestamp: review.get('timestamp')
+            }, {merge: true});
         }
     });
 

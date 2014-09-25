@@ -280,7 +280,7 @@ define([
                 if (error) {
                     console.error('REVIEW:', 'Unable to save review.');
                 } else {
-                    app.user.data.reviews.add(self, {merge: true});
+                    app.user.reviews.add(self, {merge: true});
                     self.cache(callback);
                 }
             });
