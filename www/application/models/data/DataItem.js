@@ -11,6 +11,11 @@ define([
      */
     var DataItem = BaseModel.extend({
         /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {},
+        /**
          * @property idAttribute
          * @type String
          */
@@ -132,6 +137,13 @@ define([
             return items;
         },
         /**
+         * @method getRTD
+         * @returns {Number}
+         */
+        getRTD: function() {
+            return this.attributes.next - this.attributes.last;
+        },
+        /**
          * @method getVocab
          * @returns {DataVocab}
          */
@@ -162,10 +174,38 @@ define([
             return vocabs;
         },
         /**
+         * @method isNew
+         * @returns {Boolean}
+         */
+        isNew: function() {
+            return this.attributes.reviews === 0;
+        },
+        /**
+         * @method space
+         * @param {Number} [time]
+         * @returns {DataItem}
+         */
+        space: function(time) {
+            var now = time || moment().unix();
+            var minSpace = 600;
+            var maxSpace = 43200;
+            var spaced = 0;
+            if (this.isNew()) {
+                spaced = now + maxSpace;
+            } else {
+                spaced = now + Math.max(minSpace, this.getRTD() * 0.2);
+            }
+            if (spaced > this.get('next')) {
+                this.set('next', spaced);
+            }
+            return this;
+        },
+        /**
          * @method updateSchedule
          * @returns {DataItem}
          */
         updateSchedule: function() {
+            console.log('updating schedule', new Error().stack);
             app.user.schedule.insert(this.toJSON());
             return this;
         }

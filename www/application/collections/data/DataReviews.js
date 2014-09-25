@@ -35,23 +35,6 @@ define([
             });
         },
         /**
-         * @method cacheById
-         * @param {Array|String} ids
-         * @param {Function} [callback]
-         */
-        cacheById: function(ids, callback) {
-            ids = Array.isArray(ids) ? ids : [ids];
-            app.storage.putItems('reviews', this.filter(function(review) {
-                return ids.indexOf(review.id) !== -1;
-            }).map(function(review) {
-                return review.toJSON();
-            }), function() {
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            });
-        },
-        /**
          * @method comparator
          * @param {ScheduleItem} item
          * @returns {Number}
@@ -64,26 +47,8 @@ define([
          * @returns {Array}
          */
         getBatch: function() {
-            return this.getNotPosted().slice(1).map(function(review) {
+            return this.slice(1).map(function(review) {
                 return review.attributes.reviews;
-            });
-        },
-        /**
-         * @method getPosted
-         * @returns {Array}
-         */
-        getPosted: function() {
-            return this.filter(function(review) {
-                return review.attributes.posted;
-            });
-        },
-        /**
-         * @method getNotPosted
-         * @returns {Array}
-         */
-        getNotPosted: function() {
-            return this.filter(function(review) {
-                return !review.attributes.posted;
             });
         },
         /**
@@ -104,6 +69,7 @@ define([
          * @returns {Boolean}
          */
         isRecent: function(item, max) {
+            //TODO: track recent vocab in another way
             var itemVocabIds = item ? item.get('vocabIds') : [];
             var reviewVocabIds = [];
             for (var i = 0, length = max || 1; i < length; i++) {
@@ -129,19 +95,6 @@ define([
             });
         },
         /**
-         * @method markPosted
-         * @param {Array|String} ids
-         * @returns {Array}
-         */
-        markPosted: function(ids) {
-            var marked = [];
-            ids = Array.isArray(ids) ? ids : [ids];
-            for (var i = 0, length = ids.length; i < length; i++) {
-                marked.push(this.get(ids[i]).set('posted', true));
-            }
-            return marked;
-        },
-        /**
          * @method sync
          * @param {Function} callback
          */
@@ -151,8 +104,10 @@ define([
             app.api.postReviews(batch, function(posted) {
                 var postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
                 console.log('POST:', posted.length);
-                self.markPosted(postedIds);
-                self.cacheById(postedIds, callback);
+                app.storage.removeItems('reviews', postedIds, function() {
+                    self.remove(postedIds);
+                    callback();
+                });
             }, function(error, posted) {
                 console.error('POST ERROR:', error, posted);
                 callback(error);

@@ -29,7 +29,6 @@ define([
             finished: false,
             originalItems: [],
             position: 1,
-            posted: false,
             reviews: [],
             vocabIds: []
         },
@@ -276,14 +275,12 @@ define([
                 updatedItems.push(item);
             }
             async.each(updatedItems, function(item, callback) {
-                item.updateSchedule();
                 item.cache(callback);
             }, function(error) {
                 if (error) {
                     console.error('REVIEW:', 'Unable to save review.');
                 } else {
                     app.user.data.reviews.add(self, {merge: true});
-                    app.user.schedule.sort();
                     self.cache(callback);
                 }
             });

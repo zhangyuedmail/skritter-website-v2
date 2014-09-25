@@ -19,6 +19,7 @@ define([
         initialize: function(models, options) {
             options = options ? options : {};
             this.data = options.data;
+            this.sorted = undefined;
             this.user = options.user;
         },
         /**
@@ -32,7 +33,7 @@ define([
          * @returns {Number}
          */
         comparator: function(item) {
-            return item.attributes.next;
+            return -item.getReadiness(this.sorted);
         },
         /**
          * @method getActive
@@ -103,7 +104,7 @@ define([
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
             index = index ? index : 0;
-            for (var i = 0, length = this.length; i < length; i++) {
+            for (var i = 0, length = this.sort().length; i < length; i++) {
                 var item = this.at(i);
                 if (!item.attributes.vocabIds.length) {
                     continue;
@@ -163,6 +164,29 @@ define([
                 self.reset();
                 self.lazyAdd(data, callback, {silent: true});
             });
+        },
+        /**
+         * @method logSchedule
+         * @param {Number} [limit]
+         */
+        logSchedule: function(limit) {
+            for (var i = 0, length = limit || this.sort().length; i < length; i++) {
+                var item = this.at(i);
+                if (item) {
+                    console.log(item.id, item.getReadiness(this.sorted));
+                } else {
+                    break;
+                }
+            }
+        },
+        /**
+         * @method sort
+         * @returns {ScheduleItems}
+         */
+        sort: function() {
+            console.log('SCHEDULE:', 'sorting');
+            this.sorted = moment().unix();
+            return BaseCollection.prototype.sort.call(this);
         }
     });
 

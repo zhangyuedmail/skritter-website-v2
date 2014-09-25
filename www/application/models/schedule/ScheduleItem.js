@@ -29,6 +29,20 @@ define([
             successes: 0
         },
         /**
+         * @method getReadiness
+         * @param {Number} time
+         * @returns {Number}
+         */
+        getReadiness: function(time) {
+            var now = time || moment().unix();
+            var timeSince =  now - this.attributes.last;
+            var untilNext = this.attributes.next - this.attributes.last;
+            if (this.attributes.part === 'rune') {
+                timeSince += 5;
+            }
+            return timeSince / untilNext;
+        },
+        /**
          * @method isNew
          * @returns {Boolean}
          */
