@@ -16,6 +16,7 @@ define([
         initialize: function() {
             this.title = app.strings.account.title;
             this.settings = app.user.settings;
+            this.sub = app.user.subscription;
         },
         /**
          * @method render
@@ -28,6 +29,15 @@ define([
             this.elements.accountID = this.$('#account-id');
             this.elements.accountEmail = this.$('#account-email');
             this.elements.accountTimezone = this.$('#account-timezone');
+            this.elements.subDetail = this.$('#sub-detail');
+            this.elements.subDetailMethod = this.$('#sub-detail-method');
+            this.elements.subDetailPlan = this.$('#sub-detail-plan');
+            this.elements.subDetailRecurring = this.$('#sub-detail-recurring');
+            this.elements.subMessage = this.$('#sub-message');
+            this.elements.subStatus = this.$('#sub-status');
+            this.elements.subButtonCancel = this.$('#subscribe-cancel');
+            this.elements.subButtonMonth = this.$('#subscribe-month');
+            this.elements.subButtonYear = this.$('#subscribe-year');
             this.renderElements();
             return this;
         },
@@ -36,6 +46,30 @@ define([
          * @returns {PageAccount}
          */
         renderElements: function() {
+            if (this.sub.isExpired()) {
+                this.elements.subStatus.addClass('text-danger').text('Expired');
+                this.elements.subDetail.hide();
+                this.elements.subButtonCancel.hide();
+            } else {
+                this.elements.subStatus.addClass('text-success').text('Active');
+                this.elements.subDetail.show();
+                this.elements.subButtonMonth.hide();
+                this.elements.subButtonYear.hide();
+            }
+            if (this.sub.get('subscribed')) {
+                this.elements.subDetailMethod.text(this.sub.get('subscribed'));
+                this.elements.subDetailPlan.text(this.sub.get('plan'));
+                this.elements.subDetailRecurring.text(this.sub.get('expires'));
+                switch (this.sub.get('subscribed')) {
+                    case 'ios':
+                        this.elements.subButtonCancel.hide();
+                        break;
+                    case 'skritter':
+                        this.elements.subButtonCancel.hide();
+                        break;
+
+                }
+            }
             this.elements.accountCountry.val(this.settings.get('country'));
             this.elements.accountID.val(this.settings.get('id'));
             this.elements.accountDisplayName.val(this.settings.get('name'));
@@ -48,7 +82,9 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick #button-download-all': 'handleButtonDownloadAllClicked'
+            'vclick #button-download-all': 'handleButtonDownloadAllClicked',
+            'vclick #subscribe-month': 'handleSubscribeMonth',
+            'vclick #subscribe-year': 'handleSubscribeYear'
         }),
         /**
          * @method handleButtonDownloadAllClicked
@@ -57,13 +93,33 @@ define([
         handleButtonDownloadAllClicked: function(event) {
             event.preventDefault();
             app.dialogs.show().element('.message-title').text('Downloading Data');
-            app.dialogs.show().element('.message-text').text('');
+            app.dialogs.element('.message-text').text('');
             app.user.data.downloadAll(app.reload, function() {
                 app.dialogs.element('.message-title').text('Something went wrong.');
                 app.dialogs.element('.message-text').text('Check your connection and click reload.');
                 app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
                 app.dialogs.element('.message-other button').on('vclick', app.reload);
             });
+        },
+        /**
+         * @method handleSubscribeMonth
+         * @param {Event} event
+         */
+        handleSubscribeMonth: function(event) {
+            event.preventDefault();
+            var self = this;
+            this.sub.subscribeGoogle('one.month.sub', function() {
+                self.renderElements();
+            }, function(error) {
+                self.elements.subMessage.addClass('text-danger').text('');
+            });
+        },
+        /**
+         * @method handleSubscribeYear
+         * @param {Event} event
+         */
+        handleSubscribeYear: function(event) {
+            event.preventDefault();
         },
         /**
          * @method loadTimezones

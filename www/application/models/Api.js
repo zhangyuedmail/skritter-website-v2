@@ -462,7 +462,7 @@ define([
                 }
             }).done(function(data) {
                 if (data.statusCode === 200) {
-                    callbackComplete(data.Subscription);
+                    callbackComplete($.extend(data.Subscription, data.Payment));
                 } else {
                     callbackError(data);
                 }

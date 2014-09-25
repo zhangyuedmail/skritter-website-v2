@@ -19,6 +19,29 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="content-box">
+                    <h2>Subscription (<span id="sub-status"></span>)</h2>
+                    <form class="subscription-form" role="form">
+                        <fieldset>
+                            <div class="form-group">
+                                <p id="sub-message"></p>
+                                <div id="sub-detail">
+                                    <h4><strong>Method:</strong> <span id="sub-detail-method"></span></h4>
+                                    <h4><strong>Plan:</strong> <span id="sub-detail-plan"></span></h4>
+                                    <h4><strong>Recurring:</strong> <span id="sub-detail-recurring"></span></h4>
+                                </div>
+                                <button id="subscribe-month" type="button" class="btn btn-lg btn-success spacing">Monthly ($14.99)</button>
+                                <button id="subscribe-year" type="button" class="btn btn-lg btn-success spacing">Yearly ($99.99)</button>
+                                <button id="subscribe-cancel" type="button" class="btn btn-danger">Cancel Subscription</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="content-box">
                     <h2>{{account.general}}</h2>
                     <form class="account-general-form" role="form">
                         <fieldset>
@@ -298,17 +321,14 @@
             <div class="col-xs-12">
                 <div class="content-box">
                     <h2>Sync</h2>
+                    <p class="lead">Data seem a bit off? Try a fresh download of everything!</p>
                     <form class="account-general-form" role="form">
                         <fieldset>
-
                             <div class="form-group">
-
-                                <button type="button" id="button-download-all" class="btn btn-danger">
+                                <button type="button" id="button-download-all" class="btn btn-default">
                                     <i class="fa fa-download"></i> Download All Data
                                 </button>
-
                             </div>
-
                         </fieldset>
                     </form>
                 </div>

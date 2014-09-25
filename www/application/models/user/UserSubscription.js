@@ -25,6 +25,18 @@ define([
             localStorage.setItem(this.user.id + '-subscription', JSON.stringify(this.toJSON()));
         },
         /**
+         * @method isExpired
+         * @returns {Boolean}
+         */
+        isExpired: function() {
+            var expires = this.get('expires');
+            var now = moment().unix();
+            if (expires === false) {
+                return false;
+            }
+            return moment(expires).unix() < now;
+        },
+        /**
          * @method fetch
          * @param {Function} callback
          */
@@ -35,6 +47,75 @@ define([
                 callback();
             }, function(error) {
                 callback(error);
+            });
+        },
+        /**
+         * @method fetchGoogle
+         * @param {Function} [callback]
+         */
+        fetchGoogle: function(callback) {
+            var self = this;
+            async.waterfall([
+                function(callback) {
+                    plugins.inappbilling.init(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    plugins.inappbilling.getPurchases(function(subscription) {
+                        self.set('gplay_subscription', {
+                            subscription: subscription[0].productId,
+                            package: subscription[0].packageName,
+                            token: subscription[0].purchaseToken
+                        });
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(subscription, callback) {
+                    self.update(callback);
+                }
+            ], function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        /**
+         * @method subscribeGoogle
+         * @param {String} sku
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        subscribeGoogle: function(sku, callbackSuccess, callbackError) {
+            var self = this;
+            async.series([
+                function(callback) {
+                    plugins.inappbilling.init(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    plugins.inappbilling.subscribe(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    }, sku);
+                },
+                function(callback) {
+                    self.fetchGoogle(callback);
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackSuccess();
+                }
             });
         },
         /**
