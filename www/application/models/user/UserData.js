@@ -156,10 +156,14 @@ define([
         downloadAll: function(callbackSuccess, callbackError) {
             var self = this;
             var now = moment().unix();
+            var resultStarted = 0;
+            var resultFinished = 0;
             async.series([
+                //clear all locally stored data
                 function(callback) {
                     app.storage.clearAll(callback);
                 },
+                //send batch request to fetch all data
                 function(callback) {
                     if (self.get('downloadId')) {
                         callback();
@@ -204,6 +208,7 @@ define([
                         });
                     }
                 },
+                //check status of download on server
                 function(callback) {
                     app.api.checkBatch(self.get('downloadId'), function() {
                         callback();
@@ -213,6 +218,7 @@ define([
                         app.dialogs.element('.message-text').text('ASSEMBLING: ' + app.fn.convertBytesToSize(result.responseSize));
                     });
                 },
+                //download all item from server in chunks
                 function(callback) {
                     app.api.getBatch(self.get('downloadId'), function() {
                         callback();
@@ -221,8 +227,21 @@ define([
                     }, function(result) {
                         var percent = Math.floor((result.downloadedRequests / result.totalRequests) * 100);
                         app.dialogs.element('.message-text').text('FETCHING: ' + percent + '%');
-                        self.put(result);
+                        resultStarted++
+                        self.put(result, function() {
+                            resultFinished++;
+                        });
                     });
+                },
+                //wait for database put operation to finish
+                function(callback) {
+                    (function wait() {
+                        if (resultStarted === resultFinished) {
+                            callback();
+                        } else {
+                            setTimeout(wait, 1000);
+                        }
+                    })()
                 }
             ], function(error) {
                 if (error) {

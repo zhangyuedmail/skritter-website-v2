@@ -96,7 +96,9 @@ define([
             event.preventDefault();
             app.dialogs.show().element('.message-title').text('Downloading Data');
             app.dialogs.element('.message-text').text('');
-            app.user.data.downloadAll(app.reload, function() {
+            app.user.data.downloadAll(function() {
+                app.reload();
+            }, function() {
                 app.dialogs.element('.message-title').text('Something went wrong.');
                 app.dialogs.element('.message-text').text('Check your connection and click reload.');
                 app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
