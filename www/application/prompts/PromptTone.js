@@ -79,21 +79,35 @@ define([
          * @method handleInputUp
          */
         handleInputUp: function(points, shape) {
-            var stroke = this.character.recognizeStroke(points, shape);
-            if (stroke) {
-                this.canvas.lastMouseDownEvent = null;
-                if (this.tones.indexOf(stroke.get('tone')) > -1) {
+            if (points && points.length > 5) {
+                var stroke = this.character.recognizeStroke(points, shape);
+                if (stroke) {
+                    this.canvas.lastMouseDownEvent = null;
+                    if (this.tones.indexOf(stroke.get('tone')) > -1) {
+                        this.review.setAt('score', 3);
+                        this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
+                    } else {
+                        this.review.setAt('score', 1);
+                        this.character.reset();
+                        this.character.add(this.character.getTone(this.tones[0]));
+                        this.canvas.drawShape('stroke', this.character.getShape());
+                    }
+                }
+            } else {
+                if (this.tones.indexOf(5) > -1) {
                     this.review.setAt('score', 3);
-                    this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
+                    this.character.reset();
+                    this.character.add(this.character.getTone(5));
+                    this.canvas.drawShape('stroke', this.character.getShape());
                 } else {
                     this.review.setAt('score', 1);
                     this.character.reset();
                     this.character.add(this.character.getTone(this.tones[0]));
                     this.canvas.drawShape('stroke', this.character.getShape());
                 }
-                if (this.character.isComplete()) {
-                    this.renderAnswer();
-                }
+            }
+            if (this.character.isComplete()) {
+                this.renderAnswer();
             }
         },
         /**
