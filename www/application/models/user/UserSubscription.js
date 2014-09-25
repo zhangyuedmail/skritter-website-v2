@@ -57,14 +57,14 @@ define([
             var self = this;
             async.waterfall([
                 function(callback) {
-                    plugins.inappbilling.init(function() {
+                    plugins.billing.init(function() {
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
                 function(callback) {
-                    plugins.inappbilling.getPurchases(function(subscription) {
+                    plugins.billing.getPurchases(function(subscription) {
                         self.set('gplay_subscription', {
                             subscription: subscription[0].productId,
                             package: subscription[0].packageName,
@@ -94,14 +94,14 @@ define([
             var self = this;
             async.series([
                 function(callback) {
-                    plugins.inappbilling.init(function() {
+                    plugins.billing.init(function() {
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
                 function(callback) {
-                    plugins.inappbilling.subscribe(function() {
+                    plugins.billing.subscribe(function() {
                         callback();
                     }, function(error) {
                         callback(error);

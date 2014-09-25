@@ -48,7 +48,6 @@ define([
         renderElements: function() {
             if (this.sub.isExpired()) {
                 this.elements.subStatus.addClass('text-danger').text('Expired');
-                this.elements.subDetail.hide();
                 this.elements.subButtonCancel.hide();
             } else {
                 this.elements.subStatus.addClass('text-success').text('Active');
@@ -63,11 +62,14 @@ define([
                 switch (this.sub.get('subscribed')) {
                     case 'ios':
                         this.elements.subButtonCancel.hide();
+                        this.elements.subButtonMonth.hide();
+                        this.elements.subButtonYear.hide();
                         break;
                     case 'skritter':
                         this.elements.subButtonCancel.hide();
+                        this.elements.subButtonMonth.hide();
+                        this.elements.subButtonYear.hide();
                         break;
-
                 }
             }
             this.elements.accountCountry.val(this.settings.get('country'));
@@ -111,7 +113,7 @@ define([
             this.sub.subscribeGoogle('one.month.sub', function() {
                 self.renderElements();
             }, function(error) {
-                self.elements.subMessage.addClass('text-danger').text('');
+                self.elements.subMessage.addClass('text-danger').text(error);
             });
         },
         /**
@@ -120,6 +122,12 @@ define([
          */
         handleSubscribeYear: function(event) {
             event.preventDefault();
+            var self = this;
+            this.sub.subscribeGoogle('one.year.sub', function() {
+                self.renderElements();
+            }, function(error) {
+                self.elements.subMessage.addClass('text-danger').text(error);
+            });
         },
         /**
          * @method loadTimezones
