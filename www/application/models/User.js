@@ -248,7 +248,18 @@ define([
                         if (self.data.get('lastItemSync')) {
                             callback();
                         } else {
-                            self.data.downloadAll(callback, callback);
+                            self.data.downloadAll(callback, function(error) {
+                                callback(error);
+                            });
+                        }
+                    },
+                    //update subscription from server
+                    function(callback) {
+                        if (app.isLocalhost()) {
+                            callback();
+                        } else {
+                            app.dialogs.element('.message-text').text('CHECKING SUBSCRIPTION');
+                            app.user.subscription.fetch(callback);
                         }
                     },
                     //update user from server
@@ -260,13 +271,13 @@ define([
                             app.user.settings.fetch(callback);
                         }
                     },
-                    //update subscription from server
+                    //run sync for changed items
                     function(callback) {
                         if (app.isLocalhost()) {
                             callback();
                         } else {
-                            app.dialogs.element('.message-text').text('CHECKING SUBSCRIPTION');
-                            app.user.subscription.fetch(callback);
+                            app.dialogs.element('.message-text').text('FINDING ITEMS');
+                            app.user.data.sync(null, callback);
                         }
                     },
                     //load all vocablists
