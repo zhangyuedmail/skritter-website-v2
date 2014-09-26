@@ -29,6 +29,7 @@ define([
          * @type Object
          */
         defaults: {
+            audio: true,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune']
         },

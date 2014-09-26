@@ -22,6 +22,13 @@ define([
             containedVocabIds: []
         },
         /**
+         * @method getAudio
+         * @returns {String}
+         */
+        getAudio: function() {
+            return app.isNative()  ? this.get('writing') : this.get('audio');
+        },
+        /**
          * @method getCanvasCharacter
          * @returns {CanvasCharacter}
          */
@@ -149,7 +156,7 @@ define([
                     html += "</div>";
                 }
             } else {
-                return "<span class='reading-1'><span class='position-1'>" + this.get('reading') + "</span></span>"
+                return "<span class='reading-1'><span class='position-1'>" + this.get('reading') + "</span></span>";
             }
             return html;
         },

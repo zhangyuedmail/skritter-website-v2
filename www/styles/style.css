@@ -230,6 +230,7 @@ body {
     float: left;
 }
 
+
 .prompt-container .field-reading span { margin-right: 5px; }
 .prompt-container .field-reading .reading-hidden { border-bottom: 1px solid #000000; }
 .prompt-container .field-reading .reading-hidden span { visibility: hidden; }
@@ -245,12 +246,21 @@ body {
 .prompt-container .field-writing .writing-hidden span { visibility: hidden; }
 
 
+
 /*** PROMPTS: GRADING BUTTONS ***/
 .prompt-container .grading-container {
     bottom: 0;
     display: none;
     position: absolute;
 }
+
+
+/*** PROMPTS: PROMPT-DEFN ***/
+.prompt-container .prompt-defn { margin-top: 30%; }
+
+
+/*** PROMPTS: PROMPT-RDNG ***/
+.prompt-container .prompt-rdng { margin-top: 30%; }
 
 
 /*** SIDEBARS ***/

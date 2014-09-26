@@ -15,6 +15,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.audio = new Audio();
             this.strokes = {};
             this.loadAll();
         },
@@ -46,6 +47,21 @@ define([
                 this.strokes[strokeId].name = "stroke-" + strokeId;
             }
             return this;
+        },
+        /**
+         * @method playAudio
+         * @param {String} value
+         */
+        playAudio: function(value) {
+            if (app.isNative() && plugins.tts) {
+                plugins.tts.speak(value);
+            } else {
+                if (this.audio.paused) {
+                    var url = app.api.get('root') + app.api.get('tld') + value;
+                    this.audio.src = url;
+                    this.audio.play();
+                }
+            }
         }
     });
 

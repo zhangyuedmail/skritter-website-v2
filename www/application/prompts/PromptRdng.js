@@ -40,6 +40,9 @@ define([
             this.elements.fieldQuestion.hide();
             this.elements.fieldReading.html(this.vocab.getReading());
             this.elements.fieldWriting.html(this.vocab.getWriting());
+            if (app.user.settings.get('audio') && this.vocab.getAudio()) {
+                app.assets.playAudio(this.vocab.getAudio());
+            }
             return this;
         },
         /**
