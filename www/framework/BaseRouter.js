@@ -25,6 +25,7 @@ define([], function() {
                     }
                 }
                 this.currentPage.$("input[type='checkbox']").bootstrapSwitch();
+                this.currentPage.preloadFont();
             }
             if (app.dialogs && app.dialogs.isOpen()) {
                 app.dialogs.hide();

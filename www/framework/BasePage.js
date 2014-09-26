@@ -80,6 +80,18 @@ define([
             } else {
                 event.preventDefault();
             }
+        },
+        /**
+         * @method preloadFont
+         * @returns {View}
+         */
+        preloadFont: function() {
+            if (app.user.getLanguageCode() === 'zh') {
+                this.$('.font-preloader').addClass('chinese-text');
+            } else {
+                this.$('.font-preloader').addClass('japanese-text');
+            }
+            return this;
         }
     });
 });
