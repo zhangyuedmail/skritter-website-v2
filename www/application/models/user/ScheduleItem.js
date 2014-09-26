@@ -106,14 +106,19 @@ define([
                 //contained vocabs
                 function(callback) {
                     var containedVocabIds = result.vocab.get('containedVocabIds');
-                    app.storage.getItems('vocabs', containedVocabIds, function(containedVocabs) {
-                        if (containedVocabIds.length === containedVocabs.length) {
-                            result.containedVocabs = app.user.data.vocabs.add(containedVocabs, {merge: true, silent: true, sort: false});
-                            callback();
-                        } else {
-                            callback('One or more of the contained vocabs is missing.');
-                        }
-                    });
+                    if (part === 'rune' || part === 'tone') {
+                        app.storage.getItems('vocabs', containedVocabIds, function(containedVocabs) {
+                            if (containedVocabIds.length === containedVocabs.length) {
+                                result.containedVocabs = app.user.data.vocabs.add(containedVocabs, {merge: true, silent: true, sort: false});
+                                callback();
+                            } else {
+                                callback('One or more of the contained vocabs is missing.');
+                            }
+                        });
+                    } else {
+                        result.containedVocabs = [];
+                        callback();
+                    }
                 },
                 //sentences
                 function(callback) {

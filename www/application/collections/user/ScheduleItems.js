@@ -112,13 +112,13 @@ define([
                 if (activeParts.indexOf(item.attributes.part) === -1) {
                     continue;
                 }
-                if (activeStyles.indexOf(item.attributes.style) === -1) {
+                if (app.user.isChinese() && activeStyles.indexOf(item.attributes.style) === -1) {
                     continue;
                 }
                 if (this.user.history.hasBase(itemBase)) {
                     continue;
                 }
-                if (app.user.isJapanese() && app.fn.isKana(itemBase)) {
+                if (app.user.isJapanese() && item.equals('part', 'rdng') && app.fn.isKana(itemBase)) {
                     item.set('vocabIds', []);
                     continue;
                 }

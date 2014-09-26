@@ -22,8 +22,9 @@ body {
     position: relative;
 }
 .font-preloader {
-    display: none;
+    position: absolute;
     visibility: hidden;
+    z-index: -1;
 }
 
 
