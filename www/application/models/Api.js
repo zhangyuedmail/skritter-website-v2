@@ -232,6 +232,7 @@ define([
         getBatch: function(batchId, callbackComplete, callbackError, callbackResult) {
             var self = this;
             var downloadedRequests = 0;
+            var batchSize = 29;
             async.waterfall([
                 function(callback) {
                     self.checkBatch(batchId, function(requestIds) {
@@ -249,7 +250,7 @@ define([
                             type: 'GET',
                             data: {
                                 bearer_token: self.getToken(),
-                                request_ids: requestIds.splice(0, 49).join(',')
+                                request_ids: requestIds.slice(0, batchSize).join(',')
                             }
                         }).done(function(data) {
                             var result = {};
@@ -266,6 +267,7 @@ define([
                                 delete result.statusCode;
                                 result.downloadedRequests = downloadedRequests;
                                 result.totalRequests = data.Batch.totalRequests;
+                                requestIds.splice(0, batchSize);
                                 callbackResult(result);
                                 if (requestIds.length > 0) {
                                     setTimeout(download, self.get('timeout'));
