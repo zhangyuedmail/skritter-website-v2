@@ -359,6 +359,7 @@ define([
                 if (skipDialog) {
                     this.remove();
                 } else {
+                    app.sidebars.hide();
                     app.dialogs.show('logout');
                     app.dialogs.element('button.logout').on('vclick', this.remove);
                 }
