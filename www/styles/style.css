@@ -208,6 +208,7 @@ body {
     height: 100%;
     position: relative;
 }
+.prompt-container .field { font-size: 2em; }
 .prompt-container .prompt { position: relative; }
 
 
