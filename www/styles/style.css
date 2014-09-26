@@ -21,6 +21,10 @@ body {
     height: 100%;
     position: relative;
 }
+.font-preloader {
+    display: none;
+    visibility: hidden;
+}
 
 
 /*** BOOTSTRAP ***/
