@@ -26,7 +26,7 @@ define([
         defaults: {
             clientId: 'mcfarljwapiclient',
             clientSecret: 'e3872517fed90a820e441531548b8c',
-            guest: false,
+            guest: undefined,
             root: 'https://beta.skritter',
             timeout: 100,
             tld: location.host.indexOf('.cn') === -1 ? '.com' : '.cn',
@@ -617,7 +617,7 @@ define([
          * @returns {Boolean}
          */
         hasGuest: function() {
-            return this.get('guest');
+            return this.get('guest') ? true : false;
         },
         /**
          * @method isGuestValid
