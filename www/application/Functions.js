@@ -3,10 +3,11 @@
  */
 define([
     'application/Bootstrap',
+    'application/Mapper',
     'application/PinyinConverter',
     'application/Recognizer',
     'application/Shortstraw'
-], function(Bootstrap, PinyinConverter, Recognizer, Shortstraw) {
+], function(Bootstrap, Mapper, PinyinConverter, Recognizer, Shortstraw) {
     /**
      * @method addAllObjectAttributes
      * @param {Array} array
@@ -268,6 +269,11 @@ define([
         return !isNaN(parseFloat(number)) && isFinite(number);
     }
     /**
+     * @property mapper
+     * @typeof {Mapper}
+     */
+    var mapper = Mapper;
+    /**
      * @method mergeObjectArrays
      * @param {Object} object1
      * @param {Object} object2
@@ -381,6 +387,7 @@ define([
         hasKana: hasKana,
         isKana: isKana,
         isNumber: isNumber,
+        mapper: mapper,
         mergeObjectArrays: mergeObjectArrays,
         pad: pad,
         pinyin: pinyin,

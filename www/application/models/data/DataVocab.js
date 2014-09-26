@@ -18,9 +18,7 @@ define([
          * @property defaults
          * @type Object
          */
-        defaults: {
-            containedVocabIds: []
-        },
+        defaults: {},
         /**
          * @method getAudio
          * @returns {String}
@@ -49,9 +47,13 @@ define([
         getCharacters: function() {
             var characters = [];
             if (this.has('containedVocabIds')) {
-                var containedVocabs = this.getContainedVocabs();
-                for (var i = 0, length = containedVocabs.length; i < length; i++) {
-                    characters.push(containedVocabs[i].get('writing'));
+                var containedVocabIds = this.get('containedVocabIds');
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    if (this.isChinese()) {
+                        characters.push(app.fn.mapper.fromBase(containedVocabIds[i]));
+                    } else {
+                        characters.push(containedVocabIds[i].split('-')[1]);
+                    }
                 }
             } else {
                 characters.push(this.get('writing'));
@@ -65,13 +67,15 @@ define([
          */
         getContainedItemIds: function(part) {
             var containedItemIds = [];
-            var containedVocabIds = this.get('containedVocabIds');
-            for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                if (['rune', 'tone'].indexOf(part) === -1) {
-                    var splitId = containedVocabIds[i].split('-');
-                    containedItemIds.push(app.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
-                } else {
-                    containedItemIds.push(app.user.id + '-' + containedVocabIds[i] + '-' + part);
+            if (this.has('containedVocabIds')) {
+                var containedVocabIds = this.get('containedVocabIds');
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    if (['rune', 'tone'].indexOf(part) === -1) {
+                        var splitId = containedVocabIds[i].split('-');
+                        containedItemIds.push(app.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
+                    } else {
+                        containedItemIds.push(app.user.id + '-' + containedVocabIds[i] + '-' + part);
+                    }
                 }
             }
             return containedItemIds;
@@ -82,7 +86,7 @@ define([
          */
         getContainedVocabs: function() {
             var vocabs = [];
-            var containedIds = this.get('containedVocabIds').length ? this.get('containedVocabIds') :[this.id];
+            var containedIds = this.get('containedVocabIds').length ? this.get('containedVocabIds') : [this.id];
             for (var i = 0, length = containedIds.length; i < length; i++) {
                 vocabs.push(this.collection.get(containedIds[i]));
             }
