@@ -87,7 +87,7 @@ define([
                     callback(data);
                 };
                 transaction.onerror = function (error) {
-                    callback(undefined, error);
+                    callback(error);
                 };
                 transaction.objectStore(table).openCursor().onsuccess = function (event) {
                     var cursor = event.target.result;
@@ -98,6 +98,28 @@ define([
                 };
             } else {
                 callback(data);
+            }
+        },
+        /**
+         * @method getCount
+         * @param {String} table
+         * @param {Function} callback
+         */
+        getCount: function(table, callback) {
+            var count = 0;
+            if (table) {
+                var transaction = this.get('database').transaction(table, 'readonly');
+                transaction.oncomplete = function () {
+                    callback(count);
+                };
+                transaction.onerror = function (error) {
+                    callback(error);
+                };
+                transaction.objectStore(table).count().onsuccess = function(event) {
+                    count = event.target.result;
+                };
+            } else {
+                callback(count);
             }
         },
         /**
@@ -136,30 +158,45 @@ define([
          * @param {Function} callback
          */
         getSchedule: function(callback) {
+            var self = this;
             var data = [];
-            var transaction = this.get('database').transaction('items', 'readonly');
-            transaction.oncomplete = function() {
-                callback(data);
-            };
-            transaction.onerror = function(error) {
-                callback(undefined, error);
-            };
-            transaction.objectStore('items').openCursor().onsuccess = function(event) {
-                var cursor = event.target.result;
-                if (cursor) {
-                    data.push({
-                        id: cursor.value.id,
-                        part: cursor.value.part,
-                        style: cursor.value.style,
-                        next: cursor.value.next,
-                        last: cursor.value.last,
-                        reviews: cursor.value.reviews,
-                        successes: cursor.value.successes,
-                        vocabIds: cursor.value.vocabIds
-                    });
-                    cursor.continue();
-                }
-            };
+            var cutoff = moment().add(1, 'months').unix();
+            var offset = 0;
+            function isReady(item) {
+                return !item.reviews || item.next < cutoff;
+            }
+            function pushItem(item) {
+                data.push({
+                    id: item.id,
+                    part: item.part,
+                    style: item.style,
+                    next: item.next,
+                    last: item.last,
+                    reviews: item.reviews,
+                    successes: item.successes,
+                    vocabIds: item.vocabIds
+                });
+            }
+            this.getCount('items', function(count) {
+                var transaction = self.get('database').transaction('items', 'readonly');
+                transaction.oncomplete = function() {
+                    callback(data);
+                };
+                transaction.onerror = function(error) {
+                    callback(error);
+                };
+                transaction.objectStore('items').openCursor().onsuccess = function(event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        if ((count < 5000 && cursor.value.vocabIds.length) || isReady(cursor.value)) {
+                            pushItem(cursor.value);
+                        } else {
+                            offset++;
+                        }
+                        cursor.continue();
+                    }
+                };
+            });
         },
         /**
          * @method isLoaded
