@@ -223,11 +223,11 @@ define([
         return Math.floor((1 + Math.random()) * 0x100000000).toString(16).substring(1);
     }
     /**
-     * @method isKana
+     * @method hasKana
      * @param {String} text
      * @returns {Boolean}
      */
-    function isKana(text) {
+    function hasKana(text) {
         var chars = text.split('');
         if (chars.length > 0) {
             for (var i = 0, length = chars.length; i < length; i++) {
@@ -240,6 +240,25 @@ define([
             }
         }
         return false;
+    }
+    /**
+     * @method isKana
+     * @param {String} text
+     * @returns {Boolean}
+     */
+    function isKana(text) {
+        var chars = text.split('');
+        if (chars.length > 0) {
+            for (var i = 0, length = chars.length; i < length; i++) {
+                var charCode = text.charCodeAt(i);
+                if (!(charCode >= 12353 && charCode <= 12436) &&
+                    !(charCode >= 12449 && charCode <= 12540) &&
+                    charCode !== 65374) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     /**
      * @method isNumber
@@ -359,6 +378,7 @@ define([
         getBoundingRectangle: getBoundingRectangle,
         getDistance: getDistance,
         getGuid: getGuid,
+        hasKana: hasKana,
         isKana: isKana,
         isNumber: isNumber,
         mergeObjectArrays: mergeObjectArrays,

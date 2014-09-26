@@ -105,6 +105,7 @@ define([
             index = index ? index : 0;
             for (var i = 0, length = this.sort().length; i < length; i++) {
                 var item = this.at(i);
+                var itemBase = item.id.split('-')[2];
                 if (!item.attributes.vocabIds.length) {
                     continue;
                 }
@@ -114,7 +115,11 @@ define([
                 if (activeStyles.indexOf(item.attributes.style) === -1) {
                     continue;
                 }
-                if (this.user.history.hasBase(item.id.split('-')[2])) {
+                if (this.user.history.hasBase(itemBase)) {
+                    continue;
+                }
+                if (app.user.isJapanese() && app.fn.isKana(itemBase)) {
+                    item.set('vocabIds', []);
                     continue;
                 }
                 if (index > 0) {
