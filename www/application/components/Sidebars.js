@@ -88,7 +88,9 @@ define([
          */
         hide: function(speed) {
             if (this.enabled) {
-                $('.navbar-menu.toggle').removeClass('active');
+                if (this.name === 'menu') {
+                    $('.navbar-menu.toggle').removeClass('active');
+                }
                 this.sidebar.removeClass('expanded');
                 this.sidebar.hide('slide', {direction: this.direction}, speed ? speed : this.speed);
             }
@@ -126,7 +128,9 @@ define([
          */
         show: function(speed) {
             if (this.enabled) {
-                $('.navbar-menu.toggle').addClass('active');
+                if (this.name === 'menu') {
+                    $('.navbar-menu.toggle').addClass('active');
+                }
                 this.sidebar.addClass('expanded');
                 this.sidebar.show('slide', {direction: this.direction}, speed ? speed : this.speed);
             }
