@@ -157,6 +157,9 @@ define([
                         }
 
                     }
+                    if (a < segments.length - 1) {
+                        html += ", ";
+                    }
                     html += "</div>";
                 }
             } else {
