@@ -150,13 +150,6 @@ define([
             return this.getLanguageCode() === 'zh' ? true : false;
         },
         /**
-         * @method isGuest
-         * @returns {Boolean}
-         */
-        isGuest: function() {
-            return this.id === 'guest';
-        },
-        /**
          * @method isJapanese
          * @returns {Boolean}
          */
@@ -250,10 +243,15 @@ define([
                             callback();
                         }
                     },
-                    //perform initial item sync
+                    //sync items from server
                     function(callback) {
                         if (self.data.get('lastItemSync')) {
-                            callback();
+                            if (app.isLocalhost()) {
+                                callback();
+                            } else {
+                                app.dialogs.element('.message-text').text('UPDATING ITEMS');
+                                app.user.data.sync(null, callback);
+                            }
                         } else {
                             self.data.downloadAll(callback, function(error) {
                                 callback(error);
@@ -278,13 +276,24 @@ define([
                             app.user.settings.fetch(callback);
                         }
                     },
-                    //run sync for changed items
+                    //load tts plugin with language locale
                     function(callback) {
-                        if (app.isLocalhost()) {
-                            callback();
+                        if (plugins.tts) {
+                            app.dialogs.element('.message-text').text('STARTING TTS');
+                            async.series([
+                                function(callback) {
+                                    plugins.tts.startup(function() {
+                                        callback();
+                                    });
+                                },
+                                function(callback) {
+                                    plugins.tts.setLanguage(self.getLanguageCode(), function() {
+                                        callback();
+                                    });
+                                }
+                            ], callback);
                         } else {
-                            app.dialogs.element('.message-text').text('FINDING ITEMS');
-                            app.user.data.sync(null, callback);
+                            callback();
                         }
                     },
                     //load all schedule items
@@ -303,7 +312,7 @@ define([
                     //load all reviews
                     function(callback) {
                         self.reviews.loadAll(callback);
-                    },
+                    }
                 ], function(error) {
                     if (error) {
                         app.dialogs.element('.message-title').text('Something went wrong.');

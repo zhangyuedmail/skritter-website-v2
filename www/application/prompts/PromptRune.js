@@ -55,6 +55,9 @@ define([
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldReading.html(this.vocab.getReading());
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
+            if (app.user.settings.get('audio') && this.vocab.getAudio() && this.review.isFirst()) {
+                app.assets.playAudio(this.vocab.getAudio());
+            }
             return this;
         },
         /**
