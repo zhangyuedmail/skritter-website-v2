@@ -16,13 +16,14 @@
                     document.addEventListener('deviceready', loadApplication, false);
                 });
             } else {
-                loadApplication();
+                $(document).ready(loadApplication);
             }
         });
     }
 
     function loadApplication() {
         requirejs(['application/Application'], function(Application) {
+            window.plugins = $.extend({}, window.plugins);
             window.app = $.extend(new Application(), window.app);
             window.app.start();
         });

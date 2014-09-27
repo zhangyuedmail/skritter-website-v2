@@ -195,6 +195,26 @@ define([
                         app.dialogs.show('default', callback).element('.message-title').text('Getting Started');
                         app.dialogs.element('.message-text').text('');
                     },
+                    //load tts plugin with language locale
+                    function(callback) {
+                        if (plugins.tts) {
+                            app.dialogs.element('.message-text').text('STARTING TTS');
+                            async.series([
+                                function(callback) {
+                                    plugins.tts.startup(function() {
+                                        callback();
+                                    });
+                                },
+                                function(callback) {
+                                    plugins.tts.setLanguage(self.getLanguageCode(), function() {
+                                        callback();
+                                    });
+                                }
+                            ], callback);
+                        } else {
+                            callback();
+                        }
+                    },
                     //load user storage instance
                     function(callback) {
                         app.storage.open(self.id, callback);
@@ -204,6 +224,7 @@ define([
                         if (self.data.get('expires') - moment().unix() > 604800) {
                             callback();
                         } else {
+                            app.dialogs.element('.message-text').text('REFRESHING TOKEN');
                             app.api.refreshToken(self.data.get('refresh_token'), function(data) {
                                 self.data.set(data);
                                 callback();
@@ -274,26 +295,6 @@ define([
                         } else {
                             app.dialogs.element('.message-text').text('UPDATING USER');
                             app.user.settings.fetch(callback);
-                        }
-                    },
-                    //load tts plugin with language locale
-                    function(callback) {
-                        if (plugins.tts) {
-                            app.dialogs.element('.message-text').text('STARTING TTS');
-                            async.series([
-                                function(callback) {
-                                    plugins.tts.startup(function() {
-                                        callback();
-                                    });
-                                },
-                                function(callback) {
-                                    plugins.tts.setLanguage(self.getLanguageCode(), function() {
-                                        callback();
-                                    });
-                                }
-                            ], callback);
-                        } else {
-                            callback();
                         }
                     },
                     //load all schedule items

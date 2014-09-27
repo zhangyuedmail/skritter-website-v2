@@ -72,11 +72,6 @@ app = (function() {
          */
         isNative: function() {
             return location.protocol === 'file:';
-        },
-        /**
-         * @property plugins
-         * @type {Object}
-         */
-        plugins: {}
+        }
     };
 })();
