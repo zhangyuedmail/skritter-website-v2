@@ -47,6 +47,7 @@ define([
                 this.renderQuestion();
             }
             this.reset().resize();
+            this.updateVocabSidebar();
             return this;
         },
         /**
@@ -73,6 +74,11 @@ define([
             this.elements.fieldQuestion = this.$('.field-question');
             this.elements.fieldReading = this.$('.field-reading');
             this.elements.fieldWriting = this.$('.field-writing');
+            this.elements.infoBan = $('#sidebar-info .info-ban');
+            this.elements.infoDefinition = $('#sidebar-info .info-definition');
+            this.elements.infoReading = $('#sidebar-info .info-reading');
+            this.elements.infoStar = $('#sidebar-info .info-star');
+            this.elements.infoWriting = $('#sidebar-info .info-writing');
             return this;
         },
         /**
@@ -106,6 +112,8 @@ define([
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             this.listenTo(this.gradingButtons, 'complete', this.handleGradingButtonsCompleted);
             this.listenTo(this.gradingButtons, 'selected', this.handleGradingButtonsSelected);
+            this.listenTo(app.sidebars, 'click:info-ban', this.toggleBanned);
+            this.listenTo(app.sidebars, 'click:info-star', this.toggleStarred);
             return this;
         },
         /**
@@ -166,6 +174,52 @@ define([
          * @returns {Prompt}
          */
         resize: function() {
+            return this;
+        },
+        /**
+         * @method toggleBanned
+         */
+        toggleBanned: function() {
+            if (this.vocab.isBanned()) {
+                this.vocab.set('bannedParts', []);
+            } else {
+                this.vocab.set('bannedParts', ['rune']);
+            }
+            this.updateVocabSidebar();
+        },
+        /**
+         * @method toggleStarred
+         */
+        toggleStarred: function() {
+            if (this.vocab.isStarred()) {
+                this.vocab.set('starred', false);
+            } else {
+                this.vocab.set('starred', true);
+            }
+            this.updateVocabSidebar();
+        },
+        /**
+         * @method updateVocabSidebar
+         * @returns {Prompt}
+         */
+        updateVocabSidebar: function() {
+            this.elements.infoDefinition.text(this.vocab.getDefinition());
+            this.elements.infoReading.html(this.vocab.getReading());
+            this.elements.infoWriting.html(this.vocab.getWriting());
+            if (this.vocab.isBanned()) {
+                this.elements.infoBan.addClass('fa-star text-danger');
+                this.elements.infoBan.removeClass('text-muted');
+            } else {
+                this.elements.infoBan.addClass('text-muted');
+                this.elements.infoBan.removeClass('fa-star text-danger');
+            }
+            if (this.vocab.isStarred()) {
+                this.elements.infoStar.addClass('fa-star text-warning');
+                this.elements.infoStar.removeClass('fa-star-o');
+            } else {
+                this.elements.infoStar.addClass('fa-star-o');
+                this.elements.infoStar.removeClass('fa-star text-warning');
+            }
             return this;
         },
         /**

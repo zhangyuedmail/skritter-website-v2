@@ -296,3 +296,17 @@ body {
     border-left: 2px solid #006687;
     right: 0;
 }
+
+/*** SIDEBARS: INFO ***/
+#sidebar-info {
+    padding-top: 15px;
+}
+#sidebar-info .info {
+    font-size: 1.2em;
+}
+#sidebar-info .info-reading {
+    font-size: 2em;
+}
+#sidebar-info .info-writing {
+    font-size: 3em;
+}

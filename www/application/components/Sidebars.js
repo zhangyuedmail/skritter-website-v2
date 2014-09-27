@@ -41,6 +41,8 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BaseView.prototype.events, {
+            'vclick #sidebar-info .info-ban': 'handleInfoBanClicked',
+            'vclick #sidebar-info .info-star': 'handleInfoStarClicked',
             'swipeleft .sidebar': 'handleSidebarSwipeLeft',
             'swiperight .sidebar': 'handleSidebarSwipeRight'
         }),
@@ -60,6 +62,22 @@ define([
          */
         enable: function() {
             this.enabled = true;
+        },
+        /**
+         * @method handleInfoBanClicked
+         * @param {Event} event
+         */
+        handleInfoBanClicked: function(event) {
+            event.preventDefault();
+            this.trigger('click:info-ban');
+        },
+        /**
+         * @method handleInfoStarClicked
+         * @param {Event} event
+         */
+        handleInfoStarClicked: function(event) {
+            event.preventDefault();
+            this.trigger('click:info-star');
         },
         /**
          * @method handleSidebarSwipeLeft

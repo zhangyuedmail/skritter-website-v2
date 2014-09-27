@@ -94,7 +94,6 @@ define([], function() {
             this.$el.empty();
             this.stopListening();
             this.undelegateEvents();
-            this.destroy();
             return this;
         }
     });

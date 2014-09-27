@@ -222,6 +222,13 @@ define([
             return html;
         },
         /**
+         * @method isBanned
+         * @returns {Boolean}
+         */
+        isBanned: function() {
+            return this.get('bannedParts').length ? true : false;
+        },
+        /**
          * @method isChinese
          * @returns {Boolean}
          */
@@ -234,6 +241,13 @@ define([
          */
         isJapanese: function() {
             return this.get('lang') === 'ja';
+        },
+        /**
+         * @method isStarred
+         * @returns {Boolean}
+         */
+        isStarred: function() {
+            return this.get('starred');
         }
     });
 
