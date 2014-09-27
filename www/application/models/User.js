@@ -221,6 +221,20 @@ define([
                                     }, function() {
                                         callback();
                                     });
+                                },
+                                function() {
+                                    plugins.tts.pitch(self.settings.get('audioPitch'), function() {
+                                        callback();
+                                    }, function() {
+                                        callback();
+                                    });
+                                },
+                                function() {
+                                    plugins.tts.speed(self.settings.get('audioSpeed'), function() {
+                                        callback();
+                                    }, function() {
+                                        callback();
+                                    });
                                 }
                             ], callback);
                         } else {

@@ -30,6 +30,8 @@ define([
          */
         defaults: {
             audio: true,
+            audioPitch: '100',
+            audioSpeed: '60',
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune']
         },
