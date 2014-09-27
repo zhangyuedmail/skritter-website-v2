@@ -105,7 +105,7 @@ define([
                 },
                 //contained vocabs
                 function(callback) {
-                    var containedVocabIds = result.vocab.get('containedVocabIds');
+                    var containedVocabIds = result.vocab.has('containedVocabIds') ? result.vocab.get('containedVocabIds') : [];
                     if (part === 'rune' || part === 'tone') {
                         app.storage.getItems('vocabs', containedVocabIds, function(containedVocabs) {
                             if (containedVocabIds.length === containedVocabs.length) {

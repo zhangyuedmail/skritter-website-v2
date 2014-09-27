@@ -86,7 +86,7 @@ define([
          */
         getContainedVocabs: function() {
             var vocabs = [];
-            var containedIds = this.get('containedVocabIds').length ? this.get('containedVocabIds') : [this.id];
+            var containedIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [this.id];
             for (var i = 0, length = containedIds.length; i < length; i++) {
                 vocabs.push(this.collection.get(containedIds[i]));
             }
