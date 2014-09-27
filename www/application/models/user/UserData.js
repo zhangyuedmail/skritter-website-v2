@@ -62,8 +62,8 @@ define([
         /**
          * @method addItems
          * @param {Object} [options]
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         addItems: function(options, callbackSuccess, callbackError) {
             var self = this;

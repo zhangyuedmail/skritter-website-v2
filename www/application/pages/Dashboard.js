@@ -56,8 +56,17 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-add-new': 'handleButtonAddNewClicked',
             'vclick #button-sync': 'handleButtonSyncClicked'
         }),
+        /**
+         * @method handleButtonAddNewClicked
+         * @param {Event} event
+         */
+        handleButtonAddNewClicked: function(event) {
+            event.preventDefault();
+            app.user.data.addItems({limit: 1, showDialog: true});
+        },
         /**
          * @method handleButtonSyncClicked
          * @param {Event} event

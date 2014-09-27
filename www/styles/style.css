@@ -229,9 +229,11 @@ body {
 .prompt-container .detail-container {
     background-color: #ffffff;
     float: left;
+    overflow-y: auto;
 }
+.prompt-container .detail-container .field { clear: both; }
 
-
+.prompt-container .field-reading div { display: inline; }
 .prompt-container .field-reading span { margin-right: 5px; }
 .prompt-container .field-reading .reading-hidden { border-bottom: 1px solid #000000; }
 .prompt-container .field-reading .reading-hidden span { visibility: hidden; }
