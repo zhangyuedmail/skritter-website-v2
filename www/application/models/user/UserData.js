@@ -67,6 +67,7 @@ define([
          */
         addItems: function(options, callbackSuccess, callbackError) {
             var self = this;
+            var now = moment().unix();
             options = options ? options : {};
             options.limit = options.limit ? options.limit : 1;
             if (options.showDialog) {
@@ -120,7 +121,7 @@ define([
                     if (options.skipSync) {
                         callback();
                     } else {
-                        self.sync(function() {
+                        self.sync({includeAll: true, offset: now}, function() {
                             callback();
                         }, function(error) {
                             callback(error);
@@ -306,7 +307,17 @@ define([
             var resultStarted = 0;
             var resultFinished = 0;
             options = options ? options : {};
+            options.includeAll = options.includeAll ? options.includeAll : false;
             async.waterfall([
+                //post review to server first
+                function(callback) {
+                    app.user.reviews.save(function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                },
+                //batch request to fetch all changed items
                 function(callback) {
                     app.api.requestBatch([
                         {
@@ -315,13 +326,13 @@ define([
                             params: {
                                 lang: app.user.getLanguageCode(),
                                 sort: 'changed',
-                                offset: self.get('lastItemSync'),
-                                include_vocabs: 'true',
+                                offset: options.offset || self.get('lastItemSync'),
+                                include_vocabs: (options.includeVocabs || options.includeAll).toString(),
                                 include_sentences: 'false',
-                                include_strokes: 'true',
-                                include_heisigs: 'true',
-                                include_top_mnemonics: 'true',
-                                include_decomps: 'true'
+                                include_strokes: (options.includeStrokes || options.includeAll).toString(),
+                                include_heisigs: (options.includeHeisigs || options.includeAll).toString(),
+                                include_top_mnemonics: (options.includeTopMnemonics || options.includeAll).toString(),
+                                include_decomps: (options.includeDecomps || options.includeAll).toString()
                             },
                             spawner: true
                         }
@@ -331,6 +342,7 @@ define([
                         callback(error);
                     });
                 },
+                //wait for the batch request to finish
                 function(batch, callback) {
                     app.api.checkBatch(batch.id, function() {
                         callback(null, batch);
@@ -338,13 +350,14 @@ define([
                         callback(error);
                     }, function(result) {});
                 },
+                //download back in controlled chunks
                 function(batch, callback) {
                     app.api.getBatch(batch.id, function() {
                         callback();
                     }, function(error) {
                         callback(error);
                     }, function(result) {
-                        console.log('SYNCING:', result.Items ? result.Items.length : 0);
+                        console.log('SYNC/DOWN:', result.Items ? result.Items.length : 0);
                         resultStarted++;
                         self.user.schedule.insert(result.Items);
                         self.put(result, function() {

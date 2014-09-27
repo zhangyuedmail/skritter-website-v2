@@ -78,23 +78,29 @@ define([
             });
         },
         /**
-         * @method sync
-         * @param {Function} callback
+         * @method save
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        sync: function(callback) {
+        save: function(callbackSuccess, callbackError) {
             var self = this;
             var batch = this.getBatch();
-            app.api.postReviews(batch, function(posted) {
-                var postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
-                console.log('POST:', posted.length);
-                app.storage.removeItems('reviews', postedIds, function() {
-                    self.remove(postedIds);
-                    callback();
+            if (this.length > 1) {
+                app.api.postReviews(batch, function(posted) {
+                    var postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
+                    console.log('SYNC/UP:', posted.length);
+                    app.storage.removeItems('reviews', postedIds, function() {
+                        self.remove(postedIds);
+                        callbackError();
+                    });
+                }, function(error, posted) {
+                    console.error('POST ERROR:', error, posted);
+                    callback(error);
                 });
-            }, function(error, posted) {
-                console.error('POST ERROR:', error, posted);
-                callback(error);
-            });
+            } else {
+                console.log('SYNC/UP:', 0);
+                callbackSuccess();
+            }
         },
         /**
          * @method updateHistory
