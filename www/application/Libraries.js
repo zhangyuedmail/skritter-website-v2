@@ -3,6 +3,7 @@ define([
     'fastclick',
     'handlebars',
     'moment.timezone',
+    'raygun',
     'backbone.routefilter',
     'bootstrap.switch',
     'createjs.easel',
@@ -10,7 +11,6 @@ define([
     'jquery.mobile',
     'jquery.ui',
     'modernizr',
-    'raygun',
     'require.i18n',
     'require.text'
 ], function(Async, FastClick, Handlebars, Moment) {
@@ -18,4 +18,5 @@ define([
     window.fastclick = new FastClick(document.body);
     window.handlebars = Handlebars;
     window.moment = Moment;
+    window.raygun = Raygun.noConflict();
 });

@@ -195,6 +195,14 @@ define([
                         app.dialogs.show('default', callback).element('.message-title').text('Getting Started');
                         app.dialogs.element('.message-text').text('');
                     },
+                    //start tracking authenticated user with raygun
+                    function(callback) {
+                        raygun.setUser(self.settings.get('name'), false, self.settings.get('email'));
+                        raygun.setVersion(app.getVersion());
+                        raygun.withCustomData(self.settings.getCustomData());
+                        raygun.withTags(self.settings.getTags());
+                        callback();
+                    },
                     //load tts plugin with language locale
                     function(callback) {
                         if (plugins.tts) {
@@ -203,10 +211,14 @@ define([
                                 function(callback) {
                                     plugins.tts.startup(function() {
                                         callback();
+                                    }, function() {
+                                        callback();
                                     });
                                 },
                                 function(callback) {
                                     plugins.tts.setLanguage(self.getLanguageCode(), function() {
+                                        callback();
+                                    }, function() {
                                         callback();
                                     });
                                 }

@@ -12,6 +12,7 @@
     function loadLibraries() {
         requirejs(['application/Libraries'], function() {
             if (app.isNative()) {
+                raygun.init('HovAfmmtQxgDLtXszGJ7NA==').attach().setUser('guest', true);
                 requirejs(['cordova.js'], function() {
                     document.addEventListener('deviceready', loadApplication, false);
                 });

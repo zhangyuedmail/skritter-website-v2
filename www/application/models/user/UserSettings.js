@@ -75,11 +75,37 @@ define([
             }
         },
         /**
+         * @method getCustomData
+         * @returns {Object}
+         */
+        getCustomData: function() {
+            return {};
+        },
+        /**
          * @method getEnabledParts
          * @returns {Array}
          */
         getEnabledParts: function() {
             return this.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+        },
+        /**
+         * @method getTags
+         * @returns {Array}
+         */
+        getTags: function() {
+            var tags = [];
+            if (this.user.isChinese()) {
+                if (this.get('reviewSimplified') && this.get('reviewTraditional')) {
+                    tags = ['chinese', 'simplified', 'traditional'];
+                } else if (this.get('reviewSimplified')) {
+                    tags = ['chinese', 'simplified', 'traditional'];
+                } else if (this.get('reviewTraditional')) {
+                    tags = ['chinese', 'traditional'];
+                }
+            } else if (this.user.isJapanese()) {
+                tags = ['japanese'];
+            }
+            return tags;
         },
         /**
          * @method setActiveParts

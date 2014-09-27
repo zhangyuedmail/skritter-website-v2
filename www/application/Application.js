@@ -45,6 +45,13 @@ define([
             versionCode: '@@versionCode'
         },
         /**
+         * @method getVersion
+         * @returns {String}
+         */
+        getVersion: function() {
+            return this.get('version') === '@@version' ? 'edge' : this.get('version');
+        },
+        /**
          * @method start
          */
         start: function() {
