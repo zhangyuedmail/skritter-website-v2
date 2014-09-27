@@ -37,23 +37,35 @@ define([
             'vclick #button-skip': 'handleButtonSkipClicked'
         }),
         /**
+         * @method checkPassword
+         * @param {String} password
+         * @returns {Boolean}
+         */
+        checkPassword: function(password) {
+            return password.split('').length > 5;
+        },
+        /**
          * @method handleButtonCreateClicked
          * @param {Event} event
          */
         handleButtonCreateClicked: function(event) {
             event.preventDefault();
             var self = this;
-            this.disableForm().elements.message.empty();
-            app.user.createNew({
-                email: this.elements.email.val(),
-                name: this.elements.username.val(),
-                password: this.elements.password.val()
-            }, function() {
-                app.reload();
-            }, function(error) {
-                self.enableForm().elements.message.text(error.responseJSON.message);
-                app.dialogs.hide();
-            });
+            if (this.checkPassword(this.elements.password.val())) {
+                this.disableForm().elements.message.empty();
+                app.user.createNew({
+                    email: this.elements.email.val(),
+                    name: this.elements.username.val(),
+                    password: this.elements.password.val()
+                }, function() {
+                    app.reload();
+                }, function(error) {
+                    self.enableForm().elements.message.text(error.responseJSON.message);
+                    app.dialogs.hide();
+                });
+            } else {
+                self.enableForm().elements.message.text('Password must be at least 6 characters.');
+            }
         },
         /**
          * @method handleButtonSkipClicked
