@@ -46,6 +46,21 @@ define([
             return this;
         },
         /**
+         * @method events
+         * @returns {Object}
+         */
+        events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-info': 'handleInfoButtonClicked'
+        }),
+        /**
+         * @method handleInfoButtonClicked
+         * @param {Event} event
+         */
+        handleInfoButtonClicked: function(review) {
+            event.preventDefault();
+            app.sidebars.select('info').toggle();
+        },
+        /**
          * @method handlePromptComplete
          * @param {DataReview} review
          */

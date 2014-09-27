@@ -56,7 +56,6 @@ body {
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
 
 
-
 /*** DIALOGS: LIST CONFIRMATION ***/
 .dialog-list-confirmation .list-image img { max-width: 100px; }
 
@@ -232,7 +231,6 @@ body {
     overflow-y: auto;
 }
 .prompt-container .detail-container .field { clear: both; }
-
 .prompt-container .field-reading div { display: inline; }
 .prompt-container .field-reading span { margin-right: 5px; }
 .prompt-container .field-reading .reading-hidden { border-bottom: 1px solid #000000; }
@@ -247,7 +245,6 @@ body {
 .prompt-container .field-writing span { margin-right: 5px; }
 .prompt-container .field-writing .writing-hidden { border-bottom: 1px solid #000000; }
 .prompt-container .field-writing .writing-hidden span { visibility: hidden; }
-
 
 
 /*** PROMPTS: GRADING BUTTONS ***/
@@ -281,7 +278,6 @@ body {
 }
 .sidebar {
     background-color: #ffffff;
-    border-right: 2px solid #006687;
     display: none;
     height: 100%;
     overflow-y: auto;
@@ -291,4 +287,12 @@ body {
     top: 0;
     z-index: 9100;
     width: 300px;
+}
+.sidebar.left {
+    border-right: 2px solid #006687;
+    left: 0;
+}
+.sidebar.right {
+    border-left: 2px solid #006687;
+    right: 0;
 }

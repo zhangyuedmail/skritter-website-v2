@@ -15,6 +15,7 @@ define([
          * @method initialize
          */
         initialize: function() {
+            this.direction = 'left';
             this.enabled = true;
             this.name = 'default';
             this.sidebar = undefined;
@@ -40,7 +41,8 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BaseView.prototype.events, {
-            'swipeleft .sidebar': 'handleSidebarSwipeLeft'
+            'swipeleft .sidebar': 'handleSidebarSwipeLeft',
+            'swiperight .sidebar': 'handleSidebarSwipeRight'
         }),
         /**
          * @method disable
@@ -65,7 +67,19 @@ define([
          */
         handleSidebarSwipeLeft: function(event) {
             event.preventDefault();
-            this.hide();
+            if (this.direction === 'left') {
+                this.hide();
+            }
+        },
+        /**
+         * @method handleSidebarSwipeRight
+         * @param {Event} event
+         */
+        handleSidebarSwipeRight: function(event) {
+            event.preventDefault();
+            if (this.direction === 'right') {
+                this.hide();
+            }
         },
         /**
          * @method hide
@@ -76,7 +90,7 @@ define([
             if (this.enabled) {
                 $('.navbar-menu.toggle').removeClass('active');
                 this.sidebar.removeClass('expanded');
-                this.sidebar.hide('slide', {direction: 'left'}, speed ? speed : this.speed);
+                this.sidebar.hide('slide', {direction: this.direction}, speed ? speed : this.speed);
             }
             return this;
         },
@@ -95,9 +109,11 @@ define([
         select: function(name) {
             var sidebar = this.$('#sidebar-' + name);
             if (sidebar.length) {
+                this.direction = sidebar.hasClass('right') ? 'right' : 'left';
                 this.name = name;
                 this.sidebar = sidebar;
             } else {
+                this.direction = 'left';
                 this.name = 'default';
                 this.sidebar = this.$('#sidebar-default');
             }
@@ -112,7 +128,7 @@ define([
             if (this.enabled) {
                 $('.navbar-menu.toggle').addClass('active');
                 this.sidebar.addClass('expanded');
-                this.sidebar.show('slide', {direction: 'left'}, speed ? speed : this.speed);
+                this.sidebar.show('slide', {direction: this.direction}, speed ? speed : this.speed);
             }
             return this;
         },

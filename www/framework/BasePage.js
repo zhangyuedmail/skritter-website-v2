@@ -26,7 +26,7 @@ define([
         events: _.extend({}, BaseView.prototype.events, {
                 'vclick .content-container': 'handleContentContainerClicked',
                 'vclick .navbar-item': 'handleNavbarItemClicked',
-                'vclick .navbar-menu.toggle': 'handleSidebarToggleClicked'
+                'vclick .navbar-menu.toggle': 'handleMenuToggleClicked'
             }
         ),
         /**
@@ -71,12 +71,12 @@ define([
             }
         },
         /**
-         * @method handleSidebarToggleClicked
+         * @method handleMenuToggleClicked
          * @param {Event} event
          */
-        handleSidebarToggleClicked: function(event) {
+        handleMenuToggleClicked: function(event) {
             if (app.sidebars) {
-                app.sidebars.toggle();
+                app.sidebars.select('menu').toggle();
             } else {
                 event.preventDefault();
             }
