@@ -49,6 +49,7 @@ define([
             app.dialogs.show().element('.message-title').text('Logging In');
             this.disableForm().elements.message.empty();
             app.user.login(username, password, function() {
+                app.api.clearGuest();
                 app.reload();
             }, function(error) {
                 self.enableForm().elements.message.text(error.responseJSON.message);
