@@ -104,19 +104,19 @@ define([
             var contentWidth = app.router.currentPage.getContentWidth();
             if (app.isPortrait()) {
                 this.$el.css({
-                    'border-bottom': '2px solid #000000',
+                    'border-bottom': '1px solid #000000',
                     'border-right': 'none',
-                    height: contentHeight - canvasSize - 2,
+                    height: contentHeight - canvasSize - 1,
                     'overflow-y': 'auto',
                     width: canvasSize
                 });
             } else {
                 this.$el.css({
                     'border-bottom': 'none',
-                    'border-right': '2px solid #000000',
+                    'border-right': '1px solid #000000',
                     height: canvasSize,
                     'overflow-y': 'auto',
-                    width: contentWidth - canvasSize - 2
+                    width: contentWidth - canvasSize - 1
                 });
             }
             return this;

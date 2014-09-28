@@ -43,8 +43,9 @@ define([
             var data = Strokes.getData();
             this.strokes = {};
             for (var strokeId in data) {
-                this.strokes[strokeId] = data[strokeId]("#000000");
-                this.strokes[strokeId].name = "stroke-" + strokeId;
+                var stroke = data[strokeId]("#000000");
+                stroke.name = "stroke-" + strokeId;
+                this.strokes[strokeId] = stroke;
             }
             return this;
         },

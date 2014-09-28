@@ -257,11 +257,21 @@ body {
 
 
 /*** PROMPTS: PROMPT-DEFN ***/
-.prompt-container .prompt-defn { margin-top: 30%; }
+.prompt-container .prompt-defn { height: 100%; }
+.prompt-container .prompt-defn .container {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+}
 
 
 /*** PROMPTS: PROMPT-RDNG ***/
-.prompt-container .prompt-rdng { margin-top: 30%; }
+.prompt-container .prompt-rdng { height: 100%; }
+.prompt-container .prompt-rdng .container {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+}
 
 
 /*** SIDEBARS ***/

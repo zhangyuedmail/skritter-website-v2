@@ -300,6 +300,7 @@ define([
                                 app.user.data.sync(null, callback);
                             }
                         } else {
+                            app.dialogs.element('.message-text').text('REQUESTING DATA');
                             self.data.downloadAll(callback, function(error) {
                                 callback(error);
                             });
