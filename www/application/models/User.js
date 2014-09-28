@@ -206,47 +206,38 @@ define([
                     //load tts plugin with language locale
                     function(callback) {
                         if (plugins.tts) {
-                            app.dialogs.element('.message-text').text('STARTING TTS');
                             async.series([
-                                function(callback) {
-                                    plugins.tts.shutdown(function() {
+                                function (callback) {
+                                    plugins.tts.startup(function () {
                                         callback();
-                                    }, function() {
-                                        callback();
-                                    });
-                                },
-                                function(callback) {
-                                    plugins.tts.startup(function() {
-                                        callback();
-                                    }, function() {
+                                    }, function () {
                                         callback();
                                     });
                                 },
-                                function(callback) {
-                                    plugins.tts.setLanguage(self.getLanguageCode(), function() {
+                                function (callback) {
+                                    plugins.tts.setLanguage(self.getLanguageCode(), function () {
                                         callback();
-                                    }, function() {
-                                        callback();
-                                    });
-                                },
-                                function() {
-                                    plugins.tts.pitch(self.settings.get('audioPitch'), function() {
-                                        callback();
-                                    }, function() {
+                                    }, function () {
                                         callback();
                                     });
                                 },
-                                function() {
-                                    plugins.tts.speed(self.settings.get('audioSpeed'), function() {
+                                function (callback) {
+                                    plugins.tts.pitch(self.settings.get('audioPitch'), function () {
                                         callback();
-                                    }, function() {
+                                    }, function () {
+                                        callback();
+                                    });
+                                },
+                                function (callback) {
+                                    plugins.tts.speed(self.settings.get('audioSpeed'), function () {
+                                        callback();
+                                    }, function () {
                                         callback();
                                     });
                                 }
-                            ], callback);
-                        } else {
-                            callback();
+                            ]);
                         }
+                        callback();
                     },
                     //load user storage instance
                     function(callback) {
