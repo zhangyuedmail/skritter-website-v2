@@ -88,7 +88,7 @@ define([
             this.elements.statsDue.text(app.user.schedule.getDueCount());
             this.elements.statsNew.text(app.user.schedule.getNewCount());
             this.elements.statsStudied.text(app.user.stats.getStudied());
-            this.elements.statsTime.text(app.user.stats.getTime());
+            this.elements.statsTime.text(app.fn.convertTimeToClock(app.user.stats.getTime() * 1000));
         },
         /**
          * @method updateListSection
