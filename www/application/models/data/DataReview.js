@@ -26,6 +26,7 @@ define([
          * @type Object
          */
         defaults: {
+            attempts: 0,
             finished: false,
             originalItems: [],
             position: 1,

@@ -79,7 +79,7 @@ define([
                     expectedTargets.push(this.targets[i]);
                 }
             }
-            return expectedTargets;
+            return expectedTargets.length ? expectedTargets : [this.targets[0]];
         },
         /**
          * @method getPosition

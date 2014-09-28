@@ -20,6 +20,7 @@ define([
         initialize: function(options, controller, review) {
             Prompt.prototype.initialize.call(this, options, controller, review);
             this.character = undefined;
+            this.revealed = false;
         },
         /**
          * @method render
@@ -28,6 +29,8 @@ define([
         render: function() {
             app.timer.setLimits(30, 15);
             this.$el.html(this.compile(DesktopTemplate));
+            this.elements.toolbarEraser = this.$('#toolbar-eraser');
+            this.elements.toolbarReveal = this.$('#toolbar-reveal');
             Prompt.prototype.render.call(this);
             this.canvas.showGrid().show();
             return this;
@@ -61,14 +64,22 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
+            this.toggleToolbarEraser();
             if (app.user.settings.get('audio') && this.vocab.getAudio() && this.review.isFirst()) {
                 app.assets.playAudio(this.vocab.getAudio());
             }
             return this;
         },
         /**
+         * @method events
+         * @returns {Object}
+         */
+        events: _.extend({}, Prompt.prototype.events, {
+            'vclick #toolbar-eraser': 'handleToolbarEraserClicked',
+            'vclick #toolbar-reveal': 'handleToolbarRevealClicked'
+        }),
+        /**
          * @method handlePromptClicked
-         * @param {Event} event
          */
         handleCanvasClicked: function() {
             if (this.review.getAt('answered')) {
@@ -82,13 +93,52 @@ define([
             if (points && points.length > 1 && shape) {
                 var stroke = this.character.recognizeStroke(points, shape);
                 if (stroke) {
+                    this.toggleToolbarEraser();
                     this.canvas.lastMouseDownEvent = null;
                     this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
                     if (this.character.isComplete()) {
+                        this.revealed = false;
+                        this.toggleToolbarReveal();
                         this.renderAnswer();
+                    } else {
+                        this.revealed = false;
+                        this.toggleToolbarReveal();
+                        this.canvas.fadeLayer('background', null);
                     }
                 }
             }
+        },
+        /**
+         * @method handleToolbarEraserClicked
+         * @param {Event} event
+         */
+        handleToolbarEraserClicked: function(event) {
+            event.preventDefault();
+            this.gradingButtons.hide();
+            this.review.setAt('answered', false);
+            if (this.character.length) {
+                this.renderQuestion();
+                this.character.reset();
+                this.canvas.clearAll();
+                this.revealed = false;
+                this.toggleToolbarReveal();
+            }
+            this.toggleToolbarEraser();
+        },
+        /**
+         * @method handleToolbarRevealClicked
+         * @param {Event} event
+         */
+        handleToolbarRevealClicked: function(event) {
+            event.preventDefault();
+            if (this.revealed) {
+                this.canvas.clearLayer('background');
+                this.revealed = false;
+            } else {
+                this.revealCharacter();
+                this.revealed = true;
+            }
+            this.toggleToolbarReveal();
         },
         /**
          * @method reset
@@ -126,6 +176,36 @@ define([
                 });
             }
             return this;
+        },
+        /**
+         * @method revealCharacter
+         * @param {Number} [excludeStroke]
+         */
+        revealCharacter: function(excludeStroke) {
+            console.log(this.character.getExpectedVariations());
+            this.canvas.clearLayer('background');
+            this.canvas.drawShape('background', this.character.getExpectedVariations()[0].getShape(excludeStroke), {color: '#b3b3b3'});
+            this.review.setAt('score', 1);
+        },
+        /**
+         * @method toggleToolbarEraser
+         */
+        toggleToolbarEraser: function() {
+            if (this.character.length) {
+                this.elements.toolbarEraser.removeClass('text-muted');
+            } else {
+                this.elements.toolbarEraser.addClass('text-muted');
+            }
+        },
+        /**
+         * @method toggleToolbarReveal
+         */
+        toggleToolbarReveal: function() {
+            if (this.revealed) {
+                this.elements.toolbarReveal.addClass('text-primary');
+            } else {
+                this.elements.toolbarReveal.removeClass('text-primary');
+            }
         }
     });
 

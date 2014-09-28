@@ -230,6 +230,30 @@ define([
             }
         },
         /**
+         * @method fadeLayer
+         * @param {String} layerName
+         * @param {Object} [options]
+         * @param {Function} callback
+         * @returns {createjs.Container}
+         */
+        fadeLayer: function(layerName, options, callback) {
+            var layer = this.getLayer(layerName);
+            options = options ? otpions : {};
+            options.speed = options.speed ? options.speed : 300;
+            if (layer.getNumChildren() > 0) {
+                layer.cache(0, 0, this.canvasSize, this.canvasSize);
+                createjs.Tween.get(layer).to({alpha: 0}, options.speed).call(function() {
+                    layer.removeAllChildren();
+                    layer.uncache();
+                    layer.alpha = 1;
+                    if (typeof callback === 'function') {
+                        callback(layer);
+                    }
+                });
+            }
+            return layer;
+        },
+        /**
          * @method fadeShapeOut
          * @param {String} layerName
          * @param {createjs.Shape} shape

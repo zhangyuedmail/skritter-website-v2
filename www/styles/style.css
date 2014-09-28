@@ -69,7 +69,7 @@ body {
 }
 .navbar-text {
     float: none;
-    font-size: 22px;
+    font-size: 18px;
     margin: auto;
     padding-left: 5px;
 }
@@ -230,6 +230,7 @@ body {
 .prompt-container .detail-container {
     background-image: url('../images/textures/noisy.png');
     float: left;
+    position: relative;
 }
 .prompt-container .detail-container .field { clear: both; }
 .prompt-container .field-reading div { display: inline; }
@@ -272,6 +273,20 @@ body {
     top: 30%;
     width: 100%;
 }
+
+
+/*** PROMPTS: TOOLBAR ***/
+.prompt-container .prompt-toolbar {
+    background-color: #ffffff;
+    border-top: 1px solid #000000;
+    bottom: 0;
+    height: 30px;
+    position: absolute;
+    width: 100%;
+}
+.prompt-container .prompt-toolbar i { font-size: 28px; }
+.prompt-container .prompt-toolbar .pull-left i { margin-left: 10px; }
+.prompt-container .prompt-toolbar .pull-right i { margin-right: 10px; }
 
 
 /*** SIDEBARS ***/
