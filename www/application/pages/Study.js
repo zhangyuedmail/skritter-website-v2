@@ -33,8 +33,7 @@ define([
             this.elements.studyCount = this.$('#study-count');
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);
-            this.renderElements();
-            this.next();
+            this.renderElements().next();
             return this;
         },
         /**
@@ -56,7 +55,7 @@ define([
          * @method handleInfoButtonClicked
          * @param {Event} event
          */
-        handleInfoButtonClicked: function(review) {
+        handleInfoButtonClicked: function(event) {
             event.preventDefault();
             app.sidebars.select('info').toggle();
         },

@@ -82,7 +82,7 @@ define([
          * @method handleInputUp
          */
         handleInputUp: function(points, shape) {
-            if (points && points.length > 5) {
+            if (points && points.length > 5 && shape) {
                 var stroke = this.character.recognizeStroke(points, shape);
                 if (stroke) {
                     this.canvas.lastMouseDownEvent = null;
@@ -136,6 +136,7 @@ define([
                     'border-bottom': '1px solid #000000',
                     'border-right': 'none',
                     height: contentHeight - canvasSize - 1,
+                    'overflow-y': 'auto',
                     width: contentWidth
                 });
             } else {
@@ -143,6 +144,7 @@ define([
                     'border-bottom': 'none',
                     'border-right': '1px solid #000000',
                     height: canvasSize,
+                    'overflow-y': 'auto',
                     width: contentWidth - canvasSize - 1
                 });
             }
