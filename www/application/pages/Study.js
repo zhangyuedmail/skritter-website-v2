@@ -29,7 +29,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateDesktop));
-            app.timer.setElement(this.$('#study-timer'));
+            app.timer.updateOffset().setElement(this.$('#study-timer'));
             this.elements.studyCount = this.$('#study-count');
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);

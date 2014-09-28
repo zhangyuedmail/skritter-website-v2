@@ -19,6 +19,16 @@ define([
             this.on('change', this.cache);
         },
         /**
+         * @property
+         * @type Object
+         */
+        defaults: {
+            char: {},
+            daysStudied: {},
+            timeStudied: {},
+            word: {}
+        },
+        /**
          * @method cache
          */
         cache: function() {
@@ -42,6 +52,13 @@ define([
          */
         getTime: function() {
             return this.get('timeStudied') ? Math.floor(this.get('timeStudied').day) : 0;
+        },
+        /**
+         * @method getTimerOffset
+         * @returns {Number}
+         */
+        getTimerOffset: function() {
+            return this.get('timeStudied').day ? this.get('timeStudied').day : 0;
         },
         /**
          * @method sync

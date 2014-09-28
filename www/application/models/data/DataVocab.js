@@ -10,6 +10,10 @@ define([
      */
     var DataVocab = BaseModel.extend({
         /**
+         * @method initialize
+         */
+        initialize: function() {},
+        /**
          * @property idAttribute
          * @type String
          */

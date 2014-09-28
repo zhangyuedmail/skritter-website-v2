@@ -57,10 +57,10 @@ define([
             });
         },
         /**
-         * @method getTotalTime
+         * @method getTimerOffset
          * @returns {Number}
          */
-        getTotalTime: function() {
+        getTimerOffset: function() {
             var totalTime = 0;
             for (var i = 0, length = this.length; i < length; i++) {
                 totalTime += this.at(i).get('reviews')[0].reviewTime;

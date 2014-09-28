@@ -116,6 +116,7 @@ define([
          * @returns {Timer}
          */
         reset: function() {
+            this.stopwatch.reset();
             this.lapOffset = this.lapStart = this.lapTime = 0;
             this.thinkingTime = 0;
             return this;
@@ -192,6 +193,16 @@ define([
                 this.timeSecond = this.time / 1000 >> 0;
                 this.$el.text(app.fn.convertTimeToClock(this.time));
             }
+        },
+        /**
+         * @method updateOffset
+         * @param {Timer}
+         */
+        updateOffset: function() {
+            this.reset();
+            this.localOffset = app.user.stats.getTimerOffset();
+            this.serverOffset = app.user.reviews.getTimerOffset();
+            return this;
         }
     });
 
