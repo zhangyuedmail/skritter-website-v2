@@ -3,7 +3,7 @@
  */
 define([
     'framework/BaseView',
-    'require.text!.././prompt-grading-buttons.html'
+    'require.text!templates/mobile/prompts/prompt-grading-buttons.html'
 ], function(BaseView, DesktopTemplate) {
     /**
      * @class PromptGradingButtons

@@ -3,7 +3,7 @@
  */
 define([
     'framework/BaseView',
-    'require.text!.././prompt.html',
+    'require.text!templates/mobile/prompts/prompt.html',
     'prompts/PromptCanvas',
     'prompts/PromptGradingButtons',
     'prompts/PromptDefn',
