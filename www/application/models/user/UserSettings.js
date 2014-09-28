@@ -82,7 +82,14 @@ define([
          * @returns {Object}
          */
         getCustomData: function() {
-            return {};
+            var currentReview = this.user.reviews.current ? this.user.reviews.current.toJSON() : null;
+            var previousReview = this.user.reviews.previous ? this.user.reviews.previous.toJSON() : null;
+            return {
+                reviews: {
+                    current: currentReview,
+                    previous: previousReview
+                }
+            };
         },
         /**
          * @method getEnabledParts

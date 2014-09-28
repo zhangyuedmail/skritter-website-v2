@@ -18,6 +18,8 @@ define([
          */
         initialize: function(models, options) {
             options = options ? options : {};
+            this.current = undefined;
+            this.previous = undefined;
             this.user = options.user;
             this.on('add change', this.updateHistory);
         },

@@ -65,6 +65,7 @@ define([
          */
         handlePromptComplete: function(review) {
             console.log('REVIEW:', review.id, review);
+            this.reviews.previous = review;
             review.save(_.bind(this.next, this));
         },
         /**
@@ -74,6 +75,7 @@ define([
             var self = this;
             this.schedule.getNext(this.scheduleIndex).load(function(result) {
                 self.prompt = self.promptController.loadPrompt(result.item.createReview());
+                self.reviews.current = self.prompt.review;
             }, function() {
                 self.scheduleIndex++;
                 self.next();
