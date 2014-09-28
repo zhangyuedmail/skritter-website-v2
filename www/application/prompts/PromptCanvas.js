@@ -38,7 +38,7 @@ define([
             this.$el.html(this.stage.canvas);
             createjs.Ticker.addEventListener('tick', this.stage);
             createjs.Touch.enable(this.stage);
-            createjs.Ticker.setFPS(64);
+            createjs.Ticker.setFPS(24);
             this.createLayer('grid');
             this.createLayer('background');
             this.createLayer('stroke');

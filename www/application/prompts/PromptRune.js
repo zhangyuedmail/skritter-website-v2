@@ -73,7 +73,7 @@ define([
          * @method handleInputUp
          */
         handleInputUp: function(points, shape) {
-            if (points && points.length > 5 && shape) {
+            if (points && points.length > 1 && shape) {
                 var stroke = this.character.recognizeStroke(points, shape);
                 if (stroke) {
                     this.canvas.lastMouseDownEvent = null;
