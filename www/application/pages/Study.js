@@ -34,6 +34,7 @@ define([
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);
             this.renderElements().next();
+            app.user.stats.sync();
             return this;
         },
         /**

@@ -310,7 +310,7 @@ define([
         /**
          * @method sync
          * @param {Object} [options]
-         * @param {Function} callbackSuccess
+         * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
         sync: function(options, callbackSuccess, callbackError) {
@@ -325,6 +325,7 @@ define([
                     } else {
                         self.syncing = true;
                         self.trigger('sync', self.syncing);
+                        console.log('SYNCING:', moment().format('YYYY-MM-DD HH:mm'));
                         callback();
                     }
                 },
@@ -370,7 +371,6 @@ define([
                                 }, function(error) {
                                     callback(error);
                                 }, function(result) {
-                                    console.log('VOCAB RESULTS:', result);
                                     resultStarted++;
                                     self.user.schedule.insert(result.Items);
                                     self.put(result, function() {
@@ -440,7 +440,6 @@ define([
                                 }, function(error) {
                                     callback(error);
                                 }, function(result) {
-                                    console.log('SYNC/DOWN:', result.Items ? result.Items.length : 0);
                                     resultStarted++;
                                     self.user.schedule.insert(result.Items);
                                     self.put(result, function() {
@@ -474,7 +473,9 @@ define([
                 } else {
                     self.cache();
                     self.user.schedule.sort();
-                    callbackSuccess();
+                    if (typeof callbackError === 'function') {
+                        callbackSuccess();
+                    }
                 }
             });
         },

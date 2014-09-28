@@ -304,7 +304,9 @@ define([
                                 callback();
                             } else {
                                 app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                                app.user.data.sync(null, callback);
+                                app.user.data.sync(null, callback, function() {
+                                    callback();
+                                });
                             }
                         } else {
                             app.dialogs.element('.message-text').text('REQUESTING DATA');
@@ -347,6 +349,13 @@ define([
                     //load all reviews
                     function(callback) {
                         self.reviews.loadAll(callback);
+                    },
+                    //start background sync interval
+                    function(callback) {
+                        setInterval(function() {
+                            self.data.sync();
+                        }, moment.duration(1, 'minute').asMilliseconds());
+                        callback();
                     }
                 ], function(error) {
                     if (error) {
@@ -356,7 +365,6 @@ define([
                         app.dialogs.element('.message-other button').on('vclick', app.reload);
                         console.error('USER ERROR:', error);
                     } else {
-                        self.stats.sync();
                         app.dialogs.hide(function() {
                             app.api.clearGuest();
                             callback(self);
