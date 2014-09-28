@@ -67,6 +67,7 @@ define([
             if (this.grid) {
                 this.drawGrid();
             }
+            this.stage.uncache();
             return this;
         },
         /**
