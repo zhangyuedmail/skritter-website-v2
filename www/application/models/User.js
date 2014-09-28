@@ -209,6 +209,13 @@ define([
                             app.dialogs.element('.message-text').text('STARTING TTS');
                             async.series([
                                 function(callback) {
+                                    plugins.tts.shutdown(function() {
+                                        callback();
+                                    }, function() {
+                                        callback();
+                                    });
+                                },
+                                function(callback) {
                                     plugins.tts.startup(function() {
                                         callback();
                                     }, function() {
