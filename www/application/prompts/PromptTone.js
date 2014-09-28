@@ -45,7 +45,9 @@ define([
             this.canvas.disableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldReading.html(this.vocab.getReading(this.position + 1, {
-                mask: true
+                hide: app.user.settings.get('hideReading'),
+                mask: true,
+                style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting());
             if (app.user.settings.get('audio') && this.vocab.getAudio() && this.review.isLast()) {
@@ -64,7 +66,9 @@ define([
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldReading.html(this.vocab.getReading(this.position, {
-                mask: true
+                hide: app.user.settings.get('hideReading'),
+                mask: true,
+                style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;

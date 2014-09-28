@@ -40,7 +40,10 @@ define([
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
-            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldReading.html(this.vocab.getReading(null, {
+                hide: false,
+                style: app.user.settings.get('readingStyle')
+            }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position + 1));
             return this;
         },
@@ -53,7 +56,10 @@ define([
             this.character = this.review.getCharacter();
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
-            this.elements.fieldReading.html(this.vocab.getReading());
+            this.elements.fieldReading.html(this.vocab.getReading(null, {
+                hide: app.user.settings.get('hideReading'),
+                style: app.user.settings.get('readingStyle')
+            }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
             if (app.user.settings.get('audio') && this.vocab.getAudio() && this.review.isFirst()) {
                 app.assets.playAudio(this.vocab.getAudio());
