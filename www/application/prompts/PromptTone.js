@@ -135,6 +135,7 @@ define([
             var canvasSize = this.canvas.getWidth();
             var contentHeight = app.router.currentPage.getContentHeight();
             var contentWidth = app.router.currentPage.getContentWidth();
+            this.elements.promptText.css('max-height', contentHeight - canvasSize - 1);
             if (app.isPortrait()) {
                 this.$el.css({
                     'border-bottom': '1px solid #000000',

@@ -56,32 +56,7 @@ define([
          * @method events
          * @returns {Object}
          */
-        events: _.extend({}, BasePage.prototype.events, {
-            'vclick #button-add-new': 'handleButtonAddNewClicked',
-            'vclick #button-sync': 'handleButtonSyncClicked'
-        }),
-        /**
-         * @method handleButtonAddNewClicked
-         * @param {Event} event
-         */
-        handleButtonAddNewClicked: function(event) {
-            event.preventDefault();
-            app.user.data.addItems({limit: 1, showDialog: true});
-        },
-        /**
-         * @method handleButtonSyncClicked
-         * @param {Event} event
-         */
-        handleButtonSyncClicked: function(event) {
-            event.preventDefault();
-            app.dialogs.show().element('.message-title').text('Syncing');
-            app.dialogs.element('.message-text').text('');
-            app.user.data.sync(function() {
-                app.dialogs.hide();
-            }, function() {
-                app.dialogs.hide();
-            });
-        },
+        events: _.extend({}, BasePage.prototype.events, {}),
         /**
          * @method updateStatSection
          */

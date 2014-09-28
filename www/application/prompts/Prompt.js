@@ -79,6 +79,7 @@ define([
             this.elements.infoReading = $('#sidebar-info .info-reading');
             this.elements.infoStar = $('#sidebar-info .info-star');
             this.elements.infoWriting = $('#sidebar-info .info-writing');
+            this.elements.promptText = this.$('.prompt-text');
             return this;
         },
         /**
@@ -174,6 +175,17 @@ define([
          * @returns {Prompt}
          */
         resize: function() {
+            this.scaleText();
+            return this;
+        },
+        /**
+         * @method scaleText
+         * @returns {Prompt}
+         */
+        scaleText: function() {
+            var canvasSize = this.canvas.getWidth();
+            this.$('.text-max').css('font-size', canvasSize / 8);
+            this.$('.text-normal').css('font-size', canvasSize / 16);
             return this;
         },
         /**

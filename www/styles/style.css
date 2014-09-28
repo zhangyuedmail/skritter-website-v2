@@ -2,6 +2,7 @@
 Z-INDEX:
 9900: modals
 9100: sidebars
+9000: canvas
 ***/
 
 /*** APPLICATION ***/
@@ -58,6 +59,7 @@ body {
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .loading-box { margin-top: 25px; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
+.scrollable { overflow-y: auto; }
 
 
 /*** DIALOGS: LIST CONFIRMATION ***/
@@ -214,8 +216,8 @@ body {
     height: 100%;
     position: relative;
 }
-.prompt-container .field { font-size: 1.5em; }
 .prompt-container .prompt { position: relative; }
+.prompt-container .field { font-size: 1.5em; }
 
 
 /*** PROMPTS: CANVAS ***/
@@ -223,6 +225,7 @@ body {
     display: none;
     float: left;
     text-align: center;
+    z-index: 9000;
 }
 .prompt-container .prompt-canvas {
     background-color: #ffffff;
@@ -327,7 +330,11 @@ body {
     right: 0;
 }
 
+
 /*** SIDEBARS: INFO ***/
+#sidebar-info.sidebar {
+    width: 80%;
+}
 #sidebar-info .info {
     font-size: 1.2em;
 }
