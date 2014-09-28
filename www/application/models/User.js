@@ -199,7 +199,7 @@ define([
                     function(callback) {
                         raygun.setUser(self.settings.get('name'), false, self.settings.get('email'));
                         raygun.setVersion(app.getVersion());
-                        raygun.withCustomData(self.settings.getCustomData());
+                        raygun.withCustomData(self.settings.getCustomData);
                         raygun.withTags(self.settings.getTags());
                         callback();
                     },
