@@ -50,6 +50,7 @@ define([
             this.elements.userDisplayName.text(app.user.getDisplayName());
             this.updateStatSection();
             this.updateListSection();
+            app.user.stats.sync();
         },
         /**
          * @method events
