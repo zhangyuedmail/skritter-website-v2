@@ -3,7 +3,7 @@
  */
 define([
     'prompts/Prompt',
-    'require.text!templates/desktop/prompts/prompt-rdng.html'
+    'require.text!.././prompt-rdng.html'
 ], function(Prompt, DesktopTemplate) {
     /**
      * @class PromptRdng

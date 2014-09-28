@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/settings.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/settings.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageSettings
      * @extends BasePage
@@ -25,7 +25,7 @@ define([
          * @returns {PageSettings}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             this.undelegateEvents();
             this.activeParts = this.settings.getActiveParts();
             this.activeStyles = this.settings.getActiveStyles();

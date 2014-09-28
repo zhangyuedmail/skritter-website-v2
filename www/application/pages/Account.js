@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/account.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/account.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageAccount
      * @extends BasePage
@@ -23,7 +23,7 @@ define([
          * @returns {PageAccount}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             this.elements.accountCountry = this.$('#account-country');
             this.elements.accountDisplayName = this.$('#account-displayname');
             this.elements.accountID = this.$('#account-id');

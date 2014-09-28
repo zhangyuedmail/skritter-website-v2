@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/account-creation/create-account.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/account-creation/create-account.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageCreateAccount
      * @extends BasePage
@@ -21,7 +21,7 @@ define([
          * @returns {PageCreateAccount}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             this.elements.email = this.$('#create-account-email');
             this.elements.message = this.$('#message');
             this.elements.password = this.$('#create-account-password');

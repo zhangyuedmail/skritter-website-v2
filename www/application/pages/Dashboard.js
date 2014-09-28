@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/dashboard.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/dashboard.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageDashboard
      * @extends BasePage
@@ -25,7 +25,7 @@ define([
          * @returns {PageDashboard}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             app.sidebars.enable();
             this.elements.buttonSync = this.$('#sync-button');
             this.elements.listContainer = this.$('.list-container');

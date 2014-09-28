@@ -30,6 +30,10 @@ body {
 
 /*** BOOTSTRAP ***/
 .btn.spacing { margin: 5px 0; }
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
 .content-box {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);

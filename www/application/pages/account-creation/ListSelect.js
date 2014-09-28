@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/account-creation/list-select.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/account-creation/list-select.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageListSelect
      * @extends BasePage
@@ -23,7 +23,7 @@ define([
          * @returns {PageListSelect}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             this.elements.listsContainer = this.$('.lists-container');
             this.elements.listTable = this.$('#list-table');
             this.elements.loadingBox = this.$('.loading-box');

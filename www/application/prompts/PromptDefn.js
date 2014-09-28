@@ -3,7 +3,7 @@
  */
 define([
     'prompts/Prompt',
-    'require.text!templates/desktop/prompts/prompt-defn.html'
+    'require.text!.././prompt-defn.html'
 ], function(Prompt, DesktopTemplate) {
     /**
      * @class PromptDefn

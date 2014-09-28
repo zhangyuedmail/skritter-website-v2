@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/login.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/login.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageLogin
      * @extends BasePage
@@ -21,7 +21,7 @@ define([
          * @returns {PageLogin}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             app.sidebars.disable();
             this.elements.loginPassword = this.$("#login-password");
             this.elements.loginUsername = this.$("#login-username");

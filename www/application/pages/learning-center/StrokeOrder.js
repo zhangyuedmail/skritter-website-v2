@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/learning-center/stroke-order.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!../.././stroke-order.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageStrokeOrder
      * @extends BasePage
@@ -21,7 +21,7 @@ define([
          * @returns {PageStrokeOrder}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             return this;
         },
         /**

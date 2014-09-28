@@ -3,9 +3,9 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/study.html',
+    'require.text!templates/mobile/study.html',
     'prompts/PromptController'
-], function(BasePage, TemplateDesktop, PromptController) {
+], function(BasePage, TemplateMobile, PromptController) {
     /**
      * @class PageStudy
      * @extends BasePage
@@ -28,7 +28,7 @@ define([
          * @returns {PageStudy}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             app.timer.updateOffset().setElement(this.$('#study-timer'));
             this.elements.studyCount = this.$('#study-count');
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();

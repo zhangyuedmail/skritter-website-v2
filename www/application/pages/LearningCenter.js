@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/learning-center.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/learning-center.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageLearningCenter
      * @extends BasePage
@@ -21,7 +21,7 @@ define([
          * @returns {PageLearningCenter}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             return this;
         }
     });

@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/landing.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/landing.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageLanding
      * @extends BasePage
@@ -21,7 +21,7 @@ define([
          * @returns {PageLanding}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             app.sidebars.disable();
             this.elements.tagline = this.$('.tagline');
             switch (app.get('languageCode')) {

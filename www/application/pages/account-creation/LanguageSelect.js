@@ -3,8 +3,8 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/desktop/account-creation/language-select.html'
-], function(BasePage, TemplateDesktop) {
+    'require.text!templates/mobile/account-creation/language-select.html'
+], function(BasePage, TemplateMobile) {
     /**
      * @class PageLanguageSelect
      * @extends BasePage
@@ -21,7 +21,7 @@ define([
          * @returns {PageLanguageSelect}
          */
         render: function() {
-            this.$el.html(this.compile(TemplateDesktop));
+            this.$el.html(this.compile(TemplateMobile));
             this.elements.languageContainer = this.$('#language-container');
             this.elements.chineseOptions = this.$('#chinese-options-container');
             this.elements.selectChinese = this.$('#select-chinese');
