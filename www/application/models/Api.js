@@ -797,6 +797,47 @@ define([
             }).fail(function(error) {
                 callbackError(error);
             });
+        },
+        /**
+         * @method updateVocabs
+         * @param {Array|Object} vocabs
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         * @param {Function} callbackResult
+         */
+        updateVocabs: function(vocabs, callbackComplete, callbackError, callbackResult) {
+            var self = this;
+            var updated = [];
+            vocabs = Array.isArray(vocabs) ? vocabs : [vocabs];
+            (function next() {
+                var vocab = vocabs.splice(0, 1)[0];
+                console.log(vocab);
+                $.ajax({
+                    url: self.getBaseUrl() + 'vocabs/' + vocab.id +
+                        '?bearer_token=' + self.getToken(),
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'PUT',
+                    data: JSON.stringify(vocab)
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        updated.push(data.Vocab.id);
+                        callbackResult({
+                            Items: data.Items,
+                            Vocab: data.Vocab
+                        });
+                        if (vocabs.length > 0) {
+                            setTimeout(next, self.timeout);
+                        } else {
+                            callbackComplete(updated);
+                        }
+                    } else {
+                        callbackError(data, updated);
+                    }
+                }).fail(function(error) {
+                    callbackError(error, updated);
+                });
+            })();
         }
     });
 

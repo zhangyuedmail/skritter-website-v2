@@ -11,10 +11,29 @@ define([
      */
     var DataVocabs = BaseCollection.extend({
         /**
+         * @method initialize
+         */
+        initialize: function() {
+            this.on('change', function(vocab) {
+                vocab.cache();
+            });
+        },
+        /**
          * @property model
          * @type DataVocab
          */
         model: DataVocab,
+        /**
+         * @method cache
+         * @param {Function} [callback]
+         */
+        cache: function(callback) {
+            app.storage.putItems('vocabs', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
         /**
          * @method loadAll
          * @param {Function} callback

@@ -32,6 +32,8 @@ define([
             audio: true,
             audioPitch: '100',
             audioSpeed: '60',
+            allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+            allJapaneseParts: ['defn', 'rdng', 'rune'],
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             readingStyle: 'pinyin'
@@ -76,6 +78,13 @@ define([
             } else {
                 return ['both', 'none', 'trad'];
             }
+        },
+        /**
+         * @method getAllParts
+         * @returns {Array}
+         */
+        getAllParts: function() {
+            return this.user.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
         },
         /**
          * @method getCustomData

@@ -24,6 +24,18 @@ define([
          */
         defaults: {},
         /**
+         * @method cache
+         * @param {Function} [callback]
+         */
+        cache: function(callback) {
+            app.user.data.flagVocabUpdate(this.id);
+            app.storage.putItems('vocabs', this.toJSON(), function() {
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
+        },
+        /**
          * @method getAudio
          * @returns {String}
          */

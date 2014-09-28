@@ -183,7 +183,7 @@ define([
             if (this.vocab.isBanned()) {
                 this.vocab.set('bannedParts', []);
             } else {
-                this.vocab.set('bannedParts', ['rune']);
+                this.vocab.set('bannedParts', app.user.settings.getAllParts());
             }
             this.updateVocabSidebar();
         },

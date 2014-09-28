@@ -62,8 +62,8 @@ define([
             this.user = new User();
             this.user.load(function() {
                 Backbone.history.start({
-                    pushState: app.isLocalhost() ? false : true,
-                    root: app.isLocalhost() ? '/skritter-html5/www/' : '/'
+                    pushState: app.isLocalhost() || app.isNative() ? false : true,
+                    root: app.isLocalhost() || app.isNative() ? '/skritter-html5/www/' : '/'
                 });
             });
         }
