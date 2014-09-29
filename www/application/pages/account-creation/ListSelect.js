@@ -27,6 +27,15 @@ define([
             this.elements.listsContainer = this.$('.lists-container');
             this.elements.listTable = this.$('#list-table');
             this.elements.loadingBox = this.$('.loading-box');
+            this.elements.recommendedChinese = this.$('.recommended-chinese');
+            this.elements.recommendedJapanese = this.$('.recommended-japanese');
+            if (app.api.getGuest('lang') === 'zh') {
+                this.elements.recommendedChinese.show();
+                this.elements.recommendedJapanese.hide();
+            } else {
+                this.elements.recommendedChinese.hide();
+                this.elements.recommendedJapanese.show();
+            }
             this.elements.searchBox = this.$('#search-box');
             this.loadLists();
             return this;
