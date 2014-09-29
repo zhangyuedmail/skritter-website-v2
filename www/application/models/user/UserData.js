@@ -321,7 +321,9 @@ define([
             async.series([
                 function(callback) {
                     if (self.syncing) {
-                        callback('Sync in progress.');
+                        callback('In progress.');
+                    } else if (self.user.reviews.length < 2) {
+                        callback('No reviews.');
                     } else {
                         self.syncing = true;
                         self.trigger('sync', self.syncing);
@@ -467,6 +469,7 @@ define([
                 self.syncing = false;
                 self.trigger('sync', self.syncing);
                 if (error) {
+                    console.log('SYNC:', error);
                     if (typeof callbackError === 'function') {
                         callbackError(error);
                     }

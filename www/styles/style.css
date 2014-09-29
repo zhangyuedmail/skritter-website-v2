@@ -242,7 +242,7 @@ body {
 .prompt-container .detail-container .field { clear: both; }
 .prompt-container .field-reading div { display: inline; }
 .prompt-container .field-reading span { margin-right: 5px; }
-.prompt-container .field-reading .reading-hidden { border-bottom: 1px solid #000000; }
+.prompt-container .field-reading .reading-hidden { border-top: 1px solid #000000; }
 .prompt-container .field-reading .reading-hidden span { visibility: hidden; }
 .prompt-container .field-reading .reading-button {
     background-color: #d3d3d3;
@@ -252,8 +252,24 @@ body {
 .prompt-container .field-reading .reading-button span { visibility: hidden; }
 .prompt-container .field-reading .reading-button.reveal span { visibility: visible; }
 .prompt-container .field-writing span { margin-right: 5px; }
-.prompt-container .field-writing .writing-hidden { border-bottom: 1px solid #000000; }
+.prompt-container .field-writing .writing-hidden { border-top: 5px solid #000000; }
 .prompt-container .field-writing .writing-hidden span { visibility: hidden; }
+.prompt-container .prompt-newness {
+    bottom: -20px;
+    font-size: 12px;
+    margin: 0;
+    padding: 2px 5px;
+    left: 0;
+    position: absolute;
+}
+.prompt-container .prompt-style {
+    bottom: -20px;
+    font-size: 12px;
+    margin: 0;
+    padding: 2px 5px;
+    position: absolute;
+    right: 0;
+}
 
 
 /*** PROMPTS: GRADING BUTTONS ***/
@@ -271,6 +287,16 @@ body {
     top: 30%;
     width: 100%;
 }
+.prompt-container .prompt-defn .prompt-newness {
+    bottom: auto;
+    margin: 0 15px;
+    top: -50px;
+}
+.prompt-container .prompt-defn .prompt-style {
+    bottom: auto;
+    margin: 0 15px;
+    top: -50px;
+}
 
 
 /*** PROMPTS: PROMPT-RDNG ***/
@@ -280,6 +306,20 @@ body {
     top: 30%;
     width: 100%;
 }
+.prompt-container .prompt-rdng .prompt-newness {
+    bottom: auto;
+    margin: 0 15px;
+    top: -50px;
+}
+.prompt-container .prompt-rdng .prompt-style {
+    bottom: auto;
+    margin: 0 15px;
+    top: -50px;
+}
+
+
+/*** PROMPTS: PROMPT-RUNE ***/
+.prompt-container .prompt-rune .field-writing { padding-top: 5px; }
 
 
 /*** PROMPTS: TOOLBAR ***/

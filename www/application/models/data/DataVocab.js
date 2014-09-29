@@ -201,6 +201,14 @@ define([
             return app.user.data.strokes.get(this.get('writing'));
         },
         /**
+         * @method getStyle
+         * @returns {String}
+         */
+        getStyle: function() {
+            var style = this.get('style');
+            return style && ['both', 'none'].indexOf(style) === -1 ? style : '';
+        },
+        /**
          * @method getTones
          * @param {Number} position
          * @returns {Array}

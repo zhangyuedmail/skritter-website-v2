@@ -46,6 +46,15 @@ define([
             } else {
                 this.renderQuestion();
             }
+            if (!this.item.isNew()) {
+                this.elements.promptNewness.text('NEW');
+                this.elements.promptNewness.addClass('text-warning');
+            } else {
+                this.elements.promptNewness.text('');
+            }
+            if (this.vocab.isChinese()) {
+                this.elements.promptStyle.text(this.vocab.getStyle().toUpperCase());
+            }
             this.reset().resize();
             this.updateVocabSidebar();
             return this;
@@ -79,6 +88,8 @@ define([
             this.elements.infoReading = $('#sidebar-info .info-reading');
             this.elements.infoStar = $('#sidebar-info .info-star');
             this.elements.infoWriting = $('#sidebar-info .info-writing');
+            this.elements.promptNewness = this.$('.prompt-newness');
+            this.elements.promptStyle = this.$('.prompt-style');
             this.elements.promptText = this.$('.prompt-text');
             return this;
         },
@@ -185,7 +196,9 @@ define([
         scaleText: function() {
             var canvasSize = this.canvas.getWidth();
             this.$('.text-max').css('font-size', canvasSize / 8);
+            this.$('.text-large').css('font-size', canvasSize / 12);
             this.$('.text-normal').css('font-size', canvasSize / 16);
+            this.$('.text-small').css('font-size', canvasSize / 20);
             return this;
         },
         /**
