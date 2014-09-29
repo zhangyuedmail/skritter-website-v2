@@ -37,7 +37,15 @@ define([
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             readingStyle: 'pinyin',
-            showTutorials: ['defn', 'rdng', 'rune', 'tone']
+            tutorials: ['defn', 'grading', 'rdng', 'rune', 'tone']
+        },
+        /**
+         * @method disableTutorial
+         * @param {String} name
+         * @returns {Boolean}
+         */
+        disableTutorial: function(name) {
+            this.set('tutorials', _.without(this.get('tutorials'), name));
         },
         /**
          * @method fetch
@@ -126,6 +134,20 @@ define([
                 tags = ['japanese'];
             }
             return tags;
+        },
+        /**
+         * @method hasTutorial
+         * @param {String} name
+         * @returns {Boolean}
+         */
+        hasTutorial: function(name) {
+            return this.get('tutorials').indexOf(name) !== -1;
+        },
+        /**
+         * @method resetTutorials
+         */
+        resetTutorials: function() {
+            this.set('tutorials', ['defn', 'grading', 'rdng', 'rune', 'tone']);
         },
         /**
          * @method setActiveParts

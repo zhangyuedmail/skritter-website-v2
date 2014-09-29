@@ -48,6 +48,7 @@ body {
 .content-box.fixed-150 { height: 150px; }
 .content-box h1, .content-box h2, .content-box h3,
 .content-box h4, .content-box h5, .content-box h6 { margin-top: 5px; }
+.fa.fa-1x5 { font-size: 1.5em; }
 .modal { z-index: 9900; }
 .padding-top { padding-top: 10px; }
 @media (max-width: 991px) {
@@ -73,6 +74,10 @@ body {
 
 /*** DIALOGS: LIST CONFIRMATION ***/
 .dialog-list-confirmation .list-image img { max-width: 100px; }
+
+
+/*** DIALOGS: EDIT TEXT ***/
+.modal .tutorial-reading { display: inline-block; }
 
 
 /*** NAVBAR ***/

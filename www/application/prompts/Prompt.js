@@ -21,13 +21,20 @@ define([
             this.controller = controller;
             this.gradingButtons = controller.gradingButtons;
             this.item = review.getBaseItem();
+            this.part = review.get('part');
             this.position = 1;
             this.review = review;
             this.teaching = false;
             this.vocab = review.getBaseVocab();
             //load canvas characters for rune and tone prompts
-            if (['rune', 'tone'].indexOf(review.get('part')) !== -1) {
+            if (['rune', 'tone'].indexOf(this.part) !== -1) {
                 review.characters = this.item.getCanvasCharacters();
+            }
+            //show tutorial if not already disabled
+            if (app.user.settings.hasTutorial(this.part)) {
+                app.dialogs.show('tutorial-' + this.part);
+                app.dialogs.element('.tutorial-reading').html(this.vocab.getReading());
+                app.dialogs.element('.tutorial-hide').on('vclick', function() {});
             }
         },
         /**
@@ -76,6 +83,10 @@ define([
                 thinkingTime: app.timer.getThinkingTime()
             });
             this.gradingButtons.select(this.review.getAt('score')).show();
+            if (app.user.settings.hasTutorial('grading')) {
+                app.dialogs.show('tutorial-grading');
+                app.dialogs.element('.tutorial-hide').on('vclick', function() {});
+            }
             return this;
         },
         /**
