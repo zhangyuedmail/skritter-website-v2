@@ -86,11 +86,14 @@ define([
             if (this.has('containedVocabIds')) {
                 var containedVocabIds = this.get('containedVocabIds');
                 for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    var containedVocabId = containedVocabIds[i];
+                    var containedSplit = containedVocabId.split('-');
                     if (part === 'rune') {
-                        containedItemIds.push(app.user.id + '-' + containedVocabIds[i] + '-' + part);
+                        containedItemIds.push(app.user.id + '-' + containedVocabId + '-' + part);
+                    } else if (parseInt(containedSplit[2], 10) > 1) {
+                        containedItemIds.push(app.user.id + '-' + containedVocabId + '-' + part);
                     } else {
-                        var splitId = containedVocabIds[i].split('-');
-                        containedItemIds.push(app.user.id + '-' + splitId[0] + '-' + splitId[1] + '-0-' + part);
+                        containedItemIds.push(app.user.id + '-' + containedSplit[0] + '-' + containedSplit[1] + '-0-' + part);
                     }
                 }
             }
