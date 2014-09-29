@@ -36,7 +36,8 @@ define([
             allJapaneseParts: ['defn', 'rdng', 'rune'],
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
-            readingStyle: 'pinyin'
+            readingStyle: 'pinyin',
+            showTutorials: ['defn', 'rdng', 'rune', 'tone']
         },
         /**
          * @method fetch
