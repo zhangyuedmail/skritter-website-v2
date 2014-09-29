@@ -122,6 +122,7 @@ define([
             event.preventDefault();
             this.gradingButtons.hide();
             this.review.setAt('answered', false);
+            this.teaching = false;
             if (this.character.length) {
                 this.renderQuestion();
                 this.character.reset();
