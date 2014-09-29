@@ -38,9 +38,9 @@ define([
             var timePast =  now - this.attributes.last;
             var timeInterval = 0;
             if (this.attributes.interval) {
-                timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last
+                timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;
             } else {
-                timeInterval = this.attributes.next  - this.attributes.last
+                timeInterval = this.attributes.next  - this.attributes.last;
             }
             if (this.attributes.part === 'rune') {
                 timePast += 2;
