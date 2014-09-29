@@ -275,7 +275,9 @@ define([
          */
         updateVocabSidebar: function() {
             this.elements.infoDefinition.text(this.vocab.getDefinition());
-            this.elements.infoReading.html(this.vocab.getReading());
+            this.elements.infoReading.html(this.vocab.getReading(null, {
+                style: app.user.settings.get('readingStyle')
+            }));
             this.elements.infoWriting.html(this.vocab.getWriting());
             if (this.vocab.isBanned()) {
                 this.elements.infoBan.addClass('fa-star text-danger');
