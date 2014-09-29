@@ -1,0 +1,45 @@
+<!-- DIALOGS: Default -->
+<div class="modal fade" id="dialog-default" tabindex="-1" role="dialog" aria-labelledby="default" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <img class="loader-image" src="www/images/ajax-loader.gif" height="64" width="64">
+                <h3 class="message-title"></h3>
+                <h5 class="message-text"></h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOGS: Download -->
+<div class="modal fade" id="dialog-download" tabindex="-1" role="dialog" aria-labelledby="download" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><span class="download-title"></span><span class="download-status-text pull-right"></span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        <span class="sr-only">100% Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOGS: Logout -->
+<div class="modal fade" id="dialog-logout" tabindex="-1" role="dialog" aria-labelledby="logout" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Are you sure?</h3>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="logout btn btn-danger pull-right">Log Out</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+{
+    "name": "GelatoJS",
+    "description": "A delectable mix of mobile friendly libraries.",
+    "author": {
+        "name": "Joshua McFarland",
+        "url": "http://www.joshmcfarland.net/"
+    },
+    "license": "MIT",
+    "version": "0.0.1",
+    "versionCode": "1",
+    "package": "com.jernung.gelato",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mcfarljw/gelatojs.git"
+    },
+    "devDependencies": {
+        "grunt": "0.4.5",
+        "grunt-contrib-clean": "0.5.0",
+        "grunt-contrib-copy": "0.5.0",
+        "grunt-contrib-csslint": "0.2.0",
+        "grunt-contrib-jshint": "0.10.0",
+        "grunt-contrib-requirejs": "0.4.4",
+        "grunt-contrib-yuidoc": "0.5.2",
+        "grunt-mkdir": "0.1.2",
+        "grunt-shell": "0.7.0",
+        "grunt-zip": "0.15.0",
+        "karma": "0.12.19",
+        "karma-chrome-launcher": "^0.1.4",
+        "karma-jasmine": "^0.1.5",
+        "karma-requirejs": "^0.2.2",
+        "requirejs": "^2.1.14"
+    }
+}
