@@ -327,13 +327,16 @@ body {
     background-color: #ffffff;
     border-top: 1px solid #000000;
     bottom: 0;
-    height: 30px;
+    height: 36px;
     position: absolute;
     width: 100%;
 }
-.prompt-container .prompt-toolbar i { font-size: 28px; }
-.prompt-container .prompt-toolbar .pull-left i { margin-left: 10px; }
-.prompt-container .prompt-toolbar .pull-right i { margin-right: 10px; }
+.prompt-container .prompt-toolbar i {
+    font-size: 28px;
+    padding-top: 5px;
+}
+.prompt-container .prompt-toolbar .pull-left i { margin-left: 15px; }
+.prompt-container .prompt-toolbar .pull-right i { margin-right: 15px; }
 
 
 /*** SIDEBARS ***/

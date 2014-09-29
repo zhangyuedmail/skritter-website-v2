@@ -52,7 +52,7 @@ define([
                 targets.push(target);
             }
             character.name = rune;
-            character.targets = targets;
+            character.targets = rune === 'tones' ? targets : targets.reverse();
             return character;
         }
     });

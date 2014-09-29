@@ -115,17 +115,19 @@ define([
          * @method drawCircle
          * @param {String} layerName
          * @param {Object} options
-         * @returns {PromptCanvas}
+         * @returns {createjs.Shape}
          */
         drawCircle: function(layerName, x, y, radius, options) {
-            var layer = this.getLayer(layerName);
             var circle = new createjs.Shape();
             options = options ? options : {};
             circle.graphics.beginFill(options.fill ? options.fill : '#000000');
             circle.graphics.drawCircle(x, y, radius);
+            if (options.alpha) {
+                circle.alpha = options.alpha;
+            }
             this.getLayer(layerName).addChild(circle);
             this.stage.update();
-            return this;
+            return circle;
         },
         /**
          * @method drawFontCharacter
@@ -173,7 +175,7 @@ define([
          * @param {String} layerName
          * @param {createjs.Shape} shape
          * @param {Object} options
-         * @returns {PromptCanvas}
+         * @returns {createjs.Shape}
          */
         drawShape: function(layerName, shape, options) {
             options = options ? options : {};
@@ -187,7 +189,7 @@ define([
             }
             this.getLayer(layerName).addChild(shape);
             this.stage.update();
-            return this;
+            return shape;
         },
         /**
          * @method enableInput
@@ -378,6 +380,16 @@ define([
         showGrid: function() {
             this.getLayer('grid').visible = true;
             return this;
+        },
+        /**
+         * @method tracePath
+         */
+        tracePath: function(layerName, path) {
+            var tracer = this.drawCircle(layerName, path[0].x, path[0].y, this.strokeSize, {alpha: 0.4});
+            var tween = createjs.Tween.get(tracer, {loop: true});
+            for (var i = 1, length = path.length; i < length; i++) {
+                tween.to({x: path[i].x - path[0].x, y: path[i].y - path[0].y}, 500);
+            }
         },
         /**
          * @method triggerClick

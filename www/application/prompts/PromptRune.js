@@ -21,6 +21,7 @@ define([
             Prompt.prototype.initialize.call(this, options, controller, review);
             this.character = undefined;
             this.revealed = false;
+            this.teaching = false;
         },
         /**
          * @method render
@@ -76,7 +77,8 @@ define([
          */
         events: _.extend({}, Prompt.prototype.events, {
             'vclick #toolbar-eraser': 'handleToolbarEraserClicked',
-            'vclick #toolbar-reveal': 'handleToolbarRevealClicked'
+            'vclick #toolbar-reveal': 'handleToolbarRevealClicked',
+            'vclick #toolbar-teach': 'handleToolbarTeachClicked'
         }),
         /**
          * @method handlePromptClicked
@@ -97,13 +99,19 @@ define([
                     this.canvas.lastMouseDownEvent = null;
                     this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
                     if (this.character.isComplete()) {
+                        this.canvas.fadeLayer('background', null);
                         this.revealed = false;
                         this.toggleToolbarReveal();
                         this.renderAnswer();
                     } else {
-                        this.revealed = false;
-                        this.toggleToolbarReveal();
-                        this.canvas.fadeLayer('background', null);
+                        if (this.teaching) {
+                            this.canvas.clearLayer('background');
+                            this.teach();
+                        } else {
+                            this.canvas.fadeLayer('background', null);
+                            this.revealed = false;
+                            this.toggleToolbarReveal();
+                        }
                     }
                 }
             }
@@ -139,6 +147,20 @@ define([
                 this.revealed = true;
             }
             this.toggleToolbarReveal();
+        },
+        /**
+         * @method handleToolbarTeachClicked
+         * @param {Event} event
+         */
+        handleToolbarTeachClicked: function(event) {
+            event.preventDefault();
+            this.review.setAt('score', 1);
+            if (this.teaching) {
+                this.canvas.fadeLayer('background', null);
+                this.teaching = false;
+            } else {
+                this.teach();
+            }
         },
         /**
          * @method reset
@@ -181,10 +203,22 @@ define([
          * @param {Number} [excludeStroke]
          */
         revealCharacter: function(excludeStroke) {
-            console.log(this.character.getExpectedVariations());
             this.canvas.clearLayer('background');
             this.canvas.drawShape('background', this.character.getExpectedVariations()[0].getShape(excludeStroke), {color: '#b3b3b3'});
             this.review.setAt('score', 1);
+        },
+        /**
+         * @method teach
+         * @returns {PromptRune}
+         */
+        teach: function() {
+            var stroke = this.character.getExpectedStroke();
+            var strokeParam = stroke.getParams()[0];
+            var strokePath = strokeParam.get('corners');
+            this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
+            this.canvas.tracePath('background', strokePath);
+            this.teaching = true;
+            return this;
         },
         /**
          * @method toggleToolbarEraser
