@@ -269,7 +269,9 @@ define([
          * @param {String} vocabId
          */
         flagVocabUpdate: function(vocabId) {
-            this.attributes.changedVocabIds.push(vocabId);
+            if (this.attributes.changedVocabIds.indexOf(vocabId) === -1) {
+                this.attributes.changedVocabIds.push(vocabId);
+            }
             this.cache();
         },
         /**
@@ -319,16 +321,10 @@ define([
             options.includeAll = options.includeAll ? options.includeAll : false;
             async.series([
                 function(callback) {
-                    if (self.syncing) {
-                        callback('In progress.');
-                    } else if (self.user.reviews.length < 2) {
-                        callback('No reviews.');
-                    } else {
-                        self.syncing = true;
-                        self.trigger('sync', self.syncing);
-                        console.log('SYNCING:', moment().format('YYYY-MM-DD HH:mm'));
-                        callback();
-                    }
+                    self.syncing = true;
+                    self.trigger('sync', self.syncing);
+                    console.log('SYNCING:', moment().format('YYYY-MM-DD HH:mm'));
+                    callback();
                 },
                 //check server for posted review errors
                 function(callback) {
@@ -397,7 +393,7 @@ define([
                 },
                 //sync items changed from last
                 function(callback) {
-                    if (self.get('lastItemSync') < moment(now * 1000).subtract('500', 'minutes').unix()) {
+                    if (options.offset || self.get('lastItemSync') < moment(now * 1000).subtract('500', 'minutes').unix()) {
                         var resultStarted = 0;
                         var resultFinished = 0;
                         async.waterfall([

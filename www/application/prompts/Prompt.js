@@ -132,7 +132,7 @@ define([
                     value = currentDefinition;
                 }
                 $('#sidebar-info .info-definition').text(value);
-                self.elements.fieldDefinition.text(value);
+                self.render();
                 app.dialogs.hide();
             });
         },
