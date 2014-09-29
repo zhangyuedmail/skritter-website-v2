@@ -135,6 +135,9 @@ define([
         getLanguageName: function() {
             return this.isChinese() ? app.strings.global.chinese : app.strings.global.japanese;
         },
+        getFontClass: function() {
+            return this.isChinese() ? 'simkai' : '';
+        },
         /**
          * @method isAuthenticated
          * @returns {Boolean}

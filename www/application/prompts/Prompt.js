@@ -57,6 +57,7 @@ define([
             }
             this.reset().resize();
             this.updateVocabSidebar();
+            this.loadFont();
             return this;
         },
         /**
