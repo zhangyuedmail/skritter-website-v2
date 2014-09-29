@@ -69,7 +69,7 @@ define([
          */
         handleMenuButtonPressed: function() {
             if (app.sidebars) {
-                app.sidebars.toggle();
+                app.sidebars.select('menu').toggle();
             }
         },
         /**
