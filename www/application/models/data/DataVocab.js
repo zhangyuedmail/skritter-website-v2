@@ -205,8 +205,13 @@ define([
          * @returns {String}
          */
         getStyle: function() {
+            var activeStyles = app.user.settings.getActiveStyles();
             var style = this.get('style');
-            return style && ['both', 'none'].indexOf(style) === -1 ? style : '';
+            if (style && ['both', 'none'].indexOf(style) === -1 &&
+                activeStyles.indexOf('simp') > -1 && activeStyles.indexOf('trad') > -1) {
+                return style;
+            }
+            return '';
         },
         /**
          * @method getTones
