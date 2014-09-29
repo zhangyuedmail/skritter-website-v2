@@ -335,8 +335,21 @@ define([
                             } catch (error) {
                                 raygun.send(error, {ReviewErrors: errors});
                             }
+                            console.log('REVIEW ERRORS', _.pluck(errors, 'itemId'));
+                            app.api.getItemById(_.pluck(errors, 'itemId'), null, function(result) {
+                                console.log('FIXING ERRORS', _.pluck(result.Items, 'id'));
+                                self.user.schedule.insert(result.Items);
+                                self.put(result, function() {
+                                    self.set('lastErrorCheck', now, {silent: true});
+                                    callback();
+                                });
+                            }, function() {
+                                callback();
+                            });
+                        } else {
+                            self.set('lastErrorCheck', now, {silent: true});
+                            callback();
                         }
-                        callback();
                     }, function(error) {
                         callback(error);
                     });
