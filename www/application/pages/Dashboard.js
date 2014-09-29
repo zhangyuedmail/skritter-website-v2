@@ -72,8 +72,8 @@ define([
         updateListSection: function() {
             this.listTable.setFields({
                 name: 'Title',
-                studyingMode: 'Status'
-            }).filterActive();
+                currentSection: 'Section'
+            }).filterAdding();
         }
     });
 

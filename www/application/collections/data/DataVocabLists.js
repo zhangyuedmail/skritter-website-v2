@@ -46,6 +46,15 @@ define([
             });
         },
         /**
+         * @method getAdding
+         * @returns {DataVocabLists}
+         */
+        getAdding: function() {
+            return this.models.filter(function(list) {
+                return ['adding'].indexOf(list.attributes.studyingMode) !== -1;
+            });
+        },
+        /**
          * @method getTable
          */
         getTable: function() {

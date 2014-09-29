@@ -112,6 +112,16 @@ define([
             return this;
         },
         /**
+         * @method filterAdding
+         * @returns {ListTable}
+         */
+        filterAdding: function() {
+            this.filter = this.filterAdding;
+            this.lists = this.vocablists.getAdding();
+            this.renderTable();
+            return this;
+        },
+        /**
          * @method set
          * @param {Object} fields
          * @returns {ListTable}
