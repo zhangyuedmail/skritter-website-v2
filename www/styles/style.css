@@ -2,6 +2,7 @@
 Z-INDEX:
 9900: modals
 9100: sidebars
+9010: grading
 9000: canvas
 ***/
 
@@ -277,7 +278,13 @@ body {
     bottom: 0;
     display: none;
     position: absolute;
+    z-index: 9010;
 }
+.prompt-container .grading-container .btn {
+    background-color: #ffffff;
+    opacity: 0.4;
+}
+.prompt-container .grading-container .active { opacity: 1.0; }
 
 
 /*** PROMPTS: PROMPT-DEFN ***/

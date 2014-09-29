@@ -80,8 +80,10 @@ define([
             for (var i = 1; i <= 4; i++) {
                 if (i === grade) {
                     this.$('#grade' + i).addClass('active');
+                    this.$('#grade' + i).find('i').show();
                 } else {
                     this.$('#grade' + i).removeClass('active');
+                    this.$('#grade' + i).find('i').hide();
                 }
             }
             this.grade = grade;
