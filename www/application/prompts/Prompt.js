@@ -109,6 +109,7 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BaseView.prototype.events, {
+            'swipeleft': 'handleSwipedLeft',
             'vclick': 'handlePromptClicked'
         }),
         /**
@@ -146,6 +147,14 @@ define([
          */
         handlePromptClicked: function(event) {
             event.preventDefault();
+        },
+        /**
+         * @method handleSwipedLeft
+         * @param {Event} event
+         */
+        handleSwipedLeft: function(event) {
+            event.preventDefault();
+            app.sidebars.select('info').show();
         },
         /**
          * @method next
