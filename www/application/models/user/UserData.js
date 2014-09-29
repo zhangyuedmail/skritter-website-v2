@@ -269,7 +269,6 @@ define([
          * @param {String} vocabId
          */
         flagVocabUpdate: function(vocabId) {
-            console.log('flagging vocab', vocabId);
             this.attributes.changedVocabIds.push(vocabId);
             this.cache();
         },

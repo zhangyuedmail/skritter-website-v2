@@ -82,6 +82,13 @@ define([
             });
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.promptController.remove();
+            BasePage.prototype.remove.call(this);
+        },
+        /**
          * @method updateDueCount
          */
         updateDueCount: function() {

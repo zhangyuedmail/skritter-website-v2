@@ -86,6 +86,13 @@ define([
             return this;
         },
         /**
+         * @method remove
+         */
+        remove: function() {
+            this.reset();
+            BaseView.prototype.remove.call(this);
+        },
+        /**
          * @method resize
          * @returns {PromptController}
          */
