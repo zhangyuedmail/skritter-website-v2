@@ -38,7 +38,7 @@ define([
          * @returns {PageLists}
          */
         renderElements: function() {
-            return this
+            return this;
         },
         /**
          * @method events
