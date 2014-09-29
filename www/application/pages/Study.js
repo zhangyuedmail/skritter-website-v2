@@ -49,6 +49,7 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-add': 'handleAddButtonClicked',
             'vclick #button-info': 'handleInfoButtonClicked'
         }),
         /**
@@ -58,6 +59,14 @@ define([
         handleInfoButtonClicked: function(event) {
             event.preventDefault();
             app.sidebars.select('info').toggle();
+        },
+        /**
+         * @method handleAddButtonClicked
+         * @param {Event} event
+         */
+        handleAddButtonClicked: function(event) {
+            event.preventDefault();
+            app.user.data.addItems({limit: 5, showDialog: true});
         },
         /**
          * @method handlePromptComplete

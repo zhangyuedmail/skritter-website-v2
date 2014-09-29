@@ -74,8 +74,8 @@ define([
             options = options ? options : {};
             options.limit = options.limit ? options.limit : 1;
             if (options.showDialog) {
-                app.dialogs.show().element('.message-title').text('Searching');
-                app.dialogs.element('.message-text').text('');
+                app.dialogs.show().element('.message-title').text('Adding Items');
+                app.dialogs.element('.message-text').text('SEARCHING LISTS');
             }
             async.waterfall([
                 function(callback) {
@@ -116,7 +116,7 @@ define([
                         self.vocablists.add(result.VocabLists, {merge: true});
                         console.log('ADDING:', totalVocabs);
                         if (options.showDialog) {
-                            app.dialogs.element('.message-title').text('Adding: ' + totalVocabs);
+                            app.dialogs.element('.message-text').text('FOUND: ' + totalVocabs);
                         }
                     });
                 },
