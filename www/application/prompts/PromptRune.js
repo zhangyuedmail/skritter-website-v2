@@ -21,7 +21,6 @@ define([
             Prompt.prototype.initialize.call(this, options, controller, review);
             this.character = undefined;
             this.revealed = false;
-            this.teaching = false;
         },
         /**
          * @method render
@@ -65,10 +64,10 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
-            this.toggleToolbarEraser();
             if (app.user.settings.get('audio') && this.vocab.getAudio() && this.review.isFirst()) {
                 app.assets.playAudio(this.vocab.getAudio());
             }
+            this.toggleToolbarEraser();
             return this;
         },
         /**
@@ -105,7 +104,6 @@ define([
                         this.renderAnswer();
                     } else {
                         if (this.teaching) {
-                            this.canvas.clearLayer('background');
                             this.teach();
                         } else {
                             this.canvas.fadeLayer('background', null);
@@ -215,6 +213,7 @@ define([
             var stroke = this.character.getExpectedStroke();
             var strokeParam = stroke.getParams()[0];
             var strokePath = strokeParam.get('corners');
+            this.canvas.clearLayer('background');
             this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
             this.canvas.tracePath('background', strokePath);
             this.teaching = true;

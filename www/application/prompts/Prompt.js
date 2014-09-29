@@ -23,6 +23,7 @@ define([
             this.item = review.getBaseItem();
             this.position = 1;
             this.review = review;
+            this.teaching = false;
             this.vocab = review.getBaseVocab();
             //load canvas characters for rune and tone prompts
             if (['rune', 'tone'].indexOf(review.get('part')) !== -1) {
@@ -56,6 +57,9 @@ define([
                 this.elements.promptStyle.text(this.vocab.getStyle().toUpperCase());
             }
             this.reset().resize();
+            if (this.teaching) {
+                this.teach();
+            }
             this.updateVocabSidebar();
             this.loadFont();
             return this;
@@ -234,6 +238,13 @@ define([
             this.$('.text-large').css('font-size', canvasSize / 12);
             this.$('.text-normal').css('font-size', canvasSize / 16);
             this.$('.text-small').css('font-size', canvasSize / 20);
+            return this;
+        },
+        /**
+         * @method teach
+         * @returns {Prompt}
+         */
+        teach: function() {
             return this;
         },
         /**
