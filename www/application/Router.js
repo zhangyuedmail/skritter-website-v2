@@ -8,12 +8,13 @@ define([
     'pages/Account',
     'pages/Dashboard',
     'pages/Landing',
+    'pages/Lists',
     'pages/Login',
     'pages/Settings',
     'pages/Study',
     'pages/Tests'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageDashboard, PageLanding, PageLogin, PageSettings, PageStudy, PageTests) {
+            PageAccount, PageDashboard, PageLanding, PageLists, PageLogin, PageSettings, PageStudy, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -36,6 +37,8 @@ define([
         routes: {
             '': 'showHome',
             'account': 'showAccount',
+            'lists': 'showLists',
+            'lists/:sort': 'showLists',
             'login': 'showLogin',
             'logout': 'handleLogout',
             'settings': 'showSettings',
@@ -102,6 +105,14 @@ define([
         showLanding: function() {
             this.currentPage = new PageLanding();
             this.currentPage.render();
+        },
+        /**
+         * @method showLists
+         * @param {String} [sort]
+         */
+        showLists: function(sort) {
+            this.currentPage = new PageLists();
+            this.currentPage.render().sort(sort);
         },
         /**
          * @method showLogin

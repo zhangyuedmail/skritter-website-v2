@@ -9,7 +9,7 @@ define([
      * @class PageDashboard
      * @extends BasePage
      */
-    var PageHome = BasePage.extend({
+    var PageDashboard = BasePage.extend({
         /**
          * @method initialize
          */
@@ -77,5 +77,5 @@ define([
         }
     });
 
-    return PageHome;
+    return PageDashboard;
 });

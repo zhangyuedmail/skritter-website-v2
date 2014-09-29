@@ -60,6 +60,7 @@ body {
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .loading-box { margin-top: 25px; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
+.navbar-bottom { max-height: 75px; }
 .scrollable { overflow-y: auto; }
 
 
@@ -202,6 +203,10 @@ body {
 
 /*** PAGES: LIST SELECT ***/
 .page-list-select table { font-size: 2em; }
+
+
+/*** PAGES: LISTS ***/
+.page-lists {}
 
 
 /*** PAGES: LOGIN ***/

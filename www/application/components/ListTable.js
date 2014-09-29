@@ -20,6 +20,7 @@ define([
          */
         initialize: function(options, lists) {
             this.fields = {};
+            this.filter = undefined;
             this.lists = [];
             this.vocablists = lists;
         },
@@ -43,6 +44,10 @@ define([
             var divHead = '';
             this.elements.body.empty();
             this.elements.head.empty();
+            //defaults to using locally stored vocablists
+            if (!this.lists.length) {
+                this.lists = this.vocablists.models;
+            }
             //generates the header section
             if (this.fields) {
                 divHead += '<tr>';
@@ -57,7 +62,7 @@ define([
                     var list = this.lists[i];
                     divBody += "<tr id='list-" + list.id + "' class='cursor'>";
                     for (var field in this.fields) {
-                        var fieldValue = list.get(field);
+                        var fieldValue = list.cid ? list.get(field) : list[field];
                         if (field === 'studyingMode') {
                             if (fieldValue === 'not studying') {
                                 divBody += "<td class='list-field-" + field + "'>Not Studying</td>";
@@ -86,8 +91,15 @@ define([
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-            });
+            return _.extend({}, BaseView.prototype.events, {});
+        },
+        /**
+         * @method clear
+         * @returns {ListTable}
+         */
+        clear: function() {
+            this.elements.body.empty();
+            this.elements.head.empty();
         },
         /**
          * @method filterActive
