@@ -20,6 +20,7 @@ define([
             this.name = 'default';
             this.sidebar = undefined;
             this.speed = 300;
+            this.tweening = false;
             this.render();
         },
         /**
@@ -105,12 +106,16 @@ define([
          * @returns {Sidebars}
          */
         hide: function(speed) {
-            if (this.enabled) {
+            var self = this;
+            if (this.enabled && !this.moving) {
+                this.moving = true;
                 if (this.name === 'menu') {
                     $('.navbar-menu.toggle').removeClass('active');
                 }
                 this.sidebar.removeClass('expanded');
-                this.sidebar.hide('slide', {direction: this.direction}, speed ? speed : this.speed);
+                this.sidebar.hide('slide', {direction: this.direction}, speed ? speed : this.speed, function() {
+                    self.moving = false;
+                });
             }
             return this;
         },
@@ -128,6 +133,9 @@ define([
          */
         select: function(name) {
             var sidebar = this.$('#sidebar-' + name);
+            if (this.sidebar) {
+                this.hide();
+            }
             if (sidebar.length) {
                 this.direction = sidebar.hasClass('right') ? 'right' : 'left';
                 this.name = name;
@@ -145,12 +153,16 @@ define([
          * @returns {Sidebars}
          */
         show: function(speed) {
-            if (this.enabled) {
+            var self = this;
+            if (this.enabled && !this.moving) {
+                this.moving = true;
                 if (this.name === 'menu') {
                     $('.navbar-menu.toggle').addClass('active');
                 }
                 this.sidebar.addClass('expanded');
-                this.sidebar.show('slide', {direction: this.direction}, speed ? speed : this.speed);
+                this.sidebar.show('slide', {direction: this.direction}, speed ? speed : this.speed, function() {
+                    self.moving = false;
+                });
             }
             return this;
         },
