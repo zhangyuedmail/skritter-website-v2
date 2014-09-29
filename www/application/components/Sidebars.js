@@ -42,6 +42,7 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BaseView.prototype.events, {
+            'vclick #sidebar-info .edit-definition': 'handleEditDefinitionClicked',
             'vclick #sidebar-info .info-ban': 'handleInfoBanClicked',
             'vclick #sidebar-info .info-star': 'handleInfoStarClicked',
             'swipeleft .sidebar': 'handleSidebarSwipeLeft',
@@ -63,6 +64,14 @@ define([
          */
         enable: function() {
             this.enabled = true;
+        },
+        /**
+         * @method handleEditDefinitionClicked
+         * @param {Event} event
+         */
+        handleEditDefinitionClicked: function(event) {
+            event.preventDefault();
+            this.trigger('click:edit-definition');
         },
         /**
          * @method handleInfoBanClicked

@@ -811,7 +811,6 @@ define([
             vocabs = Array.isArray(vocabs) ? vocabs : [vocabs];
             (function next() {
                 var vocab = vocabs.splice(0, 1)[0];
-                console.log(vocab);
                 $.ajax({
                     url: self.getBaseUrl() + 'vocabs/' + vocab.id +
                         '?bearer_token=' + self.getToken(),

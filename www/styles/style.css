@@ -63,6 +63,13 @@ body {
 .scrollable { overflow-y: auto; }
 
 
+/*** DIALOGS: EDIT TEXT ***/
+.dialog-edit-text .dialog-value{
+    min-height: 100px;
+    width: 100%;
+}
+
+
 /*** DIALOGS: LIST CONFIRMATION ***/
 .dialog-list-confirmation .list-image img { max-width: 100px; }
 
@@ -145,9 +152,9 @@ body {
 .navbar-menu .toggle-text {
     float: right;
     font-size: 22px;
-    margin-left: 20px;
+    margin-left: 15px;
 }
-.navbar-menu.active .toggle-bars { margin-left: -5px; }
+.navbar-menu.active .toggle-bars { margin-left: -10px; }
 .navbar-menu.active .toggle-text { margin-left: 30px; }
 
 
@@ -387,6 +394,10 @@ body {
 }
 #sidebar-info .info {
     font-size: 1.2em;
+}
+#sidebar-info .info-options {
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
 #sidebar-info .info-reading {
     font-size: 2em;

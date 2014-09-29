@@ -113,6 +113,30 @@ define([
             'vclick': 'handlePromptClicked'
         }),
         /**
+         * @method editDefinition
+         */
+        editDefinition: function() {
+            var self = this;
+            //TODO: clean up interactions with sidebar
+            app.dialogs.show('edit-text').element('.modal-title span').text('Edit Definition');
+            var currentDefinition = this.vocab.getDefinition();
+            app.dialogs.element('.dialog-value').text(currentDefinition);
+            app.dialogs.element('.save').on('vclick', function() {
+                var value = app.dialogs.element('.dialog-value').val();
+                if (!value || value === '') {
+                    value = currentDefinition;
+                    self.vocab.set('customDefinition', undefined);
+                } else if (currentDefinition !== value) {
+                    self.vocab.set('customDefinition', value);
+                } else {
+                    value = currentDefinition;
+                }
+                $('#sidebar-info .info-definition').text(value);
+                self.elements.fieldDefinition.text(value);
+                app.dialogs.hide();
+            });
+        },
+        /**
          * @method enableCanvasListeners
          * @returns {Prompt}
          */
@@ -125,6 +149,7 @@ define([
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             this.listenTo(this.gradingButtons, 'complete', this.handleGradingButtonsCompleted);
             this.listenTo(this.gradingButtons, 'selected', this.handleGradingButtonsSelected);
+            this.listenTo(app.sidebars, 'click:edit-definition', this.editDefinition);
             this.listenTo(app.sidebars, 'click:info-ban', this.toggleBanned);
             this.listenTo(app.sidebars, 'click:info-star', this.toggleStarred);
             return this;
