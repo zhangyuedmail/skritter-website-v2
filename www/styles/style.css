@@ -289,7 +289,7 @@ body {
 }
 .prompt-container .grading-container .btn {
     background-color: #ffffff;
-    opacity: 0.4;
+    opacity: 0.6;
 }
 .prompt-container .grading-container .active { opacity: 1.0; }
 

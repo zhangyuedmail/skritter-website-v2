@@ -46,7 +46,7 @@ define([
             } else {
                 this.renderQuestion();
             }
-            if (!this.item.isNew()) {
+            if (this.item.isNew()) {
                 this.elements.promptNewness.text('NEW');
                 this.elements.promptNewness.addClass('text-warning');
             } else {
