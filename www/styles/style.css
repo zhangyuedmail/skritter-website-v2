@@ -1,0 +1,407 @@
+/***
+Z-INDEX:
+9900: modals
+9100: sidebars
+9010: grading
+9000: canvas
+***/
+
+/*** APPLICATION ***/
+html, body { height: 100%; }
+body {
+    -moz-user-select: none;
+    -ms-text-size-adjust: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: none;
+    -webkit-user-select: none;
+    background-color: #f3f3f3;
+    padding-top: 45px;
+    user-select: none;
+}
+.application-container {
+    height: 100%;
+    position: relative;
+}
+.font-preloader {
+    position: absolute;
+    visibility: hidden;
+    z-index: -1;
+}
+
+
+/*** BOOTSTRAP ***/
+.btn.spacing { margin: 5px 0; }
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+.content-box {
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+    border-top: solid #e7e7e7 1px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+    margin-bottom: 10px;
+    padding: 10px 15px;
+}
+.content-box.fixed-150 { height: 150px; }
+.content-box h1, .content-box h2, .content-box h3,
+.content-box h4, .content-box h5, .content-box h6 { margin-top: 5px; }
+.modal { z-index: 9900; }
+.padding-top { padding-top: 10px; }
+@media (max-width: 991px) {
+    .content-box.fixed-150 { height: auto; }
+}
+
+
+/*** GLOBAL ***/
+.cursor { cursor: pointer; }
+.chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
+.loading-box { margin-top: 25px; }
+.japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
+.scrollable { overflow-y: auto; }
+
+
+/*** DIALOGS: EDIT TEXT ***/
+.dialog-edit-text .dialog-value{
+    min-height: 100px;
+    width: 100%;
+}
+
+
+/*** DIALOGS: LIST CONFIRMATION ***/
+.dialog-list-confirmation .list-image img { max-width: 100px; }
+
+
+/*** NAVBAR ***/
+.navbar, .navbar-header { height: 45px; }
+.navbar-icon {
+    color: #ffffff;
+    font-size: 28px;
+    padding-top: 7.5px;
+}
+.navbar-text {
+    float: none;
+    font-size: 18px;
+    margin: auto;
+    padding-left: 5px;
+}
+.navbar ul > li {
+    cursor: pointer;
+    height: 45px;
+    min-width: 55px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+}
+.navbar ul > li:hover { background-color: #009fd4; }
+.navbar ul > li.no-hover:hover { background-color: transparent; }
+@media (max-width: 767px) {
+    .navbar {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .navbar .container {
+        padding-right: 0;
+        width: 100%;
+    }
+    .navbar-header { float: left; }
+    .navbar-nav { margin: 0; }
+    .navbar-nav li { float: left; }
+    .navbar-left { float: left; }
+    .navbar-right { float: right; }
+}
+
+
+/*** NAVBAR: MENU ***/
+.navbar-menu {
+    background: transparent none;
+    border: none;
+    color: #ffffff;
+    height: 45px;
+    min-width: 100px;
+    margin: 0 20px 0 -15px;
+}
+.navbar-menu:focus {
+    border: none;
+    outline: none;
+}
+
+
+/*** NAVBAR: MENU BACK ***/
+.navbar-menu .back-icon {
+    float: left;
+    font-size: 24px;
+    margin-left: 15px;
+}
+.navbar-menu .back-text {
+    float: right;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+
+/*** NAVBAR: MENU SIDEBAR ***/
+.navbar-menu .toggle-bars {
+    float: left;
+    font-size: 26px;
+    margin-left: 5px;
+    margin-top: 2px;
+}
+.navbar-menu .toggle-text {
+    float: right;
+    font-size: 22px;
+    margin-left: 15px;
+}
+.navbar-menu.active .toggle-bars { margin-left: -10px; }
+.navbar-menu.active .toggle-text { margin-left: 30px; }
+
+
+/*** PAGES ***/
+.page { height: 100%; }
+.page.no-navbar { margin-top: auto; }
+.page.no-overflow { overflow: hidden; }
+.page .content-container { height: 100%; }
+@media (max-width: 991px) {
+    .page.no-navbar { margin-top: -55px; }
+}
+@media (max-width: 767px) {
+    .page .no-margins {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+
+/*** PAGES: ACCOUNT CREATION ***/
+.page-create-account .create-account-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+.page-list-select .list-image img {
+    max-width: 50px;
+}
+.page-list-select .list-name {
+    font-size: 0.6em;
+    padding-left: 25px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+
+/*** PAGES: LANDING ***/
+.landing-logo {
+    margin: 25px auto 0 auto;
+    padding-left: 10%;
+    width: 50%;
+}
+
+
+/*** PAGES: LIST SELECT ***/
+.page-list-select table { font-size: 2em; }
+
+
+/*** PAGES: LOGIN ***/
+.page-login .login-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+
+/*** PAGES: SETTINGS ***/
+.page-settings .setting-label {
+    float: left;
+    width: 100px;
+}
+
+
+/*** PROMPTS ***/
+.prompt-container {
+    cursor: pointer;
+    height: 100%;
+    position: relative;
+}
+.prompt-container .prompt { position: relative; }
+.prompt-container .field { font-size: 1.5em; }
+
+
+/*** PROMPTS: CANVAS ***/
+.prompt-container .canvas-container {
+    display: none;
+    float: left;
+    text-align: center;
+    z-index: 9000;
+}
+.prompt-container .prompt-canvas {
+    background-color: #ffffff;
+    display: inline;
+}
+
+
+/*** PROMPTS: DETAIL ***/
+.prompt-container .detail-container {
+    background-image: url('../images/textures/noisy.png');
+    float: left;
+    position: relative;
+}
+.prompt-container .detail-container .field { clear: both; }
+.prompt-container .field-reading div { display: inline; }
+.prompt-container .field-reading span { margin-right: 5px; }
+.prompt-container .field-reading .reading-hidden { border-top: 1px solid #000000; }
+.prompt-container .field-reading .reading-hidden span { visibility: hidden; }
+.prompt-container .field-reading .reading-button {
+    background-color: #d3d3d3;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}
+.prompt-container .field-reading .reading-button span { visibility: hidden; }
+.prompt-container .field-reading .reading-button.reveal span { visibility: visible; }
+.prompt-container .field-writing span { margin-right: 5px; }
+.prompt-container .field-writing .writing-hidden { border-top: 5px solid #000000; }
+.prompt-container .field-writing .writing-hidden span { visibility: hidden; }
+.prompt-container .prompt-newness {
+    bottom: -20px;
+    font-size: 12px;
+    margin: 0;
+    padding: 2px 5px;
+    left: 0;
+    position: absolute;
+}
+.prompt-container .prompt-style {
+    bottom: -20px;
+    font-size: 12px;
+    margin: 0;
+    padding: 2px 5px;
+    position: absolute;
+    right: 0;
+}
+
+
+/*** PROMPTS: GRADING BUTTONS ***/
+.prompt-container .grading-container {
+    bottom: 0;
+    display: none;
+    position: absolute;
+    z-index: 9010;
+}
+.prompt-container .grading-container .btn {
+    background-color: #ffffff;
+    opacity: 0.4;
+}
+.prompt-container .grading-container .active { opacity: 1.0; }
+
+
+/*** PROMPTS: PROMPT-DEFN ***/
+.prompt-container .prompt-defn { height: 100%; }
+.prompt-container .prompt-defn .container {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+}
+.prompt-container .prompt-defn .prompt-newness {
+    bottom: auto;
+    margin: 0 15px;
+    top: -50px;
+}
+.prompt-container .prompt-defn .prompt-style {
+    bottom: auto;
+    margin: 0 15px;
+    top: -50px;
+}
+
+
+/*** PROMPTS: PROMPT-RDNG ***/
+.prompt-container .prompt-rdng { height: 100%; }
+.prompt-container .prompt-rdng .container {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+}
+.prompt-container .prompt-rdng .prompt-newness {
+    bottom: auto;
+    margin: 0 15px;
+    top: -50px;
+}
+.prompt-container .prompt-rdng .prompt-style {
+    bottom: auto;
+    margin: 0 15px;
+    top: -50px;
+}
+
+
+/*** PROMPTS: PROMPT-RUNE ***/
+.prompt-container .prompt-rune .field-writing { padding-top: 5px; }
+
+
+/*** PROMPTS: TOOLBAR ***/
+.prompt-container .prompt-toolbar {
+    background-color: #ffffff;
+    border-top: 1px solid #000000;
+    bottom: 0;
+    height: 36px;
+    position: absolute;
+    width: 100%;
+}
+.prompt-container .prompt-toolbar i {
+    font-size: 28px;
+    padding-top: 5px;
+}
+.prompt-container .prompt-toolbar .pull-left i { margin-left: 15px; }
+.prompt-container .prompt-toolbar .pull-right i { margin-right: 15px; }
+
+
+/*** SIDEBARS ***/
+.sidebars-container a {
+    color: #000000;
+    font-size: 20px;
+}
+.sidebars-container hr {
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+.sidebars-container i {
+    padding-right: 50px;
+    width: 30px;
+}
+.sidebar {
+    background-color: #ffffff;
+    display: none;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 45px;
+    margin-top: 45px;
+    position: fixed;
+    top: 0;
+    z-index: 9100;
+    width: 300px;
+}
+.sidebar.left {
+    border-right: 2px solid #006687;
+    left: 0;
+}
+.sidebar.right {
+    border-left: 2px solid #006687;
+    right: 0;
+}
+
+
+/*** SIDEBARS: INFO ***/
+#sidebar-info.sidebar {
+    width: 80%;
+}
+#sidebar-info .info {
+    font-size: 1.2em;
+}
+#sidebar-info .info-options {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+#sidebar-info .info-reading {
+    font-size: 2em;
+}
+#sidebar-info .info-writing {
+    font-size: 3em;
+}

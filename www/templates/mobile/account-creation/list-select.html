@@ -1,0 +1,41 @@
+<div class="mobile no-navbar page page-list-select">
+
+    <div class="container text-center">
+
+        <h1>
+            <i class="cursor fa fa-arrow-circle-left navigate pull-left" data-url="#"></i>
+            {{account-creation.list-select.header}}
+        </h1>
+
+        <p class="text-muted">{{account-creation.list-select.message}}</p>
+
+        <hr>
+
+        <div class="loading-box">
+            <img src="images/ajax-loader.gif" class="loading-image" alt="">
+            <h2 class="loading-message"></h2>
+        </div>
+
+        <div class="lists-container">
+            <p>
+                <strong>Recommended Lists: </strong>
+                <a href="#" class="recommended-list" data-search="101">Skritter 101</a> -
+                <a href="#" class="recommended-list" data-search="integrated chinese">Integrated Chinese</a> -
+                <a href="#" class="recommended-list" data-search="new practical chinese reader">New Practical Chinese Reader</a> -
+                <a href="#" class="recommended-list" data-search="hsk (new)">New HSK</a> -
+                <a href="#" class="recommended-list" data-search="practical audio-visual chinese">Practical Audio-Visual Chinese</a> -
+                <a href="#" class="recommended-list" data-search="radicals">Radicals</a>
+            </p>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input id="search-box" type="text" class="form-control" placeholder="{{account-creation.list-select.search-placeholder}}">
+            </div>
+            <table id="list-table" class="cursor table table-bordered table-hover">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>

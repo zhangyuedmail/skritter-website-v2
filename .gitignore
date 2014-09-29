@@ -1,8 +1,8 @@
 # Directories #
 .idea/
-build/
-docs/
-framework/crosswalk/arm
-framework/crosswalk/x86
+build/**/
 node_modules/
 nbproject/
+
+# Files #
+npm-debug.log
