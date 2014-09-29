@@ -78,6 +78,18 @@ define([
                 app.dialogs.element('.message-text').text('SEARCHING LISTS');
             }
             async.waterfall([
+                //wait for background sync to complete
+                function(callback) {
+                    (function wait() {
+                        if (self.syncing) {
+                            app.dialogs.element('.message-text').text('WAITING');
+                            setTimeout(wait, 1000);
+                        } else {
+                            callback();
+                        }
+                    })();
+                },
+                //request new items via api batch
                 function(callback) {
                     app.api.requestBatch([
                         {
@@ -96,6 +108,7 @@ define([
                         callback(error);
                     });
                 },
+                //check batch until server finish processing
                 function(batch, callback) {
                     app.api.checkBatch(batch.id, function() {
                         callback(null, batch);
@@ -103,6 +116,7 @@ define([
                         callback(error);
                     }, function(result) {});
                 },
+                //fetch items that have been added
                 function(batch, callback) {
                     var totalItems = 0;
                     var totalVocabs = 0;
@@ -120,6 +134,7 @@ define([
                         }
                     });
                 },
+                //run sync to fetch items changed since add
                 function(callback) {
                     if (options.skipSync) {
                         callback();
