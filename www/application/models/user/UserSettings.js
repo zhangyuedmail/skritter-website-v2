@@ -91,8 +91,8 @@ define([
          * @returns {Object}
          */
         getCustomData: function() {
-            var currentReview = this.user.reviews.current ? this.user.reviews.current.toJSON() : null;
-            var previousReview = this.user.reviews.previous ? this.user.reviews.previous.toJSON() : null;
+            var currentReview = app.user.reviews.current ? app.user.reviews.current.toJSON() : null;
+            var previousReview = app.user.reviews.previous ? app.user.reviews.previous.toJSON() : null;
             return {
                 reviews: {
                     current: currentReview,
