@@ -75,8 +75,9 @@ define([
                 studyingMode: 'adding'
             }, function(result) {
                 app.user.data.vocablists.add(result, {merge: true});
-                app.dialogs.hide();
-                app.router.navigate('list/sort/my-lists', {trigger: true});
+                app.dialogs.hide(function() {
+                    app.router.navigate('list/sort/my-lists', {trigger: true});
+                });
             }, function(error) {
                 console.error(error);
             });
