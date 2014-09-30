@@ -138,7 +138,7 @@ define([
         getReading: function(startFrom, options) {
             var html = '';
             var position = 1;
-            var fillers = [" ... ", "'"];
+            var fillers = [" ... ", "'", " "];
             startFrom = startFrom ? startFrom : false;
             options = options ? options : {};
             options.hide = options.hide ? options.hide : false;
