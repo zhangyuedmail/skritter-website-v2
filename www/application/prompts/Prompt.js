@@ -100,11 +100,13 @@ define([
         renderElements: function() {
             this.elements.fieldAnswer = this.$('.field-answer');
             this.elements.fieldDefinition = this.$('.field-definition');
+            this.elements.fieldHeisig = this.$('.field-heisig');
             this.elements.fieldQuestion = this.$('.field-question');
             this.elements.fieldReading = this.$('.field-reading');
             this.elements.fieldWriting = this.$('.field-writing');
             this.elements.infoBan = $('#sidebar-info .info-ban');
             this.elements.infoDefinition = $('#sidebar-info .info-definition');
+            this.elements.infoHeisig = $('#sidebar-info .info-heisig');
             this.elements.infoReading = $('#sidebar-info .info-reading');
             this.elements.infoStar = $('#sidebar-info .info-star');
             this.elements.infoWriting = $('#sidebar-info .info-writing');
@@ -297,6 +299,11 @@ define([
          */
         updateVocabSidebar: function() {
             this.elements.infoDefinition.text(this.vocab.getDefinition());
+            if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
+                this.elements.infoHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+            } else {
+                this.elements.infoHeisig.empty();
+            }
             this.elements.infoReading.html(this.vocab.getReading(null, {
                 style: app.user.settings.get('readingStyle')
             }));

@@ -31,6 +31,7 @@ define([
             this.activeStyles = this.settings.getActiveStyles();
             this.enabledParts = this.settings.getEnabledParts();
             this.elements.adjAudio = this.$('#adjustments #audio');
+            this.elements.adjHeisig = this.$('#adjustments #heisig');
             this.elements.adjHideReading = this.$('#adjustments #hide-reading');
             this.elements.adjRawSquigs = this.$('#adjustments #raw-squigs');
             this.elements.adjReadingStyle = this.$('#adjustments #reading-style');
@@ -49,6 +50,7 @@ define([
          */
         renderElements: function() {
             this.elements.adjAudio.bootstrapSwitch('state', this.settings.get('audio'));
+            this.elements.adjHeisig.bootstrapSwitch('state', this.settings.get('showHeisig'));
             this.elements.adjHideReading.bootstrapSwitch('state', this.settings.get('hideReading'));
             this.elements.adjRawSquigs.bootstrapSwitch('state', this.settings.get('RawSquigs'));
             if (app.user.isChinese()) {
@@ -96,7 +98,8 @@ define([
                 audio: this.elements.adjAudio.bootstrapSwitch('state'),
                 hideReading: this.elements.adjHideReading.bootstrapSwitch('state'),
                 rawSquigs: this.elements.adjRawSquigs.bootstrapSwitch('state'),
-                readingStyle: this.elements.adjReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin'
+                readingStyle: this.elements.adjReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
+                showHeisig: this.elements.adjHeisig.bootstrapSwitch('state')
             });
         },
         /**
