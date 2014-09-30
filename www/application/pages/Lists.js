@@ -40,8 +40,22 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick table tr': 'handleTableRowClicked'
+            'vclick table tr': 'handleTableRowClicked',
+            'keyup #search-box': 'handleSearchBoxChanged'
         }),
+        /**
+         * @method handleSearchBoxChanged
+         * @param {Event} event
+         */
+        handleSearchBoxChanged: function(event) {
+            event.preventDefault();
+            var searchText = this.$('#search-box').val();
+            this.table.filterBy({
+                categories: searchText,
+                name: searchText,
+                shortName: searchText
+            }).renderTable();
+        },
         /**
          * @method handleTableRowClicked
          * @param {Event} event
@@ -100,7 +114,7 @@ define([
          */
         resize: function() {
             this.$('#lists').css({
-                height: this.getHeight() - 70,
+                height: this.getHeight() - 120,
                 'overflow-y': 'auto'
             });
             return this;

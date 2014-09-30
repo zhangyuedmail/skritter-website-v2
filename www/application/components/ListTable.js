@@ -17,6 +17,7 @@ define([
          */
         initialize: function() {
             this.fields = {name: 'Name'};
+            this.filtered = [];
             this.lists = [];
         },
         /**
@@ -32,6 +33,7 @@ define([
          * @returns {ListTable}
          */
         renderTable: function() {
+            var lists = this.filtered.length ? this.filtered : this.lists;
             var divBody = '';
             var divHead = '';
             this.$('table tbody').empty();
@@ -45,8 +47,8 @@ define([
                 divHead += '</tr>';
             }
             //generates the body section
-            for (var i = 0, length = this.lists.length; i < length; i++) {
-                var list = this.lists[i];
+            for (var i = 0, length = lists.length; i < length; i++) {
+                var list = lists[i];
                 divBody += "<tr id='list-" + list.id + "' class='cursor'>";
                 for (var field in this.fields) {
                     var fieldValue = list[field];
@@ -84,6 +86,28 @@ define([
         clear: function() {
             this.$('table thead').empty();
             this.$('table tbody').empty();
+        },
+        /**
+         * @method filterByName
+         * @param {Object} criteria
+         * @returns {ListTable}
+         */
+        filterBy: function(criteria) {
+            this.filtered = _.filter(this.lists, function(list) {
+                for (var criterion in criteria) {
+                    if (Array.isArray(list[criterion])) {
+                        var normalizedArray = list[criterion].map(app.fn.toLowerCase);
+                        if (normalizedArray.indexOf(criteria[criterion]) > -1) {
+                            return true;
+                        }
+                    } else {
+                        if (list[criterion].toLowerCase().indexOf(criteria[criterion].toLowerCase()) > -1) {
+                            return true;
+                        }
+                    }
+                }
+            });
+            return this;
         },
         /**
          * @method set
