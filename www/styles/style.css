@@ -85,8 +85,8 @@ body {
 .navbar, .navbar-header { height: 45px; }
 .navbar-icon {
     color: #ffffff;
-    font-size: 26px;
-    padding-top: 7.5px;
+    font-size: 22px;
+    padding-top: 12px;
 }
 .navbar-text {
     float: none;

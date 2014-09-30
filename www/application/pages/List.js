@@ -18,7 +18,6 @@ define([
             this.title = 'List';
             this.list = undefined;
             this.listId = undefined;
-            this.listName = undefined;
             this.table = new ListSectionTable();
         },
         /**
@@ -27,6 +26,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
+            this.$('.list-controls button').hide();
             this.table.setElement(this.$('.section-table-container')).render();
             this.resize();
             return this;
@@ -36,9 +36,17 @@ define([
          * @returns {PageList}
          */
         renderElements: function() {
+            this.$('.list-controls button').hide();
             switch (this.list.studyingMode) {
                 case 'adding':
-                    this.$('#button-add').hide();
+                    this.$('#button-pause').show();
+                    break;
+                case 'reviewing':
+                    this.$('#button-resume').show();
+                    this.$('#button-remove').show();
+                    break;
+                case 'not studying':
+                    this.$('#button-add').show();
                     break;
             }
             return this;
@@ -49,7 +57,10 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick table tr': 'handleTableRowClicked',
-            'vclick #button-add': 'handleButtonAddClicked'
+            'vclick #button-add': 'handleButtonAddClicked',
+            'vclick #button-pause': 'handleButtonPauseClicked',
+            //'vclick #button-remove': 'handleButtonRemoveClicked',
+            'vclick #button-resume': 'handleButtonResumeClicked'
         }),
         /**
          * @method handleTableRowClicked
@@ -63,13 +74,56 @@ define([
                 id: this.listId,
                 studyingMode: 'adding'
             }, function(result) {
-                console.log(result);
                 app.user.data.vocablists.add(result, {merge: true});
+                app.dialogs.hide();
+                app.router.navigate('list/sort/my-lists', {trigger: true});
+            }, function(error) {
+                console.error(error);
+            });
+        },
+        /**
+         * @method handleButtonPauseClicked
+         * @param {Event} event
+         */
+        handleButtonPauseClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            app.dialogs.show().element('.message-title').text('Updating');
+            app.dialogs.element('.message-text').text('PAUSING LIST');
+            app.api.updateVocabList({
+                id: this.listId,
+                studyingMode: 'reviewing'
+            }, function(result) {
+                app.user.data.vocablists.add(result, {merge: true});
+                self.list = result;
+                self.renderElements();
                 app.dialogs.hide();
             }, function(error) {
                 console.error(error);
             });
         },
+        /**
+         * @method handleButtonResumeClicked
+         * @param {Event} event
+         */
+        handleButtonResumeClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            app.dialogs.show().element('.message-title').text('Updating');
+            app.dialogs.element('.message-text').text('RESUMING LIST');
+            app.api.updateVocabList({
+                id: this.listId,
+                studyingMode: 'adding'
+            }, function(result) {
+                self.list = result;
+                app.user.data.vocablists.add(result, {merge: true});
+                self.renderElements();
+                app.dialogs.hide();
+            }, function(error) {
+                console.error(error);
+            });
+        },
+
         /**
          * @method handleTableRowClicked
          * @param {Event} event
@@ -105,9 +159,8 @@ define([
          * @returns {PageList}
          */
         resize: function() {
-            var detailHeight = this.$('#detail').height();
-            this.$('#sections').css({
-                height: this.getHeight() - detailHeight - 100,
+            this.$('#list').css({
+                height: this.getHeight() - 75,
                 'overflow-y': 'auto'
             });
             return this;
@@ -115,12 +168,10 @@ define([
         /**
          * @method sort
          * @param {String} listId
-         * @param {String} [listName]
          * @returns {PageList}
          */
-        set: function(listId, listName) {
+        set: function(listId) {
             this.listId = listId;
-            this.listName = listName;
             this.loadList();
             return this;
         }
