@@ -36,6 +36,20 @@ define([
             });
         },
         /**
+         * @method hasActive
+         * @returns {Boolean}
+         */
+        hasActive: function() {
+            return this.pluck('studyingMode').indexOf('adding') > -1;
+        },
+        /**
+         * @method hasPaused
+         * @returns {Boolean}
+         */
+        hasPaused: function() {
+            return this.pluck('studyingMode').indexOf('reviewing') > -1;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

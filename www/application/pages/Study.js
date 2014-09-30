@@ -72,6 +72,11 @@ define([
             }, function(error) {
                 app.dialogs.element('.loader-image').hide();
                 app.dialogs.element('.message-title').text(error);
+                if (app.user.data.vocablists.hasPaused()) {
+                    app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
+                } else {
+                    app.dialogs.element('.message-text').text('You need to add another list to study.');
+                }
                 app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to 'My Lists'", {level: 'primary'}));
                 app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
                 app.dialogs.element('.message-close button').on('vclick', function() {

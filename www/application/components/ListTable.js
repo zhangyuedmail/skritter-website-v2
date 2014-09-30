@@ -60,7 +60,7 @@ define([
                         } else if (fieldValue === 'adding') {
                             divBody += "<td class='list-field-" + field + "'>Adding</td>";
                         } else {
-                            divBody += "<td class='list-field-" + field + "'>Reviewing</td>";
+                            divBody += "<td class='list-field-" + field + "'>Paused</td>";
                         }
                     } else if (field === 'image') {
                         divBody += "<td class='list-image'><img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''></td>";
