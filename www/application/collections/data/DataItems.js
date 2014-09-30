@@ -195,7 +195,11 @@ define([
                         if (items && items.length) {
                             app.dialogs.element('.message-text').text('FETCHING ' + items.length + ' ITEMS');
                             app.api.getItemByOffset(now, {
-                                lang: app.user.getLanguageCode()
+                                lang: app.user.getLanguageCode(),
+                                includeVocabs: true,
+                                includeStrokes: true,
+                                includeHeisigs: true,
+                                includeDecomps: true
                             }, function(result) {
                                 if (result.Items && result.Items.length) {
                                     self.data.user.schedule.insert(result.Items);

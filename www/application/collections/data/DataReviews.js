@@ -71,9 +71,9 @@ define([
                         if (errors && errors.length) {
                             try {
                                 throw new Error('Review Errors');
-                            } catch (error) {
+                            } catch (e) {
                                 console.log('REVIEW ERRORS:', errors);
-                                raygun.send(error, {ReviewErrors: errors});
+                                raygun.send(e, {ReviewErrors: errors});
                             }
                             callback(null, errors);
                         } else {
@@ -89,12 +89,10 @@ define([
                         var itemIds = _.pluck(errors, 'itemId');
                         app.api.getItemById(itemIds, null, function(result) {
                             console.log('FIXING ERRORS:', itemIds);
-                            if (result && result.length) {
+                            if (result && result.Items.length) {
                                 app.user.schedule.insert(result.Items);
                             }
-                            self.user.data.put(result, function() {
-                                callback();
-                            });
+                            self.user.data.put(result, callback);
                         }, function() {
                             callback();
                         });
@@ -152,9 +150,16 @@ define([
                     });
                 }, function(error, posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
-                    self.remove(postedIds);
-                    console.error('REVIEW ERROR:', error);
-                    callbackError(error);
+                    try {
+                        throw new Error('Review Format Errors');
+                    } catch (e) {
+                        console.log('REVIEW FORMAT ERRORS:', error.responseJSON);
+                        raygun.send(e, {Response: error.responseJSON});
+                    }
+                    app.storage.clear('reviews', function() {
+                        self.reset();
+                        callbackError(error);
+                    });
                 });
             } else {
                 callbackSuccess();
