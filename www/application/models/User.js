@@ -143,6 +143,17 @@ define([
             return this.isChinese() ? 'simkai' : 'kaisho';
         },
         /**
+         * @method getServerTime
+         * @param {Function} callback
+         */
+        getServerTime: function(callback) {
+            app.api.getDate(function(result) {
+                callback(result.serverTime);
+            }, function() {
+                callback(moment().unix());
+            });
+        },
+        /**
          * @method isAuthenticated
          * @returns {Boolean}
          */

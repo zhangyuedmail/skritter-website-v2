@@ -65,6 +65,13 @@ define([
             var self = this;
             var now = moment().unix();
             async.waterfall([
+                //use server time for reference
+                function(callback) {
+                    self.data.user.getServerTime(function(time) {
+                        now = time;
+                        callback();
+                    });
+                },
                 //check server for posted review errors
                 function(callback) {
                     app.api.getReviewErrors(self.user.data.get('lastErrorCheck'), function(errors) {

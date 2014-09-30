@@ -72,6 +72,7 @@ define([
             app.dialogs.show().element('.message-title').text('Loading');
             app.dialogs.element('.message-text').text('MY LISTS');
             app.api.getVocabLists({
+                lang: app.user.getLanguageCode(),
                 sort: 'studying'
             }, function(lists) {
                 app.user.data.vocablists.add(lists, {merge: true});
@@ -95,6 +96,7 @@ define([
             app.dialogs.show().element('.message-title').text('Loading');
             app.dialogs.element('.message-text').text('TEXTBOOKS');
             app.api.getVocabLists({
+                lang: app.user.getLanguageCode(),
                 sort: 'official'
             }, function(lists) {
                 self.table.setFields({

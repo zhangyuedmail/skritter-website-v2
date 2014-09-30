@@ -51,7 +51,8 @@ define([
          * @returns {Number}
          */
         getTime: function() {
-            return this.get('timeStudied') ? Math.floor(this.get('timeStudied').day) : 0;
+            var timeStudied = this.get('timeStudied') ? Math.floor(this.get('timeStudied').day) : 0;
+            return timeStudied + this.user.reviews.getTimerOffset();
         },
         /**
          * @method getTimerOffset
@@ -76,7 +77,10 @@ define([
                     });
                 },
                 function(date, callback) {
-                    app.api.getStats({start: date.today}, function(data) {
+                    app.api.getStats({
+                        lang: app.user.getLanguageCode(),
+                        start: date.today
+                    }, function(data) {
                         self.set(data[0]);
                         callback();
                     }, function(error) {

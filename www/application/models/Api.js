@@ -352,6 +352,7 @@ define([
                     type: 'GET',
                     data: {
                         bearer_token: self.getToken(),
+                        lang: options.lang || app.user.getLanguageCode(),
                         ids: itemIds.splice(0, 19).join('|'),
                         fields: options.fields,
                         include_vocabs: options.includeVocabs ? 'true' : 'false',
@@ -397,6 +398,7 @@ define([
                     type: 'GET',
                     data: {
                         bearer_token: self.getToken(),
+                        lang: options.lang || app.user.getLanguageCode(),
                         cursor: cursor,
                         sort: 'changed',
                         offset: offset,
@@ -478,10 +480,10 @@ define([
                 type: 'GET',
                 data: {
                     bearer_token: this.getToken(),
+                    lang: options.lang || app.user.getLanguageCode(),
                     start: options.start,
                     end: options.end,
                     step: options.step,
-                    lang: options.lang,
                     fields: options.fields
                 }
             }).done(function(data) {
@@ -598,6 +600,7 @@ define([
                     type: 'GET',
                     data: {
                         bearer_token: self.getToken(),
+                        lang: options.lang || app.user.getLanguageCode(),
                         ids: vocabIds.splice(0, 19).join('|'),
                         fields: options.fields,
                         include_strokes: options.includeStrokes,
@@ -639,6 +642,7 @@ define([
                 type: 'GET',
                 data: {
                     bearer_token: this.getToken(),
+                    lang: options.lang || app.user.getLanguageCode(),
                     fields: options.fields,
                     sectionFields: options.sectionFields
                 }
@@ -670,8 +674,8 @@ define([
                     type: 'GET',
                     data: {
                         bearer_token: self.getToken(),
+                        lang: options.lang || app.user.getLanguageCode(),
                         cursor: cursor,
-                        lang: options.lang,
                         sort: options.sort,
                         fields: options.fields
                     }

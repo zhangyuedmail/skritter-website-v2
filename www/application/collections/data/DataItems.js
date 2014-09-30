@@ -35,6 +35,13 @@ define([
             var resultStarted = 0;
             var resultFinished = 0;
             async.series([
+                //use server time for reference
+                function(callback) {
+                    self.data.user.getServerTime(function(time) {
+                        now = time;
+                        callback();
+                    });
+                },
                 //clear all locally stored data
                 function(callback) {
                     localStorage.removeItem(app.user.id + '-data');
@@ -139,6 +146,13 @@ define([
             options.get = options.get === undefined ?  true : options.get;
             options.limit = options.limit === undefined ? 1 : options.limit;
             async.series([
+                //use server time for reference
+                function(callback) {
+                    self.data.user.getServerTime(function(time) {
+                        now = time;
+                        callback();
+                    });
+                },
                 //make initial request for new items
                 function (callback) {
                     app.dialogs.element('.message-text').text('CHECKING LISTS');
@@ -247,19 +261,37 @@ define([
         sync: function(callbackSuccess, callbackError) {
             var self = this;
             var now = moment().unix();
-            app.api.getItemByOffset(self.data.get('lastItemSync'), {
-                lang: app.user.getLanguageCode()
-            }, function(result) {
-                if (result.Items && result.Items.length) {
-                    self.data.user.schedule.insert(result.Items);
+            async.series([
+                //use server time for reference
+                function(callback) {
+                    self.data.user.getServerTime(function(time) {
+                        now = time;
+                        callback();
+                    });
+                },
+                //fetch items based on last offset value
+                function() {
+                    app.api.getItemByOffset(self.data.get('lastItemSync'), {
+                        lang: app.user.getLanguageCode()
+                    }, function(result) {
+                        if (result.Items && result.Items.length) {
+                            self.data.user.schedule.insert(result.Items);
+                        }
+                        self.data.put(result, function() {
+                            callback();
+                        });
+                    }, function(error) {
+                        callback();
+                    });
                 }
-                self.data.put(result, function() {
+            ], function(error) {
+                if (error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                } else {
                     self.data.set('lastItemSync', now);
                     callbackSuccess();
-                });
-            }, function(error) {
-                if (typeof callbackError === 'function') {
-                    callbackError(error);
                 }
             });
         }
