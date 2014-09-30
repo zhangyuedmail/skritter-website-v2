@@ -48,7 +48,7 @@ define([
          */
         handleTableRowClicked: function(event) {
             event.preventDefault();
-            app.router.navigate('lists/' + event.currentTarget.id.replace('list-', ''));
+            app.router.navigate('list/' + event.currentTarget.id.replace('list-', ''), {trigger: true});
         },
         /**
          * @method loadMyLists

@@ -624,6 +624,35 @@ define([
             })();
         },
         /**
+         * @method getVocabList
+         * @param {String} listId
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getVocabList: function(listId, options, callbackComplete, callbackError) {
+            options = options ? options : {};
+            $.ajax({
+                url: this.getBaseUrl() + 'vocablists/' + listId,
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    fields: options.fields,
+                    sectionFields: options.sectionFields
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method getVocabLists
          * @param {Object} [callback]
          * @param {Function} callbackComplete
@@ -817,6 +846,31 @@ define([
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     callbackComplete(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method updateVocabListSection
+         * @param {Object} list
+         * @param {Object} section
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        updateVocabListSection: function(list, section, callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl()  + 'vocablists/' + list.id + '/sections/' + section.id +
+                    '?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(section)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.VocabListSection);
                 } else {
                     callbackError(data);
                 }
