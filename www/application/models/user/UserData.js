@@ -141,7 +141,7 @@ define([
                     }
                 },
                 function(callback) {
-                    self.user.reviews.checkErrors(callback, callback)
+                    self.user.reviews.checkErrors(callback, callback);
                 },
                 function(callback) {
                     self.vocabs.putChanged(callback, callback);
@@ -165,7 +165,7 @@ define([
                         callbackSuccess();
                     }
                 }
-            })
+            });
         },
         /**
          * @method updateExpires
