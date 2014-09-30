@@ -117,6 +117,7 @@ define([
         handleListSelected: function(event) {
             event.preventDefault();
             app.router.navigate('getting-started/signup', {trigger: true});
+            app.dialogs.hide();
         },
         /**
          * @method handleRecommendedClicked
