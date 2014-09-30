@@ -69,8 +69,19 @@ define([
             app.dialogs.show().element('.message-title').text('Adding Items');
             app.user.data.items.fetchNew({limit: 5}, function() {
                 app.dialogs.hide();
-            }, function() {
-                app.dialogs.hide();
+            }, function(error) {
+                app.dialogs.element('.loader-image').hide();
+                app.dialogs.element('.message-title').text(error);
+                app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to 'My Lists'", {level: 'primary'}));
+                app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                app.dialogs.element('.message-close button').on('vclick', function() {
+                    app.dialogs.hide();
+                });
+                app.dialogs.element('.message-confirm button').on('vclick', function() {
+                    app.dialogs.hide(function() {
+                        app.router.navigate('list/sort/my-lists', {trigger: true});
+                    });
+                });
             });
         },
         /**

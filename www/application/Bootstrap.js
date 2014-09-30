@@ -16,7 +16,7 @@ define(function() {
         options.level = options.level ? options.level : 'info';
         var div = "<div class='alert alert-" + options.level + options.dismissible + "' role='alert'>";
         if (options.dismissible) {
-            div += "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
+            div += "<button type='button' class='close spacing' data-dismiss='alert' aria-hidden='true'>&times;</button>";
         }
         div += html;
         div += "</div>";
@@ -33,7 +33,7 @@ define(function() {
         options = options ? options : {};
         options.level = options.level ? options.level : 'default';
         options.size = options.size ? 'btn-' + options.size + ' ' : '';
-        return "<button type='button' class='btn " + options.size + "btn-" + options.level + "'>" + text + "</button>";
+        return "<button type='button' class='btn " + options.size + "btn-" + options.level + " spacing'>" + text + "</button>";
     }
 
     return {
