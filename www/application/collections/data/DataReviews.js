@@ -57,6 +57,61 @@ define([
             });
         },
         /**
+         * @method checkErrors
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        checkErrors: function(callbackSuccess, callbackError) {
+            var self = this;
+            var now = moment().unix();
+            async.waterfall([
+                //check server for posted review errors
+                function(callback) {
+                    app.api.getReviewErrors(self.user.data.get('lastErrorCheck'), function(errors) {
+                        if (errors && errors.length) {
+                            try {
+                                throw new Error('Review Errors');
+                            } catch (error) {
+                                console.log('REVIEW ERRORS:', errors);
+                                raygun.send(error, {ReviewErrors: errors});
+                            }
+                            callback(null, errors);
+                        } else {
+                            callback(null, []);
+                        }
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                //fix review error conflicts by downloading fresh item
+                function(errors, callback) {
+                    if (errors && errors.length) {
+                        var itemIds = _.pluck(errors, 'itemId');
+                        app.api.getItemById(itemIds, null, function(result) {
+                            console.log('FIXING ERRORS:', itemIds);
+                            if (result && result.length) {
+                                app.user.schedule.insert(result.Items);
+                            }
+                            self.user.data.put(result, function() {
+                                callback();
+                            });
+                        }, function() {
+                            callback();
+                        });
+                    } else {
+                        callback();
+                    }
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError();
+                } else {
+                    self.user.data.set('lastErrorCheck', now);
+                    callbackSuccess();
+                }
+            });
+        },
+        /**
          * @method getTimerOffset
          * @returns {Number}
          */
@@ -80,28 +135,37 @@ define([
             });
         },
         /**
-         * @method save
+         * @method post
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
-        save: function(callbackSuccess, callbackError) {
+        post: function(callbackSuccess, callbackError) {
             var self = this;
             var batch = this.getBatch();
+            var postedIds;
             if (this.length > 1) {
                 app.api.postReviews(batch, function(posted) {
-                    var postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
+                    postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
                     app.storage.removeItems('reviews', postedIds, function() {
                         self.remove(postedIds);
-                        callbackError();
+                        callbackSuccess();
                     });
                 }, function(error, posted) {
-                    console.error('POST ERROR:', error, posted);
-                    callback(error);
+                    postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
+                    self.remove(postedIds);
+                    console.error('POST ERROR:', error);
+                    callbackError(error);
                 });
             } else {
                 callbackSuccess();
             }
         },
+        /**
+         * @method sync
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        sync: function(callbackSuccess, callbackError) {},
         /**
          * @method updateHistory
          * @param {DataReview} review

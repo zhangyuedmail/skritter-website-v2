@@ -281,7 +281,7 @@ define([
                     function(callback) {
                         if (app.api.hasGuest() && !app.api.getGuest('addedItems')) {
                             app.dialogs.element('.message-text').text('ADDING ITEMS');
-                            self.data.addItems({limit: 10, fetch: false}, function() {
+                            self.data.items.fetchNew({limit: 10, fetch: false}, function() {
                                 app.api.setGuest('addedItems', true);
                                 callback();
                             }, function(error) {
@@ -298,13 +298,13 @@ define([
                                 callback();
                             } else {
                                 app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                                app.user.data.sync(null, callback, function() {
+                                app.user.data.items.sync(callback, function() {
                                     callback();
                                 });
                             }
                         } else {
                             app.dialogs.element('.message-text').text('REQUESTING DATA');
-                            self.data.downloadAll(callback, function(error) {
+                            self.data.items.downloadAll(callback, function(error) {
                                 callback(error);
                             });
                         }
@@ -348,7 +348,7 @@ define([
                     function(callback) {
                         setInterval(function() {
                             self.data.sync();
-                        }, moment.duration(10, 'minutes').asMilliseconds());
+                        }, moment.duration(5, 'minutes').asMilliseconds());
                         callback();
                     }
                 ], function(error) {

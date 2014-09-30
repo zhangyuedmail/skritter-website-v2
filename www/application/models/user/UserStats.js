@@ -62,9 +62,10 @@ define([
         },
         /**
          * @method sync
-         * @param {Function} [callback]
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
-        sync: function(callback) {
+        sync: function(callbackSuccess, callbackError) {
             var self = this;
             async.waterfall([
                 function(callback) {
@@ -84,12 +85,12 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    if (typeof callback === 'function') {
-                        callback(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
                     }
                 } else {
-                    if (typeof callback === 'function') {
-                        callback();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
                     }
                 }
             });
