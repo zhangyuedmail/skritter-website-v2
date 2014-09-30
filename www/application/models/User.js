@@ -195,7 +195,7 @@ define([
                 async.series([
                     //display general loading message
                     function(callback) {
-                        app.dialogs.show('default', callback).element('.message-title').text('Getting Started');
+                        app.dialogs.show(null, callback).element('.message-title').text('Getting Started');
                         app.dialogs.element('.message-text').text('');
                     },
                     //start tracking authenticated user with raygun

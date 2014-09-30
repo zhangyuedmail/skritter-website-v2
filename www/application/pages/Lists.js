@@ -55,12 +55,20 @@ define([
          */
         loadMyLists: function() {
             var self = this;
+            app.dialogs.show().element('.message-title').text('Loading');
+            app.dialogs.element('.message-text').text('MY LISTS');
             app.api.getVocabLists({
                 sort: 'studying'
             }, function(lists) {
-                console.log(lists);
                 app.user.data.vocablists.add(lists, {merge: true});
-                self.table.setLists(lists).renderTable();
+                self.table.setFields({
+                    image: '',
+                    name: 'Name',
+                    studyingMode: 'Status'
+                }).setLists(lists).sortByStatus().renderTable();
+                self.$('#button-my-lists').addClass('active');
+                self.$('#button-textbooks').removeClass('active');
+                app.dialogs.hide();
             }, function(error) {
                 console.error(error);
             });
@@ -70,11 +78,18 @@ define([
          */
         loadTextbooks: function() {
             var self = this;
+            app.dialogs.show().element('.message-title').text('Loading');
+            app.dialogs.element('.message-text').text('TEXTBOOKS');
             app.api.getVocabLists({
                 sort: 'official'
             }, function(lists) {
-                console.log(lists);
-                self.table.setLists(lists).renderTable();
+                self.table.setFields({
+                    image: '',
+                    name: 'Name'
+                }).setLists(lists).sortByName().renderTable();
+                self.$('#button-my-lists').removeClass('active');
+                self.$('#button-textbooks').addClass('active');
+                app.dialogs.hide();
             }, function(error) {
                 console.error(error);
             });
@@ -96,10 +111,6 @@ define([
          * @returns {PageLists}
          */
         set: function(sort) {
-            this.table.setFields({
-                image: 'Image',
-                name: 'Name'
-            }).sortByName();
             if (sort === 'textbooks') {
                 this.loadTextbooks();
             } else {

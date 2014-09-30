@@ -126,6 +126,28 @@ define([
                 this.lists.reverse();
             }
             return this;
+        },
+        /**
+         * @method sortByStatus
+         * @param {Boolean} [desc]
+         * @returns {ListTable}
+         */
+        sortByStatus: function(desc) {
+            this.lists =_.sortBy(this.lists, function(list) {
+                if (list.studyingMode === 'adding') {
+                    return 0 + list.name;
+                } else if (list.studyingMode === 'reviewing') {
+                    return 1 + list.name;
+                } else if (list.studyingMode === 'finished') {
+                    return 2 + list.name;
+                } else {
+                    return 3 + list.name;
+                }
+            });
+            if (desc) {
+                this.lists.reverse();
+            }
+            return this;
         }
     });
 
