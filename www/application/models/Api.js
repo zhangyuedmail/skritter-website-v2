@@ -415,7 +415,7 @@ define([
                         delete data.statusCode;
                         result = app.fn.mergeObjectArrays(result, data);
                         if (data.cursor) {
-                            setTimeout(next, self.timeout);
+                            setTimeout(next, self.timeout, data.cursor);
                         } else {
                             console.log('items', result);
                             callbackComplete(result);

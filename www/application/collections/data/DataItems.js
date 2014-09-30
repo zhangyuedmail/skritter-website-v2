@@ -270,7 +270,7 @@ define([
                     });
                 },
                 //fetch items based on last offset value
-                function() {
+                function(callback) {
                     app.api.getItemByOffset(self.data.get('lastItemSync'), {
                         lang: app.user.getLanguageCode()
                     }, function(result) {
@@ -281,7 +281,7 @@ define([
                             callback();
                         });
                     }, function(error) {
-                        callback();
+                        callback(error);
                     });
                 }
             ], function(error) {

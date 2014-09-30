@@ -76,17 +76,17 @@ define([
                         }, function(error) {
                             callback(error);
                         }, function(result) {
-                            resultStarted++;
                             if (result && result.length) {
                                 self.data.user.schedule.insert(result.Items);
                             }
+                            resultStarted++;
                             self.data.put(result, function() {
                                 resultFinished++;
                             });
                         });
                     },
                     //wait for database put operation to finish
-                    function(changedVocabIds, callback) {
+                    function(callback) {
                         (function wait() {
                             if (resultStarted === resultFinished) {
                                 callback();

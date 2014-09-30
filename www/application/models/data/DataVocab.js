@@ -40,7 +40,10 @@ define([
          * @returns {String}
          */
         getAudio: function() {
-            return app.isNative()  ? this.get('writing') : this.get('audio');
+            if (app.isNative()) {
+                return this.isJapanese() ? this.get('reading') : this.get('writing');
+            }
+            return this.get('audio');
         },
         /**
          * @method getCanvasCharacter

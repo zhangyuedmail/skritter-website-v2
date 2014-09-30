@@ -67,7 +67,7 @@ define([
             async.waterfall([
                 //use server time for reference
                 function(callback) {
-                    self.data.user.getServerTime(function(time) {
+                    self.user.getServerTime(function(time) {
                         now = time;
                         callback();
                     });
