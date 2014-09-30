@@ -33,8 +33,8 @@ define([
             //show tutorial if not already disabled
             if (app.user.settings.hasTutorial(this.part)) {
                 app.dialogs.show('tutorial-' + this.part);
-                app.dialogs.element('.tutorial-reading').html(this.vocab.getReading());
-                app.dialogs.element('.tutorial-hide').on('vclick', function() {});
+                app.dialogs.element('.tutorial-writing').html(this.vocab.getWriting());
+                app.dialogs.element('.tutorial-disable').on('vclick', _.bind(this.disableTutorial, this));
             }
         },
         /**
@@ -85,7 +85,10 @@ define([
             this.gradingButtons.select(this.review.getAt('score')).show();
             if (app.user.settings.hasTutorial('grading')) {
                 app.dialogs.show('tutorial-grading');
-                app.dialogs.element('.tutorial-hide').on('vclick', function() {});
+                app.dialogs.element('.tutorial-disable').on('vclick', function() {
+                    app.user.settings.disableTutorial('grading');
+                    app.dialogs.hide();
+                });
             }
             return this;
         },
@@ -128,6 +131,13 @@ define([
             'swipeleft': 'handleSwipedLeft',
             'vclick': 'handlePromptClicked'
         }),
+        /**
+         * @method disableTutorial
+         */
+        disableTutorial: function() {
+            app.user.settings.disableTutorial(this.part);
+            app.dialogs.hide();
+        },
         /**
          * @method editDefinition
          */
