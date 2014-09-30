@@ -66,7 +66,12 @@ define([
          */
         handleAddButtonClicked: function(event) {
             event.preventDefault();
-            app.user.data.addItems({limit: 5, showDialog: true});
+            app.dialogs.show().element('.message-title').text('Adding Items');
+            app.user.data.addItems({limit: 5}, function() {
+                app.dialogs.hide();
+            }, function() {
+                app.dialogs.hide();
+            });
         },
         /**
          * @method handlePromptComplete

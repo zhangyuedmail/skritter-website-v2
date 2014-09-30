@@ -164,7 +164,9 @@ define([
                     if (data.Batch && data.statusCode === 200) {
                         data.Batch.responseSize = app.fn.addAllObjectAttributes(data.Batch.Requests, 'responseSize');
                         if (data.Batch.runningRequests > 0) {
-                            callbackResult(data.Batch);
+                            if (typeof callbackResult === 'function') {
+                                callbackResult(data.Batch);
+                            }
                             setTimeout(wait, 5000);
                         } else {
                             if (typeof callbackResult === 'function') {
@@ -366,6 +368,7 @@ define([
                         if (itemIds.length > 0) {
                             setTimeout(next, self.timeout);
                         } else {
+                            console.log('items', result);
                             callbackComplete(result);
                         }
                     } else {

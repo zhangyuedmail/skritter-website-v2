@@ -281,7 +281,7 @@ define([
                     function(callback) {
                         if (app.api.hasGuest() && !app.api.getGuest('addedItems')) {
                             app.dialogs.element('.message-text').text('ADDING ITEMS');
-                            self.data.addItems({limit: 10, skipSync: true}, function() {
+                            self.data.addItems({limit: 10, fetch: false}, function() {
                                 app.api.setGuest('addedItems', true);
                                 callback();
                             }, function(error) {

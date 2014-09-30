@@ -42,6 +42,7 @@ define([
          */
         defaults: {
             access_token: undefined,
+            addOffset: 0,
             changedVocabIds: [],
             downloadId: undefined,
             expires: undefined,
@@ -65,103 +66,150 @@ define([
         /**
          * @method addItems
          * @param {Object} [options]
-         * @param {Function} [callbackSuccess]
-         * @param {Function} [callbackError]
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
         addItems: function(options, callbackSuccess, callbackError) {
             var self = this;
             var now = moment().unix();
+            var items = [];
+            var numVocabsAdded = 0;
+            var vocablists = [];
             options = options ? options : {};
+            options.fetch = options.fetch !== undefined ? options.fetch : true;
             options.limit = options.limit ? options.limit : 1;
-            if (options.showDialog) {
-                app.dialogs.show().element('.message-title').text('Adding Items');
-                app.dialogs.element('.message-text').text('SEARCHING LISTS');
-            }
-            async.waterfall([
-                //wait for background sync to complete
-                function(callback) {
-                    (function wait() {
-                        if (self.syncing) {
-                            app.dialogs.element('.message-text').text('WAITING');
-                            setTimeout(wait, 1000);
-                        } else {
-                            callback();
-                        }
-                    })();
+            async.series([
+                //make initial request for new items
+                function (callback) {
+                    app.dialogs.element('.message-text').text('CHECKING LISTS');
+                    async.waterfall([
+                        //request new items via api batch
+                        function(callback) {
+                            app.api.requestBatch([
+                                {
+                                    path: 'api/v' + app.api.get('version') + '/items/add',
+                                    method: 'POST',
+                                    params: {
+                                        lang: app.user.getLanguageCode(),
+                                        limit: options.limit,
+                                        offset: self.get('addOffset')
+                                    }
+                                }
+                            ], function(result) {
+                                callback(null, result);
+                            }, function(error) {
+                                callback(error);
+                            });
+                        },
+                        //check batch until server finish processing
+                        function(batch, callback) {
+                            app.api.checkBatch(batch.id, function() {
+                                callback(null, batch);
+                            }, function(error) {
+                                callback(error);
+                            });
+                        },
+                        //fetch items that have been added
+                        function(batch, callback) {
+                            app.api.getBatch(batch.id, function() {
+                                callback();
+                            }, function(error) {
+                                callback(error);
+                            }, function(result) {
+                                if (result.Items && result.Items.length) {
+                                    items = items.concat(result.Items);
+                                }
+                                if (result.numVocabsAdded) {
+                                    numVocabsAdded += result.numVocabsAdded;
+                                }
+                                if (result.VocabLists && result.VocabLists.length) {
+                                    vocablists = vocablists.concat(result.VocabLists);
+                                }
+                            });
+                        },
+                    ], callback);
                 },
-                //request new items via api batch
+                //sync items changed since items were added
                 function(callback) {
-                    app.api.requestBatch([
-                        {
-                            path: 'api/v' + app.api.get('version') + '/items/add',
-                            method: 'POST',
-                            params: {
-                                lang: app.user.getLanguageCode(),
-                                limit: options.limit,
-                                offset: 0,
-                                fields: 'id'
+                    var resultStarted = 0;
+                    var resultFinished = 0;
+                    if (options.fetch && items && items.length) {
+                        app.dialogs.element('.message-text').text('FETCHING ' + items.length + ' ITEMS');
+                        async.waterfall([
+                            //batch request to fetch all changed items
+                            function(callback) {
+                                app.api.requestBatch([
+                                    {
+                                        path: 'api/v' + app.api.get('version') + '/items',
+                                        method: 'GET',
+                                        params: {
+                                            lang: app.user.getLanguageCode(),
+                                            sort: 'changed',
+                                            offset: now,
+                                            include_vocabs: 'true',
+                                            include_sentences: 'false',
+                                            include_strokes: 'true',
+                                            include_heisigs: 'true',
+                                            include_top_mnemonics: 'false',
+                                            include_decomps: 'true'
+                                        },
+                                        spawner: true
+                                    }
+                                ], function(result) {
+                                    callback(null, result);
+                                }, function(error) {
+                                    callback(error);
+                                });
+                            },
+                            //wait for the batch request to finish
+                            function(batch, callback) {
+                                app.api.checkBatch(batch.id, function() {
+                                    callback(null, batch);
+                                }, function(error) {
+                                    callback(error);
+                                }, function(result) {});
+                            },
+                            //download back in controlled chunks
+                            function(batch, callback) {
+                                app.api.getBatch(batch.id, function() {
+                                    callback();
+                                }, function(error) {
+                                    callback(error);
+                                }, function(result) {
+                                    resultStarted++;
+                                    if (result.Items && result.Items.length) {
+                                        self.user.schedule.insert(result.Items);
+                                    }
+                                    self.put(result, function() {
+                                        resultFinished++;
+                                    });
+                                });
+                            },
+                            //wait for database put operation to finish
+                            function(callback) {
+                                (function wait() {
+                                    if (resultStarted >= resultFinished) {
+                                        callback();
+                                    } else {
+                                        setTimeout(wait, 1000);
+                                    }
+                                })();
                             }
-                        }
-                    ], function(result) {
-                        callback(null, result);
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //check batch until server finish processing
-                function(batch, callback) {
-                    app.api.checkBatch(batch.id, function() {
-                        callback(null, batch);
-                    }, function(error) {
-                        callback(error);
-                    }, function(result) {});
-                },
-                //fetch items that have been added
-                function(batch, callback) {
-                    var totalItems = 0;
-                    var totalVocabs = 0;
-                    app.api.getBatch(batch.id, function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    }, function(result) {
-                        totalItems += result.Items ? result.Items.length : 0;
-                        totalVocabs += result.numVocabsAdded ? result.numVocabsAdded : 0;
-                        self.vocablists.add(result.VocabLists, {merge: true});
-                        console.log('ADDING:', totalVocabs);
-                        if (options.showDialog) {
-                            app.dialogs.element('.message-text').text('FOUND: ' + totalVocabs);
-                        }
-                    });
-                },
-                //run sync to fetch items changed since add
-                function(callback) {
-                    if (options.skipSync) {
-                        callback();
+                        ], callback);
                     } else {
-                        self.sync({includeAll: true, offset: now}, function() {
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
+                        callback('No items found.');
                     }
                 }
             ], function(error) {
                 if (error) {
-                    if (options.showDialog) {
-                        app.dialogs.hide(function() {
-                            callbackError(error);
-                        });
-                    } else {
-                        callbackError(error);
-                    }
+                    console.log('ITEM ADD ERROR:', error);
+                    callbackError(error);
                 } else {
-                    if (options.showDialog) {
-                        app.dialogs.hide(callbackSuccess);
-                    } else {
-                        callbackSuccess();
-                    }
-
+                    console.log('ITEMS', items, vocablists, numVocabsAdded);
+                    self.set('addOffset', self.get('addOffset') + numVocabsAdded);
+                    self.user.data.vocablists.add(vocablists, {merge: true});
+                    self.user.schedule.sort();
+                    callbackSuccess();
                 }
             });
         },
@@ -200,25 +248,10 @@ define([
                                     include_sentences: 'false',
                                     include_strokes: 'true',
                                     include_heisigs: 'true',
-                                    include_top_mnemonics: 'true',
+                                    include_top_mnemonics: 'false',
                                     include_decomps: 'true'
                                 },
                                 spawner: true
-                            },
-                            {
-                                path: 'api/v' + app.api.get('version') + '/srsconfigs',
-                                method: 'GET',
-                                params: {
-                                    lang: app.user.getLanguageCode()
-                                }
-                            },
-                            {
-                                path: 'api/v' + app.api.get('version') + '/vocablists',
-                                method: 'GET',
-                                params: {
-                                    lang: app.user.getLanguageCode(),
-                                    sort: 'studying'
-                                }
                             }
                         ], function(result) {
                             self.set('downloadId', result.id);
@@ -256,7 +289,7 @@ define([
                 //wait for database put operation to finish
                 function(callback) {
                     (function wait() {
-                        if (resultStarted === resultFinished) {
+                        if (resultFinished >= resultStarted) {
                             callback();
                         } else {
                             setTimeout(wait, 1000);
@@ -325,74 +358,86 @@ define([
         },
         /**
          * @method sync
-         * @param {Object} [options]
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
-        sync: function(options, callbackSuccess, callbackError) {
+        sync: function(callbackSuccess, callbackError) {
             var self = this;
             var now = moment().unix();
-            options = options ? options : {};
-            options.includeAll = options.includeAll ? options.includeAll : false;
             async.series([
                 function(callback) {
-                    self.syncing = true;
-                    self.trigger('sync', self.syncing);
-                    console.log('SYNCING:', moment().format('YYYY-MM-DD HH:mm'));
-                    callback();
+                    if (self.syncing) {
+                        callback('Syncing in progress.');
+                    } else {
+                        console.log('SYNC:', moment().format('YYYY-MM-DD HH:mm'));
+                        self.syncing = true;
+                        callback();
+                    }
                 },
-                //check server for posted review errors
+                //REVIEWS
                 function(callback) {
-                    app.api.getReviewErrors(self.get('lastErrorCheck'), function(errors) {
-                        if (errors.length) {
-                            try {
-                                throw new Error('Review Errors');
-                            } catch (error) {
-                                raygun.send(error, {ReviewErrors: errors});
-                            }
-                            console.log('REVIEW ERRORS', _.pluck(errors, 'itemId'));
-                            app.api.getItemById(_.pluck(errors, 'itemId'), null, function(result) {
-                                console.log('FIXING ERRORS', _.pluck(result.Items, 'id'));
-                                self.user.schedule.insert(result.Items);
-                                self.put(result, function() {
-                                    self.set('lastErrorCheck', now, {silent: true});
+                    async.waterfall([
+                        //check server for posted review errors
+                        function(callback) {
+                            app.api.getReviewErrors(self.get('lastErrorCheck'), function(errors) {
+                                if (errors && errors.length) {
+                                    try {
+                                        throw new Error('Review Errors');
+                                    } catch (error) {
+                                        raygun.send(error, {ReviewErrors: errors});
+                                    }
+                                    callback(null, errors);
+                                } else {
+                                    callback(null, []);
+                                }
+                            }, function(error) {
+                                callback(error);
+                            });
+                        },
+                        //fix review error conflicts by downloading fresh item
+                        function(errors, callback) {
+                            if (errors && errors.length) {
+                                var itemIds = _.pluck(errors, 'itemId');
+                                app.api.getItemById(itemIds, null, function(result) {
+                                    self.user.schedule.insert(result.Items);
+                                    self.put(result, function() {
+                                        callback();
+                                    });
+                                }, function() {
                                     callback();
                                 });
-                            }, function() {
+                            } else {
                                 callback();
+                            }
+                        },
+                        //post all reviews to server excluded most recent
+                        function(callback) {
+                            self.set('lastErrorCheck', now);
+                            app.user.reviews.save(function() {
+                                callback();
+                            }, function(error) {
+                                callback(error);
                             });
-                        } else {
-                            self.set('lastErrorCheck', now, {silent: true});
-                            callback();
                         }
-                    }, function(error) {
-                        callback(error);
-                    });
+                    ], callback);
                 },
-                //post review to server first
+                //VOCABS
                 function(callback) {
-                    app.user.reviews.save(function() {
-                        callback();
-                    }, function() {
-                        callback();
-                    });
-                },
-                //sync locally changed vocabs
-                function(callback) {
-                    if (self.get('changedVocabIds').length) {
-                        var resultStarted = 0;
-                        var resultFinished = 0;
+                    var changedVocabIds = self.get('changedVocabIds');
+                    var resultStarted = 0;
+                    var resultFinished = 0;
+                    if (changedVocabIds && changedVocabIds.length > 0) {
                         async.waterfall([
                             //fetch locally stored vocabs
                             function(callback) {
-                                app.storage.getItems('vocabs', self.get('changedVocabIds'), function(vocabs) {
+                                app.storage.getItems('vocabs', changedVocabIds, function(vocabs) {
                                     callback(null, vocabs);
                                 });
                             },
                             //update vocab directly to server
                             function(vocabs, callback) {
                                 app.api.updateVocabs(vocabs, function(updated) {
-                                    callback(null, _.difference(self.get('changedVocabIds'), updated));
+                                    callback(null, _.difference(changedVocabIds, updated));
                                 }, function(error) {
                                     callback(error);
                                 }, function(result) {
@@ -407,7 +452,7 @@ define([
                             function(changedVocabIds, callback) {
                                 (function wait() {
                                     if (resultStarted === resultFinished) {
-                                        self.set('changedVocabIds', changedVocabIds, {silent: true});
+                                        self.set('changedVocabIds', changedVocabIds);
                                         callback();
                                     } else {
                                         setTimeout(wait, 1000);
@@ -419,87 +464,77 @@ define([
                         callback();
                     }
                 },
-                //sync items changed from last
+                //ITEMS
                 function(callback) {
-                    if (options.offset || self.get('lastItemSync') < moment(now * 1000).subtract('500', 'minutes').unix()) {
-                        var resultStarted = 0;
-                        var resultFinished = 0;
-                        async.waterfall([
-                            //batch request to fetch all changed items
-                            function(callback) {
-                                app.api.requestBatch([
-                                    {
-                                        path: 'api/v' + app.api.get('version') + '/items',
-                                        method: 'GET',
-                                        params: {
-                                            lang: app.user.getLanguageCode(),
-                                            sort: 'changed',
-                                            offset: options.offset || self.get('lastItemSync'),
-                                            include_vocabs: (options.includeVocabs || options.includeAll).toString(),
-                                            include_sentences: 'false',
-                                            include_strokes: (options.includeStrokes || options.includeAll).toString(),
-                                            include_heisigs: (options.includeHeisigs || options.includeAll).toString(),
-                                            include_top_mnemonics: (options.includeTopMnemonics || options.includeAll).toString(),
-                                            include_decomps: (options.includeDecomps || options.includeAll).toString()
-                                        },
-                                        spawner: true
-                                    }
-                                ], function(result) {
-                                    callback(null, result);
-                                }, function(error) {
-                                    callback(error);
-                                });
-                            },
-                            //wait for the batch request to finish
-                            function(batch, callback) {
-                                app.api.checkBatch(batch.id, function() {
-                                    callback(null, batch);
-                                }, function(error) {
-                                    callback(error);
-                                }, function(result) {});
-                            },
-                            //download back in controlled chunks
-                            function(batch, callback) {
-                                app.api.getBatch(batch.id, function() {
-                                    callback();
-                                }, function(error) {
-                                    callback(error);
-                                }, function(result) {
-                                    resultStarted++;
+                    var resultStarted = 0;
+                    var resultFinished = 0;
+                    async.waterfall([
+                        //batch request to fetch all changed items
+                        function(callback) {
+                            app.api.requestBatch([
+                                {
+                                    path: 'api/v' + app.api.get('version') + '/items',
+                                    method: 'GET',
+                                    params: {
+                                        lang: app.user.getLanguageCode(),
+                                        sort: 'changed',
+                                        offset: self.get('lastItemSync')
+                                    },
+                                    spawner: true
+                                }
+                            ], function(result) {
+                                callback(null, result);
+                            }, function(error) {
+                                callback(error);
+                            });
+                        },
+                        //wait for the batch request to finish
+                        function(batch, callback) {
+                            app.api.checkBatch(batch.id, function() {
+                                callback(null, batch);
+                            }, function(error) {
+                                callback(error);
+                            }, function(result) {});
+                        },
+                        //download back in controlled chunks
+                        function(batch, callback) {
+                            app.api.getBatch(batch.id, function() {
+                                callback();
+                            }, function(error) {
+                                callback(error);
+                            }, function(result) {
+                                resultStarted++;
+                                if (result.Items && result.Items.length) {
                                     self.user.schedule.insert(result.Items);
-                                    self.put(result, function() {
-                                        resultFinished++;
-                                    });
+                                }
+                                self.put(result, function() {
+                                    resultFinished++;
                                 });
-                            },
-                            //wait for database put operation to finish
-                            function(callback) {
-                                (function wait() {
-                                    if (resultStarted === resultFinished) {
-                                        self.set('lastItemSync', now, {silent: true});
-                                        callback();
-                                    } else {
-                                        setTimeout(wait, 1000);
-                                    }
-                                })();
-                            }
-                        ], callback);
-                    } else {
-                        callback();
-                    }
+                            });
+                        },
+                        //wait for database put operation to finish
+                        function(callback) {
+                            (function wait() {
+                                if (resultFinished >= resultStarted) {
+                                    self.set('lastItemSync', now);
+                                    callback();
+                                } else {
+                                    setTimeout(wait, 1000);
+                                }
+                            })();
+                        }
+                    ], callback);
                 }
             ], function(error) {
-                self.syncing = false;
-                self.trigger('sync', self.syncing);
                 if (error) {
-                    console.log('SYNC:', error);
+                    console.log('SYNC ERROR:', error);
                     if (typeof callbackError === 'function') {
                         callbackError(error);
                     }
                 } else {
-                    self.cache();
                     self.user.schedule.sort();
-                    if (typeof callbackError === 'function') {
+                    self.syncing = false;
+                    if (typeof callbackSuccess === 'function') {
                         callbackSuccess();
                     }
                 }

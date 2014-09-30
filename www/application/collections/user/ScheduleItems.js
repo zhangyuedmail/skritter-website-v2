@@ -137,9 +137,9 @@ define([
         insert: function(items, options) {
             items = Array.isArray(items) ? items : [items];
             options = options ? options : {};
-            options.merge = options.merge ? options.merge : true;
-            options.silent = options.silent ? options.silent : true;
-            options.sort = options.sort ? options.sort : false;
+            options.merge = options.merge === undefined ? true : options.merge;
+            options.silent = options.silent === undefined ? false : options.silent;
+            options.sort = options.sort === undefined ? true : options.sort;
             var scheduleItems = [];
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
@@ -155,6 +155,7 @@ define([
                     vocabIds: item.vocabIds
                 });
             }
+            console.log('UPDATING SCHEDULE:', scheduleItems);
             return this.add(scheduleItems, options);
         },
         /**
