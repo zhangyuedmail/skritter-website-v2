@@ -49,6 +49,12 @@ define([
             if (this.sub.isExpired()) {
                 this.elements.subStatus.addClass('text-danger').text('Expired');
                 this.elements.subButtonCancel.hide();
+            } else if (!this.sub.isExpired() && !this.sub.get('subscribed')) {
+                this.elements.subStatus.addClass('text-success').text('Active');
+                this.elements.subDetail.hide();
+                this.elements.subButtonCancel.hide();
+                this.elements.subButtonMonth.hide();
+                this.elements.subButtonYear.hide();
             } else {
                 this.elements.subStatus.addClass('text-success').text('Active');
                 this.elements.subDetail.show();
