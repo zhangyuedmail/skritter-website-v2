@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/learning-center/stroke-order.html'
+    'require.text!templates/mobile/learning-center/stroke-order.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageStrokeOrder
