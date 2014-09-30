@@ -136,7 +136,7 @@ define([
             var numVocabsAdded = 0;
             var vocablists = [];
             options = options ? options : {};
-            options.fetch = options.fetch === undefined ?  true : options.fetch;
+            options.get = options.get === undefined ?  true : options.get;
             options.limit = options.limit === undefined ? 1 : options.limit;
             async.series([
                 //make initial request for new items
@@ -191,72 +191,19 @@ define([
                 },
                 //sync items changed since items were added
                 function(callback) {
-                    var resultStarted = 0;
-                    var resultFinished = 0;
-                    if (options.fetch) {
+                    if (options.get) {
                         if (items && items.length) {
                             app.dialogs.element('.message-text').text('FETCHING ' + items.length + ' ITEMS');
-                            async.waterfall([
-                                //batch request to fetch all changed items
-                                function(callback) {
-                                    app.api.requestBatch([
-                                        {
-                                            path: 'api/v' + app.api.get('version') + '/items',
-                                            method: 'GET',
-                                            params: {
-                                                lang: app.user.getLanguageCode(),
-                                                sort: 'changed',
-                                                offset: now,
-                                                include_vocabs: 'true',
-                                                include_sentences: 'false',
-                                                include_strokes: 'true',
-                                                include_heisigs: 'true',
-                                                include_top_mnemonics: 'false',
-                                                include_decomps: 'true'
-                                            },
-                                            spawner: true
-                                        }
-                                    ], function(result) {
-                                        callback(null, result);
-                                    }, function(error) {
-                                        callback(error);
-                                    });
-                                },
-                                //wait for the batch request to finish
-                                function(batch, callback) {
-                                    app.api.checkBatch(batch.id, function() {
-                                        callback(null, batch);
-                                    }, function(error) {
-                                        callback(error);
-                                    }, function(result) {});
-                                },
-                                //download back in controlled chunks
-                                function(batch, callback) {
-                                    app.api.getBatch(batch.id, function() {
-                                        callback();
-                                    }, function(error) {
-                                        callback(error);
-                                    }, function(result) {
-                                        resultStarted++;
-                                        if (result.Items && result.Items.length) {
-                                            self.data.user.schedule.insert(result.Items);
-                                        }
-                                        self.data.put(result, function() {
-                                            resultFinished++;
-                                        });
-                                    });
-                                },
-                                //wait for database put operation to finish
-                                function(callback) {
-                                    (function wait() {
-                                        if (resultStarted >= resultFinished) {
-                                            callback();
-                                        } else {
-                                            setTimeout(wait, 1000);
-                                        }
-                                    })();
+                            app.api.getItemByOffset(now, {
+                                lang: app.user.getLanguageCode()
+                            }, function(result) {
+                                if (result.Items && result.Items.length) {
+                                    self.data.user.schedule.insert(result.Items);
                                 }
-                            ], callback);
+                                self.data.put(result, callback);
+                            }, function(error) {
+                                callback(error);
+                            });
                         } else {
                             callback('No items found.');
                         }
@@ -296,70 +243,18 @@ define([
         sync: function(callbackSuccess, callbackError) {
             var self = this;
             var now = moment().unix();
-            var resultStarted = 0;
-            var resultFinished = 0;
-            async.waterfall([
-                //batch request to fetch all changed items
-                function(callback) {
-                    app.dialogs.element('.message-text').text('SYNCING ITEMS');
-                    app.api.requestBatch([
-                        {
-                            path: 'api/v' + app.api.get('version') + '/items',
-                            method: 'GET',
-                            params: {
-                                lang: app.user.getLanguageCode(),
-                                sort: 'changed',
-                                offset: self.data.get('lastItemSync')
-                            },
-                            spawner: true
-                        }
-                    ], function(result) {
-                        callback(null, result);
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //wait for the batch request to finish
-                function(batch, callback) {
-                    app.api.checkBatch(batch.id, function() {
-                        callback(null, batch);
-                    }, function(error) {
-                        callback(error);
-                    }, function(result) {});
-                },
-                //download back in controlled chunks
-                function(batch, callback) {
-                    app.api.getBatch(batch.id, function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    }, function(result) {
-                        resultStarted++;
-                        if (result.Items && result.Items.length) {
-                            app.user.schedule.insert(result.Items);
-                        }
-                        self.data.put(result, function() {
-                            resultFinished++;
-                        });
-                    });
-                },
-                //wait for database put operation to finish
-                function(callback) {
-                    (function wait() {
-                        if (resultFinished >= resultStarted) {
-                            callback();
-                        } else {
-                            setTimeout(wait, 1000);
-                        }
-                    })();
+            app.api.getItemByOffset(now, {
+                lang: app.user.getLanguageCode()
+            }, function(result) {
+                if (result.Items && result.Items.length) {
+                    self.data.user.schedule.insert(result.Items);
                 }
-            ], function(error) {
-                if (error) {
-                    callbackError(error);
-                } else {
+                self.data.put(result, function() {
                     self.data.set('lastItemSync', now);
                     callbackSuccess();
-                }
+                });
+            }, function(error) {
+                callbackError(error);
             });
         }
     });

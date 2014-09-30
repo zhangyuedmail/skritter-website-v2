@@ -354,18 +354,65 @@ define([
                         bearer_token: self.getToken(),
                         ids: itemIds.splice(0, 19).join('|'),
                         fields: options.fields,
-                        include_vocabs: options.includeVocabs,
-                        include_strokes: options.includeStrokes,
-                        include_sentences: options.includeSentences,
-                        include_heisigs: options.includeHeisigs,
-                        include_top_mnemonics: options.includeTopMnemonics,
-                        include_decomps: options.includeDecomps
+                        include_vocabs: options.includeVocabs ? 'true' : 'false',
+                        include_strokes: options.includeStrokes ? 'true' : 'false',
+                        include_sentences: options.includeSentences ? 'true' : 'false',
+                        include_heisigs: options.includeHeisigs ? 'true' : 'false',
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : 'false',
+                        include_decomps: options.includeDecomps ? 'true' : 'false'
                     }
                 }).done(function(data) {
                     if (data.statusCode === 200) {
                         delete data.statusCode;
                         result = app.fn.mergeObjectArrays(result, data);
                         if (itemIds.length > 0) {
+                            setTimeout(next, self.timeout);
+                        } else {
+                            callbackComplete(result);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+        /**
+         * @method getItemByOffset
+         * @param {Array|String} itemIds
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getItemByOffset: function(offset, options, callbackComplete, callbackError) {
+            var self = this;
+            var result = {};
+            options = options ? options : {};
+            (function next(cursor) {
+                $.ajax({
+                    url: self.getBaseUrl() + 'items',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        cursor: cursor,
+                        sort: 'changed',
+                        offset: offset,
+                        fields: options.fields,
+                        include_vocabs: options.includeVocabs ? 'true' : 'false',
+                        include_strokes: options.includeStrokes ? 'true' : 'false',
+                        include_sentences: options.includeSentences ? 'true' : 'false',
+                        include_heisigs: options.includeHeisigs ? 'true' : 'false',
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : 'false',
+                        include_decomps: options.includeDecomps ? 'true' : 'false'
+                    }
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        delete data.statusCode;
+                        result = app.fn.mergeObjectArrays(result, data);
+                        if (data.cursor) {
                             setTimeout(next, self.timeout);
                         } else {
                             console.log('items', result);
