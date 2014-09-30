@@ -67,7 +67,7 @@ define([
         handleAddButtonClicked: function(event) {
             event.preventDefault();
             app.dialogs.show().element('.message-title').text('Adding Items');
-            app.user.data.addItems({limit: 5}, function() {
+            app.user.data.items.fetchNew({limit: 5}, function() {
                 app.dialogs.hide();
             }, function() {
                 app.dialogs.hide();

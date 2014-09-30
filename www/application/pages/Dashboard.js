@@ -53,7 +53,22 @@ define([
          * @method events
          * @returns {Object}
          */
-        events: _.extend({}, BasePage.prototype.events, {}),
+        events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-sync': 'handleSyncClicked'
+        }),
+        /**
+         * @method handleSyncClicked
+         * @param {Event} event
+         */
+        handleSyncClicked: function(event) {
+            event.preventDefault();
+            app.dialogs.show().element('.message-title').text('Syncing Account');
+            app.user.data.sync(function() {
+                app.dialogs.hide();
+            }, function() {
+                app.dialogs.hide();
+            });
+        },
         /**
          * @method updateStatSection
          */

@@ -102,7 +102,7 @@ define([
             event.preventDefault();
             app.dialogs.show().element('.message-title').text('Downloading Data');
             app.dialogs.element('.message-text').text('');
-            app.user.data.downloadAll(function() {
+            app.user.data.items.downloadAll(function() {
                 app.reload();
             }, function() {
                 app.dialogs.element('.message-title').text('Something went wrong.');
