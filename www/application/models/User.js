@@ -135,8 +135,12 @@ define([
         getLanguageName: function() {
             return this.isChinese() ? app.strings.global.chinese : app.strings.global.japanese;
         },
+        /**
+         * @method getFontClass
+         * @returns {String}
+         */
         getFontClass: function() {
-            return this.isChinese() ? 'simkai' : '';
+            return this.isChinese() ? 'simkai' : 'kaisho';
         },
         /**
          * @method isAuthenticated
@@ -298,9 +302,7 @@ define([
                                 callback();
                             } else {
                                 app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                                app.user.data.items.sync(callback, function() {
-                                    callback();
-                                });
+                                self.data.items.sync(callback);
                             }
                         } else {
                             app.dialogs.element('.message-text').text('REQUESTING DATA');
@@ -345,12 +347,7 @@ define([
                         self.reviews.loadAll(callback);
                     },
                     //start background sync interval
-                    function(callback) {
-                        setInterval(function() {
-                            self.data.sync();
-                        }, moment.duration(5, 'minutes').asMilliseconds());
-                        callback();
-                    }
+
                 ], function(error) {
                     if (error) {
                         app.dialogs.element('.message-title').text('Something went wrong.');
@@ -359,6 +356,7 @@ define([
                         app.dialogs.element('.message-other button').on('vclick', app.reload);
                         console.error('USER ERROR:', error);
                     } else {
+                        self.data.startBackgroundSync();
                         app.dialogs.hide(function() {
                             app.api.clearGuest();
                             callback(self);

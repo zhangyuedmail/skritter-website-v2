@@ -238,12 +238,12 @@ define([
         /**
          * @method sync
          * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackError]
          */
         sync: function(callbackSuccess, callbackError) {
             var self = this;
             var now = moment().unix();
-            app.api.getItemByOffset(now, {
+            app.api.getItemByOffset(self.data.get('lastItemSync'), {
                 lang: app.user.getLanguageCode()
             }, function(result) {
                 if (result.Items && result.Items.length) {
@@ -254,7 +254,9 @@ define([
                     callbackSuccess();
                 });
             }, function(error) {
-                callbackError(error);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             });
         }
     });

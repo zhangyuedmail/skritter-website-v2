@@ -23,6 +23,7 @@ define([
          * @constructor
          */
         initialize: function(attributes, options) {
+            this.backgroundSync = undefined;
             this.decomps = new DataDecomps();
             this.items = new DataItems(null, {data: this});
             this.params = new DataParams();
@@ -108,11 +109,64 @@ define([
             });
         },
         /**
+         * @method startBackgroundSync
+         */
+        startBackgroundSync: function() {
+            var self = this;
+            this.backgroundSync = setInterval(function() {
+                self.sync();
+            }, moment.duration(5, 'minutes').asMilliseconds());
+        },
+        /**
+         * @method stopBackgroundSync
+         */
+        stopBackgroundSync: function() {
+            clearInterval(this.backgroundSync);
+            this.backgroundSync = undefined;
+        },
+        /**
          * @method sync
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
-        sync: function(callbackSuccess, callbackError) {},
+        sync: function(callbackSuccess, callbackError) {
+            var self = this;
+            async.series([
+                function(callback) {
+                    if (self.syncing) {
+                        callback('Sync already in progress.');
+                    } else {
+                        this.syncing = true;
+                        callback();
+                    }
+                },
+                function(callback) {
+                    self.user.reviews.checkErrors(callback, callback)
+                },
+                function(callback) {
+                    self.vocabs.putChanged(callback, callback);
+                },
+                function(callback) {
+                    self.user.stats.sync(callback, callback);
+                },
+                function(callback) {
+                    self.user.reviews.post(callback, callback);
+                }
+            ], function(error) {
+                if (error) {
+                    console.log('SYNC ERROR', error);
+                    if (typeof callbackError === 'function') {
+                        callbackError();
+                    }
+                } else {
+                    self.syncing = false;
+                    console.log('SYNC:', moment().format('HH:mm/YYYY-MM-DD'));
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
+                }
+            })
+        },
         /**
          * @method updateExpires
          */

@@ -153,7 +153,7 @@ define([
                 }, function(error, posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
                     self.remove(postedIds);
-                    console.error('POST ERROR:', error);
+                    console.error('REVIEW ERROR:', error);
                     callbackError(error);
                 });
             } else {
@@ -171,12 +171,17 @@ define([
          * @param {DataReview} review
          */
         updateHistory: function(review) {
+            //send changed review to history
             this.user.history.add({
                 id: review.id,
                 base: review.id.split('-')[2],
                 part: review.get('part'),
                 timestamp: review.get('timestamp')
             }, {merge: true});
+            //check for enough reviews to sync
+            if (this.length > 10) {
+                this.user.data.sync();
+            }
         }
     });
 
