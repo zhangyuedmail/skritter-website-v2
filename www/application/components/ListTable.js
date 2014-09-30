@@ -4,9 +4,8 @@
  * @submodule Components
  */
 define([
-    'framework/BaseView',
-    'require.text!templates/table.html'
-], function(BaseView, Template) {
+    'framework/BaseView'
+], function(BaseView) {
     /**
      * @class ListTable
      * @extend BaseView
@@ -14,25 +13,18 @@ define([
     var ListTable = BaseView.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
-         * @param {DataVocabLists} lists
          * @constructor
          */
-        initialize: function(options, lists) {
-            this.fields = {};
-            this.filter = undefined;
+        initialize: function() {
+            this.fields = {name: 'Name'};
             this.lists = [];
-            this.vocablists = lists;
         },
         /**
          * @method render
          * @returns {ListTable}
          */
         render: function() {
-            this.$el.html(this.compile(Template));
-            this.$('table').addClass('table-hover');
-            this.elements.body = this.$('table tbody');
-            this.elements.head = this.$('table thead');
+            this.$el.html("<table class='table table-hover'><thead></thead><tbody></tbody></table>");
             return this;
         },
         /**
@@ -42,12 +34,8 @@ define([
         renderTable: function() {
             var divBody = '';
             var divHead = '';
-            this.elements.body.empty();
-            this.elements.head.empty();
-            //defaults to using locally stored vocablists
-            if (!this.lists.length) {
-                this.lists = this.vocablists.models;
-            }
+            this.$('table tbody').empty();
+            this.$('table thead').empty();
             //generates the header section
             if (this.fields) {
                 divHead += '<tr>';
@@ -57,34 +45,30 @@ define([
                 divHead += '</tr>';
             }
             //generates the body section
-            if (this.lists.length > 0) {
-                for (var i = 0, length = this.lists.length; i < length; i++) {
-                    var list = this.lists[i];
-                    divBody += "<tr id='list-" + list.id + "' class='cursor'>";
-                    for (var field in this.fields) {
-                        var fieldValue = list.cid ? list.get(field) : list[field];
-                        if (field === 'studyingMode') {
-                            if (fieldValue === 'not studying') {
-                                divBody += "<td class='list-field-" + field + "'>Not Studying</td>";
-                            } else if (fieldValue === 'finished') {
-                                divBody += "<td class='list-field-" + field + "'>Finished</td>";
-                            } else if (fieldValue === 'adding') {
-                                divBody += "<td class='list-field-" + field + "'>Adding</td>";
-                            } else {
-                                divBody += "<td class='list-field-" + field + "'>Reviewing</td>";
-                            }
+            for (var i = 0, length = this.lists.length; i < length; i++) {
+                var list = this.lists[i];
+                divBody += "<tr id='list-" + list.id + "' class='cursor'>";
+                for (var field in this.fields) {
+                    var fieldValue = list[field];
+                    if (field === 'studyingMode') {
+                        if (fieldValue === 'not studying') {
+                            divBody += "<td class='list-field-" + field + "'>Not Studying</td>";
+                        } else if (fieldValue === 'finished') {
+                            divBody += "<td class='list-field-" + field + "'>Finished</td>";
+                        } else if (fieldValue === 'adding') {
+                            divBody += "<td class='list-field-" + field + "'>Adding</td>";
                         } else {
-                            divBody += "<td class='list-field-" + field + "'>" + fieldValue + "</td>";
+                            divBody += "<td class='list-field-" + field + "'>Reviewing</td>";
                         }
+                    } else if (field === 'image') {
+                        divBody += "<td class='list-image'><img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''></td>";
+                    } else {
+                        divBody += "<td class='list-field-" + field + "'>" + fieldValue + "</td>";
                     }
                 }
-            } else {
-                divBody += "<tr><td class='text-center' colspan='" + Object.keys(this.fields).length + "'>";
-                divBody += "You don't have any active lists!";
-                divBody += "</td></tr>";
             }
-            this.elements.body.html(divBody);
-            this.elements.head.html(divHead);
+            this.$('table thead').html(divHead);
+            this.$('table tbody').html(divBody);
             return this;
         },
         /**
@@ -98,37 +82,49 @@ define([
          * @returns {ListTable}
          */
         clear: function() {
-            this.elements.body.empty();
-            this.elements.head.empty();
-        },
-        /**
-         * @method filterActive
-         * @returns {ListTable}
-         */
-        filterActive: function() {
-            this.filter = this.filterActive;
-            this.lists = this.vocablists.getActive();
-            this.renderTable();
-            return this;
-        },
-        /**
-         * @method filterAdding
-         * @returns {ListTable}
-         */
-        filterAdding: function() {
-            this.filter = this.filterAdding;
-            this.lists = this.vocablists.getAdding();
-            this.renderTable();
-            return this;
+            this.$('table thead').empty();
+            this.$('table tbody').empty();
         },
         /**
          * @method set
          * @param {Object} fields
+         * @param {Array|Object} lists
+         * @returns {ListTable}
+         */
+        set: function(fields, lists) {
+            this.setFields(fields).setLists(lists);
+            return this;
+        },
+        /**
+         * @method setFields
+         * @param {Object} fields
          * @returns {ListTable}
          */
         setFields: function(fields) {
-            this.fields = fields ? fields : {};
-            this.renderTable();
+            this.fields = fields || {name: 'Name'};
+            return this;
+        },
+        /**
+         * @method setLists
+         * @param {Array|Object} lists
+         * @returns {ListTable}
+         */
+        setLists: function(lists) {
+            this.lists = Array.isArray(lists) ? lists : [lists];
+            return this;
+        },
+        /**
+         * @method sortByName
+         * @param {Boolean} [desc]
+         * @returns {ListTable}
+         */
+        sortByName: function(desc) {
+            this.lists =_.sortBy(this.lists, function(list) {
+                return list.name;
+            });
+            if (desc) {
+                this.lists.reverse();
+            }
             return this;
         }
     });

@@ -3,8 +3,9 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/lists.html'
-], function(BasePage, TemplateMobile) {
+    'require.text!templates/mobile/lists.html',
+    'components/ListTable'
+], function(BasePage, TemplateMobile, ListTable) {
     /**
      * @class PageLists
      * @extends BasePage
@@ -15,7 +16,7 @@ define([
          */
         initialize: function() {
             this.title = 'Lists';
-            this.listTable = app.user.data.vocablists.getTable();
+            this.table = new ListTable();
         },
         /**
          * @method render
@@ -23,14 +24,8 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
-            app.sidebars.enable();
-            this.elements.listContainer = this.$('.list-container');
-            this.elements.listViewer = this.$('#list-viewer');
-            this.listTable.setElement(this.elements.listContainer).render().setFields({
-                name: 'Title',
-                studyingMode: 'Status'
-            });
-            this.renderElements().resize();
+            this.table.setElement(this.$('.list-table-container')).render();
+            this.resize();
             return this;
         },
         /**
@@ -44,12 +39,31 @@ define([
          * @method events
          * @returns {Object}
          */
-        events: _.extend({}, BasePage.prototype.events, {}),
+        events: _.extend({}, BasePage.prototype.events, {
+            'vclick table tr': 'handleTableRowClicked'
+        }),
+        /**
+         * @method handleTableRowClicked
+         * @param {Event} event
+         */
+        handleTableRowClicked: function(event) {
+            event.preventDefault();
+            app.router.navigate('lists/' + event.currentTarget.id.replace('list-', ''));
+        },
         /**
          * @method loadMyLists
          */
         loadMyLists: function() {
-            this.listTable.filterActive();
+            var self = this;
+            app.api.getVocabLists({
+                sort: 'studying'
+            }, function(lists) {
+                console.log(lists);
+                app.user.data.vocablists.add(lists, {merge: true});
+                self.table.setLists(lists).renderTable();
+            }, function(error) {
+                console.error(error);
+            });
         },
         /**
          * @method loadTextbooks
@@ -59,8 +73,8 @@ define([
             app.api.getVocabLists({
                 sort: 'official'
             }, function(lists) {
-                self.listTable.lists = lists;
-                self.listTable.renderTable();
+                console.log(lists);
+                self.table.setLists(lists).renderTable();
             }, function(error) {
                 console.error(error);
             });
@@ -70,9 +84,8 @@ define([
          * @returns {PageLists}
          */
         resize: function() {
-            var contentHeight = this.getHeight();
-            this.elements.listViewer.css({
-                'max-height': contentHeight - 75,
+            this.$('#lists').css({
+                height: this.getHeight() - 70,
                 'overflow-y': 'auto'
             });
             return this;
@@ -82,7 +95,11 @@ define([
          * @param {String} sort
          * @returns {PageLists}
          */
-        sort: function(sort) {
+        set: function(sort) {
+            this.table.setFields({
+                image: 'Image',
+                name: 'Name'
+            }).sortByName();
             if (sort === 'textbooks') {
                 this.loadTextbooks();
             } else {

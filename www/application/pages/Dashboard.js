@@ -15,7 +15,6 @@ define([
          */
         initialize: function() {
             this.title = app.strings.dashboard.title;
-            this.listTable = app.user.data.vocablists.getTable();
             this.listenTo(app.user.schedule, 'sort', this.updateStatSection);
             this.listenTo(app.user.stats, 'change', this.updateStatSection);
         },
@@ -35,7 +34,6 @@ define([
             this.elements.statsStudied = this.$('.stats-studied');
             this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userDisplayName = this.$('.user-displayname');
-            this.listTable.setElement(this.elements.listContainer).render();
             this.renderElements();
             return this;
         },

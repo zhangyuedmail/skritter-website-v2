@@ -61,6 +61,7 @@ body {
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .loading-box { margin-top: 25px; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
+.list-image img { max-width: 50px; }
 .navbar-bottom { max-height: 75px; }
 .scrollable { overflow-y: auto; }
 

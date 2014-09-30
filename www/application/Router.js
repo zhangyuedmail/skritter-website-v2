@@ -38,7 +38,8 @@ define([
             '': 'showHome',
             'account': 'showAccount',
             'lists': 'showLists',
-            'lists/:sort': 'showLists',
+            'lists/:listId': 'showList',
+            'lists/sort/:sort': 'showLists',
             'login': 'showLogin',
             'logout': 'handleLogout',
             'settings': 'showSettings',
@@ -107,12 +108,20 @@ define([
             this.currentPage.render();
         },
         /**
+         * @method showList
+         * @param {String} listId
+         */
+        showList: function(listId) {
+            this.currentPage = new PageLists();
+            this.currentPage.set(listId).render();
+        },
+        /**
          * @method showLists
          * @param {String} [sort]
          */
         showLists: function(sort) {
             this.currentPage = new PageLists();
-            this.currentPage.render().sort(sort);
+            this.currentPage.set(sort).render();
         },
         /**
          * @method showLogin
