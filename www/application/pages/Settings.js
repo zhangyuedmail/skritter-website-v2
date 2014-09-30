@@ -54,7 +54,7 @@ define([
             if (app.user.isChinese()) {
                 this.elements.adjReadingStyle.bootstrapSwitch('state', this.settings.get('readingStyle') === 'pinyin' ? true : false);
             } else {
-                this.elements.adjReadingStyle.parent().parent().parent().hide();
+                this.elements.adjReadingStyle.parent().parent().hide();
             }
             this.elements.partDefn.bootstrapSwitch('state', this.activeParts.indexOf('defn') !== -1);
             this.elements.partRdng.bootstrapSwitch('state', this.activeParts.indexOf('rdng') !== -1);
