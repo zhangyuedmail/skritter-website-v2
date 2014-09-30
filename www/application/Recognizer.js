@@ -6,10 +6,10 @@ define([], function() {
      * @class Recognizer
      */
     function Recognizer() {
-        this.baseAngleThreshold = 60;
+        this.baseAngleThreshold = 45;
         this.baseCornerPenalty = 30;
-        this.baseCornerThreshold = 2;
-        this.baseDistanceThreshold = 200;
+        this.baseCornerThreshold = 1;
+        this.baseDistanceThreshold = 100;
         this.baseSize = 600;
         this.canvasSize = 600;
     }
