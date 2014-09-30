@@ -19,7 +19,9 @@ define([
          */
         initialize: function(options, controller, review) {
             Prompt.prototype.initialize.call(this, options, controller, review);
+            this.attempts = 0;
             this.character = undefined;
+            this.maxAttempts = 3;
             this.revealed = false;
         },
         /**
@@ -31,6 +33,7 @@ define([
             this.$el.html(this.compile(DesktopTemplate));
             this.elements.toolbarEraser = this.$('#toolbar-eraser');
             this.elements.toolbarReveal = this.$('#toolbar-reveal');
+            this.attempts = 0;
             Prompt.prototype.render.call(this);
             this.canvas.showGrid().show();
             return this;
@@ -94,6 +97,7 @@ define([
             if (points && points.length > 1 && shape) {
                 var stroke = this.character.recognizeStroke(points, shape);
                 if (stroke) {
+                    this.attempts = 0;
                     this.toggleToolbarEraser();
                     this.canvas.lastMouseDownEvent = null;
                     this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
@@ -110,6 +114,12 @@ define([
                             this.revealed = false;
                             this.toggleToolbarReveal();
                         }
+                    }
+                } else {
+                    this.attempts++;
+                    if (this.attempts > this.maxAttempts) {
+                        this.canvas.fadeShape('background', this.character.getExpectedStroke().getShape(), {color: '#b3b3b3', milliseconds: 1000});
+                        this.review.setAt('score', 1);
                     }
                 }
             }
@@ -217,6 +227,7 @@ define([
             this.canvas.clearLayer('background');
             this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
             this.canvas.tracePath('background', strokePath);
+            this.review.setAt('score', 1);
             this.teaching = true;
             return this;
         },
