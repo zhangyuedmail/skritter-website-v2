@@ -256,9 +256,9 @@ define([
          */
         scaleText: function() {
             var canvasSize = this.canvas.getWidth();
-            this.$('.text-max').css('font-size', canvasSize / 8);
-            this.$('.text-large').css('font-size', canvasSize / 12);
-            this.$('.text-normal').css('font-size', canvasSize / 16);
+            this.$('.text-max').css('font-size', canvasSize / 12);
+            this.$('.text-large').css('font-size', canvasSize / 16);
+            this.$('.text-normal').css('font-size', canvasSize / 18);
             this.$('.text-small').css('font-size', canvasSize / 20);
             return this;
         },
