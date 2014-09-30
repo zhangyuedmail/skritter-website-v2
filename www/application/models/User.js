@@ -348,7 +348,7 @@ define([
                     function(callback) {
                         setInterval(function() {
                             self.data.sync();
-                        }, moment.duration(1, 'minute').asMilliseconds());
+                        }, moment.duration(10, 'minutes').asMilliseconds());
                         callback();
                     }
                 ], function(error) {

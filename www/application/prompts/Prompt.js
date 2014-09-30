@@ -33,6 +33,7 @@ define([
             //show tutorial if not already disabled
             if (app.user.settings.hasTutorial(this.part)) {
                 app.dialogs.show('tutorial-' + this.part);
+                app.dialogs.element('.tutorial-reading').html(this.vocab.getReading());
                 app.dialogs.element('.tutorial-writing').html(this.vocab.getWriting());
                 app.dialogs.element('.tutorial-disable').on('vclick', _.bind(this.disableTutorial, this));
             }

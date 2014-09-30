@@ -76,7 +76,7 @@ define([
             var numVocabsAdded = 0;
             var vocablists = [];
             options = options ? options : {};
-            options.fetch = options.fetch !== undefined ? options.fetch : true;
+            options.fetch = options.fetch === undefined ?  true : options.fetch;
             options.limit = options.limit ? options.limit : 1;
             async.series([
                 //make initial request for new items
@@ -133,71 +133,75 @@ define([
                 function(callback) {
                     var resultStarted = 0;
                     var resultFinished = 0;
-                    if (options.fetch && items && items.length) {
-                        app.dialogs.element('.message-text').text('FETCHING ' + items.length + ' ITEMS');
-                        async.waterfall([
-                            //batch request to fetch all changed items
-                            function(callback) {
-                                app.api.requestBatch([
-                                    {
-                                        path: 'api/v' + app.api.get('version') + '/items',
-                                        method: 'GET',
-                                        params: {
-                                            lang: app.user.getLanguageCode(),
-                                            sort: 'changed',
-                                            offset: now,
-                                            include_vocabs: 'true',
-                                            include_sentences: 'false',
-                                            include_strokes: 'true',
-                                            include_heisigs: 'true',
-                                            include_top_mnemonics: 'false',
-                                            include_decomps: 'true'
-                                        },
-                                        spawner: true
-                                    }
-                                ], function(result) {
-                                    callback(null, result);
-                                }, function(error) {
-                                    callback(error);
-                                });
-                            },
-                            //wait for the batch request to finish
-                            function(batch, callback) {
-                                app.api.checkBatch(batch.id, function() {
-                                    callback(null, batch);
-                                }, function(error) {
-                                    callback(error);
-                                }, function(result) {});
-                            },
-                            //download back in controlled chunks
-                            function(batch, callback) {
-                                app.api.getBatch(batch.id, function() {
-                                    callback();
-                                }, function(error) {
-                                    callback(error);
-                                }, function(result) {
-                                    resultStarted++;
-                                    if (result.Items && result.Items.length) {
-                                        self.user.schedule.insert(result.Items);
-                                    }
-                                    self.put(result, function() {
-                                        resultFinished++;
+                    if (options.fetch) {
+                        if (items && items.length) {
+                            app.dialogs.element('.message-text').text('FETCHING ' + items.length + ' ITEMS');
+                            async.waterfall([
+                                //batch request to fetch all changed items
+                                function(callback) {
+                                    app.api.requestBatch([
+                                        {
+                                            path: 'api/v' + app.api.get('version') + '/items',
+                                            method: 'GET',
+                                            params: {
+                                                lang: app.user.getLanguageCode(),
+                                                sort: 'changed',
+                                                offset: now,
+                                                include_vocabs: 'true',
+                                                include_sentences: 'false',
+                                                include_strokes: 'true',
+                                                include_heisigs: 'true',
+                                                include_top_mnemonics: 'false',
+                                                include_decomps: 'true'
+                                            },
+                                            spawner: true
+                                        }
+                                    ], function(result) {
+                                        callback(null, result);
+                                    }, function(error) {
+                                        callback(error);
                                     });
-                                });
-                            },
-                            //wait for database put operation to finish
-                            function(callback) {
-                                (function wait() {
-                                    if (resultStarted >= resultFinished) {
+                                },
+                                //wait for the batch request to finish
+                                function(batch, callback) {
+                                    app.api.checkBatch(batch.id, function() {
+                                        callback(null, batch);
+                                    }, function(error) {
+                                        callback(error);
+                                    }, function(result) {});
+                                },
+                                //download back in controlled chunks
+                                function(batch, callback) {
+                                    app.api.getBatch(batch.id, function() {
                                         callback();
-                                    } else {
-                                        setTimeout(wait, 1000);
-                                    }
-                                })();
-                            }
-                        ], callback);
+                                    }, function(error) {
+                                        callback(error);
+                                    }, function(result) {
+                                        resultStarted++;
+                                        if (result.Items && result.Items.length) {
+                                            self.user.schedule.insert(result.Items);
+                                        }
+                                        self.put(result, function() {
+                                            resultFinished++;
+                                        });
+                                    });
+                                },
+                                //wait for database put operation to finish
+                                function(callback) {
+                                    (function wait() {
+                                        if (resultStarted >= resultFinished) {
+                                            callback();
+                                        } else {
+                                            setTimeout(wait, 1000);
+                                        }
+                                    })();
+                                }
+                            ], callback);
+                        } else {
+                            callback('No items found.');
+                        }
                     } else {
-                        callback('No items found.');
+                        callback();
                     }
                 }
             ], function(error) {
