@@ -71,7 +71,7 @@ define([
          * @method handleMenuButtonPressed
          */
         handleMenuButtonPressed: function() {
-            if (app.sidebars) {
+            if (app.sidebars && app.user.isAuthenticated()) {
                 app.sidebars.select('menu').toggle();
             }
         },

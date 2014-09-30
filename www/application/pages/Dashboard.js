@@ -18,7 +18,6 @@ define([
             this.listTable = app.user.data.vocablists.getTable();
             this.listenTo(app.user.schedule, 'sort', this.updateStatSection);
             this.listenTo(app.user.stats, 'change', this.updateStatSection);
-            this.listenTo(app.user.data.vocablists, 'add change', this.updateListSection);
         },
         /**
          * @method render
@@ -26,7 +25,6 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
-            app.sidebars.enable();
             this.elements.buttonSync = this.$('#sync-button');
             this.elements.listContainer = this.$('.list-container');
             this.elements.messageExpired = this.$('.message-expired');
@@ -49,7 +47,6 @@ define([
             this.elements.userAvatar.html(app.user.getAvatar('img-thumbnail'));
             this.elements.userDisplayName.text(app.user.getDisplayName());
             this.updateStatSection();
-            this.updateListSection();
             app.user.stats.sync();
         },
         /**
@@ -65,15 +62,6 @@ define([
             this.elements.statsNew.text(app.user.schedule.getNewCount());
             this.elements.statsStudied.text(app.user.stats.getStudied());
             this.elements.statsTime.text(app.fn.convertTimeToClock(app.user.stats.getTime() * 1000));
-        },
-        /**
-         * @method updateListSection
-         */
-        updateListSection: function() {
-            this.listTable.setFields({
-                name: 'Title',
-                currentSection: 'Section'
-            }).filterAdding();
         }
     });
 
