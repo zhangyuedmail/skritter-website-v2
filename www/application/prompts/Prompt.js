@@ -135,7 +135,8 @@ define([
          */
         events: _.extend({}, BaseView.prototype.events, {
             'swipeleft': 'handleSwipedLeft',
-            'vclick': 'handlePromptClicked'
+            'vclick': 'handlePromptClicked',
+            'vclick .reading-button': 'handleReadingButtonClicked'
         }),
         /**
          * @method disableTutorial
@@ -236,6 +237,14 @@ define([
          */
         handlePromptClicked: function(event) {
             event.preventDefault();
+        },
+        /**
+         * @method handleReadingButtonClicked
+         * @param {Event} event
+         */
+        handleReadingButtonClicked: function(event) {
+            event.preventDefault();
+            $(event.currentTarget).removeClass('reading-button');
         },
         /**
          * @method handleSwipedLeft

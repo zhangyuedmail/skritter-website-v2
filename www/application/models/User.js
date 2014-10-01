@@ -313,7 +313,9 @@ define([
                                 callback();
                             } else {
                                 app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                                self.data.items.sync(callback);
+                                self.data.items.sync(callback, function() {
+                                    callback();
+                                });
                             }
                         } else {
                             app.dialogs.element('.message-text').text('REQUESTING DATA');

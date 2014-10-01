@@ -141,13 +141,13 @@ define([
                     }
                 },
                 function(callback) {
-                    self.user.reviews.checkErrors(callback, callback);
-                },
-                function(callback) {
                     self.vocabs.putChanged(callback, callback);
                 },
                 function(callback) {
                     self.user.stats.sync(callback, callback);
+                },
+                function(callback) {
+                    self.user.reviews.checkErrors(callback, callback);
                 },
                 function(callback) {
                     self.user.reviews.post(callback, callback);
