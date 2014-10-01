@@ -49,6 +49,7 @@ define([
             if (this.sub.isExpired()) {
                 this.elements.subStatus.addClass('text-danger').text('Expired');
                 this.elements.subButtonCancel.hide();
+                this.elements.subDetail.hide();
             } else if (!this.sub.isExpired() && !this.sub.get('subscribed')) {
                 this.elements.subStatus.addClass('text-success').text('Active');
                 this.elements.subDetail.hide();

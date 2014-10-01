@@ -49,7 +49,7 @@ define([
          * @returns {String}
          */
         getVersion: function() {
-            return this.get('version') === '@@version' ? 'edge' : this.get('version');
+            return this.get('version').indexOf('version') === -1 ? this.get('version') : 'edge';
         },
         /**
          * @method start

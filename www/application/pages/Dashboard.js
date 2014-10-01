@@ -26,8 +26,6 @@ define([
             this.$el.html(this.compile(TemplateMobile));
             this.elements.buttonSync = this.$('#sync-button');
             this.elements.listContainer = this.$('.list-container');
-            this.elements.messageExpired = this.$('.message-expired');
-            this.elements.messageRegister = this.$('.message-register');
             this.elements.statsDue = this.$('.stats-due');
             this.elements.statsNew = this.$('.stats-new');
             this.elements.statsTime = this.$('.stats-time');
