@@ -21,12 +21,21 @@ define([
             this.controller = controller;
             this.gradingButtons = controller.gradingButtons;
             this.item = review.getBaseItem();
+            this.part = review.get('part');
             this.position = 1;
             this.review = review;
+            this.teaching = false;
             this.vocab = review.getBaseVocab();
             //load canvas characters for rune and tone prompts
-            if (['rune', 'tone'].indexOf(review.get('part')) !== -1) {
+            if (['rune', 'tone'].indexOf(this.part) !== -1) {
                 review.characters = this.item.getCanvasCharacters();
+            }
+            //show tutorial if not already disabled
+            if (app.user.settings.hasTutorial(this.part)) {
+                app.dialogs.show('tutorial-' + this.part);
+                app.dialogs.element('.tutorial-reading').html(this.vocab.getReading());
+                app.dialogs.element('.tutorial-writing').html(this.vocab.getWriting());
+                app.dialogs.element('.tutorial-disable').on('vclick', _.bind(this.disableTutorial, this));
             }
         },
         /**
@@ -46,7 +55,7 @@ define([
             } else {
                 this.renderQuestion();
             }
-            if (!this.item.isNew()) {
+            if (this.item.isNew()) {
                 this.elements.promptNewness.text('NEW');
                 this.elements.promptNewness.addClass('text-warning');
             } else {
@@ -56,7 +65,11 @@ define([
                 this.elements.promptStyle.text(this.vocab.getStyle().toUpperCase());
             }
             this.reset().resize();
+            if (this.teaching) {
+                this.teach();
+            }
             this.updateVocabSidebar();
+            this.loadFont();
             return this;
         },
         /**
@@ -71,6 +84,13 @@ define([
                 thinkingTime: app.timer.getThinkingTime()
             });
             this.gradingButtons.select(this.review.getAt('score')).show();
+            if (app.user.settings.hasTutorial('grading')) {
+                app.dialogs.show('tutorial-grading');
+                app.dialogs.element('.tutorial-disable').on('vclick', function() {
+                    app.user.settings.disableTutorial('grading');
+                    app.dialogs.hide();
+                });
+            }
             return this;
         },
         /**
@@ -80,11 +100,13 @@ define([
         renderElements: function() {
             this.elements.fieldAnswer = this.$('.field-answer');
             this.elements.fieldDefinition = this.$('.field-definition');
+            this.elements.fieldHeisig = this.$('.field-heisig');
             this.elements.fieldQuestion = this.$('.field-question');
             this.elements.fieldReading = this.$('.field-reading');
             this.elements.fieldWriting = this.$('.field-writing');
             this.elements.infoBan = $('#sidebar-info .info-ban');
             this.elements.infoDefinition = $('#sidebar-info .info-definition');
+            this.elements.infoHeisig = $('#sidebar-info .info-heisig');
             this.elements.infoReading = $('#sidebar-info .info-reading');
             this.elements.infoStar = $('#sidebar-info .info-star');
             this.elements.infoWriting = $('#sidebar-info .info-writing');
@@ -112,6 +134,13 @@ define([
             'swipeleft': 'handleSwipedLeft',
             'vclick': 'handlePromptClicked'
         }),
+        /**
+         * @method disableTutorial
+         */
+        disableTutorial: function() {
+            app.user.settings.disableTutorial(this.part);
+            app.dialogs.hide();
+        },
         /**
          * @method editDefinition
          */
@@ -229,10 +258,17 @@ define([
          */
         scaleText: function() {
             var canvasSize = this.canvas.getWidth();
-            this.$('.text-max').css('font-size', canvasSize / 8);
-            this.$('.text-large').css('font-size', canvasSize / 12);
-            this.$('.text-normal').css('font-size', canvasSize / 16);
+            this.$('.text-max').css('font-size', canvasSize / 12);
+            this.$('.text-large').css('font-size', canvasSize / 16);
+            this.$('.text-normal').css('font-size', canvasSize / 18);
             this.$('.text-small').css('font-size', canvasSize / 20);
+            return this;
+        },
+        /**
+         * @method teach
+         * @returns {Prompt}
+         */
+        teach: function() {
             return this;
         },
         /**
@@ -263,7 +299,14 @@ define([
          */
         updateVocabSidebar: function() {
             this.elements.infoDefinition.text(this.vocab.getDefinition());
-            this.elements.infoReading.html(this.vocab.getReading());
+            if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
+                this.elements.infoHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+            } else {
+                this.elements.infoHeisig.empty();
+            }
+            this.elements.infoReading.html(this.vocab.getReading(null, {
+                style: app.user.settings.get('readingStyle')
+            }));
             this.elements.infoWriting.html(this.vocab.getWriting());
             if (this.vocab.isBanned()) {
                 this.elements.infoBan.addClass('fa-star text-danger');

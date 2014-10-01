@@ -49,6 +49,7 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-add': 'handleAddButtonClicked',
             'vclick #button-info': 'handleInfoButtonClicked'
         }),
         /**
@@ -58,6 +59,35 @@ define([
         handleInfoButtonClicked: function(event) {
             event.preventDefault();
             app.sidebars.select('info').toggle();
+        },
+        /**
+         * @method handleAddButtonClicked
+         * @param {Event} event
+         */
+        handleAddButtonClicked: function(event) {
+            event.preventDefault();
+            app.dialogs.show().element('.message-title').text('Adding Items');
+            app.user.data.items.fetchNew({limit: 5}, function() {
+                app.dialogs.hide();
+            }, function(error) {
+                app.dialogs.element('.loader-image').hide();
+                app.dialogs.element('.message-title').text(error);
+                if (app.user.data.vocablists.hasPaused()) {
+                    app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
+                } else {
+                    app.dialogs.element('.message-text').text('You need to add another list to study.');
+                }
+                app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to 'My Lists'", {level: 'primary'}));
+                app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                app.dialogs.element('.message-close button').on('vclick', function() {
+                    app.dialogs.hide();
+                });
+                app.dialogs.element('.message-confirm button').on('vclick', function() {
+                    app.dialogs.hide(function() {
+                        app.router.navigate('list/sort/my-lists', {trigger: true});
+                    });
+                });
+            });
         },
         /**
          * @method handlePromptComplete

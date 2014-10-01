@@ -136,6 +136,24 @@ define([
             return this.isChinese() ? app.strings.global.chinese : app.strings.global.japanese;
         },
         /**
+         * @method getFontClass
+         * @returns {String}
+         */
+        getFontClass: function() {
+            return this.isChinese() ? 'simkai' : 'kaisho';
+        },
+        /**
+         * @method getServerTime
+         * @param {Function} callback
+         */
+        getServerTime: function(callback) {
+            app.api.getDate(function(result) {
+                callback(result.serverTime);
+            }, function() {
+                callback(moment().unix());
+            });
+        },
+        /**
          * @method isAuthenticated
          * @returns {Boolean}
          */
@@ -192,7 +210,7 @@ define([
                 async.series([
                     //display general loading message
                     function(callback) {
-                        app.dialogs.show('default', callback).element('.message-title').text('Getting Started');
+                        app.dialogs.show(null, callback).element('.message-title').text('Getting Started');
                         app.dialogs.element('.message-text').text('');
                     },
                     //start tracking authenticated user with raygun
@@ -278,7 +296,7 @@ define([
                     function(callback) {
                         if (app.api.hasGuest() && !app.api.getGuest('addedItems')) {
                             app.dialogs.element('.message-text').text('ADDING ITEMS');
-                            self.data.addItems({limit: 10, skipSync: true}, function() {
+                            self.data.items.fetchNew({get: false, limit: 10}, function() {
                                 app.api.setGuest('addedItems', true);
                                 callback();
                             }, function(error) {
@@ -295,13 +313,11 @@ define([
                                 callback();
                             } else {
                                 app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                                app.user.data.sync(null, callback, function() {
-                                    callback();
-                                });
+                                self.data.items.sync(callback);
                             }
                         } else {
                             app.dialogs.element('.message-text').text('REQUESTING DATA');
-                            self.data.downloadAll(callback, function(error) {
+                            self.data.items.downloadAll(callback, function(error) {
                                 callback(error);
                             });
                         }
@@ -342,12 +358,7 @@ define([
                         self.reviews.loadAll(callback);
                     },
                     //start background sync interval
-                    function(callback) {
-                        setInterval(function() {
-                            self.data.sync();
-                        }, moment.duration(1, 'minute').asMilliseconds());
-                        callback();
-                    }
+
                 ], function(error) {
                     if (error) {
                         app.dialogs.element('.message-title').text('Something went wrong.');
@@ -356,6 +367,7 @@ define([
                         app.dialogs.element('.message-other button').on('vclick', app.reload);
                         console.error('USER ERROR:', error);
                     } else {
+                        self.data.startBackgroundSync();
                         app.dialogs.hide(function() {
                             app.api.clearGuest();
                             callback(self);

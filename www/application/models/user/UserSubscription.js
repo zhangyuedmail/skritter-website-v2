@@ -50,41 +50,6 @@ define([
             });
         },
         /**
-         * @method fetchGoogle
-         * @param {Function} [callback]
-         */
-        fetchGoogle: function(callback) {
-            var self = this;
-            async.waterfall([
-                function(callback) {
-                    plugins.billing.init(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(callback) {
-                    plugins.billing.getPurchases(function(subscription) {
-                        self.set('gplay_subscription', {
-                            subscription: subscription[0].productId,
-                            package: subscription[0].packageName,
-                            token: subscription[0].purchaseToken
-                        });
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(subscription, callback) {
-                    self.update(callback);
-                }
-            ], function() {
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            });
-        },
-        /**
          * @method subscribeGoogle
          * @param {String} sku
          * @param {Function} callbackSuccess
@@ -108,7 +73,19 @@ define([
                     }, sku);
                 },
                 function(callback) {
-                    self.fetchGoogle(callback);
+                    plugins.billing.getPurchases(function(subscription) {
+                        self.set('gplay_subscription', {
+                            subscription: subscription[0].productId,
+                            package: subscription[0].packageName,
+                            token: subscription[0].purchaseToken
+                        });
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    self.update(callback);
                 }
             ], function(error) {
                 if (error) {

@@ -87,6 +87,16 @@ define([], function() {
             });
         },
         /**
+         * @method loadFont
+         * @param {String} [fontClass]
+         * @returns {BaseView}
+         */
+        loadFont: function(fontClass) {
+            fontClass = fontClass ? fontClass : app.user.isChinese() ? 'chinese-text' : 'japanese-text';
+            this.$('.asian-font').addClass(fontClass);
+            return this;
+        },
+        /**
          * @method remove
          * @returns {BaseView}
          */

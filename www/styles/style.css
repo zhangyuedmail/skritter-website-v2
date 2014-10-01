@@ -48,6 +48,7 @@ body {
 .content-box.fixed-150 { height: 150px; }
 .content-box h1, .content-box h2, .content-box h3,
 .content-box h4, .content-box h5, .content-box h6 { margin-top: 5px; }
+.fa.fa-1x5 { font-size: 1.5em; }
 .modal { z-index: 9900; }
 .padding-top { padding-top: 10px; }
 @media (max-width: 991px) {
@@ -60,6 +61,8 @@ body {
 .chinese-text { font-family: "simkai", "Arial Unicode MS", sans-serif; }
 .loading-box { margin-top: 25px; }
 .japanese-text { font-family: "kaisho", "Arial Unicode MS", sans-serif; }
+.list-image img { max-width: 50px; }
+.navbar-bottom { max-height: 75px; }
 .scrollable { overflow-y: auto; }
 
 
@@ -74,12 +77,16 @@ body {
 .dialog-list-confirmation .list-image img { max-width: 100px; }
 
 
+/*** DIALOGS: EDIT TEXT ***/
+.modal .tutorial-reading { display: inline-block; }
+
+
 /*** NAVBAR ***/
 .navbar, .navbar-header { height: 45px; }
 .navbar-icon {
     color: #ffffff;
-    font-size: 28px;
-    padding-top: 7.5px;
+    font-size: 22px;
+    padding-top: 12px;
 }
 .navbar-text {
     float: none;
@@ -204,6 +211,10 @@ body {
 .page-list-select table { font-size: 2em; }
 
 
+/*** PAGES: LISTS ***/
+.page-lists {}
+
+
 /*** PAGES: LOGIN ***/
 .page-login .login-form {
     max-width: 500px;
@@ -289,9 +300,13 @@ body {
 }
 .prompt-container .grading-container .btn {
     background-color: #ffffff;
-    opacity: 0.4;
+    opacity: 0.6;
 }
-.prompt-container .grading-container .active { opacity: 1.0; }
+.prompt-container .grading-container .active {
+    font-weight: bolder;
+    opacity: 1.0;
+    padding: 20px 0;
+}
 
 
 /*** PROMPTS: PROMPT-DEFN ***/

@@ -4,9 +4,8 @@
  * @submodule Components
  */
 define([
-    'framework/BaseView',
-    'require.text!templates/table.html'
-], function(BaseView, Template) {
+    'framework/BaseView'
+], function(BaseView) {
     /**
      * @class ListTable
      * @extend BaseView
@@ -14,24 +13,19 @@ define([
     var ListTable = BaseView.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
-         * @param {DataVocabLists} lists
          * @constructor
          */
-        initialize: function(options, lists) {
-            this.fields = {};
+        initialize: function() {
+            this.fields = {name: 'Name'};
+            this.filtered = [];
             this.lists = [];
-            this.vocablists = lists;
         },
         /**
          * @method render
          * @returns {ListTable}
          */
         render: function() {
-            this.$el.html(this.compile(Template));
-            this.$('table').addClass('table-hover');
-            this.elements.body = this.$('table tbody');
-            this.elements.head = this.$('table thead');
+            this.$el.html("<table class='table table-hover'><thead></thead><tbody></tbody></table>");
             return this;
         },
         /**
@@ -39,10 +33,11 @@ define([
          * @returns {ListTable}
          */
         renderTable: function() {
+            var lists = this.filtered.length ? this.filtered : this.lists;
             var divBody = '';
             var divHead = '';
-            this.elements.body.empty();
-            this.elements.head.empty();
+            this.$('table tbody').empty();
+            this.$('table thead').empty();
             //generates the header section
             if (this.fields) {
                 divHead += '<tr>';
@@ -52,61 +47,130 @@ define([
                 divHead += '</tr>';
             }
             //generates the body section
-            if (this.lists.length > 0) {
-                for (var i = 0, length = this.lists.length; i < length; i++) {
-                    var list = this.lists[i];
-                    divBody += "<tr id='list-" + list.id + "' class='cursor'>";
-                    for (var field in this.fields) {
-                        var fieldValue = list.get(field);
-                        if (field === 'studyingMode') {
-                            if (fieldValue === 'not studying') {
-                                divBody += "<td class='list-field-" + field + "'>Not Studying</td>";
-                            } else if (fieldValue === 'finished') {
-                                divBody += "<td class='list-field-" + field + "'>Finished</td>";
-                            } else if (fieldValue === 'adding') {
-                                divBody += "<td class='list-field-" + field + "'>Adding</td>";
-                            } else {
-                                divBody += "<td class='list-field-" + field + "'>Reviewing</td>";
-                            }
+            for (var i = 0, length = lists.length; i < length; i++) {
+                var list = lists[i];
+                divBody += "<tr id='list-" + list.id + "' class='cursor'>";
+                for (var field in this.fields) {
+                    var fieldValue = list[field];
+                    if (field === 'studyingMode') {
+                        if (fieldValue === 'not studying') {
+                            divBody += "<td class='list-field-" + field + "'>Not Studying</td>";
+                        } else if (fieldValue === 'finished') {
+                            divBody += "<td class='list-field-" + field + "'>Finished</td>";
+                        } else if (fieldValue === 'adding') {
+                            divBody += "<td class='list-field-" + field + "'>Adding</td>";
                         } else {
-                            divBody += "<td class='list-field-" + field + "'>" + fieldValue + "</td>";
+                            divBody += "<td class='list-field-" + field + "'>Paused</td>";
                         }
+                    } else if (field === 'image') {
+                        divBody += "<td class='list-image'><img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''></td>";
+                    } else {
+                        divBody += "<td class='list-field-" + field + "'>" + fieldValue + "</td>";
                     }
                 }
-            } else {
-                divBody += "<tr><td class='text-center' colspan='" + Object.keys(this.fields).length + "'>";
-                divBody += "You don't have any active lists!";
-                divBody += "</td></tr>";
             }
-            this.elements.body.html(divBody);
-            this.elements.head.html(divHead);
+            this.$('table thead').html(divHead);
+            this.$('table tbody').html(divBody);
             return this;
         },
         /**
          * @property {Object} events
          */
         events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-            });
+            return _.extend({}, BaseView.prototype.events, {});
         },
         /**
-         * @method filterActive
+         * @method clear
          * @returns {ListTable}
          */
-        filterActive: function() {
-            this.filter = this.filterActive;
-            this.lists = this.vocablists.getActive();
-            this.renderTable();
+        clear: function() {
+            this.$('table thead').empty();
+            this.$('table tbody').empty();
+        },
+        /**
+         * @method filterByName
+         * @param {Object} criteria
+         * @returns {ListTable}
+         */
+        filterBy: function(criteria) {
+            this.filtered = _.filter(this.lists, function(list) {
+                for (var criterion in criteria) {
+                    if (Array.isArray(list[criterion])) {
+                        var normalizedArray = list[criterion].map(app.fn.toLowerCase);
+                        if (normalizedArray.indexOf(criteria[criterion]) > -1) {
+                            return true;
+                        }
+                    } else {
+                        if (list[criterion].toLowerCase().indexOf(criteria[criterion].toLowerCase()) > -1) {
+                            return true;
+                        }
+                    }
+                }
+            });
             return this;
         },
         /**
          * @method set
          * @param {Object} fields
+         * @param {Array|Object} lists
+         * @returns {ListTable}
+         */
+        set: function(fields, lists) {
+            this.setFields(fields).setLists(lists);
+            return this;
+        },
+        /**
+         * @method setFields
+         * @param {Object} fields
          * @returns {ListTable}
          */
         setFields: function(fields) {
-            this.fields = fields ? fields : {};
-            this.renderTable();
+            this.fields = fields || {name: 'Name'};
+            return this;
+        },
+        /**
+         * @method setLists
+         * @param {Array|Object} lists
+         * @returns {ListTable}
+         */
+        setLists: function(lists) {
+            this.lists = Array.isArray(lists) ? lists : [lists];
+            return this;
+        },
+        /**
+         * @method sortByName
+         * @param {Boolean} [desc]
+         * @returns {ListTable}
+         */
+        sortByName: function(desc) {
+            this.lists =_.sortBy(this.lists, function(list) {
+                return list.name;
+            });
+            if (desc) {
+                this.lists.reverse();
+            }
+            return this;
+        },
+        /**
+         * @method sortByStatus
+         * @param {Boolean} [desc]
+         * @returns {ListTable}
+         */
+        sortByStatus: function(desc) {
+            this.lists =_.sortBy(this.lists, function(list) {
+                if (list.studyingMode === 'adding') {
+                    return 0 + list.name;
+                } else if (list.studyingMode === 'reviewing') {
+                    return 1 + list.name;
+                } else if (list.studyingMode === 'finished') {
+                    return 2 + list.name;
+                } else {
+                    return 3 + list.name;
+                }
+            });
+            if (desc) {
+                this.lists.reverse();
+            }
             return this;
         }
     });

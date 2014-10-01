@@ -40,7 +40,10 @@ define([
          * @returns {String}
          */
         getAudio: function() {
-            return app.isNative()  ? this.get('writing') : this.get('audio');
+            if (app.isNative()) {
+                return this.isJapanese() ? this.get('reading') : this.get('writing');
+            }
+            return this.get('audio');
         },
         /**
          * @method getCanvasCharacter
@@ -135,7 +138,7 @@ define([
         getReading: function(startFrom, options) {
             var html = '';
             var position = 1;
-            var fillers = [" ... ", "'"];
+            var fillers = [" ... ", "'", " "];
             startFrom = startFrom ? startFrom : false;
             options = options ? options : {};
             options.hide = options.hide ? options.hide : false;
@@ -205,8 +208,13 @@ define([
          * @returns {String}
          */
         getStyle: function() {
+            var activeStyles = app.user.settings.getActiveStyles();
             var style = this.get('style');
-            return style && ['both', 'none'].indexOf(style) === -1 ? style : '';
+            if (style && ['both', 'none'].indexOf(style) === -1 &&
+                activeStyles.indexOf('simp') > -1 && activeStyles.indexOf('trad') > -1) {
+                return style;
+            }
+            return '';
         },
         /**
          * @method getTones

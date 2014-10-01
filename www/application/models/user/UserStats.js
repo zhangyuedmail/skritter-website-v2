@@ -51,7 +51,8 @@ define([
          * @returns {Number}
          */
         getTime: function() {
-            return this.get('timeStudied') ? Math.floor(this.get('timeStudied').day) : 0;
+            var timeStudied = this.get('timeStudied') ? Math.floor(this.get('timeStudied').day) : 0;
+            return timeStudied + this.user.reviews.getTimerOffset();
         },
         /**
          * @method getTimerOffset
@@ -62,9 +63,10 @@ define([
         },
         /**
          * @method sync
-         * @param {Function} [callback]
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
-        sync: function(callback) {
+        sync: function(callbackSuccess, callbackError) {
             var self = this;
             async.waterfall([
                 function(callback) {
@@ -75,7 +77,10 @@ define([
                     });
                 },
                 function(date, callback) {
-                    app.api.getStats({start: date.today}, function(data) {
+                    app.api.getStats({
+                        lang: app.user.getLanguageCode(),
+                        start: date.today
+                    }, function(data) {
                         self.set(data[0]);
                         callback();
                     }, function(error) {
@@ -84,12 +89,12 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    if (typeof callback === 'function') {
-                        callback(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
                     }
                 } else {
-                    if (typeof callback === 'function') {
-                        callback();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
                     }
                 }
             });

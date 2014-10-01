@@ -51,8 +51,8 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            this.elements.fieldWriting.html(this.vocab.getWriting());
             this.elements.fieldQuestion.html(app.strings.prompt['definition-question']);
+            this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
         },
         /**

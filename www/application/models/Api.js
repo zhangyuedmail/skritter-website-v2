@@ -164,7 +164,9 @@ define([
                     if (data.Batch && data.statusCode === 200) {
                         data.Batch.responseSize = app.fn.addAllObjectAttributes(data.Batch.Requests, 'responseSize');
                         if (data.Batch.runningRequests > 0) {
-                            callbackResult(data.Batch);
+                            if (typeof callbackResult === 'function') {
+                                callbackResult(data.Batch);
+                            }
                             setTimeout(wait, 5000);
                         } else {
                             if (typeof callbackResult === 'function') {
@@ -350,14 +352,15 @@ define([
                     type: 'GET',
                     data: {
                         bearer_token: self.getToken(),
+                        lang: options.lang || app.user.getLanguageCode(),
                         ids: itemIds.splice(0, 19).join('|'),
                         fields: options.fields,
-                        include_vocabs: options.includeVocabs,
-                        include_strokes: options.includeStrokes,
-                        include_sentences: options.includeSentences,
-                        include_heisigs: options.includeHeisigs,
-                        include_top_mnemonics: options.includeTopMnemonics,
-                        include_decomps: options.includeDecomps
+                        include_vocabs: options.includeVocabs ? 'true' : 'false',
+                        include_strokes: options.includeStrokes ? 'true' : 'false',
+                        include_sentences: options.includeSentences ? 'true' : 'false',
+                        include_heisigs: options.includeHeisigs ? 'true' : 'false',
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : 'false',
+                        include_decomps: options.includeDecomps ? 'true' : 'false'
                     }
                 }).done(function(data) {
                     if (data.statusCode === 200) {
@@ -366,6 +369,55 @@ define([
                         if (itemIds.length > 0) {
                             setTimeout(next, self.timeout);
                         } else {
+                            callbackComplete(result);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+        /**
+         * @method getItemByOffset
+         * @param {Array|String} itemIds
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getItemByOffset: function(offset, options, callbackComplete, callbackError) {
+            var self = this;
+            var result = {};
+            options = options ? options : {};
+            (function next(cursor) {
+                $.ajax({
+                    url: self.getBaseUrl() + 'items',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        lang: options.lang || app.user.getLanguageCode(),
+                        cursor: cursor,
+                        sort: 'changed',
+                        offset: offset,
+                        fields: options.fields,
+                        include_vocabs: options.includeVocabs ? 'true' : 'false',
+                        include_strokes: options.includeStrokes ? 'true' : 'false',
+                        include_sentences: options.includeSentences ? 'true' : 'false',
+                        include_heisigs: options.includeHeisigs ? 'true' : 'false',
+                        include_top_mnemonics: options.includeTopMnemonics ? 'true' : 'false',
+                        include_decomps: options.includeDecomps ? 'true' : 'false'
+                    }
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        delete data.statusCode;
+                        result = app.fn.mergeObjectArrays(result, data);
+                        if (data.cursor) {
+                            setTimeout(next, self.timeout, data.cursor);
+                        } else {
+                            console.log('items', result);
                             callbackComplete(result);
                         }
                     } else {
@@ -428,10 +480,10 @@ define([
                 type: 'GET',
                 data: {
                     bearer_token: this.getToken(),
+                    lang: options.lang || app.user.getLanguageCode(),
                     start: options.start,
                     end: options.end,
                     step: options.step,
-                    lang: options.lang,
                     fields: options.fields
                 }
             }).done(function(data) {
@@ -548,6 +600,7 @@ define([
                     type: 'GET',
                     data: {
                         bearer_token: self.getToken(),
+                        lang: options.lang || app.user.getLanguageCode(),
                         ids: vocabIds.splice(0, 19).join('|'),
                         fields: options.fields,
                         include_strokes: options.includeStrokes,
@@ -574,6 +627,36 @@ define([
             })();
         },
         /**
+         * @method getVocabList
+         * @param {String} listId
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getVocabList: function(listId, options, callbackComplete, callbackError) {
+            options = options ? options : {};
+            $.ajax({
+                url: this.getBaseUrl() + 'vocablists/' + listId,
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    lang: options.lang || app.user.getLanguageCode(),
+                    fields: options.fields,
+                    sectionFields: options.sectionFields
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method getVocabLists
          * @param {Object} [callback]
          * @param {Function} callbackComplete
@@ -591,8 +674,8 @@ define([
                     type: 'GET',
                     data: {
                         bearer_token: self.getToken(),
+                        lang: options.lang || app.user.getLanguageCode(),
                         cursor: cursor,
-                        lang: options.lang,
                         sort: options.sort,
                         fields: options.fields
                     }
@@ -767,6 +850,31 @@ define([
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     callbackComplete(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method updateVocabListSection
+         * @param {Object} list
+         * @param {Object} section
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        updateVocabListSection: function(list, section, callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl()  + 'vocablists/' + list.id + '/sections/' + section.id +
+                    '?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(section)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.VocabListSection);
                 } else {
                     callbackError(data);
                 }

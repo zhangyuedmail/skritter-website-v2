@@ -78,6 +78,15 @@ define([
             return this;
         },
         /**
+         * @method reset
+         * @returns {Dialogs}
+         */
+        reset: function() {
+            this.element('.modal-body').children('*').show();
+            this.element('.modal-body').children('*').empty();
+            return this;
+        },
+        /**
          * @method show
          * @param {String} [dialogId]
          * @param {Function} [callback]
@@ -91,6 +100,9 @@ define([
             options.keyboard = options.keyboard ? options.keyboard : false;
             options.show = options.show ? options.show : true;
             options.remote = options.remote ? options.remote : false;
+            if (this.id === 'dialog-default') {
+                this.reset();
+            }
             this.element().modal(options).one('shown.bs.modal', function() {
                 if (typeof callback === 'function') {
                     callback();

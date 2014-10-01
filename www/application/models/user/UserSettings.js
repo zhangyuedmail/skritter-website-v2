@@ -36,7 +36,16 @@ define([
             allJapaneseParts: ['defn', 'rdng', 'rune'],
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
-            readingStyle: 'pinyin'
+            readingStyle: 'pinyin',
+            tutorials: ['defn', 'grading', 'rdng', 'rune', 'tone']
+        },
+        /**
+         * @method disableTutorial
+         * @param {String} name
+         * @returns {Boolean}
+         */
+        disableTutorial: function(name) {
+            this.set('tutorials', _.without(this.get('tutorials'), name));
         },
         /**
          * @method fetch
@@ -91,8 +100,8 @@ define([
          * @returns {Object}
          */
         getCustomData: function() {
-            var currentReview = this.user.reviews.current ? this.user.reviews.current.toJSON() : null;
-            var previousReview = this.user.reviews.previous ? this.user.reviews.previous.toJSON() : null;
+            var currentReview = app.user.reviews.current ? app.user.reviews.current.toJSON() : null;
+            var previousReview = app.user.reviews.previous ? app.user.reviews.previous.toJSON() : null;
             return {
                 reviews: {
                     current: currentReview,
@@ -125,6 +134,20 @@ define([
                 tags = ['japanese'];
             }
             return tags;
+        },
+        /**
+         * @method hasTutorial
+         * @param {String} name
+         * @returns {Boolean}
+         */
+        hasTutorial: function(name) {
+            return this.get('tutorials').indexOf(name) !== -1;
+        },
+        /**
+         * @method resetTutorials
+         */
+        resetTutorials: function() {
+            this.set('tutorials', ['defn', 'grading', 'rdng', 'rune', 'tone']);
         },
         /**
          * @method setActiveParts

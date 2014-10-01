@@ -49,6 +49,13 @@ define([
             if (this.sub.isExpired()) {
                 this.elements.subStatus.addClass('text-danger').text('Expired');
                 this.elements.subButtonCancel.hide();
+                this.elements.subDetail.hide();
+            } else if (!this.sub.isExpired() && !this.sub.get('subscribed')) {
+                this.elements.subStatus.addClass('text-success').text('Active');
+                this.elements.subDetail.hide();
+                this.elements.subButtonCancel.hide();
+                this.elements.subButtonMonth.hide();
+                this.elements.subButtonYear.hide();
             } else {
                 this.elements.subStatus.addClass('text-success').text('Active');
                 this.elements.subDetail.show();
@@ -96,7 +103,7 @@ define([
             event.preventDefault();
             app.dialogs.show().element('.message-title').text('Downloading Data');
             app.dialogs.element('.message-text').text('');
-            app.user.data.downloadAll(function() {
+            app.user.data.items.downloadAll(function() {
                 app.reload();
             }, function() {
                 app.dialogs.element('.message-title').text('Something went wrong.');

@@ -3,9 +3,8 @@
  */
 define([
     'framework/BaseCollection',
-    'models/data/DataVocabList',
-    'components/ListTable'
-], function(BaseCollection, DataVocabList, ListTable) {
+    'models/data/DataVocabList'
+], function(BaseCollection, DataVocabList) {
     /**
      * @class DataVocabLists
      * @extend BaseCollection
@@ -37,19 +36,18 @@ define([
             });
         },
         /**
-         * @method getActive
-         * @returns {DataVocabLists}
+         * @method hasActive
+         * @returns {Boolean}
          */
-        getActive: function() {
-            return this.models.filter(function(list) {
-                return ['adding', 'reviewing'].indexOf(list.attributes.studyingMode) !== -1;
-            });
+        hasActive: function() {
+            return this.pluck('studyingMode').indexOf('adding') > -1;
         },
         /**
-         * @method getTable
+         * @method hasPaused
+         * @returns {Boolean}
          */
-        getTable: function() {
-            return new ListTable(null, this);
+        hasPaused: function() {
+            return this.pluck('studyingMode').indexOf('reviewing') > -1;
         },
         /**
          * @method loadAll
@@ -57,7 +55,7 @@ define([
          */
         loadAll: function(callback) {
             var self = this;
-            app.storage.getAll('vocablists', function(data) {
+            app.storage.getAll('vocablists', function (data) {
                 self.reset();
                 self.lazyAdd(data, callback, {silent: true});
             });

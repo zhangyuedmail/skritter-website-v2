@@ -19,9 +19,10 @@ define([
          */
         initialize: function(options, controller, review) {
             Prompt.prototype.initialize.call(this, options, controller, review);
+            this.attempts = 0;
             this.character = undefined;
+            this.maxAttempts = 3;
             this.revealed = false;
-            this.teaching = false;
         },
         /**
          * @method render
@@ -32,6 +33,7 @@ define([
             this.$el.html(this.compile(DesktopTemplate));
             this.elements.toolbarEraser = this.$('#toolbar-eraser');
             this.elements.toolbarReveal = this.$('#toolbar-reveal');
+            this.attempts = 0;
             Prompt.prototype.render.call(this);
             this.canvas.showGrid().show();
             return this;
@@ -65,10 +67,10 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
-            this.toggleToolbarEraser();
             if (app.user.settings.get('audio') && this.vocab.getAudio() && this.review.isFirst()) {
                 app.assets.playAudio(this.vocab.getAudio());
             }
+            this.toggleToolbarEraser();
             return this;
         },
         /**
@@ -95,6 +97,7 @@ define([
             if (points && points.length > 1 && shape) {
                 var stroke = this.character.recognizeStroke(points, shape);
                 if (stroke) {
+                    this.attempts = 0;
                     this.toggleToolbarEraser();
                     this.canvas.lastMouseDownEvent = null;
                     this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
@@ -105,13 +108,18 @@ define([
                         this.renderAnswer();
                     } else {
                         if (this.teaching) {
-                            this.canvas.clearLayer('background');
                             this.teach();
                         } else {
                             this.canvas.fadeLayer('background', null);
                             this.revealed = false;
                             this.toggleToolbarReveal();
                         }
+                    }
+                } else {
+                    this.attempts++;
+                    if (this.attempts > this.maxAttempts) {
+                        this.canvas.fadeShape('background', this.character.getExpectedStroke().getShape(), {color: '#b3b3b3', milliseconds: 1000});
+                        this.review.setAt('score', 1);
                     }
                 }
             }
@@ -124,6 +132,7 @@ define([
             event.preventDefault();
             this.gradingButtons.hide();
             this.review.setAt('answered', false);
+            this.teaching = false;
             if (this.character.length) {
                 this.renderQuestion();
                 this.character.reset();
@@ -215,8 +224,10 @@ define([
             var stroke = this.character.getExpectedStroke();
             var strokeParam = stroke.getParams()[0];
             var strokePath = strokeParam.get('corners');
+            this.canvas.clearLayer('background');
             this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
             this.canvas.tracePath('background', strokePath);
+            this.review.setAt('score', 1);
             this.teaching = true;
             return this;
         },

@@ -8,12 +8,14 @@ define([
     'pages/Account',
     'pages/Dashboard',
     'pages/Landing',
+    'pages/List',
+    'pages/Lists',
     'pages/Login',
     'pages/Settings',
     'pages/Study',
     'pages/Tests'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageDashboard, PageLanding, PageLogin, PageSettings, PageStudy, PageTests) {
+            PageAccount, PageDashboard, PageLanding, PageList, PageLists, PageLogin, PageSettings, PageStudy, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -36,6 +38,9 @@ define([
         routes: {
             '': 'showHome',
             'account': 'showAccount',
+            'list': 'showLists',
+            'list/:listId': 'showList',
+            'list/sort/:sort': 'showLists',
             'login': 'showLogin',
             'logout': 'handleLogout',
             'settings': 'showSettings',
@@ -68,7 +73,7 @@ define([
          * @method handleMenuButtonPressed
          */
         handleMenuButtonPressed: function() {
-            if (app.sidebars) {
+            if (app.sidebars && app.user.isAuthenticated()) {
                 app.sidebars.select('menu').toggle();
             }
         },
@@ -102,6 +107,22 @@ define([
         showLanding: function() {
             this.currentPage = new PageLanding();
             this.currentPage.render();
+        },
+        /**
+         * @method showList
+         * @param {String} listId
+         */
+        showList: function(listId) {
+            this.currentPage = new PageList();
+            this.currentPage.set(listId).render();
+        },
+        /**
+         * @method showLists
+         * @param {String} [sort]
+         */
+        showLists: function(sort) {
+            this.currentPage = new PageLists();
+            this.currentPage.set(sort).render();
         },
         /**
          * @method showLogin
