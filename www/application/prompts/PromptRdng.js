@@ -42,8 +42,8 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting());
-            if (app.user.settings.get('audio') && this.vocab.getAudio()) {
-                app.assets.playAudio(this.vocab.getAudio());
+            if (app.user.settings.get('audio')) {
+                this.vocab.playAudio();
             }
             return this;
         },

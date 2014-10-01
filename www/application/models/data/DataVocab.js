@@ -301,6 +301,17 @@ define([
          */
         isStarred: function() {
             return this.get('starred');
+        },
+        /**
+         * @method playAudio
+         * @returns {Boolean}
+         */
+        playAudio: function() {
+            if (this.getAudio()) {
+                app.assets.playAudio(this.getAudio());
+                return true;
+            }
+            return false;
         }
     });
 

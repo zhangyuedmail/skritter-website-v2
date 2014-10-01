@@ -98,7 +98,7 @@ body {
 .navbar ul > li {
     cursor: pointer;
     height: 45px;
-    min-width: 55px;
+    min-width: 50px;
     padding-left: 5px;
     padding-right: 5px;
     text-align: center;
@@ -227,6 +227,13 @@ body {
 .page-settings .setting-label {
     float: left;
     width: 100px;
+}
+
+
+/*** PAGES: STUDY ***/
+.page-study .study-stats {
+    color: #ffffff;
+    padding-top: 5px;
 }
 
 

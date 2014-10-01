@@ -70,8 +70,8 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
-            if (app.user.settings.get('audio') && this.vocab.getAudio() && this.review.isFirst()) {
-                app.assets.playAudio(this.vocab.getAudio());
+            if (app.user.settings.get('audio') && this.review.isFirst()) {
+                this.vocab.playAudio();
             }
             this.toggleToolbarEraser();
             return this;
@@ -103,7 +103,6 @@ define([
                     this.attempts = 0;
                     this.toggleToolbarEraser();
                     this.canvas.lastMouseDownEvent = null;
-                    console.log(app.user.settings, app.user.settings.get('squigs'));
                     if (app.user.settings.get('squigs')) {
                         this.canvas.getLayer('stroke').alpha = 1;
                         this.canvas.drawShape('stroke', shape);

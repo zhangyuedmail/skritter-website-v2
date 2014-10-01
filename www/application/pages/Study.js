@@ -50,8 +50,19 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick #button-add': 'handleAddButtonClicked',
+            'vclick #button-audio': 'handleAudioButtonClicked',
             'vclick #button-info': 'handleInfoButtonClicked'
         }),
+        /**
+         * @method handleAudioButtonClicked
+         * @param {Event} event
+         */
+        handleAudioButtonClicked: function(event) {
+            event.preventDefault();
+            if (this.prompt) {
+                this.prompt.vocab.playAudio();
+            }
+        },
         /**
          * @method handleInfoButtonClicked
          * @param {Event} event

@@ -136,6 +136,7 @@ define([
         events: _.extend({}, BaseView.prototype.events, {
             'swipeleft': 'handleSwipedLeft',
             'vclick': 'handlePromptClicked',
+            'vclick .audio-button': 'handleAudioButtonClicked',
             'vclick .reading-button': 'handleReadingButtonClicked'
         }),
         /**
