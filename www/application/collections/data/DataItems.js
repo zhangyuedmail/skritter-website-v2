@@ -70,6 +70,21 @@ define([
                                     include_decomps: 'true'
                                 },
                                 spawner: true
+                            },
+                            {
+                                path: 'api/v' + app.api.get('version') + '/srsconfigs',
+                                method: 'GET',
+                                params: {
+                                    lang: app.user.getLanguageCode()
+                                }
+                            },
+                            {
+                                path: 'api/v' + app.api.get('version') + '/vocablists',
+                                method: 'GET',
+                                params: {
+                                    lang: app.user.getLanguageCode(),
+                                    sort: 'studying'
+                                }
                             }
                         ], function(result) {
                             self.data.set('downloadId', result.id);

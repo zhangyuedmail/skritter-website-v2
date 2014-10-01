@@ -77,12 +77,19 @@ define([
          */
         handleAddButtonClicked: function(event) {
             event.preventDefault();
+            var self = this;
+            app.timer.stop();
             app.dialogs.show().element('.message-title').text('Adding Items');
             app.user.data.items.fetchNew({limit: 5}, function() {
+                if (self.prompt) {
+                    app.timer.start();
+                } else {
+                    self.next();
+                }
                 app.dialogs.hide();
-            }, function(error) {
+            }, function() {
                 app.dialogs.element('.loader-image').hide();
-                app.dialogs.element('.message-title').text(error);
+                app.dialogs.element('.message-title').text('No active lists found.');
                 if (app.user.data.vocablists.hasPaused()) {
                     app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
                 } else {
@@ -114,13 +121,31 @@ define([
          */
         next: function() {
             var self = this;
-            this.schedule.getNext(this.scheduleIndex).load(function(result) {
-                self.prompt = self.promptController.loadPrompt(result.item.createReview());
-                self.reviews.current = self.prompt.review;
-            }, function() {
-                self.scheduleIndex++;
-                self.next();
-            });
+            var nextItem = this.schedule.getNext(this.scheduleIndex);
+            if (nextItem) {
+                nextItem.load(function(result) {
+                    self.prompt = self.promptController.loadPrompt(result.item.createReview());
+                    self.reviews.current = self.prompt.review;
+                }, function() {
+                    self.scheduleIndex++;
+                    self.next();
+                });
+            } else {
+                app.dialogs.show().element('.message-title').text('No items to study.');
+                app.dialogs.element('.message-text').text("Try adding items if you have an active list. If not, go back and add one.");
+                app.dialogs.element('.loader-image').hide();
+                app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("<i class='fa fa-plus'></i> Add Items", {level: 'primary'}));
+                app.dialogs.element('.message-confirm button').on('vclick', function(event) {
+                    app.dialogs.hide(function() {
+                        self.handleAddButtonClicked(event);
+                    });
+                });
+                app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Go Back", {level: 'default'}));
+                app.dialogs.element('.message-close button').on('vclick', function() {
+                    app.router.navigate('', {replace: true, trigger: true});
+                    app.dialogs.hide();
+                });
+            }
         },
         /**
          * @method remove
