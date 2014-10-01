@@ -178,11 +178,16 @@ define([
         handleToolbarTeachClicked: function(event) {
             event.preventDefault();
             this.review.setAt('score', 1);
-            if (this.teaching) {
-                this.canvas.fadeLayer('background', null);
-                this.teaching = false;
-            } else {
+            if (this.character.isComplete()) {
+                this.handleToolbarEraserClicked(event);
                 this.teach();
+            } else {
+                if (this.teaching) {
+                    this.canvas.fadeLayer('background', null);
+                    this.teaching = false;
+                } else {
+                    this.teach();
+                }
             }
         },
         /**
