@@ -38,6 +38,7 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
             this.elements.fieldQuestion.hide();
             this.elements.fieldWriting.html(this.vocab.getWriting());
             if (app.user.settings.get('audio') && this.vocab.getAudio()) {

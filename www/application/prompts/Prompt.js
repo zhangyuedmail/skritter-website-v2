@@ -49,6 +49,7 @@ define([
          */
         render: function() {
             this.position = this.review.getPosition();
+            console.log('PROMPT:', this.review.get('itemId'), this.review, this.vocab);
             this.renderElements();
             if (this.review.getAt('answered')) {
                 this.renderAnswer();
@@ -101,6 +102,7 @@ define([
             this.elements.fieldAnswer = this.$('.field-answer');
             this.elements.fieldDefinition = this.$('.field-definition');
             this.elements.fieldHeisig = this.$('.field-heisig');
+            this.elements.fieldMnemonic = this.$('.field-mnemonic');
             this.elements.fieldQuestion = this.$('.field-question');
             this.elements.fieldReading = this.$('.field-reading');
             this.elements.fieldWriting = this.$('.field-writing');

@@ -46,6 +46,7 @@ define([
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
             this.elements.fieldReading.html(this.vocab.getReading(null, {
                 hide: false,
                 style: app.user.settings.get('readingStyle')
@@ -62,6 +63,7 @@ define([
             this.character = this.review.getCharacter();
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
             this.elements.fieldReading.html(this.vocab.getReading(null, {
                 hide: app.user.settings.get('hideReading'),
                 style: app.user.settings.get('readingStyle')
@@ -110,8 +112,8 @@ define([
                     if (this.character.isComplete()) {
                         if (app.user.settings.get('squigs')) {
                             this.canvas.tweenCharacter('background', this.review.getCharacter());
-                            this.canvas.injectLayerColor('stroke', 'grey');
-                            this.canvas.getLayer('stroke').alpha = 0.4;
+                            this.canvas.injectLayerColor('stroke', '#b3b3b3');
+                            this.canvas.getLayer('stroke').alpha = 0.5;
                         } else {
                             this.canvas.fadeLayer('background', null);
                         }

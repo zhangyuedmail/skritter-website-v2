@@ -44,6 +44,7 @@ define([
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
             this.elements.fieldReading.html(this.vocab.getReading(this.position + 1, {
                 hide: app.user.settings.get('hideReading'),
                 mask: true,
@@ -65,6 +66,7 @@ define([
             this.tones = this.vocab.getTones(this.position);
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
             this.elements.fieldReading.html(this.vocab.getReading(this.position, {
                 hide: app.user.settings.get('hideReading'),
                 mask: true,

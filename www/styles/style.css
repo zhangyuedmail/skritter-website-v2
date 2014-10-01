@@ -258,7 +258,10 @@ body {
     float: left;
     position: relative;
 }
-.prompt-container .detail-container .field { clear: both; }
+.prompt-container .detail-container .field {
+    clear: both;
+    padding-top: 5px;
+}
 .prompt-container .field-reading div { display: inline; }
 .prompt-container .field-reading span { margin-right: 5px; }
 .prompt-container .field-reading .reading-hidden { border-top: 1px solid #000000; }

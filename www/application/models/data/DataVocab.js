@@ -130,6 +130,13 @@ define([
             }
         },
         /**
+         * @method getMnemonicText
+         * @returns {String}
+         */
+        getMnemonicText: function() {
+            return app.fn.textToHTML(this.get('mnemonic') ? this.get('mnemonic').text : '');
+        },
+        /**
          * @method getReading
          * @param {Number} [startFrom]
          * @param {Object} [options]
