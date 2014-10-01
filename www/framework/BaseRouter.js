@@ -44,6 +44,9 @@ define([], function() {
             if (this.currentPage) {
                 this.currentPage.remove();
             }
+            if (app.timer) {
+                app.timer.stop();
+            }
             this.currentPage = undefined;
         },
         /**
