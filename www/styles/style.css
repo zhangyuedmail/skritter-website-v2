@@ -31,6 +31,7 @@ body {
 
 
 /*** BOOTSTRAP ***/
+.btn.inline { display: inline-block; }
 .btn.spacing { margin: 5px 0; }
 .container-fluid {
     padding-left: 0;
@@ -407,19 +408,12 @@ body {
 
 
 /*** SIDEBARS: INFO ***/
-#sidebar-info.sidebar {
-    width: 80%;
-}
-#sidebar-info .info {
-    font-size: 1.2em;
-}
+#sidebar-info .info { padding-bottom: 10px; }
+#sidebar-info.sidebar { width: 80%; }
+#sidebar-info .info { font-size: 1.2em; }
 #sidebar-info .info-options {
     margin-bottom: 15px;
     margin-top: 15px;
 }
-#sidebar-info .info-reading {
-    font-size: 2em;
-}
-#sidebar-info .info-writing {
-    font-size: 3em;
-}
+#sidebar-info .info-reading { font-size: 2em; }
+#sidebar-info .info-writing { font-size: 3em; }

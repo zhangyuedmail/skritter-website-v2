@@ -109,6 +109,7 @@ define([
             this.elements.infoBan = $('#sidebar-info .info-ban');
             this.elements.infoDefinition = $('#sidebar-info .info-definition');
             this.elements.infoHeisig = $('#sidebar-info .info-heisig');
+            this.elements.infoMnemonic = $('#sidebar-info .info-mnemonic');
             this.elements.infoReading = $('#sidebar-info .info-reading');
             this.elements.infoStar = $('#sidebar-info .info-star');
             this.elements.infoWriting = $('#sidebar-info .info-writing');
@@ -151,7 +152,7 @@ define([
             //TODO: clean up interactions with sidebar
             app.dialogs.show('edit-text').element('.modal-title span').text('Edit Definition');
             var currentDefinition = this.vocab.getDefinition();
-            app.dialogs.element('.dialog-value').text(currentDefinition);
+            app.dialogs.element('.dialog-value').val(currentDefinition);
             app.dialogs.element('.save').on('vclick', function() {
                 var value = app.dialogs.element('.dialog-value').val();
                 if (!value || value === '') {
@@ -163,6 +164,37 @@ define([
                     value = currentDefinition;
                 }
                 $('#sidebar-info .info-definition').text(value);
+                self.render();
+                app.dialogs.hide();
+            });
+        },
+        /**
+         * @method editDefinition
+         */
+        editMnemonic: function() {
+            var self = this;
+            //TODO: clean up interactions with sidebar
+            app.dialogs.show('edit-text').element('.modal-title span').text('Edit Mnemonic');
+            var currentMnemonic = this.vocab.get('mnemonic') ? this.vocab.get('mnemonic').text : '';
+            app.dialogs.element('.dialog-value').empty();
+            app.dialogs.element('.dialog-value').val(currentMnemonic);
+            app.dialogs.element('.save').on('vclick', function() {
+                var value = app.dialogs.element('.dialog-value').val();
+                if (!value || value === '') {
+                    value = '';
+                    self.vocab.set('mnemonic', '');
+                } else if (currentMnemonic !== value) {
+                    if (self.vocab.get('mnemonic')) {
+                        self.vocab.get('mnemonic').text = value;
+                        self.vocab.set('mnemonic', self.vocab.get('mnemonic'));
+                        self.vocab.cache();
+                    } else {
+                        self.vocab.set('mnemonic', {text: value, public: false});
+                    }
+                } else {
+                    value = currentMnemonic;
+                }
+                $('#sidebar-info .info-mnemonic').text(value);
                 self.render();
                 app.dialogs.hide();
             });
@@ -181,6 +213,7 @@ define([
             this.listenTo(this.gradingButtons, 'complete', this.handleGradingButtonsCompleted);
             this.listenTo(this.gradingButtons, 'selected', this.handleGradingButtonsSelected);
             this.listenTo(app.sidebars, 'click:edit-definition', this.editDefinition);
+            this.listenTo(app.sidebars, 'click:edit-mnemonic', this.editMnemonic);
             this.listenTo(app.sidebars, 'click:info-ban', this.toggleBanned);
             this.listenTo(app.sidebars, 'click:info-star', this.toggleStarred);
             return this;
@@ -305,6 +338,12 @@ define([
                 this.elements.infoHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
             } else {
                 this.elements.infoHeisig.empty();
+            }
+            if (this.vocab.get('mnemonic')) {
+                this.elements.infoMnemonic.html(this.vocab.getMnemonicText());
+            } else {
+                this.elements.infoMnemonic.html('');
+                this.elements.infoMnemonic.parent().find('button').text('Add Mnemonic');
             }
             this.elements.infoReading.html(this.vocab.getReading(null, {
                 style: app.user.settings.get('readingStyle')

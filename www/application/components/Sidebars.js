@@ -20,7 +20,6 @@ define([
             this.name = 'default';
             this.sidebar = undefined;
             this.speed = 300;
-            this.tweening = false;
             this.render();
         },
         /**
@@ -43,6 +42,7 @@ define([
          */
         events: _.extend({}, BaseView.prototype.events, {
             'vclick #sidebar-info .edit-definition': 'handleEditDefinitionClicked',
+            'vclick #sidebar-info .edit-mnemonic': 'handleEditMnemonicClicked',
             'vclick #sidebar-info .info-ban': 'handleInfoBanClicked',
             'vclick #sidebar-info .info-star': 'handleInfoStarClicked',
             'swipeleft .sidebar': 'handleSidebarSwipeLeft',
@@ -72,6 +72,14 @@ define([
         handleEditDefinitionClicked: function(event) {
             event.preventDefault();
             this.trigger('click:edit-definition');
+        },
+        /**
+         * @method handleEditMnemonicClicked
+         * @param {Event} event
+         */
+        handleEditMnemonicClicked: function(event) {
+            event.preventDefault();
+            this.trigger('click:edit-mnemonic');
         },
         /**
          * @method handleInfoBanClicked
