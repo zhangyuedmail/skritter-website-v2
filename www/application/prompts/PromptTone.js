@@ -45,8 +45,8 @@ define([
             this.canvas.disableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
-            this.elements.fieldReading.html(this.vocab.getReading(this.position + 1, {
-                hide: app.user.settings.get('hideReading'),
+            this.elements.fieldReading.html(this.vocab.getReading(this.vocab.getCharacterCount() > 1 ? this.position + 1 : null, {
+                hide: app.user.isChinese() ? app.user.settings.get('hideReading') : false,
                 mask: true,
                 style: app.user.settings.get('readingStyle')
             }));
@@ -82,13 +82,25 @@ define([
         handleCanvasClicked: function() {
             if (this.review.getAt('answered')) {
                 this.next();
+            } else {
+                if (this.tones.indexOf(5) > -1) {
+                    this.review.setAt('score', 3);
+                    this.character.reset();
+                    this.character.add(this.character.getTone(5));
+                    this.canvas.drawShape('stroke', this.character.getShape());
+                } else {
+                    this.review.setAt('score', 1);
+                    this.character.reset();
+                    this.character.add(this.character.getTone(this.tones[0]));
+                    this.canvas.drawShape('stroke', this.character.getShape());
+                }
             }
         },
         /**
          * @method handleInputUp
          */
         handleInputUp: function(points, shape) {
-            if (points && points.length > 1 && shape) {
+            if (points && points.length > 4 && shape) {
                 var stroke = this.character.recognizeStroke(points, shape);
                 if (stroke) {
                     this.canvas.lastMouseDownEvent = null;
@@ -101,18 +113,6 @@ define([
                         this.character.add(this.character.getTone(this.tones[0]));
                         this.canvas.drawShape('stroke', this.character.getShape());
                     }
-                }
-            } else {
-                if (this.tones.indexOf(5) > -1) {
-                    this.review.setAt('score', 3);
-                    this.character.reset();
-                    this.character.add(this.character.getTone(5));
-                    this.canvas.drawShape('stroke', this.character.getShape());
-                } else {
-                    this.review.setAt('score', 1);
-                    this.character.reset();
-                    this.character.add(this.character.getTone(this.tones[0]));
-                    this.canvas.drawShape('stroke', this.character.getShape());
                 }
             }
             if (this.character.isComplete()) {

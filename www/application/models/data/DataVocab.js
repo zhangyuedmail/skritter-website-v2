@@ -146,6 +146,7 @@ define([
             var html = '';
             var position = 1;
             var fillers = [" ... ", "'", " "];
+            //TODO: fix for single character prompts with multiple readings
             startFrom = startFrom ? startFrom : false;
             options = options ? options : {};
             options.hide = options.hide ? options.hide : false;
@@ -191,7 +192,6 @@ define([
                         } else {
                             html += "<span class='reading-filler'>" + piece + "</span>";
                         }
-
                     }
                     if (a < segments.length - 1) {
                         html += ", ";
@@ -199,7 +199,11 @@ define([
                     html += "</div>";
                 }
             } else {
-                return "<span class='reading-1'><span class='position-1'>" + this.get('reading') + "</span></span>";
+                if (options.hide) {
+                    html += "<span class='reading-1 reading-button'><span class='position-1 invisible'>" + this.get('reading') + "</span></span>";
+                } else {
+                    html += "<span class='reading-1'><span class='position-1'>" + this.get('reading') + "</span></span>";
+                }
             }
             return html;
         },

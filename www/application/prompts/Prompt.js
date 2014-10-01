@@ -245,6 +245,7 @@ define([
         handleReadingButtonClicked: function(event) {
             event.preventDefault();
             $(event.currentTarget).removeClass('reading-button');
+            $(event.currentTarget).find('span').removeClass('invisible');
         },
         /**
          * @method handleSwipedLeft
