@@ -343,7 +343,7 @@ define([
      */
     function segmentReading(reading) {
         var segments = [];
-        var variations = reading.split(', ');
+        var variations = readiGng.split(', ');
         for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
             var variation = variations[a];
             segments.push(variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g));
@@ -365,7 +365,7 @@ define([
                 .replace(/\n/gi, '<br/>')
                 .replace(/\*([^*]+)\*/gi, '<strong>$1</strong>');
         return text;
-    }
+    };
     /**
      * @method toLowerCase
      * @param {String} value
