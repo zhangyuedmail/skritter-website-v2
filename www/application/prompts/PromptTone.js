@@ -30,6 +30,7 @@ define([
             app.timer.setLimits(15, 10);
             this.$el.html(this.compile(DesktopTemplate));
             Prompt.prototype.render.call(this);
+            this.canvas.getLayer('stroke').alpha = 1;
             this.canvas.hideGrid().show();
             this.canvas.drawFontCharacter('background', this.review.getVocab().get('writing'), {
                 alpha: 0.4

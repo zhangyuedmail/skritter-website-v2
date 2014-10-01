@@ -35,6 +35,7 @@ define([
             this.elements.toolbarReveal = this.$('#toolbar-reveal');
             this.attempts = 0;
             Prompt.prototype.render.call(this);
+            this.canvas.getLayer('stroke').alpha = 1;
             this.canvas.showGrid().show();
             return this;
         },

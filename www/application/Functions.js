@@ -343,7 +343,7 @@ define([
      */
     function segmentReading(reading) {
         var segments = [];
-        var variations = readiGng.split(', ');
+        var variations = reading.split(', ');
         for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
             var variation = variations[a];
             segments.push(variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g));
