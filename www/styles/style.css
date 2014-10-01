@@ -405,11 +405,11 @@ body {
     width: 300px;
 }
 .sidebar.left {
-    border-right: 2px solid #006687;
+    border-right: 2px solid #333333;
     left: 0;
 }
 .sidebar.right {
-    border-left: 2px solid #006687;
+    border-left: 2px solid #333333;
     right: 0;
 }
 
