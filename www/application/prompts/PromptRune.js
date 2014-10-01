@@ -100,9 +100,21 @@ define([
                     this.attempts = 0;
                     this.toggleToolbarEraser();
                     this.canvas.lastMouseDownEvent = null;
-                    this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
+                    console.log(app.user.settings, app.user.settings.get('squigs'));
+                    if (app.user.settings.get('squigs')) {
+                        this.canvas.getLayer('stroke').alpha = 1;
+                        this.canvas.drawShape('stroke', shape);
+                    } else {
+                        this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
+                    }
                     if (this.character.isComplete()) {
-                        this.canvas.fadeLayer('background', null);
+                        if (app.user.settings.get('squigs')) {
+                            this.canvas.tweenCharacter('background', this.review.getCharacter());
+                            this.canvas.injectLayerColor('stroke', 'grey');
+                            this.canvas.getLayer('stroke').alpha = 0.4;
+                        } else {
+                            this.canvas.fadeLayer('background', null);
+                        }
                         this.revealed = false;
                         this.toggleToolbarReveal();
                         this.renderAnswer();

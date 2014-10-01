@@ -52,7 +52,7 @@ define([
             this.elements.adjAudio.bootstrapSwitch('state', this.settings.get('audio'));
             this.elements.adjHeisig.bootstrapSwitch('state', this.settings.get('showHeisig'));
             this.elements.adjHideReading.bootstrapSwitch('state', this.settings.get('hideReading'));
-            this.elements.adjRawSquigs.bootstrapSwitch('state', this.settings.get('RawSquigs'));
+            this.elements.adjRawSquigs.bootstrapSwitch('state', this.settings.get('squigs'));
             if (app.user.isChinese()) {
                 this.elements.adjReadingStyle.bootstrapSwitch('state', this.settings.get('readingStyle') === 'pinyin' ? true : false);
             } else {
@@ -97,9 +97,9 @@ define([
             this.settings.set({
                 audio: this.elements.adjAudio.bootstrapSwitch('state'),
                 hideReading: this.elements.adjHideReading.bootstrapSwitch('state'),
-                rawSquigs: this.elements.adjRawSquigs.bootstrapSwitch('state'),
                 readingStyle: this.elements.adjReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
-                showHeisig: this.elements.adjHeisig.bootstrapSwitch('state')
+                showHeisig: this.elements.adjHeisig.bootstrapSwitch('state'),
+                squigs: this.elements.adjRawSquigs.bootstrapSwitch('state')
             });
         },
         /**

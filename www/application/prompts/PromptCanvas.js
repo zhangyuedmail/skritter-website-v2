@@ -342,6 +342,14 @@ define([
             inject(object);
         },
         /**
+         * @method injectLayer
+         * @param {String} layerName
+         * @param color
+         */
+        injectLayerColor: function(layerName, color) {
+            this.injectColor(this.getLayer(layerName), color);
+        },
+        /**
          * @method remove
          */
         remove: function() {
