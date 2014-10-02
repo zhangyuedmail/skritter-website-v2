@@ -38,10 +38,10 @@ define([
                 app.dialogs.show().element('.message-title').text('Authenticating Guest');
                 app.api.authenticateGuest(function() {
                     self.showLanguageSelect();
-                    app.dialogs.hide()
+                    app.dialogs.hide();
                 }, function() {
                     self.defaultRoute();
-                    app.dialogs.hide()
+                    app.dialogs.hide();
                 });
             }
         },
