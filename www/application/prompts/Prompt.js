@@ -127,6 +127,7 @@ define([
             app.timer.start();
             this.review.setAt('answered', false);
             this.gradingButtons.hide();
+            this.controller.navigation.css('bottom', '0');
             return this;
         },
         /**
@@ -261,7 +262,9 @@ define([
          */
         next: function() {
             this.updateScore();
-            if (this.review.isLast()) {
+            if (!this.review.getAt('answered')) {
+                this.renderAnswer();
+            } else if (this.review.isLast()) {
                 this.controller.triggerPromptComplete(this.review);
             } else {
                 this.review.next();
@@ -274,8 +277,7 @@ define([
         previous: function() {
             this.updateScore();
             if (this.review.isFirst()) {
-                //TODO: allow for previous prompt navigation
-                console.log('PROMPT: previous');
+                this.controller.triggerPrevious();
             } else {
                 this.review.previous();
                 this.render();

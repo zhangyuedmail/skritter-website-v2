@@ -20,7 +20,7 @@ define([
             this.promptController = undefined;
             this.reviews = app.user.reviews;
             this.schedule = app.user.schedule;
-            this.scheduleIndex = -1;
+            this.scheduleIndex = 0;
             this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
         },
         /**
@@ -33,6 +33,7 @@ define([
             this.elements.studyCount = this.$('#study-count');
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);
+            this.listenTo(this.promptController, 'prompt:previous', this.previous);
             this.renderElements().next();
             return this;
         },
@@ -121,7 +122,13 @@ define([
          */
         next: function() {
             var self = this;
-            var nextItem = this.schedule.getNext(this.scheduleIndex);
+            var nextItem;
+            if (this.scheduleIndex === -1 && this.reviews.current) {
+                this.scheduleIndex = 0;
+                nextItem = this.reviews.current;
+            } else {
+                nextItem = this.schedule.getNext(this.scheduleIndex);
+            }
             if (nextItem) {
                 nextItem.load(function(result) {
                     self.prompt = self.promptController.loadPrompt(result.item.createReview());
@@ -145,6 +152,23 @@ define([
                     app.router.navigate('', {replace: true, trigger: true});
                     app.dialogs.hide();
                 });
+            }
+        },
+        /**
+         * @method previous
+         */
+        previous: function() {
+            var self = this;
+            var previousItem = this.reviews.previous;
+            if (previousItem && this.schedule.get(previousItem.get('itemId'))) {
+                this.schedule.get(previousItem.get('itemId')).load(function() {
+                    self.scheduleIndex = -1;
+                    self.prompt = self.promptController.loadPrompt(previousItem);
+                }, function() {
+                    console.log('Unable to load previous item.');
+                });
+            } else {
+                console.log('Unable to go back further.');
             }
         },
         /**

@@ -21,7 +21,7 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.active = undefined;
+            this.prompt = undefined;
             this.canvas = new PromptCanvas();
             this.gradingButtons = new PromptGradingButtons();
             this.listenTo(app, 'resize', this.resize);
@@ -49,6 +49,21 @@ define([
             return this;
         },
         /**
+         * @method events
+         * @returns {Object}
+         */
+        events: _.extend({}, BaseView.prototype.events, {
+            'vclick .navigate-previous': 'handleNavigatePreviousClicked'
+        }),
+        /**
+         * @method handleNavigatePreviousClicked
+         * @param {Event} event
+         */
+        handleNavigatePreviousClicked: function(event) {
+            event.preventDefault();
+            this.prompt.previous();
+        },
+        /**
          * @method loadPrompt
          * @param {DataReview} review
          * @returns {PromptController}
@@ -57,28 +72,28 @@ define([
             this.reset();
             switch (review.get('part')) {
                 case 'defn':
-                    this.active = new PromptDefn(null, this, review);
+                    this.prompt = new PromptDefn(null, this, review);
                     break;
                 case 'rdng':
-                    this.active = new PromptRdng(null, this, review);
+                    this.prompt = new PromptRdng(null, this, review);
                     break;
                 case 'rune':
-                    this.active = new PromptRune(null, this, review);
+                    this.prompt = new PromptRune(null, this, review);
                     break;
                 case 'tone':
-                    this.active = new PromptTone(null, this, review);
+                    this.prompt = new PromptTone(null, this, review);
                     break;
             }
-            return this.active.render();
+            return this.prompt.render();
         },
         /**
          * @method reset
          * @returns {PromptController}
          */
         reset: function() {
-            if (this.active) {
-                this.active.remove();
-                this.active = undefined;
+            if (this.prompt) {
+                this.prompt.remove();
+                this.prompt = undefined;
             }
             this.canvas.hide().clearAll();
             this.gradingButtons.hide().select(3);
@@ -105,10 +120,16 @@ define([
                 this.canvas.resize(contentHeight);
                 this.elements.prompt.height(this.canvas.getWidth());
             }
-            if (this.active) {
-                this.active.resize();
+            if (this.prompt) {
+                this.prompt.resize();
             }
             return this;
+        },
+        /**
+         * @method triggerPrevious
+         */
+        triggerPrevious: function() {
+            this.trigger('prompt:previous');
         },
         /**
          * @method triggerPromptComplete
