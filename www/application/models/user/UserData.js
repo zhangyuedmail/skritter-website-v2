@@ -114,7 +114,7 @@ define([
         startBackgroundSync: function() {
             var self = this;
             this.backgroundSync = setInterval(function() {
-                self.sync();
+                self.sync(1);
             }, moment.duration(5, 'minutes').asMilliseconds());
         },
         /**
@@ -126,10 +126,11 @@ define([
         },
         /**
          * @method sync
+         * @param {Number} startFrom
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
-        sync: function(callbackSuccess, callbackError) {
+        sync: function(startFrom, callbackSuccess, callbackError) {
             var self = this;
             async.series([
                 function(callback) {
@@ -141,16 +142,20 @@ define([
                     }
                 },
                 function(callback) {
+                    app.dialogs.element('.message-text').text('SAVING VOCABS');
                     self.vocabs.putChanged(callback, callback);
                 },
                 function(callback) {
+                    app.dialogs.element('.message-text').text('CALCULATING STATS');
                     self.user.stats.sync(callback, callback);
                 },
                 function(callback) {
+                    app.dialogs.element('.message-text').text('RESOLVING CONFLICTS');
                     self.user.reviews.checkErrors(callback, callback);
                 },
                 function(callback) {
-                    self.user.reviews.post(callback, callback);
+                    app.dialogs.element('.message-text').text('POSTING REVIEWS');
+                    self.user.reviews.post(startFrom, callback, callback);
                 }
             ], function(error) {
                 if (error) {

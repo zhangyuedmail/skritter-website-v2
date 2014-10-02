@@ -59,9 +59,15 @@ define([
         handleSyncClicked: function(event) {
             event.preventDefault();
             app.dialogs.show().element('.message-title').text('Syncing Account');
-            app.user.data.sync(function() {
-                app.dialogs.hide();
-            }, function() {
+            async.series([
+                function(callback) {
+                    app.dialogs.element('.message-text').text('UPDATING ITEMS');
+                    app.user.data.items.sync(callback, callback);
+                },
+                function(callback) {
+                    app.user.data.sync(0, callback, callback);
+                }
+            ], function() {
                 app.dialogs.hide();
             });
         },

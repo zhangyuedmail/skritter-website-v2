@@ -49,10 +49,13 @@ define([
         },
         /**
          * @method getBatch
+         * @param {Number} [startFrom]
          * @returns {Array}
          */
-        getBatch: function() {
-            return this.slice(1).map(function(review) {
+        getBatch: function(startFrom) {
+            startFrom = startFrom === undefined ? 0 : startFrom;
+            console.log('slicing batch from', startFrom);
+            return this.slice(startFrom).map(function(review) {
                 return review.attributes.reviews;
             });
         },
@@ -141,14 +144,15 @@ define([
         },
         /**
          * @method post
+         * @param {Number} startFrom
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
-        post: function(callbackSuccess, callbackError) {
+        post: function(startFrom, callbackSuccess, callbackError) {
             var self = this;
-            var batch = this.getBatch();
+            var batch = this.getBatch(startFrom);
             var postedIds;
-            if (this.length > 1) {
+            if (batch && batch.length) {
                 app.api.postReviews(batch, function(posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
                     app.storage.removeItems('reviews', postedIds, function() {
@@ -192,7 +196,7 @@ define([
             }, {merge: true});
             //check for enough reviews to sync
             if (this.length > 10) {
-                this.user.data.sync();
+                this.user.data.sync(1);
             }
         }
     });

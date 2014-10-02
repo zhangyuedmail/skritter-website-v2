@@ -412,13 +412,24 @@ define([
          * @param {Boolean} [skipDialog]
          */
         logout: function(skipDialog) {
+            var self = this;
             if (this.isAuthenticated()) {
                 if (skipDialog) {
-                    this.remove();
+                    this.data.sync(0, function() {
+                        self.remove();
+                    }, function() {
+                        self.remove();
+                    });
                 } else {
                     app.sidebars.hide();
                     app.dialogs.show('logout');
-                    app.dialogs.element('button.logout').on('vclick', this.remove);
+                    app.dialogs.element('button.logout').on('vclick', function() {
+                        self.data.sync(0, function() {
+                            self.remove();
+                        }, function() {
+                            self.remove();
+                        });
+                    });
                 }
             } else {
                 app.reload();
