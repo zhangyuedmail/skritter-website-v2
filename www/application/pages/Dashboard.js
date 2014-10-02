@@ -27,9 +27,7 @@ define([
             this.elements.buttonSync = this.$('#sync-button');
             this.elements.listContainer = this.$('.list-container');
             this.elements.statsDue = this.$('.stats-due');
-            this.elements.statsNew = this.$('.stats-new');
             this.elements.statsTime = this.$('.stats-time');
-            this.elements.statsStudied = this.$('.stats-studied');
             this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userDisplayName = this.$('.user-displayname');
             this.renderElements();
@@ -76,8 +74,6 @@ define([
          */
         updateStatSection: function() {
             this.elements.statsDue.text(app.user.schedule.getDueCount());
-            this.elements.statsNew.text(app.user.schedule.getNewCount());
-            this.elements.statsStudied.text(app.user.stats.getStudied());
             this.elements.statsTime.text(app.fn.convertTimeToClock(app.user.stats.getTime() * 1000));
         }
     });
