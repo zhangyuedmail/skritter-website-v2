@@ -61,7 +61,6 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            this.character = this.review.getCharacter();
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
@@ -223,6 +222,10 @@ define([
                     height: canvasSize,
                     width: contentWidth - canvasSize - 1
                 });
+            }
+            this.canvas.clearAll();
+            if (this.character.length) {
+                this.canvas.drawShape('stroke', this.character.getShape());
             }
             return this;
         },

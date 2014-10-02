@@ -122,21 +122,23 @@ define([
          */
         next: function() {
             var self = this;
-            var nextItem;
+            var nextItem, review;
             if (this.scheduleIndex === -1 && this.reviews.current) {
-                this.scheduleIndex = 0;
-                nextItem = this.reviews.current;
+                nextItem = this.schedule.get(this.reviews.current.get('itemId'));
+                review = this.reviews.current;
             } else {
                 nextItem = this.schedule.getNext(this.scheduleIndex);
             }
             if (nextItem) {
                 nextItem.load(function(result) {
-                    self.prompt = self.promptController.loadPrompt(result.item.createReview());
+                    self.scheduleIndex = 0;
+                    self.prompt = self.promptController.loadPrompt(review || result.item.createReview());
                     self.reviews.current = self.prompt.review;
                 }, function() {
                     self.scheduleIndex++;
                     self.next();
                 });
+
             } else {
                 app.dialogs.show().element('.message-title').text('No items to study.');
                 app.dialogs.element('.message-text').text("Try adding items if you have an active list. If not, go back and add one.");
@@ -163,6 +165,7 @@ define([
             if (previousItem && this.schedule.get(previousItem.get('itemId'))) {
                 this.schedule.get(previousItem.get('itemId')).load(function() {
                     self.scheduleIndex = -1;
+                    self.reviews.previous = undefined;
                     self.prompt = self.promptController.loadPrompt(previousItem);
                 }, function() {
                     console.log('Unable to load previous item.');

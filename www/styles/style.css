@@ -245,6 +245,13 @@ body {
 }
 .prompt-container .prompt { position: relative; }
 .prompt-container .field { font-size: 1.5em; }
+.prompt-container .navigate-previous {
+    background: #000000;
+    color: #ffffff;
+    display: none;
+    padding: 15px 5px 15px 0;
+    position: absolute;
+}
 
 
 /*** PROMPTS: CANVAS ***/

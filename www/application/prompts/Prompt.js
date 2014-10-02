@@ -27,7 +27,7 @@ define([
             this.teaching = false;
             this.vocab = review.getBaseVocab();
             //load canvas characters for rune and tone prompts
-            if (['rune', 'tone'].indexOf(this.part) !== -1) {
+            if (['rune', 'tone'].indexOf(this.part) !== -1 && !review.characters.length) {
                 review.characters = this.item.getCanvasCharacters();
             }
             //show tutorial if not already disabled
@@ -49,6 +49,8 @@ define([
          */
         render: function() {
             this.position = this.review.getPosition();
+            this.character = this.review.getCharacter();
+            this.tones = this.vocab.getTones(this.position);
             console.log('PROMPT:', this.review.get('itemId'), this.review, this.vocab);
             this.renderElements();
             if (this.review.getAt('answered')) {
@@ -84,6 +86,11 @@ define([
                 reviewTime: app.timer.getReviewTime(),
                 thinkingTime: app.timer.getThinkingTime()
             });
+            if (app.user.reviews.previous || !this.review.isFirst()) {
+                this.showNavigation(0.4);
+            } else {
+                this.hideNavigation();
+            }
             this.gradingButtons.select(this.review.getAt('score')).show();
             if (app.user.settings.hasTutorial('grading')) {
                 app.dialogs.show('tutorial-grading');
@@ -126,8 +133,12 @@ define([
             app.timer.setLapOffset(this.review.getAt('reviewTime'));
             app.timer.start();
             this.review.setAt('answered', false);
+            if (app.user.reviews.previous || !this.review.isFirst()) {
+                this.showNavigation(0.1);
+            } else {
+                this.hideNavigation();
+            }
             this.gradingButtons.hide();
-            this.controller.navigation.css('bottom', '0');
             return this;
         },
         /**
@@ -258,6 +269,15 @@ define([
             app.sidebars.select('info').show();
         },
         /**
+         * @method hideNavigation
+         * @param {Number} [opacity]
+         * @returns {Prompt}
+         */
+        hideNavigation: function() {
+            this.controller.elements.navigatePrevious.hide();
+            return this;
+        },
+        /**
          * @method next
          */
         next: function() {
@@ -310,6 +330,28 @@ define([
             this.$('.text-large').css('font-size', canvasSize / 16);
             this.$('.text-normal').css('font-size', canvasSize / 18);
             this.$('.text-small').css('font-size', canvasSize / 20);
+            return this;
+        },
+        /**
+         * @method showNavigation
+         * @param {Number} [opacity]
+         * @returns {Prompt}
+         */
+        showNavigation: function(opacity) {
+            opacity = opacity === undefined ? 0.4 : opacity;
+            if (this.part === 'rune' || this.part ==='tone') {
+               this.controller.elements.navigatePrevious.css({
+                    bottom: (this.canvas.getSize() / 2) - 30,
+                    display: 'block',
+                    opacity: opacity
+                });
+            } else {
+                this.controller.elements.navigatePrevious.css({
+                    bottom: '50%',
+                    display: 'block',
+                    opacity: opacity
+                });
+            }
             return this;
         },
         /**
