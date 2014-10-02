@@ -114,7 +114,7 @@ define([
                 //contained vocabs
                 function(callback) {
                     var containedVocabIds = result.vocab.has('containedVocabIds') ? result.vocab.get('containedVocabIds') : [];
-                    if (part === 'rune' || part === 'tone') {
+                    if (containedVocabIds.length) {
                         app.storage.getItems('vocabs', containedVocabIds, function(containedVocabs) {
                             if (containedVocabIds.length === containedVocabs.length) {
                                 result.containedVocabs = app.user.data.vocabs.add(containedVocabs, {merge: true, silent: true, sort: false});

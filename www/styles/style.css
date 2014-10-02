@@ -51,6 +51,10 @@ body {
 .content-box h4, .content-box h5, .content-box h6 { margin-top: 5px; }
 .fa.fa-1x5 { font-size: 1.5em; }
 .modal { z-index: 9900; }
+.no-margins {
+    margin-bottom: 0;
+    margin-top: 0;
+}
 .padding-top { padding-top: 10px; }
 @media (max-width: 991px) {
     .content-box.fixed-150 { height: auto; }
@@ -428,6 +432,12 @@ body {
 #sidebar-info .info-options {
     margin-bottom: 15px;
     margin-top: 15px;
+}
+#sidebar-info .info-contained td { padding-right: 10px; }
+#sidebar-info .info-decomps td { padding-right: 10px; }
+#sidebar-info .info-tag {
+    font-size: 12px;
+    margin-top: -10px;
 }
 #sidebar-info .info-reading { font-size: 2em; }
 #sidebar-info .info-writing { font-size: 3em; }

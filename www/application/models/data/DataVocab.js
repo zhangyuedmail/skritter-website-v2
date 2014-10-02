@@ -103,6 +103,23 @@ define([
             return containedItemIds;
         },
         /**
+         * @method getContainedRows
+         * @returns {String}
+         */
+        getContainedRows: function() {
+            var containedHTML = '';
+            var containedVocabs = _.without(this.getContainedVocabs(), undefined);
+            for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
+                var vocabItem = containedVocabs[a];
+                containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
+                containedHTML += "<td class='writing asian-font'>" + vocabItem.get('writing') + '</td>';
+                containedHTML += "<td class='reading'>" + vocabItem.getReading() + '</td>';
+                containedHTML += "<td class='definition'>" + vocabItem.getDefinition() + '</td>';
+                containedHTML += "</tr>";
+            }
+            return containedHTML;
+        },
+        /**
          * @method getContainedVocabs
          * @returns {Array}
          */
@@ -113,6 +130,13 @@ define([
                 vocabs.push(this.collection.get(containedIds[i]));
             }
             return vocabs;
+        },
+        /**
+         * @method getDecomp
+         * @param {DataDecomp}
+         */
+        getDecomp: function() {
+            return this.getCharacters().length === 1 ? app.user.data.decomps.get(this.getCharacters()[0]) : undefined;
         },
         /**
          * @method getDefinition

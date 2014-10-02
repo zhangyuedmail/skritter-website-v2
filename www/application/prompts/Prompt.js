@@ -114,6 +114,8 @@ define([
             this.elements.fieldReading = this.$('.field-reading');
             this.elements.fieldWriting = this.$('.field-writing');
             this.elements.infoBan = $('#sidebar-info .info-ban');
+            this.elements.infoContained = $('#sidebar-info .info-contained');
+            this.elements.infoDecomps = $('#sidebar-info .info-decomps');
             this.elements.infoDefinition = $('#sidebar-info .info-definition');
             this.elements.infoHeisig = $('#sidebar-info .info-heisig');
             this.elements.infoMnemonic = $('#sidebar-info .info-mnemonic');
@@ -391,8 +393,10 @@ define([
             this.elements.infoDefinition.text(this.vocab.getDefinition());
             if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
                 this.elements.infoHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+                this.elements.infoHeisig.parent().show();
             } else {
                 this.elements.infoHeisig.empty();
+                this.elements.infoHeisig.parent().hide();
             }
             if (this.vocab.get('mnemonic')) {
                 this.elements.infoMnemonic.html(this.vocab.getMnemonicText());
@@ -404,6 +408,18 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.infoWriting.html(this.vocab.getWriting());
+            if (this.vocab.getContainedVocabs().length > 1) {
+                this.elements.infoContained.parent().show();
+                this.elements.infoContained.html(this.vocab.getContainedRows());
+            } else {
+                this.elements.infoContained.parent().hide();
+            }
+            if (this.vocab.getCharacterCount() === 1 && this.vocab.getDecomp()) {
+                this.elements.infoDecomps.parent().show();
+                this.elements.infoDecomps.html(this.vocab.getDecomp().getChildrenRows());
+            } else {
+                this.elements.infoDecomps.parent().hide();
+            }
             if (this.vocab.isBanned()) {
                 this.elements.infoBan.addClass('fa-star text-danger');
                 this.elements.infoBan.removeClass('text-muted');
