@@ -37,16 +37,19 @@ define([
             var now = time || moment().unix();
             var timePast =  now - this.attributes.last;
             var timeInterval = 0;
+            if (!this.attributes.vocabIds.length) {
+                return 0;
+            }
             if (this.attributes.interval) {
                 timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;
             } else {
                 timeInterval = this.attributes.next  - this.attributes.last;
             }
             if (this.attributes.part === 'rune') {
-                timePast += 2;
+                timePast += 10;
             }
             if (this.attributes.part === 'tone') {
-                timePast += 1;
+                timePast += 5;
             }
             return timePast / timeInterval;
         },
@@ -55,7 +58,7 @@ define([
          * @returns {Boolean}
          */
         isNew: function() {
-            return this.attributes.reviews === 0;
+            return this.get('reviews') === 0;
         },
         /**
          * @method load
