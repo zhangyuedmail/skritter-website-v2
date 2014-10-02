@@ -154,9 +154,13 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    console.log('SYNC ERROR', error);
-                    if (typeof callbackError === 'function') {
-                        callbackError();
+                    if (error.status === 403) {
+                        self.stopBackgroundSync();
+                    } else {
+                        console.log('SYNC ERROR', error);
+                        if (typeof callbackError === 'function') {
+                            callbackError();
+                        }
                     }
                 } else {
                     self.syncing = false;
