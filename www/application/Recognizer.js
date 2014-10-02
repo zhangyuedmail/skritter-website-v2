@@ -9,7 +9,7 @@ define([], function() {
         this.baseAngleThreshold = 45;
         this.baseCornerPenalty = 30;
         this.baseCornerThreshold = 1;
-        this.baseDistanceThreshold = 100;
+        this.baseDistanceThreshold = 150;
         this.baseSize = 600;
         this.canvasSize = 600;
     }
