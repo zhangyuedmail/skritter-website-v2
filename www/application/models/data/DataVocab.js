@@ -235,18 +235,21 @@ define([
         getTones: function(position) {
             var tones = [];
             var reading = this.get('reading');
-            if (reading.indexOf(', ') === -1) {
-                reading = reading.match(/[0-9]+/g);
-                for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
-                    tones.push([parseInt(reading[a], 10)]);
+            if (this.isChinese()) {
+                if (reading.indexOf(', ') === -1) {
+                    reading = reading.match(/[0-9]+/g);
+                    for (var a = 0, lengthA = reading.length; a < lengthA; a++) {
+                        tones.push([parseInt(reading[a], 10)]);
+                    }
+                } else {
+                    reading = reading.split(', ');
+                    for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                        tones.push([app.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
+                    }
                 }
-            } else {
-                reading = reading.split(', ');
-                for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
-                    tones.push([app.fn.arrayToInt(reading[b].match(/[0-9]+/g))]);
-                }
+                return _.flatten(this.getCharacterCount() > 1 ? tones[position - 1] : tones);
             }
-            return _.flatten(this.getCharacterCount() > 1 ? tones[position - 1] : tones);
+            return tones;
         },
         /**
          * @method getWriting
