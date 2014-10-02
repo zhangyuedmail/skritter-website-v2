@@ -37,13 +37,13 @@ define([
          */
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
+            if (app.user.settings.get('audio')) {
+                this.vocab.playAudio();
+            }
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
             this.elements.fieldQuestion.hide();
             this.elements.fieldWriting.html(this.vocab.getWriting());
-            if (app.user.settings.get('audio')) {
-                this.vocab.playAudio();
-            }
             return this;
         },
         /**

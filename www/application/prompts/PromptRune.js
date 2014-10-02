@@ -61,6 +61,9 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
+            if (app.user.settings.get('audio') && this.review.isFirst()) {
+                this.vocab.playAudio();
+            }
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
@@ -69,9 +72,6 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
-            if (app.user.settings.get('audio') && this.review.isFirst()) {
-                this.vocab.playAudio();
-            }
             this.toggleToolbarEraser();
             return this;
         },

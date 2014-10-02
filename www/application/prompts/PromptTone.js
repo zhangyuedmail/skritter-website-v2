@@ -44,6 +44,9 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
+            if (app.user.settings.get('audio') && this.review.isLast()) {
+                this.vocab.playAudio();
+            }
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
             this.elements.fieldReading.html(this.vocab.getReading(this.vocab.getCharacterCount() > 1 ? this.position + 1 : null, {
@@ -52,9 +55,6 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting());
-            if (app.user.settings.get('audio') && this.review.isLast()) {
-                this.vocab.playAudio();
-            }
             return this;
         },
         /**
