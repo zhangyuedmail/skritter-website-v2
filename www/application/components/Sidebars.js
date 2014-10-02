@@ -19,7 +19,7 @@ define([
             this.enabled = true;
             this.name = 'default';
             this.sidebar = undefined;
-            this.speed = 300;
+            this.speed = 150;
             this.render();
         },
         /**
