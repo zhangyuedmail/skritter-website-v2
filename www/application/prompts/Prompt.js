@@ -281,7 +281,7 @@ define([
          * @method next
          */
         next: function() {
-            this.updateScore();
+            this.updateReview();
             if (!this.review.getAt('answered')) {
                 this.renderAnswer();
             } else if (this.review.isLast()) {
@@ -295,7 +295,7 @@ define([
          * @method previous
          */
         previous: function() {
-            this.updateScore();
+            this.updateReview();
             if (this.review.isFirst()) {
                 this.controller.triggerPrevious();
             } else {
@@ -421,11 +421,15 @@ define([
             return this;
         },
         /**
-         * @method updateScore
+         * @method updateReview
          * @returns {Prompt}
          */
-        updateScore: function() {
-            this.review.setAt('score', this.gradingButtons.getScore());
+        updateReview: function() {
+            this.review.setAt({
+                reviewTime: app.timer.getReviewTime(),
+                score: this.gradingButtons.getScore(),
+                thinkingTime: app.timer.getThinkingTime()
+            });
             return this;
         }
     });

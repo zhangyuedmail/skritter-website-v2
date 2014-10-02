@@ -93,6 +93,12 @@ define([
             }
         },
         /**
+         * @method handleInputDown
+         */
+        handleInputDown: function() {
+            app.timer.stopThinking();
+        },
+        /**
          * @method handleInputUp
          */
         handleInputUp: function(points, shape) {
