@@ -817,7 +817,7 @@ define([
          */
         updateSubscription: function(subscription, callbackComplete, callbackError) {
             $.ajax({
-                url: this.getBaseUrl() + 'subscriptions' +
+                url: this.getBaseUrl() + 'subscriptions/' + app.user.id +
                     '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,

@@ -79,6 +79,8 @@ define([
                         break;
                 }
             }
+            //TODO: remove this once you know if cancelling it possible
+            this.elements.subButtonCancel.hide();
             this.elements.accountCountry.val(this.settings.get('country'));
             this.elements.accountID.val(this.settings.get('id'));
             this.elements.accountDisplayName.val(this.settings.get('name'));
@@ -92,6 +94,7 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick #button-download-all': 'handleButtonDownloadAllClicked',
+            'vclick #button-restore-subscription': 'handleButtonRestoreSubscriptionClicked',
             'vclick #subscribe-month': 'handleSubscribeMonth',
             'vclick #subscribe-year': 'handleSubscribeYear'
         }),
@@ -113,27 +116,46 @@ define([
             });
         },
         /**
-         * @method handleSubscribeMonth
-         * @param {Event} event
+         * @method handleButtonRestoreSubscriptionClicked
          */
-        handleSubscribeMonth: function(event) {
-            event.preventDefault();
+        handleButtonRestoreSubscriptionClicked: function() {
+            app.dialogs.show().element('.message-title').text('Restoring Subscription');
+            app.user.subscription.restoreGoogle(function() {
+                app.dialogs.element('.message-title').text('Subscription Restored');
+                app.dialogs.element('.loader-image').hide();
+                app.dialogs.element('.message-text').text("Please click to reload the application.");
+                app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Reload", {level: 'primary'}));
+                app.dialogs.element('.message-confirm button').on('vclick', function() {
+                    app.reload();
+                });
+            }, function(error) {
+                app.dialogs.element('.message-title').text('Subscription Error');
+                app.dialogs.element('.loader-image').hide();
+                app.dialogs.element('.message-text').text(error);
+                app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                app.dialogs.element('.message-close button').on('vclick', function() {
+                    app.dialogs.hide();
+                });
+            });
+        },
+        /**
+         * @method handleSubscribeMonth
+         */
+        handleSubscribeMonth: function() {
             var self = this;
             this.sub.subscribeGoogle('one.month.sub', function() {
-                self.renderElements();
+                app.reload();
             }, function(error) {
                 self.elements.subMessage.addClass('text-danger').text(error);
             });
         },
         /**
          * @method handleSubscribeYear
-         * @param {Event} event
          */
-        handleSubscribeYear: function(event) {
-            event.preventDefault();
+        handleSubscribeYear: function() {
             var self = this;
             this.sub.subscribeGoogle('one.year.sub', function() {
-                self.renderElements();
+                app.reload();
             }, function(error) {
                 self.elements.subMessage.addClass('text-danger').text(error);
             });
