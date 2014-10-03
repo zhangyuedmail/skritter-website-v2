@@ -44,7 +44,6 @@ define([
                 },
                 //clear all locally stored data
                 function(callback) {
-                    localStorage.removeItem(app.user.id + '-data');
                     localStorage.removeItem(app.user.id + '-history');
                     localStorage.removeItem(app.user.id + '-stats');
                     app.storage.clearAll(callback);

@@ -358,15 +358,20 @@ define([
                     //load all reviews
                     function(callback) {
                         self.reviews.loadAll(callback);
-                    },
-                    //start background sync interval
-
+                    }
                 ], function(error) {
                     if (error) {
                         app.dialogs.element('.message-title').text('Something went wrong.');
                         app.dialogs.element('.message-text').text('Check your connection and click reload.');
-                        app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
-                        app.dialogs.element('.message-other button').on('vclick', app.reload);
+                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                        app.dialogs.element('.message-confirm button').on('vclick', function() {
+                            try {
+                                throw new Error('User Load Error');
+                            } catch (e) {
+                                raygun.send(e, {Response: error.responseJSON});
+                            }
+                            app.reload();
+                        });
                         console.error('USER ERROR:', error);
                     } else {
                         self.data.startBackgroundSync();
@@ -440,6 +445,7 @@ define([
          */
         remove: function() {
             localStorage.removeItem(app.user.id + '-data');
+            localStorage.removeItem(app.user.id + '-history');
             localStorage.removeItem(app.user.id + '-settings');
             localStorage.removeItem(app.user.id + '-stats');
             localStorage.removeItem(app.user.id + '-subscription');
