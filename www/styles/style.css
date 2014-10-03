@@ -71,6 +71,11 @@ body {
 .scrollable { overflow-y: auto; }
 
 
+/*** COMPONENTS: VOCAB TABLE ***/
+.vocab-table .vocab-field-reading { font-size: 1.5em; }
+.vocab-table .vocab-field-writing { font-size: 2em; }
+
+
 /*** DIALOGS: EDIT TEXT ***/
 .dialog-edit-text .dialog-value{
     min-height: 100px;

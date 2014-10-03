@@ -12,10 +12,11 @@ define([
     'pages/Lists',
     'pages/Login',
     'pages/Settings',
+    'pages/Starred',
     'pages/Study',
     'pages/Tests'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageDashboard, PageLanding, PageList, PageLists, PageLogin, PageSettings, PageStudy, PageTests) {
+            PageAccount, PageDashboard, PageLanding, PageList, PageLists, PageLogin, PageSettings, PageStarred, PageStudy, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -44,6 +45,7 @@ define([
             'login': 'showLogin',
             'logout': 'handleLogout',
             'settings': 'showSettings',
+            'starred': 'showStarred',
             'study': 'showStudy',
             'tests': 'showTests',
             '*route': 'defaultRoute'
@@ -140,6 +142,13 @@ define([
          */
         showSettings: function() {
             this.currentPage = new PageSettings();
+            this.currentPage.render();
+        },
+        /**
+         * @method showStarred
+         */
+        showStarred: function() {
+            this.currentPage = new PageStarred();
             this.currentPage.render();
         },
         /**

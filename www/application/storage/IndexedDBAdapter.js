@@ -199,6 +199,30 @@ define([
             });
         },
         /**
+         * @method getStarred
+         * @param {Function} callback
+         */
+        getStarred: function(callback) {
+            var self = this;
+            var data = [];
+            var transaction = self.get('database').transaction('vocabs', 'readonly');
+            transaction.oncomplete = function() {
+                callback(data);
+            };
+            transaction.onerror = function(error) {
+                callback(error);
+            };
+            transaction.objectStore('vocabs').openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    if (cursor.value.starred) {
+                        data.push(cursor.value);
+                    }
+                    cursor.continue();
+                }
+            };
+        },
+        /**
          * @method isLoaded
          * @returns {Boolean}
          */

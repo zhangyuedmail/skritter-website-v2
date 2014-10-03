@@ -25,7 +25,7 @@ define([
          * @returns {ListTable}
          */
         render: function() {
-            this.$el.html("<table class='table table-hover'><thead></thead><tbody></tbody></table>");
+            this.$el.html("<table class='table table-hover list-table'><thead></thead><tbody></tbody></table>");
             return this;
         },
         /**

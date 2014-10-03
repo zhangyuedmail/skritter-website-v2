@@ -84,6 +84,7 @@ define([], {
             logout: 'Log Out',
             queue: 'Queue',
             settings: 'Settings',
+            starred: 'Starred',
             study: 'Study'
         },
         study: {
