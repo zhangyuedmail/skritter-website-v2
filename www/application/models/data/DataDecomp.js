@@ -22,14 +22,18 @@ define([
             var decompHTML = '';
             var children = this.get('Children');
             var definitions = this.getDefinitions();
+            decompHTML += "<table class='table-decomps'><tbody>";
             for (var i = 0, length = children.length; i < length; i++) {
                 var child = children[i];
+                var reading = app.user.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading;
                 decompHTML += '<tr>';
-                decompHTML += "<td class='writing character-font'>" + child.writing + '</td>';
-                decompHTML += "<td class='reading'>" + app.user.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading + '</td>';
+                decompHTML += "<td class='writing asian-font'>" + child.writing + '</td>';
+                decompHTML += "<td class='reading'>" + reading + '</td>';
                 decompHTML += "<td class='definition'>" + definitions[i] + '</td>';
                 decompHTML += '</tr>';
+
             }
+            decompHTML += "</tbody></table>";
             return decompHTML;
         },
         /**

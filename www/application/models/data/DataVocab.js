@@ -109,6 +109,7 @@ define([
         getContainedRows: function() {
             var containedHTML = '';
             var containedVocabs = _.without(this.getContainedVocabs(), undefined);
+            containedHTML += "<table class='table-contained'><tbody>";
             for (var a = 0, lengthA = containedVocabs.length; a < lengthA; a++) {
                 var vocabItem = containedVocabs[a];
                 containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
@@ -117,6 +118,7 @@ define([
                 containedHTML += "<td class='definition'>" + vocabItem.getDefinition() + '</td>';
                 containedHTML += "</tr>";
             }
+            containedHTML += "</tbody></table>";
             return containedHTML;
         },
         /**
@@ -133,10 +135,16 @@ define([
         },
         /**
          * @method getDecomp
-         * @param {DataDecomp}
+         * @param {Boolean|DataDecomp}
          */
         getDecomp: function() {
-            return this.getCharacters().length === 1 ? app.user.data.decomps.get(this.getCharacters()[0]) : undefined;
+            if (this.getCharacters().length === 1) {
+                var decomp = app.user.data.decomps.get(this.getCharacters()[0]);
+                if (decomp && !decomp.get('atomic')) {
+                    return decomp;
+                }
+            }
+            return false;
         },
         /**
          * @method getDefinition

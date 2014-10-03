@@ -438,11 +438,28 @@ body {
     margin-bottom: 15px;
     margin-top: 15px;
 }
-#sidebar-info .info-contained td { padding-right: 10px; }
-#sidebar-info .info-decomps td { padding-right: 10px; }
+#sidebar-info .info-contained td {
+    padding-bottom: 5px;
+    padding-right: 10px;
+}
+#sidebar-info .info-decomps td {
+    padding-bottom: 5px;
+    padding-right: 10px;
+}
 #sidebar-info .info-tag {
     font-size: 12px;
     margin-top: -10px;
 }
-#sidebar-info .info-reading { font-size: 2em; }
-#sidebar-info .info-writing { font-size: 3em; }
+#sidebar-info .info-reading {
+    font-size: 1em;
+    word-break: break-all;
+}
+#sidebar-info .info-writing { font-size: 2em; }
+
+
+/*** TABLE: CONTAINED ***/
+.table-contained .writing { font-size: 2em; }
+
+
+/*** TABLE: DECOMPS ***/
+.table-decomps .writing { font-size: 2em; }

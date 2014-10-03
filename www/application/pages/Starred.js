@@ -36,7 +36,7 @@ define([
         loadStarred: function() {
             var self = this;
             app.storage.getStarred(function(vocabs) {
-                app.user.data.vocabs.set(vocabs, {merge: true})
+                app.user.data.vocabs.set(vocabs, {merge: true});
                 self.table.set({
                     writing: 'Word',
                     starred: ''
