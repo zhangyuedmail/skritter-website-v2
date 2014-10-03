@@ -6,7 +6,8 @@
         locale: undefined,
         paths: app.configs.paths,
         shim: app.configs.shim,
-        urlArgs: app.isLocalhost() ? 'bust=' + (new Date()).getTime() : undefined
+        urlArgs: app.isLocalhost() ? 'bust=' + (new Date()).getTime() : undefined,
+        waitSeconds: 60
     });
 
     function loadLibraries() {
