@@ -48,7 +48,9 @@ define([
                 this.vocab.playAudio();
             }
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
-            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
+            if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
+                this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+            }
             this.elements.fieldReading.html(this.vocab.getReading(this.vocab.getCharacterCount() > 1 ? this.position + 1 : null, {
                 hide: app.user.isChinese() ? app.user.settings.get('hideReading') : false,
                 mask: true,
@@ -65,6 +67,9 @@ define([
             Prompt.prototype.renderQuestion.call(this);
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
+                this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+            }
             this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
             this.elements.fieldReading.html(this.vocab.getReading(this.position, {
                 hide: app.user.settings.get('hideReading'),

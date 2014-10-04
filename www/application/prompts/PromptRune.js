@@ -47,7 +47,9 @@ define([
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
-            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
+            if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
+                this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+            }
             this.elements.fieldReading.html(this.vocab.getReading(null, {
                 hide: false,
                 style: app.user.settings.get('readingStyle')
@@ -66,7 +68,9 @@ define([
             }
             this.canvas.enableInput();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
-            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
+            if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
+                this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+            }
             this.elements.fieldReading.html(this.vocab.getReading(null, {
                 hide: app.user.settings.get('hideReading'),
                 style: app.user.settings.get('readingStyle')

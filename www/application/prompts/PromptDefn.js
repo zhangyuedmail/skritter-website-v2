@@ -41,7 +41,9 @@ define([
                 this.vocab.playAudio();
             }
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
-            this.elements.fieldMnemonic.html(this.vocab.getMnemonicText());
+            if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
+                this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+            }
             this.elements.fieldQuestion.hide();
             this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
