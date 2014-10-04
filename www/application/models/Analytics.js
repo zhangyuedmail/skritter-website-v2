@@ -38,6 +38,20 @@ define(['framework/BaseModel'], function(BaseModel) {
             plugins.analytics.setUserId(userId);
         },
         /**
+         * @method trackEvent
+         * @param {String} category
+         * @param {String} action
+         * @param {String} [label]
+         * @param {String} [value]
+         *
+         */
+        trackEvent: function(category, action, label, value) {
+            if (!this.enabled) {
+                return;
+            }
+            plugins.analytics.trackEvent(category, action, label, value);
+        },
+        /**
          * @method trackView
          * @param {String} title
          */
