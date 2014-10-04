@@ -2632,12 +2632,23 @@ define(function() {
         "橹": "櫓",
         "诸": "諸"
     };
+
+    /**
+     * @method writingToBase
+     * @param {Array} writings
+     * @returns {Array}
+     */
+    function writingToBase(writings) {
+        return writings.map(function(writing) {
+            return toBase(writing);
+        });
+    }
     /**
      * @method fromBase
      * @param {String} base
      * @returns {String}
      */
-    var fromBase = function(base) {
+    function fromBase(base) {
         var rune = '';
         var splitBase = base.split('-');
         var splitBaseRunes = splitBase[1].split('');
@@ -2658,13 +2669,13 @@ define(function() {
             rune = splitBase[1];
         }
         return rune;
-    };
+    }
     /**
      * @method toBase
      * @param {String} word
      * @returns {String}
      */
-    var toBase = function(word) {
+    function toBase(word) {
         var mappedRunes = [];
         var multiple = false;
         var runes = word.split('');
@@ -2716,10 +2727,11 @@ define(function() {
             }
         }
         return 'zh-' + mappedRunes.join('') + '-' + variation;
-    };
+    }
 
     return {
         fromBase: fromBase,
-        toBase: toBase
+        toBase: toBase,
+        writingToBase: writingToBase
     };
 });
