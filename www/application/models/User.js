@@ -370,7 +370,7 @@ define([
                         app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
                         app.dialogs.element('.message-confirm button').on('vclick', function() {
                             try {
-                                throw new Error('User Load Error');
+                                throw new Error('User Error');
                             } catch (e) {
                                 raygun.send(e, {Response: error.responseJSON});
                             }

@@ -23,6 +23,7 @@ define([
             this.character = undefined;
             this.maxAttempts = 3;
             this.revealed = false;
+            this.taps = 0;
         },
         /**
          * @method render
@@ -34,6 +35,7 @@ define([
             this.elements.toolbarEraser = this.$('#toolbar-eraser');
             this.elements.toolbarReveal = this.$('#toolbar-reveal');
             this.attempts = 0;
+            this.taps = 0;
             Prompt.prototype.render.call(this);
             this.canvas.getLayer('stroke').alpha = 1;
             this.canvas.showGrid().show();
@@ -94,6 +96,9 @@ define([
         handleCanvasClicked: function() {
             if (this.review.getAt('answered')) {
                 this.next();
+            } else if (!this.character.isComplete()) {
+                this.taps++;
+                this.canvas.fadeShape('background', this.character.getExpectedStroke().getShape(), {color: '#b3b3b3', milliseconds: 1000});
             }
         },
         /**
@@ -119,6 +124,11 @@ define([
                         this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
                     }
                     if (this.character.isComplete()) {
+                        if (this.review.getAt('score') === 1 || this.taps > 2) {
+                            this.review.setAt('score', 1);
+                        } else if (this.taps > 1) {
+                            this.review.setAt('score', 2);
+                        }
                         if (app.user.settings.get('squigs')) {
                             this.canvas.tweenCharacter('background', this.review.getCharacter());
                             this.canvas.injectLayerColor('stroke', '#b3b3b3');
