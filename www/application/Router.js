@@ -59,11 +59,15 @@ define([
             } else if (Backbone.history.fragment === '') {
                 app.dialogs.show('exit');
                 app.dialogs.element('.exit').one('vclick', function() {
-                    app.user.data.sync(function() {
+                    if (app.user.isAuthenticated()) {
+                        app.user.data.sync(function() {
+                            navigator.app.exitApp();
+                        }, function() {
+                            navigator.app.exitApp();
+                        });
+                    } else {
                         navigator.app.exitApp();
-                    }, function() {
-                        navigator.app.exitApp();
-                    });
+                    }
                 });
             } else {
                 this.back();
