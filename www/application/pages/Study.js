@@ -88,23 +88,35 @@ define([
                     self.next();
                 }
                 app.dialogs.hide();
-            }, function() {
+            }, function(error) {
                 app.dialogs.element('.loader-image').hide();
-                app.dialogs.element('.message-title').text('No active lists found.');
-                if (app.user.data.vocablists.hasPaused()) {
-                    app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
+                if (error.statusCode === 402) {
+                    app.dialogs.element('.message-title').text('Subscription required.');
+                    app.dialogs.element('.message-text').text('You need an active subscription to add new items.');
+                    app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to Account", {level: 'danger'}));
+                    app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                    app.dialogs.element('.message-confirm button').on('vclick', function() {
+                        app.dialogs.hide(function() {
+                            app.router.navigate('account', {trigger: true});
+                        });
+                    });
                 } else {
-                    app.dialogs.element('.message-text').text('You need to add another list to study.');
+                    if (app.user.data.vocablists.hasPaused()) {
+                        app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
+                    } else {
+                        app.dialogs.element('.message-text').text('You need to add another list to study.');
+                    }
+                    app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to My Lists", {level: 'primary'}));
+                    app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                    app.dialogs.element('.message-confirm button').on('vclick', function() {
+                        app.dialogs.hide(function() {
+                            app.router.navigate('list/sort/my-lists', {trigger: true});
+                        });
+                    });
                 }
-                app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to 'My Lists'", {level: 'primary'}));
-                app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
                 app.dialogs.element('.message-close button').on('vclick', function() {
                     app.dialogs.hide();
-                });
-                app.dialogs.element('.message-confirm button').on('vclick', function() {
-                    app.dialogs.hide(function() {
-                        app.router.navigate('list/sort/my-lists', {trigger: true});
-                    });
+                    app.timer.start();
                 });
             });
         },

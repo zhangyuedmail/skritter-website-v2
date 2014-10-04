@@ -265,16 +265,20 @@ define([
                                     }
                                     downloadedRequests++;
                                 }
-                                delete result.cursor;
-                                delete result.statusCode;
-                                result.downloadedRequests = downloadedRequests;
-                                result.totalRequests = data.Batch.totalRequests;
-                                requestIds.splice(0, batchSize);
-                                callbackResult(result);
-                                if (requestIds.length > 0) {
-                                    setTimeout(download, self.get('timeout'));
+                                if (result && result.statusCode === 200) {
+                                    delete result.cursor;
+                                    delete result.statusCode;
+                                    result.downloadedRequests = downloadedRequests;
+                                    result.totalRequests = data.Batch.totalRequests;
+                                    requestIds.splice(0, batchSize);
+                                    callbackResult(result);
+                                    if (requestIds.length > 0) {
+                                        setTimeout(download, self.get('timeout'));
+                                    } else {
+                                        callback();
+                                    }
                                 } else {
-                                    callback();
+                                    callbackError(result);
                                 }
                             } else {
                                 callback(data);
