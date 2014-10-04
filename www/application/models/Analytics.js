@@ -42,7 +42,7 @@ define(['framework/BaseModel'], function(BaseModel) {
          * @param {String} category
          * @param {String} action
          * @param {String} [label]
-         * @param {String} [value]
+         * @param {Number} [value]
          *
          */
         trackEvent: function(category, action, label, value) {

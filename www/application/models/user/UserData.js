@@ -169,6 +169,7 @@ define([
                     }
                 } else {
                     self.syncing = false;
+                    app.analytics.trackEvent('User', 'Sync', app.user.settings.get('name'));
                     console.log('SYNC:', moment().format('HH:mm/YYYY-MM-DD'));
                     if (typeof callbackSuccess === 'function') {
                         callbackSuccess();

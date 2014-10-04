@@ -32,7 +32,7 @@ define([
             if (this.get('expires') === false || this.isExpired() || this.get('subscribed')) {
                 return false;
             }
-            return moment(this.get('expires')).add(1, 'day').fromNow(true);
+            return moment(this.get('expires')).fromNow(true);
         },
         /**
          * @method isExpired
@@ -42,7 +42,7 @@ define([
             if (this.get('subscribed') || this.get('expires') === false) {
                 return false;
             }
-            return moment(this.get('expires')).add(1, 'days').unix() < moment().unix();
+            return moment(this.get('expires')).unix() < moment().unix();
         },
         /**
          * @method fetch
