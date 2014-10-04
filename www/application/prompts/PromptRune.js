@@ -158,6 +158,19 @@ define([
             }
         },
         /**
+         * @method handleCanvasSwipeUp
+         */
+        handleCanvasSwipeUp: function() {
+            if (this.character.length) {
+                this.renderQuestion();
+                this.character.reset();
+                this.canvas.clearAll();
+                this.revealed = false;
+                this.toggleToolbarReveal();
+            }
+            this.toggleToolbarEraser();
+        },
+        /**
          * @method handleToolbarEraserClicked
          * @param {Event} event
          */
