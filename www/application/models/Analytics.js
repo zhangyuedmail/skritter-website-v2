@@ -46,20 +46,18 @@ define(['framework/BaseModel'], function(BaseModel) {
          *
          */
         trackEvent: function(category, action, label, value) {
-            if (!this.enabled) {
-                return;
+            if (this.enabled && plugins.analytics.trackEvent === 'function') {
+                plugins.analytics.trackEvent(category, action, label, value);
             }
-            plugins.analytics.trackEvent(category, action, label, value);
         },
         /**
          * @method trackView
          * @param {String} title
          */
         trackView: function(title) {
-            if (!this.enabled) {
-                return;
+            if (this.enabled && plugins.analytics.trackView === 'function') {
+                plugins.analytics.trackView(title);
             }
-            plugins.analytics.trackView(title);
         }
     });
 
