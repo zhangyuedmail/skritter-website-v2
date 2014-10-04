@@ -36,6 +36,7 @@ define([
             allJapaneseParts: ['defn', 'rdng', 'rune'],
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
+            hideExpired: 0,
             readingStyle: 'pinyin',
             tutorials: ['defn', 'grading', 'rdng', 'rune', 'tone']
         },

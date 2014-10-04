@@ -25,7 +25,9 @@ define([
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
             this.elements.buttonSync = this.$('#sync-button');
+            this.elements.expiredNotice = this.$('#expired-notice');
             this.elements.listContainer = this.$('.list-container');
+            this.elements.trialRemaining = this.$('#trial-remaining');
             this.elements.statsDue = this.$('.stats-due');
             this.elements.statsTime = this.$('.stats-time');
             this.elements.userAvatar = this.$('.user-avatar');
@@ -40,6 +42,22 @@ define([
         renderElements: function() {
             this.elements.userAvatar.html(app.user.getAvatar('img-thumbnail'));
             this.elements.userDisplayName.text(app.user.getDisplayName());
+            if (app.user.subscription.isExpired()) {
+                if (app.user.settings.get('hideExpired') > moment().unix()) {
+                    this.elements.expiredNotice.hide();
+                } else {
+                    this.elements.expiredNotice.find('.expired-title').text('Subscription Expired');
+                    this.elements.expiredNotice.find('.expired-message').text('Continue adding new items and lists to study by purchasing a subscription on the account page.');
+                    this.elements.expiredNotice.show();
+                }
+            } else {
+                this.elements.expiredNotice.hide();
+            }
+            if (app.user.subscription.getRemainingTrial()) {
+                this.elements.trialRemaining.find('span').text(app.user.subscription.getRemainingTrial());
+            } else {
+                this.elements.trialRemaining.hide();
+            }
             this.updateStatSection();
             app.user.stats.sync();
         },
@@ -48,8 +66,18 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-hide-expired': 'handleButtonHideExpires',
             'vclick #button-sync': 'handleSyncClicked'
         }),
+        /**
+         * @method handleButtonHideExpires
+         * @param {Event} event
+         */
+        handleButtonHideExpires: function(event) {
+            event.preventDefault();
+            app.user.settings.set('hideExpired', moment().add(1, 'week').unix());
+            this.elements.expiredNotice.hide();
+        },
         /**
          * @method handleSyncClicked
          * @param {Event} event

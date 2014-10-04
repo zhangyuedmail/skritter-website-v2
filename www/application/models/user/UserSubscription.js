@@ -25,16 +25,24 @@ define([
             localStorage.setItem(this.user.id + '-subscription', JSON.stringify(this.toJSON()));
         },
         /**
+         * @method getRemainingTrial
+         * @returns {Boolean|Number}
+         */
+        getRemainingTrial: function() {
+            if (this.get('expires') === false || this.isExpired() || this.get('subscribed')) {
+                return false;
+            }
+            return moment(this.get('expires')).add(1, 'day').fromNow(true);
+        },
+        /**
          * @method isExpired
          * @returns {Boolean}
          */
         isExpired: function() {
-            var expires = this.get('expires');
-            var now = moment().unix();
-            if (expires === false) {
+            if (this.get('subscribed') || this.get('expires') === false) {
                 return false;
             }
-            return moment(expires).unix() < now;
+            return moment(this.get('expires')).add(1, 'days').unix() < moment().unix();
         },
         /**
          * @method fetch

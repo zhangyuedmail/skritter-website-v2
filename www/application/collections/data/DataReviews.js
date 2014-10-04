@@ -54,7 +54,6 @@ define([
          */
         getBatch: function(startFrom) {
             startFrom = startFrom === undefined ? 0 : startFrom;
-            console.log('slicing batch from', startFrom);
             return this.slice(startFrom).map(function(review) {
                 return review.attributes.reviews;
             });

@@ -33,9 +33,9 @@ define([
             this.elements.subDetailMethod = this.$('#sub-detail-method');
             this.elements.subDetailPlan = this.$('#sub-detail-plan');
             this.elements.subDetailRecurring = this.$('#sub-detail-recurring');
+            this.elements.subTrialExpires = this.$('#sub-trial-expires');
             this.elements.subMessage = this.$('#sub-message');
             this.elements.subStatus = this.$('#sub-status');
-            this.elements.subButtonCancel = this.$('#subscribe-cancel');
             this.elements.subButtonMonth = this.$('#subscribe-month');
             this.elements.subButtonYear = this.$('#subscribe-year');
             this.renderElements();
@@ -46,41 +46,29 @@ define([
          * @returns {PageAccount}
          */
         renderElements: function() {
-            if (this.sub.isExpired()) {
-                this.elements.subStatus.addClass('text-danger').text('Expired');
-                this.elements.subButtonCancel.hide();
+            if (this.sub.getRemainingTrial()) {
+                this.elements.subStatus.text('Trial').addClass('text-warning');
+                this.elements.subTrialExpires.find('span').text(this.sub.get('expires'));
                 this.elements.subDetail.hide();
-            } else if (!this.sub.isExpired() && !this.sub.get('subscribed')) {
-                this.elements.subStatus.addClass('text-success').text('Active');
+            } else if (this.sub.isExpired()) {
+                this.elements.subStatus.text('Expired').addClass('text-danger');
+                this.elements.subTrialExpires.hide();
                 this.elements.subDetail.hide();
-                this.elements.subButtonCancel.hide();
-                this.elements.subButtonMonth.hide();
-                this.elements.subButtonYear.hide();
-            } else {
-                this.elements.subStatus.addClass('text-success').text('Active');
-                this.elements.subDetail.show();
-                this.elements.subButtonMonth.hide();
-                this.elements.subButtonYear.hide();
-            }
-            if (this.sub.get('subscribed')) {
+            } else if (this.sub.get('subscribed')){
+                this.elements.subStatus.text('Active').addClass('text-success');
                 this.elements.subDetailMethod.text(this.sub.get('subscribed'));
                 this.elements.subDetailPlan.text(this.sub.get('plan'));
                 this.elements.subDetailRecurring.text(this.sub.get('expires'));
-                switch (this.sub.get('subscribed')) {
-                    case 'ios':
-                        this.elements.subButtonCancel.hide();
-                        this.elements.subButtonMonth.hide();
-                        this.elements.subButtonYear.hide();
-                        break;
-                    case 'skritter':
-                        this.elements.subButtonCancel.hide();
-                        this.elements.subButtonMonth.hide();
-                        this.elements.subButtonYear.hide();
-                        break;
-                }
+                this.elements.subTrialExpires.hide();
+                this.elements.subButtonMonth.hide();
+                this.elements.subButtonYear.hide();
+            } else {
+                this.elements.subStatus.text('Free').addClass('text-info');
+                this.elements.subDetail.hide();
+                this.elements.subTrialExpires.hide();
+                this.elements.subButtonMonth.hide();
+                this.elements.subButtonYear.hide();
             }
-            //TODO: remove this once you know if cancelling it possible
-            this.elements.subButtonCancel.hide();
             this.elements.accountCountry.val(this.settings.get('country'));
             this.elements.accountID.val(this.settings.get('id'));
             this.elements.accountDisplayName.val(this.settings.get('name'));
