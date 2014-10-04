@@ -330,7 +330,9 @@ define([
                             callback();
                         } else {
                             app.dialogs.element('.message-text').text('CHECKING SUBSCRIPTION');
-                            app.user.subscription.fetch(callback);
+                            app.user.subscription.fetch(function() {
+                                callback();
+                            });
                         }
                     },
                     //update user from server
@@ -339,7 +341,9 @@ define([
                             callback();
                         } else {
                             app.dialogs.element('.message-text').text('UPDATING USER');
-                            app.user.settings.fetch(callback);
+                            app.user.settings.fetch(function() {
+                                callback();
+                            });
                         }
                     },
                     //load all schedule items
