@@ -3,7 +3,7 @@
  */
 define([
     'prompts/Prompt',
-    'require.text!templates/mobile/prompts/prompt-tone.html'
+    'require.text!templates/prompts/prompt-tone.html'
 ], function(Prompt, DesktopTemplate) {
     /**
      * @class PromptTone

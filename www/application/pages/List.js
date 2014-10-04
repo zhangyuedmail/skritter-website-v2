@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/list.html',
+    'require.text!templates/list.html',
     'components/ListSectionTable'
 ], function(BasePage, TemplateMobile, ListSectionTable) {
     /**

@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/account-creation/list-select.html'
+    'require.text!templates/account-creation/list-select.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageListSelect

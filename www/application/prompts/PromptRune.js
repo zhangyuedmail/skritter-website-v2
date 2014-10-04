@@ -3,7 +3,7 @@
  */
 define([
     'prompts/Prompt',
-    'require.text!templates/mobile/prompts/prompt-rune.html'
+    'require.text!templates/prompts/prompt-rune.html'
 ], function(Prompt, DesktopTemplate) {
     /**
      * @class PromptRune

@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/settings.html'
+    'require.text!templates/settings.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageSettings

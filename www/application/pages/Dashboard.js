@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/dashboard.html'
+    'require.text!templates/dashboard.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageDashboard

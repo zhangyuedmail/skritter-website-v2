@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/account.html'
+    'require.text!templates/account.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageAccount

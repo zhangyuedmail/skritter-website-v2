@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/learning-center.html'
+    'require.text!templates/learning-center.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageLearningCenter

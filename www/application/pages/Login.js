@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/login.html'
+    'require.text!templates/login.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageLogin
