@@ -47,6 +47,13 @@ define([
             versionCode: '@@versionCode'
         },
         /**
+         * @method getPackageName
+         * @returns {String}
+         */
+        getPackageName: function() {
+            return cordova.file.applicationStorageDirectory.replace('file:///data/data/', '').replace('/', '');
+        },
+        /**
          * @method getVersion
          * @returns {String}
          */

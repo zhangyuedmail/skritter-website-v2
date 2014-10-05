@@ -227,10 +227,8 @@ define([
                             var mainVersion = app.get('expansionMainVersion');
                             var patchVersion = app.get('expansionPatchVersion');
                             plugins.expansion.load(mainVersion, patchVersion, function() {
-                                console.log('Expansion loaded.');
                                 callback();
                             }, function() {
-                                console.log('Expansion not loaded.');
                                 callback();
                             });
                         } else {
