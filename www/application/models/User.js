@@ -208,7 +208,7 @@ define([
                     app.analytics.setUserId(this.settings.get('name'));
                 }
                 async.series([
-                    //display general loading message
+                    //display general loading messaged
                     function(callback) {
                         app.dialogs.show(null, callback).element('.message-title').text('Getting Started');
                         app.dialogs.element('.message-text').text('');
@@ -220,6 +220,22 @@ define([
                         raygun.withCustomData(self.settings.getCustomData);
                         raygun.withTags(self.settings.getTags());
                         callback();
+                    },
+                    //load expansion files from local obb
+                    function(callback) {
+                        if (plugins.expansion) {
+                            var mainVersion = app.get('expansionMainVersion');
+                            var patchVersion = app.get('expansionPatchVersion');
+                            plugins.expansion.load(mainVersion, patchVersion, function() {
+                                console.log('Expansion loaded.');
+                                callback();
+                            }, function() {
+                                console.log('Expansion not loaded.');
+                                callback();
+                            });
+                        } else {
+                            callback();
+                        }
                     },
                     //load user storage instance
                     function(callback) {

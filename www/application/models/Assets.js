@@ -54,8 +54,8 @@ define([
          * @param {String} value
          */
         playAudio: function(value) {
-            if (app.isNative() && plugins.tts) {
-                plugins.tts.speak(value);
+            if (app.isNative() && plugins.expansion) {
+                plugins.expansion.media.play(decodeURIComponent(value));
             } else {
                 if (this.audio.paused) {
                     var url = app.api.get('root') + app.api.get('tld') + value;
