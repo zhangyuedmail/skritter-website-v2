@@ -3,7 +3,7 @@
  */
 define([
     'prompts/Prompt',
-    'require.text!templates/mobile/prompts/prompt-rune.html'
+    'require.text!templates/prompts/prompt-rune.html'
 ], function(Prompt, DesktopTemplate) {
     /**
      * @class PromptRune
@@ -23,6 +23,7 @@ define([
             this.character = undefined;
             this.maxAttempts = 3;
             this.revealed = false;
+            this.taps = 0;
         },
         /**
          * @method render
@@ -31,9 +32,11 @@ define([
         render: function() {
             app.timer.setLimits(30, 15);
             this.$el.html(this.compile(DesktopTemplate));
+            this.elements.toolbar = this.$('.prompt-toolbar');
             this.elements.toolbarEraser = this.$('#toolbar-eraser');
             this.elements.toolbarReveal = this.$('#toolbar-reveal');
             this.attempts = 0;
+            this.taps = 0;
             Prompt.prototype.render.call(this);
             this.canvas.getLayer('stroke').alpha = 1;
             this.canvas.showGrid().show();
@@ -51,7 +54,7 @@ define([
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
             }
             this.elements.fieldReading.html(this.vocab.getReading(null, {
-                hide: false,
+                hide: this.review.isLast() ? false : app.user.settings.get('hideReading'),
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position + 1));
@@ -94,6 +97,9 @@ define([
         handleCanvasClicked: function() {
             if (this.review.getAt('answered')) {
                 this.next();
+            } else if (!this.character.isComplete()) {
+                this.taps++;
+                this.canvas.fadeShape('background', this.character.getExpectedStroke().getShape(), {color: '#b3b3b3', milliseconds: 1000});
             }
         },
         /**
@@ -119,6 +125,11 @@ define([
                         this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
                     }
                     if (this.character.isComplete()) {
+                        if (this.review.getAt('score') === 1 || this.taps > 2) {
+                            this.review.setAt('score', 1);
+                        } else if (this.taps > 1) {
+                            this.review.setAt('score', 2);
+                        }
                         if (app.user.settings.get('squigs')) {
                             this.canvas.tweenCharacter('background', this.review.getCharacter());
                             this.canvas.injectLayerColor('stroke', '#b3b3b3');
@@ -148,6 +159,19 @@ define([
             }
         },
         /**
+         * @method handleCanvasSwipeUp
+         */
+        handleCanvasSwipeUp: function() {
+            if (this.character.length) {
+                this.renderQuestion();
+                this.character.reset();
+                this.canvas.clearAll();
+                this.revealed = false;
+                this.toggleToolbarReveal();
+            }
+            this.toggleToolbarEraser();
+        },
+        /**
          * @method handleToolbarEraserClicked
          * @param {Event} event
          */
@@ -161,6 +185,7 @@ define([
                 this.character.reset();
                 this.canvas.clearAll();
                 this.revealed = false;
+                this.teaching = false;
                 this.toggleToolbarReveal();
             }
             this.toggleToolbarEraser();
@@ -210,7 +235,7 @@ define([
         },
         /**
          * @method resize
-         * @returns {PromptRune}
+         * @returns {PromptRune}v
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
@@ -223,14 +248,28 @@ define([
                     'border-bottom': '1px solid #000000',
                     'border-right': 'none',
                     height: contentHeight - canvasSize - 1,
+                    'padding-top': 0,
                     width: canvasSize
+                });
+                this.elements.toolbar.css({
+                    'border-bottom': 'none',
+                    'border-top': '1px solid #000000',
+                    bottom: 0,
+                    top: 'auto'
                 });
             } else {
                 this.$el.css({
                     'border-bottom': 'none',
                     'border-right': '1px solid #000000',
                     height: canvasSize,
+                    'padding-top': '36px',
                     width: contentWidth - canvasSize - 1
+                });
+                this.elements.toolbar.css({
+                    'border-bottom': '1px solid #000000',
+                    'border-top': 'none',
+                    bottom: 'auto',
+                    top: 0
                 });
             }
             this.canvas.clearAll();

@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/study.html',
+    'require.text!templates/study.html',
     'prompts/PromptController'
 ], function(BasePage, TemplateMobile, PromptController) {
     /**

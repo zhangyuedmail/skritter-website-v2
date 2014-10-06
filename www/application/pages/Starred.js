@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/starred.html',
+    'require.text!templates/starred.html',
     'components/VocabTable'
 ], function(BasePage, TemplateMobile, VocabTable) {
     /**

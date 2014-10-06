@@ -421,7 +421,6 @@ define([
                         if (data.cursor) {
                             setTimeout(next, self.timeout, data.cursor);
                         } else {
-                            console.log('items', result);
                             callbackComplete(result);
                         }
                     } else {

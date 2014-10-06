@@ -21,28 +21,6 @@ define([
          */
         idAttribute: 'id',
         /**
-         * @property defaults
-         * @type Object
-         */
-        defaults: {
-            created: moment().unix(),
-            changed: moment().unix(),
-            interval: 0,
-            lang: undefined,
-            last: 0,
-            next: 0,
-            part: undefined,
-            previousInterval: 0,
-            previousSuccess: false,
-            reviews: 0,
-            sectionIds: [],
-            style: undefined,
-            successes: 0,
-            timeStudied: 0,
-            vocabIds: [],
-            vocabListIds: []
-        },
-        /**
          * @method cache
          * @param {Function} [callback]
          */
@@ -74,22 +52,21 @@ define([
                     submitTime: now,
                     reviewTime: 0,
                     thinkingTime: 0,
-                    currentInterval: item.get('interval'),
-                    actualInterval: item.get('last'),
-                    newInterval: null,
+                    currentInterval: 0,
+                    actualInterval: 0,
+                    newInterval: undefined,
                     wordGroup: wordGroup,
-                    previousInterval: item.get('previousInterval'),
-                    previousSuccess: item.get('previousSuccess')
+                    previousInterval: 0,
+                    previousSuccess: false
                 });
             }
             return review.set({
                 id: wordGroup,
                 itemId: this.id,
-                originalItems: app.fn.arrayToJSON(items),
+                originalItems: app.fn.arrayToJSON(_.uniq(items, 'cid')),
                 part: part,
                 reviews: reviews,
-                timestamp: timestamp,
-                vocabIds: this.getAllVocabIds()
+                timestamp: timestamp
             });
         },
         /**

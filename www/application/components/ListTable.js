@@ -95,13 +95,13 @@ define([
         filterBy: function(criteria) {
             this.filtered = _.filter(this.lists, function(list) {
                 for (var criterion in criteria) {
-                    if (Array.isArray(list[criterion])) {
+                    if (list[criterion] && Array.isArray(list[criterion])) {
                         var normalizedArray = list[criterion].map(app.fn.toLowerCase);
                         if (normalizedArray.indexOf(criteria[criterion]) > -1) {
                             return true;
                         }
                     } else {
-                        if (list[criterion].toLowerCase().indexOf(criteria[criterion].toLowerCase()) > -1) {
+                        if (list[criterion] && list[criterion].toLowerCase().indexOf(criteria[criterion].toLowerCase()) > -1) {
                             return true;
                         }
                     }

@@ -132,50 +132,54 @@ define([
          */
         sync: function(startFrom, callbackSuccess, callbackError) {
             var self = this;
-            async.series([
-                function(callback) {
-                    if (self.syncing) {
-                        callback('Sync already in progress.');
-                    } else {
-                        this.syncing = true;
-                        callback();
-                    }
-                },
-                function(callback) {
-                    app.dialogs.element('.message-text').text('SAVING VOCABS');
-                    self.vocabs.putChanged(callback, callback);
-                },
-                function(callback) {
-                    app.dialogs.element('.message-text').text('CALCULATING STATS');
-                    self.user.stats.sync(callback, callback);
-                },
-                function(callback) {
-                    app.dialogs.element('.message-text').text('RESOLVING CONFLICTS');
-                    self.user.reviews.checkErrors(callback, callback);
-                },
-                function(callback) {
-                    app.dialogs.element('.message-text').text('POSTING REVIEWS');
-                    self.user.reviews.post(startFrom, callback, callback);
+            if (this.syncing) {
+                if (typeof callbackError === 'function') {
+                    callbackError('Sync already in progress.');
                 }
-            ], function(error) {
-                if (error) {
-                    if (error.status === 403) {
-                        self.stopBackgroundSync();
-                    } else {
-                        console.log('SYNC ERROR', error);
-                        if (typeof callbackError === 'function') {
-                            callbackError();
+            } else {
+                this.syncing = true;
+                console.log('^^^SYNC STARTED:', moment().format('HH:mm:ss YYYY-MM-DD'));
+                async.series([
+                    function(callback) {
+                        app.dialogs.element('.message-text').text('CALCULATING STATS');
+                        self.user.stats.sync(callback, callback);
+                    },
+                    function(callback) {
+                        if (self.get('changedVocabIds').length) {
+                            app.dialogs.element('.message-text').text('SAVING VOCABS');
+                            self.vocabs.putChanged(callback, callback);
+                        } else {
+                            callback();
+                        }
+                    },
+                    function(callback) {
+                        if (self.user.reviews.length > startFrom) {
+                            app.dialogs.element('.message-text').text('POSTING REVIEWS');
+                            self.user.reviews.post(startFrom, callback, callback);
+                        } else {
+                            callback();
                         }
                     }
-                } else {
-                    self.syncing = false;
-                    app.analytics.trackEvent('User', 'Sync', app.user.settings.get('name'));
-                    console.log('SYNC:', moment().format('HH:mm/YYYY-MM-DD'));
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess();
+                ], function(error) {
+                    if (error) {
+                        if (error.status === 403) {
+                            self.stopBackgroundSync();
+                        } else {
+                            console.log('^^^SYNC ERROR', error);
+                            if (typeof callbackError === 'function') {
+                                callbackError();
+                            }
+                        }
+                    } else {
+                        app.analytics.trackEvent('User', 'Sync', app.user.settings.get('name'));
+                        console.log('^^^SYNC FINISHED:', moment().format('HH:mm:ss YYYY-MM-DD'));
+                        self.syncing = false;
+                        if (typeof callbackSuccess === 'function') {
+                            callbackSuccess();
+                        }
                     }
-                }
-            });
+                });
+            }
         },
         /**
          * @method updateExpires

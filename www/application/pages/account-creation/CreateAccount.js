@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/account-creation/create-account.html'
+    'require.text!templates/account-creation/create-account.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageCreateAccount

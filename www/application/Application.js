@@ -39,10 +39,19 @@ define([
          */
         defaults: {
             canvasSize: 600,
+            expansionMainVersion: 3,
+            expansionPatchVersion: 1,
             languageCode: '@@languageCode',
             timestamp: parseInt('@@timestamp', 10),
             version: '@@version',
             versionCode: '@@versionCode'
+        },
+        /**
+         * @method getPackageName
+         * @returns {String}
+         */
+        getPackageName: function() {
+            return cordova.file.applicationStorageDirectory.replace('file:///data/data/', '').replace('/', '');
         },
         /**
          * @method getVersion

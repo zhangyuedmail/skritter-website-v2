@@ -81,7 +81,7 @@ define([
                             try {
                                 throw new Error('Review Errors');
                             } catch (e) {
-                                console.log('REVIEW ERRORS:', errors);
+                                console.error('REVIEW ERRORS:', errors);
                                 raygun.send(e, {ReviewErrors: errors});
                             }
                             callback(null, errors);
@@ -160,11 +160,13 @@ define([
                     });
                 }, function(error, posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
-                    try {
-                        throw new Error('Review Format Errors');
-                    } catch (e) {
-                        console.log('REVIEW FORMAT ERRORS:', error.responseJSON);
-                        raygun.send(e, {Response: error.responseJSON});
+                    if (error.statusCode !== 403) {
+                        try {
+                            throw new Error('Review Format Errors');
+                        } catch (e) {
+                            console.error('REVIEW FORMAT ERRORS:', error.responseJSON);
+                            raygun.send(e, {Message: error.responseJSON});
+                        }
                     }
                     app.storage.clear('reviews', function() {
                         self.reset();
@@ -177,10 +179,27 @@ define([
         },
         /**
          * @method sync
+         * @param {Number} [startFrom]
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
-        sync: function(callbackSuccess, callbackError) {},
+        sync: function(startFrom, callbackSuccess, callbackError) {
+            var self = this;
+            async.series([
+                function(callback) {
+                    self.checkErrors(callback, callback);
+                },
+                function(callback) {
+                    self.post(startFrom, callback, callback);
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackSuccess();
+                }
+            });
+        },
         /**
          * @method updateHistory
          * @param {DataReview} review

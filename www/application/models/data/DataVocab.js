@@ -37,13 +37,13 @@ define([
         },
         /**
          * @method getAudio
-         * @returns {String}
+         * @returns {Boolean|String}
          */
         getAudio: function() {
-            if (app.isNative()) {
-                return this.isJapanese() ? this.get('reading') : this.get('writing');
+            if (this.has('audio')) {
+                return app.isNative() ? this.get('audio').replace('/sounds?file=', '') : this.get('audio');
             }
-            return this.get('audio');
+            return false;
         },
         /**
          * @method getCanvasCharacter

@@ -93,6 +93,10 @@ body {
 
 /*** NAVBAR ***/
 .navbar, .navbar-header { height: 45px; }
+.navbar .container-fluid {
+    padding-left: inherit;
+    padding-right: 15px;
+}
 .navbar-icon {
     color: #ffffff;
     font-size: 22px;
@@ -122,6 +126,10 @@ body {
     .navbar .container {
         padding-right: 0;
         width: 100%;
+    }
+    .navbar .container-fluid {
+        padding-left: 15px;
+        padding-right: inherit;
     }
     .navbar-header { float: left; }
     .navbar-nav { margin: 0; }
@@ -253,7 +261,7 @@ body {
     position: relative;
 }
 .prompt-container .prompt { position: relative; }
-.prompt-container .field { font-size: 1.5em; }
+.prompt-container .field { font-size: 1.5em;     }
 .prompt-container .navigate-previous {
     background: #000000;
     color: #ffffff;
@@ -337,8 +345,12 @@ body {
 
 
 /*** PROMPTS: PROMPT-DEFN ***/
+.prompt-container .prompt-defn .field {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 .prompt-container .prompt-defn { height: 100%; }
-.prompt-container .prompt-defn .container {
+.prompt-container .prompt-defn .container-fluid {
     position: absolute;
     top: 30%;
     width: 100%;
@@ -356,8 +368,12 @@ body {
 
 
 /*** PROMPTS: PROMPT-RDNG ***/
+.prompt-container .prompt-rdng .field {
+    padding-left: 10px;
+    padding-right: 10px;
+}
 .prompt-container .prompt-rdng { height: 100%; }
-.prompt-container .prompt-rdng .container {
+.prompt-container .prompt-rdng .container-fluid {
     position: absolute;
     top: 30%;
     width: 100%;
