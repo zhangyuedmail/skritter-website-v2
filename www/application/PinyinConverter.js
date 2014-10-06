@@ -2171,7 +2171,7 @@ define([], function() {
                     zhuyinArray.push(textItem);
                 }
             }
-            return zhuyinArray.join('');a
+            return zhuyinArray.join('');
         } else {
             return '';
         }

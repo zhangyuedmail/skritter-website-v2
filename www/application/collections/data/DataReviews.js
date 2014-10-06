@@ -81,7 +81,7 @@ define([
                             try {
                                 throw new Error('Review Errors');
                             } catch (e) {
-                                console.log('REVIEW ERRORS:', errors);
+                                console.error('REVIEW ERRORS:', errors);
                                 raygun.send(e, {ReviewErrors: errors});
                             }
                             callback(null, errors);
@@ -164,7 +164,7 @@ define([
                         try {
                             throw new Error('Review Format Errors');
                         } catch (e) {
-                            console.log('REVIEW FORMAT ERRORS:', error.responseJSON);
+                            console.error('REVIEW FORMAT ERRORS:', error.responseJSON);
                             raygun.send(e, {Message: error.responseJSON});
                         }
                     }

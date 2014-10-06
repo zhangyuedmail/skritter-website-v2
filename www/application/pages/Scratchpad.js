@@ -17,7 +17,7 @@ define([
         initialize: function() {
             this.title = 'Scratchpad';
             this.prompt = undefined;
-            this.promptController = undefined
+            this.promptController = undefined;
         },
         /**
          * @method render
