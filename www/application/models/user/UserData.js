@@ -138,6 +138,7 @@ define([
                 }
             } else {
                 this.syncing = true;
+                console.log('^^^SYNC STARTED:', moment().format('HH:mm:ss YYYY-MM-DD'));
                 async.series([
                     function(callback) {
                         app.dialogs.element('.message-text').text('CALCULATING STATS');
@@ -164,14 +165,14 @@ define([
                         if (error.status === 403) {
                             self.stopBackgroundSync();
                         } else {
-                            console.log('SYNC ERROR', error);
+                            console.log('^^^SYNC ERROR', error);
                             if (typeof callbackError === 'function') {
                                 callbackError();
                             }
                         }
                     } else {
                         app.analytics.trackEvent('User', 'Sync', app.user.settings.get('name'));
-                        console.log('SYNC:', moment().format('HH:mm/YYYY-MM-DD'));
+                        console.log('^^^SYNC FINISHED:', moment().format('HH:mm:ss YYYY-MM-DD'));
                         self.syncing = false;
                         if (typeof callbackSuccess === 'function') {
                             callbackSuccess();

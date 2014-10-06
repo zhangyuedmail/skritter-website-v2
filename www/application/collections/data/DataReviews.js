@@ -198,7 +198,7 @@ define([
                 } else {
                     callbackSuccess();
                 }
-            })
+            });
         },
         /**
          * @method updateHistory
