@@ -63,6 +63,7 @@ define([
                 app.dialogs.element('.loader-image').hide();
                 app.dialogs.element('.exit').one('vclick', function() {
                     app.dialogs.element('button').hide();
+                    app.dialogs.element('.modal-header').hide();
                     app.dialogs.element('.loader-image').show();
                     if (app.user.isAuthenticated()) {
                         app.user.data.sync(0, function() {
