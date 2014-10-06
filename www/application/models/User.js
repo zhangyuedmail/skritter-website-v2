@@ -410,7 +410,10 @@ define([
                 } else {
                     app.sidebars.hide();
                     app.dialogs.show('logout');
+                    app.dialogs.element('.loader-image').hide();
                     app.dialogs.element('button.logout').on('vclick', function() {
+                        app.dialogs.element('button').hide();
+                        app.dialogs.element('.loader-image').show();
                         self.data.sync(0, function() {
                             self.remove();
                         }, function() {

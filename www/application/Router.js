@@ -60,7 +60,10 @@ define([
                 app.sidebars.hide();
             } else if (Backbone.history.fragment === '') {
                 app.dialogs.show('exit');
+                app.dialogs.element('.loader-image').hide();
                 app.dialogs.element('.exit').one('vclick', function() {
+                    app.dialogs.element('button').hide();
+                    app.dialogs.element('.loader-image').show();
                     if (app.user.isAuthenticated()) {
                         app.user.data.sync(function() {
                             navigator.app.exitApp();
