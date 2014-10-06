@@ -37,6 +37,7 @@ body {
     padding-left: 0;
     padding-right: 0;
 }
+.container-fluid .navbar-right { padding-right: 15px; }
 .content-box {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
