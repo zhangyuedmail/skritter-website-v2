@@ -160,11 +160,13 @@ define([
                     });
                 }, function(error, posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
-                    try {
-                        throw new Error('Review Format Errors');
-                    } catch (e) {
-                        console.log('REVIEW FORMAT ERRORS:', error.responseJSON);
-                        raygun.send(e, {Response: error.responseJSON});
+                    if (error.statusCode !== 403) {
+                        try {
+                            throw new Error('Review Format Errors');
+                        } catch (e) {
+                            console.log('REVIEW FORMAT ERRORS:', error.responseJSON);
+                            raygun.send(e, {Message: error.responseJSON});
+                        }
                     }
                     app.storage.clear('reviews', function() {
                         self.reset();
