@@ -32,6 +32,7 @@ define([
         render: function() {
             app.timer.setLimits(30, 15);
             this.$el.html(this.compile(DesktopTemplate));
+            this.elements.toolbar = this.$('.prompt-toolbar');
             this.elements.toolbarEraser = this.$('#toolbar-eraser');
             this.elements.toolbarReveal = this.$('#toolbar-reveal');
             this.attempts = 0;
@@ -234,7 +235,7 @@ define([
         },
         /**
          * @method resize
-         * @returns {PromptRune}
+         * @returns {PromptRune}v
          */
         resize: function() {
             Prompt.prototype.resize.call(this);
@@ -247,14 +248,28 @@ define([
                     'border-bottom': '1px solid #000000',
                     'border-right': 'none',
                     height: contentHeight - canvasSize - 1,
+                    'padding-top': 0,
                     width: canvasSize
+                });
+                this.elements.toolbar.css({
+                    'border-bottom': 'none',
+                    'border-top': '1px solid #000000',
+                    bottom: 0,
+                    top: 'auto'
                 });
             } else {
                 this.$el.css({
                     'border-bottom': 'none',
                     'border-right': '1px solid #000000',
                     height: canvasSize,
+                    'padding-top': '36px',
                     width: contentWidth - canvasSize - 1
+                });
+                this.elements.toolbar.css({
+                    'border-bottom': '1px solid #000000',
+                    'border-top': 'none',
+                    bottom: 'auto',
+                    top: 0
                 });
             }
             this.canvas.clearAll();
