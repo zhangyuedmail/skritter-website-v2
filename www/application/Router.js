@@ -65,7 +65,7 @@ define([
                     app.dialogs.element('button').hide();
                     app.dialogs.element('.loader-image').show();
                     if (app.user.isAuthenticated()) {
-                        app.user.data.sync(function() {
+                        app.user.data.sync(0, function() {
                             navigator.app.exitApp();
                         }, function() {
                             navigator.app.exitApp();
