@@ -140,7 +140,6 @@ define([
             app.dialogs.show().element('.message-title').text('Loading');
             app.dialogs.element('.message-text').text('SELECTED LIST');
             app.api.getVocabList(this.listId, null, function(list) {
-                console.log(list);
                 self.list = list;
                 self.$('#list-name').text(list.name);
                 self.$('#list-description').text(list.description);
