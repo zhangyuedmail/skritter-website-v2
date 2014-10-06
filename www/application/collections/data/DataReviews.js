@@ -179,10 +179,27 @@ define([
         },
         /**
          * @method sync
+         * @param {Number} [startFrom]
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
-        sync: function(callbackSuccess, callbackError) {},
+        sync: function(startFrom, callbackSuccess, callbackError) {
+            var self = this;
+            async.series([
+                function(callback) {
+                    self.checkErrors(callback, callback);
+                },
+                function(callback) {
+                    self.post(startFrom, callback, callback);
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackSuccess();
+                }
+            })
+        },
         /**
          * @method updateHistory
          * @param {DataReview} review

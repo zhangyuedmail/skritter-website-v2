@@ -350,7 +350,7 @@ define([
                             try {
                                 throw new Error('User Error');
                             } catch (e) {
-                                raygun.send(e, {Response: error.responseJSON});
+                                raygun.send(e, {Message: error.responseJSON});
                             }
                             app.reload();
                         });
@@ -379,7 +379,7 @@ define([
             app.api.authenticateUser(username, password, function(data) {
                 self.set('id', data.user_id);
                 self.data.set(data);
-                async.parallel([
+                async.series([
                     function(callback) {
                         self.settings.fetch(callback);
                     },
