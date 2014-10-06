@@ -54,7 +54,7 @@ define([
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
             }
             this.elements.fieldReading.html(this.vocab.getReading(null, {
-                hide: false,
+                hide: this.review.isLast() ? false : app.user.settings.get('hideReading'),
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position + 1));
