@@ -221,20 +221,6 @@ define([
                         raygun.withTags(self.settings.getTags());
                         callback();
                     },
-                    //load expansion files from local obb
-                    function(callback) {
-                        if (plugins.expansion) {
-                            var mainVersion = app.get('expansionMainVersion');
-                            var patchVersion = app.get('expansionPatchVersion');
-                            plugins.expansion.load(mainVersion, patchVersion, function() {
-                                callback();
-                            }, function() {
-                                callback();
-                            });
-                        } else {
-                            callback();
-                        }
-                    },
                     //load user storage instance
                     function(callback) {
                         app.storage.open(self.id, callback);
@@ -340,6 +326,20 @@ define([
                     //load all reviews
                     function(callback) {
                         self.reviews.loadAll(callback);
+                    },
+                    //load expansion files from local obb
+                    function(callback) {
+                        if (plugins.expansion) {
+                            var mainVersion = app.get('expansionMainVersion');
+                            var patchVersion = app.get('expansionPatchVersion');
+                            plugins.expansion.load(mainVersion, patchVersion, function() {
+                                callback();
+                            }, function() {
+                                callback();
+                            });
+                        } else {
+                            callback();
+                        }
                     }
                 ], function(error) {
                     if (error) {

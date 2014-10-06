@@ -350,7 +350,7 @@ body {
     padding-right: 10px;
 }
 .prompt-container .prompt-defn { height: 100%; }
-.prompt-container .prompt-defn .container {
+.prompt-container .prompt-defn .container-fluid {
     position: absolute;
     top: 30%;
     width: 100%;
@@ -373,7 +373,7 @@ body {
     padding-right: 10px;
 }
 .prompt-container .prompt-rdng { height: 100%; }
-.prompt-container .prompt-rdng .container {
+.prompt-container .prompt-rdng .container-fluid {
     position: absolute;
     top: 30%;
     width: 100%;
