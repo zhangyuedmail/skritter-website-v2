@@ -332,6 +332,7 @@ define([
             this.$('.text-large').css('font-size', canvasSize / 14);
             this.$('.text-normal').css('font-size', canvasSize / 16);
             this.$('.text-small').css('font-size', canvasSize / 18);
+            this.$('.text-tiny').css('font-size', canvasSize / 22);
             return this;
         },
         /**

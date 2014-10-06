@@ -3,7 +3,7 @@
  */
 define([
     'prompts/Prompt',
-    'require.text!templates/mobile/prompts/prompt-tone.html'
+    'require.text!templates/prompts/prompt-tone.html'
 ], function(Prompt, DesktopTemplate) {
     /**
      * @class PromptTone
@@ -52,7 +52,7 @@ define([
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
             }
             this.elements.fieldReading.html(this.vocab.getReading(this.vocab.getCharacterCount() > 1 ? this.position + 1 : null, {
-                hide: app.user.isChinese() ? app.user.settings.get('hideReading') : false,
+                hide: this.review.isLast() ? false : app.user.settings.get('hideReading'),
                 mask: true,
                 style: app.user.settings.get('readingStyle')
             }));

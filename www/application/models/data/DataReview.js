@@ -26,12 +26,10 @@ define([
          * @type Object
          */
         defaults: {
-            attempts: 0,
             finished: false,
             originalItems: [],
             position: 1,
-            reviews: [],
-            vocabIds: []
+            reviews: []
         },
         /**
          * @method cache
@@ -247,42 +245,46 @@ define([
         save: function(callback) {
             var self = this;
             var configs = app.user.data.srsconfigs.getConfigs(this.get('part'));
-            var updatedItems = [];
+            var originalItems = _.cloneDeep(this.get('originalItems'));
             for (var i = 0, length = this.get('reviews').length; i < length; i++) {
                 //load required resources for updating
                 var review = this.get('reviews')[i];
-                var originalItem = _.find(this.get('originalItems'), {id: review.itemId});
-                var item = app.user.data.items.get(review.itemId);
+                var item = _.find(originalItems, {id: review.itemId});
                 //update values for base review
                 if (this.get('reviews').length > 1 && i === 0) {
                     review.reviewTime = this.getTotalReviewTime();
                     review.score = this.getFinalScore();
                     review.thinkingTime = this.getTotalThinkingTime();
                 }
-                //update interval based on item and score
-                review.newInterval = app.fn.calculateInterval(originalItem, review.score, configs);
+                //update review based on item and score
+                $.extend(review, {
+                    actualInterval: item.last ? review.submitTime - item.last : undefined,
+                    currentInterval: item.interval,
+                    newInterval: app.fn.calculateInterval(item, review.score, configs),
+                    previousInterval: item.previousInterval,
+                    previousSuccess: item.previousSuccess
+                });
                 //update local item based on review
-                item.set({
+                $.extend(item, {
                     changed: review.submitTime,
                     last: review.submitTime,
                     interval: review.newInterval,
                     next: review.submitTime + review.newInterval,
                     previousInterval: review.currentInterval,
                     previousSuccess: review.score > 1 ? true : false,
-                    reviews: originalItem.reviews + 1,
-                    successes: review.score > 1 ? originalItem.successes + 1 : originalItem.successes,
-                    timeStudied: originalItem.reviewTime + review.reviewTime
+                    reviews: item.reviews + 1,
+                    successes: review.score > 1 ? item.successes + 1 : item.successes,
+                    timeStudied: item.timeStudied + review.reviewTime
                 });
-                updatedItems.push(item);
             }
-            async.each(updatedItems, function(item, callback) {
+            async.each(app.user.data.items.add(originalItems, {merge: true}), function(item, callback) {
                 item.cache(callback);
             }, function(error) {
                 if (error) {
                     console.error('REVIEW:', 'Unable to save review.');
                 } else {
                     app.user.reviews.add(self, {merge: true});
-                    self.cache(callback);
+                   self.cache(callback);
                 }
             });
         },

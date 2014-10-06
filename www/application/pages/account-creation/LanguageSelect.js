@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/account-creation/language-select.html'
+    'require.text!templates/account-creation/language-select.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageLanguageSelect

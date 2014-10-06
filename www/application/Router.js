@@ -11,12 +11,13 @@ define([
     'pages/List',
     'pages/Lists',
     'pages/Login',
+    'pages/Scratchpad',
     'pages/Settings',
     'pages/Starred',
     'pages/Study',
     'pages/Tests'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageDashboard, PageLanding, PageList, PageLists, PageLogin, PageSettings, PageStarred, PageStudy, PageTests) {
+            PageAccount, PageDashboard, PageLanding, PageList, PageLists, PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -44,6 +45,7 @@ define([
             'list/sort/:sort': 'showLists',
             'login': 'showLogin',
             'logout': 'handleLogout',
+            'scratchpad/:writings': 'showScratchpad',
             'settings': 'showSettings',
             'starred': 'showStarred',
             'study': 'showStudy',
@@ -58,12 +60,20 @@ define([
                 app.sidebars.hide();
             } else if (Backbone.history.fragment === '') {
                 app.dialogs.show('exit');
+                app.dialogs.element('.loader-image').hide();
                 app.dialogs.element('.exit').one('vclick', function() {
-                    app.user.data.sync(function() {
+                    app.dialogs.element('button').hide();
+                    app.dialogs.element('.modal-header').hide();
+                    app.dialogs.element('.loader-image').show();
+                    if (app.user.isAuthenticated()) {
+                        app.user.data.sync(0, function() {
+                            navigator.app.exitApp();
+                        }, function() {
+                            navigator.app.exitApp();
+                        });
+                    } else {
                         navigator.app.exitApp();
-                    }, function() {
-                        navigator.app.exitApp();
-                    });
+                    }
                 });
             } else {
                 this.back();
@@ -136,6 +146,28 @@ define([
         showLogin: function() {
             this.currentPage = new PageLogin();
             this.currentPage.render();
+        },
+        /**
+         * @method showScratchpad
+         * @param {String} vocabIds
+         */
+        showScratchpad: function(writings) {
+            var self = this;
+            writings = writings.split('|');
+            this.currentPage = new PageScratchpad();
+            if (app.user.isAuthenticated() || app.api.isGuestValid()) {
+                this.currentPage.render().load(writings);
+            } else {
+                app.dialogs.show().element('.message-title').text('Authenticating Guest');
+                app.api.authenticateGuest(function() {
+                    app.dialogs.hide(function() {
+                        self.currentPage.render().load(writings);
+                    });
+                }, function() {
+                    self.defaultRoute();
+                    app.dialogs.hide();
+                });
+            }
         },
         /**
          * @method showSettings

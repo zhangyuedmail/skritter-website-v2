@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/landing.html'
+    'require.text!templates/landing.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageLanding

@@ -2136,13 +2136,17 @@ define([], function() {
     function pinyinToTone(text) {
         text = text.toLowerCase();
         var textArray = text.match(/[a-z|A-Z]+[0-9]+|\,\s|\s\.\.\.\s|\'/g);
-        for (var i = 0, length = textArray.length; i < length; i++) {
-            var textItem = textArray[i];
-            if (textItem !== ' ... ' && textItem !== "'" && textItem !== ", ") {
-                textArray[i] = data[textItem].pinyin;
+        if (textArray) {
+            for (var i = 0, length = textArray.length; i < length; i++) {
+                var textItem = textArray[i];
+                if (textItem !== ' ... ' && textItem !== "'" && textItem !== ", ") {
+                    textArray[i] = data[textItem].pinyin;
+                }
             }
+            return textArray.join('');
+        } else {
+            return '';
         }
-        return textArray.join('');
     }
     /**
      * @method pinyinToZhuyin
@@ -2153,20 +2157,24 @@ define([], function() {
         text = text.toLowerCase();
         var zhuyinArray = [];
         var textArray = text.match(/[a-z|A-Z]+[0-9]+|\,\s|\s\.\.\.\s|\'/g);
-        for (var i = 0, length = textArray.length; i < length; i++) {
-            var textItem = textArray[i];
-            var toneItem = textItem.match(/[0-9]+/g);
-            if (textItem !== " ... " && textItem !== "'" && textItem !== ", ") {
-                zhuyinArray.push(data[textItem].zhuyin);
-                if (toneItem) {
-                    zhuyinArray.push(data[toneItem].zhuyin);
+        if (textArray) {
+            for (var i = 0, length = textArray.length; i < length; i++) {
+                var textItem = textArray[i];
+                var toneItem = textItem.match(/[0-9]+/g);
+                if (textItem !== " ... " && textItem !== "'" && textItem !== ", ") {
+                    zhuyinArray.push(data[textItem].zhuyin);
+                    if (toneItem) {
+                        zhuyinArray.push(data[toneItem].zhuyin);
+                    }
+                }
+                if (textItem === ", ") {
+                    zhuyinArray.push(textItem);
                 }
             }
-            if (textItem === ", ") {
-                zhuyinArray.push(textItem);
-            }
+            return zhuyinArray.join('');
+        } else {
+            return '';
         }
-        return zhuyinArray.join('');
     }
 
     return {

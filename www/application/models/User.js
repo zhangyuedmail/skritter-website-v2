@@ -208,7 +208,7 @@ define([
                     app.analytics.setUserId(this.settings.get('name'));
                 }
                 async.series([
-                    //display general loading message
+                    //display general loading messaged
                     function(callback) {
                         app.dialogs.show(null, callback).element('.message-title').text('Getting Started');
                         app.dialogs.element('.message-text').text('');
@@ -219,42 +219,6 @@ define([
                         raygun.setVersion(app.getVersion());
                         raygun.withCustomData(self.settings.getCustomData);
                         raygun.withTags(self.settings.getTags());
-                        callback();
-                    },
-                    //load tts plugin with language locale
-                    function(callback) {
-                        if (plugins.tts) {
-                            async.series([
-                                function (callback) {
-                                    plugins.tts.startup(function () {
-                                        callback();
-                                    }, function () {
-                                        callback();
-                                    });
-                                },
-                                function (callback) {
-                                    plugins.tts.setLanguage(self.getLanguageCode(), function () {
-                                        callback();
-                                    }, function () {
-                                        callback();
-                                    });
-                                },
-                                function (callback) {
-                                    plugins.tts.pitch(self.settings.get('audioPitch'), function () {
-                                        callback();
-                                    }, function () {
-                                        callback();
-                                    });
-                                },
-                                function (callback) {
-                                    plugins.tts.speed(self.settings.get('audioSpeed'), function () {
-                                        callback();
-                                    }, function () {
-                                        callback();
-                                    });
-                                }
-                            ]);
-                        }
                         callback();
                     },
                     //load user storage instance
@@ -330,7 +294,9 @@ define([
                             callback();
                         } else {
                             app.dialogs.element('.message-text').text('CHECKING SUBSCRIPTION');
-                            app.user.subscription.fetch(callback);
+                            app.user.subscription.fetch(function() {
+                                callback();
+                            });
                         }
                     },
                     //update user from server
@@ -339,7 +305,9 @@ define([
                             callback();
                         } else {
                             app.dialogs.element('.message-text').text('UPDATING USER');
-                            app.user.settings.fetch(callback);
+                            app.user.settings.fetch(function() {
+                                callback();
+                            });
                         }
                     },
                     //load all schedule items
@@ -358,6 +326,20 @@ define([
                     //load all reviews
                     function(callback) {
                         self.reviews.loadAll(callback);
+                    },
+                    //load expansion files from local obb
+                    function(callback) {
+                        if (plugins.expansion) {
+                            var mainVersion = app.get('expansionMainVersion');
+                            var patchVersion = app.get('expansionPatchVersion');
+                            plugins.expansion.load(mainVersion, patchVersion, function() {
+                                callback();
+                            }, function() {
+                                callback();
+                            });
+                        } else {
+                            callback();
+                        }
                     }
                 ], function(error) {
                     if (error) {
@@ -366,9 +348,9 @@ define([
                         app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
                         app.dialogs.element('.message-confirm button').on('vclick', function() {
                             try {
-                                throw new Error('User Load Error');
+                                throw new Error('User Error');
                             } catch (e) {
-                                raygun.send(e, {Response: error.responseJSON});
+                                raygun.send(e, {Message: error.responseJSON});
                             }
                             app.reload();
                         });
@@ -397,7 +379,7 @@ define([
             app.api.authenticateUser(username, password, function(data) {
                 self.set('id', data.user_id);
                 self.data.set(data);
-                async.parallel([
+                async.series([
                     function(callback) {
                         self.settings.fetch(callback);
                     },
@@ -428,7 +410,11 @@ define([
                 } else {
                     app.sidebars.hide();
                     app.dialogs.show('logout');
+                    app.dialogs.element('.loader-image').hide();
                     app.dialogs.element('button.logout').on('vclick', function() {
+                        app.dialogs.element('button').hide();
+                        app.dialogs.element('.modal-header').hide();
+                        app.dialogs.element('.loader-image').show();
                         self.data.sync(0, function() {
                             self.remove();
                         }, function() {

@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/mobile/dashboard.html'
+    'require.text!templates/dashboard.html'
 ], function(BasePage, TemplateMobile) {
     /**
      * @class PageDashboard
@@ -84,18 +84,20 @@ define([
          */
         handleSyncClicked: function(event) {
             event.preventDefault();
-            app.dialogs.show().element('.message-title').text('Syncing Account');
-            async.series([
-                function(callback) {
-                    app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                    app.user.data.items.sync(callback, callback);
-                },
-                function(callback) {
-                    app.user.data.sync(0, callback, callback);
-                }
-            ], function() {
-                app.dialogs.hide();
-            });
+            if (!app.user.data.syncing) {
+                app.dialogs.show().element('.message-title').text('Syncing Account');
+                async.series([
+                    function(callback) {
+                        app.dialogs.element('.message-text').text('UPDATING ITEMS');
+                        app.user.data.items.sync(callback, callback);
+                    },
+                    function(callback) {
+                        app.user.data.sync(0, callback, callback);
+                    }
+                ], function() {
+                    app.dialogs.hide();
+                });
+            }
         },
         /**
          * @method updateStatSection
