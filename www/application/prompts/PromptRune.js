@@ -184,6 +184,7 @@ define([
                 this.character.reset();
                 this.canvas.clearAll();
                 this.revealed = false;
+                this.teaching = false;
                 this.toggleToolbarReveal();
             }
             this.toggleToolbarEraser();
