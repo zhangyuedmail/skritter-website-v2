@@ -49,6 +49,9 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
+            if (app.user.settings.get('audio') && app.user.settings.get('hideReading') && this.review.isLast()) {
+                this.vocab.playAudio();
+            }
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
@@ -66,7 +69,7 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            if (app.user.settings.get('audio') && this.review.isFirst()) {
+            if (app.user.settings.get('audio') && !app.user.settings.get('hideReading') && this.review.isFirst()) {
                 this.vocab.playAudio();
             }
             this.canvas.enableInput();
