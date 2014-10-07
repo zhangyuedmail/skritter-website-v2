@@ -64,12 +64,30 @@ define([
          * @method start
          */
         start: function() {
+            var self = this;
             this.analytics = new Analytics();
             this.dialogs = new Dialogs();
             this.sidebars = new Sidebars();
             this.timer = new Timer();
             this.user = new User();
-            this.user.load(function() {
+            async.series([
+                function(callback) {
+                    self.user.load(callback);
+                },
+                function(callback) {
+                    if (app.isNative()) {
+                        if (self.user.getLanguageCode() === 'zh') {
+                            self.analytics.startTrackerWithId('UA-52116701-1', callback);
+                        } else if (self.user.getLanguageCode() === 'ja') {
+                            self.analytics.startTrackerWithId('UA-52116701-2', callback);
+                        } else {
+                            callback();
+                        }
+                    } else {
+                        callback();
+                    }
+                }
+            ], function() {
                 Backbone.history.start({
                     pushState: app.isLocalhost() || app.isNative() ? false : true,
                     root: app.isLocalhost() || app.isNative() ? '/skritter-html5/www/' : '/'

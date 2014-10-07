@@ -14,28 +14,41 @@ define(['framework/BaseModel'], function(BaseModel) {
         initialize: function(attributes, options) {
             options = options ? options : {};
             this.enabled = false;
-            this.user = options.user;
-            if (app.isNative() && plugins.analytics) {
-                if (app.get('languageCode') === 'ja') {
-                    plugins.analytics.startTrackerWithId('UA-52116701-2');
-                    this.enabled = true;
-                } else if (app.get('languageCode') === 'zh') {
-                    plugins.analytics.startTrackerWithId('UA-52116701-1');
-                    this.enabled = true;
-                }
-            } else {
-                //TODO: add tracking for html5 website version
-            }
         },
         /**
          * @method setUserId
          * @param {String} userId
+         * @@param {Function} callback
          */
-        setUserId: function(userId) {
-            if (!this.enabled) {
-                return;
+        setUserId: function(userId, callback) {
+            if (this.enabled && plugins.analytics.setUserId === 'function') {
+                plugins.analytics.setUserId(userId, function() {
+                    callback();
+                }, function() {
+                    callback();
+                });
+            } else {
+                callback();
             }
-            plugins.analytics.setUserId(userId);
+        },
+        /**
+         * @method startTrackerWithId
+         * @param {String} trackingId
+         * @param {Function} callback
+         */
+        startTrackerWithId: function(trackingId, callback) {
+            var self = this;
+            if (app.isNative() && plugins.analytics) {
+                plugins.analytics.startTrackerWithId(trackingId, function() {
+                    self.enabled = true;
+                    callback();
+                }, function() {
+                    self.enabled = false;
+                    callback();
+                });
+            } else {
+                callback();
+            }
         },
         /**
          * @method trackEvent
@@ -46,7 +59,7 @@ define(['framework/BaseModel'], function(BaseModel) {
          *
          */
         trackEvent: function(category, action, label, value) {
-            if (this.enabled && plugins.analytics.trackEvent === 'function') {
+            if (this.enabled) {
                 plugins.analytics.trackEvent(category, action, label, value);
             }
         },
@@ -55,7 +68,7 @@ define(['framework/BaseModel'], function(BaseModel) {
          * @param {String} title
          */
         trackView: function(title) {
-            if (this.enabled && plugins.analytics.trackView === 'function') {
+            if (this.enabled) {
                 plugins.analytics.trackView(title);
             }
         }

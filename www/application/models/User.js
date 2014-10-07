@@ -204,14 +204,15 @@ define([
                 if (localStorage.getItem(this.id + '-subscription')) {
                     this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')), {silent: true});
                 }
-                if (app.analytics) {
-                    app.analytics.setUserId(this.settings.get('name'));
-                }
                 async.series([
                     //display general loading messaged
                     function(callback) {
                         app.dialogs.show(null, callback).element('.message-title').text('Getting Started');
                         app.dialogs.element('.message-text').text('');
+                    },
+                    //bind user id to google analytics tracking
+                    function(callback) {
+                        app.analytics.setUserId(self.settings.get('name'), callback);
                     },
                     //start tracking authenticated user with raygun
                     function(callback) {
@@ -359,12 +360,12 @@ define([
                         self.data.startBackgroundSync();
                         app.dialogs.hide(function() {
                             app.api.clearGuest();
-                            callback(self);
+                            callback(null, self);
                         });
                     }
                 });
             } else {
-                callback(this);
+                callback(null, this);
             }
         },
         /**
