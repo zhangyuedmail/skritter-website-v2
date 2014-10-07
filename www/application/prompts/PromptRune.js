@@ -293,13 +293,16 @@ define([
          */
         teach: function() {
             var stroke = this.character.getExpectedStroke();
-            var strokeParam = stroke.getParams()[0];
-            var strokePath = strokeParam.get('corners');
-            this.canvas.clearLayer('background');
-            this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
-            this.canvas.tracePath('background', strokePath);
-            this.review.setAt('score', 1);
-            this.teaching = true;
+            var strokeParams = stroke.getParams();
+            if (strokeParams) {
+                var strokeParam = stroke.getParams()[0];
+                var strokePath = strokeParam.get('corners');
+                this.canvas.clearLayer('background');
+                this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
+                this.canvas.tracePath('background', strokePath);
+                this.review.setAt('score', 1);
+                this.teaching = true;
+            }
             return this;
         },
         /**
