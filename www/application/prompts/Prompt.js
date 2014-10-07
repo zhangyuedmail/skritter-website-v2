@@ -67,6 +67,11 @@ define([
             if (this.vocab.isChinese()) {
                 this.elements.promptStyle.text(this.vocab.getStyle().toUpperCase());
             }
+            if (this.vocab.getAudio()) {
+                $('#button-audio').css('visibility', 'visible');
+            } else {
+                $('#button-audio').css('visibility', 'hidden');
+            }
             this.reset().resize();
             if (this.teaching) {
                 this.teach();
