@@ -222,6 +222,17 @@ define([
                         raygun.withTags(self.settings.getTags());
                         callback();
                     },
+                    //load expansion files from local obb
+                    function(callback) {
+                        if (plugins.expansion) {
+                            var mainVersion = app.get('expansionMainVersion');
+                            var patchVersion = app.get('expansionPatchVersion');
+                            plugins.expansion.load(mainVersion, patchVersion);
+                            callback();
+                        } else {
+                            callback();
+                        }
+                    },
                     //load user storage instance
                     function(callback) {
                         app.storage.open(self.id, callback);
@@ -287,21 +298,6 @@ define([
                             self.data.items.downloadAll(callback, function(error) {
                                 callback(error);
                             });
-                        }
-                    },
-                    //load expansion files from local obb
-                    function(callback) {
-                        if (plugins.expansion) {
-                            app.dialogs.element('.message-text').text('INITIALIZING AUDIO');
-                            var mainVersion = app.get('expansionMainVersion');
-                            var patchVersion = app.get('expansionPatchVersion');
-                            plugins.expansion.load(mainVersion, patchVersion, function() {
-                                callback();
-                            }, function() {
-                                callback();
-                            });
-                        } else {
-                            callback();
                         }
                     },
                     //update subscription from server
