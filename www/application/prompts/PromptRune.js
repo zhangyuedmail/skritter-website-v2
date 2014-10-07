@@ -166,6 +166,7 @@ define([
          */
         handleCanvasSwipeUp: function() {
             if (this.character.length) {
+                app.analytics.trackEvent('Prompt', 'swipeup', 'eraser');
                 this.renderQuestion();
                 this.character.reset();
                 this.canvas.clearAll();
@@ -181,6 +182,7 @@ define([
         handleToolbarEraserClicked: function(event) {
             event.preventDefault();
             this.gradingButtons.hide();
+            app.analytics.trackEvent('Prompt', 'click', 'eraser');
             this.review.setAt('answered', false);
             this.teaching = false;
             if (this.character.length) {
@@ -199,6 +201,7 @@ define([
          */
         handleToolbarRevealClicked: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('Prompt', 'click', 'reveal');
             if (this.revealed) {
                 this.canvas.clearLayer('background');
                 this.revealed = false;
@@ -214,6 +217,7 @@ define([
          */
         handleToolbarTeachClicked: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('Prompt', 'click', 'teach');
             this.review.setAt('score', 1);
             if (this.character.isComplete()) {
                 this.handleToolbarEraserClicked(event);

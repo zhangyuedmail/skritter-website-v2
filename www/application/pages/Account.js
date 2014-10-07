@@ -92,7 +92,7 @@ define([
          */
         handleButtonDownloadAllClicked: function(event) {
             event.preventDefault();
-            app.analytics.trackEvent('User', 'Download All', app.user.settings.get('name'));
+            app.analytics.trackEvent('Account', 'click', 'download all');
             app.dialogs.show().element('.message-title').text('Downloading Data');
             app.dialogs.element('.message-text').text('');
             app.user.data.items.downloadAll(function() {
@@ -109,7 +109,7 @@ define([
          */
         handleButtonRestoreSubscriptionClicked: function() {
             app.dialogs.show().element('.message-title').text('Restoring Subscription');
-            app.analytics.trackEvent('User', 'Subscription Restore', app.user.settings.get('name'));
+            app.analytics.trackEvent('Account', 'click', 'restore subscription');
             app.user.subscription.restoreGoogle(function() {
                 app.dialogs.element('.message-title').text('Subscription Restored');
                 app.dialogs.element('.loader-image').hide();

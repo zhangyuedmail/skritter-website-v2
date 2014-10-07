@@ -49,7 +49,7 @@ define([
             app.dialogs.show().element('.message-title').text('Logging In');
             this.disableForm().elements.message.empty();
             app.user.login(username, password, function() {
-                app.analytics.trackEvent('User', 'Logged In', app.user.settings.get('name'));
+                app.analytics.trackUserEvent('logged in');
                 app.api.clearGuest();
                 app.reload();
             }, function(error) {

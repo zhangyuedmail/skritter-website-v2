@@ -171,7 +171,7 @@ define([
                             }
                         }
                     } else {
-                        app.analytics.trackEvent('User', 'Sync', app.user.settings.get('name'));
+                        app.analytics.trackUserEvent('background sync');
                         console.log('^^^SYNC FINISHED:', moment().format('HH:mm:ss YYYY-MM-DD'));
                         self.syncing = false;
                         if (typeof callbackSuccess === 'function') {

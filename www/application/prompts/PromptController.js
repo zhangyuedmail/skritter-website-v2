@@ -62,6 +62,7 @@ define([
          */
         handleNavigatePreviousClicked: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('Prompt', 'click', 'previous');
             this.prompt.previous();
         },
         /**

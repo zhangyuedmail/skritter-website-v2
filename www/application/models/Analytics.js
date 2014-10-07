@@ -64,6 +64,17 @@ define(['framework/BaseModel'], function(BaseModel) {
             }
         },
         /**
+         * @method trackUserEvent
+         * @param {String} action
+         * @param {Number} [value]
+         *
+         */
+        trackUserEvent: function(action, value) {
+            if (this.enabled) {
+                plugins.analytics.trackEvent('User', action, app.user.settings.get('name'), value);
+            }
+        },
+        /**
          * @method trackView
          * @param {String} title
          */

@@ -68,12 +68,14 @@ define([
          */
         handleButtonAddClicked: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('List', 'click', 'add');
             app.dialogs.show().element('.message-title').text('Updating');
             app.dialogs.element('.message-text').text('ADDING LIST');
             app.api.updateVocabList({
                 id: this.listId,
                 studyingMode: 'adding'
             }, function(result) {
+
                 app.user.data.vocablists.add(result, {merge: true});
                 app.dialogs.hide(function() {
                     app.router.navigate('list/sort/my-lists', {trigger: true});
@@ -89,6 +91,7 @@ define([
         handleButtonPauseClicked: function(event) {
             event.preventDefault();
             var self = this;
+            app.analytics.trackEvent('List', 'click', 'pause');
             app.dialogs.show().element('.message-title').text('Updating');
             app.dialogs.element('.message-text').text('PAUSING LIST');
             app.api.updateVocabList({
@@ -110,6 +113,7 @@ define([
         handleButtonResumeClicked: function(event) {
             event.preventDefault();
             var self = this;
+            app.analytics.trackEvent('List', 'click', 'resume');
             app.dialogs.show().element('.message-title').text('Updating');
             app.dialogs.element('.message-text').text('RESUMING LIST');
             app.api.updateVocabList({

@@ -249,7 +249,7 @@ define([
                     callbackError(error);
                 } else {
                     console.log('ITEMS', items, vocablists, numVocabsAdded);
-                    app.analytics.trackEvent('User', 'Added Items', app.user.settings.get('name'), items.length);
+                    app.analytics.trackUserEvent('added items', items.length);
                     self.data.set('addOffset', self.get('addOffset') + numVocabsAdded);
                     self.data.vocablists.add(vocablists, {merge: true});
                     self.data.user.schedule.sort();

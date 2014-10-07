@@ -273,6 +273,7 @@ define([
          */
         handleSwipedLeft: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('Prompt', 'swipeleft', 'info');
             app.sidebars.select('info').show();
         },
         /**

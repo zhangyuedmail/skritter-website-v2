@@ -61,6 +61,7 @@ define([
         handleAudioButtonClicked: function(event) {
             event.preventDefault();
             if (this.prompt) {
+                app.analytics.trackEvent('Prompt', 'click', 'audio');
                 this.prompt.vocab.playAudio();
             }
         },
@@ -70,6 +71,7 @@ define([
          */
         handleInfoButtonClicked: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('Prompt', 'click', 'info');
             app.sidebars.select('info').toggle();
         },
         /**
@@ -80,6 +82,7 @@ define([
             event.preventDefault();
             var self = this;
             app.timer.stop();
+            app.analytics.trackEvent('Prompt', 'click', 'add items');
             app.dialogs.show().element('.message-title').text('Adding Items');
             app.user.data.items.fetchNew({limit: 5}, function() {
                 if (self.prompt) {

@@ -58,7 +58,7 @@ define([
                     name: this.elements.username.val(),
                     password: this.elements.password.val()
                 }, function() {
-                    app.analytics.trackEvent('User', 'Account Created', app.user.settings.get('name'));
+                    app.analytics.trackUserEvent('account created');
                     app.reload();
                 }, function(error) {
                     self.enableForm().elements.message.text(error.responseJSON.message);

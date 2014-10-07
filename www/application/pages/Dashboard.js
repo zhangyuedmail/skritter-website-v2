@@ -86,6 +86,7 @@ define([
             event.preventDefault();
             if (!app.user.data.syncing) {
                 app.dialogs.show().element('.message-title').text('Syncing Account');
+                app.analytics.trackUserEvent('manual sync');
                 async.series([
                     function(callback) {
                         app.dialogs.element('.message-text').text('UPDATING ITEMS');
