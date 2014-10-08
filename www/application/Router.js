@@ -9,6 +9,7 @@ define([
     'pages/Dashboard',
     'pages/Landing',
     'pages/List',
+    'pages/ListSection',
     'pages/Lists',
     'pages/Login',
     'pages/Scratchpad',
@@ -17,7 +18,8 @@ define([
     'pages/Study',
     'pages/Tests'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageDashboard, PageLanding, PageList, PageLists, PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
+            PageAccount, PageDashboard, PageLanding, PageList, PageListSection, PageLists,
+            PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -42,6 +44,7 @@ define([
             'account': 'showAccount',
             'list': 'showLists',
             'list/:listId': 'showList',
+            'list/:listId/:sectionId': 'showListSection',
             'list/sort/:sort': 'showLists',
             'login': 'showLogin',
             'logout': 'handleLogout',
@@ -132,6 +135,15 @@ define([
         showList: function(listId) {
             this.currentPage = new PageList();
             this.currentPage.set(listId).render();
+        },
+        /**
+         * @method showListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        showListSection: function(listId, sectionId) {
+            this.currentPage = new PageListSection();
+            this.currentPage.set(listId, sectionId).render();
         },
         /**
          * @method showLists

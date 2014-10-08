@@ -660,6 +660,35 @@ define([
             });
         },
         /**
+         * @method getVocabListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getVocabListSection: function(listId, sectionId, options, callbackComplete, callbackError) {
+            options = options ? options : {};
+            $.ajax({
+                url: this.getBaseUrl() + 'vocablists/' + listId + '/sections/' + sectionId,
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    fields: options.fields
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.VocabListSection);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method getVocabLists
          * @param {Object} [callback]
          * @param {Function} callbackComplete

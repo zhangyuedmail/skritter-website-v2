@@ -68,6 +68,7 @@ define([
                         divBody += "<td class='list-field-" + field + "'>" + fieldValue + "</td>";
                     }
                 }
+                divBody += "</tr>";
             }
             this.$('table thead').html(divHead);
             this.$('table tbody').html(divBody);

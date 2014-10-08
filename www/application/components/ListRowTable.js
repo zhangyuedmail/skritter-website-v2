@@ -7,22 +7,21 @@ define([
     'framework/BaseView'
 ], function(BaseView) {
     /**
-     * @class ListSectionTable
+     * @class ListRowTable
      * @extend BaseView
      */
-    var ListSectionTable = BaseView.extend({
+    var ListRowTable = BaseView.extend({
         /**
          * @method initialize
          * @constructor
          */
         initialize: function() {
             this.fields = {name: 'Name'};
-            this.list = undefined;
-            this.sections = [];
+            this.rows = [];
         },
         /**
          * @method render
-         * @returns {ListSectionTable}
+         * @returns {ListRowTable}
          */
         render: function() {
             this.$el.html("<table class='table table-hover'><thead></thead><tbody></tbody></table>");
@@ -30,7 +29,7 @@ define([
         },
         /**
          * @method renderTable
-         * @returns {ListSectionTable}
+         * @returns {ListRowTable}
          */
         renderTable: function() {
             var divBody = '';
@@ -46,16 +45,12 @@ define([
                 divHead += '</tr>';
             }
             //generates the body section
-            for (var i = 0, length = this.sections.length; i < length; i++) {
-                var section = this.sections[i];
-                divBody += "<tr id='section-" + section.id + "' class='cursor'>";
+            for (var i = 0, length = this.rows.length; i < length; i++) {
+                var row = this.rows[i];
+                divBody += "<tr id='vocab-" + row.vocabId + "' class='cursor'>";
                 for (var field in this.fields) {
-                    var fieldValue = section[field];
-                    if (field === 'rows') {
-                        divBody += "<td class='section-field-" + field + "'>" + fieldValue.length + "</td>";
-                    } else {
-                        divBody += "<td class='section-field-" + field + "'>" + fieldValue + "</td>";
-                    }
+                    var fieldValue = row[field];
+                    divBody += "<td class='row-field-" + field + "'>" + app.fn.mapper.fromBase(fieldValue) + "</td>";
                 }
                 divBody += "</tr>";
             }
@@ -71,7 +66,7 @@ define([
         },
         /**
          * @method clear
-         * @returns {ListSectionTable}
+         * @returns {ListRowTable}
          */
         clear: function() {
             this.$('table thead').empty();
@@ -81,7 +76,7 @@ define([
          * @method set
          * @param {Object} fields
          * @param {Object} list
-         * @returns {ListSectionTable}
+         * @returns {ListRowTable}
          */
         set: function(fields, list) {
             this.setFields(fields).setList(list);
@@ -90,23 +85,22 @@ define([
         /**
          * @method setFields
          * @param {Object} fields
-         * @returns {ListSectionTable}
+         * @returns {ListRowTable}
          */
         setFields: function(fields) {
             this.fields = fields || {name: 'Name'};
             return this;
         },
         /**
-         * @method setLists
-         * @param {Object} list
-         * @returns {ListSectionTable}
+         * @method setRows
+         * @param {Object} rows
+         * @returns {ListRowTable}
          */
-        setList: function(list) {
-            this.list = list;
-            this.sections = list.sections || [];
+        setRows: function(rows) {
+            this.rows = rows || [];
             return this;
         }
     });
 
-    return ListSectionTable;
+    return ListRowTable;
 });
