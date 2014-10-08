@@ -135,6 +135,7 @@ define([
          */
         handleTableRowClicked: function(event) {
             event.preventDefault();
+            app.router.navigate('list/' + this.list.id + '/' + event.currentTarget.id.replace('section-', ''), {trigger: true});
         },
         /**
          * @method loadList
