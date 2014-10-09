@@ -40,6 +40,7 @@ define([
                     stroke.set({
                         contains: contains,
                         data: data,
+                        kana: this.get('kana') || false,
                         id: position + '|' + strokeId,
                         position: position,
                         shape: app.assets.getStroke(strokeId),
