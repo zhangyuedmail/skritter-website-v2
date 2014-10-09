@@ -168,10 +168,12 @@ define([
                             raygun.send(e, {Message: error.responseJSON});
                         }
                     }
-                    app.storage.clear('reviews', function() {
-                        self.reset();
-                        callbackError(error);
-                    });
+                    if (error.statusCode) {
+                        app.storage.clear('reviews', function() {
+                            self.reset();
+                            callbackError(error);
+                        });
+                    }
                 });
             } else {
                 callbackSuccess();
