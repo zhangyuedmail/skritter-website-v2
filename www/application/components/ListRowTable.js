@@ -24,7 +24,7 @@ define([
          * @returns {ListRowTable}
          */
         render: function() {
-            this.$el.html("<table class='table table-hover'><thead></thead><tbody></tbody></table>");
+            this.$el.html("<table class='table table-hover table-list-row'><thead></thead><tbody></tbody></table>");
             return this;
         },
         /**
@@ -50,7 +50,13 @@ define([
                 divBody += "<tr id='vocab-" + row.vocabId + "' class='cursor'>";
                 for (var field in this.fields) {
                     var fieldValue = row[field];
-                    divBody += "<td class='row-field-" + field + "'>" + app.fn.mapper.fromBase(fieldValue) + "</td>";
+                    if (field === 'remove') {
+                        divBody += "<td class='row-field-" + field + "  text-right text-danger'><i class='fa fa-2x fa-remove'></i></td>";
+                    } else if (field === 'writing') {
+                        divBody += "<td class='row-field-" + field + "'>" + app.fn.mapper.fromBase(row.vocabId) + "</td>";
+                    } else {
+                        divBody += "<td class='row-field-" + field + "'>" + fieldValue + "</td>";
+                    }
                 }
                 divBody += "</tr>";
             }

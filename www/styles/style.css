@@ -479,3 +479,6 @@ body {
 
 /*** TABLE: DECOMPS ***/
 .table-decomps .writing { font-size: 2em; }
+
+/*** TABLE: LIST ROWS ***/
+.table-list-row .row-field-writing { font-size: 2em; }

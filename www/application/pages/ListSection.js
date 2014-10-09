@@ -44,8 +44,17 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick table tr': 'handleTableRowClicked'
+            'vclick table tr': 'handleTableRowClicked',
+            'vclick #button-back': 'handleBackButtonClicked'
         }),
+        /**
+         * @method handleBackButtonClicked
+         * @param {Event} event
+         */
+        handleBackButtonClicked: function(event) {
+            event.preventDefault();
+            app.router.navigate('list/' + this.list.id, {trigger: true});
+        },
         /**
          * @method handleTableRowClicked
          * @param {Event} event
@@ -66,7 +75,8 @@ define([
                 self.$('#list-name').text(self.list.name);
                 self.$('#section-name').text(self.section.name);
                 self.table.setFields({
-                    vocabId: 'Name'
+                    writing: 'Writing',
+                    remove: ''
                 }).setRows(self.section.rows).renderTable();
                 self.renderElements().resize();
                 app.dialogs.hide();
