@@ -92,6 +92,7 @@ define([], function() {
                 contains: targetStroke.get('contains'),
                 data: targetStroke.get('data'),
                 id: targetStroke.id,
+                kana: targetStroke.get('kana'),
                 position: targetStroke.get('position'),
                 shape: targetStroke.get('shape'),
                 strokeId: targetStroke.get('strokeId'),
