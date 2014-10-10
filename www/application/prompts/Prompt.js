@@ -441,6 +441,7 @@ define([
                 this.elements.infoStar.addClass('fa-star-o');
                 this.elements.infoStar.removeClass('fa-star text-warning');
             }
+            app.sidebars.loadFont();
             return this;
         },
         /**
