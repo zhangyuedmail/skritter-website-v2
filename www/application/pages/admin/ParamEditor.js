@@ -78,6 +78,8 @@ define([
             var corners = app.fn.shortstraw.process(points);
             for (var i = 0, length = corners.length; i < length; i++) {
                 var corner = corners[i];
+                corner.x = Math.round(corner.x);
+                corner.y = Math.round(corner.y);
                 this.canvas.drawCircle('stroke', corner.x, corner.y, 10, {fill: 'red'});
             }
             param.strokeId = this.strokeId;
