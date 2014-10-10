@@ -16,6 +16,7 @@ define([
          */
         initialize: function() {
             this.title = 'Lists';
+            this.lists= [];
             this.table = new ListTable();
         },
         /**
@@ -71,21 +72,62 @@ define([
             var self = this;
             app.dialogs.show().element('.message-title').text('Loading');
             app.dialogs.element('.message-text').text('MY LISTS');
+            async.waterfall([
+                function(callback) {
+                    app.api.getVocabLists({
+                        lang: app.user.getLanguageCode(),
+                        sort: 'custom'
+                    }, function(result) {
+                        app.user.data.vocablists.add(result, {merge: true});
+                        callback(null, result);
+                    }, callback);
+                },
+                function(lists, callback) {
+                    app.api.getVocabLists({
+                        lang: app.user.getLanguageCode(),
+                        sort: 'studying'
+                    }, function(result) {
+                        app.user.data.vocablists.add(result, {merge: true});
+                        callback();
+                    }, callback);
+                }
+            ], function(error) {
+                if (error) {
+                    //TODO: add in handling for offline
+                } else {
+                    self.lists = app.user.data.vocablists.toJSON();
+                    self.table.setFields({
+                        image: '',
+                        name: 'Name',
+                        studyingMode: 'Status'
+                    }).setLists(self.lists).sortByStatus().renderTable();
+                    self.$('.sort-button').removeClass('active');
+                    self.$('#button-my-lists').addClass('active');
+                }
+                app.dialogs.hide();
+            });
+
+        },
+        /**
+         * @method loadPublished
+         */
+        loadPublished: function() {
+            var self = this;
+            app.dialogs.show().element('.message-title').text('Loading');
+            app.dialogs.element('.message-text').text('PUBLISHED');
             app.api.getVocabLists({
                 lang: app.user.getLanguageCode(),
-                sort: 'studying'
+                sort: 'published'
             }, function(lists) {
-                app.user.data.vocablists.add(lists, {merge: true});
                 self.table.setFields({
                     image: '',
-                    name: 'Name',
-                    studyingMode: 'Status'
-                }).setLists(lists).sortByStatus().renderTable();
-                self.$('#button-my-lists').addClass('active');
-                self.$('#button-textbooks').removeClass('active');
+                    name: 'Name'
+                }).setLists(lists).sortByName().renderTable();
+                self.$('.sort-button').removeClass('active');
+                self.$('#button-published').addClass('active');
                 app.dialogs.hide();
             }, function(error) {
-                console.error(error);
+                //TODO: add in handling for offline
             });
         },
         /**
@@ -103,11 +145,11 @@ define([
                     image: '',
                     name: 'Name'
                 }).setLists(lists).sortByName().renderTable();
-                self.$('#button-my-lists').removeClass('active');
+                self.$('.sort-button').removeClass('active');
                 self.$('#button-textbooks').addClass('active');
                 app.dialogs.hide();
             }, function(error) {
-                console.error(error);
+                //TODO: add in handling for offline
             });
         },
         /**
@@ -129,6 +171,8 @@ define([
         set: function(sort) {
             if (sort === 'textbooks') {
                 this.loadTextbooks();
+            } else if (sort === 'published') {
+                this.loadPublished();
             } else {
                 this.loadMyLists();
             }
