@@ -49,14 +49,38 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick #button-clear': 'handleClearButtonClicked'
+            'vclick #button-backward': 'handleBackwardButtonClicked',
+            'vclick #button-clear': 'handleClearButtonClicked',
+            'vclick #button-forward': 'handleForwardButtonClicked'
         }),
+        /**
+         * @method handleBackwardButtonClicked
+         * @param {Event} event
+         */
+        handleBackwardButtonClicked: function(event) {
+            event.preventDefault();
+            this.strokeId--;
+            this.elements.paramOutput.val('');
+            this.canvas.clearAll();
+            this.loadStroke();
+        },
         /**
          * @method handleClearButtonClicked
          * @param {Event} event
          */
         handleClearButtonClicked: function(event) {
             event.preventDefault();
+            this.elements.paramOutput.val('');
+            this.canvas.clearAll();
+            this.loadStroke();
+        },
+        /**
+         * @method handleForwardButtonClicked
+         * @param {Event} event
+         */
+        handleForwardButtonClicked: function(event) {
+            event.preventDefault();
+            this.strokeId++;
             this.elements.paramOutput.val('');
             this.canvas.clearAll();
             this.loadStroke();
@@ -94,6 +118,7 @@ define([
         loadStroke: function() {
             var stroke = app.assets.getStroke(this.strokeId);
             this.canvas.drawShape('background', stroke, {color: 'grey'});
+            app.router.navigate('admin/param-editor/' + this.strokeId);
             return this;
         },
         /**
