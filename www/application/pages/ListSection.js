@@ -45,7 +45,9 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick table tr': 'handleTableRowClicked',
-            'vclick #button-back': 'handleBackButtonClicked'
+            'vclick #button-back': 'handleBackButtonClicked',
+            'vclick #button-save': 'handleSaveButtonClicked',
+            'vclick .row-field-remove': 'handleRemoveButtonClicked'
         }),
         /**
          * @method handleBackButtonClicked
@@ -54,6 +56,28 @@ define([
         handleBackButtonClicked: function(event) {
             event.preventDefault();
             app.router.navigate('list/' + this.list.id, {trigger: true});
+        },
+        /**
+         * @method handleRemoveButtonClicked
+         * @param {Event} event
+         */
+        handleRemoveButtonClicked: function(event) {
+            event.stopPropagation();
+            this.table.removeById(event.currentTarget.parentNode.id.replace('vocab-', ''));
+            this.table.renderTable();
+        },
+        /**
+         * @method handleSaveButtonClicked
+         * @param {Event} event
+         */
+        handleSaveButtonClicked: function(event) {
+            event.preventDefault();
+            app.dialogs.show().element('.message-title').text('Saving');
+            app.api.updateVocabListSection(this.list, this.table.section, function() {
+                app.dialogs.hide();
+            }, function() {
+                app.dialogs.hide();
+            });
         },
         /**
          * @method handleTableRowClicked
@@ -77,7 +101,7 @@ define([
                 self.table.setFields({
                     writing: 'Writing',
                     remove: ''
-                }).setRows(self.section.rows).renderTable();
+                }).setSection(self.section).renderTable();
                 self.renderElements().resize();
                 app.dialogs.hide();
             }, function(error) {

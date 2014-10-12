@@ -17,7 +17,7 @@ define([
          */
         initialize: function() {
             this.fields = {name: 'Name'};
-            this.rows = [];
+            this.section = {rows: []};
         },
         /**
          * @method render
@@ -45,8 +45,8 @@ define([
                 divHead += '</tr>';
             }
             //generates the body section
-            for (var i = 0, length = this.rows.length; i < length; i++) {
-                var row = this.rows[i];
+            for (var i = 0, length = this.section.rows.length; i < length; i++) {
+                var row = this.section.rows[i];
                 divBody += "<tr id='vocab-" + row.vocabId + "' class='cursor'>";
                 for (var field in this.fields) {
                     var fieldValue = row[field];
@@ -79,6 +79,14 @@ define([
             this.$('table tbody').empty();
         },
         /**
+         * @method
+         * @param vocabId
+         * @returns {Object}
+         */
+        removeById: function(vocabId) {
+            return this.section.rows.splice(_.findIndex(this.section.rows, {vocabId: vocabId}), 1)[0];
+        },
+        /**
          * @method set
          * @param {Object} fields
          * @param {Object} list
@@ -99,11 +107,11 @@ define([
         },
         /**
          * @method setRows
-         * @param {Object} rows
+         * @param {Object} section
          * @returns {ListRowTable}
          */
-        setRows: function(rows) {
-            this.rows = rows || [];
+        setSection: function(section) {
+            this.section = section || {rows: []};
             return this;
         }
     });

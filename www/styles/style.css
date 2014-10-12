@@ -225,6 +225,10 @@ body {
 }
 
 
+/*** PAGES: LIST SECTION ***/
+.page-list-section .row-field-remove { width: 50px; }
+
+
 /*** PAGES: LIST SELECT ***/
 .page-list-select table { font-size: 2em; }
 
