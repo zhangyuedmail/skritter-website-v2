@@ -60,7 +60,9 @@ define([
             'vclick #button-add': 'handleButtonAddClicked',
             'vclick #button-pause': 'handleButtonPauseClicked',
             //'vclick #button-remove': 'handleButtonRemoveClicked',
-            'vclick #button-resume': 'handleButtonResumeClicked'
+            'vclick #button-resume': 'handleButtonResumeClicked',
+            'vclick #button-save': 'handleSaveButtonClicked',
+            'vclick .section-field-remove': 'handleSectionRemoveButtonClicked'
         }),
         /**
          * @method handleTableRowClicked
@@ -128,7 +130,28 @@ define([
                 console.error(error);
             });
         },
-
+        /**
+         * @method handleSaveButtonClicked
+         * @param {Event} event
+         */
+        handleSaveButtonClicked: function(event) {
+            event.preventDefault();
+            app.dialogs.show().element('.message-title').text('Saving');
+            app.api.updateVocabList(this.table.list, function() {
+                app.dialogs.hide();
+            }, function() {
+                app.dialogs.hide();
+            });
+        },
+        /**
+         * @method handleSectionRemoveButtonClicked
+         * @param {Event} event
+         */
+        handleSectionRemoveButtonClicked: function(event) {
+            event.stopPropagation();
+            this.table.removeById(event.currentTarget.parentNode.id.replace('section-', ''));
+            this.table.renderTable();
+        },
         /**
          * @method handleTableRowClicked
          * @param {Event} event
@@ -151,7 +174,8 @@ define([
                 self.$('#list-studying').text(list.peopleStudying);
                 self.table.setFields({
                     name: 'Name',
-                    rows: 'Items'
+                    rows: 'Items',
+                    remove: ''
                 }).setList(list).renderTable();
                 self.renderElements().resize();
                 app.dialogs.hide();

@@ -47,7 +47,7 @@ define([
             'vclick table tr': 'handleTableRowClicked',
             'vclick #button-back': 'handleBackButtonClicked',
             'vclick #button-save': 'handleSaveButtonClicked',
-            'vclick .row-field-remove': 'handleRemoveButtonClicked'
+            'vclick .row-field-remove': 'handleRowRemoveButtonClicked'
         }),
         /**
          * @method handleBackButtonClicked
@@ -58,10 +58,10 @@ define([
             app.router.navigate('list/' + this.list.id, {trigger: true});
         },
         /**
-         * @method handleRemoveButtonClicked
+         * @method handleRowRemoveButtonClicked
          * @param {Event} event
          */
-        handleRemoveButtonClicked: function(event) {
+        handleRowRemoveButtonClicked: function(event) {
             event.stopPropagation();
             this.table.removeById(event.currentTarget.parentNode.id.replace('vocab-', ''));
             this.table.renderTable();

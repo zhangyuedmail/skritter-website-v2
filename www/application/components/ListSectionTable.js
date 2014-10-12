@@ -17,8 +17,7 @@ define([
          */
         initialize: function() {
             this.fields = {name: 'Name'};
-            this.list = undefined;
-            this.sections = [];
+            this.list = {sections: []};
         },
         /**
          * @method render
@@ -46,18 +45,22 @@ define([
                 divHead += '</tr>';
             }
             //generates the body section
-            for (var i = 0, length = this.sections.length; i < length; i++) {
-                var section = this.sections[i];
-                divBody += "<tr id='section-" + section.id + "' class='cursor'>";
-                for (var field in this.fields) {
-                    var fieldValue = section[field];
-                    if (field === 'rows') {
-                        divBody += "<td class='section-field-" + field + "'>" + fieldValue.length + "</td>";
-                    } else {
-                        divBody += "<td class='section-field-" + field + "'>" + fieldValue + "</td>";
+            for (var i = 0, length = this.list.sections.length; i < length; i++) {
+                var section = this.list.sections[i];
+                if (!section.deleted) {
+                    divBody += "<tr id='section-" + section.id + "' class='cursor'>";
+                    for (var field in this.fields) {
+                        var fieldValue = section[field];
+                        if (field === 'rows') {
+                            divBody += "<td class='section-field-" + field + "'>" + fieldValue.length + "</td>";
+                        } else if (field === 'remove') {
+                            divBody += "<td class='section-field-" + field + "  text-right text-danger'><i class='fa fa-2x fa-remove'></i></td>";
+                        } else {
+                            divBody += "<td class='section-field-" + field + "'>" + fieldValue + "</td>";
+                        }
                     }
+                    divBody += "</tr>";
                 }
-                divBody += "</tr>";
             }
             this.$('table thead').html(divHead);
             this.$('table tbody').html(divBody);
@@ -76,6 +79,16 @@ define([
         clear: function() {
             this.$('table thead').empty();
             this.$('table tbody').empty();
+        },
+        /**
+         * @method
+         * @param {String} sectionId
+         * @returns {Object}
+         */
+        removeById: function(sectionId) {
+            var section = _.find(this.list.sections, {id: sectionId});
+            section.deleted = true;
+            return section;
         },
         /**
          * @method set
@@ -102,8 +115,7 @@ define([
          * @returns {ListSectionTable}
          */
         setList: function(list) {
-            this.list = list;
-            this.sections = list.sections || [];
+            this.list = list || {sections: []};
             return this;
         }
     });

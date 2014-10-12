@@ -80,7 +80,7 @@ define([
         },
         /**
          * @method
-         * @param vocabId
+         * @param {String} vocabId
          * @returns {Object}
          */
         removeById: function(vocabId) {
