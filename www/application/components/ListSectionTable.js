@@ -73,6 +73,18 @@ define([
             return _.extend({}, BaseView.prototype.events, {});
         },
         /**
+         * @method addSection
+         * @param {Object} section
+         * @returns {ListSectionTable}
+         */
+        addSection: function(section) {
+            if (this.list.studyingMode === 'finished') {
+                this.list.studyingMode = 'reviewing';
+            }
+            this.list.sections.push(section);
+            return this;
+        },
+        /**
          * @method clear
          * @returns {ListSectionTable}
          */

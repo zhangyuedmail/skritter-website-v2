@@ -160,7 +160,11 @@ define([
         getSchedule: function(callback) {
             var self = this;
             var data = [];
+            var cutoff = moment().add(1, 'year').unix();
             var offset = 0;
+            function isReady(item) {
+                return !item.reviews || item.next < cutoff;
+            }
             function pushItem(item) {
                 data.push({
                     id: item.id,

@@ -72,7 +72,14 @@ define([
          */
         handleButtonAddSectionClicked: function(event) {
             event.preventDefault();
+            var self = this;
             app.dialogs.show('list-add-section').element('.modal-title span').text('Add Section');
+            app.dialogs.element('.section-add').on('vclick', function() {
+                var name = app.dialogs.element('#section-name').val();
+                self.table.addSection({name: name, deleted: false, rows: []});
+                self.table.renderTable();
+                app.dialogs.hide();
+            });
         },
 
         /**
