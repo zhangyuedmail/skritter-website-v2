@@ -57,6 +57,7 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick table tr': 'handleTableRowClicked',
+            'vclick #button-add-section': 'handleButtonAddSectionClicked',
             'vclick #button-add': 'handleButtonAddClicked',
             'vclick #button-pause': 'handleButtonPauseClicked',
             //'vclick #button-remove': 'handleButtonRemoveClicked',
@@ -64,6 +65,16 @@ define([
             'vclick #button-save': 'handleSaveButtonClicked',
             'vclick .section-field-remove': 'handleSectionRemoveButtonClicked'
         }),
+
+        /**
+         * @method handleButtonAddSectionClicked
+         * @param {Event} event
+         */
+        handleButtonAddSectionClicked: function(event) {
+            event.preventDefault();
+            app.dialogs.show('list-add-section').element('.modal-title span').text('Add Section');
+        },
+
         /**
          * @method handleTableRowClicked
          * @param {Event} event
