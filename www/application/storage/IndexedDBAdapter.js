@@ -160,11 +160,7 @@ define([
         getSchedule: function(callback) {
             var self = this;
             var data = [];
-            var cutoff = moment().add(3, 'months').unix();
             var offset = 0;
-            function isReady(item) {
-                return !item.reviews || item.next < cutoff;
-            }
             function pushItem(item) {
                 data.push({
                     id: item.id,
@@ -188,7 +184,7 @@ define([
                 transaction.objectStore('items').openCursor().onsuccess = function(event) {
                     var cursor = event.target.result;
                     if (cursor) {
-                        if ((count < 6000 && cursor.value.vocabIds.length) || isReady(cursor.value)) {
+                        if ((count < 10000 && cursor.value.vocabIds.length) || isReady(cursor.value)) {
                             pushItem(cursor.value);
                         } else {
                             offset++;
