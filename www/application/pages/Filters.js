@@ -3,8 +3,9 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/filters.html'
-], function(BasePage, TemplateMobile) {
+    'require.text!templates/filters.html',
+    'components/ListTable'
+], function(BasePage, TemplateMobile, ListTable) {
     /**
      * @class PageFilters
      * @extends BasePage
@@ -19,6 +20,7 @@ define([
             this.activeParts = [];
             this.activeStyles = [];
             this.enabledParts = [];
+            this.listTable = new ListTable();
         },
         /**
          * @method render
@@ -35,6 +37,7 @@ define([
             this.elements.partTone = this.$('#parts #tone');
             this.elements.styleSimp = this.$('#styles #simp');
             this.elements.styleTrad = this.$('#styles #trad');
+            this.listTable.setElement(this.$('#lists .table-container')).render();
             this.renderElements();
             return this;
         },
@@ -61,6 +64,12 @@ define([
             } else {
                 this.$('#styles').hide();
             }
+            this.listTable.setFields({
+                name: 'Name',
+                remove: ''
+            }).setLists(app.user.data.vocablists.getFiltered().map(function(list) {
+                return list.toJSON();
+            })).sortByName().renderTable();
             return this;
         },
         /**

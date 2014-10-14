@@ -64,6 +64,8 @@ define([
                         }
                     } else if (field === 'image') {
                         divBody += "<td class='list-image'><img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''></td>";
+                    } else if (field === 'remove') {
+                        divBody += "<td class='section-field-" + field + "  text-right text-danger'><i class='fa fa-2x fa-remove'></i></td>";
                     } else {
                         divBody += "<td class='list-field-" + field + "'>" + fieldValue + "</td>";
                     }
