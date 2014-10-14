@@ -217,6 +217,14 @@ body {
 }
 
 
+/*** PAGES: FILTERS ***/
+.page-filters .setting-label {
+    float: left;
+    padding-bottom: 10px;
+    width: 100px;
+}
+
+
 /*** PAGES: LANDING ***/
 .landing-logo {
     margin: 25px auto 0 auto;

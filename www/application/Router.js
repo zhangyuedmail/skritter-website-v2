@@ -7,6 +7,7 @@ define([
     'routers/RouterLearningCenter',
     'pages/Account',
     'pages/Dashboard',
+    'pages/Filters',
     'pages/Landing',
     'pages/List',
     'pages/ListSection',
@@ -18,7 +19,7 @@ define([
     'pages/Study',
     'pages/Tests'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageDashboard, PageLanding, PageList, PageListSection, PageLists,
+            PageAccount, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
             PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
     /**
      * @class Router
@@ -42,6 +43,7 @@ define([
         routes: {
             '': 'showHome',
             'account': 'showAccount',
+            'filters': 'showFilters',
             'list': 'showLists',
             'list/:listId': 'showList',
             'list/sort/:sort': 'showLists',
@@ -109,6 +111,13 @@ define([
          */
         showDashboard: function() {
             this.currentPage = new PageDashboard();
+            this.currentPage.render();
+        },
+        /**
+         * @method showFilters
+         */
+        showFilters: function() {
+            this.currentPage = new PageFilters();
             this.currentPage.render();
         },
         /**
