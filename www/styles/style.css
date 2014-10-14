@@ -56,6 +56,8 @@ body {
     margin-top: 0;
 }
 .padding-top { padding-top: 10px; }
+.table-no-border td, .table-no-border th { border: 0 !important; }
+.table-no-title:first-child tr:first-child td, .table-no-title th { border: 0 !important; }
 @media (max-width: 991px) {
     .content-box.fixed-150 { height: auto; }
 }
@@ -78,17 +80,25 @@ body {
 
 /*** DIALOGS: EDIT TEXT ***/
 .dialog-edit-text .dialog-value{
+    margin-bottom: 10px;
     min-height: 100px;
     width: 100%;
 }
+
+
+/*** DIALOGS: EDIT TEXT ***/
+.modal .tutorial-reading { display: inline-block; }
 
 
 /*** DIALOGS: LIST CONFIRMATION ***/
 .dialog-list-confirmation .list-image img { max-width: 100px; }
 
 
-/*** DIALOGS: EDIT TEXT ***/
-.modal .tutorial-reading { display: inline-block; }
+/*** DIALOGS: LIST SELECT ***/
+.dialog-list-select .list-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
 
 
 /*** NAVBAR ***/

@@ -20,6 +20,7 @@ define([
             this.activeParts = [];
             this.activeStyles = [];
             this.enabledParts = [];
+            this.listSelectTable = new ListTable();
             this.listTable = new ListTable();
         },
         /**
@@ -65,9 +66,9 @@ define([
                 this.$('#styles').hide();
             }
             this.listTable.setFields({
-                name: 'Name',
+                name: '',
                 remove: ''
-            }).setLists(app.user.data.vocablists.getFiltered().map(function(list) {
+            }).addStyle('table-no-border').setLists(app.user.data.vocablists.getFiltered().map(function(list) {
                 return list.toJSON();
             })).sortByName().renderTable();
             return this;
@@ -77,9 +78,47 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-add-list': 'handleAddListClicked',
+            'vclick .list-field-remove': 'handleListRemoveButtonClicked',
             'switchChange.bootstrapSwitch #parts': 'updateParts',
             'switchChange.bootstrapSwitch #styles': 'updateStyles'
         }),
+        /**
+         * @method handleAddListClicked
+         * @param {Event} event
+         */
+        handleAddListClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            app.dialogs.show('list-select').element('.modal-title span').text('Filter Lists');
+            this.listSelectTable.setElement(app.dialogs.element('.list-container')).render();
+            this.listSelectTable.addStyle('table-no-border').setFields({
+                name: '',
+                select: ''
+            }).setLists(app.user.data.vocablists.toJSON()).sortByName().renderTable();
+            app.dialogs.element('.select-list').on('vclick', function() {
+                var selected = app.dialogs.element('.list-container input:checkbox:checked').map(function() {
+                    return this.value;
+                }).get();
+                self.settings.set('filterLists', _.uniq(self.settings.get('filterLists').concat(selected)));
+                self.renderElements();
+                app.dialogs.hide();
+            });
+        },
+        /**
+         * @method handleListRemoveButtonClicked
+         * @param {Event} event
+         */
+        handleListRemoveButtonClicked: function(event) {
+            event.stopPropagation();
+            var listId = event.currentTarget.parentNode.id.replace('list-', '');
+            var filterLists = this.settings.get('filterLists');
+            if (filterLists.indexOf(listId) > -1) {
+                this.settings.get(filterLists.splice(filterLists.indexOf(listId), 1));
+                this.settings.cache();
+            }
+            this.renderElements();
+        },
         /**
          * @method updateParts
          * @param {Event} event
