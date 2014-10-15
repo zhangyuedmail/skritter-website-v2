@@ -96,6 +96,7 @@ body {
 
 /*** DIALOGS: LIST SELECT ***/
 .dialog-list-select .list-container {
+    margin-bottom: 10px;
     max-height: 300px;
     overflow-y: auto;
 }
@@ -270,6 +271,7 @@ body {
 
 
 /*** PAGES: STUDY ***/
+.page-study .fa-filter { color: #e99002; }
 .page-study .study-stats {
     color: #ffffff;
     padding-top: 5px;

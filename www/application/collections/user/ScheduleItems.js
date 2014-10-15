@@ -111,6 +111,13 @@ define([
             return this.add(scheduleItems, options);
         },
         /**
+         * @method isFiltered
+         * @returns {Boolean}
+         */
+        isFiltered: function() {
+            return this.filtered.length < this.length;
+        },
+        /**
          * @method loadAll
          * @param {Function} callback
          */

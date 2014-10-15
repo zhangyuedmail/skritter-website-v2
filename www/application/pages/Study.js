@@ -30,11 +30,11 @@ define([
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
             app.timer.updateOffset().setElement(this.$('#study-timer'));
+            this.elements.filterStatus = this.$('#filter-status');
             this.elements.studyCount = this.$('#study-count');
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);
             this.listenTo(this.promptController, 'prompt:previous', this.previous);
-            this.schedule.updateFilter();
             this.renderElements().next();
             return this;
         },
@@ -43,6 +43,12 @@ define([
          * @returns {PageStudy}
          */
         renderElements: function() {
+            this.schedule.updateFilter();
+            if (this.schedule.isFiltered()) {
+                this.elements.filterStatus.show();
+            } else {
+                this.elements.filterStatus.hide();
+            }
             this.updateDueCount();
             return this;
         },
