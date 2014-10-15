@@ -34,6 +34,7 @@ define([
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);
             this.listenTo(this.promptController, 'prompt:previous', this.previous);
+            this.schedule.updateFilter();
             this.renderElements().next();
             return this;
         },

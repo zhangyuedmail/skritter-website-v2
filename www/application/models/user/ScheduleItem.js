@@ -30,7 +30,7 @@ define([
         },
         /**
          * @method getReadiness
-         * @param {Number} time
+         * @param {Number} [time]
          * @returns {Number}
          */
         getReadiness: function(time) {
@@ -46,10 +46,10 @@ define([
                 timeInterval = this.attributes.next  - this.attributes.last;
             }
             if (this.attributes.part === 'rune') {
-                timePast += 10;
+                timePast += 30;
             }
             if (this.attributes.part === 'tone') {
-                timePast += 5;
+                timePast += 15;
             }
             return timePast / timeInterval;
         },

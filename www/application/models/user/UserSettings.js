@@ -76,6 +76,13 @@ define([
             return parts;
         },
         /**
+         * @method getActiveLists
+         * @returns {Array|Boolean}
+         */
+        getActiveLists: function() {
+            return this.get('filterLists').length ? this.get('filterLists') : false;
+        },
+        /**
          * @method getActiveStyles
          * @returns {Array}
          */
