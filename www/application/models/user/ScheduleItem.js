@@ -22,11 +22,11 @@ define([
             interval: 0,
             last: 0,
             next: 0,
-            part: undefined,
             reviews: 0,
-            style: undefined,
+            sectionIds: [],
             successes: 0,
-            vocabIds: []
+            vocabIds: [],
+            vocabListIds: []
         },
         /**
          * @method getReadiness
@@ -35,23 +35,21 @@ define([
          */
         getReadiness: function(time) {
             var now = time || moment().unix();
-            var timePast =  now - this.attributes.last;
-            var timeInterval = 0;
-            if (!this.attributes.vocabIds.length) {
-                return 0;
-            }
-            if (this.attributes.interval) {
-                timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;
-            } else {
-                timeInterval = this.attributes.next  - this.attributes.last;
-            }
+            var readiness = 0;
+            var offset = 0;
             if (this.attributes.part === 'rune') {
-                timePast += 30;
+                offset += 30;
+            } else if (this.attributes.part === 'tone') {
+                offset += 15;
             }
-            if (this.attributes.part === 'tone') {
-                timePast += 15;
+            if (!this.attributes.last) {
+                readiness = 9999 + offset;
+            } else {
+                var timePast =  now - this.attributes.last;
+                var timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;
+                readiness = (timePast + offset) / timeInterval
             }
-            return timePast / timeInterval;
+            return readiness
         },
         /**
          * @method isNew
