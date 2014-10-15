@@ -159,6 +159,7 @@ define([
             options = options ? options : {};
             options.get = options.get === undefined ?  true : options.get;
             options.limit = options.limit === undefined ? 1 : options.limit;
+            options.lists = options.lists === undefined ? undefined : options.lists.join('|');
             async.series([
                 //use server time for reference
                 function(callback) {
@@ -180,6 +181,7 @@ define([
                                     params: {
                                         lang: app.user.getLanguageCode(),
                                         limit: options.limit,
+                                        lists: options.lists,
                                         offset: self.get('addOffset')
                                     }
                                 }
@@ -252,7 +254,7 @@ define([
                     app.analytics.trackUserEvent('added items', items.length);
                     self.data.set('addOffset', self.get('addOffset') + numVocabsAdded);
                     self.data.vocablists.add(vocablists, {merge: true});
-                    self.data.user.schedule.sort();
+                    self.data.user.schedule.updateFilter();
                     callbackSuccess();
                 }
             });

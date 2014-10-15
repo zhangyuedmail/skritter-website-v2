@@ -88,10 +88,14 @@ define([
         handleAddButtonClicked: function(event) {
             event.preventDefault();
             var self = this;
+            var activeLists = app.user.settings.getActiveLists();
             app.timer.stop();
             app.analytics.trackEvent('Prompt', 'click', 'add items');
             app.dialogs.show().element('.message-title').text('Adding Items');
-            app.user.data.items.fetchNew({limit: 5}, function() {
+            app.user.data.items.fetchNew({
+                limit: 5,
+                lists: activeLists
+            }, function() {
                 if (self.prompt) {
                     app.timer.start();
                 } else {

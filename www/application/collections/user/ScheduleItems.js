@@ -49,22 +49,11 @@ define([
          * @returns {DataItem}
          */
         getNext: function(index) {
-            var activeParts = this.user.settings.getActiveParts();
-            var activeStyles = this.user.settings.getActiveStyles();
             var items = this.sortFilter();
             index = index ? index : 0;
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
                 var itemBase = item.id.split('-')[2];
-                if (!item.attributes.vocabIds.length) {
-                    continue;
-                }
-                if (activeParts.indexOf(item.attributes.part) === -1) {
-                    continue;
-                }
-                if (app.user.isChinese() && activeStyles.indexOf(item.attributes.style) === -1) {
-                    continue;
-                }
                 if (this.user.history.hasBase(itemBase)) {
                     continue;
                 }
@@ -133,6 +122,7 @@ define([
          * @param {Number} [limit]
          */
         logSchedule: function(limit) {
+            limit = limit || 10;
             var items = this.sortFilter();
             for (var i = 0, length = limit || items.length; i < length; i++) {
                 var item = items[i];
@@ -149,9 +139,11 @@ define([
          */
         sortFilter: function() {
             var now = moment().unix();
-            return _.sortBy(this.filtered, function(item) {
+            this.filtered = _.sortBy(this.filtered, function(item) {
                 return -item.getReadiness(now);
             });
+            this.trigger('sort', this);
+            return this.filtered;
         },
         /**
          * @method updateFilter
@@ -178,6 +170,7 @@ define([
                 }
                 return true;
             });
+            this.trigger('sort', this);
             return this;
         }
     });
