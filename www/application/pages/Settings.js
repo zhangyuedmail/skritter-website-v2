@@ -36,6 +36,7 @@ define([
          * @returns {PageSettings}
          */
         renderElements: function() {
+            this.undelegateEvents();
             this.elements.adjAudio.bootstrapSwitch('state', this.settings.get('audio'));
             this.elements.adjHeisig.bootstrapSwitch('state', this.settings.get('showHeisig'));
             this.elements.adjHideReading.bootstrapSwitch('state', this.settings.get('hideReading'));
@@ -45,6 +46,7 @@ define([
             } else {
                 this.elements.adjReadingStyle.parent().parent().hide();
             }
+            this.delegateEvents();
             return this;
         },
         /**

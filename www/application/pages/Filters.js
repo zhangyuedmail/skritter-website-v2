@@ -47,6 +47,7 @@ define([
          * @returns {PageFilters}
          */
         renderElements: function() {
+            this.undelegateEvents();
             this.elements.partDefn.bootstrapSwitch('state', this.activeParts.indexOf('defn') !== -1);
             this.elements.partRdng.bootstrapSwitch('state', this.activeParts.indexOf('rdng') !== -1);
             this.elements.partRune.bootstrapSwitch('state', this.activeParts.indexOf('rune') !== -1);
@@ -71,6 +72,7 @@ define([
             }).addStyle('table-no-border').setLists(app.user.data.vocablists.getFiltered().map(function(list) {
                 return list.toJSON();
             })).sortByName().renderTable();
+            this.delegateEvents();
             return this;
         },
         /**
@@ -138,6 +140,7 @@ define([
             if (this.$('#parts #tone').bootstrapSwitch('state')) {
                 this.activeParts.push('tone');
             }
+            console.log(this.activeParts);
             this.settings.setActiveParts(this.activeParts);
         },
         /**
