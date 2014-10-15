@@ -77,10 +77,10 @@ define([
         },
         /**
          * @method getActiveLists
-         * @returns {Array|Boolean}
+         * @returns {Array}
          */
         getActiveLists: function() {
-            return this.get('filterLists').length ? this.get('filterLists') : false;
+            return this.get('filterLists').length ? this.get('filterLists') : undefined;
         },
         /**
          * @method getActiveStyles
@@ -166,12 +166,10 @@ define([
         setActiveParts: function(parts) {
             if (this.user.isChinese()) {
                 this.set('filterChineseParts', parts);
-                this.update();
-                return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
+            } else {
+                this.set('filterJapaneseParts', parts);
             }
-            this.set('filterJapaneseParts', parts);
-            this.update();
-            return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
+            return this.getActiveParts();
         },
         /**
          * @method setActiveStyles
@@ -191,7 +189,6 @@ define([
                     this.set('reviewTraditional', true);
                 }
             }
-            this.update();
             return this.getActiveStyles();
         },
         /**
