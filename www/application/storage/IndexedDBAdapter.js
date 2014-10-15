@@ -160,43 +160,34 @@ define([
         getSchedule: function(callback) {
             var self = this;
             var data = [];
-            var cutoff = moment().add(1, 'year').unix();
-            var offset = 0;
-            function isReady(item) {
-                return !item.reviews || item.next < cutoff;
-            }
-            function pushItem(item) {
-                data.push({
-                    id: item.id,
-                    part: item.part,
-                    style: item.style,
-                    next: item.next,
-                    last: item.last,
-                    reviews: item.reviews,
-                    successes: item.successes,
-                    vocabIds: item.vocabIds
-                });
-            }
-            this.getCount('items', function(count) {
-                var transaction = self.get('database').transaction('items', 'readonly');
-                transaction.oncomplete = function() {
-                    callback(data);
-                };
-                transaction.onerror = function(error) {
-                    callback(error);
-                };
-                transaction.objectStore('items').openCursor().onsuccess = function(event) {
-                    var cursor = event.target.result;
-                    if (cursor) {
-                        if ((count < 10000 && cursor.value.vocabIds.length) || isReady(cursor.value)) {
-                            pushItem(cursor.value);
-                        } else {
-                            offset++;
-                        }
-                        cursor.continue();
+            var transaction = self.get('database').transaction('items', 'readonly');
+            transaction.oncomplete = function() {
+                callback(data);
+            };
+            transaction.onerror = function(error) {
+                callback(error);
+            };
+            transaction.objectStore('items').openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    if (cursor.value.vocabIds.length) {
+                        data.push({
+                            id: cursor.value.id,
+                            interval: cursor.value.interval,
+                            last: cursor.value.last,
+                            next: cursor.value.next,
+                            part: cursor.value.part,
+                            reviews: cursor.value.reviews,
+                            sectionIds: cursor.value.sectionIds,
+                            style: cursor.value.style,
+                            successes: cursor.value.successes,
+                            vocabIds: cursor.value.vocabIds,
+                            vocabListIds: cursor.value.vocabListIds
+                        });
                     }
-                };
-            });
+                    cursor.continue();
+                }
+            };
         },
         /**
          * @method getStarred

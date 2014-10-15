@@ -41,7 +41,7 @@ define([
         getActive: function() {
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
-            return this.models.filter(function(item) {
+            return this.filter(function(item) {
                 if (!item.attributes.vocabIds.length) {
                     return false;
                 }
@@ -145,14 +145,16 @@ define([
                 var item = items[i];
                 scheduleItems.push({
                     id: item.id,
-                    interval: item.interval ? item.interval : 0,
-                    last: item.last ? item.last : 0,
-                    next: item.next ? item.next : 0,
+                    interval: item.interval || 0,
+                    last: item.last || 0,
+                    next: item.next || 0,
                     part: item.part,
-                    reviews: item.reviews ? item.reviews : 0,
+                    reviews: item.reviews,
+                    sectionIds: item.sectionIds,
                     style: item.style,
-                    successes: item.successes ? item.successes : 0,
-                    vocabIds: item.vocabIds
+                    successes: item.successes,
+                    vocabIds: item.vocabIds,
+                    vocabListIds: item.vocabListIds
                 });
             }
             console.log('UPDATING SCHEDULE:', scheduleItems);

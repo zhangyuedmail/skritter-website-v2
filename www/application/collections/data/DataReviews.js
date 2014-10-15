@@ -156,7 +156,7 @@ define([
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
                     app.storage.removeItems('reviews', postedIds, function() {
                         self.remove(postedIds);
-                        callbackSuccess
+                        callbackSuccess();
                     });
                 }, function(error, posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
