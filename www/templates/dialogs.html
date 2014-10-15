@@ -1,11 +1,33 @@
 <!-- DIALOGS: Default -->
-<div class="dialog-default modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="default" aria-hidden="true">
+<div class="dialog-default modal fade" tabindex="-1" role="dialog" aria-labelledby="default" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body text-center">
                 <img class="loader-image" src="images/ajax-loader.gif" height="64" width="64">
                 <h3 class="message-title"></h3>
                 <h5 class="message-text"></h5>
+                <div class="message-confirm"></div>
+                <div class="message-close"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOGS: Add Items -->
+<div class="dialog-add-items modal fade" tabindex="-1" role="dialog" aria-labelledby="add-items" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h3 class="message-title"></h3>
+                <h5 class="message-text"></h5>
+                <img class="loader-image" src="images/ajax-loader.gif" height="64" width="64">
+                <div class="item-limit">
+                    <button type="button" data-value="1" class="btn btn-primary spacing">1</button>
+                    <button type="button" data-value="5" class="btn btn-primary spacing">5</button>
+                    <button type="button" data-value="10" class="btn btn-primary spacing">10</button>
+                    <button type="button" data-value="20" class="btn btn-primary spacing">20</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
                 <div class="message-confirm"></div>
                 <div class="message-close"></div>
             </div>

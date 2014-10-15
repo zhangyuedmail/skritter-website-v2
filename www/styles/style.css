@@ -78,6 +78,13 @@ body {
 .vocab-table .vocab-field-writing { font-size: 2em; }
 
 
+/*** DIALOGS: ADD ITEMS ***/
+.dialog-add-items .item-limit .btn {
+    border-width: 5px;
+    padding: 20px;
+}
+
+
 /*** DIALOGS: EDIT TEXT ***/
 .dialog-edit-text .dialog-value{
     margin-bottom: 10px;
