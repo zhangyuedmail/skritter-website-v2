@@ -97,7 +97,9 @@ define([
             this.listSelectTable.addStyle('table-no-border').setFields({
                 name: '',
                 select: ''
-            }).setLists(app.user.data.vocablists.toJSON()).sortByName().renderTable();
+            }).setLists(app.user.data.vocablists.getActive().map(function(list){
+                return list.toJSON()
+            })).sortByName().renderTable();
             app.dialogs.element('.select-list').on('vclick', function() {
                 var selected = app.dialogs.element('.list-container input:checkbox:checked').map(function() {
                     return this.value;

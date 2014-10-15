@@ -36,6 +36,15 @@ define([
             });
         },
         /**
+         * @method getActive
+         * @returns {Array}
+         */
+        getActive: function() {
+            return this.filter(function(list) {
+                return list.get('studyingMode') !== 'not studying';
+            });
+        },
+        /**
          * @method getFiltered
          * @returns {Array}
          */
