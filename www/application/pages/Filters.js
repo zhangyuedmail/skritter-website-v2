@@ -98,7 +98,7 @@ define([
                 name: '',
                 select: ''
             }).setLists(app.user.data.vocablists.getActive().map(function(list){
-                return list.toJSON()
+                return list.toJSON();
             })).sortByName().renderTable();
             app.dialogs.element('.select-list').on('vclick', function() {
                 var selected = app.dialogs.element('.list-container input:checkbox:checked').map(function() {

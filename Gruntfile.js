@@ -129,7 +129,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('validate', [
-        'csslint:all',
+        //'csslint:all',
         'jshint:all'
     ]);
 

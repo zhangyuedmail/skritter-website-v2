@@ -47,9 +47,9 @@ define([
             } else {
                 var timePast =  now - this.attributes.last;
                 var timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;
-                readiness = (timePast + offset) / timeInterval
+                readiness = (timePast + offset) / timeInterval;
             }
-            return readiness
+            return readiness;
         },
         /**
          * @method isNew
