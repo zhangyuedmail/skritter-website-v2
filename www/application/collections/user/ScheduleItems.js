@@ -53,14 +53,7 @@ define([
             index = index ? index : 0;
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
-                var itemBase = item.id.split('-')[2];
-                if (this.user.history.hasBase(itemBase)) {
-                    continue;
-                }
-                if (app.user.isJapanese() && item.equals('part', 'rdng') && app.fn.isKana(itemBase)) {
-                    item.set('vocabIds', []);
-                    continue;
-                }
+
                 if (index > 0) {
                     index--;
                     continue;
@@ -167,6 +160,13 @@ define([
                         }
                     }
                     return false;
+                }
+                if (app.user.isJapanese()) {
+                    var itemBase = item.id.split('-')[2];
+                    if (item.equals('part', 'rdng') && app.fn.isKana(itemBase)) {
+                        item.set('vocabIds', []);
+                        return false;
+                    }
                 }
                 return true;
             });

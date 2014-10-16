@@ -21,7 +21,7 @@ define([
             this.current = undefined;
             this.previous = undefined;
             this.user = options.user;
-            this.on('add change', this.updateHistory);
+            this.on('add change', this.autoSync);
         },
         /**
          * @property model
@@ -46,6 +46,16 @@ define([
          */
         comparator: function(item) {
             return -item.attributes.timestamp;
+        },
+        /**
+         * @method autoSync
+         * @param {DataReview} review
+         */
+        autoSync: function(review) {
+            //check for enough reviews to sync
+            /**if (this.length > 10) {
+                this.user.data.sync(1);
+            }**/
         },
         /**
          * @method getBatch
@@ -203,23 +213,6 @@ define([
                     callbackSuccess();
                 }
             });
-        },
-        /**
-         * @method updateHistory
-         * @param {DataReview} review
-         */
-        updateHistory: function(review) {
-            //send changed review to history
-            this.user.history.add({
-                id: review.id,
-                base: review.id.split('-')[2],
-                part: review.get('part'),
-                timestamp: review.get('timestamp')
-            }, {merge: true});
-            //check for enough reviews to sync
-            if (this.length > 10) {
-                this.user.data.sync(1);
-            }
         }
     });
 

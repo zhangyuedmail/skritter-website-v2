@@ -4,13 +4,12 @@
 define([
     'framework/BaseModel',
     'collections/data/DataReviews',
-    'collections/user/HistoryItems',
     'collections/user/ScheduleItems',
     'models/user/UserData',
     'models/user/UserSettings',
     'models/user/UserStats',
     'models/user/UserSubscription'
-], function(BaseModel, DataReviews, HistoryItems, ScheduleItems, UserData, UserSettings, UserStats, UserSubscription) {
+], function(BaseModel, DataReviews, ScheduleItems, UserData, UserSettings, UserStats, UserSubscription) {
     /**
      * @class User
      * @extends BaseModel
@@ -22,7 +21,6 @@ define([
          */
         initialize: function() {
             this.data = new UserData(null, {user: this});
-            this.history = new HistoryItems(null, {user: this});
             this.schedule = new ScheduleItems(null, {user: this});
             this.reviews = new DataReviews(null, {user: this});
             this.settings = new UserSettings(null, {user: this});
@@ -193,9 +191,6 @@ define([
                 if (localStorage.getItem(this.id + '-data')) {
                     this.data.set(JSON.parse(localStorage.getItem(this.id + '-data')), {silent: true});
                 }
-                if (localStorage.getItem(this.id + '-history')) {
-                    this.history.add(JSON.parse(localStorage.getItem(this.id + '-history')), {silent: true});
-                }
                 if (localStorage.getItem(this.id + '-settings')) {
                     this.settings.set(JSON.parse(localStorage.getItem(this.id + '-settings')), {silent: true});
                 }
@@ -361,7 +356,7 @@ define([
                         });
                         console.error('USER ERROR:', error);
                     } else {
-                        self.data.startBackgroundSync();
+                        //self.data.startBackgroundSync();
                         app.dialogs.hide(function() {
                             app.api.clearGuest();
                             callback(null, self);
@@ -437,7 +432,6 @@ define([
          */
         remove: function() {
             localStorage.removeItem(app.user.id + '-data');
-            localStorage.removeItem(app.user.id + '-history');
             localStorage.removeItem(app.user.id + '-settings');
             localStorage.removeItem(app.user.id + '-stats');
             localStorage.removeItem(app.user.id + '-subscription');

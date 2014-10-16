@@ -30,11 +30,13 @@ define([
         },
         /**
          * @method getReadiness
-         * @param {Number} [time]
+         * @param {Number} [now]
+         * @param {Number} [recent]
          * @returns {Number}
          */
-        getReadiness: function(time) {
-            var now = time || moment().unix();
+        getReadiness: function(now, recent) {
+            now = now || moment().unix();
+            recent = recent || moment(now * 1000).subtract(10, 'minutes').unix();
             var readiness = 0;
             var offset = 0;
             if (this.attributes.part === 'rune') {
@@ -44,6 +46,8 @@ define([
             }
             if (!this.attributes.last) {
                 readiness = 9999 + offset;
+            } else if (this.attributes.last > recent) {
+                readiness -= this.attributes.last;
             } else {
                 var timePast =  now - this.attributes.last;
                 var timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;
