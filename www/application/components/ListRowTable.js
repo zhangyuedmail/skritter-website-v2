@@ -18,6 +18,7 @@ define([
         initialize: function() {
             this.fields = {name: 'Name'};
             this.section = {rows: []};
+            this.readonly = true;
         },
         /**
          * @method render
@@ -36,6 +37,11 @@ define([
             var divHead = '';
             this.$('table tbody').empty();
             this.$('table thead').empty();
+            //remove editable fields if not creator
+            if (this.readonly) {
+                console.log('kill');
+                delete this.fields.remove;
+            }
             //generates the header section
             if (this.fields) {
                 divHead += '<tr>';

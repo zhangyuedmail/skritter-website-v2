@@ -37,6 +37,13 @@ define([
          * @returns {PageListSection}
          */
         renderElements: function() {
+            if (this.list.creator === app.user.id) {
+                this.$('#button-add-section').show();
+                this.table.readonly = false;
+            } else {
+                this.$('#button-add-section').hide();
+                this.table.readonly = true;
+            }
             return this;
         },
         /**
@@ -98,6 +105,13 @@ define([
                 self.section = _.find(list.sections, {id: self.sectionId});
                 self.$('#list-name').text(self.list.name);
                 self.$('#section-name').text(self.section.name);
+                if (self.list.creator === app.user.id) {
+                    self.$('#button-add-vocab').show();
+                    self.table.readonly = false;
+                } else {
+                    self.$('#button-add-vocab').hide();
+                    self.table.readonly = true;
+                }
                 self.table.setFields({
                     writing: 'Writing',
                     remove: ''

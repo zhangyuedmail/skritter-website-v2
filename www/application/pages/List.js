@@ -190,6 +190,13 @@ define([
                 self.$('#list-name').text(list.name);
                 self.$('#list-description').text(list.description);
                 self.$('#list-studying').text(list.peopleStudying);
+                if (self.list.creator === app.user.id) {
+                    self.$('#button-add-section').show();
+                    self.table.readonly = false;
+                } else {
+                    self.$('#button-add-section').hide();
+                    self.table.readonly = true;
+                }
                 self.table.setFields({
                     name: 'Name',
                     rows: 'Items',
