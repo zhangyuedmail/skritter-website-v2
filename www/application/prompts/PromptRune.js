@@ -300,8 +300,7 @@ define([
          */
         teach: function() {
             var stroke = this.character.getExpectedStroke();
-            var strokeParams = stroke.getParams();
-            if (strokeParams) {
+            if (stroke) {
                 var strokeParam = stroke.getParams()[0];
                 var strokePath = strokeParam.get('corners');
                 this.canvas.clearLayer('background');
