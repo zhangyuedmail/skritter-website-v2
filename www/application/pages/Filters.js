@@ -64,7 +64,7 @@ define([
                 this.elements.styleSimp.bootstrapSwitch('state', this.activeStyles.indexOf('simp') !== -1);
                 this.elements.styleTrad.bootstrapSwitch('state', this.activeStyles.indexOf('trad') !== -1);
             } else {
-                this.$('#styles').hide();
+                this.$('#styles').parent().hide();
             }
             this.listTable.setFields({
                 name: '',
