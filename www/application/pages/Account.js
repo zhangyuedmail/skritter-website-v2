@@ -100,8 +100,10 @@ define([
             }, function() {
                 app.dialogs.element('.message-title').text('Something went wrong.');
                 app.dialogs.element('.message-text').text('Check your connection and click reload.');
-                app.dialogs.element('.message-other').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
-                app.dialogs.element('.message-other button').on('vclick', app.reload);
+                app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                app.dialogs.element('.message-confirm button').on('vclick', function() {
+                    app.reload();
+                });
             });
         },
         /**

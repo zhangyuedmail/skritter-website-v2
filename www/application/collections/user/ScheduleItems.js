@@ -147,9 +147,8 @@ define([
          */
         sortFilter: function() {
             var now = moment().unix();
-            var recent = this.recent;
             this.filtered = _.sortBy(this.filtered, function(item) {
-                return -item.getReadiness(now, recent);
+                return -item.getReadiness(now, this.recent);
             });
             this.trigger('sort', this);
             return this.filtered;

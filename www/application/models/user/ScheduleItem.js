@@ -38,7 +38,7 @@ define([
         /**
          * @method getReadiness
          * @param {Number} [now]
-         * @param {Number} [recent]
+         * @param {Array} [recent]
          * @returns {Number}
          */
         getReadiness: function(now, recent) {
