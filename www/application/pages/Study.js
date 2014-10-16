@@ -65,7 +65,10 @@ define([
             'vclick #button-audio': 'handleAudioButtonClicked',
             'vclick #button-info': 'handleInfoButtonClicked'
         }),
-
+        /**
+         * @method ignoreErrors
+         * @param {Number} limit
+         */
         addItems: function(limit) {
             app.user.data.items.fetchNew({
                 limit: limit || 1,
@@ -100,7 +103,6 @@ define([
                 });
             });
         },
-
         /**
          * @method handleAudioButtonClicked
          * @param {Event} event
