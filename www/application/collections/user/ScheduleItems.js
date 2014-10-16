@@ -20,12 +20,27 @@ define([
             options = options ? options : {};
             this.user = options.user;
             this.filtered = [];
+            this.recent = [];
         },
         /**
          * @property model
          * @type ScheduleItem
          */
         model: ScheduleItem,
+        /**
+         * @method addRecent
+         * @param {String} base
+         * @returns {Array}
+         */
+        addRecent: function(base) {
+            if (this.recent.indexOf(base) === -1) {
+                this.recent.unshift(base);
+                if (this.recent.length > 9) {
+                    this.recent.pop();
+                }
+            }
+            return this.recent;
+        },
         /**
          * @method getDue
          * @returns {Array}
@@ -132,8 +147,9 @@ define([
          */
         sortFilter: function() {
             var now = moment().unix();
+            var recent = this.recent;
             this.filtered = _.sortBy(this.filtered, function(item) {
-                return -item.getReadiness(now);
+                return -item.getReadiness(now, recent);
             });
             this.trigger('sort', this);
             return this.filtered;

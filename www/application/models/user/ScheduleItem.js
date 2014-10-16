@@ -29,6 +29,13 @@ define([
             vocabListIds: []
         },
         /**
+         * @method getBase
+         * @returns {String}
+         */
+        getBase: function() {
+            return this.id.split('-')[2];
+        },
+        /**
          * @method getReadiness
          * @param {Number} [now]
          * @param {Number} [recent]
@@ -36,7 +43,7 @@ define([
          */
         getReadiness: function(now, recent) {
             now = now || moment().unix();
-            recent = recent || moment(now * 1000).subtract(10, 'minutes').unix();
+            recent = recent || [];
             var readiness = 0;
             var offset = 0;
             if (this.attributes.part === 'rune') {
@@ -44,10 +51,12 @@ define([
             } else if (this.attributes.part === 'tone') {
                 offset += 15;
             }
-            if (!this.attributes.last) {
+            if (recent.indexOf(this.getBase()) !== -1) {
+                readiness -= this.attributes.last + this.attributes.interval + offset;
+            } else if (!this.attributes.last) {
                 readiness = 9999 + offset;
-            } else if (this.attributes.last > recent) {
-                readiness -= this.attributes.last;
+            } else if (this.attributes.last > now - 600) {
+                readiness -= this.attributes.last + offset;
             } else {
                 var timePast =  now - this.attributes.last;
                 var timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;

@@ -168,6 +168,7 @@ define([
         handlePromptComplete: function(review) {
             console.log('REVIEW:', review.id, review);
             this.reviews.previous = review;
+            this.schedule.addRecent(review.getBase());
             review.save(_.bind(this.next, this));
         },
         /**
