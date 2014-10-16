@@ -21,6 +21,7 @@ define([
             this.reviews = app.user.reviews;
             this.schedule = app.user.schedule;
             this.scheduleIndex = 0;
+            this.listenTo(app.user.data, 'sync', this.updateAddStatus);
             this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
         },
         /**
@@ -30,6 +31,7 @@ define([
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
             app.timer.updateOffset().setElement(this.$('#study-timer'));
+            this.elements.addItems = this.$('#button-add');
             this.elements.filterStatus = this.$('#filter-status');
             this.elements.studyCount = this.$('#study-count');
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
@@ -61,6 +63,50 @@ define([
             'vclick #button-audio': 'handleAudioButtonClicked',
             'vclick #button-info': 'handleInfoButtonClicked'
         }),
+
+        addItems: function(limit) {
+            app.user.data.items.fetchNew({
+                limit: limit || 1,
+                lists: app.user.settings.getActiveLists()
+            }, function(numVocabsAdded) {
+                $.growl({
+                    icon: 'fa fa-plus',
+                    message: 'Added ' + numVocabsAdded + ' new vocabs.'
+                }, {
+                    allow_dismiss: false,
+                    animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                    },
+                    offset: {x: 5, y: 50},
+                    type: 'success'
+                });
+            }, function(error) {
+                var message = '';
+                if (error.statusCode === 402) {
+                    message = 'Subscription required to add new vocabs.';
+                } else {
+                    if (app.user.data.vocablists.hasPaused()) {
+                        message = 'You need to resume at least one paused list.';
+                    } else {
+                        message = 'You need to add another list to study.';
+                    }
+                }
+                $.growl({
+                    icon: 'fa fa-warning',
+                    message: message
+                }, {
+                    allow_dismiss: false,
+                    animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                    },
+                    offset: {x: 5, y: 50},
+                    type: 'warning'
+                });
+            });
+        },
+
         /**
          * @method handleAudioButtonClicked
          * @param {Event} event
@@ -88,40 +134,22 @@ define([
         handleAddButtonClicked: function(event) {
             event.preventDefault();
             var self = this;
-            var activeLists = app.user.settings.getActiveLists();
             app.timer.stop();
             app.analytics.trackEvent('Prompt', 'click', 'add items');
             app.dialogs.show('add-items');
-            app.dialogs.element('.message-confirm').empty();
-            app.dialogs.element('.message-close').empty();
-            async.waterfall([
-                function(callback) {
-                    app.dialogs.element('.loader-image').hide();
-                    app.dialogs.element('.item-limit').show();
-                    app.dialogs.element('.message-title').text('How many items to add?');
-                    app.dialogs.element('.message-text').text('Select one of the quantities below.');
-                    app.dialogs.element('.item-limit').on('vclick', function(event) {
-                        var limit = $(event.target).data('value');
-                        if (limit) {
-                            callback(null, parseInt(limit, 10));
-                        }
-                    });
-                },
-                function(limit, callback) {
-                    app.dialogs.element('.message-title').text('Adding Items');
-                    app.dialogs.element('.loader-image').show();
-                    app.dialogs.element('.item-limit').hide();
-                    app.user.data.items.fetchNew({
-                        limit: limit || 1,
-                        lists: activeLists
-                    }, function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                }
-            ], function(error) {
-                if (error) {
+            app.dialogs.element('.loader-image').hide();
+            app.dialogs.element('.item-limit').show();
+            app.dialogs.element('.message-title').text('How many items to add?');
+            app.dialogs.element('.message-text').text('Select one of the quantities below.');
+            app.dialogs.element('.item-limit').on('vclick', function(event) {
+                self.addItems($(event.target).data('value'));
+                app.dialogs.hide(function() {
+                    app.timer.start();
+                });
+            });
+            /**
+
+             if (error) {
                     app.dialogs.element('.loader-image').hide();
                     if (error.statusCode === 402) {
                         app.dialogs.element('.message-title').text('Subscription required.');
@@ -159,7 +187,8 @@ define([
                     }
                     app.dialogs.hide();
                 }
-            });
+
+             */
         },
         /**
          * @method handlePromptComplete
@@ -234,6 +263,16 @@ define([
         remove: function() {
             this.promptController.remove();
             BasePage.prototype.remove.call(this);
+        },
+        /**
+         * @method updateAddStatus
+         */
+        updateAddStatus: function(status) {
+            if (status) {
+                this.elements.addItems.hide();
+            } else {
+                this.elements.addItems.show();
+            }
         },
         /**
          * @method updateDueCount

@@ -48,6 +48,13 @@ define([
             return this;
         },
         /**
+         * @method getContent
+         * @returns {Element}
+         */
+        getContent: function() {
+            return this.$('#content');
+        },
+        /**
          * @method getContentHeight
          * @returns {Number}
          */

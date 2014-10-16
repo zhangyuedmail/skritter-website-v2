@@ -43,6 +43,7 @@ define([
          */
         defaults: {
             access_token: undefined,
+            addHistory: undefined,
             addOffset: 0,
             changedVocabIds: [],
             downloadId: undefined,
@@ -73,6 +74,21 @@ define([
                 this.attributes.changedVocabIds.push(vocabId);
             }
             this.cache();
+        },
+        /**
+         * @method incrementAddedItems
+         * @param {Number} addedCount
+         * @returns {UserData}
+         */
+        incrementAddedItems: function(addedCount) {
+            var today = moment().format('YYYY-MM-DD');
+            var history = this.get('addHistory');
+            if (this.get('addHistory') && today === history.date) {
+                this.set('addHistory', {date: today, added: history.added + addedCount});
+            } else {
+                this.set('addHistory', {date: today, added: addedCount});
+            }
+            return this;
         },
         /**
          * @method put
@@ -138,6 +154,7 @@ define([
                 }
             } else {
                 this.syncing = true;
+                this.trigger('sync', true);
                 console.log('^^^SYNC STARTED:', moment().format('HH:mm:ss YYYY-MM-DD'));
                 async.series([
                     function(callback) {
@@ -162,6 +179,7 @@ define([
                     }
                 ], function(error) {
                     if (error) {
+                        this.trigger('sync', false);
                         if (error.status === 403) {
                             self.stopBackgroundSync();
                         } else {
@@ -174,6 +192,7 @@ define([
                         app.analytics.trackUserEvent('background sync');
                         console.log('^^^SYNC FINISHED:', moment().format('HH:mm:ss YYYY-MM-DD'));
                         self.syncing = false;
+                        self.trigger('sync', false);
                         if (typeof callbackSuccess === 'function') {
                             callbackSuccess();
                         }

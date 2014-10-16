@@ -159,104 +159,115 @@ define([
             options.get = options.get === undefined ?  true : options.get;
             options.limit = options.limit === undefined ? 1 : options.limit;
             options.lists = options.lists === undefined ? undefined : options.lists.join('|');
-            async.series([
-                //use server time for reference
-                function(callback) {
-                    self.data.user.getServerTime(function(time) {
-                        now = time;
-                        callback();
-                    });
-                },
-                //make initial request for new items
-                function (callback) {
-                    app.dialogs.element('.message-text').text('CHECKING LISTS');
-                    async.waterfall([
-                        //request new items via api batch
-                        function(callback) {
-                            app.api.requestBatch([
-                                {
-                                    path: 'api/v' + app.api.get('version') + '/items/add',
-                                    method: 'POST',
-                                    params: {
-                                        lang: app.user.getLanguageCode(),
-                                        limit: options.limit,
-                                        lists: options.lists,
-                                        offset: self.get('addOffset')
+            if (self.data.syncing) {
+                if (typeof callbackError === 'function') {
+                    callbackError('Sync already in progress.');
+                }
+            } else {
+                self.data.syncing = true;
+                self.data.trigger('sync', true);
+                async.series([
+                    //use server time for reference
+                    function(callback) {
+                        self.data.user.getServerTime(function(time) {
+                            now = time;
+                            callback();
+                        });
+                    },
+                    //make initial request for new items
+                    function (callback) {
+                        app.dialogs.element('.message-text').text('CHECKING LISTS');
+                        async.waterfall([
+                            //request new items via api batch
+                            function(callback) {
+                                app.api.requestBatch([
+                                    {
+                                        path: 'api/v' + app.api.get('version') + '/items/add',
+                                        method: 'POST',
+                                        params: {
+                                            lang: app.user.getLanguageCode(),
+                                            limit: options.limit,
+                                            lists: options.lists,
+                                            offset: self.get('addOffset')
+                                        }
                                     }
-                                }
-                            ], function(result) {
-                                callback(null, result);
-                            }, function(error) {
-                                callback(error);
-                            });
-                        },
-                        //check batch until server finish processing
-                        function(batch, callback) {
-                            app.api.checkBatch(batch.id, function() {
-                                callback(null, batch);
-                            }, function(error) {
-                                callback(error);
-                            });
-                        },
-                        //fetch items that have been added
-                        function(batch, callback) {
-                            app.api.getBatch(batch.id, function() {
-                                callback();
-                            }, function(error) {
-                                callback(error);
-                            }, function(result) {
-                                if (result.Items && result.Items.length) {
-                                    items = items.concat(result.Items);
-                                }
-                                if (result.numVocabsAdded) {
-                                    numVocabsAdded += result.numVocabsAdded;
-                                }
-                                if (result.VocabLists && result.VocabLists.length) {
-                                    vocablists = vocablists.concat(result.VocabLists);
-                                }
-                            });
-                        },
-                    ], callback);
-                },
-                //sync items changed since items were added
-                function(callback) {
-                    if (options.get) {
-                        if (items && items.length) {
-                            app.dialogs.element('.message-text').text('FETCHING ' + items.length + ' ITEMS');
-                            app.api.getItemByOffset(now, {
-                                lang: app.user.getLanguageCode(),
-                                includeVocabs: true,
-                                includeStrokes: true,
-                                includeHeisigs: true,
-                                includeDecomps: true
-                            }, function(result) {
-                                if (result.Items && result.Items.length) {
-                                    self.data.user.schedule.insert(result.Items);
-                                }
-                                self.data.put(result, callback);
-                            }, function(error) {
-                                callback(error);
-                            });
+                                ], function(result) {
+                                    callback(null, result);
+                                }, function(error) {
+                                    callback(error);
+                                });
+                            },
+                            //check batch until server finish processing
+                            function(batch, callback) {
+                                app.api.checkBatch(batch.id, function() {
+                                    callback(null, batch);
+                                }, function(error) {
+                                    callback(error);
+                                });
+                            },
+                            //fetch items that have been added
+                            function(batch, callback) {
+                                app.api.getBatch(batch.id, function() {
+                                    callback();
+                                }, function(error) {
+                                    callback(error);
+                                }, function(result) {
+                                    if (result.Items && result.Items.length) {
+                                        items = items.concat(result.Items);
+                                    }
+                                    if (result.numVocabsAdded) {
+                                        numVocabsAdded += result.numVocabsAdded;
+                                    }
+                                    if (result.VocabLists && result.VocabLists.length) {
+                                        vocablists = vocablists.concat(result.VocabLists);
+                                    }
+                                });
+                            },
+                        ], callback);
+                    },
+                    //sync items changed since items were added
+                    function(callback) {
+                        if (options.get) {
+                            if (items && items.length) {
+                                app.dialogs.element('.message-text').text('FETCHING ' + items.length + ' ITEMS');
+                                app.api.getItemByOffset(now, {
+                                    lang: app.user.getLanguageCode(),
+                                    includeVocabs: true,
+                                    includeStrokes: true,
+                                    includeHeisigs: true,
+                                    includeDecomps: true
+                                }, function(result) {
+                                    if (result.Items && result.Items.length) {
+                                        self.data.user.schedule.insert(result.Items);
+                                    }
+                                    self.data.put(result, callback);
+                                }, function(error) {
+                                    callback(error);
+                                });
+                            } else {
+                                callback('No items found.');
+                            }
                         } else {
-                            callback('No items found.');
+                            callback();
                         }
-                    } else {
-                        callback();
                     }
-                }
-            ], function(error) {
-                if (error) {
-                    console.log('ITEM ADD ERROR:', error);
-                    callbackError(error);
-                } else {
-                    console.log('ITEMS', items, vocablists, numVocabsAdded);
-                    app.analytics.trackUserEvent('added items', items.length);
-                    self.data.set('addOffset', self.get('addOffset') + numVocabsAdded);
-                    self.data.vocablists.add(vocablists, {merge: true});
-                    self.data.user.schedule.updateFilter();
-                    callbackSuccess();
-                }
-            });
+                ], function(error) {
+                    if (error) {
+                        console.log('ITEM ADD ERROR:', error);
+                        callbackError(error);
+                    } else {
+                        console.log('ITEMS', items, vocablists, numVocabsAdded);
+                        app.analytics.trackUserEvent('added items', items.length);
+                        self.data.set('addOffset', self.data.get('addOffset') + numVocabsAdded);
+                        self.data.incrementAddedItems(numVocabsAdded);
+                        self.data.vocablists.add(vocablists, {merge: true});
+                        self.data.user.schedule.updateFilter();
+                        self.data.syncing = false;
+                        self.data.trigger('sync', false);
+                        callbackSuccess(numVocabsAdded);
+                    }
+                });
+            }
         },
         /**
          * @method loadAll
