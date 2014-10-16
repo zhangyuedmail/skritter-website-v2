@@ -5,6 +5,7 @@ define([
     'moment.timezone',
     'raygun',
     'backbone.routefilter',
+    'bootstrap.growl',
     'bootstrap.switch',
     'createjs.easel',
     'createjs.tween',
