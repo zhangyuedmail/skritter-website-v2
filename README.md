@@ -1,1 +1,1 @@
-![](http://html5.skritter.com/images/banners/skritter-github-banner-beta.png)
+![](http://html5.skritter.com/files/images/skritter-github-banner-beta.png)

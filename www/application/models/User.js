@@ -188,6 +188,7 @@ define([
         load: function(callback) {
             var self = this;
             if (localStorage.getItem('_active')) {
+                //load localstorage into memory
                 this.set('id', localStorage.getItem('_active'));
                 if (localStorage.getItem(this.id + '-data')) {
                     this.data.set(JSON.parse(localStorage.getItem(this.id + '-data')), {silent: true});
@@ -203,6 +204,12 @@ define([
                 }
                 if (localStorage.getItem(this.id + '-subscription')) {
                     this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')), {silent: true});
+                }
+                //attach raygun reporting based on environment
+                if (app.isNative()) {
+                    raygun.init('HovAfmmtQxgDLtXszGJ7NA==', {ignoreAjaxAbort: true}).attach();
+                } else if (location.host === 'html5.skritter.com') {
+                    raygun.init('rzs1L7e4RucNaCmV3aP9Qw==', {ignoreAjaxAbort: true}).attach();
                 }
                 async.series([
                     //display general loading messaged

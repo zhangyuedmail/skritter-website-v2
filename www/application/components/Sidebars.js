@@ -175,6 +175,7 @@ define([
                 this.moving = true;
                 if (this.name === 'menu') {
                     $('.navbar-menu.toggle').addClass('active');
+                    $('.application-version').text(app.getVersion());
                 }
                 this.sidebar.addClass('expanded');
                 this.sidebar.show('slide', {direction: this.direction}, speed ? speed : this.speed, function() {
