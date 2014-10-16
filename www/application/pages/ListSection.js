@@ -52,10 +52,46 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick table tr': 'handleTableRowClicked',
+            'vclick #button-add-vocab': 'handleAddVocabButtonClicked',
             'vclick #button-back': 'handleBackButtonClicked',
             'vclick #button-save': 'handleSaveButtonClicked',
             'vclick .row-field-remove': 'handleRowRemoveButtonClicked'
         }),
+        /**
+         * @method handleAddVocabButtonClicked
+         * @param {Event} event
+         */
+        handleAddVocabButtonClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            var sections = [];
+            app.dialogs.show('add-vocab').element('.modal-title span').text('Add Vocabs');
+            app.dialogs.show('add-vocab').element('.message-text').text('To add multiple vocabs use spaces.');
+            app.dialogs.element('.check').on('vclick', function() {
+                var vocabs = app.dialogs.element('.vocabs').val().split(' ');
+                async.each(vocabs, function(vocab, callback) {
+                    app.api.getVocabByQuery(vocab, {fields: 'id,style,writing'}, function(result) {
+                        console.log(result.Vocabs);
+                        if (result.Vocabs.length) {
+                            sections.push({vocabId: _.find(result.Vocabs, {writing: vocab}).id});
+                        } else {
+                            console.log('Search for', vocab, "didn't return anything useful.");
+                        }
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }, function(error) {
+                    if (error) {
+
+                    } else {
+                        self.section.rows = self.section.rows.concat(sections);
+                        self.table.setSection(self.section).renderTable();
+                        app.dialogs.hide();
+                    }
+                });
+            });
+        },
         /**
          * @method handleBackButtonClicked
          * @param {Event} event
