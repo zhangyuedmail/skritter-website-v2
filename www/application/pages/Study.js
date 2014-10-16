@@ -66,44 +66,6 @@ define([
             'vclick #button-info': 'handleInfoButtonClicked'
         }),
         /**
-         * @method ignoreErrors
-         * @param {Number} limit
-         */
-        addItems: function(limit) {
-            app.user.data.items.fetchNew({
-                limit: limit || 1,
-                lists: app.user.settings.getActiveLists()
-            }, function(numVocabsAdded) {
-                $.growl({
-                    icon: 'fa fa-plus',
-                    message: 'Added ' + numVocabsAdded + ' new vocabs.'
-                }, {
-                    allow_dismiss: true,
-                    offset: {x: 5, y: 50},
-                    type: 'success'
-                });
-            }, function(error) {
-                var message = '';
-                if (error.statusCode === 402) {
-                    message = 'Subscription required to add new vocabs.';
-                } else {
-                    if (app.user.data.vocablists.hasPaused()) {
-                        message = 'You need to resume at least one paused list.';
-                    } else {
-                        message = 'You need to add another list to study.';
-                    }
-                }
-                $.growl({
-                    icon: 'fa fa-warning',
-                    message: message
-                }, {
-                    allow_dismiss: true,
-                    offset: {x: 5, y: 50},
-                    type: 'warning'
-                });
-            });
-        },
-        /**
          * @method handleAudioButtonClicked
          * @param {Event} event
          */
@@ -133,15 +95,73 @@ define([
             app.timer.stop();
             app.analytics.trackEvent('Prompt', 'click', 'add items');
             app.dialogs.show('add-items');
-            app.dialogs.element('.loader-image').hide();
-            app.dialogs.element('.item-limit').show();
-            app.dialogs.element('.message-title').text('How many items to add?');
-            app.dialogs.element('.message-text').text('Select one of the quantities below.');
-            app.dialogs.element('.item-limit').on('vclick', function(event) {
-                self.addItems($(event.target).data('value'));
-                app.dialogs.hide(function() {
-                    app.timer.start();
-                });
+            app.dialogs.element('.message-confirm').empty();
+            app.dialogs.element('.message-close').empty();
+            async.waterfall([
+                function(callback) {
+                    app.dialogs.element('.loader-image').hide();
+                    app.dialogs.element('.item-limit').show();
+                    app.dialogs.element('.message-title').text('How many items to add?');
+                    app.dialogs.element('.message-text').text('Select one of the quantities below.');
+                    app.dialogs.element('.item-limit').on('vclick', function(event) {
+                        var limit = $(event.target).data('value');
+                        if (limit) {
+                            callback(null, parseInt(limit, 10));
+                        }
+                    });
+                },
+                function(limit, callback) {
+                    app.dialogs.element('.message-title').text('Adding Items');
+                    app.dialogs.element('.loader-image').show();
+                    app.dialogs.element('.item-limit').hide();
+                    app.user.data.items.fetchNew({
+                        limit: limit || 1,
+                        lists: app.user.settings.getActiveLists()
+                    }, function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    app.dialogs.element('.loader-image').hide();
+                    if (error.statusCode === 402) {
+                        app.dialogs.element('.message-title').text('Subscription required.');
+                        app.dialogs.element('.message-text').text('You need an active subscription to add new items.');
+                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to Account", {level: 'danger'}));
+                        app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                        app.dialogs.element('.message-confirm button').on('vclick', function() {
+                            app.dialogs.hide(function() {
+                                app.router.navigate('account', {trigger: true});
+                            });
+                        });
+                    } else {
+                        if (app.user.data.vocablists.hasPaused()) {
+                            app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
+                        } else {
+                            app.dialogs.element('.message-text').text('You need to add another list to study.');
+                        }
+                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to My Lists", {level: 'primary'}));
+                        app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                        app.dialogs.element('.message-confirm button').on('vclick', function() {
+                            app.dialogs.hide(function() {
+                                app.router.navigate('list/sort/my-lists', {trigger: true});
+                            });
+                        });
+                    }
+                    app.dialogs.element('.message-close button').on('vclick', function() {
+                        app.dialogs.hide();
+                        app.timer.start();
+                    });
+                } else {
+                    if (self.prompt) {
+                        app.timer.start();
+                    } else {
+                        self.next();
+                    }
+                    app.dialogs.hide();
+                }
             });
         },
         /**
