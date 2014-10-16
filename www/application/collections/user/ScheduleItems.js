@@ -163,6 +163,9 @@ define([
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
             this.filtered = this.filter(function(item) {
+                if (!item.attributes.vocabIds.length) {
+                    return false;
+                }
                 if (activeParts.indexOf(item.attributes.part) === -1) {
                     return false;
                 }
