@@ -1,5 +1,5 @@
 <!-- DIALOGS: Default -->
-<div class="dialog-default modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="default" aria-hidden="true">
+<div class="dialog-default modal fade" tabindex="-1" role="dialog" aria-labelledby="default" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body text-center">
@@ -8,6 +8,47 @@
                 <h5 class="message-text"></h5>
                 <div class="message-confirm"></div>
                 <div class="message-close"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOGS: Add Items -->
+<div class="dialog-add-items modal fade" tabindex="-1" role="dialog" aria-labelledby="add-items" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h3 class="message-title"></h3>
+                <h5 class="message-text"></h5>
+                <img class="loader-image" src="images/ajax-loader.gif" height="64" width="64">
+                <div class="item-limit">
+                    <button type="button" data-value="1" class="btn btn-primary spacing">1</button>
+                    <button type="button" data-value="5" class="btn btn-primary spacing">5</button>
+                    <button type="button" data-value="10" class="btn btn-primary spacing">10</button>
+                    <button type="button" data-value="20" class="btn btn-primary spacing">20</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+                <div class="message-confirm"></div>
+                <div class="message-close"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOGS: Add Vocab -->
+<div class="dialog-add-vocab modal fade" tabindex="-1" role="dialog" aria-labelledby="add-vocab" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa fa-search"></i> <span></span></h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <h5 class="message-text"></h5>
+                    <input type="text" class="form-control vocabs" placeholder="">
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="check btn btn-success pull-right">Check</button>
             </div>
         </div>
     </div>
@@ -45,6 +86,24 @@
     </div>
 </div>
 
+<!-- DIALOGS: List Add Section -->
+<div class="dialog-list-add-section modal fade" tabindex="-1" role="dialog" aria-labelledby="list-add-section" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa fa-edit"></i> <span></span></h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="section-name" placeholder="What is the section name?">
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="section-add btn btn-success pull-right"><i class="fa fa-plus"></i> Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- DIALOGS: List Confirmation -->
 <div class="dialog-list-confirmation modal fade" tabindex="-1" role="dialog" aria-labelledby="list-confirmation" aria-hidden="true">
     <div class="modal-dialog">
@@ -69,6 +128,22 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button" class="select btn btn-success">Select &raquo;</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOGS: List Select -->
+<div class="dialog-list-select modal fade" tabindex="-1" role="dialog" aria-labelledby="list-select" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa fa-th"></i> <span></span></h3>
+            </div>
+            <div class="modal-body">
+                <div class="list-container"></div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="select-list btn btn-success pull-right"><i class="fa fa-check"></i> Select</button>
             </div>
         </div>
     </div>

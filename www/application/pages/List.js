@@ -57,11 +57,31 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick table tr': 'handleTableRowClicked',
+            'vclick #button-add-section': 'handleButtonAddSectionClicked',
             'vclick #button-add': 'handleButtonAddClicked',
             'vclick #button-pause': 'handleButtonPauseClicked',
             //'vclick #button-remove': 'handleButtonRemoveClicked',
-            'vclick #button-resume': 'handleButtonResumeClicked'
+            'vclick #button-resume': 'handleButtonResumeClicked',
+            'vclick #button-save': 'handleSaveButtonClicked',
+            'vclick .section-field-remove': 'handleSectionRemoveButtonClicked'
         }),
+
+        /**
+         * @method handleButtonAddSectionClicked
+         * @param {Event} event
+         */
+        handleButtonAddSectionClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            app.dialogs.show('list-add-section').element('.modal-title span').text('Add Section');
+            app.dialogs.element('.section-add').on('vclick', function() {
+                var name = app.dialogs.element('#section-name').val();
+                self.table.addSection({name: name, deleted: false, rows: []});
+                self.table.renderTable();
+                app.dialogs.hide();
+            });
+        },
+
         /**
          * @method handleTableRowClicked
          * @param {Event} event
@@ -128,13 +148,35 @@ define([
                 console.error(error);
             });
         },
-
+        /**
+         * @method handleSaveButtonClicked
+         * @param {Event} event
+         */
+        handleSaveButtonClicked: function(event) {
+            event.preventDefault();
+            app.dialogs.show().element('.message-title').text('Saving');
+            app.api.updateVocabList(this.table.list, function() {
+                app.dialogs.hide();
+            }, function() {
+                app.dialogs.hide();
+            });
+        },
+        /**
+         * @method handleSectionRemoveButtonClicked
+         * @param {Event} event
+         */
+        handleSectionRemoveButtonClicked: function(event) {
+            event.stopPropagation();
+            this.table.removeById(event.currentTarget.parentNode.id.replace('section-', ''));
+            this.table.renderTable();
+        },
         /**
          * @method handleTableRowClicked
          * @param {Event} event
          */
         handleTableRowClicked: function(event) {
             event.preventDefault();
+            app.router.navigate('list/' + this.list.id + '/' + event.currentTarget.id.replace('section-', ''), {trigger: true});
         },
         /**
          * @method loadList
@@ -148,9 +190,17 @@ define([
                 self.$('#list-name').text(list.name);
                 self.$('#list-description').text(list.description);
                 self.$('#list-studying').text(list.peopleStudying);
+                if (self.list.creator === app.user.id) {
+                    self.$('#button-add-section').show();
+                    self.table.readonly = false;
+                } else {
+                    self.$('#button-add-section').hide();
+                    self.table.readonly = true;
+                }
                 self.table.setFields({
                     name: 'Name',
-                    rows: 'Items'
+                    rows: 'Items',
+                    remove: ''
                 }).setList(list).renderTable();
                 self.renderElements().resize();
                 app.dialogs.hide();

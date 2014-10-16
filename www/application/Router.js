@@ -7,8 +7,10 @@ define([
     'routers/RouterLearningCenter',
     'pages/Account',
     'pages/Dashboard',
+    'pages/Filters',
     'pages/Landing',
     'pages/List',
+    'pages/ListSection',
     'pages/Lists',
     'pages/Login',
     'pages/Scratchpad',
@@ -17,7 +19,8 @@ define([
     'pages/Study',
     'pages/Tests'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageDashboard, PageLanding, PageList, PageLists, PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
+            PageAccount, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
+            PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -40,9 +43,11 @@ define([
         routes: {
             '': 'showHome',
             'account': 'showAccount',
+            'filters': 'showFilters',
             'list': 'showLists',
             'list/:listId': 'showList',
             'list/sort/:sort': 'showLists',
+            'list/:listId/:sectionId': 'showListSection',
             'login': 'showLogin',
             'logout': 'handleLogout',
             'scratchpad/:writings': 'showScratchpad',
@@ -109,6 +114,13 @@ define([
             this.currentPage.render();
         },
         /**
+         * @method showFilters
+         */
+        showFilters: function() {
+            this.currentPage = new PageFilters();
+            this.currentPage.render();
+        },
+        /**
          * @method showHome
          */
         showHome: function() {
@@ -132,6 +144,15 @@ define([
         showList: function(listId) {
             this.currentPage = new PageList();
             this.currentPage.set(listId).render();
+        },
+        /**
+         * @method showListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        showListSection: function(listId, sectionId) {
+            this.currentPage = new PageListSection();
+            this.currentPage.set(listId, sectionId).render();
         },
         /**
          * @method showLists

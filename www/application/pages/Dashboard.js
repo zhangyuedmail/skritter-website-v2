@@ -40,6 +40,8 @@ define([
          * @returns {PageDashboard}
          */
         renderElements: function() {
+            app.user.stats.sync();
+            app.user.schedule.updateFilter();
             this.elements.userAvatar.html(app.user.getAvatar('img-thumbnail'));
             this.elements.userDisplayName.text(app.user.getDisplayName());
             if (app.user.subscription.isExpired()) {
@@ -59,7 +61,6 @@ define([
                 this.elements.trialRemaining.hide();
             }
             this.updateStatSection();
-            app.user.stats.sync();
         },
         /**
          * @method events
@@ -96,6 +97,7 @@ define([
                         app.user.data.sync(0, callback, callback);
                     }
                 ], function() {
+                    app.user.schedule.sortFilter();
                     app.dialogs.hide();
                 });
             }

@@ -56,6 +56,8 @@ body {
     margin-top: 0;
 }
 .padding-top { padding-top: 10px; }
+.table-no-border td, .table-no-border th { border: 0 !important; }
+.table-no-title:first-child tr:first-child td, .table-no-title th { border: 0 !important; }
 @media (max-width: 991px) {
     .content-box.fixed-150 { height: auto; }
 }
@@ -76,19 +78,35 @@ body {
 .vocab-table .vocab-field-writing { font-size: 2em; }
 
 
+/*** DIALOGS: ADD ITEMS ***/
+.dialog-add-items .item-limit .btn {
+    border-width: 5px;
+    padding: 20px;
+}
+
+
 /*** DIALOGS: EDIT TEXT ***/
 .dialog-edit-text .dialog-value{
+    margin-bottom: 10px;
     min-height: 100px;
     width: 100%;
 }
+
+
+/*** DIALOGS: EDIT TEXT ***/
+.modal .tutorial-reading { display: inline-block; }
 
 
 /*** DIALOGS: LIST CONFIRMATION ***/
 .dialog-list-confirmation .list-image img { max-width: 100px; }
 
 
-/*** DIALOGS: EDIT TEXT ***/
-.modal .tutorial-reading { display: inline-block; }
+/*** DIALOGS: LIST SELECT ***/
+.dialog-list-select .list-container {
+    margin-bottom: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
 
 
 /*** NAVBAR ***/
@@ -217,12 +235,24 @@ body {
 }
 
 
+/*** PAGES: FILTERS ***/
+.page-filters .setting-label {
+    float: left;
+    padding-bottom: 10px;
+    width: 100px;
+}
+
+
 /*** PAGES: LANDING ***/
 .landing-logo {
     margin: 25px auto 0 auto;
     padding-left: 10%;
     width: 50%;
 }
+
+
+/*** PAGES: LIST SECTION ***/
+.page-list-section .row-field-remove { width: 50px; }
 
 
 /*** PAGES: LIST SELECT ***/
@@ -248,6 +278,7 @@ body {
 
 
 /*** PAGES: STUDY ***/
+.page-study .fa-filter { color: #e99002; }
 .page-study .study-stats {
     color: #ffffff;
     padding-top: 5px;
@@ -480,3 +511,6 @@ body {
 
 /*** TABLE: DECOMPS ***/
 .table-decomps .writing { font-size: 2em; }
+
+/*** TABLE: LIST ROWS ***/
+.table-list-row .row-field-writing { font-size: 2em; }

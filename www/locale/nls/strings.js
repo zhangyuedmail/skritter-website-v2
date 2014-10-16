@@ -80,6 +80,7 @@ define([], {
         sidebar: {
             account: 'Account',
             dashboard: 'Dashboard',
+            filters: 'Filters',
             lists: 'Lists',
             logout: 'Log Out',
             queue: 'Queue',

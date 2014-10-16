@@ -18,8 +18,8 @@ define([
          */
         initialize: function(models, options) {
             options = options ? options : {};
-            this.sorted = undefined;
             this.user = options.user;
+            this.filtered = [];
         },
         /**
          * @property model
@@ -27,47 +27,12 @@ define([
          */
         model: ScheduleItem,
         /**
-         * @method comparator
-         * @param {ScheduleItem} item
-         * @returns {Number}
-         */
-        comparator: function(item) {
-            return -item.getReadiness(this.sorted);
-        },
-        /**
-         * @method getActive
-         * @param {Array}
-         */
-        getActive: function() {
-            var activeParts = this.user.settings.getActiveParts();
-            var activeStyles = this.user.settings.getActiveStyles();
-            return this.models.filter(function(item) {
-                if (!item.attributes.vocabIds.length) {
-                    return false;
-                }
-                if (activeParts.indexOf(item.attributes.part) === -1) {
-                    return false;
-                }
-                if (activeStyles.indexOf(item.attributes.style) === -1) {
-                    return false;
-                }
-                return true;
-            });
-        },
-        /**
-         * @method getActiveCount
-         * @param {Number}
-         */
-        getActiveCount: function() {
-            return this.getActive().length;
-        },
-        /**
          * @method getDue
          * @returns {Array}
          */
         getDue: function() {
-            var now = moment().add(1, 'minutes').unix();
-            return this.getActive().filter(function(item) {
+            var now = moment().add(5, 'minutes').unix();
+            return this.filtered.filter(function(item) {
                 return item.attributes.next < now;
             });
         },
@@ -79,42 +44,16 @@ define([
             return this.getDue().length;
         },
         /**
-         * @method getNew
-         * @returns {ScheduleItems}
-         */
-        getNew: function() {
-            return this.getActive().filter(function(item) {
-                return item.isNew();
-            });
-        },
-        /**
-         * @method getNewCount
-         * @returns {Number}
-         */
-        getNewCount: function() {
-            return this.getNew().length;
-        },
-        /**
          * @method getNext
          * @param {Number} [index]
          * @returns {DataItem}
          */
         getNext: function(index) {
-            var activeParts = this.user.settings.getActiveParts();
-            var activeStyles = this.user.settings.getActiveStyles();
+            var items = this.sortFilter();
             index = index ? index : 0;
-            for (var i = 0, length = this.sort().length; i < length; i++) {
-                var item = this.at(i);
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
                 var itemBase = item.id.split('-')[2];
-                if (!item.attributes.vocabIds.length) {
-                    continue;
-                }
-                if (activeParts.indexOf(item.attributes.part) === -1) {
-                    continue;
-                }
-                if (app.user.isChinese() && activeStyles.indexOf(item.attributes.style) === -1) {
-                    continue;
-                }
                 if (this.user.history.hasBase(itemBase)) {
                     continue;
                 }
@@ -145,18 +84,27 @@ define([
                 var item = items[i];
                 scheduleItems.push({
                     id: item.id,
-                    interval: item.interval ? item.interval : 0,
-                    last: item.last ? item.last : 0,
-                    next: item.next ? item.next : 0,
+                    interval: item.interval || 0,
+                    last: item.last || 0,
+                    next: item.next || 0,
                     part: item.part,
-                    reviews: item.reviews ? item.reviews : 0,
+                    reviews: item.reviews,
+                    sectionIds: item.sectionIds,
                     style: item.style,
-                    successes: item.successes ? item.successes : 0,
-                    vocabIds: item.vocabIds
+                    successes: item.successes,
+                    vocabIds: item.vocabIds,
+                    vocabListIds: item.vocabListIds
                 });
             }
             console.log('UPDATING SCHEDULE:', scheduleItems);
             return this.add(scheduleItems, options);
+        },
+        /**
+         * @method isFiltered
+         * @returns {Boolean}
+         */
+        isFiltered: function() {
+            return this.filtered.length < this.length;
         },
         /**
          * @method loadAll
@@ -174,8 +122,10 @@ define([
          * @param {Number} [limit]
          */
         logSchedule: function(limit) {
-            for (var i = 0, length = limit || this.sort().length; i < length; i++) {
-                var item = this.at(i);
+            limit = limit || 10;
+            var items = this.sortFilter();
+            for (var i = 0, length = limit || items.length; i < length; i++) {
+                var item = items[i];
                 if (item) {
                     console.log(item.id, item.getReadiness(this.sorted));
                 } else {
@@ -184,12 +134,44 @@ define([
             }
         },
         /**
-         * @method sort
+         * @method sortFilter
+         * @returns {Array}
+         */
+        sortFilter: function() {
+            var now = moment().unix();
+            this.filtered = _.sortBy(this.filtered, function(item) {
+                return -item.getReadiness(now);
+            });
+            this.trigger('sort', this);
+            return this.filtered;
+        },
+        /**
+         * @method updateFilter
          * @returns {ScheduleItems}
          */
-        sort: function() {
-            this.sorted = moment().unix();
-            return BaseCollection.prototype.sort.call(this);
+        updateFilter: function() {
+            var activeLists = this.user.settings.getActiveLists();
+            var activeParts = this.user.settings.getActiveParts();
+            var activeStyles = this.user.settings.getActiveStyles();
+            this.filtered = this.filter(function(item) {
+                if (activeParts.indexOf(item.attributes.part) === -1) {
+                    return false;
+                }
+                if (activeStyles.indexOf(item.attributes.style) === -1) {
+                    return false;
+                }
+                if (activeLists) {
+                    for (var i = 0, length = activeLists.length; i < length; i++) {
+                        if (item.attributes.vocabListIds.indexOf(activeLists[i]) !== -1) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return true;
+            });
+            this.trigger('sort', this);
+            return this;
         }
     });
 

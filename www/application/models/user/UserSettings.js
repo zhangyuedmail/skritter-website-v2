@@ -36,6 +36,7 @@ define([
             allJapaneseParts: ['defn', 'rdng', 'rune'],
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
+            filterLists: [],
             hideExpired: 0,
             readingStyle: 'pinyin',
             tutorials: ['defn', 'grading', 'rdng', 'rune', 'tone']
@@ -73,6 +74,13 @@ define([
                 parts = _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
             }
             return parts;
+        },
+        /**
+         * @method getActiveLists
+         * @returns {Array}
+         */
+        getActiveLists: function() {
+            return this.get('filterLists').length ? this.get('filterLists') : undefined;
         },
         /**
          * @method getActiveStyles
@@ -158,12 +166,10 @@ define([
         setActiveParts: function(parts) {
             if (this.user.isChinese()) {
                 this.set('filterChineseParts', parts);
-                this.update();
-                return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
+            } else {
+                this.set('filterJapaneseParts', parts);
             }
-            this.set('filterJapaneseParts', parts);
-            this.update();
-            return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
+            return this.getActiveParts();
         },
         /**
          * @method setActiveStyles
@@ -183,7 +189,6 @@ define([
                     this.set('reviewTraditional', true);
                 }
             }
-            this.update();
             return this.getActiveStyles();
         },
         /**

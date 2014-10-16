@@ -160,19 +160,21 @@ define([
                     });
                 }, function(error, posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
-                    if (error.statusCode !== 403) {
+                    if (error.statusCode === 403) {
+                        callbackError(error);
+                    } else if (error.statusCode) {
                         try {
                             throw new Error('Review Format Errors');
                         } catch (e) {
                             console.error('REVIEW FORMAT ERRORS:', error.responseJSON);
                             raygun.send(e, {Message: error.responseJSON});
                         }
-                    }
-                    if (error.statusCode) {
                         app.storage.clear('reviews', function() {
                             self.reset();
                             callbackError(error);
                         });
+                    } else {
+                        callbackError(error);
                     }
                 });
             } else {
