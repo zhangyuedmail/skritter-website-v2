@@ -46,11 +46,13 @@ define([
          */
         renderElements: function() {
             this.schedule.updateFilter();
-            if (this.schedule.isFiltered()) {
+            this.elements.filterStatus.hide();
+            //TODO: show icon based on filter status
+            /**if (this.schedule.isFiltered()) {
                 this.elements.filterStatus.show();
             } else {
                 this.elements.filterStatus.hide();
-            }
+            }**/
             this.updateDueCount();
             return this;
         },
@@ -73,11 +75,7 @@ define([
                     icon: 'fa fa-plus',
                     message: 'Added ' + numVocabsAdded + ' new vocabs.'
                 }, {
-                    allow_dismiss: false,
-                    animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
-                    },
+                    allow_dismiss: true,
                     offset: {x: 5, y: 50},
                     type: 'success'
                 });
@@ -96,11 +94,7 @@ define([
                     icon: 'fa fa-warning',
                     message: message
                 }, {
-                    allow_dismiss: false,
-                    animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
-                    },
+                    allow_dismiss: true,
                     offset: {x: 5, y: 50},
                     type: 'warning'
                 });
@@ -147,48 +141,6 @@ define([
                     app.timer.start();
                 });
             });
-            /**
-
-             if (error) {
-                    app.dialogs.element('.loader-image').hide();
-                    if (error.statusCode === 402) {
-                        app.dialogs.element('.message-title').text('Subscription required.');
-                        app.dialogs.element('.message-text').text('You need an active subscription to add new items.');
-                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to Account", {level: 'danger'}));
-                        app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
-                        app.dialogs.element('.message-confirm button').on('vclick', function() {
-                            app.dialogs.hide(function() {
-                                app.router.navigate('account', {trigger: true});
-                            });
-                        });
-                    } else {
-                        if (app.user.data.vocablists.hasPaused()) {
-                            app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
-                        } else {
-                            app.dialogs.element('.message-text').text('You need to add another list to study.');
-                        }
-                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to My Lists", {level: 'primary'}));
-                        app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
-                        app.dialogs.element('.message-confirm button').on('vclick', function() {
-                            app.dialogs.hide(function() {
-                                app.router.navigate('list/sort/my-lists', {trigger: true});
-                            });
-                        });
-                    }
-                    app.dialogs.element('.message-close button').on('vclick', function() {
-                        app.dialogs.hide();
-                        app.timer.start();
-                    });
-                } else {
-                    if (self.prompt) {
-                        app.timer.start();
-                    } else {
-                        self.next();
-                    }
-                    app.dialogs.hide();
-                }
-
-             */
         },
         /**
          * @method handlePromptComplete

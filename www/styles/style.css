@@ -31,6 +31,11 @@ body {
 
 
 /*** BOOTSTRAP ***/
+[data-growl="container"] {
+    padding-right: 30px;
+    font-size: 14px;
+}
+[data-growl="icon"] { padding-right: 10px; }
 .btn.inline { display: inline-block; }
 .btn.spacing { margin: 5px 0; }
 .container-fluid {
