@@ -178,8 +178,9 @@ define([
                         }
                     }
                 ], function(error) {
+                    self.syncing = false;
+                    self.trigger('sync', false);
                     if (error) {
-                        self.trigger('sync', false);
                         if (error.status === 403) {
                             self.stopBackgroundSync();
                         } else {
@@ -191,8 +192,6 @@ define([
                     } else {
                         app.analytics.trackUserEvent('background sync');
                         console.log('^^^SYNC FINISHED:', moment().format('HH:mm:ss YYYY-MM-DD'));
-                        self.syncing = false;
-                        self.trigger('sync', false);
                         if (typeof callbackSuccess === 'function') {
                             callbackSuccess();
                         }
