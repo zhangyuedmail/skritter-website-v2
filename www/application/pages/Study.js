@@ -184,7 +184,7 @@ define([
                 nextItem = this.schedule.get(this.reviews.current.get('itemId'));
                 review = this.reviews.current;
             } else {
-                nextItem = this.schedule.getNext(this.scheduleIndex);
+                nextItem = this.schedule.getNext();
             }
             if (nextItem) {
                 nextItem.load(function(result) {
@@ -192,7 +192,6 @@ define([
                     self.prompt = self.promptController.loadPrompt(review || result.item.createReview());
                     self.reviews.current = self.prompt.review;
                 }, function() {
-                    self.scheduleIndex++;
                     self.next();
                 });
 

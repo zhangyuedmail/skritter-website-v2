@@ -179,14 +179,14 @@ define([
                     }
                 ], function(error) {
                     if (error) {
-                        this.trigger('sync', false);
+                        self.trigger('sync', false);
                         if (error.status === 403) {
                             self.stopBackgroundSync();
                         } else {
                             console.log('^^^SYNC ERROR', error);
-                            if (typeof callbackError === 'function') {
-                                callbackError();
-                            }
+                        }
+                        if (typeof callbackError === 'function') {
+                            callbackError();
                         }
                     } else {
                         app.analytics.trackUserEvent('background sync');

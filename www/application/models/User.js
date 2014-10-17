@@ -356,7 +356,7 @@ define([
                         });
                         console.error('USER ERROR:', error);
                     } else {
-                        //self.data.startBackgroundSync();
+                        self.data.startBackgroundSync();
                         app.dialogs.hide(function() {
                             app.api.clearGuest();
                             callback(null, self);

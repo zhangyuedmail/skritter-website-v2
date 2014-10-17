@@ -41,9 +41,8 @@ define([
          * @param {Array} [recent]
          * @returns {Number}
          */
-        getReadiness: function(now, recent) {
+        getReadiness: function(now) {
             now = now || moment().unix();
-            recent = recent || [];
             var readiness = 0;
             var offset = 0;
             if (this.attributes.part === 'rune') {
@@ -51,16 +50,16 @@ define([
             } else if (this.attributes.part === 'tone') {
                 offset += 15;
             }
-            if (recent.indexOf(this.getBase()) !== -1) {
-                readiness -= this.attributes.last + this.attributes.interval + offset;
-            } else if (!this.attributes.last) {
-                readiness = 9999 + offset;
-            } else if (this.attributes.last > now - 600) {
-                readiness -= this.attributes.last + offset;
+            if (this.attributes.last) {
+                if (this.attributes.last > now - 600) {
+                    readiness -= this.attributes.last + offset;
+                } else {
+                    var timePast = now - this.attributes.last;
+                    var timeInterval = (this.attributes.last + this.attributes.interval) - this.attributes.last;
+                    readiness = (timePast + offset) / timeInterval;
+                }
             } else {
-                var timePast =  now - this.attributes.last;
-                var timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;
-                readiness = (timePast + offset) / timeInterval;
+                readiness = 9999 + offset;
             }
             return readiness;
         },
@@ -201,11 +200,18 @@ define([
                 }
             ], function(error) {
                 if (error) {
+                    console.error('SCHEDULE ERROR:', error, self);
                     if (result.item) {
                         self.set({vocabIds: [], flag: error ? error : 'Unable to load item.'});
+                        result.item.set({
+                            flag: error ? error : 'Unable to load item.',
+                            vocabIds: []
+                        }).cache(function() {
+                            callbackError(error);
+                        });
+                    } else {
+                        callbackError(error);
                     }
-                    console.error('SCHEDULE ERROR:', error, self);
-                    callbackError(error);
                 } else {
                     callbackSuccess(result);
                 }
