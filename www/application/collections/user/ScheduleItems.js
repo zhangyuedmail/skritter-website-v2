@@ -69,8 +69,12 @@ define([
                 if (!item.attributes.vocabIds.length) {
                     continue;
                 }
+                if (this.recent.indexOf(item.getBase()) !== -1) {
+                    continue;
+                }
                 return item;
             }
+            return items[0];
         },
         /**
          * @method insert
@@ -127,11 +131,12 @@ define([
          */
         logSchedule: function(limit) {
             limit = limit || 10;
+            var now = moment().unix();
             var items = this.sortFilter();
             for (var i = 0, length = limit || items.length; i < length; i++) {
                 var item = items[i];
                 if (item) {
-                    console.log(item.id, item.getReadiness(this.sorted));
+                    console.log(item.id, item.getReadiness(now));
                 } else {
                     break;
                 }
@@ -144,7 +149,7 @@ define([
         sortFilter: function() {
             var now = moment().unix();
             this.filtered = _.sortBy(this.filtered, function(item) {
-                return -item.getReadiness(now, this.recent);
+                return -item.getReadiness(now);
             });
             this.trigger('sort', this);
             return this.filtered;
