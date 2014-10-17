@@ -201,11 +201,18 @@ define([
                 }
             ], function(error) {
                 if (error) {
+                    console.error('SCHEDULE ERROR:', error, self);
                     if (result.item) {
                         self.set({vocabIds: [], flag: error ? error : 'Unable to load item.'});
+                        result.item.set({
+                            flag: error ? error : 'Unable to load item.',
+                            vocabIds: []
+                        }).cache(function() {
+                            callbackError(error);
+                        });
+                    } else {
+                        callbackError(error);
                     }
-                    console.error('SCHEDULE ERROR:', error, self);
-                    callbackError(error);
                 } else {
                     callbackSuccess(result);
                 }

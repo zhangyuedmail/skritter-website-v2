@@ -799,8 +799,8 @@ define([
                     type: 'POST',
                     data: JSON.stringify(batch)
                 }).done(function(data) {
-                    posted = posted.concat(batch);
                     if (data.statusCode === 200) {
+                        posted = posted.concat(batch);
                         if (reviews.length > 0) {
                             setTimeout(next, self.timeout);
                         } else {

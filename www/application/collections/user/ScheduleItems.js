@@ -60,17 +60,13 @@ define([
         },
         /**
          * @method getNext
-         * @param {Number} [index]
          * @returns {DataItem}
          */
-        getNext: function(index) {
+        getNext: function() {
             var items = this.sortFilter();
-            index = index ? index : 0;
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
-
-                if (index > 0) {
-                    index--;
+                if (!item.attributes.vocabIds.length) {
                     continue;
                 }
                 return item;
