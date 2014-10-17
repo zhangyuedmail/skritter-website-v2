@@ -142,7 +142,6 @@ define([
             if (this.$('#parts #tone').bootstrapSwitch('state')) {
                 this.activeParts.push('tone');
             }
-            console.log(this.activeParts);
             this.settings.setActiveParts(this.activeParts);
         },
         /**

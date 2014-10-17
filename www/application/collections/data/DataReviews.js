@@ -49,13 +49,11 @@ define([
         },
         /**
          * @method autoSync
-         * @param {DataReview} review
          */
-        autoSync: function(review) {
-            //check for enough reviews to sync
-            /**if (this.length > 10) {
+        autoSync: function() {
+            if (this.length > 10) {
                 this.user.data.sync(1);
-            }**/
+            }
         },
         /**
          * @method getBatch
@@ -170,7 +168,7 @@ define([
                     });
                 }, function(error, posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
-                    if (error.statusCode === 403) {
+                    if (error.responseJSON && error.responseJSON.statusCode === 403) {
                         callbackError(error);
                     } else if (error.statusCode) {
                         try {
