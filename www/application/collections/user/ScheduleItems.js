@@ -159,36 +159,49 @@ define([
          * @returns {ScheduleItems}
          */
         updateFilter: function() {
+            var activeItems = this.user.settings.getActiveItems();
             var activeLists = this.user.settings.getActiveLists();
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
-            this.filtered = this.filter(function(item) {
-                if (!item.attributes.vocabIds.length) {
-                    return false;
-                }
-                if (activeParts.indexOf(item.attributes.part) === -1) {
-                    return false;
-                }
-                if (activeStyles.indexOf(item.attributes.style) === -1) {
-                    return false;
-                }
-                if (activeLists) {
-                    for (var i = 0, length = activeLists.length; i < length; i++) {
-                        if (item.attributes.vocabListIds.indexOf(activeLists[i]) !== -1) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                if (app.user.isJapanese()) {
-                    var itemBase = item.id.split('-')[2];
-                    if (item.equals('part', 'rdng') && app.fn.isKana(itemBase)) {
-                        item.set('vocabIds', []);
+            if (activeItems) {
+                this.filtered = this.filter(function(item) {
+                    if (!item.attributes.vocabIds.length) {
                         return false;
                     }
-                }
-                return true;
-            });
+                    if (activeItems.indexOf(item.id) !== -1) {
+                        return true;
+                    }
+                    return false;
+                });
+            } else {
+                this.filtered = this.filter(function(item) {
+                    if (!item.attributes.vocabIds.length) {
+                        return false;
+                    }
+                    if (activeParts.indexOf(item.attributes.part) === -1) {
+                        return false;
+                    }
+                    if (activeStyles.indexOf(item.attributes.style) === -1) {
+                        return false;
+                    }
+                    if (activeLists) {
+                        for (var i = 0, length = activeLists.length; i < length; i++) {
+                            if (item.attributes.vocabListIds.indexOf(activeLists[i]) !== -1) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    if (app.user.isJapanese()) {
+                        var itemBase = item.id.split('-')[2];
+                        if (item.equals('part', 'rdng') && app.fn.isKana(itemBase)) {
+                            item.set('vocabIds', []);
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+            }
             this.trigger('sort', this);
             return this;
         }

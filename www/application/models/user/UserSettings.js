@@ -39,6 +39,7 @@ define([
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             filterLists: [],
+            filterItems: [],
             hideExpired: 0,
             readingStyle: 'pinyin',
             tutorials: ['defn', 'grading', 'rdng', 'rune', 'tone']
@@ -65,6 +66,20 @@ define([
             });
         },
         /**
+         * @method getActiveItems
+         * @returns {Array}
+         */
+        getActiveItems: function() {
+            return this.get('filterItems').length ? this.get('filterItems') : undefined;
+        },
+        /**
+         * @method getActiveLists
+         * @returns {Array}
+         */
+        getActiveLists: function() {
+            return this.get('filterLists').length ? this.get('filterLists') : undefined;
+        },
+        /**
          * @method getActiveParts
          * @returns {Array}
          */
@@ -76,13 +91,6 @@ define([
                 parts = _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
             }
             return parts;
-        },
-        /**
-         * @method getActiveLists
-         * @returns {Array}
-         */
-        getActiveLists: function() {
-            return this.get('filterLists').length ? this.get('filterLists') : undefined;
         },
         /**
          * @method getActiveStyles
