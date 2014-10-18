@@ -793,7 +793,8 @@ define([
                 var batch = _.flatten(reviews.splice(0, 49));
                 $.ajax({
                     url: self.getBaseUrl() + 'reviews' +
-                        '?bearer_token=' + self.getToken(),
+                        '?bearer_token=' + self.getToken() +
+                        '&spaceItems=false',
                     beforeSend: self.beforeSend,
                     context: self,
                     type: 'POST',
