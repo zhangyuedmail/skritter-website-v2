@@ -38,7 +38,6 @@ define([
         /**
          * @method getReadiness
          * @param {Number} [now]
-         * @param {Array} [recent]
          * @returns {Number}
          */
         getReadiness: function(now) {
@@ -54,9 +53,7 @@ define([
                 if (this.attributes.last > now - 600) {
                     readiness -= this.attributes.last + offset;
                 } else {
-                    var timePast = now - this.attributes.last;
-                    var timeInterval = (this.attributes.last + this.attributes.interval) - this.attributes.last;
-                    readiness = (timePast + offset) / timeInterval;
+                    readiness = (now - this.attributes.last + offset) / (this.attributes.next - this.attributes.last);
                 }
             } else {
                 readiness = 9999 + offset;
