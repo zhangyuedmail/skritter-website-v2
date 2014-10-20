@@ -28,7 +28,6 @@ app = (function() {
                 backbone: 'libraries/backbone-1.1.2.min',
                 'backbone.routefilter': 'libraries/backbone.routefilter-0.2.0.min',
                 bootstrap: 'libraries/bootstrap-3.2.0.min',
-                'bootstrap.growl': 'libraries/bootstrap.growl-2.0.1.min',
                 'bootstrap.switch': 'libraries/bootstrap.switch-3.0.2.min',
                 'createjs.easel': 'libraries/createjs.easel-NEXT.min',
                 'createjs.tween': 'libraries/createjs.tween-NEXT.min',
@@ -38,6 +37,7 @@ app = (function() {
                 'jasmine.html': 'libraries/jasmine.html-2.0.3',
                 jquery: 'libraries/jquery-1.11.1.min',
                 'jquery.mobile': 'libraries/jquery.mobile-1.4.4.min',
+                'jquery.notify': 'libraries/jquery.notify-0.3.1.min',
                 'jquery.ui': 'libraries/jquery.ui-1.11.1.min',
                 handlebars: 'libraries/handlebars-2.0.0.min',
                 modernizr: 'libraries/modernizr.custom-2.8.3.min',
@@ -53,11 +53,11 @@ app = (function() {
                 backbone: ['jquery', 'underscore'],
                 'backbone.routefilter': ['backbone'],
                 bootstrap: ['jquery'],
-                'bootstrap.growl': ['bootstrap'],
                 'bootstrap.switch': ['bootstrap'],
                 'jasmine.html': ['jasmine'],
                 'jasmine.boot': ['jasmine.html'],
                 'jquery.mobile': ['jquery'],
+                'jquery.notify': ['jquery'],
                 'jquery.ui': ['jquery'],
                 'moment.timezone': ['moment']
             }
