@@ -44,7 +44,7 @@ define([
             this.createLayer('stroke');
             this.createLayer('overlay');
             this.createLayer('input');
-            this.resize().hide();
+            this.hide();
             return this;
         },
         /**
@@ -361,6 +361,7 @@ define([
          * @returns {PromptCanvas}
          */
         resize: function(size) {
+            console.log('resizing canvas');
             this.canvasSize = size > this.maxCanvasSize ? this.maxCanvasSize : size;
             app.attributes.canvasSize = this.canvasSize;
             this.stage.canvas.height = this.canvasSize;
