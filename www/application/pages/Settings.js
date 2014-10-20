@@ -68,7 +68,7 @@ define([
                 readingStyle: this.elements.adjReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
                 showHeisig: this.elements.adjHeisig.bootstrapSwitch('state'),
                 squigs: this.elements.adjRawSquigs.bootstrapSwitch('state')
-            });
+            }).update();
         }
     });
 
