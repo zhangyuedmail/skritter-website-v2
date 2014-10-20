@@ -37,7 +37,7 @@ define([
          */
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
-            if (app.user.settings.get('audio')) {
+            if (app.user.settings.isAudioEnabled()) {
                 this.vocab.playAudio();
             }
             this.elements.fieldQuestion.hide();

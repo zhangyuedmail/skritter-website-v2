@@ -37,7 +37,7 @@ define([
          */
         renderElements: function() {
             this.undelegateEvents();
-            this.elements.adjAudio.bootstrapSwitch('state', this.settings.get('audio'));
+            this.elements.adjAudio.bootstrapSwitch('state', this.settings.get('volume') ? true : false);
             this.elements.adjHeisig.bootstrapSwitch('state', this.settings.get('showHeisig'));
             this.elements.adjHideReading.bootstrapSwitch('state', this.settings.get('hideReading'));
             this.elements.adjRawSquigs.bootstrapSwitch('state', this.settings.get('squigs'));
@@ -63,11 +63,11 @@ define([
         updateAdjustments: function(event) {
             event.preventDefault();
             this.settings.set({
-                audio: this.elements.adjAudio.bootstrapSwitch('state'),
                 hideReading: this.elements.adjHideReading.bootstrapSwitch('state'),
                 readingStyle: this.elements.adjReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
                 showHeisig: this.elements.adjHeisig.bootstrapSwitch('state'),
-                squigs: this.elements.adjRawSquigs.bootstrapSwitch('state')
+                squigs: this.elements.adjRawSquigs.bootstrapSwitch('state'),
+                volume: this.elements.adjAudio.bootstrapSwitch('state') ? 1 : 0
             }).update();
         }
     });
