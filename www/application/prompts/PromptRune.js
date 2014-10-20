@@ -49,7 +49,7 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
-            if (app.user.settings.get('audio') && app.user.settings.get('hideReading') && this.review.isLast()) {
+            if (app.user.settings.isAudioEnabled() && app.user.settings.get('hideReading') && this.review.isLast()) {
                 this.vocab.playAudio();
             }
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
@@ -69,7 +69,7 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            if (app.user.settings.get('audio') && !app.user.settings.get('hideReading') && this.review.isFirst()) {
+            if (app.user.settings.isAudioEnabled() && !app.user.settings.get('hideReading') && this.review.isFirst()) {
                 this.vocab.playAudio();
             }
             this.canvas.enableInput();

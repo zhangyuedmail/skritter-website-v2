@@ -29,7 +29,6 @@ define([
          * @type Object
          */
         defaults: {
-            audio: true,
             audioPitch: '100',
             audioSpeed: '60',
             autoAdd: true,
@@ -161,6 +160,13 @@ define([
          */
         hasTutorial: function(name) {
             return this.get('tutorials').indexOf(name) !== -1;
+        },
+        /**
+         * @method isAudioEnabled
+         * @returns {Boolean}
+         */
+        isAudioEnabled: function() {
+            return this.get('volume') ? true : false;
         },
         /**
          * @method resetTutorials

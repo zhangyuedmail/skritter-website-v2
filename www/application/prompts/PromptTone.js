@@ -44,7 +44,7 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
-            if (app.user.settings.get('audio') && this.review.isLast()) {
+            if (app.user.settings.isAudioEnabled() && this.review.isLast()) {
                 this.vocab.playAudio();
             }
             this.elements.fieldDefinition.html(this.vocab.getDefinition());

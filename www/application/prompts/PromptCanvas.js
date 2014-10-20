@@ -44,7 +44,7 @@ define([
             this.createLayer('stroke');
             this.createLayer('overlay');
             this.createLayer('input');
-            this.resize().hide();
+            this.hide();
             return this;
         },
         /**
@@ -52,6 +52,8 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
+                'pointerdown.Canvas .prompt-canvas': 'triggerCanvasMouseDown',
+                'pointerup.Canvas .prompt-canvas': 'triggerCanvasMouseUp',
                 'vmousedown.Canvas .prompt-canvas': 'triggerCanvasMouseDown',
                 'vmouseup.Canvas .prompt-canvas': 'triggerCanvasMouseUp'
             });
@@ -199,7 +201,7 @@ define([
             var self = this;
             var oldPoint, oldMidPoint, points, marker;
             this.disableInput();
-            this.$el.on('vmousedown.Input', down);
+            this.$el.on('vmousedown.Input pointerdown.Input', down);
             function down(event) {
                 points = [];
                 marker = new createjs.Shape();
@@ -207,8 +209,8 @@ define([
                 oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
                 self.triggerInputDown(oldPoint, event);
                 self.getLayer('input').addChild(marker);
-                self.$el.on('vmouseout.Input vmouseup.Input', up);
-                self.$el.on('vmousemove.Input', move);
+                self.$el.on('vmouseout.Input vmouseup.Input pointerup.Input', up);
+                self.$el.on('vmousemove.Input pointermove.Input', move);
             }
             function move() {
                 var point = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
@@ -221,8 +223,8 @@ define([
             }
             function up(event) {
                 marker.graphics.endStroke();
-                self.$el.off('vmousemove.Input', move);
-                self.$el.off('vmouseout.Input vmouseup.Input', up);
+                self.$el.off('vmousemove.Input pointermove.Input', move);
+                self.$el.off('vmouseout.Input vmouseup.Input pointerup.Input', up);
                 if (event.type === 'vmouseout') {
                     self.fadeShape('background', marker.clone(true));
                 } else {
@@ -438,7 +440,7 @@ define([
                     }
                 }
             }
-            this.$(this.elements.holder).on('vmousemove.Canvas', _.bind(function(event) {
+            this.$(this.elements.holder).on('vmousemove.Canvas pointermove.Canvas', _.bind(function(event) {
                 this.mouseMoveEvent = event;
             }, this));
             this.mouseDownTimer = window.setTimeout(_.bind(function() {
@@ -460,7 +462,7 @@ define([
         triggerCanvasMouseUp: function(event) {
             event.preventDefault();
             window.clearTimeout(this.mouseDownTimer);
-            this.$(this.elements.holder).off('vmousemove.Canvas');
+            this.$(this.elements.holder).off('vmousemove.Canvas pointermove.Canvas');
             this.previousMouseDownEvent = this.mouseDownEvent;
             this.mouseMoveEvent = null;
             this.mouseUpEvent = event;
