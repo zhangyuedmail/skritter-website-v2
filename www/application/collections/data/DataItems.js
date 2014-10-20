@@ -252,6 +252,8 @@ define([
                         }
                     }
                 ], function(error) {
+                    self.data.syncing = false;
+                    self.data.trigger('sync', false);
                     if (error) {
                         console.log('ITEM ADD ERROR:', error);
                         callbackError(error);
@@ -262,8 +264,6 @@ define([
                         self.data.incrementAddedItems(numVocabsAdded);
                         self.data.vocablists.add(vocablists, {merge: true});
                         self.data.user.schedule.updateFilter();
-                        self.data.syncing = false;
-                        self.data.trigger('sync', false);
                         callbackSuccess(numVocabsAdded);
                     }
                 });
