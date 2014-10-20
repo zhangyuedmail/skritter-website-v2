@@ -44,6 +44,7 @@ define([
             'vclick #sidebar-info .edit-definition': 'handleEditDefinitionClicked',
             'vclick #sidebar-info .edit-mnemonic': 'handleEditMnemonicClicked',
             'vclick #sidebar-info .info-ban': 'handleInfoBanClicked',
+            'vclick #sidebar-info .info-pleco': 'handleInfoPlecoClicked',
             'vclick #sidebar-info .info-star': 'handleInfoStarClicked',
             'swipeleft .sidebar': 'handleSidebarSwipeLeft',
             'swiperight .sidebar': 'handleSidebarSwipeRight'
@@ -88,6 +89,14 @@ define([
         handleInfoBanClicked: function(event) {
             event.preventDefault();
             this.trigger('click:info-ban');
+        },
+        /**
+         * @method handleInfoPlecoClicked
+         * @param {Event} event
+         */
+        handleInfoPlecoClicked: function(event) {
+            event.preventDefault();
+            this.trigger('click:info-pleco');
         },
         /**
          * @method handleInfoStarClicked

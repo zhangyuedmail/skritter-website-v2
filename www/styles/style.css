@@ -509,6 +509,10 @@ body {
     word-break: break-all;
 }
 #sidebar-info .info-writing { font-size: 2em; }
+#sidebar-info .pleco-icon {
+    height: 55px;
+    margin-top: -8px;
+}
 
 
 /*** TABLE: CONTAINED ***/

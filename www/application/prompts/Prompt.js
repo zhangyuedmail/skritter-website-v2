@@ -124,6 +124,7 @@ define([
             this.elements.infoDefinition = $('#sidebar-info .info-definition');
             this.elements.infoHeisig = $('#sidebar-info .info-heisig');
             this.elements.infoMnemonic = $('#sidebar-info .info-mnemonic');
+            this.elements.infoPleco = $('#sidebar-info .info-pleco');
             this.elements.infoReading = $('#sidebar-info .info-reading');
             this.elements.infoStar = $('#sidebar-info .info-star');
             this.elements.infoWriting = $('#sidebar-info .info-writing');
@@ -236,6 +237,7 @@ define([
             this.listenTo(app.sidebars, 'click:edit-definition', this.editDefinition);
             this.listenTo(app.sidebars, 'click:edit-mnemonic', this.editMnemonic);
             this.listenTo(app.sidebars, 'click:info-ban', this.toggleBanned);
+            this.listenTo(app.sidebars, 'click:info-pleco', this.searchPleco);
             this.listenTo(app.sidebars, 'click:info-star', this.toggleStarred);
             return this;
         },
@@ -342,6 +344,14 @@ define([
             return this;
         },
         /**
+         * @method searchPleco
+         */
+        searchPleco: function() {
+            if (plugins.core) {
+                plugins.core.openPleco(this.vocab.get('writing'));
+            }
+        },
+        /**
          * @method showNavigation
          * @param {Number} [opacity]
          * @returns {Prompt}
@@ -440,6 +450,11 @@ define([
             } else {
                 this.elements.infoStar.addClass('fa-star-o');
                 this.elements.infoStar.removeClass('fa-star text-warning');
+            }
+            if (app.isNative() && this.vocab.isChinese()) {
+                this.elements.infoPleco.show();
+            } else {
+                this.elements.infoPleco.hide();
             }
             app.sidebars.loadFont();
             return this;
