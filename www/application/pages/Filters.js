@@ -61,7 +61,7 @@ define([
             this.elements.partRune.bootstrapSwitch('disabled', this.enabledParts.indexOf('rune') === -1);
             this.elements.partTone.bootstrapSwitch('disabled', this.enabledParts.indexOf('tone') === -1);
             if (app.user.isChinese()) {
-                if (this.settings.get('reviewSimplified') && this.settings.get('reviewSimplified')) {
+                if (this.settings.get('addSimplified') && this.settings.get('addTraditional')) {
                     this.elements.styleSimp.bootstrapSwitch('state', this.activeStyles.indexOf('simp') !== -1);
                     this.elements.styleTrad.bootstrapSwitch('state', this.activeStyles.indexOf('trad') !== -1);
                 } else {
