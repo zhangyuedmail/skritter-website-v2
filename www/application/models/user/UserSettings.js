@@ -209,18 +209,20 @@ define([
         },
         /**
          * @method update
+         * @param {Function} [callbackSuccess]
          * @param {Function} [callback]
          */
-        update: function(callback) {
+        update: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.updateUser(this.toJSON(), function(user) {
                 self.set(user);
-                if (typeof callback === 'function') {
-                    callback();
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
                 }
             }, function(error) {
-                if (typeof callback === 'function') {
-                    callback(error);
+                self.set(self.previousAttributes());
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
                 }
             });
         }
