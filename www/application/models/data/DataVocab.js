@@ -154,11 +154,11 @@ define([
             var customDefinition = this.get('customDefinition');
             var definition = this.get('definitions')[app.user.settings.get('sourceLang')];
             if (customDefinition && customDefinition !== '') {
-                return this.get('customDefinition');
+                return app.fn.textToHTML(this.get('customDefinition'));
             } else if (definition) {
-                return definition;
+                return app.fn.textToHTML(definition);
             } else {
-                return this.get('definitions').en;
+                return app.fn.textToHTML(this.get('definitions').en);
             }
         },
         /**
