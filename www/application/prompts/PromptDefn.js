@@ -64,11 +64,13 @@ define([
          */
         handlePromptClicked: function(event) {
             Prompt.prototype.handlePromptClicked.call(this, event);
-            if (this.review.getAt('answered')) {
-                this.gradingButtons.triggerSelected();
-                this.next();
-            } else {
-                this.renderAnswer();
+            if (this.promptClick) {
+                if (this.review.getAt('answered')) {
+                    this.gradingButtons.triggerSelected();
+                    this.next();
+                } else {
+                    this.renderAnswer();
+                }
             }
         },
         /**

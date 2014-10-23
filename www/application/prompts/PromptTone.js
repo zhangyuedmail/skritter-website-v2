@@ -84,19 +84,21 @@ define([
          * @param {Event} event
          */
         handleCanvasClicked: function() {
-            if (this.review.getAt('answered')) {
-                this.next();
-            } else {
-                if (this.tones.indexOf(5) > -1) {
-                    this.review.setAt('score', 3);
-                    this.character.reset();
-                    this.character.add(this.character.getTone(5));
-                    this.canvas.drawShape('stroke', this.character.getShape());
+            if (this.promptClick) {
+                if (this.review.getAt('answered')) {
+                    this.next();
                 } else {
-                    this.review.setAt('score', 1);
-                    this.character.reset();
-                    this.character.add(this.character.getTone(this.tones[0]));
-                    this.canvas.drawShape('stroke', this.character.getShape());
+                    if (this.tones.indexOf(5) > -1) {
+                        this.review.setAt('score', 3);
+                        this.character.reset();
+                        this.character.add(this.character.getTone(5));
+                        this.canvas.drawShape('stroke', this.character.getShape());
+                    } else {
+                        this.review.setAt('score', 1);
+                        this.character.reset();
+                        this.character.add(this.character.getTone(this.tones[0]));
+                        this.canvas.drawShape('stroke', this.character.getShape());
+                    }
                 }
             }
         },

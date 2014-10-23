@@ -98,11 +98,13 @@ define([
          * @method handlePromptClicked
          */
         handleCanvasClicked: function() {
-            if (this.review.getAt('answered')) {
-                this.next();
-            } else if (!this.character.isComplete()) {
-                this.taps++;
-                this.canvas.fadeShape('background', this.character.getExpectedStroke().getShape(), {color: '#b3b3b3', milliseconds: 1000});
+            if (this.promptClick) {
+                if (this.review.getAt('answered')) {
+                    this.next();
+                } else if (!this.character.isComplete()) {
+                    this.taps++;
+                    this.canvas.fadeShape('background', this.character.getExpectedStroke().getShape(), {color: '#b3b3b3', milliseconds: 1000});
+                }
             }
         },
         /**

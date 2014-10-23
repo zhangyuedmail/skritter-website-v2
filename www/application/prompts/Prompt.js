@@ -23,6 +23,7 @@ define([
             this.item = review.getBaseItem();
             this.part = review.get('part');
             this.position = 1;
+            this.promptClick = true;
             this.review = review;
             this.teaching = false;
             this.vocab = review.getBaseVocab();
@@ -86,6 +87,7 @@ define([
          */
         renderAnswer: function() {
             app.timer.stop();
+            this.clickTimeout();
             this.review.setAt({
                 answered: true,
                 reviewTime: app.timer.getReviewTime(),
@@ -159,6 +161,18 @@ define([
             'vclick .audio-button': 'handleAudioButtonClicked',
             'vclick .reading-button': 'handleReadingButtonClicked'
         }),
+        /**
+         * @method clickTimeout
+         * @param {Number} [milliseconds]
+         */
+        clickTimeout: function(milliseconds) {
+            var self = this;
+            milliseconds = milliseconds || 200;
+            this.promptClick = false;
+            setTimeout(function() {
+                self.promptClick = true;
+            }, milliseconds);
+        },
         /**
          * @method disableTutorial
          */
@@ -256,6 +270,7 @@ define([
         /**
          * @method handlePromptClicked
          * @param {Event} event
+         * @returns {Boolean|Prompt}
          */
         handlePromptClicked: function(event) {
             event.preventDefault();
@@ -362,7 +377,7 @@ define([
         showNavigation: function(opacity) {
             opacity = opacity === undefined ? 0.4 : opacity;
             if (this.part === 'rune' || this.part ==='tone') {
-               this.controller.elements.navigatePrevious.css({
+                this.controller.elements.navigatePrevious.css({
                     bottom: (this.canvas.getSize() / 2) - 30,
                     display: 'block',
                     opacity: opacity
