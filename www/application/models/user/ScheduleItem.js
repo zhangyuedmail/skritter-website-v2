@@ -50,7 +50,7 @@ define([
                 offset += 15;
             }
             if (this.attributes.last) {
-                if (this.attributes.last > now - 600) {
+                if (this.attributes.next >= now && this.attributes.last > now - 600) {
                     readiness -= this.attributes.last + offset;
                 } else {
                     readiness = (now - this.attributes.last + offset) / (this.attributes.next - this.attributes.last);
