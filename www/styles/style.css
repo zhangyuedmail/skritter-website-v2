@@ -306,6 +306,10 @@ body {
     padding: 15px 5px 15px 0;
     position: absolute;
 }
+.prompt-container .field-definition img {
+    float: left;
+    padding: 5px;
+}
 
 
 /*** PROMPTS: CANVAS ***/
@@ -499,6 +503,10 @@ body {
 #sidebar-info .info-decomps td {
     padding-bottom: 5px;
     padding-right: 10px;
+}
+#sidebar-info .info-definition img {
+    float: left;
+    padding: 5px;
 }
 #sidebar-info .info-tag {
     font-size: 12px;

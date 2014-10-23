@@ -410,7 +410,7 @@ define([
          * @returns {Prompt}
          */
         updateVocabSidebar: function() {
-            this.elements.infoDefinition.text(this.vocab.getDefinition());
+            this.elements.infoDefinition.html(this.vocab.getDefinition());
             if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
                 this.elements.infoHeisig.text(this.vocab.get('heisigDefinition'));
                 this.elements.infoHeisig.parent().show();
