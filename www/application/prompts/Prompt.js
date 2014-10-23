@@ -276,6 +276,9 @@ define([
         handleSwipedLeft: function(event) {
             event.preventDefault();
             app.analytics.trackEvent('Prompt', 'swipeleft', 'info');
+            if (this.review) {
+                this.review.setAt('score', 1);
+            }
             app.sidebars.select('info').show();
         },
         /**

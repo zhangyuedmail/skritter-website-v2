@@ -83,6 +83,9 @@ define([
         handleInfoButtonClicked: function(event) {
             event.preventDefault();
             app.analytics.trackEvent('Prompt', 'click', 'info');
+            if (this.prompt && this.prompt.review) {
+                this.prompt.review.setAt('score', 1);
+            }
             app.sidebars.select('info').toggle();
         },
         /**
