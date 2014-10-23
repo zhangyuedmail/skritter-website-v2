@@ -85,15 +85,25 @@ define([
         events: _.extend({}, BasePage.prototype.events, {
             'vclick #button-hide-expired': 'handleButtonHideExpires',
             'vclick #button-hide-rate': 'handleButtonHideRate',
+            'vclick #button-expired': 'handleButtonExpired',
             'vclick #button-rate': 'handleButtonRate',
             'vclick #button-sync': 'handleSyncClicked'
         }),
+        /**
+         * @method handleButtonExpired
+         * @param {Event} event
+         */
+        handleButtonExpired: function(event) {
+            event.preventDefault();
+            app.analytics.trackEvent('Dashboard', 'click', 'expired_account_button');
+        },
         /**
          * @method handleButtonHideExpires
          * @param {Event} event
          */
         handleButtonHideExpires: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('Dashboard', 'click', 'hide_expired_button');
             app.user.settings.set('hideExpired', moment().add(1, 'week').unix());
             this.elements.expiredNotice.hide();
         },
@@ -103,6 +113,7 @@ define([
          */
         handleButtonHideRate: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('Dashboard', 'click', 'hide_rate_button');
             app.user.settings.set('showRate', false);
             this.elements.rateNotice.hide();
         },
@@ -112,6 +123,7 @@ define([
          */
         handleButtonRate: function(event) {
             event.preventDefault();
+            app.analytics.trackEvent('Dashboard', 'click', 'rate_button');
             app.user.settings.set('showRate', false);
             this.elements.rateNotice.hide();
             if (plugins.core) {

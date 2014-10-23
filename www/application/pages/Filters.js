@@ -96,6 +96,7 @@ define([
         handleAddListClicked: function(event) {
             event.preventDefault();
             var self = this;
+            app.analytics.trackEvent('Filters', 'click', 'list_add');
             app.dialogs.show('list-select').element('.modal-title span').text('Filter Lists');
             this.listSelectTable.setElement(app.dialogs.element('.list-container')).render();
             this.listSelectTable.addStyle('table-no-border').setFields({
@@ -119,6 +120,7 @@ define([
          */
         handleListRemoveButtonClicked: function(event) {
             event.stopPropagation();
+            app.analytics.trackEvent('Filters', 'click', 'list_remove');
             var listId = event.currentTarget.parentNode.id.replace('list-', '');
             var filterLists = this.settings.get('filterLists');
             if (filterLists.indexOf(listId) > -1) {
@@ -134,6 +136,7 @@ define([
         updateParts: function(event) {
             event.preventDefault();
             this.activeParts = [];
+            app.analytics.trackEvent('Filters', 'click', 'toggle_parts');
             if (this.$('#parts #defn').bootstrapSwitch('state')) {
                 this.activeParts.push('defn');
             }
@@ -155,6 +158,7 @@ define([
         updateStyles: function(event) {
             event.preventDefault();
             this.activeStyles = [];
+            app.analytics.trackEvent('Filters', 'click', 'toggle_styles');
             if (this.$('#styles #simp').bootstrapSwitch('state')) {
                 this.activeStyles.push('simp');
             }
