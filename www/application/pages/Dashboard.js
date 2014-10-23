@@ -27,12 +27,17 @@ define([
             this.elements.buttonSync = this.$('#sync-button');
             this.elements.expiredNotice = this.$('#expired-notice');
             this.elements.listContainer = this.$('.list-container');
-            this.elements.trialRemaining = this.$('#trial-remaining');
+            this.elements.rateMessage = this.$('.rate-message');
+            this.elements.rateNotice = this.$('#rate-notice');
+            this.elements.rateThankyou = this.$('.rate-thankyou');
+            this.elements.rateTitle = this.$('.rate-title');
             this.elements.statsDue = this.$('.stats-due');
             this.elements.statsTime = this.$('.stats-time');
+            this.elements.trialRemaining = this.$('#trial-remaining');
             this.elements.userAvatar = this.$('.user-avatar');
             this.elements.userDisplayName = this.$('.user-displayname');
             this.renderElements();
+            this.loadFont();
             return this;
         },
         /**
@@ -55,6 +60,17 @@ define([
             } else {
                 this.elements.expiredNotice.hide();
             }
+            if (app.isNative() && app.user.settings.get('showRate') && app.user.subscription.isSubscribed()) {
+                this.elements.rateTitle.text('Spread the word.');
+                this.elements.rateMessage.text('If you love Skritter and are learning lots of characters, you can help us by going to the Play Store and rating us 5 stars.');
+                if (app.user.isChinese()) {
+                    this.elements.rateThankyou.text('谢谢!');
+                } else {
+                    this.elements.rateThankyou.text('ありがとうございます!');
+                }
+            } else {
+                this.elements.rateNotice.hide();
+            }
             if (app.user.subscription.getRemainingTrial()) {
                 this.elements.trialRemaining.find('span').text(app.user.subscription.getRemainingTrial());
             } else {
@@ -68,6 +84,8 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick #button-hide-expired': 'handleButtonHideExpires',
+            'vclick #button-hide-rate': 'handleButtonHideRate',
+            'vclick #button-rate': 'handleButtonRate',
             'vclick #button-sync': 'handleSyncClicked'
         }),
         /**
@@ -78,6 +96,28 @@ define([
             event.preventDefault();
             app.user.settings.set('hideExpired', moment().add(1, 'week').unix());
             this.elements.expiredNotice.hide();
+        },
+        /**
+         * @method handleButtonHideRate
+         * @param {Event} event
+         */
+        handleButtonHideRate: function(event) {
+            event.preventDefault();
+            app.user.settings.set('showRate', false);
+            this.elements.rateNotice.hide();
+        },
+        /**
+         * @method handleButtonRate
+         * @param {Event} event
+         */
+        handleButtonRate: function(event) {
+            event.preventDefault();
+            app.user.settings.set('showRate', false);
+            this.elements.rateNotice.hide();
+            if (plugins.core) {
+                var packageName = app.user.isChinese() ? 'com.inkren.skritter.chinese' : 'com.inkren.skritter.japanese';
+                plugins.core.openGooglePlay(packageName);
+            }
         },
         /**
          * @method handleSyncClicked
