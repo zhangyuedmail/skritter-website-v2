@@ -54,7 +54,7 @@ define([
                 this.elements.subStatus.text('Expired').addClass('text-danger');
                 this.elements.subTrialExpires.hide();
                 this.elements.subDetail.hide();
-            } else if (this.sub.get('subscribed')){
+            } else if (this.sub.get('subscribed') && this.sub.get('expires')){
                 this.elements.subStatus.text('Active').addClass('text-success');
                 this.elements.subDetailMethod.text(this.sub.get('subscribed'));
                 this.elements.subDetailPlan.text(this.sub.get('plan'));
