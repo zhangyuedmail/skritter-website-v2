@@ -173,7 +173,7 @@ define([
             var self = this;
             //TODO: clean up interactions with sidebar
             app.dialogs.show('edit-text').element('.modal-title span').text('Edit Definition');
-            var currentDefinition = this.vocab.getDefinition();
+            var currentDefinition = this.vocab.getDefinition(true);
             app.dialogs.element('.dialog-value').val(currentDefinition);
             app.dialogs.element('.save').on('vclick', function() {
                 var value = app.dialogs.element('.dialog-value').val();

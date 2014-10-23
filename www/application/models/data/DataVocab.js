@@ -148,18 +148,20 @@ define([
         },
         /**
          * @method getDefinition
+         * @param {Boolean} [skipFormat]
          * @returns {String}
          */
-        getDefinition: function() {
+        getDefinition: function(skipFormat) {
             var customDefinition = this.get('customDefinition');
             var definition = this.get('definitions')[app.user.settings.get('sourceLang')];
             if (customDefinition && customDefinition !== '') {
-                return app.fn.textToHTML(this.get('customDefinition'));
+                definition = this.get('customDefinition');
             } else if (definition) {
-                return app.fn.textToHTML(definition);
+                definition = definition;
             } else {
-                return app.fn.textToHTML(this.get('definitions').en);
+                definition = this.get('definitions').en;
             }
+            return skipFormat ? definition : app.fn.textToHTML(definition);
         },
         /**
          * @method getMnemonicText
