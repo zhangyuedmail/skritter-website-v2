@@ -81,8 +81,11 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'change .account-general-form input': 'handleGeneralFormChanged',
+            'change .account-general-form select': 'handleGeneralFormChanged',
             'vclick #button-download-all': 'handleButtonDownloadAllClicked',
             'vclick #button-restore-subscription': 'handleButtonRestoreSubscriptionClicked',
+            'vclick #button-save': 'handleButtonSaveClicked',
             'vclick #subscribe-month': 'handleSubscribeMonth',
             'vclick #subscribe-year': 'handleSubscribeYear'
         }),
@@ -128,6 +131,25 @@ define([
                 app.dialogs.element('.message-close button').on('vclick', function() {
                     app.dialogs.hide();
                 });
+            });
+        },
+        /**
+         * @method handleGeneralFormChanged
+         * @param {Event} event
+         */
+        handleGeneralFormChanged: function(event) {
+            event.preventDefault();
+            var self = this;
+            this.settings.set({
+                country: this.elements.accountCountry.val(),
+                email: this.elements.accountEmail.val(),
+                name: this.elements.accountDisplayName.val(),
+                timezone: this.elements.accountTimezone.val()
+            }).update(function() {
+                $.notify('Account updated!', 'success');
+            }, function(error) {
+                $.notify(error.responseJSON ? error.responseJSON.message : 'Something went wrong!', 'error');
+                self.renderElements();
             });
         },
         /**
