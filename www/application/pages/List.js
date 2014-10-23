@@ -65,7 +65,6 @@ define([
             'vclick #button-save': 'handleSaveButtonClicked',
             'vclick .section-field-remove': 'handleSectionRemoveButtonClicked'
         }),
-
         /**
          * @method handleButtonAddSectionClicked
          * @param {Event} event
@@ -81,7 +80,6 @@ define([
                 app.dialogs.hide();
             });
         },
-
         /**
          * @method handleTableRowClicked
          * @param {Event} event
@@ -184,7 +182,7 @@ define([
         loadList: function() {
             var self = this;
             app.dialogs.show().element('.message-title').text('Loading');
-            app.dialogs.element('.message-text').text('SELECTED LIST');
+            app.dialogs.element('.message-text').empty();
             app.api.getVocabList(this.listId, null, function(list) {
                 self.list = list;
                 self.$('#list-name').text(list.name);

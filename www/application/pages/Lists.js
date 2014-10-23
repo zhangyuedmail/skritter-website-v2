@@ -66,12 +66,35 @@ define([
             app.router.navigate('list/' + event.currentTarget.id.replace('list-', ''), {trigger: true});
         },
         /**
+         * @method loadAll
+         */
+        loadAll: function() {
+            var self = this;
+            app.dialogs.show().element('.message-title').text('Loading');
+            app.dialogs.element('.message-text').empty();
+            app.api.getVocabLists({
+                lang: app.user.getLanguageCode(),
+                sort: 'official'
+            }, function(lists) {
+                self.table.setFields({
+                    image: '',
+                    name: 'Name'
+                }).setLists(lists).sortByName().renderTable();
+                self.$('.sort-button').removeClass('active');
+                self.$('#button-textbooks').addClass('active');
+                self.setTitle('Browse Lists');
+                app.dialogs.hide();
+            }, function(error) {
+                //TODO: add in handling for offline
+            });
+        },
+        /**
          * @method loadMyLists
          */
         loadMyLists: function() {
             var self = this;
             app.dialogs.show().element('.message-title').text('Loading');
-            app.dialogs.element('.message-text').text('MY LISTS');
+            app.dialogs.element('.message-text').empty();
             async.waterfall([
                 function(callback) {
                     app.api.getVocabLists({
@@ -104,53 +127,10 @@ define([
                     self.$('.sort-button').removeClass('active');
                     self.$('#button-my-lists').addClass('active');
                 }
+                self.setTitle('My Lists');
                 app.dialogs.hide();
             });
 
-        },
-        /**
-         * @method loadPublished
-         */
-        loadPublished: function() {
-            var self = this;
-            app.dialogs.show().element('.message-title').text('Loading');
-            app.dialogs.element('.message-text').text('PUBLISHED');
-            app.api.getVocabLists({
-                lang: app.user.getLanguageCode(),
-                sort: 'published'
-            }, function(lists) {
-                self.table.setFields({
-                    image: '',
-                    name: 'Name'
-                }).setLists(lists).sortByName().renderTable();
-                self.$('.sort-button').removeClass('active');
-                self.$('#button-published').addClass('active');
-                app.dialogs.hide();
-            }, function(error) {
-                //TODO: add in handling for offline
-            });
-        },
-        /**
-         * @method loadTextbooks
-         */
-        loadTextbooks: function() {
-            var self = this;
-            app.dialogs.show().element('.message-title').text('Loading');
-            app.dialogs.element('.message-text').text('TEXTBOOKS');
-            app.api.getVocabLists({
-                lang: app.user.getLanguageCode(),
-                sort: 'official'
-            }, function(lists) {
-                self.table.setFields({
-                    image: '',
-                    name: 'Name'
-                }).setLists(lists).sortByName().renderTable();
-                self.$('.sort-button').removeClass('active');
-                self.$('#button-textbooks').addClass('active');
-                app.dialogs.hide();
-            }, function(error) {
-                //TODO: add in handling for offline
-            });
         },
         /**
          * @method resize
@@ -169,10 +149,8 @@ define([
          * @returns {PageLists}
          */
         set: function(sort) {
-            if (sort === 'textbooks') {
-                this.loadTextbooks();
-            } else if (sort === 'published') {
-                this.loadPublished();
+            if (sort === 'browse') {
+                this.loadAll();
             } else {
                 this.loadMyLists();
             }

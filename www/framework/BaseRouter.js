@@ -18,8 +18,7 @@ define([], function() {
         after: function() {
             if (this.currentPage) {
                 if (this.currentPage.title) {
-                    document.title = this.currentPage.title + " - " + app.strings.application.name;
-                    this.currentPage.$('.navbar-title').text(this.currentPage.title);
+                    this.currentPage.setTitle(this.currentPage.title);
                     if (app.analytics) {
                         app.analytics.trackView(this.currentPage.title);
                     }

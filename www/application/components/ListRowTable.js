@@ -39,7 +39,6 @@ define([
             this.$('table thead').empty();
             //remove editable fields if not creator
             if (this.readonly) {
-                console.log('kill');
                 delete this.fields.remove;
             }
             //generates the header section

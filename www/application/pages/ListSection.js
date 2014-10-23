@@ -15,7 +15,7 @@ define([
          * @method initialize
          */
         initialize: function() {
-            this.title = 'List';
+            this.title = 'List Section';
             this.list = undefined;
             this.listId = undefined;
             this.section = undefined;
@@ -135,7 +135,7 @@ define([
         loadList: function() {
             var self = this;
             app.dialogs.show().element('.message-title').text('Loading');
-            app.dialogs.element('.message-text').text('SELECTED LIST');
+            app.dialogs.element('.message-text').empty();
             app.api.getVocabList(this.listId, null, function(list) {
                 self.list = list;
                 self.section = _.find(list.sections, {id: self.sectionId});

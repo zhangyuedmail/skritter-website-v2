@@ -99,6 +99,16 @@ define([
                 this.$('.font-preloader').addClass('japanese-text');
             }
             return this;
+        },
+        /**
+         * @method setTitle
+         * @param {String} title
+         * @returns {View}
+         */
+        setTitle: function(text) {
+            document.title = text + ' - ' + app.strings.application.name;
+            this.$('.navbar-title').text(text);
+            return this;
         }
     });
 });
