@@ -2463,6 +2463,196 @@ define([], function() {
             stroke.setBounds(0, 0, 353, 367);
             return stroke;
         },
+        703: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAiOABkYgygeg8gKgogoYg8gdgyAJg8AUYgUAAgUAKgKAKYkOCMlAAoksAoYiWAUiWAUigAKYg8AKhGAKg8gKYhGgKhQgUhGgUYgUAAgUAAgUAAYAAAKAAAAAAAKYAyAoAoAyA8AyYAeAeAoAUA8AAYBugUBuAABugUYEsgeE2geE2gyYCCgeCMgUCCgeYBQgKBagUBQgUYAUAAAUgUAAgUYAKgUgUgegUgK").cp());
+            stroke.setBounds(0, 0, 224, 49);
+            return stroke;
+        },
+        704: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAUeAniYAAhGgKhQAAhGYgUighai0iWg8YhkgyhkAAhuAAYiWAKiMAoiCA8YAAgKAAAAAAAAYC0kYC0kiCqkYYAyhQAyhQAyhaYBaiWBGiWBaiWYAyhaAAAAgyhGYgegogegogogoYgegogogegegeYgUgKgKgKgKgKYgKAAAAAAgKAAYgKAAgKAAAAAAYgKAUAKAUAKAUYAKAKAAAKAKAUYAKAUAKAeAAAeYAKAeAAAeAAAeYAAAegKAUAAAeYgKAegKAeAAAeYgKAAAAAAAAAKYhkEYiWEOiWEEYh4DSiCDSiWC+YgyA8goA8gyAyYgoBGgJBGAdBGYAUAyAoAKAogeYA8gyA8gyBGgyYCWiCC0g8C+AKYDSAKA8DIAUCqYAUCMAACWAACWYAABaAABaAABaYAAAoAKAeAoAKYAUAAAegUAKgKYBGg8AKhkgKhQYAAhuAAhkgKhu").cp());
+            stroke.setBounds(0, 0, 134, 314);
+            return stroke;
+        },
+        705: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAi2ADIYgUgKgUgKgKgUYgygeg8geg8geYgegKgegUgegKYgegKgeAAgUgKYgUAAgKgKgKAAYgKAAgUAAAAAAYgUAKAUAUAKAKYAUAUAUAeAUAKYAyAogUAogoAeYkOCqkOCqkOCqYjwCgj6CgjcC0Yg8Ayg8AygyA8YhuCMgxCMATC0YAUBkAyBkBQBGYBaBQBuAyB4AeYC0AyC0AAC0AKYBQAABQAABQAAYDSgKDSAADSgKYAoAAAogUAogKYAKgKAUgUAAgUYAAgKgUgUgKgKYgegUgogKgegUYhagyhkgKhkAUYiCAUiCAeiCAKYiMAKiMAAiMAAYiWAAiMgUiCgyYk2hugelUC+i0YEEj6FAiqEsi0YCMhQCChGCMhQYB4hGCChGCChGYBkgyBugoBugyYAKgKAKAAAKgKYAUgKgUgegKgUYAAAAgKAAAAgK").cp());
+            stroke.setBounds(0, 0, 227, 235);
+            return stroke;
+        },
+        706: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AAAAAYBkAeBuAUBGBaYAUAUAAAoAAAeYAAAKgKAUgKAAYgUAAgUAAgKgKYg8hkhQg8hahGIAAgKYAAgKAAAAAAAA").cp());
+            stroke.setBounds(0, 0, 31, 28);
+            return stroke;
+        },
+        707: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAw6A9uYAKgegogogoAAYgoAAgeAeAAAoYgKAoAoAoAoAAYAoAAAegoAAgo").cp());
+            stroke.setBounds(0, 0, 27, 27);
+            return stroke;
+        },
+        708: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AaGAAYBkAUAyA8AeBQYAeA8AUBGAeBGYAKAogeAogUAeYg8BkhGBagyBkYhkCghaCWhaCgYhaCWhaCWhaCgYiMDmiCDwiMDmYgeAygUAogeAyYAAAKAAAKAAAUYAegeAUgUAUgUYCCiCB4iMCCiCYAogoAygoBGgKYBugUAyAyAoCCYBQFKBaFKBkFAYBQEYDcBGD6gyYCMgeBuhQBkhQYEEjcCMkiCMkiYA8h4Ayh4Ayh4YAKgUAUgUAUgeYAAAAAKAKAKAAYAAAUAAAUAAAKYhGEOhaD6huD6YhGCqhQCghuCCYigCqi0CMj6AeYigAUiggUiMhGYiMg8hah4goiCYg8i+goi0gyi+YgyiggoiggoigYgUg8gygUg8A8YhkBahaBkhkBkYg8BGhGBGg8BGYiWCWiCCqhaC+Yg8CCgoCCgyCMYgKAUgKAUgUAKYgeAogegKgKgoYgehugUh4AUiCYAAgeAUgeAUgeYCWjwCWjwCMjwYCMjmCMjmCCjwYBuiqBki0Bki0YBujSBujIBujSYA8iCAyiCAyiCYAehGgKhGgohGYgKgKAAgUgKgU").cp());
+            stroke.setBounds(0, 0, 343, 372);
+            return stroke;
+        },
+        709: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EA6wAFUYhkh4huhuhuhuYgUAKgUAUgUAKYhaA8hQA8hugKYh4gKh4AAh4AKYk2AUlAAUk2AeYmaAomaBGmaAKYi0AAi0AAh4iqYgKgKgegKgUAAYgUAKgKAeAAAUYAAA8AKA8AoAyYBGBkBaBQBkBQYBaA8A8AABag8YAegUAogUAegKYBQgUBGgUBQgKYGQhaGQg8GQgeYF8goF8gUF8geYAUAAAKAAAeAAYgUAAhGBQgUAUYgoAegoAogoAeYhQBGhQBGhaA8YigCCi0B4iqBuYhQAyhQAyhQAyYgoAeiMBaAAA8YAUCCI6mGAUgKYDIiCDShuDSh4YBuhGBug8BuhGYBQgyBGgoBaAeYAAAKAKgKAAAAYAoAAA8AKAKgoYAKgegUgygUgU").cp());
+            stroke.setBounds(0, 0, 380, 140);
+            return stroke;
+        },
+        710: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AZKHCYAAAAAAgKAAgKYAUiMgKhuiChaYh4hGiCgUiCAAYgeAAgUAKgUAKYAAAKAAAAAAAKYAeAKAUAUAeAAYBkAeA8BGAKBkYAKBaAABkgKBaYgeFehaFKigE2YjmGulAFUmGEYYgUAKgUAKgUAUYgKAUAAAUAAAUYAAAKAUAKAUAAYAeAAAUgKAegKYDmiCDSigC+i0YF8loD6nMCMnqYAoiWAeiWAUig").cp());
+            stroke.setBounds(0, 0, 163, 272);
+            return stroke;
+        },
+        711: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EA0+AGGYgKgogegegegeYgUgegegUgegeYhuiMiMg8i0gKYgeAAgoAKgeAAYAAAKAAAAAAAKYAKAKAUAAAKAKYAoAUAoAUAoAeYA8AyAUAogeBGYhGCqiqCgh4CCYpYKUrkH0sCG4YhuBGhuBGhkBGYgoAeifBkBjAoYBkAeDciCBQgoYCMhGCMhQCChQYH+kiHqlUHMlyYC0iWCqi0CqiqYCCiCCgjwDcAKYBGAKAegygog8").cp());
+            stroke.setBounds(0, 0, 342, 274);
+            return stroke;
+        },
+        712: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AGaBuYgegKgUgUgUgKYgogegegegygKYgUAAgeAAgUAAYgUAAgKAAgKAAYgeAKgeAUgKAeYgKAeAAAeAAAeYAyIwgUIwAAIwYAACCgKB4goB4YgxC0BjCCCCBaYAyAoAogUAUg8YAKgoAAgoAAgoYAAhGAAhQAAhGYAAhGAAhQAAhGYAAhGAAhGAAhQYAAhGAAhGAAhQYAAhGAAhGAAhQYAAhGAAhGAAhGYAAhQAAhGAAhGYAAhQAAhGAAhGYAAhQAAhGAAhGYAAgoAAgeAAgoYAAgegKgUAKgeYAKgKAAgKAKgKYAKAAAKAAAUgKYAeAAAegUAegUYAKgKAAgKAAgKYAAgUgKAAgKgKYgKgKgUgKgKgK").cp());
+            stroke.setBounds(0, 0, 48, 264);
+            return stroke;
+        },
+        713: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AIIP8YAohGgKhuAAg8YgKh4AAiCAKh4YAAhGAeg8BQgUYAygKAUgogogyYgKgUgUgKgUgUYhug8h4goh4gKYhQAAhQAAhGAKYgeAAgKAegUAUYAKAKAUAUAUAKYAKAAAUAAAKAKYCWAUA8BGAKCWYAAB4AABuAAB4YAAA8AAAyAAA8YAAAogKAoAUAoYAKAeAoAoAeAAYA8AKAegUAege").cp());
+            stroke.setBounds(0, 0, 72, 108);
+            return stroke;
+        },
+        714: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AHMC+YgKh4i0hGhuAAYgyAAg8AAgyAyYAeAUAeAKAUAKYBGAeAyAoAKBQYAAAeAKAoAAAeYAKEiAAEsAAEsYAABGgKBGAABQYgUB4AKB4B4BQYAeAUAoAKAogKYAUAAAUgyAAgeYAKhagKhQAAhaYAAi+AAi+AAi+").cp());
+            stroke.setBounds(0, 0, 50, 181);
+            return stroke;
+        },
+        715: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AcwE2YC0gKC+gKC0gKYAyAAAeAogUAyYAAAegKAUgKAUYk2SIqeN6voKKYhaA8haAyhaA8YgUAUgKAegUAeYAeAAAeAKAUAAYAKAAAKgKAKAAYIcj6HglKGam4YH0oIFKpsDSqoYAoh4AKgKCCAAYAUAAAUgKAUgKYgKgUAAgegKgUYgegogogegogoYhQhGhQhQhQhGYgyAegoAogoAeYgeAUgeAKgeAAYlAAKlKAKlAAUYksAUksAUksAeYiCAKiCAAh4AeYgeAKgUAAgeAKYhjAyCVBQAyAKYCCAUCMgeB4gKYCWgKCWgUCMgK").cp());
+            stroke.setBounds(0, 0, 296, 341);
+            return stroke;
+        },
+        716: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAxOAC0YhQg8hag8hQgyYgegKgoAAgeAKYhGAehQAehGAKYiWAUiWAAiWAKYksAUkiAeksAUYkYAUkOAekOgKYiWgKiCgohah4YAAgKgKgKgUgKYgKAUgKAeAAAKYAKA8AKA8AeAoYBGBQBaBGBQBQYAoAoAyAAA8gUYAogeAygUAygKYFog8FygyFygeYBkgKBuAABugKYEYgKEYAAEYAUYBQAKBaAKBQAKYAoAKAyAUAUgyYAUgygegogogU").cp());
+            stroke.setBounds(0, 0, 322, 52);
+            return stroke;
+        },
+        717: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AJOEYYhag8hkgyhkgyYgygegogUgygeYgogegygTgyAJYgUAUAAAUAAAeYAKAoAeAAAeAUYAeAUAUAUAeAUYAyAoAoA8AUBGYAKBaAKBQAABaYAKC+AAC0AAC+YgKCMgKCgAUCWYAKAyAeAyA8gKYB4gKgKi0AAhQYAKjIAAjIAKi+YAAh4AKiCAAh4YAAgKAUgUAUgKYAegKAogUAKgoYAAgygegegegU").cp());
+            stroke.setBounds(0, 0, 66, 174);
+            return stroke;
+        },
+        718: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EBAOAEsYgKgegUgegUgUYhkhkhuhGiCgyYgeAAgUAAgUAKYhGAyhaAohaAAYjIAKjSAAjSAAYjIAAjSAKjIAKYh4AKh4AKhuAKYiCAKiCAUh4AAYlUAUlUAUlUAKYiCAAh4gohkhkYgUgKgUgKgUgKYgKAUAAAeAAAeYAAAKAAAKAKAKYBGCgCCBuCWBaYAyAoBGgKAogoYAygoA8gUA8gKYC0geC0geC0gUYGQg8GagoGagKYEYAAEYAKEOAKYDIAKDIAeDIAUYA8AKAyAUA8AAYA8AKAegogegy").cp());
+            stroke.setBounds(0, 0, 413, 58);
+            return stroke;
+        },
+        719: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EA/IADwYhahkhuhQiMgoYg8gUhQgJg8AdYhkA8hkAKhkAAYjwAUjwgKjwAUYjcAKjSAKjcAUYhQAAhQAKhQAAYiMAKiCAKiMAKYhGAAhQAKhQAAYhkAKhkAKhkAAYhkAKhkAAhkgKYhugKhGg8g8hkYgKgUgogUgUgKYgUAegUAUAAAeYAABaAKBQBGA8YBkBQBuBGBkBGYAoAeAygKAogoYAUgUAegUAogKYAygUA8gUBGgKYDSgeDcgeDcgeYEOgeEOgeEOgKYBQgKBQAABQAAYCqAACqAKCqAKYA8AAA8AABGAKYA8AABGAABGAKYBGAABGAKBGAAYCCAKCMAKCCAKYAUAAAogKAAgKYAKgUgKgegUgU").cp());
+            stroke.setBounds(0, 0, 408, 57);
+            return stroke;
+        },
+        720: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("ATYCMYiChGiCg8iMgKYhGAAhGAAhGAAYgUAKgKAUgKAKYAKAKAKAUAUAKYAUAUAUAAAeAKYCCAoBaBQAKCWYAyKUgeKeAAKUYAACqAACqAACqYAAB4gKCCAAB4YAAB4hQAohkg8YgKAAgKAAAAgKYjchujShujShuYgegUgeAAgoAAYAAAAAAAKAAAKYAUAUAUAUAUAUYDICMC+CCC+CMYBGAyA8BGgKBaYAAAUAKAUAAAUYAKAyAeAUAygKYA8AAAygeAogoYBuh4BGiCAAiqYgKiggUiqAAiqYAAjSAAjSAAjSYAAo6AAo6AAo6YAAgoAKgyAKgoYAKgUAegUAUgUYAUgKAUgUAKgUYAUgygegegogU").cp());
+            stroke.setBounds(0, 0, 131, 383);
+            return stroke;
+        },
+        721: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAnYABGYAAgKAAAAAAgKYgyh3i0B3g8A8YjIDSiMD6igDmYiqDwjIDcjSDIYiCBuh4BuiMBuYigCCiqCCiqBuYhQAyhQAohGAyYgUAUAAAegKAUYAUAKAUAKAUAAYAUAAAKgKAUgKYFeiqFKjSE2jwYE2jwEYkYD6kiYCqjICWjSCWjSYAog8BahugUhQ").cp());
+            stroke.setBounds(0, 0, 253, 241);
+            return stroke;
+        },
+        722: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAzkAEOYgogogogegogeYhQg8hagyhQg8YgUAKgKAKgKAUYg8BGhQA8hkAKYlUAelUAolUAUYigAKigAeigAKYiWAKigAKigAAYhaAKhkAAhaAKYiCAAhug8hQhuYgKgUgKgKgKgKYgegUgUAAAAAoYAAAoAAAyAKAeYBGCqCCB4CgBaYAoAeAogUAogeYAogeAogeAygKYCMgoCMgeCWgUYFUg8FegUFegeYBkgKBkgKBkgKYBQAABQgKBQgKYBagKBQgKBQgKYgKCMgKB4gUB4YgoFyhGFoh4FeYhGC+hQC+iCCgYhQBkhaAUhuhGYgUgKgegUgUgKYiWhuighkiWhuYgegUgegKgegKYgKAyAUAeAUAeYB4B4CCB4BuB4YBGBGAoBGAKBaYAKCCBGAoCCgoYCMgyCChQBuhuYCMiWBQi0A8i+YC0nWBQnqBGnqYAKhaAygyBQgeYBGgeAUgyhGgy").cp());
+            stroke.setBounds(0, 0, 336, 281);
+            return stroke;
+        },
+        723: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAjeADmYg8gog8gyg8geYiMhQiggeigAAYgUAAgUAUgUAKYAKAKAUAUAKAKYAKAKAUAAAUAKYCCAyBQBkgKCMYgoGkg8GuhkGaYgyCqg8CqhQCgYigE2i+EsjwD6YiMCWigCMigCCYiCBaiCBaiCBaYgUAKAAAogKAUYAUAAAeAKAUAAYAegKAegUAegKYHWj6GalAFAmkYEYloC+mkBum4YAeiCAeiCAUiCYAyjcAUjmAyjcYAKgoAegeAygUYAeAAAygUAAgUYAAgegUgygUgU").cp());
+            stroke.setBounds(0, 0, 233, 378);
+            return stroke;
+        },
+        724: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAv0AC0YgUgegogogogKYhugohugehugeYgoAAgoAAgeAeYgeAogoAogoAUYjmBukEAejwA8YhkAehkAUhkAUYjwAyjmA8jmAoYg8AKg8AAhGAKYigAKiWgehuiCYgKgKAAAAgKgKYgegUgUAAAAAyYAAAeAAAeAKAUYBQC0CMBuC0BGYAoAUAygKAygoYAogeAygoAygKYFKhuFKhkFUhaYBkgUBagUBkgUYDwgoDwgeDwgeYA8gKA8gKA8gKYAyAAAoAAAyAAYAygKAUgegegy").cp());
+            stroke.setBounds(0, 0, 310, 90);
+            return stroke;
+        },
+        725: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EA7EAC0YgKgKgUgKgKgKYhugyh4gyhugoYg8gTg8AJgyAeYg8AohGAyhGAUYkiBQksBakiBGYkOBGkOBQkOBQYhQAUhGAUhQAUYjSAyjcAojSAeYigAeiWgohaigYgKAAAAgKgKAAYgKgKgUgKgKAAYAAAKgKAKAAAUYAAAUAAAeAAAeYA8DSCgCCC+BaYAyAUAygUAygoYAUgUAegUAegKYC+hGC0hGC+hGYEOhkEOhaEOg8YBQgUBQgUBGgKYCMgoCMgeCMgeYBQgeBagUBagKYDcgyDcgeDcAKYAyAKAyAKAygKYAeAAAogUAKgUYAUgogUgegege").cp());
+            stroke.setBounds(0, 0, 384, 116);
+            return stroke;
+        },
+        726: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAZUA4kYgehagUhagehkYiqoSigocigoSYgoiggyiggoigYhaksgykig8ksYgKgoAAgUAygeYA8geAAgyg8gyYgegUgogegygKYhugoh4gUh4geYhagJhQAJhQAoYgUAKgKAUgKAUYAKAKAUAKAUAKYAKAAAUAAAKAAYCgAUCCBGAyCqYDIKADIK8CgKeYAyDIAyDSAyDIYAyC0AoC0AoC0YAeBkA8BGBQA8YBQAyBagyAKhaYAAgUAAgUAAgU").cp());
+            stroke.setBounds(0, 0, 163, 380);
+            return stroke;
+        },
+        727: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EABaAiOYCChaCWhaCChaYCWhuCMhuCMiCYFAk2EEmQCgmkYAKgyAUgeA8AAYA8AAAUgygogyYAAgKgKgKgKgKYiChuiWhQiqgoYgeAAgyAAgeAKYgoAKAAAeAeAUYAUAKAUAKAUAAYCCAyAeA8geCCYgeCqhQCghQCgYkEHWloGGmkFKYgyAogyAegyAyYgUAKAAAeAAAUYAUAAAUAKAeAAYAAAAAKgKAKAA").cp());
+            stroke.setBounds(0, 0, 183, 222);
+            return stroke;
+        },
+        728: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAvWAEOYgUgegUgUgegUYhahGhkhGhkg8YgoAegoAogoAeYgoAogeAKgyAAYjmAUjcAUjmAKYh4AKh4AAh4gKYgyAAhugUgUBQYgKAyAyAKAoAKYDIAeDcgeDIgKYDIgKDIAADIgKYgKAeAAAUgKAUYjmKol8JYn+IIYmGGGm4FAnqEOYgeAUgdAUAJAoYAKAKAygKAeAKIAKgKYQQm4Mgq8IcveYBujIBajcBkjSYAohQAUgKBaAAYAUAAAKAAAUgKYA8gKAUgogegy").cp());
+            stroke.setBounds(0, 0, 306, 325);
+            return stroke;
+        },
+        729: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("ATETiYAUgeAegoAUgoYBQigBGiqBQigYAeg8AUg8Aeg8YAUgoAogeA8AAYAeAAAogKAUgoYAKgogUgegegUYhQhGhQg8hag8Yhkg8hugKh4AAYgKAAgUAKgKAAYAKAUAAAUAUAKYAUAUAUAAAUAKYBQAyAUAogKBaYg8FAhuE2iWEiYj6HMlUGQl8FoYgKAUgUAKgKAUYAAAeAAAUAeAAYAeAAAegKAUgUYHClAGGmuEOng").cp());
+            stroke.setBounds(0, 0, 183, 253);
+            return stroke;
+        },
+        730: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAsOAD6YgKgegegegegUYhkg8hug8hkgyYgUAAgeAAgeAKYhQAehQAyhQAKYmuA8mkAymuAoYiqAUiqAAi0AKYAAAAgKAAgKAAIAAAAYgKAAgKAAAAAAYgoAAgogKgogKIAAAAYgUgKgUAAgUgKYgoAAgogKgeAKYAKAKAAAKAKAKYBuBkBuBkBuBaYAoAoAoAKAegoYAehGA8gUA8gKYC+gyDIgoC+geYDIgeDIgKDIgKYDmgKDwgKDmAeYBGAKA8AKBGAUYAeAAAeAAAeAAYA8gKAUgogegy").cp());
+            stroke.setBounds(0, 0, 287, 61);
+            return stroke;
+        },
+        731: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAjAAGkYgUgegUgegegUYhuhQhuhQhuhGYhuhGiMg7iCATYAUB4CMgKBGBGYBGA8gKBagKBaYgUBkgeBugoBuYlANSn+KysWHgYgeAUAAAUAAAeYAUAeAegUAUgKYGujIF8kOE2loYFemQD6nMC0nqYAehQAygyBaAAYAUAAAKgKAUAAYAygKAUgegUgy").cp());
+            stroke.setBounds(0, 0, 226, 286);
+            return stroke;
+        },
+        732: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAvWADIYgKgUgUgKgKgKYhGgohGgohGgoYhkgxgKAAhQBPYgeAegeAKgyAKYlUAKleAKleAUYlKAUlKAKlKAUYiMAKhkgyhahaYgegUgUgUgUgUYgegUgUAAAAAoYAAAoAAAyAUAoYBGCWBuBkCMBaYAyAeAyAAAogoYAogyAygKA8gKYA8gKAygKA8gKYGkgeGkgeGkgeYC0gKCqgUC+gKYgKAoAAAeAAAeYgoDwgeDwgeDwYgeC+gyDIAKC+YAAA8AoAyBGgUYBQgUAKhkAKhGYAUhuAUhkAUhuYAyjwAoj6Aoj6YAUhuAohGB4gUYA8gKAUgygygy").cp());
+            stroke.setBounds(0, 0, 307, 179);
+            return stroke;
+        },
+        733: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAv+AEYYAAgUgUgegKgUYhQhGhQgyhkgoIAAAAYjSAejSAKjSAUYlKAUlKAelKAUYj6AUkEAKj6AKYiMAAhugyhGiCYgKgKgKgKgKgKYgegTgUAJAAAeYAAA8AAAyAeAyYA8CCBkBuBuBaYAyAeAoAAAygoYAogUAogeAygKYBkgUBugeBkgKYG4gyG4gyG4AAYEOgKEEAAEEBQYBGAUAegegUhG").cp());
+            stroke.setBounds(0, 0, 309, 56);
+            return stroke;
+        },
+        734: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EBAOAEOYgUgogegogegeYhkhah4geiCgoYgKAAgUAAgKAKYg8AyhGAUhQAAYkiAKksAKksAUYiMAUiWAKiMAKYiqAKigAKiqAKYhaAKhaAKhaAAYk2AUk2AUk2AAYiMAAiCgogyiWYgKgUgegUgKAKYgUAAgKAUgKAUYAAAUAAAUAAAKYAyDSCMCMC0BkYAoAUAogKAogeYAegeAogUAogKYBGgeBQgUBGgKYCggeCWgeCggKYIIgoISgoIIgKYEOgKEOAAEEAeYBQAKBGAUBQAUYAyAUA8AAAyAAYBGAAAUgegeg8").cp());
+            stroke.setBounds(0, 0, 413, 59);
+            return stroke;
+        },
+        735: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AKKC+YgKgUgegegegKYhGgohQgohGgUYhkgehkgJhkATYgeAKgUAUgKAUYAUAKAKAUAeAAYCMAUBQA8AKCWYAKCgAACWAACWYAKEigKEiAAEiYAABQgKBaAABQYgKBGgKBGgKBGYgUBkAeBaBaBGYAoAeAyAeAygeYAygUAAg8AAgyIAAgKYgKlegKloAAleYAAhuAAhuAAhuYAKiWAAiWAAiWYAAgyAUgoAygUYA8gUAUgygogy").cp());
+            stroke.setBounds(0, 0, 68, 243);
+            return stroke;
+        },
+        736: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AZKW0YAKj6gKkEAAj6YAAhkAKhkAUhaYAAgeAegeAUgUYAegoAUgogegoYgUgegUgUgegUYiChQiMgyiWgKYgoAAg8AAgoAKYgyAKAAAeAoAUYAeAUAoAKAeAKYBkAoBGA8AAB4YAKAoAAAoAAAyYAKKABaKei0JsYgyCghGCghQCWYjSGGksE2loEOYg8Aog8AogyAoYgUAUAAAegKAUYAUAAAUAKAeAKYAAAAAKAAAKgKYE2iqEYjIDwj6YGunWDcpOAop2YAAhaAAhQAAha").cp());
+            stroke.setBounds(0, 0, 174, 405);
+            return stroke;
+        },
+        737: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("ACgAAYCqAKC0AUCgBQYCCAyBuBQBGB4YAeAoAKAyAKAyYAKAygKAygyAUYgyAeg8AKgogoYgogegogegegyYiWjwjmh4kOg8YgegKgogKAAgoYAAgKAygUAeAAYAUAAAeAAAeAA").cp());
+            stroke.setBounds(0, 0, 106, 67);
+            return stroke;
+        },
+        738: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAAAAgMYAAgKAAgeAAgUYAAgeAUgKAeAUYAKAKAUAUAKAUYAUAoAUAyAeAoYA8BkBaAoB4gUYCMgeCCgyCChGYMgnqLuomKeqUYCCiCB4iMCCiCYAUgKAKgUAKAAYAeAAAUAAAeAAYAAAeAAAegKAUYg8BQhGBahGBQYomJ2psIcqeH0YjcCgjwCgjcCqYhGAogyBGgyA8YgeAegeAegygUYighGiMhQh4h4Yhahkgeh4AAiW").cp());
+            stroke.setBounds(0, 0, 356, 272);
+            return stroke;
+        },
+        739: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAxYADcYgKgKgKgKgKAAYg8gyg8gyg8gyYhuhFgKAKhkBFYgoAegeAUgoAKYlKAelAAolAAeYjmAUjcAKjmAKYh4AKhkgyhGhuYgKgKgKgKgKgKYgKgKgUgKgKAKYgKAAgKAUAAAKYgKAyAKAyAeAyYBaCMB4BuCMBaYAeAeAyAAAegoYAyg8BGgUBQgUYGuh4HCgyG4g8YAUAAAoAKAKAUYAKAKAAAogUAUYkiIml8HgnMGkYm4GQnqFKoSEYYgUAUgUAKgUAKYgKAKAAAeAAAAYAAAKAUAKAUAAYAeAAAogKAegKYJ2kEI6loH+nCYCgiMCWiMCMigYCWiqCMi+CMjIYAogyAegyAog8YAyhGAyhGAohQYAegoAegUA8gKYAeAAAygUAKgKYAAgogUgogKgo").cp());
+            stroke.setBounds(0, 0, 321, 292);
+            return stroke;
+        },
+        740: function(defaultColor) {
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AXwRMYgehQgyhagyhGYjIj6kEjSkiiWYhagohagyhkgeYhGgeg8gehGgeYgKAAiWgoAAAAYAAAUAeAyAeAUYCCBkCMBQCMBkYCCBkB4BuBuBuYBGBGA8BGA8BGYBGBaA8BkA8BkYAeAyAeAoAoAoYBQBGB4goAUhuYAKgoAAg8gUgo").cp());
+            stroke.setBounds(0, 0, 156, 137);
+            return stroke;
+        }
         /**
          XXX: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("GARBLEDYGOOK").cp());
