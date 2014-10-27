@@ -113,6 +113,7 @@ define([
          * @returns {Prompt}
          */
         renderElements: function() {
+            this.elements.buttonWrong = this.$('.button-wrong');
             this.elements.fieldAnswer = this.$('.field-answer');
             this.elements.fieldDefinition = this.$('.field-definition');
             this.elements.fieldHeisig = this.$('.field-heisig');
@@ -159,7 +160,8 @@ define([
             'swipeleft': 'handleSwipedLeft',
             'vclick': 'handlePromptClicked',
             'vclick .audio-button': 'handleAudioButtonClicked',
-            'vclick .reading-button': 'handleReadingButtonClicked'
+            'vclick .reading-button': 'handleReadingButtonClicked',
+            'vclick .button-wrong': 'handleWrongButtonClicked'
         }),
         /**
          * @method clickTimeout
@@ -295,6 +297,14 @@ define([
                 this.review.setAt('score', 1);
             }
             app.sidebars.select('info').show();
+        },
+        /**
+         * @method handleWrongButtonClicked
+         * @param {Event} event
+         * @returns {Boolean|Prompt}
+         */
+        handleWrongButtonClicked: function(event) {
+            event.stopPropagation();
         },
         /**
          * @method hideNavigation

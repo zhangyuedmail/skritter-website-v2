@@ -40,6 +40,7 @@ define([
             if (app.user.settings.isAudioEnabled()) {
                 this.vocab.playAudio();
             }
+            this.elements.buttonWrong.hide();
             this.elements.fieldQuestion.hide();
             this.elements.fieldReading.html(this.vocab.getReading(null, {
                 style: app.user.settings.get('readingStyle')
@@ -71,6 +72,16 @@ define([
                     this.renderAnswer();
                 }
             }
+        },
+        /**
+         * @method handleWrongButtonClicked
+         * @param {Event} event
+         * @returns {Boolean|Prompt}
+         */
+        handleWrongButtonClicked: function(event) {
+            Prompt.prototype.handleWrongButtonClicked.call(this, event);
+            this.review.setAt('score', 1);
+            this.renderAnswer();
         },
         /**
          * @method resize

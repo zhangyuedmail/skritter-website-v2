@@ -310,6 +310,11 @@ body {
     float: left;
     padding: 5px;
 }
+.prompt-container .button-wrong {
+    bottom: 15px;
+    position: absolute;
+    right: 15px;
+}
 
 
 /*** PROMPTS: CANVAS ***/
