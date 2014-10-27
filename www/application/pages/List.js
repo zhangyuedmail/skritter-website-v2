@@ -185,6 +185,7 @@ define([
             app.dialogs.element('.message-text').empty();
             app.api.getVocabList(this.listId, null, function(list) {
                 self.list = list;
+                console.log('LIST', list);
                 self.$('#list-name').text(list.name);
                 self.$('#list-description').text(list.description);
                 self.$('#list-studying').text(list.peopleStudying);

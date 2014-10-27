@@ -138,6 +138,7 @@ define([
             app.dialogs.element('.message-text').empty();
             app.api.getVocabList(this.listId, null, function(list) {
                 self.list = list;
+                console.log('LIST', list);
                 self.section = _.find(list.sections, {id: self.sectionId});
                 self.$('#list-name').text(self.list.name);
                 self.$('#section-name').text(self.section.name);
