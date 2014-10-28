@@ -79,6 +79,7 @@ define([], {
         },
         sidebar: {
             account: 'Account',
+            banned: 'Banned',
             dashboard: 'Dashboard',
             filters: 'Filters',
             lists: 'Lists',
