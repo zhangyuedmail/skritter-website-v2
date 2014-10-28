@@ -38,7 +38,8 @@ define([
             app.storage.getStarred(function(vocabs) {
                 app.user.data.vocabs.set(vocabs, {merge: true});
                 self.table.set({
-                    writing: 'Word',
+                    writing: 'Writing',
+                    reading: 'Reading',
                     starred: ''
                 }, vocabs);
                 self.table.renderTable();
@@ -51,7 +52,7 @@ define([
          */
         resize: function() {
             this.$('#starred').css({
-                height: this.getHeight() - 75,
+                height: this.getHeight() - 25, //subtract 75 with search input
                 'overflow-y': 'auto'
             });
             return this;

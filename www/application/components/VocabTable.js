@@ -61,7 +61,7 @@ define([
                             divBody += "<td class='vocab-field-" + field + "'>" + fieldValue + "</td>";
                         }
                     } else if (field === 'starred') {
-                        divBody += "<td class='vocab-field-" + field + "'><i class='fa fa-2x fa-star text-warning'></i></td>";
+                        divBody += "<td class='vocab-field-" + field + "'><i class='fa fa-2x fa-close pull-right text-warning'></i></td>";
                     } else if (field === 'writing') {
                         divBody += "<td class='vocab-field-" + field + " asian-font'>" + fieldValue + "</td>";
                     } else {
