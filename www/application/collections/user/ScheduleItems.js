@@ -46,7 +46,7 @@ define([
          * @returns {Array}
          */
         getDue: function() {
-            var now = moment().add(5, 'minutes').unix();
+            var now = moment().unix();
             return this.filtered.filter(function(item) {
                 return item.attributes.next < now;
             });
