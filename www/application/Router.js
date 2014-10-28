@@ -6,6 +6,7 @@ define([
     'routers/RouterGettingStarted',
     'routers/RouterLearningCenter',
     'pages/Account',
+    'pages/Banned',
     'pages/Dashboard',
     'pages/Filters',
     'pages/Landing',
@@ -19,7 +20,7 @@ define([
     'pages/Study',
     'pages/Tests'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
+            PageAccount, PageBanned, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
             PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
     /**
      * @class Router
@@ -43,6 +44,7 @@ define([
         routes: {
             '': 'showHome',
             'account': 'showAccount',
+            'banned': 'showBanned',
             'filters': 'showFilters',
             'list': 'showLists',
             'list/:listId': 'showList',
@@ -104,6 +106,13 @@ define([
          */
         showAccount: function() {
             this.currentPage = new PageAccount();
+            this.currentPage.render();
+        },
+        /**
+         * @method showBanned
+         */
+        showBanned: function() {
+            this.currentPage = new PageBanned();
             this.currentPage.render();
         },
         /**

@@ -414,8 +414,10 @@ define([
         toggleBanned: function() {
             if (this.vocab.isBanned()) {
                 this.vocab.set('bannedParts', []);
+                this.elements.infoBan.addClass('text-danger');
             } else {
                 this.vocab.set('bannedParts', app.user.settings.getAllParts());
+                this.elements.infoBan.removeClass('text-danger');
             }
             this.updateVocabSidebar();
         },
