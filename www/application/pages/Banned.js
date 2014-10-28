@@ -3,7 +3,7 @@
  */
 define([
     'framework/BasePage',
-    'require.text!templates/Banned.html',
+    'require.text!templates/banned.html',
     'components/VocabTable'
 ], function(BasePage, TemplateMobile, VocabTable) {
     /**
