@@ -867,6 +867,28 @@ define([
             });
         },
         /**
+         * @method resetAccount
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        resetAccount: function(callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl() + 'reset' +
+                    '?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'POST'
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method setGuest
          * @param {String} key
          * @param {Array|Object|String} value

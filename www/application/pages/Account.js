@@ -84,6 +84,7 @@ define([
             'change .account-general-form input': 'handleGeneralFormChanged',
             'change .account-general-form select': 'handleGeneralFormChanged',
             'vclick #button-download-all': 'handleButtonDownloadAllClicked',
+            'vclick #button-reset-all': 'handleButtonResetAllClicked',
             'vclick #button-restore-subscription': 'handleButtonRestoreSubscriptionClicked',
             'vclick #button-save': 'handleButtonSaveClicked',
             'vclick #subscribe-month': 'handleSubscribeMonth',
@@ -110,11 +111,61 @@ define([
             });
         },
         /**
+         * @method handleButtonResetAllClicked
+         * @param {Event} event
+         */
+        handleButtonResetAllClicked: function(event) {
+            event.preventDefault();
+            app.analytics.trackEvent('Account', 'click', 'reset all');
+            app.dialogs.show('confirm').element('.modal-title span').text('Reset Account');
+            var resetMessage = "Want to start all over, make it as if nothing ever happened?";
+            resetMessage += "<strong>What will be deleted?</strong><hr>";
+            resetMessage += "<ul>";
+            resetMessage += "<li>All of your words will be deleted</li>";
+            resetMessage += "<li>All of your progress will be reset</li>";
+            resetMessage += "</ul>";
+            app.dialogs.element('.modal-message').html(resetMessage);
+            app.dialogs.element('.confirm').on('vclick', function() {
+                async.series([
+                    function(callback) {
+                        app.dialogs.hide(callback);
+                    },
+                    function(callback) {
+                        app.dialogs.show();
+                        app.dialogs.element('.message-title').text('Resetting');
+                        app.api.resetAccount(function() {
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    },
+                    function(callback) {
+                        app.user.data.items.downloadAll(function() {
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    }
+                ], function(error) {
+                    if (error) {
+                        app.dialogs.element('.message-title').text('Something went wrong.');
+                        app.dialogs.element('.message-text').text('Check your connection and click reload.');
+                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                        app.dialogs.element('.message-confirm button').on('vclick', function() {
+                            app.reload();
+                        });
+                    } else {
+                        app.reload();
+                    }
+                });
+            });
+        },
+        /**
          * @method handleButtonRestoreSubscriptionClicked
          */
         handleButtonRestoreSubscriptionClicked: function() {
-            app.dialogs.show().element('.message-title').text('Restoring Subscription');
             app.analytics.trackEvent('Account', 'click', 'restore subscription');
+            app.dialogs.show().element('.message-title').text('Restoring Subscription');
             app.user.subscription.restoreGoogle(function() {
                 app.dialogs.element('.message-title').text('Subscription Restored');
                 app.dialogs.element('.loader-image').hide();
