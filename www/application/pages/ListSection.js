@@ -22,6 +22,7 @@ define([
             this.sectionId = undefined;
             this.table = new ListRowTable();
             this.removed = false;
+            this.listenTo(app, 'resize', this.resize);
         },
         /**
          * @method render

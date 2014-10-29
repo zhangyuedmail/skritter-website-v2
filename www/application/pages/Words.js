@@ -17,6 +17,7 @@ define([
         initialize: function() {
             this.title = 'Words';
             this.table = new VocabTable();
+            this.listenTo(app, 'resize', this.resize);
         },
         /**
          * @method render

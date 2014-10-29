@@ -18,6 +18,7 @@ define([
             this.title = 'Lists';
             this.lists= [];
             this.table = new ListTable();
+            this.listenTo(app, 'resize', this.resize);
         },
         /**
          * @method render

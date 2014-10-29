@@ -20,6 +20,7 @@ define([
             this.listId = undefined;
             this.removed = false;
             this.table = new ListSectionTable();
+            this.listenTo(app, 'resize', this.resize);
         },
         /**
          * @method render
