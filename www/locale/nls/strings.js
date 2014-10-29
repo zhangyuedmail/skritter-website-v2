@@ -87,7 +87,8 @@ define([], {
             queue: 'Queue',
             settings: 'Settings',
             starred: 'Starred',
-            study: 'Study'
+            study: 'Study',
+            words: 'Words'
         },
         study: {
             title: 'Study'

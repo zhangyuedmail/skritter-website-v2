@@ -24,6 +24,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
+            this.table.setElement(this.$('.table-container')).render();
             this.resize();
             return this;
         },
@@ -33,7 +34,6 @@ define([
          */
         loadBanned: function() {
             var self = this;
-            this.table.setElement(this.$('.banned-table-container')).render();
             app.storage.getBanned(function(vocabs) {
                 app.user.data.vocabs.set(vocabs, {merge: true});
                 self.table.set({
@@ -55,13 +55,12 @@ define([
          */
         loadStarred: function() {
             var self = this;
-            this.table.setElement(this.$('.starred-table-container')).render();
             app.storage.getStarred(function(vocabs) {
                 app.user.data.vocabs.set(vocabs, {merge: true});
                 self.table.set({
                     writing: 'Writing',
                     reading: 'Reading',
-                    words: ''
+                    starred: ''
                 }, vocabs);
                 self.$('.words-button').removeClass('active');
                 self.$('#button-words-starred').addClass('active');
