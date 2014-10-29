@@ -15,12 +15,13 @@ define([
     'pages/Login',
     'pages/Scratchpad',
     'pages/Settings',
+    'pages/Stats',
     'pages/Study',
     'pages/Tests',
     'pages/Words'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
             PageAccount, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
-            PageLogin, PageScratchpad, PageSettings, PageStudy, PageTests, PageWords) {
+            PageLogin, PageScratchpad, PageSettings, PageStats, PageStudy, PageTests, PageWords) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -52,6 +53,7 @@ define([
             'logout': 'handleLogout',
             'scratchpad/:writings': 'showScratchpad',
             'settings': 'showSettings',
+            'stats': 'showStats',
             'study': 'showStudy',
             'tests': 'showTests',
             'words': 'showWords',
@@ -197,6 +199,13 @@ define([
          */
         showSettings: function() {
             this.currentPage = new PageSettings();
+            this.currentPage.render();
+        },
+        /**
+         * @method showStats
+         */
+        showStats: function() {
+            this.currentPage = new PageStats();
             this.currentPage.render();
         },
         /**
