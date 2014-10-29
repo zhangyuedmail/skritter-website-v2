@@ -6,7 +6,6 @@ define([
     'routers/RouterGettingStarted',
     'routers/RouterLearningCenter',
     'pages/Account',
-    'pages/Banned',
     'pages/Dashboard',
     'pages/Filters',
     'pages/Landing',
@@ -16,13 +15,12 @@ define([
     'pages/Login',
     'pages/Scratchpad',
     'pages/Settings',
-    'pages/Starred',
     'pages/Study',
     'pages/Tests',
     'pages/Words'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
-            PageAccount, PageBanned, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
-            PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests, PageWords) {
+            PageAccount, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
+            PageLogin, PageScratchpad, PageSettings, PageStudy, PageTests, PageWords) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -45,7 +43,6 @@ define([
         routes: {
             '': 'showHome',
             'account': 'showAccount',
-            'banned': 'showBanned',
             'filters': 'showFilters',
             'list': 'showLists',
             'list/:listId': 'showList',
@@ -55,7 +52,6 @@ define([
             'logout': 'handleLogout',
             'scratchpad/:writings': 'showScratchpad',
             'settings': 'showSettings',
-            'starred': 'showStarred',
             'study': 'showStudy',
             'tests': 'showTests',
             'words': 'showWords',
@@ -109,13 +105,6 @@ define([
          */
         showAccount: function() {
             this.currentPage = new PageAccount();
-            this.currentPage.render();
-        },
-        /**
-         * @method showBanned
-         */
-        showBanned: function() {
-            this.currentPage = new PageBanned();
             this.currentPage.render();
         },
         /**
@@ -208,13 +197,6 @@ define([
          */
         showSettings: function() {
             this.currentPage = new PageSettings();
-            this.currentPage.render();
-        },
-        /**
-         * @method showStarred
-         */
-        showStarred: function() {
-            this.currentPage = new PageStarred();
             this.currentPage.render();
         },
         /**
