@@ -18,10 +18,11 @@ define([
     'pages/Settings',
     'pages/Starred',
     'pages/Study',
-    'pages/Tests'
+    'pages/Tests',
+    'pages/Words'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
             PageAccount, PageBanned, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
-            PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
+            PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests, PageWords) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -57,6 +58,8 @@ define([
             'starred': 'showStarred',
             'study': 'showStudy',
             'tests': 'showTests',
+            'words': 'showWords',
+            'words/:filter': 'showWords',
             '*route': 'defaultRoute'
         },
         /**
@@ -227,6 +230,14 @@ define([
         showTests: function() {
             this.currentPage = new PageTests();
             this.currentPage.render();
+        },
+        /**
+         * @method showWords
+         * @param {String} [filter]
+         */
+        showWords: function(filter) {
+            this.currentPage = new PageWords();
+            this.currentPage.render().set(filter);
         }
     });
 
