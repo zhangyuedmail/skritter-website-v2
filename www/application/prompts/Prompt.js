@@ -364,11 +364,21 @@ define([
          */
         scaleText: function() {
             var canvasSize = this.canvas.getWidth();
+            var writingLength = this.vocab.get('writing').split('').length;
             this.$('.text-max').css('font-size', canvasSize / 10);
             this.$('.text-large').css('font-size', canvasSize / 14);
             this.$('.text-normal').css('font-size', canvasSize / 16);
             this.$('.text-small').css('font-size', canvasSize / 18);
             this.$('.text-tiny').css('font-size', canvasSize / 22);
+            if (writingLength < 3) {
+                this.$('.text-max-character').css('font-size', canvasSize / 5);
+            } else if (writingLength < 5) {
+                this.$('.text-max-character').css('font-size', canvasSize / 6);
+            } else if (writingLength < 7) {
+                this.$('.text-max-character').css('font-size', canvasSize / 7);
+            } else {
+                this.$('.text-max-character').css('font-size', canvasSize / 10);
+            }
             return this;
         },
         /**
