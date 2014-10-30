@@ -192,13 +192,6 @@ define([
                         }
                         return false;
                     }
-                    if (app.user.isJapanese()) {
-                        var itemBase = item.id.split('-')[2];
-                        if (item.equals('part', 'rdng') && app.fn.isKana(itemBase)) {
-                            item.set('vocabIds', []);
-                            return false;
-                        }
-                    }
                     return true;
                 });
             }
