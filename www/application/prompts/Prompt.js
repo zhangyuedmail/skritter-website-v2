@@ -272,10 +272,11 @@ define([
         /**
          * @method handlePromptClicked
          * @param {Event} event
-         * @returns {Boolean|Prompt}
+         * @returns {Boolean}
          */
         handlePromptClicked: function(event) {
             event.preventDefault();
+            return app.sidebars && app.sidebars.isCollapsed() && this.promptClick ? true : false;
         },
         /**
          * @method handleReadingButtonClicked
@@ -301,11 +302,12 @@ define([
         /**
          * @method handleWrongButtonClicked
          * @param {Event} event
-         * @returns {Boolean|Prompt}
+         * @returns {Boolean}
          */
         handleWrongButtonClicked: function(event) {
             event.stopPropagation();
             event.preventDefault();
+            return app.sidebars && app.sidebars.isCollapsed() && this.promptClick ? true : false;
         },
         /**
          * @method hideNavigation

@@ -146,6 +146,13 @@ define([
             return this;
         },
         /**
+         * @method isCollapsed
+         * @returns {Boolean}
+         */
+        isCollapsed: function() {
+            return this.sidebar.hasClass('expanded') ? false : true;
+        },
+        /**
          * @method isExpanded
          * @returns {Boolean}
          */

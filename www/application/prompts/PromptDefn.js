@@ -64,8 +64,7 @@ define([
          * @param {Event} event
          */
         handlePromptClicked: function(event) {
-            Prompt.prototype.handlePromptClicked.call(this, event);
-            if (this.promptClick) {
+            if (Prompt.prototype.handlePromptClicked.call(this, event)) {
                 if (this.review.getAt('answered')) {
                     this.gradingButtons.triggerSelected();
                     this.next();
@@ -77,12 +76,12 @@ define([
         /**
          * @method handleWrongButtonClicked
          * @param {Event} event
-         * @returns {Boolean|Prompt}
          */
         handleWrongButtonClicked: function(event) {
-            Prompt.prototype.handleWrongButtonClicked.call(this, event);
-            this.review.setAt('score', 1);
-            this.renderAnswer();
+            if (Prompt.prototype.handleWrongButtonClicked.call(this, event)) {
+                this.review.setAt('score', 1);
+                this.renderAnswer();
+            }
         },
         /**
          * @method resize
