@@ -56,6 +56,33 @@ define([
             return this;
         },
         /**
+         * @method events
+         * @returns {Object}
+         */
+        events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-sync': 'handleSyncClicked'
+        }),
+        /**
+         * @method handleSyncClicked
+         * @param {Event} event
+         */
+        handleSyncClicked: function(event) {
+            event.preventDefault();
+            app.dialogs.show().element('.message-title').text('Updating Stats');
+            async.series([
+                function(callback) {
+                    app.user.stats.sync(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function() {
+                app.dialogs.hide();
+            });
+        },
+        /**
+         /**
          * @method resize
          * @returns {PageStats}
          */
