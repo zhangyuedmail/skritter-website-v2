@@ -305,6 +305,7 @@ define([
          */
         handleWrongButtonClicked: function(event) {
             event.stopPropagation();
+            event.preventDefault();
         },
         /**
          * @method hideNavigation
