@@ -35,6 +35,17 @@ define([
             localStorage.setItem(this.user.id + '-stats', JSON.stringify(this.toJSON()));
         },
         /**
+         * @method getCharLearnedTotal
+         * @param {String} step
+         */
+        getCharLearnedTotal: function(step) {
+            var total = 0;
+            for (var part in this.get('char')) {
+                total += this.get('char')[part].learned[step];
+            }
+            return total;
+        },
+        /**
          * @method getStudied
          * @returns {Number}
          */
@@ -60,6 +71,17 @@ define([
          */
         getTimerOffset: function() {
             return this.get('timeStudied').day ? this.get('timeStudied').day : 0;
+        },
+        /**
+         * @method getWordLearnedTotal
+         * @param {String} step
+         */
+        getWordLearnedTotal: function(step) {
+            var total = 0;
+            for (var part in this.get('word')) {
+                total += this.get('word')[part].learned[step];
+            }
+            return total;
         },
         /**
          * @method sync
