@@ -283,6 +283,10 @@ body {
 }
 
 
+/*** PAGES: STATS ***/
+.page-stats td { font-size: 1.5em; }
+
+
 /*** PAGES: STUDY ***/
 .page-study .fa-filter { color: #e99002; }
 .page-study .study-stats {
