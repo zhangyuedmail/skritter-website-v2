@@ -23,7 +23,7 @@ define([], function() {
         this.DIAGONAL_INTERVAL = 40;
         this.STRAW_WINDOW = 3;
         this.MEDIAN_THRESHOLD = 0.95;
-        this.LINE_THRESHOLD = 0.95;
+        this.LINE_THRESHOLD = 0.80;
     }
     /**
      * @method boundingBox

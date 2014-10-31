@@ -79,6 +79,20 @@ body {
 .scrollable { overflow-y: auto; }
 
 
+/*** ADMIN: PARAM EDITOR ***/
+.page-admin-param-editor .canvas-container, .page-admin-param-editor .detail-container { float: left; }
+.page-admin-param-editor .prompt-canvas {
+    background-color: #ffffff;
+    cursor: pointer;
+    display: inline;
+}
+.page-admin-param-editor textarea {
+    height: 100%;
+    resize: none;
+    width: 100%;
+}
+
+
 /*** COMPONENTS: VOCAB TABLE ***/
 .vocab-table .vocab-field-reading { font-size: 1.5em; }
 .vocab-table .vocab-field-writing { font-size: 2em; }

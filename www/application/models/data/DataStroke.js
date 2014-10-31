@@ -31,6 +31,7 @@ define([
                 var position = 1;
                 target.name = rune;
                 target.variation = a + 1;
+                target.kana = this.get('kana') || false;
                 for (var b = 0, lengthB = variation.length; b < lengthB; b++) {
                     var data = variation[b];
                     var stroke = new CanvasStroke();
@@ -40,6 +41,7 @@ define([
                     stroke.set({
                         contains: contains,
                         data: data,
+                        kana: target.kana,
                         id: position + '|' + strokeId,
                         position: position,
                         shape: app.assets.getStroke(strokeId),

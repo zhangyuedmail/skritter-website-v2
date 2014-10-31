@@ -3,6 +3,7 @@
  */
 define([
     'framework/BaseRouter',
+    'routers/RouterAdmin',
     'routers/RouterGettingStarted',
     'routers/RouterLearningCenter',
     'pages/Account',
@@ -19,7 +20,7 @@ define([
     'pages/Study',
     'pages/Tests',
     'pages/Words'
-], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
+], function(BaseRouter, RouterAdmin, RouterGettingStarted, RouterLearningCenter,
             PageAccount, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
             PageLogin, PageScratchpad, PageSettings, PageStats, PageStudy, PageTests, PageWords) {
     /**
@@ -32,6 +33,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.admin = new RouterAdmin();
             this.gettingStarted = new RouterGettingStarted();
             this.learningCenter = new RouterLearningCenter();
             document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);

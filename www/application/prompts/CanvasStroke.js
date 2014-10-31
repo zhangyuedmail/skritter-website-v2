@@ -83,20 +83,27 @@ define([
             var data = this.inflateData();
             var shape = this.get('shape').clone(true);
             var spriteBounds = shape.getBounds();
-            var ms = shape.getMatrix();
-            //apply rotation based on newly sized shape
-            var sx = data.w / spriteBounds.width;
-            var sy = data.h / spriteBounds.height;
-            ms.scale(sx, sy);
-            ms.translate(-data.w / 2, -data.h / 2);
-            ms.rotate(data.rot * Math.PI / 180);
-            var t = ms.decompose();
-            //find the actual position based on prior transformations
-            shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
-            var finalBounds = shape.getTransformedBounds();
-            shape.name = 'stroke';
-            shape.x += finalBounds.width / 2 + data.x;
-            shape.y += finalBounds.height / 2 + data.y;
+            if (this.isKana()) {
+                shape.x = data.x;
+                shape.y = data.y;
+                shape.scaleX = data.w / 600;
+                shape.scaleY = data.h / 600;
+            } else {
+                //apply rotation based on newly sized shape
+                var ms = shape.getMatrix();
+                var sx = data.w / spriteBounds.width;
+                var sy = data.h / spriteBounds.height;
+                ms.scale(sx, sy);
+                ms.translate(-data.w / 2, -data.h / 2);
+                ms.rotate(data.rot * Math.PI / 180);
+                var t = ms.decompose();
+                //find the actual position based on prior transformations
+                shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
+                var finalBounds = shape.getTransformedBounds();
+                shape.name = 'stroke';
+                shape.x += finalBounds.width / 2 + data.x;
+                shape.y += finalBounds.height / 2 + data.y;
+            }
             return shape;
         },
         /**
@@ -132,6 +139,13 @@ define([
                 scaleY: (data[4] * canvasSize) / bounds.height,
                 rot: -data[5]
             };
+        },
+        /**
+         * @method isKana
+         * @returns {Boolean}
+         */
+        isKana: function() {
+            return this.get('kana');
         },
         /**
          * @method updateCorners

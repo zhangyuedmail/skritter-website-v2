@@ -4,8 +4,9 @@
 define([
     'framework/BaseCollection',
     'models/data/DataStroke',
+    'application/Kana',
     'application/Tones'
-], function(BaseCollection, DataStroke, Tones) {
+], function(BaseCollection, DataStroke, Kana, Tones) {
     /**
      * @class DataStrokes
      * @extend BaseCollection
@@ -16,6 +17,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.add(Kana.getData());
             this.add(Tones.getData());
         },
         /**
