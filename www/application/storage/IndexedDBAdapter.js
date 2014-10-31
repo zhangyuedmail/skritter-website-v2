@@ -101,6 +101,30 @@ define([
             }
         },
         /**
+         * @method getBanned
+         * @param {Function} callback
+         */
+        getBanned: function(callback) {
+            var self = this;
+            var data = [];
+            var transaction = self.get('database').transaction('vocabs', 'readonly');
+            transaction.oncomplete = function() {
+                callback(data);
+            };
+            transaction.onerror = function(error) {
+                callback(error);
+            };
+            transaction.objectStore('vocabs').openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    if (cursor.value.bannedParts.length) {
+                        data.push(cursor.value);
+                    }
+                    cursor.continue();
+                }
+            };
+        },
+        /**
          * @method getCount
          * @param {String} table
          * @param {Function} callback

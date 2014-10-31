@@ -79,6 +79,7 @@ define([], {
         },
         sidebar: {
             account: 'Account',
+            banned: 'Banned',
             dashboard: 'Dashboard',
             filters: 'Filters',
             lists: 'Lists',
@@ -86,7 +87,8 @@ define([], {
             queue: 'Queue',
             settings: 'Settings',
             starred: 'Starred',
-            study: 'Study'
+            study: 'Study',
+            words: 'Words'
         },
         study: {
             title: 'Study'

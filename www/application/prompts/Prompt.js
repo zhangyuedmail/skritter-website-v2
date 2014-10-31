@@ -113,6 +113,7 @@ define([
          * @returns {Prompt}
          */
         renderElements: function() {
+            this.elements.buttonWrong = this.$('.button-wrong');
             this.elements.fieldAnswer = this.$('.field-answer');
             this.elements.fieldDefinition = this.$('.field-definition');
             this.elements.fieldHeisig = this.$('.field-heisig');
@@ -159,7 +160,8 @@ define([
             'swipeleft': 'handleSwipedLeft',
             'vclick': 'handlePromptClicked',
             'vclick .audio-button': 'handleAudioButtonClicked',
-            'vclick .reading-button': 'handleReadingButtonClicked'
+            'vclick .reading-button': 'handleReadingButtonClicked',
+            'vclick .button-wrong': 'handleWrongButtonClicked'
         }),
         /**
          * @method clickTimeout
@@ -270,10 +272,11 @@ define([
         /**
          * @method handlePromptClicked
          * @param {Event} event
-         * @returns {Boolean|Prompt}
+         * @returns {Boolean}
          */
         handlePromptClicked: function(event) {
             event.preventDefault();
+            return app.sidebars && app.sidebars.isCollapsed() && this.promptClick ? true : false;
         },
         /**
          * @method handleReadingButtonClicked
@@ -295,6 +298,16 @@ define([
                 this.review.setAt('score', 1);
             }
             app.sidebars.select('info').show();
+        },
+        /**
+         * @method handleWrongButtonClicked
+         * @param {Event} event
+         * @returns {Boolean}
+         */
+        handleWrongButtonClicked: function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            return app.sidebars && app.sidebars.isCollapsed() && this.promptClick ? true : false;
         },
         /**
          * @method hideNavigation
@@ -354,11 +367,21 @@ define([
          */
         scaleText: function() {
             var canvasSize = this.canvas.getWidth();
+            var writingLength = this.vocab.get('writing').split('').length;
             this.$('.text-max').css('font-size', canvasSize / 10);
             this.$('.text-large').css('font-size', canvasSize / 14);
             this.$('.text-normal').css('font-size', canvasSize / 16);
             this.$('.text-small').css('font-size', canvasSize / 18);
             this.$('.text-tiny').css('font-size', canvasSize / 22);
+            if (writingLength < 3) {
+                this.$('.text-max-character').css('font-size', canvasSize / 5);
+            } else if (writingLength < 5) {
+                this.$('.text-max-character').css('font-size', canvasSize / 6);
+            } else if (writingLength < 7) {
+                this.$('.text-max-character').css('font-size', canvasSize / 7);
+            } else {
+                this.$('.text-max-character').css('font-size', canvasSize / 10);
+            }
             return this;
         },
         /**
@@ -404,8 +427,10 @@ define([
         toggleBanned: function() {
             if (this.vocab.isBanned()) {
                 this.vocab.set('bannedParts', []);
+                this.elements.infoBan.addClass('text-danger');
             } else {
                 this.vocab.set('bannedParts', app.user.settings.getAllParts());
+                this.elements.infoBan.removeClass('text-danger');
             }
             this.updateVocabSidebar();
         },

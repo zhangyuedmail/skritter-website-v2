@@ -15,6 +15,7 @@ define([
          */
         initialize: function() {
             this.title = app.strings.dashboard.title;
+            this.listenTo(app.user.data, 'sync', this.toggleSyncButton);
             this.listenTo(app.user.schedule, 'sort', this.updateStatSection);
             this.listenTo(app.user.stats, 'change', this.updateStatSection);
         },
@@ -24,7 +25,7 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
-            this.elements.buttonSync = this.$('#sync-button');
+            this.elements.buttonSync = this.$('#button-sync');
             this.elements.expiredNotice = this.$('#expired-notice');
             this.elements.listContainer = this.$('.list-container');
             this.elements.rateMessage = this.$('.rate-message');
@@ -47,6 +48,7 @@ define([
         renderElements: function() {
             app.user.stats.sync();
             app.user.schedule.updateFilter();
+            this.toggleSyncButton(app.user.data.syncing);
             this.elements.userAvatar.html(app.user.getAvatar('img-thumbnail'));
             this.elements.userDisplayName.text(app.user.getDisplayName());
             if (app.user.subscription.isExpired()) {
@@ -152,6 +154,17 @@ define([
                     app.user.schedule.sortFilter();
                     app.dialogs.hide();
                 });
+            }
+        },
+        /**
+         * @method toggleSyncButton
+         * @param {Boolean} status
+         */
+        toggleSyncButton: function(status) {
+            if (status) {
+                this.elements.buttonSync.hide();
+            } else {
+                this.elements.buttonSync.show();
             }
         },
         /**

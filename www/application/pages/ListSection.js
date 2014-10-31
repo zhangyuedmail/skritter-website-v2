@@ -21,6 +21,8 @@ define([
             this.section = undefined;
             this.sectionId = undefined;
             this.table = new ListRowTable();
+            this.removed = false;
+            this.listenTo(app, 'resize', this.resize);
         },
         /**
          * @method render
@@ -106,6 +108,7 @@ define([
          */
         handleRowRemoveButtonClicked: function(event) {
             event.stopPropagation();
+            this.removed = true;
             this.table.removeById(event.currentTarget.parentNode.id.replace('vocab-', ''));
             this.table.renderTable();
         },
@@ -115,10 +118,29 @@ define([
          */
         handleSaveButtonClicked: function(event) {
             event.preventDefault();
-            app.dialogs.show().element('.message-title').text('Saving');
-            app.api.updateVocabListSection(this.list, this.table.section, function() {
-                app.dialogs.hide();
-            }, function() {
+            var self = this;
+            async.series([
+                function(callback) {
+                    if (self.removed) {
+                        app.dialogs.show('confirm').element('.modal-title span').text('Vocabs Removed');
+                        app.dialogs.element('.modal-message').html("You have removed vocabs and they will be deleted from this list section. Are you sure you want to save?");
+                        app.dialogs.element('.confirm').on('vclick', function() {
+                            app.dialogs.hide(callback);
+                        });
+                    } else {
+                        callback();
+                    }
+                },
+                function(callback) {
+                    app.dialogs.show().element('.message-title').text('Saving');
+                    app.api.updateVocabListSection(self.list, self.table.section, function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                }
+            ], function() {
+                self.removed = false;
                 app.dialogs.hide();
             });
         },
@@ -138,6 +160,7 @@ define([
             app.dialogs.element('.message-text').empty();
             app.api.getVocabList(this.listId, null, function(list) {
                 self.list = list;
+                console.log('LIST', list);
                 self.section = _.find(list.sections, {id: self.sectionId});
                 self.$('#list-name').text(self.list.name);
                 self.$('#section-name').text(self.section.name);

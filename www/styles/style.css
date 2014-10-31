@@ -283,6 +283,10 @@ body {
 }
 
 
+/*** PAGES: STATS ***/
+.page-stats td { font-size: 1.5em; }
+
+
 /*** PAGES: STUDY ***/
 .page-study .fa-filter { color: #e99002; }
 .page-study .study-stats {
@@ -309,6 +313,11 @@ body {
 .prompt-container .field-definition img {
     float: left;
     padding: 5px;
+}
+.prompt-container .button-wrong {
+    bottom: 15px;
+    position: absolute;
+    right: 15px;
 }
 
 

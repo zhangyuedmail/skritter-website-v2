@@ -74,6 +74,7 @@ define([
         handleContentContainerClicked: function(event) {
             if (app.sidebars && app.sidebars.isExpanded()) {
                 event.stopPropagation();
+                event.preventDefault();
                 app.sidebars.hide();
             }
         },

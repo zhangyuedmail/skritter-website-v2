@@ -60,8 +60,10 @@ define([
                         } else {
                             divBody += "<td class='vocab-field-" + field + "'>" + fieldValue + "</td>";
                         }
+                    } else if (field === 'banned') {
+                        divBody += "<td class='vocab-field-" + field + "'><i class='fa fa-2x fa-close pull-right text-warning'></i></td>";
                     } else if (field === 'starred') {
-                        divBody += "<td class='vocab-field-" + field + "'><i class='fa fa-2x fa-star text-warning'></i></td>";
+                        divBody += "<td class='vocab-field-" + field + "'><i class='fa fa-2x fa-close pull-right text-warning'></i></td>";
                     } else if (field === 'writing') {
                         divBody += "<td class='vocab-field-" + field + " asian-font'>" + fieldValue + "</td>";
                     } else {
@@ -80,6 +82,7 @@ define([
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
                 'vclick tr': 'handleRowClicked',
+                'vclick .vocab-field-banned': 'handleFieldBannedClicked',
                 'vclick .vocab-field-starred': 'handleFieldStarredClicked'
             });
         },
@@ -90,6 +93,20 @@ define([
         clear: function() {
             this.$('table thead').empty();
             this.$('table tbody').empty();
+        },
+        /**
+         * @method handleFieldStarredClicked
+         * @param {Event} event
+         */
+        handleFieldBannedClicked: function(event) {
+            event.preventDefault();
+            var vocabId = this.$(event.currentTarget).parent()[0].id.replace('vocab-', '');
+            this.filtered.splice(_.findIndex(this.filtered, {id: vocabId}), 1);
+            this.vocabs.splice(_.findIndex(this.vocabs, {id: vocabId}), 1);
+            if (app.user.data.vocabs.get(vocabId)) {
+                app.user.data.vocabs.get(vocabId).set('bannedParts', []);
+            }
+            this.renderTable();
         },
         /**
          * @method handleFieldStarredClicked

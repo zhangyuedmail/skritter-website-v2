@@ -18,7 +18,9 @@ define([
             this.title = 'List';
             this.list = undefined;
             this.listId = undefined;
+            this.removed = false;
             this.table = new ListSectionTable();
+            this.listenTo(app, 'resize', this.resize);
         },
         /**
          * @method render
@@ -152,10 +154,29 @@ define([
          */
         handleSaveButtonClicked: function(event) {
             event.preventDefault();
-            app.dialogs.show().element('.message-title').text('Saving');
-            app.api.updateVocabList(this.table.list, function() {
-                app.dialogs.hide();
-            }, function() {
+            var self = this;
+            async.series([
+                function(callback) {
+                    if (self.removed) {
+                        app.dialogs.show('confirm').element('.modal-title span').text('Sections Removed');
+                        app.dialogs.element('.modal-message').html("You have removed sections and they will be deleted from the list. Are you sure you want to save?");
+                        app.dialogs.element('.confirm').on('vclick', function() {
+                            app.dialogs.hide(callback);
+                        });
+                    } else {
+                        callback();
+                    }
+                },
+                function(callback) {
+                    app.dialogs.show().element('.message-title').text('Saving');
+                    app.api.updateVocabList(self.table.list, function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                }
+            ], function() {
+                self.removed = false;
                 app.dialogs.hide();
             });
         },
@@ -165,6 +186,7 @@ define([
          */
         handleSectionRemoveButtonClicked: function(event) {
             event.stopPropagation();
+            this.removed = true;
             this.table.removeById(event.currentTarget.parentNode.id.replace('section-', ''));
             this.table.renderTable();
         },
@@ -185,6 +207,7 @@ define([
             app.dialogs.element('.message-text').empty();
             app.api.getVocabList(this.listId, null, function(list) {
                 self.list = list;
+                console.log('LIST', list);
                 self.$('#list-name').text(list.name);
                 self.$('#list-description').text(list.description);
                 self.$('#list-studying').text(list.peopleStudying);

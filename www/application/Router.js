@@ -15,12 +15,13 @@ define([
     'pages/Login',
     'pages/Scratchpad',
     'pages/Settings',
-    'pages/Starred',
+    'pages/Stats',
     'pages/Study',
-    'pages/Tests'
+    'pages/Tests',
+    'pages/Words'
 ], function(BaseRouter, RouterGettingStarted, RouterLearningCenter,
             PageAccount, PageDashboard, PageFilters, PageLanding, PageList, PageListSection, PageLists,
-            PageLogin, PageScratchpad, PageSettings, PageStarred, PageStudy, PageTests) {
+            PageLogin, PageScratchpad, PageSettings, PageStats, PageStudy, PageTests, PageWords) {
     /**
      * @class Router
      * @extends BaseRouter
@@ -52,9 +53,11 @@ define([
             'logout': 'handleLogout',
             'scratchpad/:writings': 'showScratchpad',
             'settings': 'showSettings',
-            'starred': 'showStarred',
+            'stats': 'showStats',
             'study': 'showStudy',
             'tests': 'showTests',
+            'words': 'showWords',
+            'words/:filter': 'showWords',
             '*route': 'defaultRoute'
         },
         /**
@@ -199,10 +202,10 @@ define([
             this.currentPage.render();
         },
         /**
-         * @method showStarred
+         * @method showStats
          */
-        showStarred: function() {
-            this.currentPage = new PageStarred();
+        showStats: function() {
+            this.currentPage = new PageStats();
             this.currentPage.render();
         },
         /**
@@ -218,6 +221,14 @@ define([
         showTests: function() {
             this.currentPage = new PageTests();
             this.currentPage.render();
+        },
+        /**
+         * @method showWords
+         * @param {String} [filter]
+         */
+        showWords: function(filter) {
+            this.currentPage = new PageWords();
+            this.currentPage.render().set(filter);
         }
     });
 
