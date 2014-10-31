@@ -125,7 +125,7 @@ define([], function() {
      */
     Recognizer.prototype.checkCorners = function(targetParam, userStroke) {
         var score = Math.abs(targetParam.get('corners').length - userStroke.get('corners').length);
-        if (score < this.baseAngleThreshold) {
+        if (score < this.baseCornerPenalty) {
             return score * this.baseCornerPenalty;
         }
         return -1;
