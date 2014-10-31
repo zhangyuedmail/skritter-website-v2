@@ -37,14 +37,19 @@ define([
          */
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
-            if (app.user.settings.get('audio')) {
+            if (app.user.settings.isAudioEnabled()) {
                 this.vocab.playAudio();
             }
+            this.elements.buttonWrong.hide();
             this.elements.fieldQuestion.hide();
             this.elements.fieldReading.html(this.vocab.getReading(null, {
                 style: app.user.settings.get('readingStyle')
             }));
-            this.elements.fieldWriting.html(this.vocab.getWriting());
+            if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
+                this.elements.fieldWriting.hide();
+            } else {
+                this.elements.fieldWriting.html(this.vocab.getWriting());
+            }
             return this;
         },
         /**
@@ -53,9 +58,12 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
+                this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            } else {
+                this.elements.fieldWriting.html(this.vocab.getWriting());
+            }
             this.elements.fieldQuestion.html(app.strings.prompt['reading-question']);
-            this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
         },
         /**
@@ -63,10 +71,21 @@ define([
          * @param {Event} event
          */
         handlePromptClicked: function(event) {
-            Prompt.prototype.handlePromptClicked.call(this, event);
-            if (this.review.getAt('answered')) {
-                this.next();
-            } else {
+            if (Prompt.prototype.handlePromptClicked.call(this, event)) {
+                if (this.review.getAt('answered')) {
+                    this.next();
+                } else {
+                    this.renderAnswer();
+                }
+            }
+        },
+        /**
+         * @method handleWrongButtonClicked
+         * @param {Event} event
+         */
+        handleWrongButtonClicked: function(event) {
+            if (Prompt.prototype.handleWrongButtonClicked.call(this, event)) {
+                this.review.setAt('score', 1);
                 this.renderAnswer();
             }
         },

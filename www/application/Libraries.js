@@ -9,10 +9,12 @@ define([
     'createjs.easel',
     'createjs.tween',
     'jquery.mobile',
+    'jquery.notify',
     'jquery.ui',
     'modernizr',
     'require.i18n',
-    'require.text'
+    'require.text',
+    'webfont'
 ], function(Async, FastClick, Handlebars, Moment) {
     window.async = Async;
     window.fastclick = new FastClick(document.body);

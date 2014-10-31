@@ -36,6 +36,25 @@ define([
             });
         },
         /**
+         * @method getActive
+         * @returns {Array}
+         */
+        getActive: function() {
+            return this.filter(function(list) {
+                return list.get('studyingMode') !== 'not studying';
+            });
+        },
+        /**
+         * @method getFiltered
+         * @returns {Array}
+         */
+        getFiltered: function() {
+            var filterLists = app.user.settings.get('filterLists');
+            return this.filter(function(list) {
+                return filterLists.indexOf(list.id) > -1;
+            });
+        },
+        /**
          * @method hasActive
          * @returns {Boolean}
          */

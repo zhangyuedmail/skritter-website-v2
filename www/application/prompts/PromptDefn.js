@@ -37,9 +37,10 @@ define([
          */
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
-            if (app.user.settings.get('audio')) {
+            if (app.user.settings.isAudioEnabled()) {
                 this.vocab.playAudio();
             }
+            this.elements.buttonWrong.hide();
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
@@ -63,11 +64,22 @@ define([
          * @param {Event} event
          */
         handlePromptClicked: function(event) {
-            Prompt.prototype.handlePromptClicked.call(this, event);
-            if (this.review.getAt('answered')) {
-                this.gradingButtons.triggerSelected();
-                this.next();
-            } else {
+            if (Prompt.prototype.handlePromptClicked.call(this, event)) {
+                if (this.review.getAt('answered')) {
+                    this.gradingButtons.triggerSelected();
+                    this.next();
+                } else {
+                    this.renderAnswer();
+                }
+            }
+        },
+        /**
+         * @method handleWrongButtonClicked
+         * @param {Event} event
+         */
+        handleWrongButtonClicked: function(event) {
+            if (Prompt.prototype.handleWrongButtonClicked.call(this, event)) {
+                this.review.setAt('score', 1);
                 this.renderAnswer();
             }
         },

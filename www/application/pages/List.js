@@ -18,7 +18,9 @@ define([
             this.title = 'List';
             this.list = undefined;
             this.listId = undefined;
+            this.removed = false;
             this.table = new ListSectionTable();
+            this.listenTo(app, 'resize', this.resize);
         },
         /**
          * @method render
@@ -57,11 +59,29 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick table tr': 'handleTableRowClicked',
+            'vclick #button-add-section': 'handleButtonAddSectionClicked',
             'vclick #button-add': 'handleButtonAddClicked',
             'vclick #button-pause': 'handleButtonPauseClicked',
             //'vclick #button-remove': 'handleButtonRemoveClicked',
-            'vclick #button-resume': 'handleButtonResumeClicked'
+            'vclick #button-resume': 'handleButtonResumeClicked',
+            'vclick #button-save': 'handleSaveButtonClicked',
+            'vclick .section-field-remove': 'handleSectionRemoveButtonClicked'
         }),
+        /**
+         * @method handleButtonAddSectionClicked
+         * @param {Event} event
+         */
+        handleButtonAddSectionClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            app.dialogs.show('list-add-section').element('.modal-title span').text('Add Section');
+            app.dialogs.element('.section-add').on('vclick', function() {
+                var name = app.dialogs.element('#section-name').val();
+                self.table.addSection({name: name, deleted: false, rows: []});
+                self.table.renderTable();
+                app.dialogs.hide();
+            });
+        },
         /**
          * @method handleTableRowClicked
          * @param {Event} event
@@ -128,13 +148,55 @@ define([
                 console.error(error);
             });
         },
-
+        /**
+         * @method handleSaveButtonClicked
+         * @param {Event} event
+         */
+        handleSaveButtonClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            async.series([
+                function(callback) {
+                    if (self.removed) {
+                        app.dialogs.show('confirm').element('.modal-title span').text('Sections Removed');
+                        app.dialogs.element('.modal-message').html("You have removed sections and they will be deleted from the list. Are you sure you want to save?");
+                        app.dialogs.element('.confirm').on('vclick', function() {
+                            app.dialogs.hide(callback);
+                        });
+                    } else {
+                        callback();
+                    }
+                },
+                function(callback) {
+                    app.dialogs.show().element('.message-title').text('Saving');
+                    app.api.updateVocabList(self.table.list, function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                }
+            ], function() {
+                self.removed = false;
+                app.dialogs.hide();
+            });
+        },
+        /**
+         * @method handleSectionRemoveButtonClicked
+         * @param {Event} event
+         */
+        handleSectionRemoveButtonClicked: function(event) {
+            event.stopPropagation();
+            this.removed = true;
+            this.table.removeById(event.currentTarget.parentNode.id.replace('section-', ''));
+            this.table.renderTable();
+        },
         /**
          * @method handleTableRowClicked
          * @param {Event} event
          */
         handleTableRowClicked: function(event) {
             event.preventDefault();
+            app.router.navigate('list/' + this.list.id + '/' + event.currentTarget.id.replace('section-', ''), {trigger: true});
         },
         /**
          * @method loadList
@@ -142,15 +204,24 @@ define([
         loadList: function() {
             var self = this;
             app.dialogs.show().element('.message-title').text('Loading');
-            app.dialogs.element('.message-text').text('SELECTED LIST');
+            app.dialogs.element('.message-text').empty();
             app.api.getVocabList(this.listId, null, function(list) {
                 self.list = list;
+                console.log('LIST', list);
                 self.$('#list-name').text(list.name);
                 self.$('#list-description').text(list.description);
                 self.$('#list-studying').text(list.peopleStudying);
+                if (self.list.creator === app.user.id) {
+                    self.$('#button-add-section').show();
+                    self.table.readonly = false;
+                } else {
+                    self.$('#button-add-section').hide();
+                    self.table.readonly = true;
+                }
                 self.table.setFields({
                     name: 'Name',
-                    rows: 'Items'
+                    rows: 'Items',
+                    remove: ''
                 }).setList(list).renderTable();
                 self.renderElements().resize();
                 app.dialogs.hide();

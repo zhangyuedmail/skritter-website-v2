@@ -21,6 +21,7 @@ define([
             this.reviews = app.user.reviews;
             this.schedule = app.user.schedule;
             this.scheduleIndex = 0;
+            this.listenTo(app.user.data, 'sync', this.updateAddStatus);
             this.listenTo(app.user.schedule, 'sort', this.updateDueCount);
         },
         /**
@@ -30,6 +31,8 @@ define([
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
             app.timer.updateOffset().setElement(this.$('#study-timer'));
+            this.elements.addItems = this.$('#button-add');
+            this.elements.filterStatus = this.$('#filter-status');
             this.elements.studyCount = this.$('#study-count');
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);
@@ -42,6 +45,14 @@ define([
          * @returns {PageStudy}
          */
         renderElements: function() {
+            this.schedule.updateFilter();
+            this.elements.filterStatus.hide();
+            //TODO: show icon based on filter status
+            /**if (this.schedule.isFiltered()) {
+                this.elements.filterStatus.show();
+            } else {
+                this.elements.filterStatus.hide();
+            }**/
             this.updateDueCount();
             return this;
         },
@@ -72,6 +83,9 @@ define([
         handleInfoButtonClicked: function(event) {
             event.preventDefault();
             app.analytics.trackEvent('Prompt', 'click', 'info');
+            if (this.prompt && this.prompt.review) {
+                this.prompt.review.setAt('score', 1);
+            }
             app.sidebars.select('info').toggle();
         },
         /**
@@ -83,44 +97,74 @@ define([
             var self = this;
             app.timer.stop();
             app.analytics.trackEvent('Prompt', 'click', 'add items');
-            app.dialogs.show().element('.message-title').text('Adding Items');
-            app.user.data.items.fetchNew({limit: 5}, function() {
-                if (self.prompt) {
-                    app.timer.start();
-                } else {
-                    self.next();
-                }
-                app.dialogs.hide();
-            }, function(error) {
-                app.dialogs.element('.loader-image').hide();
-                if (error.statusCode === 402) {
-                    app.dialogs.element('.message-title').text('Subscription required.');
-                    app.dialogs.element('.message-text').text('You need an active subscription to add new items.');
-                    app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to Account", {level: 'danger'}));
-                    app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
-                    app.dialogs.element('.message-confirm button').on('vclick', function() {
-                        app.dialogs.hide(function() {
-                            app.router.navigate('account', {trigger: true});
-                        });
+            app.dialogs.show('add-items');
+            app.dialogs.element('.message-confirm').empty();
+            app.dialogs.element('.message-close').empty();
+            async.waterfall([
+                function(callback) {
+                    app.dialogs.element('.loader-image').hide();
+                    app.dialogs.element('.item-limit').show();
+                    app.dialogs.element('.message-title').text('How many items to add?');
+                    app.dialogs.element('.message-text').text('Select one of the quantities below.');
+                    app.dialogs.element('.item-limit').on('vclick', function(event) {
+                        var limit = $(event.target).data('value');
+                        if (limit) {
+                            callback(null, parseInt(limit, 10));
+                        }
                     });
-                } else {
-                    if (app.user.data.vocablists.hasPaused()) {
-                        app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
+                },
+                function(limit, callback) {
+                    app.dialogs.element('.message-title').text('Adding Items');
+                    app.dialogs.element('.loader-image').show();
+                    app.dialogs.element('.item-limit').hide();
+                    app.user.data.items.fetchNew({
+                        limit: limit || 1,
+                        lists: app.user.settings.getActiveLists()
+                    }, function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    app.dialogs.element('.loader-image').hide();
+                    if (error.statusCode === 402) {
+                        app.dialogs.element('.message-title').text('Subscription required.');
+                        app.dialogs.element('.message-text').text('You need an active subscription to add new items.');
+                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to Account", {level: 'danger'}));
+                        app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                        app.dialogs.element('.message-confirm button').on('vclick', function() {
+                            app.dialogs.hide(function() {
+                                app.router.navigate('account', {trigger: true});
+                            });
+                        });
                     } else {
-                        app.dialogs.element('.message-text').text('You need to add another list to study.');
-                    }
-                    app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to My Lists", {level: 'primary'}));
-                    app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
-                    app.dialogs.element('.message-confirm button').on('vclick', function() {
-                        app.dialogs.hide(function() {
-                            app.router.navigate('list/sort/my-lists', {trigger: true});
+                        if (app.user.data.vocablists.hasPaused()) {
+                            app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
+                        } else {
+                            app.dialogs.element('.message-text').text('You need to add another list to study.');
+                        }
+                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to My Lists", {level: 'primary'}));
+                        app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                        app.dialogs.element('.message-confirm button').on('vclick', function() {
+                            app.dialogs.hide(function() {
+                                app.router.navigate('list/sort/my-lists', {trigger: true});
+                            });
                         });
+                    }
+                    app.dialogs.element('.message-close button').on('vclick', function() {
+                        app.dialogs.hide();
+                        app.timer.start();
                     });
-                }
-                app.dialogs.element('.message-close button').on('vclick', function() {
+                } else {
+                    if (self.prompt) {
+                        app.timer.start();
+                    } else {
+                        self.next();
+                    }
                     app.dialogs.hide();
-                    app.timer.start();
-                });
+                }
             });
         },
         /**
@@ -130,6 +174,7 @@ define([
         handlePromptComplete: function(review) {
             console.log('REVIEW:', review.id, review);
             this.reviews.previous = review;
+            this.schedule.addRecent(review.getBase());
             review.save(_.bind(this.next, this));
         },
         /**
@@ -142,7 +187,7 @@ define([
                 nextItem = this.schedule.get(this.reviews.current.get('itemId'));
                 review = this.reviews.current;
             } else {
-                nextItem = this.schedule.getNext(this.scheduleIndex);
+                nextItem = this.schedule.getNext();
             }
             if (nextItem) {
                 nextItem.load(function(result) {
@@ -150,7 +195,6 @@ define([
                     self.prompt = self.promptController.loadPrompt(review || result.item.createReview());
                     self.reviews.current = self.prompt.review;
                 }, function() {
-                    self.scheduleIndex++;
                     self.next();
                 });
 
@@ -195,6 +239,16 @@ define([
         remove: function() {
             this.promptController.remove();
             BasePage.prototype.remove.call(this);
+        },
+        /**
+         * @method updateAddStatus
+         */
+        updateAddStatus: function(status) {
+            if (status) {
+                this.elements.addItems.hide();
+            } else {
+                this.elements.addItems.show();
+            }
         },
         /**
          * @method updateDueCount

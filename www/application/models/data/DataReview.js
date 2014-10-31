@@ -54,6 +54,13 @@ define([
             return this.get('reviews')[this.hasContained() ? this.getPosition() : 0];
         },
         /**
+         * @method getBase
+         * @returns {String}
+         */
+        getBase: function() {
+            return this.id.split('-')[2];
+        },
+        /**
          * @method getBaseItem
          * @returns {DataItem}
          */
@@ -284,7 +291,7 @@ define([
                     console.error('REVIEW:', 'Unable to save review.');
                 } else {
                     app.user.reviews.add(self, {merge: true});
-                   self.cache(callback);
+                    self.cache(callback);
                 }
             });
         },

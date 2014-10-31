@@ -1,4 +1,4 @@
-<div class="mobile page page-list">
+<div class="mobile page page-list-section">
 
     <div class="font-preloader">力</div>
 
@@ -11,9 +11,9 @@
                 </button>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li id="button-add-section" class="navbar-item">
+                <li id="button-add-vocab" class="navbar-item">
                     <i class="fa fa-plus-circle navbar-icon"></i>
-                    <span class="navbar-text">Section</span>
+                    <span class="navbar-text">Vocab</span>
                 </li>
             </ul>
         </div>
@@ -23,26 +23,13 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div id="list" class="content-box">
+                <div id="list-section" class="content-box">
                     <h3 id="list-name"></h3>
-                    <p>People Studying: <span id="list-studying"></span></p>
-                    <p id="list-description"></p>
-                    <div class="list-controls">
-                        <button id="button-add" type="button" class="btn btn-sm btn-success spacing"><i class="fa fa-plus"></i> Add</button>
-                        <button id="button-resume" type="button" class="btn btn-sm btn-success spacing"><i class="fa fa-play"></i> Resume</button>
-                        <button id="button-pause" type="button" class="btn btn-sm btn-warning spacing"><i class="fa fa-pause"></i> Pause</button>
-                        <!--<button id="button-remove" type="button" class="btn btn-sm btn-danger spacing"><i class="fa fa-remove"></i> Remove</button>-->
-                    </div>
-                    <div id="sections">
-                        <div class="section-table-container"></div>
+                    <h4 id="section-name"></h4>
+                    <div id="rows">
+                        <div class="row-table-container"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-
             </div>
         </div>
 
@@ -50,7 +37,7 @@
 
     <div class="btn-group btn-group-justified navbar-fixed-bottom">
         <div class="btn-group">
-            <button id="button-back" type="button" class="btn btn-default navigate" data-url="list">
+            <button id="button-back" type="button" class="btn btn-default">
                 <i class="fa fa-arrow-circle-left"></i> Back
             </button>
         </div>

@@ -53,7 +53,11 @@ define([
                 app.api.clearGuest();
                 app.reload();
             }, function(error) {
-                self.enableForm().elements.message.text(error.responseJSON.message);
+                if (error.responseJSON.message) {
+                    self.enableForm().elements.message.text(error.responseJSON.message);
+                } else {
+                    self.enableForm().elements.message.empty();
+                }
                 app.dialogs.hide();
             });
         },

@@ -22,43 +22,50 @@ define([
             interval: 0,
             last: 0,
             next: 0,
-            part: undefined,
             reviews: 0,
-            style: undefined,
+            sectionIds: [],
             successes: 0,
-            vocabIds: []
+            vocabIds: [],
+            vocabListIds: []
+        },
+        /**
+         * @method getBase
+         * @returns {String}
+         */
+        getBase: function() {
+            return this.id.split('-')[2];
         },
         /**
          * @method getReadiness
-         * @param {Number} time
+         * @param {Number} [now]
          * @returns {Number}
          */
-        getReadiness: function(time) {
-            var now = time || moment().unix();
-            var timePast =  now - this.attributes.last;
-            var timeInterval = 0;
-            if (!this.attributes.vocabIds.length) {
-                return 0;
-            }
-            if (this.attributes.interval) {
-                timeInterval = (this.attributes.last + this.attributes.interval)  - this.attributes.last;
-            } else {
-                timeInterval = this.attributes.next  - this.attributes.last;
-            }
+        getReadiness: function(now) {
+            now = now || moment().unix();
+            var readiness = 0;
+            var offset = 0;
             if (this.attributes.part === 'rune') {
-                timePast += 10;
+                offset += 30;
+            } else if (this.attributes.part === 'tone') {
+                offset += 15;
             }
-            if (this.attributes.part === 'tone') {
-                timePast += 5;
+            if (this.attributes.last) {
+                if (this.attributes.next >= now && this.attributes.last > now - 600) {
+                    readiness -= this.attributes.last + offset;
+                } else {
+                    readiness = (now - this.attributes.last + offset) / (this.attributes.next - this.attributes.last);
+                }
+            } else {
+                readiness = 9999 + offset;
             }
-            return timePast / timeInterval;
+            return readiness;
         },
         /**
          * @method isNew
          * @returns {Boolean}
          */
         isNew: function() {
-            return this.get('reviews') === 0;
+            return this.get('last') === 0;
         },
         /**
          * @method load
@@ -190,11 +197,18 @@ define([
                 }
             ], function(error) {
                 if (error) {
+                    console.error('SCHEDULE ERROR:', error, self);
                     if (result.item) {
                         self.set({vocabIds: [], flag: error ? error : 'Unable to load item.'});
+                        result.item.set({
+                            flag: error ? error : 'Unable to load item.',
+                            vocabIds: []
+                        }).cache(function() {
+                            callbackError(error);
+                        });
+                    } else {
+                        callbackError(error);
                     }
-                    console.error('SCHEDULE ERROR:', error, self);
-                    callbackError(error);
                 } else {
                     callbackSuccess(result);
                 }

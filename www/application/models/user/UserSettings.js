@@ -29,15 +29,19 @@ define([
          * @type Object
          */
         defaults: {
-            audio: true,
             audioPitch: '100',
             audioSpeed: '60',
+            autoAdd: true,
             allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             allJapaneseParts: ['defn', 'rdng', 'rune'],
+            dailyAddLimit: 20,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
+            filterLists: [],
+            filterItems: [],
             hideExpired: 0,
             readingStyle: 'pinyin',
+            showRate: true,
             tutorials: ['defn', 'grading', 'rdng', 'rune', 'tone']
         },
         /**
@@ -60,6 +64,20 @@ define([
             }, function(error) {
                 callback(error);
             });
+        },
+        /**
+         * @method getActiveItems
+         * @returns {Array}
+         */
+        getActiveItems: function() {
+            return this.get('filterItems').length ? this.get('filterItems') : undefined;
+        },
+        /**
+         * @method getActiveLists
+         * @returns {Array}
+         */
+        getActiveLists: function() {
+            return this.get('filterLists').length ? this.get('filterLists') : undefined;
         },
         /**
          * @method getActiveParts
@@ -145,6 +163,13 @@ define([
             return this.get('tutorials').indexOf(name) !== -1;
         },
         /**
+         * @method isAudioEnabled
+         * @returns {Boolean}
+         */
+        isAudioEnabled: function() {
+            return this.get('volume') ? true : false;
+        },
+        /**
          * @method resetTutorials
          */
         resetTutorials: function() {
@@ -158,12 +183,10 @@ define([
         setActiveParts: function(parts) {
             if (this.user.isChinese()) {
                 this.set('filterChineseParts', parts);
-                this.update();
-                return _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
+            } else {
+                this.set('filterJapaneseParts', parts);
             }
-            this.set('filterJapaneseParts', parts);
-            this.update();
-            return _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
+            return this.getActiveParts();
         },
         /**
          * @method setActiveStyles
@@ -183,23 +206,24 @@ define([
                     this.set('reviewTraditional', true);
                 }
             }
-            this.update();
             return this.getActiveStyles();
         },
         /**
          * @method update
+         * @param {Function} [callbackSuccess]
          * @param {Function} [callback]
          */
-        update: function(callback) {
+        update: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.updateUser(this.toJSON(), function(user) {
                 self.set(user);
-                if (typeof callback === 'function') {
-                    callback();
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
                 }
             }, function(error) {
-                if (typeof callback === 'function') {
-                    callback(error);
+                self.set(self.previousAttributes());
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
                 }
             });
         }

@@ -4,13 +4,12 @@
 define([
     'framework/BaseModel',
     'collections/data/DataReviews',
-    'collections/user/HistoryItems',
     'collections/user/ScheduleItems',
     'models/user/UserData',
     'models/user/UserSettings',
     'models/user/UserStats',
     'models/user/UserSubscription'
-], function(BaseModel, DataReviews, HistoryItems, ScheduleItems, UserData, UserSettings, UserStats, UserSubscription) {
+], function(BaseModel, DataReviews, ScheduleItems, UserData, UserSettings, UserStats, UserSubscription) {
     /**
      * @class User
      * @extends BaseModel
@@ -22,7 +21,6 @@ define([
          */
         initialize: function() {
             this.data = new UserData(null, {user: this});
-            this.history = new HistoryItems(null, {user: this});
             this.schedule = new ScheduleItems(null, {user: this});
             this.reviews = new DataReviews(null, {user: this});
             this.settings = new UserSettings(null, {user: this});
@@ -188,12 +186,10 @@ define([
         load: function(callback) {
             var self = this;
             if (localStorage.getItem('_active')) {
+                //load localstorage into memory
                 this.set('id', localStorage.getItem('_active'));
                 if (localStorage.getItem(this.id + '-data')) {
                     this.data.set(JSON.parse(localStorage.getItem(this.id + '-data')), {silent: true});
-                }
-                if (localStorage.getItem(this.id + '-history')) {
-                    this.history.add(JSON.parse(localStorage.getItem(this.id + '-history')), {silent: true});
                 }
                 if (localStorage.getItem(this.id + '-settings')) {
                     this.settings.set(JSON.parse(localStorage.getItem(this.id + '-settings')), {silent: true});
@@ -203,6 +199,12 @@ define([
                 }
                 if (localStorage.getItem(this.id + '-subscription')) {
                     this.subscription.set(JSON.parse(localStorage.getItem(this.id + '-subscription')), {silent: true});
+                }
+                //attach raygun reporting based on environment
+                if (app.isNative()) {
+                    raygun.init('HovAfmmtQxgDLtXszGJ7NA==', {ignoreAjaxAbort: true}).attach();
+                } else if (location.host === 'html5.skritter.com') {
+                    raygun.init('rzs1L7e4RucNaCmV3aP9Qw==', {ignoreAjaxAbort: true}).attach();
                 }
                 async.series([
                     //display general loading messaged
@@ -430,7 +432,6 @@ define([
          */
         remove: function() {
             localStorage.removeItem(app.user.id + '-data');
-            localStorage.removeItem(app.user.id + '-history');
             localStorage.removeItem(app.user.id + '-settings');
             localStorage.removeItem(app.user.id + '-stats');
             localStorage.removeItem(app.user.id + '-subscription');

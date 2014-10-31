@@ -11,6 +11,7 @@ html, body { height: 100%; }
 body {
     -moz-user-select: none;
     -ms-text-size-adjust: none;
+    -ms-touch-action: none;
     -ms-user-select: none;
     -webkit-touch-callout: none;
     -webkit-text-size-adjust: none;
@@ -31,6 +32,11 @@ body {
 
 
 /*** BOOTSTRAP ***/
+[data-growl="container"] {
+    padding-right: 30px;
+    font-size: 14px;
+}
+[data-growl="icon"] { padding-right: 10px; }
 .btn.inline { display: inline-block; }
 .btn.spacing { margin: 5px 0; }
 .container-fluid {
@@ -56,6 +62,8 @@ body {
     margin-top: 0;
 }
 .padding-top { padding-top: 10px; }
+.table-no-border td, .table-no-border th { border: 0 !important; }
+.table-no-title:first-child tr:first-child td, .table-no-title th { border: 0 !important; }
 @media (max-width: 991px) {
     .content-box.fixed-150 { height: auto; }
 }
@@ -90,19 +98,35 @@ body {
 .vocab-table .vocab-field-writing { font-size: 2em; }
 
 
+/*** DIALOGS: ADD ITEMS ***/
+.dialog-add-items .item-limit .btn {
+    border-width: 5px;
+    padding: 20px;
+}
+
+
 /*** DIALOGS: EDIT TEXT ***/
 .dialog-edit-text .dialog-value{
+    margin-bottom: 10px;
     min-height: 100px;
     width: 100%;
 }
+
+
+/*** DIALOGS: EDIT TEXT ***/
+.modal .tutorial-reading { display: inline-block; }
 
 
 /*** DIALOGS: LIST CONFIRMATION ***/
 .dialog-list-confirmation .list-image img { max-width: 100px; }
 
 
-/*** DIALOGS: EDIT TEXT ***/
-.modal .tutorial-reading { display: inline-block; }
+/*** DIALOGS: LIST SELECT ***/
+.dialog-list-select .list-container {
+    margin-bottom: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
 
 
 /*** NAVBAR ***/
@@ -193,8 +217,8 @@ body {
     font-size: 22px;
     margin-left: 15px;
 }
-.navbar-menu.active .toggle-bars { margin-left: -10px; }
-.navbar-menu.active .toggle-text { margin-left: 30px; }
+.navbar-menu.active .toggle-bars { margin-left: 0; }
+.navbar-menu.active .toggle-text { margin-left: 20px; }
 
 
 /*** PAGES ***/
@@ -231,12 +255,24 @@ body {
 }
 
 
+/*** PAGES: FILTERS ***/
+.page-filters .setting-label {
+    float: left;
+    padding-bottom: 10px;
+    width: 100px;
+}
+
+
 /*** PAGES: LANDING ***/
 .landing-logo {
     margin: 25px auto 0 auto;
     padding-left: 10%;
     width: 50%;
 }
+
+
+/*** PAGES: LIST SECTION ***/
+.page-list-section .row-field-remove { width: 50px; }
 
 
 /*** PAGES: LIST SELECT ***/
@@ -261,7 +297,12 @@ body {
 }
 
 
+/*** PAGES: STATS ***/
+.page-stats td { font-size: 1.5em; }
+
+
 /*** PAGES: STUDY ***/
+.page-study .fa-filter { color: #e99002; }
 .page-study .study-stats {
     color: #ffffff;
     padding-top: 5px;
@@ -282,6 +323,15 @@ body {
     display: none;
     padding: 15px 5px 15px 0;
     position: absolute;
+}
+.prompt-container .field-definition img {
+    float: left;
+    padding: 5px;
+}
+.prompt-container .button-wrong {
+    bottom: 15px;
+    position: absolute;
+    right: 15px;
 }
 
 
@@ -419,10 +469,11 @@ body {
 }
 .prompt-container .prompt-toolbar i {
     font-size: 28px;
+    margin: 0 15px;
     padding-top: 5px;
 }
-.prompt-container .prompt-toolbar .pull-left i { margin-left: 15px; }
-.prompt-container .prompt-toolbar .pull-right i { margin-right: 15px; }
+.prompt-container .prompt-toolbar .pull-left i { margin-right: 20px; }
+.prompt-container .prompt-toolbar .pull-right i { margin-left: 20px; }
 
 
 /*** SIDEBARS ***/
@@ -476,6 +527,10 @@ body {
     padding-bottom: 5px;
     padding-right: 10px;
 }
+#sidebar-info .info-definition img {
+    float: left;
+    padding: 5px;
+}
 #sidebar-info .info-tag {
     font-size: 12px;
     margin-top: -10px;
@@ -485,6 +540,10 @@ body {
     word-break: break-all;
 }
 #sidebar-info .info-writing { font-size: 2em; }
+#sidebar-info .pleco-icon {
+    height: 55px;
+    margin-top: -8px;
+}
 
 
 /*** TABLE: CONTAINED ***/
@@ -493,3 +552,6 @@ body {
 
 /*** TABLE: DECOMPS ***/
 .table-decomps .writing { font-size: 2em; }
+
+/*** TABLE: LIST ROWS ***/
+.table-list-row .row-field-writing { font-size: 2em; }

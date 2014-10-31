@@ -16,7 +16,9 @@ define([
          */
         initialize: function() {
             this.title = 'Lists';
+            this.lists= [];
             this.table = new ListTable();
+            this.listenTo(app, 'resize', this.resize);
         },
         /**
          * @method render
@@ -65,36 +67,12 @@ define([
             app.router.navigate('list/' + event.currentTarget.id.replace('list-', ''), {trigger: true});
         },
         /**
-         * @method loadMyLists
+         * @method loadAll
          */
-        loadMyLists: function() {
+        loadAll: function() {
             var self = this;
             app.dialogs.show().element('.message-title').text('Loading');
-            app.dialogs.element('.message-text').text('MY LISTS');
-            app.api.getVocabLists({
-                lang: app.user.getLanguageCode(),
-                sort: 'studying'
-            }, function(lists) {
-                app.user.data.vocablists.add(lists, {merge: true});
-                self.table.setFields({
-                    image: '',
-                    name: 'Name',
-                    studyingMode: 'Status'
-                }).setLists(lists).sortByStatus().renderTable();
-                self.$('#button-my-lists').addClass('active');
-                self.$('#button-textbooks').removeClass('active');
-                app.dialogs.hide();
-            }, function(error) {
-                console.error(error);
-            });
-        },
-        /**
-         * @method loadTextbooks
-         */
-        loadTextbooks: function() {
-            var self = this;
-            app.dialogs.show().element('.message-title').text('Loading');
-            app.dialogs.element('.message-text').text('TEXTBOOKS');
+            app.dialogs.element('.message-text').empty();
             app.api.getVocabLists({
                 lang: app.user.getLanguageCode(),
                 sort: 'official'
@@ -103,12 +81,57 @@ define([
                     image: '',
                     name: 'Name'
                 }).setLists(lists).sortByName().renderTable();
-                self.$('#button-my-lists').removeClass('active');
+                self.$('.sort-button').removeClass('active');
                 self.$('#button-textbooks').addClass('active');
+                self.setTitle('Browse Lists');
                 app.dialogs.hide();
             }, function(error) {
-                console.error(error);
+                //TODO: add in handling for offline
             });
+        },
+        /**
+         * @method loadMyLists
+         */
+        loadMyLists: function() {
+            var self = this;
+            app.dialogs.show().element('.message-title').text('Loading');
+            app.dialogs.element('.message-text').empty();
+            async.waterfall([
+                function(callback) {
+                    app.api.getVocabLists({
+                        lang: app.user.getLanguageCode(),
+                        sort: 'custom'
+                    }, function(result) {
+                        app.user.data.vocablists.add(result, {merge: true});
+                        callback(null, result);
+                    }, callback);
+                },
+                function(lists, callback) {
+                    app.api.getVocabLists({
+                        lang: app.user.getLanguageCode(),
+                        sort: 'studying'
+                    }, function(result) {
+                        app.user.data.vocablists.add(result, {merge: true});
+                        callback();
+                    }, callback);
+                }
+            ], function(error) {
+                if (error) {
+                    //TODO: add in handling for offline
+                } else {
+                    self.lists = app.user.data.vocablists.toJSON();
+                    self.table.setFields({
+                        image: '',
+                        name: 'Name',
+                        studyingMode: 'Status'
+                    }).setLists(self.lists).sortByStatus().renderTable();
+                    self.$('.sort-button').removeClass('active');
+                    self.$('#button-my-lists').addClass('active');
+                }
+                self.setTitle('My Lists');
+                app.dialogs.hide();
+            });
+
         },
         /**
          * @method resize
@@ -127,8 +150,8 @@ define([
          * @returns {PageLists}
          */
         set: function(sort) {
-            if (sort === 'textbooks') {
-                this.loadTextbooks();
+            if (sort === 'browse') {
+                this.loadAll();
             } else {
                 this.loadMyLists();
             }

@@ -48,6 +48,13 @@ define([
             return this;
         },
         /**
+         * @method getContent
+         * @returns {Element}
+         */
+        getContent: function() {
+            return this.$('#content');
+        },
+        /**
          * @method getContentHeight
          * @returns {Number}
          */
@@ -67,6 +74,7 @@ define([
         handleContentContainerClicked: function(event) {
             if (app.sidebars && app.sidebars.isExpanded()) {
                 event.stopPropagation();
+                event.preventDefault();
                 app.sidebars.hide();
             }
         },
@@ -91,6 +99,16 @@ define([
             } else {
                 this.$('.font-preloader').addClass('japanese-text');
             }
+            return this;
+        },
+        /**
+         * @method setTitle
+         * @param {String} title
+         * @returns {View}
+         */
+        setTitle: function(text) {
+            document.title = text + ' - ' + app.strings.application.name;
+            this.$('.navbar-title').text(text);
             return this;
         }
     });

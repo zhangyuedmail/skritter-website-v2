@@ -25,7 +25,7 @@ define([
          * @returns {ListTable}
          */
         render: function() {
-            this.$el.html("<table class='table table-hover list-table'><thead></thead><tbody></tbody></table>");
+            this.$el.html("<table class='table table-hover table-list-table'><thead></thead><tbody></tbody></table>");
             return this;
         },
         /**
@@ -47,27 +47,38 @@ define([
                 divHead += '</tr>';
             }
             //generates the body section
-            for (var i = 0, length = lists.length; i < length; i++) {
-                var list = lists[i];
-                divBody += "<tr id='list-" + list.id + "' class='cursor'>";
-                for (var field in this.fields) {
-                    var fieldValue = list[field];
-                    if (field === 'studyingMode') {
-                        if (fieldValue === 'not studying') {
-                            divBody += "<td class='list-field-" + field + "'>Not Studying</td>";
-                        } else if (fieldValue === 'finished') {
-                            divBody += "<td class='list-field-" + field + "'>Finished</td>";
-                        } else if (fieldValue === 'adding') {
-                            divBody += "<td class='list-field-" + field + "'>Adding</td>";
+            if (lists.length) {
+                for (var i = 0, length = lists.length; i < length; i++) {
+                    var list = lists[i];
+                    divBody += "<tr id='list-" + list.id + "' class='cursor'>";
+                    for (var field in this.fields) {
+                        var fieldValue = list[field];
+                        if (field === 'studyingMode') {
+                            if (fieldValue === 'not studying') {
+                                divBody += "<td class='list-field-" + field + "'>Not Studying</td>";
+                            } else if (fieldValue === 'finished') {
+                                divBody += "<td class='list-field-" + field + "'>Finished</td>";
+                            } else if (fieldValue === 'adding') {
+                                divBody += "<td class='list-field-" + field + "'>Adding</td>";
+                            } else {
+                                divBody += "<td class='list-field-" + field + "'>Paused</td>";
+                            }
+                        } else if (field === 'image') {
+                            divBody += "<td class='list-image'><img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''></td>";
+                        } else if (field === 'remove') {
+                            divBody += "<td class='list-field-" + field + "  text-right text-danger'><i class='fa fa-2x fa-remove'></i></td>";
+                        } else if (field === 'select') {
+                            divBody += "<td class='list-field-" + field + "  text-right text-danger'>";
+                            divBody += "<input value='" + list.id + "' type='checkbox'>";
+                            divBody += "</td>";
                         } else {
-                            divBody += "<td class='list-field-" + field + "'>Paused</td>";
+                            divBody += "<td class='list-field-" + field + "'>" + fieldValue + "</td>";
                         }
-                    } else if (field === 'image') {
-                        divBody += "<td class='list-image'><img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''></td>";
-                    } else {
-                        divBody += "<td class='list-field-" + field + "'>" + fieldValue + "</td>";
                     }
+                    divBody += "</tr>";
                 }
+            } else {
+                divBody += "<h4 class='text-center'>There are no lists to display.</h4>";
             }
             this.$('table thead').html(divHead);
             this.$('table tbody').html(divBody);
@@ -78,6 +89,15 @@ define([
          */
         events: function() {
             return _.extend({}, BaseView.prototype.events, {});
+        },
+        /**
+         * @method addStyle
+         * @param {String} classes
+         * @returns {ListTable}
+         */
+        addStyle: function(classes) {
+            this.$('table').addClass(classes);
+            return this;
         },
         /**
          * @method clear

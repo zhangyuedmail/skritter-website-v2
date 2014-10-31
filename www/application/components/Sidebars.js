@@ -44,6 +44,7 @@ define([
             'vclick #sidebar-info .edit-definition': 'handleEditDefinitionClicked',
             'vclick #sidebar-info .edit-mnemonic': 'handleEditMnemonicClicked',
             'vclick #sidebar-info .info-ban': 'handleInfoBanClicked',
+            'vclick #sidebar-info .info-pleco': 'handleInfoPlecoClicked',
             'vclick #sidebar-info .info-star': 'handleInfoStarClicked',
             'swipeleft .sidebar': 'handleSidebarSwipeLeft',
             'swiperight .sidebar': 'handleSidebarSwipeRight'
@@ -88,6 +89,14 @@ define([
         handleInfoBanClicked: function(event) {
             event.preventDefault();
             this.trigger('click:info-ban');
+        },
+        /**
+         * @method handleInfoPlecoClicked
+         * @param {Event} event
+         */
+        handleInfoPlecoClicked: function(event) {
+            event.preventDefault();
+            this.trigger('click:info-pleco');
         },
         /**
          * @method handleInfoStarClicked
@@ -137,6 +146,13 @@ define([
             return this;
         },
         /**
+         * @method isCollapsed
+         * @returns {Boolean}
+         */
+        isCollapsed: function() {
+            return this.sidebar.hasClass('expanded') ? false : true;
+        },
+        /**
          * @method isExpanded
          * @returns {Boolean}
          */
@@ -175,6 +191,7 @@ define([
                 this.moving = true;
                 if (this.name === 'menu') {
                     $('.navbar-menu.toggle').addClass('active');
+                    $('.application-version').text(app.getVersion());
                 }
                 this.sidebar.addClass('expanded');
                 this.sidebar.show('slide', {direction: this.direction}, speed ? speed : this.speed, function() {

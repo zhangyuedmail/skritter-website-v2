@@ -45,6 +45,13 @@ define([
             return moment(this.get('expires')).unix() < moment().unix();
         },
         /**
+         * @method isSubscribed
+         * @returns {Boolean}
+         */
+        isSubscribed: function() {
+            return this.get('expires') === false || this.get('subscribed') ? true : false;
+        },
+        /**
          * @method fetch
          * @param {Function} callback
          */

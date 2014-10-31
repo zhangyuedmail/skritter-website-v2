@@ -8,9 +8,7 @@
                     <div class="toggle-text navbar-title"></div>
                 </button>
             </div>
-            <ul class="nav navbar-nav navbar-right">
-                <!--<li class="navbar-item"><i class="fa fa-refresh navbar-icon"></i></li>-->
-            </ul>
+            <ul class="nav navbar-nav navbar-right"></ul>
         </div>
     </div>
 
@@ -318,12 +316,28 @@
             </div>
         </div>
 
+        <!--
         <div class="row">
             <div class="col-xs-12">
                 <div class="content-box">
-                    <h2>Sync</h2>
+                    <h2>Language</h2>
+                    <p class="lead"></p>
+                    <form class="subscription-form" role="form">
+                        <fieldset>
+                            <div class="form-group"></div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="content-box">
+                    <h2>Tools</h2>
                     <p class="lead">Data seem a bit off? Try a fresh download of everything!</p>
-                    <form class="account-general-form" role="form">
+                    <form class="account-tools-form" role="form">
                         <fieldset>
                             <div class="form-group">
                                 <button type="button" id="button-download-all" class="btn btn-default spacing">
@@ -331,6 +345,9 @@
                                 </button>
                                 <button type="button" id="button-restore-subscription" class="btn btn-default spacing">
                                     <i class="fa fa-bolt"></i> Restore Subscription
+                                </button>
+                                <button type="button" id="button-reset-all" class="btn btn-danger spacing">
+                                    <i class="fa fa-exclamation-triangle"></i> Reset All Data
                                 </button>
                             </div>
                         </fieldset>

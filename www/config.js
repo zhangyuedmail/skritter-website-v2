@@ -28,7 +28,7 @@ app = (function() {
                 backbone: 'libraries/backbone-1.1.2.min',
                 'backbone.routefilter': 'libraries/backbone.routefilter-0.2.0.min',
                 bootstrap: 'libraries/bootstrap-3.2.0.min',
-                'bootstrap.switch': 'libraries/bootstrap.switch-3.0.2.min',
+                'bootstrap.switch': 'libraries/bootstrap.switch-3.1.0.min',
                 'createjs.easel': 'libraries/createjs.easel-NEXT.min',
                 'createjs.tween': 'libraries/createjs.tween-NEXT.min',
                 fastclick: 'libraries/fastclick-1.0.3.min',
@@ -37,15 +37,17 @@ app = (function() {
                 'jasmine.html': 'libraries/jasmine.html-2.0.3',
                 jquery: 'libraries/jquery-1.11.1.min',
                 'jquery.mobile': 'libraries/jquery.mobile-1.4.4.min',
+                'jquery.notify': 'libraries/jquery.notify-0.3.1.min',
                 'jquery.ui': 'libraries/jquery.ui-1.11.1.min',
                 handlebars: 'libraries/handlebars-2.0.0.min',
                 modernizr: 'libraries/modernizr.custom-2.8.3.min',
                 moment: 'libraries/moment-2.8.3.min',
-                'moment.timezone': 'libraries/moment.timezone-0.2.2.min',
+                'moment.timezone': 'libraries/moment.timezone-0.2.4.min',
                 raygun: 'libraries/raygun-1.12.0.min',
                 'require.i18n': 'libraries/require.i18n-2.0.4',
                 'require.text': 'libraries/require.text-2.0.12',
-                underscore: 'libraries/lodash.compat-2.4.1.min'
+                underscore: 'libraries/lodash.compat-2.4.1.min',
+                'webfont': 'libraries/webfont-1.5.3.min'
             },
             shim: {
                 backbone: ['jquery', 'underscore'],
@@ -55,6 +57,7 @@ app = (function() {
                 'jasmine.html': ['jasmine'],
                 'jasmine.boot': ['jasmine.html'],
                 'jquery.mobile': ['jquery'],
+                'jquery.notify': ['jquery'],
                 'jquery.ui': ['jquery'],
                 'moment.timezone': ['moment']
             }

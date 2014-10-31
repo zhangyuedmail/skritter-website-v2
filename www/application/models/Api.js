@@ -630,6 +630,41 @@ define([
             })();
         },
         /**
+         * @method getVocabByQuery
+         * @param {Array|String} vocabIds
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getVocabByQuery: function(query, options, callbackComplete, callbackError) {
+            options = options ? options : {};
+            $.ajax({
+                url: this.getBaseUrl() + 'vocabs',
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    lang: options.lang || app.user.getLanguageCode(),
+                    q: query,
+                    fields: options.fields,
+                    include_strokes: options.includeStrokes,
+                    include_sentences: options.includeSentences,
+                    include_heisigs: options.includeHeisigs,
+                    include_top_mnemonics: options.includeTopMnemonics,
+                    include_decomps: options.includeDecomps
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method getVocabList
          * @param {String} listId
          * @param {Object} [options]
@@ -652,6 +687,35 @@ define([
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     callbackComplete(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method getVocabListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getVocabListSection: function(listId, sectionId, options, callbackComplete, callbackError) {
+            options = options ? options : {};
+            $.ajax({
+                url: this.getBaseUrl() + 'vocablists/' + listId + '/sections/' + sectionId,
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    fields: options.fields
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.VocabListSection);
                 } else {
                     callbackError(data);
                 }
@@ -729,14 +793,15 @@ define([
                 var batch = _.flatten(reviews.splice(0, 49));
                 $.ajax({
                     url: self.getBaseUrl() + 'reviews' +
-                        '?bearer_token=' + self.getToken(),
+                        '?bearer_token=' + self.getToken() +
+                        '&spaceItems=false',
                     beforeSend: self.beforeSend,
                     context: self,
                     type: 'POST',
                     data: JSON.stringify(batch)
                 }).done(function(data) {
-                    posted = posted.concat(batch);
                     if (data.statusCode === 200) {
+                        posted = posted.concat(batch);
                         if (reviews.length > 0) {
                             setTimeout(next, self.timeout);
                         } else {
@@ -794,6 +859,28 @@ define([
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     callbackComplete(data.Batch);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method resetAccount
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        resetAccount: function(callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl() + 'reset' +
+                    '?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'POST'
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data);
                 } else {
                     callbackError(data);
                 }

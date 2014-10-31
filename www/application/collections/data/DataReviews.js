@@ -21,7 +21,7 @@ define([
             this.current = undefined;
             this.previous = undefined;
             this.user = options.user;
-            this.on('add change', this.updateHistory);
+            this.on('add change', this.autoSync);
         },
         /**
          * @property model
@@ -46,6 +46,14 @@ define([
          */
         comparator: function(item) {
             return -item.attributes.timestamp;
+        },
+        /**
+         * @method autoSync
+         */
+        autoSync: function() {
+            if (this.length > 10) {
+                this.user.data.sync(1);
+            }
         },
         /**
          * @method getBatch
@@ -160,18 +168,22 @@ define([
                     });
                 }, function(error, posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
-                    if (error.statusCode !== 403) {
+                    if (error.responseJSON && error.responseJSON.statusCode === 403) {
+                        callbackError(error);
+                    } else if (error.statusCode) {
                         try {
                             throw new Error('Review Format Errors');
                         } catch (e) {
                             console.error('REVIEW FORMAT ERRORS:', error.responseJSON);
                             raygun.send(e, {Message: error.responseJSON});
                         }
-                    }
-                    app.storage.clear('reviews', function() {
-                        self.reset();
+                        app.storage.clear('reviews', function() {
+                            self.reset();
+                            callbackError(error);
+                        });
+                    } else {
                         callbackError(error);
-                    });
+                    }
                 });
             } else {
                 callbackSuccess();
@@ -199,23 +211,6 @@ define([
                     callbackSuccess();
                 }
             });
-        },
-        /**
-         * @method updateHistory
-         * @param {DataReview} review
-         */
-        updateHistory: function(review) {
-            //send changed review to history
-            this.user.history.add({
-                id: review.id,
-                base: review.id.split('-')[2],
-                part: review.get('part'),
-                timestamp: review.get('timestamp')
-            }, {merge: true});
-            //check for enough reviews to sync
-            if (this.length > 10) {
-                this.user.data.sync(1);
-            }
         }
     });
 

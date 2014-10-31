@@ -49,7 +49,7 @@ define([
         renderAnswer: function() {
             Prompt.prototype.renderAnswer.call(this);
             this.canvas.disableInput();
-            if (app.user.settings.get('audio') && app.user.settings.get('hideReading') && this.review.isLast()) {
+            if (app.user.settings.isAudioEnabled() && app.user.settings.get('hideReading') && this.review.isLast()) {
                 this.vocab.playAudio();
             }
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
@@ -69,7 +69,7 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            if (app.user.settings.get('audio') && !app.user.settings.get('hideReading') && this.review.isFirst()) {
+            if (app.user.settings.isAudioEnabled() && !app.user.settings.get('hideReading') && this.review.isFirst()) {
                 this.vocab.playAudio();
             }
             this.canvas.enableInput();
@@ -98,11 +98,13 @@ define([
          * @method handlePromptClicked
          */
         handleCanvasClicked: function() {
-            if (this.review.getAt('answered')) {
-                this.next();
-            } else if (!this.character.isComplete()) {
-                this.taps++;
-                this.canvas.fadeShape('background', this.character.getExpectedStroke().getShape(), {color: '#b3b3b3', milliseconds: 1000});
+            if (this.promptClick) {
+                if (this.review.getAt('answered')) {
+                    this.next();
+                } else if (!this.character.isComplete()) {
+                    this.taps++;
+                    this.canvas.fadeShape('background', this.character.getExpectedStroke().getShape(), {color: '#b3b3b3', milliseconds: 1000});
+                }
             }
         },
         /**
@@ -300,8 +302,7 @@ define([
          */
         teach: function() {
             var stroke = this.character.getExpectedStroke();
-            var strokeParams = stroke.getParams();
-            if (strokeParams) {
+            if (stroke) {
                 var strokeParam = stroke.getParams()[0];
                 var strokePath = strokeParam.get('corners');
                 this.canvas.clearLayer('background');
