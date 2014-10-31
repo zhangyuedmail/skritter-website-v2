@@ -8,7 +8,7 @@ define([], function() {
     function Recognizer() {
         this.baseAngleThreshold = 45;
         this.baseCornerPenalty = 30;
-        this.baseCornerThreshold = 1;
+        this.baseCornerThreshold = 0;
         this.baseDistanceThreshold = 150;
         this.baseSize = 600;
         this.canvasSize = 600;
@@ -112,7 +112,7 @@ define([], function() {
      */
     Recognizer.prototype.checkAngle = function(targetParam, userStroke) {
         var score = Math.abs(targetParam.getFirstAngle() - userStroke.getFirstAngle());
-        if (score < this.baseAngleThreshold) {
+        if (score <= this.baseAngleThreshold) {
             return score;
         }
         return -1;
@@ -124,8 +124,10 @@ define([], function() {
      * @returns {Number}
      */
     Recognizer.prototype.checkCorners = function(targetParam, userStroke) {
+        var cornerThreshold = targetParam.has('cornerThreshold') ? targetParam.get('cornerThreshold') : this.baseCornerThreshold;
         var score = Math.abs(targetParam.get('corners').length - userStroke.get('corners').length);
-        if (score < this.baseCornerPenalty) {
+        console.log(targetParam.get('strokeId'), score);
+        if (score <= cornerThreshold) {
             return score * this.baseCornerPenalty;
         }
         return -1;
@@ -138,7 +140,7 @@ define([], function() {
      */
     Recognizer.prototype.checkDistance = function(targetParam, userStroke) {
         var score = app.fn.getDistance(targetParam.getRectangle().center, userStroke.getRectangle().center);
-        if (score < this.scaleThreshold(this.baseDistanceThreshold)) {
+        if (score <= this.scaleThreshold(this.baseDistanceThreshold)) {
             return score;
         }
         return -1;
