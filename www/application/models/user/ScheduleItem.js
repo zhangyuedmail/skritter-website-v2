@@ -94,7 +94,11 @@ define([
                         if (vocabs.length > 0) {
                             app.user.data.vocabs.add(vocabs, {merge: true, silent: true, sort: false});
                             result.vocab = result.item.getVocab();
-                            callback();
+                            if (Object.keys(result.vocab.get('definitions')).length) {
+                                callback();
+                            } else {
+                                callback('Initial vocab is missing a definition.');
+                            }
                         } else {
                             callback('Initial vocabs are missing.');
                         }
