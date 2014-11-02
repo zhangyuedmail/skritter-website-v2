@@ -3,8 +3,9 @@
  */
 define([
     'framework/BaseRouter',
+    'pages/admin/Export',
     'pages/admin/ParamEditor'
-], function(BaseRouter, PageAdminParamEditor) {
+], function(BaseRouter, PageAdminExport, PageAdminParamEditor) {
     /**
      * @class RouterAdmin
      * @extends BaseRouter
@@ -20,8 +21,16 @@ define([
          * @type Object
          */
         routes: {
+            'admin/export': 'showExport',
             'admin/param-editor': 'showParamEditor',
             'admin/param-editor/:strokeId': 'showParamEditor'
+        },
+        /**
+         * @method showExport
+         */
+        showExport: function() {
+            this.currentPage = new PageAdminExport();
+            this.currentPage.render();
         },
         /**
          * @method showParamEditor

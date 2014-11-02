@@ -91,6 +91,61 @@ define([
             return this;
         },
         /**
+         * @method loadAll
+         * @param {Function} [callback]
+         */
+        loadAll: function(callback) {
+            var result = {};
+            async.parallel([
+                function(callback) {
+                    app.storage.getAll('decomps', function(data) {
+                        result.Decomps = data;
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.storage.getAll('items', function(data) {
+                        result.Items = data;
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.storage.getAll('sentences', function(data) {
+                        result.Sentences = data;
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.storage.getAll('srsconfigs', function(data) {
+                        result.SRSConfigs = data;
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.storage.getAll('strokes', function(data) {
+                        result.Strokes = data;
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.storage.getAll('vocablists', function(data) {
+                        result.VocabLists = data;
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.storage.getAll('vocabs', function(data) {
+                        result.Vocabs = data;
+                        callback();
+                    });
+                }
+            ], function() {
+                if (typeof callback === 'function') {
+                    callback(result);
+                }
+            });
+        },
+        /**
          * @method put
          * @param {Object} result
          * @param {Function} [callback]
