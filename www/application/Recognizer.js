@@ -69,15 +69,16 @@ define([], function() {
         for (var a = 0, lengthA = params.length; a < lengthA; a++) {
             var param = params[a];
             var result = userStroke.clone();
+            var skipChecks = param.has('skipChecks') ? param.get('skipChecks') : [];
             var total = 0;
             //skip neutral tone during process
             if (param.get('strokeId') === 387) {
                 continue;
             }
             var scores = {
-                angle: this.checkAngle(param, userStroke),
-                corners: this.checkCorners(param, userStroke),
-                distance: this.checkDistance(param, userStroke)
+                angle: skipChecks.indexOf('angle') === -1 ? this.checkAngle(param, userStroke) : 0,
+                corners: skipChecks.indexOf('corners') === -1 ? this.checkCorners(param, userStroke) : 0,
+                distance: skipChecks.indexOf('distance') === -1 ? this.checkDistance(param, userStroke) : 0
             };
             for (var check in scores) {
                 var score = scores[check];

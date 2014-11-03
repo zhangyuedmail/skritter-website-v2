@@ -8,6 +8,7 @@ define([], function() {
      * @type Object
      */
     var data = {
+        //CHARACTER STROKES
         0: [
             {"strokeId":0,"corners":[{"x":26,"y":51},{"x":356,"y":12}]}
         ],
@@ -1164,21 +1165,23 @@ define([], function() {
         382: [
             {"strokeId":382,"corners":[{"x":9,"y":19},{"x":131,"y":27},{"x":18,"y":169}]}
         ],
+        //CHINESE TONES
         383: [
-            {"strokeId":383,"corners":[{"x":34,"y":27},{"x":304,"y":26}]}
+            {"strokeId":383,"corners":[{"x":34,"y":27},{"x":304,"y":26}], "skipChecks": ["distance"]}
         ],
         384: [
-            {"strokeId":384,"corners":[{"x":23,"y":312},{"x":255,"y":27}]}
+            {"strokeId":384,"corners":[{"x":23,"y":312},{"x":255,"y":27}], "skipChecks": ["distance"]}
         ],
         385: [
-            {"strokeId":385,"corners":[{"x":36,"y":24},{"x":171,"y":252},{"x":302,"y":30}]}
+            {"strokeId":385,"corners":[{"x":36,"y":24},{"x":171,"y":252},{"x":302,"y":30}], "skipChecks": ["distance"]}
         ],
         386: [
-            {"strokeId":386,"corners":[{"x":25,"y":24},{"x":289,"y":289}]}
+            {"strokeId":386,"corners":[{"x":25,"y":24},{"x":289,"y":289}], "skipChecks": ["distance"]}
         ],
         387: [
-            {"strokeId":387,"corners":[{"x":26,"y":15},{"x":56,"y":55}]}
+            {"strokeId":387,"corners":[{"x":26,"y":15},{"x":56,"y":55}], "skipChecks": ["distance"]}
         ],
+        //JAPANESE KANA
         600: [
             {"strokeId":600,"corners":[{"x":18,"y":41},{"x":198,"y":10}]}
         ],
