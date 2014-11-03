@@ -69,9 +69,9 @@ define([
                 this.elements.promptStyle.text(this.vocab.getStyle().toUpperCase());
             }
             if (this.vocab.getAudio()) {
-                $('#button-audio').css('visibility', 'visible');
+                $('#button-audio').removeClass('inactive');
             } else {
-                $('#button-audio').css('visibility', 'hidden');
+                $('#button-audio').addClass('inactive');
             }
             this.reset().resize();
             if (this.teaching) {

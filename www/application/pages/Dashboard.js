@@ -162,9 +162,9 @@ define([
          */
         toggleSyncButton: function(status) {
             if (status) {
-                this.elements.buttonSync.hide();
+                this.elements.buttonSync.addClass('inactive');
             } else {
-                this.elements.buttonSync.show();
+                this.elements.buttonSync.removeClass('inactive');
             }
         },
         /**

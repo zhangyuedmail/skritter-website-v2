@@ -245,9 +245,9 @@ define([
          */
         updateAddStatus: function(status) {
             if (status) {
-                this.elements.addItems.hide();
+                this.elements.addItems.addClass('inactive');
             } else {
-                this.elements.addItems.show();
+                this.elements.addItems.removeClass('inactive');
             }
         },
         /**
