@@ -235,7 +235,7 @@ define([
          */
         resize: function() {
             this.$('#list').css({
-                height: this.getHeight() - 75,
+                height: this.getHeight() - 80,
                 'overflow-y': 'auto'
             });
             return this;

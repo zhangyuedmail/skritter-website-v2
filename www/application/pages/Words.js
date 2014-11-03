@@ -77,7 +77,7 @@ define([
          */
         resize: function() {
             this.$('.content-box').css({
-                height: this.getHeight() - 75,
+                height: this.getHeight() - 80,
                 'overflow-y': 'auto'
             });
             return this;
