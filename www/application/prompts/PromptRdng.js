@@ -41,6 +41,8 @@ define([
                 this.vocab.playAudio();
             }
             this.elements.buttonWrong.hide();
+            this.elements.fieldDefinition.html(this.vocab.getDefinition());
+            this.elements.fieldHelpText.hide();
             this.elements.fieldQuestion.hide();
             this.elements.fieldReading.html(this.vocab.getReading(null, {
                 style: app.user.settings.get('readingStyle')
@@ -50,6 +52,7 @@ define([
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
             }
+            this.elements.fieldHightlight.show();
             return this;
         },
         /**
@@ -58,6 +61,7 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
+            this.elements.fieldHightlight.hide();
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
                 this.elements.fieldDefinition.html(this.vocab.getDefinition());
             } else {
