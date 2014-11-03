@@ -15,6 +15,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.expanded = false;
             this.grade = 3;
         },
         /**
@@ -60,8 +61,16 @@ define([
          * @returns {PromptGradingButtons}
          */
         hide: function(callback) {
+            this.expanded = false;
             this.$el.hide(0, callback);
             return this;
+        },
+        /**
+         * @method isExpanded
+         * @returns {Boolean}
+         */
+        isExpanded: function() {
+            return this.expanded;
         },
         /**
          * @method reset
@@ -95,6 +104,7 @@ define([
          * @returns {PromptGradingButtons}
          */
         show: function(callback) {
+            this.expanded = true;
             this.$el.show(0, callback);
             return this;
         },

@@ -168,6 +168,7 @@ define([
          */
         handleCanvasSwipeUp: function() {
             if (this.character.length) {
+                this.hideNavigation();
                 app.analytics.trackEvent('Prompt', 'swipeup', 'eraser');
                 this.renderQuestion();
                 this.character.reset();
@@ -188,6 +189,7 @@ define([
             this.review.setAt('answered', false);
             this.teaching = false;
             if (this.character.length) {
+                this.hideNavigation();
                 this.renderQuestion();
                 this.character.reset();
                 this.canvas.clearAll();

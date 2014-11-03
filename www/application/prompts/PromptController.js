@@ -55,8 +55,18 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BaseView.prototype.events, {
+            'vclick .navigate-next': 'handleNavigateNextClicked',
             'vclick .navigate-previous': 'handleNavigatePreviousClicked'
         }),
+        /**
+         * @method handleNavigateNextClicked
+         * @param {Event} event
+         */
+        handleNavigateNextClicked: function(event) {
+            event.preventDefault();
+            app.analytics.trackEvent('Prompt', 'click', 'next');
+            this.prompt.next();
+        },
         /**
          * @method handleNavigatePreviousClicked
          * @param {Event} event

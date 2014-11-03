@@ -324,15 +324,16 @@ body {
     background: #000000;
     color: #ffffff;
     display: none;
-    padding: 15px 0 15px 5px;
+    padding: 10px 15px;
     position: absolute;
-    right: 0;
+    right: 10px;
 }
 .prompt-container .navigate-previous {
     background: #000000;
     color: #ffffff;
     display: none;
-    padding: 15px 5px 15px 0;
+    left: 10px;
+    padding: 10px 15px;
     position: absolute;
 }
 .prompt-container .field-definition img {
