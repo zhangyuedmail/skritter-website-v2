@@ -36,6 +36,7 @@ define([
             this.gradingButtons.setElement(this.$('.grading-container')).render();
             this.elements.canvasContainer = this.$('.canvas-container');
             this.elements.gradingContainer = this.$('.grading-container');
+            this.elements.navigateNext = this.$('.navigate-next');
             this.elements.navigatePrevious = this.$('.navigate-previous');
             this.elements.prompt = this.$('.prompt');
             this.renderElements();

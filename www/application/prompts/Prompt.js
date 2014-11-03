@@ -93,11 +93,7 @@ define([
                 reviewTime: app.timer.getReviewTime(),
                 thinkingTime: app.timer.getThinkingTime()
             });
-            if (app.user.reviews.previous || !this.review.isFirst()) {
-                this.showNavigation(0.4);
-            } else {
-                this.hideNavigation();
-            }
+            this.showNavigation(0.4);
             this.gradingButtons.select(this.review.getAt('score')).show();
             if (app.user.settings.hasTutorial('grading')) {
                 app.dialogs.show('tutorial-grading');
@@ -400,17 +396,43 @@ define([
         showNavigation: function(opacity) {
             opacity = opacity === undefined ? 0.4 : opacity;
             if (this.part === 'rune' || this.part ==='tone') {
-                this.controller.elements.navigatePrevious.css({
-                    bottom: (this.canvas.getSize() / 2) - 30,
-                    display: 'block',
-                    opacity: opacity
-                });
+                if (this.review.getAt('answered')) {
+                    this.controller.elements.navigateNext.css({
+                        bottom: (this.canvas.getSize() / 2) - 30,
+                        display: 'block',
+                        opacity: opacity
+                    });
+                } else {
+                    this.controller.elements.navigateNext.hide();
+                }
+                if (app.user.reviews.previous || !this.review.isFirst()) {
+                    this.controller.elements.navigatePrevious.css({
+                        bottom: (this.canvas.getSize() / 2) - 30,
+                        display: 'block',
+                        opacity: opacity
+                    });
+                } else {
+                    this.controller.elements.navigatePrevious.hide();
+                }
             } else {
-                this.controller.elements.navigatePrevious.css({
-                    bottom: '50%',
-                    display: 'block',
-                    opacity: opacity
-                });
+                if (this.review.getAt('answered')) {
+                    this.controller.elements.navigateNext.css({
+                        bottom: '50%',
+                        display: 'block',
+                        opacity: opacity
+                    });
+                } else {
+                    this.controller.elements.navigateNext.hide();
+                }
+                if (app.user.reviews.previous || !this.review.isFirst()) {
+                    this.controller.elements.navigatePrevious.css({
+                        bottom: '50%',
+                        display: 'block',
+                        opacity: opacity
+                    });
+                } else {
+                    this.controller.elements.navigatePrevious.hide();
+                }
             }
             return this;
         },
