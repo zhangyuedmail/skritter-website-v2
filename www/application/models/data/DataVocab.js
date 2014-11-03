@@ -186,6 +186,7 @@ define([
             options.hide = options.hide ? options.hide : false;
             options.mask = options.mask ? options.mask : false;
             options.style = options.style === 'zhuyin' ? true : false;
+            html += "<div class='reading-block'>";
             if (this.isChinese()) {
                 var segments = app.fn.segmentReading(this.get('reading'));
                 for (var a = 0, lengthA = segments.length; a < lengthA; a++) {
@@ -239,7 +240,7 @@ define([
                     html += "<span class='reading-1'><span class='position-1'>" + this.get('reading') + "</span></span>";
                 }
             }
-            return html;
+            return html + '</div>';
         },
         /**
          * @method getStroke
@@ -295,6 +296,7 @@ define([
             var position = 1;
             var allCharacters = this.get('writing').split('');
             var containedCharacters = this.getCharacters();
+            html += "<div class='writing-block'>";
             for (var i = 0, length = allCharacters.length; i < length; i++) {
                 var character = allCharacters[i];
                 if (containedCharacters.indexOf(character) > -1) {
@@ -309,7 +311,7 @@ define([
                     html += "<span class='writing-filler'>" + character + "</span>";
                 }
             }
-            return html;
+            return html + '</div>';
         },
         /**
          * @method isBanned

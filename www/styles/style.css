@@ -399,6 +399,11 @@ body {
     position: absolute;
     right: 0;
 }
+.prompt-container .highlight {
+    background-color: #f5f5f5;
+    margin: 0 15px 15px 15px;
+    padding: 0 15px;
+}
 
 
 /*** PROMPTS: GRADING BUTTONS ***/
@@ -420,6 +425,7 @@ body {
 
 
 /*** PROMPTS: PROMPT-DEFN ***/
+.prompt-container .prompt-defn .container-fluid { margin-top: -10%; }
 .prompt-container .prompt-defn .field {
     padding-left: 10px;
     padding-right: 10px;
@@ -443,6 +449,7 @@ body {
 
 
 /*** PROMPTS: PROMPT-RDNG ***/
+.prompt-container .prompt-rdng .container-fluid { margin-top: -10%; }
 .prompt-container .prompt-rdng .field {
     padding-left: 10px;
     padding-right: 10px;

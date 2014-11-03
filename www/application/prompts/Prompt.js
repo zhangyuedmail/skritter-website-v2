@@ -113,6 +113,8 @@ define([
             this.elements.fieldAnswer = this.$('.field-answer');
             this.elements.fieldDefinition = this.$('.field-definition');
             this.elements.fieldHeisig = this.$('.field-heisig');
+            this.elements.fieldHelpText = this.$('.field-help-text');
+            this.elements.fieldHightlight = this.$('.highlight');
             this.elements.fieldMnemonic = this.$('.field-mnemonic');
             this.elements.fieldQuestion = this.$('.field-question');
             this.elements.fieldReading = this.$('.field-reading');

@@ -45,8 +45,11 @@ define([
             if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
             }
+            this.elements.fieldHelpText.hide();
             this.elements.fieldQuestion.hide();
+            this.elements.fieldReading.html(this.vocab.getReading());
             this.elements.fieldWriting.html(this.vocab.getWriting());
+            this.elements.fieldHightlight.show();
             return this;
         },
         /**
@@ -55,6 +58,7 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
+            this.elements.fieldHightlight.hide();
             this.elements.fieldQuestion.html(app.strings.prompt['definition-question']);
             this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
