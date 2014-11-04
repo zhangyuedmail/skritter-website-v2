@@ -8,7 +8,7 @@ define([], function() {
     function Recognizer() {
         this.baseAngleThreshold = 45;
         this.baseCornerPenalty = 50;
-        this.baseCornerThreshold = 2;
+        this.baseCornerThreshold = 0;
         this.baseDistanceThreshold = 150;
         this.baseSize = 600;
         this.canvasSize = 600;
@@ -16,7 +16,7 @@ define([], function() {
     /**
      * @method recognize
      * @param {CanvasCharacter} character
-     * @param {CanvasStroke} userStroke
+     * @param {CanvasStroke} stroke
      * @returns {Boolean|CanvasStroke}
      */
     Recognizer.prototype.recognize = function(character, stroke) {
