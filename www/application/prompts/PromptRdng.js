@@ -48,7 +48,7 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
-                this.elements.fieldWriting.hide();
+                this.elements.fieldJapaneseDefinition.hide();
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
             }
@@ -63,7 +63,7 @@ define([
             Prompt.prototype.renderQuestion.call(this);
             this.elements.fieldHightlight.hide();
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
-                this.elements.fieldDefinition.html(this.vocab.getDefinition());
+                this.elements.fieldJapaneseDefinition.html(this.vocab.getDefinition());
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
             }

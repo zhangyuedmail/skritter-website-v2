@@ -47,7 +47,11 @@ define([
             }
             this.elements.fieldHelpText.hide();
             this.elements.fieldQuestion.hide();
-            this.elements.fieldReading.html(this.vocab.getReading());
+            if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
+                this.elements.fieldReading.empty();
+            } else {
+                this.elements.fieldReading.html(this.vocab.getReading());
+            }
             this.elements.fieldWriting.html(this.vocab.getWriting());
             this.elements.fieldHightlight.show();
             return this;

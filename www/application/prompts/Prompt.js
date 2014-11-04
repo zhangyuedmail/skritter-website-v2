@@ -115,6 +115,7 @@ define([
             this.elements.fieldHeisig = this.$('.field-heisig');
             this.elements.fieldHelpText = this.$('.field-help-text');
             this.elements.fieldHightlight = this.$('.highlight');
+            this.elements.fieldJapaneseDefinition = this.$('.field-japanese-definition');
             this.elements.fieldMnemonic = this.$('.field-mnemonic');
             this.elements.fieldQuestion = this.$('.field-question');
             this.elements.fieldReading = this.$('.field-reading');
@@ -399,7 +400,7 @@ define([
         showNavigation: function(opacity) {
             opacity = opacity === undefined ? 0.4 : opacity;
             var bottom = 75;
-            var bottomOffset = 12;
+            var bottomOffset = 15;
             if (this.part === 'rune' || this.part ==='tone') {
                 if (this.review.getAt('answered')) {
                     this.controller.elements.navigateNext.css({
