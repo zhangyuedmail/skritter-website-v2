@@ -101,7 +101,7 @@ define([
                     app.dialogs.hide();
                 });
             }
-            this.showNavigation(0.4);
+            this.showNavigation(1.0);
             return this;
         },
         /**
@@ -144,7 +144,7 @@ define([
             this.review.setAt('answered', false);
             this.gradingButtons.hide();
             if (app.user.reviews.previous || !this.review.isFirst()) {
-                this.showNavigation(0.1);
+                this.showNavigation(0.2);
             } else {
                 this.hideNavigation();
             }
@@ -399,10 +399,11 @@ define([
         showNavigation: function(opacity) {
             opacity = opacity === undefined ? 0.4 : opacity;
             var bottom = 75;
+            var bottomOffset = 12;
             if (this.part === 'rune' || this.part ==='tone') {
                 if (this.review.getAt('answered')) {
                     this.controller.elements.navigateNext.css({
-                        bottom: this.gradingButtons.isExpanded() ? bottom : bottom - 50,
+                        bottom: this.gradingButtons.isExpanded() ? bottom : bottomOffset,
                         display: 'block',
                         opacity: opacity
                     });
@@ -411,7 +412,7 @@ define([
                 }
                 if (app.user.reviews.previous || !this.review.isFirst()) {
                     this.controller.elements.navigatePrevious.css({
-                        bottom: this.gradingButtons.isExpanded() ? bottom : bottom - 50,
+                        bottom: this.gradingButtons.isExpanded() ? bottom : bottomOffset,
                         display: 'block',
                         opacity: opacity
                     });
@@ -421,7 +422,7 @@ define([
             } else {
                 if (this.review.getAt('answered')) {
                     this.controller.elements.navigateNext.css({
-                        bottom: this.gradingButtons.isExpanded() ? bottom : bottom - 50,
+                        bottom: this.gradingButtons.isExpanded() ? bottom : bottomOffset,
                         display: 'block',
                         opacity: opacity
                     });
@@ -430,7 +431,7 @@ define([
                 }
                 if (app.user.reviews.previous || !this.review.isFirst()) {
                     this.controller.elements.navigatePrevious.css({
-                        bottom: this.gradingButtons.isExpanded() ? bottom : bottom - 50,
+                        bottom: this.gradingButtons.isExpanded() ? bottom : bottomOffset,
                         display: 'block',
                         opacity: opacity
                     });

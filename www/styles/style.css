@@ -321,7 +321,7 @@ body {
 .prompt-container .prompt { position: relative; }
 .prompt-container .field { font-size: 1.5em;     }
 .prompt-container .navigate-next {
-    background: #000000;
+    background: #666666;
     color: #ffffff;
     display: none;
     padding: 10px 15px;
@@ -329,7 +329,7 @@ body {
     right: 10px;
 }
 .prompt-container .navigate-previous {
-    background: #000000;
+    background: #666666;
     color: #ffffff;
     display: none;
     left: 10px;
