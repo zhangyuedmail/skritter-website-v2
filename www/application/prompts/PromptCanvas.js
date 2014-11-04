@@ -474,7 +474,7 @@ define([
                 var duration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
                 if (distance <= 10 && (duration > 20 && duration < 400)) {
                     this.triggerCanvasClick(event);
-                } else if (distance > 100 && angle < -70 && angle > -110) {
+                } else if (distance > this.canvasSize / 2 && angle < -70 && angle > -110) {
                     this.triggerSwipeUp(event);
                 } else {
                     this.trigger('canvas:mouseup', event);
