@@ -6,7 +6,7 @@ define([], function() {
      * @class Recognizer
      */
     function Recognizer() {
-        this.baseAngleThreshold = 15;
+        this.baseAngleThreshold = 30;
         this.baseCornerPenalty = 50;
         this.baseCornerThreshold = 0;
         this.baseDistanceThreshold = 150;
@@ -112,7 +112,7 @@ define([], function() {
      * @returns {Number}
      */
     Recognizer.prototype.checkAngle = function(targetParam, userStroke) {
-        var angleThreshold = targetParam.has('angleThreshold') ? targetParam.get('angleThreshold') : this.baseCornerThreshold;
+        var angleThreshold = targetParam.has('angleThreshold') ? targetParam.get('angleThreshold') : this.baseAngleThreshold;
         var score = Math.abs(targetParam.getFirstAngle() - userStroke.getFirstAngle());
         if (score <= angleThreshold) {
             return score;

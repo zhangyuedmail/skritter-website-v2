@@ -244,31 +244,31 @@ define([], function() {
             {"strokeId":77,"corners":[{"x":13,"y":9},{"x":253,"y":66}]}
         ],
         78: [
-            {"strokeId":78,"corners":[{"x":11,"y":8},{"x":58,"y":56}],"angleThreshold":45}
+            {"strokeId":78,"corners":[{"x":11,"y":8},{"x":58,"y":56}],"angleThreshold":60}
         ],
         79: [
-            {"strokeId":79,"corners":[{"x":1,"y":0},{"x":24,"y":16}],"angleThreshold":45}
+            {"strokeId":79,"corners":[{"x":1,"y":0},{"x":24,"y":16}],"angleThreshold":60}
         ],
         80: [
-            {"strokeId":80,"corners":[{"x":4,"y":5},{"x":113,"y":113}],"angleThreshold":45}
+            {"strokeId":80,"corners":[{"x":4,"y":5},{"x":113,"y":113}],"angleThreshold":60}
         ],
         81: [
-            {"strokeId":81,"corners":[{"x":5,"y":6},{"x":107,"y":66}],"angleThreshold":45}
+            {"strokeId":81,"corners":[{"x":5,"y":6},{"x":107,"y":66}],"angleThreshold":60}
         ],
         82: [
-            {"strokeId":82,"corners":[{"x":8,"y":9},{"x":71,"y":99}],"angleThreshold":45}
+            {"strokeId":82,"corners":[{"x":8,"y":9},{"x":71,"y":99}],"angleThreshold":60}
         ],
         83: [
-            {"strokeId":83,"corners":[{"x":39,"y":12},{"x":15,"y":100}],"angleThreshold":45}
+            {"strokeId":83,"corners":[{"x":39,"y":12},{"x":15,"y":100}],"angleThreshold":60}
         ],
         84: [
-            {"strokeId":84,"corners":[{"x":61,"y":10},{"x":13,"y":70}],"angleThreshold":45}
+            {"strokeId":84,"corners":[{"x":61,"y":10},{"x":13,"y":70}],"angleThreshold":60}
         ],
         85: [
-            {"strokeId":85,"corners":[{"x":31,"y":24},{"x":15,"y":110}],"angleThreshold":45}
+            {"strokeId":85,"corners":[{"x":31,"y":24},{"x":15,"y":110}],"angleThreshold":60}
         ],
         86: [
-            {"strokeId":86,"corners":[{"x":39,"y":20},{"x":15,"y":80}],"angleThreshold":45}
+            {"strokeId":86,"corners":[{"x":39,"y":20},{"x":15,"y":80}],"angleThreshold":60}
         ],
         87: [
             {"strokeId":87,"corners":[{"x":28,"y":61},{"x":189,"y":9}]}
