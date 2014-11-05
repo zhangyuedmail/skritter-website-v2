@@ -44,6 +44,8 @@ define([
             this.elements.fieldDefinition.html(this.vocab.getDefinition());
             if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
+            } else {
+                this.elements.fieldHeisig.hide();
             }
             this.elements.fieldHelpText.hide();
             this.elements.fieldQuestion.hide();
