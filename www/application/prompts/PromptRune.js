@@ -253,7 +253,6 @@ define([
             var canvasSize = this.canvas.getWidth();
             var contentHeight = app.router.currentPage.getContentHeight();
             var contentWidth = app.router.currentPage.getContentWidth();
-            this.elements.promptText.css('max-height', contentHeight - canvasSize - 36);
             if (app.isPortrait()) {
                 this.$el.css({
                     'border-bottom': '1px solid #000000',
@@ -268,6 +267,7 @@ define([
                     bottom: 0,
                     top: 'auto'
                 });
+                this.elements.promptText.css('max-height', contentHeight - canvasSize - 36);
             } else {
                 this.$el.css({
                     'border-bottom': 'none',
@@ -282,6 +282,7 @@ define([
                     bottom: 'auto',
                     top: 0
                 });
+                this.elements.promptText.css('max-height', contentHeight - 36);
             }
             this.canvas.clearAll();
             if (this.character.length) {
