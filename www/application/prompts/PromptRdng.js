@@ -41,16 +41,16 @@ define([
                 this.vocab.playAudio();
             }
             this.elements.buttonWrong.hide();
-            this.elements.fieldDefinition.html(this.vocab.getDefinition());
             this.elements.fieldHelpText.hide();
             this.elements.fieldQuestion.hide();
             this.elements.fieldReading.html(this.vocab.getReading(null, {
                 style: app.user.settings.get('readingStyle')
             }));
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
-                this.elements.fieldJapaneseDefinition.hide();
+                this.elements.fieldDefinition.hide();
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
+                this.elements.fieldDefinition.html(this.vocab.getDefinition());
             }
             this.elements.fieldHighlight.show();
             this.$('.prompt-rdng .container-fluid').css('top', 15);
