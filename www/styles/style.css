@@ -368,6 +368,7 @@ body {
 }
 .prompt-container .detail-container .field {
     clear: both;
+    margin: 0 5px;
     padding-top: 5px;
 }
 .prompt-container .field-highlight {

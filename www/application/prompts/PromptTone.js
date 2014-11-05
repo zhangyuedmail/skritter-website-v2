@@ -146,7 +146,6 @@ define([
             var canvasSize = this.canvas.getWidth();
             var contentHeight = app.router.currentPage.getContentHeight();
             var contentWidth = app.router.currentPage.getContentWidth();
-            this.elements.promptText.css('max-height', contentHeight - canvasSize - 1);
             if (app.isPortrait()) {
                 this.$el.css({
                     'border-bottom': '1px solid #000000',
@@ -154,6 +153,7 @@ define([
                     height: contentHeight - canvasSize - 1,
                     width: contentWidth
                 });
+                this.elements.promptText.css('max-height', contentHeight - canvasSize - 1);
             } else {
                 this.$el.css({
                     'border-bottom': 'none',
@@ -161,6 +161,7 @@ define([
                     height: canvasSize,
                     width: contentWidth - canvasSize - 1
                 });
+                this.elements.promptText.css('max-height', contentHeight - 1);
             }
             this.canvas.clearAll();
             this.canvas.drawFontCharacter('background', this.review.getVocab().get('writing'), {
