@@ -52,7 +52,8 @@ define([
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
             }
-            this.elements.fieldHightlight.show();
+            this.elements.fieldHighlight.show();
+            this.$('.prompt-rdng .container-fluid').css('top', 15);
             return this;
         },
         /**
@@ -61,7 +62,7 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            this.elements.fieldHightlight.hide();
+            this.elements.fieldHighlight.hide();
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
                 this.elements.fieldJapaneseDefinition.html(this.vocab.getDefinition());
             } else {
@@ -107,10 +108,18 @@ define([
                     height: contentHeight,
                     width: contentWidth
                 });
+                this.elements.fieldDefinition.css({
+                    'max-height': contentHeight / 2.2,
+                    'padding': '0 10px'
+                });
             } else {
                 this.$el.css({
                     height: canvasSize,
                     width: contentWidth
+                });
+                this.elements.fieldDefinition.css({
+                    'max-height': contentHeight / 4,
+                    'padding': '0 60px'
                 });
             }
             return this;

@@ -114,7 +114,7 @@ define([
             this.elements.fieldDefinition = this.$('.field-definition');
             this.elements.fieldHeisig = this.$('.field-heisig');
             this.elements.fieldHelpText = this.$('.field-help-text');
-            this.elements.fieldHightlight = this.$('.highlight');
+            this.elements.fieldHighlight = this.$('.field-highlight');
             this.elements.fieldJapaneseDefinition = this.$('.field-japanese-definition');
             this.elements.fieldMnemonic = this.$('.field-mnemonic');
             this.elements.fieldQuestion = this.$('.field-question');
@@ -159,8 +159,8 @@ define([
             'swipeleft': 'handleSwipedLeft',
             'vclick': 'handlePromptClicked',
             'vclick .audio-button': 'handleAudioButtonClicked',
-            'vclick .reading-button': 'handleReadingButtonClicked',
-            'vclick .button-wrong': 'handleWrongButtonClicked'
+            'vclick .button-wrong': 'handleWrongButtonClicked',
+            'vclick .reading-button': 'handleReadingButtonClicked'
         }),
         /**
          * @method clickTimeout
@@ -359,6 +359,16 @@ define([
          */
         resize: function() {
             this.scaleText();
+            return this;
+        },
+        /**
+         * @method scaleDefinition
+         * @returns {Prompt}
+         */
+        scaleDefinition: function() {
+            //TODO: dynamically scale definitions so they fit better
+            //var definitionLength = this.vocab.getDefinition().length;
+            //this.$('.text-definition').css('font-size');
             return this;
         },
         /**

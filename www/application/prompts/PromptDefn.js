@@ -53,7 +53,8 @@ define([
                 this.elements.fieldReading.html(this.vocab.getReading());
             }
             this.elements.fieldWriting.html(this.vocab.getWriting());
-            this.elements.fieldHightlight.show();
+            this.elements.fieldHighlight.show();
+            this.$('.prompt-defn .container-fluid').css('top', 15);
             return this;
         },
         /**
@@ -62,7 +63,7 @@ define([
          */
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
-            this.elements.fieldHightlight.hide();
+            this.elements.fieldHighlight.hide();
             this.elements.fieldQuestion.html(app.strings.prompt['definition-question']);
             this.elements.fieldWriting.html(this.vocab.getWriting());
             return this;
@@ -105,10 +106,18 @@ define([
                     height: contentHeight,
                     width: contentWidth
                 });
+                this.elements.fieldHighlight.css({
+                    'max-height': contentHeight / 2.2,
+                    margin: '15px'
+                });
             } else {
                 this.$el.css({
                     height: canvasSize,
                     width: contentWidth
+                });
+                this.elements.fieldHighlight.css({
+                    'max-height': contentHeight / 3.8,
+                    margin: '15px 60px'
                 });
             }
             return this;
