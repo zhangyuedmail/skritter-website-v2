@@ -27,7 +27,7 @@ define([
             clientId: 'mcfarljwapiclient',
             clientSecret: 'e3872517fed90a820e441531548b8c',
             guest: undefined,
-            root: 'https://beta.skritter',
+            root: 'https://www.skritter',
             timeout: 100,
             tld: location.host.indexOf('.cn') === -1 ? '.com' : '.cn',
             version: 0
