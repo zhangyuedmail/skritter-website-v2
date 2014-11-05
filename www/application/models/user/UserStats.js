@@ -40,7 +40,7 @@ define([
          * @param {String} step
          */
         getCharLearnedTotal: function(part, step) {
-            return this.get('char')[part].learned[step];;
+            return this.get('char')[part].learned[step];
         },
         /**
          * @method getTime
