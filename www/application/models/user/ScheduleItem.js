@@ -160,12 +160,15 @@ define([
                     if (part === 'rune') {
                         var strokeWritings = null;
                         if (result.containedVocabs.length === 0) {
-                            strokeWritings = result.vocab.get('writing');
+                            strokeWritings = [result.vocab.get('writing')];
                         } else {
                             strokeWritings = _.pluck(result.containedVocabs, function(vocab) {
                                 return vocab.attributes.writing;
                             });
                         }
+                        strokeWritings = strokeWritings.filter(function(writing) {
+                            return !app.fn.isKana(writing);
+                        });
                         app.storage.getItems('strokes', strokeWritings, function(strokes) {
                             if (strokeWritings.length === strokes.length) {
                                 result.strokes = app.user.data.strokes.add(strokes, {merge: true, silent: true, sort: false});
