@@ -36,26 +36,11 @@ define([
         },
         /**
          * @method getCharLearnedTotal
+         * @param {String} part
          * @param {String} step
          */
-        getCharLearnedTotal: function(step) {
-            var total = 0;
-            for (var part in this.get('char')) {
-                total += this.get('char')[part].learned[step];
-            }
-            return total;
-        },
-        /**
-         * @method getStudied
-         * @returns {Number}
-         */
-        getStudied: function() {
-            var studiedCount = 0;
-            var word =  this.get('word') ? this.get('word') : {};
-            for (var part in word) {
-                studiedCount += word[part].studied.day;
-            }
-            return studiedCount;
+        getCharLearnedTotal: function(part, step) {
+            return this.get('char')[part].learned[step];;
         },
         /**
          * @method getTime
@@ -74,14 +59,11 @@ define([
         },
         /**
          * @method getWordLearnedTotal
+         * @param {String} part
          * @param {String} step
          */
-        getWordLearnedTotal: function(step) {
-            var total = 0;
-            for (var part in this.get('word')) {
-                total += this.get('word')[part].learned[step];
-            }
-            return total;
+        getWordLearnedTotal: function(part, step) {
+            return this.get('word')[part].learned[step];
         },
         /**
          * @method sync

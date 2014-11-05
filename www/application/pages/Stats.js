@@ -34,23 +34,23 @@ define([
          */
         renderStats: function() {
             //STATS - DAY
-            this.$('#stats-day .char-learned').text(this.stats.getCharLearnedTotal('day'));
-            this.$('#stats-day .word-learned').text(this.stats.getWordLearnedTotal('day'));
+            this.$('#stats-day .char-learned').text(this.stats.getCharLearnedTotal('rune', 'day'));
+            this.$('#stats-day .word-learned').text(this.stats.getWordLearnedTotal('rune', 'day'));
             this.$('#stats-day .time-studied').text(app.fn.convertTimeToClock(this.stats.get('timeStudied').day * 1000));
             this.$('#stats-day .days-studied').text(this.stats.get('daysStudied').day);
             //STATS - WEEK
-            this.$('#stats-week .char-learned').text(this.stats.getCharLearnedTotal('week'));
-            this.$('#stats-week .word-learned').text(this.stats.getWordLearnedTotal('week'));
+            this.$('#stats-week .char-learned').text(this.stats.getCharLearnedTotal('rune', 'week'));
+            this.$('#stats-week .word-learned').text(this.stats.getWordLearnedTotal('rune', 'week'));
             this.$('#stats-week .time-studied').text(app.fn.convertTimeToClock(this.stats.get('timeStudied').week * 1000));
             this.$('#stats-week .days-studied').text(this.stats.get('daysStudied').week);
             //STATS - MONTH
-            this.$('#stats-month .char-learned').text(this.stats.getCharLearnedTotal('month'));
-            this.$('#stats-month .word-learned').text(this.stats.getWordLearnedTotal('month'));
+            this.$('#stats-month .char-learned').text(this.stats.getCharLearnedTotal('rune', 'month'));
+            this.$('#stats-month .word-learned').text(this.stats.getWordLearnedTotal('rune', 'month'));
             this.$('#stats-month .time-studied').text(app.fn.convertTimeToClock(this.stats.get('timeStudied').month * 1000));
             this.$('#stats-month .days-studied').text(this.stats.get('daysStudied').month);
             //STATS - ALL
-            this.$('#stats-all .char-learned').text(this.stats.getCharLearnedTotal('all'));
-            this.$('#stats-all .word-learned').text(this.stats.getWordLearnedTotal('all'));
+            this.$('#stats-all .char-learned').text(this.stats.getCharLearnedTotal('rune', 'all'));
+            this.$('#stats-all .word-learned').text(this.stats.getWordLearnedTotal('rune', 'all'));
             this.$('#stats-all .time-studied').text(app.fn.convertTimeToClock(this.stats.get('timeStudied').all * 1000));
             this.$('#stats-all .days-studied').text(this.stats.get('daysStudied').all);
             return this;
