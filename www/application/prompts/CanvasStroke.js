@@ -86,8 +86,8 @@ define([
             if (this.isKana()) {
                 shape.x = data.x;
                 shape.y = data.y;
-                shape.scaleX = data.w / 600;
-                shape.scaleY = data.h / 600;
+                shape.scaleX = data.w / 500;
+                shape.scaleY = data.h / 500;
             } else {
                 //apply rotation based on newly sized shape
                 var ms = shape.getMatrix();
