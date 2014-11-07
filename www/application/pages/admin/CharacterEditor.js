@@ -18,6 +18,9 @@ define([
             this.title = 'Character Editor';
             this.canvas = new PromptCanvas();
             this.character = undefined;
+            this.kana = app.user.data.strokes.where({kana: true}).map(function(character) {
+                return character.id;
+            });
             this.writing = undefined;
             this.listenTo(app, 'resize', this.resize);
         },
@@ -50,8 +53,20 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick #button-clear': 'handleClearButtonClicked'
+            'vclick #button-backward': 'handleBackwardButtonClicked',
+            'vclick #button-clear': 'handleClearButtonClicked',
+            'vclick #button-forward': 'handleForwardButtonClicked'
         }),
+        /**
+         * @method handleBackwardButtonClicked
+         * @param {Event} event
+         */
+        handleBackwardButtonClicked: function(event) {
+            event.preventDefault();
+            var position = this.kana.indexOf(this.writing);
+            this.writing = this.kana[position - 1];
+            this.loadCharacter();
+        },
         /**
          * @method handleClearButtonClicked
          * @param {Event} event
@@ -60,6 +75,16 @@ define([
             event.preventDefault();
             this.character.reset();
             this.canvas.clearLayer('stroke');
+        },
+        /**
+         * @method handleForwardButtonClicked
+         * @param {Event} event
+         */
+        handleForwardButtonClicked: function(event) {
+            event.preventDefault();
+            var position = this.kana.indexOf(this.writing);
+            this.writing = this.kana[position + 1];
+            this.loadCharacter();
         },
         /**
          * @method handleInputDown
@@ -86,8 +111,10 @@ define([
          * @return {CharacterEditor}
          */
         loadCharacter: function() {
-            this.canvas.clearLayer('background');
+            this.canvas.clearLayer('background').clearLayer('stroke');
+            this.character = app.user.data.strokes.get(this.writing).getCanvasCharacter();
             this.canvas.drawShape('background', this.character.getExpectedVariations()[0].getShape(), {color: '#b3b3b3'});
+            app.router.navigate('admin/character-editor/' + this.writing);
             return this;
         },
         /**
@@ -119,10 +146,7 @@ define([
          * @returns {CharacterEditor}
          */
         set: function(writing) {
-            var self = this;
             this.writing = writing;
-            self.character = app.user.data.strokes.get(writing).getCanvasCharacter();
-            console.log(writing, self.character);
             return this;
         }
     });
