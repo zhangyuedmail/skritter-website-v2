@@ -74,7 +74,7 @@ define([
         handleClearButtonClicked: function(event) {
             event.preventDefault();
             this.character.reset();
-            this.canvas.clearLayer('stroke');
+            this.loadCharacter();
         },
         /**
          * @method handleForwardButtonClicked
@@ -114,6 +114,7 @@ define([
             this.canvas.clearLayer('background').clearLayer('stroke');
             this.character = app.user.data.strokes.get(this.writing).getCanvasCharacter();
             this.canvas.drawShape('background', this.character.getExpectedVariations()[0].getShape(), {color: '#b3b3b3'});
+            this.canvas.enableInput();
             app.router.navigate('admin/character-editor/' + this.writing);
             return this;
         },
