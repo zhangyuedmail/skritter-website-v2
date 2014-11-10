@@ -2484,7 +2484,7 @@ define([], function() {
             return stroke;
         },
         707: function(defaultColor) {
-            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAvqg71YhQAAgygyAAhQYAAhGAyg8BQAAYBQAAAyAyAABQYAABQgyAyhQAA").p("EAwwg93YAKgogogogoAAYgoAAgeAoAAAoYgKAoAoAeAoAAYAoAAAegeAAgo").cp());
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("ACCEEYhQAAgyg8AAhGYAAhQAygyBQAAYBGAAA8AyAABQYAABGg8A8hGAA").p("ADICCYAAgogegogoAAYgoAAgeAogKAoYAAAoAoAeAoAAYAoAAAegeAAgo").cp());
             stroke.setBounds(0, 0, 27, 27);
             return stroke;
         },
@@ -3058,42 +3058,42 @@ define([], function() {
             stroke.setBounds(0, 0, 383, 274);
             return stroke;
         },
-		822: function(defaultColor) {
+        822: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AAKAyYAoAoAogeAegUYB4g7BuATBuBQYBGAyBQAeBGAyYAoAUAyAeAyAeYAKAKAAAeAAAKYgUAKgUAKgKgKYg8geg8gegygeYhQg8hQg8hQg8YhQg8gKAKhQAyYgoAUgoAegoAKYgUAKgegKgKgUYgUgKAAgeAAgUYAAgKAAAAAKAA").cp());
             stroke.setBounds(0, 0, 84, 37);
             return stroke;
         },
-		823: function(defaultColor) {
+        823: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AGGIIYB4hGAyhagKiCYAAiChGg8iCAKYAyBagyBQg8A8Yg8A8g8Aog8AyYgyAegegKgKg8YgKhGgKhQAAhQYAAgKAKgUAKgKYB4hkCMgnCgAdYCWAeBkCqgoCMYgKAegKAegUAUYgoAyhkAohQAA").p("AAoCqYAKAoAAAyAKAyYAKAeAKAUAegeYAyg8A8hGAyhGYAUgUgKgeAKgeIgKAAYhQAehQAohQAy").cp());
             stroke.setBounds(0, 0, 67, 53);
             return stroke;
         },
-		824: function(defaultColor) {
+        824: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("ABkBkYAAAAA8AoAKAKYAUAKAegKAUgKYAegKAUgUAUgUYAAAAgog8gKgKYgUgUgUAKgeAAYg8AAg8gKhGAAYAAAAAAAAAAAKYAeAeAoAeAoAeIgKAA").cp());
             stroke.setBounds(0, 0, 32, 16);
             return stroke;
         },
-		825: function(defaultColor) {
+        825: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AAoBaYBQAeBkAABQgoYAUgKAKgUgegKYgUgUgegUgeAAYgeAAgeAKgeAAYgUAKgUAAgUAAYgKAAgKAAgUgKYgKAAgKAKgKAAYAAAKAAAeAAAKYAKAKAUAKAKAA").cp());
             stroke.setBounds(0, 0, 33, 12);
             return stroke;
         },
-		826: function(defaultColor) {
+        826: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AGQGuYAAAoAKAeAAAeYAKBkhGBQhkAAYiMAAgyiWAUhuYAUgyAUgyAegyYAog8A8hQAKhGYAAgeAAgoAAgUYgeAAAAAegUAUYgKAKgKAUgKAKYg8BkhQBugeB4YgTBaAJBaAyBQYAoBQBkAyBQgKYBagUBahQAKhQYAUhQgegygyg8").cp());
             stroke.setBounds(0, 0, 49, 81);
             return stroke;
         },
-		827: function(defaultColor) {
+        827: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AAADcYAUgoAUgeAegeYCMh4CggTCqAnYAUAAAKAKAUAKYBQAoAUBGgyBQYg8BagyBagUBuYgUCggUCqgKCgYgUFUAKFUAeFeYAUD6AoD6A8D6YBkGaEODwGaBaYFyBQFyAKFyhuYGkiCFKj6D6lUYAogyAUgyAogoYAogoAygoAygoYAKgKAeAKAeAAYgoBQgeBGgoA8YkYHgmQFAocCCYkEBGkOAAkOgeYjSgUjIgyjIhaYlyi0jckshamQYiComgoowAKowYAKjmAejmAUjmYAKhugygohkAUYgyAKgoAUgoAKYgKAAAAAAAAAA").cp());
             stroke.setBounds(0, 0, 381, 374);
             return stroke;
         },
-		828: function(defaultColor) {
+        828: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AAAAUYAegnAoATAUAUYCCBQBkBkAeCgYAAAeAAAogUAeYgUA8gyAAgegyYgUgUAAgegKgUYgUiMhGh4hkhkYAAgKgKAAAAgK").cp());
             stroke.setBounds(0, 0, 36, 51);
             return stroke;
         },
-		829: function(defaultColor) {
+        829: function(defaultColor) {
             var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("AAAAUYAogdAyAJAoAUYCCBGBkC+geCWYAAAogUAogUAeYgUAUgoAUgUgKYgUgKgegeAAgeYgKg8AAg8gKg8YgUhugohkhQha").cp());
             stroke.setBounds(0, 0, 35, 59);
             return stroke;
