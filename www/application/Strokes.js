@@ -2484,7 +2484,7 @@ define([], function() {
             return stroke;
         },
         707: function(defaultColor) {
-            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("EAw6A9uYAKgegogogoAAYgoAAgeAeAAAoYgKAoAoAoAoAAYAoAAAegoAAgo").cp());
+            var stroke = new createjs.Shape(new createjs.Graphics().f(defaultColor).p("ACCEEYhQAAgyg8AAhGYAAhQAygyBQAAYBGAAA8AyAABQYAABGg8A8hGAA").p("ADICCYAAgogegogoAAYgoAAgeAogKAoYAAAoAoAeAoAAYAoAAAegeAAgo").cp());
             stroke.setBounds(0, 0, 27, 27);
             return stroke;
         },
