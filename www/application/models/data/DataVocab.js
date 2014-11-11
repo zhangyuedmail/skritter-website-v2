@@ -164,6 +164,15 @@ define([
             return skipFormat ? definition : app.fn.textToHTML(definition);
         },
         /**
+         * @method getKana
+         * @returns {Array}
+         */
+        getKana: function() {
+            return _.without(this.get('writing').split('').map(function(value) {
+                return app.fn.isKana(value) ? value : false;
+            }), false);
+        },
+        /**
          * @method getMnemonicText
          * @returns {String}
          */
@@ -180,15 +189,17 @@ define([
             var html = '';
             var position = 1;
             var fillers = [" ... ", "'", " "];
+            var segments = [];
             //TODO: fix for single character prompts with multiple readings
             startFrom = startFrom ? startFrom : false;
             options = options ? options : {};
             options.hide = options.hide ? options.hide : false;
+            options.hideKana = options.hideKana ? options.hideKana : [];
             options.mask = options.mask ? options.mask : false;
             options.style = options.style === 'zhuyin' ? true : false;
             html += "<div class='reading-block'>";
             if (this.isChinese()) {
-                var segments = app.fn.segmentReading(this.get('reading'));
+                segments = app.fn.segmentReading(this.get('reading'));
                 for (var a = 0, lengthA = segments.length; a < lengthA; a++) {
                     var segment = segments[a];
                     html += "<div class='reading-" + (a + 1) + "'>";
@@ -234,11 +245,18 @@ define([
                     html += "</div>";
                 }
             } else {
-                if (options.hide) {
-                    html += "<span class='reading-1 reading-button'><span class='position-1 invisible'>" + this.get('reading') + "</span></span>";
-                } else {
-                    html += "<span class='reading-1'><span class='position-1'>" + this.get('reading') + "</span></span>";
+                segments = this.get('reading').split('');
+                html += "<span class='reading-1'>";
+                for (var c = 0, lengthC = segments.length; c < lengthC; c++) {
+                    var segment = segments[c];
+                    if (options.hideKana.indexOf(segment) === -1) {
+                        html += "<span class='position-" + position + "'>" + segment + "</span>";
+                    } else {
+                        html += "<span class='position-" + position + "'><span> - </span></span>";
+                    }
+                    position++;
                 }
+                html += "</span>";
             }
             return html + '</div>';
         },
