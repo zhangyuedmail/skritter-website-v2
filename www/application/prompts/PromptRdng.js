@@ -53,7 +53,6 @@ define([
                 this.elements.fieldDefinition.html(this.vocab.getDefinition());
             }
             this.elements.fieldHighlight.show();
-            this.$('.prompt-rdng .container-fluid').css('top', 15);
             return this;
         },
         /**

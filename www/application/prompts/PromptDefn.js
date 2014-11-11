@@ -56,7 +56,6 @@ define([
             }
             this.elements.fieldWriting.html(this.vocab.getWriting());
             this.elements.fieldHighlight.show();
-            this.$('.prompt-defn .container-fluid').css('top', 15);
             return this;
         },
         /**

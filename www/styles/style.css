@@ -435,7 +435,7 @@ body {
 .prompt-container .prompt-defn { height: 100%; }
 .prompt-container .prompt-defn .container-fluid {
     position: absolute;
-    top: 20%;
+    top: 15%;
     width: 100%;
 }
 .prompt-container .prompt-defn .prompt-newness {
@@ -448,6 +448,9 @@ body {
     margin: 0 15px;
     top: -50px;
 }
+@media (orientation: landscape) and (max-width: 1000px) {
+    .prompt-container .prompt-defn .container-fluid { top: 5%; }
+}
 
 
 /*** PROMPTS: PROMPT-RDNG ***/
@@ -458,7 +461,7 @@ body {
 .prompt-container .prompt-rdng { height: 100%; }
 .prompt-container .prompt-rdng .container-fluid {
     position: absolute;
-    top: 20%;
+    top: 15%;
     width: 100%;
 }
 .prompt-container .prompt-rdng .prompt-newness {
@@ -470,6 +473,9 @@ body {
     bottom: auto;
     margin: 0 15px;
     top: -50px;
+}
+@media (orientation: landscape) and (max-width: 1000px) {
+    .prompt-container .prompt-rdng .container-fluid { top: 5%; }
 }
 
 
