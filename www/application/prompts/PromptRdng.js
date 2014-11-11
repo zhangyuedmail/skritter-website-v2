@@ -50,7 +50,7 @@ define([
                 if (this.vocab.get('writing').length === 1) {
                     this.elements.fieldReading.html(this.vocab.getDefinition());
                 }
-                this.elements.fieldDefinition.hide();
+                this.elements.fieldDefinition.empty();
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
                 this.elements.fieldDefinition.html(this.vocab.getDefinition());
