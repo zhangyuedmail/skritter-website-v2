@@ -66,8 +66,12 @@ define([
         renderQuestion: function() {
             Prompt.prototype.renderQuestion.call(this);
             this.elements.fieldHighlight.hide();
-            if (this.vocab.isJapanese() && this.vocab.get('writing').length > 1 && app.fn.isKana(this.vocab.get('writing'))) {
-                this.elements.fieldJapaneseDefinition.html(this.vocab.getDefinition());
+            if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
+                if (this.vocab.get('writing').length === 1 ) {
+                    this.elements.fieldWriting.html(this.vocab.getWriting());
+                } else {
+                    this.elements.fieldJapaneseDefinition.html(this.vocab.getDefinition());
+                }
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
             }
