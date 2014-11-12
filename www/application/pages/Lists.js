@@ -16,7 +16,7 @@ define([
          */
         initialize: function() {
             this.title = 'Lists';
-            this.lists= [];
+            this.lists = [];
             this.table = new ListTable();
             this.listenTo(app, 'resize', this.resize);
         },
@@ -42,9 +42,33 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-add-list': 'handleButtonAddListClicked',
             'vclick table tr': 'handleTableRowClicked',
             'keyup #search-box': 'handleSearchBoxChanged'
         }),
+        /**
+         * @method handleButtonAddListClicked
+         * @param {Event} event
+         */
+        handleButtonAddListClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            app.dialogs.show('list-add').element('.modal-title span').text('Add List');
+            app.dialogs.element('.list-add').on('vclick', function() {
+                var name = app.dialogs.element('#list-name').val();
+                app.api.createVocabList({
+                    name: name,
+                    lang: app.user.getLanguageCode()
+                }, function(list) {
+                    self.lists.push(list);
+                    self.table.setLists(self.lists);
+                    self.table.renderTable();
+                    app.dialogs.hide();
+                }, function() {
+                    app.dialogs.hide();
+                });
+            });
+        },
         /**
          * @method handleSearchBoxChanged
          * @param {Event} event

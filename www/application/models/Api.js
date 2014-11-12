@@ -218,6 +218,29 @@ define([
             });
         },
         /**
+         * @method createVocabList
+         * @param {Object} list
+         * @param {Function} callbackComplete
+         * @param {Function} [callbackError]
+         */
+        createVocabList: function(list, callbackComplete, callbackError) {
+            $.ajax({
+                url: this.getBaseUrl()  + 'vocablists?bearer_token=' + this.getToken(),
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'POST',
+                data: JSON.stringify(list)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackComplete(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method getBaseUrl
          * @returns {String}
          */
