@@ -43,6 +43,9 @@ define([
                 case 'adding':
                     this.$('#button-pause').show();
                     break;
+                case 'finished':
+                    this.$('#button-remove').show();
+                    break;
                 case 'reviewing':
                     this.$('#button-resume').show();
                     this.$('#button-remove').show();
@@ -62,7 +65,7 @@ define([
             'vclick #button-add-section': 'handleButtonAddSectionClicked',
             'vclick #button-add': 'handleButtonAddClicked',
             'vclick #button-pause': 'handleButtonPauseClicked',
-            //'vclick #button-remove': 'handleButtonRemoveClicked',
+            'vclick #button-remove': 'handleButtonRemoveClicked',
             'vclick #button-resume': 'handleButtonResumeClicked',
             'vclick #button-save': 'handleSaveButtonClicked',
             'vclick .section-field-remove': 'handleSectionRemoveButtonClicked'
@@ -125,6 +128,35 @@ define([
             }, function(error) {
                 console.error(error);
             });
+        },
+        /**
+         * @method handleButtonRemoveClicked
+         * @param {Event} event
+         */
+        handleButtonRemoveClicked: function(event) {
+            event.preventDefault();
+            var self = this;
+            app.analytics.trackEvent('List', 'click', 'resume');
+            app.dialogs.show().element('.message-title').text('Updating');
+            app.dialogs.element('.message-text').text('REMOVING LIST');
+            async.series([
+                function(callback) {
+                    app.api.updateVocabList({
+                        id: self.listId,
+                        studyingMode: 'not studying'
+                    }, function(result) {
+                        self.list = result;
+                        app.user.data.vocablists.add(result, {merge: true});
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                }
+            ], function() {
+                self.renderElements();
+                app.dialogs.hide();
+            });
+
         },
         /**
          * @method handleButtonResumeClicked
