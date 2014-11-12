@@ -96,8 +96,8 @@ define([
          */
         handleButtonDownloadAllClicked: function(event) {
             event.preventDefault();
-            app.analytics.trackEvent('Account', 'click', 'download all');
-            app.dialogs.show().element('.message-title').text('Downloading Data');
+            app.analytics.trackEvent('Account', 'click', 'restore_data');
+            app.dialogs.show().element('.message-title').text('Restoring Data');
             app.dialogs.element('.message-text').text('');
             app.user.data.items.downloadAll(function() {
                 app.reload();
@@ -116,7 +116,7 @@ define([
          */
         handleButtonResetAllClicked: function(event) {
             event.preventDefault();
-            app.analytics.trackEvent('Account', 'click', 'reset all');
+            app.analytics.trackEvent('Account', 'click', 'reset_all');
             app.dialogs.show('confirm').element('.modal-title span').text('Reset Account');
             var resetMessage = "Want to start all over, make it as if nothing ever happened?";
             resetMessage += "<strong>What will be deleted?</strong><hr>";
@@ -132,7 +132,7 @@ define([
                     },
                     function(callback) {
                         app.dialogs.show();
-                        app.dialogs.element('.message-title').text('Resetting');
+                        app.dialogs.element('.message-title').text('Resetting Account');
                         app.api.resetAccount(function() {
                             callback();
                         }, function(error) {
@@ -164,7 +164,7 @@ define([
          * @method handleButtonRestoreSubscriptionClicked
          */
         handleButtonRestoreSubscriptionClicked: function() {
-            app.analytics.trackEvent('Account', 'click', 'restore subscription');
+            app.analytics.trackEvent('Account', 'click', 'restore_subscription');
             app.dialogs.show().element('.message-title').text('Restoring Subscription');
             app.user.subscription.restoreGoogle(function() {
                 app.dialogs.element('.message-title').text('Subscription Restored');
