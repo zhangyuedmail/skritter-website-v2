@@ -12,7 +12,12 @@ define([
         /**
          * @method initialize
          */
-        initialize: function() {},
+        initialize: function() {
+            //TODO: this should be removed when handled by server
+            if (this.isJapanese()) {
+                this.set('containedVocabIds', _.without(this.get('containedVocabIds'), 'ja-～-0'));
+            }
+        },
         /**
          * @property idAttribute
          * @type String

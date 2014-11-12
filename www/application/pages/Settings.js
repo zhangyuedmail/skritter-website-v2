@@ -69,7 +69,7 @@ define([
             var self = this;
             var toggleState = self.elements.adjStudyKana.bootstrapSwitch('state');
             app.analytics.trackEvent('Settings', 'click', 'study kana');
-            app.dialogs.show().element('.message-title').text(toggleState ? 'Enabling' : 'Disabling' + ' Kana');
+            app.dialogs.show().element('.message-title').text((toggleState ? 'Enabling' : 'Disabling') + ' Kana');
             app.dialogs.element('.message-text').text('');
             async.series([
                 function(callback) {
