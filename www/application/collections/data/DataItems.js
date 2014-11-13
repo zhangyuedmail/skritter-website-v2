@@ -229,7 +229,7 @@ define([
                     function(callback) {
                         if (options.get) {
                             if (items && items.length) {
-                                app.dialogs.element('.message-text').text('FETCHING ' + items.length + ' ITEMS');
+                                app.dialogs.element('.message-text').text('FETCHING ' + numVocabsAdded + ' WORDS');
                                 app.api.getItemByOffset(now, {
                                     lang: app.user.getLanguageCode(),
                                     includeVocabs: true,

@@ -104,7 +104,7 @@ define([
                 function(callback) {
                     app.dialogs.element('.loader-image').hide();
                     app.dialogs.element('.item-limit').show();
-                    app.dialogs.element('.message-title').text('How many items to add?');
+                    app.dialogs.element('.message-title').text('How many words to add?');
                     app.dialogs.element('.message-text').text('Select one of the quantities below.');
                     app.dialogs.element('.item-limit').on('vclick', function(event) {
                         var limit = $(event.target).data('value');
