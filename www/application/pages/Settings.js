@@ -68,19 +68,19 @@ define([
         toggleStudyKana: function() {
             var self = this;
             var toggleState = self.elements.adjStudyKana.bootstrapSwitch('state');
-            app.analytics.trackEvent('Settings', 'click', 'study kana');
+            app.analytics.trackEvent('Settings', 'click', 'study_kana');
             app.dialogs.show().element('.message-title').text((toggleState ? 'Enabling' : 'Disabling') + ' Kana');
             app.dialogs.element('.message-text').text('');
             async.series([
                 function(callback) {
-                    self.settings.set('studyKana', toggleState).update(function() {
+                    app.user.data.items.downloadAll(function() {
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
                 function(callback) {
-                    app.user.data.items.downloadAll(function() {
+                    self.settings.set('studyKana', toggleState).update(function() {
                         callback();
                     }, function(error) {
                         callback(error);
@@ -106,7 +106,7 @@ define([
          */
         updateAdjustments: function(event) {
             event.preventDefault();
-            if (this.settings.equals(this.elements.adjStudyKana.bootstrapSwitch('state'))) {
+            if (!this.settings.equals('studyKana', this.elements.adjStudyKana.bootstrapSwitch('state'))) {
                 this.toggleStudyKana();
             }
             this.settings.set({
