@@ -335,7 +335,7 @@ define([
         teach: function() {
             var stroke = this.character.getExpectedStroke();
             if (stroke) {
-                var strokeParam = stroke.getParams()[0];
+                var strokeParam = stroke.getTraceParam();
                 var strokePath = strokeParam.get('corners');
                 this.canvas.clearLayer('background');
                 this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});

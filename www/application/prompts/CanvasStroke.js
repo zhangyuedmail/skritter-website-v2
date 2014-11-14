@@ -54,14 +54,16 @@ define([
             var params = app.user.data.params.where({strokeId: this.get('strokeId')});
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
                 var param = params[a].clone();
-                var corners = _.cloneDeep(param.get('corners'));
-                for (var b = 0, lengthB = corners.length; b < lengthB; b++) {
-                    var inflatedCorner = matrix.transformPoint(corners[b].x, corners[b].y);
-                    corners[b].x = inflatedCorner.x;
-                    corners[b].y = inflatedCorner.y;
+                if (!param.has('trace')) {
+                    var corners = _.cloneDeep(param.get('corners'));
+                    for (var b = 0, lengthB = corners.length; b < lengthB; b++) {
+                        var inflatedCorner = matrix.transformPoint(corners[b].x, corners[b].y);
+                        corners[b].x = inflatedCorner.x;
+                        corners[b].y = inflatedCorner.y;
+                    }
+                    param.set('corners', corners);
+                    inflatedParams.push(param);
                 }
-                param.set('corners', corners);
-                inflatedParams.push(param);
             }
             return inflatedParams;
         },
@@ -105,6 +107,28 @@ define([
                 shape.y += finalBounds.height / 2 + data.y;
             }
             return shape;
+        },
+        /**
+         * @method getTraceParam
+         * @returns {DataParam}
+         */
+        getTraceParam: function() {
+            var param = undefined;
+            var matrix = this.getShape().getMatrix();
+            var param = app.user.data.params.findWhere({strokeId: this.get('strokeId'), trace: true});
+            if (!param) {
+                var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+                param = params[params.length - 1];
+            }
+            param = param.clone();
+            var corners = _.cloneDeep(param.get('corners'));
+            for (var i = 0, length = corners.length; i < length; i++) {
+                var inflatedCorner = matrix.transformPoint(corners[i].x, corners[i].y);
+                corners[i].x = inflatedCorner.x;
+                corners[i].y = inflatedCorner.y;
+            }
+            param.set('corners', corners);
+            return param;
         },
         /**
          * @method getUserShape
