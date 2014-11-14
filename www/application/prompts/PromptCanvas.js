@@ -398,7 +398,9 @@ define([
             var tracer = this.drawCircle(layerName, path[0].x, path[0].y, this.strokeSize, {alpha: 0.4});
             var tween = createjs.Tween.get(tracer, {loop: true});
             for (var i = 1, length = path.length; i < length; i++) {
-                tween.to({x: path[i].x - path[0].x, y: path[i].y - path[0].y}, 500);
+                var adjustedX = path[i].x - path[0].x;
+                var adjustedY = path[i].y - path[0].y;
+                tween.to({x: adjustedX, y: adjustedY}, 300);
             }
         },
         /**
