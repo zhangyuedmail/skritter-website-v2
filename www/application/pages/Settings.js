@@ -73,14 +73,14 @@ define([
             app.dialogs.element('.message-text').text('');
             async.series([
                 function(callback) {
-                    app.user.data.items.downloadAll(function() {
+                    self.settings.set('studyKana', toggleState).update(function() {
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
                 function(callback) {
-                    self.settings.set('studyKana', toggleState).update(function() {
+                    app.user.data.items.downloadAll(function() {
                         callback();
                     }, function(error) {
                         callback(error);
