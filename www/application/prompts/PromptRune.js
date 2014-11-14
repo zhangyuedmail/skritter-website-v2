@@ -56,10 +56,27 @@ define([
             if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
             }
-            this.elements.fieldReading.html(this.vocab.getReading(null, {
-                hide: this.review.isLast() ? false : app.user.settings.get('hideReading'),
-                style: app.user.settings.get('readingStyle')
-            }));
+            if (this.vocab.isJapanese() && app.fn.hasKana(this.vocab.get('writing'))) {
+                if (app.fn.isKana(this.vocab.get('writing'))) {
+                    this.elements.fieldReading.empty();
+                } else if (this.review.isLast()) {
+                    this.elements.fieldReading.html(this.vocab.getReading(null, {
+                        hide: this.review.isLast() ? false : app.user.settings.get('hideReading'),
+                        style: app.user.settings.get('readingStyle')
+                    }));
+                } else {
+                    this.elements.fieldReading.html(this.vocab.getReading(null, {
+                        hide: app.user.settings.get('hideReading'),
+                        hideKana: this.vocab.getKana(),
+                        style: app.user.settings.get('readingStyle')
+                    }));
+                }
+            } else {
+                this.elements.fieldReading.html(this.vocab.getReading(null, {
+                    hide: this.review.isLast() ? false : app.user.settings.get('hideReading'),
+                    style: app.user.settings.get('readingStyle')
+                }));
+            }
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position + 1));
             return this;
         },
@@ -77,10 +94,22 @@ define([
             if (app.user.settings.get('showHeisig') && this.vocab.has('heisigDefinition')) {
                 this.elements.fieldHeisig.text('Keyword: ' + this.vocab.get('heisigDefinition'));
             }
-            this.elements.fieldReading.html(this.vocab.getReading(null, {
-                hide: app.user.settings.get('hideReading'),
-                style: app.user.settings.get('readingStyle')
-            }));
+            if (this.vocab.isJapanese() && app.fn.hasKana(this.vocab.get('writing'))) {
+                if (app.fn.isKana(this.vocab.get('writing'))) {
+                    this.elements.fieldReading.empty();
+                } else {
+                    this.elements.fieldReading.html(this.vocab.getReading(null, {
+                        hide: app.user.settings.get('hideReading'),
+                        hideKana: this.vocab.getKana(),
+                        style: app.user.settings.get('readingStyle')
+                    }));
+                }
+            } else {
+                this.elements.fieldReading.html(this.vocab.getReading(null, {
+                    hide: app.user.settings.get('hideReading'),
+                    style: app.user.settings.get('readingStyle')
+                }));
+            }
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
             this.toggleToolbarEraser();
             return this;
@@ -306,7 +335,7 @@ define([
         teach: function() {
             var stroke = this.character.getExpectedStroke();
             if (stroke) {
-                var strokeParam = stroke.getParams()[0];
+                var strokeParam = stroke.getTraceParam();
                 var strokePath = strokeParam.get('corners');
                 this.canvas.clearLayer('background');
                 this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});

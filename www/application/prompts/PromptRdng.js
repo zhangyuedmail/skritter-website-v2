@@ -47,7 +47,10 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
-                this.elements.fieldDefinition.hide();
+                if (this.vocab.get('writing').length === 1) {
+                    this.elements.fieldReading.html(this.vocab.getDefinition());
+                }
+                this.elements.fieldDefinition.empty();
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
                 this.elements.fieldDefinition.html(this.vocab.getDefinition());
@@ -63,7 +66,11 @@ define([
             Prompt.prototype.renderQuestion.call(this);
             this.elements.fieldHighlight.hide();
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
-                this.elements.fieldJapaneseDefinition.html(this.vocab.getDefinition());
+                if (this.vocab.get('writing').length === 1 ) {
+                    this.elements.fieldWriting.html(this.vocab.getWriting());
+                } else {
+                    this.elements.fieldJapaneseDefinition.html(this.vocab.getDefinition());
+                }
             } else {
                 this.elements.fieldWriting.html(this.vocab.getWriting());
             }

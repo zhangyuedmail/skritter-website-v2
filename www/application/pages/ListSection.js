@@ -75,7 +75,11 @@ define([
                     app.api.getVocabByQuery(vocab, {fields: 'id,style,writing'}, function(result) {
                         console.log(result.Vocabs);
                         if (result.Vocabs.length) {
-                            sections.push({vocabId: _.find(result.Vocabs, {writing: vocab}).id});
+                            var row = {vocabId: _.find(result.Vocabs, {writing: vocab}).id};
+                            if (app.user.isJapanese()) {
+                                row.studyWriting = true;
+                            }
+                            sections.push(row);
                         } else {
                             console.log('Search for', vocab, "didn't return anything useful.");
                         }

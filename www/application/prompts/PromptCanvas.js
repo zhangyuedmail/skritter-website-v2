@@ -398,7 +398,10 @@ define([
             var tracer = this.drawCircle(layerName, path[0].x, path[0].y, this.strokeSize, {alpha: 0.4});
             var tween = createjs.Tween.get(tracer, {loop: true});
             for (var i = 1, length = path.length; i < length; i++) {
-                tween.to({x: path[i].x - path[0].x, y: path[i].y - path[0].y}, 500);
+                var adjustedX = path[i].x - path[0].x;
+                var adjustedY = path[i].y - path[0].y;
+                var adjustedSpeed = app.fn.getDistance({x: path[i-1].x, y: path[i -1].y}, {x: path[i].x, y: path[i].y});
+                tween.to({x: adjustedX, y: adjustedY}, adjustedSpeed * 2);
             }
         },
         /**
@@ -406,7 +409,7 @@ define([
          * @param {Object} [event]
          */
         triggerCanvasClick: function(event) {
-            this.trigger('canvas:click', event);
+            this.trigger('canvas:click', new createjs.Point(this.stage.mouseX, this.stage.mouseY), event);
         },
         /**
          * @method triggerCanvasClickHold
