@@ -82,6 +82,7 @@ define([
                 param.corners = this.corners;
                 param.trace = true;
                 this.elements.paramOutput.val(JSON.stringify(param));
+                this.elements.paramOutput.select();
             }
         },
         /**
