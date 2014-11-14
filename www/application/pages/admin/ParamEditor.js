@@ -92,6 +92,7 @@ define([
             event.preventDefault();
             this.elements.paramOutput.val('');
             this.canvas.clearAll();
+            this.corners = [];
             this.loadStroke();
         },
         /**
@@ -156,6 +157,7 @@ define([
         loadStroke: function() {
             var stroke = app.assets.getStroke(this.strokeId);
             this.canvas.drawShape('background', stroke, {color: 'grey'});
+            this.corners = [];
             app.router.navigate('admin/param-editor/' + this.strokeId);
             return this;
         },

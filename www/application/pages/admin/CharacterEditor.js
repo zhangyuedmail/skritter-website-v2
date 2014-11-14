@@ -21,6 +21,7 @@ define([
             this.kana = app.user.data.strokes.where({kana: true}).map(function(character) {
                 return character.id;
             });
+            this.teaching = false;
             this.writing = undefined;
             this.listenTo(app, 'resize', this.resize);
         },
@@ -55,7 +56,8 @@ define([
         events: _.extend({}, BasePage.prototype.events, {
             'vclick #button-backward': 'handleBackwardButtonClicked',
             'vclick #button-clear': 'handleClearButtonClicked',
-            'vclick #button-forward': 'handleForwardButtonClicked'
+            'vclick #button-forward': 'handleForwardButtonClicked',
+            'vclick #button-teach': 'handleTeachButtonClicked'
         }),
         /**
          * @method handleBackwardButtonClicked
@@ -73,6 +75,7 @@ define([
          */
         handleClearButtonClicked: function(event) {
             event.preventDefault();
+            this.teaching = false;
             this.character.reset();
             this.loadCharacter();
         },
@@ -102,8 +105,24 @@ define([
                     this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
                     if (this.character.isComplete()) {
                         this.canvas.disableInput();
+                    } else {
+                        if (this.teaching) {
+                            this.teach();
+                        }
                     }
                 }
+            }
+        },
+        /**
+         * @method handleTeachButtonClicked
+         */
+        handleTeachButtonClicked: function(event) {
+            event.preventDefault();
+            if (this.teaching) {
+                this.teaching = false;
+                this.loadCharacter();
+            } else {
+                this.teach();
             }
         },
         /**
@@ -148,6 +167,22 @@ define([
          */
         set: function(writing) {
             this.writing = writing;
+            return this;
+        },
+        /**
+         * @method teach
+         * @returns {CharacterEditor}
+         */
+        teach: function() {
+            var stroke = this.character.getExpectedStroke();
+            if (stroke) {
+                var strokeParam = stroke.getTraceParam();
+                var strokePath = strokeParam.get('corners');
+                this.canvas.clearLayer('background');
+                this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
+                this.canvas.tracePath('background', strokePath);
+                this.teaching = true;
+            }
             return this;
         }
     });

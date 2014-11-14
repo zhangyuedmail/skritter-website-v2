@@ -1346,6 +1346,7 @@ define([], function() {
             {"strokeId":600,"corners":[{"x":18,"y":41},{"x":198,"y":10}]}
         ],
         601: [
+            {"strokeId":601,"corners":[{"x":36,"y":31},{"x":9,"y":214},{"x":28,"y":351}],"trace":true},
             {"strokeId":601,"corners":[{"x":34,"y":21},{"x":32,"y":354}]}
         ],
         602: [
