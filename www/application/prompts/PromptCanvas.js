@@ -406,7 +406,7 @@ define([
          * @param {Object} [event]
          */
         triggerCanvasClick: function(event) {
-            this.trigger('canvas:click', event);
+            this.trigger('canvas:click', new createjs.Point(this.stage.mouseX, this.stage.mouseY), event);
         },
         /**
          * @method triggerCanvasClickHold

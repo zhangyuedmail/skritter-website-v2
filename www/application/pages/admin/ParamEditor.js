@@ -17,6 +17,8 @@ define([
         initialize: function() {
             this.title = 'Param Editor';
             this.canvas = new PromptCanvas();
+            this.corners = [];
+            this.method = 'auto';
             this.strokeId = 0;
             this.listenTo(app, 'resize', this.resize);
         },
@@ -32,6 +34,7 @@ define([
             this.elements.paramOutput = this.$('#param-output');
             this.renderElements().resize();
             this.canvas.hideGrid().show().enableInput();
+            this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClicked);
             this.listenTo(this.canvas, 'input:down', this.handleInputDown);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             this.loadStroke();
@@ -51,7 +54,8 @@ define([
         events: _.extend({}, BasePage.prototype.events, {
             'vclick #button-backward': 'handleBackwardButtonClicked',
             'vclick #button-clear': 'handleClearButtonClicked',
-            'vclick #button-forward': 'handleForwardButtonClicked'
+            'vclick #button-forward': 'handleForwardButtonClicked',
+            'vclick #button-method': 'handleMethodButtonClicked'
         }),
         /**
          * @method handleBackwardButtonClicked
@@ -63,6 +67,22 @@ define([
             this.elements.paramOutput.val('');
             this.canvas.clearAll();
             this.loadStroke();
+        },
+        /**
+         * @method handleCanvasClicked
+         * @param {Event} event
+         */
+        handleCanvasClicked: function(point, event) {
+            event.preventDefault();
+            var param = {};
+            if (this.method = 'trace') {
+                this.canvas.drawCircle('stroke', point.x, point.y, 10, {fill: 'red'});
+                this.corners.push({x: point.x, y: point.y});
+                param.strokeId = this.strokeId;
+                param.corners = this.corners;
+                param.trace = true;
+                this.elements.paramOutput.val(JSON.stringify(param));
+            }
         },
         /**
          * @method handleClearButtonClicked
@@ -110,6 +130,24 @@ define([
             param.corners = corners;
             this.elements.paramOutput.val(JSON.stringify(param));
             this.elements.paramOutput.select();
+        },
+        /**
+         * @method handleMethodButtonClicked
+         * @param {Event} event
+         */
+        handleMethodButtonClicked: function(event) {
+            event.preventDefault();
+            this.canvas.clearAll();
+            if (this.method === 'auto') {
+                this.method = 'trace';
+                this.$('#button-method').text('Trace');
+                this.canvas.disableInput();
+            } else {
+                this.method = 'auto';
+                this.$('#button-method').text('Auto');
+                this.canvas.enableInput();
+            }
+            this.loadStroke();
         },
         /**
          * @method loadStroke
