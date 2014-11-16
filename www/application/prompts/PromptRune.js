@@ -127,7 +127,7 @@ define([
          * @method handlePromptClicked
          */
         handleCanvasClicked: function() {
-            if (this.promptClick) {
+            if (app.sidebars.isCollapsed() && this.promptClick) {
                 if (this.review.getAt('answered')) {
                     this.next();
                 } else if (!this.character.isComplete()) {

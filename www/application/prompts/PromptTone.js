@@ -81,7 +81,7 @@ define([
          * @param {Event} event
          */
         handleCanvasClicked: function() {
-            if (this.promptClick) {
+            if (app.sidebars.isCollapsed() && this.promptClick) {
                 if (this.review.getAt('answered')) {
                     this.next();
                 } else {
