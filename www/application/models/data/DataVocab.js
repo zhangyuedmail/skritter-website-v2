@@ -211,7 +211,7 @@ define([
                     for (var b = 0, lengthB = segment.length; b < lengthB; b++) {
                         var piece = segment[b];
                         if (fillers.indexOf(piece) === -1) {
-                            var pieceMasked = piece.replace(/[1-5]/g, '');
+                            var pieceMasked = piece.replace(/[1-5]/g, '').replace('lv', 'lü');
                             var pieceMaskedZhuyin = app.fn.pinyin.toZhuyin(pieceMasked + '5');
                             var pieceTone = app.fn.pinyin.toTone(piece);
                             var pieceZhuyin = app.fn.pinyin.toZhuyin(piece);
