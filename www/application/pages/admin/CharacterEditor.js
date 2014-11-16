@@ -104,6 +104,7 @@ define([
                     this.canvas.lastMouseDownEvent = null;
                     this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
                     if (this.character.isComplete()) {
+                        this.canvas.clearLayer('background');
                         this.canvas.disableInput();
                     } else {
                         if (this.teaching) {
