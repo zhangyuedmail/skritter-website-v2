@@ -18,6 +18,7 @@ define([
          */
         initialize: function(options, controller, review) {
             this.canvas = controller.canvas;
+            this.containedVocab = undefined;
             this.controller = controller;
             this.gradingButtons = controller.gradingButtons;
             this.item = review.getBaseItem();
@@ -50,6 +51,7 @@ define([
          */
         render: function() {
             this.position = this.review.getPosition();
+            this.containedVocab = this.review.getVocab();
             this.character = this.review.getCharacter();
             this.tones = this.vocab.getTones(this.position);
             console.log('PROMPT:', this.review.get('itemId'), this.review, this.vocab);
@@ -212,21 +214,21 @@ define([
             var self = this;
             //TODO: clean up interactions with sidebar
             app.dialogs.show('edit-text').element('.modal-title span').text('Edit Mnemonic');
-            var currentMnemonic = this.vocab.get('mnemonic') ? this.vocab.get('mnemonic').text : '';
+            var currentMnemonic = this.containedVocab.get('mnemonic') ? this.containedVocab.get('mnemonic').text : '';
             app.dialogs.element('.dialog-value').empty();
             app.dialogs.element('.dialog-value').val(currentMnemonic);
             app.dialogs.element('.save').on('vclick', function() {
                 var value = app.dialogs.element('.dialog-value').val();
                 if (!value || value === '') {
                     value = '';
-                    self.vocab.set('mnemonic', '');
+                    self.containedVocab.set('mnemonic', '');
                 } else if (currentMnemonic !== value) {
-                    if (self.vocab.get('mnemonic')) {
-                        self.vocab.get('mnemonic').text = value;
-                        self.vocab.set('mnemonic', self.vocab.get('mnemonic'));
-                        self.vocab.cache();
+                    if (self.containedVocab.get('mnemonic')) {
+                        self.containedVocab.get('mnemonic').text = value;
+                        self.containedVocab.set('mnemonic', self.vocab.get('mnemonic'));
+                        self.containedVocab.cache();
                     } else {
-                        self.vocab.set('mnemonic', {text: value, public: false});
+                        self.containedVocab.set('mnemonic', {text: value, public: false});
                     }
                 } else {
                     value = currentMnemonic;
@@ -496,8 +498,8 @@ define([
                 this.elements.infoHeisig.empty();
                 this.elements.infoHeisig.parent().hide();
             }
-            if (this.vocab.get('mnemonic')) {
-                this.elements.infoMnemonic.html(this.vocab.getMnemonicText());
+            if (this.containedVocab.get('mnemonic')) {
+                this.elements.infoMnemonic.html(this.containedVocab.getMnemonicText());
             } else {
                 this.elements.infoMnemonic.html('');
                 this.elements.infoMnemonic.parent().find('button').text('Add Mnemonic');
