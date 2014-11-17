@@ -380,11 +380,13 @@ define([
         scaleText: function() {
             var canvasSize = this.canvas.getWidth();
             var writingLength = this.vocab.get('writing').split('').length;
-            this.$('.text-max').css('font-size', canvasSize / 10);
-            this.$('.text-large').css('font-size', canvasSize / 14);
-            this.$('.text-normal').css('font-size', canvasSize / 16);
-            this.$('.text-small').css('font-size', canvasSize / 18);
-            this.$('.text-tiny').css('font-size', canvasSize / 22);
+            $('.text-max').css('font-size', canvasSize / 10);
+            $('.text-large').css('font-size', canvasSize / 14);
+            $('.text-normal').css('font-size', canvasSize / 16);
+            $('.text-small').css('font-size', canvasSize / 18);
+            $('.text-tiny').css('font-size', canvasSize / 22);
+            $('.text-xtiny').css('font-size', canvasSize / 30);
+            $('.text-xxtiny').css('font-size', canvasSize / 40);
             if (writingLength < 3) {
                 this.$('.text-max-character').css('font-size', canvasSize / 5);
             } else if (writingLength < 5) {
