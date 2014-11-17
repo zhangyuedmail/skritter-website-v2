@@ -97,9 +97,8 @@ define([
             app.api.updateVocabList({
                 id: this.listId,
                 studyingMode: 'adding'
-            }, function(result) {
-
-                app.user.data.vocablists.add(result, {merge: true});
+            }, function(list) {
+                app.user.data.vocablists.add(list, {merge: true});
                 app.dialogs.hide(function() {
                     app.router.navigate('list/sort/my-lists', {trigger: true});
                 });
@@ -120,9 +119,9 @@ define([
             app.api.updateVocabList({
                 id: this.listId,
                 studyingMode: 'reviewing'
-            }, function(result) {
-                app.user.data.vocablists.add(result, {merge: true});
-                self.list = result;
+            }, function(list) {
+                app.user.data.vocablists.add(list, {merge: true});
+                self.list = list;
                 self.renderElements();
                 app.dialogs.hide();
             }, function(error) {
@@ -144,9 +143,9 @@ define([
                     app.api.updateVocabList({
                         id: self.listId,
                         studyingMode: 'not studying'
-                    }, function(result) {
-                        self.list = result;
-                        app.user.data.vocablists.add(result, {merge: true});
+                    }, function(list) {
+                        self.list = list;
+                        app.user.data.vocablists.add(list, {merge: true});
                         callback();
                     }, function() {
                         callback();
@@ -171,9 +170,9 @@ define([
             app.api.updateVocabList({
                 id: this.listId,
                 studyingMode: 'adding'
-            }, function(result) {
-                self.list = result;
-                app.user.data.vocablists.add(result, {merge: true});
+            }, function(list) {
+                self.list = list;
+                app.user.data.vocablists.add(list, {merge: true});
                 self.renderElements();
                 app.dialogs.hide();
             }, function(error) {
@@ -205,6 +204,14 @@ define([
                         callback();
                     }, function() {
                         callback();
+                    });
+                },
+                function(callback) {
+                    app.api.getVocabList(self.listId, null, function(list) {
+                        self.table.setList(list).renderTable();
+                        callback();
+                    }, function(error) {
+                        callback(error);
                     });
                 }
             ], function() {

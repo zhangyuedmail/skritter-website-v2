@@ -61,8 +61,7 @@ define([
                     lang: app.user.getLanguageCode()
                 }, function(list) {
                     self.lists.push(list);
-                    self.table.setLists(self.lists);
-                    self.table.renderTable();
+                    self.table.setLists(self.lists).renderTable();
                     app.dialogs.hide();
                 }, function() {
                     app.dialogs.hide();
