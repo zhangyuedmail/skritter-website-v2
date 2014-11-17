@@ -159,7 +159,9 @@ define([
                         this.canvas.tweenShape('stroke', stroke.getUserShape(), stroke.getShape());
                     }
                     if (this.character.isComplete()) {
-                        if (this.review.getAt('score') === 1 || this.character.getMax() < 6  || this.taps > 2) {
+                        if (this.taps > 2) {
+                            this.review.setAt('score', 1);
+                        } else if (this.taps >= 1 && this.character.getMax() < 6) {
                             this.review.setAt('score', 1);
                         } else if (this.taps > 1) {
                             this.review.setAt('score', 2);
