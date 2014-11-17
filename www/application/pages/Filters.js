@@ -98,13 +98,6 @@ define([
             var self = this;
             app.analytics.trackEvent('Filters', 'click', 'list_add');
             app.dialogs.show('list-select').element('.modal-title span').text('Filter Lists');
-            this.listSelectTable.setElement(app.dialogs.element('.list-container')).render();
-            this.listSelectTable.addStyle('table-no-border').setFields({
-                name: '',
-                select: ''
-            }).setLists(app.user.data.vocablists.getActive().map(function(list){
-                return list.toJSON();
-            })).sortByName().renderTable();
             app.dialogs.element('.select-list').on('vclick', function() {
                 var selected = app.dialogs.element('.list-container input:checkbox:checked').map(function() {
                     return this.value;
@@ -112,6 +105,11 @@ define([
                 self.settings.set('filterLists', _.uniq(self.settings.get('filterLists').concat(selected)));
                 self.renderElements();
                 app.dialogs.hide();
+            });
+            app.user.data.vocablists.fetch(function() {
+                self.populateListDialog();
+            }, function() {
+                self.populateListDialog();
             });
         },
         /**
@@ -128,6 +126,19 @@ define([
                 this.settings.cache();
             }
             this.renderElements();
+        },
+        /**
+         * @method populateListDialog
+         */
+        populateListDialog: function() {
+            app.dialogs.element('.loader-image').hide();
+            this.listSelectTable.setElement(app.dialogs.element('.list-container')).render();
+            this.listSelectTable.addStyle('table-no-border').setFields({
+                name: '',
+                select: ''
+            }).setLists(app.user.data.vocablists.getActive().map(function(list){
+                return list.toJSON();
+            })).sortByName().renderTable();
         },
         /**
          * @method updateParts

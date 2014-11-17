@@ -547,7 +547,7 @@ define([
                 scaleX: toShape.scaleX,
                 scaleY: toShape.scaleY,
                 rotation: toShape.rotation
-            }, 300, createjs.Ease.backOut).call(function() {
+            }, 500, createjs.Ease.backOut).call(function() {
                 if (typeof callback === 'function') {
                     callback();
                 }
