@@ -148,6 +148,10 @@ define([
                         app.user.data.items.sync(callback, callback);
                     },
                     function(callback) {
+                        app.dialogs.element('.message-text').text('UPDATING LISTS');
+                        app.user.data.vocablists.fetch(callback, callback);
+                    },
+                    function(callback) {
                         app.user.data.sync(0, callback, callback);
                     }
                 ], function() {

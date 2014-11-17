@@ -36,6 +36,43 @@ define([
             });
         },
         /**
+         * @method fetch
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        fetch: function(callbackSuccess, callbackError) {
+            async.waterfall([
+                function(callback) {
+                    app.api.getVocabLists({
+                        lang: app.user.getLanguageCode(),
+                        sort: 'custom'
+                    }, function(result) {
+                        app.user.data.vocablists.add(result, {merge: true});
+                        callback(null, result);
+                    }, callback);
+                },
+                function(lists, callback) {
+                    app.api.getVocabLists({
+                        lang: app.user.getLanguageCode(),
+                        sort: 'studying'
+                    }, function(result) {
+                        app.user.data.vocablists.add(result, {merge: true});
+                        callback();
+                    }, callback);
+                }
+            ], function(error) {
+                if (error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError();
+                    }
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
+                }
+            });
+        },
+        /**
          * @method getActive
          * @returns {Array}
          */
