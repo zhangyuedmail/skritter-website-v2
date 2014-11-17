@@ -106,7 +106,7 @@ define([
          */
         updateAdjustments: function(event) {
             event.preventDefault();
-            if (!this.settings.equals('studyKana', this.elements.adjStudyKana.bootstrapSwitch('state'))) {
+            if (this.user.isJapanese && !this.settings.equals('studyKana', this.elements.adjStudyKana.bootstrapSwitch('state'))) {
                 this.toggleStudyKana();
             }
             this.settings.set({
