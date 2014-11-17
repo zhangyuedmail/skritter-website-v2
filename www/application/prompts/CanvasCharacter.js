@@ -76,7 +76,7 @@ define([
             var targetScore = targetScores[targetScores.indexOf(Math.max.apply(Math, targetScores))];
             for (var i = 0, length = targetScores.length; i < length; i++) {
                 if (targetScores[i] === targetScore) {
-                    expectedTargets.push(this.targets[i]);
+                    expectedTargets.unshift(this.targets[i]);
                 }
             }
             return expectedTargets.length ? expectedTargets : [this.targets[0]];
