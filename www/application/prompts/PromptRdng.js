@@ -47,6 +47,7 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
+                this.elements.fieldWriting.html(this.vocab.getWriting());
                 if (this.vocab.get('writing').length === 1) {
                     this.elements.fieldReading.html(this.vocab.getDefinition());
                 }
