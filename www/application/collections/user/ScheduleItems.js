@@ -159,42 +159,44 @@ define([
          * @returns {ScheduleItems}
          */
         updateFilter: function() {
-            var activeItems = this.user.settings.getActiveItems();
             var activeLists = this.user.settings.getActiveLists();
             var activeParts = this.user.settings.getActiveParts();
             var activeStyles = this.user.settings.getActiveStyles();
-            if (activeItems) {
-                this.filtered = this.filter(function(item) {
-                    if (!item.attributes.vocabIds.length) {
-                        return false;
-                    }
-                    if (activeItems.indexOf(item.id) !== -1) {
-                        return true;
+            var languageCode = this.user.getLanguageCode();
+            this.filtered = this.filter(function(item) {
+                //filter out items that contain no vocab ids
+                if (!item.attributes.vocabIds.length) {
+                    return false;
+                }
+                //filter out items not matching an active part
+                if (activeParts.indexOf(item.attributes.part) === -1) {
+                    return false;
+                }
+                //filter out items not contained in an active list
+                if (activeLists) {
+                    for (var i = 0, length = activeLists.length; i < length; i++) {
+                        if (item.attributes.vocabListIds.indexOf(activeLists[i]) !== -1) {
+                            return true;
+                        }
                     }
                     return false;
-                });
-            } else {
-                this.filtered = this.filter(function(item) {
-                    if (!item.attributes.vocabIds.length) {
-                        return false;
-                    }
-                    if (activeParts.indexOf(item.attributes.part) === -1) {
-                        return false;
-                    }
+                }
+                //chinese specific filters
+                if (languageCode === 'zh') {
+                    //filter out items not matching an active style
                     if (activeStyles.indexOf(item.attributes.style) === -1) {
                         return false;
                     }
-                    if (activeLists) {
-                        for (var i = 0, length = activeLists.length; i < length; i++) {
-                            if (item.attributes.vocabListIds.indexOf(activeLists[i]) !== -1) {
-                                return true;
-                            }
-                        }
+                }
+                //japanese specific filters
+                if (languageCode === 'ja') {
+                    //filter out kana only vocabs when setting not enabled
+                    if (!app.user.settings.get('studyKana') && app.fn.isKana(item.id.split('-')[2])) {
                         return false;
                     }
-                    return true;
-                });
-            }
+                }
+                return true;
+            });
             this.trigger('sort', this);
             return this;
         }
