@@ -63,7 +63,10 @@ define([
         getBatch: function(startFrom) {
             startFrom = startFrom === undefined ? 0 : startFrom;
             return this.slice(startFrom).map(function(review) {
-                return review.attributes.reviews;
+                return review.attributes.reviews.filter(function(review) {
+                    //review items without ids are placeholders
+                    return review.itemId;
+                });
             });
         },
         /**

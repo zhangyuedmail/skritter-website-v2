@@ -87,10 +87,12 @@ define([
         /**
          * @method getContainedItemIds
          * @param {String} part
+         * @param {Boolean} [excludeKana]
          * @returns {Array}
          */
-        getContainedItemIds: function(part) {
+        getContainedItemIds: function(part, excludeKana) {
             var containedItemIds = [];
+            //creates an array of item items based on contained vocab ids
             if (this.has('containedVocabIds')) {
                 var containedVocabIds = this.get('containedVocabIds');
                 for (var i = 0, length = containedVocabIds.length; i < length; i++) {
@@ -104,6 +106,12 @@ define([
                         containedItemIds.push(app.user.id + '-' + containedSplit[0] + '-' + containedSplit[1] + '-0-' + part);
                     }
                 }
+            }
+            //filters out kana that is included is a contained vocab id
+            if (this.isJapanese() && excludeKana) {
+                containedItemIds = containedItemIds.filter(function(itemId) {
+                    return !app.fn.isKana(itemId.split('-')[2]);
+                });
             }
             return containedItemIds;
         },

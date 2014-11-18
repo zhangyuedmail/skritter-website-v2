@@ -108,7 +108,13 @@ define([
             if (['rune', 'tone'].indexOf(part) !== -1) {
                 var containedIds = this.getVocab().getContainedItemIds(part);
                 for (var i = 0, length = containedIds.length; i < length; i++) {
-                    items.push(app.user.data.items.get(containedIds[i]));
+                    var containedItem = app.user.data.items.get(containedIds[i]);
+                    if (containedItem) {
+                        items.push(app.user.data.items.get(containedIds[i]));
+                    } else {
+                        //create a placeholder item
+                        items.push(new DataItem());
+                    }
                 }
             }
             return items;

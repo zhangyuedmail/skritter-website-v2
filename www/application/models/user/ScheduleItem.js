@@ -107,11 +107,11 @@ define([
                 //contained items
                 function(callback) {
                     if (part === 'rune' || part === 'tone') {
-                        var containedItemIds = result.vocab.getContainedItemIds(part);
+                        var containedItemIds = result.vocab.getContainedItemIds(part, true);
                         var containedItemCount = containedItemIds.length;
                         app.storage.getItems('items', containedItemIds, function(containedItems) {
+                            result.containedItems = app.user.data.items.add(containedItems, {merge: true, silent: true, sort: false});
                             if (containedItemCount === containedItems.length) {
-                                result.containedItems = app.user.data.items.add(containedItems, {merge: true, silent: true, sort: false});
                                 callback();
                             } else {
                                 callback('One or more of the contained items is missing.');
@@ -208,13 +208,13 @@ define([
                     if (result.item) {
                         self.set({vocabIds: [], flag: error ? error : 'Unable to load item.'});
                         result.item.set({
-                            flag: error ? error : 'Unable to load item.',
-                            vocabIds: []
+                            //flag: error ? error : 'Unable to load item.',
+                            //vocabIds: []
                         }).cache(function() {
-                            callbackError(error);
+                            //callbackError(error);
                         });
                     } else {
-                        callbackError(error);
+                        //callbackError(error);
                     }
                 } else {
                     callbackSuccess(result);

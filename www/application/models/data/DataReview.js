@@ -285,7 +285,12 @@ define([
                 });
             }
             async.each(app.user.data.items.add(originalItems, {merge: true}), function(item, callback) {
-                item.cache(callback);
+                //skip caching items without specified id
+                if (item.id) {
+                    item.cache(callback);
+                } else {
+                    callback();
+                }
             }, function(error) {
                 if (error) {
                     console.error('REVIEW:', 'Unable to save review.');
