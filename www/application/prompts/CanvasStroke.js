@@ -90,6 +90,7 @@ define([
                 shape.y = data.y;
                 shape.scaleX = data.w / 500;
                 shape.scaleY = data.h / 500;
+                shape.rotation = data.rot;
             } else {
                 //apply rotation based on newly sized shape
                 var ms = shape.getMatrix();
