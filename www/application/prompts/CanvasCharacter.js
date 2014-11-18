@@ -74,12 +74,20 @@ define([
                 }
             }
             var targetScore = targetScores[targetScores.indexOf(Math.max.apply(Math, targetScores))];
-            for (var i = 0, length = targetScores.length; i < length; i++) {
-                if (targetScores[i] === targetScore) {
-                    expectedTargets.unshift(this.targets[i]);
+            for (var c = 0, lengthC = targetScores.length; c < lengthC; c++) {
+                if (targetScores[c] === targetScore) {
+                    expectedTargets.unshift(this.targets[c]);
                 }
             }
-            return expectedTargets.length ? expectedTargets : [this.targets[0]];
+            if (expectedTargets.length) {
+                var expectedLength = Math.max.apply(Math, _.pluck(expectedTargets, 'length'));
+                expectedTargets = expectedTargets.filter(function(expectedTarget) {
+                    return expectedTarget.length === expectedLength;
+                })
+            } else {
+                expectedTargets = [this.targets[0]];
+            }
+            return expectedTargets;
         },
         /**
          * @method getPosition
