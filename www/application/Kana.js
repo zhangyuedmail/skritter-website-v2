@@ -2191,16 +2191,6 @@ define([], function () {
         },
         {
             "lang": "ja",
-            "rune": "ー",
-            "kana": true,
-            "strokes": [
-                [
-                    [1, 0.2, 0.44, 1, 1, 0]
-                ]
-            ]
-        },
-        {
-            "lang": "ja",
             "rune": "☺",
             "kana": true,
             "strokes": [
