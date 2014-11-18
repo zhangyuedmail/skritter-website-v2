@@ -400,8 +400,9 @@ define([
             for (var i = 1, length = path.length; i < length; i++) {
                 var adjustedX = path[i].x - path[0].x;
                 var adjustedY = path[i].y - path[0].y;
-                var adjustedSpeed = app.fn.getDistance({x: path[i-1].x, y: path[i -1].y}, {x: path[i].x, y: path[i].y});
-                tween.to({x: adjustedX, y: adjustedY}, adjustedSpeed * 2);
+                var adjustedSpeed = this.canvasSize;
+                var pathDistance = app.fn.getDistance({x: path[i-1].x, y: path[i-1].y}, {x: path[i].x, y: path[i].y});
+                tween.to({x: adjustedX, y: adjustedY}, path.length > 2 ? pathDistance * path.length : adjustedSpeed);
             }
         },
         /**
@@ -547,7 +548,7 @@ define([
                 scaleX: toShape.scaleX,
                 scaleY: toShape.scaleY,
                 rotation: toShape.rotation
-            }, 500, createjs.Ease.backOut).call(function() {
+            }, 400, createjs.Ease.backOut).call(function() {
                 if (typeof callback === 'function') {
                     callback();
                 }
