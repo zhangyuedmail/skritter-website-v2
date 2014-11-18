@@ -1826,7 +1826,7 @@ define([], function() {
             {"strokeId":705,"corners":[{"x":206,"y":14},{"x":18,"y":142},{"x":168,"y":240}]}
         ],
         706: [
-            {"strokeId":706,"corners":[{"x":5,"y":6},{"x":24,"y":17}],"trace":true},
+            {"strokeId":706,"corners":[{"x":5,"y":3},{"x":26,"y":21}],"trace":true},
             {"strokeId":706,"corners":[{"x":2,"y":2},{"x":31,"y":25}]},
             {"strokeId":706,"corners":[{"x":17,"y":3},{"x":17,"y":31}]}
         ],
