@@ -50,7 +50,7 @@ define([
          * @returns {CanvasStroke}
          */
         getExpectedStroke: function() {
-            var variation = this.getExpectedVariations()[0];
+            var variation = this.getExpectedVariations(true)[0];
             if (this.length === 0) {
                 return variation.at(0);
             }
@@ -58,9 +58,10 @@ define([
         },
         /**
          * @method expectedVariations
+         * @param {Boolean} [filterLength]
          * @returns {Array}
          */
-        getExpectedVariations: function() {
+        getExpectedVariations: function(filterLength) {
             var expectedTargets = [];
             var targetScores = [];
             for (var a = 0, lengthA = this.targets.length; a < lengthA; a++) {
@@ -80,10 +81,12 @@ define([
                 }
             }
             if (expectedTargets.length) {
-                var expectedLength = Math.max.apply(Math, _.pluck(expectedTargets, 'length'));
-                expectedTargets = expectedTargets.filter(function(expectedTarget) {
-                    return expectedTarget.length === expectedLength;
-                })
+                if (filterLength) {
+                    var expectedLength = Math.max.apply(Math, _.pluck(expectedTargets, 'length'));
+                    expectedTargets = expectedTargets.filter(function(expectedTarget) {
+                        return expectedTarget.length === expectedLength;
+                    });
+                }
             } else {
                 expectedTargets = [this.targets[0]];
             }
