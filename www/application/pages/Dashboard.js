@@ -68,7 +68,7 @@ define([
                 if (app.user.isChinese()) {
                     this.elements.rateThankyou.text('谢谢!');
                 } else {
-                    this.elements.rateThankyou.text('ありがとうございます!');
+                    this.elements.rateThankyou.text('ありがとうございます！');
                 }
             } else {
                 this.elements.rateNotice.hide();
