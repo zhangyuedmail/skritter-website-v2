@@ -265,7 +265,7 @@ define([
             async.series([
                 function(callback) {
                     if (studyKana) {
-                        app.dialogs.show('confirm').element('.modal-title').html("Disable Kana Support <small>BETA</small>");
+                        app.dialogs.show('confirm').element('.modal-title').html("<i class='fa fa-exclamation-triangle'></i> Disable Kana Support <small>BETA</small>");
                         app.dialogs.element('.modal-message').empty();
                         app.dialogs.element('.modal-message').append("<p>Disabling this settings will require your account to perform a refresh.</p>");
                         app.dialogs.element('.modal-message').append("<p class='text-muted'>SUPPORT: josh@skritter.com</p>");
@@ -274,7 +274,7 @@ define([
                             app.dialogs.hide(callback);
                         });
                     } else {
-                        app.dialogs.show('confirm').element('.modal-title').html("Enable Kana Support <small>BETA</small>");
+                        app.dialogs.show('confirm').element('.modal-title').html("<i class='fa fa-exclamation-triangle'></i> Enable Kana Support <small>BETA</small>");
                         app.dialogs.element('.modal-message').empty();
                         app.dialogs.element('.modal-message').append("<p>Start writing words as they exist in their entirety with kanji and kana together at last. Enabling this setting will refresh account data to include kana writing elements for relevant vocab items.</p>");
                         app.dialogs.element('.modal-message').append("<p>This is a beta feature so we'll continue to make upgrades and improvements. You can disable kana writing at any time from the Settings menu.</p>");

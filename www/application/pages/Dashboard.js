@@ -76,7 +76,7 @@ define([
             } else {
                 this.elements.rateNotice.hide();
             }
-            if (app.user.isJapanese() && !app.isNative()) {
+            if (app.user.isJapanese()) {
                 if (!app.user.settings.get('studyKana') && app.user.settings.get('showKanaNotice')) {
                     this.elements.kanaNotice.show();
                 } else {
