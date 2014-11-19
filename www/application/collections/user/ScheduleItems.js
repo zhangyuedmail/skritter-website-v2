@@ -35,7 +35,7 @@ define([
         addRecent: function(base) {
             if (this.recent.indexOf(base) === -1) {
                 this.recent.unshift(base);
-                if (this.recent.length > 4) {
+                if (this.recent.length > 2) {
                     this.recent.pop();
                 }
             }

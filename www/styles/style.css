@@ -398,7 +398,7 @@ body {
 .prompt-container .field-reading .reading-button {
     background-color: #ffffff;
     border: 2px solid #b3b3b3;
-    width: 75px;
+    width: 1.5em;
 }
 .prompt-container .field-reading .reading-button div { visibility: hidden; }
 .prompt-container .field-reading .reading-button.reveal div { visibility: visible; }
