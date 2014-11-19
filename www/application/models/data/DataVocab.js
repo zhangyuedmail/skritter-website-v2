@@ -233,6 +233,7 @@ define([
             //TODO: fix for single character prompts with multiple readings
             startFrom = startFrom ? startFrom : false;
             options = options ? options : {};
+            options.classes = Array.isArray(options.classes) ? options.classes : [options.classes];
             options.hide = options.hide ? options.hide : false;
             options.hideKana = options.hideKana ? options.hideKana : [];
             options.mask = options.mask ? options.mask : false;
@@ -347,14 +348,17 @@ define([
         /**
          * @method getWriting
          * @param {Number} [startFrom]
+         * @param {Object} [options]
          * @returns {String}
          */
-        getWriting: function(startFrom) {
+        getWriting: function(startFrom, options) {
             var html = '';
             var position = 1;
             var allCharacters = this.get('writing').split('');
             var containedCharacters = this.getCharacters();
-            html += "<div class='writing-block'>";
+            options = options ? options : {};
+            options.classes = Array.isArray(options.classes) ? options.classes : [options.classes];
+            html += "<div class='writing-block " + options.classes + "'>";
             for (var i = 0, length = allCharacters.length; i < length; i++) {
                 var character = allCharacters[i];
                 if (containedCharacters.indexOf(character) > -1) {

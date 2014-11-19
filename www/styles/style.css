@@ -402,10 +402,8 @@ body {
 }
 .prompt-container .field-reading .reading-button span { visibility: hidden; }
 .prompt-container .field-reading .reading-button.reveal span { visibility: visible; }
-.prompt-container .field-writing span {
-    background-color: #ffffff;
-    margin-right: 5px;
-}
+.prompt-container .field-writing span { margin-right: 5px; }
+.prompt-container .field-writing .highlight span { background-color: #ffffff; }
 .prompt-container .field-writing .writing-hidden { border: 2px solid #b3b3b3; }
 .prompt-container .field-writing .writing-hidden span { visibility: hidden; }
 .prompt-container .prompt-newness {

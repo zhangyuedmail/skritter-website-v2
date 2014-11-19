@@ -77,7 +77,7 @@ define([
                     style: app.user.settings.get('readingStyle')
                 }));
             }
-            this.elements.fieldWriting.html(this.vocab.getWriting(this.position + 1));
+            this.elements.fieldWriting.html(this.vocab.getWriting(this.position + 1, {classes: 'highlight'}));
             return this;
         },
         /**
@@ -110,7 +110,7 @@ define([
                     style: app.user.settings.get('readingStyle')
                 }));
             }
-            this.elements.fieldWriting.html(this.vocab.getWriting(this.position));
+            this.elements.fieldWriting.html(this.vocab.getWriting(this.position, {classes: 'highlight'}));
             this.toggleToolbarEraser();
             return this;
         },
