@@ -122,12 +122,35 @@ define([
                 var vocabItem = containedVocabs[a];
                 containedHTML += "<tr id='writing-" + vocabItem.get('writing') + "'>";
                 containedHTML += "<td class='writing asian-font'>" + vocabItem.get('writing') + '</td>';
-                containedHTML += "<td class='reading'>" + vocabItem.getReading() + '</td>';
-                containedHTML += "<td class='definition'>" + vocabItem.getDefinition() + '</td>';
+                if (vocabItem.get('kana')) {
+                    containedHTML += "<td class='reading'></td>";
+                    containedHTML += "<td class='definition'>kana</td>";
+                } else {
+                    containedHTML += "<td class='reading'>" + vocabItem.getReading() + '</td>';
+                    containedHTML += "<td class='definition'>" + vocabItem.getDefinition() + '</td>';
+                }
                 containedHTML += "</tr>";
             }
             containedHTML += "</tbody></table>";
             return containedHTML;
+        },
+        /**
+         * @method getContainedVocabIds
+         * @param {Boolean} [excludeKana]
+         * @returns {Array}
+         */
+        getContainedVocabIds: function(excludeKana) {
+            var containedVocabIds = [];
+            if (this.has('containedVocabIds')) {
+                if (excludeKana) {
+                    containedVocabIds = this.get('containedVocabIds').filter(function(vocabId) {
+                        return !app.fn.isKana(vocabId.split('-')[1]);
+                    });
+                } else {
+                    containedVocabIds = this.get('containedVocabIds');
+                }
+            }
+            return containedVocabIds;
         },
         /**
          * @method getContainedVocabs
@@ -137,7 +160,16 @@ define([
             var vocabs = [];
             var containedIds = this.has('containedVocabIds') ? this.get('containedVocabIds') : [this.id];
             for (var i = 0, length = containedIds.length; i < length; i++) {
-                vocabs.push(this.collection.get(containedIds[i]));
+                var vocab = this.collection.get(containedIds[i]);
+                if (vocab) {
+                    vocabs.push(this.collection.get(containedIds[i]));
+                } else {
+                    //create a temporary kana item when missing for collection
+                    vocabs.push(app.user.data.vocabs.add(new DataVocab({
+                        id: containedIds[i],
+                        kana: true, writing: containedIds[i].split('-')[1]
+                    }), {merge: true, silent: true}));
+                }
             }
             return vocabs;
         },

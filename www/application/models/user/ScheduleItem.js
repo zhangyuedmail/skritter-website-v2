@@ -124,7 +124,7 @@ define([
                 },
                 //contained vocabs
                 function(callback) {
-                    var containedVocabIds = result.vocab.has('containedVocabIds') ? result.vocab.get('containedVocabIds') : [];
+                    var containedVocabIds = result.vocab.getContainedVocabIds(app.user.isJapanese());
                     if (containedVocabIds.length) {
                         app.storage.getItems('vocabs', containedVocabIds, function(containedVocabs) {
                             if (containedVocabIds.length === containedVocabs.length) {
@@ -208,13 +208,13 @@ define([
                     if (result.item) {
                         self.set({vocabIds: [], flag: error ? error : 'Unable to load item.'});
                         result.item.set({
-                            //flag: error ? error : 'Unable to load item.',
-                            //vocabIds: []
+                            flag: error ? error : 'Unable to load item.',
+                            vocabIds: []
                         }).cache(function() {
-                            //callbackError(error);
+                            callbackError(error);
                         });
                     } else {
-                        //callbackError(error);
+                        callbackError(error);
                     }
                 } else {
                     callbackSuccess(result);
