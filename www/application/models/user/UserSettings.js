@@ -41,7 +41,8 @@ define([
             filterItems: [],
             hideExpired: 0,
             readingStyle: 'pinyin',
-            showRate: true,
+            showKanaNotice: true,
+            showRateNotice: true,
             tutorials: ['defn', 'grading', 'rdng', 'rune', 'tone']
         },
         /**

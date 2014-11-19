@@ -27,6 +27,9 @@ define([
             this.$el.html(this.compile(TemplateMobile));
             this.elements.buttonSync = this.$('#button-sync');
             this.elements.expiredNotice = this.$('#expired-notice');
+            this.elements.kanaMessage = this.$('.try-kana-message');
+            this.elements.kanaNotice = this.$('#try-kana-notice');
+            this.elements.kanaTitle = this.$('.try-kana-title');
             this.elements.listContainer = this.$('.list-container');
             this.elements.rateMessage = this.$('.rate-message');
             this.elements.rateNotice = this.$('#rate-notice');
@@ -62,7 +65,7 @@ define([
             } else {
                 this.elements.expiredNotice.hide();
             }
-            if (app.isNative() && app.user.settings.get('showRate') && app.user.subscription.isSubscribed()) {
+            if (app.isNative() && app.user.settings.get('showRateNotice') && app.user.subscription.isSubscribed()) {
                 this.elements.rateTitle.text('Spread the word.');
                 this.elements.rateMessage.text('If you love Skritter and are learning lots of characters, you can help us by going to the Play Store and rating us 5 stars.');
                 if (app.user.isChinese()) {
@@ -72,6 +75,15 @@ define([
                 }
             } else {
                 this.elements.rateNotice.hide();
+            }
+            if (app.user.isJapanese() && !app.isNative()) {
+                if (app.user.settings.get('showKanaNotice')) {
+                    this.elements.kanaNotice.show();
+                } else {
+                    this.elements.kanaNotice.hide();
+                }
+            } else {
+                this.elements.kanaNotice.hide();
             }
             if (app.user.subscription.getRemainingTrial()) {
                 this.elements.trialRemaining.find('span').text(app.user.subscription.getRemainingTrial());
@@ -85,9 +97,11 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'vclick #button-hide-kana': 'handleButtonHideKana',
             'vclick #button-hide-expired': 'handleButtonHideExpires',
             'vclick #button-hide-rate': 'handleButtonHideRate',
             'vclick #button-expired': 'handleButtonExpired',
+            'vclick #button-kana': 'handleButtonKana',
             'vclick #button-rate': 'handleButtonRate',
             'vclick #button-sync': 'handleSyncClicked'
         }),
@@ -110,13 +124,33 @@ define([
             this.elements.expiredNotice.hide();
         },
         /**
+         * @method handleButtonHideKana
+         * @param {Event} event
+         */
+        handleButtonHideKana: function(event) {
+            event.preventDefault();
+            app.analytics.trackEvent('Dashboard', 'click', 'hide_kana_button');
+            app.user.settings.set('showKanaNotice', false);
+            this.elements.kanaNotice.hide();
+        },
+        /**
+         * @method handleButtonKana
+         * @param {Event} event
+         */
+        handleButtonKana: function(event) {
+            event.preventDefault();
+            app.analytics.trackEvent('Dashboard', 'click', 'kana_button');
+            app.user.settings.set('showKanaNotice', false);
+            this.elements.kanaNotice.hide();
+        },
+        /**
          * @method handleButtonHideRate
          * @param {Event} event
          */
         handleButtonHideRate: function(event) {
             event.preventDefault();
             app.analytics.trackEvent('Dashboard', 'click', 'hide_rate_button');
-            app.user.settings.set('showRate', false);
+            app.user.settings.set('showRateNotice', false);
             this.elements.rateNotice.hide();
         },
         /**
@@ -126,7 +160,7 @@ define([
         handleButtonRate: function(event) {
             event.preventDefault();
             app.analytics.trackEvent('Dashboard', 'click', 'rate_button');
-            app.user.settings.set('showRate', false);
+            app.user.settings.set('showRateNotice', false);
             this.elements.rateNotice.hide();
             if (plugins.core) {
                 var packageName = app.user.isChinese() ? 'com.inkren.skritter.chinese' : 'com.inkren.skritter.japanese';
