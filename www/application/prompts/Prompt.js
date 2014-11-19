@@ -500,11 +500,15 @@ define([
                 this.elements.infoHeisig.empty();
                 this.elements.infoHeisig.parent().hide();
             }
-            if (this.containedVocab.get('mnemonic')) {
-                this.elements.infoMnemonic.html(this.containedVocab.getMnemonicText());
+            if (this.containedVocab.get('kana')) {
+                this.elements.infoMnemonic.parent().hide();
             } else {
-                this.elements.infoMnemonic.html('');
-                this.elements.infoMnemonic.parent().find('button').text('Add Mnemonic');
+                if (this.containedVocab.get('mnemonic')) {
+                    this.elements.infoMnemonic.html(this.containedVocab.getMnemonicText());
+                } else {
+                    this.elements.infoMnemonic.html('');
+                    this.elements.infoMnemonic.parent().find('button').text('Add Mnemonic');
+                }
             }
             this.elements.infoReading.html(this.vocab.getReading(null, {
                 style: app.user.settings.get('readingStyle')
