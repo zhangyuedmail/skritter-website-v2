@@ -238,7 +238,7 @@ define([
             options.hideKana = options.hideKana ? options.hideKana : [];
             options.mask = options.mask ? options.mask : false;
             options.style = options.style === 'zhuyin' ? true : false;
-            html += "<div class='reading-block'>";
+            html += "<div class='reading-block " + options.classes.join('') + "'>";
             if (this.isChinese()) {
                 segments = app.fn.segmentReading(this.get('reading'));
                 for (var a = 0, lengthA = segments.length; a < lengthA; a++) {
@@ -253,31 +253,31 @@ define([
                             var pieceZhuyin = app.fn.pinyin.toZhuyin(piece);
                             if (!startFrom || startFrom > position) {
                                 if (!startFrom && options.hide) {
-                                    html += "<span class='position-" + position + " reading-button'><span>";
+                                    html += "<div class='position-" + position + " reading-button'><div>";
                                     html += options.style ? pieceMaskedZhuyin : pieceMasked;
-                                    html += "</span></span>";
+                                    html += "</div></div>";
                                 } else {
-                                    html += "<span class='position-" + position + "'>";
+                                    html += "<div class='position-" + position + "'>";
                                     html += options.style ? pieceZhuyin : pieceTone;
-                                    html += "</span>";
+                                    html += "</div>";
                                 }
                             } else {
                                 if (options.hide) {
-                                    html += "<span class='position-" + position + " reading-button'><span>";
+                                    html += "<div class='position-" + position + " reading-button'><div>";
                                     html += options.style ? pieceMaskedZhuyin : pieceMasked;
-                                    html += "</span></span>";
+                                    html += "</div></div>";
                                 } else if (options.mask) {
-                                    html += "<span class='position-" + position + " reading-masked'><span>";
+                                    html += "<div class='position-" + position + " reading-masked'><div>";
                                     html += options.style ? pieceMaskedZhuyin : pieceMasked;
-                                    html += "</span></span>";
+                                    html += "</div></div>";
                                 } else {
-                                    html += "<span class='position-" + position + " reading-hidden'>";
-                                    html += "<span>" + piece + "</span></span>";
+                                    html += "<div class='position-" + position + " reading-hidden'>";
+                                    html += "<div>" + piece + "</div></div>";
                                 }
                             }
                             position++;
                         } else {
-                            html += "<span class='reading-filler'>" + piece + "</span>";
+                            html += "<div class='reading-filler'>" + piece + "</div>";
                         }
                     }
                     if (a < segments.length - 1) {
