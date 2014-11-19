@@ -255,6 +255,76 @@ define([
             }
         },
         /**
+         * @method toggleKana
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        toggleKana: function(callbackSuccess, callbackError) {
+            var self = this;
+            var studyKana = this.user.settings.get('studyKana');
+            async.series([
+                function(callback) {
+                    if (studyKana) {
+                        app.dialogs.show('confirm').element('.modal-title').html("Disable Kana Support <small>BETA</small>");
+                        app.dialogs.element('.modal-message').empty();
+                        app.dialogs.element('.modal-message').append("<p>Disabling this settings will require your account to perform a refresh.</p>");
+                        app.dialogs.element('.modal-message').append("<p class='text-muted'>SUPPORT: josh@skritter.com</p>");
+                        app.dialogs.element('.confirm').on('vclick', function() {
+                            app.dialogs.element().off('hide.bs.modal');
+                            app.dialogs.hide(callback);
+                        });
+                    } else {
+                        app.dialogs.show('confirm').element('.modal-title').html("Enable Kana Support <small>BETA</small>");
+                        app.dialogs.element('.modal-message').empty();
+                        app.dialogs.element('.modal-message').append("<p>Start writing words as they exist in their entirety with kanji and kana together at last. Enabling this setting will refresh account data to include kana writing elements for relevant vocab items.</p>");
+                        app.dialogs.element('.modal-message').append("<p>This is a beta feature so we'll continue to make upgrades and improvements. You can disable kana writing at any time from the Settings menu.</p>");
+                        app.dialogs.element('.modal-message').append("<p class='text-muted'>SUPPORT: josh@skritter.com</p>");
+                        app.dialogs.element('.confirm').on('vclick', function() {
+                            app.dialogs.element().off('hide.bs.modal');
+                            app.dialogs.hide(callback);
+                        });
+                    }
+                    app.dialogs.element().on('hide.bs.modal', function() {
+                        if (typeof callbackError === 'function') {
+                            callbackError();
+                        }
+                    });
+                },
+                function(callback) {
+                    studyKana = !studyKana;
+                    app.dialogs.show().element('.message-title').text((studyKana ? 'Enabling' : 'Disabling') + ' Kana');
+                    app.dialogs.element('.message-text').text('');
+                    self.user.settings.set('studyKana', studyKana).update(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    app.user.data.items.downloadAll(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    app.dialogs.element('.message-title').text('Something went wrong.');
+                    app.dialogs.element('.message-text').text('Check your connection and click reload.');
+                    app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                    app.dialogs.element('.message-confirm button').on('vclick', function() {
+                        if (typeof callbackError === 'function') {
+                            callbackError();
+                        }
+                    });
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
+                }
+            });
+        },
+        /**
          * @method updateExpires
          */
         updateExpires: function() {

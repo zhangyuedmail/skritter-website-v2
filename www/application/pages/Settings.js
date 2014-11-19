@@ -60,55 +60,33 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'switchChange.bootstrapSwitch #adjustments': 'updateAdjustments'
+            'switchChange.bootstrapSwitch #audio': 'toggleSettings',
+            'switchChange.bootstrapSwitch #heisig': 'toggleSettings',
+            'switchChange.bootstrapSwitch #hide-reading': 'toggleSettings',
+            'switchChange.bootstrapSwitch #raw-squigs': 'toggleSettings',
+            'switchChange.bootstrapSwitch #reading-style': 'toggleSettings',
+            'switchChange.bootstrapSwitch #study-kana': 'toggleStudyKana'
         }),
         /**
          * @method toggleStudyKana
-         */
-        toggleStudyKana: function() {
-            var self = this;
-            var toggleState = self.elements.adjStudyKana.bootstrapSwitch('state');
-            app.analytics.trackEvent('Settings', 'click', 'study_kana');
-            app.dialogs.show().element('.message-title').text((toggleState ? 'Enabling' : 'Disabling') + ' Kana');
-            app.dialogs.element('.message-text').text('');
-            async.series([
-                function(callback) {
-                    self.settings.set('studyKana', toggleState).update(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(callback) {
-                    app.user.data.items.downloadAll(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                }
-            ], function(error) {
-                if (error) {
-                    app.dialogs.element('.message-title').text('Something went wrong.');
-                    app.dialogs.element('.message-text').text('Check your connection and click reload.');
-                    app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
-                    app.dialogs.element('.message-confirm button').on('vclick', function() {
-                        app.reload();
-                    });
-                } else {
-                    app.reload();
-                }
-            });
-
-        },
-        /**
-         * @method updateAdjustments
          * @param {Event} event
          */
-        updateAdjustments: function(event) {
+        toggleStudyKana: function(event) {
             event.preventDefault();
-            if (app.user.isJapanese() && !this.settings.equals('studyKana', this.elements.adjStudyKana.bootstrapSwitch('state'))) {
-                this.toggleStudyKana();
-            }
+            var self = this;
+            app.analytics.trackEvent('Settings', 'click', 'study_kana');
+            app.user.data.toggleKana(function() {
+                app.reload();
+            }, function() {
+                self.renderElements();
+            });
+        },
+        /**
+         * @method toggleSettings
+         * @param {Event} event
+         */
+        toggleSettings: function(event) {
+            event.preventDefault();
             this.settings.set({
                 hideReading: this.elements.adjHideReading.bootstrapSwitch('state'),
                 readingStyle: this.elements.adjReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',

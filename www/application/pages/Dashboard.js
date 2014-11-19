@@ -77,7 +77,7 @@ define([
                 this.elements.rateNotice.hide();
             }
             if (app.user.isJapanese() && !app.isNative()) {
-                if (app.user.settings.get('showKanaNotice')) {
+                if (!app.user.settings.get('studyKana') && app.user.settings.get('showKanaNotice')) {
                     this.elements.kanaNotice.show();
                 } else {
                     this.elements.kanaNotice.hide();
@@ -97,13 +97,13 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick #button-hide-kana': 'handleButtonHideKana',
             'vclick #button-hide-expired': 'handleButtonHideExpires',
             'vclick #button-hide-rate': 'handleButtonHideRate',
+            'vclick #button-hide-try-kana': 'handleButtonHideKana',
             'vclick #button-expired': 'handleButtonExpired',
-            'vclick #button-kana': 'handleButtonKana',
             'vclick #button-rate': 'handleButtonRate',
-            'vclick #button-sync': 'handleSyncClicked'
+            'vclick #button-sync': 'handleSyncClicked',
+            'vclick #button-try-kana': 'handleButtonKana',
         }),
         /**
          * @method handleButtonExpired
@@ -140,8 +140,10 @@ define([
         handleButtonKana: function(event) {
             event.preventDefault();
             app.analytics.trackEvent('Dashboard', 'click', 'kana_button');
-            app.user.settings.set('showKanaNotice', false);
-            this.elements.kanaNotice.hide();
+            app.user.data.toggleKana(function() {
+                app.user.settings.set('showKanaNotice', false);
+                app.reload();
+            });
         },
         /**
          * @method handleButtonHideRate
