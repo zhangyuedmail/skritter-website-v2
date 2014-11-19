@@ -292,7 +292,7 @@ define([
                     if (options.hideKana.indexOf(segment) === -1) {
                         html += "<span class='position-" + position + "'>" + segment + "</span>";
                     } else {
-                        html += "<span class='position-" + position + "'><span> - </span></span>";
+                        html += "<span class='position-" + position + "'><span> ー </span></span>";
                     }
                     position++;
                 }
