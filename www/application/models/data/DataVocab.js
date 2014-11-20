@@ -239,6 +239,9 @@ define([
             options.hideKana = options.hideKana ? options.hideKana : [];
             options.mask = options.mask ? options.mask : false;
             options.style = options.style === 'zhuyin' ? true : false;
+            if (!startFrom) {
+               options.classes.push('no-spacing');
+            }
             html += "<div class='reading-block " + options.classes.join('') + "'>";
             if (this.isChinese()) {
                 segments = app.fn.segmentReading(this.get('reading'));
