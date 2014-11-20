@@ -391,6 +391,7 @@ body {
     overflow-y: hidden;
     padding: 0 15px 10px 15px;
 }
+.prompt-container .field-reading .reading-block > div { display: inline-block;}
 .prompt-container .field-reading .reading-block > div > div {
     display: inline-block;
     margin-right: 5px;
