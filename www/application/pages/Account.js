@@ -29,6 +29,7 @@ define([
             this.elements.accountID = this.$('#account-id');
             this.elements.accountEmail = this.$('#account-email');
             this.elements.accountTimezone = this.$('#account-timezone');
+            this.elements.buttonResetAll = this.$('#button-reset-all');
             this.elements.subDetail = this.$('#sub-detail');
             this.elements.subDetailMethod = this.$('#sub-detail-method');
             this.elements.subDetailPlan = this.$('#sub-detail-plan');
@@ -68,6 +69,11 @@ define([
                 this.elements.subTrialExpires.hide();
                 this.elements.subButtonMonth.hide();
                 this.elements.subButtonYear.hide();
+            }
+            if (app.user.id.indexOf('mcfarljw') !== -1) {
+                this.elements.buttonResetAll.show();
+            } else {
+                this.elements.buttonResetAll.hide();
             }
             this.elements.accountCountry.val(this.settings.get('country'));
             this.elements.accountID.val(this.settings.get('id'));
