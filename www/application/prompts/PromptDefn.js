@@ -52,7 +52,9 @@ define([
             if (this.vocab.isJapanese() && app.fn.isKana(this.vocab.get('writing'))) {
                 this.elements.fieldReading.empty();
             } else {
-                this.elements.fieldReading.html(this.vocab.getReading());
+                this.elements.fieldReading.html(this.vocab.getReading(null, {
+                    style: app.user.settings.get('readingStyle')
+                }));
             }
             this.elements.fieldWriting.html(this.vocab.getWriting());
             this.elements.fieldHighlight.show();
