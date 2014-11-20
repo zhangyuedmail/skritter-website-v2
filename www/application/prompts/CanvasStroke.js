@@ -114,7 +114,6 @@ define([
          * @returns {DataParam}
          */
         getTraceParam: function() {
-            var param = undefined;
             var matrix = this.getShape().getMatrix();
             var param = app.user.data.params.findWhere({strokeId: this.get('strokeId'), trace: true});
             if (!param) {

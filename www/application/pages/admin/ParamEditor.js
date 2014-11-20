@@ -75,7 +75,7 @@ define([
         handleCanvasClicked: function(point, event) {
             event.preventDefault();
             var param = {};
-            if (this.method = 'trace') {
+            if (this.method === 'trace') {
                 this.canvas.drawCircle('stroke', point.x, point.y, 10, {fill: 'red'});
                 this.corners.push({x: point.x, y: point.y});
                 param.strokeId = this.strokeId;

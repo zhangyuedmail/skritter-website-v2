@@ -227,6 +227,7 @@ define([
          */
         getReading: function(startFrom, options) {
             var html = '';
+            var segment = '';
             var position = 1;
             var fillers = [" ... ", "'", " "];
             var segments = [];
@@ -242,7 +243,7 @@ define([
             if (this.isChinese()) {
                 segments = app.fn.segmentReading(this.get('reading'));
                 for (var a = 0, lengthA = segments.length; a < lengthA; a++) {
-                    var segment = segments[a];
+                    segment = segments[a];
                     html += "<div class='reading-" + (a + 1) + "'>";
                     for (var b = 0, lengthB = segment.length; b < lengthB; b++) {
                         var piece = segment[b];
@@ -291,7 +292,7 @@ define([
                 segments = this.get('reading').split('');
                 html += "<div class='reading-1'>";
                 for (var c = 0, lengthC = segments.length; c < lengthC; c++) {
-                    var segment = segments[c];
+                    segment = segments[c];
                     if (options.hideKana.indexOf(segment) === -1) {
                         html += "<div class='position-" + position + (options.hide ? ' reading-button' : '') + "'><span>" + segment + "</span></div>";
                     } else {
