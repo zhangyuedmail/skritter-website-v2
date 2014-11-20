@@ -392,9 +392,9 @@ define([
             } else if (writingLength < 5) {
                 this.$('.text-max-character').css('font-size', canvasSize / 6);
             } else if (writingLength < 7) {
-                this.$('.text-max-character').css('font-size', canvasSize / 7);
+                this.$('.text-max-character').css('font-size', canvasSize / 8);
             } else {
-                this.$('.text-max-character').css('font-size', canvasSize / 10);
+                this.$('.text-max-character').css('font-size', canvasSize / 12);
             }
             return this;
         },
