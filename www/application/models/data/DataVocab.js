@@ -293,7 +293,7 @@ define([
                 for (var c = 0, lengthC = segments.length; c < lengthC; c++) {
                     var segment = segments[c];
                     if (options.hideKana.indexOf(segment) === -1) {
-                        html += "<div class='position-" + position + "'>" + segment + "</div>";
+                        html += "<div class='position-" + position + (options.hide ? ' reading-button' : '') + "'><span>" + segment + "</span></div>";
                     } else {
                         html += "<div class='position-" + position + "'><span> ー </span></div>";
                     }
