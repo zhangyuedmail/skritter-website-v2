@@ -391,21 +391,29 @@ body {
     overflow-y: hidden;
     padding: 0 15px 10px 15px;
 }
-.prompt-container .field-reading div { display: inline-block; }
-.prompt-container .field-reading div { margin-right: 5px; }
-.prompt-container .field-reading .reading-hidden { border-top: 1px solid #000000; }
-.prompt-container .field-reading .reading-hidden div { visibility: hidden; }
-.prompt-container .field-reading .reading-button {
-    background-color: #ffffff;
-    border: 2px solid #b3b3b3;
-    width: 1.5em;
+.prompt-container .field-reading .reading-block > div > div {
+    display: inline-block;
+    margin-right: 5px;
+    min-width: 2em;
 }
-.prompt-container .field-reading .reading-button div { visibility: hidden; }
-.prompt-container .field-reading .reading-button.reveal div { visibility: visible; }
-.prompt-container .field-writing span { margin-right: 5px; }
-.prompt-container .field-writing .highlight span { background-color: #ffffff; }
-.prompt-container .field-writing .writing-hidden { border: 2px solid #b3b3b3; }
-.prompt-container .field-writing .writing-hidden span { visibility: hidden; }
+.prompt-container .field-reading .reading-hidden { border-top: 1px solid #000000; }
+.prompt-container .field-reading .reading-hidden span { visibility: hidden; }
+.prompt-container .field-reading .reading-button {
+    background-color: #d3d3d3;
+    border: 1px solid #000000;
+    border-radius: 10px;
+}
+.prompt-container .field-reading .reading-button span { visibility: hidden; }
+.prompt-container .field-reading .reading-button.reveal span { visibility: visible; }
+.prompt-container .field-writing .writing-block div { display: inline; }
+.prompt-container .field-writing .writing-block > span { margin-right: 5px; }
+.prompt-container .field-writing .highlight > span {
+    border: 2px solid #b3b3b3;
+    background-color: #ffffff;
+}
+.prompt-container .field-writing .writing-block .writing-hidden { border: 2px solid #b3b3b3; }
+.prompt-container .field-writing .writing-block .writing-hidden span { visibility: hidden; }
+
 .prompt-container .prompt-newness {
     bottom: -20px;
     font-size: 12px;

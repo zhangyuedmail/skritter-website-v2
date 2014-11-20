@@ -72,7 +72,7 @@ define([
                     }));
                 }
             } else {
-                this.elements.fieldReading.html(this.vocab.getReading(null, {
+                this.elements.fieldReading.html(this.vocab.getReading(this.position + 1, {
                     hide: this.review.isLast() ? false : app.user.settings.get('hideReading'),
                     style: app.user.settings.get('readingStyle')
                 }));
@@ -105,7 +105,7 @@ define([
                     }));
                 }
             } else {
-                this.elements.fieldReading.html(this.vocab.getReading(null, {
+                this.elements.fieldReading.html(this.vocab.getReading(this.position, {
                     hide: app.user.settings.get('hideReading'),
                     style: app.user.settings.get('readingStyle')
                 }));

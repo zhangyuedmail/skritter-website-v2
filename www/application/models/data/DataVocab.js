@@ -247,15 +247,17 @@ define([
                     for (var b = 0, lengthB = segment.length; b < lengthB; b++) {
                         var piece = segment[b];
                         if (fillers.indexOf(piece) === -1) {
-                            var pieceMasked = piece.replace(/[1-5]/g, '').replace('lv', 'lü');
+                            var pieceMasked = piece.replace(/[1-5]/g, '');
                             var pieceMaskedZhuyin = app.fn.pinyin.toZhuyin(pieceMasked + '5');
                             var pieceTone = app.fn.pinyin.toTone(piece);
                             var pieceZhuyin = app.fn.pinyin.toZhuyin(piece);
+                            pieceMasked = pieceMasked.replace('lv', 'lü');
+                            pieceMaskedZhuyin = pieceMaskedZhuyin.replace('˙', '');
                             if (!startFrom || startFrom > position) {
                                 if (!startFrom && options.hide) {
-                                    html += "<div class='position-" + position + " reading-button'><div>";
+                                    html += "<div class='position-" + position + " reading-button'><span>";
                                     html += options.style ? pieceMaskedZhuyin : pieceMasked;
-                                    html += "</div></div>";
+                                    html += "</span></div>";
                                 } else {
                                     html += "<div class='position-" + position + "'>";
                                     html += options.style ? pieceZhuyin : pieceTone;
@@ -263,21 +265,21 @@ define([
                                 }
                             } else {
                                 if (options.hide) {
-                                    html += "<div class='position-" + position + " reading-button'><div>";
+                                    html += "<div class='position-" + position + " reading-button'><span>";
                                     html += options.style ? pieceMaskedZhuyin : pieceMasked;
-                                    html += "</div></div>";
+                                    html += "</span></div>";
                                 } else if (options.mask) {
-                                    html += "<div class='position-" + position + " reading-masked'><div>";
+                                    html += "<div class='position-" + position + " reading-masked'><span>";
                                     html += options.style ? pieceMaskedZhuyin : pieceMasked;
-                                    html += "</div></div>";
+                                    html += "</span></div>";
                                 } else {
                                     html += "<div class='position-" + position + " reading-hidden'>";
-                                    html += "<div>" + piece + "</div></div>";
+                                    html += "<span>" + piece + "</span></div>";
                                 }
                             }
                             position++;
                         } else {
-                            html += "<div class='reading-filler'>" + piece + "</div>";
+                            html += "<span class='reading-filler'>" + piece + "</span>";
                         }
                     }
                     if (a < segments.length - 1) {
@@ -287,17 +289,17 @@ define([
                 }
             } else {
                 segments = this.get('reading').split('');
-                html += "<span class='reading-1'>";
+                html += "<div class='reading-1'>";
                 for (var c = 0, lengthC = segments.length; c < lengthC; c++) {
                     var segment = segments[c];
                     if (options.hideKana.indexOf(segment) === -1) {
-                        html += "<span class='position-" + position + "'>" + segment + "</span>";
+                        html += "<div class='position-" + position + "'>" + segment + "</div>";
                     } else {
-                        html += "<span class='position-" + position + "'><span> ー </span></span>";
+                        html += "<div class='position-" + position + "'><span> ー </span></div>";
                     }
                     position++;
                 }
-                html += "</span>";
+                html += "</div>";
             }
             return html + '</div>';
         },
