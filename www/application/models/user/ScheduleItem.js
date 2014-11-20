@@ -213,7 +213,6 @@ define([
                         }).cache(function() {
                             callbackError(error);
                         });
-                        callbackError(error);
                     } else {
                         callbackError(error);
                     }

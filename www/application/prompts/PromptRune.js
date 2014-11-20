@@ -67,7 +67,7 @@ define([
                 } else {
                     this.elements.fieldReading.html(this.vocab.getReading(null, {
                         hide: app.user.settings.get('hideReading'),
-                        hideKana: this.vocab.getKana(),
+                        hideKana: app.user.settings.get('studyKana') ? this.vocab.getKana() : [],
                         style: app.user.settings.get('readingStyle')
                     }));
                 }
@@ -100,7 +100,7 @@ define([
                 } else {
                     this.elements.fieldReading.html(this.vocab.getReading(null, {
                         hide: app.user.settings.get('hideReading'),
-                        hideKana: this.vocab.getKana(),
+                        hideKana: app.user.settings.get('studyKana') ? this.vocab.getKana() : [],
                         style: app.user.settings.get('readingStyle')
                     }));
                 }
