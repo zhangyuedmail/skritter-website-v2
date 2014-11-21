@@ -238,6 +238,10 @@ body {
 .navbar-menu.active .toggle-text { margin-left: 20px; }
 
 
+/*** NOTIFY ***/
+.notifyjs-corner { margin-top: 50px !important; }
+
+
 /*** PAGES ***/
 .page { height: 100%; }
 .page.no-navbar { margin-top: auto; }

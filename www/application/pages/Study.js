@@ -95,6 +95,7 @@ define([
         handleAddButtonClicked: function(event) {
             event.preventDefault();
             var self = this;
+            var limit = 1;
             app.timer.stop();
             app.analytics.trackEvent('Prompt', 'click', 'add items');
             app.dialogs.show('add-items');
@@ -107,20 +108,25 @@ define([
                     app.dialogs.element('.message-title').text('How many words to add?');
                     app.dialogs.element('.message-text').text('Select one of the quantities below.');
                     app.dialogs.element('.item-limit').on('vclick', function(event) {
-                        var limit = $(event.target).data('value');
-                        if (limit) {
-                            callback(null, parseInt(limit, 10));
-                        }
+                        limit = $(event.target).data('value');
+                        limit = limit ? parseInt(limit, 10) : 1;
+                        callback();
                     });
                 },
-                function(limit, callback) {
-                    app.dialogs.element('.message-title').text('Adding Items');
-                    app.dialogs.element('.loader-image').show();
-                    app.dialogs.element('.item-limit').hide();
+                function(callback) {
+                    app.dialogs.hide(callback);
+                },
+                function(callback) {
+                    app.timer.start();
                     app.user.data.items.fetchNew({
-                        limit: limit || 1,
+                        limit: limit,
                         lists: app.user.settings.getActiveLists()
-                    }, function() {
+                    }, function(numVocabsAdded) {
+                        $.notify('Added ' + numVocabsAdded + ' words.', {
+                            className: 'success',
+                            globalPosition: 'top right',
+                            autoHide: false
+                        });
                         callback();
                     }, function(error) {
                         callback(error);
@@ -128,7 +134,8 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    app.dialogs.element('.loader-image').hide();
+                    app.timer.stop();
+                    app.dialogs.show().element('.loader-image').hide();
                     if (error.statusCode === 402) {
                         app.dialogs.element('.message-title').text('Subscription required.');
                         app.dialogs.element('.message-text').text('You need an active subscription to add new items.');
@@ -140,6 +147,7 @@ define([
                             });
                         });
                     } else {
+                        app.dialogs.element('.message-title').text('No lists found.');
                         if (app.user.data.vocablists.hasPaused()) {
                             app.dialogs.element('.message-text').text('You need to resume at least one paused list.');
                         } else {
