@@ -70,7 +70,8 @@ define([
             app.dialogs.show('add-vocab').element('.modal-title span').text('Add Vocabs');
             app.dialogs.show('add-vocab').element('.message-text').text('To add multiple vocabs use spaces.');
             app.dialogs.element('.check').on('vclick', function() {
-                var vocabs = app.dialogs.element('.vocabs').val().split(' ');
+                var vocabs = app.dialogs.element('.vocabs').val();
+                vocabs = vocabs ? vocabs.split(' ') : [];
                 async.each(vocabs, function(vocab, callback) {
                     app.api.getVocabByQuery(vocab, {fields: 'id,style,writing'}, function(result) {
                         console.log(result.Vocabs);
