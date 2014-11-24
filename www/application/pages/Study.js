@@ -121,11 +121,10 @@ define([
                     app.user.data.items.fetchNew({
                         limit: limit,
                         lists: app.user.settings.getActiveLists()
-                    }, function(numVocabsAdded) {
-                        $.notify('Added ' + numVocabsAdded + ' words.', {
+                    }, function(result) {
+                        $.notify('Added ' + result.numVocabsAdded + ' words.', {
                             className: 'success',
-                            globalPosition: 'top right',
-                            autoHide: false
+                            globalPosition: 'top right'
                         });
                         callback();
                     }, function(error) {

@@ -154,6 +154,7 @@ define([
             var now = moment().unix();
             var items = [];
             var numVocabsAdded = 0;
+            var result = {};
             var vocablists = [];
             options = options ? options : {};
             options.get = options.get === undefined ?  true : options.get;
@@ -264,7 +265,9 @@ define([
                         self.data.incrementAddedItems(numVocabsAdded);
                         self.data.vocablists.add(vocablists, {merge: true});
                         self.data.user.schedule.updateFilter();
-                        callbackSuccess(numVocabsAdded);
+                        result.numVocabsAdded = numVocabsAdded;
+                        result.vocablists = vocablists;
+                        callbackSuccess(result);
                     }
                 });
             }
