@@ -191,6 +191,7 @@ define([
                         app.user.data.sync(0, callback, callback);
                     }
                 ], function() {
+                    app.user.schedule.updateFilter();
                     app.user.schedule.sortFilter();
                     app.dialogs.hide();
                 });
