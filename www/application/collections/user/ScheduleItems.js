@@ -77,6 +77,15 @@ define([
             return items[0];
         },
         /**
+         * @method getRecentCount
+         */
+        getRecentCount: function() {
+            var offset = moment().subtract(12, 'hours').unix();
+            return this.filtered.filter(function(item) {
+                return item.attributes.created > offset;
+            }).length;
+        },
+        /**
          * @method insert
          * @param {Array|Object} items
          * @param {Object} [options]
