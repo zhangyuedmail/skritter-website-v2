@@ -43,7 +43,6 @@ define([
          */
         defaults: {
             access_token: undefined,
-            addHistory: undefined,
             addOffset: 0,
             changedVocabIds: [],
             downloadId: undefined,
@@ -74,21 +73,6 @@ define([
                 this.attributes.changedVocabIds.push(vocabId);
             }
             this.cache();
-        },
-        /**
-         * @method incrementAddedItems
-         * @param {Number} addedCount
-         * @returns {UserData}
-         */
-        incrementAddedItems: function(addedCount) {
-            var today = moment().format('YYYY-MM-DD');
-            var history = this.get('addHistory');
-            if (this.get('addHistory') && today === history.date) {
-                this.set('addHistory', {date: today, added: history.added + addedCount});
-            } else {
-                this.set('addHistory', {date: today, added: addedCount});
-            }
-            return this;
         },
         /**
          * @method loadAll

@@ -177,7 +177,6 @@ define([
                     },
                     //make initial request for new items
                     function (callback) {
-                        app.dialogs.element('.message-text').text('CHECKING LISTS');
                         async.waterfall([
                             //request new items via api batch
                             function(callback) {
@@ -230,7 +229,6 @@ define([
                     function(callback) {
                         if (options.get) {
                             if (items && items.length) {
-                                app.dialogs.element('.message-text').text('FETCHING ' + numVocabsAdded + ' WORDS');
                                 app.api.getItemByOffset(now, {
                                     lang: app.user.getLanguageCode(),
                                     includeVocabs: true,
@@ -260,11 +258,11 @@ define([
                         callbackError(error);
                     } else {
                         console.log('ITEMS', items, vocablists, numVocabsAdded);
-                        app.analytics.trackUserEvent('added items', items.length);
+                        app.analytics.trackUserEvent('added_items', items.length);
                         self.data.set('addOffset', self.data.get('addOffset') + numVocabsAdded);
-                        self.data.incrementAddedItems(numVocabsAdded);
                         self.data.vocablists.add(vocablists, {merge: true});
                         self.data.user.schedule.updateFilter();
+                        result.items = items;
                         result.numVocabsAdded = numVocabsAdded;
                         result.vocablists = vocablists;
                         callbackSuccess(result);

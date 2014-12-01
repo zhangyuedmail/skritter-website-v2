@@ -98,8 +98,7 @@ define([
             options.sort = options.sort === undefined ? true : options.sort;
             var scheduleItems = [];
             for (var i = 0, length = items.length; i < length; i++) {
-                var item = items[i];
-                scheduleItems.push(item);
+                scheduleItems.push(items[i]);
             }
             console.log('UPDATING SCHEDULE:', scheduleItems);
             return this.add(scheduleItems, options);
