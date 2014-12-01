@@ -118,11 +118,15 @@ define([
                 },
                 function(callback) {
                     app.timer.start();
+                    $.notify('Looking for ' + limit + (limit === 1 ? ' word' : ' words') + '.', {
+                        className: 'info',
+                        globalPosition: 'top right'
+                    });
                     app.user.data.items.fetchNew({
                         limit: limit,
                         lists: app.user.settings.getActiveLists()
                     }, function(result) {
-                        $.notify('Added ' + result.numVocabsAdded + ' words.', {
+                        $.notify('Added ' + result.numVocabsAdded + (result.numVocabsAdded === 1 ? ' word' : ' words') + '.', {
                             className: 'success',
                             globalPosition: 'top right'
                         });
