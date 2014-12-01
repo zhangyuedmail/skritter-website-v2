@@ -52,18 +52,27 @@ define([
          * @returns {Dialogs}
          */
         hide: function(callback) {
+            var self = this;
             this.element().modal('hide').one('hidden.bs.modal', function() {
+                self.id = undefined;
                 if (typeof callback === 'function') {
                     callback();
                 }
             });
-            this.id = undefined;
             return this;
         },
         /**
-         * @method isOpen
+         * @method isHidden
+         * @returns {Boolean}
          */
-        isOpen: function() {
+        isHidden: function() {
+            return this.id ? false : true;
+        },
+        /**
+         * @method isShown
+         * @returns {Boolean}
+         */
+        isShown: function() {
             return this.id ? true : false;
         },
         /**
@@ -94,6 +103,7 @@ define([
          * @returns {Dialogs}
          */
         show: function(dialogId, callback, options) {
+            var self = this;
             this.id = dialogId ? 'dialog-' + dialogId : 'dialog-default';
             options = options ? options : this.options;
             options.backdrop = options.backdrop ? options.backdrop : 'static';
@@ -110,6 +120,7 @@ define([
             });
             this.element().one('hidden.bs.modal', function(event) {
                 $(event.target).find('*').off();
+                self.id = undefined;
             });
             return this;
         }
