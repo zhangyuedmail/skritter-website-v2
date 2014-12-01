@@ -66,28 +66,30 @@ define([
          * @method handleBackButtonPressed
          */
         handleBackButtonPressed: function() {
-            if (app.sidebars.isExpanded()) {
-                app.sidebars.hide();
-            } else if (Backbone.history.fragment === '') {
-                app.dialogs.show('exit');
-                app.dialogs.element('.loader-image').hide();
-                app.dialogs.element('.exit').one('vclick', function() {
-                    app.dialogs.element('button').hide();
-                    app.dialogs.element('.modal-header').hide();
-                    app.dialogs.element('.loader-image').show();
-                    if (app.user.isAuthenticated()) {
-                        app.analytics.trackUserEvent('exiting application');
-                        app.user.data.sync(0, function() {
+            if (app.dialogs.isHidden()) {
+                if (app.sidebars.isExpanded()) {
+                    app.sidebars.hide();
+                } else if (Backbone.history.fragment === '') {
+                    app.dialogs.show('exit');
+                    app.dialogs.element('.loader-image').hide();
+                    app.dialogs.element('.exit').one('vclick', function () {
+                        app.dialogs.element('button').hide();
+                        app.dialogs.element('.modal-header').hide();
+                        app.dialogs.element('.loader-image').show();
+                        if (app.user.isAuthenticated()) {
+                            app.analytics.trackUserEvent('exiting application');
+                            app.user.data.sync(0, function () {
+                                navigator.app.exitApp();
+                            }, function () {
+                                navigator.app.exitApp();
+                            });
+                        } else {
                             navigator.app.exitApp();
-                        }, function() {
-                            navigator.app.exitApp();
-                        });
-                    } else {
-                        navigator.app.exitApp();
-                    }
-                });
-            } else {
-                this.back();
+                        }
+                    });
+                } else {
+                    this.back();
+                }
             }
         },
         /**
