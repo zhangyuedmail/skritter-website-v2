@@ -28,7 +28,7 @@ app = (function() {
                 backbone: 'libraries/backbone-1.1.2.min',
                 'backbone.routefilter': 'libraries/backbone.routefilter-0.2.0.min',
                 bootstrap: 'libraries/bootstrap-3.3.0.min',
-                'bootstrap.switch': 'libraries/bootstrap.switch-3.1.0.min',
+                'bootstrap.switch': 'libraries/bootstrap.switch-3.2.2.min',
                 'createjs.easel': 'libraries/createjs.easel-NEXT.min',
                 'createjs.tween': 'libraries/createjs.tween-NEXT.min',
                 fastclick: 'libraries/fastclick-1.0.3.min',
