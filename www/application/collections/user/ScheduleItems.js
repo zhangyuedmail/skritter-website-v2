@@ -90,19 +90,7 @@ define([
             var scheduleItems = [];
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
-                scheduleItems.push({
-                    id: item.id,
-                    interval: item.interval || 0,
-                    last: item.last || 0,
-                    next: item.next || 0,
-                    part: item.part,
-                    reviews: item.reviews,
-                    sectionIds: item.sectionIds,
-                    style: item.style,
-                    successes: item.successes,
-                    vocabIds: item.vocabIds,
-                    vocabListIds: item.vocabListIds
-                });
+                scheduleItems.push(item);
             }
             console.log('UPDATING SCHEDULE:', scheduleItems);
             return this.add(scheduleItems, options);

@@ -195,19 +195,7 @@ define([
                 var cursor = event.target.result;
                 if (cursor) {
                     if (cursor.value.vocabIds.length) {
-                        data.push({
-                            id: cursor.value.id,
-                            interval: cursor.value.interval,
-                            last: cursor.value.last,
-                            next: cursor.value.next,
-                            part: cursor.value.part,
-                            reviews: cursor.value.reviews,
-                            sectionIds: cursor.value.sectionIds,
-                            style: cursor.value.style,
-                            successes: cursor.value.successes,
-                            vocabIds: cursor.value.vocabIds,
-                            vocabListIds: cursor.value.vocabListIds
-                        });
+                        data.push(cursor.value);
                     }
                     cursor.continue();
                 }
