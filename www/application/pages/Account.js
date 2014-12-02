@@ -70,7 +70,7 @@ define([
                 this.elements.subButtonMonth.hide();
                 this.elements.subButtonYear.hide();
             }
-            if (app.user.id.indexOf('jaketest') !== -1 || app.user.id.indexOf('mcfarljw') !== -1) {
+            if (app.user.settings('name').indexOf('jaketest') !== -1 || app.user.id.indexOf('mcfarljw') !== -1) {
                 this.elements.buttonResetAll.show();
             } else {
                 this.elements.buttonResetAll.hide();

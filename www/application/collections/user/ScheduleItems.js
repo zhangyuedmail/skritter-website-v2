@@ -80,7 +80,7 @@ define([
          * @method getRecentCount
          */
         getRecentCount: function() {
-            var offset = moment().subtract(12, 'hours').unix();
+            var offset = moment().tz(this.user.settings.get('timezone')).startOf('day').unix();
             var recentItems = this.filtered.filter(function(item) {
                 return item.attributes.created > offset;
             });
