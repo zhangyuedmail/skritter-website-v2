@@ -146,8 +146,8 @@ define([
         /**
          * @method fetchNew
          * @param {Object} [options]
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         fetchNew: function(options, callbackSuccess, callbackError) {
             var self = this;
@@ -192,6 +192,10 @@ define([
                                         }
                                     }
                                 ], function(result) {
+                                    $.notify('Looking for ' + options.limit + (options.limit === 1 ? ' word' : ' words') + '.', {
+                                        className: 'info',
+                                        globalPosition: 'top right'
+                                    });
                                     callback(null, result);
                                 }, function(error) {
                                     callback(error);
@@ -255,7 +259,9 @@ define([
                     self.data.trigger('sync', false);
                     if (error) {
                         console.log('ITEM ADD ERROR:', error);
-                        callbackError(error);
+                        if (typeof callbackError === 'function') {
+                            callbackError(error);
+                        }
                     } else {
                         console.log('ITEMS', items, vocablists, numVocabsAdded);
                         app.analytics.trackUserEvent('added_items', items.length);
@@ -265,7 +271,13 @@ define([
                         result.items = items;
                         result.numVocabsAdded = numVocabsAdded;
                         result.vocablists = vocablists;
-                        callbackSuccess(result);
+                        $.notify('Added ' + result.numVocabsAdded + (result.numVocabsAdded === 1 ? ' word' : ' words') + '.', {
+                            className: 'success',
+                            globalPosition: 'top right'
+                        });
+                        if (typeof callbackSuccess === 'function') {
+                            callbackSuccess(result);
+                        }
                     }
                 });
             }

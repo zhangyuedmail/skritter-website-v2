@@ -65,6 +65,19 @@ define([
             localStorage.setItem(this.user.id + '-data', JSON.stringify(this.toJSON()));
         },
         /**
+         * @method checkAutoAdd
+         * @param {Number|String} dueCount
+         */
+        checkAutoAdd: function(dueCount) {
+            if (this.user.settings.get('autoAdd')) {
+                var autoAddLimit = this.user.settings.get('autoAddLimit');
+                var recentCount = this.user.schedule.getRecentCount();
+                if (recentCount < autoAddLimit && (!dueCount || dueCount < 5)) {
+                    this.items.fetchNew({limit: 1, lists: app.user.settings.getActiveLists()});
+                }
+            }
+        },
+        /**
          * @method flagVocabUpdate
          * @param {String} vocabId
          */

@@ -118,18 +118,10 @@ define([
                 },
                 function(callback) {
                     app.timer.start();
-                    $.notify('Looking for ' + limit + (limit === 1 ? ' word' : ' words') + '.', {
-                        className: 'info',
-                        globalPosition: 'top right'
-                    });
                     app.user.data.items.fetchNew({
                         limit: limit,
                         lists: app.user.settings.getActiveLists()
-                    }, function(result) {
-                        $.notify('Added ' + result.numVocabsAdded + (result.numVocabsAdded === 1 ? ' word' : ' words') + '.', {
-                            className: 'success',
-                            globalPosition: 'top right'
-                        });
+                    }, function() {
                         callback();
                     }, function(error) {
                         callback(error);
@@ -205,6 +197,7 @@ define([
                     self.scheduleIndex = 0;
                     self.prompt = self.promptController.loadPrompt(review || result.item.createReview());
                     self.reviews.current = self.prompt.review;
+                    app.user.data.checkAutoAdd(self.elements.studyCount.text());
                 }, function() {
                     self.next();
                 });
