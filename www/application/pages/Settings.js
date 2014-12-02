@@ -23,12 +23,15 @@ define([
          */
         render: function() {
             this.$el.html(this.compile(TemplateMobile));
-            this.elements.adjAudio = this.$('#adjustments #audio');
-            this.elements.adjHeisig = this.$('#adjustments #heisig');
-            this.elements.adjHideReading = this.$('#adjustments #hide-reading');
-            this.elements.adjRawSquigs = this.$('#adjustments #raw-squigs');
-            this.elements.adjReadingStyle = this.$('#adjustments #reading-style');
-            this.elements.adjStudyKana = this.$('#adjustments #study-kana');
+            this.elements.settingAudio = this.$('#audio');
+            this.elements.settingAudioTTS = this.$('#audio-tts');
+            this.elements.settingAutoAdd = this.$('#auto-add');
+            this.elements.settingAutoAddLimit = undefined;
+            this.elements.settingHeisig = this.$('#heisig');
+            this.elements.settingHideReading = this.$('#hide-reading');
+            this.elements.settingRawSquigs = this.$('#raw-squigs');
+            this.elements.settingReadingStyle = this.$('#reading-style');
+            this.elements.settingStudyKana = this.$('#study-kana');
             this.renderElements();
             return this;
         },
@@ -38,20 +41,25 @@ define([
          */
         renderElements: function() {
             this.undelegateEvents();
-            this.elements.adjAudio.bootstrapSwitch('state', this.settings.get('volume') ? true : false);
-            this.elements.adjHeisig.bootstrapSwitch('state', this.settings.get('showHeisig'));
-            this.elements.adjHideReading.bootstrapSwitch('state', this.settings.get('hideReading'));
-            this.elements.adjRawSquigs.bootstrapSwitch('state', this.settings.get('squigs'));
+            this.elements.settingAudio.bootstrapSwitch('state', this.settings.get('volume') ? true : false);
+            this.elements.settingAudioTTS.bootstrapSwitch('state', this.settings.get('audioTTS'));
+            this.elements.settingAutoAdd.bootstrapSwitch('state', this.settings.get('autoAdd'));
+            this.elements.settingHeisig.bootstrapSwitch('state', this.settings.get('showHeisig'));
+            this.elements.settingHideReading.bootstrapSwitch('state', this.settings.get('hideReading'));
+            this.elements.settingRawSquigs.bootstrapSwitch('state', this.settings.get('squigs'));
             if (app.user.isChinese()) {
-                this.elements.adjReadingStyle.bootstrapSwitch('state', this.settings.get('readingStyle') === 'pinyin' ? true : false);
+                this.elements.settingReadingStyle.bootstrapSwitch('state', this.settings.get('readingStyle') === 'pinyin' ? true : false);
             } else {
-                this.elements.adjReadingStyle.parent().parent().hide();
+                this.elements.settingReadingStyle.parent().parent().hide();
             }
             if (app.user.isJapanese()) {
-                this.elements.adjStudyKana.bootstrapSwitch('state', this.settings.get('studyKana'));
+                this.elements.settingStudyKana.bootstrapSwitch('state', this.settings.get('studyKana'));
             } else {
-                this.elements.adjStudyKana.parent().parent().hide();
+                this.elements.settingStudyKana.parent().parent().hide();
             }
+            this.elements.settingAutoAddLimit = new Slider('#daily-limit-slider');
+            this.elements.settingAutoAddLimit.setValue(this.settings.get('autoAddLimit'));
+            this.updateAutoAddLimitSlider({value: this.settings.get('autoAddLimit')});
             this.delegateEvents();
             return this;
         },
@@ -60,7 +68,9 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
+            'slide #daily-limit-slider': 'updateAutoAddLimitSlider',
             'switchChange.bootstrapSwitch #audio': 'toggleSettings',
+            'switchChange.bootstrapSwitch #auto-add': 'toggleSettings',
             'switchChange.bootstrapSwitch #heisig': 'toggleSettings',
             'switchChange.bootstrapSwitch #hide-reading': 'toggleSettings',
             'switchChange.bootstrapSwitch #raw-squigs': 'toggleSettings',
@@ -88,12 +98,21 @@ define([
         toggleSettings: function(event) {
             event.preventDefault();
             this.settings.set({
-                hideReading: this.elements.adjHideReading.bootstrapSwitch('state'),
-                readingStyle: this.elements.adjReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
-                showHeisig: this.elements.adjHeisig.bootstrapSwitch('state'),
-                squigs: this.elements.adjRawSquigs.bootstrapSwitch('state'),
-                volume: this.elements.adjAudio.bootstrapSwitch('state') ? 1 : 0
+                autoAdd: this.elements.settingAutoAdd.bootstrapSwitch('state'),
+                hideReading: this.elements.settingHideReading.bootstrapSwitch('state'),
+                readingStyle: this.elements.settingReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
+                showHeisig: this.elements.settingHeisig.bootstrapSwitch('state'),
+                squigs: this.elements.settingRawSquigs.bootstrapSwitch('state'),
+                volume: this.elements.settingAudio.bootstrapSwitch('state') ? 1 : 0
             }).update();
+        },
+        /**
+         * @method updateAutoAddLimitSlider
+         * @param {Event|Object} event
+         */
+        updateAutoAddLimitSlider: function(event) {
+            this.settings.set('autoAddLimit', event.value);
+            $('#daily-limit-slider-label').text(event.value);
         }
     });
 

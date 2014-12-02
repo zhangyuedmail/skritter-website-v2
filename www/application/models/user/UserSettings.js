@@ -31,10 +31,11 @@ define([
         defaults: {
             audioPitch: '100',
             audioSpeed: '60',
+            audioTTS: false,
             autoAdd: true,
+            autoAddLimit: 10,
             allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             allJapaneseParts: ['defn', 'rdng', 'rune'],
-            dailyAddLimit: 20,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             filterLists: [],
