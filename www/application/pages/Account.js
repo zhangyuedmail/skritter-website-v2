@@ -124,13 +124,6 @@ define([
             event.preventDefault();
             app.analytics.trackEvent('Account', 'click', 'reset_all');
             app.dialogs.show('confirm').element('.modal-title span').text('Reset Account');
-            var resetMessage = "Want to start all over, make it as if nothing ever happened?";
-            resetMessage += "<strong>What will be deleted?</strong><hr>";
-            resetMessage += "<ul>";
-            resetMessage += "<li>All of your words will be deleted</li>";
-            resetMessage += "<li>All of your progress will be reset</li>";
-            resetMessage += "</ul>";
-            app.dialogs.element('.modal-message').html(resetMessage);
             app.dialogs.element('.confirm').on('vclick', function() {
                 async.series([
                     function(callback) {
@@ -139,7 +132,7 @@ define([
                     function(callback) {
                         app.dialogs.show();
                         app.dialogs.element('.message-title').text('Resetting Account');
-                        app.api.resetAccount(app.user.getLanguageCode(), function() {
+                        app.api.resetAccount({lang: app.user.getLanguageCode()}, function() {
                             callback();
                         }, function(error) {
                             callback(error);

@@ -896,7 +896,7 @@ define([
          * @param {Function} callbackError
          */
         resetAccount: function(options, callbackComplete, callbackError) {
-            options = options ? option : {};
+            options = options ? options : {};
             options = options.lang ? options.lang : app.user.getLanguageCode();
             $.ajax({
                 url: this.getBaseUrl() + 'reset' +
