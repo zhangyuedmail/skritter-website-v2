@@ -1,5 +1,6 @@
 define([
     'async',
+    'bootstrap.slider',
     'fastclick',
     'handlebars',
     'moment.timezone',
@@ -15,10 +16,11 @@ define([
     'require.i18n',
     'require.text',
     'webfont'
-], function(Async, FastClick, Handlebars, Moment) {
+], function(Async, BootstrapSlider, FastClick, Handlebars, Moment) {
     window.async = Async;
     window.fastclick = new FastClick(document.body);
     window.handlebars = Handlebars;
     window.moment = Moment;
     window.raygun = Raygun.noConflict();
+    window.Slider = BootstrapSlider;
 });
