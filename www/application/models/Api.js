@@ -80,8 +80,8 @@ define([
             (function next() {
                 $.ajax({
                     url: self.getBaseUrl() + 'items/addmissing' +
-                        '?bearer_token=' + self.getToken() +
-                        '&vocabId=' + vocabIds.splice(0, 1)[0],
+                    '?bearer_token=' + self.getToken() +
+                    '&vocabId=' + vocabIds.splice(0, 1)[0],
                     beforeSend: self.beforeSend,
                     context: self,
                     type: 'POST'
@@ -816,8 +816,8 @@ define([
                 var batch = _.flatten(reviews.splice(0, 49));
                 $.ajax({
                     url: self.getBaseUrl() + 'reviews' +
-                        '?bearer_token=' + self.getToken() +
-                        '&spaceItems=false',
+                    '?bearer_token=' + self.getToken() +
+                    '&spaceItems=false',
                     beforeSend: self.beforeSend,
                     context: self,
                     type: 'POST',
@@ -874,7 +874,7 @@ define([
         requestBatch: function(requests, callbackComplete, callbackError) {
             $.ajax({
                 url: this.getBaseUrl() + 'batch' +
-                    '?bearer_token=' + this.getToken(),
+                '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'POST',
@@ -891,13 +891,17 @@ define([
         },
         /**
          * @method resetAccount
+         * @param {Object} [options]
          * @param {Function} callbackComplete
          * @param {Function} callbackError
          */
-        resetAccount: function(callbackComplete, callbackError) {
+        resetAccount: function(options, callbackComplete, callbackError) {
+            options = options ? option : {};
+            options = options.lang ? options.lang : app.user.getLanguageCode();
             $.ajax({
                 url: this.getBaseUrl() + 'reset' +
-                    '?bearer_token=' + this.getToken(),
+                '?lang=' + options.lang +
+                '&bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'POST'
@@ -931,7 +935,7 @@ define([
         updateSubscription: function(subscription, callbackComplete, callbackError) {
             $.ajax({
                 url: this.getBaseUrl() + 'subscriptions/' + app.user.id +
-                    '?bearer_token=' + this.getToken(),
+                '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'PUT',
@@ -955,7 +959,7 @@ define([
         updateVocabList: function(list, callbackComplete, callbackError) {
             $.ajax({
                 url: this.getBaseUrl()  + 'vocablists/' + list.id +
-                    '?bearer_token=' + this.getToken(),
+                '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'PUT',
@@ -980,7 +984,7 @@ define([
         updateVocabListSection: function(list, section, callbackComplete, callbackError) {
             $.ajax({
                 url: this.getBaseUrl()  + 'vocablists/' + list.id + '/sections/' + section.id +
-                    '?bearer_token=' + this.getToken(),
+                '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'PUT',
@@ -1004,7 +1008,7 @@ define([
         updateUser: function(settings, callbackComplete, callbackError) {
             $.ajax({
                 url: this.getBaseUrl() + 'users' +
-                    '?bearer_token=' + this.getToken(),
+                '?bearer_token=' + this.getToken(),
                 beforeSend: this.beforeSend,
                 context: this,
                 type: 'PUT',
@@ -1034,7 +1038,7 @@ define([
                 var vocab = vocabs.splice(0, 1)[0];
                 $.ajax({
                     url: self.getBaseUrl() + 'vocabs/' + vocab.id +
-                        '?bearer_token=' + self.getToken(),
+                    '?bearer_token=' + self.getToken(),
                     beforeSend: self.beforeSend,
                     context: self,
                     type: 'PUT',

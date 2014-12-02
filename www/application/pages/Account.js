@@ -139,7 +139,7 @@ define([
                     function(callback) {
                         app.dialogs.show();
                         app.dialogs.element('.message-title').text('Resetting Account');
-                        app.api.resetAccount(function() {
+                        app.api.resetAccount(app.user.getLanguageCode(), function() {
                             callback();
                         }, function(error) {
                             callback(error);
