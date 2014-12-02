@@ -81,9 +81,13 @@ define([
          */
         getRecentCount: function() {
             var offset = moment().subtract(12, 'hours').unix();
-            return this.filtered.filter(function(item) {
+            var recentItems = this.filtered.filter(function(item) {
                 return item.attributes.created > offset;
-            }).length;
+            });
+            var recentIds = recentItems.map(function(item) {
+                return item.id.split('-')[2];
+            });
+            return _.uniq(recentIds).length;
         },
         /**
          * @method insert
