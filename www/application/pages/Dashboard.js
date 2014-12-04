@@ -201,6 +201,7 @@ define([
             if (status) {
                 this.elements.buttonSync.addClass('inactive');
             } else {
+                app.user.schedule.updateFilter().sortFilter();
                 this.elements.buttonSync.removeClass('inactive');
             }
         },
