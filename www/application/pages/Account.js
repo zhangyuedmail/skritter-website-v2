@@ -70,10 +70,10 @@ define([
                 this.elements.subButtonMonth.hide();
                 this.elements.subButtonYear.hide();
             }
-            if (app.user.settings('name').indexOf('jaketest') !== -1 || app.user.id.indexOf('mcfarljw') !== -1) {
-                this.elements.buttonResetAll.show();
-            } else {
+            if (['jaketest1', 'mcfarljwtest1'].indexOf(app.user.settings.get('name')) === -1) {
                 this.elements.buttonResetAll.hide();
+            } else {
+                this.elements.buttonResetAll.show();
             }
             this.elements.accountCountry.val(this.settings.get('country'));
             this.elements.accountID.val(this.settings.get('id'));

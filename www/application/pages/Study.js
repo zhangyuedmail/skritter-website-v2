@@ -98,11 +98,11 @@ define([
             var limit = 1;
             app.timer.stop();
             app.analytics.trackEvent('Prompt', 'click', 'add items');
-            app.dialogs.show('add-items');
-            app.dialogs.element('.message-confirm').empty();
-            app.dialogs.element('.message-close').empty();
             async.waterfall([
                 function(callback) {
+                    app.dialogs.show('add-items');
+                    app.dialogs.element('.message-confirm').empty();
+                    app.dialogs.element('.message-close').empty();
                     app.dialogs.element('.loader-image').hide();
                     app.dialogs.element('.item-limit').show();
                     app.dialogs.element('.message-title').text('How many words to add?');

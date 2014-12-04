@@ -39,7 +39,6 @@ define([
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             filterLists: [],
-            filterItems: [],
             hideExpired: 0,
             readingStyle: 'pinyin',
             showKanaNotice: true,

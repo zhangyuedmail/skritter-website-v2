@@ -180,6 +180,10 @@ define([
                         async.waterfall([
                             //request new items via api batch
                             function(callback) {
+                                $.notify('Looking for ' + options.limit + (options.limit === 1 ? ' word' : ' words') + '.', {
+                                    className: 'info',
+                                    globalPosition: 'top right'
+                                });
                                 app.api.requestBatch([
                                     {
                                         path: 'api/v' + app.api.get('version') + '/items/add',
@@ -192,10 +196,6 @@ define([
                                         }
                                     }
                                 ], function(result) {
-                                    $.notify('Looking for ' + options.limit + (options.limit === 1 ? ' word' : ' words') + '.', {
-                                        className: 'info',
-                                        globalPosition: 'top right'
-                                    });
                                     callback(null, result);
                                 }, function(error) {
                                     callback(error);
@@ -248,7 +248,13 @@ define([
                                     callback(error);
                                 });
                             } else {
-                                callback('No items found.');
+                                app.api.getVocabLists({
+                                    lang: app.user.getLanguageCode(),
+                                    sort: 'studying'
+                                }, function(result) {
+                                    self.data.vocablists.add(result, {merge: true});
+                                    callback('No items found.');
+                                }, callback);
                             }
                         } else {
                             callback();
@@ -258,6 +264,7 @@ define([
                     self.data.syncing = false;
                     self.data.trigger('sync', false);
                     if (error) {
+                        console.log('VOCABLISTS', vocablists);
                         console.log('ITEM ADD ERROR:', error);
                         if (typeof callbackError === 'function') {
                             callbackError(error);
@@ -266,6 +273,7 @@ define([
                         console.log('ITEMS', items, vocablists, numVocabsAdded);
                         app.analytics.trackUserEvent('added_items', items.length);
                         self.data.set('addOffset', self.data.get('addOffset') + numVocabsAdded);
+                        console.log('VOCABLISTS', vocablists);
                         self.data.vocablists.add(vocablists, {merge: true});
                         self.data.user.schedule.updateFilter();
                         result.items = items;
