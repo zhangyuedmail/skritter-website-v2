@@ -38,6 +38,8 @@ define([
             this.learningCenter = new RouterLearningCenter();
             document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
             document.addEventListener('menubutton', _.bind(this.handleMenuButtonPressed, this), false);
+            document.addEventListener('pause', _.bind(this.handleApplicationPaused, this), false);
+            document.addEventListener('resume', _.bind(this.handleApplicationResumed, this), false);
         },
         /**
          * @property routes
@@ -61,6 +63,18 @@ define([
             'words': 'showWords',
             'words/:filter': 'showWords',
             '*route': 'defaultRoute'
+        },
+        /**
+         * @method handleApplicationPaused
+         */
+        handleApplicationPaused: function() {
+            app.user.data.sync(1);
+        },
+        /**
+         * @method handleApplicationResumed
+         */
+        handleApplicationResumed: function() {
+            app.user.data.sync(1);
         },
         /**
          * @method handleBackButtonPressed
