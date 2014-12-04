@@ -1034,6 +1034,7 @@ define([
             var self = this;
             var updated = [];
             vocabs = Array.isArray(vocabs) ? vocabs : [vocabs];
+            vocabs = _.without(vocabs, undefined);
             (function next() {
                 var vocab = vocabs.splice(0, 1)[0];
                 $.ajax({
