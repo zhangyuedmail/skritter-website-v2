@@ -228,6 +228,10 @@ define([
                         } else {
                             callback();
                         }
+                    },
+                    function(callback) {
+                        app.dialogs.element('.message-text').text('UPDATING ITEMS');
+                        app.user.data.items.sync(callback, callback);
                     }
                 ], function(error) {
                     self.syncing = false;

@@ -180,10 +180,6 @@ define([
                 app.analytics.trackUserEvent('manual sync');
                 async.series([
                     function(callback) {
-                        app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                        app.user.data.items.sync(callback, callback);
-                    },
-                    function(callback) {
                         app.dialogs.element('.message-text').text('UPDATING LISTS');
                         app.user.data.vocablists.fetch(callback, callback);
                     },
