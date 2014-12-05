@@ -320,7 +320,11 @@ define([
                 //fetch items based on last offset value
                 function(callback) {
                     app.api.getItemByOffset(self.data.get('lastItemSync'), {
-                        lang: app.user.getLanguageCode()
+                        lang: app.user.getLanguageCode(),
+                        includeDecomps: true,
+                        includeHeisigs: true,
+                        includeStrokes: true,
+                        includeVocabs: true
                     }, function(result) {
                         if (result.Items && result.Items.length) {
                             self.data.user.schedule.insert(result.Items);

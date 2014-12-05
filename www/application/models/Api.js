@@ -382,12 +382,12 @@ define([
                         lang: options.lang || app.user.getLanguageCode(),
                         ids: itemIds.splice(0, 19).join('|'),
                         fields: options.fields,
-                        include_vocabs: options.includeVocabs ? 'true' : 'false',
+                        include_decomps: options.includeDecomps ? 'true' : 'false',
+                        include_heisigs: options.includeHeisigs ? 'true' : 'false',
                         include_strokes: options.includeStrokes ? 'true' : 'false',
                         include_sentences: options.includeSentences ? 'true' : 'false',
-                        include_heisigs: options.includeHeisigs ? 'true' : 'false',
                         include_top_mnemonics: options.includeTopMnemonics ? 'true' : 'false',
-                        include_decomps: options.includeDecomps ? 'true' : 'false'
+                        include_vocabs: options.includeVocabs ? 'true' : 'false'
                     }
                 }).done(function(data) {
                     if (data.statusCode === 200) {
@@ -430,12 +430,12 @@ define([
                         sort: 'changed',
                         offset: offset,
                         fields: options.fields,
-                        include_vocabs: options.includeVocabs ? 'true' : 'false',
+                        include_decomps: options.includeDecomps ? 'true' : 'false',
+                        include_heisigs: options.includeHeisigs ? 'true' : 'false',
                         include_strokes: options.includeStrokes ? 'true' : 'false',
                         include_sentences: options.includeSentences ? 'true' : 'false',
-                        include_heisigs: options.includeHeisigs ? 'true' : 'false',
                         include_top_mnemonics: options.includeTopMnemonics ? 'true' : 'false',
-                        include_decomps: options.includeDecomps ? 'true' : 'false'
+                        include_vocabs: options.includeVocabs ? 'true' : 'false'
                     }
                 }).done(function(data) {
                     if (data.statusCode === 200) {
