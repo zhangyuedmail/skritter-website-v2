@@ -202,6 +202,7 @@ define([
             this.reset();
             this.localOffset = app.user.stats.getTimerOffset();
             this.serverOffset = app.user.reviews.getTimerOffset();
+            this.time = (this.localOffset + this.serverOffset) * 1000;
             return this;
         }
     });

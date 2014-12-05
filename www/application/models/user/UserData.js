@@ -211,7 +211,10 @@ define([
                 async.series([
                     function(callback) {
                         app.dialogs.element('.message-text').text('CALCULATING STATS');
-                        self.user.stats.sync(callback, callback);
+                        self.user.stats.sync(function() {
+                            app.timer.updateOffset();
+                            callback();
+                        }, callback);
                     },
                     function(callback) {
                         if (self.get('changedVocabIds').length) {

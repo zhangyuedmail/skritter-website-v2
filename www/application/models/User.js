@@ -358,6 +358,7 @@ define([
                     } else {
                         self.data.startBackgroundSync();
                         app.dialogs.hide(function() {
+                            app.timer.updateOffset();
                             app.api.clearGuest();
                             callback(null, self);
                         });

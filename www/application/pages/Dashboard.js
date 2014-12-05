@@ -210,7 +210,7 @@ define([
          */
         updateStatSection: function() {
             this.elements.statsDue.text(app.user.schedule.getDueCount());
-            this.elements.statsTime.text(app.fn.convertTimeToClock(app.user.stats.getTime() * 1000));
+            this.elements.statsTime.text(app.fn.convertTimeToClock(app.timer.time));
         }
     });
 
