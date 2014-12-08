@@ -255,18 +255,11 @@ define([
             async.series([
                 function(callback) {
                     app.dialogs.show().element('.message-title').text('Saving');
-                    app.api.updateVocabList(self.table.list, function() {
+                    app.api.updateVocabList(self.table.list, function(list) {
+                        self.table.setList(list).renderTable();
                         callback();
                     }, function() {
                         callback();
-                    });
-                },
-                function(callback) {
-                    app.api.getVocabList(self.listId, null, function(list) {
-                        self.table.setList(list).renderTable();
-                        callback();
-                    }, function(error) {
-                        callback(error);
                     });
                 }
             ], function() {
