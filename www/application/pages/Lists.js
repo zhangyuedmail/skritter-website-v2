@@ -42,15 +42,15 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'vclick #button-add-list': 'handleButtonAddListClicked',
+            'vclick #button-add-list': 'handleListAddButtonClicked',
             'vclick table tr': 'handleTableRowClicked',
             'keyup #search-box': 'handleSearchBoxChanged'
         }),
         /**
-         * @method handleButtonAddListClicked
+         * @method handleListAddButtonClicked
          * @param {Event} event
          */
-        handleButtonAddListClicked: function(event) {
+        handleListAddButtonClicked: function(event) {
             event.preventDefault();
             var self = this;
             app.dialogs.show('list-add').element('.modal-title span').text('Add List');
