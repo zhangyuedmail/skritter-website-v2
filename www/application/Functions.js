@@ -262,6 +262,24 @@ define([
         return true;
     }
     /**
+     * @method imageExists
+     * @param {String} src
+     * @param {Function} callbackSuccess
+     * @param {Function} [callbackError]
+     */
+    function imageExists(src, callbackSuccess, callbackError) {
+        var image = new Image();
+        image.onload = function() {
+            callbackSuccess(image);
+        };
+        image.onerror = function() {
+            if (typeof callbackError === 'function') {
+                callbackError();
+            }
+        };
+        image.src = src;
+    }
+    /**
      * @method isNumber
      * @returns {Boolean}
      */
@@ -398,6 +416,7 @@ define([
         getDistance: getDistance,
         getGuid: getGuid,
         hasKana: hasKana,
+        imageExists: imageExists,
         isKana: isKana,
         isNumber: isNumber,
         mapper: mapper,
