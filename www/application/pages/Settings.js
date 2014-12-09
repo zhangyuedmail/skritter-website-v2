@@ -26,7 +26,7 @@ define([
             this.elements.settingAudio = this.$('#audio');
             this.elements.settingAudioTTS = this.$('#audio-tts');
             this.elements.settingAutoAdd = this.$('#auto-add');
-            this.elements.settingAutoAddLimit = undefined;
+            this.elements.settingAutoAddLimit = this.$('#auto-add-limit');
             this.elements.settingHeisig = this.$('#heisig');
             this.elements.settingHideReading = this.$('#hide-reading');
             this.elements.settingRawSquigs = this.$('#raw-squigs');
@@ -57,9 +57,7 @@ define([
             } else {
                 this.elements.settingStudyKana.parent().parent().hide();
             }
-            this.elements.settingAutoAddLimit = new Slider('#daily-limit-slider');
-            this.elements.settingAutoAddLimit.setValue(this.settings.get('autoAddLimit'));
-            this.updateAutoAddLimitSlider({value: this.settings.get('autoAddLimit')});
+            this.elements.settingAutoAddLimit.val(this.settings.get('autoAddLimit'));
             this.delegateEvents();
             return this;
         },
@@ -68,7 +66,7 @@ define([
          * @returns {Object}
          */
         events: _.extend({}, BasePage.prototype.events, {
-            'slide #daily-limit-slider': 'updateAutoAddLimitSlider',
+            'change #auto-add-limit': 'toggleSettings',
             'switchChange.bootstrapSwitch #audio': 'toggleSettings',
             'switchChange.bootstrapSwitch #auto-add': 'toggleSettings',
             'switchChange.bootstrapSwitch #heisig': 'toggleSettings',
@@ -99,20 +97,13 @@ define([
             event.preventDefault();
             this.settings.set({
                 autoAdd: this.elements.settingAutoAdd.bootstrapSwitch('state'),
+                autoAddLimit: this.elements.settingAutoAddLimit.val() ? this.elements.settingAutoAddLimit.val() : 10,
                 hideReading: this.elements.settingHideReading.bootstrapSwitch('state'),
                 readingStyle: this.elements.settingReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
                 showHeisig: this.elements.settingHeisig.bootstrapSwitch('state'),
                 squigs: this.elements.settingRawSquigs.bootstrapSwitch('state'),
                 volume: this.elements.settingAudio.bootstrapSwitch('state') ? 1 : 0
             }).update();
-        },
-        /**
-         * @method updateAutoAddLimitSlider
-         * @param {Event|Object} event
-         */
-        updateAutoAddLimitSlider: function(event) {
-            this.settings.set('autoAddLimit', event.value);
-            $('#daily-limit-slider-label').text(event.value);
         }
     });
 

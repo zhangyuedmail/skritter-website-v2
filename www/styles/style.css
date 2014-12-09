@@ -316,6 +316,9 @@ body {
     float: left;
     width: 100px;
 }
+.page-settings input[type="number"] {
+    font-size: x-large;
+}
 
 
 /*** PAGES: STATS ***/
