@@ -172,7 +172,11 @@ define([
                         }
                         if (app.user.settings.get('squigs')) {
                             this.canvas.tweenCharacter('background', this.review.getCharacter());
-                            this.canvas.injectLayerColor('stroke', '#444444');
+                            if (app.user.settings.get('gradingColor')) {
+                                this.canvas.injectLayerColor('stroke', '#444444');
+                            } else {
+                                this.canvas.injectLayerColor('stroke', '#888888');
+                            }
                             this.canvas.getLayer('stroke').alpha = 0.75;
                         } else {
                             this.canvas.fadeLayer('background', null);
