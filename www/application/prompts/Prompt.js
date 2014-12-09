@@ -269,6 +269,10 @@ define([
          */
         handleGradingButtonsSelected: function(grade) {
             this.review.setAt('score', grade);
+            if (app.user.settings.get('gradingColor')) {
+                var layer = app.user.settings.get('squigs') ? 'background' : 'stroke';
+                this.canvas.injectLayerColor(layer, app.user.settings.get('gradingColors')[grade - 1]);
+            }
         },
         /**
          * @method handlePromptClicked

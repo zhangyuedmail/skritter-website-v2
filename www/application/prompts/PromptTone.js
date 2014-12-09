@@ -54,6 +54,9 @@ define([
                 style: app.user.settings.get('readingStyle')
             }));
             this.elements.fieldWriting.html(this.vocab.getWriting());
+            if (app.user.settings.get('gradingColor')) {
+                this.canvas.injectLayerColor('stroke', app.user.settings.get('gradingColors')[this.review.getAt('score') - 1]);
+            }
             return this;
         },
         /**

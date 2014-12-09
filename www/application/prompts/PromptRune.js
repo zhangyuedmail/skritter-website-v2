@@ -78,6 +78,10 @@ define([
                 }));
             }
             this.elements.fieldWriting.html(this.vocab.getWriting(this.position + 1, {classes: 'highlight'}));
+            if (app.user.settings.get('gradingColor')) {
+                var layer = app.user.settings.get('squigs') ? 'background' : 'stroke';
+                this.canvas.injectLayerColor(layer, app.user.settings.get('gradingColors')[this.review.getAt('score') - 1]);
+            }
             return this;
         },
         /**
@@ -168,8 +172,8 @@ define([
                         }
                         if (app.user.settings.get('squigs')) {
                             this.canvas.tweenCharacter('background', this.review.getCharacter());
-                            this.canvas.injectLayerColor('stroke', '#b3b3b3');
-                            this.canvas.getLayer('stroke').alpha = 0.5;
+                            this.canvas.injectLayerColor('stroke', '#444444');
+                            this.canvas.getLayer('stroke').alpha = 0.75;
                         } else {
                             this.canvas.fadeLayer('background', null);
                         }
