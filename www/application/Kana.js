@@ -764,6 +764,16 @@ define([], function () {
         },
         {
             "lang": "ja",
+            "rune": "へ",
+            "kana": true,
+            "strokes": [
+                [
+                    [774, 0.07, 0.312, 1, 1, 0]
+                ]
+            ]
+        },
+        {
+            "lang": "ja",
             "rune": "べ",
             "kana": true,
             "strokes": [
@@ -1791,7 +1801,7 @@ define([], function () {
         },
         {
             "lang": "ja",
-            "rune": "へ",
+            "rune": "ヘ",
             "kana": true,
             "strokes": [
                 [
