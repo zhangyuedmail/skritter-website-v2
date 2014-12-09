@@ -58,7 +58,12 @@ define([
                     if (field === 'remove') {
                         divBody += "<td class='row-field-" + field + "  text-right text-danger'><i class='fa fa-2x fa-remove'></i></td>";
                     } else if (field === 'writing') {
-                        divBody += "<td class='row-field-" + field + "'>" + app.fn.mapper.fromBase(row.vocabId) + "</td>";
+                        divBody += "<td class='row-field-" + field + "'>";
+                        divBody += app.fn.mapper.fromBase(row.vocabId);
+                        if (row.vocabId !== row.tradVocabId) {
+                            divBody += " <span class='text-muted'>(" + app.fn.mapper.fromBase(row.tradVocabId) + ")</span>";
+                        }
+                        divBody += "</td>";
                     } else {
                         divBody += "<td class='row-field-" + field + "'>" + fieldValue + "</td>";
                     }
