@@ -49,7 +49,7 @@ define([
         handleGradingButtonClicked: function(event) {
             event.stopPropagation();
             var grade = parseInt(event.currentTarget.id.replace('grade', ''), 10);
-            this.triggerSelected();
+            this.triggerSelected(grade);
             if (this.grade === grade) {
                 this.triggerComplete();
             }
@@ -116,9 +116,10 @@ define([
         },
         /**
          * @method triggerSelected
+         * @param {Boolean} [grade]
          */
-        triggerSelected: function() {
-            this.trigger('selected', this.grade);
+        triggerSelected: function(grade) {
+            this.trigger('selected', grade ? grade : this.grade);
         }
     });
 
