@@ -1791,7 +1791,7 @@ define([], function () {
         },
         {
             "lang": "ja",
-            "rune": "ヘ",
+            "rune": "へ",
             "kana": true,
             "strokes": [
                 [
