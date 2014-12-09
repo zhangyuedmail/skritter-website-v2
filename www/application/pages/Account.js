@@ -70,7 +70,12 @@ define([
                 this.elements.subButtonMonth.hide();
                 this.elements.subButtonYear.hide();
             }
-            if (['jaketest1', 'mcfarljwtest1'].indexOf(app.user.settings.get('name')) === -1) {
+            if ([
+                    'jaketest1',
+                    'mcfarljwtest1',
+                    'mcfarljwtest2',
+                    'mcfarljwtest3'
+                ].indexOf(app.user.settings.get('name')) === -1) {
                 this.elements.buttonResetAll.hide();
             } else {
                 this.elements.buttonResetAll.show();
