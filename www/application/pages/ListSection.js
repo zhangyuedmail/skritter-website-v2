@@ -54,16 +54,24 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick table tr': 'handleTableRowClicked',
-            'vclick #button-add-vocab': 'handleAddVocabButtonClicked',
+            'vclick #button-add-vocab': 'handleRowAddButtonClicked',
             'vclick #button-back': 'handleBackButtonClicked',
             'vclick #button-save': 'handleSaveButtonClicked',
             'vclick .row-field-remove': 'handleRowRemoveButtonClicked'
         }),
         /**
-         * @method handleAddVocabButtonClicked
+         * @method handleBackButtonClicked
          * @param {Event} event
          */
-        handleAddVocabButtonClicked: function(event) {
+        handleBackButtonClicked: function(event) {
+            event.preventDefault();
+            app.router.navigate('list/' + this.list.id, {trigger: true});
+        },
+        /**
+         * @method handleRowAddButtonClicked
+         * @param {Event} event
+         */
+        handleRowAddButtonClicked: function(event) {
             event.preventDefault();
             var self = this;
             var sections = [];
@@ -88,24 +96,14 @@ define([
                     }, function(error) {
                         callback(error);
                     });
-                }, function(error) {
-                    if (error) {
-
-                    } else {
-                        self.section.rows = self.section.rows.concat(sections);
-                        self.table.setSection(self.section).renderTable();
-                        app.dialogs.hide();
-                    }
+                }, function() {
+                    self.section.rows = self.section.rows.concat(sections);
+                    self.table.setSection(self.section);
+                    app.dialogs.hide(function() {
+                        self.saveSection();
+                    });
                 });
             });
-        },
-        /**
-         * @method handleBackButtonClicked
-         * @param {Event} event
-         */
-        handleBackButtonClicked: function(event) {
-            event.preventDefault();
-            app.router.navigate('list/' + this.list.id, {trigger: true});
         },
         /**
          * @method handleRowRemoveButtonClicked
@@ -113,40 +111,16 @@ define([
          */
         handleRowRemoveButtonClicked: function(event) {
             event.stopPropagation();
-            this.removed = true;
-            this.table.removeById(event.currentTarget.parentNode.id.replace('vocab-', ''));
-            this.table.renderTable();
-        },
-        /**
-         * @method handleSaveButtonClicked
-         * @param {Event} event
-         */
-        handleSaveButtonClicked: function(event) {
-            event.preventDefault();
             var self = this;
-            async.series([
-                function(callback) {
-                    if (self.removed) {
-                        app.dialogs.show('confirm').element('.modal-title span').text('Vocabs Removed');
-                        app.dialogs.element('.modal-message').html("You have removed vocabs and they will be deleted from this list section. Are you sure you want to save?");
-                        app.dialogs.element('.confirm').on('vclick', function() {
-                            app.dialogs.hide(callback);
-                        });
-                    } else {
-                        callback();
-                    }
-                },
-                function(callback) {
-                    app.dialogs.show().element('.message-title').text('Saving');
-                    app.api.updateVocabListSection(self.list, self.table.section, function() {
-                        callback();
-                    }, function() {
-                        callback();
-                    });
-                }
-            ], function() {
-                self.removed = false;
-                app.dialogs.hide();
+            var vocabId = event.currentTarget.parentNode.id.replace('vocab-', '');
+            var vocabWriting = this.$(event.currentTarget.parentNode).find('.row-field-writing').text();
+            app.dialogs.show('confirm').element('.modal-title span').html("Delete Vocab: <strong>" + vocabWriting + "</strong>");
+            app.dialogs.element('.modal-message').html("");
+            app.dialogs.element('.confirm').on('vclick', function() {
+                self.table.removeById(vocabId);
+                app.dialogs.hide(function() {
+                    self.saveSection();
+                });
             });
         },
         /**
@@ -196,6 +170,30 @@ define([
                 'overflow-y': 'auto'
             });
             return this;
+        },
+        /**
+         * @method saveSection
+         * @param {Function} [callback]
+         */
+        saveSection: function(callback) {
+            var self = this;
+            async.series([
+                function(callback) {
+                    app.dialogs.show().element('.message-title').text('Saving');
+                    app.api.updateVocabListSection(self.list, self.table.section, function(section) {
+                        self.table.setSection(section).renderTable();
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                }
+            ], function() {
+                if (typeof callback === 'function') {
+                    app.dialogs.hide(callback);
+                } else {
+                    app.dialogs.hide();
+                }
+            });
         },
         /**
          * @method sort

@@ -18,7 +18,6 @@ define([
             this.title = 'List';
             this.list = undefined;
             this.listId = undefined;
-            this.removed = false;
             this.table = new ListSectionTable();
             this.listenTo(app, 'resize', this.resize);
         },
@@ -62,29 +61,13 @@ define([
          */
         events: _.extend({}, BasePage.prototype.events, {
             'vclick table tr': 'handleTableRowClicked',
-            'vclick #button-add-section': 'handleButtonAddSectionClicked',
+            'vclick #button-add-section': 'handleSectionAddButtonClicked',
             'vclick #button-add': 'handleButtonAddClicked',
             'vclick #button-pause': 'handleButtonPauseClicked',
             'vclick #button-remove': 'handleButtonRemoveClicked',
             'vclick #button-resume': 'handleButtonResumeClicked',
-            'vclick #button-save': 'handleSaveButtonClicked',
             'vclick .section-field-remove': 'handleSectionRemoveButtonClicked'
         }),
-        /**
-         * @method handleButtonAddSectionClicked
-         * @param {Event} event
-         */
-        handleButtonAddSectionClicked: function(event) {
-            event.preventDefault();
-            var self = this;
-            app.dialogs.show('list-add-section').element('.modal-title span').text('Add Section');
-            app.dialogs.element('.section-add').on('vclick', function() {
-                var name = app.dialogs.element('#section-name').val();
-                self.table.addSection({name: name, deleted: false, rows: []});
-                self.table.renderTable();
-                app.dialogs.hide();
-            });
-        },
         /**
          * @method handleTableRowClicked
          * @param {Event} event
@@ -180,43 +163,19 @@ define([
             });
         },
         /**
-         * @method handleSaveButtonClicked
+         * @method handleSectionAddButtonClicked
          * @param {Event} event
          */
-        handleSaveButtonClicked: function(event) {
+        handleSectionAddButtonClicked: function(event) {
             event.preventDefault();
             var self = this;
-            async.series([
-                function(callback) {
-                    if (self.removed) {
-                        app.dialogs.show('confirm').element('.modal-title span').text('Sections Removed');
-                        app.dialogs.element('.modal-message').html("You have removed sections and they will be deleted from the list. Are you sure you want to save?");
-                        app.dialogs.element('.confirm').on('vclick', function() {
-                            app.dialogs.hide(callback);
-                        });
-                    } else {
-                        callback();
-                    }
-                },
-                function(callback) {
-                    app.dialogs.show().element('.message-title').text('Saving');
-                    app.api.updateVocabList(self.table.list, function() {
-                        callback();
-                    }, function() {
-                        callback();
-                    });
-                },
-                function(callback) {
-                    app.api.getVocabList(self.listId, null, function(list) {
-                        self.table.setList(list).renderTable();
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                }
-            ], function() {
-                self.removed = false;
-                app.dialogs.hide();
+            app.dialogs.show('list-add-section').element('.modal-title span').text('Add Section');
+            app.dialogs.element('.section-add').on('vclick', function() {
+                var name = app.dialogs.element('#section-name').val();
+                self.table.addSection({name: name, deleted: false, rows: []});
+                app.dialogs.hide(function() {
+                    self.saveList();
+                });
             });
         },
         /**
@@ -225,9 +184,17 @@ define([
          */
         handleSectionRemoveButtonClicked: function(event) {
             event.stopPropagation();
-            this.removed = true;
-            this.table.removeById(event.currentTarget.parentNode.id.replace('section-', ''));
-            this.table.renderTable();
+            var self = this;
+            var sectionId = event.currentTarget.parentNode.id.replace('section-', '');
+            var sectionName = this.$(event.currentTarget.parentNode).find('.section-field-name').text();
+            app.dialogs.show('confirm').element('.modal-title span').html("Delete Section: <strong>" + sectionName + "</strong>");
+            app.dialogs.element('.modal-message').html("Deleting a section is a permanent action that can't be restored. Are you sure you want to continue?");
+            app.dialogs.element('.confirm').on('vclick', function() {
+                self.table.removeById(sectionId);
+                app.dialogs.hide(function() {
+                    self.saveList();
+                });
+            });
         },
         /**
          * @method handleTableRowClicked
@@ -278,6 +245,30 @@ define([
                 'overflow-y': 'auto'
             });
             return this;
+        },
+        /**
+         * @method saveList
+         * @param {Function} [callback]
+         */
+        saveList: function(callback) {
+            var self = this;
+            async.series([
+                function(callback) {
+                    app.dialogs.show().element('.message-title').text('Saving');
+                    app.api.updateVocabList(self.table.list, function(list) {
+                        self.table.setList(list).renderTable();
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                }
+            ], function() {
+                if (typeof callback === 'function') {
+                    app.dialogs.hide(callback);
+                } else {
+                    app.dialogs.hide();
+                }
+            });
         },
         /**
          * @method sort
