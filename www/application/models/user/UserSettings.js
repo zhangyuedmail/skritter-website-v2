@@ -39,6 +39,8 @@ define([
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             filterLists: [],
+            gradingColor: false,
+            gradingColors: ['#d95757', '#efec10', '#70da70', '#4097d3'],
             hideExpired: 0,
             readingStyle: 'pinyin',
             showKanaNotice: true,

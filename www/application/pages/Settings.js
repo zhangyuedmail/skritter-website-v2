@@ -27,6 +27,7 @@ define([
             this.elements.settingAudioTTS = this.$('#audio-tts');
             this.elements.settingAutoAdd = this.$('#auto-add');
             this.elements.settingAutoAddLimit = this.$('#auto-add-limit');
+            this.elements.settingGradingColor = this.$('#grading-color');
             this.elements.settingHeisig = this.$('#heisig');
             this.elements.settingHideReading = this.$('#hide-reading');
             this.elements.settingRawSquigs = this.$('#raw-squigs');
@@ -44,6 +45,7 @@ define([
             this.elements.settingAudio.bootstrapSwitch('state', this.settings.get('volume') ? true : false);
             this.elements.settingAudioTTS.bootstrapSwitch('state', this.settings.get('audioTTS'));
             this.elements.settingAutoAdd.bootstrapSwitch('state', this.settings.get('autoAdd'));
+            this.elements.settingGradingColor.bootstrapSwitch('state', this.settings.get('gradingColor'));
             this.elements.settingHeisig.bootstrapSwitch('state', this.settings.get('showHeisig'));
             this.elements.settingHideReading.bootstrapSwitch('state', this.settings.get('hideReading'));
             this.elements.settingRawSquigs.bootstrapSwitch('state', this.settings.get('squigs'));
@@ -69,6 +71,7 @@ define([
             'change #auto-add-limit': 'toggleSettings',
             'switchChange.bootstrapSwitch #audio': 'toggleSettings',
             'switchChange.bootstrapSwitch #auto-add': 'toggleSettings',
+            'switchChange.bootstrapSwitch #grading-color': 'toggleSettings',
             'switchChange.bootstrapSwitch #heisig': 'toggleSettings',
             'switchChange.bootstrapSwitch #hide-reading': 'toggleSettings',
             'switchChange.bootstrapSwitch #raw-squigs': 'toggleSettings',
@@ -98,6 +101,7 @@ define([
             this.settings.set({
                 autoAdd: this.elements.settingAutoAdd.bootstrapSwitch('state'),
                 autoAddLimit: this.elements.settingAutoAddLimit.val() ? this.elements.settingAutoAddLimit.val() : 10,
+                gradingColor: this.elements.settingGradingColor.bootstrapSwitch('state'),
                 hideReading: this.elements.settingHideReading.bootstrapSwitch('state'),
                 readingStyle: this.elements.settingReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
                 showHeisig: this.elements.settingHeisig.bootstrapSwitch('state'),
