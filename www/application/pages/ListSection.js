@@ -76,7 +76,8 @@ define([
             var self = this;
             var sections = [];
             app.dialogs.show('add-vocab').element('.modal-title span').text('Add Vocabs');
-            app.dialogs.show('add-vocab').element('.message-text').text('To add multiple vocabs use spaces.');
+            app.dialogs.element('.message-text').text('To add multiple vocabs use spaces.');
+            app.dialogs.element('.vocabs').val('');
             app.dialogs.element('.check').on('vclick', function() {
                 var vocabs = app.dialogs.element('.vocabs').val();
                 vocabs = vocabs ? vocabs.split(' ') : [];
