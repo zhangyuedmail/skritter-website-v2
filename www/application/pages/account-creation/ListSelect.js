@@ -26,7 +26,6 @@ define([
             this.$el.html(this.compile(TemplateMobile));
             this.elements.listsContainer = this.$('.lists-container');
             this.elements.listTable = this.$('#list-table');
-            this.elements.loadingBox = this.$('.loading-box');
             this.elements.recommendedChinese = this.$('.recommended-chinese');
             this.elements.recommendedJapanese = this.$('.recommended-japanese');
             if (app.api.getGuest('lang') === 'zh') {
@@ -155,6 +154,7 @@ define([
         loadLists: function() {
             var self = this;
             this.elements.listsContainer.hide();
+            app.dialogs.show().element('.message-title').text('LOADING LISTS');
             app.api.getVocabLists({
                 sort: 'official',
                 lang: app.api.getGuest('lang') ? app.api.getGuest('lang') : 'zh'
@@ -162,9 +162,10 @@ define([
                 self.lists = _.filter(lists, this.initialListFilter);
                 self.sortLists();
                 self.renderListTable();
-                self.elements.loadingBox.hide();
                 self.elements.listsContainer.show();
+                app.dialogs.hide();
             }, function(error) {
+                app.dialogs.hide();
                 console.error(error);
             });
             return this;
