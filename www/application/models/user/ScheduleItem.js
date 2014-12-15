@@ -65,7 +65,7 @@ define([
          * @returns {Boolean}
          */
         isNew: function() {
-            return this.get('last') === 0;
+            return this.get('reviews') === 0;
         },
         /**
          * @method load

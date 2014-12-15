@@ -59,6 +59,15 @@ define([
             return this.getDue().length;
         },
         /**
+         * @method getNew
+         * @returns {Array}
+         */
+        getNew: function() {
+            return this.filtered.filter(function(item) {
+                return item.isNew();
+            });
+        },
+        /**
          * @method getNext
          * @returns {DataItem}
          */
