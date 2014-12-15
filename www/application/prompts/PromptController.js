@@ -136,6 +136,7 @@ define([
             if (this.prompt) {
                 this.prompt.resize();
             }
+            app.fn.recognizer.canvasSize = this.canvas.getSize();
             return this;
         },
         /**
