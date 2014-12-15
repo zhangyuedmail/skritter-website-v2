@@ -166,14 +166,14 @@ define([
                 }
             } else {
                 self.data.syncing = true;
-                self.data.trigger('sync', true);
                 async.series([
                     //use server time for reference
                     function(callback) {
-                        self.data.user.getServerTime(function(time) {
+                        app.api.checkConnection(function(time) {
+                            self.data.trigger('sync', true);
                             now = time;
                             callback();
-                        });
+                        }, callback);
                     },
                     //make initial request for new items
                     function (callback) {
@@ -262,7 +262,6 @@ define([
                     }
                 ], function(error) {
                     self.data.syncing = false;
-                    self.data.trigger('sync', false);
                     if (error) {
                         console.log('VOCABLISTS', vocablists);
                         console.log('ITEM ADD ERROR:', error);
@@ -270,8 +269,9 @@ define([
                             callbackError(error);
                         }
                     } else {
-                        console.log('ITEMS', items, vocablists, numVocabsAdded);
                         app.analytics.trackUserEvent('added_items', items.length);
+                        console.log('ITEMS', items, vocablists, numVocabsAdded);
+                        self.data.trigger('sync', false);
                         self.data.set('addOffset', self.data.get('addOffset') + numVocabsAdded);
                         console.log('VOCABLISTS', vocablists);
                         self.data.vocablists.add(vocablists, {merge: true});

@@ -183,6 +183,18 @@ define([
             })();
         },
         /**
+         * @method checkConnection
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        checkConnection: function(callbackComplete, callbackError) {
+            this.getDate(function(result) {
+                callbackComplete(result.serverTime);
+            }, function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method clearGuest
          */
         clearGuest: function() {
