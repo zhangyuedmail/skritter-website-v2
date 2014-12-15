@@ -224,7 +224,9 @@ define([
                     callbackSuccess();
                 }
             }, function(error) {
-                self.set(self.previousAttributes());
+                if (error.readyState) {
+                    self.set(self.previousAttributes());
+                }
                 if (typeof callbackError === 'function') {
                     callbackError(error);
                 }
