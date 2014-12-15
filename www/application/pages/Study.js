@@ -131,7 +131,11 @@ define([
                 if (error) {
                     app.timer.stop();
                     app.dialogs.show().element('.loader-image').hide();
-                    if (error.statusCode === 402) {
+                    if (error.readyState === 0) {
+                        app.dialogs.element('.message-title').text('No connection.');
+                        app.dialogs.element('.message-text').text('Check your internet connection and try again.');
+                        app.dialogs.element('.message-close').html(app.fn.bootstrap.button("Close", {level: 'default'}));
+                    } else if (error.statusCode === 402) {
                         app.dialogs.element('.message-title').text('Subscription required.');
                         app.dialogs.element('.message-text').text('You need an active subscription to add new items.');
                         app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button("Go to Account", {level: 'danger'}));
