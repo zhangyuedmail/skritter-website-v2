@@ -83,7 +83,6 @@ define([
         getShape: function() {
             //load shape, bounds and matrix
             var data = this.inflateData();
-            console.log(data);
             var shape = this.get('shape').clone(true);
             var spriteBounds = shape.getBounds();
             if (this.isKana()) {
