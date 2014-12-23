@@ -178,6 +178,7 @@ define([
                                 this.canvas.injectLayerColor('stroke', '#888888');
                             }
                             this.canvas.getLayer('stroke').alpha = 0.75;
+                            this.review.setAt('squigs', this.canvas.getLayer('stroke').clone(true));
                         } else {
                             this.canvas.fadeLayer('background', null);
                         }
@@ -324,7 +325,14 @@ define([
                 this.elements.promptText.css('max-height', contentHeight - 36);
             }
             this.canvas.clearAll();
-            if (this.character.length) {
+            if (this.character.isComplete()) {
+                this.canvas.drawShape('stroke', this.character.getShape(), {
+                    color: app.user.settings.get('gradingColors')[this.review.getAt('score') - 1]
+                });
+                if (this.review.getAt('squigs')) {
+                    this.canvas.getLayer('stroke').addChild(this.review.getAt('squigs'));
+                }
+            } else if (this.character.length) {
                 this.canvas.drawShape('stroke', this.character.getShape());
             }
             return this;
