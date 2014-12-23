@@ -15,6 +15,7 @@ define([
          */
         initialize: function() {
             this.characters = [];
+            this.squigs = [];
         },
         /**
          * @property idAttribute
@@ -145,6 +146,13 @@ define([
             return app.user.schedule.get(this.getBaseReview().itemId);
         },
         /**
+         * @method getSquig
+         * @returns {createjs.Container}
+         */
+        getSquig: function() {
+            return this.squigs[this.getPosition() - 1];
+        },
+        /**
          * @method getTotalReviewTime
          * @returns {Number}
          */
@@ -244,6 +252,15 @@ define([
                 review[key] = value;
             }
             return review;
+        },
+        /**
+         * @method setSquig
+         * @param {createjs.Container} squig
+         * @returns {DataReview}
+         */
+        setSquig: function(squig) {
+            this.squigs[this.getPosition() - 1] = squig;
+            return this;
         },
         /**
          * @method save
