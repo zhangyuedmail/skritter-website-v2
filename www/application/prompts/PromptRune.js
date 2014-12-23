@@ -325,7 +325,7 @@ define([
                 this.elements.promptText.css('max-height', contentHeight - 36);
             }
             this.canvas.clearAll();
-            if (this.character.isComplete()) {
+            if (app.user.settings.get('gradingColor') && this.character.isComplete()) {
                 this.canvas.drawShape('stroke', this.character.getShape(), {
                     color: app.user.settings.get('gradingColors')[this.review.getAt('score') - 1]
                 });
