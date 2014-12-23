@@ -60,7 +60,7 @@ define([
                     } else if (field === 'writing') {
                         divBody += "<td class='row-field-" + field + "'>";
                         divBody += app.fn.mapper.fromBase(row.vocabId);
-                        if (row.vocabId !== row.tradVocabId) {
+                        if (row.tradVocabId && row.vocabId !== row.tradVocabId) {
                             divBody += " <span class='text-muted'>(" + app.fn.mapper.fromBase(row.tradVocabId) + ")</span>";
                         }
                         divBody += "</td>";
