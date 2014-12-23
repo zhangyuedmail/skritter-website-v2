@@ -170,7 +170,11 @@ define([
             this.canvas.drawFontCharacter('background', this.review.getVocab().get('writing'), {
                 alpha: 0.4
             });
-            if (this.review.getAt('answered')) {
+            if (app.user.settings.get('gradingColor') && this.character.isComplete()) {
+                this.canvas.drawShape('stroke', this.character.getTone(this.tones[0]).getShape(), {
+                    color: app.user.settings.get('gradingColors')[this.review.getAt('score') - 1]
+                });
+            } else if (this.review.getAt('answered')) {
                 this.canvas.drawShape('stroke', this.character.getTone(this.tones[0]).getShape());
             }
             return this;
