@@ -106,12 +106,11 @@ define([
                 },
                 //contained items
                 function(callback) {
-                    if (part === 'rune' || part === 'tone') {
-                        var containedItemIds = result.vocab.getContainedItemIds(part, true);
-                        var containedItemCount = containedItemIds.length;
+                    var containedItemIds = result.vocab.getContainedItemIds(part, true);
+                    if (['rune', 'tone'].indexOf(part) > -1 && containedItemIds.length) {
                         app.storage.getItems('items', containedItemIds, function(containedItems) {
                             result.containedItems = app.user.data.items.add(containedItems, {merge: true, silent: true, sort: false});
-                            if (containedItemCount === containedItems.length) {
+                            if (containedItemIds.length === containedItems.length) {
                                 callback();
                             } else {
                                 callback('One or more of the contained items is missing.');
@@ -125,7 +124,7 @@ define([
                 //contained vocabs
                 function(callback) {
                     var containedVocabIds = result.vocab.getContainedVocabIds(app.user.isJapanese());
-                    if (containedVocabIds.length) {
+                    if (['rune', 'tone'].indexOf(part) > -1 && containedVocabIds.length) {
                         app.storage.getItems('vocabs', containedVocabIds, function(containedVocabs) {
                             if (containedVocabIds.length === containedVocabs.length) {
                                 result.containedVocabs = app.user.data.vocabs.add(containedVocabs, {merge: true, silent: true, sort: false});
