@@ -85,9 +85,15 @@ define([
                     app.api.getVocabByQuery(vocab, {fields: 'id,style,writing'}, function(result) {
                         console.log(result.Vocabs);
                         if (result.Vocabs.length) {
-                            var row = {vocabId: _.find(result.Vocabs, {writing: vocab}).id};
+                            var vocabId = _.find(result.Vocabs, {writing: vocab}).id;
+                            var vocabIdSplit = vocabId.split('-');
+                            var row = {};
                             if (app.user.isJapanese()) {
+                                row.vocabId = vocabId;
                                 row.studyWriting = true;
+                            } else {
+                                row.vocabId = vocabIdSplit[0] + '-' + vocabIdSplit[1] + '-0';
+                                row.tradVocabId = vocabId;
                             }
                             sections.push(row);
                         } else {
