@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
@@ -70,6 +71,21 @@ module.exports = function(grunt) {
             }
         },
         /**
+         * REPLACE
+         */
+        replace: {
+            'build-web': {
+                options: {
+                    variables: {
+                        'version': '<%= application.version %>'
+                    }
+                },
+                files: [
+                    {src: 'Application.js', dest: 'build/web/application', expand: true, cwd: 'build/web/application'}
+                ]
+            }
+        },
+        /**
          * REQUIREJS
          */
         requirejs: {
@@ -125,6 +141,7 @@ module.exports = function(grunt) {
         'validate',
         'clean:build-web',
         'requirejs:build-web',
+        'replace:build-web',
         'htmlmin:build-web'
     ]);
 
