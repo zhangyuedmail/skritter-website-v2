@@ -83,6 +83,8 @@ define([
             if (app.dialogs.isHidden()) {
                 if (app.sidebars.isExpanded()) {
                     app.sidebars.hide();
+                } else if (!app.user.isAuthenticated()) {
+                    navigator.app.exitApp();
                 } else if (Backbone.history.fragment === '') {
                     app.dialogs.show('exit');
                     app.dialogs.element('.loader-image').hide();
