@@ -66,9 +66,7 @@ define([
                             }
                         } else if (field === 'image') {
                             divBody += "<td class='list-image'><img src='images/skritter-critter.png' alt=''></td>";
-                            app.fn.imageExists('http://www.skritter.com/vocab/listimage?list=' + list.id, function(image) {
-                                self.$('#list-' + image.src.split('?list=')[1] + ' .list-image img').attr('src', image.src);
-                            });
+                            app.fn.imageExists('http://www.skritter.com/vocab/listimage?list=' + list.id, this.insertImage);
                         } else if (field === 'remove') {
                             divBody += "<td class='list-field-" + field + "  text-right text-danger'><i class='fa fa-2x fa-remove'></i></td>";
                         } else if (field === 'select') {
@@ -132,6 +130,13 @@ define([
                 }
             });
             return this;
+        },
+        /**
+         * @method insertImage
+         * @param {Image} image
+         */
+        insertImage: function(image) {
+            this.$('#list-' + image.src.split('?list=')[1] + ' .list-image img').attr('src', image.src);
         },
         /**
          * @method set

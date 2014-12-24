@@ -178,7 +178,7 @@ define([
                                 this.canvas.injectLayerColor('stroke', '#888888');
                             }
                             this.canvas.getLayer('stroke').alpha = 0.75;
-                            this.review.setSquig(this.canvas.getLayer('stroke').clone(true))
+                            this.review.setSquig(this.canvas.getLayer('stroke').clone(true));
                         } else {
                             this.canvas.fadeLayer('background', null);
                         }
