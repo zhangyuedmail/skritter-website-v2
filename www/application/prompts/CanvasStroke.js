@@ -96,8 +96,8 @@ define([
                 var ms = shape.getMatrix();
                 var sx = data.w / spriteBounds.width;
                 var sy = data.h / spriteBounds.height;
-                ms.translate(-data.w / 2, -data.h / 2);
                 ms.scale(sx, sy);
+                ms.translate(-data.w / 2, -data.h / 2);
                 ms.rotate(data.rot * Math.PI / 180);
                 var t = ms.decompose();
                 //find the actual position based on prior transformations
