@@ -80,7 +80,7 @@ define([
             app.dialogs.element('.vocabs').val('');
             app.dialogs.element('.check').on('vclick', function() {
                 var vocabs = app.dialogs.element('.vocabs').val();
-                vocabs = vocabs ? vocabs.split(' ') : [];
+                vocabs = vocabs ? vocabs.trim().split(' ') : [];
                 async.each(vocabs, function(vocab, callback) {
                     app.api.getVocabByQuery(vocab, {fields: 'id,style,writing'}, function(result) {
                         console.log(result.Vocabs);
@@ -93,7 +93,6 @@ define([
                                 row.studyWriting = true;
                             } else {
                                 row.vocabId = vocabIdSplit[0] + '-' + vocabIdSplit[1] + '-0';
-                                row.tradVocabId = vocabId;
                             }
                             sections.push(row);
                         } else {
