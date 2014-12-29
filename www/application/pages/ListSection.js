@@ -190,6 +190,7 @@ define([
                     app.dialogs.show().element('.message-title').text('Saving');
                     app.api.updateVocabListSection(self.list, self.table.section, function(section) {
                         self.table.setSection(section).renderTable();
+                        self.section = section;
                         callback();
                     }, function() {
                         callback();
