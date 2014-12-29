@@ -126,9 +126,6 @@ define([
             app.dialogs.element('.modal-message').html("");
             app.dialogs.element('.confirm').on('vclick', function() {
                 self.table.removeById(vocabId);
-                self.section.rows = _.filter(self.section.rows, function(row) {
-                    return row.vocabId != vocabId;
-                });
                 app.dialogs.hide(function() {
                     self.saveSection();
                 });
@@ -193,6 +190,7 @@ define([
                     app.dialogs.show().element('.message-title').text('Saving');
                     app.api.updateVocabListSection(self.list, self.table.section, function(section) {
                         self.table.setSection(section).renderTable();
+                        self.section = section;
                         callback();
                     }, function() {
                         callback();

@@ -91,10 +91,13 @@ define([
         /**
          * @method
          * @param {String} vocabId
-         * @returns {Object}
+         * @returns {ListRowTable}
          */
         removeById: function(vocabId) {
-            return this.section.rows.splice(_.findIndex(this.section.rows, {vocabId: vocabId}), 1)[0];
+            this.section.rows = _.filter(this.section.rows, function(row) {
+                return row.vocabId !== vocabId;
+            });
+            return this;
         },
         /**
          * @method set
