@@ -257,6 +257,7 @@ define([
                     app.dialogs.show().element('.message-title').text('Saving');
                     app.api.updateVocabList(self.table.list, function(list) {
                         self.table.setList(list).renderTable();
+                        self.list = list;
                         callback();
                     }, function() {
                         callback();
