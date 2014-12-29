@@ -79,24 +79,26 @@ define([
             app.dialogs.element('.message-text').text('To add multiple vocabs use spaces.');
             app.dialogs.element('.vocabs').val('');
             app.dialogs.element('.check').on('vclick', function() {
-                var vocabs = app.dialogs.element('.vocabs').val();
-                vocabs = vocabs ? vocabs.trim().split(' ') : [];
-                async.each(vocabs, function(vocab, callback) {
-                    app.api.getVocabByQuery(vocab, {fields: 'id,style,writing'}, function(result) {
-                        console.log(result.Vocabs);
+                var vocabWritings = app.dialogs.element('.vocabs').val();
+                vocabWritings = vocabWritings ? vocabWritings.trim().split(' ') : [];
+                async.each(vocabWritings, function(vocabWriting, callback) {
+                    app.api.getVocabByQuery(vocabWriting, {fields: 'id,style,writing'}, function(result) {
                         if (result.Vocabs.length) {
-                            var vocabId = _.find(result.Vocabs, {writing: vocab}).id;
-                            var vocabIdSplit = vocabId.split('-');
+                            var vocab = _.find(result.Vocabs, {writing: vocabWriting});
+                            var splitVocabId = vocab.id.split('-');
                             var row = {};
                             if (app.user.isJapanese()) {
-                                row.vocabId = vocabId;
+                                row.vocabId = vocab.id;
                                 row.studyWriting = true;
                             } else {
-                                row.vocabId = vocabIdSplit[0] + '-' + vocabIdSplit[1] + '-0';
+                                row.vocabId = splitVocabId[0] + '-' + splitVocabId[1] + '-0';
+                                if (vocab.style === 'trad') {
+                                    row.tradVocabId = app.fn.mapper.toBase(vocab.writing);
+                                }
                             }
                             sections.push(row);
                         } else {
-                            console.log('Search for', vocab, "didn't return anything useful.");
+                            console.log('Search for', vocabWriting, "didn't return anything useful.");
                         }
                         callback();
                     }, function(error) {
