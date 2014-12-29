@@ -126,6 +126,9 @@ define([
             app.dialogs.element('.modal-message').html("");
             app.dialogs.element('.confirm').on('vclick', function() {
                 self.table.removeById(vocabId);
+                self.section.rows = _.filter(self.section.rows, function(row) {
+                    return row.vocabId != vocabId;
+                });
                 app.dialogs.hide(function() {
                     self.saveSection();
                 });
