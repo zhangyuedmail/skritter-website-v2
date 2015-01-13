@@ -471,12 +471,21 @@ define([
          * @method toggleBanned
          */
         toggleBanned: function() {
+            var self = this;
             if (this.vocab.isBanned()) {
-                this.vocab.set('bannedParts', []);
-                this.elements.infoBan.addClass('text-danger');
-            } else {
-                this.vocab.set('bannedParts', app.user.settings.getAllParts());
                 this.elements.infoBan.removeClass('text-danger');
+                this.vocab.set('bannedParts', []);
+            } else {
+                app.dialogs.show('confirm');
+                app.dialogs.element('.modal-title span').text('Ban ' + this.vocab.get('writing') + '?');
+                app.dialogs.element('.modal-message').text('');
+                app.dialogs.element('.confirm').one('vclick', function () {
+                    self.elements.infoBan.addClass('text-danger');
+                    self.vocab.set('bannedParts', app.user.settings.getAllParts());
+                    app.user.reviews.current = undefined;
+                    app.user.schedule.banItems(self.vocab.id);
+                    app.dialogs.hide();
+                });
             }
             this.updateVocabSidebar();
         },

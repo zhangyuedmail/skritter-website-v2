@@ -42,6 +42,30 @@ define([
             return this.recent;
         },
         /**
+         * @method banItems
+         * @param {String} base
+         * @returns {Array}
+         */
+        banItems: function(base) {
+            var items = this.getByBase(base);
+            for (var i = 0, length = items.length; i < length; i++) {
+                var item = items[i];
+                item.set('vocabIds', []);
+            }
+            this.updateFilter();
+            return items;
+        },
+        /**
+         * @method getByBase
+         * @param {String} base
+         * @returns {Array}
+         */
+        getByBase: function(base) {
+            return this.filter(function(item) {
+                return item.id.indexOf(base) > -1;
+            });
+        },
+        /**
          * @method getDue
          * @returns {Array}
          */

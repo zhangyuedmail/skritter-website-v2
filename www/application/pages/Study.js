@@ -205,7 +205,6 @@ define([
                 }, function() {
                     self.next();
                 });
-
             } else {
                 app.dialogs.show().element('.message-title').text('No items to study.');
                 app.dialogs.element('.message-text').text("Try adding items if you have an active list. If not, go back and add one.");
