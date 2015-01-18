@@ -69,7 +69,7 @@ define([
          * @param {Number|String} dueCount
          */
         checkAutoAdd: function(dueCount) {
-            if (this.user.settings.get('autoAdd') && app.user.data.vocablists.hasActive()) {
+            if (this.user.settings.get('autoAdd') && app.user.data.vocablists.hasAdding()) {
                 var autoAddLimit = this.user.settings.get('autoAddLimit');
                 var recentCount = this.user.schedule.getRecentCount();
                 if (recentCount < autoAddLimit && (!dueCount || dueCount < 5)) {
