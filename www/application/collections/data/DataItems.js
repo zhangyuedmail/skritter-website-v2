@@ -171,7 +171,7 @@ define([
                     function(callback) {
                         app.api.checkConnection(function(time) {
                             self.data.trigger('sync', true);
-                            now = moment(time * 1000).subtract(2, 'minutes');
+                            now = moment(time * 1000).subtract(2, 'minutes').unix();
                             callback();
                         }, callback);
                     },
