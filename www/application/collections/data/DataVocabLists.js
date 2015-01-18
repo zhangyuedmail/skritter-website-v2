@@ -96,6 +96,20 @@ define([
          * @returns {Boolean}
          */
         hasActive: function() {
+            var studyModes = this.pluck('studyingMode');
+            if (studyModes.indexOf('adding') > -1) {
+                return true;
+            }
+            if (studyModes.indexOf('reviewing') > -1) {
+                return true;
+            }
+            return false;
+        },
+        /**
+         * @method hasAdding
+         * @returns {Boolean}
+         */
+        hasAdding: function() {
             return this.pluck('studyingMode').indexOf('adding') > -1;
         },
         /**
