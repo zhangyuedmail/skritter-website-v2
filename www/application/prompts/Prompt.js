@@ -61,6 +61,11 @@ define([
             } else {
                 this.renderQuestion();
             }
+            this.vocab.getAudio(function() {
+                $('#button-audio').removeClass('inactive');
+            }, function() {
+                $('#button-audio').addClass('inactive');
+            });
             if (this.item.isNew()) {
                 this.elements.promptNewness.text('NEW');
                 this.elements.promptNewness.addClass('text-warning');
@@ -69,11 +74,6 @@ define([
             }
             if (this.vocab.isChinese()) {
                 this.elements.promptStyle.text(this.vocab.getStyle().toUpperCase());
-            }
-            if (this.vocab.getAudio()) {
-                $('#button-audio').removeClass('inactive');
-            } else {
-                $('#button-audio').addClass('inactive');
             }
             this.reset().resize();
             if (this.teaching) {

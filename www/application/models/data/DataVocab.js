@@ -37,13 +37,30 @@ define([
         },
         /**
          * @method getAudio
-         * @returns {Boolean|String}
+         * @param {Function} callbackSuccess
+         * @param {Function} [callbackError]
          */
-        getAudio: function() {
-            if (this.has('audio')) {
-                return app.isNative() ? this.get('audio').replace('/sounds?file=', '') : this.get('audio');
+        getAudio: function(callbackSuccess, callbackError) {
+            if (app.isNative()) {
+                var filename = this.get('reading').split(', ')[0].toLowerCase().trim() + '.mp3';
+                if (plugins.expansion) {
+                    plugins.expansion.hasFile(filename, function() {
+                        callbackSuccess(filename);
+                    }, function() {
+                        if (typeof callbackError === 'function') {
+                            callbackError();
+                        }
+                    });
+                }
+            } else if (this.get('audio')){
+                callbackSuccess(this.get('audio'));
+                return;
+            } else {
+                if (typeof callbackError === 'function') {
+                    callbackError();
+                }
             }
-            return false;
+
         },
         /**
          * @method getCanvasCharacter
@@ -240,7 +257,7 @@ define([
             options.mask = options.mask ? options.mask : false;
             options.style = options.style === 'zhuyin' ? true : false;
             if (!startFrom) {
-               options.classes.push('no-spacing');
+                options.classes.push('no-spacing');
             }
             html += "<div class='reading-block " + options.classes.join('') + "'>";
             if (this.isChinese()) {
@@ -411,14 +428,11 @@ define([
         },
         /**
          * @method playAudio
-         * @returns {Boolean}
          */
         playAudio: function() {
-            if (this.getAudio()) {
-                app.assets.playAudio(this.getAudio());
-                return true;
-            }
-            return false;
+            this.getAudio(function(filename) {
+                app.assets.playAudio(filename);
+            });
         }
     });
 
