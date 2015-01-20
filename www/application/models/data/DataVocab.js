@@ -42,7 +42,12 @@ define([
          */
         getAudio: function(callbackSuccess, callbackError) {
             if (app.isNative()) {
-                var filename = this.get('reading').split(', ')[0].toLowerCase().trim() + '.mp3';
+                var filename = '';
+                if (this.isChinese()) {
+                    filename = this.get('reading').split(', ')[0].toLowerCase().trim() + '.mp3';
+                } else {
+                    filename = this.get('reading') + '_' + this.get('writing') + '.mp3';
+                }
                 if (plugins.expansion) {
                     plugins.expansion.hasFile(filename, function() {
                         callbackSuccess(filename);
