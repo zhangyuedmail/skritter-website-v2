@@ -146,22 +146,13 @@ define([
                             });
                         });
                     } else if (app.user.data.vocablists.hasAdding()) {
-                        app.dialogs.element('.loader-image').show();
-                        app.dialogs.element('.message-title').text('Syncing Account');
-                        async.series([
-                            function(callback) {
-                                app.dialogs.element('.message-text').text('UPDATING LISTS');
-                                app.user.data.vocablists.fetch(callback, callback);
-                            },
-                            function(callback) {
-                                app.user.data.sync(1, callback, callback);
-                            }
-                        ], function() {
-                            app.user.schedule.updateFilter();
-                            app.user.schedule.sortFilter();
-                            app.dialogs.hide();
-                            app.timer.start();
-                        });
+                        try {
+                            throw new Error('Missing Added Items');
+                        } catch (e) {
+                            raygun.send(e, {Lists: app.user.data.vocablists.toJSON()});
+                        }
+                        app.dialogs.hide();
+                        app.timer.start();
                     } else {
                         app.dialogs.element('.message-title').text('No active lists found.');
                         if (app.user.data.vocablists.hasPaused()) {
