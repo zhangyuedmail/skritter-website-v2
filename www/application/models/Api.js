@@ -27,7 +27,7 @@ define([
             clientId: 'mcfarljwapiclient',
             clientSecret: 'e3872517fed90a820e441531548b8c',
             guest: undefined,
-            root: 'https://www.skritter',
+            root: 'https://beta.skritter',
             timeout: 100,
             tld: location.host.indexOf('.cn') === -1 ? '.com' : '.cn',
             version: 0
@@ -788,6 +788,46 @@ define([
                             setTimeout(next, self.get('timeout'), data.cursor);
                         } else {
                             callbackComplete(lists);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+        /**
+         * @method getVocabUpdates
+         * @param {String} lang
+         * @param {String} offset
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getVocabUpdates: function(offset, options, callbackComplete, callbackError) {
+            var self = this;
+            var updates = [];
+            options = options ? options : {};
+            (function next(cursor) {
+                $.ajax({
+                    url: self.getBaseUrl() + 'vocabupdates',
+                    beforeSend: self.beforeSend,
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        cursor: cursor,
+                        fields: options.fields,
+                        offset: offset
+                    }
+                }).done(function(data) {
+                    if (data.statusCode === 200) {
+                        updates = updates.concat(data.VocabUpdates);
+                        if (data.cursor) {
+                            setTimeout(next, self.get('timeout'), data.cursor);
+                        } else {
+                            callbackComplete(updates);
                         }
                     } else {
                         callbackError(data);
