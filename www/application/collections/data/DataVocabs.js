@@ -112,7 +112,58 @@ define([
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
-        sync: function(callbackSuccess, callbackError) {}
+        sync: function(callbackSuccess, callbackError) {},
+        /**
+         * @method updateVocabs
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        updateVocabs: function(callbackSuccess, callbackError) {
+            var self = this;
+            var now = moment().unix();
+            var offset = moment(this.data.get('lastVocabUpdate') * 1000).subtract(1, 'day').format('YYYY-MM-DD');
+            async.waterfall([
+                function(callback) {
+                    self.data.user.getServerTime(function(time) {
+                        now = time;
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.api.getVocabUpdates(offset, null, function(updates) {
+                        var bases = [];
+                        var langProp = app.user.isChinese() ? 'zhBases' : 'jaBases';
+                        for (var a = 0, lengthA = updates.length; a < lengthA; a++) {
+                            bases = bases.concat(updates[a][langProp])
+                        }
+                        callback(null, _.uniq(bases));
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(bases, callback) {
+                    app.storage.getVocabIdByBase(bases, function(vocabIds) {
+                        callback(null, vocabIds);
+                    });
+                },
+                function(vocabIds, callback) {
+                    app.api.getVocabById(vocabIds, null, function(result) {
+                        self.data.put(result, function() {
+                            callback();
+                        });
+                    }, function(error) {
+                        callback(error);
+                    })
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError();
+                } else {
+                    self.data.set('lastVocabUpdate', now);
+                    callbackSuccess();
+                }
+            });
+        }
     });
 
     return DataVocabs;

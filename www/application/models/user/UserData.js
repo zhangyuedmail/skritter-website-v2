@@ -52,6 +52,7 @@ define([
             lastItemSync: 0,
             lastReviewSync: 0,
             lastSRSConfigSync: 0,
+            lastVocabUpdate: 0,
             lastVocabSync: 0,
             refresh_token: undefined,
             token_type: undefined,
@@ -200,6 +201,7 @@ define([
          */
         sync: function(startFrom, callbackSuccess, callbackError) {
             var self = this;
+            var now = moment().unix();
             if (this.syncing) {
                 if (typeof callbackError === 'function') {
                     callbackError('Sync already in progress.');
@@ -208,6 +210,12 @@ define([
                 this.syncing = true;
                 console.log('^^^SYNC STARTED:', moment().format('HH:mm:ss YYYY-MM-DD'));
                 async.series([
+                    function(callback) {
+                        self.user.getServerTime(function(time) {
+                            now = time;
+                            callback();
+                        });
+                    },
                     function(callback) {
                         app.dialogs.element('.message-text').text('CALCULATING STATS');
                         self.user.stats.sync(function() {
@@ -220,6 +228,14 @@ define([
                         if (self.get('changedVocabIds').length) {
                             app.dialogs.element('.message-text').text('SAVING VOCABS');
                             self.vocabs.putChanged(callback, callback);
+                        } else {
+                            callback();
+                        }
+                    },
+                    function(callback) {
+                        if (now - self.get('lastVocabUpdate') > 86400) {
+                            app.dialogs.element('.message-text').text('UPDATING VOCABS');
+                            self.vocabs.updateVocabs(callback, callback);
                         } else {
                             callback();
                         }

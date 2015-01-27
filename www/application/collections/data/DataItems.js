@@ -137,7 +137,8 @@ define([
                         lastItemSync: now,
                         lastReviewSync: now,
                         lastSRSConfigSync: now,
-                        lastVocabSync: now
+                        lastVocabSync: now,
+                        lastVocabUpdate: now
                     });
                     callbackSuccess();
                 }
