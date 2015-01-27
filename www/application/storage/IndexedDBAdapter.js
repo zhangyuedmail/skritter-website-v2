@@ -226,6 +226,36 @@ define([
             };
         },
         /**
+         * @method getVocabIdByBase
+         * @param {Array|String} bases
+         * @param {Function} callback
+         */
+        getVocabIdByBase: function(bases, callback) {
+            var self = this;
+            var data = [];
+            var transaction = self.get('database').transaction('vocabs', 'readonly');
+            bases = Array.isArray(bases) ? bases : [bases];
+            bases = bases.map(function(base) {
+                return '-' + base + '-';
+            });
+            transaction.oncomplete = function() {
+                callback(data);
+            };
+            transaction.onerror = function(error) {
+                callback(error);
+            };
+            transaction.objectStore('vocabs').openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var base = '-' + cursor.value.id.split('-')[1] + '-';
+                    if (bases.indexOf(base) > -1) {
+                        data.push(cursor.value.id);
+                    }
+                    cursor.continue();
+                }
+            };
+        },
+        /**
          * @method isLoaded
          * @returns {Boolean}
          */
