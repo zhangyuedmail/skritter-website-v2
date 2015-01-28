@@ -27,7 +27,7 @@ define([
             clientId: 'mcfarljwapiclient',
             clientSecret: 'e3872517fed90a820e441531548b8c',
             guest: undefined,
-            root: 'https://beta.skritter',
+            root: 'https://www.skritter',
             timeout: 100,
             tld: location.host.indexOf('.cn') === -1 ? '.com' : '.cn',
             version: 0
@@ -465,6 +465,43 @@ define([
                     callbackError(error);
                 });
             })();
+        },
+        /**
+         * @method getNextItems
+         * @param {Object} [options]
+         * @param {Function} callbackComplete
+         * @param {Function} callbackError
+         */
+        getNextItems: function(options, callbackComplete, callbackError) {
+            options = options === undefined ? {} : options;
+            $.ajax({
+                url: this.getBaseUrl() + 'items',
+                beforeSend: this.beforeSend,
+                context: this,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    lang: options.lang || app.user.getLanguageCode(),
+                    sort: 'next',
+                    include_contained: 'true',
+                    include_decomps: 'true',
+                    include_heisigs: 'true',
+                    include_strokes: 'true',
+                    include_sentences: 'false',
+                    include_top_mnemonics: 'false',
+                    include_vocabs: 'true'
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.cursor;
+                    delete data.statusCode;
+                    callbackComplete(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         },
         /**
          * @method getReviewErrors
