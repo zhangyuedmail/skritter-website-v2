@@ -467,12 +467,12 @@ define([
             })();
         },
         /**
-         * @method getNextItems
+         * @method getItemByNext
          * @param {Object} [options]
          * @param {Function} callbackComplete
          * @param {Function} callbackError
          */
-        getNextItems: function(options, callbackComplete, callbackError) {
+        getItemByNext: function(options, callbackComplete, callbackError) {
             options = options === undefined ? {} : options;
             $.ajax({
                 url: this.getBaseUrl() + 'items',

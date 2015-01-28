@@ -250,7 +250,11 @@ define([
                     },
                     function(callback) {
                         app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                        app.user.data.items.sync(callback, callback);
+                        if (self.user.settings.get('enableJit')) {
+                            app.user.data.items.syncJit(callback, callback);
+                        } else {
+                            app.user.data.items.sync(callback, callback);
+                        }
                     }
                 ], function(error) {
                     self.syncing = false;

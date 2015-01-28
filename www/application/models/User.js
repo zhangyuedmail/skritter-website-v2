@@ -286,14 +286,16 @@ define([
                     },
                     //sync items from server
                     function(callback) {
-                        if (self.data.get('lastItemSync')) {
+                        if (self.data.get('lastItemSync') || self.settings.get('enableJit')) {
                             if (app.isLocalhost()) {
                                 callback();
                             } else {
                                 app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                                self.data.items.sync(callback, function() {
-                                    callback();
-                                });
+                                if (self.settings.get('enableJit')) {
+                                    self.data.items.syncJit(callback, callback);
+                                } else {
+                                    self.data.items.sync(callback, callback);
+                                }
                             }
                         } else {
                             app.dialogs.element('.message-text').text('REQUESTING DATA');

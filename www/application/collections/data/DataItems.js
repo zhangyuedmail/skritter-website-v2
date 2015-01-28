@@ -347,6 +347,37 @@ define([
                     callbackSuccess();
                 }
             });
+        },
+        /**
+         * @method syncJit
+         * @param {Function} callbackSuccess
+         * @param {Function} [callbackError]
+         */
+        syncJit: function(callbackSuccess, callbackError) {
+            var self = this;
+            async.series([
+                //fetch items based on last offset value
+                function(callback) {
+                    app.api.getItemByNext({lang: app.user.getLanguageCode()}, function(result) {
+                        if (result.Items && result.Items.length) {
+                            self.data.user.schedule.insert(result.Items);
+                        }
+                        self.data.put(result, function() {
+                            callback();
+                        });
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                } else {
+                    callbackSuccess();
+                }
+            });
         }
     });
 

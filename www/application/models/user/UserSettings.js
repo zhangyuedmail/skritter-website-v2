@@ -36,6 +36,7 @@ define([
             autoAddLimit: 10,
             allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             allJapaneseParts: ['defn', 'rdng', 'rune'],
+            enableJit: false,
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             filterLists: [],
