@@ -27,6 +27,8 @@ define([
             this.elements.settingAudioTTS = this.$('#audio-tts');
             this.elements.settingAutoAdd = this.$('#auto-add');
             this.elements.settingAutoAddLimit = this.$('#auto-add-limit');
+            this.elements.settingAutoAdvance = this.$('#auto-advance');
+            this.elements.settingAutoAdvanceTime = this.$('#auto-advance-time');
             this.elements.settingGradingColor = this.$('#grading-color');
             this.elements.settingHeisig = this.$('#heisig');
             this.elements.settingHideReading = this.$('#hide-reading');
@@ -101,6 +103,8 @@ define([
             this.settings.set({
                 autoAdd: this.elements.settingAutoAdd.bootstrapSwitch('state'),
                 autoAddLimit: this.elements.settingAutoAddLimit.val() ? this.elements.settingAutoAddLimit.val() : 10,
+                autoAdvance: this.elements.settingAutoAdvance.bootstrapSwitch('state'),
+                autoAdvanceTime: this.elements.settingAutoAdvanceTime.val() ? this.elements.settingAutoAdvanceTime.val() : 3,
                 gradingColor: this.elements.settingGradingColor.bootstrapSwitch('state'),
                 hideReading: this.elements.settingHideReading.bootstrapSwitch('state'),
                 readingStyle: this.elements.settingReadingStyle.bootstrapSwitch('state') ? 'pinyin' : 'zhuyin',
