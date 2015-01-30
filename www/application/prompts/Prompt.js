@@ -17,6 +17,7 @@ define([
          * @constructor
          */
         initialize: function(options, controller, review) {
+            this.autoAdvanceTimer = undefined;
             this.canvas = controller.canvas;
             this.containedVocab = undefined;
             this.controller = controller;
@@ -103,6 +104,9 @@ define([
                     app.dialogs.hide();
                 });
             }
+            if (app.user.settings.get('autoAdvance')) {
+                this.startAutoAdvance();
+            }
             this.showNavigation(1.0);
             return this;
         },
@@ -111,6 +115,7 @@ define([
          * @returns {Prompt}
          */
         renderElements: function() {
+            this.elements.autoAdvance = $('.autoadvance-counter');
             this.elements.buttonWrong = this.$('.button-wrong');
             this.elements.fieldAnswer = this.$('.field-answer');
             this.elements.fieldDefinition = this.$('.field-definition');
@@ -144,6 +149,7 @@ define([
         renderQuestion: function() {
             app.timer.setLapOffset(this.review.getAt('reviewTime'));
             app.timer.start();
+            this.stopAutoAdvance();
             this.review.setAt('answered', false);
             this.gradingButtons.hide();
             if (app.user.reviews.previous || !this.review.isFirst()) {
@@ -459,6 +465,32 @@ define([
                 }
             }
             return this;
+        },
+        /**
+         * @method startAutoAdvance
+         */
+        startAutoAdvance: function() {
+            var self = this;
+            var current = 0;
+            var limit = app.user.settings.get('autoAdvanceTime');
+            this.elements.autoAdvance.text(limit / 1000);
+            this.elements.autoAdvance.show();
+            this.autoAdvanceTimer = setInterval(function() {
+                if (current >= limit - 1000) {
+                    self.next();
+                    self.stopAutoAdvance();
+                } else {
+                    current += 1000;
+                    self.elements.autoAdvance.text((limit - current) / 1000);
+                }
+            }, 1000);
+        },
+        /**
+         * @method stopAutoAdvance
+         */
+        stopAutoAdvance: function() {
+            clearInterval(this.autoAdvanceTimer);
+            this.elements.autoAdvance.hide();
         },
         /**
          * @method teach

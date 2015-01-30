@@ -366,6 +366,18 @@ body {
     position: absolute;
     right: 15px;
 }
+.prompt-container .autoadvance-counter {
+    background-color: #fa7082;
+    border-radius: 50%;
+    bottom: 125px;
+    display: none;
+    font-size: xx-large;
+    height: 50px;
+    position: absolute;
+    right: 6px;
+    text-align: center;
+    width: 50px;
+}
 
 
 /*** PROMPTS: CANVAS ***/

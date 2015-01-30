@@ -34,6 +34,8 @@ define([
             audioTTS: false,
             autoAdd: true,
             autoAddLimit: 10,
+            autoAdvance: false,
+            autoAdvanceTime: 3000,
             allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             allJapaneseParts: ['defn', 'rdng', 'rune'],
             enableJit: false,
