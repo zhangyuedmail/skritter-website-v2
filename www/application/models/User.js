@@ -286,22 +286,13 @@ define([
                     },
                     //sync items from server
                     function(callback) {
-                        if (self.data.get('lastItemSync') || self.settings.get('enableJit')) {
-                            if (app.isLocalhost()) {
-                                callback();
-                            } else {
-                                app.dialogs.element('.message-text').text('UPDATING ITEMS');
-                                if (self.settings.get('enableJit')) {
-                                    self.data.items.syncJit(callback, callback);
-                                } else {
-                                    self.data.items.sync(callback, callback);
-                                }
-                            }
-                        } else {
+                        if (!self.data.get('lastItemSync') && !self.settings.get('enableJit')) {
                             app.dialogs.element('.message-text').text('REQUESTING DATA');
                             self.data.items.downloadAll(callback, function(error) {
                                 callback(error);
                             });
+                        } else {
+                            callback();
                         }
                     },
                     //update subscription from server
@@ -342,9 +333,16 @@ define([
                     //load all reviews
                     function(callback) {
                         self.reviews.loadAll(callback);
+                    },
+                    //perform initial sync
+                    function(callback) {
+                        self.data.sync(0, callback, function() {
+                            callback();
+                        });
                     }
                 ], function(error) {
                     if (error) {
+                        console.error('USER ERROR:', error);
                         app.dialogs.element('.message-title').text('Something went wrong.');
                         app.dialogs.element('.message-text').text('Check your connection and click reload.');
                         app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
@@ -356,7 +354,6 @@ define([
                             }
                             app.reload();
                         });
-                        console.error('USER ERROR:', error);
                     } else {
                         self.data.startBackgroundSync();
                         app.dialogs.hide(function() {
@@ -367,7 +364,7 @@ define([
                     }
                 });
             } else {
-                callback(null, this);
+                callback();
             }
         },
         /**
