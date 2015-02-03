@@ -362,6 +362,9 @@ define([
                         if (result.Items && result.Items.length) {
                             self.data.user.schedule.insert(result.Items);
                         }
+                        if (result.ContainedItems && result.ContainedItems.length) {
+                            result.Items = result.Items.concat(result.ContainedItems);
+                        }
                         self.data.put(result, function() {
                             callback();
                         });
