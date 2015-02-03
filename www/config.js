@@ -46,7 +46,7 @@ app = (function() {
                 modernizr: 'libraries/modernizr.custom-2.8.3.min',
                 moment: 'libraries/moment-2.8.3.min',
                 'moment.timezone': 'libraries/moment.timezone-0.2.4.min',
-                raygun: 'libraries/raygun-1.14.0.min',
+                raygun: 'libraries/raygun-1.15.0.min',
                 'require.i18n': 'libraries/require.i18n-2.0.4',
                 'require.text': 'libraries/require.text-2.0.12',
                 underscore: 'libraries/lodash.compat-2.4.1.min',
