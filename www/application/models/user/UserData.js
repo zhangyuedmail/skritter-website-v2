@@ -233,9 +233,13 @@ define([
                         }
                     },
                     function(callback) {
-                        if (now - self.get('lastVocabUpdate') > 86400) {
+                        if (self.get('lastVocabUpdate')) {
+                            self.set('lastVocabUpdate', now);
+                            callback();
+                        } else if (now - self.get('lastVocabUpdate') > 86400) {
                             app.dialogs.element('.message-text').text('UPDATING VOCABS');
                             self.vocabs.updateVocabs(callback, callback);
+                            callback();
                         } else {
                             callback();
                         }
