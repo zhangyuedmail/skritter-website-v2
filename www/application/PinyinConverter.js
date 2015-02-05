@@ -2136,15 +2136,25 @@ define([], function() {
     /**
      * @method pinyinToTone
      * @param {String} text
+     * @param {Boolean} [includeSpaces]
      * @returns {String}
      */
-    function pinyinToTone(text) {
+    function pinyinToTone(text, includeSpaces) {
         text = text.toLowerCase();
-        var textArray = text.match(/[a-z|A-Z]+[0-9]+|\,\s|\s\.\.\.\s|\'/g);
+        var textArray = [];
+        if (includeSpaces) {
+            textArray = text.match(/[a-z|A-Z]+[0-9]+|\s|,\s|\s\.\.\.\s|'/g);
+        } else {
+            textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|\s\.\.\.\s|'/g);
+        }
+        console.log(textArray);
         if (textArray) {
             for (var i = 0, length = textArray.length; i < length; i++) {
                 var textItem = textArray[i];
-                if (textItem !== ' ... ' && textItem !== "'" && textItem !== ", ") {
+                if (textItem !== ' ... ' &&
+                    textItem !== "'" &&
+                    textItem !== ", " &&
+                    textItem !== ' ') {
                     textArray[i] = data[textItem].pinyin;
                 }
             }
