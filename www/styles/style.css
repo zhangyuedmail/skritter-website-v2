@@ -613,6 +613,7 @@ body {
     height: 55px;
     margin-top: -8px;
 }
+#sidebar-info .info-sentence-toggle { display: none; }
 
 
 /*** TABLE: CONTAINED ***/

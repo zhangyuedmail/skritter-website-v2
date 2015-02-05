@@ -2147,7 +2147,6 @@ define([], function() {
         } else {
             textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|\s\.\.\.\s|'/g);
         }
-        console.log(textArray);
         if (textArray) {
             for (var i = 0, length = textArray.length; i < length; i++) {
                 var textItem = textArray[i];

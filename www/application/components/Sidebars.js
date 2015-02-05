@@ -45,6 +45,7 @@ define([
             'vclick #sidebar-info .edit-mnemonic': 'handleEditMnemonicClicked',
             'vclick #sidebar-info .info-ban': 'handleInfoBanClicked',
             'vclick #sidebar-info .info-pleco': 'handleInfoPlecoClicked',
+            'vclick #sidebar-info .info-sentence': 'handleInfoSentenceClicked',
             'vclick #sidebar-info .info-star': 'handleInfoStarClicked',
             'swipeleft .sidebar': 'handleSidebarSwipeLeft',
             'swiperight .sidebar': 'handleSidebarSwipeRight'
@@ -97,6 +98,19 @@ define([
         handleInfoPlecoClicked: function(event) {
             event.preventDefault();
             this.trigger('click:info-pleco');
+        },
+        /**
+         * @method handleInfoSentenceClicked
+         * @param {Event} event
+         */
+        handleInfoSentenceClicked: function(event) {
+            event.preventDefault();
+            var sentenceToggle = this.$('#sidebar-info .info-sentence-toggle');
+            if (sentenceToggle.is(':hidden')) {
+                this.$('#sidebar-info .info-sentence-toggle').show('slide', {direction: 'up'}, 300);
+            } else {
+                this.$('#sidebar-info .info-sentence-toggle').hide('slide', {direction: 'up'}, 300);
+            }
         },
         /**
          * @method handleInfoStarClicked

@@ -135,6 +135,9 @@ define([
             this.elements.infoMnemonic = $('#sidebar-info .info-mnemonic');
             this.elements.infoPleco = $('#sidebar-info .info-pleco');
             this.elements.infoReading = $('#sidebar-info .info-reading');
+            this.elements.infoSentence = $('#sidebar-info .info-sentence');
+            this.elements.infoSentenceReading = $('#sidebar-info .info-sentence-reading');
+            this.elements.infoSentenceDefinition = $('#sidebar-info .info-sentence-definition');
             this.elements.infoStar = $('#sidebar-info .info-star');
             this.elements.infoWriting = $('#sidebar-info .info-writing');
             this.elements.promptNewness = this.$('.prompt-newness');
@@ -570,6 +573,15 @@ define([
                 this.elements.infoDecomps.html(this.vocab.getDecomp().getChildrenRows());
             } else {
                 this.elements.infoDecomps.parent().hide();
+            }
+            if (this.vocab.getSentence()) {
+                var sentence = this.vocab.getSentence();
+                this.elements.infoSentence.parent().show();
+                this.elements.infoSentence.html(sentence.getWriting());
+                this.elements.infoSentenceDefinition.html(sentence.getDefinition());
+                this.elements.infoSentenceReading.html(sentence.getReading());
+            } else {
+                this.elements.infoSentence.parent().hide();
             }
             if (this.vocab.isBanned()) {
                 this.elements.infoBan.addClass('fa-star text-danger');

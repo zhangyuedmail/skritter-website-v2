@@ -61,7 +61,7 @@ define([
                                     sort: 'changed',
                                     offset: 0,
                                     include_vocabs: 'true',
-                                    include_sentences: 'false',
+                                    include_sentences: 'true',
                                     include_strokes: 'true',
                                     include_heisigs: 'true',
                                     include_top_mnemonics: 'false',
@@ -324,6 +324,7 @@ define([
                         lang: app.user.getLanguageCode(),
                         includeDecomps: true,
                         includeHeisigs: true,
+                        includeSentences: true,
                         includeStrokes: true,
                         includeVocabs: true
                     }, function(result) {
