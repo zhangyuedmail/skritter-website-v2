@@ -33,7 +33,7 @@ define([
          * @returns {String}
          */
         getReading: function() {
-            return app.fn.pinyin.toTone(this.get('reading'), true);
+            return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading'), true) : this.get('reading');
         },
         /**
          * @method getWriting
@@ -41,6 +41,18 @@ define([
          */
         getWriting: function() {
             return this.get('writing').replace(/\s+/g, '');
+        },
+        /**
+         * @method isChinese
+         */
+        isChinese: function() {
+            return this.get('lang') === 'zh';
+        },
+        /**
+         * @method isJapanese
+         */
+        isJapanese: function() {
+            return this.get('lang') === 'ja';
         }
     });
 
