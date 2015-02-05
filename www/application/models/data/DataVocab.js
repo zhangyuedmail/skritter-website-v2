@@ -330,6 +330,19 @@ define([
             return html + '</div>';
         },
         /**
+         * @method getSentence
+         * @returns {Object}
+         */
+        getSentence: function() {
+            var sentenceId = this.get('sentenceId');
+            if (sentenceId) {
+                var sentence = app.user.data.sentences.get(sentenceId);
+                if (sentence) {
+                    return sentence;
+                }
+            }
+        },
+        /**
          * @method getStroke
          * @returns {DataStroke}
          */
