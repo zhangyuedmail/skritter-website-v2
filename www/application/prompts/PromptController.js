@@ -140,6 +140,12 @@ define([
             return this;
         },
         /**
+         * @method triggerNext
+         */
+        triggerNext: function() {
+            this.trigger('prompt:next');
+        },
+        /**
          * @method triggerPrevious
          */
         triggerPrevious: function() {

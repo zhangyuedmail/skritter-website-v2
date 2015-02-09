@@ -147,13 +147,14 @@ define([
          */
         hide: function(speed) {
             var self = this;
+            speed === undefined ? this.speed : speed;
             if (this.enabled && !this.moving) {
                 this.moving = true;
                 if (this.name === 'menu') {
                     $('.navbar-menu.toggle').removeClass('active');
                 }
                 this.sidebar.removeClass('expanded');
-                this.sidebar.hide('slide', {direction: this.direction}, speed ? speed : this.speed, function() {
+                this.sidebar.hide('slide', {direction: this.direction}, speed, function() {
                     self.moving = false;
                 });
             }
@@ -201,6 +202,7 @@ define([
          */
         show: function(speed) {
             var self = this;
+            speed === undefined ? this.speed : speed;
             if (this.enabled && !this.moving) {
                 this.moving = true;
                 if (this.name === 'menu') {
@@ -208,7 +210,7 @@ define([
                     $('.application-version').text(app.getVersion());
                 }
                 this.sidebar.addClass('expanded');
-                this.sidebar.show('slide', {direction: this.direction}, speed ? speed : this.speed, function() {
+                this.sidebar.show('slide', {direction: this.direction}, speed, function() {
                     self.moving = false;
                 });
             }

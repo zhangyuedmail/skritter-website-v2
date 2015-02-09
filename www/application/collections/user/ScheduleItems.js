@@ -43,11 +43,11 @@ define([
         },
         /**
          * @method banItems
-         * @param {String} base
+         * @param {String} vocabId
          * @returns {Array}
          */
-        banItems: function(base) {
-            var items = this.getByBase(base);
+        banItems: function(vocabId) {
+            var items = this.getByBase(vocabId);
             for (var i = 0, length = items.length; i < length; i++) {
                 var item = items[i];
                 item.set('vocabIds', []);
@@ -57,10 +57,11 @@ define([
         },
         /**
          * @method getByBase
-         * @param {String} base
+         * @param {String} vocabId
          * @returns {Array}
          */
-        getByBase: function(base) {
+        getByBase: function(vocabId) {
+            var base = '-' + vocabId.split('-')[1] + '-';
             return this.filter(function(item) {
                 return item.id.indexOf(base) > -1;
             });

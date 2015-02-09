@@ -473,6 +473,12 @@ define([
             return this;
         },
         /**
+         * @method skip
+         */
+        skip: function() {
+            this.controller.triggerNext();
+        },
+        /**
          * @method startAutoAdvance
          */
         startAutoAdvance: function() {
@@ -522,7 +528,10 @@ define([
                     self.vocab.set('bannedParts', app.user.settings.getAllParts());
                     app.user.reviews.current = undefined;
                     app.user.schedule.banItems(self.vocab.id);
-                    app.dialogs.hide();
+                    app.dialogs.hide(function() {
+                        app.sidebars.hide(0);
+                        self.skip();
+                    });
                 });
             }
             this.updateVocabSidebar();

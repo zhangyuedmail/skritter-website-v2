@@ -36,6 +36,7 @@ define([
             this.elements.studyCount = this.$('#study-count');
             this.promptController = new PromptController({el: this.$('.prompt-container')}).render();
             this.listenTo(this.promptController, 'prompt:complete', this.handlePromptComplete);
+            this.listenTo(this.promptController, 'prompt:next', this.handlePromptNext);
             this.listenTo(this.promptController, 'prompt:previous', this.previous);
             this.renderElements().next();
             return this;
@@ -191,6 +192,13 @@ define([
             this.reviews.previous = review;
             this.schedule.addRecent(review.getBase());
             review.save(_.bind(this.next, this));
+        },
+        /**
+         * @method handlePromptNext
+         */
+        handlePromptNext: function() {
+            console.log('SKIPPING PROMPT');
+            this.next();
         },
         /**
          * @method next
