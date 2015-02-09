@@ -356,6 +356,7 @@ define([
         previous: function() {
             this.updateReview();
             if (this.review.isFirst()) {
+                this.elements.infoSentenceToggle.hide();
                 this.controller.triggerPrevious();
             } else {
                 this.review.previous();
