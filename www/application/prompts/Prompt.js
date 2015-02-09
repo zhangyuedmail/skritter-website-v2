@@ -105,7 +105,8 @@ define([
                 });
             }
             if (app.user.settings.get('autoAdvance')) {
-                this.startAutoAdvance();
+                //TODO: restore when auto advance has been styled
+                //this.startAutoAdvance();
             }
             this.showNavigation(1.0);
             return this;
@@ -138,6 +139,7 @@ define([
             this.elements.infoSentence = $('#sidebar-info .info-sentence');
             this.elements.infoSentenceReading = $('#sidebar-info .info-sentence-reading');
             this.elements.infoSentenceDefinition = $('#sidebar-info .info-sentence-definition');
+            this.elements.infoSentenceToggle = $('#sidebar-info .info-sentence-toggle');
             this.elements.infoStar = $('#sidebar-info .info-star');
             this.elements.infoWriting = $('#sidebar-info .info-writing');
             this.elements.promptNewness = this.$('.prompt-newness');
@@ -341,6 +343,7 @@ define([
             if (!this.review.getAt('answered')) {
                 this.renderAnswer();
             } else if (this.review.isLast()) {
+                this.elements.infoSentenceToggle.hide();
                 this.controller.triggerPromptComplete(this.review);
             } else {
                 this.review.next();
