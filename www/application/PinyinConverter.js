@@ -2154,7 +2154,9 @@ define([], function() {
                     textItem !== "'" &&
                     textItem !== ", " &&
                     textItem !== ' ') {
-                    textArray[i] = data[textItem].pinyin;
+                    if (data[textItem]) {
+                        textArray[i] = data[textItem].pinyin;
+                    }
                 }
             }
             return textArray.join('');
