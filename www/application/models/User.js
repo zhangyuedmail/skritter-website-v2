@@ -229,8 +229,12 @@ define([
                         if (plugins.expansion) {
                             var mainVersion = app.get('expansionMainVersion');
                             var patchVersion = app.get('expansionPatchVersion');
-                            plugins.expansion.load(mainVersion, patchVersion);
-                            callback();
+                            plugins.expansion.load(mainVersion, patchVersion, function() {
+                                callback();
+                            }, function() {
+                                plugins.expansion = undefined;
+                                callback();
+                            });
                         } else {
                             callback();
                         }
