@@ -254,6 +254,23 @@ define([
             return review;
         },
         /**
+         * @method setBase
+         * @param {Object|String} key
+         * @param {Boolean|Number|String} [value]
+         * @returns {Object}
+         */
+        setBase: function(key, value) {
+            var review = this.get('reviews')[0];
+            if (typeof key === 'object') {
+                for (var property in key) {
+                    review[property] = key[property];
+                }
+            } else {
+                review[key] = value;
+            }
+            return review;
+        },
+        /**
          * @method setSquig
          * @param {createjs.Container} squig
          * @returns {DataReview}
