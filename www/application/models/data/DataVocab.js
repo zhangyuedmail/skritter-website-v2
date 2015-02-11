@@ -41,22 +41,20 @@ define([
          * @param {Function} [callbackError]
          */
         getAudio: function(callbackSuccess, callbackError) {
-            if (app.isNative()) {
+            if (app.isNative() && plugins.expansion) {
                 var filename = '';
                 if (this.isChinese()) {
                     filename = this.get('reading').split(', ')[0].toLowerCase().trim() + '.mp3';
                 } else {
                     filename = this.get('reading') + '_' + this.get('writing') + '.mp3';
                 }
-                if (plugins.expansion) {
-                    plugins.expansion.hasFile(filename, function() {
-                        callbackSuccess(filename);
-                    }, function() {
-                        if (typeof callbackError === 'function') {
-                            callbackError();
-                        }
-                    });
-                }
+                plugins.expansion.hasFile(filename, function() {
+                    callbackSuccess(filename);
+                }, function() {
+                    if (typeof callbackError === 'function') {
+                        callbackError();
+                    }
+                });
             } else if (this.get('audio')){
                 callbackSuccess(this.get('audio'));
                 return;
@@ -446,10 +444,19 @@ define([
         },
         /**
          * @method playAudio
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
-        playAudio: function() {
+        playAudio: function(callbackSuccess, callbackError) {
             this.getAudio(function(filename) {
                 app.assets.playAudio(filename);
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+            }, function() {
+                if (typeof callbackError === 'function') {
+                    callbackError();
+                }
             });
         }
     });

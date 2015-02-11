@@ -17,6 +17,7 @@ define([
          * @constructor
          */
         initialize: function(options, controller, review) {
+            var self = this;
             this.autoAdvanceTimer = undefined;
             this.canvas = controller.canvas;
             this.containedVocab = undefined;
@@ -39,6 +40,22 @@ define([
                 app.dialogs.element('.tutorial-reading').html(this.vocab.getReading());
                 app.dialogs.element('.tutorial-writing').html(this.vocab.getWriting());
                 app.dialogs.element('.tutorial-disable').on('vclick', _.bind(this.disableTutorial, this));
+            }
+            //update review based on audio availability
+            if (plugins.expansion) {
+                self.vocab.getAudio(function() {
+                    self.review.setBase({
+                        missingAudioLang: undefined,
+                        missingAudioReading: undefined,
+                        missingAudioWriting: undefined
+                    });
+                }, function() {
+                    self.review.setBase({
+                        missingAudioLang: self.vocab.get('lang'),
+                        missingAudioReading: self.vocab.get('reading'),
+                        missingAudioWriting: self.vocab.get('writing')
+                    });
+                });
             }
         },
         /**
