@@ -278,20 +278,20 @@ define([
                     if (error) {
                         console.log('VOCABLISTS', vocablists);
                         console.log('ITEM ADD ERROR:', error);
+                        self.data.trigger('sync', self.data.syncing);
                         if (typeof callbackError === 'function') {
                             callbackError(error);
                         }
                     } else {
                         app.analytics.trackUserEvent('added_items', items.length);
                         console.log('ITEMS', items, vocablists, numVocabsAdded);
-                        self.data.trigger('sync', false);
                         self.data.set('addOffset', self.data.get('addOffset') + numVocabsAdded);
-                        console.log('VOCABLISTS', vocablists);
                         self.data.vocablists.add(vocablists, {merge: true});
                         self.data.user.schedule.updateFilter();
                         result.items = items;
                         result.numVocabsAdded = numVocabsAdded;
                         result.vocablists = vocablists;
+                        self.data.trigger('sync', self.data.syncing);
                         $.notify('Added ' + result.numVocabsAdded + (result.numVocabsAdded === 1 ? ' word' : ' words') + '.', {
                             className: 'success',
                             globalPosition: 'top right'
