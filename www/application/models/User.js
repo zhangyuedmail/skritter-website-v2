@@ -347,17 +347,28 @@ define([
                 ], function(error) {
                     if (error) {
                         console.error('USER ERROR:', error);
-                        app.dialogs.element('.message-title').text('Something went wrong.');
-                        app.dialogs.element('.message-text').text('Check your connection and click reload.');
-                        app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
-                        app.dialogs.element('.message-confirm button').on('vclick', function() {
-                            try {
-                                throw new Error('User Error');
-                            } catch (e) {
-                                raygun.send(e, {Message: error.responseJSON});
-                            }
+                        var response = error.responseJSON;
+                        if (response.statusCode === 403) {
+                            localStorage.removeItem(app.user.id + '-data');
+                            localStorage.removeItem(app.user.id + '-settings');
+                            localStorage.removeItem(app.user.id + '-stats');
+                            localStorage.removeItem(app.user.id + '-subscription');
+                            localStorage.removeItem('_active');
+                            app.api.clearGuest();
                             app.reload();
-                        });
+                        } else {
+                            app.dialogs.element('.message-title').text('Something went wrong.');
+                            app.dialogs.element('.message-text').text('Check your connection and click reload.');
+                            app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                            app.dialogs.element('.message-confirm button').on('vclick', function() {
+                                try {
+                                    throw new Error('User Error');
+                                } catch (e) {
+                                    raygun.send(e, {Message: response});
+                                }
+                                app.reload();
+                            });
+                        }
                     } else {
                         self.data.startBackgroundSync();
                         app.dialogs.hide(function() {
