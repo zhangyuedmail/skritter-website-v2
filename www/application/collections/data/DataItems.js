@@ -42,6 +42,14 @@ define([
                         callback();
                     });
                 },
+                //submit all reviews before clearing data
+                function(callback) {
+                    self.user.reviews.post(0, function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                },
                 //clear all locally stored data
                 function(callback) {
                     localStorage.removeItem(app.user.id + '-stats');
