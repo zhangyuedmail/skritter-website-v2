@@ -42,9 +42,13 @@ define([
                         callback();
                     });
                 },
+                //load all not synced local reviews
+                function(callback) {
+                    self.data.user.reviews.loadAll(callback);
+                },
                 //submit all reviews before clearing data
                 function(callback) {
-                    self.user.reviews.post(0, function() {
+                    self.data.user.reviews.post(0, function() {
                         callback();
                     }, function() {
                         callback();
