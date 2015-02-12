@@ -348,7 +348,12 @@ define([
                     if (error) {
                         console.error('USER ERROR:', error);
                         var response = error.responseJSON;
-                        if (response.statusCode === 403) {
+                        try {
+                            throw new Error('User Error');
+                        } catch (e) {
+                            raygun.send(e, {Message: JSON.stringify(error)});
+                        }
+                        if (response && response.statusCode === 403) {
                             localStorage.removeItem(app.user.id + '-data');
                             localStorage.removeItem(app.user.id + '-settings');
                             localStorage.removeItem(app.user.id + '-stats');
@@ -361,11 +366,6 @@ define([
                             app.dialogs.element('.message-text').text('Check your connection and click reload.');
                             app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
                             app.dialogs.element('.message-confirm button').on('vclick', function() {
-                                try {
-                                    throw new Error('User Error');
-                                } catch (e) {
-                                    raygun.send(e, {Message: response});
-                                }
                                 app.reload();
                             });
                         }
