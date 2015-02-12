@@ -36,10 +36,6 @@ define([
             this.admin = new RouterAdmin();
             this.gettingStarted = new RouterGettingStarted();
             this.learningCenter = new RouterLearningCenter();
-            document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
-            document.addEventListener('menubutton', _.bind(this.handleMenuButtonPressed, this), false);
-            document.addEventListener('pause', _.bind(this.handleApplicationPaused, this), false);
-            document.addEventListener('resume', _.bind(this.handleApplicationResumed, this), false);
         },
         /**
          * @property routes
@@ -63,6 +59,29 @@ define([
             'words': 'showWords',
             'words/:filter': 'showWords',
             '*route': 'defaultRoute'
+        },
+        /**
+         * @method disableListeners
+         * @returns {Router}
+         */
+        disableListeners: function() {
+            document.removeEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
+            document.removeEventListener('menubutton', _.bind(this.handleMenuButtonPressed, this), false);
+            document.removeEventListener('pause', _.bind(this.handleApplicationPaused, this), false);
+            document.removeEventListener('resume', _.bind(this.handleApplicationResumed, this), false);
+            return this;
+        },
+        /**
+         * @method enableListeners
+         * @returns {Router}
+         */
+        enableListeners: function() {
+            this.disableListeners();
+            document.addEventListener('backbutton', _.bind(this.handleBackButtonPressed, this), false);
+            document.addEventListener('menubutton', _.bind(this.handleMenuButtonPressed, this), false);
+            document.addEventListener('pause', _.bind(this.handleApplicationPaused, this), false);
+            document.addEventListener('resume', _.bind(this.handleApplicationResumed, this), false);
+            return this;
         },
         /**
          * @method handleApplicationPaused

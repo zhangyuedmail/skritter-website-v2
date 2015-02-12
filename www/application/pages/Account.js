@@ -110,6 +110,7 @@ define([
             app.analytics.trackEvent('Account', 'click', 'restore_data');
             app.dialogs.show().element('.message-title').text('Restoring Data');
             app.dialogs.element('.message-text').text('');
+            app.router.disableListeners();
             app.user.data.items.downloadAll(function() {
                 app.reload();
             }, function() {
