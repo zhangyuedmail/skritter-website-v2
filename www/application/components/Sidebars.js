@@ -147,7 +147,7 @@ define([
          */
         hide: function(speed) {
             var self = this;
-            speed === undefined ? this.speed : speed;
+            speed = undefined ? this.speed : speed;
             if (this.enabled && !this.moving) {
                 this.moving = true;
                 if (this.name === 'menu') {
@@ -202,7 +202,7 @@ define([
          */
         show: function(speed) {
             var self = this;
-            speed === undefined ? this.speed : speed;
+            speed = undefined ? this.speed : speed;
             if (this.enabled && !this.moving) {
                 this.moving = true;
                 if (this.name === 'menu') {

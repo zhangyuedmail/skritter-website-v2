@@ -134,7 +134,7 @@ define([
                         var bases = [];
                         var langProp = app.user.isChinese() ? 'zhBases' : 'jaBases';
                         for (var a = 0, lengthA = updates.length; a < lengthA; a++) {
-                            bases = bases.concat(updates[a][langProp])
+                            bases = bases.concat(updates[a][langProp]);
                         }
                         callback(null, _.uniq(bases));
                     }, function(error) {
@@ -153,7 +153,7 @@ define([
                         });
                     }, function(error) {
                         callback(error);
-                    })
+                    });
                 }
             ], function(error) {
                 if (error) {
