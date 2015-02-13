@@ -295,6 +295,8 @@ define([
                     if (includeSentences) {
                         app.dialogs.show('confirm').element('.modal-title').html("<i class='fa fa-exclamation-triangle'></i> Disable Sentences");
                         app.dialogs.element('.modal-message').empty();
+                        app.dialogs.element('.modal-message').append("<p>This will download fresh copies of your characters and words without sentences.</p>");
+                        app.dialogs.element('.modal-message').append("<p><em>This can take a long time on larger accounts.</em></p>");
                         app.dialogs.element('.confirm').on('vclick', function() {
                             includeSentences = false;
                             app.dialogs.element().off('hide.bs.modal');
@@ -324,17 +326,11 @@ define([
                     callback();
                 },
                 function(callback) {
-                    if (includeSentences) {
-                        app.user.data.items.downloadAll(function() {
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
-                    } else {
-                        app.storage.clear('sentences', function() {
-                            callback();
-                        });
-                    }
+                    app.user.data.items.downloadAll(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
                 }
             ], function(error) {
                 if (error) {
