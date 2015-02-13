@@ -34,6 +34,7 @@ define([
             this.elements.settingHideReading = this.$('#hide-reading');
             this.elements.settingRawSquigs = this.$('#raw-squigs');
             this.elements.settingReadingStyle = this.$('#reading-style');
+            this.elements.settingSentences = this.$('#example-sentences');
             this.elements.settingStudyKana = this.$('#study-kana');
             this.renderElements();
             return this;
@@ -51,6 +52,7 @@ define([
             this.elements.settingHeisig.bootstrapSwitch('state', this.settings.get('showHeisig'));
             this.elements.settingHideReading.bootstrapSwitch('state', this.settings.get('hideReading'));
             this.elements.settingRawSquigs.bootstrapSwitch('state', this.settings.get('squigs'));
+            this.elements.settingSentences.bootstrapSwitch('state', this.settings.get('sentences'));
             if (app.user.isChinese()) {
                 this.elements.settingReadingStyle.bootstrapSwitch('state', this.settings.get('readingStyle') === 'pinyin' ? true : false);
             } else {
@@ -78,8 +80,23 @@ define([
             'switchChange.bootstrapSwitch #hide-reading': 'toggleSettings',
             'switchChange.bootstrapSwitch #raw-squigs': 'toggleSettings',
             'switchChange.bootstrapSwitch #reading-style': 'toggleSettings',
+            'switchChange.bootstrapSwitch #example-sentences': 'toggleSentences',
             'switchChange.bootstrapSwitch #study-kana': 'toggleStudyKana'
         }),
+        /**
+         * @method toggleSentences
+         * @param {Event} event
+         */
+        toggleSentences: function(event) {
+            event.preventDefault();
+            var self = this;
+            app.analytics.trackEvent('Settings', 'click', 'sentences');
+            app.user.data.toggleSentences(function() {
+                app.reload();
+            }, function() {
+                self.renderElements();
+            });
+        },
         /**
          * @method toggleStudyKana
          * @param {Event} event

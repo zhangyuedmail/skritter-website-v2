@@ -283,6 +283,77 @@ define([
             }
         },
         /**
+         * @method toggleSentences
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        toggleSentences: function(callbackSuccess, callbackError) {
+            var self = this;
+            var includeSentences = this.user.settings.get('sentences');
+            async.series([
+                function(callback) {
+                    if (includeSentences) {
+                        app.dialogs.show('confirm').element('.modal-title').html("<i class='fa fa-exclamation-triangle'></i> Disable Sentences");
+                        app.dialogs.element('.modal-message').empty();
+                        app.dialogs.element('.confirm').on('vclick', function() {
+                            includeSentences = false;
+                            app.dialogs.element().off('hide.bs.modal');
+                            app.dialogs.hide(callback);
+                        });
+                    } else {
+                        app.dialogs.show('confirm').element('.modal-title').html("<i class='fa fa-exclamation-triangle'></i> Enable Sentences");
+                        app.dialogs.element('.modal-message').empty();
+                        app.dialogs.element('.modal-message').append("<p>This will download example sentences for all of your characters and words.</p>");
+                        app.dialogs.element('.modal-message').append("<p><em>This can take a long time on larger accounts. If you're experiencing issues consider disabled them.</em></p>");
+                        app.dialogs.element('.confirm').on('vclick', function() {
+                            includeSentences = true;
+                            app.dialogs.element().off('hide.bs.modal');
+                            app.dialogs.hide(callback);
+                        });
+                    }
+                    app.dialogs.element().on('hide.bs.modal', function() {
+                        if (typeof callbackError === 'function') {
+                            callbackError();
+                        }
+                    });
+                },
+                function(callback) {
+                    app.dialogs.show().element('.message-title').text((includeSentences ? 'Enabling' : 'Disabling') + ' Sentences');
+                    app.dialogs.element('.message-text').text('');
+                    self.user.settings.set('sentences', includeSentences);
+                    callback();
+                },
+                function(callback) {
+                    if (includeSentences) {
+                        app.user.data.items.downloadAll(function() {
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    } else {
+                        app.storage.clear('sentences', function() {
+                            callback();
+                        });
+                    }
+                }
+            ], function(error) {
+                if (error) {
+                    app.dialogs.element('.message-title').text('Something went wrong.');
+                    app.dialogs.element('.message-text').text('Check your connection and click reload.');
+                    app.dialogs.element('.message-confirm').html(app.fn.bootstrap.button('Reload', {level: 'primary'}));
+                    app.dialogs.element('.message-confirm button').on('vclick', function() {
+                        if (typeof callbackError === 'function') {
+                            callbackError();
+                        }
+                    });
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
+                }
+            });
+        },
+        /**
          * @method toggleKana
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]

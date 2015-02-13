@@ -46,6 +46,7 @@ define([
             gradingColors: ['#d95757', '#efec10', '#70da70', '#4097d3'],
             hideExpired: 0,
             readingStyle: 'pinyin',
+            sentences: false,
             showKanaNotice: true,
             showRateNotice: true,
             tutorials: ['defn', 'grading', 'rdng', 'rune', 'tone']

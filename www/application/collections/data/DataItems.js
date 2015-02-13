@@ -31,6 +31,7 @@ define([
          */
         downloadAll: function(callbackSuccess, callbackError) {
             var self = this;
+            var includeSentences = app.user.settings.get('sentences');
             var now = moment().unix();
             var resultStarted = 0;
             var resultFinished = 0;
@@ -73,7 +74,7 @@ define([
                                     sort: 'changed',
                                     offset: 0,
                                     include_vocabs: 'true',
-                                    include_sentences: 'false',
+                                    include_sentences: includeSentences ? 'true' : 'false',
                                     include_strokes: 'true',
                                     include_heisigs: 'true',
                                     include_top_mnemonics: 'false',
