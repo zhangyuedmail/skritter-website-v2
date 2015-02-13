@@ -269,7 +269,7 @@ define([
         getBatch: function(batchId, callbackComplete, callbackError, callbackResult) {
             var self = this;
             var downloadedRequests = 0;
-            var batchSize = 29;
+            var batchSize = 19;
             async.waterfall([
                 function(callback) {
                     self.checkBatch(batchId, function(requestIds) {
