@@ -94,6 +94,7 @@ define([
                 if (error) {
                     callbackError(error);
                 } else {
+                    mixpanel.track('Account Created');
                     callbackComplete();
                 }
             });
@@ -404,6 +405,7 @@ define([
                     }
                 ], function() {
                     localStorage.setItem('_active', data.user_id);
+                    mixpanel.track('Logged In');
                     callbackComplete(data);
                 });
             }, function(error) {
@@ -418,6 +420,7 @@ define([
             var self = this;
             if (this.isAuthenticated()) {
                 if (skipDialog) {
+                    mixpanel.track('Logged Out');
                     this.data.sync(0, function() {
                         self.remove();
                     }, function() {
@@ -432,6 +435,7 @@ define([
                         app.dialogs.element('button').hide();
                         app.dialogs.element('.modal-header').hide();
                         app.dialogs.element('.loader-image').show();
+                        mixpanel.track('Logged Out');
                         self.data.sync(0, function() {
                             self.remove();
                         }, function() {

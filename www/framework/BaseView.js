@@ -81,6 +81,14 @@ define([], function() {
             var url = $(event.currentTarget).data('url').replace('#', app.isLocalhost() ? '/#' : '');
             var replace = $(event.currentTarget).data('replace');
             var trigger = $(event.currentTarget).data('trigger');
+            switch (url) {
+                case 'getting-started':
+                    mixpanel.track('Clicked New User');
+                    break;
+                case 'login':
+                    mixpanel.track('Clicked Existing User');
+                    break;
+            }
             app.router.navigate(url, {
                 replace: replace === undefined ? false : replace,
                 trigger: trigger === undefined ? true : trigger

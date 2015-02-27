@@ -65,16 +65,19 @@ define([
                 case 'select-chinese-both':
                     app.api.setGuest('lang', 'zh');
                     app.api.setGuest('style', 'both');
+                    mixpanel.track('Selected Creation Style', {"Language Style": "Both"});
                     this.next();
                     break;
                 case 'select-chinese-simp':
                     app.api.setGuest('lang', 'zh');
                     app.api.setGuest('style', 'simp');
+                    mixpanel.track('Selected Creation Style', {"Language Style": "Simplified"});
                     this.next();
                     break;
                 case 'select-chinese-trad':
                     app.api.setGuest('lang', 'zh');
                     app.api.setGuest('style', 'trad');
+                    mixpanel.track('Selected Creation Style', {"Language Style": "Traditional"});
                     this.next();
                     break;
                 case 'select-japanese':

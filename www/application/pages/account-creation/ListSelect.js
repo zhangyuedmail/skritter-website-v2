@@ -15,6 +15,7 @@ define([
          */
         initialize: function() {
             this.title = 'List Select';
+            this.list = null;
             this.lists = [];
             this.listsFiltered = undefined;
         },
@@ -100,14 +101,14 @@ define([
          */
         handleListClicked: function(event) {
             event.preventDefault();
-            var list = _.find(this.lists, {id: event.currentTarget.id.replace('list-', '')});
-            app.api.setGuest('list', list.id);
+            this.list = _.find(this.lists, {id: event.currentTarget.id.replace('list-', '')});
+            app.api.setGuest('list', this.list.id);
             app.dialogs.show('list-confirmation');
-            app.dialogs.element('.list-name').text(list.shortName);
-            app.dialogs.element('.list-image').html("<img src='http://www.skritter.com/vocab/listimage?list=" + list.id + "' alt=''>");
-            app.dialogs.element('.list-description').html(list.description);
-            app.dialogs.element('.list-categories').text(list.categories.join(', '));
-            app.dialogs.element('.list-studying').text(list.peopleStudying);
+            app.dialogs.element('.list-name').text(this.list.shortName);
+            app.dialogs.element('.list-image').html("<img src='http://www.skritter.com/vocab/listimage?list=" + this.list.id + "' alt=''>");
+            app.dialogs.element('.list-description').html(this.list.description);
+            app.dialogs.element('.list-categories').text(this.list.categories.join(', '));
+            app.dialogs.element('.list-studying').text(this.list.peopleStudying);
             app.dialogs.element('.select').on('vclick', this.handleListSelected);
         },
         /**
@@ -115,6 +116,7 @@ define([
          */
         handleListSelected: function(event) {
             event.preventDefault();
+            mixpanel.track('Selected Creation List', {"List Name": this.name});
             app.router.navigate('getting-started/signup', {trigger: true});
             app.dialogs.hide();
         },

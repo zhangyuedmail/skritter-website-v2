@@ -213,7 +213,9 @@ define([
          */
         handleSubscribeMonth: function() {
             var self = this;
+            mixpanel.track('Clicked Subscription', {"Subscription Type": "Monthly"});
             this.sub.subscribeGoogle('one.month.sub', function() {
+                mixpanel.track('Completed Subscription', {"Subscription Type": "Monthly"});
                 app.reload();
             }, function(error) {
                 self.elements.subMessage.addClass('text-danger').text(error);
@@ -224,7 +226,9 @@ define([
          */
         handleSubscribeYear: function() {
             var self = this;
+            mixpanel.track('Clicked Subscription', {"Subscription Type": "Yearly"});
             this.sub.subscribeGoogle('one.year.sub', function() {
+                mixpanel.track('Completed Subscription', {"Subscription Type": "Yearly"});
                 app.reload();
             }, function(error) {
                 self.elements.subMessage.addClass('text-danger').text(error);
