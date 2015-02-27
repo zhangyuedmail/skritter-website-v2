@@ -75,6 +75,13 @@ define([
                     self.user.load(callback);
                 },
                 function(callback) {
+                    mixpanel.register({
+                        'Client': 'Android',
+                        'Language Code': self.user.getLanguageCode()
+                    });
+                    callback();
+                },
+                function(callback) {
                     if (app.isNative()) {
                         if (self.user.getLanguageCode() === 'zh') {
                             self.analytics.startTrackerWithId('UA-52116701-1', callback);
