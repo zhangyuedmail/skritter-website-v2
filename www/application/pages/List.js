@@ -174,6 +174,7 @@ define([
                 var name = app.dialogs.element('#section-name').val();
                 self.table.addSection({name: name, deleted: false, rows: []});
                 app.dialogs.hide(function() {
+                    mixpanel.track('Created List Section', {"List Name": self.list.name});
                     self.saveList();
                 });
             });
@@ -192,6 +193,7 @@ define([
             app.dialogs.element('.confirm').on('vclick', function() {
                 self.table.removeById(sectionId);
                 app.dialogs.hide(function() {
+                    mixpanel.track('Deleted List Section', {"List Name": self.list.name});
                     self.saveList();
                 });
             });

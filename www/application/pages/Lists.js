@@ -62,6 +62,7 @@ define([
                 }, function(list) {
                     self.lists.push(list);
                     self.table.setLists(self.lists).renderTable();
+                    mixpanel.track('Created List', {"List Name": name});
                     app.dialogs.hide();
                 }, function() {
                     app.dialogs.hide();

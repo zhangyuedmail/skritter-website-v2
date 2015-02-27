@@ -100,6 +100,7 @@ define([
                         } else {
                             console.log('Search for', vocabWriting, "didn't return anything useful.");
                         }
+                        mixpanel.track('Added List Word', {"List Name": self.list.name});
                         callback();
                     }, function(error) {
                         callback(error);
@@ -127,6 +128,8 @@ define([
             app.dialogs.element('.confirm').on('vclick', function() {
                 self.table.removeById(vocabId);
                 app.dialogs.hide(function() {
+                    console.log(self);
+                    mixpanel.track('Deleted List Word', {"List Name": self.list.name});
                     self.saveSection();
                 });
             });
