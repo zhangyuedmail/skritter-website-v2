@@ -154,6 +154,7 @@ define([
                 self.section = _.find(list.sections, {id: self.sectionId});
                 self.$('#list-name').text(self.list.name);
                 self.$('#section-name').text(self.section.name);
+                mixpanel.track('Viewing List Section', {'List Name': list.name, 'List Section': self.section.name});
                 if (self.list.creator === app.user.id) {
                     self.$('#button-add-vocab').show();
                     self.table.readonly = false;

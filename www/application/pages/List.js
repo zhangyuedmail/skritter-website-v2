@@ -219,6 +219,7 @@ define([
                 self.$('#list-name').text(list.name);
                 self.$('#list-description').text(list.description);
                 self.$('#list-studying').text(list.peopleStudying);
+                mixpanel.track('Viewing List', {'List Name': list.name});
                 if (self.list.creator === app.user.id) {
                     self.$('#button-add-section').show();
                     self.table.readonly = false;

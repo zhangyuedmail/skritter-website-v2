@@ -101,6 +101,7 @@ define([
                 lang: app.user.getLanguageCode(),
                 sort: 'official'
             }, function(lists) {
+                mixpanel.track('Browsing Lists');
                 self.table.setFields({
                     image: '',
                     name: 'Name'
