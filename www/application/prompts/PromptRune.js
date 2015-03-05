@@ -208,6 +208,7 @@ define([
          */
         handleCanvasSwipeUp: function() {
             if (this.character.length) {
+                this.teaching = false;
                 this.hideNavigation();
                 app.analytics.trackEvent('Prompt', 'swipeup', 'eraser');
                 this.renderQuestion();
