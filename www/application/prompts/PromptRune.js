@@ -353,11 +353,10 @@ define([
         },
         /**
          * @method revealCharacter
-         * @param {Number} [excludeStroke]
          */
-        revealTeachCharacter: function(excludeStroke) {
+        revealTeachCharacter: function() {
             this.canvas.clearLayer('background2');
-            this.canvas.drawShape('background2', this.character.getExpectedVariations()[0].getShape(excludeStroke), {color: '#b3b3b3'});
+            this.canvas.drawShape('background2', this.character.getExpectedVariations()[0].getShape(), {color: '#b3b3b3'});
             this.review.setAt('score', 1);
         },
         /**
@@ -369,7 +368,7 @@ define([
             if (stroke) {
                 var strokeParam = stroke.getTraceParam();
                 var strokePath = strokeParam.get('corners');
-                this.revealTeachCharacter(this.character.getPosition());
+                this.revealTeachCharacter();
                 this.canvas.clearLayer('background');
                 this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
                 this.canvas.tracePath('background', strokePath);
