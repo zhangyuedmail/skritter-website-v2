@@ -226,6 +226,7 @@ define([
             event.preventDefault();
             this.gradingButtons.hide();
             app.analytics.trackEvent('Prompt', 'click', 'eraser');
+            this.elements.toolbarReveal.show();
             this.review.setAt('answered', false);
             this.teaching = false;
             if (this.character.length) {
@@ -264,13 +265,17 @@ define([
             app.analytics.trackEvent('Prompt', 'click', 'teach');
             this.review.setAt('score', 1);
             if (this.character.isComplete()) {
+
                 this.handleToolbarEraserClicked(event);
                 this.teach();
             } else {
                 if (this.teaching) {
+                    this.elements.toolbarReveal.show();
+                    this.canvas.clearLayer('background2');
                     this.canvas.fadeLayer('background', null);
                     this.teaching = false;
                 } else {
+                    this.elements.toolbarReveal.hide();
                     this.teach();
                 }
             }
@@ -347,6 +352,15 @@ define([
             this.review.setAt('score', 1);
         },
         /**
+         * @method revealCharacter
+         * @param {Number} [excludeStroke]
+         */
+        revealTeachCharacter: function(excludeStroke) {
+            this.canvas.clearLayer('background2');
+            this.canvas.drawShape('background2', this.character.getExpectedVariations()[0].getShape(excludeStroke), {color: '#b3b3b3'});
+            this.review.setAt('score', 1);
+        },
+        /**
          * @method teach
          * @returns {PromptRune}
          */
@@ -355,6 +369,7 @@ define([
             if (stroke) {
                 var strokeParam = stroke.getTraceParam();
                 var strokePath = strokeParam.get('corners');
+                this.revealTeachCharacter(this.character.getPosition());
                 this.canvas.clearLayer('background');
                 this.canvas.drawShape('background', stroke.getShape(), {color: '#b3b3b3'});
                 this.canvas.tracePath('background', strokePath);

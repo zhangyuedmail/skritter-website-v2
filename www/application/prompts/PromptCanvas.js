@@ -40,6 +40,7 @@ define([
             createjs.Touch.enable(this.stage);
             createjs.Ticker.setFPS(24);
             this.createLayer('grid');
+            this.createLayer('background2');
             this.createLayer('background');
             this.createLayer('stroke');
             this.createLayer('overlay');
