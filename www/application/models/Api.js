@@ -24,8 +24,8 @@ define([
          * @type Object
          */
         defaults: {
-            clientId: 'mcfarljwapiclient',
-            clientSecret: 'e3872517fed90a820e441531548b8c',
+            clientId: 'skritterandroid',
+            clientSecret: 'dc912c037002a7dd35dd651f0b5074',
             guest: undefined,
             root: 'https://www.skritter',
             timeout: 100,
