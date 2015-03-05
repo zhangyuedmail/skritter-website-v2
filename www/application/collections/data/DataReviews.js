@@ -165,6 +165,7 @@ define([
             if (batch && batch.length) {
                 app.api.postReviews(batch, function(posted) {
                     postedIds = _.uniq(_.pluck(posted, 'wordGroup'));
+                    mixpanel.track('Studied Words', {'Number Posted': postedIds.length});
                     app.storage.removeItems('reviews', postedIds, function() {
                         self.remove(postedIds);
                         callbackSuccess();
