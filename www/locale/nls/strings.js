@@ -82,6 +82,7 @@ define([], {
             banned: 'Banned',
             dashboard: 'Dashboard',
             filters: 'Filters',
+            forum: 'Forum',
             lists: 'Lists',
             logout: 'Log Out',
             queue: 'Queue',

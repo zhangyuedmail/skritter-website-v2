@@ -85,6 +85,13 @@ define([], function() {
                 case 'getting-started':
                     mixpanel.track('Clicked New User');
                     break;
+                case 'forum':
+                    if (app.isNative()) {
+                        window.open('http://discourse.skritter.com', '_system');
+                    } else {
+                        window.open('http://discourse.skritter.com', '_blank');
+                    }
+                    break;
                 case 'login':
                     mixpanel.track('Clicked Existing User');
                     break;
