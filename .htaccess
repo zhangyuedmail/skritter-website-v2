@@ -1,0 +1,32 @@
+AddType application/vnd.ms-fontobject .eot
+AddType application/x-font-opentype .otf
+AddType image/svg+xml .svg
+AddType application/x-font-ttf .ttf
+AddType application/font-woff .woff
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    <FilesMatch "\.(appcache)$">
+        ExpiresDefault "access plus 1 second"
+    </FilesMatch>
+    <FilesMatch "\.(css|html|js|json)$">
+        ExpiresDefault "access plus 1 second"
+    </FilesMatch>
+    <FilesMatch "\.(eot|ico|otf|png|svg|ttf|woff)$">
+        ExpiresDefault "access plus 1 month"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(ttf|otf|eot|woff)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
+
+<ifModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !index
+    RewriteRule (.*) index.html [L]
+</ifModule>
