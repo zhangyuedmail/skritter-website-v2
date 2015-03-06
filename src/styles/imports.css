@@ -1,0 +1,246 @@
+/*** GLOBAL ***/
+body {
+    background: url('../assets/backgrounds/retina-wood.png') repeat;
+    font-family: "Muli", "Helvetica Neue";
+}
+.content-block { border-radius: 25px; }
+.flip-180 {
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.text-chinese { font-family: "Muli", "Helvetica Neue"; }
+.text-japanese { font-family: "Muli", "Helvetica Neue"; }
+.text-pinyin { font-family: "Arial Unicode MS"; }
+@media (min-width: 1300px) {
+    .container {
+        padding-left: 0;
+        padding-right: 0;
+        width: 1280px;
+    }
+}
+
+
+/*** COMPONENT: PROMPT ***/
+.gelato-component.prompt {
+    position: relative;
+    width: 1280px;
+}
+.gelato-component.prompt .canvas-section {
+    background-color: #FBFAFC;
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+    float: left;
+    height: 100%;
+    position: relative;
+    width: 50%;
+}
+.gelato-component.prompt .content-block {
+    height: 640px;
+    padding: 0;
+}
+.gelato-component.prompt .detail-section {
+    background-color: #F3F2F6;
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    float: left;
+    height: 100%;
+    margin-top: 0;
+    position: relative;
+    width: 50%;
+}
+.gelato-component.prompt .vocab-new {
+    background-image: url('../assets/vectors/study-new-character.svg');
+    display: none;
+    height: 114px;
+    position: absolute;
+    width: 114px;
+}
+.gelato-component.prompt .writing-canvas-container { margin: 0 auto; }
+
+
+/*** COMPONENT: PROMPT DETAIL ***/
+.gelato-component.prompt-detail {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.gelato-component.prompt-detail .detail-field {
+    color: #666C73;
+    font-size: 13px;
+    font-weight: 300;
+}
+.gelato-component.prompt-detail .detail-header {
+    color: #8C9196;
+    font-size: 16px;
+    font-weight: 600;
+}
+.gelato-component.prompt-detail .detail-row { margin-top: 30px; }
+.gelato-component.prompt-detail .vocab-reading {
+    color: #8C9196;
+    font-size: 24px;
+}
+.gelato-component.prompt-detail .vocab-style { color: #B2B5B9; }
+.gelato-component.prompt-detail .vocab-sentence { font-size: 26px; }
+.gelato-component.prompt-detail .vocab-writing { font-size: 54px; }
+.gelato-component.prompt-detail .vocab-writing > div {
+    display: inline-block;
+    margin-right: 5px;
+    text-align: center;
+    width: 66px;
+}
+.gelato-component.prompt-detail .vocab-writing > div.mask { background-color: #EBEAF0; }
+.gelato-component.prompt-detail .vocab-writing > div.mask span { visibility: hidden; }
+.gelato-component.prompt-detail .vocab-writing > div.active { background-color: #ffffff; }
+
+
+/*** COMPONENT: PROMPT GRADING ***/
+.gelato-component.prompt-grading {
+    bottom: 100px;
+    color: #B2B5B9;
+    left: 95px;
+    position: absolute;
+}
+.gelato-component.prompt-grading > div {
+    float: left;
+    margin-right: 85px;
+}
+.gelato-component.prompt-grading .grading-value { font-size: 36px; }
+.gelato-component.prompt-grading .grading-text { font-size: 16px; }
+
+
+/*** COMPONENT: PROMPT NAVIGATION ***/
+.gelato-component.prompt-navigation > div {
+    height: 64px;
+    position: absolute;
+    width: 35px;
+}
+.gelato-component.prompt-navigation .navigate-previous {
+    background-image: url('../assets/vectors/study-light-previous.svg');
+    left: 30px;
+    top: 190px;
+}
+.gelato-component.prompt-navigation .navigate-next {
+    background-image: url('../assets/vectors/study-light-next.svg');
+    right: 30px;
+    top: 190px;
+}
+
+
+/*** COMPONENT: PROMPT TOOLBAR ***/
+.gelato-component.prompt-toolbar {
+    bottom: 35px;
+    left: 95px;
+    position: absolute;
+}
+.gelato-component.prompt-toolbar > div { float: left; }
+.gelato-component.prompt-toolbar .option-stroke-order {
+    background-image: url('../assets/vectors/study-stroke-order.svg');
+    height: 50px;
+    margin-right: 75px;
+    width: 52px;
+}
+.gelato-component.prompt-toolbar .option-eraser {
+    background-image: url('../assets/vectors/study-erase.svg');
+    height: 48px;
+    margin-right: 75px;
+    width: 44px;
+}
+.gelato-component.prompt-toolbar .option-reveal {
+    background-image: url('../assets/vectors/study-show.svg');
+    height: 34px;
+    margin-right: 80px;
+    margin-top: 10px;
+    width: 58px;
+}
+.gelato-component.prompt-toolbar .option-correct {
+    background-image: url('../assets/vectors/study-correct.svg');
+    height: 44px;
+    margin-top: 5px;
+    width: 58px;
+}
+
+
+/*** COMPONENT: STUDY TOOLBAR ***/
+.gelato-component.study-toolbar { position: relative; }
+.gelato-component.study-toolbar > div {
+    color: #714918;
+    display: inline-block;
+    font-size: 24px;
+    position: absolute;
+    top: 30px;
+}
+.gelato-component.study-toolbar .display-due { left: 15%; }
+.gelato-component.study-toolbar .display-timer { left: 50%; }
+.gelato-component.study-toolbar .option-add {
+    background-image: url('../assets/vectors/study-light-add-word.svg');
+    height: 28px;
+    left: 35%;
+    width: 28px;
+}
+.gelato-component.study-toolbar .option-collapse {
+    background-image: url('../assets/vectors/study-light-collapse-nav.svg');
+    height: 31px;
+    left: 30px;
+    width: 31px;
+}
+.gelato-component.study-toolbar .option-lists {
+    background-image: url('../assets/vectors/study-light-list.svg');
+    height: 28px;
+    right: 100px;
+    width: 32px;
+}
+.gelato-component.study-toolbar .option-settings {
+    background-image: url('../assets/vectors/study-light-settings.svg');
+    height: 30px;
+    right: 30px;
+    width: 30px;
+}
+
+
+/*** GELATO: NAVBAR ***/
+.gelato-navbar .navbar-default {
+    background-color: #38240C;
+    border: none;
+    font-size: 18px;
+}
+.gelato-navbar .navbar-default .navbar-brand {
+    color: #FBFAFC;
+    font-size: 24px;
+}
+.gelato-navbar .navbar-default .navbar-brand i { margin-top: -3px; }
+.gelato-navbar .navbar-default .navbar-brand i:hover { color: #DCBF88; }
+.gelato-navbar .navbar-default .navbar-nav > li > a { color: #FBFAFC; }
+.gelato-navbar .navbar-default .navbar-nav > li > a:hover { color: #DCBF88; }
+.gelato-navbar .navbar-default .navbar-toggle { border: none; }
+.gelato-navbar .navbar-default .navbar-toggle.active {
+    background-color: transparent;
+    transform: rotate(180deg);
+    transition: all 0.5s ease;
+}
+.gelato-navbar .navbar-default .navbar-toggle.active .icon-bar { background-color: #DCBF88; }
+.gelato-navbar .navbar-default .navbar-toggle .icon-bar { background-color: #FBFAFC; }
+
+
+/*** GELATO: SIDEBAR ***/
+.gelato-sidebar { margin-top: 0; }
+
+
+/*** PAGES: LOGIN ***/
+.gelato-page.login .gelato-content {
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+
+/*** PAGES: SCRATCHPAD ***/
+.gelato-page.scratchpad .toolbar-container {
+    height: 72px;
+}
+
+
+/*** PAGES: STUDY ***/
+.gelato-page.study .toolbar-container {
+    height: 72px;
+}

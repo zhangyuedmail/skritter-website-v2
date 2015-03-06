@@ -1,0 +1,31 @@
+<div class="gelato-page scratchpad">
+
+    <!-- NAVBAR: MAIN -->
+    <div id="navbar-main" class="gelato-navbar">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"><i class="fa fa-arrow-left"></i></a>
+                    <strong class="navbar-brand text-uppercase">{{scratchpad.title}}</strong>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- SIDEBAR: MAIN -->
+    <div id="sidebar-main" class="gelato-sidebar left collapsed">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a class="navigate" data-url="#" href="#"><i class="fa fa-dashboard"></i>{{navbar.dashboard}}</a></li>
+            <li><a class="navigate" data-url="lists" href="#"><i class="fa fa-list"></i>{{navbar.lists}}</a></li>
+            <li><a class="navigate" data-url="words" href="#"><i class="fa fa-book"></i>{{navbar.words}}</a></li>
+            <li><a class="navigate" data-url="stats" href="#"><i class="fa fa-line-chart"></i>{{navbar.stats}}</a></li>
+        </ul>
+    </div>
+
+    <!-- CONTENT: MAIN -->
+    <div id="content-main" class="gelato-content container">
+        <div class="toolbar-container"></div>
+        <div class="prompt-container"></div>
+    </div>
+
+</div>

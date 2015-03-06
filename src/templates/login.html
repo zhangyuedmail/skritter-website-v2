@@ -1,0 +1,51 @@
+<div class="gelato-page login">
+
+    <!-- NAVBAR: MAIN -->
+    <div id="navbar-main" class="gelato-navbar">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"><i class="fa fa-arrow-left"></i></a>
+                    <strong class="navbar-brand text-uppercase">{{login.title}}</strong>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- DIALOG: LOADING-LOGIN --->
+    <div id="loading-login" class="gelato-dialog">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="example1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <img src="assets/ajax-loader.gif" alt="" width="75">
+                        <h4>{{dialog.loading-login-items}} - <span class="loaded-items">0</span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT: MAIN -->
+    <div id="content-main" class="gelato-content container">
+        <div class="content-block">
+            <div class="response-message"></div>
+            <div class="login-form">
+                <form>
+                    <div class="form-group">
+                        <label for="field-username">Username</label>
+                        <input type="text" class="form-control" id="field-username" placeholder="{{login.placeholder-username}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="field-password">Password</label>
+                        <input type="password" class="form-control" id="field-password" placeholder="{{login.placeholder-password}}">
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary" id="login-submit">{{login.button-login}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

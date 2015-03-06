@@ -1,8 +1,0 @@
-# Directories #
-.idea/
-build/**/
-node_modules/
-nbproject/
-
-# Files #
-npm-debug.log

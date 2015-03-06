@@ -1,0 +1,17 @@
+.gelato-component.prompt-grading {
+
+  bottom: 100px;
+  color: #B2B5B9;
+  left: 95px;
+  position: absolute;
+
+  > div {
+    float: left;
+    margin-right: 85px;
+  }
+
+  .grading-value { font-size: 36px; }
+
+  .grading-text { font-size: 16px; }
+
+}

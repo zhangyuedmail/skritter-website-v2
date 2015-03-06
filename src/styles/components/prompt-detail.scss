@@ -1,0 +1,44 @@
+.gelato-component.prompt-detail {
+
+  padding-left: 30px;
+  padding-right: 30px;
+
+  .detail-field {
+    color: #666C73;
+    font-size: 13px;
+    font-weight: 300;
+  }
+  
+  .detail-header {
+    color: #8C9196;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .detail-row { margin-top: 30px; }
+  
+  .vocab-reading {
+    color: #8C9196;
+    font-size: 24px;
+  }
+  
+  .vocab-style { color: #B2B5B9; }
+  
+  .vocab-sentence { font-size: 26px; }
+  
+  .vocab-writing { font-size: 54px; }
+  
+  .vocab-writing > div {
+    display: inline-block;
+    margin-right: 5px;
+    text-align: center;
+    width: 66px;
+  }
+  
+  .vocab-writing > div.mask { background-color: #EBEAF0; }
+  
+  .vocab-writing > div.mask span { visibility: hidden; }
+  
+  .vocab-writing > div.active { background-color: #ffffff; }
+  
+}
