@@ -50,20 +50,74 @@ define([
             return this;
         },
         /**
-         * @method renderCharacter
+         * @method renderPrompt
          * @returns {Prompt}
          */
-        renderCharacter: function() {
+        renderPrompt: function() {
+            this.detail.renderFields();
+            switch (this.part) {
+                case 'defn':
+                    this.renderPromptDefn();
+                    break;
+                case 'rdng':
+                    this.renderPromptRdng();
+                    break;
+                case 'rune':
+                    this.renderPromptRune();
+                    break;
+                case 'tone':
+                    this.renderPromptTone();
+                    break;
+            }
+            return this;
+        },
+        /**
+         * @method renderPromptDefn
+         * @returns {Prompt}
+         */
+        renderPromptDefn: function() {
+            this.canvas.hide();
+            this.detail.showCharacters();
+            this.detail.showReading();
+            return this;
+        },
+        /**
+         * @method renderPromptRdng
+         * @returns {Prompt}
+         */
+        renderPromptRdng: function() {
+            this.canvas.hide();
+            this.detail.showCharacters();
+            this.detail.hideReading();
+            return this;
+        },
+        /**
+         * @method renderPromptRune
+         * @returns {Prompt}
+         */
+        renderPromptRune: function() {
+            this.canvas.show();
             this.canvas.reset();
+            this.detail.showReading();
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
-                this.detail.showCharacter();
+                this.detail.showCharacters();
             } else {
                 this.canvas.enableInput();
-                this.detail.hideCharacter();
+                this.detail.hideCharacters();
             }
             this.canvas.drawShape('surface-background1', this.character().getShape());
             this.detail.selectCharacter();
+            return this;
+        },
+        /**
+         * @method renderPromptTone
+         * @returns {Prompt}
+         */
+        renderPromptTone: function() {
+            this.canvas.show();
+            this.detail.showCharacters();
+            this.detail.showReading();
             return this;
         },
         /**
@@ -118,10 +172,11 @@ define([
          */
         next: function() {
             if (this.isLast()) {
+                console.log('Prompt complete!');
                 this.trigger('prompt:complete');
             } else {
                 this.position++;
-                this.renderCharacter();
+                this.renderPrompt();
             }
             return this;
         },
@@ -134,7 +189,7 @@ define([
                 console.log('No going back!');
             } else {
                 this.position--;
-                this.renderCharacter();
+                this.renderPrompt();
             }
             return this;
         },
@@ -148,7 +203,7 @@ define([
             this.grading.remove();
             this.navigation.remove();
             this.toolbar.remove();
-            return GelatoView.prototype.remove.call(this);
+            return GelatoComponent.prototype.remove.call(this);
         },
         /**
          * @method resize
@@ -166,12 +221,12 @@ define([
          * @returns {Prompt}
          */
         set: function(vocab, part, isNew) {
-            this.characters = vocab.getCanvasCharacters();
+            console.log('PROMPT:', vocab.id, part, vocab);
+            this.characters = part === 'rune' ? vocab.getCanvasCharacters() : [];
             this.part = part;
             this.vocab = vocab;
-            this.detail.renderFields();
             this.setNewBanner(isNew);
-            this.renderCharacter();
+            this.renderPrompt();
             this.resize();
             return this;
         },

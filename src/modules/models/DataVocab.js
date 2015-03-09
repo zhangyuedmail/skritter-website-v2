@@ -74,6 +74,47 @@ define([
             return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');
         },
         /**
+         * @method getReadingElement
+         * @returns {String}
+         */
+        getReadingElement: function() {
+            var element = '';
+            //TODO: handle fillers for both languages
+            //var fillers = [" ... ", "'", " "];
+            var variations = this.getSegmentedReading();
+            for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
+                var variation = variations[a];
+                for (var b = 0, lengthB = variation.length; b < lengthB; b++) {
+                    var reading = variation[b];
+                    var readingMarks = app.fn.pinyin.toTone(reading);
+                    var readingToneless = reading.replace(/[1-5]/g, '');
+                    var position = b + 1;
+                    element += "<div id='reading-position-" + position + "' class='cursor mask'>";
+                    element += "<span class='pinyin-marks'>" + readingMarks + "</span>";
+                    element += "<span class='pinyin-toneless hidden'>" + readingToneless + "</span>";
+                    element += "</div>"
+                }
+            }
+            return element;
+        },
+        /**
+         * @method getSegmentedReading
+         * @returns {Array}
+         */
+        getSegmentedReading: function() {
+            var segments = [];
+            if (this.isChinese()) {
+                var variations = this.get('reading').split(', ');
+                for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
+                    var variation = variations[a];
+                    segments.push(variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g));
+                }
+            } else {
+                //TODO: properly segment Japanese
+            }
+            return segments;
+        },
+        /**
          * @method getStrokes
          * @param {Array}
          */

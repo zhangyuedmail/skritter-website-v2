@@ -43,7 +43,7 @@ define([
                 this.$('.vocab-writing').addClass('text-japanese');
             }
             this.$('.vocab-definition').html(this.prompt.vocab.getDefinition());
-            this.$('.vocab-reading').html(this.prompt.vocab.getReading());
+            this.$('.vocab-reading').html(this.prompt.vocab.getReadingElement());
             this.$('.vocab-style').html(this.prompt.vocab.get('style'));
             this.$('.vocab-writing').html(this.prompt.vocab.getWritingElement());
             return this;
@@ -62,18 +62,39 @@ define([
         handleClickVocabWriting: function(event) {
             event.preventDefault();
             var target = event.currentTarget;
-            var position = parseInt(target.id.replace('writing-position-', ''), 10);
-            if (position !== this.prompt.position) {
-                this.prompt.position = position;
-                this.prompt.renderCharacter();
+            if (this.prompt.part === 'rune') {
+                var position = parseInt(target.id.replace('writing-position-', ''), 10);
+                if (position !== this.prompt.position) {
+                    this.prompt.position = position;
+                    this.prompt.renderPrompt();
+                }
             }
+            if (this.prompt.part === 'tone') {}
         },
         /**
-         * @method hideCharacter
+         * @method hideCharacters
          * @returns {PromptDetail}
          */
-        hideCharacter: function() {
-            this.$('#writing-position-' + this.prompt.position).addClass('mask');
+        hideCharacters: function() {
+            if (this.prompt.part === 'rune') {
+                this.$('#writing-position-' + this.prompt.position).addClass('mask');
+            } else {
+                this.$('.vocab-writing > div').addClass('mask');
+            }
+            return this;
+        },
+        /**
+         * @method hideReading
+         * @param {Object} [options]
+         * @returns {PromptDetail}
+         */
+        hideReading: function(options) {
+            options = options || {};
+            if (this.prompt.part === 'rdng') {
+                this.$('#reading-position-' + this.prompt.position).addClass('mask');
+            } else {
+                this.$('.vocab-reading > div').addClass('mask');
+            }
             return this;
         },
         /**
@@ -93,12 +114,29 @@ define([
             return this;
         },
         /**
-         * @method showCharacter
+         * @method showCharacters
          * @returns {PromptDetail}
          */
-        showCharacter: function() {
-            this.$('#writing-position-' + this.prompt.position).removeClass('mask');
+        showCharacters: function() {
+            if (this.prompt.part === 'rune') {
+                this.$('#writing-position-' + this.prompt.position).removeClass('mask');
+            } else {
+                this.$('.vocab-writing > div').removeClass('mask');
+            }
             return this;
+        },
+        /**
+         * @method showReading
+         * @param {Object} [options]
+         * @returns {PromptDetail}
+         */
+        showReading: function(options) {
+            options = options || {};
+            if (this.prompt.part === 'rdng') {
+                this.$('#reading-position-' + this.prompt.position).removeClass('mask');
+            } else {
+                this.$('.vocab-reading > div').removeClass('mask');
+            }
         }
     });
 

@@ -11,7 +11,7 @@ define([
      * @class StudyToolbar
      * @extends GelatoComponent
      */
-    var StudyToolbar = GelatoView.extend({
+    var StudyToolbar = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
