@@ -34,6 +34,7 @@ define([
             this.renderTemplate(Template);
             this.prompt.setElement(this.$('.prompt-container'));
             this.prompt.hide().render();
+            this.prompt.grading.hide();
             return this;
         },
         /**
@@ -52,6 +53,7 @@ define([
             var self = this;
             app.user.data.vocabs.fetchByQuery(writing, function(vocab) {
                 self.vocab = vocab;
+
                 self.renderPrompt();
             }, function(error) {
                 console.error(error);
