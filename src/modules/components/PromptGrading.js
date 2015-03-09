@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/prompt-grading.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class PromptGrading
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var PromptGrading = GelatoView.extend({
+    var PromptGrading = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -34,30 +34,7 @@ define([
          * @property events
          * @type Object
          */
-        events: {},
-        /**
-         * @method hide
-         * @returns {PromptGrading}
-         */
-        hide: function() {
-            this.$el.hide();
-            return this;
-        },
-        /**
-         * @method resize
-         * @returns {PromptGrading}
-         */
-        resize: function() {
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {PromptGrading}
-         */
-        show: function() {
-            this.$el.show();
-            return this;
-        }
+        events: {}
     });
 
     return PromptGrading;

@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/prompt-detail.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class PromptDetail
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var PromptDetail = GelatoView.extend({
+    var PromptDetail = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -69,14 +69,6 @@ define([
             }
         },
         /**
-         * @method hide
-         * @returns {PromptDetail}
-         */
-        hide: function() {
-            this.$el.hide();
-            return this;
-        },
-        /**
          * @method hideCharacter
          * @returns {PromptDetail}
          */
@@ -98,14 +90,6 @@ define([
         selectCharacter: function() {
             this.$('.vocab-writing > div').removeClass('active');
             this.$('#writing-position-' + this.prompt.position).addClass('active');
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {PromptDetail}
-         */
-        show: function() {
-            this.$el.show();
             return this;
         },
         /**

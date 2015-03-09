@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/writing-canvas.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class WritingCanvas
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var WritingCanvas = GelatoView.extend({
+    var WritingCanvas = GelatoComponent.extend({
         /**
          * @method initialize
          * @constructor
@@ -246,14 +246,6 @@ define([
             return this.size;
         },
         /**
-         * @method hide
-         * @returns {WritingCanvas}
-         */
-        hide: function() {
-            this.$el.hide();
-            return this;
-        },
-        /**
          * @method injectColor
          * @param {createjs.Container|createjs.Shape} object
          * @param {String} color
@@ -310,14 +302,6 @@ define([
          */
         setLayerColor: function(layerName, color) {
             this.injectColor(this.getLayer(layerName), color);
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {WritingCanvas}
-         */
-        show: function() {
-            this.$el.show();
             return this;
         },
         /**

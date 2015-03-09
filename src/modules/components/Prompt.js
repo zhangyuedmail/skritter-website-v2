@@ -4,19 +4,19 @@
  */
 define([
     'require.text!templates/components/prompt.html',
-    'core/modules/GelatoView',
+    'core/modules/GelatoComponent',
     'modules/components/PromptDetail',
     'modules/components/PromptGrading',
     'modules/components/PromptNavigation',
     'modules/components/PromptToolbar',
     'modules/components/WritingCanvas'
-], function(Template, GelatoView, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
+], function(Template, GelatoComponent, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
 
     /**
      * @class Prompt
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var Prompt = GelatoView.extend({
+    var Prompt = GelatoComponent.extend({
         /**
          * @method initialize
          * @constructor
@@ -97,14 +97,6 @@ define([
                 this.canvas.disableInput();
                 this.detail.showCharacter();
             }
-        },
-        /**
-         * @method hide
-         * @returns {Prompt}
-         */
-        hide: function() {
-            this.$el.hide();
-            return this;
         },
         /**
          * @method isFirst
@@ -194,14 +186,6 @@ define([
             } else {
                 this.$('.vocab-new').hide();
             }
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {Prompt}
-         */
-        show: function() {
-            this.$el.show();
             return this;
         }
     });

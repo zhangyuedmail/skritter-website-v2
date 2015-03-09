@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/prompt-toolbar.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class PromptToolbar
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var PromptToolbar = GelatoView.extend({
+    var PromptToolbar = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -58,26 +58,10 @@ define([
             this.prompt.canvas.drawShape('surface-background2', shape, {color: '#b3b3b3'});
         },
         /**
-         * @method hide
-         * @returns {PromptToolbar}
-         */
-        hide: function() {
-            this.$el.hide();
-            return this;
-        },
-        /**
          * @method resize
          * @returns {PromptToolbar}
          */
         resize: function() {
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {PromptToolbar}
-         */
-        show: function() {
-            this.$el.show();
             return this;
         }
     });

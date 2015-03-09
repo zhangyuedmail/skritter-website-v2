@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/prompt-navigation.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class PromptNavigation
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var PromptNavigation = GelatoView.extend({
+    var PromptNavigation = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -55,15 +55,6 @@ define([
             this.prompt.previous();
         },
         /**
-         * @method hide
-         * @returns {PromptNavigation}
-         */
-        hide: function() {
-            this.hideNext();
-            this.hidePrevious();
-            return this;
-        },
-        /**
          * @method hideNext
          * @returns {PromptNavigation}
          */
@@ -84,15 +75,6 @@ define([
          * @returns {PromptNavigation}
          */
         resize: function() {
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {PromptNavigation}
-         */
-        show: function() {
-            this.showNext();
-            this.showPrevious();
             return this;
         },
         /**
