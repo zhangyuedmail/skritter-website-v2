@@ -82,6 +82,7 @@ $sand8: #584c36;
 $sand9: #2c261b;
 
 
+/*** GLOBAL ***/
 body {
     background: $background repeat;
     font-family: $font-primary;
@@ -95,8 +96,41 @@ body {
     }
 }
 
+
+/*** BOOTSTRAP NAVBAR ***/
+.navbar-default {
+    background-color: #38240C;
+    border: none;
+    font-size: 18px;
+}
+.navbar-default .navbar-brand {
+    color: #FBFAFC;
+    font-size: 24px;
+}
+.navbar-default .navbar-brand i { margin-top: -3px; }
+.navbar-default .navbar-brand:hover { color: $sand5; }
+.navbar-default .navbar-nav > li > a { color: $white1; }
+.navbar-default .navbar-nav > li > a:hover { color: $sand5; }
+.navbar-default .navbar-toggle { border: none; }
+.navbar-default .navbar-toggle.active {
+    background-color: transparent;
+    transform: rotate(180deg);
+    transition: all 0.5s ease;
+}
+.navbar-default .navbar-toggle.active .icon-bar { background-color: $sand5; }
+.navbar-default .navbar-toggle .icon-bar { background-color: $white1; }
+
+
+/*** COMPONENTS ***/
 @import "components/prompt";
 @import "components/prompt-detail";
 @import "components/prompt-grading";
 @import "components/prompt-navigation";
 @import "components/prompt-toolbar";
+@import "components/study-toolbar";
+
+
+/*** PAGES ***/
+@import "pages/login";
+@import "pages/scratchpad";
+@import "pages/study";

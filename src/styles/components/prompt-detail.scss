@@ -21,6 +21,19 @@
     color: #8C9196;
     font-size: 24px;
   }
+
+  .vocab-reading > div {
+    display: inline-block;
+    margin-right: 5px;
+    text-align: center;
+    max-width: 100px;
+  }
+
+  .vocab-reading > div.mask { background-color: #EBEAF0; }
+
+  .vocab-reading > div.mask span { visibility: hidden; }
+
+  .vocab-reading > div.active { background-color: #ffffff; }
   
   .vocab-style { color: #B2B5B9; }
   

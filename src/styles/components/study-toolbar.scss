@@ -1,0 +1,45 @@
+.gelato-component.study-toolbar {
+
+  position: relative;
+
+  > div {
+    color: $wood6;
+    display: inline-block;
+    font-size: 24px;
+    position: absolute;
+    top: 30px;
+  }
+
+  .display-due { left: 15%; }
+
+  .display-timer { left: 50%; }
+
+  .option-add {
+    background-image: url('#{$dir-assets}/vectors/study-light-add-word.svg');
+    height: 28px;
+    left: 35%;
+    width: 28px;
+  }
+
+  .option-collapse {
+    background-image: url('#{$dir-assets}/vectors/study-light-collapse-nav.svg');
+    height: 31px;
+    left: 30px;
+    width: 31px;
+  }
+
+  .option-lists {
+    background-image: url('#{$dir-assets}/vectors/study-light-list.svg');
+    height: 28px;
+    right: 100px;
+    width: 32px;
+  }
+
+  .option-settings {
+    background-image: url('#{$dir-assets}/vectors/study-light-settings.svg');
+    height: 30px;
+    right: 30px;
+    width: 30px;
+  }
+
+}
