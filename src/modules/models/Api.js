@@ -174,10 +174,6 @@ define([
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     delete data.statusCode;
-                    if (data.ContainedItems) {
-                        data.Items = data.Items.concat(data.ContainedItems);
-                        delete data.ContainedItems;
-                    }
                     callbackSuccess(data);
                 } else {
                     callbackError(data);

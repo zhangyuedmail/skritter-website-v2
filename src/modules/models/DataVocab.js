@@ -92,7 +92,7 @@ define([
                     element += "<div id='reading-position-" + position + "' class='cursor mask'>";
                     element += "<span class='pinyin-marks'>" + readingMarks + "</span>";
                     element += "<span class='pinyin-toneless hidden'>" + readingToneless + "</span>";
-                    element += "</div>"
+                    element += "</div>";
                 }
             }
             return element;
