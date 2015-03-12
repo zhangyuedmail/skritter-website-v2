@@ -1,0 +1,66 @@
+.gelato-page.list-browse {
+
+  color: $grey5;
+  font-size: 16px;
+
+  .column {
+    height: 100%;
+    float: left;
+    padding: 55px 40px;
+  }
+
+  .content-column {
+    background-color: $white1;
+    padding: 0;
+    width: 80%;
+  }
+
+  .content-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+  }
+
+  .content-row {
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 15px;
+  }
+
+  .menu-column {
+    background-color: $white3;
+    min-width: 200px;
+    padding: 45px 40px;
+    width: 20%;
+  }
+
+  .menu-column .button-create-list {
+    height: 50px;
+    margin-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .menu-row {
+    color: $grey3;
+    font-weight: 300;
+    margin-bottom: 20px
+  }
+
+  .menu-row.active, .menu-row:hover {
+    color: $grey5;
+    font-weight: bold;
+  }
+
+  .table-viewer {
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .table-viewer td { border: none; }
+
+  .table-viewer .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: $white2;
+  }
+
+}
