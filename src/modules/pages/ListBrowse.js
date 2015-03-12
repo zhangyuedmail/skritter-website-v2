@@ -34,7 +34,6 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.table.setElement(this.$('.browse-container')).render();
-            this.table.addClass('table-striped');
             return this;
         },
         /**

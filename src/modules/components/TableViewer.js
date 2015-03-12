@@ -126,6 +126,21 @@ define([
         showSearchBar: function() {
             this.$('.search-bar').show();
             return this;
+        },
+        /**
+         * @method sortBy
+         * @param {String} fieldName
+         * @param {Boolean} [descending]
+         */
+        sortBy: function(fieldName, descending) {
+            this.rows = _.sortBy(this.rows, function(list) {
+                return list.get(fieldName);
+            });
+            if (descending) {
+                this.rows.reverse();
+            }
+            this.renderTable();
+            return this;
         }
     });
 
