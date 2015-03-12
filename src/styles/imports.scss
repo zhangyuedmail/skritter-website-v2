@@ -97,7 +97,22 @@ body {
 }
 
 
-/*** BOOTSTRAP NAVBAR ***/
+/*** BOOTSTRAP: BUTTONS ***/
+.btn {
+  border-radius: 25px;
+  font-size: 16px;
+}
+.btn.btn-success {
+  background-color: $green5;
+  border-color: $green5;
+}
+.btn.btn-success:hover {
+  background-color: $green6;
+  border-color: $green6;
+}
+
+
+/*** BOOTSTRAP: NAVBAR ***/
 .navbar-default {
     background-color: #38240C;
     border: none;
@@ -131,6 +146,7 @@ body {
 
 
 /*** PAGES ***/
+@import "pages/list-studying";
 @import "pages/login";
 @import "pages/scratchpad";
 @import "pages/study";

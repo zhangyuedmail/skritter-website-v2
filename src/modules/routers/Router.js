@@ -5,7 +5,7 @@
 define([
     'core/modules/GelatoRouter',
     'modules/pages/Dashboard',
-    'modules/pages/Lists',
+    'modules/pages/ListStudying',
     'modules/pages/Login',
     'modules/pages/Home',
     'modules/pages/Scratchpad',
@@ -15,7 +15,7 @@ define([
 ], function(
     GelatoRouter,
     PageDashboard,
-    PageLists,
+    PageListStudying,
     PageLogin,
     PageHome,
     PageScratchpad,
@@ -34,7 +34,7 @@ define([
          * @type Object
          */
         routes: {
-            'lists': 'showLists',
+            'lists/studying': 'showListStudying',
             'login': 'showLogin',
             'logout': 'handleLogout',
             'scratchpad': 'showScratchpad',
@@ -69,9 +69,9 @@ define([
         /**
          * @method showLists
          */
-        showLists: function() {
-            this.activePage = new PageLists();
-            this.activePage.render();
+        showListStudying: function() {
+            this.activePage = new PageListStudying();
+            this.activePage.render().load();
         },
         /**
          * @method showLogin

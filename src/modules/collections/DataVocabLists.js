@@ -27,9 +27,10 @@ define([
         model: DataVocabList,
         /**
          * @method
-         * @param {Function} callback
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        fetch: function(callback) {
+        fetch: function(callbackSuccess, callbackError) {
             var self = this;
             (function next(cursor) {
                 app.api.fetchVocabLists({
@@ -41,12 +42,30 @@ define([
                     if (result.cursor) {
                         next(result.cursor);
                     } else {
-                        callback();
+                        callbackSuccess(self);
                     }
                 }, function(error) {
-                    callback(error);
+                    callbackError(error);
                 });
             })();
+        },
+        /**
+         * @method getByAdding
+         * @returns {Array}
+         */
+        getByAdding: function() {
+            return this.filter(function(list) {
+                return list.get('studyingMode') === 'adding';
+            });
+        },
+        /**
+         * @method getByReviewing
+         * @returns {Array}
+         */
+        getByReviewing: function() {
+            return this.filter(function(list) {
+                return list.get('studyingMode') === 'reviewing';
+            });
         }
     });
 
