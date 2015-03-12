@@ -44,7 +44,12 @@ define([
             //head section
             tableHead += "<tr>";
             for (var head in this.fields) {
-                tableHead += "<th>" + this.fields[head] + "</th>";
+                var value = this.fields[head];
+                if (typeof value === 'object') {
+                    tableHead += "<th>" + value.head + "</th>";
+                } else {
+                    tableHead += "<th>" + value + "</th>";
+                }
             }
             tableHead += "</tr>";
             //body section
@@ -52,12 +57,19 @@ define([
                 var row = this.rows[i];
                 tableBody += "<tr id='row-" + row.id + "'>";
                 for (var fieldName in this.fields) {
-                    var fieldValue = row[fieldName];
+                    var fieldValue = row.get(fieldName) || this.fields[fieldName];
                     tableBody += "<td class='field-" + fieldName + "'>";
-                    tableBody += fieldValue;
+                    if (typeof fieldValue === 'object') {
+                        tableBody += fieldValue.body;
+                    } else {
+                        tableBody += fieldValue;
+                    }
                     tableBody += "</td>";
                 }
                 tableBody += "</tr>";
+            }
+            if (this.options.hideHead) {
+                this.$('table thead').hide();
             }
             this.$('table tbody').html(tableBody);
             this.$('table thead').html(tableHead);
@@ -78,14 +90,24 @@ define([
             return this;
         },
         /**
+         * @method hideSearchBar
+         * @returns {TableViewer}
+         */
+        hideSearchBar: function() {
+            this.$('.search-bar').hide();
+            return this;
+        },
+        /**
          * @method load
          * @param {Array} rows
          * @param {Object} fields
+         * @param {Object} [options]
          * @returns {TableViewer}
          */
-        load: function(rows, fields) {
+        load: function(rows, fields, options) {
             this.data = rows;
             this.fields = fields;
+            this.options = options || {};
             this.rows = rows;
             this.renderTable();
             return this;
@@ -95,6 +117,14 @@ define([
          * @returns {TableViewer}
          */
         resize: function() {
+            return this;
+        },
+        /**
+         * @method showSearchBar
+         * @returns {TableViewer}
+         */
+        showSearchBar: function() {
+            this.$('.search-bar').show();
             return this;
         }
     });
