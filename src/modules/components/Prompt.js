@@ -54,7 +54,6 @@ define([
          * @returns {Prompt}
          */
         renderPrompt: function() {
-            this.detail.renderFields();
             switch (this.part) {
                 case 'defn':
                     this.renderPromptDefn();
@@ -149,7 +148,8 @@ define([
             }
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
-                this.detail.showCharacter();
+                //TODO: fix issue with character reveal
+                this.detail.showCharacters();
             }
         },
         /**
@@ -225,6 +225,7 @@ define([
             this.characters = part === 'rune' ? vocab.getCanvasCharacters() : [];
             this.part = part;
             this.vocab = vocab;
+            this.detail.renderFields();
             this.setNewBanner(isNew);
             this.renderPrompt();
             this.resize();
