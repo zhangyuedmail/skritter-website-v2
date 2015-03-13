@@ -5,12 +5,13 @@
 define([
     'require.text!templates/components/prompt.html',
     'core/modules/GelatoComponent',
+    'modules/components/PromptCountdown',
     'modules/components/PromptDetail',
     'modules/components/PromptGrading',
     'modules/components/PromptNavigation',
     'modules/components/PromptToolbar',
     'modules/components/WritingCanvas'
-], function(Template, GelatoComponent, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
+], function(Template, GelatoComponent, PromptCountdown, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
 
     /**
      * @class Prompt
@@ -24,6 +25,7 @@ define([
         initialize: function() {
             this.characters = [];
             this.canvas = new WritingCanvas();
+            this.countdown = new PromptCountdown();
             this.detail = new PromptDetail({prompt: this});
             this.grading = new PromptGrading({prompt: this});
             this.navigation = new PromptNavigation({prompt: this});
@@ -42,6 +44,7 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.canvas.setElement('.writing-canvas-container').render();
+            this.countdown.setElement('.prompt-countdown-container').hide().render();
             this.detail.setElement(this.$('.prompt-detail-container')).render();
             this.grading.setElement(this.$('.prompt-grading-container')).render();
             this.navigation.setElement(this.$('.prompt-navigation-container')).render();
@@ -222,6 +225,7 @@ define([
          */
         set: function(vocab, part, isNew) {
             console.log('PROMPT:', vocab.id, part, vocab);
+            this.position = 1;
             this.characters = part === 'rune' ? vocab.getCanvasCharacters() : [];
             this.part = part;
             this.vocab = vocab;
