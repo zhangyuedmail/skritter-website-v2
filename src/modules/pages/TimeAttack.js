@@ -75,14 +75,15 @@ define([
          * @method getRandomVocabIds
          * @param {Object} list
          * @param {Number} number
+         * @param {Boolean} traditional
          * @returns {Array}
          */
-        getRandomVocabIds: function(list, number) {
+        getRandomVocabIds: function(list, number, traditional) {
             var randomIds = [];
             var listVocabIds = [];
             var rows = _.pluck(list.sections, 'rows');
             for (var a = 0, lengthA = rows.length; a < lengthA; a++) {
-                listVocabIds = listVocabIds.concat(_.pluck(rows[a], 'vocabId'));
+                listVocabIds = listVocabIds.concat(_.pluck(rows[a], traditional ? 'tradVocabId' : 'vocabId'));
             }
             for (var b = 0; b < number; b++) {
                 var randomIndex = Math.floor(Math.random() * (listVocabIds.length - 1) + 1);
@@ -116,7 +117,7 @@ define([
                     //fetch all rows and vocab ids from list
                     app.api.fetchVocabList(listId, null, function(list) {
                         self.list = list;
-                        self.randomIds = self.getRandomVocabIds(list, 10);
+                        self.randomIds = self.getRandomVocabIds(list, 5, false);
                         self.$('.list-name').text(list.name);
                         callback();
                     }, function(error) {

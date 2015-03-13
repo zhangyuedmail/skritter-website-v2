@@ -77,7 +77,6 @@ define([
          */
         hideCharacters: function() {
             if (this.prompt.part === 'rune') {
-                console.log('adding mask', this.prompt.position);
                 this.$('#writing-position-' + this.prompt.position).addClass('mask');
             } else {
                 this.$('.vocab-writing > div').addClass('mask');
@@ -120,7 +119,6 @@ define([
          */
         showCharacters: function() {
             if (this.prompt.part === 'rune') {
-                console.log('removing mask', this.prompt.position);
                 this.$('#writing-position-' + this.prompt.position).removeClass('mask');
             } else {
                 this.$('.vocab-writing > div').removeClass('mask');
