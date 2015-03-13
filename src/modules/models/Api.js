@@ -331,6 +331,36 @@ define([
             })();
         },
         /**
+         * @method fetchVocabList
+         * @param {String} listId
+         * @param {Object} [options]
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        fetchVocabList: function(listId, options, callbackSuccess, callbackError) {
+            options = options || {};
+            $.ajax({
+                url: this.getUrl() + 'vocablists/' + listId,
+                headers: this.getHeaders(),
+                context: self,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    fields: options.fields,
+                    sectionFields: options.sectionFields
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method fetchVocabLists
          * @param {Object} [options]
          * @param {Function} callbackSuccess
