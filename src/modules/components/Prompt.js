@@ -202,6 +202,7 @@ define([
          */
         remove: function() {
             this.canvas.remove();
+            this.countdown.remove();
             this.detail.remove();
             this.grading.remove();
             this.navigation.remove();
