@@ -55,7 +55,7 @@ define([
             //body section
             for (var i = 0, length = this.rows.length; i < length; i++) {
                 var row = this.rows[i];
-                tableBody += "<tr id='row-" + row.id + "'>";
+                tableBody += "<tr id='row-" + row.id + "' class='cursor'>";
                 for (var fieldName in this.fields) {
                     var fieldValue = row.get(fieldName) || this.fields[fieldName];
                     tableBody += "<td class='field-" + fieldName + "'>";

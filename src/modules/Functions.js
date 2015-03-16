@@ -163,6 +163,14 @@ define([
     }
 
     /**
+     * @method formatDate
+     * @param {Number} timestamp
+     */
+    function formatDate(timestamp) {
+        return Moment(timestamp * 1000).format('MMMM Do YYYY');
+    }
+
+    /**
      * @method getAngle
      * @param {Array|createjs.Point|Object} point1
      * @param {createjs.Point|Object} point2
@@ -431,6 +439,7 @@ define([
         calculateInterval: calculateInterval,
         convertTimeToClock: convertTimeToClock,
         convertBytesToSize: convertBytesToSize,
+        formatDate: formatDate,
         getAngle: getAngle,
         getBoundingRectangle: getBoundingRectangle,
         getDistance: getDistance,

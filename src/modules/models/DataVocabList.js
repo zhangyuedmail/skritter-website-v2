@@ -14,7 +14,19 @@ define([
          * @property idAttribute
          * @type String
          */
-        idAttribute: 'id'
+        idAttribute: 'id',
+        /**
+         * @method getWordCount
+         * @returns {Number}
+         */
+        getWordCount: function() {
+            var count = 0;
+            var rows = _.pluck(this.get('sections'), 'rows');
+            for (var i = 0, length = rows.length; i < length; i++) {
+                count += rows[i].length;
+            }
+            return count;
+        }
     });
 
     return DataVocabList;

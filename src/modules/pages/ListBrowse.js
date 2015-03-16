@@ -49,6 +49,22 @@ define([
             return this;
         },
         /**
+         * @property events
+         * @type Object
+         */
+        events: {
+            'vclick .table-viewer .field-name': 'handleClickTableFieldName'
+        },
+        /**
+         * @method handleClickTableFieldName
+         * @param {Event} event
+         */
+        handleClickTableFieldName: function(event) {
+            event.preventDefault();
+            var listId = $(event.currentTarget).parent().get(0).id.replace('row-', '');
+            app.router.navigate('lists/browse/' + listId, {trigger: true});
+        },
+        /**
          * @method load
          * @return {PageListBrowse}
          */
@@ -61,7 +77,8 @@ define([
                     sort: 'official'
                 }, function(result) {
                     self.lists.add(result.VocabLists);
-                    if (result.cursor) {
+                    //TODO: reverse cursor flash after testing
+                    if (!result.cursor) {
                         next(result.cursor);
                     } else {
                         self.renderTables();
