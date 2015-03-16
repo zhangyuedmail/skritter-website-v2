@@ -2128,12 +2128,61 @@ define([], function() {
     };
 
     /**
+     * @property syllables
+     * @type Object
+     */
+    var syllables = {
+        "ā":"a",
+        "á":"a",
+        "ǎ":"a",
+        "à":"a",
+        "ō":"o",
+        "ó":"o",
+        "ǒ":"o",
+        "ò":"o",
+        "ē":"e",
+        "é":"e",
+        "ě":"e",
+        "è":"e",
+        "ī":"i",
+        "í":"i",
+        "ǐ":"i",
+        "ì":"i",
+        "ū":"u",
+        "ú":"u",
+        "ǔ":"u",
+        "ù":"u",
+        "ǖ":"u",
+        "ǘ":"u",
+        "ǚ":"u",
+        "ǜ":"u",
+        "ü":"u",
+        "üē":"ue",
+        "üé":"ue",
+        "üě":"ue",
+        "üè":"ue",
+        "üā":"ua",
+        "üá":"ua",
+        "üǎ":"ua",
+        "üà":"ua"
+    };
+
+    /**
      * @method getData
      * @returns {Object}
      */
     function getData() {
         return data;
     }
+
+    function getPinyinArray() {
+        var pinyin = [];
+        for (var item in data) {
+            pinyin.push(data[item].pinyin);
+        }
+        return pinyin;
+    }
+
     /**
      * @method pinyinToTone
      * @param {String} text
@@ -2165,6 +2214,7 @@ define([], function() {
             return '';
         }
     }
+
     /**
      * @method pinyinToZhuyin
      * @param {String} text
@@ -2194,10 +2244,24 @@ define([], function() {
         }
     }
 
+    /**
+     * @method removeTones
+     * @param {String} text
+     * @return {String}
+     */
+    function removeTones(text) {
+        for (var syllable in syllables) {
+            var letter = syllables[syllable];
+            text = text.replace(syllable, letter);
+        }
+        return text;
+    }
+
     return {
         getData: getData,
         toTone: pinyinToTone,
-        toZhuyin: pinyinToZhuyin
+        toZhuyin: pinyinToZhuyin,
+        removeTones: removeTones
     };
 
 });
