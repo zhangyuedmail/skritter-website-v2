@@ -6,5 +6,6 @@ define([
     'createjs.easel',
     'createjs.tween',
     'd3',
-    'heatmap'
+    'heatmap',
+    'jquery.knob'
 ]);
