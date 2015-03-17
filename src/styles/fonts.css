@@ -1,4 +1,9 @@
 @font-face {
+    font-family: "Arial Unicode MS";
+    src: url("../fonts/Arialuni.ttf") format("truetype");
+}
+
+@font-face {
     font-family: "Muli";
     font-weight: 300;
     src: url("../fonts/Muli-Light.ttf") format("truetype");
@@ -20,10 +25,28 @@
     font-weight: 400;
     src: url("../fonts/Muli-Italic.ttf") format("truetype");
 }
+
 @font-face {
-    font-family: "Arial Unicode MS";
-    src: url("../fonts/Arialuni.ttf") format("truetype");
+    font-family: "Roboto Slab";
+    font-weight: 100;
+    src: url("../fonts/RobotoSlab-Thin.ttf") format("truetype");
 }
+@font-face {
+    font-family: "Roboto Slab";
+    font-weight: 300;
+    src: url("../fonts/RobotoSlab-Light.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Roboto Slab";
+    font-weight: 400;
+    src: url("../fonts/RobotoSlab-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Roboto Slab";
+    font-weight: 700;
+    src: url("../fonts/RobotoSlab-Bold.ttf") format("truetype");
+}
+
 /***
 TODO: add default chinese and japanese fonts
 @font-face {
