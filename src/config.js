@@ -1,13 +1,17 @@
 app.addFonts({
     custom: {
-        families: ['Arial Unicode MS', 'Muli'],
+        families: ['Arial Unicode MS', 'Muli', 'Roboto Slab'],
         urls: ['styles/fonts.css']
     }
 });
 
 app.addPaths({
     'createjs.easel': 'libraries/createjs.easel-NEXT.min',
-    'createjs.tween': 'libraries/createjs.tween-NEXT.min'
+    'createjs.tween': 'libraries/createjs.tween-NEXT.min',
+    'd3': 'libraries/d3-3.5.5.min',
+    'heatmap': 'libraries/heatmap-3.5.2.min'
 });
 
-app.addShim();
+app.addShim({
+    'heatmap': ['d3']
+});
