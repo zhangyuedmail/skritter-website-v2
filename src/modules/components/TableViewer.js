@@ -57,12 +57,18 @@ define([
                 var row = this.rows[i];
                 tableBody += "<tr id='row-" + row.id + "' class='cursor'>";
                 for (var fieldName in this.fields) {
-                    var fieldValue = row.get(fieldName) || this.fields[fieldName];
+                    var fieldValue = row instanceof Backbone.Model ? row.get(fieldName) : row[fieldName];
                     tableBody += "<td class='field-" + fieldName + "'>";
                     if (typeof fieldValue === 'object') {
                         tableBody += fieldValue.body;
                     } else {
-                        tableBody += fieldValue;
+                        if (fieldName === 'sectionStatus') {
+                            tableBody += '{status}';
+                        } else if (fieldName === 'sectionWordCount') {
+                            tableBody += row.rows.length + ' words';
+                        } else {
+                            tableBody += fieldValue;
+                        }
                     }
                     tableBody += "</td>";
                 }

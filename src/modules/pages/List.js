@@ -34,6 +34,7 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.table.setElement(this.$('.sections-container')).render();
+            this.table.hideSearchBar();
             return this;
         },
         /**
@@ -41,7 +42,6 @@ define([
          * @returns {PageListBrowse}
          */
         renderFields: function() {
-            console.log(this.list.toJSON());
             this.$('.content-header').text(app.fn.pinyin.removeTones(this.list.get('name')));
             this.$('.list-description').html(app.fn.pinyin.removeTones(this.list.get('description')));
             this.$('.list-studied-count').text(this.list.get('peopleStudying'));
@@ -60,6 +60,11 @@ define([
          * @returns {PageListBrowse}
          */
         renderSections: function() {
+            this.table.load(this.list.get('sections'), {
+                name: 'Name',
+                sectionWordCount: '',
+                sectionStatus: ''
+            });
             return this;
         },
         /**

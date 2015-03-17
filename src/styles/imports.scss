@@ -84,16 +84,16 @@ $sand9: #2c261b;
 
 /*** GLOBAL ***/
 body {
-    background: $background repeat;
-    font-family: $font-primary;
+  background: $background repeat;
+  font-family: $font-primary;
 }
 .content-block { border-radius: 25px; }
 @media (min-width: 1300px) {
-    .container {
-        padding-left: 0;
-        padding-right: 0;
-        width: 1280px;
-    }
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+    width: 1280px;
+  }
 }
 
 
@@ -114,13 +114,13 @@ body {
 
 /*** BOOTSTRAP: NAVBAR ***/
 .navbar-default {
-    background-color: #38240C;
-    border: none;
-    font-size: 18px;
+  background-color: #38240C;
+  border: none;
+  font-size: 18px;
 }
 .navbar-default .navbar-brand {
-    color: #FBFAFC;
-    font-size: 24px;
+  color: #FBFAFC;
+  font-size: 24px;
 }
 .navbar-default .navbar-brand i { margin-top: -3px; }
 .navbar-default .navbar-brand:hover { color: $sand5; }
@@ -128,9 +128,9 @@ body {
 .navbar-default .navbar-nav > li > a:hover { color: $sand5; }
 .navbar-default .navbar-toggle { border: none; }
 .navbar-default .navbar-toggle.active {
-    background-color: transparent;
-    transform: rotate(180deg);
-    transition: all 0.5s ease;
+  background-color: transparent;
+  transform: rotate(180deg);
+  transition: all 0.5s ease;
 }
 .navbar-default .navbar-toggle.active .icon-bar { background-color: $sand5; }
 .navbar-default .navbar-toggle .icon-bar { background-color: $white1; }
