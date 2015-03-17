@@ -17,6 +17,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.heatmap = new CalHeatMap();
             this.listenTo(app.user.data.items, 'download:complete', $.proxy(this.updateDownloadProgress, this));
             this.listenTo(app.user.data.items, 'download:update', $.proxy(this.updateDownloadProgress, this));
             this.listenTo(app.user.data.items, 'sort', $.proxy(this.updateDueCount, this));
@@ -43,6 +44,28 @@ define([
             this.$('.settings-name').text(app.user.settings.get('name'));
             this.toggleDownloadProgress();
             this.updateDueCount();
+            this.$('.dial').knob();
+            this.heatmap.init({
+                animationDuration: 800,
+                cellSize: 20,
+                cellRadius: 25,
+                cellPadding: 5,
+                //data: "datas-years.json",
+                displayLegend: false,
+                domain: "month",
+                domainDynamicDimension: false,
+                domainMargin: 0,
+                label: {
+                    align: 'center',
+                    position: 'top'
+                },
+                legend: [20, 40, 60, 80],
+                //nextSelector: "#example-h-NextDomain-selector",
+                //previousSelector: "#example-h-PreviousDomain-selector",
+                range: 1,
+                start: new Date(2000, 0, 5),
+                subDomain: "x_day"
+            });
             return this;
         },
         /**

@@ -1,0 +1,24 @@
+.gelato-page.dashboard {
+
+  .cal-heatmap-container {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cal-heatmap-container .graph-label { display: none; }
+
+  .content-title {
+    font-family: $font-secondary;
+    font-size: 12px;
+    font-weight: 400;
+    left: 30px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 30px;
+  }
+
+  .row-list-progress .content-block { min-height: 100px; }
+
+  .row-stats .content-block { height: 280px; }
+
+}

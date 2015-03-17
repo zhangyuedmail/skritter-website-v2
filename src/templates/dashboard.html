@@ -63,6 +63,7 @@
 
     <!-- CONTENT: MAIN -->
     <div id="content-main" class="gelato-content container">
+
         <div id="download-progress" class="content-block">
             <h4>{{dashboard.progress-header}} - <span class="progress-status">0</span>%</h4>
             <div class="progress">
@@ -71,26 +72,37 @@
                 </div>
             </div>
         </div>
-        <div class="content-block text-center">
-            <h1>Welcome to Skritter 2.0!</h1>
-            <p class="lead">Here you'll find the latest in development perfection.</p>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="content-block text-center">
-                    <h4 class="text-muted">Due:</h4>
-                    <h1 class="due-count">0</h1>
+
+        <div class="row row-stats">
+            <div class="col-xs-6">
+                <div class="content-block">
+                    <div class="content-title">Daily Goal</div>
+                    <input type="text" value="75" class="dial" data-readOnly=true data-angleOffset=10 data-angleArc=340>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-3"><div class="content-block text-center">
+                <div class="content-title">This Month</div>
+                <div id="cal-heatmap"></div>
+                <h3 class="study-streak">* 2 day streak</h3>
+            </div></div>
+            <div class="col-xs-3">
                 <div class="content-block text-center">
-                    <h4 class="text-muted">Time:</h4>
-                    <h1 class="study-time">0:00</h1>
+                    <div class="content-title">All Time</div>
+                    <h3>1635</h3>
+                    <hr>
+                    <h3>2150</h3>
                 </div>
             </div>
-            <div class="col-sm-3"></div>
-            <div class="col-sm-3"></div>
         </div>
+
+        <div class="row row-list-progress">
+            <div class="col-xs-12">
+                <div class="content-block">
+                    <div class="content-title">List Progress</div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
