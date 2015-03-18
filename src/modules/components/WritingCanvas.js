@@ -20,6 +20,7 @@ define([
             this.brushScale = 0.04;
             this.defaultFadeEasing = createjs.Ease.sineOut;
             this.defaultFadeSpeed = 500;
+            this.grid = true;
             this.gridColor = '#d8dadc';
             this.gridDashLength = 5;
             this.gridLineWidth = 0.75;
@@ -106,6 +107,15 @@ define([
             return stage;
         },
         /**
+         * @method disableGrid
+         * @returns {WritingCanvas}
+         */
+        disableGrid: function() {
+            this.clearLayer('grid');
+            this.grid = false;
+            return this;
+        },
+        /**
          * @method disableInput
          * @returns {WritingCanvas}
          */
@@ -163,6 +173,15 @@ define([
             this.getLayer(layerName).addChild(shape);
             this.stage.update();
             return shape;
+        },
+        /**
+         * @method enableGrid
+         * @returns {WritingCanvas}
+         */
+        enableGrid: function() {
+            this.drawGrid();
+            this.grid = true;
+            return this;
         },
         /**
          * @method enableInput
@@ -291,7 +310,11 @@ define([
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
             this.size = size;
-            this.reset().drawGrid();
+            if (this.grid) {
+                this.drawGrid().reset();
+            } else {
+                this.reset();
+            }
             return this;
         },
         /**
