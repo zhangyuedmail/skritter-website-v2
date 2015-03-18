@@ -111,6 +111,14 @@ define([
             return app.get('canvasSize');
         },
         /**
+         * @method getTone
+         * @param {Number} number
+         * @returns {CanvasStroke}
+         */
+        getTone: function(number) {
+            return this.name === 'tones' ? this.targets[number - 1].at(0) : null;
+        },
+        /**
          * @method isComplete
          * @returns {Boolean}
          */
@@ -125,11 +133,13 @@ define([
          * @returns {CanvasStroke}
          */
         recognize: function(points, shape) {
-            var newStroke = new CanvasStroke({points: points});
-            var stroke = app.fn.recognizer.recognize(newStroke, this, this.getSize());
-            if (stroke) {
-                stroke.set('squig', shape);
-                return this.add(stroke);
+            if (points && points.length > 1) {
+                var newStroke = new CanvasStroke({points: points});
+                var stroke = app.fn.recognizer.recognize(newStroke, this, this.getSize());
+                if (stroke) {
+                    stroke.set('squig', shape);
+                    return this.add(stroke);
+                }
             }
         }
     });
