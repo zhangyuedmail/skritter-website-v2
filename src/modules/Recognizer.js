@@ -52,6 +52,11 @@ define([], function() {
         var params = targetStroke.getParams();
         for (var a = 0, lengthA = params.length; a < lengthA; a++) {
             var param = params[a];
+
+            if (param.get('strokeId') === 387) {
+                continue;
+            }
+
             var result = userStroke.clone();
             var scores = {};
             var total = 0;
@@ -73,7 +78,8 @@ define([], function() {
                 id: targetStroke.id,
                 position: targetStroke.get('position'),
                 shape: targetStroke.get('shape'),
-                strokeId: targetStroke.get('strokeId')
+                strokeId: targetStroke.get('strokeId'),
+                tone: targetStroke.get('tone')
             });
             result.scores = scores;
             result.total = total;

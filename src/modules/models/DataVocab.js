@@ -46,6 +46,21 @@ define([
             return characters;
         },
         /**
+         * @method getCanvasTones
+         * @returns {Array}
+         */
+        getCanvasTones: function() {
+            var characters = [];
+            var strokes = this.getStrokes();
+            for (var i = 0, length = strokes.length; i < length; i++) {
+                var tones = app.user.data.strokes.get('tones');
+                if (tones) {
+                    characters.push(tones.getCanvasCharacter());
+                }
+            }
+            return characters;
+        },
+        /**
          * @method getCharacters
          * @returns {Array}
          */
@@ -128,6 +143,24 @@ define([
                 }
             }
             return strokes;
+        },
+        /**
+         * @method getToneNumbers
+         * @returns {Array}
+         */
+        getToneNumbers: function() {
+            var tones = [];
+            if (this.isChinese()) {
+                var readings = this.get('reading').split(', ');
+                for (var a = 0, lengthA = readings.length; a < lengthA; a++) {
+                    var reading = readings[a].match(/[1-5]+/g);
+                    for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                        var tone = parseInt(reading[b], 10);
+                        tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
+                    }
+                }
+            }
+            return tones;
         },
         /**
          * @method getWritingElement

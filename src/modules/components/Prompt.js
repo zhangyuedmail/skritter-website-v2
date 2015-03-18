@@ -98,7 +98,7 @@ define([
          * @returns {Prompt}
          */
         renderPromptRune: function() {
-            this.canvas.show();
+            this.canvas.enableGrid().show();
             this.canvas.reset();
             this.detail.showReading();
             if (this.character().isComplete()) {
@@ -117,9 +117,16 @@ define([
          * @returns {Prompt}
          */
         renderPromptTone: function() {
-            this.canvas.show();
+            this.canvas.disableGrid().show();
+            this.canvas.reset();
             this.detail.showCharacters();
-            this.detail.showReading();
+            if (this.character().isComplete()) {
+                this.canvas.disableInput();
+                this.detail.showReading();
+            } else {
+                this.canvas.enableInput();
+            }
+            this.canvas.drawShape('surface-background1', this.character().getShape());
             return this;
         },
         /**
@@ -143,16 +150,51 @@ define([
          * @param {createjs.Shape} shape
          */
         handleInputUp: function(points, shape) {
+            switch (this.part) {
+                case 'rune':
+                    this.recognizeRune(points, shape);
+                    break;
+                case 'tone':
+                    this.recognizeTone(points, shape);
+                    break;
+            }
+            if (this.character().isComplete()) {
+                this.canvas.disableInput();
+                this.detail.showCharacters();
+            }
+        },
+        /**
+         * @method recognizeRune
+         * @param {Array} points
+         * @param {createjs.Shape} shape
+         */
+        recognizeRune: function(points, shape) {
             var stroke = this.character().recognize(points, shape);
             if (stroke) {
                 var targetShape = stroke.getShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
             }
-            if (this.character().isComplete()) {
-                this.canvas.disableInput();
-                //TODO: fix issue with character reveal
-                this.detail.showCharacters();
+        },
+        /**
+         * @method recognizeTone
+         * @param {Array} points
+         * @param {createjs.Shape} shape
+         */
+        recognizeTone: function(points, shape) {
+            var stroke = this.character().recognize(points, shape);
+            if (stroke) {
+                var tones = this.vocab.getToneNumbers()[this.position - 1];
+                if (tones.indexOf(stroke.get('tone')) === -1) {
+                    this.character().reset();
+                    this.character().add(this.character().getTone(tones[0]).clone());
+                    this.canvas.drawShape('surface', this.character().at(0).getShape());
+                } else {
+                    var targetShape = stroke.getShape();
+                    var userShape = stroke.getUserShape();
+                    this.canvas.tweenShape('surface', userShape, targetShape);
+                }
+                return stroke;
             }
         },
         /**
@@ -175,7 +217,7 @@ define([
          */
         next: function() {
             if (this.isLast()) {
-                console.log('Prompt complete!');
+                console.log('PROMPT COMPLETE');
                 this.trigger('prompt:complete');
             } else {
                 this.position++;
@@ -189,7 +231,7 @@ define([
          */
         previous: function() {
             if (this.isFirst()) {
-                console.log('No going back!');
+                console.log('NO GOING BACK!');
             } else {
                 this.position--;
                 this.renderPrompt();
@@ -227,9 +269,18 @@ define([
         set: function(vocab, part, isNew) {
             console.log('PROMPT:', vocab.id, part, vocab);
             this.position = 1;
-            this.characters = part === 'rune' ? vocab.getCanvasCharacters() : [];
             this.part = part;
             this.vocab = vocab;
+            switch (part) {
+                case 'rune':
+                    this.characters = vocab.getCanvasCharacters();
+                    break;
+                case 'tone':
+                    this.characters = vocab.getCanvasTones();
+                    break;
+                default:
+                    this.characters = [];
+            }
             this.detail.renderFields();
             this.setNewBanner(isNew);
             this.renderPrompt();

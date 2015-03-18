@@ -24,6 +24,7 @@ define([
         getCanvasCharacter: function() {
             var character = new CanvasCharacter();
             var variations = this.clone().get('strokes');
+            var rune = this.get('rune');
             var targets = [];
             for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
                 var target = new CanvasCharacter();
@@ -34,7 +35,6 @@ define([
                     var stroke = new CanvasStroke();
                     var strokeData = targetVariation[b];
                     var strokeId = strokeData[0];
-                    //TODO: fix this after data params reformat
                     var strokeParam = app.user.data.params.findWhere({strokeId: strokeId});
                     var strokeContains = strokeParam.get('contains');
                     stroke.set({
@@ -43,14 +43,15 @@ define([
                         id: position + '-' + strokeId,
                         position: position,
                         shape: app.strokes.get(strokeId),
-                        strokeId: strokeId
+                        strokeId: strokeId,
+                        tone: rune === 'tones' ? a + 1 : null
                     });
                     position += strokeContains.length || 1;
                     target.add(stroke);
                 }
                 targets.push(target);
             }
-            character.name = this.get('rune');
+            character.name = rune;
             character.targets = targets;
             return character;
         }
