@@ -38,6 +38,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.renderDialog();
             this.prompt.setElement(this.$('.prompt-container'));
             this.prompt.hide().render();
             this.prompt.on('prompt:complete', $.proxy(this.handlePromptComplete, this));

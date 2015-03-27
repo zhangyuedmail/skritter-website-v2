@@ -33,6 +33,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.renderDialog();
             this.renderFields();
             return this;
         },

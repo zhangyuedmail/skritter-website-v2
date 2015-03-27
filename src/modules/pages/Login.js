@@ -28,6 +28,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.renderDialog();
             return this;
         },
         /**
