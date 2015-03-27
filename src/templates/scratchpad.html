@@ -12,14 +12,18 @@
         </nav>
     </div>
 
-    <!-- SIDEBAR: MAIN -->
-    <div id="sidebar-main" class="gelato-sidebar left collapsed">
-        <ul class="nav nav-pills nav-stacked">
-            <li><a data-url="#" href="#"><i class="fa fa-dashboard"></i>{{navbar.dashboard}}</a></li>
-            <li><a data-url="lists" href="#"><i class="fa fa-list"></i>{{navbar.lists}}</a></li>
-            <li><a data-url="words" href="#"><i class="fa fa-book"></i>{{navbar.words}}</a></li>
-            <li><a data-url="stats" href="#"><i class="fa fa-line-chart"></i>{{navbar.stats}}</a></li>
-        </ul>
+    <!-- DIALOG: LOADING-SCRATCHPAD --->
+    <div id="loading-scratchpad" class="gelato-dialog">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loading-scratchpad" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <img src="assets/ajax-loader.gif" alt="" width="75">
+                        <h2><span class="vocab-writing"></span></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- CONTENT: MAIN -->
