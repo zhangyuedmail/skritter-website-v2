@@ -4,13 +4,13 @@
  */
 define([
     'core/modules/GelatoApplication',
-    'modules/Functions',
     'modules/Router',
     'modules/data/Strokes',
     'modules/models/Api',
     'modules/models/MediaPlayer',
-    'modules/models/User'
-], function(GelatoApplication, Functions, Router, Strokes, Api, MediaPlayer, User) {
+    'modules/models/User',
+    'modules/utils/Functions'
+], function(GelatoApplication, Router, Strokes, Api, MediaPlayer, User, Functions) {
 
     /**
      * @class Application

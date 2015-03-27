@@ -3,10 +3,10 @@
  * @class Functions
  */
 define([
-    'modules/Mapper',
-    'modules/PinyinConverter',
-    'modules/Recognizer',
-    'modules/Shortstraw'
+    'modules/utils/Mapper',
+    'modules/utils/PinyinConverter',
+    'modules/utils/Recognizer',
+    'modules/utils/Shortstraw'
 ], function(Mapper, PinyinConverter, Recognizer, Shortstraw) {
 
     /**
