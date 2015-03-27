@@ -1,7 +1,5 @@
 <div class="gelato-page list-studying">
 
-    <!-- TODO: rework structure to support floating --->
-
     <!-- NAVBAR: MAIN -->
     <div id="navbar-main" class="gelato-navbar">
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -13,39 +11,28 @@
         </nav>
     </div>
 
-    <!-- DIALOG: LOADING --->
-    <div id="loading" class="gelato-dialog">
-        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="example1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <h1>LOADING</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- CONTENT: MAIN -->
     <div id="content-main" class="gelato-content container">
 
-        <div class="menu-column column">
-            <button type="button" class="button-create-list btn btn-success">Create new list</button>
-            <div class="menu-row cursor active">Study Queue</div>
-            <div class="menu-row cursor" data-url="lists/browse">Browse Lists</div>
-            <div class="menu-row cursor">My Lists</div>
-            <div class="menu-row cursor">ChinesePod</div>
-        </div>
+        <div class="content-block">
+            <div class="row">
 
-        <div class="content-column column">
-            <div class="content-header">Study Queue</div>
-            <div class="content-row">Adding words from</div>
-            <div class="content-row text-muted">
-                <div class="adding-container"></div>
-            </div>
-            <div class="content-row">Reviewing words from</div>
-            <div class="content-row text-muted">
-                <div class="reviewing-container"></div>
+                <div class="menu-column col-xs-12 col-md-3">
+                    <button type="button" class="btn btn-success">Create new list</button>
+                    <ul class="options">
+                        <li class="active">Study Queue</li>
+                        <li data-url="lists/browse">Browse Lists</li>
+                        <li>My Lists</li>
+                        <li>ChinesePod</li>
+                    </ul>
+                </div>
+
+                <div class="content-column col-xs-12 col-md-9">
+                    <div class="title">Study Queue</div>
+                    <div class="header">Adding words from</div>
+                    <div class="header">Reviewing words from</div>
+                </div>
+
             </div>
         </div>
 

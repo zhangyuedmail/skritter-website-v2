@@ -1,112 +1,57 @@
 .gelato-page.list {
 
-  color: $grey5;
-  font-size: 16px;
-  position: relative;
-
-  .column {
-    float: left;
-    margin-bottom: 15px;
-    margin-top: 15px;
-    padding-top: 55px;
+  .content-block {
+    padding-bottom: 0;
+    padding-top: 0;
   }
 
   .content-column {
-    background-color: $white1;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-top-right-radius: 25px;
-    float: left;
-    width: 75%;
+    background-color: transparent;
+    padding: 55px 40px;
   }
 
-  .content-header {
+  .content-column .title {
+    font-family: $font-primary;
     font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    margin-left: 40px;
-  }
-
-  .content-row {
-    font-size: 20px;
-    font-weight: 300;
-    margin-bottom: 15px;
-  }
-
-  .list-description {
-    font-size: 16px;
-    margin-bottom: 30px;
-    margin-left: 40px;
-    margin-right: 40px;
-  }
-
-  .list-status {
-    color: $grey3;
-    font-size: 12px;
-    font-weight: 300;
-    margin-bottom: 30px;
-    margin-left: 40px;
+    font-weight: 400;
+    margin-bottom: 40px;
   }
 
   .menu-column {
     background-color: $white3;
-    border-bottom-left-radius: 25px;
-    border-top-left-radius: 25px;
-    float: left;
-    min-width: 280px;
+    border-radius: 25px 0 0 25px;
     padding: 45px 40px;
-    width: 20%;
   }
 
-  .menu-column .button-create-list {
+  .menu-column button {
     height: 50px;
-    margin-bottom: 30px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 20px;
   }
 
-  .menu-row {
-    color: $grey3;
+  .menu-column .options {
+    color: $grey1;
+    font-family: $font-primary;
+    font-size: 16px;
     font-weight: 300;
-    margin-bottom: 20px
+    margin-top: 30px;
+    padding: 10px;
   }
 
-  .menu-row.active, .menu-row:hover {
-    color: $grey5;
-    font-weight: bold;
+  .menu-column .options > li {
+    cursor: pointer;
+    list-style-type: none;
+    margin-bottom: 20px;
   }
 
-  .table-viewer {
-    font-size: 16px;
-    width: 100%;
+  .menu-column .options > li.active, .menu-column .options > li:hover {
+    color: $grey3;
+    font-weight: 400;
   }
 
-  .table-viewer td {
-    border: none;
-    vertical-align: middle;
+  @media (max-width: 991px) {
+
+    .menu-column { border-radius: 25px 25px 0 0; }
+
   }
-
-  .table-viewer th {
-    border: none;
-  }
-
-  .table-viewer tr { height: 50px; }
-
-  .table-viewer .table > tbody > tr:nth-of-type(even) { background-color: $white2; }
-
-  .table-viewer .table > tbody > tr > td:first-child { padding-left: 40px; }
-
-  .table-viewer .table > tbody > tr > td:last-child { padding-right: 40px; }
-
-  .table-viewer .table > thead > tr > th:first-child { padding-left: 40px; }
-
-  .table-viewer .search-bar {
-    border-radius: 25px;
-    font-size: 16px;
-    margin-left: 40px;
-    margin-right: 120px;
-  }
-
-  .table-viewer .search-bar input, .table-viewer .search-bar span { height: 50px; }
 
 }

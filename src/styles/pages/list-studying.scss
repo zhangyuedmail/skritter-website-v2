@@ -1,30 +1,24 @@
 .gelato-page.list-studying {
 
-  color: $grey5;
-  font-size: 16px;
-
-  .column {
-    margin-bottom: 15px;
-    margin-top: 15px;
-    float: left;
-    padding: 55px 40px;
+  .content-block {
+    padding-bottom: 0;
+    padding-top: 0;
   }
 
   .content-column {
-    background-color: $white1;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-top-right-radius: 25px;
-    width: 80%;
+    background-color: transparent;
+    padding: 55px 40px;
   }
 
-  .content-header {
+  .content-column .title {
+    font-family: $font-primary;
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 400;
     margin-bottom: 40px;
   }
 
-  .content-row {
+  .content-column .header {
+    font-family: $font-primary;
     font-size: 20px;
     font-weight: 300;
     margin-bottom: 15px;
@@ -32,37 +26,39 @@
 
   .menu-column {
     background-color: $white3;
-    border-bottom-left-radius: 25px;
-    border-top-left-radius: 25px;
-    min-width: 200px;
+    border-radius: 25px 0 0 25px;
     padding: 45px 40px;
-    width: 20%;
   }
 
-  .menu-column .button-create-list {
+  .menu-column button {
     height: 50px;
-    margin-bottom: 30px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 20px;
   }
 
-  .menu-row {
-    color: $grey3;
-    font-weight: 300;
-    margin-bottom: 20px
-  }
-
-  .menu-row.active, .menu-row:hover {
-    color: $grey5;
-    font-weight: bold;
-  }
-
-  .table-viewer {
-    border: 1px $grey1 solid;
+  .menu-column .options {
+    color: $grey1;
+    font-family: $font-primary;
     font-size: 16px;
-    padding: 10px 20px;
+    font-weight: 300;
+    margin-top: 30px;
+    padding: 10px;
   }
 
-  .table-viewer td { border: none; }
+  .menu-column .options > li {
+    cursor: pointer;
+    list-style-type: none;
+    margin-bottom: 20px;
+  }
+
+  .menu-column .options > li.active, .menu-column .options > li:hover {
+    color: $grey3;
+    font-weight: 400;
+  }
+
+  @media (max-width: 991px) {
+
+    .menu-column { border-radius: 25px 25px 0 0; }
+
+  }
 
 }

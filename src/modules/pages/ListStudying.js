@@ -4,9 +4,8 @@
  */
 define([
     'require.text!templates/list-studying.html',
-    'core/modules/GelatoPage',
-    'modules/components/TableViewer'
-], function(Template, GelatoPage, TableViewer) {
+    'core/modules/GelatoPage'
+], function(Template, GelatoPage) {
 
     /**
      * @class PageListStudying
@@ -19,8 +18,6 @@ define([
          */
         initialize: function() {
             this.lists = null;
-            this.tableAdding = new TableViewer();
-            this.tableReviewing = new TableViewer();
         },
         /**
          * @property title
@@ -33,10 +30,6 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
-            this.tableAdding.setElement(this.$('.adding-container')).render();
-            this.tableReviewing.setElement(this.$('.reviewing-container')).render();
-            this.tableAdding.hideSearchBar();
-            this.tableReviewing.hideSearchBar();
             return this;
         },
         /**
@@ -44,18 +37,6 @@ define([
          * @returns {PageListStudying}
          */
         renderTables: function() {
-            this.tableAdding.load(this.lists.getByAdding(), {
-                name: 'Name',
-                progress: {head: 'Progress', body: "{progress}"},
-                study: {head: 'Study', type: 'link', body: "<div>Study list</div>"},
-                stop: {head: 'Control', type: 'link', body: "<div>Stop adding</div>"}
-            }, {hideHead: true});
-            this.tableReviewing.load(this.lists.getByReviewing(), {
-                name: 'Name',
-                progress: {head: 'Progress', body: "{progress}"},
-                study: {head: 'Study', type: 'link', body: "<div>Study list</div>"},
-                stop: {head: 'Control', type: 'link', body: "<div>Stop adding</div>"}
-            }, {hideHead: true});
             return this;
         },
         /**
@@ -63,13 +44,6 @@ define([
          * @return {PageListStudying}
          */
         load: function() {
-            var self = this;
-            app.user.data.vocablists.fetch(function(lists) {
-                self.lists = lists;
-                self.renderTables();
-            }, function(error) {
-                console.log(error);
-            });
             return this;
         }
     });
