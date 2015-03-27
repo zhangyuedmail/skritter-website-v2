@@ -26,11 +26,6 @@ define([
          */
         idAttribute: 'id',
         /**
-         * @property defaults
-         * @type Object
-         */
-        defaults: {},
-        /**
          * @method getCanvasCharacters
          * @returns {Array}
          */

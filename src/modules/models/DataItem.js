@@ -28,11 +28,13 @@ define([
          */
         idAttribute: 'id',
         /**
-         * @property defaults
-         * @type Object
+         * @method defaults
+         * @returns {Object}
          */
-        defaults: {
-            vocabIds: []
+        defaults: function() {
+            return {
+                vocabIds: []
+            };
         },
         /**
          * @method getCharacters
