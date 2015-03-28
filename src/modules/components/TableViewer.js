@@ -21,6 +21,7 @@ define([
             options = options || {};
             this.data = [];
             this.fields = {};
+            this.options = {};
             this.rows = [];
             this.prompt = options.prompt;
             this.on('resize', this.resize);
@@ -43,12 +44,12 @@ define([
             this.clear();
             //head section
             tableHead += "<tr>";
-            for (var head in this.fields) {
-                var value = this.fields[head];
-                if (typeof value === 'object') {
-                    tableHead += "<th>" + value.head + "</th>";
+            for (var fieldName in this.fields) {
+                var field = this.fields[fieldName];
+                if (typeof field === 'object' && field.title) {
+                    tableHead += "<th>" + field.title + "</th>";
                 } else {
-                    tableHead += "<th>" + value + "</th>";
+                    tableHead += "<th>" + field + "</th>";
                 }
             }
             tableHead += "</tr>";
@@ -57,24 +58,26 @@ define([
                 var row = this.rows[i];
                 tableBody += "<tr id='row-" + row.id + "' class='cursor'>";
                 for (var fieldName in this.fields) {
+                    var field = this.fields[fieldName];
                     var fieldValue = row instanceof Backbone.Model ? row.get(fieldName) : row[fieldName];
                     tableBody += "<td class='field-" + fieldName + "'>";
-                    if (typeof fieldValue === 'object') {
-                        tableBody += fieldValue.body;
+                    if (field.type === 'link') {
+                        tableBody += "<a href='#'>" + field.linkText + "</a>";
+                    } else if (field.type === 'progress') {
+                        //TODO: change progress to actual value
+                        tableBody += this.getProgressBar({value: Math.floor(Math.random() * 100) + 1});
+                    } else if (field.type === 'text') {
+                        tableBody += fieldValue;
                     } else {
-                        if (fieldName === 'sectionStatus') {
-                            tableBody += '{status}';
-                        } else if (fieldName === 'sectionWordCount') {
-                            tableBody += row.rows.length + ' words';
-                        } else {
-                            tableBody += fieldValue;
-                        }
+                        tableBody += fieldValue;
                     }
                     tableBody += "</td>";
                 }
                 tableBody += "</tr>";
             }
-            if (this.options.hideHead) {
+            if (this.options.showHeaders) {
+                this.$('table thead').show();
+            } else {
                 this.$('table thead').hide();
             }
             this.$('table tbody').html(tableBody);
@@ -96,27 +99,19 @@ define([
             return this;
         },
         /**
-         * @method hideSearchBar
-         * @returns {TableViewer}
-         */
-        hideSearchBar: function() {
-            this.$('.search-bar').hide();
-            return this;
-        },
-        /**
-         * @method load
-         * @param {Array} rows
-         * @param {Object} fields
+         * @method getProgressBar
          * @param {Object} [options]
-         * @returns {TableViewer}
+         * @returns {String}
          */
-        load: function(rows, fields, options) {
-            this.data = rows;
-            this.fields = fields;
-            this.options = options || {};
-            this.rows = rows;
-            this.renderTable();
-            return this;
+        getProgressBar: function(options) {
+            options = options || {};
+            options.value = options.value || 0;
+            var html = "<div class='progress'>";
+            html += "<div class='progress-bar' role='progressbar' aria-valuenow='" + options.value + "' ";
+            html += "aria-valuemin='0' aria-valuemax='100' style='width: " + options.value + "%;'>";
+            html += "<span class='sr-only'>" + options.value + "% Complete</span>";
+            html += "</div></div>";
+            return html;
         },
         /**
          * @method resize
@@ -126,11 +121,18 @@ define([
             return this;
         },
         /**
-         * @method showSearchBar
+         * @method set
+         * @param {Array} rows
+         * @param {Object} fields
+         * @param {Object} [options]
          * @returns {TableViewer}
          */
-        showSearchBar: function() {
-            this.$('.search-bar').show();
+        set: function(rows, fields, options) {
+            this.data = rows;
+            this.fields = fields;
+            this.options = options || {showHeaders: true};
+            this.rows = rows;
+            this.renderTable();
             return this;
         },
         /**
