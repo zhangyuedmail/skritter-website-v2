@@ -62,6 +62,23 @@ define([
             return this;
         },
         /**
+         * @property events
+         * @type Object
+         */
+        events: {
+            'vclick .table .field-name': 'handleClickTableRow'
+        },
+        /**
+         * @method handleClickTableRow
+         * @param {Event} event
+         */
+        handleClickTableRow: function(event) {
+            event.preventDefault();
+            console.log(event);
+            var listId = $(event.currentTarget).parent().attr('id').replace('row-', '');
+            app.router.navigate('lists/browse/' + listId, {trigger: true});
+        },
+        /**
          * @method getAdding
          * @returns {Array}
          */
