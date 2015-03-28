@@ -49,7 +49,7 @@ define([
                 if (typeof field === 'object' && field.title) {
                     tableHead += "<th>" + field.title + "</th>";
                 } else {
-                    tableHead += "<th>" + field + "</th>";
+                    tableHead += "<th></th>";
                 }
             }
             tableHead += "</tr>";
@@ -60,7 +60,7 @@ define([
                 for (var fieldName in this.fields) {
                     var field = this.fields[fieldName];
                     var fieldValue = row instanceof Backbone.Model ? row.get(fieldName) : row[fieldName];
-                    tableBody += "<td class='field-" + fieldName + "'>";
+                    tableBody += "<td class='field-" + fieldName.toLowerCase() + "'>";
                     if (field.type === 'link') {
                         tableBody += "<a href='#'>" + field.linkText + "</a>";
                     } else if (field.type === 'progress') {
@@ -97,6 +97,22 @@ define([
             this.$('table tbody').empty();
             this.$('table thead').empty();
             return this;
+        },
+        /**
+         * @method filterBy
+         * @param {String} fieldName
+         * @param {String} value
+         * @returns {TableViewer}
+         */
+        filterBy: function(fieldName, value) {
+            this.rows = this.data.filter(function(item) {
+                var fieldValue = item instanceof Backbone.Model ? item.get(fieldName) : item[fieldName].toLowerCase();
+                if (fieldValue.indexOf(value.toLowerCase()) > -1) {
+                    return true;
+                }
+                return false;
+            });
+            return this.renderTable();
         },
         /**
          * @method getProgressBar
@@ -141,8 +157,8 @@ define([
          * @param {Boolean} [descending]
          */
         sortBy: function(fieldName, descending) {
-            this.rows = _.sortBy(this.rows, function(list) {
-                return list.get(fieldName);
+            this.rows = _.sortBy(this.rows, function(item) {
+                return item instanceof Backbone.Model ? item.get(fieldName) : item[fieldName];
             });
             if (descending) {
                 this.rows.reverse();
