@@ -33,7 +33,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
-            this.sections.setElement(this.$('.list-sections-container')).render();
+            this.sections.setElement(this.$('.sections-table-container')).render();
             return this;
         },
         /**
@@ -76,7 +76,18 @@ define([
          * @property events
          * @type Object
          */
-        events: {},
+        events: {
+            'vclick .sections-table-container tbody tr': 'handleClickSectionTableRow'
+        },
+        /**
+         * @method handleClickSectionTableRow
+         * @param {Event} event
+         */
+        handleClickSectionTableRow: function(event) {
+            event.preventDefault();
+            var sectionId = $(event.currentTarget).attr('id').replace('row-', '');
+            app.router.navigate('lists/browse/' + this.list.id + '/' + sectionId, {trigger: true});
+        },
         /**
          * @method load
          * @param {String} listId
