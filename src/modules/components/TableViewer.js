@@ -56,24 +56,31 @@ define([
             //body section
             for (var i = 0, length = this.rows.length; i < length; i++) {
                 var row = this.rows[i];
-                tableBody += "<tr id='row-" + row.id + "' class='cursor'>";
+                var rowId = row.id || row.vocabId;
+                tableBody += "<tr id='row-" + rowId + "' class='cursor'>";
                 for (var fieldName in this.fields) {
-                    var field = this.fields[fieldName];
-                    var fieldValue = row instanceof Backbone.Model ? row.get(fieldName) : row[fieldName];
+                    var row = row instanceof Backbone.Model ? row.toJSON() : row;
+                    var fieldObject = this.fields[fieldName];
+                    var fieldValue = row[fieldName];
                     tableBody += "<td class='field-" + fieldName.toLowerCase() + "'>";
-                    if (field.type === 'link') {
+                    if (fieldObject.type === 'checkbox') {
+                        tableBody += "<input type='checkbox' name='row' value='" + rowId + "' />";
+                    } else if (fieldObject.type === 'link') {
                         tableBody += "<a href='#'>" + field.linkText + "</a>";
-                    } else if (field.type === 'progress') {
+                    } else if (fieldObject.type === 'progress') {
                         //TODO: change progress to actual value
                         tableBody += this.getProgressBar({value: Math.floor(Math.random() * 100) + 1});
-                    } else if (field.type === 'section-status') {
+                    } else if (fieldObject.type === 'section-status') {
                         //TODO: check status of section
                         tableBody += '';
-                    } else if (field.type === 'section-wordcount') {
+                    } else if (fieldObject.type === 'section-wordcount') {
                         tableBody += fieldValue.length + (fieldValue.length === 1 ? ' word' : ' words');
-                    } else if (field.type === 'text') {
-                        tableBody += fieldValue;
-
+                    } else if (fieldObject.type === 'text') {
+                        if (fieldName === 'tradVocabId') {
+                            tableBody += row.tradVocabId === row.vocabId ? '- - -' : row.tradVocabId;
+                        } else {
+                            tableBody += fieldValue;
+                        }
                     } else {
                         tableBody += fieldValue;
                     }
