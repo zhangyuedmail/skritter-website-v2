@@ -66,8 +66,14 @@ define([
                     } else if (field.type === 'progress') {
                         //TODO: change progress to actual value
                         tableBody += this.getProgressBar({value: Math.floor(Math.random() * 100) + 1});
+                    } else if (field.type === 'section-status') {
+                        //TODO: check status of section
+                        tableBody += '';
+                    } else if (field.type === 'section-wordcount') {
+                        tableBody += fieldValue.length + (fieldValue.length === 1 ? ' word' : ' words');
                     } else if (field.type === 'text') {
                         tableBody += fieldValue;
+
                     } else {
                         tableBody += fieldValue;
                     }

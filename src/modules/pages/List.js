@@ -4,8 +4,10 @@
  */
 define([
     'require.text!templates/list.html',
-    'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+    'core/modules/GelatoPage',
+    'modules/components/TableViewer',
+    'modules/models/DataVocabList'
+], function(Template, GelatoPage, TableViewer, DataVocabList) {
 
     /**
      * @class PageListBrowse
@@ -16,7 +18,10 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.list = null;
+            this.sections = new TableViewer();
+        },
         /**
          * @property title
          * @type String
@@ -28,6 +33,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.sections.setElement(this.$('.list-sections-container')).render();
             return this;
         },
         /**
@@ -35,6 +41,22 @@ define([
          * @returns {PageListBrowse}
          */
         renderFields: function() {
+            if (this.list.has('creator')) {
+                this.$('.vocablist-madeby').text(this.list.get('creator'));
+            } else {
+                this.$('.vocablist-madeby').parent().hide();
+            }
+            this.$('.vocablist-description').text(this.list.get('description'));
+            this.$('.vocablist-name').text(this.list.get('name'));
+            if (this.list.has('published')) {
+                this.$('.vocablist-published').text(this.list.get('published'));
+            } else {
+                this.$('.vocablist-published').parent().hide();
+            }
+            this.$('.vocablist-studiedby').text(this.list.get('peopleStudying'));
+            this.$('.vocablist-tags').text(this.list.get('tags').join(', '));
+            this.$('.vocablist-wordcount').text(this.list.getWordCount());
+            this.renderSections();
             return this;
         },
         /**
@@ -42,6 +64,12 @@ define([
          * @returns {PageListBrowse}
          */
         renderSections: function() {
+            this.sections.set(this.list.get('sections'), {
+                name: {title: '', type: 'text'},
+                rows: {title: '', type: 'section-wordcount'},
+                status: {title: '', type: 'section-status'}
+            }, {showHeader: false});
+            this.resize();
             return this;
         },
         /**
@@ -55,6 +83,22 @@ define([
          * @return {PageListBrowse}
          */
         load: function(listId) {
+            var self = this;
+            app.api.fetchVocabList(listId, null, function(result) {
+                self.list = new DataVocabList(result) || null;
+                self.renderFields();
+            }, function(error) {
+                console.log(error);
+            });
+            return this;
+        },
+        /**
+         * @method resize
+         */
+        resize: function() {
+            var contentBlock = this.$('.content-block');
+            var menuColumn = this.$('.menu-column');
+            menuColumn.height(contentBlock.height());
             return this;
         }
     });
