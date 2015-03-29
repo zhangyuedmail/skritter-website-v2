@@ -7,6 +7,7 @@ define([
     'modules/pages/Dashboard',
     'modules/pages/List',
     'modules/pages/ListBrowse',
+    'modules/pages/ListSection',
     'modules/pages/ListStudying',
     'modules/pages/Login',
     'modules/pages/Home',
@@ -20,6 +21,7 @@ define([
     PageDashboard,
     PageList,
     PageListBrowse,
+    PageListSection,
     PageListStudying,
     PageLogin,
     PageHome,
@@ -42,6 +44,7 @@ define([
         routes: {
             'lists/browse': 'showListBrowse',
             'lists/browse/:listId': 'showList',
+            'lists/browse/:listId/:sectionId': 'showListSection',
             'lists/queue': 'showListStudying',
             'login': 'showLogin',
             'logout': 'handleLogout',
@@ -82,6 +85,15 @@ define([
         showList: function(listId) {
             this.activePage = new PageList();
             this.activePage.render().load(listId);
+        },
+        /**
+         * @method showListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        showListSection: function(listId, sectionId) {
+            this.activePage = new PageListSection();
+            this.activePage.render().load(listId, sectionId);
         },
         /**
          * @method showListBrowse
