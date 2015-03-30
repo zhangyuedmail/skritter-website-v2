@@ -53,8 +53,8 @@ define([
          * @returns {PageStudy}
          */
         loadPrompt: function(item) {
-            //this.prompt.set(item.getVocab(), item.get('part'), item.isNew());
-            this.prompt.set(item.getVocab(), 'tone', true);
+            this.prompt.set(item.getVocab(), item.get('part'), item.isNew());
+            //this.prompt.set(item.getVocab(), 'rdng', false);
             return this;
         }
     });

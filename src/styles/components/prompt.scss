@@ -1,32 +1,60 @@
 .gelato-component.prompt {
 
   position: relative;
-  width: 1280px;
 
   .canvas-section {
     background-color: $white1;
     border-bottom-left-radius: 25px;
     border-top-left-radius: 25px;
-    float: left;
     height: 100%;
+    padding-left: 0;
+    padding-right: 0;
     position: relative;
-    width: 50%;
   }
 
-  .content-block {
-    height: 640px;
-    padding: 0;
+  .content-block { height: 640px; }
+
+  .content-block .row {
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .detail-section {
     background-color: $white2;
     border-bottom-right-radius: 25px;
     border-top-right-radius: 25px;
-    float: left;
     height: 100%;
-    margin-top: 0;
     position: relative;
-    width: 50%;
+  }
+
+  .prompt-display {
+    margin-top: 30px;
+    padding: 30px 15px;
+    position: absolute;
+    width: 100%;
+  }
+
+  .prompt-question1 {
+    color: $grey6;
+    font-size: 120px;
+  }
+
+  .prompt-question2 {
+    color: $grey2;
+    font-family: $font-secondary;
+    font-size: 28px;
+  }
+
+  .prompt-answer1 {
+    font-family: $font-primary;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .prompt-answer2 {
+    font-family: $font-primary;
+    font-size: 18px;
+    font-weight: 400;
   }
 
   .vocab-new {
@@ -38,5 +66,7 @@
   }
 
   .writing-canvas-container { margin: 0 auto; }
+
+  @media (max-width: 991px) {}
 
 }

@@ -84,6 +84,14 @@ define([
             return this;
         },
         /**
+         * @method hideDefinition
+         * @returns {PromptDetail}
+         */
+        hideDefinition: function() {
+            this.$('.vocab-definition').parent().hide();
+            return this;
+        },
+        /**
          * @method hideReading
          * @param {Object} [options]
          * @returns {PromptDetail}
@@ -123,6 +131,14 @@ define([
             } else {
                 this.$('.vocab-writing > div').removeClass('mask');
             }
+            return this;
+        },
+        /**
+         * @method showDefinition
+         * @returns {PromptDetail}
+         */
+        showDefinition: function() {
+            this.$('.vocab-definition').parent().show();
             return this;
         },
         /**

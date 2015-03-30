@@ -79,6 +79,11 @@ define([
          */
         renderPromptDefn: function() {
             this.canvas.hide();
+            this.$('.prompt-answer1').hide();
+            this.$('.prompt-answer2').hide();
+            this.$('.prompt-question1').text(this.vocab.get('writing')).show();
+            this.$('.prompt-question2').text("What's the definition?").show();
+            this.detail.hideDefinition();
             this.detail.showCharacters();
             this.detail.showReading();
             return this;
@@ -89,7 +94,12 @@ define([
          */
         renderPromptRdng: function() {
             this.canvas.hide();
+            this.$('.prompt-answer1').hide();
+            this.$('.prompt-answer2').hide();
+            this.$('.prompt-question1').text(this.vocab.get('writing')).show();
+            this.$('.prompt-question2').text("What's the reading?").show();
             this.detail.showCharacters();
+            this.detail.showDefinition();
             this.detail.hideReading();
             return this;
         },
