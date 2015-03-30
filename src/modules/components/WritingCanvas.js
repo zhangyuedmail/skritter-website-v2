@@ -315,6 +315,8 @@ define([
          */
         resize: function(size) {
             app.set('canvasSize', size);
+            //this.$('.gelato-component').height(size);
+            //this.$('.gelato-component').width(size);
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
             this.size = size;

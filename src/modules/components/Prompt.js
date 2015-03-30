@@ -64,6 +64,16 @@ define([
          * @returns {Prompt}
          */
         renderPromptDefn: function() {
+            this.canvas.disableGrid();
+            if (this.active().get('complete')) {
+                this.$('.answer-text').html(this.vocab.getDefinition());
+                this.$('.question-text').css('visibility', 'hidden');
+            } else {
+                this.$('.question-text').text("What's the definition?");
+                this.$('.question-text').css('visibility', 'visible');
+            }
+            this.$('.question-word').text(this.vocab.get('writing'));
+            this.$('.text-overlay').show();
             return this;
         },
         /**
@@ -71,6 +81,16 @@ define([
          * @returns {Prompt}
          */
         renderPromptRdng: function() {
+            this.canvas.disableGrid();
+            if (this.active().get('complete')) {
+                this.$('.answer-text').html(this.vocab.getReading());
+                this.$('.question-text').css('visibility', 'hidden');
+            } else {
+                this.$('.question-text').text("What's the reading?");
+                this.$('.question-text').css('visibility', 'visible');
+            }
+            this.$('.question-word').text(this.vocab.get('writing'));
+            this.$('.text-overlay').show();
             return this;
         },
         /**
@@ -79,6 +99,8 @@ define([
          */
         renderPromptRune: function() {
             var character = this.character().getShape();
+            this.canvas.enableGrid();
+            this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
                 this.active().set('complete', true);
                 this.canvas.disableInput();
@@ -95,9 +117,10 @@ define([
          */
         renderPromptTone: function() {
             var writing = this.vocab.getCharacters()[this.position - 1];
+            this.canvas.enableGrid();
+            this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
                 this.active().set('complete', true);
-
                 this.canvas.disableInput();
             } else {
                 this.active().set('complete', false);
@@ -127,6 +150,12 @@ define([
         handleClickCanvas: function() {
             if (this.active().get('complete')) {
                 this.next();
+            } else if (this.part === 'defn') {
+                this.active().set('complete', true);
+                this.renderPrompt();
+            } else if (this.part === 'rdng') {
+                this.active().set('complete', true);
+                this.renderPrompt();
             }
         },
         /**
@@ -248,7 +277,6 @@ define([
          * @returns {Prompt}
          */
         resize: function() {
-            console.log('REZZY');
             this.canvas.resize(this.$('.center-column').width());
             return this;
         },
