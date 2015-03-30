@@ -4,8 +4,5 @@
  */
 define([
     'createjs.easel',
-    'createjs.tween',
-    'd3',
-    'heatmap',
-    'jquery.knob'
+    'createjs.tween'
 ]);
