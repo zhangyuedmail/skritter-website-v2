@@ -5,8 +5,9 @@
 define([
     'require.text!templates/components/prompt.html',
     'core/modules/GelatoComponent',
+    'modules/components/PromptNavigation',
     'modules/components/WritingCanvas'
-], function(Template, GelatoComponent, WritingCanvas) {
+], function(Template, GelatoComponent, PromptNavigation, WritingCanvas) {
 
     /**
      * @class Prompt
@@ -20,6 +21,7 @@ define([
         initialize: function() {
             this.canvas = new WritingCanvas();
             this.gradingColors = app.user.settings.get('gradingColors');
+            this.navigation = new PromptNavigation({prompt: this});
             this.part = 'rune';
             this.position = 1;
             this.result = null;
@@ -34,6 +36,7 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.canvas.setElement('.writing-canvas-container').render();
+            this.navigation.setElement('.prompt-navigation-container').render();
             this.resize();
             return this;
         },
@@ -100,15 +103,16 @@ define([
         renderPromptRune: function() {
             var character = this.character().getShape();
             this.canvas.enableGrid();
+            this.canvas.drawShape('surface', character);
             this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
-                this.active().set('complete', true);
                 this.canvas.disableInput();
+                this.canvas.injectLayerColor('surface', this.getGradingColor());
+                this.active().set('complete', true);
             } else {
                 this.active().set('complete', false);
                 this.canvas.enableInput();
             }
-            this.canvas.drawShape('surface-background1', character);
             return this;
         },
         /**
@@ -118,16 +122,17 @@ define([
         renderPromptTone: function() {
             var writing = this.vocab.getCharacters()[this.position - 1];
             this.canvas.enableGrid();
+            this.canvas.drawShape('surface', this.character().getShape());
+            this.canvas.drawCharacter('surface-background2', writing, {color: '#ebeaf0'});
             this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
-                this.active().set('complete', true);
                 this.canvas.disableInput();
+                this.canvas.injectLayerColor('surface', this.getGradingColor());
+                this.active().set('complete', true);
             } else {
                 this.active().set('complete', false);
                 this.canvas.enableInput();
             }
-            this.canvas.drawShape('surface-background1', this.character().getShape());
-            this.canvas.drawCharacter('surface-background2', writing, {color: '#ebeaf0'});
             return this;
         },
         /**
@@ -143,6 +148,13 @@ define([
          */
         character: function() {
             return this.active().get('character');
+        },
+        /**
+         * @method getGradingColor
+         * @returns {String}
+         */
+        getGradingColor: function() {
+            return this.gradingColors[this.active().get('score')];
         },
         /**
          * @method handleClickCanvas
@@ -187,6 +199,7 @@ define([
                 if (this.character().isComplete()) {
                     this.active().set('complete', true);
                     this.canvas.disableInput();
+                    this.canvas.injectLayerColor('surface', this.getGradingColor());
                 }
             }
         },
@@ -211,7 +224,7 @@ define([
                 if (this.character().isComplete()) {
                     this.active().set('complete', true);
                     this.canvas.disableInput();
-                    this.canvas.injectLayerColor('surface', this.gradingColors[this.active().get('score')]);
+                    this.canvas.injectLayerColor('surface', this.getGradingColor());
                 }
             }
         },
@@ -278,6 +291,9 @@ define([
          */
         resize: function() {
             this.canvas.resize(this.$('.center-column').width());
+            if (this.result) {
+                this.renderPrompt();
+            }
             return this;
         },
         /**

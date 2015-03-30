@@ -51,7 +51,7 @@ define([
          */
         loadPrompt: function(item) {
             //this.prompt.set(item.getVocab(), item.get('part'));
-            this.prompt.set(item.getVocab(), 'rdng');
+            this.prompt.set(item.getVocab(), 'rune');
             return this;
         }
     });
