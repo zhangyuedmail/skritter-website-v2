@@ -55,42 +55,10 @@ define([
             this.prompt.previous();
         },
         /**
-         * @method hideNext
-         * @returns {PromptNavigation}
-         */
-        hideNext: function() {
-            this.$('.navigate-next').hide();
-            return this;
-        },
-        /**
-         * @method hidePrevious
-         * @returns {PromptNavigation}
-         */
-        hidePrevious: function() {
-            this.$('.navigate-previous').hide();
-            return this;
-        },
-        /**
          * @method resize
          * @returns {PromptNavigation}
          */
         resize: function() {
-            return this;
-        },
-        /**
-         * @method showNext
-         * @returns {PromptNavigation}
-         */
-        showNext: function() {
-            this.$('.navigate-next').show();
-            return this;
-        },
-        /**
-         * @method showPrevious
-         * @returns {PromptNavigation}
-         */
-        showPrevious: function() {
-            this.$('.navigate-previous').show();
             return this;
         }
     });

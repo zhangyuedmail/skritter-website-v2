@@ -5,9 +5,8 @@
 define([
     'require.text!templates/study.html',
     'core/modules/GelatoPage',
-    'modules/components/Prompt',
-    'modules/components/StudyToolbar'
-], function(Template, GelatoPage, Prompt, StudyToolbar) {
+    'modules/components/Prompt'
+], function(Template, GelatoPage, Prompt) {
 
     /**
      * @class PageStudy
@@ -20,7 +19,6 @@ define([
          */
         initialize: function() {
             this.prompt = new Prompt();
-            this.toolbar = new StudyToolbar();
         },
         /**
          * @property title
@@ -35,7 +33,6 @@ define([
             this.renderTemplate(Template);
             this.renderFields();
             this.prompt.setElement(this.$('.prompt-container')).render();
-            this.toolbar.setElement(this.$('.toolbar-container')).render();
             app.user.data.items.loadNext($.proxy(this.loadPrompt, this));
             return this;
         },
@@ -53,8 +50,8 @@ define([
          * @returns {PageStudy}
          */
         loadPrompt: function(item) {
-            this.prompt.set(item.getVocab(), item.get('part'), item.isNew());
-            //this.prompt.set(item.getVocab(), 'rdng', false);
+            //this.prompt.set(item.getVocab(), item.get('part'));
+            this.prompt.set(item.getVocab(), 'tone');
             return this;
         }
     });

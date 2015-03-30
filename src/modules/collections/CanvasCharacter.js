@@ -116,7 +116,7 @@ define([
          * @returns {CanvasStroke}
          */
         getTone: function(number) {
-            return this.name === 'tones' ? this.targets[number - 1].at(0) : null;
+            return this.writing === 'tones' ? this.targets[number - 1].at(0) : null;
         },
         /**
          * @method isComplete

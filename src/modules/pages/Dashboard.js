@@ -17,7 +17,6 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.heatmap = new CalHeatMap();
             this.listenTo(app.user.data.items, 'download:complete', $.proxy(this.updateDownloadProgress, this));
             this.listenTo(app.user.data.items, 'download:update', $.proxy(this.updateDownloadProgress, this));
         },
@@ -41,6 +40,11 @@ define([
          * @returns {PageDashboard}
          */
         renderFields: function() {
+            if (app.user.data.items.hasMissing()) {
+                this.$('#download-progress').show();
+            } else {
+                this.$('#download-progress').hide();
+            }
             return this;
         },
         /**

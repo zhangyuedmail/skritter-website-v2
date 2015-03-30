@@ -44,8 +44,6 @@ define([
          */
         handleClickOptionEraser: function(event) {
             event.preventDefault();
-            this.prompt.character().reset();
-            this.prompt.renderCharacter();
         },
         /**
          * @method handleClickOptionReveal
@@ -53,9 +51,6 @@ define([
          */
         handleClickOptionReveal: function(event) {
             event.preventDefault();
-            var shape = this.prompt.character().getExpectedTargets()[0].getShape();
-            this.prompt.canvas.clearLayer('surface-background2');
-            this.prompt.canvas.drawShape('surface-background2', shape, {color: '#b3b3b3'});
         },
         /**
          * @method resize

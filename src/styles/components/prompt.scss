@@ -3,70 +3,29 @@
   position: relative;
 
   .canvas-section {
-    background-color: $white1;
     border-bottom-left-radius: 25px;
     border-top-left-radius: 25px;
-    height: 100%;
-    padding-left: 0;
-    padding-right: 0;
-    position: relative;
+    background-color: white;
   }
 
-  .content-block { height: 640px; }
+  .canvas-section .center-column {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+  }
+
+  .canvas-section .writing-canvas { margin-bottom: 25px; }
 
   .content-block .row {
+    background-color: $white1;
+    border-radius: 25px;
     margin-left: 0;
     margin-right: 0;
   }
 
   .detail-section {
-    background-color: $white2;
     border-bottom-right-radius: 25px;
     border-top-right-radius: 25px;
-    height: 100%;
-    position: relative;
   }
-
-  .prompt-display {
-    margin-top: 30px;
-    padding: 30px 15px;
-    position: absolute;
-    width: 100%;
-  }
-
-  .prompt-question1 {
-    color: $grey6;
-    font-size: 120px;
-  }
-
-  .prompt-question2 {
-    color: $grey2;
-    font-family: $font-secondary;
-    font-size: 28px;
-  }
-
-  .prompt-answer1 {
-    font-family: $font-primary;
-    font-size: 18px;
-    font-weight: 400;
-  }
-
-  .prompt-answer2 {
-    font-family: $font-primary;
-    font-size: 18px;
-    font-weight: 400;
-  }
-
-  .vocab-new {
-    background-image: url('#{$dir-assets}/vectors/study-new-character.svg');
-    display: none;
-    height: 114px;
-    position: absolute;
-    width: 114px;
-  }
-
-  .writing-canvas-container { margin: 0 auto; }
-
-  @media (max-width: 991px) {}
 
 }

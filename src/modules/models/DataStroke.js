@@ -51,8 +51,8 @@ define([
                 }
                 targets.push(target);
             }
-            character.name = rune;
             character.targets = targets;
+            character.writing = rune;
             return character;
         }
     });

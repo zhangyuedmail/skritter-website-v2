@@ -5,13 +5,8 @@
 define([
     'require.text!templates/components/prompt.html',
     'core/modules/GelatoComponent',
-    'modules/components/PromptCountdown',
-    'modules/components/PromptDetail',
-    'modules/components/PromptGrading',
-    'modules/components/PromptNavigation',
-    'modules/components/PromptToolbar',
     'modules/components/WritingCanvas'
-], function(Template, GelatoComponent, PromptCountdown, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
+], function(Template, GelatoComponent, WritingCanvas) {
 
     /**
      * @class Prompt
@@ -23,16 +18,11 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.characters = [];
             this.canvas = new WritingCanvas();
-            this.countdown = new PromptCountdown();
-            this.detail = new PromptDetail({prompt: this});
-            this.grading = new PromptGrading({prompt: this});
-            this.navigation = new PromptNavigation({prompt: this});
+            this.gradingColors = app.user.settings.get('gradingColors');
             this.part = 'rune';
             this.position = 1;
-            this.toolbar = new PromptToolbar({prompt: this});
-            this.vocab = null;
+            this.result = null;
             this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             this.on('resize', this.resize);
@@ -44,11 +34,6 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.canvas.setElement('.writing-canvas-container').render();
-            this.countdown.setElement('.prompt-countdown-container').hide().render();
-            this.detail.setElement(this.$('.prompt-detail-container')).render();
-            this.grading.setElement(this.$('.prompt-grading-container')).render();
-            this.navigation.setElement(this.$('.prompt-navigation-container')).render();
-            this.toolbar.setElement('.prompt-toolbar-container').render();
             this.resize();
             return this;
         },
@@ -57,6 +42,7 @@ define([
          * @returns {Prompt}
          */
         renderPrompt: function() {
+            this.canvas.reset();
             switch (this.part) {
                 case 'defn':
                     this.renderPromptDefn();
@@ -78,14 +64,6 @@ define([
          * @returns {Prompt}
          */
         renderPromptDefn: function() {
-            this.canvas.hide();
-            this.$('.prompt-answer1').hide();
-            this.$('.prompt-answer2').hide();
-            this.$('.prompt-question1').text(this.vocab.get('writing')).show();
-            this.$('.prompt-question2').text("What's the definition?").show();
-            this.detail.hideDefinition();
-            this.detail.showCharacters();
-            this.detail.showReading();
             return this;
         },
         /**
@@ -93,14 +71,6 @@ define([
          * @returns {Prompt}
          */
         renderPromptRdng: function() {
-            this.canvas.hide();
-            this.$('.prompt-answer1').hide();
-            this.$('.prompt-answer2').hide();
-            this.$('.prompt-question1').text(this.vocab.get('writing')).show();
-            this.$('.prompt-question2').text("What's the reading?").show();
-            this.detail.showCharacters();
-            this.detail.showDefinition();
-            this.detail.hideReading();
             return this;
         },
         /**
@@ -108,18 +78,15 @@ define([
          * @returns {Prompt}
          */
         renderPromptRune: function() {
-            this.canvas.enableGrid().show();
-            this.canvas.reset();
-            this.detail.showReading();
+            var character = this.character().getShape();
             if (this.character().isComplete()) {
+                this.active().set('complete', true);
                 this.canvas.disableInput();
-                this.detail.showCharacters();
             } else {
+                this.active().set('complete', false);
                 this.canvas.enableInput();
-                this.detail.hideCharacters();
             }
-            this.canvas.drawShape('surface-background1', this.character().getShape());
-            this.detail.selectCharacter();
+            this.canvas.drawShape('surface-background1', character);
             return this;
         },
         /**
@@ -127,30 +94,38 @@ define([
          * @returns {Prompt}
          */
         renderPromptTone: function() {
-            this.canvas.disableGrid().show();
-            this.canvas.reset();
-            this.detail.showCharacters();
+            var writing = this.vocab.getCharacters()[this.position - 1];
             if (this.character().isComplete()) {
+                this.active().set('complete', true);
+
                 this.canvas.disableInput();
-                this.detail.showReading();
             } else {
+                this.active().set('complete', false);
                 this.canvas.enableInput();
             }
             this.canvas.drawShape('surface-background1', this.character().getShape());
+            this.canvas.drawCharacter('surface-background2', writing, {color: '#ebeaf0'});
             return this;
+        },
+        /**
+         * @method active
+         * @returns {PromptResult}
+         */
+        active: function() {
+            return this.result.at(this.position - 1);
         },
         /**
          * @method character
          * @returns {CanvasCharacter}
          */
         character: function() {
-            return this.characters[this.position - 1];
+            return this.active().get('character');
         },
         /**
          * @method handleClickCanvas
          */
         handleClickCanvas: function() {
-            if (this.character().isComplete()) {
+            if (this.active().get('complete')) {
                 this.next();
             }
         },
@@ -168,10 +143,6 @@ define([
                     this.recognizeTone(points, shape);
                     break;
             }
-            if (this.character().isComplete()) {
-                this.canvas.disableInput();
-                this.detail.showCharacters();
-            }
         },
         /**
          * @method recognizeRune
@@ -184,6 +155,10 @@ define([
                 var targetShape = stroke.getShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
+                if (this.character().isComplete()) {
+                    this.active().set('complete', true);
+                    this.canvas.disableInput();
+                }
             }
         },
         /**
@@ -195,17 +170,29 @@ define([
             var stroke = this.character().recognize(points, shape);
             if (stroke) {
                 var tones = this.vocab.getToneNumbers()[this.position - 1];
-                if (tones.indexOf(stroke.get('tone')) === -1) {
-                    this.character().reset();
-                    this.character().add(this.character().getTone(tones[0]).clone());
-                    this.canvas.drawShape('surface', this.character().at(0).getShape());
-                } else {
+                if (tones.indexOf(stroke.get('tone')) > -1) {
                     var targetShape = stroke.getShape();
                     var userShape = stroke.getUserShape();
                     this.canvas.tweenShape('surface', userShape, targetShape);
+                } else {
+                    this.character().reset();
+                    this.character().add(this.character().getTone(tones[0]).clone());
+                    this.canvas.drawShape('surface', this.character().at(0).getShape());
                 }
-                return stroke;
+                if (this.character().isComplete()) {
+                    this.active().set('complete', true);
+                    this.canvas.disableInput();
+                    this.canvas.injectLayerColor('surface', this.gradingColors[this.active().get('score')]);
+                }
             }
+        },
+        /**
+         * @method hideBannerNew
+         * @returns {Prompt}
+         */
+        hideBannerNew: function() {
+            this.$('.prompt-banner-new').hide();
+            return this;
         },
         /**
          * @method isFirst
@@ -219,7 +206,7 @@ define([
          * @returns {Boolean}
          */
         isLast: function() {
-            return this.position >= this.characters.length;
+            return this.position >= this.result.length;
         },
         /**
          * @method next
@@ -227,7 +214,7 @@ define([
          */
         next: function() {
             if (this.isLast()) {
-                console.log('PROMPT COMPLETE');
+                console.log('POSITION', 'LAST');
                 this.trigger('prompt:complete');
             } else {
                 this.position++;
@@ -241,7 +228,7 @@ define([
          */
         previous: function() {
             if (this.isFirst()) {
-                console.log('NO GOING BACK!');
+                console.log('POSITION', 'FIRST');
             } else {
                 this.position--;
                 this.renderPrompt();
@@ -254,11 +241,6 @@ define([
          */
         remove: function() {
             this.canvas.remove();
-            this.countdown.remove();
-            this.detail.remove();
-            this.grading.remove();
-            this.navigation.remove();
-            this.toolbar.remove();
             return GelatoComponent.prototype.remove.call(this);
         },
         /**
@@ -266,48 +248,31 @@ define([
          * @returns {Prompt}
          */
         resize: function() {
-            this.canvas.resize(450);
+            console.log('REZZY');
+            this.canvas.resize(this.$('.center-column').width());
             return this;
         },
         /**
          * @method set
          * @param {DataVocab} vocab
          * @param {String} part
-         * @param {Boolean} isNew
          * @returns {Prompt}
          */
-        set: function(vocab, part, isNew) {
+        set: function(vocab, part) {
             console.log('PROMPT:', vocab.id, part, vocab);
-            this.position = 1;
+            this.result = vocab.getPromptResult(part);
             this.part = part;
             this.vocab = vocab;
-            switch (part) {
-                case 'rune':
-                    this.characters = vocab.getCanvasCharacters();
-                    break;
-                case 'tone':
-                    this.characters = vocab.getCanvasTones();
-                    break;
-                default:
-                    this.characters = [];
-            }
-            this.detail.renderFields();
-            this.setNewBanner(isNew);
+            this.position = 1;
             this.renderPrompt();
-            this.resize();
             return this;
         },
         /**
-         * @method setNewBanner
-         * @param {Boolean} visible
+         * @method showBannerNew
          * @returns {Prompt}
          */
-        setNewBanner: function(visible) {
-            if (visible) {
-                this.$('.vocab-new').show();
-            } else {
-                this.$('.vocab-new').hide();
-            }
+        showBannerNew: function() {
+            this.$('.prompt-banner-new').show();
             return this;
         }
     });

@@ -3,8 +3,9 @@
  * @submodule Models
  */
 define([
-    'core/modules/GelatoModel'
-], function(GelatoModel) {
+    'core/modules/GelatoModel',
+    'modules/collections/PromptResults'
+], function(GelatoModel, PromptResults) {
 
     /**
      * @class DataVocab
@@ -73,12 +74,31 @@ define([
             if (customDefinition && customDefinition !== '') {
                 definition = this.get('customDefinition');
             } else if (definition) {
-                definition = this.get('definitions').en;
+                definition = this.get('definitions')['en'];
             }
             return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
         },
         /**
-         * @method
+         * @method getPromptResult
+         * @param {String} part
+         * @returns {PromptResults}
+         */
+        getPromptResult: function(part) {
+            var result = new PromptResults();
+            var characters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
+            var containedVocabIds = this.get('containedVocabIds');
+            if (containedVocabIds.length) {
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    result.add({character: characters[i], vocabId: containedVocabIds[i]});
+                }
+            } else {
+                result.add({character: characters[0], vocabId: this.id});
+            }
+            return result;
+        },
+        /**
+         * @method getReading
+         * @returns {String}
          */
         getReading: function() {
             return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');

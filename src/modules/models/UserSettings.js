@@ -28,7 +28,8 @@ define([
          */
         defaults: {
             allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
-            allJapaneseParts: ['defn', 'rdng', 'rune']
+            allJapaneseParts: ['defn', 'rdng', 'rune'],
+            gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'}
         },
         /**
          * @method cache

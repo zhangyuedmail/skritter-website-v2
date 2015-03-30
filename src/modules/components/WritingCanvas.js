@@ -283,6 +283,16 @@ define([
                     object.graphics._stroke = customStroke;
                 }
             })(object);
+            return this;
+        },
+        /**
+         * @method injectLayerColor
+         * @param {String} layerName
+         * @param {String} color
+         * @param {}
+         */
+        injectLayerColor: function(layerName, color) {
+            return this.injectColor(this.getLayer(layerName), color);
         },
         /**
          * @method reset
@@ -305,8 +315,6 @@ define([
          */
         resize: function(size) {
             app.set('canvasSize', size);
-            this.el.style.height = size;
-            this.el.style.width = size;
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
             this.size = size;
