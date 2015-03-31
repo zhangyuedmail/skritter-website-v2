@@ -160,6 +160,20 @@ define([
             return strokes;
         },
         /**
+         * @method getStyle
+         * @returns {String}
+         */
+        getStyle: function() {
+            var style = this.get('style');
+            if (style === 'simp') {
+                return 'simplified';
+            }
+            if (style === 'trad') {
+                return 'traditional'
+            }
+            return null;
+        },
+        /**
          * @method getToneNumbers
          * @returns {Array}
          */

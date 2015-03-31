@@ -1,19 +1,38 @@
 .gelato-component.prompt-toolbar {
 
+  margin-bottom: 35px;
+
+  .btn-group .btn {
+    border: none;
+    border-radius: 0;
+  }
+
   .option-stroke-order {
     background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
+    height: 50px;
+    margin-left: 22px;
+    width: 52px;
   }
 
   .option-eraser {
     background-image: url('#{$dir-assets}/vectors/study-erase.svg');
+    height: 48px;
+    margin-left: 22px;
+    width: 44px;
   }
 
   .option-reveal {
     background-image: url('#{$dir-assets}/vectors/study-show.svg');
+    height: 34px;
+    margin-left: 22px;
+    width: 58px;
   }
 
   .option-correct {
     background-image: url('#{$dir-assets}/vectors/study-correct.svg');
+    height: 44px;
+    margin-left: 22px;
+    width: 58px;
   }
 
 }

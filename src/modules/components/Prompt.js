@@ -5,9 +5,12 @@
 define([
     'require.text!templates/components/prompt.html',
     'core/modules/GelatoComponent',
+    'modules/components/PromptDetail',
+    'modules/components/PromptGrading',
     'modules/components/PromptNavigation',
+    'modules/components/PromptToolbar',
     'modules/components/WritingCanvas'
-], function(Template, GelatoComponent, PromptNavigation, WritingCanvas) {
+], function(Template, GelatoComponent, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
 
     /**
      * @class Prompt
@@ -20,11 +23,15 @@ define([
          */
         initialize: function() {
             this.canvas = new WritingCanvas();
+            this.detail = new PromptDetail({prompt: this});
+            this.grading = new PromptGrading({prompt: this});
             this.gradingColors = app.user.settings.get('gradingColors');
             this.navigation = new PromptNavigation({prompt: this});
             this.part = 'rune';
             this.position = 1;
             this.result = null;
+            this.toolbar = new PromptToolbar({prompt: this});
+            this.vocab = null;
             this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
             this.on('resize', this.resize);
@@ -36,7 +43,10 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.canvas.setElement('.writing-canvas-container').render();
+            this.detail.setElement('.prompt-detail-container').render();
+            this.grading.setElement('.prompt-grading-container').render();
             this.navigation.setElement('.prompt-navigation-container').render();
+            this.toolbar.setElement('.prompt-toolbar-container').render();
             this.resize();
             return this;
         },
@@ -68,6 +78,8 @@ define([
          */
         renderPromptDefn: function() {
             this.canvas.disableGrid();
+            this.detail.showCharacters();
+            this.detail.showReading();
             if (this.active().get('complete')) {
                 this.$('.answer-text').html(this.vocab.getDefinition());
                 this.$('.question-text').css('visibility', 'hidden');
@@ -85,6 +97,8 @@ define([
          */
         renderPromptRdng: function() {
             this.canvas.disableGrid();
+            this.detail.hideReading();
+            this.detail.showCharacters();
             if (this.active().get('complete')) {
                 this.$('.answer-text').html(this.vocab.getReading());
                 this.$('.question-text').css('visibility', 'hidden');
@@ -104,6 +118,8 @@ define([
             var character = this.character().getShape();
             this.canvas.enableGrid();
             this.canvas.drawShape('surface', character);
+            this.detail.selectCharacter(this.position);
+            this.detail.showReading();
             this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
@@ -121,13 +137,16 @@ define([
          */
         renderPromptTone: function() {
             var writing = this.vocab.getCharacters()[this.position - 1];
-            this.canvas.enableGrid();
+            this.canvas.disableGrid();
             this.canvas.drawShape('surface', this.character().getShape());
             this.canvas.drawCharacter('surface-background2', writing, {color: '#ebeaf0'});
+            this.detail.selectReading(this.position);
+            this.detail.showCharacters();
             this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
                 this.canvas.injectLayerColor('surface', this.getGradingColor());
+                this.detail.showReading(this.position);
                 this.active().set('complete', true);
             } else {
                 this.active().set('complete', false);
@@ -200,6 +219,7 @@ define([
                     this.active().set('complete', true);
                     this.canvas.disableInput();
                     this.canvas.injectLayerColor('surface', this.getGradingColor());
+                    this.detail.showCharacters(this.position);
                 }
             }
         },
@@ -225,6 +245,7 @@ define([
                     this.active().set('complete', true);
                     this.canvas.disableInput();
                     this.canvas.injectLayerColor('surface', this.getGradingColor());
+                    this.detail.showReading(this.position);
                 }
             }
         },
@@ -308,6 +329,7 @@ define([
             this.part = part;
             this.vocab = vocab;
             this.position = 1;
+            this.detail.renderFields();
             this.renderPrompt();
             return this;
         },
