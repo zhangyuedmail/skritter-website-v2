@@ -84,7 +84,7 @@ define([
          */
         getAdding: function() {
             return this.lists.filter(function(list) {
-                return list['studyingMode'] === 'adding';
+                return list.studyingMode === 'adding';
             });
         },
         /**
@@ -93,7 +93,7 @@ define([
          */
         getReviewing: function() {
             return this.lists.filter(function(list) {
-                return list['studyingMode'] === 'reviewing';
+                return list.studyingMode === 'reviewing';
             });
         },
         /**
@@ -103,7 +103,7 @@ define([
         load: function() {
             var self = this;
             app.api.fetchVocabLists({sort: 'studying'}, function(result) {
-                self.lists = result['VocabLists'] || [];
+                self.lists = result.VocabLists || [];
                 self.renderTables();
             }, function(error) {
                 console.log(error);

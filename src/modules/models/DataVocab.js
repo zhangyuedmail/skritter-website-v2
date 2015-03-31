@@ -74,7 +74,7 @@ define([
             if (customDefinition && customDefinition !== '') {
                 definition = this.get('customDefinition');
             } else if (definition) {
-                definition = this.get('definitions')['en'];
+                definition = this.get('definitions').en;
             }
             return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
         },
@@ -169,7 +169,7 @@ define([
                 return 'simplified';
             }
             if (style === 'trad') {
-                return 'traditional'
+                return 'traditional';
             }
             return null;
         },

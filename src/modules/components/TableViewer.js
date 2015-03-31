@@ -44,8 +44,8 @@ define([
             this.clear();
             //head section
             tableHead += "<tr>";
-            for (var fieldName in this.fields) {
-                var field = this.fields[fieldName];
+            for (var fieldName1 in this.fields) {
+                var field = this.fields[fieldName1];
                 if (typeof field === 'object' && field.title) {
                     tableHead += "<th>" + field.title + "</th>";
                 } else {
@@ -55,18 +55,17 @@ define([
             tableHead += "</tr>";
             //body section
             for (var i = 0, length = this.rows.length; i < length; i++) {
-                var row = this.rows[i];
+                var row = this.rows[i] instanceof Backbone.Model ? row.toJSON() : row;
                 var rowId = row.id || row.vocabId;
                 tableBody += "<tr id='row-" + rowId + "' class='cursor'>";
-                for (var fieldName in this.fields) {
-                    var row = row instanceof Backbone.Model ? row.toJSON() : row;
-                    var fieldObject = this.fields[fieldName];
-                    var fieldValue = row[fieldName];
-                    tableBody += "<td class='field-" + fieldName.toLowerCase() + "'>";
+                for (var fieldName2 in this.fields) {
+                    var fieldObject = this.fields[fieldName2];
+                    var fieldValue = row[fieldName2];
+                    tableBody += "<td class='field-" + fieldName2.toLowerCase() + "'>";
                     if (fieldObject.type === 'checkbox') {
                         tableBody += "<input type='checkbox' name='row' value='" + rowId + "' />";
                     } else if (fieldObject.type === 'link') {
-                        tableBody += "<a href='#'>" + field.linkText + "</a>";
+                        tableBody += "<a href='#'>" + fieldObject.linkText + "</a>";
                     } else if (fieldObject.type === 'progress') {
                         //TODO: change progress to actual value
                         tableBody += this.getProgressBar({value: Math.floor(Math.random() * 100) + 1});
@@ -76,7 +75,7 @@ define([
                     } else if (fieldObject.type === 'section-wordcount') {
                         tableBody += fieldValue.length + (fieldValue.length === 1 ? ' word' : ' words');
                     } else if (fieldObject.type === 'text') {
-                        if (fieldName === 'tradVocabId') {
+                        if (fieldName2 === 'tradVocabId') {
                             tableBody += row.tradVocabId === row.vocabId ? '- - -' : row.tradVocabId;
                         } else {
                             tableBody += fieldValue;

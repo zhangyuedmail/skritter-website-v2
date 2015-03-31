@@ -82,7 +82,7 @@ define([
         load: function() {
             var self = this;
             app.api.fetchVocabLists({sort: 'official'}, function(result) {
-                self.lists = result['VocabLists'] || [];
+                self.lists = result.VocabLists || [];
                 self.renderTables();
             }, function(error) {
                 console.log(error);
