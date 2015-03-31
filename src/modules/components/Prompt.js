@@ -321,14 +321,20 @@ define([
          * @method set
          * @param {DataVocab} vocab
          * @param {String} part
+         * @param {Boolean} isNew
          * @returns {Prompt}
          */
-        set: function(vocab, part) {
+        set: function(vocab, part, isNew) {
             console.log('PROMPT:', vocab.id, part, vocab);
             this.result = vocab.getPromptResult(part);
             this.part = part;
             this.vocab = vocab;
             this.position = 1;
+            if (isNew) {
+                this.showBannerNew();
+            } else {
+                this.hideBannerNew();
+            }
             this.detail.renderFields();
             this.renderPrompt();
             return this;
