@@ -7,6 +7,15 @@
     border-radius: 0;
   }
 
+  .btn-group .btn:active,
+  .btn-group .btn:focus,
+  .btn-group .btn:hover {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    outline: none;
+  }
+
   .option-stroke-order {
     background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
     height: 50px;

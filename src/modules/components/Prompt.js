@@ -34,6 +34,7 @@ define([
             this.vocab = null;
             this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
+            this.listenTo(this.grading, 'select', this.handleSelectGrade);
             this.on('resize', this.resize);
         },
         /**
@@ -56,6 +57,8 @@ define([
          */
         renderPrompt: function() {
             this.canvas.reset();
+            this.grading.unselect();
+            this.active().start();
             switch (this.part) {
                 case 'defn':
                     this.renderPromptDefn();
@@ -80,7 +83,9 @@ define([
             this.canvas.disableGrid();
             this.detail.showCharacters();
             this.detail.showReading();
+            this.toolbar.hide();
             if (this.active().get('complete')) {
+                this.grading.select(this.active().get('score'));
                 this.$('.answer-text').html(this.vocab.getDefinition());
                 this.$('.question-text').css('visibility', 'hidden');
             } else {
@@ -99,7 +104,9 @@ define([
             this.canvas.disableGrid();
             this.detail.hideReading();
             this.detail.showCharacters();
+            this.toolbar.hide();
             if (this.active().get('complete')) {
+                this.grading.select(this.active().get('score'));
                 this.$('.answer-text').html(this.vocab.getReading());
                 this.$('.question-text').css('visibility', 'hidden');
             } else {
@@ -120,10 +127,12 @@ define([
             this.canvas.drawShape('surface', character);
             this.detail.selectCharacter(this.position);
             this.detail.showReading();
+            this.toolbar.show();
             this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
                 this.canvas.injectLayerColor('surface', this.getGradingColor());
+                this.grading.select(this.active().get('score'));
                 this.active().set('complete', true);
             } else {
                 this.active().set('complete', false);
@@ -139,14 +148,19 @@ define([
             var writing = this.vocab.getCharacters()[this.position - 1];
             this.canvas.disableGrid();
             this.canvas.drawShape('surface', this.character().getShape());
-            this.canvas.drawCharacter('surface-background2', writing, {color: '#ebeaf0'});
+            this.canvas.drawCharacter('surface-background2', writing, {
+                color: '#ebeaf0',
+                font: this.vocab.getFontName()
+            });
             this.detail.selectReading(this.position);
             this.detail.showCharacters();
+            this.toolbar.hide();
             this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
                 this.canvas.injectLayerColor('surface', this.getGradingColor());
                 this.detail.showReading(this.position);
+                this.grading.select(this.active().get('score'));
                 this.active().set('complete', true);
             } else {
                 this.active().set('complete', false);
@@ -182,11 +196,15 @@ define([
             if (this.active().get('complete')) {
                 this.next();
             } else if (this.part === 'defn') {
+                this.active().stop();
                 this.active().set('complete', true);
                 this.renderPrompt();
             } else if (this.part === 'rdng') {
+                this.active().stop();
                 this.active().set('complete', true);
                 this.renderPrompt();
+            } else {
+                this.active().stopThinking();
             }
         },
         /**
@@ -205,6 +223,16 @@ define([
             }
         },
         /**
+         * @method handleSelectGrade
+         * @param value
+         */
+        handleSelectGrade: function(value) {
+            this.active().set('score', value);
+            if (this.character().isComplete()) {
+                this.canvas.injectLayerColor('surface', this.getGradingColor());
+            }
+        },
+        /**
          * @method recognizeRune
          * @param {Array} points
          * @param {createjs.Shape} shape
@@ -216,10 +244,12 @@ define([
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
                 if (this.character().isComplete()) {
+                    this.active().stop();
                     this.active().set('complete', true);
                     this.canvas.disableInput();
                     this.canvas.injectLayerColor('surface', this.getGradingColor());
                     this.detail.showCharacters(this.position);
+                    this.grading.select(this.active().get('score'));
                 }
             }
         },
@@ -242,10 +272,12 @@ define([
                     this.canvas.drawShape('surface', this.character().at(0).getShape());
                 }
                 if (this.character().isComplete()) {
+                    this.active().stop();
                     this.active().set('complete', true);
                     this.canvas.disableInput();
                     this.canvas.injectLayerColor('surface', this.getGradingColor());
                     this.detail.showReading(this.position);
+                    this.grading.select(this.active().get('score'));
                 }
             }
         },
@@ -304,6 +336,10 @@ define([
          */
         remove: function() {
             this.canvas.remove();
+            this.detail.remove();
+            this.grading.remove();
+            this.navigation.remove();
+            this.toolbar.remove();
             return GelatoComponent.prototype.remove.call(this);
         },
         /**

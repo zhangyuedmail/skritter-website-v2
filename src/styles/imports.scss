@@ -3,12 +3,21 @@ $dir-assets: '../assets';
 
 
 /*** FONTS ***/
-$font-primary: "Muli", "Helvetica Neue";
-$font-secondary: "Roboto Slab", "Helvetica Neue";
+$font-chinese: "Simkai", "Kaisho";
+$font-japanese: "Kaisho", "Simkai";
+$font-primary: "Muli", "Arial Unicode MS", "Arial";
+$font-secondary: "Roboto Slab", "Arial Unicode MS", "Arial";
 
 
 /*** BACKGROUNDS ***/
 $background: url('#{$dir-assets}/backgrounds/retina-wood.png');
+
+
+/*** COLOR: GRADING ***/
+$grade1: #e74c3c;
+$grade2: #ebbd3e;
+$grade3: #87a64b;
+$grade4: #4d88e3;
 
 
 /*** COLOR: GREY ***/
@@ -89,6 +98,8 @@ body {
   font-family: $font-primary;
 }
 .content-block { border-radius: 25px; }
+.text-chinese { font-family: $font-chinese; }
+.text-japanese { font-family: $font-japanese; }
 @media (min-width: 1300px) {
   .container {
     padding-left: 0;

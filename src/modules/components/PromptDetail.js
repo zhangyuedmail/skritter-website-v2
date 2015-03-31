@@ -40,6 +40,7 @@ define([
             this.$('.vocab-reading').html(vocab.getReadingElement());
             this.$('.vocab-style').text(vocab.getStyle());
             this.$('.vocab-writing').html(vocab.getWritingElement());
+            this.$('.text-language').addClass(vocab.getFontClass());
             return this;
         },
         /**

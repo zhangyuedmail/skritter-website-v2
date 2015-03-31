@@ -35,8 +35,17 @@ define([
          * @type Object
          */
         events: {
+            'vclick .option-correct': 'handleClickOptionCorrect',
             'vclick .option-eraser': 'handleClickOptionEraser',
-            'vclick .option-reveal': 'handleClickOptionReveal'
+            'vclick .option-reveal': 'handleClickOptionReveal',
+            'vclick .option-stroke-order': 'handleClickOptionStrokeOrder'
+        },
+        /**
+         * @method handleClickOptionCorrect
+         * @param {Event} event
+         */
+        handleClickOptionCorrect: function(event) {
+            event.preventDefault();
         },
         /**
          * @method handleClickOptionEraser
@@ -44,12 +53,24 @@ define([
          */
         handleClickOptionEraser: function(event) {
             event.preventDefault();
+            this.prompt.character().reset();
+            this.prompt.renderPrompt();
         },
         /**
          * @method handleClickOptionReveal
          * @param {Event} event
          */
         handleClickOptionReveal: function(event) {
+            event.preventDefault();
+            var nextShape = this.prompt.character().getExpectedTargets()[0].getShape();
+            this.prompt.canvas.clearLayer('surface-background2');
+            this.prompt.canvas.drawShape('surface-background2', nextShape, {color: '#b3b3b3'});
+        },
+        /**
+         * @method handleClickOptionStroke
+         * @param {Event} event
+         */
+        handleClickOptionStroke: function(event) {
             event.preventDefault();
         },
         /**

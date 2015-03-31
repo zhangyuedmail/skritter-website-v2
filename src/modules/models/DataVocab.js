@@ -79,6 +79,20 @@ define([
             return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
         },
         /**
+         * @method getFontClass
+         * @return {String}
+         */
+        getFontClass: function() {
+            return this.isChinese() ? 'text-chinese' : 'text-japanese';
+        },
+        /**
+         * @method getFontName
+         * @return {String}
+         */
+        getFontName: function() {
+            return this.isChinese() ? 'Simkai' : 'Kaisho';
+        },
+        /**
          * @method getPromptResult
          * @param {String} part
          * @returns {PromptResults}
