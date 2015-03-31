@@ -47,14 +47,14 @@
     src: url("../fonts/RobotoSlab-Bold.ttf") format("truetype");
 }
 
-/***
-TODO: add default chinese and japanese fonts
 @font-face {
-    font-family: "Skritter-Chinese";
-    src: url("../fonts/Skritter-Chinese.ttf") format("truetype");
+    font-family: "Simkai";
+    font-weight: normal;
+    src: url("../fonts/Simkai-Regular.ttf") format("truetype");
 }
+
 @font-face {
-    font-family: "Skritter-Japanese";
-    src: url("../fonts/Skritter-Japanese.ttf") format("truetype");
+    font-family: "Kaisho";
+    font-weight: normal;
+    src: url("../fonts/Kaisho-Regular.ttf") format("truetype");
 }
-***/

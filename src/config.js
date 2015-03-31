@@ -1,6 +1,6 @@
 app.addFonts({
     custom: {
-        families: ['Arial Unicode MS', 'Muli', 'Roboto Slab'],
+        families: ['Arial Unicode MS', 'Kaisho', 'Muli', 'Roboto Slab', 'Simkai'],
         urls: ['styles/fonts.css']
     }
 });
