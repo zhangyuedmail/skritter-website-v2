@@ -55,7 +55,7 @@ define([
             tableHead += "</tr>";
             //body section
             for (var i = 0, length = this.rows.length; i < length; i++) {
-                var row = this.rows[i] instanceof Backbone.Model ? row.toJSON() : row;
+                var row = this.rows[i] instanceof Backbone.Model ? this.rows[i].toJSON() : this.rows[i];
                 var rowId = row.id || row.vocabId;
                 tableBody += "<tr id='row-" + rowId + "' class='cursor'>";
                 for (var fieldName2 in this.fields) {
