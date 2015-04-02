@@ -60,17 +60,15 @@ define([
          */
         renderHeatmap: function() {
             this.heatmap.init({
-                cellRadius: 25,
                 cellSize: 25,
                 cellPadding: 5,
-                //data: 'datas-years.json',
                 domain: 'month',
                 domainDynamicDimension: false,
                 domainGutter: 20,
                 itemSelector: '.heatmap-container',
-                legend: [20, 40, 60, 80],
+                legend: [1, 50, 100, 200],
                 range: 1,
-                start: new Date(2015, 3, 1),
+                start: new Date(2015, new Date().getMonth(), 1),
                 subDomain: 'x_day',
                 subDomainTextFormat: '%d'
             });
@@ -110,11 +108,61 @@ define([
          */
         load: function() {
             var self = this;
-            app.api.fetchVocabLists({sort: 'studying'}, function(result) {
-                self.lists = result.VocabLists || [];
-                self.renderTables();
-            }, function(error) {
-                console.log(error);
+            var date = new Date();
+            var baseDateString = Moment().format('YYYY-MM-');
+            Async.waterfall([
+                function(callback) {
+                    app.api.fetchVocabLists({sort: 'studying'}, function(result) {
+                        self.lists = result.VocabLists || [];
+                        self.renderTables();
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    app.api.fetchStats({
+                        start: baseDateString + '01',
+                        end: baseDateString + '12'
+                    }, function(result) {
+                        callback(null, result);
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(stats, callback) {
+                    app.api.fetchStats({
+                        start: baseDateString + '13',
+                        end: baseDateString + '25'
+                    }, function(result) {
+                        callback(null, stats.concat(result));
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(stats, callback) {
+                    app.api.fetchStats({
+                        start: baseDateString + '26',
+                        end: baseDateString + new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+                    }, function(result) {
+                        callback(null, stats.concat(result));
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(stats, callback) {
+                    var data = {};
+                    for (var i = 0, length = stats.length; i < length; i++) {
+                        data[Moment(stats[i].date).unix()] = stats[i].char.rune.studied.day;
+                    }
+                    callback(null, data);
+                }
+            ], function(error, data) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    self.heatmap.update(data);
+                }
             });
         },
         /**
