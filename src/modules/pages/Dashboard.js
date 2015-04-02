@@ -121,6 +121,15 @@ define([
                     });
                 },
                 function(callback) {
+                    app.api.fetchStats(null, function(result) {
+                        self.$('.characters-learned-count').text(result[0].char.rune.learned.all);
+                        self.$('.words-learned-count').text(result[0].word.rune.learned.all);
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
                     app.api.fetchStats({
                         start: baseDateString + '01',
                         end: baseDateString + '12'
