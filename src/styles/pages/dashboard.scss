@@ -1,24 +1,37 @@
 .gelato-page.dashboard {
 
-  .cal-heatmap-container {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .cal-heatmap-container .graph-label { display: none; }
-
-  .content-title {
+  .block-label {
+    color: $grey5;
     font-family: $font-secondary;
     font-size: 12px;
-    font-weight: 400;
     left: 30px;
     position: absolute;
-    text-transform: uppercase;
     top: 30px;
   }
 
-  .row-list-progress .content-block { min-height: 100px; }
+  .characters-learned-count,
+  .words-learned-count {
+    color: $green5;
+    font-family: $font-secondary;
+    font-size: 60px;
+  }
 
-  .row-stats .content-block { height: 280px; }
+  .content-block { padding-top: 60px; }
+
+  .first-row .content-block { height: 300px; }
+
+  .heatmap-container .cal-heatmap-container {
+    margin: 0 auto;
+    max-height: 200px;
+  }
+
+  .heatmap-container .graph-label,
+  .heatmap-container .graph-legend { display: none; }
+
+  .heatmap-container .graph-rect { cursor: pointer; }
+
+  .table-viewer td, .table-viewer th { border: none; }
+
+  .table-viewer .field-progress { min-width: 150px; }
 
 }
