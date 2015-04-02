@@ -68,7 +68,30 @@ define([
          * @returns {Boolean}
          */
         isValid: function() {
-            return this.attributes.vocabIds.length ? true : false;
+            //filter out any items not loaded yet
+            if (this.get('changed') === undefined) {
+                return false;
+            }
+            //filter out items that contain no vocab ids
+            if (!this.get('vocabIds').length) {
+                return false;
+            }
+            //filter out items not matching an active part
+            if (this.collection.activeParts.indexOf(this.get('part')) === -1) {
+                return false;
+            }
+            //chinese specific filters
+            if (this.collection.languageCode === 'zh') {
+                //filter out items not matching an active style
+                if (this.collection.activeStyles.indexOf(this.get('style')) === -1) {
+                    return false;
+                }
+            }
+            //japanese specific filters
+            if (this.collection.languageCode === 'ja') {
+                //TODO: add japanese specific kana filters
+            }
+            return true;
         },
         /**
          * @method load
@@ -81,6 +104,7 @@ define([
             var part = this.get('part');
             var userId = app.user.id;
             var vocabIds = self.get('vocabIds');
+            //TODO: first check if item is valid
             Async.series([
                 //vocabs
                 function(callback) {

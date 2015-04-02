@@ -18,6 +18,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.item = null;
             this.prompt = new Prompt();
         },
         /**
@@ -32,8 +33,10 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.renderFields();
-            this.prompt.setElement(this.$('.prompt-container')).render();
-            app.user.data.items.loadNext($.proxy(this.loadPrompt, this));
+            this.prompt.setElement(this.$('.prompt-container')).render().hide();
+            this.listenTo(this.prompt, 'prompt:next', $.proxy(this.handlePromptNext, this));
+            this.listenTo(this.prompt, 'prompt:previous', $.proxy(this.handlePromptPrevious, this));
+            this.loadPrompt();
             return this;
         },
         /**
@@ -45,13 +48,31 @@ define([
             return this;
         },
         /**
+         * @method handlePromptNext
+         * @param {PromptResult} result
+         */
+        handlePromptNext: function(result) {
+            console.log('RESULT', result);
+            this.item.update(result);
+            this.loadPrompt();
+        },
+        /**
+         * @method handlePromptPrevious
+         */
+        handlePromptPrevious: function() {},
+        /**
          * @method loadPrompt
-         * @param {DataItem} item
          * @returns {PageStudy}
          */
-        loadPrompt: function(item) {
-            //this.prompt.set(item.getVocab(), item.get('part'), item.isNew());
-            this.prompt.set(item.getVocab(), 'rune', true);
+        loadPrompt: function() {
+            var self = this;
+            app.user.data.items.loadNext(function(item) {
+                self.item = item;
+                self.prompt.set(item.getVocab(), item.get('part'), item.isNew());
+                self.prompt.show();
+            }, function(error) {
+                console.log('PROMPT LOAD ERROR:', error);
+            });
             return this;
         }
     });

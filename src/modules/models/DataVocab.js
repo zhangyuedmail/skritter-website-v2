@@ -100,7 +100,7 @@ define([
         getPromptResult: function(part) {
             var result = new PromptResults();
             var characters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
-            var containedVocabIds = this.get('containedVocabIds');
+            var containedVocabIds = this.get('containedVocabIds') || [];
             if (['rune', 'tone'].indexOf(part) > -1 && containedVocabIds.length) {
                 for (var i = 0, length = containedVocabIds.length; i < length; i++) {
                     result.add({character: characters[i], vocabId: containedVocabIds[i]});
