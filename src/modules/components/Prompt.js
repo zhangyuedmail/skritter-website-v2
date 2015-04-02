@@ -48,6 +48,7 @@ define([
             this.grading.setElement('.prompt-grading-container').render();
             this.navigation.setElement('.prompt-navigation-container').render();
             this.toolbar.setElement('.prompt-toolbar-container').render();
+            this.$('.text-language').addClass(app.user.settings.getFontClass());
             this.resize();
             return this;
         },
@@ -263,10 +264,12 @@ define([
             if (stroke) {
                 var tones = this.vocab.getToneNumbers()[this.position - 1];
                 if (tones.indexOf(stroke.get('tone')) > -1) {
+                    this.active().set('score', 3);
                     var targetShape = stroke.getShape();
                     var userShape = stroke.getUserShape();
                     this.canvas.tweenShape('surface', userShape, targetShape);
                 } else {
+                    this.active().set('score', 1);
                     this.character().reset();
                     this.character().add(this.character().getTone(tones[0]).clone());
                     this.canvas.drawShape('surface', this.character().at(0).getShape());
@@ -310,7 +313,7 @@ define([
         next: function() {
             if (this.isLast()) {
                 console.log('POSITION', 'LAST');
-                this.trigger('prompt:complete');
+                this.trigger('prompt:next', this.result);
             } else {
                 this.position++;
                 this.renderPrompt();
@@ -324,6 +327,7 @@ define([
         previous: function() {
             if (this.isFirst()) {
                 console.log('POSITION', 'FIRST');
+                this.trigger('prompt:previous');
             } else {
                 this.position--;
                 this.renderPrompt();
