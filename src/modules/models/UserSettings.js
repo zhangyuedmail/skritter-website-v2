@@ -95,6 +95,20 @@ define([
             return this.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
         },
         /**
+         * @method getFontClass
+         * @return {String}
+         */
+        getFontClass: function() {
+            return this.user.isChinese() ? 'text-chinese' : 'text-japanese';
+        },
+        /**
+         * @method getFontName
+         * @return {String}
+         */
+        getFontName: function() {
+            return this.user.isChinese() ? 'Simkai' : 'Kaisho';
+        },
+        /**
          * @method loadCache
          * @returns {UserSettings}
          */
