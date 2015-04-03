@@ -18,7 +18,8 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.donut = null;
+            this.donutDailyGoal = null;
+            this.donutListQueue = null;
             this.heatmap = new CalHeatMap();
             this.lists = [];
             this.tableLists = new TableViewer();
@@ -38,23 +39,32 @@ define([
             this.renderTemplate(Template);
             this.tableLists.setElement(this.$('.progress-table-container')).render();
             this.renderDialog();
-            this.renderDonut();
+            this.renderDonuts();
             this.renderFields();
             this.renderHeatmap();
             this.load();
             return this;
         },
         /**
-         * @method renderDonut
+         * @method renderDonuts
          * @returns {PageDashboard}
          */
-        renderDonut: function() {
-            var context = this.$('.donut-container').get(0).getContext('2d');
-            this.donut = new Chart(context).Doughnut([
+        renderDonuts: function() {
+            var contextDailyGoal = this.$('.daily-goal-donut-container').get(0).getContext('2d');
+            var contextListQueue = this.$('.list-queue-donut-container').get(0).getContext('2d');
+            this.donutDailyGoal = new Chart(contextDailyGoal).Doughnut([
                 {value: 80, color:'#c5da4b'},
                 {value: 20, color:'#efeef3'}
             ], {
-                animateRotate: false
+                animateRotate: false,
+                percentageInnerCutout : 80
+            });
+            this.donutListQueue = new Chart(contextListQueue).Doughnut([
+                {value: 80, color:'#c5da4b'},
+                {value: 20, color:'#efeef3'}
+            ], {
+                animateRotate: false,
+                percentageInnerCutout : 80
             });
             return this;
         },
