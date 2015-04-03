@@ -3,6 +3,7 @@
  * @class Libraries
  */
 define([
+    'chart',
     'createjs.easel',
     'createjs.tween',
     'd3',

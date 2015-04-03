@@ -6,6 +6,7 @@ app.addFonts({
 });
 
 app.addPaths({
+    'chart': 'libraries/chart-1.0.2.min',
     'createjs.easel': 'libraries/createjs.easel-NEXT.min',
     'createjs.tween': 'libraries/createjs.tween-NEXT.min',
     'd3': 'libraries/d3-3.5.5.min',
