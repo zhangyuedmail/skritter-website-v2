@@ -18,6 +18,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.donut = null;
             this.heatmap = new CalHeatMap();
             this.lists = [];
             this.tableLists = new TableViewer();
@@ -37,9 +38,24 @@ define([
             this.renderTemplate(Template);
             this.tableLists.setElement(this.$('.progress-table-container')).render();
             this.renderDialog();
+            this.renderDonut();
             this.renderFields();
             this.renderHeatmap();
             this.load();
+            return this;
+        },
+        /**
+         * @method renderDonut
+         * @returns {PageDashboard}
+         */
+        renderDonut: function() {
+            var context = this.$('.donut-container').get(0).getContext('2d');
+            this.donut = new Chart(context).Doughnut([
+                {value: 80, color:'#c5da4b'},
+                {value: 20, color:'#efeef3'}
+            ], {
+                animateRotate: false
+            });
             return this;
         },
         /**

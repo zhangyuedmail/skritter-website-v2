@@ -9,6 +9,11 @@
     top: 30px;
   }
 
+  .button-study {
+    height: 50px;
+    margin-top: 30px;
+    width: 150px;
+  }
 
   .cal-heatmap-container .q1 {
     background-color: #ededed;
@@ -55,6 +60,19 @@
   .heatmap-container .graph-legend { display: none; }
 
   .heatmap-container .graph-rect { cursor: pointer; }
+
+  .items-added, .items-reviewed {
+    color: $green5;
+    font-family: $font-secondary;
+    font-size: 46px;
+    font-weight: 400;
+  }
+
+  .items-added-label, .items-reviewed-label {
+    color: $grey3;
+    font-size: 16px;
+    font-weight: 400;
+  }
 
   .table-viewer td, .table-viewer th { border: none; }
 
