@@ -222,6 +222,13 @@ define([
             return element;
         },
         /**
+         * @method isBanned
+         * @returns {Boolean}
+         */
+        isBanned: function() {
+            return this.get('bannedParts').length ? true : false;
+        },
+        /**
          * @method isChinese
          * @returns {Boolean}
          */

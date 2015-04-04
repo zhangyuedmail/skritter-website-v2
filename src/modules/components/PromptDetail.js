@@ -43,10 +43,84 @@ define([
             return this;
         },
         /**
+         * @method renderToolbar
+         * @returns {PromptDetail}
+         */
+        renderToolbar: function() {
+            var vocab = this.prompt.vocab;
+            if (vocab.isBanned()) {
+                this.$('.button-ban').addClass('active');
+            } else {
+                this.$('.button-ban').removeClass('active');
+            }
+            if (vocab.get('starred')) {
+                this.$('.button-star').addClass('active');
+            } else {
+                this.$('.button-star').removeClass('active');
+            }
+            return this;
+        },
+        /**
          * @property events
          * @type Object
          */
-        events: {},
+        events: {
+            'vclick .button-audio': 'handleClickButtonAudio',
+            'vclick .button-ban': 'handleClickButtonBan',
+            'vclick .button-edit': 'handleClickButtonEdit',
+            'vclick .button-info': 'handleClickButtonInfo',
+            'vclick .button-star': 'handleClickButtonStar'
+        },
+        /**
+         * @method handleClickButtonAudio
+         * @param {Event} event
+         */
+        handleClickButtonAudio: function(event) {
+            event.preventDefault();
+            this.prompt.vocab.play();
+        },
+        /**
+         * @method handleClickButtonBan
+         * @param {Event} event
+         */
+        handleClickButtonBan: function(event) {
+            event.preventDefault();
+            var vocab = this.prompt.vocab;
+            if (vocab.isBanned()) {
+                vocab.set('bannedParts', []);
+            } else {
+                vocab.set('bannedParts', app.user.settings.getAllParts());
+            }
+            this.renderToolbar();
+        },
+        /**
+         * @method handleClickButtonEdit
+         * @param {Event} event
+         */
+        handleClickButtonEdit: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickButtonInfo
+         * @param {Event} event
+         */
+        handleClickButtonInfo: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickButtonStar
+         * @param {Event} event
+         */
+        handleClickButtonStar: function(event) {
+            event.preventDefault();
+            var vocab = this.prompt.vocab;
+            if (vocab.get('starred')) {
+                vocab.set('starred', false);
+            } else {
+                vocab.set('starred', true);
+            }
+            this.renderToolbar();
+        },
         /**
          * @method hideCharacters
          * @param {Number} [position]

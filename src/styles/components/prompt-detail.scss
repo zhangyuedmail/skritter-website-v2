@@ -10,6 +10,48 @@
 
   margin-top: 42px;
 
+  .detail-toolbar { float: right; }
+
+  .detail-toolbar div {
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-right: 20px;
+  }
+
+  .detail-toolbar .button-audio {
+    background-image: url('#{$dir-assets}/vectors/study-word-volume.svg');
+    height: 24px;
+    width: 24px;
+  }
+
+  .detail-toolbar .button-ban {
+    background-image: url('#{$dir-assets}/vectors/study-ban.svg');
+    height: 24px;
+    width: 24px;
+  }
+
+  .detail-toolbar .button-ban.active { background-color: yellow; }
+
+  .detail-toolbar .button-edit {
+    background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
+    height: 23px;
+    width: 19px;
+  }
+
+  .detail-toolbar .button-info {
+    background-image: url('#{$dir-assets}/vectors/study-info.svg');
+    height: 23px;
+    width: 23px;
+  }
+
+  .detail-toolbar .button-star {
+    background-image: url('#{$dir-assets}/vectors/study-word-star.svg');
+    height: 23px;
+    width: 23px;
+  }
+
+  .detail-toolbar .button-star.active { background-color: yellow; }
+
   .field-header {
     color: $grey4;
     font-size: 14px;
