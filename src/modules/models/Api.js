@@ -454,13 +454,37 @@ define([
             return this.get('root') + this.get('tld') + '/api/v' + this.get('version') + '/';
         },
         /**
+         * @method putVocab
+         * @param {Object} vocab
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        putVocab: function(vocab, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'vocablists/' + vocab.id +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: self,
+                type: 'PUT',
+                data: JSON.stringify(vocab)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method putVocabList
          * @param {Object} list
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
         putVocabList: function(list, callbackSuccess, callbackError) {
-            list = {id: list.id, studyingMode: list.studyingMode};
             $.ajax({
                 url: this.getUrl() + 'vocablists/' + list.id +
                 '?bearer_token=' + this.getToken(),

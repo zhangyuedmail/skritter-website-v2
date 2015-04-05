@@ -65,7 +65,7 @@ define([
          */
         renderSections: function() {
             this.sections.set(this.list.get('sections'), {
-                name: {title: '', type: 'text'},
+                name: {title: '', type: 'row'},
                 rows: {title: '', type: 'section-wordcount'},
                 status: {title: '', type: 'section-status'}
             }, {showHeader: false});

@@ -55,8 +55,8 @@ define([
         renderTable: function() {
             this.tableRows.set(this.section.rows, {
                 checkbox: {title: '', type: 'checkbox'},
-                vocabId: {title: '', type: 'text'},
-                tradVocabId: {title: '', type: 'text'}
+                vocabId: {title: '', type: 'row'},
+                tradVocabId: {title: '', type: 'row'}
             }, {showHeaders: false});
             return this;
         },

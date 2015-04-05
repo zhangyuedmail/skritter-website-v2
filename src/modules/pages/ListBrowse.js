@@ -41,9 +41,9 @@ define([
          */
         renderTables: function() {
             this.tableLists.set(this.lists, {
-                name: {title: 'Name', type: 'text'},
+                name: {title: 'Name', type: 'row'},
                 popularity: {title: 'Popularity', type: 'progress'},
-                difficulty: {title: 'Difficulty', type: 'text'},
+                difficult: {title: 'Difficulty', type: 'text', value: '???'},
                 addToQueue: {title: '', type: 'link', linkText: "<i class='fa fa-plus-circle'></i> Add to queue"}
             }, {showHeaders: true}).sortBy('name');
             this.resize();
@@ -55,7 +55,17 @@ define([
          */
         events: {
             'keyup .list-search-input': 'handleKeyupListSearchInput',
+            'vclick .table .field-addtoqueue': 'handleClickTableAddToQueue',
             'vclick .lists-table-container .field-name': 'handleClickListTableRow'
+        },
+        /**
+         * @method handleClickTableAddToQueue
+         * @param {Event} event
+         */
+        handleClickTableAddToQueue: function(event) {
+            event.preventDefault();
+            var listId = $(event.currentTarget).parent().attr('id').replace('row-', '');
+            app.user.data.vocablists.add({id: listId, studyingMode: 'adding'});
         },
         /**
          * @method handleClickListTableRow
