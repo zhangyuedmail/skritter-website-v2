@@ -98,14 +98,42 @@ define([
             ], callback);
         },
         /**
-         * @method loadCache
+         * @method load
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          * @returns {UserData}
          */
-        loadCache: function() {
-            var item = localStorage.getItem(this.user.getCachePath('data', true));
-            if (item) {
-                this.set(JSON.parse(item), {silent: true});
-            }
+        load: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.series([
+                function(callback) {
+                    var cachedItem = localStorage.getItem(self.user.getCachePath('data', true));
+                    if (cachedItem) {
+                        self.set(JSON.parse(cachedItem), {silent: true});
+                    }
+                    callback();
+                },
+                function(callback) {
+                    self.items.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    self.vocablists.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackSuccess();
+                }
+            });
             return this;
         }
     });

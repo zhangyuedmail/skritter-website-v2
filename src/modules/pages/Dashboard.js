@@ -42,6 +42,7 @@ define([
             this.renderDonuts();
             this.renderFields();
             this.renderHeatmap();
+
             this.load();
             return this;
         },
@@ -60,8 +61,8 @@ define([
                 percentageInnerCutout : 80
             });
             this.donutListQueue = new Chart(contextListQueue).Doughnut([
-                {value: 80, color:'#c5da4b'},
-                {value: 20, color:'#efeef3'}
+                {value: 40, color:'#c5da4b'},
+                {value: 60, color:'#efeef3'}
             ], {
                 animateRotate: false,
                 percentageInnerCutout : 80
@@ -136,6 +137,7 @@ define([
             var self = this;
             var date = new Date();
             var baseDateString = Moment().format('YYYY-MM-');
+            this.$('#download-progress').hide();
             Async.waterfall([
                 function(callback) {
                     app.api.fetchVocabLists({sort: 'studying'}, function(result) {
@@ -211,6 +213,8 @@ define([
             this.$('#download-progress .progress-status').text(status);
             if (status === 100) {
                 this.$('#download-progress').fadeOut(1000);
+            } else {
+                this.$('#download-progress').show();
             }
         }
     });

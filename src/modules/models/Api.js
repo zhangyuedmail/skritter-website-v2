@@ -454,6 +454,57 @@ define([
             return this.get('root') + this.get('tld') + '/api/v' + this.get('version') + '/';
         },
         /**
+         * @method putSubscription
+         * @param {String} userId
+         * @param {Object} subscription
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        putSubscription: function(userId, subscription, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'subscriptions/' + userId +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(subscription)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method putUser
+         * @param {Object} user
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        putUser: function(user, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'users/' + user.id +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(user)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data.User);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method putVocab
          * @param {Object} vocab
          * @param {Function} callbackSuccess
@@ -461,10 +512,10 @@ define([
          */
         putVocab: function(vocab, callbackSuccess, callbackError) {
             $.ajax({
-                url: this.getUrl() + 'vocablists/' + vocab.id +
+                url: this.getUrl() + 'vocabs/' + vocab.id +
                 '?bearer_token=' + this.getToken(),
                 headers: this.getHeaders(),
-                context: self,
+                context: this,
                 type: 'PUT',
                 data: JSON.stringify(vocab)
             }).done(function(data) {
@@ -489,7 +540,7 @@ define([
                 url: this.getUrl() + 'vocablists/' + list.id +
                 '?bearer_token=' + this.getToken(),
                 headers: this.getHeaders(),
-                context: self,
+                context: this,
                 type: 'PUT',
                 data: JSON.stringify(list)
             }).done(function(data) {

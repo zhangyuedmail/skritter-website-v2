@@ -107,7 +107,6 @@ define([
          */
         handleClickTableRow: function(event) {
             event.preventDefault();
-            console.log(event);
             var listId = $(event.currentTarget).parent().attr('id').replace('row-', '');
             app.router.navigate('lists/browse/' + listId, {trigger: true});
         },

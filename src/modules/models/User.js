@@ -107,30 +107,53 @@ define([
                 },
                 //load global cache
                 function(callback) {
-                    self.auth.loadCache();
-                    self.settings.loadCache();
-                    self.subscription.loadCache();
+                    //TODO: update loading user stats
+                    self.stats.loadCache();
                     callback();
                 },
-                //load language cache
+                //load user authorization
                 function(callback) {
-                    self.stats.loadCache();
-                    self.data.loadCache();
-                    callback();
+                    self.auth.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                //load user settings
+                function(callback) {
+                    self.settings.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                 //load user subscription
+                function(callback) {
+                    self.subscription.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
                 },
                 //open database for usage
                 function(callback) {
                     self.loadStorage(callback);
                 },
-                //load initial item data
+                //load user data
                 function(callback) {
-                    self.data.items.load(callback);
+                    self.data.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
                 },
                 //initialize missing item fetch
                 function(callback) {
-                    if (self.data.items.hasMissing()) {
+                    /** TODO: something
+                     if (self.data.items.hasMissing()) {
                         self.data.items.fetchMissing();
                     }
+                     **/
                     callback();
                 }
             ], function(error) {

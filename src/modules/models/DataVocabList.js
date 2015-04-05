@@ -43,18 +43,36 @@ define([
         },
         /**
          * @method save
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          * @returns {DataVocabList}
          */
         save: function(callbackSuccess, callbackError) {
             var self = this;
-            app.api.putVocabList(this.getChanged(), function(result) {
-                self.set(result, {silent: true});
-                if (typeof callbackSuccess === 'function') {
-                    callbackSuccess(self);
+            Async.series([
+                function(callback) {
+                    app.api.putVocabList(self.getChanged(), function(result) {
+                        self.set(result, {silent: true});
+                        callback();
+                    }, function(error) {
+                        callbackError(error);
+                    });
+                }, function(callback) {
+                    app.user.storage.put('vocablists', self.toJSON(), function() {
+                        callback();
+                    }, function(error) {
+                        callbackError(error);
+                    });
                 }
-            }, function(error) {
-                if (typeof callbackError === 'function') {
-                    callbackError(error);
+            ], function(error) {
+                if (error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess(self);
+                    }
                 }
             });
             return this;

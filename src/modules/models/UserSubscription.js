@@ -37,26 +37,70 @@ define([
         },
         /**
          * @method fetch
-         * @param {Function} callback
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        fetch: function(callback) {
+        fetch: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.fetchSubscription(this.user.id, null, function(data) {
-                self.set(data);
-                callback();
+                self.set(data, {silent: true});
+                callbackSuccess();
             }, function(error) {
-                callback(error);
+                callbackError(error);
             });
         },
         /**
-         * @method loadCache
+         * @method load
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          * @returns {UserSubscription}
          */
-        loadCache: function() {
-            var item = localStorage.getItem(this.user.getCachePath('subscription', false));
-            if (item) {
-                this.set(JSON.parse(item), {silent: true});
-            }
+        load: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.series([
+                function(callback) {
+                    self.fetch(function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                },
+                function(callback) {
+                    var cachedItem = localStorage.getItem(self.user.getCachePath('settings', false));
+                    if (cachedItem) {
+                        self.set(JSON.parse(cachedItem));
+                    }
+                    callback();
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    self.cache();
+                    callbackSuccess();
+                }
+            });
+            return this;
+        },
+        /**
+         * @method save
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         * @returns {UserSubscription}
+         */
+        save: function(callbackSuccess, callbackError) {
+            var self = this;
+            app.api.putSubscription(this.user.id, this.toJSON(), function(result) {
+                self.set(result, {silent: true});
+                self.cache();
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess(self);
+                }
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
             return this;
         }
     });

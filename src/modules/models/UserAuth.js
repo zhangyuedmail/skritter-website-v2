@@ -36,14 +36,17 @@ define([
             return this;
         },
         /**
-         * @method loadCache
+         * @method load
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          * @returns {UserAuth}
          */
-        loadCache: function() {
+        load: function(callbackSuccess, callbackError) {
             var item = localStorage.getItem(this.user.getCachePath('auth', false));
             if (item) {
                 this.set(JSON.parse(item), {silent: true});
             }
+            callbackSuccess();
             return this;
         }
     });

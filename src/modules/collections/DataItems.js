@@ -174,23 +174,19 @@ define([
         },
         /**
          * @method load
-         * @param {Function} [callback]
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        load: function(callback) {
+        load: function(callbackSuccess, callbackError) {
             var self = this;
             app.user.storage.all('items', function(result) {
                 self.lazyAdd(result, function() {
                     self.updateFilter();
                     self.sortFilter();
-                    //self.sort();
-                    if (typeof callback === 'function') {
-                        callback();
-                    }
+                    callbackSuccess();
                 }, {merge: true, silent: true, sort: false});
             }, function(error) {
-                if (typeof callback === 'function') {
-                    callback(error);
-                }
+                callbackError(error);
             });
         },
         /**
