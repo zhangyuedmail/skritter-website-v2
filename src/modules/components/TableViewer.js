@@ -65,7 +65,7 @@ define([
                     if (fieldObject.type === 'checkbox') {
                         tableBody += "<input type='checkbox' name='row' value='" + rowId + "' />";
                     } else if (fieldObject.type === 'link') {
-                        tableBody += "<a href='#'>" + fieldObject.linkText + "</a>";
+                        tableBody += "<a href='" + (fieldObject.href || '#') + "'>" + fieldObject.linkText + "</a>";
                     } else if (fieldObject.type === 'progress') {
                         //TODO: change progress to actual value
                         tableBody += this.getProgressBar({value: Math.floor(Math.random() * 100) + 1});
@@ -78,7 +78,7 @@ define([
                         if (fieldName2 === 'tradVocabId') {
                             tableBody += row.tradVocabId === row.vocabId ? '- - -' : row.tradVocabId;
                         } else {
-                            tableBody += fieldValue;
+                            tableBody += fieldObject.value;
                         }
                     } else {
                         tableBody += fieldValue;
