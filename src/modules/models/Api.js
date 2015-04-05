@@ -452,6 +452,32 @@ define([
          */
         getUrl: function() {
             return this.get('root') + this.get('tld') + '/api/v' + this.get('version') + '/';
+        },
+        /**
+         * @method putVocabList
+         * @param {Object} list
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        putVocabList: function(list, callbackSuccess, callbackError) {
+            list = {id: list.id, studyingMode: list.studyingMode};
+            $.ajax({
+                url: this.getUrl() + 'vocablists/' + list.id +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: self,
+                type: 'PUT',
+                data: JSON.stringify(list)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         }
     });
 

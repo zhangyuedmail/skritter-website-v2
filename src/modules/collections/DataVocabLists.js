@@ -38,31 +38,33 @@ define([
                     lang: app.user.getLanguageCode(),
                     sort: 'studying'
                 }, function(result) {
-                    self.add(result.VocabLists, {merge: true});
-                    if (result.cursor) {
-                        next(result.cursor);
-                    } else {
-                        callbackSuccess(self);
-                    }
+                    app.user.data.insert(result, function() {
+                        self.add(result.VocabLists, {merge: true});
+                        if (result.cursor) {
+                            next(result.cursor);
+                        } else {
+                            callbackSuccess(self);
+                        }
+                    });
                 }, function(error) {
                     callbackError(error);
                 });
             })();
         },
         /**
-         * @method getByAdding
+         * @method getAdding
          * @returns {Array}
          */
-        getByAdding: function() {
+        getAdding: function() {
             return this.filter(function(list) {
                 return list.get('studyingMode') === 'adding';
             });
         },
         /**
-         * @method getByReviewing
+         * @method getReviewing
          * @returns {Array}
          */
-        getByReviewing: function() {
+        getReviewing: function() {
             return this.filter(function(list) {
                 return list.get('studyingMode') === 'reviewing';
             });

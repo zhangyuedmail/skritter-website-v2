@@ -106,10 +106,10 @@ define([
          */
         renderTables: function() {
             this.tableLists.set(this.lists, {
-                name: {title: '', type: 'text'},
+                name: {title: '', type: 'row'},
                 progress: {title: '', type: 'progress'},
-                studyingMode: {title: '', type: 'text'},
-                addToQueue: {title: '', type: 'link', linkText: "<i class='fa fa-close'></i>"}
+                studyingMode: {title: '', type: 'row'},
+                addToQueue: {title: '', type: 'text', value: "<i class='fa fa-close'></i>"}
             }, {showHeaders: false}).sortBy('name');
             return this;
         },

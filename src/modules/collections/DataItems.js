@@ -212,7 +212,7 @@ define([
                             callback();
                         }, function() {
                             callback();
-                        })
+                        });
                     }
                 },
                 function(callback) {

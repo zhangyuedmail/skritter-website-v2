@@ -18,7 +18,7 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.lists = [];
+            this.lists = null;
             this.tableAdding = new TableViewer();
             this.tableReviewing = new TableViewer();
         },
@@ -42,21 +42,21 @@ define([
          * @returns {PageListStudying}
          */
         renderTables: function() {
-            this.tableAdding.set(this.getAdding(), {
-                name: {title: '', type: 'text'},
+            this.tableAdding.set(this.lists.getAdding(), {
+                name: {title: '', type: 'row'},
                 progress: {title: '', type: 'progress'},
-                linkStudyList: {title: '', type: 'link', linkText: 'Study list'},
-                linkStopAdding: {title: '', type: 'link', linkText: 'Stop adding'},
-                linkSettings: {title: '', type: 'link', linkText: "<i class='fa fa-cog'></i>"},
-                linkRemove: {title: '', type: 'link', linkText: "<i class='fa fa-close'></i>"}
+                studyList: {title: '', type: 'text', value: 'Study list'},
+                stopAdding: {title: '', type: 'text', value: 'Stop adding'},
+                settings: {title: '', type: 'text', value: "<i class='fa fa-cog'></i>"},
+                remove: {title: '', type: 'text', value: "<i class='fa fa-close'></i>"}
             }, {showHeaders: false});
-            this.tableReviewing.set(this.getReviewing(), {
-                name: {title:'', type: 'text'},
+            this.tableReviewing.set(this.lists.getReviewing(), {
+                name: {title:'', type: 'row'},
                 progress: {title: '', type: 'progress'},
-                linkStudyList: {title: '', type: 'link', linkText: 'Study list'},
-                linkRestartAdding: {title: '', type: 'link', linkText: 'Restart list'},
-                linkSettings: {title: '', type: 'link', linkText: "<i class='fa fa-cog'></i>"},
-                linkRemove: {title: '', type: 'link', linkText: "<i class='fa fa-close'></i>"}
+                studyList: {title: '', type: 'text', value: 'Study list'},
+                restartAdding: {title: '', type: 'text', value: 'Restart list'},
+                settings: {title: '', type: 'text', value: "<i class='fa fa-cog'></i>"},
+                remove: {title: '', type: 'text', value: "<i class='fa fa-close'></i>"}
             }, {showHeaders: false});
             this.resize();
             return this;
@@ -66,7 +66,40 @@ define([
          * @type Object
          */
         events: {
-            'vclick .table .field-name': 'handleClickTableRow'
+            'vclick .table .field-name': 'handleClickTableRow',
+            'vclick .table .field-remove': 'handleClickTableRemove',
+            'vclick .table .field-restartadding': 'handleClickTableRestartAdding',
+            'vclick .table .field-stopadding': 'handleClickTableStopAdding'
+        },
+        /**
+         * @method handleClickTableRemove
+         * @param {Event} event
+         */
+        handleClickTableRemove: function(event) {
+            event.preventDefault();
+            var listId = $(event.currentTarget).parent().get(0).id.replace('row-', '');
+            var list = this.lists.get(listId);
+            list.set('studyingMode', 'not studying');
+        },
+        /**
+         * @method handleClickTableRestartAdding
+         * @param {Event} event
+         */
+        handleClickTableRestartAdding: function(event) {
+            event.preventDefault();
+            var listId = $(event.currentTarget).parent().get(0).id.replace('row-', '');
+            var list = this.lists.get(listId);
+            list.set('studyingMode', 'adding');
+        },
+        /**
+         * @method handleClickTableStopAdding
+         * @param {Event} event
+         */
+        handleClickTableStopAdding: function(event) {
+            event.preventDefault();
+            var listId = $(event.currentTarget).parent().get(0).id.replace('row-', '');
+            var list = this.lists.get(listId);
+            list.set('studyingMode', 'reviewing');
         },
         /**
          * @method handleClickTableRow
@@ -79,31 +112,14 @@ define([
             app.router.navigate('lists/browse/' + listId, {trigger: true});
         },
         /**
-         * @method getAdding
-         * @returns {Array}
-         */
-        getAdding: function() {
-            return this.lists.filter(function(list) {
-                return list.studyingMode === 'adding';
-            });
-        },
-        /**
-         * @method getReviewing
-         * @returns {Array}
-         */
-        getReviewing: function() {
-            return this.lists.filter(function(list) {
-                return list.studyingMode === 'reviewing';
-            });
-        },
-        /**
          * @method load
          * @return {PageListStudying}
          */
         load: function() {
             var self = this;
-            app.api.fetchVocabLists({sort: 'studying'}, function(result) {
-                self.lists = result.VocabLists || [];
+            app.user.data.vocablists.fetch(function(result) {
+                self.lists = result;
+                self.listenTo(result, 'change', self.renderTables);
                 self.renderTables();
             }, function(error) {
                 console.log(error);

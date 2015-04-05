@@ -11,10 +11,24 @@ define([
      */
     var DataVocabList = GelatoModel.extend({
         /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {
+            this.on('change', this.save);
+        },
+        /**
          * @property idAttribute
          * @type String
          */
         idAttribute: 'id',
+        /**
+         * @method getChanged
+         * @returns {Object}
+         */
+        getChanged: function() {
+            return $.extend(this.changed, {id: this.id});
+        },
         /**
          * @method getWordCount
          * @returns {Number}
@@ -26,6 +40,24 @@ define([
                 count += rows[i].length;
             }
             return count;
+        },
+        /**
+         * @method save
+         * @returns {DataVocabList}
+         */
+        save: function(callbackSuccess, callbackError) {
+            var self = this;
+            app.api.putVocabList(this.getChanged(), function(result) {
+                self.set(result, {silent: true});
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess(self);
+                }
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
+            return this;
         }
     });
 

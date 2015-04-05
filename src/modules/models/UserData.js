@@ -91,6 +91,9 @@ define([
                 },
                 function(callback) {
                     app.user.storage.put('vocabs', result.Vocabs || [], callback, callback);
+                },
+                function(callback) {
+                    app.user.storage.put('vocablists', result.VocabLists || [], callback, callback);
                 }
             ], callback);
         },
