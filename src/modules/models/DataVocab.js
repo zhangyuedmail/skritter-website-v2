@@ -93,6 +93,20 @@ define([
             return this.isChinese() ? 'Simkai' : 'Kaisho';
         },
         /**
+         * @method getHeisig
+         * @returns {String}
+         */
+        getHeisig: function() {
+            return null;
+        },
+        /**
+         * @method getMnemonic
+         * @returns {String}
+         */
+        getMnemonic: function() {
+            return null;
+        },
+        /**
          * @method getPromptResult
          * @param {String} part
          * @returns {PromptResults}
@@ -157,6 +171,13 @@ define([
                 //TODO: properly segment Japanese
             }
             return segments;
+        },
+        /**
+         * @method getSentence
+         * @returns {String}
+         */
+        getSentence: function() {
+            return null;
         },
         /**
          * @method getStrokes
