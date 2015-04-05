@@ -14,7 +14,7 @@ define([
     'modules/pages/Scratchpad',
     'modules/pages/Stats',
     'modules/pages/Study',
-    'modules/pages/TimeAttack',
+    'modules/pages/Word',
     'modules/pages/Words'
 ], function(
     GelatoRouter,
@@ -28,7 +28,7 @@ define([
     PageScratchpad,
     PageStats,
     PageStudy,
-    PageTimeAttack,
+    PageWord,
     PageWords
 ) {
 
@@ -52,7 +52,7 @@ define([
             'scratchpad/:writing': 'showScratchpad',
             'stats': 'showStats',
             'study': 'showStudy',
-            'mode/timeattack/:listId': 'showTimeAttack',
+            'words/:writing': 'showWord',
             'words': 'showWords',
             '*route': 'showDefault'
         },
@@ -139,12 +139,12 @@ define([
             this.activePage.render();
         },
         /**
-         * @method showTimeAttack
-         * @param {String} listId
+         * @method showWord
+         * @param {String} writing
          */
-        showTimeAttack: function(listId) {
-            this.activePage = new PageTimeAttack();
-            this.activePage.render().load(listId);
+        showWord: function(writing) {
+            this.activePage = new PageWord();
+            this.activePage.render().load(writing);
         },
         /**
          * @method showWords
