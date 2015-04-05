@@ -36,7 +36,6 @@ define([
             this.prompt.setElement(this.$('.prompt-container')).render().hide();
             this.listenTo(this.prompt, 'prompt:next', $.proxy(this.handlePromptNext, this));
             this.listenTo(this.prompt, 'prompt:previous', $.proxy(this.handlePromptPrevious, this));
-            this.loadPrompt();
             return this;
         },
         /**
@@ -60,6 +59,16 @@ define([
          * @method handlePromptPrevious
          */
         handlePromptPrevious: function() {},
+        /**
+         * @method load
+         * @param {String} listId
+         * @param {String} sectionId
+         * @returns {PageStudy}
+         */
+        load: function(listId, sectionId) {
+            this.loadPrompt();
+            return this;
+        },
         /**
          * @method loadPrompt
          * @returns {PageStudy}

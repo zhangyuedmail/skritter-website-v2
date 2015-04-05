@@ -52,6 +52,8 @@ define([
             'scratchpad/:writing': 'showScratchpad',
             'stats': 'showStats',
             'study': 'showStudy',
+            'study/:listId': 'showStudy',
+            'study/:listId/:sectionId': 'showStudy',
             'words/:writing': 'showWord',
             'words': 'showWords',
             '*route': 'showDefault'
@@ -133,10 +135,12 @@ define([
         },
         /**
          * @method showStudy
+         * @param {String} listId
+         * @param {String} sectionId
          */
-        showStudy: function() {
+        showStudy: function(listId, sectionId) {
             this.activePage = new PageStudy();
-            this.activePage.render();
+            this.activePage.render().load(listId, sectionId);
         },
         /**
          * @method showWord
