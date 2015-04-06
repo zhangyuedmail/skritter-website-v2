@@ -15,6 +15,8 @@
     width: 150px;
   }
 
+  .cal-heatmap-container rect { shape-rendering: auto }
+
   .cal-heatmap-container .q1 {
     background-color: #ededed;
     fill: #ededed
