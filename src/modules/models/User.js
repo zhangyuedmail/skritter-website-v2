@@ -9,9 +9,8 @@ define([
     'modules/models/UserAuth',
     'modules/models/UserData',
     'modules/models/UserSettings',
-    'modules/models/UserStats',
     'modules/models/UserSubscription'
-], function(GelatoModel, GelatoStorage, UserAuth, UserData, UserSettings, UserStats, UserSubscription) {
+], function(GelatoModel, GelatoStorage, UserAuth, UserData, UserSettings, UserSubscription) {
 
     /**
      * @class User
@@ -27,7 +26,6 @@ define([
             this.data = new UserData(null, {user: this});
             this.storage = new GelatoStorage();
             this.settings = new UserSettings(null, {user: this});
-            this.stats = new UserStats(null, {user: this});
             this.subscription = new UserSubscription(null, {user: this});
         },
         /**
@@ -105,12 +103,6 @@ define([
                         callbackSuccess();
                     }
                 },
-                //load global cache
-                function(callback) {
-                    //TODO: update loading user stats
-                    self.stats.loadCache();
-                    callback();
-                },
                 //load user authorization
                 function(callback) {
                     self.auth.load(function() {
@@ -127,7 +119,7 @@ define([
                         callback(error);
                     });
                 },
-                 //load user subscription
+                //load user subscription
                 function(callback) {
                     self.subscription.load(function() {
                         callback();
@@ -149,7 +141,7 @@ define([
                 },
                 //initialize missing item fetch
                 function(callback) {
-                    /** TODO: something
+                    /** TODO: enable this for mobile only
                      if (self.data.items.hasMissing()) {
                         self.data.items.fetchMissing();
                     }
@@ -245,6 +237,7 @@ define([
                 items: {keyPath: 'id', index: [{name: 'next'}]},
                 reviews: {keyPath: 'id'},
                 sentences: {keyPath: 'id'},
+                stats: {keyPath: 'date'},
                 strokes: {keyPath: 'rune'},
                 vocablists: {keyPath: 'id'},
                 vocabs: {keyPath: 'id'}

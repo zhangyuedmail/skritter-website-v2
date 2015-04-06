@@ -7,10 +7,11 @@ define([
     'modules/collections/DataDecomps',
     'modules/collections/DataItems',
     'modules/collections/DataParams',
+    'modules/collections/DataStats',
     'modules/collections/DataStrokes',
     'modules/collections/DataVocabLists',
     'modules/collections/DataVocabs'
-], function(GelatoModel, DataDecomps, DataItems, DataParams, DataStrokes, DataVocabLists, DataVocabs) {
+], function(GelatoModel, DataDecomps, DataItems, DataParams, DataStats, DataStrokes, DataVocabLists, DataVocabs) {
 
     /**
      * @class UserData
@@ -28,6 +29,7 @@ define([
             this.decomps = new DataDecomps();
             this.items = new DataItems();
             this.params = new DataParams();
+            this.stats = new DataStats();
             this.strokes = new DataStrokes();
             this.user = options.user;
             this.vocablists = new DataVocabLists();
@@ -115,6 +117,13 @@ define([
                 },
                 function(callback) {
                     self.items.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    self.stats.load(function() {
                         callback();
                     }, function(error) {
                         callback(error);

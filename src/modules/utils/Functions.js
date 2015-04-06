@@ -333,9 +333,9 @@ define([
 
     /**
      * @method pad
-     * @param {Number|String}
-     * @param {Number|String}
-     * @param {Number}
+     * @param {Number|String} text
+     * @param {Number|String} value
+     * @param {Number} size
      * @return {String}
      */
     function pad(text, value, size) {
