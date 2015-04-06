@@ -89,6 +89,7 @@ define([
             this.heatmap.init({
                 cellSize: 25,
                 cellPadding: 5,
+                cellRadius: 25,
                 domain: 'month',
                 domainDynamicDimension: false,
                 domainGutter: 20,
