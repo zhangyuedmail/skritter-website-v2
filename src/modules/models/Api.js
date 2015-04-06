@@ -174,10 +174,6 @@ define([
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     delete data.statusCode;
-                    if (data.ContainedItems) {
-                        data.Items = data.Items.concat(data.ContainedItems);
-                        delete data.ContainedItems;
-                    }
                     callbackSuccess(data);
                 } else {
                     callbackError(data);
@@ -335,6 +331,36 @@ define([
             })();
         },
         /**
+         * @method fetchVocabList
+         * @param {String} listId
+         * @param {Object} [options]
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        fetchVocabList: function(listId, options, callbackSuccess, callbackError) {
+            options = options || {};
+            $.ajax({
+                url: this.getUrl() + 'vocablists/' + listId,
+                headers: this.getHeaders(),
+                context: self,
+                type: 'GET',
+                data: {
+                    bearer_token: this.getToken(),
+                    fields: options.fields,
+                    sectionFields: options.sectionFields
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method fetchVocabLists
          * @param {Object} [options]
          * @param {Function} callbackSuccess
@@ -426,6 +452,107 @@ define([
          */
         getUrl: function() {
             return this.get('root') + this.get('tld') + '/api/v' + this.get('version') + '/';
+        },
+        /**
+         * @method putSubscription
+         * @param {String} userId
+         * @param {Object} subscription
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        putSubscription: function(userId, subscription, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'subscriptions/' + userId +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(subscription)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method putUser
+         * @param {Object} user
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        putUser: function(user, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'users/' + user.id +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(user)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data.User);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method putVocab
+         * @param {Object} vocab
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        putVocab: function(vocab, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'vocabs/' + vocab.id +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(vocab)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method putVocabList
+         * @param {Object} list
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        putVocabList: function(list, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'vocablists/' + list.id +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'PUT',
+                data: JSON.stringify(list)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         }
     });
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>dashboard-streak</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="dashboard-streak" sketch:type="MSArtboardGroup" fill="#87A64B">
+            <path d="M12.9548413,7.33935139 L16.8856378,7.33935139 C19.0950553,7.33935139 19.4498613,8.41842494 17.6882095,9.74194867 L14.4144381,12.2015234 L15.6799444,16.8670497 C16.259192,19.0025549 15.3019819,19.648779 13.5422079,18.3106234 L10.0010131,15.6178519 L6.4604694,18.3106234 C4.70090605,19.6488648 3.74258639,19.0071057 4.32275818,16.8670497 L5.58758805,12.2015234 L2.31319096,9.74194867 C0.546683969,8.41503083 0.914382035,7.33935139 3.11515148,7.33935139 L7.04594795,7.33935139 L8.65319317,2.83671619 C9.39757356,0.751363364 10.6058921,0.756105669 11.3482688,2.83671619 L12.9548413,7.33935139 Z" id="Shape-13" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

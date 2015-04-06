@@ -3,11 +3,22 @@ $dir-assets: '../assets';
 
 
 /*** FONTS ***/
-$font-primary: "Muli", "Helvetica Neue";
+$font-chinese: "Simkai", "Kaisho";
+$font-japanese: "Kaisho", "Simkai";
+$font-primary: "Muli", "Arial Unicode MS", "Arial";
+$font-secondary: "Roboto Slab", "Arial Unicode MS", "Arial";
+$font-unicode: "Arial Unicode MS", "Arial";
 
 
 /*** BACKGROUNDS ***/
 $background: url('#{$dir-assets}/backgrounds/retina-wood.png');
+
+
+/*** COLOR: GRADING ***/
+$grade1: #e74c3c;
+$grade2: #ebbd3e;
+$grade3: #87a64b;
+$grade4: #4d88e3;
 
 
 /*** COLOR: GREY ***/
@@ -82,21 +93,83 @@ $sand8: #584c36;
 $sand9: #2c261b;
 
 
+/*** GLOBAL ***/
 body {
-    background: $background repeat;
-    font-family: $font-primary;
+  background: $background repeat;
+  font-family: $font-primary;
 }
 .content-block { border-radius: 25px; }
+.text-chinese { font-family: $font-chinese; }
+.text-japanese { font-family: $font-japanese; }
 @media (min-width: 1300px) {
-    .container {
-        padding-left: 0;
-        padding-right: 0;
-        width: 1280px;
-    }
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+    width: 1280px;
+  }
 }
 
+
+/*** BOOTSTRAP: BUTTONS ***/
+.btn {
+  border-radius: 25px;
+  font-size: 16px;
+}
+.btn.btn-success {
+  background-color: $green5;
+  border-color: $green5;
+}
+.btn.btn-success:hover {
+  background-color: $green6;
+  border-color: $green6;
+}
+
+
+/*** BOOTSTRAP: NAVBAR ***/
+.navbar-default {
+  background-color: #38240C;
+  border: none;
+  font-size: 18px;
+}
+.navbar-default .navbar-brand {
+  color: #FBFAFC;
+  font-size: 24px;
+}
+.navbar-default .navbar-brand i { margin-top: -3px; }
+.navbar-default .navbar-brand:hover { color: $sand5; }
+.navbar-default .navbar-nav > li > a { color: $white1; }
+.navbar-default .navbar-nav > li > a:hover { color: $sand5; }
+.navbar-default .navbar-toggle { border: none; }
+.navbar-default .navbar-toggle.active {
+  background-color: transparent;
+  transform: rotate(180deg);
+  transition: all 0.5s ease;
+}
+.navbar-default .navbar-toggle.active .icon-bar { background-color: $sand5; }
+.navbar-default .navbar-toggle .icon-bar { background-color: $white1; }
+
+
+/*** COMPONENTS ***/
 @import "components/prompt";
 @import "components/prompt-detail";
 @import "components/prompt-grading";
 @import "components/prompt-navigation";
 @import "components/prompt-toolbar";
+@import "components/study-toolbar";
+@import "components/vocab-detail";
+@import "components/writing-canvas";
+
+
+/*** PAGES ***/
+@import "pages/dashboard";
+@import "pages/list";
+@import "pages/list-browse";
+@import "pages/list-section";
+@import "pages/list-studying";
+@import "pages/login";
+@import "pages/scratchpad";
+@import "pages/study";
+
+
+/*** OTHER ***/
+@import "heatmap";

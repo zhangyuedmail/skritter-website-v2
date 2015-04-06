@@ -1,17 +1,37 @@
 .gelato-component.prompt-grading {
 
-  bottom: 100px;
-  color: #B2B5B9;
-  left: 95px;
-  position: absolute;
+  margin-bottom: 30px;
 
-  > div {
-    float: left;
-    margin-right: 85px;
+  .btn-group .btn {
+    border: none;
+    border-radius: 0;
   }
 
-  .grading-value { font-size: 36px; }
+  .btn-group .btn:active,
+  .btn-group .btn:focus,
+  .btn-group .btn:hover {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    outline: none;
+  }
 
-  .grading-text { font-size: 16px; }
+  .btn-group .btn .grade-text {
+    font-family: $font-secondary;
+    font-size: 16px;
+  }
+
+  .btn-group .btn .grade-value {
+    font-family: $font-secondary;
+    font-size: 34px;
+  }
+
+  .btn-group .btn[data-value='1'].selected { color: $grade1; }
+
+  .btn-group .btn[data-value='2'].selected { color: $grade2; }
+
+  .btn-group .btn[data-value='3'].selected { color: $grade3; }
+
+  .btn-group .btn[data-value='4'].selected { color: $grade4; }
 
 }

@@ -4,35 +4,37 @@
  */
 define([
     'require.text!templates/components/prompt.html',
-    'core/modules/GelatoView',
+    'core/modules/GelatoComponent',
     'modules/components/PromptDetail',
     'modules/components/PromptGrading',
     'modules/components/PromptNavigation',
     'modules/components/PromptToolbar',
     'modules/components/WritingCanvas'
-], function(Template, GelatoView, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
+], function(Template, GelatoComponent, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
 
     /**
      * @class Prompt
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var Prompt = GelatoView.extend({
+    var Prompt = GelatoComponent.extend({
         /**
          * @method initialize
          * @constructor
          */
         initialize: function() {
-            this.characters = [];
             this.canvas = new WritingCanvas();
             this.detail = new PromptDetail({prompt: this});
             this.grading = new PromptGrading({prompt: this});
+            this.gradingColors = app.user.settings.get('gradingColors');
             this.navigation = new PromptNavigation({prompt: this});
             this.part = 'rune';
             this.position = 1;
+            this.result = null;
             this.toolbar = new PromptToolbar({prompt: this});
             this.vocab = null;
             this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
             this.listenTo(this.canvas, 'input:up', this.handleInputUp);
+            this.listenTo(this.grading, 'select', this.handleSelectGrade);
             this.on('resize', this.resize);
         },
         /**
@@ -42,43 +44,168 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.canvas.setElement('.writing-canvas-container').render();
-            this.detail.setElement(this.$('.prompt-detail-container')).render();
-            this.grading.setElement(this.$('.prompt-grading-container')).render();
-            this.navigation.setElement(this.$('.prompt-navigation-container')).render();
+            this.detail.setElement('.prompt-detail-container').render();
+            this.grading.setElement('.prompt-grading-container').render();
+            this.navigation.setElement('.prompt-navigation-container').render();
             this.toolbar.setElement('.prompt-toolbar-container').render();
+            this.$('.text-language').addClass(app.user.settings.getFontClass());
             this.resize();
             return this;
         },
         /**
-         * @method renderCharacter
+         * @method renderPrompt
          * @returns {Prompt}
          */
-        renderCharacter: function() {
+        renderPrompt: function() {
             this.canvas.reset();
+            this.grading.unselect();
+            this.active().start();
+            switch (this.part) {
+                case 'defn':
+                    this.renderPromptDefn();
+                    break;
+                case 'rdng':
+                    this.renderPromptRdng();
+                    break;
+                case 'rune':
+                    this.renderPromptRune();
+                    break;
+                case 'tone':
+                    this.renderPromptTone();
+                    break;
+            }
+            return this;
+        },
+        /**
+         * @method renderPromptDefn
+         * @returns {Prompt}
+         */
+        renderPromptDefn: function() {
+            this.canvas.disableGrid();
+            this.detail.showCharacters();
+            this.detail.showReading();
+            this.toolbar.hide();
+            if (this.active().get('complete')) {
+                this.grading.select(this.active().get('score'));
+                this.$('.answer-text').html(this.vocab.getDefinition());
+                this.$('.question-text').css('visibility', 'hidden');
+            } else {
+                this.$('.question-text').text("What's the definition?");
+                this.$('.question-text').css('visibility', 'visible');
+            }
+            this.$('.question-word').text(this.vocab.get('writing'));
+            this.$('.text-overlay').show();
+            return this;
+        },
+        /**
+         * @method renderPromptRdng
+         * @returns {Prompt}
+         */
+        renderPromptRdng: function() {
+            this.canvas.disableGrid();
+            this.detail.hideReading();
+            this.detail.showCharacters();
+            this.toolbar.hide();
+            if (this.active().get('complete')) {
+                this.grading.select(this.active().get('score'));
+                this.$('.answer-text').html(this.vocab.getReading());
+                this.$('.question-text').css('visibility', 'hidden');
+            } else {
+                this.$('.question-text').text("What's the reading?");
+                this.$('.question-text').css('visibility', 'visible');
+            }
+            this.$('.question-word').text(this.vocab.get('writing'));
+            this.$('.text-overlay').show();
+            return this;
+        },
+        /**
+         * @method renderPromptRune
+         * @returns {Prompt}
+         */
+        renderPromptRune: function() {
+            var character = this.character().getShape();
+            this.canvas.enableGrid();
+            this.canvas.drawShape('surface', character);
+            this.detail.selectCharacter(this.position);
+            this.detail.showReading();
+            this.toolbar.show();
+            this.$('.text-overlay').hide();
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
-                this.detail.showCharacter();
+                this.canvas.injectLayerColor('surface', this.getGradingColor());
+                this.grading.select(this.active().get('score'));
+                this.active().set('complete', true);
             } else {
+                this.active().set('complete', false);
                 this.canvas.enableInput();
-                this.detail.hideCharacter();
             }
-            this.canvas.drawShape('surface-background1', this.character().getShape());
-            this.detail.selectCharacter();
             return this;
+        },
+        /**
+         * @method renderPromptTone
+         * @returns {Prompt}
+         */
+        renderPromptTone: function() {
+            var writing = this.vocab.getCharacters()[this.position - 1];
+            this.canvas.disableGrid();
+            this.canvas.drawShape('surface', this.character().getShape());
+            this.canvas.drawCharacter('surface-background2', writing, {
+                color: '#ebeaf0',
+                font: this.vocab.getFontName()
+            });
+            this.detail.selectReading(this.position);
+            this.detail.showCharacters();
+            this.toolbar.hide();
+            this.$('.text-overlay').hide();
+            if (this.character().isComplete()) {
+                this.canvas.disableInput();
+                this.canvas.injectLayerColor('surface', this.getGradingColor());
+                this.detail.showReading(this.position);
+                this.grading.select(this.active().get('score'));
+                this.active().set('complete', true);
+            } else {
+                this.active().set('complete', false);
+                this.canvas.enableInput();
+            }
+            return this;
+        },
+        /**
+         * @method active
+         * @returns {PromptResult}
+         */
+        active: function() {
+            return this.result.at(this.position - 1);
         },
         /**
          * @method character
          * @returns {CanvasCharacter}
          */
         character: function() {
-            return this.characters[this.position - 1];
+            return this.active().get('character');
+        },
+        /**
+         * @method getGradingColor
+         * @returns {String}
+         */
+        getGradingColor: function() {
+            return this.gradingColors[this.active().get('score')];
         },
         /**
          * @method handleClickCanvas
          */
         handleClickCanvas: function() {
-            if (this.character().isComplete()) {
+            if (this.active().get('complete')) {
                 this.next();
+            } else if (this.part === 'defn') {
+                this.active().stop();
+                this.active().set('complete', true);
+                this.renderPrompt();
+            } else if (this.part === 'rdng') {
+                this.active().stop();
+                this.active().set('complete', true);
+                this.renderPrompt();
+            } else {
+                this.active().stopThinking();
             }
         },
         /**
@@ -87,23 +214,82 @@ define([
          * @param {createjs.Shape} shape
          */
         handleInputUp: function(points, shape) {
+            switch (this.part) {
+                case 'rune':
+                    this.recognizeRune(points, shape);
+                    break;
+                case 'tone':
+                    this.recognizeTone(points, shape);
+                    break;
+            }
+        },
+        /**
+         * @method handleSelectGrade
+         * @param value
+         */
+        handleSelectGrade: function(value) {
+            this.active().set('score', value);
+            if (this.character().isComplete()) {
+                this.canvas.injectLayerColor('surface', this.getGradingColor());
+            }
+        },
+        /**
+         * @method recognizeRune
+         * @param {Array} points
+         * @param {createjs.Shape} shape
+         */
+        recognizeRune: function(points, shape) {
             var stroke = this.character().recognize(points, shape);
             if (stroke) {
                 var targetShape = stroke.getShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
-            }
-            if (this.character().isComplete()) {
-                this.canvas.disableInput();
-                this.detail.showCharacter();
+                if (this.character().isComplete()) {
+                    this.active().stop();
+                    this.active().set('complete', true);
+                    this.canvas.disableInput();
+                    this.canvas.injectLayerColor('surface', this.getGradingColor());
+                    this.detail.showCharacters(this.position);
+                    this.grading.select(this.active().get('score'));
+                }
             }
         },
         /**
-         * @method hide
+         * @method recognizeTone
+         * @param {Array} points
+         * @param {createjs.Shape} shape
+         */
+        recognizeTone: function(points, shape) {
+            var stroke = this.character().recognize(points, shape);
+            if (stroke) {
+                var tones = this.vocab.getToneNumbers()[this.position - 1];
+                if (tones.indexOf(stroke.get('tone')) > -1) {
+                    this.active().set('score', 3);
+                    var targetShape = stroke.getShape();
+                    var userShape = stroke.getUserShape();
+                    this.canvas.tweenShape('surface', userShape, targetShape);
+                } else {
+                    this.active().set('score', 1);
+                    this.character().reset();
+                    this.character().add(this.character().getTone(tones[0]).clone());
+                    this.canvas.drawShape('surface', this.character().at(0).getShape());
+                }
+                if (this.character().isComplete()) {
+                    this.active().stop();
+                    this.active().set('complete', true);
+                    this.canvas.disableInput();
+                    this.canvas.injectLayerColor('surface', this.getGradingColor());
+                    this.detail.showReading(this.position);
+                    this.grading.select(this.active().get('score'));
+                }
+            }
+        },
+        /**
+         * @method hideBannerNew
          * @returns {Prompt}
          */
-        hide: function() {
-            this.$el.hide();
+        hideBannerNew: function() {
+            this.$('.prompt-banner-new').hide();
             return this;
         },
         /**
@@ -118,7 +304,7 @@ define([
          * @returns {Boolean}
          */
         isLast: function() {
-            return this.position >= this.characters.length;
+            return this.position >= this.result.length;
         },
         /**
          * @method next
@@ -126,10 +312,11 @@ define([
          */
         next: function() {
             if (this.isLast()) {
-                this.trigger('prompt:complete');
+                console.log('POSITION', 'LAST');
+                this.trigger('prompt:next', this.result);
             } else {
                 this.position++;
-                this.renderCharacter();
+                this.renderPrompt();
             }
             return this;
         },
@@ -139,10 +326,11 @@ define([
          */
         previous: function() {
             if (this.isFirst()) {
-                console.log('No going back!');
+                console.log('POSITION', 'FIRST');
+                this.trigger('prompt:previous');
             } else {
                 this.position--;
-                this.renderCharacter();
+                this.renderPrompt();
             }
             return this;
         },
@@ -156,14 +344,17 @@ define([
             this.grading.remove();
             this.navigation.remove();
             this.toolbar.remove();
-            return GelatoView.prototype.remove.call(this);
+            return GelatoComponent.prototype.remove.call(this);
         },
         /**
          * @method resize
          * @returns {Prompt}
          */
         resize: function() {
-            this.canvas.resize(450);
+            this.canvas.resize(this.$('.center-column').width());
+            if (this.result) {
+                this.renderPrompt();
+            }
             return this;
         },
         /**
@@ -174,34 +365,26 @@ define([
          * @returns {Prompt}
          */
         set: function(vocab, part, isNew) {
-            this.characters = vocab.getCanvasCharacters();
+            console.log('PROMPT:', vocab.id, part, vocab);
+            this.result = vocab.getPromptResult(part);
             this.part = part;
             this.vocab = vocab;
-            this.detail.renderFields();
-            this.setNewBanner(isNew);
-            this.renderCharacter();
-            this.resize();
-            return this;
-        },
-        /**
-         * @method setNewBanner
-         * @param {Boolean} visible
-         * @returns {Prompt}
-         */
-        setNewBanner: function(visible) {
-            if (visible) {
-                this.$('.vocab-new').show();
+            this.position = 1;
+            if (isNew) {
+                this.showBannerNew();
             } else {
-                this.$('.vocab-new').hide();
+                this.hideBannerNew();
             }
+            this.detail.renderFields();
+            this.renderPrompt();
             return this;
         },
         /**
-         * @method show
+         * @method showBannerNew
          * @returns {Prompt}
          */
-        show: function() {
-            this.$el.show();
+        showBannerNew: function() {
+            this.$('.prompt-banner-new').show();
             return this;
         }
     });

@@ -4,12 +4,13 @@
  */
 define([
     'core/modules/GelatoApplication',
-    'modules/Functions',
+    'modules/Router',
     'modules/data/Strokes',
     'modules/models/Api',
     'modules/models/MediaPlayer',
-    'modules/models/User'
-], function(GelatoApplication, Functions, Strokes, Api, MediaPlayer, User) {
+    'modules/models/User',
+    'modules/utils/Functions'
+], function(GelatoApplication, Router, Strokes, Api, MediaPlayer, User, Functions) {
 
     /**
      * @class Application
@@ -24,6 +25,7 @@ define([
             this.api = new Api();
             this.fn = Functions;
             this.media = new MediaPlayer();
+            this.router = new Router();
             this.strokes = Strokes;
             this.user = new User();
         },

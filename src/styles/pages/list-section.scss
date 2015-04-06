@@ -1,0 +1,39 @@
+.gelato-page.list-section {
+
+  .content-block {
+    margin-bottom: 15px;
+    padding-top: 30px;
+  }
+
+  .content-column {
+    background-color: transparent;
+    color: $grey4;
+  }
+
+  .content-column .button-back { margin-bottom: 30px; }
+
+  .content-column .options {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  .content-column .table > tbody > tr:nth-of-type(even) { background-color: $white2; }
+
+  .content-column .table-viewer thead tr { background-color: $white3; }
+
+  .content-column .table-viewer thead tr th { border: none; }
+
+  .content-column .table-viewer tr td { border: none; }
+
+  .content-column .table-viewer tr td:first-child, .content-column .table-viewer tr th:first-child { padding-left: 5%; }
+
+  .content-column .table-viewer tr td:last-child, .content-column .table-viewer tr th:last-child { padding-right: 5%; }
+
+  .content-column .title {
+    font-family: $font-primary;
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 30px;
+  }
+
+}

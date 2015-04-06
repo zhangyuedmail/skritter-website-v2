@@ -1,44 +1,110 @@
 .gelato-component.prompt-detail {
 
-  padding-left: 30px;
-  padding-right: 30px;
+  color: $grey3;
 
-  .detail-field {
-    color: #666C73;
-    font-size: 13px;
-    font-weight: 300;
+  font-family: "Arial Unicode MS", "Arial Unicode", "Arial", sans-serif;
+
+  margin-left: 30px;
+
+  margin-right: 30px;
+
+  margin-top: 42px;
+
+  .detail-toolbar { float: right; }
+
+  .detail-toolbar div {
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-right: 20px;
   }
-  
-  .detail-header {
-    color: #8C9196;
-    font-size: 16px;
-    font-weight: 600;
+
+  .detail-toolbar .button-audio {
+    background-image: url('#{$dir-assets}/vectors/study-word-volume.svg');
+    height: 24px;
+    width: 24px;
   }
-  
-  .detail-row { margin-top: 30px; }
-  
+
+  .detail-toolbar .button-ban {
+    background-image: url('#{$dir-assets}/vectors/study-ban.svg');
+    height: 24px;
+    width: 24px;
+  }
+
+  .detail-toolbar .button-ban.active { background-color: yellow; }
+
+  .detail-toolbar .button-edit {
+    background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
+    height: 23px;
+    width: 19px;
+  }
+
+  .detail-toolbar .button-info {
+    background-image: url('#{$dir-assets}/vectors/study-info.svg');
+    height: 23px;
+    width: 23px;
+  }
+
+  .detail-toolbar .button-star {
+    background-image: url('#{$dir-assets}/vectors/study-word-star.svg');
+    height: 23px;
+    width: 23px;
+  }
+
+  .detail-toolbar .button-star.active { background-color: yellow; }
+
+  .field-header {
+    color: $grey4;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .vocab-definition {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 30px;
+  }
+
   .vocab-reading {
     color: #8C9196;
     font-size: 24px;
+    margin-bottom: 30px;
   }
-  
-  .vocab-style { color: #B2B5B9; }
-  
-  .vocab-sentence { font-size: 26px; }
-  
-  .vocab-writing { font-size: 54px; }
-  
+
+  .vocab-reading > div {
+    display: inline-block;
+    margin-right: 5px;
+    text-align: center;
+    min-width: 50px;
+  }
+
+  .vocab-reading > div.mask { background-color: $white5; }
+
+  .vocab-reading > div.mask span { visibility: hidden; }
+
+  .vocab-reading > div.active { background-color: yellow; }
+
+  .vocab-style {
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .vocab-writing {
+    font-size: 54px;
+    margin-bottom: 10px;
+  }
+
   .vocab-writing > div {
+    color: $grey9;
     display: inline-block;
     margin-right: 5px;
     text-align: center;
     width: 66px;
   }
-  
-  .vocab-writing > div.mask { background-color: #EBEAF0; }
-  
+
+  .vocab-writing > div.mask { background-color: $white5; }
+
   .vocab-writing > div.mask span { visibility: hidden; }
-  
-  .vocab-writing > div.active { background-color: #ffffff; }
-  
+
+  .vocab-writing > div.active { background-color: yellow; }
+
 }

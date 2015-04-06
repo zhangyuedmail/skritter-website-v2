@@ -1,21 +1,22 @@
 .gelato-component.prompt-navigation {
 
-  > div {
-    height: 64px;
+  div {
     position: absolute;
-    width: 35px;
+    top: 35%;
   }
 
   .navigate-previous {
     background-image: url('#{$dir-assets}/vectors/study-light-previous.svg');
-    left: 30px;
-    top: 190px;
+    height: 64px;
+    left: 15px;
+    width: 35px;
   }
 
   .navigate-next {
     background-image: url('#{$dir-assets}/vectors/study-light-next.svg');
-    right: 30px;
-    top: 190px;
+    height: 64px;
+    right: 15px;
+    width: 35px;
   }
 
 }

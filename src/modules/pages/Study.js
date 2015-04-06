@@ -5,9 +5,8 @@
 define([
     'require.text!templates/study.html',
     'core/modules/GelatoPage',
-    'modules/components/Prompt',
-    'modules/components/StudyToolbar'
-], function(Template, GelatoPage, Prompt, StudyToolbar) {
+    'modules/components/Prompt'
+], function(Template, GelatoPage, Prompt) {
 
     /**
      * @class PageStudy
@@ -19,8 +18,8 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.item = null;
             this.prompt = new Prompt();
-            this.toolbar = new StudyToolbar();
         },
         /**
          * @property title
@@ -34,9 +33,9 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.renderFields();
-            this.prompt.setElement(this.$('.prompt-container')).render();
-            this.toolbar.setElement(this.$('.toolbar-container')).render();
-            app.user.data.items.loadNext($.proxy(this.loadPrompt, this));
+            this.prompt.setElement(this.$('.prompt-container')).render().hide();
+            this.listenTo(this.prompt, 'prompt:next', $.proxy(this.handlePromptNext, this));
+            this.listenTo(this.prompt, 'prompt:previous', $.proxy(this.handlePromptPrevious, this));
             return this;
         },
         /**
@@ -48,12 +47,41 @@ define([
             return this;
         },
         /**
-         * @method loadPrompt
-         * @param {DataItem} item
+         * @method handlePromptNext
+         * @param {PromptResult} result
+         */
+        handlePromptNext: function(result) {
+            console.log('RESULT', result);
+            this.item.update(result);
+            this.loadPrompt();
+        },
+        /**
+         * @method handlePromptPrevious
+         */
+        handlePromptPrevious: function() {},
+        /**
+         * @method load
+         * @param {String} listId
+         * @param {String} sectionId
          * @returns {PageStudy}
          */
-        loadPrompt: function(item) {
-            this.prompt.set(item.getVocab(), item.get('part'), item.isNew());
+        load: function(listId, sectionId) {
+            this.loadPrompt();
+            return this;
+        },
+        /**
+         * @method loadPrompt
+         * @returns {PageStudy}
+         */
+        loadPrompt: function() {
+            var self = this;
+            app.user.data.items.loadNext(function(item) {
+                self.item = item;
+                self.prompt.set(item.getVocab(), item.get('part'), item.isNew());
+                self.prompt.show();
+            }, function(error) {
+                console.log('PROMPT LOAD ERROR:', error);
+            });
             return this;
         }
     });

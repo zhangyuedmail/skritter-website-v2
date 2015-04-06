@@ -20,7 +20,7 @@ define([
         initialize: function(attributes, options) {
             options = options || {};
             this.user = options.user;
-            this.on('change', this.cache);
+            this.on('change', this.save);
         },
         /**
          * @property defaults
@@ -28,7 +28,8 @@ define([
          */
         defaults: {
             allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
-            allJapaneseParts: ['defn', 'rdng', 'rune']
+            allJapaneseParts: ['defn', 'rdng', 'rune'],
+            gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'}
         },
         /**
          * @method cache
@@ -40,15 +41,16 @@ define([
         },
         /**
          * @method fetch
-         * @param {Function} callback
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        fetch: function(callback) {
+        fetch: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.fetchUsers(this.user.id, null, function(data) {
-                self.set(data);
-                callback();
+                self.set(data, {silent: true});
+                callbackSuccess();
             }, function(error) {
-                callback(error);
+                callbackError(error);
             });
         },
         /**
@@ -94,14 +96,71 @@ define([
             return this.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
         },
         /**
-         * @method loadCache
+         * @method getFontClass
+         * @return {String}
+         */
+        getFontClass: function() {
+            return this.user.isChinese() ? 'text-chinese' : 'text-japanese';
+        },
+        /**
+         * @method getFontName
+         * @return {String}
+         */
+        getFontName: function() {
+            return this.user.isChinese() ? 'Simkai' : 'Kaisho';
+        },
+        /**
+         * @method load
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          * @returns {UserSettings}
          */
-        loadCache: function() {
-            var item = localStorage.getItem(this.user.getCachePath('settings', false));
-            if (item) {
-                this.set(JSON.parse(item), {silent: true});
-            }
+        load: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.series([
+                function(callback) {
+                    self.fetch(function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                },
+                function(callback) {
+                    var cachedItem = localStorage.getItem(self.user.getCachePath('settings', false));
+                    if (cachedItem) {
+                        self.set(JSON.parse(cachedItem));
+                    }
+                    callback();
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    self.cache();
+                    callbackSuccess();
+                }
+            });
+            return this;
+        },
+        /**
+         * @method save
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         * @returns {UserSettings}
+         */
+        save: function(callbackSuccess, callbackError) {
+            var self = this;
+            app.api.putUser(this.toJSON(), function(result) {
+                self.set(result, {silent: true});
+                self.cache();
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess(self);
+                }
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
             return this;
         },
         /**

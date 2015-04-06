@@ -32,8 +32,10 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.renderDialog();
             this.prompt.setElement(this.$('.prompt-container'));
             this.prompt.hide().render();
+            this.prompt.grading.hide();
             return this;
         },
         /**
@@ -50,11 +52,15 @@ define([
          */
         load: function(writing) {
             var self = this;
+            this.dialog.show('loading-scratchpad');
+            this.$('.vocab-writing').text(writing);
             app.user.data.vocabs.fetchByQuery(writing, function(vocab) {
                 self.vocab = vocab;
                 self.renderPrompt();
+                self.dialog.hide();
             }, function(error) {
                 console.error(error);
+                self.dialog.hide();
             });
             return this;
         }

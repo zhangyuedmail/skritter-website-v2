@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/writing-canvas.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class WritingCanvas
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var WritingCanvas = GelatoView.extend({
+    var WritingCanvas = GelatoComponent.extend({
         /**
          * @method initialize
          * @constructor
@@ -20,6 +20,7 @@ define([
             this.brushScale = 0.04;
             this.defaultFadeEasing = createjs.Ease.sineOut;
             this.defaultFadeSpeed = 500;
+            this.grid = true;
             this.gridColor = '#d8dadc';
             this.gridDashLength = 5;
             this.gridLineWidth = 0.75;
@@ -106,6 +107,15 @@ define([
             return stage;
         },
         /**
+         * @method disableGrid
+         * @returns {WritingCanvas}
+         */
+        disableGrid: function() {
+            this.clearLayer('grid');
+            this.grid = false;
+            return this;
+        },
+        /**
          * @method disableInput
          * @returns {WritingCanvas}
          */
@@ -163,6 +173,15 @@ define([
             this.getLayer(layerName).addChild(shape);
             this.stage.update();
             return shape;
+        },
+        /**
+         * @method enableGrid
+         * @returns {WritingCanvas}
+         */
+        enableGrid: function() {
+            this.drawGrid();
+            this.grid = true;
+            return this;
         },
         /**
          * @method enableInput
@@ -246,14 +265,6 @@ define([
             return this.size;
         },
         /**
-         * @method hide
-         * @returns {WritingCanvas}
-         */
-        hide: function() {
-            this.$el.hide();
-            return this;
-        },
-        /**
          * @method injectColor
          * @param {createjs.Container|createjs.Shape} object
          * @param {String} color
@@ -272,6 +283,16 @@ define([
                     object.graphics._stroke = customStroke;
                 }
             })(object);
+            return this;
+        },
+        /**
+         * @method injectLayerColor
+         * @param {String} layerName
+         * @param {String} color
+         * @param {}
+         */
+        injectLayerColor: function(layerName, color) {
+            return this.injectColor(this.getLayer(layerName), color);
         },
         /**
          * @method reset
@@ -294,12 +315,16 @@ define([
          */
         resize: function(size) {
             app.set('canvasSize', size);
-            this.el.style.height = size;
-            this.el.style.width = size;
+            //this.$('.gelato-component').height(size);
+            //this.$('.gelato-component').width(size);
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
             this.size = size;
-            this.reset().drawGrid();
+            if (this.grid) {
+                this.drawGrid().reset();
+            } else {
+                this.reset();
+            }
             return this;
         },
         /**
@@ -310,14 +335,6 @@ define([
          */
         setLayerColor: function(layerName, color) {
             this.injectColor(this.getLayer(layerName), color);
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {WritingCanvas}
-         */
-        show: function() {
-            this.$el.show();
             return this;
         },
         /**

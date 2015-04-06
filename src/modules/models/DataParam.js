@@ -16,13 +16,15 @@ define([
          */
         idAttribute: 'id',
         /**
-         * @property defaults
-         * @type Object
+         * @method defaults
+         * @returns {Object}
          */
-        defaults: {
-            contains: [],
-            corners: [],
-            strokeId: undefined
+        defaults: function () {
+            return {
+                contains: [],
+                corners: [],
+                strokeId: undefined
+            };
         },
         /**
          * @method angle

@@ -1,11 +1,19 @@
 <div class="gelato-component prompt-detail">
 
+    <div class="detail-toolbar">
+        <div class="button-audio cursor"></div>
+        <div class="button-star cursor"></div>
+        <div class="button-edit cursor"></div>
+        <div class="button-ban cursor"></div>
+        <div class="button-info cursor"></div>
+    </div>
+
     <div class="detail-row">
         <div class="detail-field text-uppercase vocab-style"></div>
     </div>
 
     <div class="detail-row">
-        <div class="detail-field vocab-writing text-chinese"></div>
+        <div class="detail-field vocab-writing text-language"></div>
     </div>
 
     <div class="detail-row">
@@ -13,10 +21,11 @@
     </div>
 
     <div class="detail-row">
-        <strong class="detail-header">{{prompt.header-definition}}</strong>
+        <div class="field-header">{{prompt.header-definition}}</div>
         <div class="detail-field vocab-definition"></div>
     </div>
 
+    <!--
     <div class="detail-row">
         <strong class="detail-header">{{prompt.header-sentence}}</strong>
         <div class="detail-field vocab-sentence">
@@ -30,5 +39,6 @@
             {{prompt.edit-mnemonic}}
         </div>
     </div>
+    -->
 
 </div>

@@ -3,8 +3,9 @@
  * @submodule Models
  */
 define([
-    'core/modules/GelatoModel'
-], function(GelatoModel) {
+    'core/modules/GelatoModel',
+    'modules/collections/PromptResults'
+], function(GelatoModel, PromptResults) {
 
     /**
      * @class DataVocab
@@ -26,11 +27,6 @@ define([
          */
         idAttribute: 'id',
         /**
-         * @property defaults
-         * @type Object
-         */
-        defaults: {},
-        /**
          * @method getCanvasCharacters
          * @returns {Array}
          */
@@ -41,6 +37,21 @@ define([
                 var stroke = strokes[i];
                 if (stroke) {
                     characters.push(stroke.getCanvasCharacter());
+                }
+            }
+            return characters;
+        },
+        /**
+         * @method getCanvasTones
+         * @returns {Array}
+         */
+        getCanvasTones: function() {
+            var characters = [];
+            var strokes = this.getStrokes();
+            for (var i = 0, length = strokes.length; i < length; i++) {
+                var tones = app.user.data.strokes.get('tones');
+                if (tones) {
+                    characters.push(tones.getCanvasCharacter());
                 }
             }
             return characters;
@@ -68,10 +79,105 @@ define([
             return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
         },
         /**
-         * @method
+         * @method getFontClass
+         * @return {String}
+         */
+        getFontClass: function() {
+            return this.isChinese() ? 'text-chinese' : 'text-japanese';
+        },
+        /**
+         * @method getFontName
+         * @return {String}
+         */
+        getFontName: function() {
+            return this.isChinese() ? 'Simkai' : 'Kaisho';
+        },
+        /**
+         * @method getHeisig
+         * @returns {String}
+         */
+        getHeisig: function() {
+            return null;
+        },
+        /**
+         * @method getMnemonic
+         * @returns {String}
+         */
+        getMnemonic: function() {
+            return null;
+        },
+        /**
+         * @method getPromptResult
+         * @param {String} part
+         * @returns {PromptResults}
+         */
+        getPromptResult: function(part) {
+            var result = new PromptResults();
+            var characters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
+            var containedVocabIds = this.get('containedVocabIds') || [];
+            if (['rune', 'tone'].indexOf(part) > -1 && containedVocabIds.length) {
+                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                    result.add({character: characters[i], vocabId: containedVocabIds[i]});
+                }
+            } else {
+                result.add({character: characters[0], vocabId: this.id});
+            }
+            return result;
+        },
+        /**
+         * @method getReading
+         * @returns {String}
          */
         getReading: function() {
             return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');
+        },
+        /**
+         * @method getReadingElement
+         * @returns {String}
+         */
+        getReadingElement: function() {
+            var element = '';
+            //TODO: handle fillers for both languages
+            //var fillers = [" ... ", "'", " "];
+            var variations = this.getSegmentedReading();
+            for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
+                var variation = variations[a];
+                for (var b = 0, lengthB = variation.length; b < lengthB; b++) {
+                    var reading = variation[b];
+                    var readingMarks = app.fn.pinyin.toTone(reading);
+                    var readingToneless = reading.replace(/[1-5]/g, '');
+                    var position = b + 1;
+                    element += "<div id='reading-position-" + position + "' class='cursor mask'>";
+                    element += "<span class='pinyin-marks'>" + readingMarks + "</span>";
+                    element += "<span class='pinyin-toneless hidden'>" + readingToneless + "</span>";
+                    element += "</div>";
+                }
+            }
+            return element;
+        },
+        /**
+         * @method getSegmentedReading
+         * @returns {Array}
+         */
+        getSegmentedReading: function() {
+            var segments = [];
+            if (this.isChinese()) {
+                var variations = this.get('reading').split(', ');
+                for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
+                    var variation = variations[a];
+                    segments.push(variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g));
+                }
+            } else {
+                //TODO: properly segment Japanese
+            }
+            return segments;
+        },
+        /**
+         * @method getSentence
+         * @returns {String}
+         */
+        getSentence: function() {
+            return null;
         },
         /**
          * @method getStrokes
@@ -89,6 +195,38 @@ define([
             return strokes;
         },
         /**
+         * @method getStyle
+         * @returns {String}
+         */
+        getStyle: function() {
+            var style = this.get('style');
+            if (style === 'simp') {
+                return 'simplified';
+            }
+            if (style === 'trad') {
+                return 'traditional';
+            }
+            return null;
+        },
+        /**
+         * @method getToneNumbers
+         * @returns {Array}
+         */
+        getToneNumbers: function() {
+            var tones = [];
+            if (this.isChinese()) {
+                var readings = this.get('reading').split(', ');
+                for (var a = 0, lengthA = readings.length; a < lengthA; a++) {
+                    var reading = readings[a].match(/[1-5]+/g);
+                    for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                        var tone = parseInt(reading[b], 10);
+                        tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
+                    }
+                }
+            }
+            return tones;
+        },
+        /**
          * @method getWritingElement
          * @returns {String}
          */
@@ -103,6 +241,13 @@ define([
                 element += "</span></div>";
             }
             return element;
+        },
+        /**
+         * @method isBanned
+         * @returns {Boolean}
+         */
+        isBanned: function() {
+            return this.get('bannedParts').length ? true : false;
         },
         /**
          * @method isChinese

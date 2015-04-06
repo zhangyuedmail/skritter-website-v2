@@ -20,24 +20,16 @@ define([
          */
         initialize: function(models, options) {
             options = options || {};
-            this.result = [];
+            this.activeParts = null;
+            this.activeStyles = null;
+            this.languageCode = null;
+            this.filtered = [];
         },
         /**
          * @property model
          * @type DataItem
          */
         model: DataItem,
-        /**
-         * @method itemComparator
-         * @param {DataItem} model
-         * @returns {Number}
-         */
-        comparator: function(model) {
-            if (model.isValid()) {
-                return model.attributes.next;
-            }
-            return Number.POSITIVE_INFINITY;
-        },
         /**
          * @method fetchIds
          * @param {Function} callback
@@ -107,9 +99,10 @@ define([
         },
         /**
          * @method fetchNext
-         * @param {Function} callback
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        fetchNext: function(callback) {
+        fetchNext: function(callbackSuccess, callbackError) {
             app.api.fetchItems({
                 sort: 'next',
                 include_contained: true,
@@ -117,26 +110,19 @@ define([
                 include_strokes: true,
                 include_vocabs: true
             }, function(result) {
-                app.user.data.insert(result, callback);
+                app.user.data.insert(result, callbackSuccess);
             }, function(error) {
-                callback(error);
+                callbackError(error);
             });
         },
         /**
          * @method getDue
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @returns {Number}
          */
-        getDue: function(callbackSuccess, callbackError) {
-            var self = this;
+        getDue: function() {
             var now = Moment().unix();
-            app.user.storage.bound('items', {
-                bound: IDBKeyRange.upperBound(now, false),
-                name: 'next'
-            }, function(result) {
-                callbackSuccess(self.itemFilter(result));
-            }, function(error) {
-                callbackError(error);
+            return _.filter(this.filtered, function(item) {
+                return item.get('next') > now;
             });
         },
         /**
@@ -157,12 +143,8 @@ define([
                     });
                 },
                 function(callback) {
-                    self.getDue(function(result) {
-                        localDue = result.length;
-                        callback();
-                    }, function(error) {
-                        callbackError(error);
-                    });
+                    localDue = self.getDue().length;
+                    callback();
                 }
             ], function(error) {
                 if (error) {
@@ -177,7 +159,7 @@ define([
          * @returns {Array}
          */
         getMissingIds: function() {
-            return this.filter(function(item) {
+            return _.filter(this.models, function(item) {
                 return item.attributes.next === undefined;
             }).map(function(item) {
                 return item.id;
@@ -191,73 +173,85 @@ define([
             return this.getMissingIds().length ? true : false;
         },
         /**
-         * @method itemFilter
-         * @param {DataItems|Object} collection
-         */
-        itemFilter: function(collection) {
-            var activeParts = app.user.settings.getActiveParts();
-            var activeStyles = app.user.settings.getActiveStyles();
-            var languageCode = app.user.getLanguageCode();
-            return collection.filter(function(item) {
-                //normalize collection for filtering
-                if (item instanceof Backbone.Model) {
-                    item = item.attributes;
-                }
-                //filter out any items not loaded yet
-                if (item.changed === undefined) {
-                    return false;
-                }
-                //filter out items that contain no vocab ids
-                if (!item.vocabIds.length) {
-                    return false;
-                }
-                //filter out items not matching an active part
-                if (activeParts.indexOf(item.part) === -1) {
-                    return false;
-                }
-                //chinese specific filters
-                if (languageCode === 'zh') {
-                    //filter out items not matching an active style
-                    if (activeStyles.indexOf(item.style) === -1) {
-                        return false;
-                    }
-                }
-                //japanese specific filters
-                if (languageCode === 'ja') {
-                    //TODO: add japanese specific kana filters
-                }
-                return true;
-            });
-        },
-        /**
          * @method load
-         * @param {Function} [callback]
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        load: function(callback) {
+        load: function(callbackSuccess, callbackError) {
             var self = this;
             app.user.storage.all('items', function(result) {
                 self.lazyAdd(result, function() {
-                    self.sort();
-                    if (typeof callback === 'function') {
-                        callback();
-                    }
+                    self.updateFilter();
+                    self.sortFilter();
+                    callbackSuccess();
                 }, {merge: true, silent: true, sort: false});
             }, function(error) {
-                if (typeof callback === 'function') {
-                    callback(error);
-                }
+                callbackError(error);
             });
         },
         /**
          * @method loadNext
-         * @param {Function} callback
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          */
-        loadNext: function(callback) {
-            this.sort().at(0).load(function(result) {
-                callback(result);
-            }, function() {
-                console.error('ITEM LOAD ERROR', error.stack);
+        loadNext: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.waterfall([
+                function(callback) {
+                    self.sortFilter();
+                    if (self.filtered.length) {
+                        callback();
+                    } else {
+                        self.fetchNext(function() {
+                            self.updateFilter();
+                            self.sortFilter();
+                            callback();
+                        }, function() {
+                            callback();
+                        });
+                    }
+                },
+                function(callback) {
+                    if (self.filtered.length) {
+                        self.filtered[0].load(function(item) {
+                            callback(null, item);
+                        }, function(error) {
+                            callback(error);
+                        });
+                    } else {
+                        callback(new Error('Unable to load next items.'));
+                    }
+                }
+            ], function(error, item) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackSuccess(item);
+                }
             });
+        },
+        /**
+         * @method sortFilter
+         * @returns {Array}
+         */
+        sortFilter: function() {
+            this.filtered = _.sortBy(this.filtered, function(item) {
+                return item.get('next');
+            });
+            return this.filtered;
+        },
+        /**
+         * @method updateFilter
+         * @returns {Array}
+         */
+        updateFilter: function() {
+            this.activeParts = app.user.settings.getActiveParts();
+            this.activeStyles = app.user.settings.getActiveStyles();
+            this.languageCode = app.user.getLanguageCode();
+            this.filtered = _.filter(this.models, function(item) {
+                return item.isValid();
+            });
+            return this.filtered;
         }
     });
 

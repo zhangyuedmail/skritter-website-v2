@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/study-toolbar.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class StudyToolbar
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var StudyToolbar = GelatoView.extend({
+    var StudyToolbar = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -57,26 +57,10 @@ define([
             }
         },
         /**
-         * @method hide
-         * @returns {StudyToolbar}
-         */
-        hide: function() {
-            this.$el.hide();
-            return this;
-        },
-        /**
          * @method resize
          * @returns {StudyToolbar}
          */
         resize: function() {
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {StudyToolbar}
-         */
-        show: function() {
-            this.$el.show();
             return this;
         }
     });

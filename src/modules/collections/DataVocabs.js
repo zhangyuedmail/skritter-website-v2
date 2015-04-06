@@ -90,6 +90,43 @@ define([
                     callbackSuccess(app.user.data.vocabs.get(vocab.id));
                 }
             });
+        },
+        /**
+         * @method load
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         * @returns {DataVocabs}
+         */
+        load: function(writing, callbackSuccess, callbackError) {
+            var self = this;
+            var vocabId = app.fn.mapper.toBase(writing);
+            Async.waterfall([
+                function(callback) {
+                    app.user.storage.get('vocabs', vocabId, function(result) {
+                        callback(null, result);
+                    }, function() {
+                        callback();
+                    });
+                },
+                function(vocab, callback) {
+                    if (vocab) {
+                        callback(null, vocab);
+                    } else {
+                        app.api.fetchVocabs({ids: vocabId}, function(result) {
+                            callback(null, result.Vocabs[0]);
+                        }, function(error) {
+                            callback(error);
+                        });
+                    }
+                }
+            ], function(error, vocab) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackSuccess(self.add(vocab));
+                }
+            });
+            return this;
         }
     });
 

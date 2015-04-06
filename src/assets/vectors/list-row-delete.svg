@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="20px" viewBox="0 0 16 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>list-row-delete</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="list-row-delete" sketch:type="MSArtboardGroup" fill="#9CA0A4">
+            <path d="M0.989,7.113 L2.09,18.021 C2.151,18.482 4.377,19.998 7.6,20 C10.825,19.998 13.051,18.482 13.111,18.021 L14.213,7.113 C12.529,8.055 10.012,8.5 7.6,8.5 C5.19,8.5 2.672,8.055 0.989,7.113 L0.989,7.113 Z M10.768,1.51 L9.909,0.559 C9.577,0.086 9.217,0 8.516,0 L6.685,0 C5.985,0 5.624,0.086 5.293,0.559 L4.434,1.51 C1.864,1.959 -3.63264974e-13,3.15 -3.63264974e-13,4.029 L-3.63264974e-13,4.199 C-3.63264974e-13,5.746 3.403,7 7.6,7 C11.798,7 15.201,5.746 15.201,4.199 L15.201,4.029 C15.201,3.15 13.338,1.959 10.768,1.51 L10.768,1.51 Z M9.67,4.34 L8.6,3 L6.6,3 L5.532,4.34 L3.832,4.34 C3.832,4.34 5.694,2.119 5.943,1.818 C6.133,1.588 6.327,1.5 6.579,1.5 L8.622,1.5 C8.875,1.5 9.069,1.588 9.259,1.818 C9.507,2.119 11.37,4.34 11.37,4.34 L9.67,4.34 L9.67,4.34 Z" id="Shape-13" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/prompt-navigation.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class PromptNavigation
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var PromptNavigation = GelatoView.extend({
+    var PromptNavigation = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -55,60 +55,10 @@ define([
             this.prompt.previous();
         },
         /**
-         * @method hide
-         * @returns {PromptNavigation}
-         */
-        hide: function() {
-            this.hideNext();
-            this.hidePrevious();
-            return this;
-        },
-        /**
-         * @method hideNext
-         * @returns {PromptNavigation}
-         */
-        hideNext: function() {
-            this.$('.navigate-next').hide();
-            return this;
-        },
-        /**
-         * @method hidePrevious
-         * @returns {PromptNavigation}
-         */
-        hidePrevious: function() {
-            this.$('.navigate-previous').hide();
-            return this;
-        },
-        /**
          * @method resize
          * @returns {PromptNavigation}
          */
         resize: function() {
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {PromptNavigation}
-         */
-        show: function() {
-            this.showNext();
-            this.showPrevious();
-            return this;
-        },
-        /**
-         * @method showNext
-         * @returns {PromptNavigation}
-         */
-        showNext: function() {
-            this.$('.navigate-next').show();
-            return this;
-        },
-        /**
-         * @method showPrevious
-         * @returns {PromptNavigation}
-         */
-        showPrevious: function() {
-            this.$('.navigate-previous').show();
             return this;
         }
     });

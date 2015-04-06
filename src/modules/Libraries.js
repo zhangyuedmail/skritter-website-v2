@@ -3,6 +3,9 @@
  * @class Libraries
  */
 define([
+    'chart',
     'createjs.easel',
-    'createjs.tween'
+    'createjs.tween',
+    'd3',
+    'heatmap'
 ]);

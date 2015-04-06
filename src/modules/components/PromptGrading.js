@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/prompt-grading.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class PromptGrading
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var PromptGrading = GelatoView.extend({
+    var PromptGrading = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -20,6 +20,7 @@ define([
         initialize: function(options) {
             options = options || {};
             this.prompt = options.prompt;
+            this.value = null;
             this.on('resize', this.resize);
         },
         /**
@@ -34,28 +35,39 @@ define([
          * @property events
          * @type Object
          */
-        events: {},
+        events: {
+            'vclick .btn': 'handleClickButton'
+        },
         /**
-         * @method hide
+         * @method handleClickButton
+         * @param {Event} event
+         */
+        handleClickButton: function(event) {
+            event.preventDefault();
+            this.select(parseInt($(event.currentTarget).data('value'), 10));
+            this.trigger('select', this.value);
+        },
+        /**
+         * @method select
+         * @param {Number} [value]
          * @returns {PromptGrading}
          */
-        hide: function() {
-            this.$el.hide();
+        select: function(value) {
+            this.unselect();
+            if (value) {
+                this.$('.btn-group .btn[data-value="' + value + '"]').addClass('selected');
+                this.value = value;
+            } else {
+                this.value = null;
+            }
             return this;
         },
         /**
-         * @method resize
+         * @method unselect
          * @returns {PromptGrading}
          */
-        resize: function() {
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {PromptGrading}
-         */
-        show: function() {
-            this.$el.show();
+        unselect: function() {
+            this.$('.btn-group .btn').removeClass('selected');
             return this;
         }
     });

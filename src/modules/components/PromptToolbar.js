@@ -4,14 +4,14 @@
  */
 define([
     'require.text!templates/components/prompt-toolbar.html',
-    'core/modules/GelatoView'
-], function(Template, GelatoView) {
+    'core/modules/GelatoComponent'
+], function(Template, GelatoComponent) {
 
     /**
      * @class PromptToolbar
-     * @extends GelatoView
+     * @extends GelatoComponent
      */
-    var PromptToolbar = GelatoView.extend({
+    var PromptToolbar = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -35,8 +35,17 @@ define([
          * @type Object
          */
         events: {
+            'vclick .option-correct': 'handleClickOptionCorrect',
             'vclick .option-eraser': 'handleClickOptionEraser',
-            'vclick .option-reveal': 'handleClickOptionReveal'
+            'vclick .option-reveal': 'handleClickOptionReveal',
+            'vclick .option-stroke-order': 'handleClickOptionStrokeOrder'
+        },
+        /**
+         * @method handleClickOptionCorrect
+         * @param {Event} event
+         */
+        handleClickOptionCorrect: function(event) {
+            event.preventDefault();
         },
         /**
          * @method handleClickOptionEraser
@@ -45,7 +54,7 @@ define([
         handleClickOptionEraser: function(event) {
             event.preventDefault();
             this.prompt.character().reset();
-            this.prompt.renderCharacter();
+            this.prompt.renderPrompt();
         },
         /**
          * @method handleClickOptionReveal
@@ -53,31 +62,22 @@ define([
          */
         handleClickOptionReveal: function(event) {
             event.preventDefault();
-            var shape = this.prompt.character().getExpectedTargets()[0].getShape();
+            var nextShape = this.prompt.character().getExpectedTargets()[0].getShape();
             this.prompt.canvas.clearLayer('surface-background2');
-            this.prompt.canvas.drawShape('surface-background2', shape, {color: '#b3b3b3'});
+            this.prompt.canvas.drawShape('surface-background2', nextShape, {color: '#b3b3b3'});
         },
         /**
-         * @method hide
-         * @returns {PromptToolbar}
+         * @method handleClickOptionStroke
+         * @param {Event} event
          */
-        hide: function() {
-            this.$el.hide();
-            return this;
+        handleClickOptionStroke: function(event) {
+            event.preventDefault();
         },
         /**
          * @method resize
          * @returns {PromptToolbar}
          */
         resize: function() {
-            return this;
-        },
-        /**
-         * @method show
-         * @returns {PromptToolbar}
-         */
-        show: function() {
-            this.$el.show();
             return this;
         }
     });

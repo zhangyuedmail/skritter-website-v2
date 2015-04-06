@@ -9,9 +9,8 @@ define([
     'modules/models/UserAuth',
     'modules/models/UserData',
     'modules/models/UserSettings',
-    'modules/models/UserStats',
     'modules/models/UserSubscription'
-], function(GelatoModel, GelatoStorage, UserAuth, UserData, UserSettings, UserStats, UserSubscription) {
+], function(GelatoModel, GelatoStorage, UserAuth, UserData, UserSettings, UserSubscription) {
 
     /**
      * @class User
@@ -27,7 +26,6 @@ define([
             this.data = new UserData(null, {user: this});
             this.storage = new GelatoStorage();
             this.settings = new UserSettings(null, {user: this});
-            this.stats = new UserStats(null, {user: this});
             this.subscription = new UserSubscription(null, {user: this});
         },
         /**
@@ -105,32 +103,49 @@ define([
                         callbackSuccess();
                     }
                 },
-                //load global cache
+                //load user authorization
                 function(callback) {
-                    self.auth.loadCache();
-                    self.settings.loadCache();
-                    self.subscription.loadCache();
-                    callback();
+                    self.auth.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
                 },
-                //load language cache
+                //load user settings
                 function(callback) {
-                    self.stats.loadCache();
-                    self.data.loadCache();
-                    callback();
+                    self.settings.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                //load user subscription
+                function(callback) {
+                    self.subscription.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
                 },
                 //open database for usage
                 function(callback) {
                     self.loadStorage(callback);
                 },
-                //load initial item data
+                //load user data
                 function(callback) {
-                    self.data.items.load(callback);
+                    self.data.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
                 },
                 //initialize missing item fetch
                 function(callback) {
-                    if (self.data.items.hasMissing()) {
+                    /** TODO: enable this for mobile only
+                     if (self.data.items.hasMissing()) {
                         self.data.items.fetchMissing();
                     }
+                     **/
                     callback();
                 }
             ], function(error) {
@@ -222,6 +237,7 @@ define([
                 items: {keyPath: 'id', index: [{name: 'next'}]},
                 reviews: {keyPath: 'id'},
                 sentences: {keyPath: 'id'},
+                stats: {keyPath: 'date'},
                 strokes: {keyPath: 'rune'},
                 vocablists: {keyPath: 'id'},
                 vocabs: {keyPath: 'id'}

@@ -7,10 +7,11 @@ define([
     'modules/collections/DataDecomps',
     'modules/collections/DataItems',
     'modules/collections/DataParams',
+    'modules/collections/DataStats',
     'modules/collections/DataStrokes',
     'modules/collections/DataVocabLists',
     'modules/collections/DataVocabs'
-], function(GelatoModel, DataDecomps, DataItems, DataParams, DataStrokes, DataVocabLists, DataVocabs) {
+], function(GelatoModel, DataDecomps, DataItems, DataParams, DataStats, DataStrokes, DataVocabLists, DataVocabs) {
 
     /**
      * @class UserData
@@ -28,6 +29,7 @@ define([
             this.decomps = new DataDecomps();
             this.items = new DataItems();
             this.params = new DataParams();
+            this.stats = new DataStats();
             this.strokes = new DataStrokes();
             this.user = options.user;
             this.vocablists = new DataVocabLists();
@@ -91,18 +93,56 @@ define([
                 },
                 function(callback) {
                     app.user.storage.put('vocabs', result.Vocabs || [], callback, callback);
+                },
+                function(callback) {
+                    app.user.storage.put('vocablists', result.VocabLists || [], callback, callback);
                 }
             ], callback);
         },
         /**
-         * @method loadCache
+         * @method load
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
          * @returns {UserData}
          */
-        loadCache: function() {
-            var item = localStorage.getItem(this.user.getCachePath('data', true));
-            if (item) {
-                this.set(JSON.parse(item), {silent: true});
-            }
+        load: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.series([
+                function(callback) {
+                    var cachedItem = localStorage.getItem(self.user.getCachePath('data', true));
+                    if (cachedItem) {
+                        self.set(JSON.parse(cachedItem), {silent: true});
+                    }
+                    callback();
+                },
+                function(callback) {
+                    self.items.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    self.stats.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    self.vocablists.load(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackSuccess();
+                }
+            });
             return this;
         }
     });
