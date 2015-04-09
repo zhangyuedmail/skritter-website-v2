@@ -103,6 +103,7 @@ define([
          * @param {Function} callbackError
          */
         fetchNext: function(callbackSuccess, callbackError) {
+            var self = this;
             app.api.fetchItems({
                 sort: 'next',
                 include_contained: true,
@@ -110,7 +111,11 @@ define([
                 include_strokes: true,
                 include_vocabs: true
             }, function(result) {
-                app.user.data.insert(result, callbackSuccess);
+                app.user.data.insert(result, function() {
+                    callbackSuccess(self.add(result.Items, {merge: true}));
+                }, function(error) {
+                    callbackError(error);
+                });
             }, function(error) {
                 callbackError(error);
             });
