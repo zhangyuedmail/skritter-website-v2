@@ -1,0 +1,171 @@
+/*** DIRECTORIES ***/
+$dir-assets: '../assets';
+
+
+/*** FONTS ***/
+$font-chinese: "Simkai", "Kaisho";
+$font-japanese: "Kaisho", "Simkai";
+$font-primary: "Muli", "Arial Unicode MS", "Arial";
+$font-secondary: "Roboto Slab", "Arial Unicode MS", "Arial";
+$font-unicode: "Arial Unicode MS", "Arial";
+
+
+/*** BACKGROUNDS ***/
+$background: url('#{$dir-assets}/backgrounds/retina-wood.png');
+
+
+/*** COLOR: GRADING ***/
+$grade1: #e74c3c;
+$grade2: #ebbd3e;
+$grade3: #87a64b;
+$grade4: #4d88e3;
+
+
+/*** COLOR: GREY ***/
+$grey1: #d8dadc;
+$grey2: #b2b5b9;
+$grey3: #8c9196;
+$grey4: #666c73;
+$grey5: #404851;
+$grey6: #333940;
+$grey7: #262b30;
+$grey8: #191c20;
+$grey9: #0c0e10;
+
+
+/*** COLOR: WHITE ***/
+$white1: #fbfafc;
+$white2: #f7f6f9;
+$white3: #f3f2f6;
+$white4: #efeef3;
+$white5: #ebeaf0;
+$white6: #bcbbc0;
+$white7: #8d8c90;
+$white8: #5e5d60;
+$white9: #2f2e30;
+
+
+/*** COLOR: GREEN ***/
+$green1: #e7eddb;
+$green2: #cfdbb7;
+$green3: #b7c993;
+$green4: #9fb76f;
+$green5: #87a64b;
+$green6: #6c843c;
+$green7: #51632d;
+$green8: #36421e;
+$green9: #1b210f;
+
+
+/*** COLOR: LIME ***/
+$lime1: #f3f7db;
+$lime2: #e7f0b7;
+$lime3: #dce893;
+$lime4: #d0e16f;
+$lime5: #c5da4b;
+$lime6: #9dae3c;
+$lime7: #76822d;
+$lime8: #4e571e;
+$lime9: #272b0f;
+
+
+/*** COLOR: WOOD ***/
+$wood1: #e8ded2;
+$wood2: #d1bda5;
+$wood3: #bb9d78;
+$wood4: #a47c4b;
+$wood5: #8e5c1e;
+$wood6: #714918;
+$wood7: #553712;
+$wood8: #38240c;
+$wood9: #1c1206;
+
+
+/*** COLOR: SAND ***/
+$sand1: #f8f2e7;
+$sand2: #f1e5cf;
+$sand3: #ead8b7;
+$sand4: #e3cb9f;
+$sand5: #dcbf88;
+$sand6: #b0986c;
+$sand7: #847251;
+$sand8: #584c36;
+$sand9: #2c261b;
+
+
+/*** GLOBAL ***/
+body {
+  background: $background repeat;
+  font-family: $font-primary;
+}
+.content-block { border-radius: 25px; }
+.text-chinese { font-family: $font-chinese; }
+.text-japanese { font-family: $font-japanese; }
+@media (min-width: 1300px) {
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+    width: 1280px;
+  }
+}
+
+
+/*** BOOTSTRAP: BUTTONS ***/
+.btn {
+  border-radius: 25px;
+  font-size: 16px;
+}
+.btn.btn-success {
+  background-color: $green5;
+  border-color: $green5;
+}
+.btn.btn-success:hover {
+  background-color: $green6;
+  border-color: $green6;
+}
+
+
+/*** BOOTSTRAP: NAVBAR ***/
+.navbar-default {
+  background-color: #38240C;
+  border: none;
+  font-size: 18px;
+}
+.navbar-default .navbar-brand {
+  color: #FBFAFC;
+  font-size: 24px;
+}
+.navbar-default .navbar-brand i { margin-top: -3px; }
+.navbar-default .navbar-brand:hover { color: $sand5; }
+.navbar-default .navbar-nav > li > a { color: $white1; }
+.navbar-default .navbar-nav > li > a:hover { color: $sand5; }
+.navbar-default .navbar-toggle { border: none; }
+.navbar-default .navbar-toggle.active {
+  background-color: transparent;
+  transform: rotate(180deg);
+  transition: all 0.5s ease;
+}
+.navbar-default .navbar-toggle.active .icon-bar { background-color: $sand5; }
+.navbar-default .navbar-toggle .icon-bar { background-color: $white1; }
+
+
+/*** COMPONENTS ***/
+@import "components/prompt";
+@import "components/prompt-detail";
+@import "components/prompt-grading";
+@import "components/prompt-navigation";
+@import "components/prompt-toolbar";
+@import "components/study-toolbar";
+@import "components/vocab-detail";
+@import "components/writing-canvas";
+
+
+/*** PAGES ***/
+@import "pages/dashboard";
+@import "pages/list";
+@import "pages/list-browse";
+@import "pages/list-section";
+@import "pages/list-studying";
+@import "pages/login";
+@import "pages/scratchpad";
+@import "pages/study";
