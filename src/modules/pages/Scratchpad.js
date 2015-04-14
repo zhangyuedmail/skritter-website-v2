@@ -19,7 +19,6 @@ define([
          */
         initialize: function() {
             this.prompt = new Prompt();
-            this.vocab = null;
         },
         /**
          * @property title
@@ -34,16 +33,10 @@ define([
             this.renderTemplate(Template);
             this.renderDialog();
             this.prompt.setElement(this.$('.prompt-container'));
-            this.prompt.hide().render();
+            this.prompt.render().hide();
+            // this.prompt.hide().render();
             this.prompt.grading.hide();
             return this;
-        },
-        /**
-         * @method renderPrompt
-         * @returns {PageScratchpad}
-         */
-        renderPrompt: function() {
-            this.prompt.set(this.vocab, 'rune', false).show();
         },
         /**
          * @method load
@@ -55,8 +48,8 @@ define([
             this.dialog.show('loading-scratchpad');
             this.$('.vocab-writing').text(writing);
             app.user.data.vocabs.fetchByQuery(writing, function(vocab) {
-                self.vocab = vocab;
-                self.renderPrompt();
+                self.prompt.set(vocab, 'rune', false);
+                self.prompt.show();
                 self.dialog.hide();
             }, function(error) {
                 console.error(error);

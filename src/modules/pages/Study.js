@@ -33,7 +33,8 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.renderFields();
-            this.prompt.setElement(this.$('.prompt-container')).render().hide();
+            this.prompt.setElement(this.$('.prompt-container'));
+            this.prompt.render().hide();
             this.listenTo(this.prompt, 'prompt:next', $.proxy(this.handlePromptNext, this));
             this.listenTo(this.prompt, 'prompt:previous', $.proxy(this.handlePromptPrevious, this));
             return this;
