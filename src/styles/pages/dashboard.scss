@@ -1,5 +1,27 @@
 .gelato-page.dashboard {
 
+  #goal-settings .modal-body {
+    font-size: 26px;
+  }
+
+  #goal-settings .modal-title {
+    color: $grey5;
+    font-family: $font-secondary;
+    font-size: 12px;
+    margin: 15px 0 0 15px;
+  }
+
+  .block-settings {
+    right: 30px;
+    position: absolute;
+    top: 30px;
+  }
+
+  .block-settings i {
+    color: $grey2;
+    cursor: pointer;
+  }
+
   .block-label {
     color: $grey5;
     font-family: $font-secondary;
@@ -15,7 +37,7 @@
     width: 150px;
   }
 
-  .cal-heatmap-container rect { shape-rendering: auto }
+  .cal-heatmap-container rect { shape-rendering: auto; }
 
   .cal-heatmap-container .q1 {
     background-color: #ededed;

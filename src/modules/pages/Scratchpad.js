@@ -34,7 +34,6 @@ define([
             this.renderDialog();
             this.prompt.setElement(this.$('.prompt-container'));
             this.prompt.render().hide();
-            // this.prompt.hide().render();
             this.prompt.grading.hide();
             return this;
         },

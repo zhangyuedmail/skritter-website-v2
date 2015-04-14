@@ -139,6 +139,7 @@ define([
             var date = new Date();
             var baseDateString = Moment().format('YYYY-MM-');
             this.$('#download-progress').hide();
+            //TODO: refactor this into the user progress model
             Async.waterfall([
                 function(callback) {
                     app.api.fetchVocabLists({sort: 'studying'}, function(result) {

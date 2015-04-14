@@ -21,9 +21,28 @@
         </nav>
     </div>
 
+    <!-- DIALOG: GOAL-SETTINGS --->
+    <div id="goal-settings" class="gelato-dialog">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="goal-settings" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="modal-title text-uppercase">Daily Goal</div>
+                        <div class="text-center">
+                            <div>I want to study</div>
+                            <div>{options}</div>
+                            <div>every day.</div>
+                            <button id="confirm-goal-settings" type="button" class="btn btn-lg btn-success">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- DIALOG: LOGOUT-CONFIRMATION --->
     <div id="logout-confirmation" class="gelato-dialog">
-        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="example1" aria-hidden="true">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="logout-confirmation" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header text-center">
@@ -56,6 +75,9 @@
             <div class="col-md-6">
                 <div class="content-block text-center">
                     <div class="block-label text-uppercase">Daily Goal</div>
+                    <div class="block-settings">
+                        <i class="fa fa-2x fa-gear" data-dialog="goal-settings"></i>
+                    </div>
                     <div class="row">
                         <div class="col-xs-6">
                             <canvas class="daily-goal-donut-container"></canvas>
