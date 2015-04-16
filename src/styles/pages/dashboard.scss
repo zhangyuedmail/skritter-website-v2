@@ -1,5 +1,7 @@
 .gelato-page.dashboard {
 
+  #download-progress { display: none; }
+
   .block-settings {
     right: 30px;
     position: absolute;
@@ -86,6 +88,8 @@
     font-size: 16px;
     font-weight: 400;
   }
+
+  .list-queue-donut-container { margin-left: -60px; }
 
   .table-viewer td, .table-viewer th { border: none; }
 

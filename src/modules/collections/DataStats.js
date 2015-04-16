@@ -23,6 +23,21 @@ define([
          */
         model: DataStat,
         /**
+         * @method comparator
+         * @param {DataStat} statA
+         * @param {DataStat} statB
+         * @returns {Number}
+         */
+        comparator: function(statA, statB) {
+            if (statA.id > statB.id) {
+                return -1;
+            } else if (statB.id > statA.id) {
+                return 1;
+            } else {
+                return 0;
+            }
+        },
+        /**
          * @method fetch
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
@@ -83,6 +98,20 @@ define([
             return dates;
         },
         /**
+         * @method getTotalCharactersLearned
+         * @returns {Number}
+         */
+        getTotalCharactersLearned: function() {
+            return this.at(0).get('char').rune.learned.all;
+        },
+        /**
+         * @method getTotalWordsLearned
+         * @returns {Number}
+         */
+        getTotalWordsLearned: function() {
+            return this.at(0).get('word').rune.learned.all;
+        },
+        /**
          * @method load
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
@@ -93,7 +122,7 @@ define([
             Async.series([
                 function(callback) {
                     app.user.storage.all('stats', function(result) {
-                        self.add(result, {silent: true});
+                        self.add(result, {merge: true, silent: true});
                         callback();
                     }, function(error) {
                         callback(error);

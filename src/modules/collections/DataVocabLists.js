@@ -39,7 +39,7 @@ define([
                     sort: 'studying'
                 }, function(result) {
                     app.user.data.insert(result, function() {
-                        self.add(result.VocabLists, {merge: true, silent: true});
+                        self.add(result.VocabLists, {merge: true});
                         if (result.cursor) {
                             next(result.cursor);
                         } else {
@@ -84,7 +84,7 @@ define([
             Async.series([
                 function(callback) {
                     app.user.storage.all('vocablists', function(result) {
-                        self.add(result, {merge: true});
+                        self.add(result, {silent: true});
                         callback();
                     }, function(error) {
                         callback(error);
