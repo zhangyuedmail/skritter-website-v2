@@ -1,0 +1,39 @@
+<!-- DIALOG: GOAL-SETTINGS --->
+<div id="goal-settings" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button data-action="cancel" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <div class="modal-title text-uppercase">Daily Goal</div>
+                <div class="text-center">
+                    <div>I want to study</div>
+                    <div>{options}</div>
+                    <div>every day.</div>
+                    <button data-action="confirm" type="button" class="btn btn-lg btn-success">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOG: LOGOUT --->
+<div id="logout" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <button data-action="cancel" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">{{dialog.logout-confirmation-title}}</h4>
+            </div>
+            <div class="modal-body">
+                <button data-action="cancel" type="button" class="btn btn-default" data-dismiss="modal">
+                    {{dialog.logout-confirmation-cancel}}
+                </button>
+                <button data-action="confirm" type="button" class="btn btn-danger">
+                    <i class="fa fa-power-off"></i> {{dialog.logout-confirmation-confirm}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -217,7 +217,7 @@ define([
             localStorage.removeItem(this.getCachePath('subscription', false));
             localStorage.removeItem('_active');
             this.storage.destroy(function() {
-                if (typeof callbackSuccess === 'function') {
+                if (typeof callback === 'function') {
                     callback();
                 } else {
                     app.reload();

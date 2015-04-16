@@ -25,6 +25,7 @@ define([
             this.tableLists = new TableViewer();
             this.listenTo(app.user.data.items, 'download:complete', $.proxy(this.updateDownloadProgress, this));
             this.listenTo(app.user.data.items, 'download:update', $.proxy(this.updateDownloadProgress, this));
+            this.listenTo(app.dialog, 'logout:confirm', $.proxy(this.handleDialogLogoutConfirm, this));
         },
         /**
          * @property title
@@ -38,11 +39,9 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.tableLists.setElement(this.$('.progress-table-container')).render();
-            this.renderDialog();
             this.renderDonuts();
             this.renderFields();
             this.renderHeatmap();
-
             this.load();
             return this;
         },
@@ -119,14 +118,12 @@ define([
          * @property events
          * @type Object
          */
-        events: {
-            'vclick #confirm-logout': 'handleClickConfirmLogout'
-        },
+        events: {},
         /**
-         * @method handleClickConfirmLogout
+         * @method handleDialogLogoutConfirm
          * @param {Event} event
          */
-        handleClickConfirmLogout: function(event) {
+        handleDialogLogoutConfirm: function(event) {
             event.preventDefault();
             app.user.logout();
         },

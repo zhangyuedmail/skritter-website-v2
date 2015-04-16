@@ -4,13 +4,15 @@
  */
 define([
     'core/modules/GelatoApplication',
+    'core/modules/GelatoDialog',
+    'core/modules/GelatoSidebar',
     'modules/Router',
     'modules/data/Strokes',
     'modules/models/Api',
     'modules/models/MediaPlayer',
     'modules/models/User',
     'modules/utils/Functions'
-], function(GelatoApplication, Router, Strokes, Api, MediaPlayer, User, Functions) {
+], function(GelatoApplication, GelatoDialog, GelatoSidebar, Router, Strokes, Api, MediaPlayer, User, Functions) {
 
     /**
      * @class Application
@@ -23,9 +25,11 @@ define([
          */
         initialize: function() {
             this.api = new Api();
+            this.dialog = new GelatoDialog();
             this.fn = Functions;
             this.media = new MediaPlayer();
             this.router = new Router();
+            this.sidebar = new GelatoSidebar();
             this.strokes = Strokes;
             this.user = new User();
         },
