@@ -27,8 +27,8 @@ define([
         model: DataVocabList,
         /**
          * @method
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
@@ -43,11 +43,15 @@ define([
                         if (result.cursor) {
                             next(result.cursor);
                         } else {
-                            callbackSuccess(self);
+                            if (typeof callbackSuccess === 'function') {
+                                callbackSuccess(self);
+                            }
                         }
                     });
                 }, function(error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 });
             })();
         },
@@ -79,19 +83,16 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    self.fetch(function() {
-                        callback();
-                    }, function() {
-                        callback();
-                    });
-                },
-                function(callback) {
                     app.user.storage.all('vocablists', function(result) {
                         self.add(result, {merge: true});
                         callback();
                     }, function(error) {
                         callback(error);
                     });
+                },
+                function(callback) {
+                    self.fetch();
+                    callback();
                 }
             ], function(error) {
                 if (error) {

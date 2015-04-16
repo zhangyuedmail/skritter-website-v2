@@ -37,47 +37,51 @@ define([
         },
         /**
          * @method fetch
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.fetchSubscription(this.user.id, null, function(data) {
-                self.set(data, {silent: true});
-                callbackSuccess();
+                self.set(data);
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
             }, function(error) {
-                callbackError(error);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             });
         },
         /**
          * @method load
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          * @returns {UserSubscription}
          */
         load: function(callbackSuccess, callbackError) {
             var self = this;
             Async.series([
                 function(callback) {
-                    self.fetch(function() {
-                        callback();
-                    }, function() {
-                        callback();
-                    });
-                },
-                function(callback) {
                     var cachedItem = localStorage.getItem(self.user.getCachePath('settings', false));
                     if (cachedItem) {
-                        self.set(JSON.parse(cachedItem));
+                        self.set(JSON.parse(cachedItem), {silent: true});
                     }
+                    callback();
+                },
+                function(callback) {
+                    self.fetch();
                     callback();
                 }
             ], function(error) {
                 if (error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 } else {
-                    self.cache();
-                    callbackSuccess();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
                 }
             });
             return this;

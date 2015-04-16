@@ -103,6 +103,10 @@ define([
                         callbackSuccess();
                     }
                 },
+                //open database for usage
+                function(callback) {
+                    self.loadStorage(callback);
+                },
                 //load user authorization
                 function(callback) {
                     self.auth.load(function() {
@@ -126,10 +130,6 @@ define([
                     }, function(error) {
                         callback(error);
                     });
-                },
-                //open database for usage
-                function(callback) {
-                    self.loadStorage(callback);
                 },
                 //load user data
                 function(callback) {
@@ -177,17 +177,27 @@ define([
                     });
                 },
                 function(callback) {
-                    self.settings.fetch(callback);
-                },
-                function(callback) {
-                    self.subscription.fetch(callback);
-                },
-                function(callback) {
                     indexedDB.deleteDatabase(self.getDatabaseName());
                     self.loadStorage(callback);
                 },
                 function(callback) {
-                    self.data.items.fetchIds(callback, function(status) {
+                    self.settings.fetch(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    self.subscription.fetch(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    self.data.items.fetchIds(function() {
+                        callback();
+                    }, function(status) {
                         if (typeof callbackStatus === 'function') {
                             callbackStatus(status);
                         }

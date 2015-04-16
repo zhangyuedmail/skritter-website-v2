@@ -46,7 +46,9 @@ define([
             if (item) {
                 this.set(JSON.parse(item), {silent: true});
             }
-            callbackSuccess();
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess();
+            }
             return this;
         }
     });

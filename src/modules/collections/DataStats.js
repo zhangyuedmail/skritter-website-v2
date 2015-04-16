@@ -24,8 +24,8 @@ define([
         model: DataStat,
         /**
          * @method fetch
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
@@ -45,9 +45,13 @@ define([
                 });
             }, function(error) {
                 if (error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 } else {
-                    callbackSuccess();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
                 }
             });
         },
@@ -96,11 +100,8 @@ define([
                     });
                 },
                 function(callback) {
-                    self.fetch(function() {
-                        callback();
-                    }, function() {
-                        callback();
-                    });
+                    self.fetch();
+                    callback();
                 }
             ], function(error) {
                 if (error) {

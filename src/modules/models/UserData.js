@@ -101,8 +101,8 @@ define([
         },
         /**
          * @method load
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          * @returns {UserData}
          */
         load: function(callbackSuccess, callbackError) {
@@ -138,9 +138,13 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 } else {
-                    callbackSuccess();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
                 }
             });
             return this;
