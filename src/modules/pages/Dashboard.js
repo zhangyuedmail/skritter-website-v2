@@ -60,8 +60,8 @@ define([
                 percentageInnerCutout : 80
             });
             this.donutListQueue = new Chart(contextListQueue).Doughnut([
-                {value: 40, color:'#c5da4b'},
-                {value: 60, color:'#efeef3'}
+                {value: 50, color:'#c5da4b'},
+                {value: 50, color:'#efeef3'}
             ], {
                 animateRotate: false,
                 percentageInnerCutout : 80
@@ -106,8 +106,7 @@ define([
             var addingLists = app.user.data.vocablists.getAdding();
             this.tableLists.set(addingLists, {
                 name: {title: '', type: 'row'},
-                progress: {title: '', type: 'progress'},
-                studyingMode: {title: '', type: 'row'}
+                progress: {title: '', type: 'progress'}
             }, {showHeaders: false}).sortBy('name');
             return this;
         },
@@ -115,7 +114,18 @@ define([
          * @property events
          * @type Object
          */
-        events: {},
+        events: {
+            'vclick .table .field-name': 'handleClickTableRow'
+        },
+        /**
+         * @method handleClickTableRow
+         * @param {Event} event
+         */
+        handleClickTableRow: function(event) {
+            event.preventDefault();
+            var listId = $(event.currentTarget).parent().attr('id').replace('row-', '');
+            app.router.navigate('lists/browse/' + listId, {trigger: true});
+        },
         /**
          * @method handleDialogLogoutConfirm
          * @param {Event} event
