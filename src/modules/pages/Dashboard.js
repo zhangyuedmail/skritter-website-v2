@@ -31,7 +31,7 @@ define([
          * @property title
          * @type String
          */
-        title: app.strings.dashboard.title + ' - ' + app.strings.global.title,
+        title: i18n.dashboard.title + ' - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageDashboard}

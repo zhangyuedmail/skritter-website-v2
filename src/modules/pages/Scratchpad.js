@@ -24,7 +24,7 @@ define([
          * @property title
          * @type String
          */
-        title: app.strings.scratchpad.title + ' - ' + app.strings.global.title,
+        title: i18n.scratchpad.title + ' - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageScratchpad}
@@ -44,15 +44,15 @@ define([
          */
         load: function(writing) {
             var self = this;
-            this.dialog.show('loading-scratchpad');
+            app.dialog.show('loading-scratchpad');
             this.$('.vocab-writing').text(writing);
             app.user.data.vocabs.fetchByQuery(writing, function(vocab) {
                 self.prompt.set(vocab, 'rune', false);
                 self.prompt.show();
-                self.dialog.hide();
+                app.dialog.hide();
             }, function(error) {
                 console.error(error);
-                self.dialog.hide();
+                app.dialog.hide();
             });
             return this;
         }

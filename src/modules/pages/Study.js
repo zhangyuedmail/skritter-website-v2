@@ -25,7 +25,7 @@ define([
          * @property title
          * @type String
          */
-        title: app.strings.study.title + ' - ' + app.strings.global.title,
+        title: i18n.study.title + ' - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageStudy}

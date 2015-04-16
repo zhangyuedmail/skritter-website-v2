@@ -21,7 +21,7 @@ define([
          * @property title
          * @type String
          */
-        title: app.strings.stats.title + ' - ' + app.strings.global.title,
+        title: i18n.stats.title + ' - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageStats}

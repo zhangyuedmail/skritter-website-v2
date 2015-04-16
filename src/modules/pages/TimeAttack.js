@@ -31,7 +31,7 @@ define([
          * @property title
          * @type String
          */
-        title: app.strings.global.title,
+        title: i18n.global.title,
         /**
          * @method render
          * @returns {PageTimeAttack}
@@ -103,7 +103,7 @@ define([
             } else {
                 this.timeFinish = Moment().unix();
                 this.$('.finish-time').text(this.timeFinish - this.timeStart);
-                this.dialog.show('results-display');
+                app.dialog.show('results-display');
             }
 
         },
@@ -159,10 +159,10 @@ define([
          */
         showReadyConfirmation: function() {
             var self = this;
-            this.dialog.show('ready-confirmation');
+            app.dialog.show('ready-confirmation');
             this.$('#start-timeattack').on('vclick', function() {
-                self.dialog.on('hidden', $.proxy(self.start, self));
-                self.dialog.hide();
+                app.dialog.on('hidden', $.proxy(self.start, self));
+                app.dialog.hide();
             });
         },
         /**

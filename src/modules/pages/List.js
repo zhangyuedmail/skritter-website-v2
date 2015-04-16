@@ -26,7 +26,7 @@ define([
          * @property title
          * @type String
          */
-        title: app.strings.lists.title + ' - ' + app.strings.global.title,
+        title: i18n.lists.title + ' - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageListBrowse}

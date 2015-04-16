@@ -74,19 +74,19 @@ define([
         showDefault: function() {
             this.navigate('');
             if (app.user.isAuthenticated()) {
-                this.activePage = new PageDashboard();
+                this.page = new PageDashboard();
             } else {
-                this.activePage = new PageHome();
+                this.page = new PageHome();
             }
-            this.activePage.render();
+            this.page.render();
         },
         /**
          * @method showList
          * @param {String} listId
          */
         showList: function(listId) {
-            this.activePage = new PageList();
-            this.activePage.render().load(listId);
+            this.page = new PageList();
+            this.page.render().load(listId);
         },
         /**
          * @method showListSection
@@ -94,44 +94,44 @@ define([
          * @param {String} sectionId
          */
         showListSection: function(listId, sectionId) {
-            this.activePage = new PageListSection();
-            this.activePage.render().load(listId, sectionId);
+            this.page = new PageListSection();
+            this.page.render().load(listId, sectionId);
         },
         /**
          * @method showListBrowse
          */
         showListBrowse: function() {
-            this.activePage = new PageListBrowse();
-            this.activePage.render().load();
+            this.page = new PageListBrowse();
+            this.page.render().load();
         },
         /**
          * @method showListStudying
          */
         showListStudying: function() {
-            this.activePage = new PageListStudying();
-            this.activePage.render().load();
+            this.page = new PageListStudying();
+            this.page.render().load();
         },
         /**
          * @method showLogin
          */
         showLogin: function() {
-            this.activePage = new PageLogin();
-            this.activePage.render();
+            this.page = new PageLogin();
+            this.page.render();
         },
         /**
          * @method showScratchpad
          * @param {String} [writing]
          */
         showScratchpad: function(writing) {
-            this.activePage = new PageScratchpad();
-            this.activePage.render().load(writing);
+            this.page = new PageScratchpad();
+            this.page.render().load(writing);
         },
         /**
          * @method showStats
          */
         showStats: function() {
-            this.activePage = new PageStats();
-            this.activePage.render();
+            this.page = new PageStats();
+            this.page.render();
         },
         /**
          * @method showStudy
@@ -139,23 +139,23 @@ define([
          * @param {String} sectionId
          */
         showStudy: function(listId, sectionId) {
-            this.activePage = new PageStudy();
-            this.activePage.render().load(listId, sectionId);
+            this.page = new PageStudy();
+            this.page.render().load(listId, sectionId);
         },
         /**
          * @method showWord
          * @param {String} writing
          */
         showWord: function(writing) {
-            this.activePage = new PageWord();
-            this.activePage.render().load(writing);
+            this.page = new PageWord();
+            this.page.render().load(writing);
         },
         /**
          * @method showWords
          */
         showWords: function() {
-            this.activePage = new PageWords();
-            this.activePage.render();
+            this.page = new PageWords();
+            this.page.render();
         }
     });
 
