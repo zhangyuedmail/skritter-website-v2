@@ -51,6 +51,7 @@ define([
             'scratchpad': 'showScratchpad',
             'scratchpad/:writing': 'showScratchpad',
             'stats': 'showStats',
+            'stats/:type': 'showStats',
             'study': 'showStudy',
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
@@ -128,10 +129,11 @@ define([
         },
         /**
          * @method showStats
+         * @param {String} [type]
          */
-        showStats: function() {
+        showStats: function(type) {
             this.page = new PageStats();
-            this.page.render();
+            this.page.render().load(type);
         },
         /**
          * @method showStudy
