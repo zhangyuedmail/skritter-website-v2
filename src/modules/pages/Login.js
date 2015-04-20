@@ -21,7 +21,7 @@ define([
          * @property title
          * @type String
          */
-        title: i18n.login.title + ' - ' + i18n.global.title,
+        title: 'Login - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageLogin}

@@ -1,19 +1,17 @@
 <gelato-page data-name="login">
 
     <!-- NAVBAR: MAIN -->
-    <div id="navbar-main" class="gelato-navbar">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><i class="fa fa-arrow-left"></i></a>
-                    <strong class="navbar-brand text-uppercase">{{login.title}}</strong>
-                </div>
+    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
             </div>
-        </nav>
-    </div>
+        </div>
+    </gelato-navbar>
 
     <!-- CONTENT: MAIN -->
-    <div id="content-main" class="gelato-content container">
+    <gelato-content class="container">
+
         <div class="content-block">
             <div class="response-message"></div>
             <div class="login-form">
@@ -32,6 +30,7 @@
                 </form>
             </div>
         </div>
-    </div>
+
+    </gelato-content>
 
 </gelato-page>
