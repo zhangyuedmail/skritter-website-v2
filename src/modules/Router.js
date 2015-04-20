@@ -13,9 +13,9 @@ define([
     'modules/pages/Login',
     'modules/pages/Home',
     'modules/pages/Scratchpad',
-    'modules/pages/Stats',
+    'modules/pages/StatsSummary',
+    'modules/pages/StatsTimeline',
     'modules/pages/Study',
-    'modules/pages/Word',
     'modules/pages/Words'
 ], function(
     GelatoRouter,
@@ -28,9 +28,9 @@ define([
     PageLogin,
     PageHome,
     PageScratchpad,
-    PageStats,
+    PageStatsSummary,
+    PageStatsTimeline,
     PageStudy,
-    PageWord,
     PageWords
 ) {
 
@@ -54,12 +54,12 @@ define([
             'logout': 'handleLogout',
             'scratchpad': 'showScratchpad',
             'scratchpad/:writing': 'showScratchpad',
-            'stats': 'showStats',
-            'stats/:type': 'showStats',
+            'stats': 'showStatsSummary',
+            'stats/summary': 'showStatsSummary',
+            'stats/timeline': 'showStatsTimeline',
             'study': 'showStudy',
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
-            'words/:writing': 'showWord',
             'words': 'showWords',
             '*route': 'showHome'
         },
@@ -130,12 +130,18 @@ define([
             this.page.render().load(writing);
         },
         /**
-         * @method showStats
-         * @param {String} [type]
+         * @method showStatsSummary
          */
-        showStats: function(type) {
-            this.page = new PageStats();
-            this.page.render().load(type);
+        showStatsSummary: function() {
+            this.page = new PageStatsSummary();
+            this.page.render();
+        },
+        /**
+         * @method showStatsTimeline
+         */
+        showStatsTimeline: function() {
+            this.page = new PageStatsTimeline();
+            this.page.render();
         },
         /**
          * @method showStudy
@@ -145,14 +151,6 @@ define([
         showStudy: function(listId, sectionId) {
             this.page = new PageStudy();
             this.page.render().load(listId, sectionId);
-        },
-        /**
-         * @method showWord
-         * @param {String} writing
-         */
-        showWord: function(writing) {
-            this.page = new PageWord();
-            this.page.render().load(writing);
         },
         /**
          * @method showWords

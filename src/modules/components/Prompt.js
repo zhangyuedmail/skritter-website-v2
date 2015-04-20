@@ -5,12 +5,12 @@
 define([
     'require.text!templates/components/prompt.html',
     'core/modules/GelatoComponent',
+    'modules/components/PromptCanvas',
     'modules/components/PromptDetail',
     'modules/components/PromptGrading',
     'modules/components/PromptNavigation',
-    'modules/components/PromptToolbar',
-    'modules/components/WritingCanvas'
-], function(Template, GelatoComponent, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar, WritingCanvas) {
+    'modules/components/PromptToolbar'
+], function(Template, GelatoComponent, PromptCanvas, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar) {
 
     /**
      * @class Prompt
@@ -22,7 +22,7 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.canvas = new WritingCanvas();
+            this.canvas = new PromptCanvas({prompt: this});
             this.detail = new PromptDetail({prompt: this});
             this.grading = new PromptGrading({prompt: this});
             this.gradingColors = app.user.settings.get('gradingColors');
