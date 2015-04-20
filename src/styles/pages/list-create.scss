@@ -48,18 +48,6 @@ gelato-page[data-name="list-create"] {
     margin-right: 5%;
   }
 
-  .content-column .table > tbody > tr:nth-of-type(even) { background-color: $white2; }
-
-  .content-column .table-viewer thead tr { background-color: $white3; }
-
-  .content-column .table-viewer thead tr th { border: none; }
-
-  .content-column .table-viewer tr td { border: none; }
-
-  .content-column .table-viewer tr td:first-child, .content-column .table-viewer tr th:first-child { padding-left: 5%; }
-
-  .content-column .table-viewer tr td:last-child, .content-column .table-viewer tr th:last-child { padding-right: 5%; }
-
   .content-column .title {
     font-family: $font-primary;
     font-size: 24px;

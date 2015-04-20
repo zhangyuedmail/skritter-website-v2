@@ -110,49 +110,6 @@ body {
 }
 
 
-/*** BOOTSTRAP: BUTTONS ***/
-.btn {
-  border-radius: 25px;
-  font-size: 16px;
-}
-.btn.btn-success {
-  background-color: $green5;
-  border-color: $green5;
-}
-.btn.btn-success:hover {
-  background-color: $green6;
-  border-color: $green6;
-}
-
-
-/*** BOOTSTRAP: MODAL ***/
-.modal .modal-content { border-radius: 25px; }
-
-
-/*** BOOTSTRAP: NAVBAR ***/
-.navbar-default {
-  background-color: #38240C;
-  border: none;
-  font-size: 18px;
-}
-.navbar-default .navbar-brand {
-  color: #FBFAFC;
-  font-size: 24px;
-}
-.navbar-default .navbar-brand i { margin-top: -3px; }
-.navbar-default .navbar-brand:hover { color: $sand5; }
-.navbar-default .navbar-nav > li > a { color: $white1; }
-.navbar-default .navbar-nav > li > a:hover { color: $sand5; }
-.navbar-default .navbar-toggle { border: none; }
-.navbar-default .navbar-toggle.active {
-  background-color: transparent;
-  transform: rotate(180deg);
-  transition: all 0.5s ease;
-}
-.navbar-default .navbar-toggle.active .icon-bar { background-color: $sand5; }
-.navbar-default .navbar-toggle .icon-bar { background-color: $white1; }
-
-
 /*** COMPONENTS ***/
 @import "components/prompt";
 @import "components/prompt-detail";

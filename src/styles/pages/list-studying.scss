@@ -1,5 +1,21 @@
 gelato-page[data-name="list-studying"] {
 
+  gelato-component[data-name="table-viewer"] {
+    border: 1px $grey1 solid;
+    font-size: 16px;
+    padding: 20px 20px 0 20px;
+  }
+
+  gelato-component[data-name="table-viewer"] table {
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  gelato-component[data-name="table-viewer"] td,
+  gelato-component[data-name="table-viewer"] th { border: none; }
+
+  gelato-component[data-name="table-viewer"] .field-progress { min-width: 150px; }
+
   .content-block {
     margin-bottom: 15px;
     padding-bottom: 0;
@@ -24,21 +40,6 @@ gelato-page[data-name="list-studying"] {
     margin-bottom: 15px;
     margin-top: 40px;
   }
-
-  .content-column .table-viewer {
-    border: 1px $grey1 solid;
-    font-size: 16px;
-    padding: 20px 20px 0 20px;
-  }
-
-  .content-column .table-viewer table {
-    margin-bottom: 0;
-    padding: 0;
-  }
-
-  .content-column .table-viewer td, .content-column .table-viewer th{ border: none; }
-
-  .content-column .table-viewer .field-progress { min-width: 150px; }
 
   .menu-column {
     background-color: $white3;

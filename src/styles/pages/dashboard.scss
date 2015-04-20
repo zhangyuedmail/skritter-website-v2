@@ -1,5 +1,9 @@
 gelato-page[data-name="dashboard"] {
 
+  gelato-component[data-name="table-viewer"] td, gelato-component[data-name="table-viewer"] th { border: none; }
+
+  gelato-component[data-name="table-viewer"] .field-progress { min-width: 150px; }
+
   #download-progress { display: none; }
 
   .block-settings {
@@ -90,9 +94,5 @@ gelato-page[data-name="dashboard"] {
   }
 
   .list-queue-donut-container { margin-left: -60px; }
-
-  .table-viewer td, .table-viewer th { border: none; }
-
-  .table-viewer .field-progress { min-width: 150px; }
 
 }
