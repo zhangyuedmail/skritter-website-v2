@@ -8,8 +8,8 @@ define([
     'modules/pages/List',
     'modules/pages/ListBrowse',
     'modules/pages/ListCreate',
+    'modules/pages/ListQueue',
     'modules/pages/ListSection',
-    'modules/pages/ListStudying',
     'modules/pages/Login',
     'modules/pages/Home',
     'modules/pages/Scratchpad',
@@ -23,8 +23,8 @@ define([
     PageList,
     PageListBrowse,
     PageListCreate,
+    PageListQueue,
     PageListSection,
-    PageListStudying,
     PageLogin,
     PageHome,
     PageScratchpad,
@@ -44,12 +44,12 @@ define([
          * @type Object
          */
         routes: {
-            'lists': 'showListStudying',
+            'lists': 'showListQueue',
             'lists/browse': 'showListBrowse',
             'lists/browse/:listId': 'showList',
             'lists/browse/:listId/:sectionId': 'showListSection',
             'lists/create': 'showListCreate',
-            'lists/queue': 'showListStudying',
+            'lists/queue': 'showListQueue',
             'login': 'showLogin',
             'logout': 'handleLogout',
             'scratchpad': 'showScratchpad',
@@ -61,28 +61,19 @@ define([
             'study/:listId/:sectionId': 'showStudy',
             'words/:writing': 'showWord',
             'words': 'showWords',
-            '*route': 'showDefault'
+            '*route': 'showHome'
         },
         /**
          * @method logout
          */
         handleLogout: function() {
-            if (app.user.isAuthenticated()) {
-                app.user.logout();
-            } else {
-                this.showDefault();
-            }
+            app.user.logout();
         },
         /**
-         * @method showDefault
+         * @method showHome
          */
-        showDefault: function() {
-            this.navigate('');
-            if (app.user.isAuthenticated()) {
-                this.page = new PageDashboard();
-            } else {
-                this.page = new PageHome();
-            }
+        showHome: function() {
+            this.page = new PageHome();
             this.page.render();
         },
         /**
@@ -117,10 +108,10 @@ define([
             this.page.render();
         },
         /**
-         * @method showListStudying
+         * @method showListQueue
          */
-        showListStudying: function() {
-            this.page = new PageListStudying();
+        showListQueue: function() {
+            this.page = new PageListQueue();
             this.page.render().load();
         },
         /**
