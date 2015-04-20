@@ -1,36 +1,16 @@
 <gelato-page data-name="scratchpad">
 
     <!-- NAVBAR: MAIN -->
-    <div id="navbar-main" class="gelato-navbar">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><i class="fa fa-arrow-left"></i></a>
-                    <strong class="navbar-brand text-uppercase">{{scratchpad.title}}</strong>
-                </div>
-            </div>
-        </nav>
-    </div>
-
-    <!-- DIALOG: LOADING-SCRATCHPAD --->
-    <div id="loading-scratchpad" class="gelato-dialog">
-        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loading-scratchpad" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <img src="assets/ajax-loader.gif" alt="" width="75">
-                        <h2><span class="vocab-writing"></span></h2>
-                    </div>
-                </div>
+    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><i class="fa fa-arrow-left"></i></a>
+                <strong class="navbar-brand text-uppercase">{{scratchpad.title}}</strong>
             </div>
         </div>
-    </div>
+    </gelato-navbar>
 
     <!-- CONTENT: MAIN -->
-    <div id="content-main" class="gelato-content container">
-
-        <div class="prompt-container"></div>
-        
-    </div>
+    <gelato-content class="container"></gelato-content>
 
 </gelato-page>

@@ -4,9 +4,8 @@
  */
 define([
     'require.text!templates/scratchpad.html',
-    'core/modules/GelatoPage',
-    'modules/components/Prompt'
-], function(Template, GelatoPage, Prompt) {
+    'core/modules/GelatoPage'
+], function(Template, GelatoPage) {
 
     /**
      * @class PageScratchpad
@@ -17,24 +16,18 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {
-            this.prompt = new Prompt();
-        },
+        initialize: function() {},
         /**
          * @property title
          * @type String
          */
-        title: i18n.scratchpad.title + ' - ' + i18n.global.title,
+        title: 'Scratchpad - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageScratchpad}
          */
         render: function() {
             this.renderTemplate(Template);
-            this.renderDialog();
-            this.prompt.setElement(this.$('.prompt-container'));
-            this.prompt.render().hide();
-            this.prompt.grading.hide();
             return this;
         },
         /**
@@ -43,17 +36,6 @@ define([
          * @returns {PageScratchpad}
          */
         load: function(writing) {
-            var self = this;
-            app.dialog.show('loading-scratchpad');
-            this.$('.vocab-writing').text(writing);
-            app.user.data.vocabs.fetchByQuery(writing, function(vocab) {
-                self.prompt.set(vocab, 'rune', false);
-                self.prompt.show();
-                app.dialog.hide();
-            }, function(error) {
-                console.error(error);
-                app.dialog.hide();
-            });
             return this;
         }
     });
