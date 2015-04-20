@@ -4,9 +4,8 @@
  */
 define([
     'require.text!templates/study.html',
-    'core/modules/GelatoPage',
-    'modules/components/Prompt'
-], function(Template, GelatoPage, Prompt) {
+    'core/modules/GelatoPage'
+], function(Template, GelatoPage) {
 
     /**
      * @class PageStudy
@@ -17,49 +16,20 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {
-            this.item = null;
-            this.prompt = new Prompt();
-        },
+        initialize: function() {},
         /**
          * @property title
          * @type String
          */
-        title: i18n.study.title + ' - ' + i18n.global.title,
+        title: 'Study - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageStudy}
          */
         render: function() {
             this.renderTemplate(Template);
-            this.renderFields();
-            this.prompt.setElement(this.$('.prompt-container'));
-            this.prompt.render().hide();
-            this.listenTo(this.prompt, 'prompt:next', $.proxy(this.handlePromptNext, this));
-            this.listenTo(this.prompt, 'prompt:previous', $.proxy(this.handlePromptPrevious, this));
             return this;
         },
-        /**
-         * @method renderFields
-         * @returns {PageStudy}
-         */
-        renderFields: function() {
-            this.$('.settings-name').text(app.user.settings.get('name'));
-            return this;
-        },
-        /**
-         * @method handlePromptNext
-         * @param {PromptResult} result
-         */
-        handlePromptNext: function(result) {
-            console.log('RESULT', result);
-            this.item.update(result);
-            this.loadPrompt();
-        },
-        /**
-         * @method handlePromptPrevious
-         */
-        handlePromptPrevious: function() {},
         /**
          * @method load
          * @param {String} listId
@@ -67,22 +37,6 @@ define([
          * @returns {PageStudy}
          */
         load: function(listId, sectionId) {
-            this.loadPrompt();
-            return this;
-        },
-        /**
-         * @method loadPrompt
-         * @returns {PageStudy}
-         */
-        loadPrompt: function() {
-            var self = this;
-            app.user.data.items.loadNext(function(item) {
-                self.item = item;
-                self.prompt.set(item.getVocab(), item.get('part'), item.isNew());
-                self.prompt.show();
-            }, function(error) {
-                console.log('PROMPT LOAD ERROR:', error);
-            });
             return this;
         }
     });
