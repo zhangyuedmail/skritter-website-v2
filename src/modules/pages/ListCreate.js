@@ -21,7 +21,7 @@ define([
          * @property title
          * @type String
          */
-        title: i18n.lists.title + ' - ' + i18n.global.title,
+        title: 'Create List - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageListCreate}
@@ -34,22 +34,7 @@ define([
          * @property events
          * @type Object
          */
-        events: {
-            'vclick #create-submit': 'handleClickCreateSubmit'
-        },
-        /**
-         * @method handleClickCreateSubmit
-         * @param {Event} event
-         */
-        handleClickCreateSubmit: function(event) {
-            event.preventDefault();
-        },
-        /**
-         * @method resize
-         */
-        resize: function() {
-            return this;
-        }
+        events: {}
     });
 
     return PageListCreate;
