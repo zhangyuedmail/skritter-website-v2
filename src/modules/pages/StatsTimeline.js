@@ -3,15 +3,15 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/stats-summary.html',
+    'require.text!templates/stats-timeline.html',
     'core/modules/GelatoPage'
 ], function(Template, GelatoPage) {
 
     /**
-     * @class PageStatsSummary
+     * @class PageStatsTimeline
      * @extends GelatoPage
      */
-    var PageStatsSummary = GelatoPage.extend({
+    var PageStatsTimeline = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -21,10 +21,10 @@ define([
          * @property title
          * @type String
          */
-        title: 'Stats Summary - ' + i18n.global.title,
+        title: 'Stats Timeline - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageStatsSummary}
+         * @returns {PageStatsTimeline}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -32,6 +32,6 @@ define([
         }
     });
 
-    return PageStatsSummary;
+    return PageStatsTimeline;
 
 });
