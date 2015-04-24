@@ -8,10 +8,10 @@ define([
 ], function(Template, GelatoPage) {
 
     /**
-     * @class PageListBrowse
+     * @class PageList
      * @extends GelatoPage
      */
-    var PageListBrowse = GelatoPage.extend({
+    var PageList = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -24,7 +24,7 @@ define([
         title: 'List - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageListBrowse}
+         * @returns {PageList}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -38,13 +38,13 @@ define([
         /**
          * @method load
          * @param {String} listId
-         * @return {PageListBrowse}
+         * @return {PageList}
          */
         load: function(listId) {
             return this;
         }
     });
 
-    return PageListBrowse;
+    return PageList;
 
 });

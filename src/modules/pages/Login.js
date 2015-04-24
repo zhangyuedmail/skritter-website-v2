@@ -16,7 +16,9 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.dialog = app.dialog;
+        },
         /**
          * @property title
          * @type String
@@ -57,12 +59,12 @@ define([
             this.disableForm('#login-form');
             app.dialog.show('loading');
             app.user.login(fieldUsername, fieldPassword, function() {
-                app.dialog.once('hidden', app.reload);
-                app.dialog.hide();
+                self.dialog.once('hidden', app.reload);
+                self.dialog.hide();
             }, function(error) {
                 self.$('.response-message').text(JSON.stringify(error));
                 self.enableForm('#login-form');
-                app.dialog.hide();
+                self.dialog.hide();
             }, function(status) {
                 self.$('.loaded-items').text(status);
             });

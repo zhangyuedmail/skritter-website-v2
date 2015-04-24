@@ -16,7 +16,10 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.router = app.router;
+            this.user = app.user;
+        },
         /**
          * @property title
          * @type String

@@ -40,10 +40,20 @@ define([
      */
     var Router = GelatoRouter.extend({
         /**
+         * @method initialize
+         * @param {Object} [options]
+         * @constructor
+         */
+        initialize: function(options) {
+            options = options || {};
+            this.app = options.app;
+        },
+        /**
          * @property routes
          * @type Object
          */
         routes: {
+            'dashboard': 'showDashboard',
             'lists': 'showListQueue',
             'lists/browse': 'showListBrowse',
             'lists/browse/:listId': 'showList',
@@ -64,24 +74,31 @@ define([
             '*route': 'showHome'
         },
         /**
-         * @method logout
+         * @method showDashboard
          */
-        handleLogout: function() {
-            app.user.logout();
+        showDashboard: function() {
+            this.page = new PageDashboard({app: this.app});
+            this.page.render();
         },
         /**
          * @method showHome
          */
         showHome: function() {
-            this.page = new PageHome();
-            this.page.render();
+            if (this.app.user.isAuthenticated()) {
+                this.navigate('dashboard', {trigger: false});
+                this.showDashboard();
+            } else {
+                this.navigate('', {trigger: false});
+                this.page = new PageHome({app: this.app});
+                this.page.render();
+            }
         },
         /**
          * @method showList
          * @param {String} listId
          */
         showList: function(listId) {
-            this.page = new PageList();
+            this.page = new PageList({app: this.app});
             this.page.render().load(listId);
         },
         /**
@@ -90,35 +107,35 @@ define([
          * @param {String} sectionId
          */
         showListSection: function(listId, sectionId) {
-            this.page = new PageListSection();
+            this.page = new PageListSection({app: this.app});
             this.page.render().load(listId, sectionId);
         },
         /**
          * @method showListBrowse
          */
         showListBrowse: function() {
-            this.page = new PageListBrowse();
+            this.page = new PageListBrowse({app: this.app});
             this.page.render().load();
         },
         /**
          * @method showListCreate
          */
         showListCreate: function() {
-            this.page = new PageListCreate();
+            this.page = new PageListCreate({app: this.app});
             this.page.render();
         },
         /**
          * @method showListQueue
          */
         showListQueue: function() {
-            this.page = new PageListQueue();
+            this.page = new PageListQueue({app: this.app});
             this.page.render().load();
         },
         /**
          * @method showLogin
          */
         showLogin: function() {
-            this.page = new PageLogin();
+            this.page = new PageLogin({app: this.app});
             this.page.render();
         },
         /**
@@ -126,21 +143,21 @@ define([
          * @param {String} [writing]
          */
         showScratchpad: function(writing) {
-            this.page = new PageScratchpad();
+            this.page = new PageScratchpad({app: this.app});
             this.page.render().load(writing);
         },
         /**
          * @method showStatsSummary
          */
         showStatsSummary: function() {
-            this.page = new PageStatsSummary();
+            this.page = new PageStatsSummary({app: this.app});
             this.page.render();
         },
         /**
          * @method showStatsTimeline
          */
         showStatsTimeline: function() {
-            this.page = new PageStatsTimeline();
+            this.page = new PageStatsTimeline({app: this.app});
             this.page.render();
         },
         /**
@@ -149,14 +166,14 @@ define([
          * @param {String} sectionId
          */
         showStudy: function(listId, sectionId) {
-            this.page = new PageStudy();
+            this.page = new PageStudy({app: this.app});
             this.page.render().load(listId, sectionId);
         },
         /**
          * @method showWords
          */
         showWords: function() {
-            this.page = new PageWords();
+            this.page = new PageWords({app: this.app});
             this.page.render();
         }
     });
