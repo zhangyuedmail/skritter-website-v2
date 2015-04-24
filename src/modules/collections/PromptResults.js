@@ -8,7 +8,7 @@ define([
 
     /**
      * @class PromptResults
-     * @extend GelatoCollection
+     * @extends GelatoCollection
      */
     var PromptResults = GelatoCollection.extend({
         /**

@@ -12,9 +12,13 @@ define([
     var DataVocabList = GelatoModel.extend({
         /**
          * @method initialize
+         * @param {Object} [attributes]
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {
+        initialize: function(attributes, options) {
+            options = options || {};
+            this.app = options.app || this.collection.app;
             this.on('change', this.save);
         },
         /**

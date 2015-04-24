@@ -26,14 +26,14 @@ define([
          */
         initialize: function(attributes, options) {
             options = options || {};
-            this.decomps = new DataDecomps();
-            this.items = new DataItems();
-            this.params = new DataParams();
-            this.stats = new DataStats();
-            this.strokes = new DataStrokes();
-            this.user = options.user;
-            this.vocablists = new DataVocabLists();
-            this.vocabs = new DataVocabs();
+            this.app = options.app;
+            this.decomps = new DataDecomps(null, {app: options.app});
+            this.items = new DataItems(null, {app: options.app});
+            this.params = new DataParams(null, {app: options.app});
+            this.stats = new DataStats(null, {app: options.app});
+            this.strokes = new DataStrokes(null, {app: options.app});
+            this.vocablists = new DataVocabLists(null, {app: options.app});
+            this.vocabs = new DataVocabs(null, {app: options.app});
             this.on('change', this.cache);
         },
         /**
@@ -48,21 +48,22 @@ define([
          * @param {Object} [options]
          */
         add: function(result, callback, options) {
+            var self = this;
             Async.parallel([
                 function(callback) {
-                    app.user.data.decomps.add(result.Decomps || [], options);
+                    self.app.user.data.decomps.add(result.Decomps || [], options);
                     callback();
                 },
                 function(callback) {
-                    app.user.data.items.add(result.Items || [], options);
+                    self.app.user.data.items.add(result.Items || [], options);
                     callback();
                 },
                 function(callback) {
-                    app.user.data.strokes.add(result.Strokes || [], options);
+                    self.app.user.data.strokes.add(result.Strokes || [], options);
                     callback();
                 },
                 function(callback) {
-                    app.user.data.vocabs.add(result.Vocabs || [], options);
+                    self.app.user.data.vocabs.add(result.Vocabs || [], options);
                     callback();
                 }
             ], callback);
@@ -72,7 +73,7 @@ define([
          * @returns {UserData}
          */
         cache: function() {
-            localStorage.setItem(this.user.getCachePath('data', true), JSON.stringify(this.toJSON()));
+            localStorage.setItem(this.app.user.getCachePath('data', true), JSON.stringify(this.toJSON()));
             return this;
         },
         /**
@@ -81,21 +82,22 @@ define([
          * @param {Function} callback
          */
         insert: function(result, callback) {
+            var self = this;
             Async.parallel([
                 function(callback) {
-                    app.user.storage.put('decomps', result.Decomps || [], callback, callback);
+                    self.app.user.storage.put('decomps', result.Decomps || [], callback, callback);
                 },
                 function(callback) {
-                    app.user.storage.put('items', result.Items || [], callback, callback);
+                    self.app.user.storage.put('items', result.Items || [], callback, callback);
                 },
                 function(callback) {
-                    app.user.storage.put('strokes', result.Strokes || [], callback, callback);
+                    self.app.user.storage.put('strokes', result.Strokes || [], callback, callback);
                 },
                 function(callback) {
-                    app.user.storage.put('vocabs', result.Vocabs || [], callback, callback);
+                    self.app.user.storage.put('vocabs', result.Vocabs || [], callback, callback);
                 },
                 function(callback) {
-                    app.user.storage.put('vocablists', result.VocabLists || [], callback, callback);
+                    self.app.user.storage.put('vocablists', result.VocabLists || [], callback, callback);
                 }
             ], callback);
         },
@@ -109,7 +111,7 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    var cachedItem = localStorage.getItem(self.user.getCachePath('data', true));
+                    var cachedItem = localStorage.getItem(self.app.user.getCachePath('data', true));
                     if (cachedItem) {
                         self.set(JSON.parse(cachedItem), {silent: true});
                     }

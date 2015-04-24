@@ -8,7 +8,7 @@ define([
 
     /**
      * @class DataVocabLists
-     * @extend GelatoCollection
+     * @extends GelatoCollection
      */
     var DataVocabLists = GelatoCollection.extend({
         /**
@@ -19,6 +19,7 @@ define([
          */
         initialize: function(models, options) {
             options = options || {};
+            this.app = options.app;
         },
         /**
          * @property model
@@ -33,12 +34,12 @@ define([
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
             (function next(cursor) {
-                app.api.fetchVocabLists({
+                self.app.api.fetchVocabLists({
                     cursor: cursor,
-                    lang: app.user.getLanguageCode(),
+                    lang: self.app.user.getLanguageCode(),
                     sort: 'studying'
                 }, function(result) {
-                    app.user.data.insert(result, function() {
+                    self.app.user.data.insert(result, function() {
                         self.add(result.VocabLists, {merge: true});
                         if (result.cursor) {
                             next(result.cursor);
@@ -83,7 +84,7 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    app.user.storage.all('vocablists', function(result) {
+                    self.app.user.storage.all('vocablists', function(result) {
                         self.add(result, {silent: true});
                         callback();
                     }, function(error) {

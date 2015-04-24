@@ -19,6 +19,7 @@ define([
          */
         initialize: function(attributes, options) {
             options = options || {};
+            this.app = options.app;
             this.audio = new Audio();
         },
         /**

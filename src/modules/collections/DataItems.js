@@ -14,12 +14,13 @@ define([
     var DataItems = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array} [models]
+         * @param {Array|Object} [models]
          * @param {Object} [options]
          * @constructor
          */
         initialize: function(models, options) {
             options = options || {};
+            this.app = options.app;
             this.activeParts = null;
             this.activeStyles = null;
             this.languageCode = null;
@@ -36,10 +37,11 @@ define([
          * @param {Function} [callbackStatus]
          */
         fetchIds: function(callback, callbackStatus) {
-            app.api.fetchItemIds({
-                lang: app.user.getLanguageCode()
+            var self = this;
+            this.app.api.fetchItemIds({
+                lang: this.app.user.getLanguageCode()
             }, function(result) {
-                app.user.data.insert(result, callback);
+                self.app.user.data.insert(result, callback);
             }, function(error) {
                 callback(error);
             }, function(status) {
@@ -62,7 +64,7 @@ define([
             var status = 0;
             (function next() {
                 var fetchIds = itemMissingIds.splice(0, 29);
-                app.api.fetchItems({
+                self.app.api.fetchItems({
                     ids: fetchIds.join('|'),
                     include_decomps: true,
                     include_strokes: true,
@@ -74,7 +76,7 @@ define([
                     if (typeof callbackStatus === 'function') {
                         callbackStatus(status, result);
                     }
-                    app.user.data.insert(result, function(error) {
+                    self.app.user.data.insert(result, function(error) {
                         if (error) {
                             callback(error);
                         } else {
@@ -104,14 +106,14 @@ define([
          */
         fetchNext: function(callbackSuccess, callbackError) {
             var self = this;
-            app.api.fetchItems({
+            this.app.api.fetchItems({
                 sort: 'next',
                 include_contained: true,
                 include_decomps: true,
                 include_strokes: true,
                 include_vocabs: true
             }, function(result) {
-                app.user.data.insert(result, function() {
+                self.app.user.data.insert(result, function() {
                     callbackSuccess(self.add(result.Items, {merge: true}));
                 }, function(error) {
                     callbackError(error);
@@ -140,7 +142,7 @@ define([
             var serverDue = 0;
             Async.series([
                 function(callback) {
-                    app.api.fetchItemsDue(null, function(result) {
+                    self.app.api.fetchItemsDue(null, function(result) {
                         serverDue = result.total;
                         callback();
                     }, function() {
@@ -184,7 +186,7 @@ define([
          */
         load: function(callbackSuccess, callbackError) {
             var self = this;
-            app.user.storage.all('items', function(result) {
+            this.app.user.storage.all('items', function(result) {
                 self.lazyAdd(result, function() {
                     self.updateFilter();
                     self.sortFilter();
@@ -250,9 +252,9 @@ define([
          * @returns {Array}
          */
         updateFilter: function() {
-            this.activeParts = app.user.settings.getActiveParts();
-            this.activeStyles = app.user.settings.getActiveStyles();
-            this.languageCode = app.user.getLanguageCode();
+            this.activeParts = this.app.user.settings.getActiveParts();
+            this.activeStyles = this.app.user.settings.getActiveStyles();
+            this.languageCode = this.app.user.getLanguageCode();
             this.filtered = _.filter(this.models, function(item) {
                 return item.isValid();
             });

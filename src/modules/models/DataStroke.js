@@ -13,6 +13,16 @@ define([
      */
     var DataStroke = GelatoModel.extend({
         /**
+         * @method initialize
+         * @param {Object} [attributes]
+         * @param {Object} [options]
+         * @constructor
+         */
+        initialize: function(attributes, options) {
+            options = options || {};
+            this.app = options.app || this.collection.app;
+        },
+        /**
          * @property idAttribute
          * @type String
          */
@@ -27,7 +37,7 @@ define([
             var rune = this.get('rune');
             var targets = [];
             for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
-                var target = new CanvasCharacter();
+                var target = new CanvasCharacter(null, {app: this.app});
                 var targetVariation = variations[a];
                 var position = 1;
                 target.position = a + 1;
@@ -35,7 +45,7 @@ define([
                     var stroke = new CanvasStroke();
                     var strokeData = targetVariation[b];
                     var strokeId = strokeData[0];
-                    var strokeParam = app.user.data.params.findWhere({strokeId: strokeId});
+                    var strokeParam = this.app.user.data.params.findWhere({strokeId: strokeId});
                     var strokeContains = strokeParam.get('contains');
                     stroke.set({
                         contains: strokeContains,

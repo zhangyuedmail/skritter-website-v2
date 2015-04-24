@@ -19,14 +19,18 @@ define([
     var User = GelatoModel.extend({
         /**
          * @method initialize
+         * @param {Object} [attributes]
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {
-            this.auth = new UserAuth(null, {user: this});
-            this.data = new UserData(null, {user: this});
-            this.storage = new GelatoStorage();
-            this.settings = new UserSettings(null, {user: this});
-            this.subscription = new UserSubscription(null, {user: this});
+        initialize: function(attributes, options) {
+            options = options || {};
+            this.app = options.app;
+            this.auth = new UserAuth(null, {app: this.app});
+            this.data = new UserData(null, {app: this.app});
+            this.settings = new UserSettings(null, {app: this.app});
+            this.storage = new GelatoStorage(null, {app: this.app});
+            this.subscription = new UserSubscription(null, {app: this.app});
         },
         /**
          * @property idAttribute
@@ -103,10 +107,6 @@ define([
                         callbackSuccess();
                     }
                 },
-                //open database for usage
-                function(callback) {
-                    self.loadStorage(callback);
-                },
                 //load user authorization
                 function(callback) {
                     self.auth.load(function() {
@@ -130,6 +130,10 @@ define([
                     }, function(error) {
                         callback(error);
                     });
+                },
+                //open database for usage
+                function(callback) {
+                    self.loadStorage(callback);
                 },
                 //load user data
                 function(callback) {
@@ -167,8 +171,14 @@ define([
         login: function(username, password, callbackSuccess, callbackError, callbackStatus) {
             var self = this;
             Async.series([
+                //authenticate user based on credentials
                 function(callback) {
-                    app.api.authenticateUser(username, password, function(data) {
+                    self.auth = new UserAuth();
+                    self.data = new UserData();
+                    self.settings = new UserSettings();
+                    self.storage = new GelatoStorage();
+                    self.subscription = new UserSubscription();
+                    self.api.authenticateUser(username, password, function(data) {
                         self.set('id', data.user_id);
                         self.auth.set(data);
                         callback();
@@ -176,10 +186,7 @@ define([
                         callback(error);
                     });
                 },
-                function(callback) {
-                    indexedDB.deleteDatabase(self.getDatabaseName());
-                    self.loadStorage(callback);
-                },
+                //fetch user settings
                 function(callback) {
                     self.settings.fetch(function() {
                         callback();
@@ -187,6 +194,7 @@ define([
                         callback(error);
                     });
                 },
+                //fetch user subscription
                 function(callback) {
                     self.subscription.fetch(function() {
                         callback();
@@ -194,6 +202,11 @@ define([
                         callback(error);
                     });
                 },
+                //open database for usage
+                function(callback) {
+                    self.loadStorage(callback);
+                },
+                //fetch item ids to be downloaded
                 function(callback) {
                     self.data.items.fetchIds(function() {
                         callback();

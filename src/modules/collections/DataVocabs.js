@@ -14,12 +14,13 @@ define([
     var DataVocabs = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array} [models]
+         * @param {Array|Object} [models]
          * @param {Object} [options]
          * @constructor
          */
         initialize: function(models, options) {
             options = options || {};
+            this.app = options.app;
         },
         /**
          * @property model
@@ -33,11 +34,12 @@ define([
          * @param {Function} callbackError
          */
         fetchByQuery: function(writing, callbackSuccess, callbackError) {
+            var self = this;
             var id = null;
             var vocab = null;
             Async.series([
                 function(callback) {
-                    app.api.fetchVocabs({
+                    self.app.api.fetchVocabs({
                         q: writing,
                         fields: 'id'
                     }, function(result) {
@@ -52,14 +54,14 @@ define([
                     });
                 },
                 function(callback) {
-                    app.api.fetchVocabs({
+                    self.app.api.fetchVocabs({
                         ids: id,
                         include_decomps: true,
                         include_strokes: true
                     }, function(result) {
                         if (result.Vocabs.length) {
                             vocab = result.Vocabs[0];
-                            app.user.data.add(result, callback);
+                            self.app.user.data.add(result, callback);
                         } else {
                             callback(new Error('No vocabs found.'));
                         }
@@ -69,13 +71,13 @@ define([
                 },
                 function(callback) {
                     if (vocab.containedVocabIds) {
-                        app.api.fetchVocabs({
+                        self.app.api.fetchVocabs({
                             q: writing,
                             ids: vocab.containedVocabIds.join('|'),
                             include_decomps: true,
                             include_strokes: true
                         }, function(result) {
-                            app.user.data.add(result, callback);
+                            self.app.user.data.add(result, callback);
                         }, function(error) {
                             callback(error);
                         });
@@ -87,7 +89,7 @@ define([
                 if (error) {
                     callbackError(error);
                 } else {
-                    callbackSuccess(app.user.data.vocabs.get(vocab.id));
+                    callbackSuccess(self.app.user.data.vocabs.get(vocab.id));
                 }
             });
         },
@@ -99,10 +101,10 @@ define([
          */
         load: function(writing, callbackSuccess, callbackError) {
             var self = this;
-            var vocabId = app.fn.mapper.toBase(writing);
+            var vocabId = this.app.fn.mapper.toBase(writing);
             Async.waterfall([
                 function(callback) {
-                    app.user.storage.get('vocabs', vocabId, function(result) {
+                    self.app.user.storage.get('vocabs', vocabId, function(result) {
                         callback(null, result);
                     }, function() {
                         callback();
@@ -112,7 +114,7 @@ define([
                     if (vocab) {
                         callback(null, vocab);
                     } else {
-                        app.api.fetchVocabs({ids: vocabId}, function(result) {
+                        self.app.api.fetchVocabs({ids: vocabId}, function(result) {
                             callback(null, result.Vocabs[0]);
                         }, function(error) {
                             callback(error);

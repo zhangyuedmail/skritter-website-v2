@@ -17,7 +17,10 @@ define([
          * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {},
+        initialize: function(attributes, options) {
+            options = options || {};
+            this.app = options.app;
+        },
         /**
          * @property defaults
          * @type Object
@@ -444,7 +447,7 @@ define([
          * @returns {String}
          */
         getToken: function() {
-            return app.user.auth.get('access_token');
+            return this.app.user.auth.get('access_token');
         },
         /**
          * @method getUrl
