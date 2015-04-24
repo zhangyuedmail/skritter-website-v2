@@ -14,9 +14,16 @@ define([
     var PageDashboard = GelatoPage.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {},
+        initialize: function(options) {
+            options = options || {};
+            this.app = options.app;
+            this.listenTo(this.app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(this.app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(this.app.user.data.stats, 'add change', this.renderStats);
+        },
         /**
          * @property title
          * @type String
@@ -28,6 +35,16 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.renderStats();
+            return this;
+        },
+        /**
+         * @method renderStats
+         * @returns {PageDashboard}
+         */
+        renderStats: function() {
+            this.$('#characters-learned-value').text(this.app.user.data.stats.getTotalCharactersLearned());
+            this.$('#words-learned-value').text(this.app.user.data.stats.getTotalWordsLearned());
             return this;
         }
     });
