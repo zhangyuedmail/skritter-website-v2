@@ -162,6 +162,16 @@ define([
             });
         },
         /**
+         * @method getItemAddedCount
+         * @returns {Number}
+         */
+        getAddedCount: function() {
+            var today = Moment().startOf('day').unix();
+            return _.filter(this.models, function(item) {
+                return item.attributes.created >= today;
+            }).length;
+        },
+        /**
          * @method getMissingIds
          * @returns {Array}
          */
@@ -171,6 +181,16 @@ define([
             }).map(function(item) {
                 return item.id;
             });
+        },
+        /**
+         * @method getItemReviewedCount
+         * @returns {Number}
+         */
+        getReviewedCount: function() {
+            var today = Moment().startOf('day').unix();
+            return _.filter(this.models, function(item) {
+                return item.attributes.last >= today;
+            }).length;
         },
         /**
          * @method hasMissing

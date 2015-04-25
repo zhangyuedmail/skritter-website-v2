@@ -44,6 +44,8 @@ define([
          */
         renderStats: function() {
             this.$('#characters-learned-value').text(this.app.user.data.stats.getTotalCharactersLearned());
+            this.$('#items-added-value').text(this.app.user.data.items.getAddedCount());
+            this.$('#items-reviewed-value').text(this.app.user.data.items.getReviewedCount());
             this.$('#words-learned-value').text(this.app.user.data.stats.getTotalWordsLearned());
             return this;
         }
