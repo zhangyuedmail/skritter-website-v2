@@ -110,6 +110,27 @@ define([
             });
         },
         /**
+         * @method getStreak
+         * @returns {Number}
+         */
+        getStreak: function() {
+            var bestStreak = 0;
+            var currentStreak = 0;
+            var timeStudied = this.pluck('timeStudied');
+            for (var i = 0, length = timeStudied.length; i < length; i++) {
+                if (timeStudied[i].day > 0) {
+                    currentStreak++;
+                }
+                if (currentStreak > bestStreak) {
+                    bestStreak = currentStreak;
+                }
+                if (timeStudied[i].day === 0) {
+                    currentStreak = 0;
+                }
+            }
+            return bestStreak;
+        },
+        /**
          * @method getTotalCharactersLearned
          * @returns {Number}
          */
