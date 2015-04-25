@@ -66,6 +66,24 @@ define([
             });
         },
         /**
+         * @method getFinished
+         * @returns {Array}
+         */
+        getFinished: function() {
+            return this.filter(function(list) {
+                return list.get('studyingMode') === 'finished';
+            });
+        },
+        /**
+         * @method getNotStudying
+         * @returns {Array}
+         */
+        getNotStudying: function() {
+            return this.filter(function(list) {
+                return list.get('studyingMode') === 'not studying';
+            });
+        },
+        /**
          * @method getReviewing
          * @returns {Array}
          */

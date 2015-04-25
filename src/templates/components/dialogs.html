@@ -24,6 +24,7 @@
         <div class="modal-content">
             <div class="modal-body text-center">
                 <img src="assets/ajax-loader.gif" alt="" width="75">
+                <h3 class="modal-message"></h3>
             </div>
         </div>
     </div>
@@ -35,14 +36,14 @@
         <div class="modal-content text-center">
             <div class="modal-header">
                 <button data-action="cancel" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                <h4 class="modal-title">{{dialog.logout-confirmation-title}}</h4>
+                <h4 class="modal-title">Are you sure?</h4>
             </div>
             <div class="modal-body">
                 <button data-action="cancel" type="button" class="btn btn-default" data-dismiss="modal">
-                    {{dialog.logout-confirmation-cancel}}
+                    Cancel
                 </button>
                 <button data-action="confirm" type="button" class="btn btn-danger">
-                    <i class="fa fa-power-off"></i> {{dialog.logout-confirmation-confirm}}
+                    <i class="fa fa-power-off"></i> Log Out
                 </button>
             </div>
         </div>
