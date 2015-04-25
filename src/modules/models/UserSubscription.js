@@ -101,6 +101,7 @@ define([
                     callbackSuccess(self);
                 }
             }, function(error) {
+                self.cache();
                 if (typeof callbackError === 'function') {
                     callbackError(error);
                 }
