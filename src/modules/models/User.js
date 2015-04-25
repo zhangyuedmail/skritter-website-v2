@@ -173,12 +173,7 @@ define([
             Async.series([
                 //authenticate user based on credentials
                 function(callback) {
-                    self.auth = new UserAuth();
-                    self.data = new UserData();
-                    self.settings = new UserSettings();
-                    self.storage = new GelatoStorage();
-                    self.subscription = new UserSubscription();
-                    self.api.authenticateUser(username, password, function(data) {
+                    self.app.api.authenticateUser(username, password, function(data) {
                         self.set('id', data.user_id);
                         self.auth.set(data);
                         callback();

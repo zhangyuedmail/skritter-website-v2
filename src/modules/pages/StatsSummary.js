@@ -14,9 +14,13 @@ define([
     var PageStatsSummary = GelatoPage.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {},
+        initialize: function(options) {
+            options = options || {};
+            this.app = options.app;
+        },
         /**
          * @property title
          * @type String

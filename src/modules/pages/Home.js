@@ -14,11 +14,12 @@ define([
     var PageHome = GelatoPage.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {
-            this.router = app.router;
-            this.user = app.user;
+        initialize: function(options) {
+            options = options || {};
+            this.app = options.app;
         },
         /**
          * @property title
