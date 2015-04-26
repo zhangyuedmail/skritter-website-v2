@@ -4,8 +4,9 @@
  */
 define([
     'require.text!templates/list.html',
-    'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+    'core/modules/GelatoPage',
+    'modules/components/SectionTable'
+], function(Template, GelatoPage, SectionTable) {
 
     /**
      * @class PageList
@@ -14,9 +15,15 @@ define([
     var PageList = GelatoPage.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {},
+        initialize: function(options) {
+            options = options || {};
+            this.app = options.app;
+            this.list = null;
+            this.sectionTable = new SectionTable({app: this.app});
+        },
         /**
          * @property title
          * @type String
@@ -28,6 +35,31 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.$('gelato-content').hide();
+            this.sectionTable.setElement(this.$('#list-sections-table')).render();
+            return this;
+        },
+        /**
+         * @method renderFields
+         * @returns {PageList}
+         */
+        renderFields: function() {
+            this.$('#list-description').text(this.list.get('description'));
+            this.$('#list-name').text(this.list.get('name'));
+            this.$('#list-tags').text(this.list.get('tags').join(', '));
+            this.$('gelato-content').show();
+            return this;
+        },
+        /**
+         * @method renderSections
+         * @returns {PageList}
+         */
+        renderSections: function() {
+            this.sectionTable.set(this.list, {
+                name: 'Name',
+                wordCount: 'Word Count',
+                status: 'Status'
+            });
             return this;
         },
         /**
@@ -41,6 +73,14 @@ define([
          * @return {PageList}
          */
         load: function(listId) {
+            var self = this;
+            this.app.user.data.vocablists.fetchById(listId, function(result) {
+                self.list = result[0];
+                self.renderFields();
+                self.renderSections();
+            }, function(error) {
+                console.error('LIST LOAD ERROR:', error);
+            });
             return this;
         }
     });
