@@ -145,11 +145,9 @@ define([
                 },
                 //initialize missing item fetch
                 function(callback) {
-                    /** TODO: enable this for mobile only
-                     if (self.data.items.hasMissing()) {
+                    if (self.data.items.hasMissing()) {
                         self.data.items.fetchMissing();
                     }
-                     **/
                     callback();
                 }
             ], function(error) {

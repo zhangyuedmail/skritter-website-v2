@@ -38,14 +38,7 @@ define([
          * @property events
          * @type Object
          */
-        events: {},
-        /**
-         * @method load
-         * @return {PageListBrowse}
-         */
-        load: function() {
-            return this;
-        }
+        events: {}
     });
 
     return PageListBrowse;

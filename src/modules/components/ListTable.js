@@ -59,6 +59,15 @@ define([
                         case 'status':
                             tableBody += this.getStatus({status: list.get('studyingMode')});
                             break;
+                        case 'startAdding':
+                            tableBody += '<a href="#">Restart adding</a>';
+                            break;
+                        case 'stopAdding':
+                            tableBody += '<a href="#">Stop adding</a>';
+                            break;
+                        case 'study':
+                            tableBody += '<a href="#" data-url="study/' + list.id + '">Study list</a>';
+                            break;
                         default:
                             tableBody += list.get(field2);
                     }
@@ -68,6 +77,7 @@ define([
             }
             this.$('table tbody').html(tableBody);
             this.$('table thead').html(tableHead);
+            this.renderEvents();
             return this;
         },
         /**
