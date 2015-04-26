@@ -21,6 +21,7 @@ define([
             options = options || {};
             this.app = options.app;
             this.fields = {};
+            this.filtered = [];
             this.lists = [];
         },
         /**
@@ -47,12 +48,15 @@ define([
             }
             tableHead += "</tr>";
             //table body
-            for (var i = 0, length = this.lists.length; i < length; i++) {
-                var list = this.lists[i];
+            for (var i = 0, length = this.filtered.length; i < length; i++) {
+                var list = this.filtered[i];
                 tableBody += "<tr id='row-" + list.id + "' class='cursor'>";
                 for (var field2 in this.fields) {
                     tableBody += "<td class='field-" + field2.toLowerCase() + "'>";
                     switch (field2) {
+                        case 'addStatus':
+                            tableBody += this.getAddStatus({status: list.get('studyingMode')});
+                            break;
                         case 'progress':
                             tableBody += this.getProgressBar({value: list.getPercentAdded()});
                             break;
@@ -86,6 +90,42 @@ define([
          */
         events: {
             'vclick .field-name': 'handleClickFieldName'
+        },
+        /**
+         * @method filterBy
+         * @param {String} value
+         * @returns {ListTable}
+         */
+        filterBy: function(value) {
+            this.filtered = _.filter(this.lists, function(list) {
+                if (list.get('name').indexOf(value) > -1) {
+                    return true;
+                }
+                return false;
+            });
+            this.renderTable();
+            return this;
+        },
+        /**
+         * @method getAddStatus
+         * @param {Object} [options]
+         * @returns {String}
+         */
+        getAddStatus: function(options) {
+            options = options || {};
+            var status = options.status;
+            switch (status) {
+                case 'adding':
+                    return 'Adding';
+                case 'finished':
+                    return 'Finished';
+                case 'not studying':
+                    return '<i class="fa fa-plus-circle"></i> Add to queue';
+                case 'reviewing':
+                    return 'Reviewing';
+                default:
+                    return 'Unknown';
+            }
         },
         /**
          * @method getProgressBar
@@ -141,7 +181,20 @@ define([
          */
         set: function(lists, fields) {
             this.fields = fields || {};
+            this.filtered = lists || [];
             this.lists = lists || [];
+            this.renderTable();
+            return this;
+        },
+        /**
+         * @method sortBy
+         * @param {String} field
+         * @returns {ListTable}
+         */
+        sortBy: function(field) {
+            this.filtered = _.sortBy(this.filtered, function(list) {
+                return list.get(field);
+            });
             this.renderTable();
             return this;
         }

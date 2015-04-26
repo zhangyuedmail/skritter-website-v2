@@ -42,6 +42,10 @@ define([
             this.user = new User(null, {app: this});
             this.user.load(function() {
                 self.router.start();
+                //DEBUGGING: append app namespace to window
+                if (gelato.isCordova() || gelato.isLocal()) {
+                    window.app = self;
+                }
             }, function(error) {
                 console.error('USER LOAD ERROR:', error);
             });

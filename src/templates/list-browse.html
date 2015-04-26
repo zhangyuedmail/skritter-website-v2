@@ -10,6 +10,26 @@
     </gelato-navbar>
 
     <!-- CONTENT: MAIN -->
-    <gelato-content class="container"></gelato-content>
+    <gelato-content class="container">
+        <div class="content-block">
+            <div class="row">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-success" data-url="lists/create">Create new list</button>
+                    <div data-url="lists/queue">Study Queue</div>
+                    <div class="active">Browse Lists</div>
+                    <div data-url="lists/my-lists">My Lists</div>
+                    <div data-url="lists/chinesepod">ChinesePod</div>
+                </div>
+                <div class="col-md-10">
+                    <div>Browse Lists</div>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input id="list-search-input" type="text" class="form-control" placeholder="Type to search by title or tag">
+                    </div>
+                    <div id="browse-lists-table"></div>
+                </div>
+            </div>
+        </div>
+    </gelato-content>
 
 </gelato-page>

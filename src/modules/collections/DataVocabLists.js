@@ -27,7 +27,7 @@ define([
          */
         model: DataVocabList,
         /**
-         * @method
+         * @method fetch
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
@@ -38,6 +38,36 @@ define([
                     cursor: cursor,
                     lang: self.app.user.getLanguageCode(),
                     sort: 'studying'
+                }, function(result) {
+                    self.app.user.data.insert(result, function() {
+                        self.add(result.VocabLists, {merge: true});
+                        if (result.cursor) {
+                            next(result.cursor);
+                        } else {
+                            if (typeof callbackSuccess === 'function') {
+                                callbackSuccess(self);
+                            }
+                        }
+                    });
+                }, function(error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                });
+            })();
+        },
+        /**
+         * @method fetchOfficial
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        fetchOfficial: function(callbackSuccess, callbackError) {
+            var self = this;
+            (function next(cursor) {
+                self.app.api.fetchVocabLists({
+                    cursor: cursor,
+                    lang: self.app.user.getLanguageCode(),
+                    sort: 'official'
                 }, function(result) {
                     self.app.user.data.insert(result, function() {
                         self.add(result.VocabLists, {merge: true});
@@ -81,6 +111,15 @@ define([
         getNotStudying: function() {
             return this.filter(function(list) {
                 return list.get('studyingMode') === 'not studying';
+            });
+        },
+        /**
+         * @method getOfficial
+         * @returns {Array}
+         */
+        getOfficial: function() {
+            return this.filter(function(list) {
+                return list.get('sort') === 'official';
             });
         },
         /**
