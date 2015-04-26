@@ -128,6 +128,7 @@ define([
          * @method showListQueue
          */
         showListQueue: function() {
+            this.navigate('lists/queue', {trigger: false});
             this.page = new PageListQueue({app: this.app});
             this.page.render();
         },
