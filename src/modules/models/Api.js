@@ -335,33 +335,44 @@ define([
         },
         /**
          * @method fetchVocabList
-         * @param {String} listId
+         * @param {Array|String} listId
          * @param {Object} [options]
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
         fetchVocabList: function(listId, options, callbackSuccess, callbackError) {
+            var self = this;
+            var listIds = Array.isArray(listId) ? listId : [listId];
+            var lists = [];
             options = options || {};
-            $.ajax({
-                url: this.getUrl() + 'vocablists/' + listId,
-                headers: this.getHeaders(),
-                context: self,
-                type: 'GET',
-                data: {
-                    bearer_token: this.getToken(),
-                    fields: options.fields,
-                    sectionFields: options.sectionFields
-                }
-            }).done(function(data) {
-                if (data.statusCode === 200) {
-                    delete data.statusCode;
-                    callbackSuccess(data.VocabList);
-                } else {
-                    callbackError(data);
-                }
-            }).fail(function(error) {
-                callbackError(error);
-            });
+            (function next() {
+                $.ajax({
+                    url: self.getUrl() + 'vocablists/' + listIds.slice(0, 1),
+                    headers: self.getHeaders(),
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        fields: options.fields,
+                        sectionFields: options.sectionFields
+                    }
+                }).done(function(data) {
+                    lists.push(data.VocabList);
+                    listIds.splice(0, 1);
+                    if (data.statusCode === 200) {
+                        if (listIds.length) {
+                            next();
+                        } else {
+                            callbackSuccess(lists);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+
         },
         /**
          * @method fetchVocabLists

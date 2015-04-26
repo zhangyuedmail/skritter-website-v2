@@ -33,28 +33,67 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
-            (function next(cursor) {
-                self.app.api.fetchVocabLists({
-                    cursor: cursor,
-                    lang: self.app.user.getLanguageCode(),
-                    sort: 'studying'
-                }, function(result) {
-                    self.app.user.data.insert(result, function() {
-                        self.add(result.VocabLists, {merge: true});
-                        if (result.cursor) {
-                            next(result.cursor);
-                        } else {
-                            if (typeof callbackSuccess === 'function') {
-                                callbackSuccess(self);
+            Async.waterfall([
+                function(callback) {
+                    var ids = [];
+                    (function next(cursor) {
+                        self.app.api.fetchVocabLists({
+                            cursor: cursor,
+                            fields: 'id',
+                            lang: self.app.user.getLanguageCode(),
+                            sort: 'studying'
+                        }, function(result) {
+                            var pluckedIds = _.pluck(result.VocabLists, 'id');
+                            ids = ids.concat(pluckedIds);
+                            if (result.cursor) {
+                                next(result.cursor);
+                            } else {
+                                callback(null, ids);
                             }
-                        }
+                        }, function(error) {
+                            callback(error);
+                        });
+                    })();
+                },
+                function(ids, callback) {
+                    self.fetchById(ids, function(result) {
+                        callback(null, result);
+                    }, function(error) {
+                        callback(error);
                     });
-                }, function(error) {
+                }
+            ], function(error, result) {
+                if (error) {
                     if (typeof callbackError === 'function') {
                         callbackError(error);
                     }
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess(result);
+                    }
+                }
+            });
+        },
+        /**
+         * @method fetchById
+         * @param {Array|String} id
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        fetchById: function(id, callbackSuccess, callbackError) {
+            var self = this;
+            this.app.api.fetchVocabList(id, null, function(result) {
+                self.app.user.data.insert(result, function() {
+                    result = self.add(result, {merge: true, silent: true});
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess(result);
+                    }
                 });
-            })();
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
         },
         /**
          * @method fetchOfficial
@@ -70,7 +109,7 @@ define([
                     sort: 'official'
                 }, function(result) {
                     self.app.user.data.insert(result, function() {
-                        self.add(result.VocabLists, {merge: true});
+                        self.add(result.VocabLists, {merge: true, silent: true});
                         if (result.cursor) {
                             next(result.cursor);
                         } else {
