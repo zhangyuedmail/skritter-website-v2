@@ -166,7 +166,7 @@ define([
          * @returns {Number}
          */
         getAddedCount: function() {
-            var today = Moment().startOf('day').unix();
+            var today = Moment().startOf('day').add(3, 'hours').unix();
             return _.filter(this.models, function(item) {
                 return item.attributes.created >= today;
             }).length;
@@ -187,7 +187,7 @@ define([
          * @returns {Number}
          */
         getReviewedCount: function() {
-            var today = Moment().startOf('day').unix();
+            var today = Moment().startOf('day').add(3, 'hours').unix();
             return _.filter(this.models, function(item) {
                 return item.attributes.last >= today;
             }).length;
@@ -210,10 +210,14 @@ define([
                 self.lazyAdd(result, function() {
                     self.updateFilter();
                     self.sortFilter();
-                    callbackSuccess();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
                 }, {merge: true, silent: true, sort: false});
             }, function(error) {
-                callbackError(error);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             });
         },
         /**

@@ -115,7 +115,7 @@ define([
          */
         showListBrowse: function() {
             this.page = new PageListBrowse({app: this.app});
-            this.page.render().load();
+            this.page.render();
         },
         /**
          * @method showListCreate
@@ -129,7 +129,7 @@ define([
          */
         showListQueue: function() {
             this.page = new PageListQueue({app: this.app});
-            this.page.render().load();
+            this.page.render();
         },
         /**
          * @method showLogin
