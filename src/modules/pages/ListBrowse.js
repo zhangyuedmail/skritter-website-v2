@@ -15,17 +15,14 @@ define([
     var PageListBrowse = GelatoPage.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
          * @constructor
          */
         initialize: function(options) {
-            options = options || {};
-            this.app = options.app;
-            this.browseTable = new ListTable({app: this.app});
+            this.browseTable = new ListTable();
             this.filter = '';
             this.sort = 'name';
-            this.listenTo(this.app.user.data.vocablists, 'add change', this.renderTables);
-            this.app.user.data.vocablists.fetchOfficial();
+            this.listenTo(app.user.data.vocablists, 'add change', this.renderTables);
+            app.user.data.vocablists.fetchOfficial();
         },
         /**
          * @property title
@@ -47,7 +44,7 @@ define([
          * @returns {PageListBrowse}
          */
         renderTables: function() {
-            var officialLists = this.app.user.data.vocablists.getOfficial();
+            var officialLists = app.user.data.vocablists.getOfficial();
             this.browseTable.set(officialLists, {
                 name: 'Name',
                 popularity: 'Popularity',

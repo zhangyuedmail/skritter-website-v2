@@ -14,14 +14,9 @@ define([
     var DataVocab = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-            this.app = options.app || this.collection.app;
-        },
+        initialize: function() {},
         /**
          * @property idAttribute
          * @type String
@@ -50,7 +45,7 @@ define([
             var characters = [];
             var strokes = this.getStrokes();
             for (var i = 0, length = strokes.length; i < length; i++) {
-                var tones = this.app.user.data.strokes.get('tones');
+                var tones = app.user.data.strokes.get('tones');
                 if (tones) {
                     characters.push(tones.getCanvasCharacter());
                 }
@@ -195,7 +190,7 @@ define([
             var strokes = [];
             var characters = this.getCharacters();
             for (var i = 0, length = characters.length; i < length; i++) {
-                var stroke = this.app.user.data.strokes.get(characters[i]);
+                var stroke = app.user.data.strokes.get(characters[i]);
                 if (stroke) {
                     strokes.push(stroke);
                 }

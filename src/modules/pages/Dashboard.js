@@ -15,17 +15,14 @@ define([
     var PageDashboard = GelatoPage.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(options) {
-            options = options || {};
-            this.app = options.app;
-            this.listQueue = new ListTable({app: this.app});
-            this.listenTo(this.app.user.data.stats, 'add change', this.renderStats);
-            this.listenTo(this.app.user.data.stats, 'add change', this.renderStats);
-            this.listenTo(this.app.user.data.stats, 'add change', this.renderStats);
-            this.listenTo(this.app.user.data.vocablists, 'add change', this.renderListQueue);
+        initialize: function() {
+            this.listQueue = new ListTable();
+            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(app.user.data.vocablists, 'add change', this.renderListQueue);
         },
         /**
          * @property title
@@ -48,7 +45,7 @@ define([
          * @returns {PageDashboard}
          */
         renderListQueue: function() {
-            var addingLists = this.app.user.data.vocablists.getAdding();
+            var addingLists = app.user.data.vocablists.getAdding();
             this.listQueue.set(addingLists, {
                 name: 'Name',
                 progress: 'Progress',
@@ -61,11 +58,11 @@ define([
          * @returns {PageDashboard}
          */
         renderStats: function() {
-            this.$('#characters-learned-value').text(this.app.user.data.stats.getTotalCharactersLearned());
-            this.$('#items-added-value').text(this.app.user.data.items.getAddedCount());
-            this.$('#items-reviewed-value').text(this.app.user.data.items.getReviewedCount());
-            this.$('#month-streak-value').text(this.app.user.data.stats.getStreak());
-            this.$('#words-learned-value').text(this.app.user.data.stats.getTotalWordsLearned());
+            this.$('#characters-learned-value').text(app.user.data.stats.getTotalCharactersLearned());
+            this.$('#items-added-value').text(app.user.data.items.getAddedCount());
+            this.$('#items-reviewed-value').text(app.user.data.items.getReviewedCount());
+            this.$('#month-streak-value').text(app.user.data.stats.getStreak());
+            this.$('#words-learned-value').text(app.user.data.stats.getTotalWordsLearned());
             return this;
         }
     });

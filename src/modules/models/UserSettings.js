@@ -13,13 +13,9 @@ define([
     var UserSettings = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-            this.app = options.app;
+        initialize: function() {
             this.on('change', this.save);
         },
         /**
@@ -38,7 +34,7 @@ define([
          * @returns {UserSettings}
          */
         cache: function() {
-            localStorage.setItem(this.app.user.getCachePath('settings', false), JSON.stringify(this.toJSON()));
+            localStorage.setItem(app.user.getCachePath('settings', false), JSON.stringify(this.toJSON()));
             return this;
         },
         /**
@@ -48,7 +44,7 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
-            this.app.api.fetchUsers(this.app.user.id, null, function(data) {
+            app.api.fetchUsers(app.user.id, null, function(data) {
                 self.set(data);
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
@@ -65,7 +61,7 @@ define([
          */
         getActiveParts: function() {
             var parts = [];
-            if (this.app.user.isChinese()) {
+            if (app.user.isChinese()) {
                 parts = _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
             } else {
                 parts = _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
@@ -77,11 +73,11 @@ define([
          * @returns {Array}
          */
         getActiveStyles: function() {
-            if (this.app.user.isJapanese()) {
+            if (app.user.isJapanese()) {
                 return ['both', 'none'];
-            } else if (this.app.user.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
+            } else if (app.user.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
                 return ['both', 'none', 'simp', 'trad'];
-            } else if (this.app.user.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
+            } else if (app.user.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
                 return ['both', 'none', 'simp'];
             } else {
                 return ['both', 'none', 'trad'];
@@ -92,7 +88,7 @@ define([
          * @returns {Array}
          */
         getAllParts: function() {
-            return this.app.user.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
+            return app.user.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
         },
         /**
          * @method getAvatar
@@ -106,21 +102,21 @@ define([
          * @returns {Array}
          */
         getEnabledParts: function() {
-            return this.app.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+            return app.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
         },
         /**
          * @method getFontClass
          * @return {String}
          */
         getFontClass: function() {
-            return this.app.user.isChinese() ? 'text-chinese' : 'text-japanese';
+            return app.user.isChinese() ? 'text-chinese' : 'text-japanese';
         },
         /**
          * @method getFontName
          * @return {String}
          */
         getFontName: function() {
-            return this.app.user.isChinese() ? 'Simkai' : 'Kaisho';
+            return app.user.isChinese() ? 'Simkai' : 'Kaisho';
         },
         /**
          * @method load
@@ -132,7 +128,7 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    var cachedItem = localStorage.getItem(self.app.user.getCachePath('settings', false));
+                    var cachedItem = localStorage.getItem(app.user.getCachePath('settings', false));
                     if (cachedItem) {
                         self.set(JSON.parse(cachedItem), {silent: true});
                     }
@@ -163,7 +159,7 @@ define([
          */
         save: function(callbackSuccess, callbackError) {
             var self = this;
-            this.app.api.putUser(this.toJSON(), function(result) {
+            app.api.putUser(this.toJSON(), function(result) {
                 self.set(result, {silent: true});
                 self.cache();
                 if (typeof callbackSuccess === 'function') {
@@ -183,7 +179,7 @@ define([
          * @returns {Array}
          */
         setActiveParts: function(parts) {
-            if (this.app.user.isChinese()) {
+            if (app.user.isChinese()) {
                 this.set('filterChineseParts', parts);
             } else {
                 this.set('filterJapaneseParts', parts);
@@ -196,7 +192,7 @@ define([
          * @returns {Array}
          */
         setActiveStyles: function(styles) {
-            if (this.app.user.isChinese()) {
+            if (app.user.isChinese()) {
                 if (styles.indexOf('simp') === -1) {
                     this.set('reviewSimplified', false);
                 } else {

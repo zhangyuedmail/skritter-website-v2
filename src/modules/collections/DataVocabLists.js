@@ -13,14 +13,9 @@ define([
     var DataVocabLists = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
-            this.app = options.app;
-        },
+        initialize: function() {},
         /**
          * @property model
          * @type DataVocabList
@@ -37,10 +32,10 @@ define([
                 function(callback) {
                     var ids = [];
                     (function next(cursor) {
-                        self.app.api.fetchVocabLists({
+                        app.api.fetchVocabLists({
                             cursor: cursor,
                             fields: 'id',
-                            lang: self.app.user.getLanguageCode(),
+                            lang: app.user.getLanguageCode(),
                             sort: 'studying'
                         }, function(result) {
                             var pluckedIds = _.pluck(result.VocabLists, 'id');
@@ -82,8 +77,8 @@ define([
          */
         fetchById: function(id, callbackSuccess, callbackError) {
             var self = this;
-            this.app.api.fetchVocabList(id, null, function(result) {
-                self.app.user.data.insert({VocabLists: result}, function() {
+            app.api.fetchVocabList(id, null, function(result) {
+                app.user.data.insert({VocabLists: result}, function() {
                     result = self.add(result, {merge: true, silent: true});
                     self.trigger('add', self);
                     if (typeof callbackSuccess === 'function') {
@@ -104,12 +99,12 @@ define([
         fetchOfficial: function(callbackSuccess, callbackError) {
             var self = this;
             (function next(cursor) {
-                self.app.api.fetchVocabLists({
+                app.api.fetchVocabLists({
                     cursor: cursor,
-                    lang: self.app.user.getLanguageCode(),
+                    lang: app.user.getLanguageCode(),
                     sort: 'official'
                 }, function(result) {
-                    self.app.user.data.insert(result, function() {
+                    app.user.data.insert(result, function() {
                         self.add(result.VocabLists, {merge: true, silent: true});
                         self.trigger('add', self);
                         if (result.cursor) {
@@ -182,7 +177,7 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    self.app.user.storage.all('vocablists', function(result) {
+                    app.user.storage.all('vocablists', function(result) {
                         self.add(result, {silent: true});
                         callback();
                     }, function(error) {

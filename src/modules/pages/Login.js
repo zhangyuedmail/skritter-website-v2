@@ -14,13 +14,9 @@ define([
     var PageLogin = GelatoPage.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(options) {
-            options = options || {};
-            this.app = options.app;
-        },
+        initialize: function(options) {},
         /**
          * @property title
          * @type String
@@ -59,14 +55,14 @@ define([
                 return;
             }
             this.disableForm('#login-form');
-            this.app.dialog.show('loading');
-            this.app.user.login(fieldUsername, fieldPassword, function() {
-                self.app.dialog.once('hidden', self.app.reload);
-                self.app.dialog.hide();
+            app.dialog.show('loading');
+            app.user.login(fieldUsername, fieldPassword, function() {
+                app.dialog.once('hidden', app.reload);
+                app.dialog.hide();
             }, function(error) {
                 self.$('.response-message').text(JSON.stringify(error));
                 self.enableForm('#login-form');
-                self.app.dialog.hide();
+                app.dialog.hide();
             }, function(status) {
                 self.$('.loaded-items').text(status);
             });

@@ -15,14 +15,11 @@ define([
     var PageList = GelatoPage.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(options) {
-            options = options || {};
-            this.app = options.app;
+        initialize: function() {
             this.list = null;
-            this.sectionTable = new SectionTable({app: this.app});
+            this.sectionTable = new SectionTable();
         },
         /**
          * @property title
@@ -74,7 +71,7 @@ define([
          */
         load: function(listId) {
             var self = this;
-            this.app.user.data.vocablists.fetchById(listId, function(result) {
+            app.user.data.vocablists.fetchById(listId, function(result) {
                 self.list = result[0];
                 self.renderFields();
                 self.renderSections();

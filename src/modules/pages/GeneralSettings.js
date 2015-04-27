@@ -14,13 +14,9 @@ define([
     var PageGeneralSettings = GelatoPage.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(options) {
-            options = options || {};
-            this.app = options.app;
-        },
+        initialize: function(options) {},
         /**
          * @property title
          * @type String
@@ -40,7 +36,7 @@ define([
          * @returns {PageGeneralSettings}
          */
         renderFields: function() {
-            var userSettings = this.app.user.settings;
+            var userSettings = app.user.settings;
             this.$('#user-avatar').html(userSettings.getAvatar());
             this.$('#user-description').text(userSettings.get('description'));
             this.$('#user-email').text(userSettings.get('email'));

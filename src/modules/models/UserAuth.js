@@ -13,13 +13,9 @@ define([
     var UserAuth = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-            this.app = options.app;
+        initialize: function() {
             this.on('change', this.cache);
         },
         /**
@@ -32,7 +28,7 @@ define([
          * @returns {UserAuth}
          */
         cache: function() {
-            localStorage.setItem(this.app.user.getCachePath('auth', false), JSON.stringify(this.toJSON()));
+            localStorage.setItem(app.user.getCachePath('auth', false), JSON.stringify(this.toJSON()));
             return this;
         },
         /**
@@ -42,7 +38,7 @@ define([
          * @returns {UserAuth}
          */
         load: function(callbackSuccess, callbackError) {
-            var item = localStorage.getItem(this.app.user.getCachePath('auth', false));
+            var item = localStorage.getItem(app.user.getCachePath('auth', false));
             if (item) {
                 this.set(JSON.parse(item), {silent: true});
             }

@@ -36,16 +36,12 @@ define([
          */
         start: function() {
             var self = this;
-            this.api = new Api(null, {app: this});
-            this.media = new MediaPlayer(null, {app: this});
-            this.router = new Router({app: this});
-            this.user = new User(null, {app: this});
+            this.api = new Api();
+            this.media = new MediaPlayer();
+            this.router = new Router();
+            this.user = new User();
             this.user.load(function() {
                 self.router.start();
-                //DEBUGGING: append app namespace to window
-                if (gelato.isCordova() || gelato.isLocal()) {
-                    window.app = self;
-                }
             }, function(error) {
                 console.error('USER LOAD ERROR:', error);
             });

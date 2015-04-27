@@ -13,13 +13,9 @@ define([
     var CanvasCharacter = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array|Object} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
-            this.app = options.app;
+        initialize: function() {
             this.targets = [];
         },
         /**
@@ -109,7 +105,7 @@ define([
          * @returns {Number}
          */
         getSize: function() {
-            return this.app.user.settings.get('canvasSize');
+            return app.user.settings.get('canvasSize');
         },
         /**
          * @method getTone
@@ -136,7 +132,7 @@ define([
         recognize: function(points, shape) {
             if (points && points.length > 1) {
                 var newStroke = new CanvasStroke({points: points});
-                var stroke = this.app.fn.recognizer.recognize(newStroke, this, this.getSize());
+                var stroke = app.fn.recognizer.recognize(newStroke, this, this.getSize());
                 if (stroke) {
                     stroke.set('squig', shape);
                     return this.add(stroke);

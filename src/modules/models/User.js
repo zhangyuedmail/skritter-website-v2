@@ -19,18 +19,14 @@ define([
     var User = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-            this.app = options.app;
-            this.auth = new UserAuth(null, {app: this.app});
-            this.data = new UserData(null, {app: this.app});
-            this.settings = new UserSettings(null, {app: this.app});
-            this.storage = new GelatoStorage(null, {app: this.app});
-            this.subscription = new UserSubscription(null, {app: this.app});
+        initialize: function() {
+            this.auth = new UserAuth();
+            this.data = new UserData();
+            this.settings = new UserSettings();
+            this.storage = new GelatoStorage();
+            this.subscription = new UserSubscription();
         },
         /**
          * @property idAttribute
@@ -171,7 +167,7 @@ define([
             Async.series([
                 //authenticate user based on credentials
                 function(callback) {
-                    self.app.api.authenticateUser(username, password, function(data) {
+                    app.api.authenticateUser(username, password, function(data) {
                         self.set('id', data.user_id);
                         self.auth.set(data);
                         callback();

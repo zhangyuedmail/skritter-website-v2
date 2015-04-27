@@ -14,12 +14,9 @@ define([
     var ListTable = GelatoComponent.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(options) {
-            options = options || {};
-            this.app = options.app;
+        initialize: function() {
             this.fields = {};
             this.filtered = [];
             this.lists = [];
@@ -171,7 +168,7 @@ define([
             event.preventDefault();
             var $row = $(event.currentTarget).parent('tr');
             var listId = $row.get(0).id.replace('row-', '');
-            this.app.router.navigate('lists/browse/' + listId);
+            app.router.navigate('lists/browse/' + listId);
         },
         /**
          * @method set

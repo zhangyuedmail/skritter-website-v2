@@ -13,14 +13,9 @@ define([
     var UserAuth = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-            this.app = options.app;
-        },
+        initialize: function() {},
         /**
          * @property defaults
          * @type Object
@@ -458,7 +453,7 @@ define([
          * @returns {String}
          */
         getToken: function() {
-            return this.app.user.auth.get('access_token');
+            return app.user.auth.get('access_token');
         },
         /**
          * @method getUrl

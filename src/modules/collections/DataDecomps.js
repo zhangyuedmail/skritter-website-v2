@@ -13,14 +13,9 @@ define([
     var DataDecomps = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array|Object} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
-            this.app = options.app;
-        },
+        initialize: function() {},
         /**
          * @property model
          * @type DataDecomp

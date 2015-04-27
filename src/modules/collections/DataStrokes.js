@@ -15,13 +15,9 @@ define([
     var DataStrokes = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array|Object} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
-            this.app = options.app;
+        initialize: function() {
             this.add(Kana.getData());
             this.add(Tones.getData());
         },

@@ -13,13 +13,9 @@ define([
     var DataItem = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-            this.app = options.app || this.collection.app;
+        initialize: function() {
             this.contained = [];
             this.decomps = [];
             this.strokes = [];
@@ -52,7 +48,7 @@ define([
          */
         getVocab: function() {
             var vocabs = this.vocabs;
-            if (this.app.user.isChinese()) {
+            if (app.user.isChinese()) {
                 return vocabs[this.get('reviews') % vocabs.length];
             }
             return vocabs[0];
@@ -103,14 +99,14 @@ define([
             var self = this;
             var options = {merge: true, silent: true, sort: false};
             var part = this.get('part');
-            var userId = this.app.user.id;
+            var userId = app.user.id;
             var vocabIds = this.get('vocabIds');
             //TODO: first check if item is valid
             Async.series([
                 //vocabs
                 function(callback) {
-                    self.app.user.storage.get('vocabs', vocabIds, function(result) {
-                        self.vocabs = self.app.user.data.vocabs.add(result, options);
+                    app.user.storage.get('vocabs', vocabIds, function(result) {
+                        self.vocabs = app.user.data.vocabs.add(result, options);
                         callback();
                     }, function() {
                         callback(new Error('Unable to load vocabs.'));
@@ -142,8 +138,8 @@ define([
                 },
                 //strokes
                 function(callback) {
-                    self.app.user.storage.get('strokes', self.getCharacters(), function(result) {
-                        self.strokes = self.app.user.data.strokes.add(result, options);
+                    app.user.storage.get('strokes', self.getCharacters(), function(result) {
+                        self.strokes = app.user.data.strokes.add(result, options);
                         callback();
                     }, function() {
                         callback(new Error('Unable to load strokes.'));
@@ -151,8 +147,8 @@ define([
                 },
                 //decomps
                 function(callback) {
-                    self.app.user.storage.get('decomps', self.getCharacters(), function(result) {
-                        self.decomps = self.app.user.data.decomps.add(result, options);
+                    app.user.storage.get('decomps', self.getCharacters(), function(result) {
+                        self.decomps = app.user.data.decomps.add(result, options);
                         callback();
                     }, function() {
                         callback(new Error('Unable to load decomps.'));

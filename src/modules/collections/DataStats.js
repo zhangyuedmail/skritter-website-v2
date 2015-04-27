@@ -14,14 +14,9 @@ define([
     var DataStats = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array|Object} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
-            this.app = options.app;
-        },
+        initialize: function() {},
         /**
          * @property model
          * @type DataStat
@@ -53,11 +48,11 @@ define([
             var momentMonthEnd = Moment().endOf('month');
             Async.series([
                 function(callback) {
-                    self.app.api.fetchStats({
+                    app.api.fetchStats({
                         start: Moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).format('YYYY-MM-DD')
                     }, function(result) {
-                        self.app.user.storage.put('stats', result, function() {
+                        app.user.storage.put('stats', result, function() {
                             self.add(result, {merge: true});
                             callback();
                         }, function(error) {
@@ -68,11 +63,11 @@ define([
                     });
                 },
                 function(callback) {
-                    self.app.api.fetchStats({
+                    app.api.fetchStats({
                         start: Moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
                     }, function(result) {
-                        self.app.user.storage.put('stats', result, function() {
+                        app.user.storage.put('stats', result, function() {
                             self.add(result, {merge: true});
                             callback();
                         }, function(error) {
@@ -83,11 +78,11 @@ define([
                     });
                 },
                 function(callback) {
-                    self.app.api.fetchStats({
+                    app.api.fetchStats({
                         start: Moment(momentMonthStart).format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
                     }, function(result) {
-                        self.app.user.storage.put('stats', result, function() {
+                        app.user.storage.put('stats', result, function() {
                             self.add(result, {merge: true});
                             callback();
                         }, function(error) {
@@ -154,7 +149,7 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    self.app.user.storage.all('stats', function(result) {
+                    app.user.storage.all('stats', function(result) {
                         self.add(result, {merge: true, silent: true});
                         callback();
                     }, function(error) {

@@ -15,15 +15,12 @@ define([
     var PageListQueue = GelatoPage.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(options) {
-            options = options || {};
-            this.app = options.app;
-            this.addingTable = new ListTable({app: this.app});
-            this.reviewingTable = new ListTable({app: this.app});
-            this.listenTo(this.app.user.data.vocablists, 'add change', this.renderTables);
+        initialize: function() {
+            this.addingTable = new ListTable();
+            this.reviewingTable = new ListTable();
+            this.listenTo(app.user.data.vocablists, 'add change', this.renderTables);
         },
         /**
          * @property title
@@ -46,8 +43,8 @@ define([
          * @returns {PageListQueue}
          */
         renderTables: function() {
-            var addingLists = this.app.user.data.vocablists.getAdding();
-            var reviewingLists = this.app.user.data.vocablists.getReviewing();
+            var addingLists = app.user.data.vocablists.getAdding();
+            var reviewingLists = app.user.data.vocablists.getReviewing();
             this.addingTable.set(addingLists, {
                 name: 'Name',
                 study: '',
