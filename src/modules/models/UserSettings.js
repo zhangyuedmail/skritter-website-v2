@@ -93,6 +93,14 @@ define([
             return this.app.user.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
         },
         /**
+         * @method getAvatar
+         * @returns {String}
+         */
+        getAvatar: function() {
+            var base64image = this.get('avatar');
+            return '<img src="data:image/png;base64,' + base64image + '" alt="">';
+        },
+        /**
          * @method getEnabledParts
          * @returns {Array}
          */

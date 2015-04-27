@@ -83,8 +83,9 @@ define([
         fetchById: function(id, callbackSuccess, callbackError) {
             var self = this;
             this.app.api.fetchVocabList(id, null, function(result) {
-                self.app.user.data.insert(result, function() {
+                self.app.user.data.insert({VocabLists: result}, function() {
                     result = self.add(result, {merge: true, silent: true});
+                    self.trigger('add', self);
                     if (typeof callbackSuccess === 'function') {
                         callbackSuccess(result);
                     }
@@ -110,6 +111,7 @@ define([
                 }, function(result) {
                     self.app.user.data.insert(result, function() {
                         self.add(result.VocabLists, {merge: true, silent: true});
+                        self.trigger('add', self);
                         if (result.cursor) {
                             next(result.cursor);
                         } else {

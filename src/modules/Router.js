@@ -5,6 +5,7 @@
 define([
     'core/modules/GelatoRouter',
     'modules/pages/Dashboard',
+    'modules/pages/GeneralSettings',
     'modules/pages/List',
     'modules/pages/ListBrowse',
     'modules/pages/ListCreate',
@@ -16,10 +17,12 @@ define([
     'modules/pages/StatsSummary',
     'modules/pages/StatsTimeline',
     'modules/pages/Study',
+    'modules/pages/StudySettings',
     'modules/pages/Words'
 ], function(
     GelatoRouter,
     PageDashboard,
+    PageGeneralSettings,
     PageList,
     PageListBrowse,
     PageListCreate,
@@ -31,6 +34,7 @@ define([
     PageStatsSummary,
     PageStatsTimeline,
     PageStudy,
+    PageStudySettings,
     PageWords
 ) {
 
@@ -64,6 +68,9 @@ define([
             'logout': 'handleLogout',
             'scratchpad': 'showScratchpad',
             'scratchpad/:writing': 'showScratchpad',
+            'settings': 'showGeneralSettings',
+            'settings/general': 'showGeneralSettings',
+            'settings/study': 'showStudySettings',
             'stats': 'showStatsSummary',
             'stats/summary': 'showStatsSummary',
             'stats/timeline': 'showStatsTimeline',
@@ -78,6 +85,14 @@ define([
          */
         showDashboard: function() {
             this.page = new PageDashboard({app: this.app});
+            this.page.render();
+        },
+        /**
+         * @method showGeneralSettings
+         */
+        showGeneralSettings: function() {
+            this.navigate('settings/general', {trigger: false});
+            this.page = new PageGeneralSettings({app: this.app});
             this.page.render();
         },
         /**
@@ -169,6 +184,13 @@ define([
         showStudy: function(listId, sectionId) {
             this.page = new PageStudy({app: this.app});
             this.page.render().load(listId, sectionId);
+        },
+        /**
+         * @method showStudySettings
+         */
+        showStudySettings: function() {
+            this.page = new PageStudySettings({app: this.app});
+            this.page.render();
         },
         /**
          * @method showWords
