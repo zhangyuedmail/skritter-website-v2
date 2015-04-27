@@ -29,6 +29,8 @@ define([
         defaults: {
             allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             allJapaneseParts: ['defn', 'rdng', 'rune'],
+            filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+            filterJapaneseParts: ['defn', 'rdng', 'rune'],
             gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'}
         },
         /**
@@ -97,8 +99,7 @@ define([
          * @returns {String}
          */
         getAvatar: function() {
-            var base64image = this.get('avatar');
-            return '<img src="data:image/png;base64,' + base64image + '" alt="">';
+            return '<img src="data:image/png;base64,' + this.get('avatar') + '" alt="">';
         },
         /**
          * @method getEnabledParts

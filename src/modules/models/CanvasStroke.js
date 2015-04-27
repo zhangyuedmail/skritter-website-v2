@@ -19,8 +19,8 @@ define([
         initialize: function(attributes, options) {
             options = options || {};
             this.app = options.app || this.collection.app;
-            this.updateCorners();
             this.on('change:points', this.updateCorners);
+            this.updateCorners();
         },
         /**
          * @property idAttribute
@@ -32,7 +32,7 @@ define([
          * @returns {Number}
          */
         getFirstAngle: function() {
-            return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
+            return this.app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
         },
         /**
          * @method getParams
@@ -42,7 +42,7 @@ define([
             var inflatedParams = [];
             var size = this.getSize();
             var matrix = this.getShape().getMatrix();
-            var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+            var params = this.app.user.data.params.where({strokeId: this.get('strokeId')});
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
                 var param = params[a].clone();
                 if (!param.has('trace')) {
@@ -83,7 +83,7 @@ define([
          * @returns {Number}
          */
         getSize: function() {
-            return app.get('canvasSize');
+            return this.app.get('canvasSize');
         },
         /**
          * @method getUserRectangle
@@ -92,7 +92,7 @@ define([
         getUserRectangle: function() {
             var size = this.getSize();
             var corners = _.clone(this.get('corners'));
-            return app.fn.getBoundingRectangle(corners, size, size, 18);
+            return this.app.fn.getBoundingRectangle(corners, size, size, 18);
         },
         /**
          * @method getUserShape
@@ -134,7 +134,7 @@ define([
          */
         updateCorners: function() {
             var points = _.clone(this.get('points'));
-            this.set('corners', app.fn.shortstraw.process(points));
+            this.set('corners', this.app.fn.shortstraw.process(points));
             return this;
         }
     });

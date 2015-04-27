@@ -52,7 +52,7 @@ define([
          */
         getVocab: function() {
             var vocabs = this.vocabs;
-            if (app.user.isChinese()) {
+            if (this.app.user.isChinese()) {
                 return vocabs[this.get('reviews') % vocabs.length];
             }
             return vocabs[0];
@@ -103,14 +103,14 @@ define([
             var self = this;
             var options = {merge: true, silent: true, sort: false};
             var part = this.get('part');
-            var userId = app.user.id;
-            var vocabIds = self.get('vocabIds');
+            var userId = this.app.user.id;
+            var vocabIds = this.get('vocabIds');
             //TODO: first check if item is valid
             Async.series([
                 //vocabs
                 function(callback) {
-                    app.user.storage.get('vocabs', vocabIds, function(result) {
-                        self.vocabs = app.user.data.vocabs.add(result, options);
+                    self.app.user.storage.get('vocabs', vocabIds, function(result) {
+                        self.vocabs = self.app.user.data.vocabs.add(result, options);
                         callback();
                     }, function() {
                         callback(new Error('Unable to load vocabs.'));
@@ -142,8 +142,8 @@ define([
                 },
                 //strokes
                 function(callback) {
-                    app.user.storage.get('strokes', self.getCharacters(), function(result) {
-                        self.strokes = app.user.data.strokes.add(result, options);
+                    self.app.user.storage.get('strokes', self.getCharacters(), function(result) {
+                        self.strokes = self.app.user.data.strokes.add(result, options);
                         callback();
                     }, function() {
                         callback(new Error('Unable to load strokes.'));
@@ -151,8 +151,8 @@ define([
                 },
                 //decomps
                 function(callback) {
-                    app.user.storage.get('decomps', self.getCharacters(), function(result) {
-                        self.decomps = app.user.data.decomps.add(result, options);
+                    self.app.user.storage.get('decomps', self.getCharacters(), function(result) {
+                        self.decomps = self.app.user.data.decomps.add(result, options);
                         callback();
                     }, function() {
                         callback(new Error('Unable to load decomps.'));

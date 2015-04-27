@@ -4,8 +4,8 @@
  */
 define([
     'core/modules/GelatoModel',
-    'modules/collections/PromptResults'
-], function(GelatoModel, PromptResults) {
+    'modules/collections/PromptItems'
+], function(GelatoModel, PromptItems) {
 
     /**
      * @class DataVocab
@@ -50,7 +50,7 @@ define([
             var characters = [];
             var strokes = this.getStrokes();
             for (var i = 0, length = strokes.length; i < length; i++) {
-                var tones = app.user.data.strokes.get('tones');
+                var tones = this.app.user.data.strokes.get('tones');
                 if (tones) {
                     characters.push(tones.getCanvasCharacter());
                 }
@@ -110,20 +110,27 @@ define([
         /**
          * @method getPromptResult
          * @param {String} part
-         * @returns {PromptResults}
+         * @returns {PromptItems}
          */
-        getPromptResult: function(part) {
-            var result = new PromptResults();
-            var characters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
+        getPromptItems: function(part) {
+            var promptItems = new PromptItems();
+            var canvasCharacters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
             var containedVocabIds = this.get('containedVocabIds') || [];
-            if (['rune', 'tone'].indexOf(part) > -1 && containedVocabIds.length) {
+            if (containedVocabIds.length && ['rune', 'tone'].indexOf(part) > -1) {
                 for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                    result.add({character: characters[i], vocabId: containedVocabIds[i]});
+                    promptItems.add({
+                        character: canvasCharacters[i],
+                        vocabId: containedVocabIds[i]
+                    });
                 }
             } else {
-                result.add({character: characters[0], vocabId: this.id});
+                promptItems.add({
+                    character: canvasCharacters[0],
+                    vocabId: this.id
+                });
             }
-            return result;
+            promptItems.id = this.id;
+            return promptItems;
         },
         /**
          * @method getReading
@@ -188,7 +195,7 @@ define([
             var strokes = [];
             var characters = this.getCharacters();
             for (var i = 0, length = characters.length; i < length; i++) {
-                var stroke = app.user.data.strokes.get(characters[i]);
+                var stroke = this.app.user.data.strokes.get(characters[i]);
                 if (stroke) {
                     strokes.push(stroke);
                 }
