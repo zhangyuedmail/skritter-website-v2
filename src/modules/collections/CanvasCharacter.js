@@ -78,12 +78,12 @@ define([
          * @returns {Number}
          */
         getPosition: function() {
-            var position = 1;
+            var position = 0;
             for (var i = 0, length = this.length; i < length; i++) {
                 var contains = this.at(i).get('contains');
                 position += contains.length ? contains.length : 1;
             }
-            return position;
+            return position || 1;
         },
         /**
          * @method getShape

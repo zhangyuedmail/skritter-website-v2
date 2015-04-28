@@ -81,7 +81,7 @@ define([
          * @returns {Number}
          */
         getSize: function() {
-            return app.get('canvasSize');
+            return app.user.settings.get('canvasSize');
         },
         /**
          * @method getUserRectangle

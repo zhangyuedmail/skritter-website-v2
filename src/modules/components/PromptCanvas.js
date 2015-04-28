@@ -3,7 +3,7 @@
  * @submodule Components
  */
 define([
-    'require.text!templates/components/writing-canvas.html',
+    'require.text!templates/components/prompt-canvas.html',
     'core/modules/GelatoComponent'
 ], function(Template, GelatoComponent) {
 
@@ -317,7 +317,7 @@ define([
          * @returns {PromptCanvas}
          */
         resize: function(size) {
-            app.set('canvasSize', size);
+            app.user.settings.set('canvasSize', size);
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
             this.size = size;
