@@ -1,15 +1,22 @@
-<div class="gelato-component study-toolbar">
+<gelato-component data-name="study-toolbar">
 
-    <div class="option-collapse cursor"></div>
+    <div class="row">
+        <div class="col-xs-3">
+            <span id="collapse-button"></span>
+        </div>
+        <div class="col-xs-3">
+            <span id="due-count-value"></span>
+            items due
+            <span id="add-button"></span>
+        </div>
+        <div class="col-xs-3">
+            <span id="timer-value"></span>
+        </div>
+        <div class="col-xs-3">
+            <i id="volume-button"></i>
+            <i id="lists-button"></i>
+            <i id="settings-button"></i>
+        </div>
+    </div>
 
-    <div class="display-due">0 items due</div>
-
-    <div class="option-add cursor"></div>
-
-    <div class="display-timer">0:00</div>
-
-    <div class="option-lists cursor"></div>
-
-    <div class="option-settings cursor"></div>
-
-</div>
+</gelato-component>

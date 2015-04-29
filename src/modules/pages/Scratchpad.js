@@ -15,35 +15,28 @@ define([
     var PageScratchpad = GelatoPage.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {
-            this.prompt = new Prompt();
-            this.vocab = null;
+        initialize: function(options) {
+            options = options || {};
+            this.app = options.app;
+            this.prompt = new Prompt({app: this.app});
         },
         /**
          * @property title
          * @type String
          */
-        title: app.strings.scratchpad.title + ' - ' + app.strings.global.title,
-        /**
+        title: 'Scratchpad - ' + i18n.global.title,
+        /**s
          * @method render
          * @returns {PageScratchpad}
          */
         render: function() {
             this.renderTemplate(Template);
-            this.renderDialog();
-            this.prompt.setElement(this.$('.prompt-container'));
-            this.prompt.hide().render();
-            this.prompt.grading.hide();
+            this.prompt.setElement(this.$('#prompt-container')).render();
+            this.prompt.hide();
             return this;
-        },
-        /**
-         * @method renderPrompt
-         * @returns {PageScratchpad}
-         */
-        renderPrompt: function() {
-            this.prompt.set(this.vocab, 'rune', false).show();
         },
         /**
          * @method load
@@ -52,15 +45,11 @@ define([
          */
         load: function(writing) {
             var self = this;
-            this.dialog.show('loading-scratchpad');
-            this.$('.vocab-writing').text(writing);
-            app.user.data.vocabs.fetchByQuery(writing, function(vocab) {
-                self.vocab = vocab;
-                self.renderPrompt();
-                self.dialog.hide();
+            app.user.data.vocabs.fetchByQuery(writing, function(result) {
+                self.prompt.set(result.getPromptItems('rune'));
+                self.prompt.show();
             }, function(error) {
                 console.error(error);
-                self.dialog.hide();
             });
             return this;
         }

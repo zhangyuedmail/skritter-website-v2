@@ -4,9 +4,8 @@
  */
 define([
     'require.text!templates/list-section.html',
-    'core/modules/GelatoPage',
-    'modules/components/TableViewer'
-], function(Template, GelatoPage, TableViewer) {
+    'core/modules/GelatoPage'
+], function(Template, GelatoPage) {
 
     /**
      * @class PageListSection
@@ -17,47 +16,18 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {
-            this.list = null;
-            this.section = null;
-            this.tableRows = new TableViewer();
-        },
+        initialize: function() {},
         /**
          * @property title
          * @type String
          */
-        title: app.strings.lists.title + ' - ' + app.strings.global.title,
+        title: 'List Section - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageListSection}
          */
         render: function() {
             this.renderTemplate(Template);
-            this.tableRows.setElement(this.$('.rows-table-container')).render();
-            return this;
-        },
-        /**
-         * @method renderFields
-         * @returns {PageListSection}
-         */
-        renderFields: function() {
-            this.$('.button-back').attr('data-url', 'lists/browse/' + this.list.id);
-            this.$('.section-name').text(this.section.name);
-            this.$('.vocablist-name').text(this.list.name);
-            this.renderEvents();
-            this.renderTable();
-            return this;
-        },
-        /**
-         * @method renderTable
-         * @returns {PageListSection}
-         */
-        renderTable: function() {
-            this.tableRows.set(this.section.rows, {
-                checkbox: {title: '', type: 'checkbox'},
-                vocabId: {title: '', type: 'row'},
-                tradVocabId: {title: '', type: 'row'}
-            }, {showHeaders: false});
             return this;
         },
         /**
@@ -72,20 +42,6 @@ define([
          * @return {PageListSection}
          */
         load: function(listId, sectionId) {
-            var self = this;
-            app.api.fetchVocabList(listId, null, function(result) {
-                self.list = result || [];
-                self.section = _.find(self.list.sections, {id: sectionId});
-                self.renderFields();
-            }, function(error) {
-                console.log(error);
-            });
-            return this;
-        },
-        /**
-         * @method resize
-         */
-        resize: function() {
             return this;
         }
     });

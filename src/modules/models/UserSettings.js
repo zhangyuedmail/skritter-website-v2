@@ -13,13 +13,9 @@ define([
     var UserSettings = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-            this.user = options.user;
+        initialize: function() {
             this.on('change', this.save);
         },
         /**
@@ -29,6 +25,8 @@ define([
         defaults: {
             allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             allJapaneseParts: ['defn', 'rdng', 'rune'],
+            filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+            filterJapaneseParts: ['defn', 'rdng', 'rune'],
             gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'}
         },
         /**
@@ -36,21 +34,25 @@ define([
          * @returns {UserSettings}
          */
         cache: function() {
-            localStorage.setItem(this.user.getCachePath('settings', false), JSON.stringify(this.toJSON()));
+            localStorage.setItem(app.user.getCachePath('settings', false), JSON.stringify(this.toJSON()));
             return this;
         },
         /**
          * @method fetch
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
-            app.api.fetchUsers(this.user.id, null, function(data) {
-                self.set(data, {silent: true});
-                callbackSuccess();
+            app.api.fetchUsers(app.user.id, null, function(data) {
+                self.set(data);
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
             }, function(error) {
-                callbackError(error);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             });
         },
         /**
@@ -59,7 +61,7 @@ define([
          */
         getActiveParts: function() {
             var parts = [];
-            if (this.user.isChinese()) {
+            if (app.user.isChinese()) {
                 parts = _.intersection(this.get('filterChineseParts'), this.getEnabledParts());
             } else {
                 parts = _.intersection(this.get('filterJapaneseParts'), this.getEnabledParts());
@@ -71,11 +73,11 @@ define([
          * @returns {Array}
          */
         getActiveStyles: function() {
-            if (this.user.isJapanese()) {
+            if (app.user.isJapanese()) {
                 return ['both', 'none'];
-            } else if (this.user.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
+            } else if (app.user.isChinese() && this.get('reviewSimplified') && this.get('reviewTraditional')) {
                 return ['both', 'none', 'simp', 'trad'];
-            } else if (this.user.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
+            } else if (app.user.isChinese() && this.get('reviewSimplified') && !this.get('reviewTraditional')) {
                 return ['both', 'none', 'simp'];
             } else {
                 return ['both', 'none', 'trad'];
@@ -86,58 +88,65 @@ define([
          * @returns {Array}
          */
         getAllParts: function() {
-            return this.user.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
+            return app.user.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
+        },
+        /**
+         * @method getAvatar
+         * @returns {String}
+         */
+        getAvatar: function() {
+            return '<img src="data:image/png;base64,' + this.get('avatar') + '" alt="">';
         },
         /**
          * @method getEnabledParts
          * @returns {Array}
          */
         getEnabledParts: function() {
-            return this.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+            return app.user.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
         },
         /**
          * @method getFontClass
          * @return {String}
          */
         getFontClass: function() {
-            return this.user.isChinese() ? 'text-chinese' : 'text-japanese';
+            return app.user.isChinese() ? 'text-chinese' : 'text-japanese';
         },
         /**
          * @method getFontName
          * @return {String}
          */
         getFontName: function() {
-            return this.user.isChinese() ? 'Simkai' : 'Kaisho';
+            return app.user.isChinese() ? 'Simkai' : 'Kaisho';
         },
         /**
          * @method load
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          * @returns {UserSettings}
          */
         load: function(callbackSuccess, callbackError) {
             var self = this;
             Async.series([
                 function(callback) {
-                    self.fetch(function() {
-                        callback();
-                    }, function() {
-                        callback();
-                    });
+                    var cachedItem = localStorage.getItem(app.user.getCachePath('settings', false));
+                    if (cachedItem) {
+                        self.set(JSON.parse(cachedItem), {silent: true});
+                    }
+                    callback();
                 },
                 function(callback) {
-                    var cachedItem = localStorage.getItem(self.user.getCachePath('settings', false));
-                    if (cachedItem) {
-                        self.set(JSON.parse(cachedItem));
-                    }
+                    self.fetch();
                     callback();
                 }
             ], function(error) {
                 if (error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 } else {
-                    self.cache();
-                    callbackSuccess();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
                 }
             });
             return this;
@@ -157,6 +166,7 @@ define([
                     callbackSuccess(self);
                 }
             }, function(error) {
+                self.cache();
                 if (typeof callbackError === 'function') {
                     callbackError(error);
                 }
@@ -169,7 +179,7 @@ define([
          * @returns {Array}
          */
         setActiveParts: function(parts) {
-            if (this.user.isChinese()) {
+            if (app.user.isChinese()) {
                 this.set('filterChineseParts', parts);
             } else {
                 this.set('filterJapaneseParts', parts);
@@ -182,7 +192,7 @@ define([
          * @returns {Array}
          */
         setActiveStyles: function(styles) {
-            if (this.user.isChinese()) {
+            if (app.user.isChinese()) {
                 if (styles.indexOf('simp') === -1) {
                     this.set('reviewSimplified', false);
                 } else {

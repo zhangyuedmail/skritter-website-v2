@@ -1,30 +1,16 @@
-<div class="gelato-page study">
+<gelato-page data-name="study">
 
-    <!-- NAVBAR: MAIN -->
-    <div id="navbar-main" class="gelato-navbar">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a data-url="dashboard" href="#">{{navbar.dashboard}}</a></li>
-                        <li><a data-url="lists" href="#">{{navbar.lists}}</a></li>
-                        <li><a data-url="words" href="#">{{navbar.words}}</a></li>
-                        <li><a data-url="stats" href="#">{{navbar.stats}}</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a class="settings-name" data-url="#" href="#"></a></li>
-                    </ul>
-                </div>
+    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
             </div>
-        </nav>
-    </div>
+        </div>
+    </gelato-navbar>
 
-    <!-- CONTENT: MAIN -->
-    <div id="content-main" class="gelato-content container">
+    <gelato-content class="container">
+        <div id="toolbar-container"></div>
+        <div id="prompt-container"></div>
+    </gelato-content>
 
-        <div class="prompt-container"></div>
-
-    </div>
-
-</div>
+</gelato-page>

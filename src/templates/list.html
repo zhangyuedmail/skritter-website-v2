@@ -1,79 +1,33 @@
-<div class="gelato-page list">
+<gelato-page data-name="list">
 
-    <!-- TODO: rework structure to support floating --->
-
-    <!-- NAVBAR: MAIN -->
-    <div id="navbar-main" class="gelato-navbar">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
-                </div>
-            </div>
-        </nav>
-    </div>
-
-    <!-- DIALOG: LOADING --->
-    <div id="loading" class="gelato-dialog">
-        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="example1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <h1>LOADING</h1>
-                    </div>
-                </div>
+    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
             </div>
         </div>
-    </div>
+    </gelato-navbar>
 
-    <!-- CONTENT: MAIN -->
-    <div id="content-main" class="gelato-content container">
-
+    <gelato-content class="container">
         <div class="content-block">
             <div class="row">
-
-                <div class="menu-column col-xs-12 col-md-3">
-                    <div class="text-center">
-                        <div class="button-previous cursor" data-url="lists/browse"><i class="fa fa-chevron-left"></i> back to previous</div>
-                        <div class="vocablist-image"></div>
-                        <button type="button" class="btn btn-success">Add to queue</button>
-                        <div class="vocablist-status"></div>
-                        <div class="vocablist-progress">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-                                    <span class="sr-only">50% Complete</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <ul class="options">
-                        <li>Publish</li>
-                        <li>Clone</li>
-                        <li>Delete</li>
-                        <li>Assign to group</li>
-                        <li>Export</li>
-                    </ul>
+                <div class="col-md-2">
+                    <div>Publish</div>
+                    <div>Clone</div>
+                    <div>Delete</div>
+                    <div>Assign to group</div>
+                    <div>Export</div>
                 </div>
-
-                <div class="content-column col-xs-12 col-md-9">
-                    <div class="vocablist-name title"></div>
-                    <div class="details">
-                        <span>Made by: <span class="vocablist-madeby"></span> | </span>
-                        <span>Published: <span class="vocablist-published"></span> | </span>
-                        <span>Studied by: <span class="vocablist-studiedby"></span> | </span>
-                        <span>Words: <span class="vocablist-wordcount"></span></span>
-                    </div>
-                    <div class="vocablist-description"></div>
-                    <div class="vocablist-tags"></div>
-                    <hr>
-                    <div class="sections-header">Sections</div>
-                    <div class="sections-table-container"></div>
+                <div class="col-md-10">
+                    <div id="list-name"></div>
+                    <div id="list-meta"></div>
+                    <div id="list-description"></div>
+                    <div id="list-tags"></div>
+                    <div>Sections</div>
+                    <div id="list-sections-table"></div>
                 </div>
-
             </div>
         </div>
+    </gelato-content>
 
-    </div>
-
-</div>
+</gelato-page>

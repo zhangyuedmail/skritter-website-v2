@@ -14,13 +14,9 @@ define([
     var DataVocabs = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
-        },
+        initialize: function() {},
         /**
          * @property model
          * @type DataVocab
@@ -33,6 +29,7 @@ define([
          * @param {Function} callbackError
          */
         fetchByQuery: function(writing, callbackSuccess, callbackError) {
+            var self = this;
             var id = null;
             var vocab = null;
             Async.series([

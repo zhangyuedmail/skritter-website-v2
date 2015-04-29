@@ -30,6 +30,20 @@ define([
             return $.extend(this.changed, {id: this.id});
         },
         /**
+         * @method getPercentAdded
+         * @returns {Number}
+         */
+        getPercentAdded: function() {
+            var addedRows = 0;
+            var totalRows = 0;
+            var sections = this.get('sections') || [];
+            for (var a = 0, lengthA = sections.length; a < lengthA; a++) {
+                var rows = sections[a].rows || [];
+                for (var b = 0, lengthB = rows.length; b < lengthB; b++) {}
+            }
+            return totalRows > 0 ? addedRows/totalRows : 0;
+        },
+        /**
          * @method getWordCount
          * @returns {Number}
          */

@@ -20,18 +20,14 @@ define([
     var UserData = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
+        initialize: function() {
             this.decomps = new DataDecomps();
             this.items = new DataItems();
             this.params = new DataParams();
             this.stats = new DataStats();
             this.strokes = new DataStrokes();
-            this.user = options.user;
             this.vocablists = new DataVocabLists();
             this.vocabs = new DataVocabs();
             this.on('change', this.cache);
@@ -48,6 +44,7 @@ define([
          * @param {Object} [options]
          */
         add: function(result, callback, options) {
+            var self = this;
             Async.parallel([
                 function(callback) {
                     app.user.data.decomps.add(result.Decomps || [], options);
@@ -72,7 +69,7 @@ define([
          * @returns {UserData}
          */
         cache: function() {
-            localStorage.setItem(this.user.getCachePath('data', true), JSON.stringify(this.toJSON()));
+            localStorage.setItem(app.user.getCachePath('data', true), JSON.stringify(this.toJSON()));
             return this;
         },
         /**
@@ -81,6 +78,7 @@ define([
          * @param {Function} callback
          */
         insert: function(result, callback) {
+            var self = this;
             Async.parallel([
                 function(callback) {
                     app.user.storage.put('decomps', result.Decomps || [], callback, callback);
@@ -101,15 +99,15 @@ define([
         },
         /**
          * @method load
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          * @returns {UserData}
          */
         load: function(callbackSuccess, callbackError) {
             var self = this;
             Async.series([
                 function(callback) {
-                    var cachedItem = localStorage.getItem(self.user.getCachePath('data', true));
+                    var cachedItem = localStorage.getItem(app.user.getCachePath('data', true));
                     if (cachedItem) {
                         self.set(JSON.parse(cachedItem), {silent: true});
                     }
@@ -138,9 +136,13 @@ define([
                 }
             ], function(error) {
                 if (error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 } else {
-                    callbackSuccess();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
                 }
             });
             return this;

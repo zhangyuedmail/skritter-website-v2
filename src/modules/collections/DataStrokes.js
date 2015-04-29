@@ -10,7 +10,7 @@ define([
 
     /**
      * @class DataStrokes
-     * @extend GelatoCollection
+     * @extends GelatoCollection
      */
     var DataStrokes = GelatoCollection.extend({
         /**

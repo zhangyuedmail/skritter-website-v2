@@ -5,8 +5,8 @@
 define([
     'require.text!templates/dashboard.html',
     'core/modules/GelatoPage',
-    'modules/components/TableViewer'
-], function(Template, GelatoPage, TableViewer) {
+    'modules/components/ListTable'
+], function(Template, GelatoPage, ListTable) {
 
     /**
      * @class PageDashboard
@@ -18,204 +18,52 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.donutDailyGoal = null;
-            this.donutListQueue = null;
-            this.heatmap = new CalHeatMap();
-            this.lists = [];
-            this.tableLists = new TableViewer();
-            this.listenTo(app.user.data.items, 'download:complete', $.proxy(this.updateDownloadProgress, this));
-            this.listenTo(app.user.data.items, 'download:update', $.proxy(this.updateDownloadProgress, this));
+            this.listQueue = new ListTable();
+            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(app.user.data.vocablists, 'add change', this.renderListQueue);
         },
         /**
          * @property title
          * @type String
          */
-        title: app.strings.dashboard.title + ' - ' + app.strings.global.title,
+        title: 'Dashboard - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageDashboard}
          */
         render: function() {
             this.renderTemplate(Template);
-            this.tableLists.setElement(this.$('.progress-table-container')).render();
-            this.renderDialog();
-            this.renderDonuts();
-            this.renderFields();
-            this.renderHeatmap();
-
-            this.load();
+            this.listQueue.setElement(this.$('#list-queue-table')).render();
+            this.renderListQueue();
+            this.renderStats();
             return this;
         },
         /**
-         * @method renderDonuts
+         * @method renderListQueue
          * @returns {PageDashboard}
          */
-        renderDonuts: function() {
-            var contextDailyGoal = this.$('.daily-goal-donut-container').get(0).getContext('2d');
-            var contextListQueue = this.$('.list-queue-donut-container').get(0).getContext('2d');
-            this.donutDailyGoal = new Chart(contextDailyGoal).Doughnut([
-                {value: 80, color:'#c5da4b'},
-                {value: 20, color:'#efeef3'}
-            ], {
-                animateRotate: false,
-                percentageInnerCutout : 80
-            });
-            this.donutListQueue = new Chart(contextListQueue).Doughnut([
-                {value: 40, color:'#c5da4b'},
-                {value: 60, color:'#efeef3'}
-            ], {
-                animateRotate: false,
-                percentageInnerCutout : 80
+        renderListQueue: function() {
+            var addingLists = app.user.data.vocablists.getAdding();
+            this.listQueue.set(addingLists, {
+                name: 'Name',
+                progress: 'Progress',
+                status: 'Status'
             });
             return this;
         },
         /**
-         * @method renderFields
+         * @method renderStats
          * @returns {PageDashboard}
          */
-        renderFields: function() {
-            if (app.user.data.items.hasMissing()) {
-                this.$('#download-progress').show();
-            } else {
-                this.$('#download-progress').hide();
-            }
+        renderStats: function() {
+            this.$('#characters-learned-value').text(app.user.data.stats.getTotalCharactersLearned());
+            this.$('#items-added-value').text(app.user.data.items.getAddedCount());
+            this.$('#items-reviewed-value').text(app.user.data.items.getReviewedCount());
+            this.$('#month-streak-value').text(app.user.data.stats.getStreak());
+            this.$('#words-learned-value').text(app.user.data.stats.getTotalWordsLearned());
             return this;
-        },
-        /**
-         * @method renderHeatmap
-         * @returns {PageDashboard}
-         */
-        renderHeatmap: function() {
-            this.heatmap.init({
-                cellSize: 25,
-                cellPadding: 5,
-                domain: 'month',
-                domainDynamicDimension: false,
-                domainGutter: 20,
-                itemSelector: '.heatmap-container',
-                legend: [1, 50, 100, 200],
-                range: 1,
-                start: new Date(2015, new Date().getMonth(), 1),
-                subDomain: 'x_day',
-                subDomainTextFormat: '%d'
-            });
-            return this;
-        },
-        /**
-         * @method renderTables
-         * @returns {PageDashboard}
-         */
-        renderTables: function() {
-            this.tableLists.set(this.lists, {
-                name: {title: '', type: 'row'},
-                progress: {title: '', type: 'progress'},
-                studyingMode: {title: '', type: 'row'},
-                addToQueue: {title: '', type: 'text', value: "<i class='fa fa-close'></i>"}
-            }, {showHeaders: false}).sortBy('name');
-            return this;
-        },
-        /**
-         * @property events
-         * @type Object
-         */
-        events: {
-            'vclick #confirm-logout': 'handleClickConfirmLogout'
-        },
-        /**
-         * @method handleClickConfirmLogout
-         * @param {Event} event
-         */
-        handleClickConfirmLogout: function(event) {
-            event.preventDefault();
-            app.user.logout();
-        },
-        /**
-         * @method load
-         * @returns {PageDashboard}
-         */
-        load: function() {
-            var self = this;
-            var date = new Date();
-            var baseDateString = Moment().format('YYYY-MM-');
-            this.$('#download-progress').hide();
-            Async.waterfall([
-                function(callback) {
-                    app.api.fetchVocabLists({sort: 'studying'}, function(result) {
-                        self.lists = result.VocabLists || [];
-                        self.renderTables();
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(callback) {
-                    app.api.fetchStats(null, function(result) {
-                        self.$('.characters-learned-count').text(result[0].char.rune.learned.all);
-                        self.$('.words-learned-count').text(result[0].word.rune.learned.all);
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(callback) {
-                    app.api.fetchStats({
-                        start: baseDateString + '01',
-                        end: baseDateString + '12'
-                    }, function(result) {
-                        callback(null, result);
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(stats, callback) {
-                    app.api.fetchStats({
-                        start: baseDateString + '13',
-                        end: baseDateString + '25'
-                    }, function(result) {
-                        callback(null, stats.concat(result));
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(stats, callback) {
-                    app.api.fetchStats({
-                        start: baseDateString + '26',
-                        end: baseDateString + new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
-                    }, function(result) {
-                        callback(null, stats.concat(result));
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(stats, callback) {
-                    var data = {};
-                    for (var i = 0, length = stats.length; i < length; i++) {
-                        data[Moment(stats[i].date).unix()] = stats[i].char.rune.studied.day;
-                    }
-                    callback(null, data);
-                }
-            ], function(error, data) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    self.heatmap.update(data);
-                }
-            });
-        },
-        /**
-         * @method updateDownloadProgress
-         * @param {Number} status
-         */
-        updateDownloadProgress: function(status) {
-            this.$('#download-progress .progress-bar').attr('aria-valuenow', status);
-            this.$('#download-progress .progress-bar').css('width', status + '%');
-            this.$('#download-progress .progress-bar .sr-only').text(status + '% Complete');
-            this.$('#download-progress .progress-status').text(status);
-            if (status === 100) {
-                this.$('#download-progress').fadeOut(1000);
-            } else {
-                this.$('#download-progress').show();
-            }
         }
     });
 

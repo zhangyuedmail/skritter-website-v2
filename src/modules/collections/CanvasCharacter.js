@@ -8,17 +8,14 @@ define([
 
     /**
      * @class CanvasCharacter
-     * @extend GelatoCollection
+     * @extends GelatoCollection
      */
     var CanvasCharacter = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array|Object} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
+        initialize: function() {
             this.targets = [];
         },
         /**
@@ -81,12 +78,12 @@ define([
          * @returns {Number}
          */
         getPosition: function() {
-            var position = 1;
+            var position = 0;
             for (var i = 0, length = this.length; i < length; i++) {
                 var contains = this.at(i).get('contains');
                 position += contains.length ? contains.length : 1;
             }
-            return position;
+            return position || 1;
         },
         /**
          * @method getShape
@@ -108,7 +105,7 @@ define([
          * @returns {Number}
          */
         getSize: function() {
-            return app.get('canvasSize');
+            return app.user.settings.get('canvasSize');
         },
         /**
          * @method getTone

@@ -8,46 +8,117 @@ define([
 
     /**
      * @class DataVocabLists
-     * @extend GelatoCollection
+     * @extends GelatoCollection
      */
     var DataVocabLists = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
-        },
+        initialize: function() {},
         /**
          * @property model
          * @type DataVocabList
          */
         model: DataVocabList,
         /**
-         * @method
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @method fetch
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         fetch: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.waterfall([
+                function(callback) {
+                    var ids = [];
+                    (function next(cursor) {
+                        app.api.fetchVocabLists({
+                            cursor: cursor,
+                            fields: 'id',
+                            lang: app.user.getLanguageCode(),
+                            sort: 'studying'
+                        }, function(result) {
+                            var pluckedIds = _.pluck(result.VocabLists, 'id');
+                            ids = ids.concat(pluckedIds);
+                            if (result.cursor) {
+                                next(result.cursor);
+                            } else {
+                                callback(null, ids);
+                            }
+                        }, function(error) {
+                            callback(error);
+                        });
+                    })();
+                },
+                function(ids, callback) {
+                    self.fetchById(ids, function(result) {
+                        callback(null, result);
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error, result) {
+                if (error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess(result);
+                    }
+                }
+            });
+        },
+        /**
+         * @method fetchById
+         * @param {Array|String} id
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        fetchById: function(id, callbackSuccess, callbackError) {
+            var self = this;
+            app.api.fetchVocabList(id, null, function(result) {
+                app.user.data.insert({VocabLists: result}, function() {
+                    result = self.add(result, {merge: true, silent: true});
+                    self.trigger('add', self);
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess(result);
+                    }
+                });
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
+        },
+        /**
+         * @method fetchOfficial
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        fetchOfficial: function(callbackSuccess, callbackError) {
             var self = this;
             (function next(cursor) {
                 app.api.fetchVocabLists({
                     cursor: cursor,
                     lang: app.user.getLanguageCode(),
-                    sort: 'studying'
+                    sort: 'official'
                 }, function(result) {
                     app.user.data.insert(result, function() {
                         self.add(result.VocabLists, {merge: true, silent: true});
+                        self.trigger('add', self);
                         if (result.cursor) {
                             next(result.cursor);
                         } else {
-                            callbackSuccess(self);
+                            if (typeof callbackSuccess === 'function') {
+                                callbackSuccess(self);
+                            }
                         }
                     });
                 }, function(error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 });
             })();
         },
@@ -58,6 +129,33 @@ define([
         getAdding: function() {
             return this.filter(function(list) {
                 return list.get('studyingMode') === 'adding';
+            });
+        },
+        /**
+         * @method getFinished
+         * @returns {Array}
+         */
+        getFinished: function() {
+            return this.filter(function(list) {
+                return list.get('studyingMode') === 'finished';
+            });
+        },
+        /**
+         * @method getNotStudying
+         * @returns {Array}
+         */
+        getNotStudying: function() {
+            return this.filter(function(list) {
+                return list.get('studyingMode') === 'not studying';
+            });
+        },
+        /**
+         * @method getOfficial
+         * @returns {Array}
+         */
+        getOfficial: function() {
+            return this.filter(function(list) {
+                return list.get('sort') === 'official';
             });
         },
         /**
@@ -79,19 +177,16 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    self.fetch(function() {
-                        callback();
-                    }, function() {
-                        callback();
-                    });
-                },
-                function(callback) {
                     app.user.storage.all('vocablists', function(result) {
-                        self.add(result, {merge: true});
+                        self.add(result, {silent: true});
                         callback();
                     }, function(error) {
                         callback(error);
                     });
+                },
+                function(callback) {
+                    self.fetch();
+                    callback();
                 }
             ], function(error) {
                 if (error) {

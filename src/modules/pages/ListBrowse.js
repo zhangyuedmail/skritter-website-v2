@@ -5,8 +5,8 @@
 define([
     'require.text!templates/list-browse.html',
     'core/modules/GelatoPage',
-    'modules/components/TableViewer'
-], function(Template, GelatoPage, TableViewer) {
+    'modules/components/ListTable'
+], function(Template, GelatoPage, ListTable) {
 
     /**
      * @class PageListBrowse
@@ -17,22 +17,26 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {
-            this.lists = [];
-            this.tableLists = new TableViewer();
+        initialize: function(options) {
+            this.browseTable = new ListTable();
+            this.filter = '';
+            this.sort = 'name';
+            this.listenTo(app.user.data.vocablists, 'add change', this.renderTables);
+            app.user.data.vocablists.fetchOfficial();
         },
         /**
          * @property title
          * @type String
          */
-        title: app.strings.lists.title + ' - ' + app.strings.global.title,
+        title: 'Browse - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageListBrowse}
          */
         render: function() {
             this.renderTemplate(Template);
-            this.tableLists.setElement(this.$('.lists-table-container')).render();
+            this.browseTable.setElement('#browse-lists-table').render();
+            this.renderTables();
             return this;
         },
         /**
@@ -40,13 +44,13 @@ define([
          * @returns {PageListBrowse}
          */
         renderTables: function() {
-            this.tableLists.set(this.lists, {
-                name: {title: 'Name', type: 'row'},
-                popularity: {title: 'Popularity', type: 'progress'},
-                difficult: {title: 'Difficulty', type: 'text', value: '???'},
-                addToQueue: {title: '', type: 'link', linkText: "<i class='fa fa-plus-circle'></i> Add to queue"}
-            }, {showHeaders: true}).sortBy('name');
-            this.resize();
+            var officialLists = app.user.data.vocablists.getOfficial();
+            this.browseTable.set(officialLists, {
+                name: 'Name',
+                popularity: 'Popularity',
+                difficulty: 'Difficulty',
+                addStatus: ''
+            }).sortBy(this.sort);
             return this;
         },
         /**
@@ -54,59 +58,17 @@ define([
          * @type Object
          */
         events: {
-            'keyup .list-search-input': 'handleKeyupListSearchInput',
-            'vclick .table .field-addtoqueue': 'handleClickTableAddToQueue',
-            'vclick .lists-table-container .field-name': 'handleClickListTableRow'
+            'keyup #list-search-input': 'handleKeypressListSearch'
         },
         /**
-         * @method handleClickTableAddToQueue
+         * @method handleKeypressListSearch
          * @param {Event} event
          */
-        handleClickTableAddToQueue: function(event) {
+        handleKeypressListSearch: function(event) {
             event.preventDefault();
-            var listId = $(event.currentTarget).parent().attr('id').replace('row-', '');
-            app.user.data.vocablists.add({id: listId, studyingMode: 'adding'});
-        },
-        /**
-         * @method handleClickListTableRow
-         * @param {Event} event
-         */
-        handleClickListTableRow: function(event) {
-            event.preventDefault();
-            var listId = $(event.currentTarget).parent().attr('id').replace('row-', '');
-            app.router.navigate('lists/browse/' + listId, {trigger: true});
-        },
-        /**
-         * @method handleKeyupListSearchInput
-         * @param {Event} event
-         */
-        handleKeyupListSearchInput: function(event) {
-            event.preventDefault();
-            var searchValue = $(event.currentTarget).find('input').val();
-            this.tableLists.filterBy('name', searchValue);
-        },
-        /**
-         * @method load
-         * @return {PageListBrowse}
-         */
-        load: function() {
-            var self = this;
-            app.api.fetchVocabLists({sort: 'official'}, function(result) {
-                self.lists = result.VocabLists || [];
-                self.renderTables();
-            }, function(error) {
-                console.log(error);
-            });
-            return this;
-        },
-        /**
-         * @method resize
-         */
-        resize: function() {
-            var contentBlock = this.$('.content-block');
-            var menuColumn = this.$('.menu-column');
-            menuColumn.height(contentBlock.height());
-            return this;
+            var $input = $(event.currentTarget);
+            this.filter = $input.val();
+            this.browseTable.filterBy(this.filter).sortBy(this.sort);
         }
     });
 

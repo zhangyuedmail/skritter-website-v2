@@ -16,12 +16,12 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function(options) {},
         /**
          * @property title
          * @type String
          */
-        title: app.strings.global.title,
+        title: 'Home - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageHome}

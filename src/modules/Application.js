@@ -22,12 +22,8 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.api = new Api();
             this.fn = Functions;
-            this.media = new MediaPlayer();
-            this.router = new Router();
             this.strokes = Strokes;
-            this.user = new User();
         },
         /**
          * @property defaults
@@ -35,26 +31,21 @@ define([
          */
         defaults: {},
         /**
-         * @method isOnline
-         * @param {Function} callback
-         */
-        isOnline: function(callback) {
-            this.api.fetchDate(function(result) {
-                callback(result.serverTime);
-            }, function() {
-                callback();
-            });
-        },
-        /**
          * @method start
+         * @returns {Application}
          */
         start: function() {
             var self = this;
+            this.api = new Api();
+            this.media = new MediaPlayer();
+            this.router = new Router();
+            this.user = new User();
             this.user.load(function() {
                 self.router.start();
             }, function(error) {
                 console.error('USER LOAD ERROR:', error);
             });
+            return this;
         }
     });
 

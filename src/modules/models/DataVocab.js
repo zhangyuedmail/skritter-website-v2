@@ -4,8 +4,8 @@
  */
 define([
     'core/modules/GelatoModel',
-    'modules/collections/PromptResults'
-], function(GelatoModel, PromptResults) {
+    'modules/collections/PromptItems'
+], function(GelatoModel, PromptItems) {
 
     /**
      * @class DataVocab
@@ -14,13 +14,9 @@ define([
     var DataVocab = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-        },
+        initialize: function() {},
         /**
          * @property idAttribute
          * @type String
@@ -109,20 +105,27 @@ define([
         /**
          * @method getPromptResult
          * @param {String} part
-         * @returns {PromptResults}
+         * @returns {PromptItems}
          */
-        getPromptResult: function(part) {
-            var result = new PromptResults();
-            var characters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
+        getPromptItems: function(part) {
+            var promptItems = new PromptItems();
+            var canvasCharacters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
             var containedVocabIds = this.get('containedVocabIds') || [];
-            if (['rune', 'tone'].indexOf(part) > -1 && containedVocabIds.length) {
+            if (containedVocabIds.length && ['rune', 'tone'].indexOf(part) > -1) {
                 for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                    result.add({character: characters[i], vocabId: containedVocabIds[i]});
+                    promptItems.add({
+                        character: canvasCharacters[i],
+                        vocabId: containedVocabIds[i]
+                    });
                 }
             } else {
-                result.add({character: characters[0], vocabId: this.id});
+                promptItems.add({
+                    character: canvasCharacters[0],
+                    vocabId: this.id
+                });
             }
-            return result;
+            promptItems.id = this.id;
+            return promptItems;
         },
         /**
          * @method getReading

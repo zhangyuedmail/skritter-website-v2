@@ -16,19 +16,18 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function(options) {},
         /**
          * @property title
          * @type String
          */
-        title: app.strings.login.title + ' - ' + app.strings.global.title,
+        title: 'Login - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageLogin}
          */
         render: function() {
             this.renderTemplate(Template);
-            this.renderDialog();
             return this;
         },
         /**
@@ -56,14 +55,14 @@ define([
                 return;
             }
             this.disableForm('#login-form');
-            this.dialog.show('loading-login');
+            app.dialog.show('loading');
             app.user.login(fieldUsername, fieldPassword, function() {
-                self.dialog.once('hidden', app.reload);
-                self.dialog.hide();
+                app.dialog.once('hidden', app.reload);
+                app.dialog.hide();
             }, function(error) {
                 self.$('.response-message').text(JSON.stringify(error));
                 self.enableForm('#login-form');
-                self.dialog.hide();
+                app.dialog.hide();
             }, function(status) {
                 self.$('.loaded-items').text(status);
             });

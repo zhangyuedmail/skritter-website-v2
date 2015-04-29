@@ -8,9 +8,14 @@ define([
 
     /**
      * @class DataDecomps
-     * @extend BaseCollection
+     * @extends BaseCollection
      */
     var DataDecomps = GelatoCollection.extend({
+        /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {},
         /**
          * @property model
          * @type DataDecomp

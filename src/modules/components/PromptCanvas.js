@@ -3,20 +3,22 @@
  * @submodule Components
  */
 define([
-    'require.text!templates/components/writing-canvas.html',
+    'require.text!templates/components/prompt-canvas.html',
     'core/modules/GelatoComponent'
 ], function(Template, GelatoComponent) {
 
     /**
-     * @class WritingCanvas
+     * @class PromptCanvas
      * @extends GelatoComponent
      */
-    var WritingCanvas = GelatoComponent.extend({
+    var PromptCanvas = GelatoComponent.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {
+        initialize: function(options) {
+            options = options || {};
             this.brushScale = 0.04;
             this.defaultFadeEasing = createjs.Ease.sineOut;
             this.defaultFadeSpeed = 500;
@@ -24,6 +26,7 @@ define([
             this.gridColor = '#d8dadc';
             this.gridDashLength = 5;
             this.gridLineWidth = 0.75;
+            this.prompt = options.prompt;
             this.size = 500;
             this.stage = null;
             this.strokeColor = '#5e5d60';
@@ -47,7 +50,7 @@ define([
         /**
          * @method render
          * @param {Number} [size]
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         render: function(size) {
             this.$el.html(Template);
@@ -77,7 +80,7 @@ define([
         /**
          * @method clearLayer
          * @param {String} name
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         clearLayer: function(name) {
             this.getLayer(name).removeAllChildren();
@@ -108,7 +111,7 @@ define([
         },
         /**
          * @method disableGrid
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         disableGrid: function() {
             this.clearLayer('grid');
@@ -117,7 +120,7 @@ define([
         },
         /**
          * @method disableInput
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         disableInput: function() {
             this.$el.off('.Input');
@@ -125,7 +128,7 @@ define([
         },
         /**
          * @method drawGrid
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         drawGrid: function() {
             var grid = new createjs.Shape();
@@ -176,7 +179,7 @@ define([
         },
         /**
          * @method enableGrid
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         enableGrid: function() {
             this.drawGrid();
@@ -185,7 +188,7 @@ define([
         },
         /**
          * @method enableInput
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         enableInput: function() {
             var self = this;
@@ -296,7 +299,7 @@ define([
         },
         /**
          * @method reset
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         reset: function() {
             this.getLayer('surface-background2').removeAllChildren();
@@ -311,12 +314,10 @@ define([
         /**
          * @method resize
          * @param {Number} size
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         resize: function(size) {
-            app.set('canvasSize', size);
-            //this.$('.gelato-component').height(size);
-            //this.$('.gelato-component').width(size);
+            app.user.settings.set('canvasSize', size);
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
             this.size = size;
@@ -331,7 +332,7 @@ define([
          * @method setLayerColor
          * @param {String} layerName
          * @param {String} color
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         setLayerColor: function(layerName, color) {
             this.injectColor(this.getLayer(layerName), color);
@@ -374,7 +375,7 @@ define([
          * @param {createjs.Shape} toShape
          * @param {Object} [options]
          * @param {Function} [callback]
-         * @returns {WritingCanvas}
+         * @returns {PromptCanvas}
          */
         tweenShape: function(layerName, fromShape, toShape, options, callback) {
             this.getLayer(layerName).addChild(fromShape);
@@ -396,6 +397,6 @@ define([
         }
     });
 
-    return WritingCanvas;
+    return PromptCanvas;
 
 });

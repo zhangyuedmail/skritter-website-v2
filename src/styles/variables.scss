@@ -1,0 +1,95 @@
+/*** DIRECTORIES ***/
+$dir-assets: '../assets';
+
+
+/*** BACKGROUNDS ***/
+$background-dark: url('#{$dir-assets}/backgrounds/bg-dark-wood.png');
+$background-light: url('#{$dir-assets}/backgrounds/bg-retina-wood.png');
+$background-expired: url('#{$dir-assets}/backgrounds/bg-expired.png');
+$background-footer: url('#{$dir-assets}/backgrounds/bg-footer.png');
+
+
+/*** FONTS ***/
+$font-chinese: "Simkai", "Kaisho";
+$font-japanese: "Kaisho", "Simkai";
+$font-muli: "Muli", "Arial Unicode MS", "Arial";
+$font-slab: "Roboto Slab", "Arial Unicode MS", "Arial";
+
+
+/*** COLOR: GRADING ***/
+$grade1: #e74c3c;
+$grade2: #ebbd3e;
+$grade3: #87a64b;
+$grade4: #4d88e3;
+
+
+/*** COLOR: GREY ***/
+$grey1: #d8dadc;
+$grey2: #b2b5b9;
+$grey3: #8c9196;
+$grey4: #666c73;
+$grey5: #404851;
+$grey6: #333940;
+$grey7: #262b30;
+$grey8: #191c20;
+$grey9: #0c0e10;
+
+
+/*** COLOR: WHITE ***/
+$white1: #fbfafc;
+$white2: #f7f6f9;
+$white3: #f3f2f6;
+$white4: #efeef3;
+$white5: #ebeaf0;
+$white6: #bcbbc0;
+$white7: #8d8c90;
+$white8: #5e5d60;
+$white9: #2f2e30;
+
+
+/*** COLOR: GREEN ***/
+$green1: #e7eddb;
+$green2: #cfdbb7;
+$green3: #b7c993;
+$green4: #9fb76f;
+$green5: #87a64b;
+$green6: #6c843c;
+$green7: #51632d;
+$green8: #36421e;
+$green9: #1b210f;
+
+
+/*** COLOR: LIME ***/
+$lime1: #f3f7db;
+$lime2: #e7f0b7;
+$lime3: #dce893;
+$lime4: #d0e16f;
+$lime5: #c5da4b;
+$lime6: #9dae3c;
+$lime7: #76822d;
+$lime8: #4e571e;
+$lime9: #272b0f;
+
+
+/*** COLOR: WOOD ***/
+$wood1: #e8ded2;
+$wood2: #d1bda5;
+$wood3: #bb9d78;
+$wood4: #a47c4b;
+$wood5: #8e5c1e;
+$wood6: #714918;
+$wood7: #553712;
+$wood8: #38240c;
+$wood9: #1c1206;
+
+
+/*** COLOR: SAND ***/
+$sand1: #f8f2e7;
+$sand2: #f1e5cf;
+$sand3: #ead8b7;
+$sand4: #e3cb9f;
+$sand5: #dcbf88;
+$sand6: #b0986c;
+$sand7: #847251;
+$sand8: #584c36;
+$sand9: #2c261b;

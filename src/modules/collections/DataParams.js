@@ -9,7 +9,7 @@ define([
 
     /**
      * @class DataParams
-     * @extend GelatoCollection
+     * @extends GelatoCollection
      */
     var DataParams = GelatoCollection.extend({
         /**

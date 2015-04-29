@@ -6,10 +6,15 @@ define([
 ], function(GelatoModel) {
 
     /**
-     * @class PromptResult
+     * @class PromptItem
      * @extends GelatoModel
      */
-    var PromptResult = GelatoModel.extend({
+    var PromptItem = GelatoModel.extend({
+        /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {},
         /**
          * @method defaults
          * @returns {Object}
@@ -42,7 +47,7 @@ define([
         },
         /**
          * @method start
-         * @returns {PromptResult}
+         * @returns {PromptItem}
          */
         start: function() {
             if (this.get('reviewingStart') === 0) {
@@ -52,7 +57,7 @@ define([
         },
         /**
          * @method stop
-         * @returns {PromptResult}
+         * @returns {PromptItem}
          */
         stop: function() {
             var timestamp = new Date().getTime();
@@ -63,7 +68,7 @@ define([
         /**
          * @method stopReviewing
          * @param {Number} [timestamp]
-         * @returns {PromptResult}
+         * @returns {PromptItem}
          */
         stopReviewing: function(timestamp) {
             if (this.get('reviewingStop') === 0) {
@@ -74,7 +79,7 @@ define([
         /**
          * @method stopThinking
          * @param {Number} [timestamp]
-         * @returns {PromptResult}
+         * @returns {PromptItem}
          */
         stopThinking: function(timestamp) {
             if (this.get('thinkingStop') === 0) {
@@ -84,6 +89,6 @@ define([
         }
     });
 
-    return PromptResult;
+    return PromptItem;
 
 });
