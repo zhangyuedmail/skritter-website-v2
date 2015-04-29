@@ -14,12 +14,9 @@ define([
     var DataItems = GelatoCollection.extend({
         /**
          * @method initialize
-         * @param {Array} [models]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(models, options) {
-            options = options || {};
+        initialize: function() {
             this.activeParts = null;
             this.activeStyles = null;
             this.languageCode = null;
@@ -160,6 +157,16 @@ define([
             });
         },
         /**
+         * @method getItemAddedCount
+         * @returns {Number}
+         */
+        getAddedCount: function() {
+            var today = Moment().startOf('day').add(3, 'hours').unix();
+            return _.filter(this.models, function(item) {
+                return item.attributes.created >= today;
+            }).length;
+        },
+        /**
          * @method getMissingIds
          * @returns {Array}
          */
@@ -169,6 +176,16 @@ define([
             }).map(function(item) {
                 return item.id;
             });
+        },
+        /**
+         * @method getItemReviewedCount
+         * @returns {Number}
+         */
+        getReviewedCount: function() {
+            var today = Moment().startOf('day').add(3, 'hours').unix();
+            return _.filter(this.models, function(item) {
+                return item.attributes.last >= today;
+            }).length;
         },
         /**
          * @method hasMissing
@@ -188,10 +205,14 @@ define([
                 self.lazyAdd(result, function() {
                     self.updateFilter();
                     self.sortFilter();
-                    callbackSuccess();
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
                 }, {merge: true, silent: true, sort: false});
             }, function(error) {
-                callbackError(error);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             });
         },
         /**

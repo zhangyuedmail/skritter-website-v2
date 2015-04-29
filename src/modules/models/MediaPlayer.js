@@ -13,12 +13,9 @@ define([
     var MediaPlayer = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
+        initialize: function() {
             this.audio = new Audio();
         },
         /**

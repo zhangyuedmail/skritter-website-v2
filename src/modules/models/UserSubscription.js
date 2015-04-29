@@ -13,13 +13,9 @@ define([
     var UserSubscription = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
-            this.user = options.user;
+        initialize: function() {
             this.on('change', this.cache);
         },
         /**
@@ -32,7 +28,7 @@ define([
          * @returns {UserSubscription}
          */
         cache: function() {
-            localStorage.setItem(this.user.getCachePath('subscription', false), JSON.stringify(this.toJSON()));
+            localStorage.setItem(app.user.getCachePath('subscription', false), JSON.stringify(this.toJSON()));
             return this;
         },
         /**
@@ -42,7 +38,7 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
-            app.api.fetchSubscription(this.user.id, null, function(data) {
+            app.api.fetchSubscription(app.user.id, null, function(data) {
                 self.set(data);
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
@@ -63,7 +59,7 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    var cachedItem = localStorage.getItem(self.user.getCachePath('settings', false));
+                    var cachedItem = localStorage.getItem(app.user.getCachePath('settings', false));
                     if (cachedItem) {
                         self.set(JSON.parse(cachedItem), {silent: true});
                     }
@@ -94,13 +90,14 @@ define([
          */
         save: function(callbackSuccess, callbackError) {
             var self = this;
-            app.api.putSubscription(this.user.id, this.toJSON(), function(result) {
+            app.api.putSubscription(app.user.id, this.toJSON(), function(result) {
                 self.set(result, {silent: true});
                 self.cache();
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess(self);
                 }
             }, function(error) {
+                self.cache();
                 if (typeof callbackError === 'function') {
                     callbackError(error);
                 }

@@ -1,48 +1,15 @@
 <gelato-page data-name="list-section">
 
-    <!-- TODO: rework structure to support floating --->
-    
     <!-- NAVBAR: MAIN -->
-    <div id="navbar-main" class="gelato-navbar">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
-                </div>
-            </div>
-        </nav>
-    </div>
-
-    <!-- DIALOG: LOADING --->
-    <div id="loading" class="gelato-dialog">
-        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="example1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <h1>LOADING</h1>
-                    </div>
-                </div>
+    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
             </div>
         </div>
-    </div>
+    </gelato-navbar>
 
     <!-- CONTENT: MAIN -->
-    <div id="content-main" class="gelato-content container">
-
-       <div class="content-block">
-            <div class="row">
-
-                <div class="content-column col-xs-12">
-                    <div class="options">
-                        <div class="button-back cursor"><i class="fa fa-chevron-left"></i> back to <span class="vocablist-name"></span></div>
-                        <div class="section-name title"></div>
-                    </div>
-                    <div class="rows-table-container"></div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
+    <gelato-content class="container"></gelato-content>
 
 </gelato-page>

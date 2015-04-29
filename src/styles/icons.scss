@@ -1,0 +1,64 @@
+.icon {
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+}
+
+.icon-marketing-android {
+  background-image: url('#{$dir-assets}/vectors/marketing-android.svg');
+  height: 44px;
+  width: 28px;
+}
+
+.icon-marketing-book {
+  background-image: url('#{$dir-assets}/vectors/marketing-book.svg');
+  height: 48px;
+  width: 36px;
+}
+
+.icon-marketing-calendar {
+  background-image: url('#{$dir-assets}/vectors/marketing-calendar.svg');
+}
+
+.icon-marketing-flashcards {
+  background-image: url('#{$dir-assets}/vectors/marketing-flashcards.svg');
+  height: 48px;
+  width: 48px;
+}
+
+.icon-marketing-iphone {
+  background-image: url('#{$dir-assets}/vectors/marketing-iphone.svg');
+}
+
+.icon-marketing-laptop {
+  background-image: url('#{$dir-assets}/vectors/marketing-laptop.svg');
+}
+
+.icon-marketing-lists {
+  background-image: url('#{$dir-assets}/vectors/marketing-lists.svg');
+}
+
+.icon-marketing-plane {
+  background-image: url('#{$dir-assets}/vectors/marketing-plane.svg');
+  height: 41px;
+  width: 49px;
+}
+
+.icon-marketing-progress {
+  background-image: url('#{$dir-assets}/vectors/marketing-progress.svg');
+}
+
+.icon-marketing-review {
+  background-image: url('#{$dir-assets}/vectors/marketing-review.svg');
+  height: 46px;
+  width: 48px;
+}
+
+.icon-marketing-users {
+  background-image: url('#{$dir-assets}/vectors/marketing-users.svg');
+}
+
+.icon-marketing-view-features {
+  background-image: url('#{$dir-assets}/vectors/marketing-view-features.svg');
+}

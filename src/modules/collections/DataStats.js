@@ -9,7 +9,7 @@ define([
 
     /**
      * @class DataStats
-     * @extends GelatoModel
+     * @extends GelatoCollection
      */
     var DataStats = GelatoCollection.extend({
         /**
@@ -44,21 +44,55 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
-            var dates = this.getMonthDates();
-            Async.each(dates, function(date, callback) {
-                app.api.fetchStats({
-                    start: date
-                }, function(result) {
-                    app.user.storage.put('stats', result, function() {
-                        self.add(result, {merge: true});
-                        callback();
+            var momentMonthStart = Moment().startOf('month');
+            var momentMonthEnd = Moment().endOf('month');
+            Async.series([
+                function(callback) {
+                    app.api.fetchStats({
+                        start: Moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
+                        end: Moment(momentMonthEnd).format('YYYY-MM-DD')
+                    }, function(result) {
+                        app.user.storage.put('stats', result, function() {
+                            self.add(result, {merge: true});
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
                     }, function(error) {
                         callback(error);
                     });
-                }, function(error) {
-                    callback(error);
-                });
-            }, function(error) {
+                },
+                function(callback) {
+                    app.api.fetchStats({
+                        start: Moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
+                        end: Moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
+                    }, function(result) {
+                        app.user.storage.put('stats', result, function() {
+                            self.add(result, {merge: true});
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    app.api.fetchStats({
+                        start: Moment(momentMonthStart).format('YYYY-MM-DD'),
+                        end: Moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
+                    }, function(result) {
+                        app.user.storage.put('stats', result, function() {
+                            self.add(result, {merge: true});
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
                 if (error) {
                     if (typeof callbackError === 'function') {
                         callbackError(error);
@@ -71,45 +105,39 @@ define([
             });
         },
         /**
-         * @method getMonthDates
-         * @returns {Array}
+         * @method getStreak
+         * @returns {Number}
          */
-        getMonthDates: function() {
-            var dates = [];
-            var baseDate = new Date();
-            var baseDateString = Moment().format('YYYY-MM-');
-            var baseDateToday = Moment().format('YYYY-MM-DD');
-            var baseDateYesterday = Moment().subtract(1, 'day').format('YYYY-MM-DD');
-            var downloadedDates = this.pluck('date');
-            var lastDateOfMonth = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 0).getDate();
-            for (var i = 1; i < lastDateOfMonth; i ++) {
-                var date = null;
-                if (i < 10) {
-                    date = baseDateString + '0' + i;
-                } else {
-                    date = baseDateString + i;
+        getStreak: function() {
+            var bestStreak = 0;
+            var currentStreak = 0;
+            var timeStudied = this.pluck('timeStudied');
+            for (var i = 0, length = timeStudied.length; i < length; i++) {
+                if (timeStudied[i].day > 0) {
+                    currentStreak++;
                 }
-                if (date === baseDateToday ||
-                    date === baseDateYesterday ||
-                    downloadedDates.indexOf(date) === -1) {
-                    dates.push(date);
+                if (currentStreak > bestStreak) {
+                    bestStreak = currentStreak;
+                }
+                if (timeStudied[i].day === 0) {
+                    currentStreak = 0;
                 }
             }
-            return dates;
+            return bestStreak;
         },
         /**
          * @method getTotalCharactersLearned
          * @returns {Number}
          */
         getTotalCharactersLearned: function() {
-            return this.at(0).get('char').rune.learned.all;
+            return this.length ? this.at(0).get('char').rune.learned.all : 0;
         },
         /**
          * @method getTotalWordsLearned
          * @returns {Number}
          */
         getTotalWordsLearned: function() {
-            return this.at(0).get('word').rune.learned.all;
+            return this.length ? this.at(0).get('word').rune.learned.all : 0;
         },
         /**
          * @method load

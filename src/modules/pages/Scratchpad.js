@@ -15,26 +15,27 @@ define([
     var PageScratchpad = GelatoPage.extend({
         /**
          * @method initialize
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {
-            this.prompt = new Prompt();
+        initialize: function(options) {
+            options = options || {};
+            this.app = options.app;
+            this.prompt = new Prompt({app: this.app});
         },
         /**
          * @property title
          * @type String
          */
-        title: i18n.scratchpad.title + ' - ' + i18n.global.title,
-        /**
+        title: 'Scratchpad - ' + i18n.global.title,
+        /**s
          * @method render
          * @returns {PageScratchpad}
          */
         render: function() {
             this.renderTemplate(Template);
-            this.renderDialog();
-            this.prompt.setElement(this.$('.prompt-container'));
-            this.prompt.render().hide();
-            this.prompt.grading.hide();
+            this.prompt.setElement(this.$('#prompt-container')).render();
+            this.prompt.hide();
             return this;
         },
         /**
@@ -44,15 +45,11 @@ define([
          */
         load: function(writing) {
             var self = this;
-            app.dialog.show('loading-scratchpad');
-            this.$('.vocab-writing').text(writing);
-            app.user.data.vocabs.fetchByQuery(writing, function(vocab) {
-                self.prompt.set(vocab, 'rune', false);
+            app.user.data.vocabs.fetchByQuery(writing, function(result) {
+                self.prompt.set(result.getPromptItems('rune'));
                 self.prompt.show();
-                app.dialog.hide();
             }, function(error) {
                 console.error(error);
-                app.dialog.hide();
             });
             return this;
         }

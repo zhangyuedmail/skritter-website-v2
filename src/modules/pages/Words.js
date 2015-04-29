@@ -21,7 +21,7 @@ define([
          * @property title
          * @type String
          */
-        title: i18n.words.title + ' - ' + i18n.global.title,
+        title: 'Words - ' + i18n.global.title,
         /**
          * @method render
          * @returns {PageWords}

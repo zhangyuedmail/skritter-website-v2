@@ -1,0 +1,220 @@
+gelato-page[data-name="home"] {
+
+  padding-top: 0;
+
+  gelato-navbar {
+    background-color: #262b30;
+    border-color: #262b30;
+    .navbar-brand {
+      color: #fafafa;
+      font-family: $font-slab;
+      font-size: 28px;
+      font-weight: 400;
+    }
+    .navbar-nav a {
+      color: #fbfafc;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+    }
+  }
+
+  footer {
+    background-image: $background-footer;
+    .list { margin-bottom: 75px; }
+    .list a {
+      display: block;
+      color: #8c9196;
+      font-family: $font-muli;
+      font-size: 14px;
+      font-weight: 300;
+    }
+    .list i {
+      color: #8c9196;
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 300;
+    }
+    .header {
+      color: #b2b5b9;
+      font-family: $font-slab;
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 25px;
+      margin-top: 75px;
+    }
+  }
+
+  section {
+    background-color: #fbfafc;
+    &.striped { background-color: #262b30; }
+  }
+
+  #section-features {
+    .block { padding-bottom: 60px; }
+    .media-heading {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+    }
+    .media-subtext {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .title {
+      color: #666c73;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 90px;
+      margin-top: 75px;
+    }
+  }
+
+  #section-pricing {
+    #institution-text {
+      color: #8c9196;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 100px;
+      margin-top: 100px;
+    }
+    .actual {
+      color: #6c7a85;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+      margin-top: 10px;
+    }
+    .btn {
+      height: 52px;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+      margin-top: 60px;
+      width: 184px;
+    }
+    .duration {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+    }
+    .price {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 48px;
+      font-weight: 300;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 65px;
+      margin-top: 75px;
+    }
+  }
+
+  #section-testimonials {
+    .author {
+      color: #666c73;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-left: 15px;
+      margin-top: 10px;
+    }
+    .block { padding-bottom: 60px; }
+    .quote {
+      background-color: #333940;
+      border-radius: 25px;
+      margin-bottom: 20px;
+      padding: 25px;
+    }
+    .subtext {
+      color: #9ba4ac;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 65px;
+      margin-top: 75px;
+    }
+  }
+
+  #section-start {
+    a {
+      color: #838f98; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      margin-left: 100px;
+    }
+    button {
+      color: #fafafa; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 65px;
+      padding: 15px 30px;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 65px;
+      margin-top: 75px;
+    }
+  }
+
+  #section-top-carousel {
+    margin-top: -60px;
+    a {
+      color: #fafafa; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      margin-left: 100px;
+    }
+    button {
+      color: #fafafa; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      padding: 15px 30px;
+    }
+    .carousel-caption {
+      left: 0;
+      right: 0;
+      text-align: center;
+      text-shadow: none;
+    }
+    .carousel-header {
+      color: #ebeaf0;
+      font-family: $font-slab;
+      font-size: 48px;
+      font-weight: 400;
+      left: 0;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      position: absolute;
+      right: 0;
+      text-align: center;
+      text-shadow: none;
+      top: 100px;
+      z-index: 10;
+    }
+    .carousel-image {
+      min-width: 100%;
+      width: 100%;
+    }
+  }
+
+}

@@ -22,11 +22,11 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.auth = new UserAuth(null, {user: this});
-            this.data = new UserData(null, {user: this});
+            this.auth = new UserAuth();
+            this.data = new UserData();
+            this.settings = new UserSettings();
             this.storage = new GelatoStorage();
-            this.settings = new UserSettings(null, {user: this});
-            this.subscription = new UserSubscription(null, {user: this});
+            this.subscription = new UserSubscription();
         },
         /**
          * @property idAttribute
@@ -103,10 +103,6 @@ define([
                         callbackSuccess();
                     }
                 },
-                //open database for usage
-                function(callback) {
-                    self.loadStorage(callback);
-                },
                 //load user authorization
                 function(callback) {
                     self.auth.load(function() {
@@ -131,6 +127,10 @@ define([
                         callback(error);
                     });
                 },
+                //open database for usage
+                function(callback) {
+                    self.loadStorage(callback);
+                },
                 //load user data
                 function(callback) {
                     self.data.load(function() {
@@ -141,11 +141,9 @@ define([
                 },
                 //initialize missing item fetch
                 function(callback) {
-                    /** TODO: enable this for mobile only
-                     if (self.data.items.hasMissing()) {
+                    if (self.data.items.hasMissing()) {
                         self.data.items.fetchMissing();
                     }
-                     **/
                     callback();
                 }
             ], function(error) {
@@ -167,6 +165,7 @@ define([
         login: function(username, password, callbackSuccess, callbackError, callbackStatus) {
             var self = this;
             Async.series([
+                //authenticate user based on credentials
                 function(callback) {
                     app.api.authenticateUser(username, password, function(data) {
                         self.set('id', data.user_id);
@@ -176,10 +175,7 @@ define([
                         callback(error);
                     });
                 },
-                function(callback) {
-                    indexedDB.deleteDatabase(self.getDatabaseName());
-                    self.loadStorage(callback);
-                },
+                //fetch user settings
                 function(callback) {
                     self.settings.fetch(function() {
                         callback();
@@ -187,6 +183,7 @@ define([
                         callback(error);
                     });
                 },
+                //fetch user subscription
                 function(callback) {
                     self.subscription.fetch(function() {
                         callback();
@@ -194,6 +191,11 @@ define([
                         callback(error);
                     });
                 },
+                //open database for usage
+                function(callback) {
+                    self.loadStorage(callback);
+                },
+                //fetch item ids to be downloaded
                 function(callback) {
                     self.data.items.fetchIds(function() {
                         callback();

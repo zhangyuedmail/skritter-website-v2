@@ -12,11 +12,13 @@ define([
     var CanvasStroke = GelatoModel.extend({
         /**
          * @method initialize
+         * @param {Object} [attributes]
+         * @param {Object} [options]
          * @constructor
          */
         initialize: function() {
-            this.updateCorners();
             this.on('change:points', this.updateCorners);
+            this.updateCorners();
         },
         /**
          * @property idAttribute
@@ -79,7 +81,7 @@ define([
          * @returns {Number}
          */
         getSize: function() {
-            return app.get('canvasSize');
+            return app.user.settings.get('canvasSize');
         },
         /**
          * @method getUserRectangle

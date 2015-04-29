@@ -5,32 +5,36 @@
 define([
     'core/modules/GelatoRouter',
     'modules/pages/Dashboard',
+    'modules/pages/GeneralSettings',
     'modules/pages/List',
     'modules/pages/ListBrowse',
     'modules/pages/ListCreate',
+    'modules/pages/ListQueue',
     'modules/pages/ListSection',
-    'modules/pages/ListStudying',
     'modules/pages/Login',
     'modules/pages/Home',
     'modules/pages/Scratchpad',
-    'modules/pages/Stats',
+    'modules/pages/StatsSummary',
+    'modules/pages/StatsTimeline',
     'modules/pages/Study',
-    'modules/pages/Word',
+    'modules/pages/StudySettings',
     'modules/pages/Words'
 ], function(
     GelatoRouter,
     PageDashboard,
+    PageGeneralSettings,
     PageList,
     PageListBrowse,
     PageListCreate,
+    PageListQueue,
     PageListSection,
-    PageListStudying,
     PageLogin,
     PageHome,
     PageScratchpad,
-    PageStats,
+    PageStatsSummary,
+    PageStatsTimeline,
     PageStudy,
-    PageWord,
+    PageStudySettings,
     PageWords
 ) {
 
@@ -40,50 +44,65 @@ define([
      */
     var Router = GelatoRouter.extend({
         /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {},
+        /**
          * @property routes
          * @type Object
          */
         routes: {
-            'lists': 'showListStudying',
+            'dashboard': 'showDashboard',
+            'lists': 'showListQueue',
             'lists/browse': 'showListBrowse',
             'lists/browse/:listId': 'showList',
             'lists/browse/:listId/:sectionId': 'showListSection',
             'lists/create': 'showListCreate',
-            'lists/queue': 'showListStudying',
+            'lists/queue': 'showListQueue',
             'login': 'showLogin',
             'logout': 'handleLogout',
             'scratchpad': 'showScratchpad',
             'scratchpad/:writing': 'showScratchpad',
-            'stats': 'showStats',
-            'stats/:type': 'showStats',
+            'settings': 'showGeneralSettings',
+            'settings/general': 'showGeneralSettings',
+            'settings/study': 'showStudySettings',
+            'stats': 'showStatsSummary',
+            'stats/summary': 'showStatsSummary',
+            'stats/timeline': 'showStatsTimeline',
             'study': 'showStudy',
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
-            'words/:writing': 'showWord',
             'words': 'showWords',
-            '*route': 'showDefault'
+            '*route': 'showHome'
         },
         /**
-         * @method logout
+         * @method showDashboard
          */
-        handleLogout: function() {
-            if (app.user.isAuthenticated()) {
-                app.user.logout();
-            } else {
-                this.showDefault();
-            }
-        },
-        /**
-         * @method showDefault
-         */
-        showDefault: function() {
-            this.navigate('');
-            if (app.user.isAuthenticated()) {
-                this.page = new PageDashboard();
-            } else {
-                this.page = new PageHome();
-            }
+        showDashboard: function() {
+            this.page = new PageDashboard();
             this.page.render();
+        },
+        /**
+         * @method showGeneralSettings
+         */
+        showGeneralSettings: function() {
+            this.navigate('settings/general', {trigger: false});
+            this.page = new PageGeneralSettings();
+            this.page.render();
+        },
+        /**
+         * @method showHome
+         */
+        showHome: function() {
+            if (app.user.isAuthenticated()) {
+                this.navigate('dashboard', {trigger: false});
+                this.showDashboard();
+            } else {
+                this.navigate('', {trigger: false});
+                this.page = new PageHome();
+                this.page.render();
+            }
         },
         /**
          * @method showList
@@ -107,7 +126,7 @@ define([
          */
         showListBrowse: function() {
             this.page = new PageListBrowse();
-            this.page.render().load();
+            this.page.render();
         },
         /**
          * @method showListCreate
@@ -117,11 +136,12 @@ define([
             this.page.render();
         },
         /**
-         * @method showListStudying
+         * @method showListQueue
          */
-        showListStudying: function() {
-            this.page = new PageListStudying();
-            this.page.render().load();
+        showListQueue: function() {
+            this.navigate('lists/queue', {trigger: false});
+            this.page = new PageListQueue();
+            this.page.render();
         },
         /**
          * @method showLogin
@@ -139,12 +159,18 @@ define([
             this.page.render().load(writing);
         },
         /**
-         * @method showStats
-         * @param {String} [type]
+         * @method showStatsSummary
          */
-        showStats: function(type) {
-            this.page = new PageStats();
-            this.page.render().load(type);
+        showStatsSummary: function() {
+            this.page = new PageStatsSummary();
+            this.page.render();
+        },
+        /**
+         * @method showStatsTimeline
+         */
+        showStatsTimeline: function() {
+            this.page = new PageStatsTimeline();
+            this.page.render();
         },
         /**
          * @method showStudy
@@ -156,12 +182,11 @@ define([
             this.page.render().load(listId, sectionId);
         },
         /**
-         * @method showWord
-         * @param {String} writing
+         * @method showStudySettings
          */
-        showWord: function(writing) {
-            this.page = new PageWord();
-            this.page.render().load(writing);
+        showStudySettings: function() {
+            this.page = new PageStudySettings();
+            this.page.render();
         },
         /**
          * @method showWords

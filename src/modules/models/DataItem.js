@@ -13,12 +13,9 @@ define([
     var DataItem = GelatoModel.extend({
         /**
          * @method initialize
-         * @param {Object} [attributes]
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(attributes, options) {
-            options = options || {};
+        initialize: function() {
             this.contained = [];
             this.decomps = [];
             this.strokes = [];
@@ -103,7 +100,7 @@ define([
             var options = {merge: true, silent: true, sort: false};
             var part = this.get('part');
             var userId = app.user.id;
-            var vocabIds = self.get('vocabIds');
+            var vocabIds = this.get('vocabIds');
             //TODO: first check if item is valid
             Async.series([
                 //vocabs

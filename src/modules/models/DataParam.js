@@ -11,6 +11,11 @@ define([
      */
     var DataParam = GelatoModel.extend({
         /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function(attributes, options) {},
+        /**
          * @property idAttribute
          * @type String
          */

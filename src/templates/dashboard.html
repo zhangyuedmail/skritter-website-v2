@@ -1,98 +1,66 @@
 <gelato-page data-name="dashboard">
 
-    <!-- NAVBAR: MAIN -->
-    <div id="navbar-main" class="gelato-navbar">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
-                    <ul class="nav navbar-nav navbar-left">
-                        <li><a data-url="study" href="#">{{navbar.study}}</a></li>
-                        <li><a data-url="lists/queue" href="#">{{navbar.lists}}</a></li>
-                        <li><a data-url="words" href="#">{{navbar.words}}</a></li>
-                        <li><a data-url="stats" href="#">{{navbar.stats}}</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><button type="submit" class="btn btn-default navbar-btn" data-dialog="logout">{{navbar.logout}}</button></li>
-                        <li><a class="settings-name" data-url="#" href="#"></a></li>
-                    </ul>
-                </div>
+    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="#" data-url="study">Study</a></li>
+                    <li><a href="#" data-url="lists">Lists</a></li>
+                    <li><a href="#" data-url="words">Words</a></li>
+                    <li><a href="#" data-url="stats">Stats</a></li>
+                </ul>
             </div>
-        </nav>
-    </div>
+        </div>
+    </gelato-navbar>
 
-    <!-- CONTENT: MAIN -->
-    <div id="content-main" class="gelato-content container">
-
-        <div id="download-progress" class="content-block">
-            <h4>{{dashboard.progress-header}} - <span class="progress-status">0</span>%</h4>
-            <div class="progress">
-                <div class="active progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                    <span class="sr-only">0% Complete</span>
+    <gelato-content class="container">
+        <div id="subscription-expired" class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <strong>Subscription expired!</strong> Purchase a subscription to continue adding new items and lists to study.
+                    <button type="button" class="btn btn-success text-right" data-url="study">Go to Billing</button>
+                    <a href="#" data-dismiss="alert">Hide</a>
                 </div>
             </div>
         </div>
-
-        <div class="row first-row">
-
+        <div class="row">
             <div class="col-md-6">
-                <div class="content-block text-center">
-                    <div class="block-label text-uppercase">Daily Goal</div>
-                    <div class="block-settings">
-                        <i class="fa fa-2x fa-gear" data-dialog="goal-settings"></i>
+                <div class="content-block">
+                    <div class="content-block-label">Daily Goal</div>
+                    <div class="content-block-options">
+                        <span id="goal-settings-button"><i class="fa fa-cog"></i></span>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <canvas class="daily-goal-donut-container"></canvas>
-                        </div>
-                        <div class="col-xs-6 text-left">
-                            <div><span class="items-reviewed">0</span> <span class="items-reviewed-label">items reviewed</span></div>
-                            <div><span class="items-added">0</span> <span class="items-added-label">items added</span></div>
-                        </div>
-                    </div>
-                    <button type="button" class="button-study btn btn-lg btn-success" data-url="study">Study</button>
+                    <div id="goal-doughnut"></div>
+                    <div><span id="items-reviewed-value"></span><span>items reviewed</span></div>
+                    <div><span id="items-added-value"></span><span>items added</span></div>
+                    <button type="button" class="btn btn-success" data-url="study">Study</button>
                 </div>
             </div>
-
-
             <div class="col-md-3">
-                <div class="content-block text-center">
-                    <div class="block-label text-uppercase">This Month</div>
-                    <div class="heatmap-container"></div>
-                    <div><span>-</span> day streak</div>
+                <div class="content-block">
+                    <div class="content-block-label">This Month</div>
+                    <div id="month-heatmap"></div>
+                    <div><span id="month-streak-value"></span><span>day streak</span></div>
                 </div>
             </div>
-
             <div class="col-md-3">
-                <div class="content-block text-center">
-                    <div class="block-label text-uppercase">All Time</div>
-                    <div class="characters-learned-count">-</div>
-                    <div>characters learned</div>
-                    <div class="words-learned-count">-</div>
-                    <div>words learned</div>
+                <div class="content-block">
+                    <div class="content-block-label">All Time</div>
+                    <div><span id="characters-learned-value"></span><span>characters learned</span></div>
+                    <div><span id="words-learned-value"></span><span>words learned</span></div>
                 </div>
             </div>
-
         </div>
-
-        <div class="row second-row">
-
+        <div class="row">
             <div class="col-xs-12">
                 <div class="content-block">
-                    <div class="block-label text-uppercase">Study Queue</div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <canvas class="list-queue-donut-container"></canvas>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="progress-table-container"></div>
-                        </div>
-                    </div>
+                    <div class="content-block-label">List Queue</div>
+                    <div id="list-queue-doughnut"></div>
+                    <div id="list-queue-table"></div>
                 </div>
             </div>
-
         </div>
-
-    </div>
+    </gelato-content>
 
 </gelato-page>

@@ -11,6 +11,11 @@ define([
      */
     var DataDecomp = GelatoModel.extend({
         /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {},
+        /**
          * @property idAttribute
          * @type String
          */
