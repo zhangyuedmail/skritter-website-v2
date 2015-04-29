@@ -3,15 +3,17 @@ $dir-assets: '../assets';
 
 
 /*** BACKGROUNDS ***/
-$background: url('#{$dir-assets}/backgrounds/retina-wood.png');
+$background-dark: url('#{$dir-assets}/backgrounds/bg-dark-wood.png');
+$background-light: url('#{$dir-assets}/backgrounds/bg-retina-wood.png');
+$background-expired: url('#{$dir-assets}/backgrounds/bg-expired.png');
+$background-footer: url('#{$dir-assets}/backgrounds/bg-footer.png');
 
 
 /*** FONTS ***/
 $font-chinese: "Simkai", "Kaisho";
 $font-japanese: "Kaisho", "Simkai";
-$font-primary: "Muli", "Arial Unicode MS", "Arial";
-$font-secondary: "Roboto Slab", "Arial Unicode MS", "Arial";
-$font-unicode: "Arial Unicode MS", "Arial";
+$font-muli: "Muli", "Arial Unicode MS", "Arial";
+$font-slab: "Roboto Slab", "Arial Unicode MS", "Arial";
 
 
 /*** COLOR: GRADING ***/
