@@ -5,6 +5,7 @@
 define([
     'core/modules/GelatoRouter',
     'modules/pages/About',
+    'modules/pages/Contact',
     'modules/pages/Dashboard',
     'modules/pages/GeneralSettings',
     'modules/pages/List',
@@ -23,6 +24,7 @@ define([
 ], function(
     GelatoRouter,
     PageAbout,
+    PageContact,
     PageDashboard,
     PageGeneralSettings,
     PageList,
@@ -56,6 +58,7 @@ define([
          */
         routes: {
             'about': 'showAbout',
+            'contact': 'showContact',
             'dashboard': 'showDashboard',
             'lists': 'showListQueue',
             'lists/browse': 'showListBrowse',
@@ -84,6 +87,13 @@ define([
          */
         showAbout: function() {
             this.page = new PageAbout();
+            this.page.render();
+        },
+        /**
+         * @method showContact
+         */
+        showContact: function() {
+            this.page = new PageContact();
             this.page.render();
         },
         /**

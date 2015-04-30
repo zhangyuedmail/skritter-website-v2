@@ -1,0 +1,94 @@
+<gelato-page data-name="contact">
+
+    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="#" data-url="features">Features</a></li>
+                    <li><a href="#" data-url="pricing">Pricing</a></li>
+                    <li><a href="#" data-url="#">Start 7-day trial</a></li>
+                    <li><a href="#" data-url="login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </gelato-navbar>
+
+    <gelato-content>
+        <div class="container">
+            <div id="section-title" class="row text-center">
+                <div class="col-xs-12">
+                    <div class="title">Contact Us</div>
+                </div>
+            </div>
+        </div>
+        <div id="section-main" class="content-block">
+            <div class="text-center">
+                <div id="status-message"></div>
+            </div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="contact-email" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="contact-email" placeholder="Type email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contact-topic-select" class="col-sm-2 control-label">Topic</label>
+                    <div class="col-sm-10">
+                        <select id="contact-topic-select" class="form-control">
+                            <option value="Suggestion">Feature suggestion</option>
+                            <option value="Bug">Bug report</option>
+                            <option value="How To">Question</option>
+                            <option value="Feedback">Feedback</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contact-message" class="col-sm-2 control-label">Message</label>
+                    <textarea id="contact-message" class="col-sm-10" rows="5"></textarea>
+                </div>
+                <p class="friendly-text">
+                    Good to hear from you! We do respond to everything. Want to get Skritter for your school?
+                    &nbsp;<a href="#" data-url="institutions">Click Here</a>
+                </p>
+                <div class="text-center">
+                    <button id="contact-submit" type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+        <footer>
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-xs-4">
+                        <div class="header">Company</div>
+                        <div class="list">
+                            <a href="#" data-url="about">About us</a>
+                            <a href="#" data-url="legal">Legal</a>
+                            <a href="#" data-url="contact">Contact</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="header">Community</div>
+                        <div class="list">
+                            <a href="#" data-url="blog">Blog</a>
+                            <a href="#" data-url="forum">Forum</a>
+                            <i class="fa fa-facebook-square"></i>
+                            <i class="fa fa-twitter"></i>
+                            <i class="fa fa-google-plus"></i>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="header">Help</div>
+                        <div class="list">
+                            <a href="#" data-url="resources">Resources</a>
+                            <a href="#" data-url="institutions">Schools</a>
+                            <a href="#" data-url="faqs">FAQs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </gelato-content>
+
+</gelato-page>
