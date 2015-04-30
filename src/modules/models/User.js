@@ -51,7 +51,7 @@ define([
                     callbackSuccess();
                 }, function(error) {
                     callbackError(error);
-                })
+                });
             } else {
                 app.api.authenticateGuest(function(data) {
                     self.set('id', 'guest');
