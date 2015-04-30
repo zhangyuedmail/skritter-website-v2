@@ -39,6 +39,30 @@ define([
          */
         defaults: {},
         /**
+         * TODO: check if guest token is still valid
+         * @method authenticateGuest
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        authenticateGuest: function(callbackSuccess, callbackError) {
+            var self = this;
+            if (this.isGuest()) {
+                this.auth.load(function() {
+                    callbackSuccess();
+                }, function(error) {
+                    callbackError(error);
+                })
+            } else {
+                app.api.authenticateGuest(function(data) {
+                    self.set('id', 'guest');
+                    self.auth.set(data);
+                    localStorage.setItem('_active', 'guest');
+                }, function(error) {
+                    callbackError(error);
+                });
+            }
+        },
+        /**
          * @method getCachePath
          * @param {String} path
          * @param {Boolean} [includeLanguageCode]
@@ -69,7 +93,7 @@ define([
          * @returns {Boolean}
          */
         isAuthenticated: function() {
-            return this.has('id');
+            return this.id && this.id !== 'guest';
         },
         /**
          * @method isChinese
@@ -77,6 +101,13 @@ define([
          */
         isChinese: function() {
             return this.getLanguageCode() === 'zh';
+        },
+        /**
+         * @method isGuest
+         * @returns {Boolean}
+         */
+        isGuest: function() {
+            return this.id === 'guest';
         },
         /**
          * @method isJapanese
@@ -96,11 +127,15 @@ define([
             Async.series([
                 //check user authentication status
                 function(callback) {
-                    if (self.id) {
+                    if (self.isAuthenticated()) {
                         console.log('USER:', self.id);
                         callback();
                     } else {
-                        callbackSuccess();
+                        self.authenticateGuest(function() {
+                            callbackSuccess();
+                        }, function(error) {
+                            callback(error);
+                        });
                     }
                 },
                 //load user authorization
