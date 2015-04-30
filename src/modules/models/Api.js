@@ -21,8 +21,8 @@ define([
          * @type Object
          */
         defaults: {
-            client: 'mcfarljwapiclient',
-            credentials: 'bWNmYXJsandhcGljbGllbnQ6ZTM4NzI1MTdmZWQ5MGE4MjBlNDQxNTMxNTQ4Yjhj',
+            client: 'skritterandroid',
+            credentials: 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==',
             root: 'https://beta.skritter',
             tld: location.host.indexOf('.cn') > -1 ? '.cn' : '.com',
             version: 0
@@ -461,6 +461,31 @@ define([
          */
         getUrl: function() {
             return this.get('root') + this.get('tld') + '/api/v' + this.get('version') + '/';
+        },
+        /**
+         * @method postContact
+         * @param {String} domain
+         * @param {Object} body
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        postContact: function(domain, body, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + domain +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: JSON.stringify(body)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackSuccess();
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         },
         /**
          * @method putSubscription
