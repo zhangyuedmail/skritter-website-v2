@@ -1,0 +1,118 @@
+gelato-page[data-name="about"] {
+
+  background-color: $white1; //TODO: check color
+
+  gelato-navbar {
+    background-color: #262b30;
+    border-color: #262b30;
+    .navbar-brand {
+      color: #fafafa;
+      font-family: $font-slab;
+      font-size: 28px;
+      font-weight: 400;
+    }
+    .navbar-nav a {
+      color: #fbfafc;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+    }
+  }
+
+  footer {
+    background-image: $background-footer;
+    .list { margin-bottom: 75px; }
+    .list a {
+      display: block;
+      color: #8c9196;
+      font-family: $font-muli;
+      font-size: 14px;
+      font-weight: 300;
+    }
+    .list i {
+      color: #8c9196;
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 300;
+    }
+    .header {
+      color: #b2b5b9;
+      font-family: $font-slab;
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 25px;
+      margin-top: 75px;
+    }
+  }
+
+  .content-block {
+    background-color: $white3; //TODO: check color
+    margin-top: 60px;
+    margin-bottom: 60px;
+    padding: 0 15px;
+  }
+
+  #section-content {
+    background-color: #ffffff; //TODO: check color
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+    .header {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+    .subtext {
+      color: #666c73;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+  }
+
+  #section-quote {
+    margin: 60px auto 0 auto;
+    max-width: 600px;
+    .author {
+      color: #b2b5b9;
+      font-family: $font-slab;
+      font-size: 20px;
+      font-weight: 400;
+    }
+    .quote {
+      color: #666c73;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+    }
+  }
+
+  #section-team {
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    .employee-name {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .employee-subtext {
+      color: #8c9196;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .header {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+    .media { margin-bottom: 35px; }
+  }
+
+}

@@ -4,6 +4,7 @@
  */
 define([
     'core/modules/GelatoRouter',
+    'modules/pages/About',
     'modules/pages/Dashboard',
     'modules/pages/GeneralSettings',
     'modules/pages/List',
@@ -21,6 +22,7 @@ define([
     'modules/pages/Words'
 ], function(
     GelatoRouter,
+    PageAbout,
     PageDashboard,
     PageGeneralSettings,
     PageList,
@@ -53,6 +55,7 @@ define([
          * @type Object
          */
         routes: {
+            'about': 'showAbout',
             'dashboard': 'showDashboard',
             'lists': 'showListQueue',
             'lists/browse': 'showListBrowse',
@@ -75,6 +78,13 @@ define([
             'study/:listId/:sectionId': 'showStudy',
             'words': 'showWords',
             '*route': 'showHome'
+        },
+        /**
+         * @method showAbout
+         */
+        showAbout: function() {
+            this.page = new PageAbout();
+            this.page.render();
         },
         /**
          * @method showDashboard
