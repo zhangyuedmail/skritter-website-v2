@@ -1,0 +1,71 @@
+gelato-page[data-name="features"] {
+
+  background-color: $white1; //TODO: check color
+
+  #section-banner {
+    margin-top: 60px;
+    img { width: 100%; }
+  }
+
+  #section-features {
+    .block { padding-bottom: 60px; }
+    .media-heading {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+    }
+    .media-subtext {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .title {
+      color: #666c73;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 90px;
+      margin-top: 75px;
+    }
+  }
+
+  #section-start {
+    margin: 60px auto 0 auto;
+    max-width: 600px;
+    a {
+      color: #838f98; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      margin-left: 100px;
+    }
+    button {
+      color: #fafafa; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 65px;
+      padding: 15px 30px;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 65px;
+      margin-top: 75px;
+    }
+  }
+
+  #section-quote {
+    margin: 60px auto 0 auto;
+    max-width: 600px;
+    .quote {
+      color: #363b40;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+    }
+  }
+
+}

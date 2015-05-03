@@ -7,6 +7,7 @@ define([
     'modules/pages/About',
     'modules/pages/Contact',
     'modules/pages/Dashboard',
+    'modules/pages/Features',
     'modules/pages/GeneralSettings',
     'modules/pages/List',
     'modules/pages/ListBrowse',
@@ -26,6 +27,7 @@ define([
     PageAbout,
     PageContact,
     PageDashboard,
+    PageFeatures,
     PageGeneralSettings,
     PageList,
     PageListBrowse,
@@ -60,6 +62,7 @@ define([
             'about': 'showAbout',
             'contact': 'showContact',
             'dashboard': 'showDashboard',
+            'features': 'showFeatures',
             'lists': 'showListQueue',
             'lists/browse': 'showListBrowse',
             'lists/browse/:listId': 'showList',
@@ -101,6 +104,13 @@ define([
          */
         showDashboard: function() {
             this.page = new PageDashboard();
+            this.page.render();
+        },
+        /**
+         * @method showFeatures
+         */
+        showFeatures: function() {
+            this.page = new PageFeatures();
             this.page.render();
         },
         /**

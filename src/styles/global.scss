@@ -3,4 +3,47 @@ body {
   font-family: $font-muli;
 }
 
+gelato-navbar {
+  background-color: #262b30;
+  border-color: #262b30;
+  .navbar-brand {
+    color: #fafafa;
+    font-family: $font-slab;
+    font-size: 28px;
+    font-weight: 400;
+  }
+  .navbar-nav a {
+    color: #fbfafc;
+    font-family: $font-muli;
+    font-size: 18px;
+    font-weight: 300;
+  }
+}
+
+footer {
+  background-image: $background-footer;
+  .list { margin-bottom: 75px; }
+  .list a {
+    display: block;
+    color: #8c9196;
+    font-family: $font-muli;
+    font-size: 14px;
+    font-weight: 300;
+  }
+  .list i {
+    color: #8c9196;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: 300;
+  }
+  .header {
+    color: #b2b5b9;
+    font-family: $font-slab;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 25px;
+    margin-top: 75px;
+  }
+}
+
 .content-block { border-radius: 25px; }
