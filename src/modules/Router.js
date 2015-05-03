@@ -9,6 +9,7 @@ define([
     'modules/pages/Dashboard',
     'modules/pages/Features',
     'modules/pages/GeneralSettings',
+    'modules/pages/Legal',
     'modules/pages/List',
     'modules/pages/ListBrowse',
     'modules/pages/ListCreate',
@@ -29,6 +30,7 @@ define([
     PageDashboard,
     PageFeatures,
     PageGeneralSettings,
+    PageLegal,
     PageList,
     PageListBrowse,
     PageListCreate,
@@ -63,6 +65,7 @@ define([
             'contact': 'showContact',
             'dashboard': 'showDashboard',
             'features': 'showFeatures',
+            'legal': 'showLegal',
             'lists': 'showListQueue',
             'lists/browse': 'showListBrowse',
             'lists/browse/:listId': 'showList',
@@ -133,6 +136,13 @@ define([
                 this.page = new PageHome();
                 this.page.render();
             }
+        },
+        /**
+         * @method showLegal
+         */
+        showLegal: function() {
+            this.page = new PageLegal();
+            this.page.render();
         },
         /**
          * @method showList
