@@ -134,9 +134,10 @@ gelato-page[data-name="home"] {
   #section-start {
     a {
       color: #838f98; //TODO: check color
+      display: block;
       font-size: 24px;
       font-weight: 300;
-      margin-left: 100px;
+      margin-top: 20px;
     }
     button {
       color: #fafafa; //TODO: check color
@@ -145,13 +146,16 @@ gelato-page[data-name="home"] {
       margin-bottom: 65px;
       padding: 15px 30px;
     }
+    .container {
+      padding-bottom: 75px;
+      padding-top: 75px;
+    }
     .title {
       color: #838f98;
       font-family: $font-slab;
       font-size: 36px;
       font-weight: 400;
-      margin-bottom: 65px;
-      margin-top: 75px;
+      margin-bottom: 150px;
     }
   }
 
