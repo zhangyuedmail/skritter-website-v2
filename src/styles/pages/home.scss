@@ -63,11 +63,18 @@ gelato-page[data-name="home"] {
       margin-top: 60px;
       width: 184px;
     }
+    .discount {
+      color: #87a64b;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
     .duration {
       color: #8c9196;
       font-family: $font-slab;
       font-size: 24px;
       font-weight: 300;
+      margin-bottom: 12px;
     }
     .price {
       color: #404851;
