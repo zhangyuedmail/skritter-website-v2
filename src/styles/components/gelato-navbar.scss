@@ -1,0 +1,19 @@
+gelato-navbar {
+
+  background-color: #262b30;
+  border-color: #262b30;
+
+  .item-header {
+    color: #fafafa;
+    font-family: $font-slab;
+    font-weight: 400;
+  }
+
+  .item-link,
+  .item-text {
+    color: #fbfafc;
+    font-family: $font-muli;
+    font-weight: 300;
+  }
+
+}
