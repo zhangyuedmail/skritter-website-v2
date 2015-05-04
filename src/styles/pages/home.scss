@@ -8,6 +8,14 @@ gelato-page[data-name="home"] {
   }
 
   #section-features {
+    #more-features {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 100px;
+      i { margin-bottom: -5px; }
+    }
     .block { padding-bottom: 60px; }
     .media-heading {
       color: #8c9196;
