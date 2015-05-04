@@ -147,6 +147,20 @@ gelato-page[data-name="home"] {
       font-weight: 300;
       padding: 15px 30px;
     }
+    #device-icons {
+      margin-top: 80px;
+      .device-text {
+        color: #e1e4e6;
+        font-family: $font-muli;
+        font-size: 16px;
+        font-weight: 300;
+      }
+      .icon-block {
+        display: inline-block;
+        margin-left: 40px;
+        margin-right: 40px;
+      }
+    }
     .carousel-caption {
       left: 0;
       right: 0;
