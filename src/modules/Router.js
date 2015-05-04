@@ -9,6 +9,7 @@ define([
     'modules/pages/Dashboard',
     'modules/pages/Features',
     'modules/pages/GeneralSettings',
+    'modules/pages/Home',
     'modules/pages/Institutions',
     'modules/pages/Legal',
     'modules/pages/List',
@@ -17,7 +18,7 @@ define([
     'modules/pages/ListQueue',
     'modules/pages/ListSection',
     'modules/pages/Login',
-    'modules/pages/Home',
+    'modules/pages/Pricing',
     'modules/pages/Scratchpad',
     'modules/pages/StatsSummary',
     'modules/pages/StatsTimeline',
@@ -31,6 +32,7 @@ define([
     PageDashboard,
     PageFeatures,
     PageGeneralSettings,
+    PageHome,
     PageInstitutions,
     PageLegal,
     PageList,
@@ -39,7 +41,7 @@ define([
     PageListQueue,
     PageListSection,
     PageLogin,
-    PageHome,
+    PagePricing,
     PageScratchpad,
     PageStatsSummary,
     PageStatsTimeline,
@@ -77,6 +79,7 @@ define([
             'lists/queue': 'showListQueue',
             'login': 'showLogin',
             'logout': 'handleLogout',
+            'pricing': 'showPricing',
             'scratchpad': 'showScratchpad',
             'scratchpad/:writing': 'showScratchpad',
             'settings': 'showGeneralSettings',
@@ -198,6 +201,13 @@ define([
          */
         showLogin: function() {
             this.page = new PageLogin();
+            this.page.render();
+        },
+        /**
+         * @method showPricing
+         */
+        showPricing: function() {
+            this.page = new PagePricing();
             this.page.render();
         },
         /**

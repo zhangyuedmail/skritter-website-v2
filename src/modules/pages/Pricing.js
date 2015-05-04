@@ -3,15 +3,15 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/institutions.html',
+    'require.text!templates/pricing.html',
     'core/modules/GelatoPage'
 ], function(Template, GelatoPage) {
 
     /**
-     * @class PageInstitutions
+     * @class PagePricing
      * @extends GelatoPage
      */
-    var PageInstitutions = GelatoPage.extend({
+    var PagePricing = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -21,10 +21,10 @@ define([
          * @property title
          * @type String
          */
-        title: 'Institutions - ' + i18n.global.title,
+        title: 'Pricing - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageInstitutions}
+         * @returns {PagePricing}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -32,6 +32,6 @@ define([
         }
     });
 
-    return PageInstitutions;
+    return PagePricing;
 
 });
