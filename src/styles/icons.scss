@@ -11,6 +11,12 @@
   width: 28px;
 }
 
+.icon-marketing-best-value {
+  background-image: url('#{$dir-assets}/vectors/marketing-best-value.svg');
+  height: 91px;
+  width: 91px;
+}
+
 .icon-marketing-book {
   background-image: url('#{$dir-assets}/vectors/marketing-book.svg');
   height: 48px;
@@ -41,6 +47,12 @@
 
 .icon-marketing-lists {
   background-image: url('#{$dir-assets}/vectors/marketing-lists.svg');
+}
+
+.icon-marketing-most-popular {
+  background-image: url('#{$dir-assets}/vectors/marketing-most-popular.svg');
+  height: 91px;
+  width: 91px;
 }
 
 .icon-marketing-plane {
