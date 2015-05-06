@@ -1,6 +1,6 @@
 gelato-page[data-name="about"] {
 
-  background-color: $white1; //TODO: check color
+  background: $background-characters repeat $white1;
 
   .content-block {
     background-color: $white3; //TODO: check color
@@ -13,6 +13,7 @@ gelato-page[data-name="about"] {
     background-color: #ffffff; //TODO: check color
     border-bottom-left-radius: 25px;
     border-top-left-radius: 25px;
+    padding: 15px;
     .header {
       color: #404851;
       font-family: $font-muli;
@@ -49,6 +50,7 @@ gelato-page[data-name="about"] {
   #section-team {
     border-bottom-right-radius: 25px;
     border-top-right-radius: 25px;
+    padding: 15px;
     .employee-name {
       color: #404851;
       font-family: $font-muli;
