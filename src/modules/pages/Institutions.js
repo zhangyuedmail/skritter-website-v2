@@ -29,6 +29,22 @@ define([
         render: function() {
             this.renderTemplate(Template);
             return this;
+        },
+        /**
+         * @property events
+         * @type {Object}
+         */
+        events: {
+            'vclick #request-trial-link': 'handleClickRequestTrialLink'
+        },
+        /**
+         * @method handleClickRequestTrialLink
+         * @param {Event} event
+         */
+        handleClickRequestTrialLink: function(event) {
+            event.preventDefault();
+            var section = this.$("#section-request");
+            $('html, body').animate({scrollTop: section.offset().top}, 1000);
         }
     });
 
