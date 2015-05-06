@@ -118,44 +118,7 @@ gelato-page[data-name="institutions"] {
   }
 
   #section-top-carousel {
-    margin-top: -60px;
-    a {
-      color: #fafafa; //TODO: check color
-      font-size: 24px;
-      font-weight: 300;
-      margin-left: 100px;
-    }
-    button {
-      color: #fafafa; //TODO: check color
-      font-size: 24px;
-      font-weight: 300;
-      padding: 15px 30px;
-    }
-    .carousel-caption {
-      left: 0;
-      right: 0;
-      text-align: center;
-      text-shadow: none;
-    }
-    .carousel-header {
-      color: #363b40;
-      font-family: $font-slab;
-      font-size: 48px;
-      font-weight: 400;
-      left: 0;
-      padding-top: 20px;
-      padding-bottom: 20px;
-      position: absolute;
-      right: 0;
-      text-align: center;
-      text-shadow: none;
-      top: 100px;
-      z-index: 10;
-    }
-    .carousel-image {
-      min-width: 100%;
-      width: 100%;
-    }
+    .carousel-overlay { bottom: 250px; }
   }
 
 }
