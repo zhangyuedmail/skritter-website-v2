@@ -44,14 +44,14 @@ define([
         handleClickLoginSubmit: function(event) {
             event.preventDefault();
             var self = this;
-            var fieldUsername = this.$('#field-username').val();
-            var fieldPassword = this.$('#field-password').val();
+            var fieldUsername = this.$('#login-username').val();
+            var fieldPassword = this.$('#login-password').val();
             if (!fieldUsername) {
-                this.$('.response-message').text('Username is required.');
+                this.$('#response-message').text('Username is required.');
                 return;
             }
             if (!fieldPassword) {
-                this.$('.response-message').text('Password is required.');
+                this.$('#response-message').text('Password is required.');
                 return;
             }
             this.disableForm('#login-form');
@@ -60,7 +60,7 @@ define([
                 app.dialog.once('hidden', app.reload);
                 app.dialog.hide();
             }, function(error) {
-                self.$('.response-message').text(JSON.stringify(error));
+                self.$('#response-message').text(JSON.stringify(error));
                 self.enableForm('#login-form');
                 app.dialog.hide();
             }, function(status) {

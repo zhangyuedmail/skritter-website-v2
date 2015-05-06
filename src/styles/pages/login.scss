@@ -1,8 +1,72 @@
 gelato-page[data-name="login"] {
 
-  gelato-content {
-    margin: 0 auto;
+  background: $background-characters repeat $white1;
+  height: 100%;
+  margin-top: -50px;
+  padding-top: 50px;
+
+  footer {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  #section-main {
+    margin: 100px auto 0 auto;
     max-width: 500px;
+    padding-left: 30px;
+    padding-right: 30px;
+    button {
+      height: 50px;
+      margin-top: 10px;
+      width: 184px;
+    }
+    input,
+    select {
+      border-radius: 0;
+      color: #8c9196;
+      float: right;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      height: 50px;
+      width: 250px;
+    }
+    textarea {
+      border: 1px solid #cccccc;
+      color: #8c9196;
+      float: right;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-right: 15px;
+      width: 250px;
+    }
+    label {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      text-align: left;
+    }
+    .friendly-text {
+      color: #666c73;
+      font-family: $font-muli;
+      font-size: 14px;
+      font-weight: 300;
+      margin-top: 10px;
+      text-align: left;
+    }
+  }
+
+  #section-title {
+    color: #666c73;
+    font-family: $font-slab;
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 60px;
+    margin-top: 60px;
   }
 
 }

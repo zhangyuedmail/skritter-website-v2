@@ -1,32 +1,74 @@
 <gelato-page data-name="login">
 
-    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
+    <gelato-navbar class="fixed-top">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="left">
+                    <div class="item item-header" data-url="#">
+                        <i class="fa fa-chevron-left"></i>
+                        &nbsp;
+                        Login
+                    </div>
+                </div>
             </div>
         </div>
     </gelato-navbar>
 
-    <gelato-content class="container">
-        <div class="content-block">
-            <div class="response-message"></div>
-            <div class="login-form">
-                <form>
-                    <div class="form-group">
-                        <label for="field-username">Username</label>
-                        <input id="field-username" type="text" class="form-control" placeholder="" autofocus>
-                    </div>
-                    <div class="form-group">
-                        <label for="field-password">Password</label>
-                        <input id="field-password" type="password" class="form-control" placeholder="">
-                    </div>
-                    <div class="text-right">
-                        <button id="login-submit" type="submit" class="btn btn-primary">Log in</button>
-                    </div>
-                </form>
+    <gelato-content>
+        <div id="section-main" class="content-block">
+            <div class="text-center">
+                <div id="response-message"></div>
             </div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="login-username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="login-username" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="login-password" placeholder="">
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button id="login-submit" type="submit" class="btn btn-success">Log In</button>
+                </div>
+            </form>
         </div>
+        <footer>
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-xs-4">
+                        <div class="header">Company</div>
+                        <div class="list">
+                            <a href="#" data-url="about">About us</a>
+                            <a href="#" data-url="legal">Legal</a>
+                            <a href="#" data-url="contact">Contact</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="header">Community</div>
+                        <div class="list">
+                            <a href="#" data-url="blog">Blog</a>
+                            <a href="#" data-url="forum">Forum</a>
+                            <i class="fa fa-facebook-square"></i>
+                            <i class="fa fa-twitter"></i>
+                            <i class="fa fa-google-plus"></i>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="header">Help</div>
+                        <div class="list">
+                            <a href="#" data-url="resources">Resources</a>
+                            <a href="#" data-url="institutions">Schools</a>
+                            <a href="#" data-url="faqs">FAQs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </gelato-content>
 
 </gelato-page>
