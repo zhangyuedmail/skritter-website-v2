@@ -1,10 +1,32 @@
 gelato-page[data-name="features"] {
 
-  background-color: $white1; //TODO: check color
+  background: $background-characters repeat $white1;
+  padding-top: 0;
+
+  section {
+    background-color: #fbfafc;
+    &.striped { background-color: #262b30; }
+  }
 
   #section-banner {
-    margin-top: 60px;
+    padding-top: 60px;
     img { width: 100%; }
+  }
+
+  #section-extra-features {
+    .block { padding-bottom: 60px; }
+    .media-heading {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 18px;
+      font-weight: 300;
+    }
+    .media-subtext {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 14px;
+      font-weight: 300;
+    }
   }
 
   #section-features {
@@ -32,13 +54,13 @@ gelato-page[data-name="features"] {
   }
 
   #section-start {
-    margin: 60px auto 0 auto;
-    max-width: 600px;
+    background: none;
     a {
       color: #838f98; //TODO: check color
+      display: block;
       font-size: 24px;
       font-weight: 300;
-      margin-left: 100px;
+      margin-top: 20px;
     }
     button {
       color: #fafafa; //TODO: check color
@@ -47,13 +69,16 @@ gelato-page[data-name="features"] {
       margin-bottom: 65px;
       padding: 15px 30px;
     }
+    .container {
+      padding-bottom: 75px;
+      padding-top: 75px;
+    }
     .title {
       color: #838f98;
       font-family: $font-slab;
       font-size: 36px;
       font-weight: 400;
-      margin-bottom: 65px;
-      margin-top: 75px;
+      margin-bottom: 150px;
     }
   }
 
