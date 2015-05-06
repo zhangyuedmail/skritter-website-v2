@@ -82,6 +82,24 @@ gelato-page[data-name="features"] {
     }
   }
 
+  #section-start-top {
+    a {
+      color: #838f98; //TODO: check color
+      display: block;
+      font-size: 24px;
+      font-weight: 300;
+      margin-top: 20px;
+    }
+    button {
+      color: #fafafa; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 65px;
+      padding: 15px 30px;
+    }
+    .container { padding-top: 75px; }
+  }
+
   #section-header {
     margin-top: 60px;
     .header {
