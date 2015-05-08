@@ -3,6 +3,7 @@
  * @class Libraries
  */
 define([
+    'bootstrap.datetimepicker',
     'chart',
     'createjs.easel',
     'createjs.tween',

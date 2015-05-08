@@ -6,6 +6,7 @@ gelato.addFonts({
 });
 
 gelato.addPaths({
+    'bootstrap.datetimepicker': 'libraries/bootstrap.datetimepicker-4.7.14.min',
     'chart': 'libraries/chart-1.0.2.min',
     'createjs.easel': 'libraries/createjs.easel-NEXT.min',
     'createjs.tween': 'libraries/createjs.tween-NEXT.min',
