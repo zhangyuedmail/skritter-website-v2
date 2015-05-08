@@ -48,7 +48,7 @@ define([
             event.preventDefault();
             var section = this.$("#section-request");
             $('html, body').animate({scrollTop: section.offset().top}, 1000);
-            this.$('#institution-request-type [value="request-purchase"]').prop('checked', 'checked');
+            this.$('#institution-request-type [value="purchase"]').prop('checked', 'checked');
         },
         /**
          * @method handleClickRequestSubmit
@@ -100,7 +100,7 @@ define([
             event.preventDefault();
             var section = this.$("#section-request");
             $('html, body').animate({scrollTop: section.offset().top}, 1000);
-            this.$('#institution-request-type [value="request-trial"]').prop('checked', 'checked');
+            this.$('#institution-request-type [value="trial"]').prop('checked', 'checked');
         }
     });
 
