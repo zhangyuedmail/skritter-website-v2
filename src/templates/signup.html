@@ -22,8 +22,8 @@
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div id="main-block" class="content-block">
+        <div id="section-main" class="container">
+            <div class="content-block">
                 <div class="row">
                     <div id="section-form" class="col-md-7">
                         <form class="form-horizontal">
@@ -57,10 +57,10 @@
                                 <label for="signup-plan" class="col-sm-5 control-label">Plan</label>
                                 <div class="col-sm-7">
                                     <select id="signup-plan" class="form-control" name="signup-plan">
-                                        <option value="1-month">$14.99 / 1 month</option>
-                                        <option value="6-month">$59.99 / 6 month</option>
-                                        <option value="12-month">$99.99 / 1 year</option>
-                                        <option value="24-month">$179.99 / 2 year</option>
+                                        <option value="1-month">$14.99 / month</option>
+                                        <option value="6-month">$59.99 / 6 months ($10.00/month)</option>
+                                        <option value="12-month">$99.99 / 12 months  ($8.33/month)</option>
+                                        <option value="24-month">$179.99 / 24 months ($7.50/month)</option>
                                     </select>
                                 </div>
                             </div>
@@ -73,13 +73,13 @@
                             <div class="form-group">
                                 <label for="signup-payment-method" class="col-sm-5 control-label">Payment method</label>
                                 <div id="signup-payment-method" class="col-sm-7">
-                                    <label class="radio-inline">
+                                    <label id="credit-radio" class="radio-inline">
                                         <input type="radio" name="payment-method" id="method-credit" value="credit">
                                         Credit card
                                     </label>
-                                    <label class="radio-inline">
+                                    <label id="paypal-radio" class="radio-inline">
                                         <input type="radio" name="payment-method" id="method-paypal" value="paypal">
-                                        PayPal
+                                        <img src="assets/images/signup/paypal_logo.gif" alt="">
                                     </label>
                                     <div id="accepted-payments">
                                         <img src="assets/images/signup/credit_cards.png" alt="">

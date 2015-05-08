@@ -4,10 +4,16 @@ gelato-page[data-name="signup"] {
 
   .content-block {
     background-color: $white3; //TODO: check color
-    margin: 60px auto;
+    //margin: 60px auto;
+    margin-left: auto;
+    margin-right: auto;
     max-width: 992px;
     padding: 0 15px;
   }
+
+  #credit-radio { margin-top: -15px; }
+
+  #paypal-radio img { margin-top: -10px; }
 
   #section-form {
     background-color: #ffffff; //TODO: check color
@@ -140,11 +146,17 @@ gelato-page[data-name="signup"] {
     }
   }
 
+  #section-main {
+    margin-top: 60px;
+  }
+
   #section-policy {
     color: #b2b5b9;
     font-family: $font-muli;
     font-size: 14px;
     font-weight: 300;
+    margin-bottom: 60px;
+    margin-top: 30px;
     strong {
       color: #666c73;
       font-weight: 400;
