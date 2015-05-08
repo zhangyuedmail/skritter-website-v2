@@ -7,6 +7,8 @@ gelato-page[data-name="institutions"] {
     &.striped { background-color: #262b30; }
   }
 
+  .bootstrap-datetimepicker-widget table { color: $grey5; }
+
   #section-features {
     .container {
       padding-bottom: 60px;
@@ -91,7 +93,7 @@ gelato-page[data-name="institutions"] {
   #section-request {
     background: $background-characters repeat #262b30;
     form {
-      max-width: 400px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -115,6 +117,7 @@ gelato-page[data-name="institutions"] {
       margin-bottom: 36px;
       margin-top: 75px;
     }
+    #institution-request-type { margin-top: 45px; }
   }
 
   #section-top-carousel {

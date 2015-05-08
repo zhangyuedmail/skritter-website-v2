@@ -28,6 +28,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.$('#institution-when').datetimepicker({format: 'YYYY-MM-DD'});
             return this;
         },
         /**

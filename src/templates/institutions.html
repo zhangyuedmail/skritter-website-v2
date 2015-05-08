@@ -108,44 +108,85 @@
         <section id="section-request" class="striped">
             <div class="container text-center">
                 <h1 class="title">Request an obligation-free trial</h1>
-                <form>
-                    <div class="row">
-                        <div class="col-xd-12">
-                            <div class="form-group">
-                                <label for="request-name">Name</label>
-                                <input type="text" class="form-control" id="request-name">
+                <form id="movieForm">
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">School name</label>
+                                <input type="text" class="form-control" name="director" />
                             </div>
-                            <div class="form-group">
-                                <label for="request-email">Email address</label>
-                                <input type="text" class="form-control" id="request-email">
-                            </div>
-                            <div class="form-group">
-                                <label for="request-phone">Phone number</label>
-                                <input type="text" class="form-control" id="request-phone">
-                            </div>
-                            <div class="form-group">
-                                <label for="request-school-name">School name</label>
-                                <input type="text" class="form-control" id="request-school-name">
-                            </div>
-                            <div class="form-group">
-                                <label for="request-school-address">School address</label>
-                                <input type="text" class="form-control" id="request-school-address">
-                            </div>
-                            <div class="form-group">
-                                <label for="request-school-type">School type</label>
-                                <input type="text" class="form-control" id="request-school-type">
-                            </div>
-                            <div class="form-group">
-                                <label for="request-when">When</label>
-                                <input type="text" class="form-control" id="request-when">
-                            </div>
-                            <div class="form-group">
-                                <label for="request-quantity">Number of students</label>
-                                <input type="text" class="form-control" id="request-quantity">
+                            <div class="col-xs-8">
+                                <label class="control-label">School address</label>
+                                <input type="text" class="form-control" name="writer" />
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Send request</button>
                     </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">School type</label>
+                                <select class="form-control" name="genre">
+                                    <option value="college">College / University</option>
+                                    <option value="primary">Primary School</option>
+                                    <option value="secondary">Secondary School</option>
+                                    <option value="district">School District</option>
+                                    <option value="business">Business</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Number of students</label>
+                                <select class="form-control" name="genre">
+                                    <option value="1-30">1-30 students</option>
+                                    <option value="31-60">31-60 students</option>
+                                    <option value="61-150">61-150 students</option>
+                                    <option value="151-300">151-300 students</option>
+                                    <option value="301+">301+ students</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="control-label">When</label>
+                                <div class='input-group date' id='institution-when'>
+                                    <input type='text' class="form-control" />
+                                    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Contact name</label>
+                                <input type="text" class="form-control" name="title" />
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="control-label">Contact email</label>
+                                <input type="email" class="form-control" name="title" />
+                            </div>
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Language</label>
+                                <select class="form-control" name="genre">
+                                    <option value="chinese">Chinese</option>
+                                    <option value="japanese">Japanese</option>
+                                    <option value="both">Both</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Message (optional)</label>
+                        <textarea class="form-control" name="review" rows="8"></textarea>
+                    </div>
+                    <div id="institution-request-type" class="form-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="request-type" value="request-trial" checked /> Request a trial
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="request-type" value="purchase-license" /> Purchase license
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-success">Request</button>
                 </form>
             </div>
         </section>
