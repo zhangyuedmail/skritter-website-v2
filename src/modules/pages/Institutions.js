@@ -28,7 +28,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
-            this.$('#institution-when').datetimepicker({format: 'YYYY-MM-DD'});
+            this.$('#institution-datepicker').datetimepicker({format: 'YYYY-MM-DD'});
             return this;
         },
         /**
@@ -36,16 +36,28 @@ define([
          * @type {Object}
          */
         events: {
-            'vclick #request-trial-link': 'handleClickRequestTrialLink'
+            'vclick .request-purchase': 'handleClickRequestPurchase',
+            'vclick .request-trial': 'handleClickRequestTrial'
         },
         /**
-         * @method handleClickRequestTrialLink
+         * @method handleClickRequestPurchase
          * @param {Event} event
          */
-        handleClickRequestTrialLink: function(event) {
+        handleClickRequestPurchase: function(event) {
             event.preventDefault();
             var section = this.$("#section-request");
             $('html, body').animate({scrollTop: section.offset().top}, 1000);
+            this.$('#institution-request-type [value="request-purchase"]').prop('checked', 'checked');
+        },
+        /**
+         * @method handleClickRequestTrial
+         * @param {Event} event
+         */
+        handleClickRequestTrial: function(event) {
+            event.preventDefault();
+            var section = this.$("#section-request");
+            $('html, body').animate({scrollTop: section.offset().top}, 1000);
+            this.$('#institution-request-type [value="request-trial"]').prop('checked', 'checked');
         }
     });
 
