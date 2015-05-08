@@ -20,6 +20,7 @@ define([
     'modules/pages/Login',
     'modules/pages/Pricing',
     'modules/pages/Scratchpad',
+    'modules/pages/Signup',
     'modules/pages/StatsSummary',
     'modules/pages/StatsTimeline',
     'modules/pages/Study',
@@ -43,6 +44,7 @@ define([
     PageLogin,
     PagePricing,
     PageScratchpad,
+    PageSignup,
     PageStatsSummary,
     PageStatsTimeline,
     PageStudy,
@@ -85,6 +87,7 @@ define([
             'settings': 'showGeneralSettings',
             'settings/general': 'showGeneralSettings',
             'settings/study': 'showStudySettings',
+            'signup': 'showSignup',
             'stats': 'showStatsSummary',
             'stats/summary': 'showStatsSummary',
             'stats/timeline': 'showStatsTimeline',
@@ -217,6 +220,13 @@ define([
         showScratchpad: function(writing) {
             this.page = new PageScratchpad();
             this.page.render().load(writing);
+        },
+        /**
+         * @method showSignup
+         */
+        showSignup: function() {
+            this.page = new PageSignup();
+            this.page.render();
         },
         /**
          * @method showStatsSummary
