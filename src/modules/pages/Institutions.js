@@ -4,8 +4,9 @@
  */
 define([
     'require.text!templates/institutions.html',
-    'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+    'core/modules/GelatoPage',
+    'modules/components/Footer'
+], function(Template, GelatoPage, Footer) {
 
     /**
      * @class PageInstitutions
@@ -16,7 +17,9 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function(options) {},
+        initialize: function() {
+            this.footer = new Footer();
+        },
         /**
          * @property title
          * @type String
@@ -28,6 +31,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.footer.setElement(this.$('#footer-container')).render();
             this.$('#institution-datepicker').datetimepicker({format: 'YYYY-MM-DD'});
             return this;
         },
@@ -101,6 +105,14 @@ define([
             var section = this.$("#section-request");
             $('html, body').animate({scrollTop: section.offset().top}, 1000);
             this.$('#institution-request-type [value="trial"]').prop('checked', 'checked');
+        },
+        /**
+         * @method remove
+         * @returns {PageHome}
+         */
+        remove: function() {
+            this.footer.remove();
+            return GelatoPage.prototype.remove.call(this);
         }
     });
 

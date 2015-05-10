@@ -4,8 +4,9 @@
  */
 define([
     'require.text!templates/signup.html',
-    'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+    'core/modules/GelatoPage',
+    'modules/components/Footer'
+], function(Template, GelatoPage, Footer) {
 
     /**
      * @class PageSignup
@@ -16,7 +17,9 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function(options) {},
+        initialize: function() {
+            this.footer = new Footer();
+        },
         /**
          * @property title
          * @type String
@@ -28,6 +31,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.footer.setElement(this.$('#footer-container')).render();
             this.$('#trial-expire-date').text(Moment().add(7, 'days').format('MMMM Do YYYY'));
             return this;
         },
@@ -44,6 +48,14 @@ define([
          */
         handleClickLoginSubmit: function(event) {
             event.preventDefault();
+        },
+        /**
+         * @method remove
+         * @returns {PageHome}
+         */
+        remove: function() {
+            this.footer.remove();
+            return GelatoPage.prototype.remove.call(this);
         }
     });
 

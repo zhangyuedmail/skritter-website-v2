@@ -4,8 +4,9 @@
  */
 define([
     'require.text!templates/contact.html',
-    'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+    'core/modules/GelatoPage',
+    'modules/components/Footer'
+], function(Template, GelatoPage, Footer) {
 
     /**
      * @class PageContact
@@ -16,7 +17,9 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function(options) {},
+        initialize: function() {
+            this.footer = new Footer();
+        },
         /**
          * @property title
          * @type String
@@ -28,6 +31,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.footer.setElement(this.$('#footer-container')).render();
             return this;
         },
         /**
@@ -75,6 +79,14 @@ define([
                 self.$('#status-message').text(JSON.stringify(error));
                 self.enableForm('form');
             });
+        },
+        /**
+         * @method remove
+         * @returns {PageHome}
+         */
+        remove: function() {
+            this.footer.remove();
+            return GelatoPage.prototype.remove.call(this);
         }
     });
 

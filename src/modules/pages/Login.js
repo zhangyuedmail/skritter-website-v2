@@ -4,8 +4,9 @@
  */
 define([
     'require.text!templates/login.html',
-    'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+    'core/modules/GelatoPage',
+    'modules/components/Footer'
+], function(Template, GelatoPage, Footer) {
 
     /**
      * @class PageLogin
@@ -16,7 +17,9 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function(options) {},
+        initialize: function() {
+            this.footer = new Footer();
+        },
         /**
          * @property title
          * @type String
@@ -28,6 +31,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
+            this.footer.setElement(this.$('#footer-container')).render();
             return this;
         },
         /**
@@ -66,6 +70,14 @@ define([
             }, function(status) {
                 self.$('.loaded-items').text(status);
             });
+        },
+        /**
+         * @method remove
+         * @returns {PageHome}
+         */
+        remove: function() {
+            this.footer.remove();
+            return GelatoPage.prototype.remove.call(this);
         }
     });
 
