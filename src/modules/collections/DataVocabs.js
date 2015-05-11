@@ -99,7 +99,7 @@ define([
             var vocabId = app.fn.mapper.toBase(writing);
             Async.waterfall([
                 function(callback) {
-                    app.user.storage.get('vocabs', vocabId, function(result) {
+                    app.user.data.storage.get('vocabs', vocabId, function(result) {
                         callback(null, result);
                     }, function() {
                         callback();

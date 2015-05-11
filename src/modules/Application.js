@@ -49,6 +49,7 @@ define([
             this.router = new Router();
             this.user = new User();
             this.user.load(function() {
+                console.log('USER:', self.user.id);
                 self.router.start();
             }, function(error) {
                 console.error('USER LOAD ERROR:', error);

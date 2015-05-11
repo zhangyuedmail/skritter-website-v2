@@ -28,9 +28,9 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
-            Async.waterfall([
+            var vocablistIds = [];
+            Async.series([
                 function(callback) {
-                    var ids = [];
                     (function next(cursor) {
                         app.api.fetchVocabLists({
                             cursor: cursor,
@@ -38,33 +38,32 @@ define([
                             lang: app.user.getLanguageCode(),
                             sort: 'studying'
                         }, function(result) {
-                            var pluckedIds = _.pluck(result.VocabLists, 'id');
-                            ids = ids.concat(pluckedIds);
+                            vocablistIds = _.pluck(result.VocabLists, 'id').concat(vocablistIds);
                             if (result.cursor) {
                                 next(result.cursor);
                             } else {
-                                callback(null, ids);
+                                callback();
                             }
                         }, function(error) {
                             callback(error);
                         });
                     })();
                 },
-                function(ids, callback) {
-                    self.fetchById(ids, function(result) {
-                        callback(null, result);
+                function(callback) {
+                    self.fetchById(vocablistIds, function() {
+                        callback();
                     }, function(error) {
                         callback(error);
                     });
                 }
-            ], function(error, result) {
+            ], function(error) {
                 if (error) {
                     if (typeof callbackError === 'function') {
                         callbackError(error);
                     }
                 } else {
                     if (typeof callbackSuccess === 'function') {
-                        callbackSuccess(result);
+                        callbackSuccess();
                     }
                 }
             });
@@ -79,10 +78,9 @@ define([
             var self = this;
             app.api.fetchVocabList(id, null, function(result) {
                 app.user.data.insert({VocabLists: result}, function() {
-                    result = self.add(result, {merge: true, silent: true});
-                    self.trigger('add', self);
+                    self.add(result, {merge: true, silent: true});
                     if (typeof callbackSuccess === 'function') {
-                        callbackSuccess(result);
+                        callbackSuccess();
                     }
                 });
             }, function(error) {
@@ -136,7 +134,7 @@ define([
          * @returns {Array}
          */
         getFinished: function() {
-            return this.filter(function(list) {
+            return _.filter(this.models, function(list) {
                 return list.get('studyingMode') === 'finished';
             });
         },
@@ -145,7 +143,7 @@ define([
          * @returns {Array}
          */
         getNotStudying: function() {
-            return this.filter(function(list) {
+            return _.filter(this.models, function(list) {
                 return list.get('studyingMode') === 'not studying';
             });
         },
@@ -154,8 +152,8 @@ define([
          * @returns {Array}
          */
         getOfficial: function() {
-            return this.filter(function(list) {
-                return list.get('sort') === 'official';
+            return _.filter(this.models, function(list) {
+                return list.get('studyingMode') === 'official';
             });
         },
         /**
@@ -163,7 +161,7 @@ define([
          * @returns {Array}
          */
         getReviewing: function() {
-            return this.filter(function(list) {
+            return _.filter(this.models, function(list) {
                 return list.get('studyingMode') === 'reviewing';
             });
         },
@@ -175,25 +173,11 @@ define([
          */
         load: function(callbackSuccess, callbackError) {
             var self = this;
-            Async.series([
-                function(callback) {
-                    app.user.storage.all('vocablists', function(result) {
-                        self.add(result, {silent: true});
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(callback) {
-                    self.fetch();
-                    callback();
-                }
-            ], function(error) {
-                if (error) {
-                    callbackError(error);
-                } else {
-                    callbackSuccess();
-                }
+            app.user.data.storage.all('vocablists', function(result) {
+                self.add(result, {silent: true});
+                callbackSuccess();
+            }, function(error) {
+                callbackError(error);
             });
             return this;
         }

@@ -5,7 +5,10 @@
 define([
     'core/modules/GelatoCollection',
     'modules/models/DataStat'
-], function(GelatoCollection, DataStat) {
+], function(
+    GelatoCollection,
+    DataStat
+) {
 
     /**
      * @class DataStats
@@ -52,7 +55,7 @@ define([
                         start: Moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.storage.put('stats', result, function() {
+                        app.user.data.storage.put('stats', result, function() {
                             self.add(result, {merge: true});
                             callback();
                         }, function(error) {
@@ -67,7 +70,7 @@ define([
                         start: Moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.storage.put('stats', result, function() {
+                        app.user.data.storage.put('stats', result, function() {
                             self.add(result, {merge: true});
                             callback();
                         }, function(error) {
@@ -82,7 +85,7 @@ define([
                         start: Moment(momentMonthStart).format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.storage.put('stats', result, function() {
+                        app.user.data.storage.put('stats', result, function() {
                             self.add(result, {merge: true});
                             callback();
                         }, function(error) {
@@ -147,25 +150,11 @@ define([
          */
         load: function(callbackSuccess, callbackError) {
             var self = this;
-            Async.series([
-                function(callback) {
-                    app.user.storage.all('stats', function(result) {
-                        self.add(result, {merge: true, silent: true});
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(callback) {
-                    self.fetch();
-                    callback();
-                }
-            ], function(error) {
-                if (error) {
-                    callbackError(error);
-                } else {
-                    callbackSuccess();
-                }
+            app.user.data.storage.all('stats', function(result) {
+                self.add(result, {merge: true, silent: true});
+                callbackSuccess();
+            }, function(error) {
+                callbackError(error);
             });
             return this;
         }

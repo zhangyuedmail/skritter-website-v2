@@ -4,7 +4,9 @@
  */
 define([
     'core/modules/GelatoModel'
-], function(GelatoModel) {
+], function(
+    GelatoModel
+) {
 
     /**
      * @class UserSettings
@@ -34,7 +36,7 @@ define([
          * @returns {UserSettings}
          */
         cache: function() {
-            localStorage.setItem(app.user.getCachePath('settings', false), JSON.stringify(this.toJSON()));
+            localStorage.setItem(app.user.getDataPath('settings', false), JSON.stringify(this.toJSON()));
             return this;
         },
         /**
@@ -45,7 +47,7 @@ define([
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.fetchUsers(app.user.id, null, function(data) {
-                self.clear().set(data);
+                self.set(data, {merge: true});
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
@@ -120,35 +122,13 @@ define([
         },
         /**
          * @method load
-         * @param {Function} [callbackSuccess]
-         * @param {Function} [callbackError]
          * @returns {UserSettings}
          */
-        load: function(callbackSuccess, callbackError) {
-            var self = this;
-            Async.series([
-                function(callback) {
-                    var cachedItem = localStorage.getItem(app.user.getCachePath('settings', false));
-                    if (cachedItem) {
-                        self.set(JSON.parse(cachedItem), {silent: true});
-                    }
-                    callback();
-                },
-                function(callback) {
-                    self.fetch();
-                    callback();
-                }
-            ], function(error) {
-                if (error) {
-                    if (typeof callbackError === 'function') {
-                        callbackError(error);
-                    }
-                } else {
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess();
-                    }
-                }
-            });
+        load: function() {
+            var settings = localStorage.getItem(app.user.getDataPath('settings', false));
+            if (settings) {
+                this.set(JSON.parse(settings), {silent: true});
+            }
             return this;
         },
         /**
@@ -160,7 +140,7 @@ define([
         save: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.putUser(this.toJSON(), function(result) {
-                self.set(result, {silent: true});
+                self.set(result, {merge: true});
                 self.cache();
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess(self);

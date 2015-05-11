@@ -72,7 +72,7 @@ define([
                         callbackError(error);
                     });
                 }, function(callback) {
-                    app.user.storage.put('vocablists', self.toJSON(), function() {
+                    app.user.data.storage.put('vocablists', self.toJSON(), function() {
                         callback();
                     }, function(error) {
                         callbackError(error);

@@ -105,7 +105,7 @@ define([
             Async.series([
                 //vocabs
                 function(callback) {
-                    app.user.storage.get('vocabs', vocabIds, function(result) {
+                    app.user.data.storage.get('vocabs', vocabIds, function(result) {
                         self.vocabs = app.user.data.vocabs.add(result, options);
                         callback();
                     }, function() {
@@ -138,7 +138,7 @@ define([
                 },
                 //strokes
                 function(callback) {
-                    app.user.storage.get('strokes', self.getCharacters(), function(result) {
+                    app.user.data.storage.get('strokes', self.getCharacters(), function(result) {
                         self.strokes = app.user.data.strokes.add(result, options);
                         callback();
                     }, function() {
@@ -147,7 +147,7 @@ define([
                 },
                 //decomps
                 function(callback) {
-                    app.user.storage.get('decomps', self.getCharacters(), function(result) {
+                    app.user.data.storage.get('decomps', self.getCharacters(), function(result) {
                         self.decomps = app.user.data.decomps.add(result, options);
                         callback();
                     }, function() {

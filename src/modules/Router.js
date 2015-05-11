@@ -80,7 +80,6 @@ define([
             'lists/create': 'showListCreate',
             'lists/queue': 'showListQueue',
             'login': 'showLogin',
-            'logout': 'handleLogout',
             'pricing': 'showPricing',
             'scratchpad': 'showScratchpad',
             'scratchpad/:writing': 'showScratchpad',
@@ -95,7 +94,7 @@ define([
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
             'words': 'showWords',
-            '*route': 'showHome'
+            '*route': 'showDefault'
         },
         /**
          * @method showAbout
@@ -115,8 +114,24 @@ define([
          * @method showDashboard
          */
         showDashboard: function() {
-            this.page = new PageDashboard();
-            this.page.render();
+            if (app.user.isLoggedIn()) {
+                this.page = new PageDashboard();
+                this.page.render();
+            } else {
+                this.showDefault();
+            }
+        },
+        /**
+         * @method showDefault
+         */
+        showDefault: function() {
+            if (app.user.isLoggedIn()) {
+                this.navigate('dashboard', {trigger: false});
+                this.showDashboard();
+            } else {
+                this.navigate('', {trigger: false});
+                this.showHome();
+            }
         },
         /**
          * @method showFeatures
@@ -137,14 +152,8 @@ define([
          * @method showHome
          */
         showHome: function() {
-            if (app.user.isAuthenticated()) {
-                this.navigate('dashboard', {trigger: false});
-                this.showDashboard();
-            } else {
-                this.navigate('', {trigger: false});
-                this.page = new PageHome();
-                this.page.render();
-            }
+            this.page = new PageHome();
+            this.page.render();
         },
         /**
          * @method showInstitutions

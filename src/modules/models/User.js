@@ -1,16 +1,20 @@
 /**
  * @module Application
- * @module Application
  * @submodule Models
  */
 define([
     'core/modules/GelatoModel',
-    'core/modules/GelatoStorage',
-    'modules/models/UserAuth',
+    'modules/models/UserAuthentication',
     'modules/models/UserData',
     'modules/models/UserSettings',
     'modules/models/UserSubscription'
-], function(GelatoModel, GelatoStorage, UserAuth, UserData, UserSettings, UserSubscription) {
+], function(
+    GelatoModel,
+    UserAuthentication,
+    UserData,
+    UserSettings,
+    UserSubscription
+) {
 
     /**
      * @class User
@@ -22,10 +26,9 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.auth = new UserAuth();
+            this.authentication = new UserAuthentication();
             this.data = new UserData();
             this.settings = new UserSettings();
-            this.storage = new GelatoStorage();
             this.subscription = new UserSubscription();
         },
         /**
@@ -34,54 +37,13 @@ define([
          */
         idAttribute: 'id',
         /**
-         * @property defaults
-         * @type Object
-         */
-        defaults: {},
-        /**
-         * TODO: check if guest token is still valid
-         * @method authenticateGuest
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         */
-        authenticateGuest: function(callbackSuccess, callbackError) {
-            var self = this;
-            if (this.isGuest()) {
-                this.auth.load(function() {
-                    callbackSuccess();
-                }, function(error) {
-                    callbackError(error);
-                });
-            } else {
-                app.api.authenticateGuest(function(data) {
-                    self.set('id', 'guest');
-                    self.auth.set(data);
-                    localStorage.setItem('_active', 'guest');
-                }, function(error) {
-                    callbackError(error);
-                });
-            }
-        },
-        /**
-         * @method clearGuest
-         * @returns {User}
-         */
-        clearGuest: function() {
-            localStorage.removeItem('guest-auth');
-            localStorage.removeItem('guest-settings');
-            return this;
-        },
-        /**
-         * @method getCachePath
+         * @method getDataPath
          * @param {String} path
          * @param {Boolean} [includeLanguageCode]
          * @returns {String}
          */
-        getCachePath: function(path, includeLanguageCode) {
-            if (includeLanguageCode) {
-                return this.id + '-' + this.getLanguageCode() + '-' + path;
-            }
-            return this.id + '-' + path;
+        getDataPath: function(path, includeLanguageCode) {
+            return includeLanguageCode ? this.id + '-' + this.getLanguageCode() + '-' + path : this.id + '-' + path;
         },
         /**
          * @method getDatabaseName
@@ -98,11 +60,11 @@ define([
             return this.settings.get('targetLang');
         },
         /**
-         * @method isAuthenticated
+         * @method isLoggedIn
          * @returns {Boolean}
          */
-        isAuthenticated: function() {
-            return this.id && this.id !== 'guest';
+        isLoggedIn: function() {
+            return this.authentication.has('user_id');
         },
         /**
          * @method isChinese
@@ -110,13 +72,6 @@ define([
          */
         isChinese: function() {
             return this.getLanguageCode() === 'zh';
-        },
-        /**
-         * @method isGuest
-         * @returns {Boolean}
-         */
-        isGuest: function() {
-            return this.id === 'guest';
         },
         /**
          * @method isJapanese
@@ -132,64 +87,21 @@ define([
          */
         load: function(callbackSuccess, callbackError) {
             var self = this;
-            this.set('id', localStorage.getItem('_active'), {silent: true});
+            this.set('id', app.getSetting('user') || 'guest');
+            this.authentication.load();
+            this.settings.load();
+            this.subscription.load();
             Async.series([
-                //check user authentication status
                 function(callback) {
-                    if (self.isAuthenticated()) {
-                        console.log('USER:', self.id);
-                        self.clearGuest();
-                        callback();
-                    } else {
-                        self.authenticateGuest(function() {
-                            callbackSuccess();
+                    if (self.isLoggedIn()) {
+                        self.data.load(function() {
+                            callback();
                         }, function(error) {
                             callback(error);
                         });
+                    } else {
+                        callback();
                     }
-                },
-                //load user authorization
-                function(callback) {
-                    self.auth.load(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //load user settings
-                function(callback) {
-                    self.settings.load(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //load user subscription
-                function(callback) {
-                    self.subscription.load(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //open database for usage
-                function(callback) {
-                    self.loadStorage(callback);
-                },
-                //load user data
-                function(callback) {
-                    self.data.load(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //initialize missing item fetch
-                function(callback) {
-                    if (self.data.items.hasMissing()) {
-                        self.data.items.fetchMissing();
-                    }
-                    callback();
                 }
             ], function(error) {
                 if (error) {
@@ -205,49 +117,31 @@ define([
          * @param {String} password
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
-         * @param {Function} [callbackStatus]
          */
-        login: function(username, password, callbackSuccess, callbackError, callbackStatus) {
+        login: function(username, password, callbackSuccess, callbackError) {
             var self = this;
             Async.series([
-                //authenticate user based on credentials
                 function(callback) {
-                    app.api.authenticateUser(username, password, function(data) {
-                        self.set('id', data.user_id);
-                        self.auth.set(data);
+                    app.api.authenticateUser(username, password, function(result) {
+                        self.set('id', result.user_id);
+                        self.authentication.set(result, {merge: true});
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
-                //fetch user settings
                 function(callback) {
-                    self.settings.fetch(function() {
+                    app.user.settings.fetch(function() {
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
-                //fetch user subscription
                 function(callback) {
-                    self.subscription.fetch(function() {
+                    app.user.subscription.fetch(function() {
                         callback();
                     }, function(error) {
                         callback(error);
-                    });
-                },
-                //open database for usage
-                function(callback) {
-                    self.loadStorage(callback);
-                },
-                //fetch item ids to be downloaded
-                function(callback) {
-                    self.data.items.fetchIds(function() {
-                        callback();
-                    }, function(status) {
-                        if (typeof callbackStatus === 'function') {
-                            callbackStatus(status);
-                        }
                     });
                 }
             ], function(error) {
@@ -255,53 +149,27 @@ define([
                     console.error('USER LOGIN ERROR:', error);
                     callbackError(error);
                 } else {
-                    localStorage.setItem('_active', self.id);
+                    app.setSetting('user', self.id);
                     callbackSuccess();
                 }
             });
         },
         /**
          * @method logout
-         * @param {Function} [callback]
          */
-        logout: function(callback) {
-            localStorage.removeItem(this.getCachePath('auth', false));
-            localStorage.removeItem(this.getCachePath('ja-data', false));
-            localStorage.removeItem(this.getCachePath('zh-data', false));
-            localStorage.removeItem(this.getCachePath('settings', false));
-            localStorage.removeItem(this.getCachePath('ja-stats', false));
-            localStorage.removeItem(this.getCachePath('zh-stats', false));
-            localStorage.removeItem(this.getCachePath('subscription', false));
-            localStorage.removeItem('_active');
-            this.storage.destroy(function() {
-                if (typeof callback === 'function') {
-                    callback();
-                } else {
-                    app.reload();
-                }
+        logout: function() {
+            this.data.storage.destroy(function() {
+                localStorage.removeItem(app.user.getDataPath('authentication', false));
+                localStorage.removeItem(app.user.getDataPath('ja-data', false));
+                localStorage.removeItem(app.user.getDataPath('zh-data', false));
+                localStorage.removeItem(app.user.getDataPath('settings', false));
+                localStorage.removeItem(app.user.getDataPath('ja-stats', false));
+                localStorage.removeItem(app.user.getDataPath('zh-stats', false));
+                localStorage.removeItem(app.user.getDataPath('subscription', false));
+                app.removeSetting('user');
+                app.reload();
             }, function(error) {
                 console.error('USER LOGOUT ERROR:', error);
-                app.reload();
-            });
-        },
-        /**
-         * @method loadStorage
-         * @param {Function} callback
-         */
-        loadStorage: function(callback) {
-            this.storage.open(this.getDatabaseName(), 1, {
-                decomps: {keyPath: 'writing'},
-                items: {keyPath: 'id', index: [{name: 'next'}]},
-                reviews: {keyPath: 'id'},
-                sentences: {keyPath: 'id'},
-                stats: {keyPath: 'date'},
-                strokes: {keyPath: 'rune'},
-                vocablists: {keyPath: 'id'},
-                vocabs: {keyPath: 'id'}
-            }, function() {
-                callback();
-            }, function(error) {
-                callback(error);
             });
         }
     });
