@@ -39,7 +39,7 @@ define([
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.fetchSubscription(app.user.id, null, function(data) {
-                self.set(data);
+                self.clear().set(data);
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
@@ -59,7 +59,7 @@ define([
             var self = this;
             Async.series([
                 function(callback) {
-                    var cachedItem = localStorage.getItem(app.user.getCachePath('settings', false));
+                    var cachedItem = localStorage.getItem(app.user.getCachePath('subscription', false));
                     if (cachedItem) {
                         self.set(JSON.parse(cachedItem), {silent: true});
                     }

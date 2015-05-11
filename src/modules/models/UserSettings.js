@@ -45,7 +45,7 @@ define([
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
             app.api.fetchUsers(app.user.id, null, function(data) {
-                self.set(data);
+                self.clear().set(data);
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
