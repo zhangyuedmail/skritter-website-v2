@@ -63,6 +63,15 @@ define([
             }
         },
         /**
+         * @method clearGuest
+         * @returns {User}
+         */
+        clearGuest: function() {
+            localStorage.removeItem('guest-auth');
+            localStorage.removeItem('guest-settings');
+            return this;
+        },
+        /**
          * @method getCachePath
          * @param {String} path
          * @param {Boolean} [includeLanguageCode]
@@ -129,6 +138,7 @@ define([
                 function(callback) {
                     if (self.isAuthenticated()) {
                         console.log('USER:', self.id);
+                        self.clearGuest();
                         callback();
                     } else {
                         self.authenticateGuest(function() {
