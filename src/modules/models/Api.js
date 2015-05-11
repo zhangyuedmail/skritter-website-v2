@@ -21,9 +21,11 @@ define([
          * @type Object
          */
         defaults: {
-            client: 'skritterandroid',
-            credentials: 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==',
+            client: 'Web',
             root: 'https://beta.skritter',
+            skritterAndroid: 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==',
+            skritterIOS: 'c2tyaXR0ZXJpb3M6NGZmYjFiZDViYTczMWJhNTc1YWI4OWYzYzY5ODQ0',
+            skritterWeb: 'c2tyaXR0ZXJ3ZWI6YTI2MGVhNWZkZWQyMzE5YWY4MTYwYmI4ZTQwZTdk',
             tld: location.host.indexOf('.cn') > -1 ? '.cn' : '.com',
             version: 0
         },
@@ -439,7 +441,22 @@ define([
          * @returns {String}
          */
         getCredentials: function() {
-            return 'basic ' + this.get('credentials');
+            var credentials = '';
+            switch (gelato.getPlatform()) {
+                case 'Android':
+                    this.set('client', 'skritterandroid');
+                    credentials = this.get('skritterAndroid');
+                    break;
+                case 'iOS':
+                    this.set('client', 'skritterios');
+                    credentials = this.get('skritterIOS');
+                    break;
+                default:
+                    this.set('client', 'skritterweb');
+                    credentials = this.get('skritterWeb');
+
+            }
+            return 'basic ' + credentials;
         },
         /**
          * @method getHeaders
@@ -453,7 +470,7 @@ define([
          * @returns {String}
          */
         getToken: function() {
-            return app.user.auth.get('access_token');
+            return app.user.authentication.get('access_token');
         },
         /**
          * @method getUrl
