@@ -1,1 +1,27 @@
-gelato-component[data-name="prompt-grading"] {}
+gelato-component[data-name="prompt-grading"] {
+
+  margin-top: 25px;
+
+  button {
+    background-color: transparent;
+    border: none;
+    color: #b2b3b4;
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: transparent;
+      border: none;
+    }
+    .grade-text {
+      font-family: $font-slab;
+      font-size: 12px;
+      font-weight: 300;
+    }
+    .grade-value {
+      font-family: $font-slab;
+      font-size: 48px;
+      font-weight: 400;
+    }
+  }
+
+}

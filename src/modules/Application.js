@@ -10,7 +10,15 @@ define([
     'modules/models/MediaPlayer',
     'modules/models/User',
     'modules/utils/Functions'
-], function(GelatoApplication, Router, Strokes, Api, MediaPlayer, User, Functions) {
+], function(
+    GelatoApplication,
+    Router,
+    Strokes,
+    Api,
+    MediaPlayer,
+    User,
+    Functions
+) {
 
     /**
      * @class Application

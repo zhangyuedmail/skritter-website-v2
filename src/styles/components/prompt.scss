@@ -1,8 +1,22 @@
 gelato-component[data-name="prompt"] {
 
-  #canvas-section-center {
-    margin: 0 auto;
-    width: 80%;
+  .content-block .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #panel-left {
+    #panel-left-center {
+      margin: 0 auto;
+      width: 80%;
+    }
+  }
+
+  #prompt-banner-new {
+    display: none;
+    left: 0;
+    position: absolute;
+    top: 0;
   }
 
 }

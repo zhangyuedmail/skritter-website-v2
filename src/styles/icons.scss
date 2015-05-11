@@ -5,78 +5,93 @@
   width: 50px;
 }
 
+/*** MARKETING ***/
 .icon-marketing-android {
   background-image: url('#{$dir-assets}/vectors/marketing-android.svg');
   height: 44px;
   width: 28px;
 }
-
 .icon-marketing-best-value {
   background-image: url('#{$dir-assets}/vectors/marketing-best-value.svg');
   height: 91px;
   width: 91px;
 }
-
 .icon-marketing-book {
   background-image: url('#{$dir-assets}/vectors/marketing-book.svg');
   height: 48px;
   width: 36px;
 }
-
 .icon-marketing-calendar {
   background-image: url('#{$dir-assets}/vectors/marketing-calendar.svg');
 }
-
 .icon-marketing-flashcards {
   background-image: url('#{$dir-assets}/vectors/marketing-flashcards.svg');
   height: 48px;
   width: 48px;
 }
-
 .icon-marketing-iphone {
   background-image: url('#{$dir-assets}/vectors/marketing-iphone.svg');
   height: 44px;
   width: 26px;
 }
-
 .icon-marketing-laptop {
   background-image: url('#{$dir-assets}/vectors/marketing-laptop.svg');
   height: 32px;
   width: 48px;
 }
-
 .icon-marketing-lists {
   background-image: url('#{$dir-assets}/vectors/marketing-lists.svg');
 }
-
 .icon-marketing-most-popular {
   background-image: url('#{$dir-assets}/vectors/marketing-most-popular.svg');
   height: 91px;
   width: 91px;
 }
-
 .icon-marketing-plane {
   background-image: url('#{$dir-assets}/vectors/marketing-plane.svg');
   height: 41px;
   width: 49px;
 }
-
 .icon-marketing-progress {
   background-image: url('#{$dir-assets}/vectors/marketing-progress.svg');
 }
-
 .icon-marketing-review {
   background-image: url('#{$dir-assets}/vectors/marketing-review.svg');
   height: 46px;
   width: 48px;
 }
-
 .icon-marketing-users {
   background-image: url('#{$dir-assets}/vectors/marketing-users.svg');
 }
-
 .icon-marketing-view-features {
   background-image: url('#{$dir-assets}/vectors/marketing-view-features.svg');
   height: 20px;
   width: 20px;
+}
+
+/*** STUDY ***/
+.icon-study-erase {
+  background-image: url('#{$dir-assets}/vectors/study-erase.svg');
+  height: 48px;
+  width: 44px;
+}
+.icon-study-incorrect {
+  background-image: url('#{$dir-assets}/vectors/study-incorrect.svg');
+  height: 44px;
+  width: 59px;
+}
+.icon-study-new-character {
+  background-image: url('#{$dir-assets}/vectors/study-new-character.svg');
+  height: 114px;
+  width: 114px;
+}
+.icon-study-show {
+  background-image: url('#{$dir-assets}/vectors/study-show.svg');
+  height: 34px;
+  width: 58px;
+}
+.icon-study-stroke-order {
+  background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
+  height: 50px;
+  width: 52px;
 }

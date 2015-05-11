@@ -30,9 +30,9 @@ define([
             this.items = null;
             this.part = 'rune';
             this.position = 1;
-            //this.listenTo(this.canvas, 'canvas:click', this.handleClickCanvas);
-            this.listenTo(this.canvas, 'input:up', this.handleInputUp);
-            //this.listenTo(this.grading, 'select', this.handleSelectGrade);
+            this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
+            this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
+            this.listenTo(this.grading, 'select', this.handleGradeSelect);
             this.on('resize', this.resize);
         },
         /**
@@ -118,23 +118,15 @@ define([
             return this.active().get('character');
         },
         /**
-         * @method getGradingColor
-         * @returns {String}
+         * @method handleCanvasClick
          */
-        getGradingColor: function() {
-            var gradingColors = app.user.settings.get('gradingColors');
-            return gradingColors[this.active().get('score')];
-        },
+        handleCanvasClick: function() {},
         /**
-         * @method handleClickCanvas
-         */
-        handleClickCanvas: function() {},
-        /**
-         * @method handleInputUp
+         * @method handleCanvasInputUp
          * @param {Array} points
          * @param {createjs.Shape} shape
          */
-        handleInputUp: function(points, shape) {
+        handleCanvasInputUp: function(points, shape) {
             switch (this.part) {
                 case 'rune':
                     this.recognizeRune(points, shape);
@@ -145,10 +137,10 @@ define([
             }
         },
         /**
-         * @method handleSelectGrade
+         * @method handleGradeSelect
          * @param value
          */
-        handleSelectGrade: function(value) {},
+        handleGradeSelect: function(value) {},
         /**
          * @method recognizeRune
          * @param {Array} points
@@ -166,14 +158,6 @@ define([
          * @param {createjs.Shape} shape
          */
         recognizeTone: function(points, shape) {},
-        /**
-         * @method hideBannerNew
-         * @returns {Prompt}
-         */
-        hideBannerNew: function() {
-            this.$('#prompt-new-banner').hide();
-            return this;
-        },
         /**
          * @method isFirst
          * @returns {Boolean}
@@ -233,7 +217,7 @@ define([
          * @returns {Prompt}
          */
         resize: function() {
-            this.canvas.resize(this.$('#canvas-section-center').width());
+            this.canvas.resize(this.$('#panel-left-center').width());
             return this;
         },
         /**
@@ -254,14 +238,6 @@ define([
          */
         show: function() {
             return GelatoComponent.prototype.show.call(this).resize();
-        },
-        /**
-         * @method showBannerNew
-         * @returns {Prompt}
-         */
-        showBannerNew: function() {
-            this.$('#prompt-new-banner').show();
-            return this;
         }
     });
 
