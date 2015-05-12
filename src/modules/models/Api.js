@@ -604,6 +604,33 @@ define([
             }).fail(function(error) {
                 callbackError(error);
             });
+        },
+        /**
+         * @method refreshToken
+         * @param {String} token
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        refreshToken: function(token, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'oauth2/token',
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: {
+                    grant_type: 'refresh_token',
+                    client_id: this.get('clientId'),
+                    refresh_token: token
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackSuccess(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         }
     });
 

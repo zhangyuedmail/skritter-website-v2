@@ -86,18 +86,30 @@ define([
          * @param {Function} callbackError
          */
         load: function(callbackSuccess, callbackError) {
-            var self = this;
             this.set('id', app.getSetting('user') || 'guest');
+            this.authentication.load();
+            this.settings.load();
+            this.subscription.load();
+            if (this.isLoggedIn()) {
+                this.loadUser(callbackSuccess, callbackError);
+            } else {
+                this.loadGuest(callbackSuccess, callbackError);
+            }
+        },
+        /**
+         * @method loadGuest
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        loadGuest: function(callbackSuccess, callbackError) {
+            var self = this;
             Async.series([
                 function(callback) {
-                    self.authentication.load();
-                    self.settings.load();
-                    self.subscription.load();
-                    callback();
-                },
-                function(callback) {
-                    if (self.isLoggedIn()) {
-                        self.data.load(function() {
+                    if (self.authentication.isExpired()) {
+                        app.api.authenticateGuest(function(result) {
+                            self.set('id', 'guest');
+                            self.authentication.set('created', Moment().unix());
+                            self.authentication.set(result, {merge: true});
                             callback();
                         }, function(error) {
                             callback(error);
@@ -105,6 +117,36 @@ define([
                     } else {
                         callback();
                     }
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    callbackSuccess();
+                }
+            });
+        },
+        /**
+         * @method loadUser
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        loadUser: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.series([
+                function(callback) {
+                    if (self.authentication.isExpired()) {
+                        self.authentication.refresh(function() {
+                            callback();
+                        }, function(error) {
+                           callback(error);
+                        });
+                    } else {
+                        callback();
+                    }
+                },
+                function(callback) {
+                    self.data.load(callback, callback);
                 }
             ], function(error) {
                 if (error) {
@@ -127,6 +169,7 @@ define([
                 function(callback) {
                     app.api.authenticateUser(username, password, function(result) {
                         self.set('id', result.user_id);
+                        self.authentication.set('created', Moment().unix());
                         self.authentication.set(result, {merge: true});
                         callback();
                     }, function(error) {
@@ -150,6 +193,33 @@ define([
             ], function(error) {
                 if (error) {
                     console.error('USER LOGIN ERROR:', error);
+                    callbackError(error);
+                } else {
+                    app.setSetting('user', self.id);
+                    callbackSuccess();
+                }
+            });
+        },
+        /**
+         * @method loginGuest
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        loginGuest: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.series([
+                function(callback) {
+                    app.api.authenticateGuest(function(result) {
+                        self.set('id', 'guest');
+                        self.authentication.set(result, {merge: true});
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    console.error('GUEST LOGIN ERROR:', error);
                     callbackError(error);
                 } else {
                     app.setSetting('user', self.id);

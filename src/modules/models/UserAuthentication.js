@@ -22,7 +22,10 @@ define([
          * @property defaults
          * @type Object
          */
-        defaults: {},
+        defaults: {
+            created: 0,
+            expires_in: 0
+        },
         /**
          * @method cache
          * @returns {UserAuthentication}
@@ -30,6 +33,20 @@ define([
         cache: function() {
             localStorage.setItem(app.user.getDataPath('authentication', false), JSON.stringify(this.toJSON()));
             return this;
+        },
+        /**
+         * @method getExpires
+         * @returns {Number}
+         */
+        getExpires: function() {
+            return this.get('created') + this.get('expires_in');
+        },
+        /**
+         * @method isExpired
+         * @returns {Boolean}
+         */
+        isExpired: function() {
+            return this.getExpires() < Moment().unix();
         },
         /**
          * @method load
@@ -41,6 +58,21 @@ define([
                 this.set(JSON.parse(authentication), {silent: true});
             }
             return this;
+        },
+        /**
+         * @method refresh
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        refresh: function(callbackSuccess, callbackError) {
+            var self = this;
+            app.api.refreshToken(this.get('refresh_token'), function(result) {
+                self.authentication.set('created', Moment().unix());
+                self.authentication.set(result, {merge: true});
+                callbackSuccess();
+            }, function(error) {
+                callbackError(error);
+            });
         }
     });
 
