@@ -105,7 +105,7 @@ define([
                         app.user.data.vocabs.add(result.Vocabs);
                         callback();
                     }, function(error) {
-                        callback(error)
+                        callback(error);
                     });
                 }
             ], function(error) {
