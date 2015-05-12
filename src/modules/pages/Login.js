@@ -67,8 +67,6 @@ define([
                 self.$('#response-message').text(JSON.stringify(error));
                 self.enableForm('#login-form');
                 app.dialog.hide();
-            }, function(status) {
-                self.$('.loaded-items').text(status);
             });
         },
         /**
