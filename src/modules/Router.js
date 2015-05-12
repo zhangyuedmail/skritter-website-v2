@@ -25,6 +25,7 @@ define([
     'modules/pages/StatsTimeline',
     'modules/pages/Study',
     'modules/pages/StudySettings',
+    'modules/pages/Tutorial',
     'modules/pages/Words'
 ], function(
     GelatoRouter,
@@ -49,6 +50,7 @@ define([
     PageStatsTimeline,
     PageStudy,
     PageStudySettings,
+    PageTutorial,
     PageWords
 ) {
 
@@ -93,6 +95,8 @@ define([
             'study': 'showStudy',
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
+            'tutorial': 'showTutorial',
+            'tutorial/:tutorialId': 'showTutorial',
             'words': 'showWords',
             '*route': 'showDefault'
         },
@@ -266,6 +270,14 @@ define([
         showStudySettings: function() {
             this.page = new PageStudySettings();
             this.page.render();
+        },
+        /**
+         * @method showTutorial
+         * @param {String} [tutorialId]
+         */
+        showTutorial: function(tutorialId) {
+            this.page = new PageTutorial();
+            this.page.render().load(tutorialId);
         },
         /**
          * @method showWords
