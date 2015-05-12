@@ -5,8 +5,9 @@
 define([
     'require.text!templates/tutorial.html',
     'core/modules/GelatoPage',
+    'modules/collections/TutorialModules',
     'modules/components/Prompt'
-], function(Template, GelatoPage, Prompt) {
+], function(Template, GelatoPage, TutorialModules, Prompt) {
 
     /**
      * @class PageTutorial
@@ -18,8 +19,8 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.content  = ['zh-十-0', 'zh-羊-0', 'zh-父-0'];
             this.prompt = new Prompt();
+            this.tutorials = new TutorialModules();
         },
         /**
          * @property title
@@ -43,32 +44,77 @@ define([
         },
         /**
          * @method load
-         * @param {String} tutorialId
+         * @param {String} language
+         * @param {String} page
          * @returns {PageTutorial}
          */
-        load: function(tutorialId) {
+        load: function(language, page) {
             var self = this;
-            app.api.fetchVocabs({
-                ids: this.content.join('|'),
-                include_decomps: true,
-                include_strokes: true
-            }, function(result) {
-                app.user.data.decomps.add(result.Decomps);
-                app.user.data.strokes.add(result.Strokes);
-                app.user.data.vocabs.add(result.Vocabs);
-                switch (tutorialId) {
-                    case '1':
-                        self.showLesson1();
-                        break;
-                    case '2':
-                        self.showLesson2();
-                        break;
-                    case '3':
-                        self.showLesson3();
-                        break;
+            Async.series([
+                /**
+                function(callback) {
+                    if (language) {
+                        callback();
+                    } else {
+                        self.listenToOnce(app.dialog, 'tutorial-select-language:click', function(action) {
+                            callback();
+                        });
+                        app.dialog.show('tutorial-select-language');
+                    }
+                },
+                function(callback) {
+                    if (language) {
+                        callback();
+                    } else {
+                        self.listenToOnce(app.dialog, 'hidden', function() {
+                            callback();
+                        });
+                        app.dialog.hide();
+                    }
+                },
+                function(callback) {
+                    if (page) {
+                        callback();
+                    } else {
+                        self.listenToOnce(app.dialog, 'tutorial-select-level:click', function(action) {
+                            callback();
+                        });
+                        app.dialog.show('tutorial-select-level');
+                    }
+                },
+                function(callback) {
+                    if (page) {
+                        callback();
+                    } else {
+                        self.listenToOnce(app.dialog, 'hidden', function() {
+                            callback();
+                        });
+                        app.dialog.hide();
+                    }
+                },
+                 **/
+                function(callback) {
+                    app.dialog.show('loading');
+                    app.api.fetchVocabs({
+                        ids: self.tutorials.getVocabIds().join('|'),
+                        include_decomps: true,
+                        include_strokes: true
+                    }, function(result) {
+                        app.user.data.decomps.add(result.Decomps);
+                        app.user.data.strokes.add(result.Strokes);
+                        app.user.data.vocabs.add(result.Vocabs);
+                        callback();
+                    }, function(error) {
+                        callback(error)
+                    });
                 }
-            }, function(error) {
-                console.error('TUTORIAL LOAD ERROR:', error);
+            ], function(error) {
+                if (error) {
+                    console.error('TUTORIAL LOAD ERROR:', error);
+                } else {
+                    app.dialog.hide();
+                    self.showLesson1();
+                }
             });
             return this;
         },
@@ -84,7 +130,11 @@ define([
          * @method showLesson1
          */
         showLesson1: function() {
-            var vocab = app.user.data.vocabs.get('zh-十-0');
+            var module = this.tutorials.get(1);
+            var vocab = app.user.data.vocabs.get(module.get('vocabId'));
+            this.listenToOnce(this.prompt, 'prompt:next', this.showLesson2);
+            this.prompt.detail.$('#tutorial-title').text(module.get('title'));
+            this.prompt.detail.$('#tutorial-content').text(module.get('content'));
             this.prompt.set(vocab.getPromptItems('rune'));
             this.prompt.show();
         },
@@ -92,7 +142,11 @@ define([
          * @method showLesson2
          */
         showLesson2: function() {
-            var vocab = app.user.data.vocabs.get('zh-羊-0');
+            var module = this.tutorials.get(2);
+            var vocab = app.user.data.vocabs.get(module.get('vocabId'));
+            this.listenToOnce(this.prompt, 'prompt:next', this.showLesson3);
+            this.prompt.detail.$('#tutorial-title').text(module.get('title'));
+            this.prompt.detail.$('#tutorial-content').text(module.get('content'));
             this.prompt.set(vocab.getPromptItems('rune'));
             this.prompt.show();
         },
@@ -100,7 +154,11 @@ define([
          * @method showLesson2
          */
         showLesson3: function() {
-            var vocab = app.user.data.vocabs.get('zh-父-0');
+            var module = this.tutorials.get(3);
+            var vocab = app.user.data.vocabs.get(module.get('vocabId'));
+            //this.listenToOnce(this.prompt, 'prompt:next', this.showLesson2);
+            this.prompt.detail.$('#tutorial-title').text(module.get('title'));
+            this.prompt.detail.$('#tutorial-content').text(module.get('content'));
             this.prompt.set(vocab.getPromptItems('rune'));
             this.prompt.show();
         }
