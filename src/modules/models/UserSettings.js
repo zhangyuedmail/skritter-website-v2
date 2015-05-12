@@ -46,6 +46,12 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
+            if (app.user.isLoggedIn()) {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+                return;
+            }
             app.api.fetchUsers(app.user.id, null, function(data) {
                 self.set(data, {merge: true});
                 if (typeof callbackSuccess === 'function') {
@@ -135,10 +141,15 @@ define([
          * @method save
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
-         * @returns {UserSettings}
          */
         save: function(callbackSuccess, callbackError) {
             var self = this;
+            if (!app.user.isLoggedIn()) {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+                return;
+            }
             app.api.putUser(this.toJSON(), function(result) {
                 self.set(result, {merge: true});
                 self.cache();
@@ -151,7 +162,6 @@ define([
                     callbackError(error);
                 }
             });
-            return this;
         },
         /**
          * @method setActiveParts
@@ -172,7 +182,7 @@ define([
          * @returns {Array}
          */
         setActiveStyles: function(styles) {
-            if (app.user.isChinese()) {
+            if (!app.user.isChinese()) {
                 if (styles.indexOf('simp') === -1) {
                     this.set('reviewSimplified', false);
                 } else {

@@ -38,6 +38,12 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
+            if (!app.user.isLoggedIn()) {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+                return;
+            }
             app.api.fetchSubscription(app.user.id, null, function(data) {
                 self.set(data, {merge: true});
                 if (typeof callbackSuccess === 'function') {
@@ -64,10 +70,15 @@ define([
          * @method save
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
-         * @returns {UserSubscription}
          */
         save: function(callbackSuccess, callbackError) {
             var self = this;
+            if (!app.user.isLoggedIn()) {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+                return;
+            }
             app.api.putSubscription(app.user.id, this.toJSON(), function(result) {
                 self.set(result, {merge: true});
                 self.cache();
@@ -80,7 +91,6 @@ define([
                     callbackError(error);
                 }
             });
-            return this;
         }
     });
 

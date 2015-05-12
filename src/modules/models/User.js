@@ -88,10 +88,13 @@ define([
         load: function(callbackSuccess, callbackError) {
             var self = this;
             this.set('id', app.getSetting('user') || 'guest');
-            this.authentication.load();
-            this.settings.load();
-            this.subscription.load();
             Async.series([
+                function(callback) {
+                    self.authentication.load();
+                    self.settings.load();
+                    self.subscription.load();
+                    callback();
+                },
                 function(callback) {
                     if (self.isLoggedIn()) {
                         self.data.load(function() {
