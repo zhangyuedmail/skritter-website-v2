@@ -96,7 +96,8 @@ define([
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
             'tutorial': 'showTutorial',
-            'tutorial/:tutorialId': 'showTutorial',
+            'tutorial/:language': 'showTutorial',
+            'tutorial/:language/:page': 'showTutorial',
             'words': 'showWords',
             '*route': 'showDefault'
         },
@@ -273,11 +274,12 @@ define([
         },
         /**
          * @method showTutorial
-         * @param {String} [tutorialId]
+         * @param {String} [language]
+         * @param {String} [page]
          */
-        showTutorial: function(tutorialId) {
+        showTutorial: function(language, page) {
             this.page = new PageTutorial();
-            this.page.render().load(tutorialId);
+            this.page.render().load(language, page);
         },
         /**
          * @method showWords
