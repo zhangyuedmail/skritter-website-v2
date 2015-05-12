@@ -72,10 +72,10 @@ define([
          * @property events
          */
         events: {
-            'pointerdown.Canvas .writing-canvas': 'triggerCanvasMouseDown',
-            'pointerup.Canvas .writing-canvas': 'triggerCanvasMouseUp',
-            'vmousedown.Canvas .writing-canvas': 'triggerCanvasMouseDown',
-            'vmouseup.Canvas .writing-canvas': 'triggerCanvasMouseUp'
+            'pointerdown.Canvas canvas': 'triggerCanvasMouseDown',
+            'pointerup.Canvas canvas': 'triggerCanvasMouseUp',
+            'vmousedown.Canvas canvas': 'triggerCanvasMouseDown',
+            'vmouseup.Canvas canvas': 'triggerCanvasMouseUp'
         },
         /**
          * @method clearLayer
@@ -292,7 +292,6 @@ define([
          * @method injectLayerColor
          * @param {String} layerName
          * @param {String} color
-         * @param {}
          */
         injectLayerColor: function(layerName, color) {
             return this.injectColor(this.getLayer(layerName), color);

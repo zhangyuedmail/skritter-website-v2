@@ -69,7 +69,7 @@ define([
             var definition = this.get('definitions')[app.user.settings.get('sourceLang')];
             if (customDefinition && customDefinition !== '') {
                 definition = this.get('customDefinition');
-            } else if (definition) {
+            } else if (!definition) {
                 definition = this.get('definitions').en;
             }
             return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
@@ -202,14 +202,13 @@ define([
          * @returns {String}
          */
         getStyle: function() {
-            var style = this.get('style');
-            if (style === 'simp') {
-                return 'simplified';
+            switch (this.get('style')) {
+                case 'simp':
+                    return 'simplified';
+                case 'trad':
+                    return 'traditional';
             }
-            if (style === 'trad') {
-                return 'traditional';
-            }
-            return null;
+            return '';
         },
         /**
          * @method getToneNumbers

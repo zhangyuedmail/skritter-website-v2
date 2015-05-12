@@ -29,7 +29,7 @@ define([
          * @returns {Number}
          */
         comparator: function(stroke) {
-            return stroke.attributes.position;
+            return stroke.get('position');
         },
         /**
          * @method getNextStroke
@@ -126,7 +126,6 @@ define([
          * @method recognize
          * @param {Array} points
          * @param {createjs.Shape} shape
-         * @param {Number} size
          * @returns {CanvasStroke}
          */
         recognize: function(points, shape) {

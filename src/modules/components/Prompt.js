@@ -120,7 +120,11 @@ define([
         /**
          * @method handleCanvasClick
          */
-        handleCanvasClick: function() {},
+        handleCanvasClick: function() {
+            if (this.character().isComplete()) {
+                this.next();
+            }
+        },
         /**
          * @method handleCanvasInputUp
          * @param {Array} points
@@ -147,10 +151,12 @@ define([
          * @param {createjs.Shape} shape
          */
         recognizeRune: function(points, shape) {
-            var nextStroke = this.character().getNextStroke();
-            this.character().add(nextStroke);
-            this.canvas.drawShape('surface', nextStroke.getShape());
-            this.renderPrompt();
+            if (points.length > 4) {
+                var nextStroke = this.character().getNextStroke();
+                this.character().add(nextStroke);
+                this.canvas.drawShape('surface', nextStroke.getShape());
+                this.renderPrompt();
+            }
         },
         /**
          * @method recognizeTone
@@ -217,7 +223,9 @@ define([
          * @returns {Prompt}
          */
         resize: function() {
-            this.canvas.resize(this.$('#panel-left-center').width());
+            var panelLeft = this.$('#panel-left');
+            var panelRight = this.$('#panel-right');
+            this.canvas.resize(panelLeft.find('#panel-left-center').width());
             return this;
         },
         /**
@@ -228,6 +236,7 @@ define([
         set: function(items) {
             console.log('PROMPT:', items);
             this.items = items;
+            this.detail.renderFields();
             this.renderPrompt();
             this.resize();
             return this;

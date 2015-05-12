@@ -20,7 +20,6 @@ define([
         initialize: function(options) {
             options = options || {};
             this.prompt = options.prompt;
-            this.on('resize', this.resize);
         },
         /**
          * @method render
@@ -35,8 +34,8 @@ define([
          * @type Object
          */
         events: {
-            'vclick .navigate-next': 'handleClickNavigateNext',
-            'vclick .navigate-previous': 'handleClickNavigatePrevious'
+            'vclick #navigate-next': 'handleClickNavigateNext',
+            'vclick #navigate-previous': 'handleClickNavigatePrevious'
         },
         /**
          * @method handleClickNavigateNext
@@ -53,13 +52,6 @@ define([
         handleClickNavigatePrevious: function(event) {
             event.preventDefault();
             this.prompt.previous();
-        },
-        /**
-         * @method resize
-         * @returns {PromptNavigation}
-         */
-        resize: function() {
-            return this;
         }
     });
 

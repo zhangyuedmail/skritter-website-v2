@@ -46,6 +46,13 @@ define([
             return (this.get('thinkingStop') - this.get('reviewingStart')) / 1000;
         },
         /**
+         * @method getVocab
+         * @returns {DataVocab}
+         */
+        getVocab: function() {
+            return app.user.data.vocabs.get(this.get('vocabId'));
+        },
+        /**
          * @method start
          * @returns {PromptItem}
          */
