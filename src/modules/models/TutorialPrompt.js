@@ -6,10 +6,10 @@ define([
 ], function(GelatoModel) {
 
     /**
-     * @class TutorialModule
+     * @class TutorialPrompt
      * @extends GelatoModel
      */
-    var TutorialModule = GelatoModel.extend({
+    var TutorialPrompt = GelatoModel.extend({
         /**
          * @method initialize
          * @constructor
@@ -24,6 +24,6 @@ define([
         }
     });
 
-    return TutorialModule;
+    return TutorialPrompt;
 
 });

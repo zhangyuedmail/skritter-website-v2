@@ -58,7 +58,6 @@ define([
             }
             character.targets = targets;
             character.writing = rune;
-            console.log('FUCKING CHAR', character);
             return character;
         }
     });

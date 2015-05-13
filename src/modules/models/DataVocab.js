@@ -125,6 +125,7 @@ define([
                 });
             }
             promptItems.id = this.id;
+            promptItems.part = part;
             return promptItems;
         },
         /**
@@ -184,7 +185,7 @@ define([
         },
         /**
          * @method getStrokes
-         * @param {Array}
+         * @returns {Array}
          */
         getStrokes: function() {
             var strokes = [];

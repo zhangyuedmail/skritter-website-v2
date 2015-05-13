@@ -29,7 +29,7 @@ define([
             this.toolbar = new PromptToolbar({prompt: this});
             this.items = null;
             this.part = 'rune';
-            this.position = 1;
+            this.position = 0;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
             this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
             this.listenTo(this.grading, 'select', this.handleGradeSelect);
@@ -54,7 +54,7 @@ define([
          * @returns {Prompt}
          */
         renderPrompt: function() {
-            switch (this.part) {
+            switch (this.items.part) {
                 case 'defn':
                     this.renderPromptDefn();
                     break;
@@ -101,6 +101,16 @@ define([
          * @returns {Prompt}
          */
         renderPromptTone: function() {
+            var writing = this.vocab.getCharacters()[this.position];
+            this.canvas.drawCharacter('surface-background2', writing, {
+                color: '#ebeaf0',
+                font: this.vocab.getFontName()
+            });
+            if (this.character().isComplete()) {
+                this.canvas.disableInput();
+            } else {
+                this.canvas.enableInput();
+            }
             return this;
         },
         /**
@@ -108,7 +118,7 @@ define([
          * @returns {PromptResult}
          */
         active: function() {
-            return this.items.at(this.position - 1);
+            return this.items.at(this.position);
         },
         /**
          * @method character
@@ -163,20 +173,27 @@ define([
          * @param {Array} points
          * @param {createjs.Shape} shape
          */
-        recognizeTone: function(points, shape) {},
+        recognizeTone: function(points, shape) {
+            var stroke = this.character().recognize(points, shape);
+            if (stroke) {
+                var targetShape = stroke.getTargetShape();
+                var userShape = stroke.getUserShape();
+                this.canvas.tweenShape('surface', userShape, targetShape);
+            }
+        },
         /**
          * @method isFirst
          * @returns {Boolean}
          */
         isFirst: function() {
-            return this.position === 1;
+            return this.position === 0;
         },
         /**
          * @method isLast
          * @returns {Boolean}
          */
         isLast: function() {
-            return this.position >= this.items.length;
+            return this.position >= this.items.length - 1;
         },
         /**
          * @method next
@@ -219,6 +236,16 @@ define([
             return GelatoComponent.prototype.remove.call(this);
         },
         /**
+         * @method revealCharacter
+         * @returns {Prompt}
+         */
+        revealCharacter: function() {
+            var nextShape = this.character().getExpectedTargets()[0].getTargetShape();
+            this.canvas.clearLayer('surface-background2');
+            this.canvas.drawShape('surface-background2', nextShape, {color: '#b3b3b3'});
+            return this;
+        },
+        /**
          * @method resize
          * @returns {Prompt}
          */
@@ -237,8 +264,8 @@ define([
             console.log('PROMPT:', items);
             this.items = items;
             this.detail.renderFields();
-            this.renderPrompt();
-            this.resize();
+            this.vocab = this.active().getVocab();
+            this.resize().renderPrompt();
             return this;
         },
         /**

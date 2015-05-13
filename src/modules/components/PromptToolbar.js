@@ -62,9 +62,6 @@ define([
          */
         handleClickOptionReveal: function(event) {
             event.preventDefault();
-            var nextShape = this.prompt.character().getExpectedTargets()[0].getTargetShape();
-            this.prompt.canvas.clearLayer('surface-background2');
-            this.prompt.canvas.drawShape('surface-background2', nextShape, {color: '#b3b3b3'});
         },
         /**
          * @method handleClickOptionStroke

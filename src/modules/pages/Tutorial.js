@@ -5,9 +5,8 @@
 define([
     'require.text!templates/tutorial.html',
     'core/modules/GelatoPage',
-    'modules/collections/TutorialModules',
     'modules/components/Prompt'
-], function(Template, GelatoPage, TutorialModules, Prompt) {
+], function(Template, GelatoPage, Prompt) {
 
     /**
      * @class PageTutorial
@@ -19,8 +18,10 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.index = 0;
             this.prompt = new Prompt();
-            this.tutorials = new TutorialModules();
+            this.tutorials = null;
+            this.listenTo(this.prompt, 'prompt:next', this.handlePromptNext);
         },
         /**
          * @property title
@@ -39,70 +40,35 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.prompt.setElement(this.$('#prompt-container'));
-            this.prompt.render().hide();
+            this.prompt.render();
+            return this;
+        },
+        /**
+         * @method renderPrompt
+         * @returns {PageTutorial}
+         */
+        renderPrompt: function() {
+            var module = this.tutorials.at(this.index);
+            var vocab = app.user.data.vocabs.get(module.get('vocabId'));
+            this.prompt.detail.$('#tutorial-title').text(module.get('title'));
+            this.prompt.detail.$('#tutorial-content').text(module.get('content'));
+            this.prompt.set(vocab.getPromptItems(module.get('part')));
             return this;
         },
         /**
          * @method load
-         * @param {String} language
-         * @param {String} page
+         * @param {String} module
+         * @param {String} index
          * @returns {PageTutorial}
          */
-        load: function(language, page) {
+        load: function(module, index) {
             var self = this;
+            this.index = index || 0;
+            this.tutorials = app.tutorials.getByModule(module);
             Async.series([
-                /**
-                function(callback) {
-                    if (language) {
-                        callback();
-                    } else {
-                        self.listenToOnce(app.dialog, 'tutorial-select-language:click', function(action) {
-                            callback();
-                        });
-                        app.dialog.show('tutorial-select-language');
-                    }
-                },
-                function(callback) {
-                    if (language) {
-                        callback();
-                    } else {
-                        self.listenToOnce(app.dialog, 'hidden', function() {
-                            callback();
-                        });
-                        app.dialog.hide();
-                    }
-                },
-                function(callback) {
-                    if (page) {
-                        callback();
-                    } else {
-                        self.listenToOnce(app.dialog, 'tutorial-select-level:click', function(action) {
-                            callback();
-                        });
-                        app.dialog.show('tutorial-select-level');
-                    }
-                },
-                function(callback) {
-                    if (page) {
-                        callback();
-                    } else {
-                        self.listenToOnce(app.dialog, 'hidden', function() {
-                            callback();
-                        });
-                        app.dialog.hide();
-                    }
-                },
-                 **/
                 function(callback) {
                     app.dialog.show('loading');
-                    app.api.fetchVocabs({
-                        ids: self.tutorials.getVocabIds().join('|'),
-                        include_decomps: true,
-                        include_strokes: true
-                    }, function(result) {
-                        app.user.data.decomps.add(result.Decomps);
-                        app.user.data.strokes.add(result.Strokes);
-                        app.user.data.vocabs.add(result.Vocabs);
+                    self.tutorials.fetch(function() {
                         callback();
                     }, function(error) {
                         callback(error);
@@ -113,10 +79,17 @@ define([
                     console.error('TUTORIAL LOAD ERROR:', error);
                 } else {
                     app.dialog.hide();
-                    self.showLesson1();
+                    self.renderPrompt();
                 }
             });
             return this;
+        },
+        /**
+         * @method handlePromptNext
+         */
+        handlePromptNext: function() {
+            this.index++;
+            this.renderPrompt();
         },
         /**
          * @method remove
@@ -125,42 +98,6 @@ define([
         remove: function() {
             this.prompt.remove();
             return GelatoPage.prototype.remove.call(this);
-        },
-        /**
-         * @method showLesson1
-         */
-        showLesson1: function() {
-            var module = this.tutorials.get(1);
-            var vocab = app.user.data.vocabs.get(module.get('vocabId'));
-            this.listenToOnce(this.prompt, 'prompt:next', this.showLesson2);
-            this.prompt.detail.$('#tutorial-title').text(module.get('title'));
-            this.prompt.detail.$('#tutorial-content').text(module.get('content'));
-            this.prompt.set(vocab.getPromptItems('rune'));
-            this.prompt.show();
-        },
-        /**
-         * @method showLesson2
-         */
-        showLesson2: function() {
-            var module = this.tutorials.get(2);
-            var vocab = app.user.data.vocabs.get(module.get('vocabId'));
-            this.listenToOnce(this.prompt, 'prompt:next', this.showLesson3);
-            this.prompt.detail.$('#tutorial-title').text(module.get('title'));
-            this.prompt.detail.$('#tutorial-content').text(module.get('content'));
-            this.prompt.set(vocab.getPromptItems('rune'));
-            this.prompt.show();
-        },
-        /**
-         * @method showLesson2
-         */
-        showLesson3: function() {
-            var module = this.tutorials.get(3);
-            var vocab = app.user.data.vocabs.get(module.get('vocabId'));
-            //this.listenToOnce(this.prompt, 'prompt:next', this.showLesson2);
-            this.prompt.detail.$('#tutorial-title').text(module.get('title'));
-            this.prompt.detail.$('#tutorial-content').text(module.get('content'));
-            this.prompt.set(vocab.getPromptItems('rune'));
-            this.prompt.show();
         }
     });
 

@@ -95,9 +95,8 @@ define([
             'study': 'showStudy',
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
-            'tutorial': 'showTutorial',
-            'tutorial/:language': 'showTutorial',
-            'tutorial/:language/:page': 'showTutorial',
+            'tutorial/:module': 'showTutorial',
+            'tutorial/:module/:index': 'showTutorial',
             'words': 'showWords',
             '*route': 'showDefault'
         },
@@ -274,12 +273,12 @@ define([
         },
         /**
          * @method showTutorial
-         * @param {String} [language]
-         * @param {String} [page]
+         * @param {String} [module]
+         * @param {String} [index]
          */
-        showTutorial: function(language, page) {
+        showTutorial: function(module, index) {
             this.page = new PageTutorial();
-            this.page.render().load(language, page);
+            this.page.render().load(module, index);
         },
         /**
          * @method showWords
