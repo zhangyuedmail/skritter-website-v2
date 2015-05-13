@@ -8,9 +8,15 @@ define([
     'modules/components/PromptCanvas',
     'modules/components/PromptDetail',
     'modules/components/PromptGrading',
-    'modules/components/PromptNavigation',
     'modules/components/PromptToolbar'
-], function(Template, GelatoComponent, PromptCanvas, PromptDetail, PromptGrading, PromptNavigation, PromptToolbar) {
+], function(
+    Template,
+    GelatoComponent,
+    PromptCanvas,
+    PromptDetail,
+    PromptGrading,
+    PromptToolbar
+) {
 
     /**
      * @class Prompt
@@ -25,13 +31,14 @@ define([
             this.canvas = new PromptCanvas({prompt: this});
             this.detail = new PromptDetail({prompt: this});
             this.grading = new PromptGrading({prompt: this});
-            this.navigation = new PromptNavigation({prompt: this});
             this.toolbar = new PromptToolbar({prompt: this});
             this.items = null;
             this.part = 'rune';
             this.position = 0;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
             this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
+            this.listenTo(this.canvas, 'navigate:right', this.handleNavigateRight);
+            this.listenTo(this.canvas, 'navigate:left', this.handleNavigateLeft);
             this.listenTo(this.grading, 'select', this.handleGradeSelect);
             this.on('resize', this.resize);
         },
@@ -44,7 +51,6 @@ define([
             this.canvas.setElement('#prompt-canvas-container').render();
             this.detail.setElement('#prompt-detail-container').render();
             this.grading.setElement('#prompt-grading-container').render();
-            this.navigation.setElement('#prompt-navigation-container').render();
             this.toolbar.setElement('#prompt-toolbar-container').render();
             this.resize();
             return this;
@@ -156,6 +162,18 @@ define([
          */
         handleGradeSelect: function(value) {},
         /**
+         * @method handleNavigateLeft
+         */
+        handleNavigateLeft: function() {
+            this.previous();
+        },
+        /**
+         * @method handleNavigateRight
+         */
+        handleNavigateRight: function() {
+            this.next();
+        },
+        /**
          * @method recognizeRune
          * @param {Array} points
          * @param {createjs.Shape} shape
@@ -251,8 +269,9 @@ define([
          */
         resize: function() {
             var panelLeft = this.$('#panel-left');
-            var panelRight = this.$('#panel-right');
+            //var panelRight = this.$('#panel-right');
             this.canvas.resize(panelLeft.find('#panel-left-center').width());
+            //TODO: render prompt again
             return this;
         },
         /**

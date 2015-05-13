@@ -75,7 +75,9 @@ define([
             'pointerdown.Canvas canvas': 'triggerCanvasMouseDown',
             'pointerup.Canvas canvas': 'triggerCanvasMouseUp',
             'vmousedown.Canvas canvas': 'triggerCanvasMouseDown',
-            'vmouseup.Canvas canvas': 'triggerCanvasMouseUp'
+            'vmouseup.Canvas canvas': 'triggerCanvasMouseUp',
+            'vclick #navigate-left': 'triggerNavigateLeft',
+            'vclick #navigate-right': 'triggerNavigateRight'
         },
         /**
          * @method clearLayer
@@ -366,6 +368,22 @@ define([
          */
         triggerInputUp: function(points, shape) {
             this.trigger('input:up', points, shape);
+        },
+        /**
+         * @method triggerNavigateLeft
+         * @param {Event} event
+         */
+        triggerNavigateLeft: function(event) {
+            event.preventDefault();
+            this.trigger('navigate:left');
+        },
+        /**
+         * @method triggerNavigateRight
+         * @param {Event} event
+         */
+        triggerNavigateRight: function(event) {
+            event.preventDefault();
+            this.trigger('navigate:right');
         },
         /**
          * @method tweenShape
