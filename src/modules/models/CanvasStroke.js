@@ -39,7 +39,7 @@ define([
         getParams: function() {
             var inflatedParams = [];
             var size = this.getSize();
-            var matrix = this.getShape().getMatrix();
+            var matrix = this.getTargetShape().getMatrix();
             var params = app.user.data.params.where({strokeId: this.get('strokeId')});
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
                 var param = params[a].clone();
@@ -58,10 +58,17 @@ define([
             return inflatedParams;
         },
         /**
-         * @method getShape
+         * @method size
+         * @returns {Number}
+         */
+        getSize: function() {
+            return app.user.settings.get('canvasSize');
+        },
+        /**
+         * @method getTargetShape
          * @return {createjs.Shape}
          */
-        getShape: function() {
+        getTargetShape: function() {
             var data = this.inflateData();
             var shape = this.get('shape').clone(true);
             var ms = shape.getMatrix();
@@ -77,13 +84,6 @@ define([
             return shape;
         },
         /**
-         * @method size
-         * @returns {Number}
-         */
-        getSize: function() {
-            return app.user.settings.get('canvasSize');
-        },
-        /**
          * @method getUserRectangle
          * @returns {Object}
          */
@@ -97,7 +97,7 @@ define([
          * @returns {createjs.Shape}
          */
         getUserShape: function() {
-            var shape = this.getShape();
+            var shape = this.getTargetShape();
             //var bounds = shape.getBounds();
             var rect = this.getUserRectangle();
             shape.x = rect.x;

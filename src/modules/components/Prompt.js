@@ -151,11 +151,11 @@ define([
          * @param {createjs.Shape} shape
          */
         recognizeRune: function(points, shape) {
-            if (points.length > 4) {
-                var nextStroke = this.character().getNextStroke();
-                this.character().add(nextStroke);
-                this.canvas.drawShape('surface', nextStroke.getShape());
-                this.renderPrompt();
+            var stroke = this.character().recognize(points, shape);
+            if (stroke) {
+                var targetShape = stroke.getTargetShape();
+                var userShape = stroke.getUserShape();
+                this.canvas.tweenShape('surface', userShape, targetShape);
             }
         },
         /**

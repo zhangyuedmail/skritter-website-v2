@@ -28,6 +28,11 @@ define([
          * @type String
          */
         title: 'Scratchpad - ' + i18n.global.title,
+        /**
+         * @property bodyClass
+         * @type {String}
+         */
+        bodyClass: 'background-light',
         /**s
          * @method render
          * @returns {PageScratchpad}

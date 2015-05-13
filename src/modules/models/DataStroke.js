@@ -34,8 +34,8 @@ define([
             for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
                 var target = new CanvasCharacter();
                 var targetVariation = variations[a];
-                var position = 1;
-                target.position = a + 1;
+                var strokePosition = 0;
+                target.position = a;
                 for (var b = 0, lengthB = targetVariation.length; b < lengthB; b++) {
                     var stroke = new CanvasStroke();
                     var strokeData = targetVariation[b];
@@ -45,19 +45,20 @@ define([
                     stroke.set({
                         contains: strokeContains,
                         data: strokeData,
-                        id: position + '-' + strokeId,
-                        position: position,
+                        id: strokePosition + '-' + strokeId,
+                        position: strokePosition,
                         shape: app.strokes.get(strokeId),
                         strokeId: strokeId,
                         tone: rune === 'tones' ? a + 1 : null
                     });
-                    position += strokeContains.length || 1;
+                    strokePosition += strokeContains.length || 1;
                     target.add(stroke);
                 }
                 targets.push(target);
             }
             character.targets = targets;
             character.writing = rune;
+            console.log('FUCKING CHAR', character);
             return character;
         }
     });
