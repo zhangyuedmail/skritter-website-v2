@@ -3,9 +3,9 @@
  */
 define([
     'core/modules/GelatoCollection',
-    'modules/data/Tutorials',
+    'modules/data/TutorialData',
     'modules/models/TutorialModule'
-], function(GelatoCollection, Tutorials, TutorialModule) {
+], function(GelatoCollection, TutorialData, TutorialModule) {
 
     /**
      * @class TutorialModules

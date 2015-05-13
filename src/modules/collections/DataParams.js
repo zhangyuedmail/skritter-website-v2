@@ -4,8 +4,8 @@
 define([
     'core/modules/GelatoCollection',
     'modules/models/DataParam',
-    'modules/data/Params'
-], function(GelatoCollection, DataParam, Params) {
+    'modules/data/ParamData'
+], function(GelatoCollection, DataParam, ParamData) {
 
     /**
      * @class DataParams
@@ -17,7 +17,7 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.add(Params.getParams());
+            this.add(ParamData.getParams());
         },
         /**
          * @property model

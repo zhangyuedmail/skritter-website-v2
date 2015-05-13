@@ -5,7 +5,7 @@
 define([
     'core/modules/GelatoApplication',
     'modules/Router',
-    'modules/data/Strokes',
+    'modules/data/StrokeData',
     'modules/models/Api',
     'modules/models/MediaPlayer',
     'modules/models/User',
@@ -13,7 +13,7 @@ define([
 ], function(
     GelatoApplication,
     Router,
-    Strokes,
+    StrokeData,
     Api,
     MediaPlayer,
     User,
@@ -31,7 +31,7 @@ define([
          */
         initialize: function() {
             this.fn = Functions;
-            this.strokes = Strokes;
+            this.strokes = StrokeData;
         },
         /**
          * @property defaults

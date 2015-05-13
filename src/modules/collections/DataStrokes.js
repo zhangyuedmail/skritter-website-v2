@@ -4,9 +4,9 @@
 define([
     'core/modules/GelatoCollection',
     'modules/models/DataStroke',
-    'modules/data/Kana',
-    'modules/data/Tones'
-], function(GelatoCollection, DataStroke, Kana, Tones) {
+    'modules/data/KanaData',
+    'modules/data/ToneData'
+], function(GelatoCollection, DataStroke, KanaData, ToneData) {
 
     /**
      * @class DataStrokes
@@ -18,8 +18,8 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.add(Kana.getData());
-            this.add(Tones.getData());
+            this.add(KanaData.getData());
+            this.add(ToneData.getData());
         },
         /**
          * @property model

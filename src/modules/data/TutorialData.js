@@ -13,21 +13,27 @@ define([], function() {
         {
             id: 1,
             content: 'Write top to bottom, left to right.',
+            group: 'stroke-order',
             language: 'chinese',
+            part: 'rune',
             title: 'Stroke Order - Rule #1',
             vocabId: 'zh-一-0'
         },
         {
             id: 2,
             content: 'Horizontal strokes first.',
+            group: 'stroke-order',
             language: 'chinese',
+            part: 'rune',
             title: 'Stroke Order - Rule #2',
             vocabId: 'zh-十-0'
         },
         {
             id: 3,
             content: 'Cutting strokes last.',
+            group: 'stroke-order',
             language: 'chinese',
+            part: 'rune',
             title: 'Stroke Order - Rule #3',
             vocabId: 'zh-羊-0'
         }
