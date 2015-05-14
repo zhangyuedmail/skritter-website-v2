@@ -14,6 +14,10 @@ gelato-component[data-name="prompt-grading"] {
       border: none;
       box-shadow: none;
       outline: 0 !important;
+      &.grade1 { color: $grade1; }
+      &.grade2 { color: $grade2; }
+      &.grade3 { color: $grade3; }
+      &.grade4 { color: $grade4; }
     }
     .grade-text {
       font-family: $font-slab;
