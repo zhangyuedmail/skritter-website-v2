@@ -7,7 +7,7 @@ define([
     'modules/Router',
     'modules/data/StrokeData',
     'modules/data/TutorialData',
-    'modules/collections/TutorialPrompts',
+    'modules/collections/TutorialCollection',
     'modules/models/Api',
     'modules/models/MediaPlayer',
     'modules/models/User',
@@ -17,7 +17,7 @@ define([
     Router,
     StrokeData,
     TutorialData,
-    TutorialPrompts,
+    TutorialCollection,
     Api,
     MediaPlayer,
     User,
@@ -51,7 +51,7 @@ define([
             this.api = new Api();
             this.media = new MediaPlayer();
             this.router = new Router();
-            this.tutorials = new TutorialPrompts(TutorialData.getData());
+            this.tutorials = new TutorialCollection(TutorialData.getData());
             this.user = new User();
             this.user.load(function() {
                 console.log('USER:', self.user.id);

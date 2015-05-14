@@ -3,34 +3,31 @@
  */
 define([
     'core/modules/GelatoCollection',
-    'modules/data/TutorialData',
-    'modules/models/TutorialPrompt'
-], function(GelatoCollection, TutorialData, TutorialPrompt) {
+    'modules/models/TutorialModel'
+], function(GelatoCollection, TutorialModel) {
 
     /**
-     * @class TutorialPrompts
+     * @class TutorialCollection
      * @extends GelatoCollection
      */
-    var TutorialPrompts = GelatoCollection.extend({
+    var TutorialCollection = GelatoCollection.extend({
         /**
          * @method initialize
          * @constructor
          */
-        initialize: function() {
-            this.add(TutorialData.getData());
-        },
+        initialize: function() {},
         /**
          * @property model
-         * @type TutorialPrompt
+         * @type TutorialModel
          */
-        model: TutorialPrompt,
+        model: TutorialModel,
         /**
          * @method getByModule
          * @param {String} name
-         * @return {TutorialPrompts}
+         * @return {TutorialCollection}
          */
         getByModule: function(name) {
-            return new TutorialPrompts(this.filter(function(module) {
+            return new TutorialCollection(this.filter(function(module) {
                 return module.get('module') === name;
             }));
         },
@@ -64,6 +61,6 @@ define([
         }
     });
 
-    return TutorialPrompts;
+    return TutorialCollection;
 
 });
