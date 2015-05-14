@@ -79,7 +79,6 @@ define([
         handleClickStrokeOrderButton: function(event) {
             event.preventDefault();
             this.index = this.tutorials.indexOf(this.tutorials.findWhere({module: 'chinese-stroke-order'}));
-            console.log(this.index);
             this.renderPrompt();
         },
         /**
@@ -89,7 +88,6 @@ define([
         handleClickTonesButton: function(event) {
             event.preventDefault();
             this.index = this.tutorials.indexOf(this.tutorials.findWhere({module: 'chinese-tones'}));
-            console.log(this.index);
             this.renderPrompt();
         },
         /**
@@ -130,7 +128,11 @@ define([
          */
         handlePromptNext: function() {
             this.index++;
-            this.renderPrompt();
+            if (this.index < this.tutorials.length) {
+                this.renderPrompt();
+            } else {
+                app.router.navigate('signup');
+            }
         },
         /**
          * @method remove

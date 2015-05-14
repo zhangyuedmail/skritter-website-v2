@@ -33,7 +33,6 @@ define([
             this.grading = new PromptGrading({prompt: this});
             this.toolbar = new PromptToolbar({prompt: this});
             this.items = null;
-            this.part = 'rune';
             this.position = 0;
             this.teaching = false;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
@@ -141,9 +140,6 @@ define([
                 this.canvas.clearMessage();
                 this.canvas.enableInput();
                 this.grading.unselect();
-                if (this.teaching) {
-                    this.teach();
-                }
             }
             return this;
         },
@@ -166,9 +162,11 @@ define([
          * @returns {Prompt}
          */
         disableTeaching: function() {
-            this.teaching = false;
-            this.canvas.clearLayer('surface-background1');
-            this.canvas.clearLayer('surface-background2');
+            if (this.items.part === 'rune') {
+                this.teaching = false;
+                this.canvas.clearLayer('surface-background1');
+                this.canvas.clearLayer('surface-background2');
+            }
             return this;
         },
         /**
@@ -176,8 +174,10 @@ define([
          * @returns {Prompt}
          */
         enableTeaching: function() {
-            this.teaching = true;
-            this.teach();
+            if (this.items.part === 'rune') {
+                this.teaching = true;
+                this.teach();
+            }
             return this;
         },
         /**
@@ -204,7 +204,7 @@ define([
          * @param {createjs.Shape} shape
          */
         handleCanvasInputUp: function(points, shape) {
-            switch (this.part) {
+            switch (this.items.part) {
                 case 'rune':
                     this.recognizeRune(points, shape);
                     break;
@@ -275,10 +275,6 @@ define([
                 this.canvas.setMessage('(click to advance)');
                 this.grading.select(this.active().get('score'));
                 this.disableTeaching();
-            } else {
-                if (this.teaching) {
-                    this.teach();
-                }
             }
         },
         /**
