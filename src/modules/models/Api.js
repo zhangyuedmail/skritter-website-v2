@@ -442,7 +442,8 @@ define([
          */
         getCredentials: function() {
             var credentials = '';
-            switch (gelato.getPlatform()) {
+            var platform = window.device ? window.device.platform : 'Web';
+            switch (platform) {
                 case 'Android':
                     this.set('client', 'skritterandroid');
                     credentials = this.get('skritterAndroid');
