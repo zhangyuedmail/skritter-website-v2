@@ -84,6 +84,27 @@ define([
             return shape;
         },
         /**
+         * @method getTraceParam
+         * @returns {DataParam}
+         */
+        getTraceParam: function() {
+            var matrix = this.getTargetShape().getMatrix();
+            var param = app.user.data.params.findWhere({strokeId: this.get('strokeId'), trace: true});
+            if (!param) {
+                var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+                param = params[params.length - 1];
+            }
+            param = param.clone();
+            var corners = _.cloneDeep(param.get('corners'));
+            for (var i = 0, length = corners.length; i < length; i++) {
+                var inflatedCorner = matrix.transformPoint(corners[i].x, corners[i].y);
+                corners[i].x = inflatedCorner.x;
+                corners[i].y = inflatedCorner.y;
+            }
+            param.set('corners', corners);
+            return param;
+        },
+        /**
          * @method getUserRectangle
          * @returns {Object}
          */

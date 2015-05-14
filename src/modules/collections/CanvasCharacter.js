@@ -32,10 +32,10 @@ define([
             return stroke.get('position');
         },
         /**
-         * @method getNextStroke
+         * @method getExpectedStroke
          * @returns {CanvasStroke}
          */
-        getNextStroke: function() {
+        getExpectedStroke: function() {
             var target = this.getExpectedTargets()[0];
             return this.length ? target.at(this.getPosition()) : target.at(0);
         },
