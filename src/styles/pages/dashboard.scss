@@ -1,1 +1,27 @@
-gelato-page[data-name="dashboard"] {}
+gelato-page[data-name="dashboard"] {
+
+  color: #8c9196;
+  font-family: $font-muli;
+  font-size: 16px;
+  font-weight: 300;
+
+  .content-block {
+    padding: 30px;
+    .content-block-label {
+      color: #404851;
+      display: inline-block;
+      font-family: $font-slab;
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+    .content-block-options {
+      display: inline-block;
+      float: right;
+      font-size: 18px;
+    }
+  }
+
+
+
+}
