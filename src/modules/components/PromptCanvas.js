@@ -90,6 +90,14 @@ define([
             return this;
         },
         /**
+         * @method clearMessage
+         * @returns {PromptCanvas}
+         */
+        clearMessage: function() {
+            this.$('#canvas-message').empty();
+            return this;
+        },
+        /**
          * @method createLayer
          * @param {String} name
          * @returns {createjs.Container}
@@ -327,6 +335,19 @@ define([
                 this.drawGrid().reset();
             } else {
                 this.reset();
+            }
+            return this;
+        },
+        /**
+         * @method setMessage
+         * @param {String} text
+         * @param {Number} [duration]
+         * @returns {PromptCanvas}
+         */
+        setMessage: function(text, duration) {
+            this.$('#canvas-message').text(text);
+            if (duration) {
+                this.$('#canvas-message').fadeOut(duration);
             }
             return this;
         },

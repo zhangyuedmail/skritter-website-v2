@@ -50,8 +50,8 @@ define([
         renderPrompt: function() {
             var tutorial = this.tutorials.at(this.index);
             var vocab = app.user.data.vocabs.get(tutorial.get('vocabId'));
-            this.prompt.detail.$('#tutorial-title').text(tutorial.get('title'));
-            this.prompt.detail.$('#tutorial-content').text(tutorial.get('content'));
+            this.prompt.detail.$('#tutorial-title').html(tutorial.get('title'));
+            this.prompt.detail.$('#tutorial-content').html(tutorial.get('content'));
             this.prompt.set(vocab.getPromptItems(tutorial.get('part')));
             return this;
         },

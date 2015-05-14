@@ -95,11 +95,20 @@ define([
          * @returns {Prompt}
          */
         renderPromptRune: function() {
+            var activeItem = this.active();
+            var targetShape = this.character().getTargetShape();
+            this.canvas.clearLayer('surface');
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
-                this.canvas.injectLayerColor('surface', this.active().getGradingColor());
+                this.canvas.drawShape('surface', targetShape, {color: activeItem.getGradingColor()});
+                this.canvas.setMessage('(click to advance)');
+                this.grading.select(activeItem.get('score'));
+
             } else {
                 this.canvas.enableInput();
+                this.canvas.drawShape('surface', targetShape);
+                this.canvas.clearMessage();
+                this.grading.unselect();
             }
             return this;
         },
@@ -108,21 +117,30 @@ define([
          * @returns {Prompt}
          */
         renderPromptTone: function() {
+            var activeItem = this.active();
+            var targetShape = this.character().getTargetShape();
             var writing = this.vocab.getCharacters()[this.position];
+            this.canvas.clearLayer('surface');
+            this.canvas.clearLayer('surface-background2');
             this.canvas.drawCharacter('surface-background2', writing, {
                 color: '#ebeaf0',
                 font: this.vocab.getFontName()
             });
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
+                this.canvas.drawShape('surface', targetShape, {color: activeItem.getGradingColor()});
+                this.canvas.setMessage('(click to advance)');
+                this.grading.select(activeItem.get('score'));
             } else {
+                this.canvas.clearMessage();
                 this.canvas.enableInput();
+                this.grading.unselect();
             }
             return this;
         },
         /**
          * @method active
-         * @returns {PromptResult}
+         * @returns {PromptItem}
          */
         active: function() {
             return this.items.at(this.position);
@@ -198,7 +216,11 @@ define([
                 var targetShape = stroke.getTargetShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
-                this.renderPrompt();
+            }
+            if (this.character().isComplete()) {
+                this.canvas.injectLayerColor('surface', this.active().getGradingColor());
+                this.canvas.setMessage('(click to advance)');
+                this.grading.select(this.active().get('score'));
             }
         },
         /**
@@ -212,7 +234,11 @@ define([
                 var targetShape = stroke.getTargetShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
-                this.renderPrompt();
+            }
+            if (this.character().isComplete()) {
+                this.canvas.injectLayerColor('surface', this.active().getGradingColor());
+                this.canvas.setMessage('(click to advance)');
+                this.grading.select(this.active().get('score'));
             }
         },
         /**
@@ -289,7 +315,9 @@ define([
             var panelLeft = this.$('#panel-left');
             //var panelRight = this.$('#panel-right');
             this.canvas.resize(panelLeft.find('#panel-left-center').width());
-            //TODO: render prompt again
+            if (this.items) {
+                this.renderPrompt();
+            }
             return this;
         },
         /**
@@ -302,7 +330,7 @@ define([
             this.items = items;
             this.detail.renderFields();
             this.vocab = this.active().getVocab();
-            this.resize().renderPrompt();
+            this.resize();
             return this;
         },
         /**
