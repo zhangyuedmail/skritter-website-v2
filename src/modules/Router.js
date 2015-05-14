@@ -7,6 +7,7 @@ define([
     'modules/pages/About',
     'modules/pages/Contact',
     'modules/pages/Dashboard',
+    'modules/pages/Demo',
     'modules/pages/Features',
     'modules/pages/GeneralSettings',
     'modules/pages/Home',
@@ -32,6 +33,7 @@ define([
     PageAbout,
     PageContact,
     PageDashboard,
+    PageDemo,
     PageFeatures,
     PageGeneralSettings,
     PageHome,
@@ -72,6 +74,7 @@ define([
             'about': 'showAbout',
             'contact': 'showContact',
             'dashboard': 'showDashboard',
+            'demo/:language': 'showDemo',
             'features': 'showFeatures',
             'institutions': 'showInstitutions',
             'legal': 'showLegal',
@@ -136,6 +139,14 @@ define([
                 this.navigate('', {trigger: false});
                 this.showHome();
             }
+        },
+        /**
+         * @method showDemo
+         * @param {String} [language]
+         */
+        showDemo: function(language) {
+            this.page = new PageDemo();
+            this.page.render().load(language);
         },
         /**
          * @method showFeatures
