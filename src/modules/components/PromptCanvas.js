@@ -213,6 +213,7 @@ define([
                 oldPoint = point;
                 oldMidPoint = midPoint;
                 points.push(point);
+                self.triggerInputMove(point);
                 self.stage.update();
             }
             function up() {
@@ -330,16 +331,6 @@ define([
             return this;
         },
         /**
-         * @method setLayerColor
-         * @param {String} layerName
-         * @param {String} color
-         * @returns {PromptCanvas}
-         */
-        setLayerColor: function(layerName, color) {
-            this.injectColor(this.getLayer(layerName), color);
-            return this;
-        },
-        /**
          * @method triggerCanvasMouseDown
          * @param {Object} event
          */
@@ -360,6 +351,13 @@ define([
          */
         triggerInputDown: function(point) {
             this.trigger('input:down', point);
+        },
+        /**
+         * @method triggerInputMove
+         * @param {createjs.Point} point
+         */
+        triggerInputMove: function(point) {
+            this.trigger('input:move', point);
         },
         /**
          * @method triggerInputUp

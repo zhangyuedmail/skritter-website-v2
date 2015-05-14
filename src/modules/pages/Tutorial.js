@@ -48,11 +48,11 @@ define([
          * @returns {PageTutorial}
          */
         renderPrompt: function() {
-            var module = this.tutorials.at(this.index);
-            var vocab = app.user.data.vocabs.get(module.get('vocabId'));
-            this.prompt.detail.$('#tutorial-title').text(module.get('title'));
-            this.prompt.detail.$('#tutorial-content').text(module.get('content'));
-            this.prompt.set(vocab.getPromptItems(module.get('part')));
+            var tutorial = this.tutorials.at(this.index);
+            var vocab = app.user.data.vocabs.get(tutorial.get('vocabId'));
+            this.prompt.detail.$('#tutorial-title').text(tutorial.get('title'));
+            this.prompt.detail.$('#tutorial-content').text(tutorial.get('content'));
+            this.prompt.set(vocab.getPromptItems(tutorial.get('part')));
             return this;
         },
         /**

@@ -97,6 +97,7 @@ define([
         renderPromptRune: function() {
             if (this.character().isComplete()) {
                 this.canvas.disableInput();
+                this.canvas.injectLayerColor('surface', this.active().getGradingColor());
             } else {
                 this.canvas.enableInput();
             }
@@ -134,6 +135,16 @@ define([
             return this.active().get('character');
         },
         /**
+         * @method erase
+         * @returns {Prompt}
+         */
+        erase: function() {
+            this.canvas.reset();
+            this.character().reset();
+            this.renderPrompt();
+            return this;
+        },
+        /**
          * @method handleCanvasClick
          */
         handleCanvasClick: function() {
@@ -158,9 +169,12 @@ define([
         },
         /**
          * @method handleGradeSelect
-         * @param value
+         * @param {Number} value
          */
-        handleGradeSelect: function(value) {},
+        handleGradeSelect: function(value) {
+            this.active().set('score', value);
+            this.renderPrompt();
+        },
         /**
          * @method handleNavigateLeft
          */
@@ -184,6 +198,7 @@ define([
                 var targetShape = stroke.getTargetShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
+                this.renderPrompt();
             }
         },
         /**
@@ -197,6 +212,7 @@ define([
                 var targetShape = stroke.getTargetShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
+                this.renderPrompt();
             }
         },
         /**
@@ -249,18 +265,20 @@ define([
             this.canvas.remove();
             this.detail.remove();
             this.grading.remove();
-            this.navigation.remove();
             this.toolbar.remove();
             return GelatoComponent.prototype.remove.call(this);
         },
         /**
-         * @method revealCharacter
+         * @method reveal
          * @returns {Prompt}
          */
-        revealCharacter: function() {
-            var nextShape = this.character().getExpectedTargets()[0].getTargetShape();
-            this.canvas.clearLayer('surface-background2');
-            this.canvas.drawShape('surface-background2', nextShape, {color: '#b3b3b3'});
+        reveal: function() {
+            var targetStroke = this.character().getExpectedTargets()[0];
+            if (targetStroke) {
+                var targetShape = targetStroke.getTargetShape();
+                this.canvas.clearLayer('surface-background2');
+                this.canvas.drawShape('surface-background2', targetShape, {color: '#ebeaf0'});
+            }
             return this;
         },
         /**
@@ -293,6 +311,16 @@ define([
          */
         show: function() {
             return GelatoComponent.prototype.show.call(this).resize();
+        },
+        /**
+         * @method teach
+         * @returns {Prompt}
+         */
+        teach: function() {
+            //TODO: implement new teaching mode
+            //var targetStroke = this.character().getExpectedStroke();
+            //if (targetStroke) {}
+            return this;
         }
     });
 

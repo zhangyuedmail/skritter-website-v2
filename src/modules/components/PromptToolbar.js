@@ -35,10 +35,10 @@ define([
          * @type Object
          */
         events: {
-            'vclick .option-correct': 'handleClickOptionCorrect',
-            'vclick .option-eraser': 'handleClickOptionEraser',
-            'vclick .option-reveal': 'handleClickOptionReveal',
-            'vclick .option-stroke-order': 'handleClickOptionStrokeOrder'
+            'vclick #option-correct': 'handleClickOptionCorrect',
+            'vclick #option-eraser': 'handleClickOptionEraser',
+            'vclick #option-reveal': 'handleClickOptionReveal',
+            'vclick #option-stroke-order': 'handleClickOptionStrokeOrder'
         },
         /**
          * @method handleClickOptionCorrect
@@ -53,7 +53,7 @@ define([
          */
         handleClickOptionEraser: function(event) {
             event.preventDefault();
-            this.prompt.character().reset();
+            this.prompt.erase();
             this.prompt.renderPrompt();
         },
         /**
@@ -62,13 +62,17 @@ define([
          */
         handleClickOptionReveal: function(event) {
             event.preventDefault();
+            this.prompt.reveal();
+            this.prompt.renderPrompt();
         },
         /**
-         * @method handleClickOptionStroke
+         * @method handleClickOptionStrokeOrder
          * @param {Event} event
          */
-        handleClickOptionStroke: function(event) {
+        handleClickOptionStrokeOrder: function(event) {
             event.preventDefault();
+            this.prompt.teach();
+            this.prompt.renderPrompt();
         },
         /**
          * @method resize
