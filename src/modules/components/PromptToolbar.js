@@ -46,6 +46,7 @@ define([
          */
         handleClickOptionCorrect: function(event) {
             event.preventDefault();
+
         },
         /**
          * @method handleClickOptionEraser
@@ -71,8 +72,11 @@ define([
          */
         handleClickOptionStrokeOrder: function(event) {
             event.preventDefault();
-            this.prompt.teach();
-            this.prompt.renderPrompt();
+            if (this.prompt.teaching) {
+                this.prompt.disableTeaching();
+            } else {
+                this.prompt.enableTeaching();
+            }
         },
         /**
          * @method resize

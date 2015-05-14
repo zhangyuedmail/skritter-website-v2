@@ -60,7 +60,7 @@ define([
                 }
             }
             this.prompt.detail.$('#tutorial-content').html(tutorial.get('content'));
-            this.prompt.set(vocab.getPromptItems(tutorial.get('part')));
+            this.prompt.set(vocab.getPromptItems(tutorial.get('part')), {teaching: true});
             this.renderEvents();
             return this;
         },

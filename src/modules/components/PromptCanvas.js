@@ -137,6 +137,27 @@ define([
             return this;
         },
         /**
+         * @method drawCircle
+         * @param {String} layerName
+         * @param {Number} x
+         * @param {Number} y
+         * @param {Number} radius
+         * @param {Object} options
+         * @returns {createjs.Shape}
+         */
+        drawCircle: function(layerName, x, y, radius, options) {
+            var circle = new createjs.Shape();
+            options = options ? options : {};
+            circle.graphics.beginFill(options.fill || '#000000');
+            circle.graphics.drawCircle(x, y, radius);
+            if (options.alpha) {
+                circle.alpha = options.alpha;
+            }
+            this.getLayer(layerName).addChild(circle);
+            this.stage.update();
+            return circle;
+        },
+        /**
          * @method drawGrid
          * @returns {PromptCanvas}
          */
@@ -350,6 +371,20 @@ define([
                 this.$('#canvas-message').fadeOut(duration);
             }
             return this;
+        },
+        /**
+         * @method tracePath
+         * @param {String} layerName
+         * @param {Array} path
+         */
+        tracePath: function(layerName, path) {
+            var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: '#337ab7'});
+            var tween = createjs.Tween.get(circle, {loop: true});
+            for (var i = 1, length = path.length; i < length; i++) {
+                var adjustedX = path[i].x - path[0].x;
+                var adjustedY = path[i].y - path[0].y;
+                tween.to({x: adjustedX, y: adjustedY}, 1000);
+            }
         },
         /**
          * @method triggerCanvasMouseDown

@@ -35,6 +35,7 @@ define([
             this.items = null;
             this.part = 'rune';
             this.position = 0;
+            this.teaching = false;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
             this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
             this.listenTo(this.canvas, 'navigate:right', this.handleNavigateRight);
@@ -103,12 +104,16 @@ define([
                 this.canvas.drawShape('surface', targetShape, {color: activeItem.getGradingColor()});
                 this.canvas.setMessage('(click to advance)');
                 this.grading.select(activeItem.get('score'));
+                this.disableTeaching();
 
             } else {
                 this.canvas.enableInput();
                 this.canvas.drawShape('surface', targetShape);
                 this.canvas.clearMessage();
                 this.grading.unselect();
+                if (this.teaching) {
+                    this.teach();
+                }
             }
             return this;
         },
@@ -131,10 +136,14 @@ define([
                 this.canvas.drawShape('surface', targetShape, {color: activeItem.getGradingColor()});
                 this.canvas.setMessage('(click to advance)');
                 this.grading.select(activeItem.get('score'));
+                this.disableTeaching();
             } else {
                 this.canvas.clearMessage();
                 this.canvas.enableInput();
                 this.grading.unselect();
+                if (this.teaching) {
+                    this.teach();
+                }
             }
             return this;
         },
@@ -151,6 +160,25 @@ define([
          */
         character: function() {
             return this.active().get('character');
+        },
+        /**
+         * @method disableTeaching
+         * @returns {Prompt}
+         */
+        disableTeaching: function() {
+            this.teaching = false;
+            this.canvas.clearLayer('surface-background1');
+            this.canvas.clearLayer('surface-background2');
+            return this;
+        },
+        /**
+         * @method enableTeaching
+         * @returns {Prompt}
+         */
+        enableTeaching: function() {
+            this.teaching = true;
+            this.teach();
+            return this;
         },
         /**
          * @method erase
@@ -218,9 +246,15 @@ define([
                 this.canvas.tweenShape('surface', userShape, targetShape);
             }
             if (this.character().isComplete()) {
+                //TODO: better combine this in with rune render
                 this.canvas.injectLayerColor('surface', this.active().getGradingColor());
                 this.canvas.setMessage('(click to advance)');
                 this.grading.select(this.active().get('score'));
+                this.disableTeaching();
+            } else {
+                if (this.teaching) {
+                    this.teach();
+                }
             }
         },
         /**
@@ -236,9 +270,15 @@ define([
                 this.canvas.tweenShape('surface', userShape, targetShape);
             }
             if (this.character().isComplete()) {
+                //TODO: better combine this in with tone render
                 this.canvas.injectLayerColor('surface', this.active().getGradingColor());
                 this.canvas.setMessage('(click to advance)');
                 this.grading.select(this.active().get('score'));
+                this.disableTeaching();
+            } else {
+                if (this.teaching) {
+                    this.teach();
+                }
             }
         },
         /**
@@ -323,13 +363,18 @@ define([
         /**
          * @method set
          * @param {PromptItems} items
+         * @param {Object} [options]
          * @returns {Prompt}
          */
-        set: function(items) {
+        set: function(items, options) {
             console.log('PROMPT:', items);
+            options = options || {};
             this.items = items;
             this.detail.renderFields();
             this.vocab = this.active().getVocab();
+            if (options.teaching) {
+                this.enableTeaching();
+            }
             this.resize();
             return this;
         },
@@ -345,9 +390,14 @@ define([
          * @returns {Prompt}
          */
         teach: function() {
-            //TODO: implement new teaching mode
-            //var targetStroke = this.character().getExpectedStroke();
-            //if (targetStroke) {}
+            var targetStroke = this.character().getExpectedStroke();
+            if (targetStroke) {
+                var strokeParam = targetStroke.getTraceParam();
+                var strokePath = strokeParam.get('corners');
+                this.canvas.clearLayer('surface-background1');
+                this.canvas.tracePath('surface-background1', strokePath);
+                this.reveal();
+            }
             return this;
         }
     });
