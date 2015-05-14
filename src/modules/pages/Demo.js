@@ -59,6 +59,9 @@ define([
                     this.prompt.detail.$('#tutorial-buttons').html('<button id="stroke-order-button" type="button" class="btn btn-primary">Previous Tutorial: Stroke Order</button>');
                 }
             }
+            this.prompt.detail.$('#tutorial-blurb .media-object').empty().html(tutorial.get('blurbImage'));
+            this.prompt.detail.$('#tutorial-blurb .media-header').empty().html(tutorial.get('blurbHeader'));
+            this.prompt.detail.$('#tutorial-blurb .media-subtext').empty().html(tutorial.get('blurbText'));
             this.prompt.detail.$('#tutorial-content').html(tutorial.get('content'));
             this.prompt.set(vocab.getPromptItems(tutorial.get('part')), {teaching: true});
             this.renderEvents();

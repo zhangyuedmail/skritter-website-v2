@@ -25,6 +25,9 @@ define([], function() {
             vocabId: 'zh-十-0'
         },
         {
+            blurbHeader: 'Stroke Order Help',
+            blurbImage: '<img src="http://placehold.it/20x20" alt="">',
+            blurbText: 'Ever wondered about stroke order? Skritter clears up any such questions.',
             content: 'Cutting strokes last.',
             module: 'chinese-stroke-order',
             part: 'rune',
@@ -39,6 +42,9 @@ define([], function() {
             vocabId: 'zh-父-0'
         },
         {
+            blurbHeader: 'Smart Flashcards',
+            blurbImage: '<img src="http://placehold.it/20x20" alt="">',
+            blurbText: 'Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.',
             content: 'Center verticals before outside wings.',
             module: 'chinese-stroke-order',
             part: 'rune',
@@ -46,6 +52,9 @@ define([], function() {
             vocabId: 'zh-水-0'
         },
         {
+            blurbHeader: 'Efficient Reviewing',
+            blurbImage: '<img src="http://placehold.it/20x20" alt="">',
+            blurbText: 'Learn new characters in less than a minute, and remember 95% of what you learn.',
             content: 'Outside before inside.',
             module: 'chinese-stroke-order',
             part: 'rune',
@@ -67,6 +76,9 @@ define([], function() {
             vocabId: 'zh-回-0'
         },
         {
+            blurbHeader: 'Brian Jackson (Economist, Alaska)',
+            blurbImage: '<img src="http://placehold.it/20x20" alt="">',
+            blurbText: 'Learning to write Chinese characters has never been so fun. From writing zero to 2000+ characters in six months!',
             content: 'Dots and minor strokes last.',
             module: 'chinese-stroke-order',
             part: 'rune',
@@ -81,6 +93,9 @@ define([], function() {
             vocabId: 'zh-天-0'
         },
         {
+            blurbHeader: 'Tone Practice',
+            blurbImage: '<img src="http://placehold.it/20x20" alt="">',
+            blurbText: 'Draw the tone marks for each character to enhance your comprehension.',
             content: '',
             module: 'chinese-tones',
             part: 'tone',
