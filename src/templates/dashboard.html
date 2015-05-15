@@ -26,7 +26,7 @@
             </section>
 
             <section class="row">
-                <div class="col-md-6">
+                <div id="section-daily-goal" class="col-md-6">
                     <div class="content-block">
                         <div class="content-block-header">
                             <div class="content-block-label">Daily Goal</div>
@@ -34,34 +34,59 @@
                                 <span id="goal-settings-button"><i class="fa fa-cog"></i></span>
                             </div>
                         </div>
-                        <canvas id="goal-doughnut"></canvas>
-                        <div><span id="items-reviewed-value"></span><span>items reviewed</span></div>
-                        <div><span id="items-added-value"></span><span>items added</span></div>
-                        <button type="button" class="btn btn-success" data-url="study">Study</button>
+                        <div id="daily-goal-row" class="row">
+                            <div class="col-xs-6">
+                                <canvas id="goal-doughnut"></canvas>
+                            </div>
+                            <div class="col-xs-6">
+                                <div id="items-reviewed">
+                                    <div class="value"></div>
+                                    <div>items reviewed</div>
+                                </div>
+                                <div id="items-added">
+                                    <div class="value"></div>
+                                    <div>items added</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-success" data-url="study">Study</button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div id="section-month-overview" class="col-md-3">
                     <div class="content-block">
                         <div class="content-block-label">This Month</div>
-                        <div id="month-heatmap"></div>
-                        <div><span id="month-streak-value"></span><span>day streak</span></div>
+                        <div id="heatmap-container"></div>
+                        <div id="month-streak" class="text-center">
+                            <div class="value"></div>
+                            <div>day streak</div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div id="section-all-time" class="col-md-3">
                     <div class="content-block">
                         <div class="content-block-label">All Time</div>
-                        <div><span id="characters-learned-value"></span><span>characters learned</span></div>
-                        <div><span id="words-learned-value"></span><span>words learned</span></div>
+                        <div class="text-center">
+                            <div id="characters-learned"><div class="value"></div><div>characters learned</div></div>
+                            <div id="words-learned"><div class="value"></div><div>words learned</div></div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <section class="row">
+            <section id="section-list-queue" class="row">
                 <div class="col-xs-12">
                     <div class="content-block">
                         <div class="content-block-label">List Queue</div>
-                        <div id="list-queue-doughnut"></div>
-                        <div id="list-queue-table"></div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <canvas id="list-queue-doughnut"></canvas>
+                            </div>
+                            <div class="col-xs-9">
+                                <div id="list-queue-table"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
