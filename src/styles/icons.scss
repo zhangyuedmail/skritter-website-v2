@@ -24,6 +24,11 @@
 .icon-marketing-calendar {
   background-image: url('#{$dir-assets}/vectors/marketing-calendar.svg');
 }
+.icon-marketing-chinese-pod {
+  background-image: url('#{$dir-assets}/vectors/marketing-chinese-pod.svg');
+  height: 60px;
+  width: 50px;
+}
 .icon-marketing-decomps {
   background-image: url('#{$dir-assets}/vectors/marketing-decomps.svg');
   height: 60px;
@@ -82,7 +87,17 @@
 }
 .icon-marketing-stroke-order {
   background-image: url('#{$dir-assets}/vectors/marketing-stroke-order.svg');
-  height: 50px;
+  height: 60px;
+  width: 50px;
+}
+.icon-marketing-textbooks {
+  background-image: url('#{$dir-assets}/vectors/marketing-textbooks.svg');
+  height: 60px;
+  width: 50px;
+}
+.icon-marketing-tone-practice {
+  background-image: url('#{$dir-assets}/vectors/marketing-tone-practice.svg');
+  height: 60px;
   width: 50px;
 }
 .icon-marketing-users {
