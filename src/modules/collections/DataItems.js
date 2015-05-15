@@ -46,6 +46,16 @@ define([
             });
         },
         /**
+         * @method getItemAddedCount
+         * @returns {Number}
+         */
+        getAddedCount: function() {
+            var today = Moment().startOf('day').add(3, 'hours').unix();
+            return _.filter(this.models, function(item) {
+                return item.get('created') >= today;
+            }).length;
+        },
+        /**
          * @method getDue
          * @returns {Number}
          */
@@ -60,16 +70,6 @@ define([
          */
         getDueCount: function() {
             return this.getDue().length;
-        },
-        /**
-         * @method getItemAddedCount
-         * @returns {Number}
-         */
-        getAddedCount: function() {
-            var today = Moment().startOf('day').add(3, 'hours').unix();
-            return _.filter(this.models, function(item) {
-                return item.get('created') >= today;
-            }).length;
         },
         /**
          * @method getItemReviewedCount

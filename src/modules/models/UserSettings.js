@@ -46,7 +46,7 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
-            if (app.user.isLoggedIn()) {
+            if (!app.user.isLoggedIn()) {
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
