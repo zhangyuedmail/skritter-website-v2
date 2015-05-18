@@ -102,8 +102,7 @@ define([
                 legend: [1, 50, 100, 200],
                 range: 1,
                 start: new Date(2015, new Date().getMonth(), 1),
-                subDomain: 'x_day',
-                subDomainTextFormat: '%d'
+                subDomain: 'x_day'
             });
             return this;
         },
@@ -115,8 +114,7 @@ define([
             var addingLists = app.user.data.vocablists.getAdding();
             this.listQueue.set(addingLists, {
                 name: 'Name',
-                progress: 'Progress',
-                status: 'Status'
+                progress: 'Progress'
             });
             return this;
         },

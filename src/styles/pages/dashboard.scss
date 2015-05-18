@@ -50,10 +50,10 @@ gelato-page[data-name="dashboard"] {
       width: 150px;
     }
     #list-queue-table {
-      color: blue;
+      margin-top: 30px;
       td, th { border: none; }
       thead { display: none; }
-      .field-progress { min-width: 150px; }
+      .field-progress { min-width: 200px; }
     }
   }
 
