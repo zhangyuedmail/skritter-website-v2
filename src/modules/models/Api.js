@@ -16,7 +16,7 @@ define([
          * @constructor
          */
         initialize: function() {},
-        /**
+        /**O
          * @property defaults
          * @type Object
          */
@@ -626,6 +626,30 @@ define([
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     callbackSuccess(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method resetPassword
+         * @param {String} indentifier
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        resetPassword: function(indentifier, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'reset-password' +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: JSON.stringify({input: indentifier})
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackSuccess();
                 } else {
                     callbackError(data);
                 }
