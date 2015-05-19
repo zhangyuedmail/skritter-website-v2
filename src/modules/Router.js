@@ -19,6 +19,7 @@ define([
     'modules/pages/ListQueue',
     'modules/pages/ListSection',
     'modules/pages/Login',
+    'modules/pages/PasswordReset',
     'modules/pages/Pricing',
     'modules/pages/Scratchpad',
     'modules/pages/Signup',
@@ -45,6 +46,7 @@ define([
     PageListQueue,
     PageListSection,
     PageLogin,
+    PagePasswordReset,
     PagePricing,
     PageScratchpad,
     PageSignup,
@@ -85,6 +87,7 @@ define([
             'lists/create': 'showListCreate',
             'lists/queue': 'showListQueue',
             'login': 'showLogin',
+            'password-reset': 'showPasswordReset',
             'pricing': 'showPricing',
             'scratchpad': 'showScratchpad',
             'scratchpad/:writing': 'showScratchpad',
@@ -228,6 +231,13 @@ define([
          */
         showLogin: function() {
             this.page = new PageLogin();
+            this.page.render();
+        },
+        /**
+         * @method showPasswordReset
+         */
+        showPasswordReset: function() {
+            this.page = new PagePasswordReset();
             this.page.render();
         },
         /**
