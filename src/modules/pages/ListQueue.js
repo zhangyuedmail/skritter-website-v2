@@ -28,6 +28,11 @@ define([
          */
         title: 'List Queue - ' + i18n.global.title,
         /**
+         * @property bodyClass
+         * @type {String}
+         */
+        bodyClass: 'background-light',
+        /**
          * @method render
          * @returns {PageListQueue}
          */
@@ -45,20 +50,30 @@ define([
         renderTables: function() {
             var addingLists = app.user.data.vocablists.getAdding();
             var reviewingLists = app.user.data.vocablists.getReviewing();
-            this.addingTable.set(addingLists, {
-                name: 'Name',
-                study: '',
-                stopAdding: '',
-                progress: 'Progress',
-                status: 'Status'
-            });
-            this.reviewingTable.set(reviewingLists, {
-                name: 'Name',
-                study: '',
-                startAdding: '',
-                progress: 'Progress',
-                status: 'Status'
-            });
+            if (addingLists.length) {
+                this.$('#header-adding').show();
+                this.addingTable.set(addingLists, {
+                    name: 'Name',
+                    progress: 'Progress',
+                    study: '',
+                    stopAdding: '',
+                    remove: ''
+                });
+            } else {
+                this.$('#header-adding').hide();
+            }
+            if (reviewingLists.length) {
+                this.$('#header-reviewing').show();
+                this.reviewingTable.set(reviewingLists, {
+                    name: 'Name',
+                    progress: 'Progress',
+                    study: '',
+                    startAdding: '',
+                    remove: ''
+                });
+            } else {
+                this.$('#header-reviewing').hide();
+            }
             return this;
         },
         /**

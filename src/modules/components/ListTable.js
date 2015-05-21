@@ -57,6 +57,9 @@ define([
                         case 'progress':
                             tableBody += this.getProgressBar({value: list.getPercentAdded()});
                             break;
+                        case 'remove':
+                            tableBody += '<i class="fa fa-close"></i>';
+                            break;
                         case 'status':
                             tableBody += this.getStatus({status: list.get('studyingMode')});
                             break;
@@ -67,7 +70,7 @@ define([
                             tableBody += '<a href="#">Stop adding</a>';
                             break;
                         case 'study':
-                            tableBody += '<a href="#" data-url="study/' + list.id + '">Study list</a>';
+                            tableBody += '<a href="#">Study list</a>';
                             break;
                         default:
                             tableBody += list.get(field2);
@@ -86,7 +89,10 @@ define([
          * @type Object
          */
         events: {
-            'vclick .field-name': 'handleClickFieldName'
+            'vclick .field-name': 'handleClickFieldName',
+            'vclick .field-startadding': 'handleClickFieldStartAdding',
+            'vclick .field-stopadding': 'handleClickFieldStopAdding',
+            'vclick .field-study': 'handleClickFieldStudy'
         },
         /**
          * @method filterBy
@@ -169,6 +175,42 @@ define([
             var $row = $(event.currentTarget).parent('tr');
             var listId = $row.get(0).id.replace('row-', '');
             app.router.navigate('lists/browse/' + listId);
+        },
+        /**
+         * @method handleClickFieldStartAdding
+         * @param {Event} event
+         */
+        handleClickFieldStartAdding: function(event) {
+            event.preventDefault();
+            var $row = $(event.currentTarget).parent('tr');
+            var listId = $row.get(0).id.replace('row-', '');
+            var list = app.user.data.vocablists.get(listId);
+            if (list) {
+                list.set('studyingMode', 'adding');
+            }
+        },
+        /**
+         * @method handleClickFieldStopAdding
+         * @param {Event} event
+         */
+        handleClickFieldStopAdding: function(event) {
+            event.preventDefault();
+            var $row = $(event.currentTarget).parent('tr');
+            var listId = $row.get(0).id.replace('row-', '');
+            var list = app.user.data.vocablists.get(listId);
+            if (list) {
+                list.set('studyingMode', 'reviewing');
+            }
+        },
+        /**
+         * @method handleClickFieldStudy
+         * @param {Event} event
+         */
+        handleClickFieldStudy: function(event) {
+            event.preventDefault();
+            var $row = $(event.currentTarget).parent('tr');
+            var listId = $row.get(0).id.replace('row-', '');
+            app.router.navigate('study/' + listId);
         },
         /**
          * @method set
