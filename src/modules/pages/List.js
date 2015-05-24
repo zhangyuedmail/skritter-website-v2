@@ -59,8 +59,7 @@ define([
         renderSections: function() {
             this.sectionTable.set(this.list, {
                 name: 'Name',
-                wordCount: 'Word Count',
-                status: 'Status'
+                wordCount: 'Word Count'
             });
             return this;
         },
