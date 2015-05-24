@@ -1,9 +1,9 @@
 <gelato-page data-name="list">
 
-    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+    <gelato-navbar class="fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
+            <div class="left">
+                <div class="item item-header">{{global.title}}</div>
             </div>
         </div>
     </gelato-navbar>
@@ -11,20 +11,24 @@
     <gelato-content class="container">
         <div class="content-block">
             <div class="row">
-                <div class="col-md-2">
-                    <div>Publish</div>
-                    <div>Clone</div>
-                    <div>Delete</div>
-                    <div>Assign to group</div>
-                    <div>Export</div>
+                <div class="col-md-3">
+                    <section id="section-menu">
+                        <div>Publish</div>
+                        <div>Clone</div>
+                        <div>Delete</div>
+                        <div>Assign to group</div>
+                        <div>Export</div>
+                    </section>
                 </div>
-                <div class="col-md-10">
-                    <div id="list-name"></div>
-                    <div id="list-meta"></div>
-                    <div id="list-description"></div>
-                    <div id="list-tags"></div>
-                    <div>Sections</div>
-                    <div id="list-sections-table"></div>
+                <div class="col-md-9">
+                    <section id="section-content">
+                        <div id="list-name"></div>
+                        <div id="list-meta"></div>
+                        <div id="list-description"></div>
+                        <div id="list-tags"></div>
+                        <div class="header">Sections</div>
+                        <div id="list-sections-table"></div>
+                    </section>
                 </div>
             </div>
         </div>

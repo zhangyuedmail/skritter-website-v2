@@ -78,9 +78,9 @@ define([
             var self = this;
             app.api.fetchVocabList(id, null, function(result) {
                 app.user.data.insert({VocabLists: result}, function() {
-                    self.add(result, {merge: true, silent: true});
+                    result = self.add(result, {merge: true, silent: true});
                     if (typeof callbackSuccess === 'function') {
-                        callbackSuccess();
+                        callbackSuccess(result);
                     }
                 });
             }, function(error) {

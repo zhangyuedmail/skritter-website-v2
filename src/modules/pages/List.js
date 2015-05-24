@@ -27,6 +27,11 @@ define([
          */
         title: 'List - ' + i18n.global.title,
         /**
+         * @property bodyClass
+         * @type {String}
+         */
+        bodyClass: 'background-light',
+        /**
          * @method render
          * @returns {PageList}
          */
