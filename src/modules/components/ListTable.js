@@ -100,11 +100,9 @@ define([
          * @returns {ListTable}
          */
         filterBy: function(value) {
+            value = value.toLowerCase();
             this.filtered = _.filter(this.lists, function(list) {
-                if (list.get('name').indexOf(value) > -1) {
-                    return true;
-                }
-                return false;
+                return list.get('name').toLowerCase().indexOf(value) > -1;
             });
             this.renderTable();
             return this;

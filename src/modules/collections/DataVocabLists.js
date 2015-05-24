@@ -153,7 +153,7 @@ define([
          */
         getOfficial: function() {
             return _.filter(this.models, function(list) {
-                return list.get('studyingMode') === 'official';
+                return list.get('sort') === 'official';
             });
         },
         /**
