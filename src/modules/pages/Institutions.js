@@ -51,8 +51,10 @@ define([
         handleClickRequestPurchase: function(event) {
             event.preventDefault();
             var section = this.$("#section-request");
+            var students = $(event.currentTarget).data('students');
             $('html, body').animate({scrollTop: section.offset().top}, 1000);
             this.$('#institution-request-type [value="purchase"]').prop('checked', 'checked');
+            this.$('#institution-number option[value="' + students + '"]').prop('selected', 'selected');
         },
         /**
          * @method handleClickRequestSubmit

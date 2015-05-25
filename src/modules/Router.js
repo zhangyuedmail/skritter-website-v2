@@ -95,6 +95,7 @@ define([
             'settings/general': 'showGeneralSettings',
             'settings/study': 'showStudySettings',
             'signup': 'showSignup',
+            'signup/:price': 'showSignup',
             'stats': 'showStatsSummary',
             'stats/summary': 'showStatsSummary',
             'stats/timeline': 'showStatsTimeline',
@@ -209,7 +210,7 @@ define([
          */
         showListBrowse: function() {
             this.page = new PageListBrowse();
-            this.page.render();
+            this.page.render().load();
         },
         /**
          * @method showListCreate
@@ -224,7 +225,7 @@ define([
         showListQueue: function() {
             this.navigate('lists/queue', {trigger: false});
             this.page = new PageListQueue();
-            this.page.render();
+            this.page.render().load();
         },
         /**
          * @method showLogin
@@ -257,10 +258,11 @@ define([
         },
         /**
          * @method showSignup
+         * @param {String} [price]
          */
-        showSignup: function() {
+        showSignup: function(price) {
             this.page = new PageSignup();
-            this.page.render();
+            this.page.render().select(price);
         },
         /**
          * @method showStatsSummary

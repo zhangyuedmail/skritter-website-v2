@@ -56,6 +56,15 @@ define([
         remove: function() {
             this.footer.remove();
             return GelatoPage.prototype.remove.call(this);
+        },
+        /**
+         * @method select
+         * @param {String} price
+         * @returns {PageSignup}
+         */
+        select: function(price) {
+            this.$('#signup-plan option[value="' + price + '"]').prop('selected', 'selected');
+            return this;
         }
     });
 
