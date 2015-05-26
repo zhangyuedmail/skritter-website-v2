@@ -22,6 +22,7 @@ define([
             this.doughnutList = null;
             this.heatmap = new CalHeatMap();
             this.listQueue = new ListTable();
+            this.listenTo(app.dialog, 'goal-settings:confirm', this.updateGoalSettings);
             this.listenTo(app.user.data.stats, 'add change', this.renderStats);
             this.listenTo(app.user.data.stats, 'add change', this.renderStats);
             this.listenTo(app.user.data.stats, 'add change', this.renderStats);
@@ -130,6 +131,36 @@ define([
             this.$('#month-streak .value').text(app.user.data.stats.getStreak());
             this.$('#words-learned .value').text(app.user.data.stats.getTotalWordsLearned());
             return this;
+        },
+        /**
+         * @property events
+         * @type {Object}
+         */
+        events: {
+            'vclick #goal-settings-button': 'handleClickGoalSettings'
+        },
+        /**
+         * @method handleClickGoalSettings
+         * @param {Event} event
+         */
+        handleClickGoalSettings: function(event) {
+            event.preventDefault();
+            var goal = app.user.settings.getGoal();
+            var goalType = Object.keys(goal)[0];
+            var goalValue = goal[goalType];
+            console.log(goalType);
+            $('gelato-dialog [name="goal-type"][value="' + goalType + '"]').prop('checked', 'checked');
+            $('gelato-dialog #goal-value').val(goalValue);
+            app.dialog.show('goal-settings');
+        },
+        /**
+         * @method updateGoalSettings
+         */
+        updateGoalSettings: function() {
+            var goalType = $('gelato-dialog [name="goal-type"]:checked').val();
+            var goalValue = $('gelato-dialog #goal-value').val();
+            app.user.settings.setGoal(goalType, goalValue);
+            app.dialog.hide();
         }
     });
 

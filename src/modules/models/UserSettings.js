@@ -29,7 +29,8 @@ define([
             allJapaneseParts: ['defn', 'rdng', 'rune'],
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
-            gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'}
+            gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
+            goals: {ja: {time: 20}, zh: {time: 20}}
         },
         /**
          * @method cache
@@ -127,6 +128,13 @@ define([
             return app.user.isChinese() ? 'Simkai' : 'Kaisho';
         },
         /**
+         * @method getGoal
+         * @returns {Object}
+         */
+        getGoal: function() {
+            return this.get('goals')[app.user.getLanguageCode()];
+        },
+        /**
          * @method load
          * @returns {UserSettings}
          */
@@ -151,7 +159,7 @@ define([
                 return;
             }
             app.api.putUser(this.toJSON(), function(result) {
-                self.set(result, {merge: true});
+                self.set(result, {merge: true, silent: true});
                 self.cache();
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess(self);
@@ -195,6 +203,22 @@ define([
                 }
             }
             return this.getActiveStyles();
+        },
+        /**
+         * @method setGoal
+         * @param {String} type
+         * @param {String} value
+         * @returns {UserSettings}
+         */
+        setGoal: function(type, value) {
+            var languageCode = app.user.getLanguageCode();
+            var goals = this.get('goals');
+            var newGoal = {};
+            newGoal[type] = parseInt(value, 10);
+            goals[languageCode] = newGoal;
+            this.set('goals', goals);
+            this.save();
+            return this;
         }
     });
 

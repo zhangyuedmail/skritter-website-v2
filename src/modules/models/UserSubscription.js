@@ -45,7 +45,7 @@ define([
                 return;
             }
             app.api.fetchSubscription(app.user.id, null, function(data) {
-                self.set(data, {merge: true});
+                self.set(data, {merge: true, silent: true});
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
