@@ -60,8 +60,8 @@ define([
             var context = this.$('#goal-doughnut').get(0).getContext('2d');
             this.doughnutGoal = new Chart(context).Doughnut(
                 [
-                    {value: 60, color:'#c5da4b'},
-                    {value: 40, color: '#efeef3'}
+                    {value: 0, color:'#c5da4b'},
+                    {value: 100, color: '#efeef3'}
                 ],
                 {
                     percentageInnerCutout : 80,
@@ -77,8 +77,8 @@ define([
             var context = this.$('#list-queue-doughnut').get(0).getContext('2d');
             this.doughnutList = new Chart(context).Doughnut(
                 [
-                    {value: 20, color:'#c5da4b'},
-                    {value: 80, color: '#efeef3'}
+                    {value: 0, color:'#c5da4b'},
+                    {value: 100, color: '#efeef3'}
                 ],
                 {
                     percentageInnerCutout : 80,
@@ -104,6 +104,7 @@ define([
                 start: new Date(2015, new Date().getMonth(), 1),
                 subDomain: 'x_day'
             });
+            this.heatmap.update(app.user.data.stats.getHeatmapData());
             return this;
         },
         /**

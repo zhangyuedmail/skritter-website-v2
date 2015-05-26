@@ -108,6 +108,19 @@ define([
             });
         },
         /**
+         * @method getHeatmapData
+         * @returns {Object}
+         */
+        getHeatmapData: function() {
+            var data = {};
+            for (var i = 0, length = this.length; i < length; i++) {
+                var stat = this.at(i);
+                var date = Moment(stat.get('date')).unix();
+                data[date] = stat.get('char').rune.studied.day;
+            }
+            return data;
+        },
+        /**
          * @method getStreak
          * @returns {Number}
          */

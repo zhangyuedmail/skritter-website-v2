@@ -212,6 +212,20 @@ define([
                     self.data.load(callback, callback);
                 },
                 function(callback) {
+                    app.user.data.stats.fetch(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    app.user.data.vocablists.fetch(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
                     app.user.data.items.fetchIds(function() {
                         callback();
                     }, function(error) {
