@@ -48,7 +48,10 @@ define([
          * @property defaults
          * @type Object
          */
-        defaults: {},
+        defaults: {
+            lastItemUpdate: 0,
+            lastVocabUpdate: 0
+        },
         /**
          * @method add
          * @param {Object} result
@@ -136,6 +139,10 @@ define([
          */
         load: function(callbackSuccess, callbackError) {
             var self = this;
+            var data = localStorage.getItem(app.user.getDataPath('data', true));
+            if (data) {
+                this.set(JSON.parse(data), {silent: true});
+            }
             Async.series([
                 function(callback) {
                     self.initializeStorage(function() {

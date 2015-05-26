@@ -39,9 +39,12 @@ define([
             var sections = this.get('sections') || [];
             for (var a = 0, lengthA = sections.length; a < lengthA; a++) {
                 var rows = sections[a].rows || [];
-                for (var b = 0, lengthB = rows.length; b < lengthB; b++) {}
+                for (var b = 0, lengthB = rows.length; b < lengthB; b++) {
+                    addedRows += app.user.data.items.hasVocabId(rows[b].vocabId) ? 1 : 0;
+                    totalRows++;
+                }
             }
-            return totalRows > 0 ? addedRows/totalRows : 0;
+            return totalRows > 0 ? (addedRows / totalRows) * 100 : 0;
         },
         /**
          * @method getWordCount

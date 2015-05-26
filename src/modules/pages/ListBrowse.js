@@ -20,7 +20,7 @@ define([
         initialize: function() {
             this.browseTable = new ListTable();
             this.listenTo(app.user.data.vocablists, 'add change', this.renderTables);
-            //app.user.data.vocablists.fetchOfficial();
+
         },
         /**
          * @property title
@@ -69,6 +69,14 @@ define([
             event.preventDefault();
             var $input = $(event.currentTarget);
             this.browseTable.filterBy($input.val()).sortBy('name');
+        },
+        /**
+         * @method load
+         * @returns {PageListBrowse}
+         */
+        load: function() {
+            app.user.data.vocablists.fetchOfficial();
+            return this;
         }
     });
 

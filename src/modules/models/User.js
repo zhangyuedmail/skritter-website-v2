@@ -133,13 +133,14 @@ define([
          */
         loadUser: function(callbackSuccess, callbackError) {
             var self = this;
+            app.dialog.show('loading');
             Async.series([
                 function(callback) {
                     if (self.authentication.isExpired()) {
                         self.authentication.refresh(function() {
                             callback();
                         }, function(error) {
-                           callback(error);
+                            callback(error);
                         });
                     } else {
                         callback();
@@ -147,11 +148,28 @@ define([
                 },
                 function(callback) {
                     self.data.load(callback, callback);
+                },
+                function(callback) {
+                    self.data.items.fetchMissing(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    }, function(status) {
+                        app.dialog.element.find('.modal-message').text(status + '%');
+                    });
+                },
+                function(callback) {
+                    self.data.items.fetchChanged(function() {
+                        callback();
+                    }, function(error) {
+                       callback(error);
+                    });
                 }
             ], function(error) {
                 if (error) {
                     callbackError(error);
                 } else {
+                    app.dialog.hide();
                     callbackSuccess();
                 }
             });
@@ -189,12 +207,24 @@ define([
                     }, function(error) {
                         callback(error);
                     });
+                },
+                function(callback) {
+                    self.data.load(callback, callback);
+                },
+                function(callback) {
+                    app.user.data.items.fetchIds(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
                 }
             ], function(error) {
                 if (error) {
                     console.error('USER LOGIN ERROR:', error);
                     callbackError(error);
                 } else {
+                    var now = Moment().unix();
+                    self.data.set({lastItemUpdate: now, lastVocabUpdate: now});
                     app.setSetting('user', self.id);
                     callbackSuccess();
                 }

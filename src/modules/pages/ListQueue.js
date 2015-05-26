@@ -80,7 +80,15 @@ define([
          * @property events
          * @type Object
          */
-        events: {}
+        events: {},
+        /**
+         * @method load
+         * @returns {PageListQueue}
+         */
+        load: function() {
+            app.user.data.vocablists.fetch();
+            return this;
+        }
     });
 
     return PageListQueue;
