@@ -79,6 +79,7 @@ define([
             app.api.fetchVocabList(id, null, function(result) {
                 app.user.data.insert({VocabLists: result}, function() {
                     result = self.add(result, {merge: true, silent: true});
+                    self.trigger('add', self);
                     if (typeof callbackSuccess === 'function') {
                         callbackSuccess(result);
                     }
@@ -88,6 +89,37 @@ define([
                     callbackError(error);
                 }
             });
+        },
+        /**
+         * @method fetchCustom
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        fetchCustom: function(callbackSuccess, callbackError) {
+            var self = this;
+            (function next(cursor) {
+                app.api.fetchVocabLists({
+                    cursor: cursor,
+                    lang: app.user.getLanguageCode(),
+                    sort: 'custom'
+                }, function(result) {
+                    app.user.data.insert(result, function() {
+                        self.add(result.VocabLists, {merge: true, silent: true});
+                        self.trigger('add', self);
+                        if (result.cursor) {
+                            next(result.cursor);
+                        } else {
+                            if (typeof callbackSuccess === 'function') {
+                                callbackSuccess(self);
+                            }
+                        }
+                    });
+                }, function(error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                });
+            })();
         },
         /**
          * @method fetchOfficial
@@ -145,6 +177,15 @@ define([
         getNotStudying: function() {
             return _.filter(this.models, function(list) {
                 return list.get('studyingMode') === 'not studying';
+            });
+        },
+        /**
+         * @method getCustom
+         * @returns {Array}
+         */
+        getCustom: function() {
+            return _.filter(this.models, function(list) {
+                return list.get('sort') === 'custom';
             });
         },
         /**
