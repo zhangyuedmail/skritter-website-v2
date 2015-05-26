@@ -16,6 +16,7 @@ define([
     'modules/pages/List',
     'modules/pages/ListBrowse',
     'modules/pages/ListCreate',
+    'modules/pages/ListCustom',
     'modules/pages/ListQueue',
     'modules/pages/ListSection',
     'modules/pages/Login',
@@ -43,6 +44,7 @@ define([
     PageList,
     PageListBrowse,
     PageListCreate,
+    PageListCustom,
     PageListQueue,
     PageListSection,
     PageLogin,
@@ -85,6 +87,7 @@ define([
             'lists/browse/:listId': 'showList',
             'lists/browse/:listId/:sectionId': 'showListSection',
             'lists/create': 'showListCreate',
+            'lists/my-lists': 'showListCustom',
             'lists/queue': 'showListQueue',
             'login': 'showLogin',
             'password-reset': 'showPasswordReset',
@@ -218,6 +221,13 @@ define([
         showListCreate: function() {
             this.page = new PageListCreate();
             this.page.render();
+        },
+        /**
+         * @method showListCustom
+         */
+        showListCustom: function() {
+            this.page = new PageListCustom();
+            this.page.render().load();
         },
         /**
          * @method showListQueue
