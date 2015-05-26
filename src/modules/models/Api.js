@@ -56,6 +56,31 @@ define([
             });
         },
         /**
+         * @method createVocabList
+         * @param {Object} list
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        createVocabList: function(list, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'vocablists' +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: JSON.stringify(list)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method authenticateUser
          * @param {String} username
          * @param {String} password

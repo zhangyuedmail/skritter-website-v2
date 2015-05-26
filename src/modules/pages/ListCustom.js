@@ -68,7 +68,7 @@ define([
         handleKeypressListSearch: function(event) {
             event.preventDefault();
             var $input = $(event.currentTarget);
-            this.browseTable.filterBy($input.val()).sortBy('name');
+            this.customTable.filterBy($input.val()).sortBy('name');
         },
         /**
          * @method load

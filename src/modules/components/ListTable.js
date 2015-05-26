@@ -90,6 +90,7 @@ define([
          */
         events: {
             'vclick .field-name': 'handleClickFieldName',
+            'vclick .field-remove': 'handleClickFieldRemove',
             'vclick .field-startadding': 'handleClickFieldStartAdding',
             'vclick .field-stopadding': 'handleClickFieldStopAdding',
             'vclick .field-study': 'handleClickFieldStudy'
@@ -173,6 +174,19 @@ define([
             var $row = $(event.currentTarget).parent('tr');
             var listId = $row.get(0).id.replace('row-', '');
             app.router.navigate('lists/browse/' + listId);
+        },
+        /**
+         * @method handleClickFieldRemove
+         * @param {Event} event
+         */
+        handleClickFieldRemove: function(event) {
+            event.preventDefault();
+            var $row = $(event.currentTarget).parent('tr');
+            var listId = $row.get(0).id.replace('row-', '');
+            var list = app.user.data.vocablists.get(listId);
+            if (list) {
+                list.set('studyingMode', 'not studying');
+            }
         },
         /**
          * @method handleClickFieldStartAdding
