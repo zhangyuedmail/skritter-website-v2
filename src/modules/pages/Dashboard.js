@@ -59,11 +59,22 @@ define([
          */
         renderGoalDoughnut: function() {
             var context = this.$('#goal-doughnut').get(0).getContext('2d');
-            this.doughnutGoal = new Chart(context).Doughnut(
-                [
-                    {value: 0, color:'#c5da4b'},
-                    {value: 100, color: '#efeef3'}
-                ],
+            var goal = app.user.settings.getGoal();
+            var goalType = Object.keys(goal)[0];
+            var goalValue = goal[goalType];
+            var data = [];
+            if (goalType === 'items') {
+                //TODO: pull doughnut data from stats
+                var remaining = goalValue - app.user.data.items.getReviewedCount();
+                remaining = remaining < 0 ? 0 : remaining;
+                data = [
+                    {value: goalValue - remaining, color:'#c5da4b'},
+                    {value: remaining, color: '#efeef3'}
+                ]
+            } else {
+                //TODO: display remaining goal based on time
+            }
+            this.doughnutGoal = new Chart(context).Doughnut(data,
                 {
                     percentageInnerCutout : 80,
                     animateRotate : false
