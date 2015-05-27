@@ -1,9 +1,9 @@
 <gelato-page data-name="general-settings">
 
-    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+    <gelato-navbar class="fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
+            <div class="left">
+                <div class="item item-header">{{global.title}}</div>
             </div>
         </div>
     </gelato-navbar>
@@ -11,16 +11,16 @@
     <gelato-content class="container">
         <div class="content-block">
             <div class="row">
-                <div class="col-md-2">
-                    <div>Account</div>
-                    <div>General</div>
-                    <div>Study</div>
-                    <div>Billing</div>
+                <div class="col-md-3">
+                    <div class="header">Account</div>
+                    <div class="active">General</div>
+                    <div data-url="settings/study">Study</div>
+                    <div class="header">Billing</div>
                     <div>Billing history</div>
                     <div>Subscription</div>
                     <div>School validation</div>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-9">
                     <div class="row">
                         <div class="col-xs-4">Avatar</div>
                         <div class="col-xs-8">

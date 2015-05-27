@@ -23,6 +23,11 @@ define([
          */
         title: 'Study Settings - ' + i18n.global.title,
         /**
+         * @property bodyClass
+         * @type {String}
+         */
+        bodyClass: 'background-light',
+        /**
          * @method render
          * @returns {PageStudySettings}
          */
