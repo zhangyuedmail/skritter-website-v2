@@ -47,6 +47,14 @@ define([
             return totalRows > 0 ? (addedRows / totalRows) * 100 : 0;
         },
         /**
+         * @method getSectionById
+         * @param {String} sectionId
+         * @returns {Object}
+         */
+        getSectionById: function(sectionId) {
+            return _.find(this.get('sections'), {id: sectionId});
+        },
+        /**
          * @method getWordCount
          * @returns {Number}
          */

@@ -1,15 +1,17 @@
 <gelato-page data-name="list-section">
 
-    <!-- NAVBAR: MAIN -->
-    <gelato-navbar class="navbar navbar-default navbar-fixed-top">
+    <gelato-navbar class="fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#"><strong>{{global.title}}</strong></a>
+            <div class="left">
+                <div class="item item-header">{{global.title}}</div>
             </div>
         </div>
     </gelato-navbar>
 
-    <!-- CONTENT: MAIN -->
-    <gelato-content class="container"></gelato-content>
+    <gelato-content class="container">
+        <div class="content-block">
+            <div id="list-rows-table"></div>
+        </div>
+    </gelato-content>
 
 </gelato-page>
