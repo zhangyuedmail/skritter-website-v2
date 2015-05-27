@@ -23,13 +23,41 @@ define([
          */
         model: DataVocab,
         /**
+         * @method fetchById
+         * @param {Array|String} vocabId
+         * @param callbackSuccess
+         * @param callbackError
+         */
+        fetchById: function(vocabId, callbackSuccess, callbackError) {
+            var self = this;
+            vocabId = Array.isArray(vocabId) ? vocabId : [vocabId];
+            (function next() {
+                    app.api.fetchVocabs({
+                        ids: vocabId.slice(0,29).join('|')
+                    }, function(result) {
+                        app.user.data.insert(result, function() {
+                            self.add(result.Vocabs, {merge: true});
+                            vocabId.splice(0, 29);
+                            if (vocabId.length) {
+                                next();
+                            } else {
+                                callbackSuccess();
+                            }
+                        }, function(error) {
+                            callbackError(error);
+                        });
+                    }, function(error) {
+                        callbackError(error);
+                    });
+            }());
+        },
+        /**
          * @method fetchByQuery
          * @param {String} writing
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
          */
         fetchByQuery: function(writing, callbackSuccess, callbackError) {
-            var self = this;
             var id = null;
             var vocab = null;
             Async.series([

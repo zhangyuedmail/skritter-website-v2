@@ -29,7 +29,6 @@ define([
          */
         fetchChanged: function(callbackSuccess, callbackError) {
             var self = this;
-            console.log(app.user.data.get('lastItemUpdate'));
             (function next(cursor) {
                 app.api.fetchItems({
                     cursor: cursor,
