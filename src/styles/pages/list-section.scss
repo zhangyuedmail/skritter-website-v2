@@ -1,1 +1,18 @@
-gelato-page[data-name="list-section"] {}
+gelato-page[data-name="list-section"] {
+
+  table {
+    font-size: 16px;
+    td, th { border: none; }
+    thead { display: none; }
+    tr:nth-child(even) { background-color: #f7f6f9; }
+  }
+
+  #list-url { cursor: pointer; }
+
+  #section-name {
+    font-family: $font-muli;
+    font-size: 36px;
+    font-weight: 400;
+  }
+
+}

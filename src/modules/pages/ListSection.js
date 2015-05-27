@@ -38,7 +38,7 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
-            this.rowTable.setElement(this.$('#list-rows-table')).render();
+            this.rowTable.setElement(this.$('#section-rows-table')).render();
             return this;
         },
         /**
@@ -46,6 +46,10 @@ define([
          * @returns {PageListSection}
          */
         renderFields: function() {
+            this.$('#list-name').text(this.list.get('name'));
+            this.$('#list-url').attr('data-url', 'lists/browse/' + this.list.id);
+            this.$('#section-name').text(this.section.name);
+            this.renderEvents();
             return this;
         },
         /**
