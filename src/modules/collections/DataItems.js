@@ -29,6 +29,7 @@ define([
          */
         fetchChanged: function(callbackSuccess, callbackError) {
             var self = this;
+            console.log(app.user.data.get('lastItemUpdate'));
             (function next(cursor) {
                 app.api.fetchItems({
                     cursor: cursor,
@@ -39,6 +40,7 @@ define([
                     include_strokes: true,
                     include_vocabs: true
                 }, function(result) {
+                    console.log('RESULT', result);
                     app.user.data.insert(result, function() {
                         if (result.cursor) {
                             self.add(result.Items, {merge: true});
@@ -85,33 +87,37 @@ define([
             var self = this;
             var missingIds = this.getMissingIds();
             var missingTotal = missingIds.length;
-            (function next() {
-                app.api.fetchItems({
-                    ids: missingIds.slice(0,29).join('|'),
-                    include_contained: true,
-                    include_decomps: true,
-                    include_strokes: true,
-                    include_vocabs: true
-                }, function(result) {
-                    app.user.data.insert(result, function() {
-                        self.add(result.Items, {merge: true});
-                        if (missingIds.length) {
-                            missingIds = self.getMissingIds();
-                            if (typeof callbackStatus === 'function') {
-                                var completion = 1 - (missingIds.length / missingTotal);
-                                callbackStatus(Math.floor(completion * 100));
+            if (missingIds.length) {
+                (function next() {
+                    app.api.fetchItems({
+                        ids: missingIds.slice(0,29).join('|'),
+                        include_contained: true,
+                        include_decomps: true,
+                        include_strokes: true,
+                        include_vocabs: true
+                    }, function(result) {
+                        app.user.data.insert(result, function() {
+                            self.add(result.Items, {merge: true});
+                            if (missingIds.length) {
+                                missingIds = self.getMissingIds();
+                                if (typeof callbackStatus === 'function') {
+                                    var completion = 1 - (missingIds.length / missingTotal);
+                                    callbackStatus(Math.floor(completion * 100));
+                                }
+                                next();
+                            } else {
+                                callbackSuccess();
                             }
-                            next();
-                        } else {
-                            callbackSuccess();
-                        }
+                        }, function(error) {
+                            callbackError(error);
+                        });
                     }, function(error) {
                         callbackError(error);
                     });
-                }, function(error) {
-                    callbackError(error);
-                });
-            })();
+                }());
+            } else {
+                callbackSuccess();
+            }
         },
         /**
          * @method fetchNext
