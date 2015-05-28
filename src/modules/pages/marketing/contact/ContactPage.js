@@ -3,22 +3,26 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/contact.html',
+    'require.text!modules/pages/marketing/contact/contact-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template, 
+    GelatoPage, 
+    FooterComponent
+) {
 
     /**
-     * @class PageContact
+     * @class ContactPage
      * @extends GelatoPage
      */
-    var PageContact = GelatoPage.extend({
+    var ContactPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
          */
         initialize: function() {
-            this.footer = new Footer();
+            this.footer = new FooterComponent();
         },
         /**
          * @property title
@@ -27,7 +31,7 @@ define([
         title: 'Contact - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageContact}
+         * @returns {ContactPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -90,6 +94,6 @@ define([
         }
     });
 
-    return PageContact;
+    return ContactPage;
 
 });
