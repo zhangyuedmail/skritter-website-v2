@@ -70,7 +70,7 @@ define([
                 data = [
                     {value: goalValue - remaining, color:'#c5da4b'},
                     {value: remaining, color: '#efeef3'}
-                ]
+                ];
             } else {
                 //TODO: display remaining goal based on time
             }
