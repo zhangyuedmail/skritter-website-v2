@@ -133,7 +133,7 @@ define([
          */
         loadUser: function(callbackSuccess, callbackError) {
             var self = this;
-            app.dialog.show('loading');
+            app.dialogs.open('loading');
             Async.series([
                 function(callback) {
                     if (self.authentication.isExpired()) {
@@ -169,7 +169,7 @@ define([
                 if (error) {
                     callbackError(error);
                 } else {
-                    app.dialog.hide();
+                    app.dialogs.close();
                     callbackSuccess();
                 }
             });
