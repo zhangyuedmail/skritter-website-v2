@@ -39,7 +39,6 @@ define([
                     include_strokes: true,
                     include_vocabs: true
                 }, function(result) {
-                    console.log('RESULT', result);
                     app.user.data.insert(result, function() {
                         if (result.cursor) {
                             self.add(result.Items, {merge: true});
