@@ -4,8 +4,8 @@
  */
 define([
     'core/modules/GelatoRouter',
-    'modules/pages/About',
-    'modules/pages/Contact',
+    'modules/pages/marketing/about/AboutPage',
+    'modules/pages/marketing/contact/ContactPage',
     'modules/pages/Dashboard',
     'modules/pages/Demo',
     'modules/pages/Features',
@@ -32,8 +32,8 @@ define([
     'modules/pages/Words'
 ], function(
     GelatoRouter,
-    PageAbout,
-    PageContact,
+    AboutPage,
+    ContactPage,
     PageDashboard,
     PageDemo,
     PageFeatures,
@@ -114,14 +114,14 @@ define([
          * @method showAbout
          */
         showAbout: function() {
-            this.page = new PageAbout();
+            this.page = new AboutPage();
             this.page.render();
         },
         /**
          * @method showContact
          */
         showContact: function() {
-            this.page = new PageContact();
+            this.page = new ContactPage();
             this.page.render();
         },
         /**
