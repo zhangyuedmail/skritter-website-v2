@@ -3,15 +3,18 @@
  * @submodule Components
  */
 define([
-    'require.text!templates/components/footer.html',
+    'require.text!modules/components/marketing/footer/footer-template.html',
     'core/modules/GelatoComponent'
-], function(Template, GelatoComponent) {
+], function(
+    Template,
+    GelatoComponent
+) {
 
     /**
-     * @class Footer
+     * @class FooterComponent
      * @extends GelatoComponent
      */
-    var Footer = GelatoComponent.extend({
+    var FooterComponent = GelatoComponent.extend({
         /**
          * @method initialize
          * @constructor
@@ -19,7 +22,7 @@ define([
         initialize: function() {},
         /**
          * @method render
-         * @returns {Footer}
+         * @returns {FooterComponent}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -32,6 +35,6 @@ define([
         events: {}
     });
 
-    return Footer;
+    return FooterComponent;
 
 });
