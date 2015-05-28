@@ -3,22 +3,26 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/about.html',
+    'require.text!modules/pages/marketing/about/about-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template,
+    GelatoPage,
+    FooterComponent
+) {
 
     /**
-     * @class PageAbout
+     * @class AboutPage
      * @extends GelatoPage
      */
-    var PageAbout = GelatoPage.extend({
+    var AboutPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
          */
         initialize: function() {
-            this.footer = new Footer();
+            this.footer = new FooterComponent();
         },
         /**
          * @property title
@@ -27,7 +31,7 @@ define([
         title: 'About - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageAbout}
+         * @returns {AboutPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -44,6 +48,6 @@ define([
         }
     });
 
-    return PageAbout;
+    return AboutPage;
 
 });
