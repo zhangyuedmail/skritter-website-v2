@@ -1,7 +1,7 @@
 gelato.addFonts({
     custom: {
         families: ['Kaisho', 'Muli', 'Roboto Slab', 'Simkai'],
-        urls: ['styles/fonts.css']
+        urls: ['fonts.css']
     }
 });
 

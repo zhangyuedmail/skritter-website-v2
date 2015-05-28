@@ -1,0 +1,18 @@
+/*** VARIABLES ***/
+@import "styles/variables";
+
+/*** GLOBAL ***/
+@import "styles/bootstrap";
+@import "styles/global";
+@import "styles/icons";
+
+/*** LIBRARIES ***/
+@import "styles/libraries/bootstrap.datetimepicker";
+@import "styles/libraries/heatmap";
+
+/*** COMPONENTS ***/
+@import "modules/components/marketing/footer/footer-style";
+
+/*** PAGES ***/
+@import "modules/pages/marketing/about/about-style";
+@import "modules/pages/marketing/contact/contact-style";
