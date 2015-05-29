@@ -12,7 +12,17 @@
 
 /*** COMPONENTS ***/
 @import "modules/components/marketing/footer/footer-style";
+@import "styles/components/gelato-content";
+@import "styles/components/gelato-navbar";
 
 /*** PAGES ***/
 @import "modules/pages/marketing/about/about-style";
 @import "modules/pages/marketing/contact/contact-style";
+@import "modules/pages/marketing/features/features-style";
+@import "modules/pages/marketing/landing/landing-style";
+@import "modules/pages/marketing/institutions/institutions-style";
+@import "modules/pages/marketing/legal/legal-style";
+@import "modules/pages/marketing/login/login-style";
+@import "modules/pages/marketing/password-reset/password-reset-style";
+@import "modules/pages/marketing/pricing/pricing-style";
+@import "modules/pages/marketing/signup/signup-style";

@@ -8,22 +8,22 @@ define([
     'modules/pages/marketing/contact/ContactPage',
     'modules/pages/Dashboard',
     'modules/pages/Demo',
-    'modules/pages/Features',
+    'modules/pages/marketing/features/FeaturesPage',
     'modules/pages/GeneralSettings',
-    'modules/pages/Home',
-    'modules/pages/Institutions',
-    'modules/pages/Legal',
+    'modules/pages/marketing/institutions/InstitutionsPage',
+    'modules/pages/marketing/landing/LandingPage',
+    'modules/pages/marketing/legal/LegalPage',
     'modules/pages/List',
     'modules/pages/ListBrowse',
     'modules/pages/ListCreate',
     'modules/pages/ListCustom',
     'modules/pages/ListQueue',
     'modules/pages/ListSection',
-    'modules/pages/Login',
-    'modules/pages/PasswordReset',
-    'modules/pages/Pricing',
+    'modules/pages/marketing/login/LoginPage',
+    'modules/pages/marketing/password-reset/PasswordResetPage',
+    'modules/pages/marketing/pricing/PricingPage',
     'modules/pages/Scratchpad',
-    'modules/pages/Signup',
+    'modules/pages/marketing/signup/SignupPage',
     'modules/pages/StatsSummary',
     'modules/pages/StatsTimeline',
     'modules/pages/Study',
@@ -36,22 +36,22 @@ define([
     ContactPage,
     PageDashboard,
     PageDemo,
-    PageFeatures,
+    FeaturesPage,
     PageGeneralSettings,
-    PageHome,
-    PageInstitutions,
-    PageLegal,
+    InstitutionsPage,
+    LandingPage,
+    LegalPage,
     PageList,
     PageListBrowse,
     PageListCreate,
     PageListCustom,
     PageListQueue,
     PageListSection,
-    PageLogin,
-    PagePasswordReset,
-    PagePricing,
+    LoginPage,
+    PasswordResetPage,
+    PricingPage,
     PageScratchpad,
-    PageSignup,
+    SignupPage,
     PageStatsSummary,
     PageStatsTimeline,
     PageStudy,
@@ -144,7 +144,7 @@ define([
                 this.showDashboard();
             } else {
                 this.navigate('', {trigger: false});
-                this.showHome();
+                this.showLanding();
             }
         },
         /**
@@ -159,7 +159,7 @@ define([
          * @method showFeatures
          */
         showFeatures: function() {
-            this.page = new PageFeatures();
+            this.page = new FeaturesPage();
             this.page.render();
         },
         /**
@@ -171,24 +171,24 @@ define([
             this.page.render();
         },
         /**
-         * @method showHome
+         * @method showLanding
          */
-        showHome: function() {
-            this.page = new PageHome();
+        showLanding: function() {
+            this.page = new LandingPage();
             this.page.render();
         },
         /**
          * @method showInstitutions
          */
         showInstitutions: function() {
-            this.page = new PageInstitutions();
+            this.page = new InstitutionsPage();
             this.page.render();
         },
         /**
          * @method showLegal
          */
         showLegal: function() {
-            this.page = new PageLegal();
+            this.page = new LegalPage();
             this.page.render();
         },
         /**
@@ -241,21 +241,21 @@ define([
          * @method showLogin
          */
         showLogin: function() {
-            this.page = new PageLogin();
+            this.page = new LoginPage();
             this.page.render();
         },
         /**
          * @method showPasswordReset
          */
         showPasswordReset: function() {
-            this.page = new PagePasswordReset();
+            this.page = new PasswordResetPage();
             this.page.render();
         },
         /**
          * @method showPricing
          */
         showPricing: function() {
-            this.page = new PagePricing();
+            this.page = new PricingPage();
             this.page.render();
         },
         /**
@@ -271,7 +271,7 @@ define([
          * @param {String} [price]
          */
         showSignup: function(price) {
-            this.page = new PageSignup();
+            this.page = new SignupPage();
             this.page.render().select(price);
         },
         /**
