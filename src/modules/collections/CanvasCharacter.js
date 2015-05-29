@@ -29,13 +29,13 @@ define([
          * @returns {Number}
          */
         comparator: function(stroke) {
-            return stroke.attributes.position;
+            return stroke.get('position');
         },
         /**
-         * @method getNextStroke
+         * @method getExpectedStroke
          * @returns {CanvasStroke}
          */
-        getNextStroke: function() {
+        getExpectedStroke: function() {
             var target = this.getExpectedTargets()[0];
             return this.length ? target.at(this.getPosition()) : target.at(0);
         },
@@ -83,22 +83,7 @@ define([
                 var contains = this.at(i).get('contains');
                 position += contains.length ? contains.length : 1;
             }
-            return position || 1;
-        },
-        /**
-         * @method getShape
-         * @param {Number} [excludeStrokes]
-         * @returns {createjs.Container}
-         */
-        getShape: function(excludeStrokes) {
-            var container = new createjs.Container();
-            for (var i = 0, length = this.length; i < length; i++) {
-                if (!excludeStrokes) {
-                    container.addChild(this.at(i).getShape());
-                }
-            }
-            container.name = 'character';
-            return container;
+            return position;
         },
         /**
          * @method size
@@ -106,6 +91,21 @@ define([
          */
         getSize: function() {
             return app.user.settings.get('canvasSize');
+        },
+        /**
+         * @method getShape
+         * @param {Number} [excludeStrokes]
+         * @returns {createjs.Container}
+         */
+        getTargetShape: function(excludeStrokes) {
+            var container = new createjs.Container();
+            for (var i = 0, length = this.length; i < length; i++) {
+                if (!excludeStrokes) {
+                    container.addChild(this.at(i).getTargetShape());
+                }
+            }
+            container.name = 'character';
+            return container;
         },
         /**
          * @method getTone
@@ -126,7 +126,6 @@ define([
          * @method recognize
          * @param {Array} points
          * @param {createjs.Shape} shape
-         * @param {Number} size
          * @returns {CanvasStroke}
          */
         recognize: function(points, shape) {

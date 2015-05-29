@@ -1,0 +1,104 @@
+gelato-page[data-name="pricing"] {
+
+  padding-top: 0;
+
+  section {
+    background-color: #fbfafc;
+    &.striped { background-color: #262b30; }
+  }
+
+  #section-pricing {
+    #institution-text {
+      color: #8c9196;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 100px;
+      margin-top: 100px;
+    }
+    .actual {
+      color: #6c7a85;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+      margin-top: 10px;
+    }
+    .banner {
+      position: absolute;
+      right: 0;
+      top: -35px;
+    }
+    .btn {
+      height: 52px;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+      margin-bottom: 10px;
+      margin-top: 60px;
+      width: 184px;
+    }
+    .discount {
+      color: #87a64b;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .duration {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 12px;
+    }
+    .price {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 48px;
+      font-weight: 300;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 65px;
+      margin-top: 75px;
+    }
+    .trial {
+      color: #6c7a85;
+      font-family: $font-muli;
+      font-size: 12px;
+      font-weight: 300;
+    }
+  }
+
+  #section-start {
+    background: $background-characters repeat #262b30;
+    a {
+      color: #838f98; //TODO: check color
+      display: block;
+      font-size: 24px;
+      font-weight: 300;
+      margin-top: 20px;
+    }
+    button {
+      color: #fafafa; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 65px;
+      padding: 15px 30px;
+    }
+    .container {
+      padding-bottom: 75px;
+      padding-top: 75px;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 150px;
+    }
+  }
+
+}

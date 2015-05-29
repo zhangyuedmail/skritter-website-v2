@@ -28,7 +28,7 @@ define([
          * @returns {UserSubscription}
          */
         cache: function() {
-            localStorage.setItem(app.user.getCachePath('subscription', false), JSON.stringify(this.toJSON()));
+            localStorage.setItem(app.user.getDataPath('subscription', false), JSON.stringify(this.toJSON()));
             return this;
         },
         /**
@@ -38,8 +38,14 @@ define([
          */
         fetch: function(callbackSuccess, callbackError) {
             var self = this;
+            if (!app.user.isLoggedIn()) {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+                return;
+            }
             app.api.fetchSubscription(app.user.id, null, function(data) {
-                self.set(data);
+                self.set(data, {merge: true, silent: true});
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
@@ -51,47 +57,30 @@ define([
         },
         /**
          * @method load
-         * @param {Function} [callbackSuccess]
-         * @param {Function} [callbackError]
          * @returns {UserSubscription}
          */
-        load: function(callbackSuccess, callbackError) {
-            var self = this;
-            Async.series([
-                function(callback) {
-                    var cachedItem = localStorage.getItem(app.user.getCachePath('settings', false));
-                    if (cachedItem) {
-                        self.set(JSON.parse(cachedItem), {silent: true});
-                    }
-                    callback();
-                },
-                function(callback) {
-                    self.fetch();
-                    callback();
-                }
-            ], function(error) {
-                if (error) {
-                    if (typeof callbackError === 'function') {
-                        callbackError(error);
-                    }
-                } else {
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess();
-                    }
-                }
-            });
+        load: function() {
+            var subscription = localStorage.getItem(app.user.getDataPath('subscription', false));
+            if (subscription) {
+                this.set(JSON.parse(subscription), {silent: true});
+            }
             return this;
         },
         /**
          * @method save
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
-         * @returns {UserSubscription}
          */
         save: function(callbackSuccess, callbackError) {
             var self = this;
+            if (!app.user.isLoggedIn()) {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+                return;
+            }
             app.api.putSubscription(app.user.id, this.toJSON(), function(result) {
-                self.set(result, {silent: true});
+                self.set(result, {merge: true});
                 self.cache();
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess(self);
@@ -102,7 +91,6 @@ define([
                     callbackError(error);
                 }
             });
-            return this;
         }
     });
 

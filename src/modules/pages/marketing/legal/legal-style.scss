@@ -1,0 +1,44 @@
+gelato-page[data-name="legal"] {
+
+  background: $background-characters repeat $white1;
+
+  #section-content {
+    background-color: #ffffff; //TODO: check color
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+    padding: 15px 30px;
+    .header {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+    .subtext {
+      color: #666c73;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+  }
+
+  #section-header {
+    margin: 60px auto 0 auto;
+    max-width: 600px;
+    .header {
+      color: #363b40;
+      font-family: $font-slab;
+      font-size: 48px;
+      font-weight: 400;
+    }
+  }
+
+  .content-block {
+    background-color: $white3; //TODO: check color
+    margin-top: 60px;
+    margin-bottom: 60px;
+    padding: 0 15px;
+  }
+
+}

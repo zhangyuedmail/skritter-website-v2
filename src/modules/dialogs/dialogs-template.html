@@ -1,0 +1,101 @@
+<!-- DIALOG: GOAL-SETTINGS --->
+<div id="goal-settings" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button data-action="cancel" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <div class="modal-title">Daily Goal</div>
+                <div class="modal-main text-center">
+                    <div>I want to study</div>
+                    <div class="row">
+                        <div class="col-xs-6 text-right">
+                            <input id="goal-value" type="number" min="1" max="1000" value="1">
+                        </div>
+                        <div class="col-xs-6 text-left">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="goal-type" id="goal-minutes" value="minutes" checked>
+                                    &nbsp;
+                                    minutes
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="goal-type" id="goam-items" value="items">
+                                    &nbsp;
+                                    items
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>every day.</div>
+                    <button data-action="confirm" type="button" class="btn btn-lg btn-success">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOG: LOADING --->
+<gelato-dialog data-name="loading">
+    <div id="loading" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <img src="assets/ajax-loader.gif" alt="" width="75">
+                    <h3 class="modal-message"></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</gelato-dialog>
+
+<!-- DIALOG: LOGOUT --->
+<div id="logout" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <button data-action="cancel" type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <button data-action="cancel" type="button" class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button data-action="confirm" type="button" class="btn btn-danger">
+                    <i class="fa fa-power-off"></i> Log Out
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOG: TUTORIAL-SELECT-LANGUAGE --->
+<div id="tutorial-select-language" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h3>Welcome to the Skritter tutorial!</h3>
+                <p>Choose your language.</p>
+                <button data-action="chinese" type="button" class="btn btn-success">Chinese 中文</button>
+                <button data-action="japanese" type="button" class="btn btn-success">Japanese 日本語</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DIALOG: TUTORIAL-SELECT-LEVEL --->
+<div id="tutorial-select-level" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h3>Do you know how to write characters?</h3>
+                <p>If not, we will help you get started.</p>
+                <button data-action="yes" type="button" class="btn btn-success">Yes, I do.</button>
+                <button data-action="no" type="button" class="btn btn-success">No, I don't.</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+/*** VARIABLES ***/
+@import "styles/variables";
+
+/*** GLOBAL ***/
+@import "styles/bootstrap";
+@import "styles/global";
+@import "styles/icons";
+
+/*** LIBRARIES ***/
+@import "styles/libraries/bootstrap.datetimepicker";
+@import "styles/libraries/heatmap";
+
+/*** COMPONENTS ***/
+@import "modules/components/marketing/footer/footer-style";
+@import "modules/components/tables/list-rows/list-rows-table-style";
+@import "modules/components/tables/list-sections/list-sections-table-style";
+@import "modules/components/tables/lists/lists-table-style";
+@import "styles/components/gelato-content";
+@import "styles/components/gelato-navbar";
+
+/*** PAGES ***/
+@import "modules/pages/dashboard/dashboard-style";
+@import "modules/pages/lists/browse/browse-lists-style";
+@import "modules/pages/lists/create/create-list-style";
+@import "modules/pages/lists/custom/custom-lists-style";
+@import "modules/pages/lists/queue/queue-lists-style";
+@import "modules/pages/lists/single/single-list-style";
+@import "modules/pages/lists/single-section/single-list-section-style";
+@import "modules/pages/marketing/about/about-style";
+@import "modules/pages/marketing/contact/contact-style";
+@import "modules/pages/marketing/features/features-style";
+@import "modules/pages/marketing/landing/landing-style";
+@import "modules/pages/marketing/institutions/institutions-style";
+@import "modules/pages/marketing/legal/legal-style";
+@import "modules/pages/marketing/login/login-style";
+@import "modules/pages/marketing/password-reset/password-reset-style";
+@import "modules/pages/marketing/pricing/pricing-style";
+@import "modules/pages/marketing/signup/signup-style";
+@import "modules/pages/settings/general/general-settings-style";
+@import "modules/pages/settings/study/study-settings-style";
+@import "modules/pages/stats/summary/summary-stats-style";
+@import "modules/pages/stats/timeline/timeline-stats-style";
+@import "modules/pages/words/words-style";

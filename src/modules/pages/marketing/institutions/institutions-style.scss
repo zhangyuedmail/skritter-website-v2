@@ -1,0 +1,128 @@
+gelato-page[data-name="institutions"] {
+
+  padding-top: 0;
+
+  section {
+    background-color: #fbfafc;
+    &.striped { background-color: #262b30; }
+  }
+
+  .bootstrap-datetimepicker-widget table { color: $grey5; }
+
+  #section-features {
+    .container {
+      padding-bottom: 60px;
+      padding-top: 60px;
+    }
+    .image { margin-bottom: 35px; }
+    .subtext {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+    }
+  }
+
+  #section-pricing {
+    .btn {
+      height: 52px;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+      width: 184px;
+    }
+    .container {
+      padding-bottom: 60px;
+      padding-top: 60px;
+    }
+    .price {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 48px;
+      font-weight: 300;
+      margin-bottom: 35px;
+    }
+    .quantity {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 35px;
+    }
+    .subtext {
+      color: #b2b5b9;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 25px;
+    }
+  }
+
+  #section-explanation {
+    .header {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 15px;
+    }
+    .subtext {
+      color: #666c73;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 36px;
+      margin-top: 75px;
+    }
+  }
+
+  #section-request {
+    background: $background-characters repeat #262b30;
+    form {
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn {
+      height: 52px;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+      margin-top: 30px;
+      width: 184px;
+    }
+    .container {
+      padding-bottom: 60px;
+      padding-top: 45px;
+    }
+    .title {
+      color: #838f98;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 36px;
+      margin-top: 75px;
+    }
+    #institution-message { resize: none; }
+    #institution-request-type { margin-top: 45px; }
+  }
+
+  #section-top-carousel {
+    .carousel-overlay { bottom: 250px; }
+  }
+
+}

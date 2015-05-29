@@ -1,0 +1,72 @@
+gelato-page[data-name="custom-lists"] {
+
+  .content-block { background-color: #f2f2f6; }
+
+  #section-content {
+    background-color: $white1; //TODO: check color
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    color: #404851;
+    margin: -15px;
+    padding: 55px 40px;
+    table {
+      font-size: 16px;
+      margin-top: 40px;
+      td, th { border: none; }
+      tr:nth-child(even) { background-color: #f7f6f9; }
+      .field-name { max-width: 400px; }
+      .field-progress { min-width: 200px; }
+    }
+    .input-group {
+      input {
+        border-bottom-right-radius: 25px;
+        border-top-right-radius: 25px;
+      }
+      span {
+        border-bottom-left-radius: 25px;
+        border-top-left-radius: 25px;
+      }
+      .input-group-addon { background-color: transparent; }
+    }
+    .header {
+      font-family: $font-muli;
+      font-size: 20px;
+      font-weight: 300;
+      margin-bottom: 15px;
+      margin-top: 40px;
+    }
+    .title {
+      font-family: $font-muli;
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 25px;
+    }
+  }
+
+  #section-menu {
+    color: #8c9196;
+    margin: 45px auto 0 auto;
+    width: 140px;
+    button {
+      height: 50px;
+      padding: 0 20px;
+    }
+    .options {
+      color: #8c9196;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      margin-top: 30px;
+      padding: 10px;
+      > div {
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+      .active {
+        color: #404851;
+        font-weight: 400;
+      }
+    }
+  }
+
+}

@@ -39,9 +39,20 @@ define([
             var sections = this.get('sections') || [];
             for (var a = 0, lengthA = sections.length; a < lengthA; a++) {
                 var rows = sections[a].rows || [];
-                for (var b = 0, lengthB = rows.length; b < lengthB; b++) {}
+                for (var b = 0, lengthB = rows.length; b < lengthB; b++) {
+                    addedRows += app.user.data.items.hasVocabId(rows[b].vocabId) ? 1 : 0;
+                    totalRows++;
+                }
             }
-            return totalRows > 0 ? addedRows/totalRows : 0;
+            return totalRows > 0 ? (addedRows / totalRows) * 100 : 0;
+        },
+        /**
+         * @method getSectionById
+         * @param {String} sectionId
+         * @returns {Object}
+         */
+        getSectionById: function(sectionId) {
+            return _.find(this.get('sections'), {id: sectionId});
         },
         /**
          * @method getWordCount
@@ -72,7 +83,7 @@ define([
                         callbackError(error);
                     });
                 }, function(callback) {
-                    app.user.storage.put('vocablists', self.toJSON(), function() {
+                    app.user.data.storage.put('vocablists', self.toJSON(), function() {
                         callback();
                     }, function(error) {
                         callbackError(error);

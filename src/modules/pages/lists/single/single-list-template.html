@@ -1,0 +1,40 @@
+<gelato-page data-name="list">
+
+    <gelato-navbar class="fixed-top">
+        <div class="container">
+            <div class="left">
+                <div class="item item-header">{{global.title}}</div>
+            </div>
+        </div>
+    </gelato-navbar>
+
+    <gelato-content class="container">
+        <div class="content-block">
+            <div class="row">
+                <div class="col-md-3">
+                    <section id="section-menu">
+                        <button type="button" class="btn btn-success">Add to queue</button>
+                        <div class="options">
+                            <div>Publish</div>
+                            <div>Clone</div>
+                            <div>Delete</div>
+                            <div>Assign to group</div>
+                            <div>Export</div>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-md-9">
+                    <section id="section-content">
+                        <div id="list-name"></div>
+                        <div id="list-meta"></div>
+                        <div id="list-description"></div>
+                        <div id="list-tags"></div>
+                        <div class="header">Sections</div>
+                        <div id="list-sections-table"></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </gelato-content>
+
+</gelato-page>

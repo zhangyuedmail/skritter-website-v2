@@ -1,0 +1,203 @@
+<gelato-page data-name="institutions">
+
+    <gelato-navbar class="theme-marketing fixed-top">
+        <div class="container">
+            <div class="left">
+                <div class="item item-header" data-url="#">{{global.title}}</div>
+                <div class="item item-link" data-url="features">Features</div>
+                <div class="item item-link" data-url="pricing">Pricing</div>
+            </div>
+            <div class="right">
+                <div class="item item-button"><button type="button" class="btn btn-success">Start 7-day trial</button></div>
+                <div class="item item-link" data-url="login">Login</div>
+            </div>
+        </div>
+    </gelato-navbar>
+
+    <gelato-content>
+        <section id="section-top-carousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#section-top-carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#section-top-carousel" data-slide-to="1"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <img src="assets/images/hero/hero3.png" alt="" class="carousel-image">
+                </div>
+                <div class="item">
+                    <img src="assets/images/hero/hero4.png" alt="" class="carousel-image">
+                </div>
+            </div>
+            <div class="carousel-overlay">
+                <div class="header">Skritter for Schools</div>
+                <button type="button" class="btn btn-success request-purchase">Purchase license</button>
+                <a class="request-trial" href="#">Request trial</a>
+            </div>
+        </section>
+        <section id="section-features">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-3 block">
+                        <div class="image"><i class="icon icon-marketing-calendar"></i></div>
+                        <div class="subtext">1 year subscription</div>
+                    </div>
+                    <div class="col-md-3 block">
+                        <div class="image"><i class="icon icon-marketing-users"></i></div>
+                        <div class="subtext">Individual accounts</div>
+                    </div>
+                    <div class="col-md-3 block">
+                        <div class="image"><i class="icon icon-marketing-lists"></i></div>
+                        <div class="subtext">Assign lists</div>
+                    </div>
+                    <div class="col-md-3 block">
+                        <div class="image"><i class="icon icon-marketing-progress"></i></div>
+                        <div class="subtext">Track progress</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="section-explanation" class="striped">
+            <div class="container">
+                <h1 class="title text-center">How it works</h1>
+                <div class="header">Contact us for trial or purchase a license</div>
+                <div class="subtext">
+                    We offer a generous trial period free of change. You and your students will get free access and support with no purchasing commitment.
+                </div>
+                <div class="header">Choose a sign-up option</div>
+                <div class="subtext">
+                    <p>If your school purchases a license, we offer two options for students to create an account:</p>
+                    <p>1. Get a batch of coupons that students can use to register on the site.</p>
+                    <p>2. Have students sign up with a school email address.</p>
+                </div>
+                <div class="header">Use your curriculum</div>
+                <div class="subtext">
+                    Skritter already supports more than 150 textbooks, but if your institution uses a textbook we do not currently support, we will upload the first one for free with the purchase of school license.
+                </div>
+            </div>
+        </section>
+        <section id="section-pricing">
+            <div class="container">
+                <h1 class="title text-center">Tiered pricing</h1>
+                <h3 class="subtext text-center">All prices are per year</h3>
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="quantity">1-30 students</div>
+                        <div class="price">$300</div>
+                        <button type="submit" class="btn btn-success request-purchase" data-students="1-30">Purchase license</button>
+                        <div class="trial">Includes a 7-day free trial</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="quantity">31-60 students</div>
+                        <div class="price">$500</div>
+                        <button type="submit" class="btn btn-success request-purchase" data-students="31-60">Purchase license</button>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="quantity">61-150 students</div>
+                        <div class="price">$800</div>
+                        <button type="submit" class="btn btn-success request-purchase" data-students="61-150">Purchase license</button>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="quantity">151-300 students</div>
+                        <div class="price">$1,000</div>
+                        <button type="submit" class="btn btn-success request-purchase" data-students="151-300">Purchase license</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <div class="quantity">300+ students</div>
+                        <div class="price">$1,000 + $200</div>
+                        <div class="subtext">first 300 students plus additional 100 students</div>
+                        <button type="submit" class="btn btn-success request-purchase" data-students="301+">Purchase license</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="section-request" class="striped">
+            <div class="container text-center">
+                <h1 class="title">Request an obligation-free trial</h1>
+                <h3 id="status-message"></h3>
+                <form>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">School name</label>
+                                <input id="institution-name" type="text" class="form-control" name="name" />
+                            </div>
+                            <div class="col-xs-8">
+                                <label class="control-label">School address</label>
+                                <input id="institution-address" type="text" class="form-control" name="address" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">School type</label>
+                                <select id="institution-type" class="form-control" name="type">
+                                    <option value="college">College / University</option>
+                                    <option value="primary">Primary School</option>
+                                    <option value="secondary">Secondary School</option>
+                                    <option value="district">School District</option>
+                                    <option value="business">Business</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Number of students</label>
+                                <select id="institution-number" class="form-control" name="number">
+                                    <option value="1-30">1-30 students</option>
+                                    <option value="31-60">31-60 students</option>
+                                    <option value="61-150">61-150 students</option>
+                                    <option value="151-300">151-300 students</option>
+                                    <option value="301+">301+ students</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="control-label">When</label>
+                                <div class='input-group date' id='institution-datepicker'>
+                                    <input id="institution-when" type='text' class="form-control" />
+                                    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label class="control-label">Contact name</label>
+                                <input id="institution-contact-name" type="text" class="form-control" name="contact-name" />
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="control-label">Contact email</label>
+                                <input id="institution-contact-email" type="email" class="form-control" name="contact-email" />
+                            </div>
+                            <div class="col-xs-4 selectContainer">
+                                <label class="control-label">Language</label>
+                                <select id="institution-language" class="form-control" name="language">
+                                    <option value="chinese">Chinese</option>
+                                    <option value="japanese">Japanese</option>
+                                    <option value="both">Both</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Message (optional)</label>
+                        <textarea id="institution-message" class="form-control" name="review" rows="8"></textarea>
+                    </div>
+                    <div id="institution-request-type" class="form-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="request-type" value="trial" checked /> Request a trial
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="request-type" value="purchase" /> Purchase license
+                        </label>
+                    </div>
+                    <button id="request-submit" type="submit" class="btn btn-success">Request</button>
+                </form>
+            </div>
+        </section>
+        <div id="footer-container"></div>
+    </gelato-content>
+
+</gelato-page>

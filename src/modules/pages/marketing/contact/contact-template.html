@@ -1,0 +1,64 @@
+<gelato-page data-name="contact">
+
+    <gelato-navbar class="theme-marketing fixed-top">
+        <div class="container">
+            <div class="left">
+                <div class="item item-header" data-url="#">{{global.title}}</div>
+                <div class="item item-link" data-url="features">Features</div>
+                <div class="item item-link" data-url="pricing">Pricing</div>
+            </div>
+            <div class="right">
+                <div class="item item-button"><button type="button" class="btn btn-success">Start 7-day trial</button></div>
+                <div class="item item-link" data-url="login">Login</div>
+            </div>
+        </div>
+    </gelato-navbar>
+
+    <gelato-content>
+        <div class="container">
+            <div id="section-title" class="row text-center">
+                <div class="col-xs-12">
+                    <div class="title">Contact Us</div>
+                </div>
+            </div>
+        </div>
+        <div id="section-main" class="content-block">
+            <div class="text-center">
+                <div id="status-message"></div>
+            </div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="contact-email" class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="contact-email" placeholder="Type email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contact-topic-select" class="col-sm-2 control-label">Topic</label>
+                    <div class="col-sm-10">
+                        <select id="contact-topic-select" class="form-control">
+                            <option value="Feedback">Feedback</option>
+                            <option value="How To">Question</option>
+                            <option value="Bug">Bug report</option>
+                            <option value="Suggestion">Feature suggestion</option>
+                            <option value="Payment Issue">Payment issue</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contact-message" class="col-sm-2 control-label">Message</label>
+                    <textarea id="contact-message" class="col-sm-10" rows="5"></textarea>
+                </div>
+                <p class="friendly-text">
+                    Good to hear from you! We do respond to everything. Want to get Skritter for your school?
+                    &nbsp;<a href="#" data-url="institutions">Click Here</a>
+                </p>
+                <div class="text-center">
+                    <button id="contact-submit" type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div id="footer-container"></div>
+    </gelato-content>
+
+</gelato-page>

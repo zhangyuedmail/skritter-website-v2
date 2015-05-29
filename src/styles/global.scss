@@ -1,4 +1,10 @@
 body {
-  color: #fafafa;
+  color: $grey5;
   font-family: $font-muli;
 }
+
+.background-light { background: $background-light repeat; }
+
+.background-dark { background: $background-dark repeat; }
+
+.content-block { border-radius: 25px; }

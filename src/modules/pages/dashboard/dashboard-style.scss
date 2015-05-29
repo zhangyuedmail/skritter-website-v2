@@ -1,0 +1,143 @@
+gelato-page[data-name="dashboard"] {
+
+  color: #8c9196;
+  font-family: $font-muli;
+  font-size: 16px;
+  font-weight: 300;
+  padding-top: 40px;
+
+  .content-block {
+    margin-bottom: 40px;
+    padding: 30px;
+    .content-block-header { margin-bottom: 30px; }
+    .content-block-label {
+      color: #404851;
+      display: inline-block;
+      font-family: $font-slab;
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+    .content-block-options {
+      float: right;
+      font-size: 18px;
+    }
+  }
+
+  #section-all-time {
+    .content-block { height: 350px; }
+    #characters-learned {
+      .value {
+        color: $green5;
+        font-family: $font-slab;
+        font-size: 60px;
+      }
+    }
+    #words-learned {
+      .value {
+        color: $green5;
+        font-family: $font-slab;
+        font-size: 60px;
+      }
+    }
+  }
+
+  #section-list-queue {
+    canvas {
+      float: left;
+      height: 150px;
+      margin-top: 30px;
+      width: 150px;
+    }
+    #list-queue-table {
+      margin-top: 30px;
+      td, th { border: none; }
+      thead { display: none; }
+      .field-progress { min-width: 200px; }
+    }
+  }
+
+  #section-month-overview {
+    .content-block { height: 350px; }
+    #heatmap-container {
+      margin-top: 30px;
+      max-height: 200px;
+      rect { shape-rendering: auto; }
+      .cal-heatmap-container { margin: 0 auto; }
+      .graph-label,
+      .graph-legend { display: none; }
+      .graph-rect { cursor: pointer; }
+      .q1 {
+        background-color: #ededed;
+        fill: #ededed
+      }
+      .q2 {
+        background-color: #cedb9c;
+        fill: #9cc069
+      }
+      .q3 {
+        background-color: #b5cf6b;
+        fill: #669d45
+      }
+      .q4 {
+        background-color: #637939;
+        fill: #637939
+      }
+      .q5 {
+        background-color: #3b6427;
+        fill: #3b6427
+      }
+    }
+    #month-streak {
+      margin-top: -30px;
+      > div { display: inline-block; }
+      .value {
+        color: #87a64b;
+        font-family: $font-slab;
+        font-size: 36px;
+        font-weight: 300;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  #section-daily-goal {
+    button {
+      height: 50px;
+      width: 150px;
+    }
+    canvas {
+      float: right;
+      height: 150px;
+      width: 150px;
+    }
+    .content-block { height: 350px; }
+    #daily-goal-row { margin-bottom: 30px; }
+    #items-added {
+      margin-left: 15px;
+      margin-top: 15px;
+      > div { display: inline-block; }
+      .value {
+        color: #87a64b;
+        font-family: $font-slab;
+        font-size: 36px;
+        font-weight: 300;
+        margin-right: 10px;
+      }
+    }
+    #items-reviewed {
+      margin-bottom: 15px;
+      margin-left: 15px;
+      margin-top: 10px;
+      > div { display: inline-block; }
+      .value {
+        color: #87a64b;
+        font-family: $font-slab;
+        font-size: 36px;
+        font-weight: 300;
+        margin-right: 10px;
+      }
+    }
+  }
+
+}

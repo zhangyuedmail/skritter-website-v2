@@ -1,8 +1,9 @@
 /*** DIRECTORIES ***/
-$dir-assets: '../assets';
+$dir-assets: './assets';
 
 
 /*** BACKGROUNDS ***/
+$background-characters: url('#{$dir-assets}/backgrounds/bg-characters.png');
 $background-dark: url('#{$dir-assets}/backgrounds/bg-dark-wood.png');
 $background-light: url('#{$dir-assets}/backgrounds/bg-retina-wood.png');
 $background-expired: url('#{$dir-assets}/backgrounds/bg-expired.png');

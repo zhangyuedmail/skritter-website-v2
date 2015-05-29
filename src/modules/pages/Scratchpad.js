@@ -5,8 +5,12 @@
 define([
     'require.text!templates/scratchpad.html',
     'core/modules/GelatoPage',
-    'modules/components/Prompt'
-], function(Template, GelatoPage, Prompt) {
+    'modules/components/prompt/PromptComponent'
+], function(
+    Template,
+    GelatoPage,
+    PromptComponent
+) {
 
     /**
      * @class PageScratchpad
@@ -15,19 +19,21 @@ define([
     var PageScratchpad = GelatoPage.extend({
         /**
          * @method initialize
-         * @param {Object} [options]
          * @constructor
          */
-        initialize: function(options) {
-            options = options || {};
-            this.app = options.app;
-            this.prompt = new Prompt({app: this.app});
+        initialize: function() {
+            this.prompt = new PromptComponent();
         },
         /**
          * @property title
          * @type String
          */
         title: 'Scratchpad - ' + i18n.global.title,
+        /**
+         * @property bodyClass
+         * @type {String}
+         */
+        bodyClass: 'background-light',
         /**s
          * @method render
          * @returns {PageScratchpad}

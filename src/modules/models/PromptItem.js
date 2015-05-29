@@ -32,6 +32,13 @@ define([
             };
         },
         /**
+         * @method getGradingColor
+         * @returns {String}
+         */
+        getGradingColor: function() {
+            return app.user.settings.get('gradingColors')[this.get('score')];
+        },
+        /**
          * @method getReviewingTime
          * @returns {Number}
          */
@@ -44,6 +51,13 @@ define([
          */
         getThinkingTime: function() {
             return (this.get('thinkingStop') - this.get('reviewingStart')) / 1000;
+        },
+        /**
+         * @method getVocab
+         * @returns {DataVocab}
+         */
+        getVocab: function() {
+            return app.user.data.vocabs.get(this.get('vocabId'));
         },
         /**
          * @method start

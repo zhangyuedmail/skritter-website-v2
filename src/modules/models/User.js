@@ -1,16 +1,20 @@
 /**
  * @module Application
- * @module Application
  * @submodule Models
  */
 define([
     'core/modules/GelatoModel',
-    'core/modules/GelatoStorage',
-    'modules/models/UserAuth',
+    'modules/models/UserAuthentication',
     'modules/models/UserData',
     'modules/models/UserSettings',
     'modules/models/UserSubscription'
-], function(GelatoModel, GelatoStorage, UserAuth, UserData, UserSettings, UserSubscription) {
+], function(
+    GelatoModel,
+    UserAuthentication,
+    UserData,
+    UserSettings,
+    UserSubscription
+) {
 
     /**
      * @class User
@@ -22,10 +26,9 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.auth = new UserAuth();
+            this.authentication = new UserAuthentication();
             this.data = new UserData();
             this.settings = new UserSettings();
-            this.storage = new GelatoStorage();
             this.subscription = new UserSubscription();
         },
         /**
@@ -34,21 +37,13 @@ define([
          */
         idAttribute: 'id',
         /**
-         * @property defaults
-         * @type Object
-         */
-        defaults: {},
-        /**
-         * @method getCachePath
+         * @method getDataPath
          * @param {String} path
          * @param {Boolean} [includeLanguageCode]
          * @returns {String}
          */
-        getCachePath: function(path, includeLanguageCode) {
-            if (includeLanguageCode) {
-                return this.id + '-' + this.getLanguageCode() + '-' + path;
-            }
-            return this.id + '-' + path;
+        getDataPath: function(path, includeLanguageCode) {
+            return includeLanguageCode ? this.id + '-' + this.getLanguageCode() + '-' + path : this.id + '-' + path;
         },
         /**
          * @method getDatabaseName
@@ -65,11 +60,11 @@ define([
             return this.settings.get('targetLang');
         },
         /**
-         * @method isAuthenticated
+         * @method isLoggedIn
          * @returns {Boolean}
          */
-        isAuthenticated: function() {
-            return this.has('id');
+        isLoggedIn: function() {
+            return this.authentication.has('user_id');
         },
         /**
          * @method isChinese
@@ -91,65 +86,90 @@ define([
          * @param {Function} callbackError
          */
         load: function(callbackSuccess, callbackError) {
+            this.set('id', app.getSetting('user') || 'guest');
+            this.authentication.load();
+            this.settings.load();
+            this.subscription.load();
+            if (this.isLoggedIn()) {
+                this.loadUser(callbackSuccess, callbackError);
+            } else {
+                this.loadGuest(callbackSuccess, callbackError);
+            }
+        },
+        /**
+         * @method loadGuest
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        loadGuest: function(callbackSuccess, callbackError) {
             var self = this;
-            this.set('id', localStorage.getItem('_active'), {silent: true});
             Async.series([
-                //check user authentication status
                 function(callback) {
-                    if (self.id) {
-                        console.log('USER:', self.id);
-                        callback();
+                    if (self.authentication.isExpired()) {
+                        app.api.authenticateGuest(function(result) {
+                            self.set('id', 'guest');
+                            self.authentication.set('created', Moment().unix());
+                            self.authentication.set(result, {merge: true});
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
                     } else {
-                        callbackSuccess();
+                        callback();
                     }
-                },
-                //load user authorization
-                function(callback) {
-                    self.auth.load(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //load user settings
-                function(callback) {
-                    self.settings.load(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //load user subscription
-                function(callback) {
-                    self.subscription.load(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //open database for usage
-                function(callback) {
-                    self.loadStorage(callback);
-                },
-                //load user data
-                function(callback) {
-                    self.data.load(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                //initialize missing item fetch
-                function(callback) {
-                    if (self.data.items.hasMissing()) {
-                        self.data.items.fetchMissing();
-                    }
-                    callback();
                 }
             ], function(error) {
                 if (error) {
                     callbackError(error);
                 } else {
+                    callbackSuccess();
+                }
+            });
+        },
+        /**
+         * @method loadUser
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        loadUser: function(callbackSuccess, callbackError) {
+            var self = this;
+            app.dialogs.open('loading');
+            Async.series([
+                function(callback) {
+                    if (self.authentication.isExpired()) {
+                        self.authentication.refresh(function() {
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    } else {
+                        callback();
+                    }
+                },
+                function(callback) {
+                    self.data.load(callback, callback);
+                },
+                function(callback) {
+                    self.data.items.fetchMissing(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    }, function(status) {
+                        app.dialogs.element.find('.modal-message').text(status + '%');
+                    });
+                },
+                function(callback) {
+                    self.data.items.fetchChanged(function() {
+                        callback();
+                    }, function(error) {
+                       callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    app.dialogs.close();
                     callbackSuccess();
                 }
             });
@@ -160,49 +180,56 @@ define([
          * @param {String} password
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
-         * @param {Function} [callbackStatus]
          */
-        login: function(username, password, callbackSuccess, callbackError, callbackStatus) {
+        login: function(username, password, callbackSuccess, callbackError) {
             var self = this;
             Async.series([
-                //authenticate user based on credentials
                 function(callback) {
-                    app.api.authenticateUser(username, password, function(data) {
-                        self.set('id', data.user_id);
-                        self.auth.set(data);
+                    app.api.authenticateUser(username, password, function(result) {
+                        self.set('id', result.user_id);
+                        self.authentication.set('created', Moment().unix());
+                        self.authentication.set(result, {merge: true});
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
-                //fetch user settings
                 function(callback) {
-                    self.settings.fetch(function() {
+                    app.user.settings.fetch(function() {
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
-                //fetch user subscription
                 function(callback) {
-                    self.subscription.fetch(function() {
+                    app.user.subscription.fetch(function() {
                         callback();
                     }, function(error) {
                         callback(error);
                     });
                 },
-                //open database for usage
                 function(callback) {
-                    self.loadStorage(callback);
+                    self.data.load(callback, callback);
                 },
-                //fetch item ids to be downloaded
                 function(callback) {
-                    self.data.items.fetchIds(function() {
+                    app.user.data.stats.fetch(function() {
                         callback();
-                    }, function(status) {
-                        if (typeof callbackStatus === 'function') {
-                            callbackStatus(status);
-                        }
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    app.user.data.vocablists.fetch(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    app.user.data.items.fetchIds(function() {
+                        callback();
+                    }, function(error) {
+                        callback(error);
                     });
                 }
             ], function(error) {
@@ -210,53 +237,56 @@ define([
                     console.error('USER LOGIN ERROR:', error);
                     callbackError(error);
                 } else {
-                    localStorage.setItem('_active', self.id);
+                    var now = Moment().unix();
+                    self.data.set({lastItemUpdate: now, lastVocabUpdate: now});
+                    app.setSetting('user', self.id);
+                    callbackSuccess();
+                }
+            });
+        },
+        /**
+         * @method loginGuest
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        loginGuest: function(callbackSuccess, callbackError) {
+            var self = this;
+            Async.series([
+                function(callback) {
+                    app.api.authenticateGuest(function(result) {
+                        self.set('id', 'guest');
+                        self.authentication.set(result, {merge: true});
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                }
+            ], function(error) {
+                if (error) {
+                    console.error('GUEST LOGIN ERROR:', error);
+                    callbackError(error);
+                } else {
+                    app.setSetting('user', self.id);
                     callbackSuccess();
                 }
             });
         },
         /**
          * @method logout
-         * @param {Function} [callback]
          */
-        logout: function(callback) {
-            localStorage.removeItem(this.getCachePath('auth', false));
-            localStorage.removeItem(this.getCachePath('ja-data', false));
-            localStorage.removeItem(this.getCachePath('zh-data', false));
-            localStorage.removeItem(this.getCachePath('settings', false));
-            localStorage.removeItem(this.getCachePath('ja-stats', false));
-            localStorage.removeItem(this.getCachePath('zh-stats', false));
-            localStorage.removeItem(this.getCachePath('subscription', false));
-            localStorage.removeItem('_active');
-            this.storage.destroy(function() {
-                if (typeof callback === 'function') {
-                    callback();
-                } else {
-                    app.reload();
-                }
+        logout: function() {
+            this.data.storage.destroy(function() {
+                localStorage.removeItem(app.user.getDataPath('authentication', false));
+                localStorage.removeItem(app.user.getDataPath('ja-data', false));
+                localStorage.removeItem(app.user.getDataPath('zh-data', false));
+                localStorage.removeItem(app.user.getDataPath('settings', false));
+                localStorage.removeItem(app.user.getDataPath('ja-stats', false));
+                localStorage.removeItem(app.user.getDataPath('zh-stats', false));
+                localStorage.removeItem(app.user.getDataPath('subscription', false));
+                app.removeSetting('user');
+                app.reload();
             }, function(error) {
                 console.error('USER LOGOUT ERROR:', error);
-                app.reload();
-            });
-        },
-        /**
-         * @method loadStorage
-         * @param {Function} callback
-         */
-        loadStorage: function(callback) {
-            this.storage.open(this.getDatabaseName(), 1, {
-                decomps: {keyPath: 'writing'},
-                items: {keyPath: 'id', index: [{name: 'next'}]},
-                reviews: {keyPath: 'id'},
-                sentences: {keyPath: 'id'},
-                stats: {keyPath: 'date'},
-                strokes: {keyPath: 'rune'},
-                vocablists: {keyPath: 'id'},
-                vocabs: {keyPath: 'id'}
-            }, function() {
-                callback();
-            }, function(error) {
-                callback(error);
             });
         }
     });

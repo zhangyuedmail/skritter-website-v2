@@ -39,7 +39,7 @@ define([
         getParams: function() {
             var inflatedParams = [];
             var size = this.getSize();
-            var matrix = this.getShape().getMatrix();
+            var matrix = this.getTargetShape().getMatrix();
             var params = app.user.data.params.where({strokeId: this.get('strokeId')});
             for (var a = 0, lengthA = params.length; a < lengthA; a++) {
                 var param = params[a].clone();
@@ -58,10 +58,17 @@ define([
             return inflatedParams;
         },
         /**
-         * @method getShape
+         * @method size
+         * @returns {Number}
+         */
+        getSize: function() {
+            return app.user.settings.get('canvasSize');
+        },
+        /**
+         * @method getTargetShape
          * @return {createjs.Shape}
          */
-        getShape: function() {
+        getTargetShape: function() {
             var data = this.inflateData();
             var shape = this.get('shape').clone(true);
             var ms = shape.getMatrix();
@@ -77,11 +84,25 @@ define([
             return shape;
         },
         /**
-         * @method size
-         * @returns {Number}
+         * @method getTraceParam
+         * @returns {DataParam}
          */
-        getSize: function() {
-            return app.user.settings.get('canvasSize');
+        getTraceParam: function() {
+            var matrix = this.getTargetShape().getMatrix();
+            var param = app.user.data.params.findWhere({strokeId: this.get('strokeId'), trace: true});
+            if (!param) {
+                var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+                param = params[params.length - 1];
+            }
+            param = param.clone();
+            var corners = _.cloneDeep(param.get('corners'));
+            for (var i = 0, length = corners.length; i < length; i++) {
+                var inflatedCorner = matrix.transformPoint(corners[i].x, corners[i].y);
+                corners[i].x = inflatedCorner.x;
+                corners[i].y = inflatedCorner.y;
+            }
+            param.set('corners', corners);
+            return param;
         },
         /**
          * @method getUserRectangle
@@ -97,7 +118,7 @@ define([
          * @returns {createjs.Shape}
          */
         getUserShape: function() {
-            var shape = this.getShape();
+            var shape = this.getTargetShape();
             //var bounds = shape.getBounds();
             var rect = this.getUserRectangle();
             shape.x = rect.x;

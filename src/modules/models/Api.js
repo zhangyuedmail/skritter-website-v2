@@ -16,14 +16,16 @@ define([
          * @constructor
          */
         initialize: function() {},
-        /**
+        /**O
          * @property defaults
          * @type Object
          */
         defaults: {
-            client: 'mcfarljwapiclient',
-            credentials: 'bWNmYXJsandhcGljbGllbnQ6ZTM4NzI1MTdmZWQ5MGE4MjBlNDQxNTMxNTQ4Yjhj',
+            client: 'Web',
             root: 'https://beta.skritter',
+            skritterAndroid: 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==',
+            skritterIOS: 'c2tyaXR0ZXJpb3M6NGZmYjFiZDViYTczMWJhNTc1YWI4OWYzYzY5ODQ0',
+            skritterWeb: 'c2tyaXR0ZXJ3ZWI6YTI2MGVhNWZkZWQyMzE5YWY4MTYwYmI4ZTQwZTdk',
             tld: location.host.indexOf('.cn') > -1 ? '.cn' : '.com',
             version: 0
         },
@@ -46,6 +48,31 @@ define([
                 if (data.statusCode === 200) {
                     delete data.statusCode;
                     callbackSuccess(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method createVocabList
+         * @param {Object} list
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        createVocabList: function(list, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'vocablists' +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: JSON.stringify(list)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    delete data.statusCode;
+                    callbackSuccess(data.VocabList);
                 } else {
                     callbackError(data);
                 }
@@ -439,7 +466,23 @@ define([
          * @returns {String}
          */
         getCredentials: function() {
-            return 'basic ' + this.get('credentials');
+            var credentials = '';
+            var platform = window.device ? window.device.platform : 'Web';
+            switch (platform) {
+                case 'Android':
+                    this.set('client', 'skritterandroid');
+                    credentials = this.get('skritterAndroid');
+                    break;
+                case 'iOS':
+                    this.set('client', 'skritterios');
+                    credentials = this.get('skritterIOS');
+                    break;
+                default:
+                    this.set('client', 'skritterweb');
+                    credentials = this.get('skritterWeb');
+
+            }
+            return 'basic ' + credentials;
         },
         /**
          * @method getHeaders
@@ -453,7 +496,7 @@ define([
          * @returns {String}
          */
         getToken: function() {
-            return app.user.auth.get('access_token');
+            return app.user.authentication.get('access_token');
         },
         /**
          * @method getUrl
@@ -461,6 +504,31 @@ define([
          */
         getUrl: function() {
             return this.get('root') + this.get('tld') + '/api/v' + this.get('version') + '/';
+        },
+        /**
+         * @method postContact
+         * @param {String} domain
+         * @param {Object} body
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        postContact: function(domain, body, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + domain +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: JSON.stringify(body)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackSuccess();
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
         },
         /**
          * @method putSubscription
@@ -556,6 +624,57 @@ define([
                 if (data.statusCode === 200) {
                     delete data.statusCode;
                     callbackSuccess(data.VocabList);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method refreshToken
+         * @param {String} token
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        refreshToken: function(token, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'oauth2/token',
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: {
+                    grant_type: 'refresh_token',
+                    client_id: this.get('clientId'),
+                    refresh_token: token
+                }
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackSuccess(data);
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method resetPassword
+         * @param {String} indentifier
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        resetPassword: function(indentifier, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'reset-password' +
+                '?bearer_token=' + this.getToken(),
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: JSON.stringify({input: indentifier})
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackSuccess();
                 } else {
                     callbackError(data);
                 }

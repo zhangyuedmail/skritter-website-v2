@@ -1,0 +1,84 @@
+<gelato-page data-name="general-settings">
+
+    <gelato-navbar class="fixed-top">
+        <div class="container">
+            <div class="left">
+                <div class="item item-header">{{global.title}}</div>
+            </div>
+        </div>
+    </gelato-navbar>
+
+    <gelato-content class="container">
+        <div class="content-block">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="header">Account</div>
+                    <div class="active">General</div>
+                    <div data-url="settings/study">Study</div>
+                    <div class="header">Billing</div>
+                    <div>Billing history</div>
+                    <div>Subscription</div>
+                    <div>School validation</div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-xs-4">Avatar</div>
+                        <div class="col-xs-8">
+                            <div id="user-avatar"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Username</div>
+                        <div class="col-xs-8">
+                            <div id="user-id"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Display name</div>
+                        <div class="col-xs-8">
+                            <div id="user-name"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Email</div>
+                        <div class="col-xs-8">
+                            <div id="user-email"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Password</div>
+                        <div class="col-xs-8">
+                            <a href="#">Change password</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">About me</div>
+                        <div class="col-xs-8">
+                            <textarea id="user-description"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Private account</div>
+                        <div class="col-xs-8">
+                            <input id="user-private" type="checkbox">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Country</div>
+                        <div class="col-xs-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Timezone</div>
+                        <div class="col-xs-8"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">Date format</div>
+                        <div class="col-xs-8"></div>
+                    </div>
+                    <button id="save-general-settings" type="button" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </gelato-content>
+
+</gelato-page>

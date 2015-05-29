@@ -4,38 +4,60 @@
  */
 define([
     'core/modules/GelatoRouter',
-    'modules/pages/Dashboard',
-    'modules/pages/GeneralSettings',
-    'modules/pages/List',
-    'modules/pages/ListBrowse',
-    'modules/pages/ListCreate',
-    'modules/pages/ListQueue',
-    'modules/pages/ListSection',
-    'modules/pages/Login',
-    'modules/pages/Home',
+    'modules/pages/dashboard/DashboardPage',
+    'modules/pages/lists/browse/BrowseListsPage',
+    'modules/pages/lists/create/CreateListPage',
+    'modules/pages/lists/custom/CustomListsPage',
+    'modules/pages/lists/queue/QueueListsPage',
+    'modules/pages/lists/single/SingleListPage',
+    'modules/pages/lists/single-section/SingleListSectionPage',
+    'modules/pages/marketing/about/AboutPage',
+    'modules/pages/marketing/contact/ContactPage',
+    'modules/pages/marketing/features/FeaturesPage',
+    'modules/pages/marketing/institutions/InstitutionsPage',
+    'modules/pages/marketing/landing/LandingPage',
+    'modules/pages/marketing/legal/LegalPage',
+    'modules/pages/marketing/login/LoginPage',
+    'modules/pages/marketing/password-reset/PasswordResetPage',
+    'modules/pages/marketing/pricing/PricingPage',
+    'modules/pages/marketing/signup/SignupPage',
+    'modules/pages/settings/general/GeneralSettingsPage',
+    'modules/pages/settings/study/StudySettingsPage',
+    'modules/pages/stats/summary/SummaryStatsPage',
+    'modules/pages/stats/timeline/TimelineStatsPage',
+    'modules/pages/words/WordsPage',
+    'modules/pages/Demo',
     'modules/pages/Scratchpad',
-    'modules/pages/StatsSummary',
-    'modules/pages/StatsTimeline',
     'modules/pages/Study',
-    'modules/pages/StudySettings',
-    'modules/pages/Words'
+    'modules/pages/Tutorial'
 ], function(
     GelatoRouter,
-    PageDashboard,
-    PageGeneralSettings,
-    PageList,
-    PageListBrowse,
-    PageListCreate,
-    PageListQueue,
-    PageListSection,
-    PageLogin,
-    PageHome,
+    DashboardPage,
+    BrowseListsPage,
+    CreateListPage,
+    CustomListsPage,
+    QueueListsPage,
+    SingleListPage,
+    SingleListSectionPage,
+    AboutPage,
+    ContactPage,
+    FeaturesPage,
+    InstitutionsPage,
+    LandingPage,
+    LegalPage,
+    LoginPage,
+    PasswordResetPage,
+    PricingPage,
+    SignupPage,
+    GeneralSettingsPage,
+    StudySettingsPage,
+    SummaryStatsPage,
+    TimelineStatsPage,
+    WordsPage,
+    PageDemo,
     PageScratchpad,
-    PageStatsSummary,
-    PageStatsTimeline,
     PageStudy,
-    PageStudySettings,
-    PageWords
+    PageTutorial
 ) {
 
     /**
@@ -53,34 +75,112 @@ define([
          * @type Object
          */
         routes: {
+            'about': 'showAbout',
+            'contact': 'showContact',
             'dashboard': 'showDashboard',
-            'lists': 'showListQueue',
-            'lists/browse': 'showListBrowse',
-            'lists/browse/:listId': 'showList',
-            'lists/browse/:listId/:sectionId': 'showListSection',
-            'lists/create': 'showListCreate',
-            'lists/queue': 'showListQueue',
+            'demo/:language': 'showDemo',
+            'features': 'showFeatures',
+            'institutions': 'showInstitutions',
+            'legal': 'showLegal',
+            'lists': 'showQueueLists',
+            'lists/browse': 'showBrowseLists',
+            'lists/browse/:listId': 'showSingleList',
+            'lists/browse/:listId/:sectionId': 'showSingleListSection',
+            'lists/create': 'showCreateList',
+            'lists/my-lists': 'showCustomLists',
+            'lists/queue': 'showQueueLists',
             'login': 'showLogin',
-            'logout': 'handleLogout',
+            'password-reset': 'showPasswordReset',
+            'pricing': 'showPricing',
             'scratchpad': 'showScratchpad',
             'scratchpad/:writing': 'showScratchpad',
             'settings': 'showGeneralSettings',
             'settings/general': 'showGeneralSettings',
             'settings/study': 'showStudySettings',
-            'stats': 'showStatsSummary',
-            'stats/summary': 'showStatsSummary',
-            'stats/timeline': 'showStatsTimeline',
+            'signup': 'showSignup',
+            'signup/:price': 'showSignup',
+            'stats': 'showSummaryStats',
+            'stats/summary': 'showSummaryStats',
+            'stats/timeline': 'showTimelineStats',
             'study': 'showStudy',
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
+            'tutorial/:module': 'showTutorial',
+            'tutorial/:module/:index': 'showTutorial',
             'words': 'showWords',
-            '*route': 'showHome'
+            '*route': 'showDefault'
+        },
+        /**
+         * @method showAbout
+         */
+        showAbout: function() {
+            this.page = new AboutPage();
+            this.page.render();
+        },
+        /**
+         * @method showBrowseLists
+         */
+        showBrowseLists: function() {
+            this.page = new BrowseListsPage();
+            this.page.render().load();
+        },
+        /**
+         * @method showContact
+         */
+        showContact: function() {
+            this.page = new ContactPage();
+            this.page.render();
+        },
+        /**
+         * @method showCreateList
+         */
+        showCreateList: function() {
+            this.page = new CreateListPage();
+            this.page.render();
+        },
+        /**
+         * @method showCustomLists
+         */
+        showCustomLists: function() {
+            this.page = new CustomListsPage();
+            this.page.render().load();
         },
         /**
          * @method showDashboard
          */
         showDashboard: function() {
-            this.page = new PageDashboard();
+            if (app.user.isLoggedIn()) {
+                this.page = new DashboardPage();
+                this.page.render();
+            } else {
+                this.showDefault();
+            }
+        },
+        /**
+         * @method showDefault
+         */
+        showDefault: function() {
+            if (app.user.isLoggedIn()) {
+                this.navigate('dashboard', {trigger: false});
+                this.showDashboard();
+            } else {
+                this.navigate('', {trigger: false});
+                this.showLanding();
+            }
+        },
+        /**
+         * @method showDemo
+         * @param {String} [language]
+         */
+        showDemo: function(language) {
+            this.page = new PageDemo();
+            this.page.render().load(language);
+        },
+        /**
+         * @method showFeatures
+         */
+        showFeatures: function() {
+            this.page = new FeaturesPage();
             this.page.render();
         },
         /**
@@ -88,67 +188,58 @@ define([
          */
         showGeneralSettings: function() {
             this.navigate('settings/general', {trigger: false});
-            this.page = new PageGeneralSettings();
+            this.page = new GeneralSettingsPage();
             this.page.render();
         },
         /**
-         * @method showHome
+         * @method showLanding
          */
-        showHome: function() {
-            if (app.user.isAuthenticated()) {
-                this.navigate('dashboard', {trigger: false});
-                this.showDashboard();
-            } else {
-                this.navigate('', {trigger: false});
-                this.page = new PageHome();
-                this.page.render();
-            }
-        },
-        /**
-         * @method showList
-         * @param {String} listId
-         */
-        showList: function(listId) {
-            this.page = new PageList();
-            this.page.render().load(listId);
-        },
-        /**
-         * @method showListSection
-         * @param {String} listId
-         * @param {String} sectionId
-         */
-        showListSection: function(listId, sectionId) {
-            this.page = new PageListSection();
-            this.page.render().load(listId, sectionId);
-        },
-        /**
-         * @method showListBrowse
-         */
-        showListBrowse: function() {
-            this.page = new PageListBrowse();
+        showLanding: function() {
+            this.page = new LandingPage();
             this.page.render();
         },
         /**
-         * @method showListCreate
+         * @method showInstitutions
          */
-        showListCreate: function() {
-            this.page = new PageListCreate();
+        showInstitutions: function() {
+            this.page = new InstitutionsPage();
             this.page.render();
         },
         /**
-         * @method showListQueue
+         * @method showLegal
          */
-        showListQueue: function() {
-            this.navigate('lists/queue', {trigger: false});
-            this.page = new PageListQueue();
+        showLegal: function() {
+            this.page = new LegalPage();
             this.page.render();
         },
         /**
          * @method showLogin
          */
         showLogin: function() {
-            this.page = new PageLogin();
+            this.page = new LoginPage();
             this.page.render();
+        },
+        /**
+         * @method showPasswordReset
+         */
+        showPasswordReset: function() {
+            this.page = new PasswordResetPage();
+            this.page.render();
+        },
+        /**
+         * @method showPricing
+         */
+        showPricing: function() {
+            this.page = new PricingPage();
+            this.page.render();
+        },
+        /**
+         * @method showQueueLists
+         */
+        showQueueLists: function() {
+            this.navigate('lists/queue', {trigger: false});
+            this.page = new QueueListsPage();
+            this.page.render().load();
         },
         /**
          * @method showScratchpad
@@ -159,17 +250,36 @@ define([
             this.page.render().load(writing);
         },
         /**
-         * @method showStatsSummary
+         * @method showSignup
+         * @param {String} [price]
          */
-        showStatsSummary: function() {
-            this.page = new PageStatsSummary();
-            this.page.render();
+        showSignup: function(price) {
+            this.page = new SignupPage();
+            this.page.render().select(price);
         },
         /**
-         * @method showStatsTimeline
+         * @method showSingleList
+         * @param {String} listId
          */
-        showStatsTimeline: function() {
-            this.page = new PageStatsTimeline();
+        showSingleList: function(listId) {
+            this.page = new SingleListPage();
+            this.page.render().load(listId);
+        },
+        /**
+         * @method showSingleListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        showSingleListSection: function(listId, sectionId) {
+            this.page = new SingleListSectionPage();
+            this.page.render().load(listId, sectionId);
+        },
+        /**
+         * @method showSummaryStats
+         */
+        showSummaryStats: function() {
+            this.navigate('stats/summary', {trigger: false});
+            this.page = new SummaryStatsPage();
             this.page.render();
         },
         /**
@@ -185,14 +295,30 @@ define([
          * @method showStudySettings
          */
         showStudySettings: function() {
-            this.page = new PageStudySettings();
+            this.page = new StudySettingsPage();
             this.page.render();
+        },
+        /**
+         * @method showTimelineStats
+         */
+        showTimelineStats: function() {
+            this.page = new TimelineStatsPage();
+            this.page.render();
+        },
+        /**
+         * @method showTutorial
+         * @param {String} [module]
+         * @param {String} [index]
+         */
+        showTutorial: function(module, index) {
+            this.page = new PageTutorial();
+            this.page.render().load(module, index);
         },
         /**
          * @method showWords
          */
         showWords: function() {
-            this.page = new PageWords();
+            this.page = new WordsPage();
             this.page.render();
         }
     });

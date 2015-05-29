@@ -1,0 +1,41 @@
+<gelato-page data-name="custom-lists">
+
+    <gelato-navbar class="fixed-top">
+        <div class="container">
+            <div class="left">
+                <div class="item item-header">{{global.title}}</div>
+            </div>
+        </div>
+    </gelato-navbar>
+
+    <gelato-content>
+        <div class="container">
+            <div class="content-block">
+                <div class="row">
+                    <div class="col-md-3">
+                        <section id="section-menu">
+                            <button type="button" class="btn btn-success" data-url="lists/create">Create new list</button>
+                            <div class="options">
+                                <div data-url="lists/queue" >Study Queue</div>
+                                <div data-url="lists/browse">Browse Lists</div>
+                                <div class="active">My Lists</div>
+                                <div data-url="lists/chinesepod">ChinesePod</div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-md-9">
+                        <section id="section-content">
+                            <div class="title">My Lists</div>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input id="list-search-input" type="text" class="form-control" placeholder="Type to search by title or tag">
+                            </div>
+                            <div id="custom-lists-table"></div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </gelato-content>
+
+</gelato-page>

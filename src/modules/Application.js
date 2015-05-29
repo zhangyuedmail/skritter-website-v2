@@ -5,12 +5,24 @@
 define([
     'core/modules/GelatoApplication',
     'modules/Router',
-    'modules/data/Strokes',
+    'modules/data/StrokeData',
+    'modules/data/TutorialData',
+    'modules/collections/TutorialCollection',
     'modules/models/Api',
     'modules/models/MediaPlayer',
     'modules/models/User',
     'modules/utils/Functions'
-], function(GelatoApplication, Router, Strokes, Api, MediaPlayer, User, Functions) {
+], function(
+    GelatoApplication,
+    Router,
+    StrokeData,
+    TutorialData,
+    TutorialCollection,
+    Api,
+    MediaPlayer,
+    User,
+    Functions
+) {
 
     /**
      * @class Application
@@ -23,7 +35,7 @@ define([
          */
         initialize: function() {
             this.fn = Functions;
-            this.strokes = Strokes;
+            this.strokes = StrokeData;
         },
         /**
          * @property defaults
@@ -39,8 +51,10 @@ define([
             this.api = new Api();
             this.media = new MediaPlayer();
             this.router = new Router();
+            this.tutorials = new TutorialCollection(TutorialData.getData());
             this.user = new User();
             this.user.load(function() {
+                console.log('USER:', self.user.id);
                 self.router.start();
             }, function(error) {
                 console.error('USER LOAD ERROR:', error);

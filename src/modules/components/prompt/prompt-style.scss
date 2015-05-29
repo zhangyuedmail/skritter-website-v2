@@ -1,0 +1,37 @@
+gelato-component[data-name="prompt"] {
+
+  color: #666c73;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  min-width: 992px;
+
+  .content-block {
+    background-color: #f3f2f6;
+    .row {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  #panel-left {
+    background-color: #fbfafc;
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+    #panel-left-center {
+      margin: 0 auto;
+      position: relative;
+      width: 80%;
+    }
+    #prompt-banner-new {
+      display: none;
+      left: 0;
+      position: absolute;
+      top: 0;
+    }
+  }
+
+  #panel-right {
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+  }
+
+}

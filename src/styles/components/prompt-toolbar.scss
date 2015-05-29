@@ -1,1 +1,25 @@
-gelato-component[data-name="prompt-toolbar"] {}
+gelato-component[data-name="prompt-toolbar"] {
+
+  margin-bottom: 35px;
+  margin-left: -5px;
+  margin-top: 30px;
+
+  button {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      outline: 0 !important;
+    }
+  }
+
+  #option-correct { margin-top: 15px; }
+
+  #option-top { margin-top: 5px; }
+
+}

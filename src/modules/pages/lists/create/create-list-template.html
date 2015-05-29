@@ -1,0 +1,43 @@
+<gelato-page data-name="create-list">
+
+    <gelato-navbar class="fixed-top">
+        <div class="container">
+            <div class="left">
+                <div class="item item-header">{{global.title}}</div>
+            </div>
+        </div>
+    </gelato-navbar>
+
+    <gelato-content class="container">
+        <div class="content-block">
+            <div data-url="lists"><i class="fa fa-chevron-left"></i> cancel and go back</div>
+            <div class="title">Create a new list</div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div id="list-photo"></div>
+                    <div id="upload-photo-button"><i class="fa fa-plus-circle"></i> Upload photo</div>
+                </div>
+                <div class="col-md-9">
+                    <form>
+                        <div class="form-group">
+                            <label for="list-name">Name</label>
+                            <input type="text" class="form-control" id="list-name" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <div><label>List Type</label></div>
+                            <label class="radio-inline"><input type="radio" name="list-size">Single Section</label>
+                            <label class="radio-inline"><input type="radio" name="list-size">Multiple Sections</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="list-description">Description (optional)</label>
+                            <input type="text" class="form-control" id="list-description" placeholder="">
+                        </div>
+                        <button id="create-list-submit" type="submit" class="btn btn-success">Create list</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </gelato-content>
+
+</gelato-page>

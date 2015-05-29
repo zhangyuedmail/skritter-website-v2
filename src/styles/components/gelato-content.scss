@@ -1,0 +1,51 @@
+gelato-content {
+
+  #section-top-carousel {
+    margin-top: -60px;
+    a {
+      color: #fafafa; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      margin-left: 100px;
+    }
+    button {
+      color: #fafafa; //TODO: check color
+      font-size: 24px;
+      font-weight: 300;
+      padding: 15px 30px;
+    }
+    .carousel-icons {
+      margin-top: 80px;
+      .device-text {
+        color: #e1e4e6;
+        font-family: $font-muli;
+        font-size: 16px;
+        font-weight: 300;
+      }
+      .icon-block {
+        display: inline-block;
+        margin-left: 40px;
+        margin-right: 40px;
+      }
+    }
+    .carousel-image {
+      min-width: 100%;
+      overflow: hidden;
+      width: 100%;
+    }
+    .carousel-overlay {
+      bottom: 100px;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+      .header {
+        color: #ebeaf0;
+        font-family: $font-slab;
+        font-size: 48px;
+        font-weight: 400;
+        margin-bottom: 150px;
+      }
+    }
+  }
+
+}
