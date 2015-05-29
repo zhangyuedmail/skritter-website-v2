@@ -25,11 +25,11 @@ define([
     'modules/pages/settings/study/StudySettingsPage',
     'modules/pages/stats/summary/SummaryStatsPage',
     'modules/pages/stats/timeline/TimelineStatsPage',
+    'modules/pages/words/WordsPage',
     'modules/pages/Demo',
     'modules/pages/Scratchpad',
     'modules/pages/Study',
-    'modules/pages/Tutorial',
-    'modules/pages/Words'
+    'modules/pages/Tutorial'
 ], function(
     GelatoRouter,
     DashboardPage,
@@ -53,11 +53,11 @@ define([
     StudySettingsPage,
     SummaryStatsPage,
     TimelineStatsPage,
+    WordsPage,
     PageDemo,
     PageScratchpad,
     PageStudy,
-    PageTutorial,
-    PageWords
+    PageTutorial
 ) {
 
     /**
@@ -318,7 +318,7 @@ define([
          * @method showWords
          */
         showWords: function() {
-            this.page = new PageWords();
+            this.page = new WordsPage();
             this.page.render();
         }
     });

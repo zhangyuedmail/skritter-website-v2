@@ -12,6 +12,9 @@
 
 /*** COMPONENTS ***/
 @import "modules/components/marketing/footer/footer-style";
+@import "modules/components/tables/list-rows/list-rows-table-style";
+@import "modules/components/tables/list-sections/list-sections-table-style";
+@import "modules/components/tables/lists/lists-table-style";
 @import "styles/components/gelato-content";
 @import "styles/components/gelato-navbar";
 
@@ -37,3 +40,4 @@
 @import "modules/pages/settings/study/study-settings-style";
 @import "modules/pages/stats/summary/summary-stats-style";
 @import "modules/pages/stats/timeline/timeline-stats-style";
+@import "modules/pages/words/words-style";
