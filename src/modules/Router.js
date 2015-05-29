@@ -21,13 +21,13 @@ define([
     'modules/pages/marketing/password-reset/PasswordResetPage',
     'modules/pages/marketing/pricing/PricingPage',
     'modules/pages/marketing/signup/SignupPage',
+    'modules/pages/settings/general/GeneralSettingsPage',
+    'modules/pages/settings/study/StudySettingsPage',
+    'modules/pages/stats/summary/SummaryStatsPage',
+    'modules/pages/stats/timeline/TimelineStatsPage',
     'modules/pages/Demo',
-    'modules/pages/GeneralSettings',
     'modules/pages/Scratchpad',
-    'modules/pages/StatsSummary',
-    'modules/pages/StatsTimeline',
     'modules/pages/Study',
-    'modules/pages/StudySettings',
     'modules/pages/Tutorial',
     'modules/pages/Words'
 ], function(
@@ -49,13 +49,13 @@ define([
     PasswordResetPage,
     PricingPage,
     SignupPage,
+    GeneralSettingsPage,
+    StudySettingsPage,
+    SummaryStatsPage,
+    TimelineStatsPage,
     PageDemo,
-    PageGeneralSettings,
     PageScratchpad,
-    PageStatsSummary,
-    PageStatsTimeline,
     PageStudy,
-    PageStudySettings,
     PageTutorial,
     PageWords
 ) {
@@ -99,9 +99,9 @@ define([
             'settings/study': 'showStudySettings',
             'signup': 'showSignup',
             'signup/:price': 'showSignup',
-            'stats': 'showStatsSummary',
-            'stats/summary': 'showStatsSummary',
-            'stats/timeline': 'showStatsTimeline',
+            'stats': 'showSummaryStats',
+            'stats/summary': 'showSummaryStats',
+            'stats/timeline': 'showTimelineStats',
             'study': 'showStudy',
             'study/:listId': 'showStudy',
             'study/:listId/:sectionId': 'showStudy',
@@ -188,7 +188,7 @@ define([
          */
         showGeneralSettings: function() {
             this.navigate('settings/general', {trigger: false});
-            this.page = new PageGeneralSettings();
+            this.page = new GeneralSettingsPage();
             this.page.render();
         },
         /**
@@ -275,17 +275,11 @@ define([
             this.page.render().load(listId, sectionId);
         },
         /**
-         * @method showStatsSummary
+         * @method showSummaryStats
          */
-        showStatsSummary: function() {
-            this.page = new PageStatsSummary();
-            this.page.render();
-        },
-        /**
-         * @method showStatsTimeline
-         */
-        showStatsTimeline: function() {
-            this.page = new PageStatsTimeline();
+        showSummaryStats: function() {
+            this.navigate('stats/summary', {trigger: false});
+            this.page = new SummaryStatsPage();
             this.page.render();
         },
         /**
@@ -301,7 +295,14 @@ define([
          * @method showStudySettings
          */
         showStudySettings: function() {
-            this.page = new PageStudySettings();
+            this.page = new StudySettingsPage();
+            this.page.render();
+        },
+        /**
+         * @method showTimelineStats
+         */
+        showTimelineStats: function() {
+            this.page = new TimelineStatsPage();
             this.page.render();
         },
         /**
