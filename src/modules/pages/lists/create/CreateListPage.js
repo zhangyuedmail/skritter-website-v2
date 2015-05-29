@@ -3,15 +3,18 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/list-create.html',
+    'require.text!modules/pages/lists/create/create-list-template.html',
     'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+], function(
+    Template,
+    GelatoPage
+) {
 
     /**
-     * @class PageListCreate
+     * @class CreateListPage
      * @extends GelatoPage
      */
-    var PageListCreate = GelatoPage.extend({
+    var CreateListPage = GelatoPage.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -30,7 +33,7 @@ define([
         bodyClass: 'background-light',
         /**
          * @method render
-         * @returns {PageListCreate}
+         * @returns {CreateListPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -63,6 +66,6 @@ define([
         }
     });
 
-    return PageListCreate;
+    return CreateListPage;
 
 });
