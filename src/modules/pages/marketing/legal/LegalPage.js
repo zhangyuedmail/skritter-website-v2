@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/legal.html',
+    'require.text!modules/pages/marketing/legal/legal-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template,
+    GelatoPage,
+    Footer
+) {
 
     /**
-     * @class PageLegal
+     * @class LegalPage
      * @extends GelatoPage
      */
-    var PageLegal = GelatoPage.extend({
+    var LegalPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -27,7 +31,7 @@ define([
         title: 'Legal - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageLegal}
+         * @returns {LegalPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -49,6 +53,6 @@ define([
         }
     });
 
-    return PageLegal;
+    return LegalPage;
 
 });
