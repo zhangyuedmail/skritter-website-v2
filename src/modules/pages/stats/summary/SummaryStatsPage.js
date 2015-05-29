@@ -3,15 +3,18 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/stats-summary.html',
+    'require.text!modules/pages/stats/summary/summary-stats-template.html',
     'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+], function(
+    Template, 
+    GelatoPage
+) {
 
     /**
-     * @class PageStatsSummary
+     * @class SummaryStatsPage
      * @extends GelatoPage
      */
-    var PageStatsSummary = GelatoPage.extend({
+    var SummaryStatsPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -24,7 +27,7 @@ define([
         title: 'Stats Summary - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageStatsSummary}
+         * @returns {SummaryStatsPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -32,6 +35,6 @@ define([
         }
     });
 
-    return PageStatsSummary;
+    return SummaryStatsPage;
 
 });
