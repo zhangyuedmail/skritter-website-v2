@@ -5,11 +5,11 @@
 define([
     'require.text!modules/pages/lists/browse/browse-lists-template.html',
     'core/modules/GelatoPage',
-    'modules/components/ListTable'
+    'modules/components/tables/lists/ListsTableComponent'
 ], function(
     Template,
     GelatoPage,
-    ListTable
+    ListsTableComponent
 ) {
 
     /**
@@ -22,7 +22,7 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.browseTable = new ListTable();
+            this.browseTable = new ListsTableComponent();
             this.listenTo(app.user.data.vocablists, 'add change', this.renderTables);
 
         },

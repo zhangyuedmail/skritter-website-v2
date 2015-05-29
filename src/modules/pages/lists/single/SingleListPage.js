@@ -5,11 +5,11 @@
 define([
     'require.text!modules/pages/lists/single/single-list-template.html',
     'core/modules/GelatoPage',
-    'modules/components/SectionTable'
+    'modules/components/tables/list-sections/ListSectionsTableComponent'
 ], function(
     Template,
     GelatoPage,
-    SectionTable
+    ListSectionsTableComponent
 ) {
 
     /**
@@ -23,7 +23,7 @@ define([
          */
         initialize: function() {
             this.list = null;
-            this.sectionTable = new SectionTable();
+            this.sectionTable = new ListSectionsTableComponent();
         },
         /**
          * @property title

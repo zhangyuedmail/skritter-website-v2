@@ -5,11 +5,11 @@
 define([
     'require.text!modules/pages/lists/queue/queue-lists-template.html',
     'core/modules/GelatoPage',
-    'modules/components/ListTable'
+    'modules/components/tables/lists/ListsTableComponent'
 ], function(
     Template,
     GelatoPage,
-    ListTable
+    ListsTableComponent
 ) {
 
     /**
@@ -22,8 +22,8 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.addingTable = new ListTable();
-            this.reviewingTable = new ListTable();
+            this.addingTable = new ListsTableComponent();
+            this.reviewingTable = new ListsTableComponent();
             this.listenTo(app.user.data.vocablists, 'add change', this.renderTables);
         },
         /**

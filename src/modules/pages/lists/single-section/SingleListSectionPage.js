@@ -5,11 +5,11 @@
 define([
     'require.text!modules/pages/lists/single-section/single-list-section-template.html',
     'core/modules/GelatoPage',
-    'modules/components/RowTable'
+    'modules/components/tables/list-rows/ListRowsTableComponent'
 ], function(
     Template,
     GelatoPage,
-    RowTable
+    ListRowsTableComponent
 ) {
 
     /**
@@ -23,7 +23,7 @@ define([
          */
         initialize: function() {
             this.list = null;
-            this.rowTable = new RowTable();
+            this.rowTable = new ListRowsTableComponent();
             this.section = null;
         },
         /**

@@ -5,11 +5,11 @@
 define([
     'require.text!modules/pages/dashboard/dashboard-template.html',
     'core/modules/GelatoPage',
-    'modules/components/ListTable'
+    'modules/components/tables/lists/ListsTableComponent'
 ], function(
     Template,
     GelatoPage,
-    ListTable
+    ListsTableComponent
 ) {
 
     /**
@@ -25,7 +25,7 @@ define([
             this.doughnutGoal = null;
             this.doughnutList = null;
             this.heatmap = new CalHeatMap();
-            this.listQueue = new ListTable();
+            this.listQueue = new ListsTableComponent();
             this.listenTo(app.dialog, 'goal-settings:confirm', this.updateGoalSettings);
             this.listenTo(app.user.data.stats, 'add change', this.renderStats);
             this.listenTo(app.user.data.stats, 'add change', this.renderStats);
@@ -163,10 +163,9 @@ define([
             var goal = app.user.settings.getGoal();
             var goalType = Object.keys(goal)[0];
             var goalValue = goal[goalType];
-            console.log(goalType);
             $('gelato-dialog [name="goal-type"][value="' + goalType + '"]').prop('checked', 'checked');
             $('gelato-dialog #goal-value').val(goalValue);
-            app.dialog.show('goal-settings');
+            app.dialogs.open('goal-settings');
         },
         /**
          * @method updateGoalSettings
@@ -175,7 +174,7 @@ define([
             var goalType = $('gelato-dialog [name="goal-type"]:checked').val();
             var goalValue = $('gelato-dialog #goal-value').val();
             app.user.settings.setGoal(goalType, goalValue);
-            app.dialog.hide();
+            app.dialog.close();
         }
     });
 
