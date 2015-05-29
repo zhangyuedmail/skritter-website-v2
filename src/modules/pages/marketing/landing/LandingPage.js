@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/home.html',
+    'require.text!modules/pages/marketing/landing/landing-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template, 
+    GelatoPage, 
+    Footer
+) {
 
     /**
-     * @class PageHome
+     * @class LandingPage
      * @extends GelatoPage
      */
-    var PageHome = GelatoPage.extend({
+    var LandingPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -24,10 +28,10 @@ define([
          * @property title
          * @type String
          */
-        title: 'Home - ' + i18n.global.title,
+        title: 'Landing - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageHome}
+         * @returns {LandingPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -36,7 +40,7 @@ define([
         },
         /**
          * @method remove
-         * @returns {PageHome}
+         * @returns {LandingPage}
          */
         remove: function() {
             this.footer.remove();
@@ -44,6 +48,6 @@ define([
         }
     });
 
-    return PageHome;
+    return LandingPage;
 
 });
