@@ -16,6 +16,13 @@
 @import "styles/components/gelato-navbar";
 
 /*** PAGES ***/
+@import "modules/pages/dashboard/dashboard-style";
+@import "modules/pages/lists/browse/browse-lists-style";
+@import "modules/pages/lists/create/create-list-style";
+@import "modules/pages/lists/custom/custom-lists-style";
+@import "modules/pages/lists/queue/queue-lists-style";
+@import "modules/pages/lists/single/single-list-style";
+@import "modules/pages/lists/single-section/single-list-section-style";
 @import "modules/pages/marketing/about/about-style";
 @import "modules/pages/marketing/contact/contact-style";
 @import "modules/pages/marketing/features/features-style";

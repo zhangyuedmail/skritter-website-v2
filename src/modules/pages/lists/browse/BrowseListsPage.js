@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/list-browse.html',
+    'require.text!modules/pages/lists/browse/browse-lists-template.html',
     'core/modules/GelatoPage',
     'modules/components/ListTable'
-], function(Template, GelatoPage, ListTable) {
+], function(
+    Template,
+    GelatoPage,
+    ListTable
+) {
 
     /**
-     * @class PageListBrowse
+     * @class BrowseListsPage
      * @extends GelatoPage
      */
-    var PageListBrowse = GelatoPage.extend({
+    var BrowseListsPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -34,7 +38,7 @@ define([
         bodyClass: 'background-light',
         /**
          * @method render
-         * @returns {PageListBrowse}
+         * @returns {BrowseListsPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -44,7 +48,7 @@ define([
         },
         /**
          * @method renderTables
-         * @returns {PageListBrowse}
+         * @returns {BrowseListsPage}
          */
         renderTables: function() {
             var officialLists = app.user.data.vocablists.getOfficial();
@@ -72,7 +76,7 @@ define([
         },
         /**
          * @method load
-         * @returns {PageListBrowse}
+         * @returns {BrowseListsPage}
          */
         load: function() {
             app.user.data.vocablists.fetchOfficial();
@@ -80,6 +84,6 @@ define([
         }
     });
 
-    return PageListBrowse;
+    return BrowseListsPage;
 
 });
