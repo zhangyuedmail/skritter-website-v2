@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/features.html',
+    'require.text!modules/pages/marketing/features/features-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template,
+    GelatoPage,
+    Footer
+) {
 
     /**
-     * @class PageFeatures
+     * @class FeaturesPage
      * @extends GelatoPage
      */
-    var PageFeatures = GelatoPage.extend({
+    var FeaturesPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -27,7 +31,7 @@ define([
         title: 'Features - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageFeatures}
+         * @returns {FeaturesPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -49,6 +53,6 @@ define([
         }
     });
 
-    return PageFeatures;
+    return FeaturesPage;
 
 });
