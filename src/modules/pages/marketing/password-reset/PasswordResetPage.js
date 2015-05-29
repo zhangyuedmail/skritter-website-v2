@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/password-reset.html',
+    'require.text!modules/pages/marketing/password-reset/password-reset-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template,
+    GelatoPage,
+    Footer
+) {
 
     /**
-     * @class PagePasswordReset
+     * @class PasswordResetPage
      * @extends GelatoPage
      */
-    var PagePasswordReset = GelatoPage.extend({
+    var PasswordResetPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -27,7 +31,7 @@ define([
         title: 'Password Reset - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PagePasswordReset}
+         * @returns {PasswordResetPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -77,6 +81,6 @@ define([
         }
     });
 
-    return PagePasswordReset;
+    return PasswordResetPage;
 
 });
