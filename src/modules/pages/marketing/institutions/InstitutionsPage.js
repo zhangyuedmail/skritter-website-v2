@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/institutions.html',
+    'require.text!modules/pages/marketing/institutions/institutions-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template, 
+    GelatoPage, 
+    Footer
+) {
 
     /**
-     * @class PageInstitutions
+     * @class InstitutionsPage
      * @extends GelatoPage
      */
-    var PageInstitutions = GelatoPage.extend({
+    var InstitutionsPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -27,7 +31,7 @@ define([
         title: 'Institutions - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageInstitutions}
+         * @returns {InstitutionsPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -118,6 +122,6 @@ define([
         }
     });
 
-    return PageInstitutions;
+    return InstitutionsPage;
 
 });
