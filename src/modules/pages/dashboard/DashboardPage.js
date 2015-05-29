@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/dashboard.html',
+    'require.text!modules/pages/dashboard/dashboard-template.html',
     'core/modules/GelatoPage',
     'modules/components/ListTable'
-], function(Template, GelatoPage, ListTable) {
+], function(
+    Template,
+    GelatoPage,
+    ListTable
+) {
 
     /**
-     * @class PageDashboard
+     * @class DashboardPage
      * @extends GelatoPage
      */
-    var PageDashboard = GelatoPage.extend({
+    var DashboardPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -40,7 +44,7 @@ define([
         bodyClass: 'background-light',
         /**
          * @method render
-         * @returns {PageDashboard}
+         * @returns {DashboardPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -55,7 +59,7 @@ define([
         },
         /**
          * @method renderGoalDoughnut
-         * @returns {PageDashboard}
+         * @returns {DashboardPage}
          */
         renderGoalDoughnut: function() {
             var context = this.$('#goal-doughnut').get(0).getContext('2d');
@@ -83,7 +87,7 @@ define([
         },
         /**
          * @method renderListDoughnut
-         * @returns {PageDashboard}
+         * @returns {DashboardPage}
          */
         renderListDoughnut: function() {
             var context = this.$('#list-queue-doughnut').get(0).getContext('2d');
@@ -100,7 +104,7 @@ define([
         },
         /**
          * @method renderHeatmap
-         * @returns {PageDashboard}
+         * @returns {DashboardPage}
          */
         renderHeatmap: function() {
             this.heatmap.init({
@@ -121,7 +125,7 @@ define([
         },
         /**
          * @method renderListQueue
-         * @returns {PageDashboard}
+         * @returns {DashboardPage}
          */
         renderListQueue: function() {
             var addingLists = app.user.data.vocablists.getAdding();
@@ -133,7 +137,7 @@ define([
         },
         /**
          * @method renderStats
-         * @returns {PageDashboard}
+         * @returns {DashboardPage}
          */
         renderStats: function() {
             this.$('#characters-learned .value').text(app.user.data.stats.getTotalCharactersLearned());
@@ -175,6 +179,6 @@ define([
         }
     });
 
-    return PageDashboard;
+    return DashboardPage;
 
 });
