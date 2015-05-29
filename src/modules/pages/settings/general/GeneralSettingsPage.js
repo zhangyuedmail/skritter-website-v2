@@ -3,15 +3,18 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/general-settings.html',
+    'require.text!modules/pages/settings/general/general-settings-template.html',
     'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+], function(
+    Template, 
+    GelatoPage
+) {
 
     /**
-     * @class PageGeneralSettings
+     * @class GeneralSettingsPage
      * @extends GelatoPage
      */
-    var PageGeneralSettings = GelatoPage.extend({
+    var GeneralSettingsPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -29,7 +32,7 @@ define([
         bodyClass: 'background-light',
         /**
          * @method render
-         * @returns {PageGeneralSettings}
+         * @returns {GeneralSettingsPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -38,7 +41,7 @@ define([
         },
         /**
          * @method renderFields
-         * @returns {PageGeneralSettings}
+         * @returns {GeneralSettingsPage}
          */
         renderFields: function() {
             var userSettings = app.user.settings;
@@ -57,6 +60,6 @@ define([
         events: {}
     });
 
-    return PageGeneralSettings;
+    return GeneralSettingsPage;
 
 });
