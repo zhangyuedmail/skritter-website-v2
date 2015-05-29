@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/list-queue.html',
+    'require.text!modules/pages/lists/queue/queue-lists-template.html',
     'core/modules/GelatoPage',
     'modules/components/ListTable'
-], function(Template, GelatoPage, ListTable) {
+], function(
+    Template,
+    GelatoPage,
+    ListTable
+) {
 
     /**
-     * @class PageListQueue
+     * @class QueueListsPage
      * @extends GelatoPage
      */
-    var PageListQueue = GelatoPage.extend({
+    var QueueListsPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -34,7 +38,7 @@ define([
         bodyClass: 'background-light',
         /**
          * @method render
-         * @returns {PageListQueue}
+         * @returns {QueueListsPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -45,7 +49,7 @@ define([
         },
         /**
          * @method renderTables
-         * @returns {PageListQueue}
+         * @returns {QueueListsPage}
          */
         renderTables: function() {
             var addingLists = app.user.data.vocablists.getAdding();
@@ -83,7 +87,7 @@ define([
         events: {},
         /**
          * @method load
-         * @returns {PageListQueue}
+         * @returns {QueueListsPage}
          */
         load: function() {
             app.user.data.vocablists.fetch();
@@ -91,6 +95,6 @@ define([
         }
     });
 
-    return PageListQueue;
+    return QueueListsPage;
 
 });
