@@ -3,15 +3,18 @@
  * @submodule Components
  */
 define([
-    'require.text!templates/components/prompt-canvas.html',
+    'require.text!modules/components/prompt/canvas/prompt-canvas-template.html',
     'core/modules/GelatoComponent'
-], function(Template, GelatoComponent) {
+], function(
+    Template, 
+    GelatoComponent
+) {
 
     /**
-     * @class PromptCanvas
+     * @class PromptCanvasComponent
      * @extends GelatoComponent
      */
-    var PromptCanvas = GelatoComponent.extend({
+    var PromptCanvasComponent = GelatoComponent.extend({
         /**
          * @method initialize
          * @param {Object} [options]
@@ -50,7 +53,7 @@ define([
         /**
          * @method render
          * @param {Number} [size]
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         render: function(size) {
             this.$el.html(Template);
@@ -82,7 +85,7 @@ define([
         /**
          * @method clearLayer
          * @param {String} name
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         clearLayer: function(name) {
             this.getLayer(name).removeAllChildren();
@@ -91,7 +94,7 @@ define([
         },
         /**
          * @method clearMessage
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         clearMessage: function() {
             this.$('#canvas-message').empty();
@@ -121,7 +124,7 @@ define([
         },
         /**
          * @method disableGrid
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         disableGrid: function() {
             this.clearLayer('grid');
@@ -130,7 +133,7 @@ define([
         },
         /**
          * @method disableInput
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         disableInput: function() {
             this.$el.off('.Input');
@@ -159,7 +162,7 @@ define([
         },
         /**
          * @method drawGrid
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         drawGrid: function() {
             var grid = new createjs.Shape();
@@ -210,7 +213,7 @@ define([
         },
         /**
          * @method enableGrid
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         enableGrid: function() {
             this.drawGrid();
@@ -219,7 +222,7 @@ define([
         },
         /**
          * @method enableInput
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         enableInput: function() {
             var self = this;
@@ -330,7 +333,7 @@ define([
         },
         /**
          * @method reset
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         reset: function() {
             this.getLayer('surface-background2').removeAllChildren();
@@ -345,7 +348,7 @@ define([
         /**
          * @method resize
          * @param {Number} size
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         resize: function(size) {
             app.user.settings.set('canvasSize', size);
@@ -363,7 +366,7 @@ define([
          * @method setMessage
          * @param {String} text
          * @param {Number} [duration]
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         setMessage: function(text, duration) {
             this.$('#canvas-message').text(text);
@@ -446,7 +449,7 @@ define([
          * @param {createjs.Shape} toShape
          * @param {Object} [options]
          * @param {Function} [callback]
-         * @returns {PromptCanvas}
+         * @returns {PromptCanvasComponent}
          */
         tweenShape: function(layerName, fromShape, toShape, options, callback) {
             this.getLayer(layerName).addChild(fromShape);
@@ -468,6 +471,6 @@ define([
         }
     });
 
-    return PromptCanvas;
+    return PromptCanvasComponent;
 
 });
