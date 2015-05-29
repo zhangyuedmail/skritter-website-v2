@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/signup.html',
+    'require.text!modules/pages/marketing/signup/signup-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template, 
+    GelatoPage, 
+    Footer
+) {
 
     /**
-     * @class PageSignup
+     * @class SignupPage
      * @extends GelatoPage
      */
-    var PageSignup = GelatoPage.extend({
+    var SignupPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -27,7 +31,7 @@ define([
         title: 'Signup - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageSignup}
+         * @returns {SignupPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -60,7 +64,7 @@ define([
         /**
          * @method select
          * @param {String} price
-         * @returns {PageSignup}
+         * @returns {SignupPage}
          */
         select: function(price) {
             this.$('#signup-plan option[value="' + price + '"]').prop('selected', 'selected');
@@ -68,6 +72,6 @@ define([
         }
     });
 
-    return PageSignup;
+    return SignupPage;
 
 });
