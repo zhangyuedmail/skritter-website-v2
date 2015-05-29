@@ -4,26 +4,26 @@
  */
 define([
     'core/modules/GelatoRouter',
+    'modules/pages/dashboard/DashboardPage',
+    'modules/pages/lists/browse/BrowseListsPage',
+    'modules/pages/lists/create/CreateListPage',
+    'modules/pages/lists/custom/CustomListsPage',
+    'modules/pages/lists/queue/QueueListsPage',
+    'modules/pages/lists/single/SingleListPage',
+    'modules/pages/lists/single-section/SingleListSectionPage',
     'modules/pages/marketing/about/AboutPage',
     'modules/pages/marketing/contact/ContactPage',
-    'modules/pages/Dashboard',
-    'modules/pages/Demo',
     'modules/pages/marketing/features/FeaturesPage',
-    'modules/pages/GeneralSettings',
     'modules/pages/marketing/institutions/InstitutionsPage',
     'modules/pages/marketing/landing/LandingPage',
     'modules/pages/marketing/legal/LegalPage',
-    'modules/pages/List',
-    'modules/pages/ListBrowse',
-    'modules/pages/ListCreate',
-    'modules/pages/ListCustom',
-    'modules/pages/ListQueue',
-    'modules/pages/ListSection',
     'modules/pages/marketing/login/LoginPage',
     'modules/pages/marketing/password-reset/PasswordResetPage',
     'modules/pages/marketing/pricing/PricingPage',
-    'modules/pages/Scratchpad',
     'modules/pages/marketing/signup/SignupPage',
+    'modules/pages/Demo',
+    'modules/pages/GeneralSettings',
+    'modules/pages/Scratchpad',
     'modules/pages/StatsSummary',
     'modules/pages/StatsTimeline',
     'modules/pages/Study',
@@ -32,26 +32,26 @@ define([
     'modules/pages/Words'
 ], function(
     GelatoRouter,
+    DashboardPage,
+    BrowseListsPage,
+    CreateListPage,
+    CustomListsPage,
+    QueueListsPage,
+    SingleListPage,
+    SingleListSectionPage,
     AboutPage,
     ContactPage,
-    PageDashboard,
-    PageDemo,
     FeaturesPage,
-    PageGeneralSettings,
     InstitutionsPage,
     LandingPage,
     LegalPage,
-    PageList,
-    PageListBrowse,
-    PageListCreate,
-    PageListCustom,
-    PageListQueue,
-    PageListSection,
     LoginPage,
     PasswordResetPage,
     PricingPage,
-    PageScratchpad,
     SignupPage,
+    PageDemo,
+    PageGeneralSettings,
+    PageScratchpad,
     PageStatsSummary,
     PageStatsTimeline,
     PageStudy,
@@ -82,13 +82,13 @@ define([
             'features': 'showFeatures',
             'institutions': 'showInstitutions',
             'legal': 'showLegal',
-            'lists': 'showListQueue',
-            'lists/browse': 'showListBrowse',
-            'lists/browse/:listId': 'showList',
-            'lists/browse/:listId/:sectionId': 'showListSection',
-            'lists/create': 'showListCreate',
-            'lists/my-lists': 'showListCustom',
-            'lists/queue': 'showListQueue',
+            'lists': 'showQueueLists',
+            'lists/browse': 'showBrowseLists',
+            'lists/browse/:listId': 'showSingleList',
+            'lists/browse/:listId/:sectionId': 'showSingleListSection',
+            'lists/create': 'showCreateList',
+            'lists/my-lists': 'showCustomLists',
+            'lists/queue': 'showQueueLists',
             'login': 'showLogin',
             'password-reset': 'showPasswordReset',
             'pricing': 'showPricing',
@@ -118,6 +118,13 @@ define([
             this.page.render();
         },
         /**
+         * @method showBrowseLists
+         */
+        showBrowseLists: function() {
+            this.page = new BrowseListsPage();
+            this.page.render().load();
+        },
+        /**
          * @method showContact
          */
         showContact: function() {
@@ -125,11 +132,25 @@ define([
             this.page.render();
         },
         /**
+         * @method showCreateList
+         */
+        showCreateList: function() {
+            this.page = new CreateListPage();
+            this.page.render();
+        },
+        /**
+         * @method showCustomLists
+         */
+        showCustomLists: function() {
+            this.page = new CustomListsPage();
+            this.page.render().load();
+        },
+        /**
          * @method showDashboard
          */
         showDashboard: function() {
             if (app.user.isLoggedIn()) {
-                this.page = new PageDashboard();
+                this.page = new DashboardPage();
                 this.page.render();
             } else {
                 this.showDefault();
@@ -192,52 +213,6 @@ define([
             this.page.render();
         },
         /**
-         * @method showList
-         * @param {String} listId
-         */
-        showList: function(listId) {
-            this.page = new PageList();
-            this.page.render().load(listId);
-        },
-        /**
-         * @method showListSection
-         * @param {String} listId
-         * @param {String} sectionId
-         */
-        showListSection: function(listId, sectionId) {
-            this.page = new PageListSection();
-            this.page.render().load(listId, sectionId);
-        },
-        /**
-         * @method showListBrowse
-         */
-        showListBrowse: function() {
-            this.page = new PageListBrowse();
-            this.page.render().load();
-        },
-        /**
-         * @method showListCreate
-         */
-        showListCreate: function() {
-            this.page = new PageListCreate();
-            this.page.render();
-        },
-        /**
-         * @method showListCustom
-         */
-        showListCustom: function() {
-            this.page = new PageListCustom();
-            this.page.render().load();
-        },
-        /**
-         * @method showListQueue
-         */
-        showListQueue: function() {
-            this.navigate('lists/queue', {trigger: false});
-            this.page = new PageListQueue();
-            this.page.render().load();
-        },
-        /**
          * @method showLogin
          */
         showLogin: function() {
@@ -259,6 +234,14 @@ define([
             this.page.render();
         },
         /**
+         * @method showQueueLists
+         */
+        showQueueLists: function() {
+            this.navigate('lists/queue', {trigger: false});
+            this.page = new QueueListsPage();
+            this.page.render().load();
+        },
+        /**
          * @method showScratchpad
          * @param {String} [writing]
          */
@@ -273,6 +256,23 @@ define([
         showSignup: function(price) {
             this.page = new SignupPage();
             this.page.render().select(price);
+        },
+        /**
+         * @method showSingleList
+         * @param {String} listId
+         */
+        showSingleList: function(listId) {
+            this.page = new SingleListPage();
+            this.page.render().load(listId);
+        },
+        /**
+         * @method showSingleListSection
+         * @param {String} listId
+         * @param {String} sectionId
+         */
+        showSingleListSection: function(listId, sectionId) {
+            this.page = new SingleListSectionPage();
+            this.page.render().load(listId, sectionId);
         },
         /**
          * @method showStatsSummary
