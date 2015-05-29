@@ -3,15 +3,18 @@
  * @submodule Components
  */
 define([
-    'require.text!templates/components/list-table.html',
+    'require.text!modules/components/tables/lists/lists-table-template.html',
     'core/modules/GelatoComponent'
-], function(Template, GelatoComponent) {
+], function(
+    Template,
+    GelatoComponent
+) {
 
     /**
-     * @class ListTable
+     * @class ListsTableComponent
      * @extends GelatoComponent
      */
-    var ListTable = GelatoComponent.extend({
+    var ListsTableComponent = GelatoComponent.extend({
         /**
          * @method initialize
          * @constructor
@@ -23,7 +26,7 @@ define([
         },
         /**
          * @method render
-         * @returns {ListTable}
+         * @returns {ListsTableComponent}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -31,7 +34,7 @@ define([
         },
         /**
          * @method renderTable
-         * @returns {ListTable}
+         * @returns {ListsTableComponent}
          */
         renderTable: function() {
             var tableBody = '';
@@ -98,7 +101,7 @@ define([
         /**
          * @method filterBy
          * @param {String} value
-         * @returns {ListTable}
+         * @returns {ListsTableComponent}
          */
         filterBy: function(value) {
             value = value.toLowerCase();
@@ -228,7 +231,7 @@ define([
          * @method set
          * @param {Array} lists
          * @param {Object} fields
-         * @returns {ListTable}
+         * @returns {ListsTableComponent}
          */
         set: function(lists, fields) {
             this.fields = fields || {};
@@ -240,7 +243,7 @@ define([
         /**
          * @method sortBy
          * @param {String} field
-         * @returns {ListTable}
+         * @returns {ListsTableComponent}
          */
         sortBy: function(field) {
             this.filtered = _.sortBy(this.filtered, function(list) {
@@ -251,6 +254,6 @@ define([
         }
     });
 
-    return ListTable;
+    return ListsTableComponent;
 
 });

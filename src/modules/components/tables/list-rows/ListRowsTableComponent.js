@@ -3,15 +3,18 @@
  * @submodule Components
  */
 define([
-    'require.text!templates/components/row-table.html',
+    'require.text!modules/components/tables/list-rows/list-rows-table-template.html',
     'core/modules/GelatoComponent'
-], function(Template, GelatoComponent) {
+], function(
+    Template,
+    GelatoComponent
+) {
 
     /**
-     * @class RowTable
+     * @class ListRowsTableComponent
      * @extends GelatoComponent
      */
-    var RowTable = GelatoComponent.extend({
+    var ListRowsTableComponent = GelatoComponent.extend({
         /**
          * @method initialize
          * @constructor
@@ -24,7 +27,7 @@ define([
         },
         /**
          * @method render
-         * @returns {RowTable}
+         * @returns {ListRowsTableComponent}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -32,7 +35,7 @@ define([
         },
         /**
          * @method renderTable
-         * @returns {RowTable}
+         * @returns {ListRowsTableComponent}
          */
         renderTable: function() {
             var tableBody = '';
@@ -91,7 +94,7 @@ define([
         /**
          * @method filterBy
          * @param {String} value
-         * @returns {RowTable}
+         * @returns {ListRowsTableComponent}
          */
         filterBy: function(value) {
             this.filtered = _.filter(this.sections, function(list) {
@@ -117,7 +120,7 @@ define([
          * @method set
          * @param {Object} section
          * @param {Object} fields
-         * @returns {RowTable}
+         * @returns {ListRowsTableComponent}
          */
         set: function(section, fields) {
             this.fields = fields || {};
@@ -129,7 +132,7 @@ define([
         /**
          * @method sortBy
          * @param {String} field
-         * @returns {RowTable}
+         * @returns {ListRowsTableComponent}
          */
         sortBy: function(field) {
             this.filtered = _.sortBy(this.filtered, function(list) {
@@ -140,6 +143,6 @@ define([
         }
     });
 
-    return RowTable;
+    return ListRowsTableComponent;
 
 });

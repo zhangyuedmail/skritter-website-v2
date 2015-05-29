@@ -3,15 +3,18 @@
  * @submodule Components
  */
 define([
-    'require.text!templates/components/section-table.html',
+    'require.text!modules/components/tables/list-sections/list-sections-table-template.html',
     'core/modules/GelatoComponent'
-], function(Template, GelatoComponent) {
+], function(
+    Template,
+    GelatoComponent
+) {
 
     /**
-     * @class SectionTable
+     * @class ListSectionsTableComponent
      * @extends GelatoComponent
      */
-    var SectionTable = GelatoComponent.extend({
+    var ListSectionsTableComponent = GelatoComponent.extend({
         /**
          * @method initialize
          * @constructor
@@ -24,7 +27,7 @@ define([
         },
         /**
          * @method render
-         * @returns {SectionTable}
+         * @returns {ListSectionsTableComponent}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -32,7 +35,7 @@ define([
         },
         /**
          * @method renderTable
-         * @returns {SectionTable}
+         * @returns {ListSectionsTableComponent}
          */
         renderTable: function() {
             var tableBody = '';
@@ -77,7 +80,7 @@ define([
         /**
          * @method filterBy
          * @param {String} value
-         * @returns {SectionTable}
+         * @returns {ListSectionsTableComponent}
          */
         filterBy: function(value) {
             this.filtered = _.filter(this.sections, function(list) {
@@ -114,7 +117,7 @@ define([
          * @method set
          * @param {DataVocabList} list
          * @param {Object} fields
-         * @returns {SectionTable}
+         * @returns {ListSectionsTableComponent}
          */
         set: function(list, fields) {
             this.fields = fields || {};
@@ -127,7 +130,7 @@ define([
         /**
          * @method sortBy
          * @param {String} field
-         * @returns {SectionTable}
+         * @returns {ListSectionsTableComponent}
          */
         sortBy: function(field) {
             this.filtered = _.sortBy(this.filtered, function(list) {
@@ -138,6 +141,6 @@ define([
         }
     });
 
-    return SectionTable;
+    return ListSectionsTableComponent;
 
 });
