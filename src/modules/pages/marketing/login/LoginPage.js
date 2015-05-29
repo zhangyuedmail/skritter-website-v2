@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/login.html',
+    'require.text!modules/pages/marketing/login/login-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template, 
+    GelatoPage, 
+    Footer
+) {
 
     /**
-     * @class PageLogin
+     * @class LoginPage
      * @extends GelatoPage
      */
-    var PageLogin = GelatoPage.extend({
+    var LoginPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -27,7 +31,7 @@ define([
         title: 'Login - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PageLogin}
+         * @returns {LoginPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -79,6 +83,6 @@ define([
         }
     });
 
-    return PageLogin;
+    return LoginPage;
 
 });
