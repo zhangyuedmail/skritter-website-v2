@@ -6,8 +6,8 @@ define([
     'require.text!templates/demo.html',
     'core/modules/GelatoPage',
     'modules/collections/TutorialCollection',
-    'modules/components/Prompt'
-], function(Template, GelatoPage, TutorialCollection, Prompt) {
+    'modules/components/prompt/PromptComponent'
+], function(Template, GelatoPage, TutorialCollection, PromptComponent) {
 
     /**
      * @class PageDemo
@@ -20,7 +20,7 @@ define([
          */
         initialize: function() {
             this.index = 0;
-            this.prompt = new Prompt();
+            this.prompt = new PromptComponent();
             this.tutorials = new TutorialCollection();
             this.listenTo(this.prompt, 'prompt:next', this.handlePromptNext);
         },

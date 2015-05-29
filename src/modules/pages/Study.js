@@ -5,9 +5,12 @@
 define([
     'require.text!templates/study.html',
     'core/modules/GelatoPage',
-    'modules/components/Prompt',
-    'modules/components/StudyToolbar'
-], function(Template, GelatoPage, Prompt, StudyToolbar) {
+    'modules/components/prompt/PromptComponent'
+], function(
+    Template,
+    GelatoPage,
+    PromptComponent
+) {
 
     /**
      * @class PageStudy
@@ -19,8 +22,7 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.prompt = new Prompt();
-            this.toolbar = new StudyToolbar();
+            this.prompt = new PromptComponent();
         },
         /**
          * @property title
@@ -34,9 +36,7 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.prompt.setElement(this.$('#prompt-container')).render();
-            this.toolbar.setElement(this.$('#toolbar-container')).render();
             this.prompt.hide();
-            this.toolbar.hide();
             return this;
         },
         /**
@@ -50,7 +50,6 @@ define([
             app.user.data.items.loadNext(function(result) {
                 self.prompt.set(result.getVocab().getPromptItems('rune'));
                 self.prompt.show();
-                self.toolbar.show();
             }, function(error) {
                 console.error(error);
             });
