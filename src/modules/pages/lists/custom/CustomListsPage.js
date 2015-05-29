@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/list-custom.html',
+    'require.text!modules/pages/lists/custom/custom-lists-template.html',
     'core/modules/GelatoPage',
     'modules/components/ListTable'
-], function(Template, GelatoPage, ListTable) {
+], function(
+    Template,
+    GelatoPage,
+    ListTable
+) {
 
     /**
-     * @class PageListCustom
+     * @class CustomListsPage
      * @extends GelatoPage
      */
-    var PageListCustom = GelatoPage.extend({
+    var CustomListsPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -34,7 +38,7 @@ define([
         bodyClass: 'background-light',
         /**
          * @method render
-         * @returns {PageListCustom}
+         * @returns {CustomListsPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -44,7 +48,7 @@ define([
         },
         /**
          * @method renderTables
-         * @returns {PageListCustom}
+         * @returns {CustomListsPage}
          */
         renderTables: function() {
             var customLists = app.user.data.vocablists.getCustom();
@@ -72,7 +76,7 @@ define([
         },
         /**
          * @method load
-         * @returns {PageListCustom}
+         * @returns {CustomListsPage}
          */
         load: function() {
             app.user.data.vocablists.fetchCustom();
@@ -80,6 +84,6 @@ define([
         }
     });
 
-    return PageListCustom;
+    return CustomListsPage;
 
 });
