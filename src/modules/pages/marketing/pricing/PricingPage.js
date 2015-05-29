@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/pricing.html',
+    'require.text!modules/pages/marketing/pricing/pricing-template.html',
     'core/modules/GelatoPage',
-    'modules/components/Footer'
-], function(Template, GelatoPage, Footer) {
+    'modules/components/marketing/footer/FooterComponent'
+], function(
+    Template,
+    GelatoPage,
+    Footer
+) {
 
     /**
-     * @class PagePricing
+     * @class PricingPage
      * @extends GelatoPage
      */
-    var PagePricing = GelatoPage.extend({
+    var PricingPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -27,7 +31,7 @@ define([
         title: 'Pricing - ' + i18n.global.title,
         /**
          * @method render
-         * @returns {PagePricing}
+         * @returns {PricingPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -44,6 +48,6 @@ define([
         }
     });
 
-    return PagePricing;
+    return PricingPage;
 
 });
