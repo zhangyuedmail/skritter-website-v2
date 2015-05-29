@@ -3,15 +3,18 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/study-settings.html',
+    'require.text!modules/pages/settings/study/study-settings-template.html',
     'core/modules/GelatoPage'
-], function(Template, GelatoPage) {
+], function(
+    Template,
+    GelatoPage
+) {
 
     /**
-     * @class PageStudySettings
+     * @class StudySettingsPage
      * @extends GelatoPage
      */
-    var PageStudySettings = GelatoPage.extend({
+    var StudySettingsPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -29,7 +32,7 @@ define([
         bodyClass: 'background-light',
         /**
          * @method render
-         * @returns {PageStudySettings}
+         * @returns {StudySettingsPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -42,6 +45,6 @@ define([
         events: {}
     });
 
-    return PageStudySettings;
+    return StudySettingsPage;
 
 });
