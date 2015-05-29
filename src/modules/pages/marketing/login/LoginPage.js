@@ -63,19 +63,19 @@ define([
                 return;
             }
             this.disableForm('#login-form');
-            app.dialog.show('loading');
+            app.dialogs.open('loading');
             app.user.login(fieldUsername, fieldPassword, function() {
-                app.dialog.once('hidden', app.reload);
-                app.dialog.hide();
+                app.dialogs.once('hidden', app.reload);
+                app.dialogs.close();
             }, function(error) {
                 self.$('#response-message').text(JSON.stringify(error));
                 self.enableForm('#login-form');
-                app.dialog.hide();
+                app.dialogs.close();
             });
         },
         /**
          * @method remove
-         * @returns {PageHome}
+         * @returns {LoginPage}
          */
         remove: function() {
             this.footer.remove();

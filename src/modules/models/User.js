@@ -155,7 +155,7 @@ define([
                     }, function(error) {
                         callback(error);
                     }, function(status) {
-                        app.dialog.element.find('.modal-message').text(status + '%');
+                        app.dialogs.element.find('.modal-message').text(status + '%');
                     });
                 },
                 function(callback) {
