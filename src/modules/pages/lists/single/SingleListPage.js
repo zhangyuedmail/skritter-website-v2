@@ -3,16 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/list.html',
+    'require.text!modules/pages/lists/single/single-list-template.html',
     'core/modules/GelatoPage',
     'modules/components/SectionTable'
-], function(Template, GelatoPage, SectionTable) {
+], function(
+    Template,
+    GelatoPage,
+    SectionTable
+) {
 
     /**
-     * @class PageList
+     * @class SingleListPage
      * @extends GelatoPage
      */
-    var PageList = GelatoPage.extend({
+    var SingleListPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -33,7 +37,7 @@ define([
         bodyClass: 'background-light',
         /**
          * @method render
-         * @returns {PageList}
+         * @returns {SingleListPage}
          */
         render: function() {
             this.renderTemplate(Template);
@@ -43,7 +47,7 @@ define([
         },
         /**
          * @method renderFields
-         * @returns {PageList}
+         * @returns {SingleListPage}
          */
         renderFields: function() {
             this.$('#list-description').text(this.list.get('description'));
@@ -54,7 +58,7 @@ define([
         },
         /**
          * @method renderSections
-         * @returns {PageList}
+         * @returns {SingleListPage}
          */
         renderSections: function() {
             this.sectionTable.set(this.list, {
@@ -71,7 +75,7 @@ define([
         /**
          * @method load
          * @param {String} listId
-         * @return {PageList}
+         * @return {SingleListPage}
          */
         load: function(listId) {
             var self = this;
@@ -86,6 +90,6 @@ define([
         }
     });
 
-    return PageList;
+    return SingleListPage;
 
 });
