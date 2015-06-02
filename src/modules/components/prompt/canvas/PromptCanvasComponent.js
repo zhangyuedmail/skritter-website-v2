@@ -97,7 +97,7 @@ define([
          * @returns {PromptCanvasComponent}
          */
         clearMessage: function() {
-            this.$('#canvas-message').empty();
+            this.$('#prompt-canvas-message').empty();
             return this;
         },
         /**
@@ -369,9 +369,9 @@ define([
          * @returns {PromptCanvasComponent}
          */
         setMessage: function(text, duration) {
-            this.$('#canvas-message').text(text);
+            this.$('#prompt-canvas-message').text(text);
             if (duration) {
-                this.$('#canvas-message').fadeOut(duration);
+                this.$('#prompt-canvas-message').fadeOut(duration);
             }
             return this;
         },
