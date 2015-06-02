@@ -3,20 +3,20 @@
  * @submodule Pages
  */
 define([
-    'require.text!templates/study.html',
     'core/modules/GelatoPage',
+    'require.text!modules/pages/study/study-template.html',
     'modules/components/prompt/PromptComponent'
 ], function(
-    Template,
     GelatoPage,
+    Template,
     PromptComponent
 ) {
 
     /**
-     * @class PageStudy
+     * @class StudyPage
      * @extends GelatoPage
      */
-    var PageStudy = GelatoPage.extend({
+    var StudyPage = GelatoPage.extend({
         /**
          * @method initialize
          * @constructor
@@ -30,26 +30,29 @@ define([
          */
         title: 'Study - ' + i18n.global.title,
         /**
+         * @property bodyClass
+         * @type {String}
+         */
+        bodyClass: 'background-light',
+        /**
          * @method render
-         * @returns {PageStudy}
+         * @returns {StudyPage}
          */
         render: function() {
             this.renderTemplate(Template);
             this.prompt.setElement(this.$('#prompt-container')).render();
-            this.prompt.hide();
             return this;
         },
         /**
          * @method load
          * @param {String} [listId]
          * @param {String} [sectionId]
-         * @returns {PageStudy}
+         * @returns {StudyPage}
          */
         load: function(listId, sectionId) {
             var self = this;
             app.user.data.items.loadNext(function(result) {
                 self.prompt.set(result.getVocab().getPromptItems('rune'));
-                self.prompt.show();
             }, function(error) {
                 console.error(error);
             });
@@ -57,6 +60,6 @@ define([
         }
     });
 
-    return PageStudy;
+    return StudyPage;
 
 });

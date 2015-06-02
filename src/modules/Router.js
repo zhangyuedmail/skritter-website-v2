@@ -25,10 +25,10 @@ define([
     'modules/pages/settings/study/StudySettingsPage',
     'modules/pages/stats/summary/SummaryStatsPage',
     'modules/pages/stats/timeline/TimelineStatsPage',
+    'modules/pages/study/StudyPage',
     'modules/pages/words/WordsPage',
     'modules/pages/Demo',
     'modules/pages/Scratchpad',
-    'modules/pages/Study',
     'modules/pages/Tutorial'
 ], function(
     GelatoRouter,
@@ -53,10 +53,10 @@ define([
     StudySettingsPage,
     SummaryStatsPage,
     TimelineStatsPage,
+    StudyPage,
     WordsPage,
     PageDemo,
     PageScratchpad,
-    PageStudy,
     PageTutorial
 ) {
 
@@ -288,7 +288,7 @@ define([
          * @param {String} sectionId
          */
         showStudy: function(listId, sectionId) {
-            this.page = new PageStudy();
+            this.page = new StudyPage();
             this.page.render().load(listId, sectionId);
         },
         /**
