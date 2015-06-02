@@ -6,12 +6,16 @@ define([
     'require.text!modules/components/prompt/prompt-template.html',
     'core/modules/GelatoComponent',
     'modules/components/prompt/canvas/PromptCanvasComponent',
-    'modules/components/prompt/details/PromptDetailsComponent'
+    'modules/components/prompt/details/PromptDetailsComponent',
+    'modules/components/prompt/grading/PromptGradingComponent',
+    'modules/components/prompt/toolbar/PromptToolbarComponent'
 ], function(
     Template,
     GelatoComponent,
     PromptCanvasComponent,
-    PromptDetailsComponent
+    PromptDetailsComponent,
+    PromptGradingComponent,
+    PromptToolbarComponent
 ) {
 
     /**
@@ -26,6 +30,8 @@ define([
         initialize: function() {
             this.canvas = new PromptCanvasComponent({prompt: this});
             this.details = new PromptDetailsComponent({prompt: this});
+            this.grading = new PromptGradingComponent({prompt: this});
+            this.toolbar = new PromptToolbarComponent({prompt: this});
             this.items = null;
             this.teaching = false;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
@@ -40,6 +46,8 @@ define([
             this.renderTemplate(Template);
             this.canvas.setElement('#prompt-canvas-container').render();
             this.details.setElement('#prompt-details-container').render();
+            this.grading.setElement('#prompt-grading-container').render();
+            this.toolbar.setElement('#prompt-toolbar-container').render();
             this.resize();
             return this;
         },
@@ -119,6 +127,8 @@ define([
         remove: function() {
             this.canvas.remove();
             this.details.remove();
+            this.grading.remove();
+            this.toolbar.remove();
             return GelatoComponent.prototype.remove.call(this);
         },
         /**
@@ -128,7 +138,7 @@ define([
         resize: function() {
             var panelLeft = this.$('#panel-left');
             var panelRight = this.$('#panel-right');
-            this.canvas.resize(panelLeft.find('#center-column').width());
+            this.canvas.resize(450);
             return this;
         },
         /**
@@ -141,6 +151,7 @@ define([
             console.log('PROMPT:', items);
             this.items = items;
             this.renderPrompt();
+            this.details.renderFields();
             return this;
         }
     });

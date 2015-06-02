@@ -37,6 +37,11 @@ define([
          * @returns {PromptDetailsComponent}
          */
         renderFields: function() {
+            var vocab = this.prompt.items.getVocab();
+            this.$('#vocab-definition .value').html(vocab.getDefinition());
+            this.$('#vocab-reading .value').html(vocab.getReadingElement());
+            this.$('#vocab-style .value').html(vocab.getStyle());
+            this.$('#vocab-writing .value').html(vocab.getWritingElement());
             return this;
         },
         /**

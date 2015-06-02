@@ -1,37 +1,30 @@
 gelato-component[data-name="prompt"] {
 
+  border-radius: 25px;
   color: #666c73;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  min-width: 992px;
-
-  .content-block {
-    background-color: #f3f2f6;
-    .row {
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
+  height: 640px;
+  margin: 0 auto;
+  width: 1280px;
 
   #panel-left {
-    background-color: #fbfafc;
+    background-color: $white1;
     border-bottom-left-radius: 25px;
     border-top-left-radius: 25px;
-    #center-column {
-      margin: 0 auto;
-      position: relative;
-      width: 80%;
-    }
-    #prompt-banner-new {
-      display: none;
-      left: 0;
-      position: absolute;
-      top: 0;
-    }
+    height: 640px;
+    float: left;
+    padding-left: 95px;
+    padding-right: 95px;
+    width: 640px;
   }
 
   #panel-right {
+    background-color: $white3;
     border-bottom-right-radius: 25px;
     border-top-right-radius: 25px;
+    float: right;
+    height: 640px;
+    padding: 42px 45px;
+    width: 640px;
   }
 
 }

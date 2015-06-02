@@ -223,6 +223,15 @@ define([
          */
         loadNext: function(callbackSuccess, callbackError) {
             //TODO: figure out what is next
+            if (this.length) {
+                this.at(0).load(function(result) {
+                    callbackSuccess(result);
+                }, function(error) {
+                    callbackError(error);
+                });
+            } else {
+                callbackError(new Error('No items founds.'));
+            }
         }
     });
 

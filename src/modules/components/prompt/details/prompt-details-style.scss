@@ -1,32 +1,42 @@
 gelato-component[data-name="prompt-details"] {
 
-  font-size: 16px;
-  margin: 42px 15px;
+  .detail-row {
+    .title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+  }
 
-  .row {
+  #vocab-definition {
     margin-bottom: 30px;
-    &.no-margin { margin-bottom: 0; }
+    .value {
+      font-size: 14px;
+      font-weight: 300;
+    }
   }
 
-  .title {
-    color: #8c9196;
-    font-weight: 600;
-  }
-
-  .vocab-definition {
-    color: #8c9196;
-    font-weight: 300;
-  }
-
-  .vocab-reading {
-    color: #8c9196;
-    font-size: 24px;
+  #vocab-reading {
+    margin-bottom: 30px;
     margin-left: 5px;
+    .value {
+      font-size: 18px;
+      font-weight: 300;
+    }
   }
 
-  .vocab-writing {
-    color: #666c73;
-    font-size: 54px;
+  #vocab-style {
+    .value {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+
+  #vocab-writing {
+    .value {
+      font-size: 42px;
+      font-weight: 400;
+    }
   }
 
 }

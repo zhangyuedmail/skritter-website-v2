@@ -1,6 +1,6 @@
 gelato-component[data-name="prompt-grading"] {
 
-  margin-top: 25px;
+  margin-bottom: 30px;
 
   button {
     background-color: transparent;
@@ -29,7 +29,7 @@ gelato-component[data-name="prompt-grading"] {
     }
     .grade-value {
       font-family: $font-slab;
-      font-size: 48px;
+      font-size: 36px;
       font-weight: 400;
     }
   }
