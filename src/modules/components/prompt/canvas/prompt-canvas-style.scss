@@ -1,16 +1,5 @@
 gelato-component[data-name="prompt-canvas"] {
 
-  .navigate-button {
-    color: $white5;
-    cursor: pointer;
-    font-size: 64px;
-    position: absolute;
-    top: 42%;
-    &:hover { color: $white7; }
-    &#navigate-left { left: -45px; }
-    &#navigate-right { right: -45px; }
-  }
-
   #canvas-message {
     bottom: 5px;
     font-size: 24px;
