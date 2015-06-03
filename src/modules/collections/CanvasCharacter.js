@@ -93,11 +93,11 @@ define([
             return app.user.settings.get('canvasSize');
         },
         /**
-         * @method getShape
+         * @method getUserShape
          * @param {Number} [excludeStrokes]
          * @returns {createjs.Container}
          */
-        getTargetShape: function(excludeStrokes) {
+        getUserShape: function(excludeStrokes) {
             var container = new createjs.Container();
             for (var i = 0, length = this.length; i < length; i++) {
                 if (!excludeStrokes) {
