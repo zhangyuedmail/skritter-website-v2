@@ -41,6 +41,7 @@ define([
             this.$('#vocab-definition .value').html(vocab.getDefinition());
             this.$('#vocab-reading .value').html(vocab.getReadingElement());
             this.$('#vocab-style .value').html(vocab.getStyle());
+            this.$('#vocab-writing .value').addClass(vocab.getFontClass());
             this.$('#vocab-writing .value').html(vocab.getWritingElement());
             return this;
         },
@@ -48,7 +49,72 @@ define([
          * @property events
          * @type Object
          */
-        events: {}
+        events: {
+            'vclick #vocab-writing .writing-element': 'handleClickWritingElement'
+        },
+        /**
+         * @method handleClickWritingElement
+         * @param {Event} event
+         */
+        handleClickWritingElement: function(event) {
+            event.preventDefault();
+            var $element = $(event.currentTarget);
+            var position = parseInt($element.data('position'), 10);
+            this.prompt.items.position = position;
+            this.prompt.renderPrompt();
+        },
+        /**
+         * @method hideReading
+         * @param {Number} [position]
+         */
+        hideReading: function(position) {
+            if (position === undefined) {
+                this.$('#vocab-reading .reading-element').addClass('mask');
+            } else {
+                this.$('#vocab-reading [data-position="' + position + '"]').addClass('mask');
+            }
+        },
+        /**
+         * @method hideWriting
+         * @param {Number} [position]
+         */
+        hideWriting: function(position) {
+            if (position === undefined) {
+                this.$('#writing-reading .writing-element').addClass('mask');
+            } else {
+                this.$('#writing-reading [data-position="' + position + '"]').addClass('mask');
+            }
+        },
+        /**
+         * @method revealReading
+         * @param {Number} [position]
+         */
+        revealReading: function(position) {
+            if (position === undefined) {
+                this.$('#vocab-reading .reading-element').removeClass('mask');
+            } else {
+                this.$('#vocab-reading [data-position="' + position + '"]').removeClass('mask');
+            }
+        },
+        /**
+         * @method revealWriting
+         * @param {Number} [position]
+         */
+        revealWriting: function(position) {
+            if (position === undefined) {
+                this.$('#vocab-writing .writing-element').removeClass('mask');
+            } else {
+                this.$('#vocab-writing [data-position="' + position + '"]').removeClass('mask');
+            }
+        },
+        /**
+         * @method selectWriting
+         * @param {Number} position
+         */
+        selectWriting: function(position) {
+            this.$('#vocab-writing .writing-element').removeClass('active');
+            this.$('#vocab-writing [data-position="' + position + '"]').addClass('active');
+        }
     });
 
     return PromptDetailsComponent;

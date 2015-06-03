@@ -21,6 +21,13 @@ gelato-component[data-name="prompt-details"] {
     .value {
       font-size: 18px;
       font-weight: 300;
+      .reading-element {
+        cursor: pointer;
+        display: inline;
+        margin-right: 2px;
+        &.mask { background-color: $white5; }
+        &.mask span { visibility: hidden; }
+      }
     }
   }
 
@@ -33,9 +40,21 @@ gelato-component[data-name="prompt-details"] {
   }
 
   #vocab-writing {
+    margin-bottom: 15px;
     .value {
       font-size: 42px;
       font-weight: 400;
+      .writing-element {
+        cursor: pointer;
+        display: inline;
+        margin-right: 5px;
+        padding: 10px;
+        text-align: center;
+        width: 60px;
+        &.active { background-color: $white1 !important; }
+        &.mask { background-color: $white5; }
+        &.mask span { visibility: hidden; }
+      }
     }
   }
 

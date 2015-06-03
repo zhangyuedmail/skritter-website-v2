@@ -36,6 +36,7 @@ define([
             this.teaching = false;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
             this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
+            this.listenTo(this.grading, 'select', this.handleSelectGrading);
             this.on('resize', this.resize);
         },
         /**
@@ -56,8 +57,6 @@ define([
          * @returns {PromptComponent}
          */
         renderPrompt: function() {
-            this.activeCharacter = this.items.getCharacter();
-            this.activeItem = this.items.getItem();
             switch (this.items.part) {
                 case 'defn':
                     //this.renderPromptDefn();
@@ -79,19 +78,40 @@ define([
          * @returns {PromptComponent}
          */
         renderPromptRune: function() {
-            if (this.activeCharacter.isComplete()) {
-                this.canvas.disableInput();
-                this.canvas.injectLayerColor('surface', this.activeItem.getGradingColor());
+            this.canvas.reset();
+            this.canvas.drawShape('surface', this.character().getUserShape());
+            this.details.selectWriting(this.position());
+            this.grading.unselect();
+            if (this.character().isComplete()) {
+                this.handlePromptRuneComplete();
             } else {
                 this.canvas.enableInput();
+                this.details.revealReading();
+
             }
             return this;
+        },
+        /**
+         * method character
+         * @returns {CanvasCharacter}
+         */
+        character: function() {
+            return this.items.getCharacter();
         },
         /**
          * @method handleCanvasClick
          */
         handleCanvasClick: function() {
-
+            if (this.character().isComplete()) {
+                if (this.items.next()) {
+                    this.canvas.reset();
+                    this.renderPrompt();
+                } else {
+                    this.trigger('complete');
+                }
+            } else {
+                //TODO: fade the background shadow
+            }
         },
         /**
          * @method handleCanvasInputUp
@@ -106,18 +126,50 @@ define([
                     break;
             }
         },
+        handlePromptRuneComplete: function() {
+            this.canvas.disableInput();
+            this.canvas.injectLayerColor('surface', this.item().getGradingColor());
+            this.details.revealWriting(this.position());
+            this.grading.select(this.item().get('score'));
+        },
+        /**
+         * @method handleSelectGrading
+         * @param {Number} score
+         */
+        handleSelectGrading: function(score) {
+            this.item().set('score', score);
+            if (this.character().isComplete()) {
+                this.renderPrompt();
+            }
+        },
+        /**
+         * @method item
+         * @returns {PromptItem}
+         */
+        item: function() {
+            return this.items.getItem();
+        },
+        /**
+         * @method position
+         * @returns {Number}
+         */
+        position: function() {
+            return this.items.position;
+        },
         /**
          * @method recognizeRune
          * @param {Array} points
          * @param {createjs.Shape} shape
          */
         recognizeRune: function(points, shape) {
-            var stroke = this.activeCharacter.recognize(points, shape);
+            var stroke = this.character().recognize(points, shape);
             if (stroke) {
                 var targetShape = stroke.getTargetShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
-                this.renderPrompt();
+                if (this.character().isComplete()) {
+                    this.handlePromptRuneComplete();
+                }
             }
         },
         /**
@@ -144,14 +196,14 @@ define([
         /**
          * @method set
          * @param {PromptItems} items
-         * @param {Object} [options]
          * @returns {PromptComponent}
          */
-        set: function(items, options) {
-            console.log('PROMPT:', items);
+        set: function(items) {
+            console.log('PROMPT:', items.getVocabId(), items);
             this.items = items;
-            this.renderPrompt();
+            this.canvas.reset();
             this.details.renderFields();
+            this.renderPrompt();
             return this;
         }
     });

@@ -35,7 +35,7 @@ define([
          */
         events: {
             'vclick #toolbar-correct': 'handleClickOptionCorrect',
-            'vclick #toolbar-eraser': 'handleClickOptionErase',
+            'vclick #toolbar-erase': 'handleClickOptionErase',
             'vclick #toolbar-show': 'handleClickOptionShow',
             'vclick #toolbar-teach': 'handleClickOptionTeach'
         },
@@ -52,6 +52,10 @@ define([
          */
         handleClickOptionErase: function(event) {
             event.preventDefault();
+            this.prompt.character().reset();
+            this.prompt.canvas.reset();
+            this.prompt.details.hideWriting(this.prompt.position());
+            this.prompt.renderPrompt();
         },
         /**
          * @method handleClickOptionShow
