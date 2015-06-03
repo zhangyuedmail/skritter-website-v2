@@ -32,6 +32,13 @@ define([
             return this.getItem().get('character');
         },
         /**
+         * @method getVocabId
+         * @returns {String}
+         */
+        getVocabId: function() {
+            return this.at(0).get('vocabId');
+        },
+        /**
          * @method getItem
          * @returns {PromptItem}
          */
@@ -43,19 +50,43 @@ define([
          * @returns {DataVocab}
          */
         getVocab: function() {
-            return this.at(0).getVocab();
+            return app.user.data.vocabs.get(this.id);
         },
+        /**
+         * @method isFirst
+         * @returns {Boolean}
+         */
         isFirst: function() {
-
+            return this.position <= 0;
         },
+        /**
+         * @method isLast
+         * @returns {Boolean}
+         */
         isLast: function() {
-
+            return this.position >= this.length - 1;
         },
+        /**
+         * @method next
+         * @return {Boolean}
+         */
         next: function() {
-
+            if (this.isLast()) {
+                return false;
+            }
+            this.position++;
+            return true;
         },
+        /**
+         * @method previous
+         * @return {Boolean}
+         */
         previous: function() {
-
+            if (this.isFirst()) {
+                return false;
+            }
+            this.position--;
+            return true;
         }
     });
 
