@@ -150,8 +150,7 @@ define([
                     var reading = variation[b];
                     var readingMarks = app.fn.pinyin.toTone(reading);
                     var readingToneless = reading.replace(/[1-5]/g, '');
-                    var position = b + 1;
-                    element += "<div id='reading-position-" + position + "' class='cursor mask'>";
+                    element += "<div class='reading-element mask' data-position='" + b + "'>";
                     element += "<span class='pinyin-marks'>" + readingMarks + "</span>";
                     element += "<span class='pinyin-toneless hidden'>" + readingToneless + "</span>";
                     element += "</div>";
@@ -238,8 +237,7 @@ define([
             var characters = this.getCharacters();
             for (var i = 0, length = characters.length; i < length; i++) {
                 var character = characters[i];
-                var position = i + 1;
-                element += "<div id='writing-position-" + position + "' class='cursor mask'><span>";
+                element += "<div class='writing-element mask' data-position='" + i + "'><span>";
                 element += character;
                 element += "</span></div>";
             }
