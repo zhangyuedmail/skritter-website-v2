@@ -7,6 +7,16 @@ gelato-component[data-name="prompt-details"] {
     }
   }
 
+  #details-toolbar {
+    right: 25px;
+    position: absolute;
+    i {
+      cursor: pointer;
+      float: left;
+      margin-right: 20px;
+    }
+  }
+
   #vocab-definition {
     margin-bottom: 30px;
     .value {

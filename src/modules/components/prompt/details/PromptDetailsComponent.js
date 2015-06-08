@@ -37,15 +37,15 @@ define([
          * @returns {PromptDetailsComponent}
          */
         renderFields: function() {
-            var vocab = this.prompt.items.getVocab();
-            console.log(vocab.getSentence());
-            this.$('#vocab-definition .value').html(vocab.getDefinition());
-            this.$('#vocab-mnemonic .value').html(vocab.getMnemonicText());
-            this.$('#vocab-reading .value').html(vocab.getReadingElement());
-            this.$('#vocab-sentence .value').html(vocab.getSentenceWriting());
-            this.$('#vocab-style .value').html(vocab.getStyle());
-            this.$('#vocab-writing .value').addClass(vocab.getFontClass());
-            this.$('#vocab-writing .value').html(vocab.getWritingElement());
+            this.$('#vocab-definition .value').html(this.prompt.vocab.getDefinition());
+            this.$('#vocab-mnemonic .value').html(this.prompt.vocab.getMnemonicText());
+            this.$('#vocab-reading .value').html(this.prompt.vocab.getReadingElement());
+            this.$('#vocab-sentence .value').html(this.prompt.vocab.getSentenceWriting());
+            this.$('#vocab-style .value').html(this.prompt.vocab.getStyle());
+            this.$('#vocab-writing .value').addClass(this.prompt.vocab.getFontClass());
+            this.$('#vocab-writing .value').html(this.prompt.vocab.getWritingElement());
+            this.updateDetailBanned();
+            this.updateDetailStarred();
             return this;
         },
         /**
@@ -53,7 +53,52 @@ define([
          * @type Object
          */
         events: {
+            'vclick #button-detail-audio': 'handleClickDetailAudio',
+            'vclick #button-detail-ban': 'handleClickDetailBan',
+            'vclick #button-detail-edit': 'handleClickDetailEdit',
+            'vclick #button-detail-info': 'handleClickDetailInfo',
+            'vclick #button-detail-star': 'handleClickDetailStar',
             'vclick #vocab-writing .writing-element': 'handleClickWritingElement'
+        },
+        /**
+         * @method handleClickDetailAudio
+         * @param {Event} event
+         */
+        handleClickDetailAudio: function(event) {
+            event.preventDefault();
+            this.prompt.vocab.play();
+        },
+        /**
+         * @method handleClickDetailBan
+         * @param {Event} event
+         */
+        handleClickDetailBan: function(event) {
+            event.preventDefault();
+            this.prompt.vocab.toggleBanned();
+            this.updateDetailBanned();
+        },
+        /**
+         * @method handleClickDetailEdit
+         * @param {Event} event
+         */
+        handleClickDetailEdit: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickDetailInfo
+         * @param {Event} event
+         */
+        handleClickDetailInfo: function(event) {
+            event.preventDefault();
+        },
+        /**
+         * @method handleClickDetailStar
+         * @param {Event} event
+         */
+        handleClickDetailStar: function(event) {
+            event.preventDefault();
+            this.prompt.vocab.toggleStarred();
+            this.updateDetailStarred();
         },
         /**
          * @method handleClickWritingElement
@@ -128,6 +173,26 @@ define([
         selectWriting: function(position) {
             this.$('#vocab-writing .writing-element').removeClass('active');
             this.$('#vocab-writing [data-position="' + position + '"]').addClass('active');
+        },
+        /**
+         * @method updateDetailBanned
+         */
+        updateDetailBanned: function() {
+            if (this.prompt.vocab.isBanned()) {
+                this.$('#button-detail-ban').css('background-color', 'red');
+            } else {
+                this.$('#button-detail-ban').css('background-color', '');
+            }
+        },
+        /**
+         * @method updateDetailStarred
+         */
+        updateDetailStarred: function() {
+            if (this.prompt.vocab.isStarred()) {
+                this.$('#button-detail-star').css('background-color', 'yellow');
+            } else {
+                this.$('#button-detail-star').css('background-color', '');
+            }
         }
     });
 

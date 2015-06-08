@@ -315,7 +315,7 @@ define([
          * @returns {PromptComponent}
          */
         set: function(items) {
-            console.log('PROMPT:', items.getVocabId(), items);
+            console.log('PROMPT:', items.getVocab(), items);
             this.items = items;
             this.vocab = items.getVocab();
             this.canvas.reset();

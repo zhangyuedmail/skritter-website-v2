@@ -115,6 +115,11 @@
 }
 
 /*** STUDY ***/
+.icon-study-ban {
+  background-image: url('#{$dir-assets}/vectors/study-ban.svg');
+  height: 23px;
+  width: 23px;
+}
 .icon-study-erase {
   background-image: url('#{$dir-assets}/vectors/study-erase.svg');
   height: 48px;
@@ -124,6 +129,11 @@
   background-image: url('#{$dir-assets}/vectors/study-incorrect.svg');
   height: 44px;
   width: 59px;
+}
+.icon-study-info {
+  background-image: url('#{$dir-assets}/vectors/study-info.svg');
+  height: 23px;
+  width: 23px;
 }
 .icon-study-new-character {
   background-image: url('#{$dir-assets}/vectors/study-new-character.svg');
@@ -139,4 +149,19 @@
   background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
   height: 50px;
   width: 52px;
+}
+.icon-study-word-edit {
+  background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
+  height: 23px;
+  width: 19px;
+}
+.icon-study-word-star {
+  background-image: url('#{$dir-assets}/vectors/study-word-star.svg');
+  height: 24px;
+  width: 24px;
+}
+.icon-study-word-volume {
+  background-image: url('#{$dir-assets}/vectors/study-word-volume.svg');
+  height: 24px;
+  width: 24px;
 }
