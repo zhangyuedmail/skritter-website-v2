@@ -60,10 +60,10 @@ define([
         renderPrompt: function() {
             switch (this.items.part) {
                 case 'defn':
-                    //this.renderPromptDefn();
+                    this.renderPromptDefn();
                     break;
                 case 'rdng':
-                    //this.renderPromptRdng();
+                    this.renderPromptRdng();
                     break;
                 case 'rune':
                     this.renderPromptRune();
@@ -75,6 +75,42 @@ define([
             return this;
         },
         /**
+         * @method renderPromptDefn
+         * @returns {PromptComponent}
+         */
+        renderPromptDefn: function() {
+            console.log(this.items);
+            this.canvas.reset();
+            this.canvas.disableGrid();
+            this.grading.unselect();
+            if (this.item().isComplete()) {
+                this.handlePromptDefnComplete();
+            } else {
+                this.canvas.revealDefinitionQuestion();
+                this.details.hideDefinition();
+                this.details.revealReading();
+                this.details.revealWriting();
+            }
+            return this;
+        },
+        /**
+         * @method renderPromptRdng
+         * @returns {PromptComponent}
+         */
+        renderPromptRdng: function() {
+            this.canvas.reset();
+            this.canvas.disableGrid();
+            this.grading.unselect();
+            if (this.item().isComplete()) {
+                this.handlePromptRdngComplete();
+            } else {
+                this.canvas.revealReadingQuestion();
+                this.details.hideReading();
+                this.details.revealWriting();
+            }
+            return this;
+        },
+        /**
          * @method renderPromptRune
          * @returns {PromptComponent}
          */
@@ -82,9 +118,10 @@ define([
             this.canvas.reset();
             this.canvas.enableGrid();
             this.canvas.drawShape('surface', this.character().getUserShape());
+            this.details.revealDefinition();
             this.details.selectWriting(this.position());
             this.grading.unselect();
-            if (this.character().isComplete()) {
+            if (this.item().isComplete()) {
                 this.handlePromptRuneComplete();
             } else {
                 this.canvas.enableInput();
@@ -104,9 +141,10 @@ define([
                 font: this.vocab.getFontName()
             });
             this.canvas.drawShape('surface', this.character().getUserShape());
+            this.details.revealDefinition();
             this.details.revealWriting();
             this.grading.unselect();
-            if (this.character().isComplete()) {
+            if (this.item().isComplete()) {
                 this.handlePromptToneComplete();
             } else {
                 this.canvas.enableInput();
@@ -125,15 +163,26 @@ define([
          * @method handleCanvasClick
          */
         handleCanvasClick: function() {
-            if (this.character().isComplete()) {
+            if (this.item().isComplete()) {
                 if (this.items.next()) {
-                    this.canvas.reset();
                     this.renderPrompt();
                 } else {
+                    console.log('PROMPT COMPLETE');
                     this.trigger('complete');
                 }
             } else {
-                //TODO: fade the background shadow
+                switch (this.items.part) {
+                    case 'defn':
+                        this.item().set('complete', true);
+                        this.renderPrompt();
+                        break;
+                    case 'rdng':
+                        this.item().set('complete', true);
+                        this.renderPrompt();
+                        break;
+                    default:
+                        //TODO: fade the background shadow
+                }
             }
         },
         /**
@@ -148,6 +197,22 @@ define([
                     this.recognizeTone(points, shape);
                     break;
             }
+        },
+        /**
+         * @method handlePromptDefnComplete
+         */
+        handlePromptDefnComplete: function() {
+            this.canvas.revealDefinitionAnswer();
+            this.details.revealDefinition();
+            this.grading.select(this.item().get('score'));
+        },
+        /**
+         * @method handlePromptRdngComplete
+         */
+        handlePromptRdngComplete: function() {
+            this.canvas.revealReadingAnswer();
+            this.details.revealReading();
+            this.grading.select(this.item().get('score'));
         },
         /**
          * @method handlePromptRuneComplete
@@ -254,6 +319,7 @@ define([
             this.items = items;
             this.vocab = items.getVocab();
             this.canvas.reset();
+            this.canvas.renderFields();
             this.details.renderFields();
             this.renderPrompt();
             return this;
