@@ -72,6 +72,20 @@ define([
             return this;
         },
         /**
+         * @method renderFields
+         * @returns {PromptCanvasComponent}
+         */
+        renderFields: function() {
+            var vocab = this.prompt.items.getVocab();
+            this.$('#prompt-canvas-definition .answer').html(vocab.getDefinition());
+            this.$('#prompt-canvas-definition .writing').html(vocab.get('writing'));
+            this.$('#prompt-canvas-definition .writing').addClass(vocab.getFontClass());
+            this.$('#prompt-canvas-reading .answer').html(vocab.getReading());
+            this.$('#prompt-canvas-reading .writing').html(vocab.get('writing'));
+            this.$('#prompt-canvas-reading .writing').addClass(vocab.getFontClass());
+            return this;
+        },
+        /**
          * @property events
          */
         events: {
@@ -320,6 +334,18 @@ define([
             return this.size;
         },
         /**
+         * @method hideDefinition
+         */
+        hideDefinition: function() {
+            this.$('#prompt-canvas-definition').hide();
+        },
+        /**
+         * @method hideReading
+         */
+        hideReading: function() {
+            this.$('#prompt-canvas-reading').hide();
+        },
+        /**
          * @method injectColor
          * @param {createjs.Container|createjs.Shape} object
          * @param {String} color
@@ -380,6 +406,42 @@ define([
                 this.reset();
             }
             return this;
+        },
+        /**
+         * @method revealDefinitionAnswer
+         */
+        revealDefinitionAnswer: function() {
+            var element = this.$('#prompt-canvas-definition');
+            element.find('.answer').show();
+            element.find('.question').hide();
+            element.show();
+        },
+        /**
+         * @method revealDefinitionQuestion
+         */
+        revealDefinitionQuestion: function() {
+            var element = this.$('#prompt-canvas-definition');
+            element.find('.answer').hide();
+            element.find('.question').show();
+            element.show();
+        },
+        /**
+         * @method revealReadingAnswer
+         */
+        revealReadingAnswer: function() {
+            var element = this.$('#prompt-canvas-reading');
+            element.find('.answer').show();
+            element.find('.question').hide();
+            element.show();
+        },
+        /**
+         * @method revealReadingQuestion
+         */
+        revealReadingQuestion: function() {
+            var element = this.$('#prompt-canvas-reading');
+            element.find('.answer').hide();
+            element.find('.question').show();
+            element.show();
         },
         /**
          * @method setMessage
