@@ -18,6 +18,7 @@ define([
         initialize: function() {
             this.contained = [];
             this.decomps = [];
+            this.sentences = [];
             this.strokes = [];
             this.vocabs = [];
         },
@@ -153,6 +154,16 @@ define([
                     }, function() {
                         callback(new Error('Unable to load decomps.'));
                     });
+                },
+                //sentences
+                function(callback) {
+                    var sentenceId = self.getVocab().get('sentenceId') || [];
+                    app.user.data.storage.get('sentences', sentenceId, function(result) {
+                        self.sentences = app.user.data.sentences.add(result, options);
+                        callback();
+                    }, function() {
+                        callback(new Error('Unable to load sentences.'));
+                    });
                 }
             ], function(error) {
                 if (error) {
@@ -161,15 +172,6 @@ define([
                     callbackSuccess(self);
                 }
             });
-        },
-        /**
-         * @method update
-         * @param {PromptResult} result
-         * @returns {DataItem}
-         */
-        update: function(result) {
-            this.set('next', 999999999999);
-            return this;
         }
     });
 
