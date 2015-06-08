@@ -16,12 +16,20 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.on('change', this.cache);
+        },
         /**
          * @property idAttribute
          * @type String
          */
         idAttribute: 'id',
+        /**
+         * @method cache
+         */
+        cache: function() {
+            app.user.data.storage.put('vocabs', this.toJSON());
+        },
         /**
          * @method getCanvasCharacters
          * @returns {Array}
@@ -284,6 +292,13 @@ define([
             return this.get('lang') === 'ja';
         },
         /**
+         * @method isStarred
+         * @returns {Boolean}
+         */
+        isStarred: function() {
+            return this.get('starred');
+        },
+        /**
          * @method play
          * @returns {DataVocab}
          */
@@ -292,6 +307,34 @@ define([
                 app.media.play(this.get('audioURL'));
             }
             return this;
+        },
+        /**
+         * @method toggleBanned
+         * @returns {Boolean}
+         */
+        toggleBanned: function() {
+            if (this.isBanned()) {
+                this.set('bannedParts', []);
+                return false;
+            }
+            if (this.isChinese()) {
+                this.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
+            } else {
+                this.set('bannedParts', ['defn', 'rdng', 'rune']);
+            }
+            return true;
+        },
+        /**
+         * @method toggleStarred
+         * @returns {Boolean}
+         */
+        toggleStarred: function() {
+            if (this.get('starred')) {
+                this.set('starred', false);
+                return false;
+            }
+            this.set('starred', true);
+            return true;
         }
     });
 
