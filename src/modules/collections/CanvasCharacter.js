@@ -93,6 +93,22 @@ define([
             return app.user.settings.get('canvasSize');
         },
         /**
+         * @method getTargetShape
+         * @param {Number} [excludeStrokes]
+         * @returns {createjs.Container}
+         */
+        getTargetShape: function(excludeStrokes) {
+            var container = new createjs.Container();
+            var target = this.getExpectedTargets()[0];
+            for (var i = 0, length = target.length; i < length; i++) {
+                if (!excludeStrokes) {
+                    container.addChild(target.at(i).getTargetShape());
+                }
+            }
+            container.name = 'character';
+            return container;
+        },
+        /**
          * @method getUserShape
          * @param {Number} [excludeStrokes]
          * @returns {createjs.Container}
