@@ -15,6 +15,14 @@ gelato-component[data-name="prompt-details"] {
     }
   }
 
+  #vocab-mnemonic {
+    margin-bottom: 30px;
+    .value {
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
+
   #vocab-reading {
     margin-bottom: 30px;
     .value {
@@ -29,6 +37,14 @@ gelato-component[data-name="prompt-details"] {
         &.mask { background-color: $white5; }
         &.mask span { visibility: hidden; }
       }
+    }
+  }
+
+  #vocab-sentence {
+    margin-bottom: 30px;
+    .value {
+      font-size: 18px;
+      font-weight: 300;
     }
   }
 

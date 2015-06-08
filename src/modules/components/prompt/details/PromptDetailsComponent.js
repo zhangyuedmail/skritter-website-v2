@@ -38,8 +38,11 @@ define([
          */
         renderFields: function() {
             var vocab = this.prompt.items.getVocab();
+            console.log(vocab.getSentence());
             this.$('#vocab-definition .value').html(vocab.getDefinition());
+            this.$('#vocab-mnemonic .value').html(vocab.getMnemonicText());
             this.$('#vocab-reading .value').html(vocab.getReadingElement());
+            this.$('#vocab-sentence .value').html(vocab.getSentenceWriting());
             this.$('#vocab-style .value').html(vocab.getStyle());
             this.$('#vocab-writing .value').addClass(vocab.getFontClass());
             this.$('#vocab-writing .value').html(vocab.getWritingElement());
@@ -59,8 +62,7 @@ define([
         handleClickWritingElement: function(event) {
             event.preventDefault();
             var $element = $(event.currentTarget);
-            var position = parseInt($element.data('position'), 10);
-            this.prompt.items.position = position;
+            this.prompt.items.position = parseInt($element.data('position'), 10);
             this.prompt.renderPrompt();
         },
         /**
