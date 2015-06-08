@@ -64,6 +64,12 @@ define([
             this.prompt.renderPrompt();
         },
         /**
+         * @method hideDefinition
+         */
+        hideDefinition: function() {
+            this.$('#vocab-definition .value').hide();
+        },
+        /**
          * @method hideReading
          * @param {Number} [position]
          */
@@ -84,6 +90,12 @@ define([
             } else {
                 this.$('#writing-reading [data-position="' + position + '"]').addClass('mask');
             }
+        },
+        /**
+         * @method revealDefinition
+         */
+        revealDefinition: function() {
+            this.$('#vocab-definition .value').show();
         },
         /**
          * @method revealReading
