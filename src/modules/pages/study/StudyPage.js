@@ -52,7 +52,8 @@ define([
         load: function(listId, sectionId) {
             var self = this;
             app.user.data.items.loadNext(function(result) {
-                self.prompt.set(result.getVocab().getPromptItems('rune'));
+                self.part = result.get('part');
+                self.prompt.set(result.getVocab().getPromptItems(self.part));
             }, function(error) {
                 console.error(error);
             });

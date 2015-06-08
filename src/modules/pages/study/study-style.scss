@@ -1,1 +1,7 @@
-gelato-page[data-name="study"] {}
+gelato-page[data-name="study"] {
+
+  gelato-navbar {
+    .container { width: 1280px; }
+  }
+
+}

@@ -65,6 +65,7 @@ define([
             this.disableForm('#login-form');
             app.dialogs.open('loading');
             app.user.login(fieldUsername, fieldPassword, function() {
+                app.router.navigate('', {trigger: false});
                 app.dialogs.once('hidden', app.reload);
                 app.dialogs.close();
             }, function(error) {
@@ -75,7 +76,7 @@ define([
         },
         /**
          * @method remove
-         * @returns {LoginPage}
+         * @returns {GelatoView}
          */
         remove: function() {
             this.footer.remove();
