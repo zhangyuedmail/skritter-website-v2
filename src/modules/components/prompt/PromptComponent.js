@@ -34,6 +34,7 @@ define([
             this.toolbar = new PromptToolbarComponent({prompt: this});
             this.items = null;
             this.teaching = false;
+            this.vocab = null;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
             this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
             this.listenTo(this.grading, 'select', this.handleSelectGrading);
@@ -68,7 +69,7 @@ define([
                     this.renderPromptRune();
                     break;
                 case 'tone':
-                    //this.renderPromptTone();
+                    this.renderPromptTone();
                     break;
             }
             return this;
@@ -79,6 +80,7 @@ define([
          */
         renderPromptRune: function() {
             this.canvas.reset();
+            this.canvas.enableGrid();
             this.canvas.drawShape('surface', this.character().getUserShape());
             this.details.selectWriting(this.position());
             this.grading.unselect();
@@ -87,7 +89,28 @@ define([
             } else {
                 this.canvas.enableInput();
                 this.details.revealReading();
-
+            }
+            return this;
+        },
+        /**
+         * @method renderPromptTone
+         * @returns {PromptComponent}
+         */
+        renderPromptTone: function() {
+            this.canvas.reset();
+            this.canvas.disableGrid();
+            this.canvas.drawCharacter('surface-background2', this.vocab.get('writing'), {
+                color: '#ebeaf0',
+                font: this.vocab.getFontName()
+            });
+            this.canvas.drawShape('surface', this.character().getUserShape());
+            this.details.revealWriting();
+            this.grading.unselect();
+            if (this.character().isComplete()) {
+                this.handlePromptToneComplete();
+            } else {
+                this.canvas.enableInput();
+                this.details.revealReading();
             }
             return this;
         },
@@ -122,14 +145,26 @@ define([
                     this.recognizeRune(points, shape);
                     break;
                 case 'tone':
-                    //this.recognizeTone(points, shape);
+                    this.recognizeTone(points, shape);
                     break;
             }
         },
+        /**
+         * @method handlePromptRuneComplete
+         */
         handlePromptRuneComplete: function() {
             this.canvas.disableInput();
             this.canvas.injectLayerColor('surface', this.item().getGradingColor());
             this.details.revealWriting(this.position());
+            this.grading.select(this.item().get('score'));
+        },
+        /**
+         * @method handlePromptToneComplete
+         */
+        handlePromptToneComplete: function() {
+            this.canvas.disableInput();
+            this.canvas.injectLayerColor('surface', this.item().getGradingColor());
+            this.details.revealReading(this.position(), true);
             this.grading.select(this.item().get('score'));
         },
         /**
@@ -173,6 +208,22 @@ define([
             }
         },
         /**
+         * @method recognizeTone
+         * @param {Array} points
+         * @param {createjs.Shape} shape
+         */
+        recognizeTone: function(points, shape) {
+            var stroke = this.character().recognize(points, shape);
+            if (stroke) {
+                var targetShape = stroke.getTargetShape();
+                var userShape = stroke.getUserShape();
+                this.canvas.tweenShape('surface', userShape, targetShape);
+                if (this.character().isComplete()) {
+                    this.handlePromptToneComplete();
+                }
+            }
+        },
+        /**
          * @method remove
          * @returns {GelatoView}
          */
@@ -201,6 +252,7 @@ define([
         set: function(items) {
             console.log('PROMPT:', items.getVocabId(), items);
             this.items = items;
+            this.vocab = items.getVocab();
             this.canvas.reset();
             this.details.renderFields();
             this.renderPrompt();

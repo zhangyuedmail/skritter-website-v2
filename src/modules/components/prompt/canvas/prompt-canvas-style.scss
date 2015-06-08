@@ -1,8 +1,13 @@
 gelato-component[data-name="prompt-canvas"] {
 
-  margin-bottom: 25px;
+  position: relative;
 
-  #canvas-message {
+  #prompt-canvas-element {
+    position: absolute;
+    z-index: 9999;
+  }
+
+  #prompt-canvas-message {
     bottom: 5px;
     font-size: 24px;
     position: absolute;

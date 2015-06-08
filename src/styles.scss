@@ -13,6 +13,7 @@
 /*** COMPONENTS ***/
 @import "modules/components/marketing/footer/footer-style";
 @import "modules/components/prompt/prompt-style";
+@import "modules/components/prompt/canvas/prompt-canvas-style";
 @import "modules/components/prompt/details/prompt-details-style";
 @import "modules/components/prompt/grading/prompt-grading-style";
 @import "modules/components/prompt/toolbar/prompt-toolbar-style";
@@ -44,4 +45,5 @@
 @import "modules/pages/settings/study/study-settings-style";
 @import "modules/pages/stats/summary/summary-stats-style";
 @import "modules/pages/stats/timeline/timeline-stats-style";
+@import "modules/pages/study/study-style";
 @import "modules/pages/words/words-style";

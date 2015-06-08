@@ -56,7 +56,7 @@ define([
          * @returns {PromptCanvasComponent}
          */
         render: function(size) {
-            this.$el.html(Template);
+            this.renderTemplate(Template);
             this.stage = this.createStage();
             createjs.Ticker.addEventListener('tick', this.stage);
             createjs.Touch.enable(this.stage);
@@ -116,7 +116,7 @@ define([
          * @returns {createjs.Stage}
          */
         createStage: function() {
-            var canvas = this.$('canvas').get(0);
+            var canvas = $('#prompt-canvas-element').get(0);
             var stage = new createjs.Stage(canvas);
             stage.autoClear = true;
             stage.enableDOMEvents(true);
@@ -228,23 +228,35 @@ define([
             var self = this;
             var oldPoint, oldMidPoint, points, marker;
             this.disableInput().$el.on('vmousedown.Input pointerdown.Input', down);
-            function down() {
+            function down(event) {
                 points = [];
                 marker = new createjs.Shape();
                 marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round').beginStroke(self.strokeColor);
-                oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
+                oldPoint = oldMidPoint = new createjs.Point(event.offsetX, event.offsetY);
+                if (event.offsetX && event.offsetY) {
+                    oldPoint = oldMidPoint = new createjs.Point(event.offsetX, event.offsetY);
+                } else {
+                    oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
+                }
                 self.triggerInputDown(oldPoint);
                 self.getLayer('input').addChild(marker);
                 self.$el.on('vmouseout.Input vmouseup.Input pointerup.Input', up);
                 self.$el.on('vmousemove.Input pointermove.Input', move);
             }
-            function move() {
-                var point = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
+            function move(event) {
+                var point = new createjs.Point();
+                if (event.offsetX && event.offsetY) {
+                    point.x = event.offsetX;
+                    point.y = event.offsetY;
+                } else {
+                    point.x = self.stage.mouseX;
+                    point.y = self.stage.mouseY;
+                }
                 var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
                 marker.graphics.moveTo(midPoint.x, midPoint.y).curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 oldPoint = point;
                 oldMidPoint = midPoint;
-                points.push(point);
+                points.push(point.clone());
                 self.triggerInputMove(point);
                 self.stage.update();
             }
@@ -354,6 +366,8 @@ define([
             app.user.settings.set('canvasSize', size);
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
+            this.$component.height(size);
+            this.$component.width(size);
             this.size = size;
             if (this.grid) {
                 this.drawGrid().reset();
