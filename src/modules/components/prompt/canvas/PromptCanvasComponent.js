@@ -6,7 +6,7 @@ define([
     'require.text!modules/components/prompt/canvas/prompt-canvas-template.html',
     'core/modules/GelatoComponent'
 ], function(
-    Template, 
+    Template,
     GelatoComponent
 ) {
 
@@ -232,12 +232,12 @@ define([
                 points = [];
                 marker = new createjs.Shape();
                 marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round').beginStroke(self.strokeColor);
-                oldPoint = oldMidPoint = new createjs.Point(event.offsetX, event.offsetY);
                 if (event.offsetX && event.offsetY) {
-                    oldPoint = oldMidPoint = new createjs.Point(event.offsetX, event.offsetY);
+                    points.push(new createjs.Point(event.offsetX, event.offsetY));
                 } else {
-                    oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
+                    points.push(new createjs.Point(self.stage.mouseX, self.stage.mouseY));
                 }
+                oldPoint = oldMidPoint = points[0];
                 self.triggerInputDown(oldPoint);
                 self.getLayer('input').addChild(marker);
                 self.$el.on('vmouseout.Input vmouseup.Input pointerup.Input', up);
@@ -256,14 +256,19 @@ define([
                 marker.graphics.moveTo(midPoint.x, midPoint.y).curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 oldPoint = point;
                 oldMidPoint = midPoint;
-                points.push(point.clone());
+                points.push(point);
                 self.triggerInputMove(point);
                 self.stage.update();
             }
-            function up() {
+            function up(event) {
                 marker.graphics.endStroke();
                 self.$el.off('vmousemove.Input pointermove.Input', move);
                 self.$el.off('vmouseout.Input vmouseup.Input pointerup.Input', up);
+                if (event.offsetX && event.offsetY) {
+                    points.push(new createjs.Point(event.offsetX, event.offsetY));
+                } else {
+                    points.push(new createjs.Point(self.stage.mouseX, self.stage.mouseY));
+                }
                 self.triggerInputUp(points, marker.clone(true));
                 self.getLayer('input').removeAllChildren();
             }
