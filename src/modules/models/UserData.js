@@ -8,6 +8,7 @@ define([
     'modules/collections/DataDecomps',
     'modules/collections/DataItems',
     'modules/collections/DataParams',
+    'modules/collections/DataSentences',
     'modules/collections/DataStats',
     'modules/collections/DataStrokes',
     'modules/collections/DataVocabLists',
@@ -18,6 +19,7 @@ define([
     DataDecomps,
     DataItems,
     DataParams,
+    DataSentences,
     DataStats,
     DataStrokes,
     DataVocabLists,
@@ -37,6 +39,7 @@ define([
             this.decomps = new DataDecomps();
             this.items = new DataItems();
             this.params = new DataParams();
+            this.sentences = new DataSentences();
             this.stats = new DataStats();
             this.storage = new GelatoStorage();
             this.strokes = new DataStrokes();
@@ -66,6 +69,10 @@ define([
                 },
                 function(callback) {
                     app.user.data.items.add(result.Items || [], options);
+                    callback();
+                },
+                function(callback) {
+                    app.user.data.sentences.add(result.Sentences || [], options);
                     callback();
                 },
                 function(callback) {
@@ -119,6 +126,9 @@ define([
                 },
                 function(callback) {
                     app.user.data.storage.put('items', result.Items || [], callback, callback);
+                },
+                function(callback) {
+                    app.user.data.storage.put('sentences', result.Sentences || [], callback, callback);
                 },
                 function(callback) {
                     app.user.data.storage.put('strokes', result.Strokes || [], callback, callback);
