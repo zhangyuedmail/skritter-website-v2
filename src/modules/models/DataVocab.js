@@ -97,10 +97,22 @@ define([
         },
         /**
          * @method getMnemonic
-         * @returns {String}
+         * @returns {Object}
          */
         getMnemonic: function() {
+            if (this.get('mnemonic')) {
+                return this.get('mnemonic');
+            } else if (this.get('topMnemonic')) {
+                return this.get('topMnemonic');
+            }
             return null;
+        },
+        /**
+         * @method getMnemonicText
+         * @returns {String}
+         */
+        getMnemonicText: function() {
+            return this.getMnemonic() ? app.fn.textToHTML(this.getMnemonic().text) : null;
         },
         /**
          * @method getPromptResult
@@ -177,10 +189,17 @@ define([
         },
         /**
          * @method getSentence
-         * @returns {String}
+         * @returns {DataSentence}
          */
         getSentence: function() {
-            return null;
+            return this.get('sentenceId') ? app.user.data.sentences.get(this.get('sentenceId')) : null;
+        },
+        /**
+         * @method getSentenceWriting
+         * @returns {String}
+         */
+        getSentenceWriting: function() {
+            return this.getSentence() ? this.getSentence().getWriting() : null;
         },
         /**
          * @method getStrokes
