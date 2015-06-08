@@ -60,6 +60,16 @@ define([
             return app.user.data.vocabs.get(this.get('vocabId'));
         },
         /**
+         * @method isComplete
+         * @returns {Boolean}
+         */
+        isComplete: function() {
+            if (['rune', 'tone'].indexOf(this.collection.part) > -1) {
+                return this.get('character').isComplete();
+            }
+            return this.get('complete');
+        },
+        /**
          * @method start
          * @returns {PromptItem}
          */
