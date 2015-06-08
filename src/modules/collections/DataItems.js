@@ -91,7 +91,9 @@ define([
                         ids: missingIds.slice(0,29).join('|'),
                         include_contained: true,
                         include_decomps: true,
+                        include_sentences: true,
                         include_strokes: true,
+                        include_top_mnemonics: true,
                         include_vocabs: true
                     }, function(result) {
                         app.user.data.insert(result, function() {
@@ -128,7 +130,9 @@ define([
                 sort: 'next',
                 include_contained: true,
                 include_decomps: true,
+                include_sentences: true,
                 include_strokes: true,
+                include_top_mnemonics: true,
                 include_vocabs: true
             }, function(result) {
                 app.user.data.insert(result, function() {
@@ -222,9 +226,10 @@ define([
          * @param {Function} callbackError
          */
         loadNext: function(callbackSuccess, callbackError) {
-            //TODO: figure out what is next
+            //TODO: figure out what is actually next
             if (this.length) {
-                this.at(0).load(function(result) {
+                this.get('mcfarljwtest1-zh-姓-0-rune').load(function(result) {
+                //this.at(0).load(function(result) {
                     callbackSuccess(result);
                 }, function(error) {
                     callbackError(error);
