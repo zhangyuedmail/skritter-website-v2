@@ -3,33 +3,37 @@
  */
 define([
     'core/modules/GelatoCollection',
-    'modules/models/PromptItem'
-], function(GelatoCollection, PromptItem) {
+    'modules/models/PromptReview'
+], function(GelatoCollection, PromptReview) {
 
     /**
-     * @class PromptItems
+     * @class PromptReviews
      * @extends GelatoCollection
      */
-    var PromptItems = GelatoCollection.extend({
+    var PromptReviews = GelatoCollection.extend({
         /**
          * @method initialize
+         * @param {Array|Object} [models]
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {
+        initialize: function(models, options) {
+            models = models || {};
+            options = options || {};
             this.part = null;
             this.position = 0;
         },
         /**
          * @property model
-         * @type PromptItem
+         * @type {PromptReview}
          */
-        model: PromptItem,
+        model: PromptReview,
         /**
          * @method getCharacter
          * @returns {CanvasCharacter}
          */
         getCharacter: function() {
-            return this.getItem().get('character');
+            return this.getItem().character;
         },
         /**
          * @method getToneNumbers
@@ -43,11 +47,11 @@ define([
          * @returns {String}
          */
         getVocabId: function() {
-            return this.at(0).get('vocabId');
+            return this.at(0).vocab.id;
         },
         /**
          * @method getItem
-         * @returns {PromptItem}
+         * @returns {PromptReview}
          */
         getItem: function() {
             return this.at(this.position);
@@ -57,7 +61,7 @@ define([
          * @returns {DataVocab}
          */
         getVocab: function() {
-            return app.user.data.vocabs.get(this.id);
+            return app.user.data.vocabs.get(this.getVocabId());
         },
         /**
          * @method isFirst
@@ -97,6 +101,6 @@ define([
         }
     });
 
-    return PromptItems;
+    return PromptReviews;
 
 });

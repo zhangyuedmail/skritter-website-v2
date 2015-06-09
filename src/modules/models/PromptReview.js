@@ -6,29 +6,35 @@ define([
 ], function(GelatoModel) {
 
     /**
-     * @class PromptItem
+     * @class PromptReview
      * @extends GelatoModel
      */
-    var PromptItem = GelatoModel.extend({
+    var PromptReview = GelatoModel.extend({
         /**
          * @method initialize
+         * @param {Object} [attributes]
+         * @param {Object} [options]
          * @constructor
          */
-        initialize: function() {},
+        initialize: function(attributes, options) {
+            attributes = attributes || {};
+            options = options || {};
+            this.character = null;
+            this.item = null;
+            this.vocab = null;
+        },
         /**
          * @method defaults
          * @returns {Object}
          */
         defaults: function() {
             return {
-                character: null,
                 complete: false,
                 reviewingStart: 0,
                 reviewingStop: 0,
                 score: 3,
                 submitTime: Moment().unix(),
-                thinkingStop: 0,
-                vocabId: null
+                thinkingStop: 0
             };
         },
         /**
@@ -57,7 +63,7 @@ define([
          * @returns {DataVocab}
          */
         getVocab: function() {
-            return app.user.data.vocabs.get(this.get('vocabId'));
+            return this.vocab;
         },
         /**
          * @method isComplete
@@ -65,23 +71,23 @@ define([
          */
         isComplete: function() {
             if (['rune', 'tone'].indexOf(this.collection.part) > -1) {
-                return this.get('character').isComplete();
+                return this.character.isComplete();
             }
             return this.get('complete');
         },
         /**
          * @method start
-         * @returns {PromptItem}
+         * @returns {PromptReview}
          */
         start: function() {
             if (this.get('reviewingStart') === 0) {
-                this.set('reviewingStart', new Date().getTime());
+                this.set({reviewingStart: new Date().getTime(), submitTime: Moment().unix()});
             }
             return this;
         },
         /**
          * @method stop
-         * @returns {PromptItem}
+         * @returns {PromptReview}
          */
         stop: function() {
             var timestamp = new Date().getTime();
@@ -92,7 +98,7 @@ define([
         /**
          * @method stopReviewing
          * @param {Number} [timestamp]
-         * @returns {PromptItem}
+         * @returns {PromptReview}
          */
         stopReviewing: function(timestamp) {
             if (this.get('reviewingStop') === 0) {
@@ -103,7 +109,7 @@ define([
         /**
          * @method stopThinking
          * @param {Number} [timestamp]
-         * @returns {PromptItem}
+         * @returns {PromptReview}
          */
         stopThinking: function(timestamp) {
             if (this.get('thinkingStop') === 0) {
@@ -113,6 +119,6 @@ define([
         }
     });
 
-    return PromptItem;
+    return PromptReview;
 
 });
