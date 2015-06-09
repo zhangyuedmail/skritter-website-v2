@@ -4,8 +4,9 @@
  */
 define([
     'core/modules/GelatoModel',
-    'modules/collections/PromptItems'
-], function(GelatoModel, PromptItems) {
+    'modules/collections/PromptReviews',
+    'modules/models/PromptReview'
+], function(GelatoModel, PromptReviews, PromptReview) {
 
     /**
      * @class DataVocab
@@ -123,30 +124,23 @@ define([
             return this.getMnemonic() ? app.fn.textToHTML(this.getMnemonic().text) : null;
         },
         /**
-         * @method getPromptResult
+         * @method getPromptReviews
          * @param {String} part
-         * @returns {PromptItems}
+         * @returns {PromptReviews}
          */
-        getPromptItems: function(part) {
-            var promptItems = new PromptItems();
-            var canvasCharacters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
-            var containedVocabIds = this.get('containedVocabIds') || [];
-            if (containedVocabIds.length && ['rune', 'tone'].indexOf(part) > -1) {
-                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                    promptItems.add({
-                        character: canvasCharacters[i],
-                        vocabId: containedVocabIds[i]
-                    });
-                }
-            } else {
-                promptItems.add({
-                    character: canvasCharacters[0],
-                    vocabId: this.id
-                });
+        getPromptReviews: function(part) {
+            var reviews = new PromptReviews();
+            var vocabIds = ['rune', 'tone'].indexOf(part) > -1 ? this.getVocabIds() : this.getVocabIds()[0];
+            var characters = (part === 'tone') ? this.getCanvasTones() : this.getCanvasCharacters();
+            for (var i = 0, length = vocabIds.length; i < length; i++) {
+                var review = new PromptReview();
+                review.character = characters[i];
+                review.item = this.toJSON();
+                review.vocab = app.user.data.vocabs.get(vocabIds[i]);
+                reviews.add(review);
             }
-            promptItems.id = this.id;
-            promptItems.part = part;
-            return promptItems;
+            reviews.part = part;
+            return reviews;
         },
         /**
          * @method getReading
@@ -255,6 +249,13 @@ define([
                 }
             }
             return position === undefined ? tones : tones[position];
+        },
+        /**
+         * @method getVocabIds
+         * @returns {Array}
+         */
+        getVocabIds: function() {
+            return [this.id].concat(this.get('containedVocabIds') || []);
         },
         /**
          * @method getWritingElement

@@ -3,8 +3,10 @@
  * @submodule Models
  */
 define([
-    'core/modules/GelatoModel'
-], function(GelatoModel) {
+    'core/modules/GelatoModel',
+    'modules/collections/PromptReviews',
+    'modules/models/PromptReview'
+], function(GelatoModel, PromptReviews, PromptReview) {
 
     /**
      * @class DataItem
@@ -21,6 +23,7 @@ define([
             this.sentences = [];
             this.strokes = [];
             this.vocabs = [];
+            this.on('change', this.cache);
         },
         /**
          * @property idAttribute
@@ -37,11 +40,37 @@ define([
             };
         },
         /**
+         * @method cache
+         */
+        cache: function() {
+            app.user.data.storage.put('items', this.toJSON());
+        },
+        /**
          * @method getCharacters
          * @returns {Array}
          */
         getCharacters: function() {
             return this.getVocab().get('writing').split('');
+        },
+        /**
+         * @method getPromptReviews
+         * @returns {PromptReviews}
+         */
+        getPromptReviews: function() {
+            var reviews = new PromptReviews();
+            var part = this.get('part');
+            var vocab = this.getVocab();
+            var vocabIds = ['rune', 'tone'].indexOf(part) > -1 ? vocab.getVocabIds() : vocab.getVocabIds()[0];
+            var characters = (part === 'tone') ? vocab.getCanvasTones() : vocab.getCanvasCharacters();
+            for (var i = 0, length = vocabIds.length; i < length; i++) {
+                var review = new PromptReview();
+                review.character = characters[i];
+                review.item = this.toJSON();
+                review.vocab = app.user.data.vocabs.get(vocabIds[i]);
+                reviews.add(review);
+            }
+            reviews.part = part;
+            return reviews;
         },
         /**
          * @method getVocab
