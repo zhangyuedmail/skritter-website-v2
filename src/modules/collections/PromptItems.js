@@ -32,6 +32,13 @@ define([
             return this.getItem().get('character');
         },
         /**
+         * @method getToneNumbers
+         * @returns {Array}
+         */
+        getToneNumbers: function() {
+            return this.getVocab().getToneNumbers(this.position);
+        },
+        /**
          * @method getVocabId
          * @returns {String}
          */

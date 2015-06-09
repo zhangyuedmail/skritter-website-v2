@@ -181,7 +181,7 @@ define([
                         this.renderPrompt();
                         break;
                     default:
-                        //TODO: fade the background shadow
+                    //TODO: fade the background shadow
                 }
             }
         },
@@ -279,10 +279,18 @@ define([
          */
         recognizeTone: function(points, shape) {
             var stroke = this.character().recognize(points, shape);
+            var possibleTones = this.items.getToneNumbers();
+            var expectedTone = this.character().getTone(possibleTones[0]);
             if (stroke) {
                 var targetShape = stroke.getTargetShape();
                 var userShape = stroke.getUserShape();
-                this.canvas.tweenShape('surface', userShape, targetShape);
+                if (possibleTones.indexOf(stroke.get('tone')) > -1) {
+                    this.canvas.tweenShape('surface', userShape, targetShape);
+                    this.item().set('score', 3);
+                } else {
+                    this.canvas.drawShape('surface', expectedTone.getTargetShape());
+                    this.item().set('score', 1);
+                }
                 if (this.character().isComplete()) {
                     this.handlePromptToneComplete();
                 }

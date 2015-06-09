@@ -1,6 +1,9 @@
 gelato-component[data-name="prompt-details"] {
 
+  position: relative;
+
   .detail-row {
+    color: #8c9196;
     .title {
       font-size: 14px;
       font-weight: 700;
@@ -36,13 +39,13 @@ gelato-component[data-name="prompt-details"] {
   #vocab-reading {
     margin-bottom: 30px;
     .value {
+      color: #8c9196;
       font-size: 18px;
       font-weight: 300;
       margin-left: 12px;
       .reading-element {
         cursor: pointer;
         display: inline;
-        margin-right: 2px;
         &.active { background-color: $white1 !important; }
         &.mask { background-color: $white5; }
         &.mask span { visibility: hidden; }
@@ -59,7 +62,9 @@ gelato-component[data-name="prompt-details"] {
   }
 
   #vocab-style {
+    margin-bottom: 5px;
     .value {
+      color: #b2b5b9;
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
@@ -69,13 +74,12 @@ gelato-component[data-name="prompt-details"] {
   #vocab-writing {
     margin-bottom: 15px;
     .value {
+      color: #666c73;
       font-size: 42px;
       font-weight: 400;
       .writing-element {
         cursor: pointer;
         display: inline;
-        margin-right: 5px;
-        padding: 10px;
         width: 60px;
         &.active { background-color: $white1 !important; }
         &.mask { background-color: $white5; }

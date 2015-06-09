@@ -239,9 +239,10 @@ define([
         },
         /**
          * @method getToneNumbers
+         * @param {Number} [position]
          * @returns {Array}
          */
-        getToneNumbers: function() {
+        getToneNumbers: function(position) {
             var tones = [];
             if (this.isChinese()) {
                 var readings = this.get('reading').split(', ');
@@ -253,7 +254,7 @@ define([
                     }
                 }
             }
-            return tones;
+            return position === undefined ? tones : tones[position];
         },
         /**
          * @method getWritingElement
