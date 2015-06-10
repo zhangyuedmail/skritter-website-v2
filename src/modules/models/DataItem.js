@@ -18,7 +18,7 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.contained = [];
+            this.containedItems = [];
             this.decomps = [];
             this.sentences = [];
             this.strokes = [];
@@ -60,15 +60,31 @@ define([
             var reviews = new PromptReviews();
             var part = this.get('part');
             var vocab = this.getVocab();
-            var vocabIds = ['rune', 'tone'].indexOf(part) > -1 ? vocab.getVocabIds() : vocab.getVocabIds()[0];
-            var characters = (part === 'tone') ? vocab.getCanvasTones() : vocab.getCanvasCharacters();
+            var containedVocabIds = vocab.getContainedVocabIds();
+            var characters = [];
+            var vocabIds = [];
+            if (['rune', 'tone'].indexOf(part) > -1) {
+                if (containedVocabIds.length) {
+                    vocabIds = containedVocabIds;
+                } else {
+                    vocabIds = [vocab.id];
+                }
+                if (part === 'tone') {
+                    characters = vocab.getCanvasTones();
+                } else {
+                    characters = vocab.getCanvasCharacters();
+                }
+            } else {
+                vocabIds = [vocab.id];
+            }
             for (var i = 0, length = vocabIds.length; i < length; i++) {
                 var review = new PromptReview();
-                review.character = characters[i];
+                review.character = characters.length ? characters[i] : null;
                 review.item = this.toJSON();
                 review.vocab = app.user.data.vocabs.get(vocabIds[i]);
                 reviews.add(review);
             }
+            reviews.vocab = vocab;
             reviews.part = part;
             return reviews;
         },
@@ -156,15 +172,25 @@ define([
                             } else if (self.collection.get(fallbackId)) {
                                 contained.push(self.collection.get(fallbackId));
                             } else {
-                                callback(new Error('Unable to load contained item ids.'));
+                                callback(new Error('Unable to load contained items.'));
                                 return;
                             }
                         }
-                        self.contained = contained;
+                        self.containedItems = contained;
                         callback();
                     } else {
                         callback();
                     }
+                },
+                //contained vocabs
+                function(callback) {
+                    var containedVocabIds = self.getVocab().getContainedVocabIds();
+                    app.user.data.storage.get('vocabs', containedVocabIds, function(result) {
+                        self.containedVocabs = app.user.data.vocabs.add(result, options);
+                        callback();
+                    }, function() {
+                        callback(new Error('Unable to load contained vocabs.'));
+                    });
                 },
                 //strokes
                 function(callback) {

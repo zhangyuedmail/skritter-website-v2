@@ -32,6 +32,13 @@ define([
             app.user.data.storage.put('vocabs', this.toJSON());
         },
         /**
+         * @method getContainedVocabIds
+         * @returns {Array}
+         */
+        getContainedVocabIds: function() {
+            return this.get('containedVocabIds') || [];
+        },
+        /**
          * @method getCanvasCharacters
          * @returns {Array}
          */
@@ -130,15 +137,31 @@ define([
          */
         getPromptReviews: function(part) {
             var reviews = new PromptReviews();
-            var vocabIds = ['rune', 'tone'].indexOf(part) > -1 ? this.getVocabIds() : this.getVocabIds()[0];
-            var characters = (part === 'tone') ? this.getCanvasTones() : this.getCanvasCharacters();
+            var containedVocabIds = this.getContainedVocabIds();
+            var characters = [];
+            var vocabIds = [];
+            if (['rune', 'tone'].indexOf(part) > -1) {
+                if (containedVocabIds.length) {
+                    vocabIds = containedVocabIds;
+                } else {
+                    vocabIds = [this.id];
+                }
+                if (part === 'tone') {
+                    characters = this.getCanvasTones();
+                } else {
+                    characters = this.getCanvasCharacters();
+                }
+            } else {
+                vocabIds = [this.id];
+            }
             for (var i = 0, length = vocabIds.length; i < length; i++) {
                 var review = new PromptReview();
-                review.character = characters[i];
+                review.character = characters.length ? characters[i] : null;
                 review.item = this.toJSON();
                 review.vocab = app.user.data.vocabs.get(vocabIds[i]);
                 reviews.add(review);
             }
+            reviews.vocab = this;
             reviews.part = part;
             return reviews;
         },
@@ -155,7 +178,6 @@ define([
          */
         getReadingElement: function() {
             var element = '';
-            //TODO: handle fillers for both languages
             //var fillers = [" ... ", "'", " "];
             var variations = this.getSegmentedReading();
             for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
