@@ -116,7 +116,15 @@ define([
             for (var i = 0, length = this.length; i < length; i++) {
                 var stat = this.at(i);
                 var date = Moment(stat.get('date')).unix();
-                data[date] = stat.get('char').rune.studied.day;
+                data[date] = 0;
+                data[date] += stat.get('char').defn.studied.day;
+                data[date] += stat.get('char').rdng.studied.day;
+                data[date] += stat.get('char').rune.studied.day;
+                data[date] += stat.get('char').tone.studied.day;
+                data[date] += stat.get('word').defn.studied.day;
+                data[date] += stat.get('word').rdng.studied.day;
+                data[date] += stat.get('word').rune.studied.day;
+                data[date] += stat.get('word').tone.studied.day;
             }
             return data;
         },
