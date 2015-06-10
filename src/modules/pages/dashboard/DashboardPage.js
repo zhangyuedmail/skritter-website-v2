@@ -26,7 +26,8 @@ define([
             this.doughnutList = null;
             this.heatmap = new CalHeatMap();
             this.listQueue = new ListsTableComponent();
-            this.listenTo(app.dialog, 'goal-settings:confirm', this.updateGoalSettings);
+            this.listenTo(app.dialog, 'goal-settings:confirm', this.renderStats);
+            this.listenTo(app.user.data.items, 'add change', this.renderListQueue);
             this.listenTo(app.user.data.stats, 'add change', this.renderStats);
             this.listenTo(app.user.data.stats, 'add change', this.renderStats);
             this.listenTo(app.user.data.stats, 'add change', this.renderStats);

@@ -30,7 +30,8 @@ define([
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
-            goals: {ja: {time: 20}, zh: {time: 20}}
+            goals: {ja: {time: 20}, zh: {time: 20}},
+            syncMode: 'jit'
         },
         /**
          * @method cache
@@ -133,6 +134,13 @@ define([
          */
         getGoal: function() {
             return this.get('goals')[app.user.getLanguageCode()];
+        },
+        /**
+         * @method isJIT
+         * @returns {Boolean}
+         */
+        isJIT: function() {
+            return this.get('syncMode') === 'jit';
         },
         /**
          * @method load

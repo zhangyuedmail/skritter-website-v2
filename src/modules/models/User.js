@@ -133,7 +133,6 @@ define([
          */
         loadUser: function(callbackSuccess, callbackError) {
             var self = this;
-            app.dialogs.open('loading');
             Async.series([
                 function(callback) {
                     if (self.authentication.isExpired()) {
@@ -148,28 +147,12 @@ define([
                 },
                 function(callback) {
                     self.data.load(callback, callback);
-                },
-                function(callback) {
-                    self.data.items.fetchMissing(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    }, function(status) {
-                        app.dialogs.element.find('.modal-message').text(status + '%');
-                    });
-                },
-                function(callback) {
-                    self.data.items.fetchChanged(function() {
-                        callback();
-                    }, function(error) {
-                       callback(error);
-                    });
                 }
             ], function(error) {
                 if (error) {
                     callbackError(error);
                 } else {
-                    app.dialogs.close();
+                    self.data.items.fetchChanged();
                     callbackSuccess();
                 }
             });
@@ -224,13 +207,6 @@ define([
                     }, function(error) {
                         callback(error);
                     });
-                },
-                function(callback) {
-                    app.user.data.items.fetchIds(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
                 }
             ], function(error) {
                 if (error) {
@@ -239,6 +215,7 @@ define([
                 } else {
                     var now = Moment().unix();
                     self.data.set({lastItemUpdate: now, lastVocabUpdate: now});
+                    app.user.data.set('lastItemUpdate', Moment().startOf('day').unix());
                     app.setSetting('user', self.id);
                     callbackSuccess();
                 }
@@ -284,6 +261,7 @@ define([
                 localStorage.removeItem(app.user.getDataPath('zh-stats', false));
                 localStorage.removeItem(app.user.getDataPath('subscription', false));
                 app.removeSetting('user');
+                app.router.navigate('', {trigger: false});
                 app.reload();
             }, function(error) {
                 console.error('USER LOGOUT ERROR:', error);
