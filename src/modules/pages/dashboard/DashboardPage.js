@@ -26,11 +26,10 @@ define([
             this.doughnutList = null;
             this.heatmap = new CalHeatMap();
             this.listQueue = new ListsTableComponent();
-            this.listenTo(app.dialog, 'goal-settings:confirm', this.renderStats);
-            this.listenTo(app.user.data.items, 'add change', this.renderListQueue);
-            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
-            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
-            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
+            this.listenTo(app.user.data.items, 'add change', this.renderDailyGoal);
+            this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
+            this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
+            this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
             this.listenTo(app.user.data.vocablists, 'add change', this.renderListQueue);
         },
         /**
@@ -52,10 +51,30 @@ define([
             this.listQueue.setElement(this.$('#list-queue-table')).render();
             this.$('#section-expired').hide();
             this.renderHeatmap();
-            this.renderGoalDoughnut();
-            this.renderListDoughnut();
+            this.renderAllTime();
+            this.renderDailyGoal();
             this.renderListQueue();
-            this.renderStats();
+            return this;
+        },
+        /**
+         * @method renderAllTime
+         * @returns {DashboardPage}
+         */
+        renderAllTime: function() {
+            this.$('#characters-learned .value').text(app.user.data.stats.getTotalCharactersLearned());
+            this.$('#month-streak .value').text(app.user.data.stats.getStreak());
+            this.$('#words-learned .value').text(app.user.data.stats.getTotalWordsLearned());
+            this.updateHeatmap();
+            return this;
+        },
+        /**
+         * @method renderDailyGoal
+         * @returns {DashboardPage}
+         */
+        renderDailyGoal: function() {
+            this.$('#items-added .value').text(app.user.data.items.getAddedCount());
+            this.$('#items-reviewed .value').text(app.user.data.items.getReviewedCount());
+            this.renderGoalDoughnut();
             return this;
         },
         /**
@@ -121,7 +140,7 @@ define([
                 start: new Date(2015, new Date().getMonth(), 1),
                 subDomain: 'x_day'
             });
-            this.heatmap.update(app.user.data.stats.getHeatmapData());
+            this.updateHeatmap();
             return this;
         },
         /**
@@ -134,48 +153,19 @@ define([
                 name: 'Name',
                 progress: 'Progress'
             });
-            return this;
-        },
-        /**
-         * @method renderStats
-         * @returns {DashboardPage}
-         */
-        renderStats: function() {
-            this.$('#characters-learned .value').text(app.user.data.stats.getTotalCharactersLearned());
-            this.$('#items-added .value').text(app.user.data.items.getAddedCount());
-            this.$('#items-reviewed .value').text(app.user.data.items.getReviewedCount());
-            this.$('#month-streak .value').text(app.user.data.stats.getStreak());
-            this.$('#words-learned .value').text(app.user.data.stats.getTotalWordsLearned());
+            //this.renderListDoughnut();
             return this;
         },
         /**
          * @property events
          * @type {Object}
          */
-        events: {
-            'vclick #goal-settings-button': 'handleClickGoalSettings'
-        },
+        events: {},
         /**
-         * @method handleClickGoalSettings
-         * @param {Event} event
+         * @method updateHeatmap
          */
-        handleClickGoalSettings: function(event) {
-            event.preventDefault();
-            var goal = app.user.settings.getGoal();
-            var goalType = Object.keys(goal)[0];
-            var goalValue = goal[goalType];
-            $('gelato-dialog [name="goal-type"][value="' + goalType + '"]').prop('checked', 'checked');
-            $('gelato-dialog #goal-value').val(goalValue);
-            app.dialogs.open('goal-settings');
-        },
-        /**
-         * @method updateGoalSettings
-         */
-        updateGoalSettings: function() {
-            var goalType = $('gelato-dialog [name="goal-type"]:checked').val();
-            var goalValue = $('gelato-dialog #goal-value').val();
-            app.user.settings.setGoal(goalType, goalValue);
-            app.dialog.close();
+        updateHeatmap: function() {
+            this.heatmap.update(app.user.data.stats.getHeatmapData());
         }
     });
 
