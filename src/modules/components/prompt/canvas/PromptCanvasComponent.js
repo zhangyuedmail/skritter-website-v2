@@ -76,13 +76,12 @@ define([
          * @returns {PromptCanvasComponent}
          */
         renderFields: function() {
-            var vocab = this.prompt.items.getVocab();
-            this.$('#prompt-canvas-definition .answer').html(vocab.getDefinition());
-            this.$('#prompt-canvas-definition .writing').html(vocab.get('writing'));
-            this.$('#prompt-canvas-definition .writing').addClass(vocab.getFontClass());
-            this.$('#prompt-canvas-reading .answer').html(vocab.getReading());
-            this.$('#prompt-canvas-reading .writing').html(vocab.get('writing'));
-            this.$('#prompt-canvas-reading .writing').addClass(vocab.getFontClass());
+            this.$('#prompt-canvas-definition .answer').html(this.prompt.reviews.vocab.getDefinition());
+            this.$('#prompt-canvas-definition .writing').html(this.prompt.reviews.vocab.get('writing'));
+            this.$('#prompt-canvas-definition .writing').addClass(this.prompt.reviews.vocab.getFontClass());
+            this.$('#prompt-canvas-reading .answer').html(this.prompt.reviews.vocab.getReading());
+            this.$('#prompt-canvas-reading .writing').html(this.prompt.reviews.vocab.get('writing'));
+            this.$('#prompt-canvas-reading .writing').addClass(this.prompt.reviews.vocab.getFontClass());
             return this;
         },
         /**
@@ -385,6 +384,8 @@ define([
             this.getLayer('input-background2').removeAllChildren();
             this.getLayer('input-background1').removeAllChildren();
             this.getLayer('input').removeAllChildren();
+            this.hideDefinition();
+            this.hideReading();
             this.stage.update();
             return this;
         },

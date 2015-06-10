@@ -37,13 +37,13 @@ define([
          * @returns {PromptDetailsComponent}
          */
         renderFields: function() {
-            this.$('#vocab-definition .value').html(this.prompt.vocab.getDefinition());
-            this.$('#vocab-mnemonic .value').html(this.prompt.vocab.getMnemonicText());
-            this.$('#vocab-reading .value').html(this.prompt.vocab.getReadingElement());
-            this.$('#vocab-sentence .value').html(this.prompt.vocab.getSentenceWriting());
-            this.$('#vocab-style .value').html(this.prompt.vocab.getStyle());
-            this.$('#vocab-writing .value').addClass(this.prompt.vocab.getFontClass());
-            this.$('#vocab-writing .value').html(this.prompt.vocab.getWritingElement());
+            this.$('#vocab-definition .value').html(this.prompt.reviews.vocab.getDefinition());
+            this.$('#vocab-mnemonic .value').html(this.prompt.reviews.vocab.getMnemonicText());
+            this.$('#vocab-reading .value').html(this.prompt.reviews.vocab.getReadingElement());
+            this.$('#vocab-sentence .value').html(this.prompt.reviews.vocab.getSentenceWriting());
+            this.$('#vocab-style .value').html(this.prompt.reviews.vocab.getStyle());
+            this.$('#vocab-writing .value').addClass(this.prompt.reviews.vocab.getFontClass());
+            this.$('#vocab-writing .value').html(this.prompt.reviews.vocab.getWritingElement());
             this.updateDetailBanned();
             this.updateDetailStarred();
             return this;
@@ -66,7 +66,7 @@ define([
          */
         handleClickDetailAudio: function(event) {
             event.preventDefault();
-            this.prompt.vocab.play();
+            this.prompt.reviews.vocab.play();
         },
         /**
          * @method handleClickDetailBan
@@ -74,7 +74,7 @@ define([
          */
         handleClickDetailBan: function(event) {
             event.preventDefault();
-            this.prompt.vocab.toggleBanned();
+            this.prompt.reviews.vocab.toggleBanned();
             this.updateDetailBanned();
         },
         /**
@@ -97,7 +97,7 @@ define([
          */
         handleClickDetailStar: function(event) {
             event.preventDefault();
-            this.prompt.vocab.toggleStarred();
+            this.prompt.reviews.vocab.toggleStarred();
             this.updateDetailStarred();
         },
         /**
@@ -107,7 +107,7 @@ define([
         handleClickWritingElement: function(event) {
             event.preventDefault();
             var $element = $(event.currentTarget);
-            this.prompt.items.position = parseInt($element.data('position'), 10);
+            this.prompt.reviews.position = parseInt($element.data('position'), 10);
             this.prompt.renderPrompt();
         },
         /**
@@ -178,7 +178,7 @@ define([
          * @method updateDetailBanned
          */
         updateDetailBanned: function() {
-            if (this.prompt.vocab.isBanned()) {
+            if (this.prompt.reviews.vocab.isBanned()) {
                 this.$('#button-detail-ban').css('background-color', 'red');
             } else {
                 this.$('#button-detail-ban').css('background-color', '');
@@ -188,7 +188,7 @@ define([
          * @method updateDetailStarred
          */
         updateDetailStarred: function() {
-            if (this.prompt.vocab.isStarred()) {
+            if (this.prompt.reviews.vocab.isStarred()) {
                 this.$('#button-detail-star').css('background-color', 'yellow');
             } else {
                 this.$('#button-detail-star').css('background-color', '');

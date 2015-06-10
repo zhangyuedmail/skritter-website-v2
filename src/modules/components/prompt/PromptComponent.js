@@ -32,9 +32,8 @@ define([
             this.details = new PromptDetailsComponent({prompt: this});
             this.grading = new PromptGradingComponent({prompt: this});
             this.toolbar = new PromptToolbarComponent({prompt: this});
-            this.items = null;
+            this.reviews = null;
             this.teaching = false;
-            this.vocab = null;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
             this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
             this.listenTo(this.grading, 'select', this.handleSelectGrading);
@@ -58,7 +57,7 @@ define([
          * @returns {PromptComponent}
          */
         renderPrompt: function() {
-            switch (this.items.part) {
+            switch (this.reviews.part) {
                 case 'defn':
                     this.renderPromptDefn();
                     break;
@@ -79,7 +78,6 @@ define([
          * @returns {PromptComponent}
          */
         renderPromptDefn: function() {
-            console.log(this.items);
             this.canvas.reset();
             this.canvas.disableGrid();
             this.grading.unselect();
@@ -136,9 +134,9 @@ define([
         renderPromptTone: function() {
             this.canvas.reset();
             this.canvas.disableGrid();
-            this.canvas.drawCharacter('surface-background2', this.vocab.get('writing'), {
+            this.canvas.drawCharacter('surface-background2', this.item().vocab.get('writing'), {
                 color: '#ebeaf0',
-                font: this.vocab.getFontName()
+                font: this.item().vocab.getFontName()
             });
             this.canvas.drawShape('surface', this.character().getUserShape());
             this.details.revealDefinition();
@@ -157,21 +155,20 @@ define([
          * @returns {CanvasCharacter}
          */
         character: function() {
-            return this.items.getCharacter();
+            return this.reviews.getCharacter();
         },
         /**
          * @method handleCanvasClick
          */
         handleCanvasClick: function() {
             if (this.item().isComplete()) {
-                if (this.items.next()) {
+                if (this.reviews.next()) {
                     this.renderPrompt();
                 } else {
-                    console.log('PROMPT COMPLETE');
-                    this.trigger('complete');
+                    this.trigger('complete', this.reviews);
                 }
             } else {
-                switch (this.items.part) {
+                switch (this.reviews.part) {
                     case 'defn':
                         this.item().set('complete', true);
                         this.renderPrompt();
@@ -189,7 +186,7 @@ define([
          * @method handleCanvasInputUp
          */
         handleCanvasInputUp: function(points, shape) {
-            switch (this.items.part) {
+            switch (this.reviews.part) {
                 case 'rune':
                     this.recognizeRune(points, shape);
                     break;
@@ -244,17 +241,17 @@ define([
         },
         /**
          * @method item
-         * @returns {PromptItem}
+         * @returns {PromptReview}
          */
         item: function() {
-            return this.items.getItem();
+            return this.reviews.getItem();
         },
         /**
          * @method position
          * @returns {Number}
          */
         position: function() {
-            return this.items.position;
+            return this.reviews.position;
         },
         /**
          * @method recognizeRune
@@ -279,7 +276,7 @@ define([
          */
         recognizeTone: function(points, shape) {
             var stroke = this.character().recognize(points, shape);
-            var possibleTones = this.items.getToneNumbers();
+            var possibleTones = this.reviews.getToneNumbers();
             var expectedTone = this.character().getTone(possibleTones[0]);
             if (stroke) {
                 var targetShape = stroke.getTargetShape();
@@ -319,13 +316,12 @@ define([
         },
         /**
          * @method set
-         * @param {PromptItems} items
+         * @param {PromptReviews} reviews
          * @returns {PromptComponent}
          */
-        set: function(items) {
-            console.log('PROMPT:', items.getVocab(), items);
-            this.items = items;
-            this.vocab = items.getVocab();
+        set: function(reviews) {
+            console.log('PROMPT:', reviews.part, reviews.vocab.id, reviews);
+            this.reviews = reviews;
             this.canvas.reset();
             this.canvas.renderFields();
             this.details.renderFields();
