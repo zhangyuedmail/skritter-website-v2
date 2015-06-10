@@ -23,9 +23,17 @@ define([
          */
         model: DataItem,
         /**
+         * @method comparator
+         * @param {DataItem} item
+         * @returns {Number}
+         */
+        comparator: function(item) {
+            return item.get('next');
+        },
+        /**
          * @method fetchNext
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         fetchChanged: function(callbackSuccess, callbackError) {
             var self = this;
@@ -45,13 +53,20 @@ define([
                             next(result.cursor);
                         } else {
                             app.user.data.set('lastItemUpdate', Moment().unix());
-                            callbackSuccess();
+                            self.trigger('change', self);
+                            if (typeof callbackSuccess === 'function') {
+                                callbackSuccess();
+                            }
                         }
                     }, function(error) {
-                        callbackError(error);
+                        if (typeof callbackError === 'function') {
+                            callbackError(error);
+                        }
                     });
                 }, function(error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 });
             })();
         },
@@ -121,8 +136,8 @@ define([
         },
         /**
          * @method fetchNext
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
         fetchNext: function(callbackSuccess, callbackError) {
             var self = this;
@@ -228,12 +243,13 @@ define([
         loadNext: function(callbackSuccess, callbackError) {
             //TODO: figure out what is actually next
             if (this.length) {
-                this.get('mcfarljwtest1-zh-姓-0-rune').load(function(result) {
-                //this.at(0).load(function(result) {
-                    callbackSuccess(result);
-                }, function(error) {
-                    callbackError(error);
-                });
+                this.sort().filter(function(item) {
+                    return item.get('vocabIds').length;
+                })[0].load(function(result) {
+                        callbackSuccess(result);
+                    }, function(error) {
+                        callbackError(error);
+                    });
             } else {
                 callbackError(new Error('No items founds.'));
             }
