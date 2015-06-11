@@ -4,12 +4,14 @@
  */
 define([
     'core/modules/GelatoModel',
+    'modules/collections/PromptHistory',
     'modules/models/UserAuthentication',
     'modules/models/UserData',
     'modules/models/UserSettings',
     'modules/models/UserSubscription'
 ], function(
     GelatoModel,
+    PromptHistory,
     UserAuthentication,
     UserData,
     UserSettings,
@@ -28,6 +30,7 @@ define([
         initialize: function() {
             this.authentication = new UserAuthentication();
             this.data = new UserData();
+            this.history = new PromptHistory();
             this.settings = new UserSettings();
             this.subscription = new UserSubscription();
         },
@@ -43,7 +46,10 @@ define([
          * @returns {String}
          */
         getDataPath: function(path, includeLanguageCode) {
-            return includeLanguageCode ? this.id + '-' + this.getLanguageCode() + '-' + path : this.id + '-' + path;
+            if (includeLanguageCode) {
+                return this.id + '-' + this.getLanguageCode() + '-' + path;
+            }
+            return this.id + '-' + path;
         },
         /**
          * @method getDatabaseName
@@ -89,7 +95,6 @@ define([
             this.set('id', app.getSetting('user') || 'guest');
             this.authentication.load();
             this.settings.load();
-            this.subscription.load();
             if (this.isLoggedIn()) {
                 this.loadUser(callbackSuccess, callbackError);
             } else {
@@ -133,6 +138,8 @@ define([
          */
         loadUser: function(callbackSuccess, callbackError) {
             var self = this;
+            this.history.load();
+            this.subscription.load();
             Async.series([
                 function(callback) {
                     if (self.authentication.isExpired()) {
@@ -256,6 +263,8 @@ define([
                 localStorage.removeItem(app.user.getDataPath('authentication', false));
                 localStorage.removeItem(app.user.getDataPath('ja-data', false));
                 localStorage.removeItem(app.user.getDataPath('zh-data', false));
+                localStorage.removeItem(app.user.getDataPath('ja-history', false));
+                localStorage.removeItem(app.user.getDataPath('zh-history', false));
                 localStorage.removeItem(app.user.getDataPath('settings', false));
                 localStorage.removeItem(app.user.getDataPath('ja-stats', false));
                 localStorage.removeItem(app.user.getDataPath('zh-stats', false));

@@ -16,6 +16,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.syncing = false;
             this.on('add change remove', this.cache);
         },
         /**
@@ -52,29 +53,36 @@ define([
         },
         /**
          * @method save
+         * @param {Number} startFrom
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
-        save: function(callbackSuccess, callbackError) {
+        save: function(startFrom, callbackSuccess, callbackError) {
             var self = this;
-            Async.each(this.models, function(model, callback) {
-                app.api.postReviews(model.get('reviews'), function() {
-                    self.remove(model);
-                    callback();
+            var reviews = this.slice(startFrom || 0, Number.MAX_VALUE);
+            if (!this.syncing) {
+                this.syncing = true;
+                Async.each(reviews, function(review, callback) {
+                    console.log('SAVING REVIEW:', review);
+                    app.api.postReviews(review.get('reviews'), function() {
+                        self.remove(review);
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
                 }, function(error) {
-                    callback(error);
+                    self.syncing = false;
+                    if (error) {
+                        if (typeof callbackError === 'function') {
+                            callbackError(error);
+                        }
+                    } else {
+                        if (typeof callbackSuccess === 'function') {
+                            callbackSuccess();
+                        }
+                    }
                 });
-            }, function(error) {
-                if (error) {
-                    if (typeof callbackError === 'function') {
-                        callbackError(error);
-                    }
-                } else {
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess();
-                    }
-                }
-            });
+            }
         }
     });
 
