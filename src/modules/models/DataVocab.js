@@ -59,7 +59,7 @@ define([
          */
         getCanvasTones: function() {
             var characters = [];
-            var strokes = this.getStrokes();
+            var strokes = this.getCharacters();
             for (var i = 0, length = strokes.length; i < length; i++) {
                 var tones = app.user.data.strokes.get('tones');
                 if (tones) {

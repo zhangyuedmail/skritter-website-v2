@@ -23,6 +23,11 @@ define([
             this.item = null;
             this.vocab = null;
         },
+         /**
+         * @property idAttribute
+         * @type {String}
+         */
+        idAttribute: 'id',
         /**
          * @method defaults
          * @returns {Object}
@@ -38,6 +43,20 @@ define([
             };
         },
         /**
+         * @method getActualInterval
+         * @returns {number}
+         */
+        getActualInterval: function() {
+            return this.get('submitTime') - this.item.last;
+        },
+        /**
+         * @method getNewInterval
+         * @returns {Number}
+         */
+        getNewInterval: function() {
+            return app.fn.interval.quantify(this.item, this.get('score'));
+        },
+        /**
          * @method getGradingColor
          * @returns {String}
          */
@@ -49,14 +68,22 @@ define([
          * @returns {Number}
          */
         getReviewingTime: function() {
-            return (this.get('reviewingStop') - this.get('reviewingStart')) / 1000;
+            var reviewingTime = (this.get('reviewingStop') - this.get('reviewingStart')) / 1000;
+            if (this.collection.part === 'tone') {
+                return reviewingTime > 15 ? 15 : reviewingTime;
+            }
+            return reviewingTime > 30 ? 30 : reviewingTime;
         },
         /**
          * @method getThinkingTime
          * @returns {Number}
          */
         getThinkingTime: function() {
-            return (this.get('thinkingStop') - this.get('reviewingStart')) / 1000;
+            var thinkingTime = (this.get('thinkingStop') - this.get('reviewingStart')) / 1000;
+            if (this.collection.part === 'tone') {
+                return thinkingTime > 10 ? 10 : thinkingTime;
+            }
+            return thinkingTime > 15 ? 15 : thinkingTime;
         },
         /**
          * @method getVocab
@@ -70,10 +97,7 @@ define([
          * @returns {Boolean}
          */
         isComplete: function() {
-            if (['rune', 'tone'].indexOf(this.collection.part) > -1) {
-                return this.character.isComplete();
-            }
-            return this.get('complete');
+            return this.character ? this.character.isComplete() : this.get('complete');
         },
         /**
          * @method start

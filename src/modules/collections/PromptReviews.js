@@ -20,6 +20,7 @@ define([
         initialize: function(models, options) {
             models = models || {};
             options = options || {};
+            this.item = null;
             this.part = null;
             this.position = 0;
         },
@@ -29,39 +30,135 @@ define([
          */
         model: PromptReview,
         /**
-         * @method getCharacter
-         * @returns {CanvasCharacter}
+         * @method active
+         * @returns {PromptReview}
          */
-        getCharacter: function() {
-            return this.getItem().character;
+        active: function() {
+            return this.at(this.position);
+        },
+        /**
+         * @method generateBaseReview
+         * @returns {Object}
+         */
+        generateBaseReview: function() {
+            //TODO: talk to scott about defaults
+            return {
+                itemId: this.item.id,
+                score: this.getScore(),
+                bearTime: true,
+                submitTime: this.getSubmitTime(),
+                reviewTime: this.getReviewingTime(),
+                thinkingTime: this.getThinkingTime(),
+                currentInterval: this.item.interval,
+                actualInterval: this.getActualInterval(),
+                newInterval: this.getNewInterval(),
+                wordGroup: this.group,
+                previousInterval: this.item.previousInterval || 0,
+                previousSuccess: this.item.previousSuccess
+            };
+        },
+        /**
+         * @method generateChildReviews
+         * @returns {Array}
+         */
+        generateChildReviews: function() {
+            //TODO: talk to scott about defaults
+            var reviews = [];
+            for (var i = 0, length = this.length; i < length; i++) {
+                var review = this.at(i);
+                reviews.push({
+                    itemId: review.item.id,
+                    score: review.get('score'),
+                    bearTime: false,
+                    submitTime: review.get('submitTime'),
+                    reviewTime: review.getReviewingTime(),
+                    thinkingTime: review.getThinkingTime(),
+                    currentInterval: review.item.interval,
+                    actualInterval: review.getActualInterval(),
+                    newInterval: review.getNewInterval(),
+                    wordGroup: this.group,
+                    previousInterval: review.item.previousInterval || 0,
+                    previousSuccess: review.item.previousSuccess
+                });
+            }
+            return reviews;
+        },
+        /**
+         * @method getActualInterval
+         * @returns {number}
+         */
+        getActualInterval: function() {
+            return this.getSubmitTime() - this.item.last;
+        },
+        /**
+         * @method getNewInterval
+         * @returns {Number}
+         */
+        getNewInterval: function() {
+            return app.fn.interval.quantify(this.item, this.getScore());
+        },
+        /**
+         * @method getReviewingTime
+         * @returns {Number}
+         */
+        getReviewingTime: function() {
+            var reviewingTime = 0;
+            for (var i = 0, length = this.length; i < length; i++) {
+                reviewingTime += this.at(i).getReviewingTime();
+            }
+            return reviewingTime;
+        },
+        /**
+         * @method getScore
+         * @returns {Number}
+         */
+        getScore: function() {
+            var score = this.at(0).get('score');
+            if (this.length > 1) {
+                var totalCount = this.length;
+                var totalScore = 0;
+                var totalWrong = 0;
+                for (var i = 0, length = this.length; i < length; i++) {
+                    var reviewScore = this.at(i).get('score');
+                    totalScore += reviewScore;
+                    if (reviewScore === 3) {
+                        totalWrong++;
+                    }
+                }
+                if (totalCount === 2 && totalWrong === 1) {
+                    score = 1;
+                } else if (totalWrong > 1) {
+                    score = 1;
+                } else {
+                    score = Math.floor(totalScore / totalCount);
+                }
+            }
+            return score;
+        },
+        /**
+         * @method getSubmitTime
+         * @returns {Number}
+         */
+        getSubmitTime: function() {
+            return this.at(0).get('submitTime');
+        },
+        /**
+         * @method getThinkingTime
+         * @returns {Number}
+         */
+        getThinkingTime: function() {
+            var thinkingTime = 0;
+            for (var i = 0, length = this.length; i < length; i++) {
+                thinkingTime += this.at(i).getThinkingTime();
+            }
+            return thinkingTime;
         },
         /**
          * @method getToneNumbers
          * @returns {Array}
          */
         getToneNumbers: function() {
-            return this.getVocab().getToneNumbers(this.position);
-        },
-        /**
-         * @method getVocabId
-         * @returns {String}
-         */
-        getVocabId: function() {
-            return this.at(0).vocab.id;
-        },
-        /**
-         * @method getItem
-         * @returns {PromptReview}
-         */
-        getItem: function() {
-            return this.at(this.position);
-        },
-        /**
-         * @method getVocab
-         * @returns {DataVocab}
-         */
-        getVocab: function() {
-            return app.user.data.vocabs.get(this.getVocabId());
+            return this.vocab.getToneNumbers(this.position);
         },
         /**
          * @method isFirst
@@ -98,6 +195,44 @@ define([
             }
             this.position--;
             return true;
+        },
+        /**
+         * @method updateItems
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        updateItems: function(callbackSuccess, callbackError) {
+            var updatedItems = [];
+            var reviews = [this.generateBaseReview()];
+            if (this.length > 1) {
+                reviews = reviews.concat(this.generateChildReviews());
+            }
+            Async.eachSeries(reviews, function(review, callback) {
+                var item = app.user.data.items.get(review.itemId);
+                item.set({
+                    changed: review.submitTime,
+                    last: review.submitTime,
+                    interval: review.newInterval,
+                    next: review.submitTime + review.newInterval,
+                    previousInterval: review.currentInterval,
+                    previousSuccess: review.score > 1,
+                    reviews: item.get('reviews') + 1,
+                    successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
+                    timeStudied: item.get('timeStudied') + review.reviewTime
+                }).cache(function() {
+                    updatedItems.push(item);
+                    callback();
+                }, function(error) {
+                    callback(error);
+                });
+            }, function(error) {
+                if (error) {
+                    callbackError(error);
+                } else {
+                    app.user.history.add({reviews: reviews, timestamp: Date.now()});
+                    callbackSuccess();
+                }
+            });
         }
     });
 

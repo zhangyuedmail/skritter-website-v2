@@ -19,11 +19,12 @@ define([
          */
         initialize: function() {
             this.containedItems = [];
+            this.containedVocabs = [];
             this.decomps = [];
+            this.readiness = 0;
             this.sentences = [];
             this.strokes = [];
             this.vocabs = [];
-            this.on('change', this.cache);
         },
         /**
          * @property idAttribute
@@ -41,9 +42,19 @@ define([
         },
         /**
          * @method cache
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
-        cache: function() {
-            app.user.data.storage.put('items', this.toJSON());
+        cache: function(callbackSuccess, callbackError) {
+            app.user.data.storage.put('items', this.toJSON(), function() {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
         },
         /**
          * @method getCharacters
@@ -60,33 +71,43 @@ define([
             var reviews = new PromptReviews();
             var part = this.get('part');
             var vocab = this.getVocab();
-            var containedVocabIds = vocab.getContainedVocabIds();
             var characters = [];
-            var vocabIds = [];
+            var items = [];
+            var vocabs = [];
             if (['rune', 'tone'].indexOf(part) > -1) {
-                if (containedVocabIds.length) {
-                    vocabIds = containedVocabIds;
-                } else {
-                    vocabIds = [vocab.id];
-                }
-                if (part === 'tone') {
-                    characters = vocab.getCanvasTones();
-                } else {
-                    characters = vocab.getCanvasCharacters();
-                }
+                characters = (part === 'tone') ? vocab.getCanvasTones() : vocab.getCanvasCharacters();
+                items = this.containedItems.length ? this.containedItems : [this];
+                vocabs = this.containedVocabs.length ? this.containedVocabs : [vocab];
             } else {
-                vocabIds = [vocab.id];
+                items = [this];
+                vocabs = [vocab];
             }
-            for (var i = 0, length = vocabIds.length; i < length; i++) {
+            for (var i = 0, length = vocabs.length; i < length; i++) {
                 var review = new PromptReview();
-                review.character = characters.length ? characters[i] : null;
-                review.item = this.toJSON();
-                review.vocab = app.user.data.vocabs.get(vocabIds[i]);
+                review.character = characters[i];
+                review.item = items[i].toJSON();
+                review.vocab = vocabs[i];
                 reviews.add(review);
             }
-            reviews.vocab = vocab;
+            reviews.group = Date.now() + '_' + this.id;
+            reviews.item = this.toJSON();
             reviews.part = part;
+            reviews.vocab = vocab;
             return reviews;
+        },
+        /**
+         * @method getReadiness
+         * @returns {Number}
+         */
+        getReadiness: function() {
+            if (this.get('vocabIds').length) {
+                var actualAgo = Moment().unix() - this.get('last');
+                var scheduledAgo = this.get('next') - this.get('last');
+                this.readiness = actualAgo / scheduledAgo;
+            } else {
+                this.readiness = 0;
+            }
+            return this.readiness;
         },
         /**
          * @method getVocab

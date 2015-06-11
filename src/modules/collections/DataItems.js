@@ -28,7 +28,7 @@ define([
          * @returns {Number}
          */
         comparator: function(item) {
-            return item.get('next');
+            return -item.getReadiness();
         },
         /**
          * @method fetchNext
@@ -41,11 +41,7 @@ define([
                 app.api.fetchItems({
                     cursor: cursor,
                     offset: app.user.data.get('lastItemUpdate'),
-                    sort: 'changed',
-                    include_contained: true,
-                    include_decomps: true,
-                    include_strokes: true,
-                    include_vocabs: true
+                    sort: 'changed'
                 }, function(result) {
                     app.user.data.insert(result, function() {
                         if (result.cursor) {
@@ -241,7 +237,6 @@ define([
          * @param {Function} callbackError
          */
         loadNext: function(callbackSuccess, callbackError) {
-            //TODO: figure out what is actually next
             if (this.length) {
                 this.sort().filter(function(item) {
                     return item.get('vocabIds').length;
