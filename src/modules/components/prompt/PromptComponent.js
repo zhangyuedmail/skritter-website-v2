@@ -36,6 +36,8 @@ define([
             this.teaching = false;
             this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
             this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
+            this.listenTo(this.canvas, 'navigate:left', this.handleNavigateLeft);
+            this.listenTo(this.canvas, 'navigate:right', this.handleNavigateRight);
             this.listenTo(this.grading, 'select', this.handleSelectGrading);
             this.on('resize', this.resize);
         },
@@ -71,6 +73,11 @@ define([
                     this.renderPromptTone();
                     break;
             }
+            if (this.reviews.isFirst()) {
+                this.$('#navigate-left').hide();
+            } else {
+                this.$('#navigate-left').show();
+            }
             return this;
         },
         /**
@@ -81,9 +88,10 @@ define([
             this.canvas.reset();
             this.canvas.disableGrid();
             this.grading.unselect();
-            if (this.item().isComplete()) {
+            if (this.review().isComplete()) {
                 this.handlePromptDefnComplete();
             } else {
+                this.review().start();
                 this.canvas.revealDefinitionQuestion();
                 this.details.hideDefinition();
                 this.details.revealReading();
@@ -99,9 +107,10 @@ define([
             this.canvas.reset();
             this.canvas.disableGrid();
             this.grading.unselect();
-            if (this.item().isComplete()) {
+            if (this.review().isComplete()) {
                 this.handlePromptRdngComplete();
             } else {
+                this.review().start();
                 this.canvas.revealReadingQuestion();
                 this.details.hideReading();
                 this.details.revealWriting();
@@ -119,9 +128,10 @@ define([
             this.details.revealDefinition();
             this.details.selectWriting(this.position());
             this.grading.unselect();
-            if (this.item().isComplete()) {
+            if (this.review().isComplete()) {
                 this.handlePromptRuneComplete();
             } else {
+                this.review().start();
                 this.canvas.enableInput();
                 this.details.revealReading();
             }
@@ -134,17 +144,18 @@ define([
         renderPromptTone: function() {
             this.canvas.reset();
             this.canvas.disableGrid();
-            this.canvas.drawCharacter('surface-background2', this.item().vocab.get('writing'), {
+            this.canvas.drawCharacter('surface-background2', this.review().vocab.get('writing'), {
                 color: '#ebeaf0',
-                font: this.item().vocab.getFontName()
+                font: this.review().vocab.getFontName()
             });
             this.canvas.drawShape('surface', this.character().getUserShape());
             this.details.revealDefinition();
             this.details.revealWriting();
             this.grading.unselect();
-            if (this.item().isComplete()) {
+            if (this.review().isComplete()) {
                 this.handlePromptToneComplete();
             } else {
+                this.review().start();
                 this.canvas.enableInput();
                 this.details.revealReading();
             }
@@ -155,35 +166,37 @@ define([
          * @returns {CanvasCharacter}
          */
         character: function() {
-            return this.reviews.getCharacter();
+            return this.review().character;
         },
         /**
          * @method handleCanvasClick
          */
         handleCanvasClick: function() {
-            if (this.item().isComplete()) {
-                if (this.reviews.next()) {
-                    this.renderPrompt();
-                } else {
-                    this.trigger('complete', this.reviews);
-                }
+            if (this.review().isComplete()) {
+                this.next();
             } else {
                 switch (this.reviews.part) {
                     case 'defn':
-                        this.item().set('complete', true);
+                        this.review().set('complete', true);
                         this.renderPrompt();
                         break;
                     case 'rdng':
-                        this.item().set('complete', true);
+                        this.review().set('complete', true);
                         this.renderPrompt();
                         break;
-                    default:
-                    //TODO: fade the background shadow
+                    case 'rune':
+                        this.review().stopThinking();
+                        break;
+                    case 'tone':
+                        this.review().stopThinking();
+                        break;
                 }
             }
         },
         /**
          * @method handleCanvasInputUp
+         * @param {Array} points
+         * @param {createjs.Shape} shape
          */
         handleCanvasInputUp: function(points, shape) {
             switch (this.reviews.part) {
@@ -196,55 +209,76 @@ define([
             }
         },
         /**
+         * @method handleNavigateLeft
+         */
+        handleNavigateLeft: function() {
+            this.review().stop();
+            this.previous();
+        },
+        /**
+         * @method handleNavigateRight
+         */
+        handleNavigateRight: function() {
+            this.review().stop();
+            this.next();
+        },
+        /**
          * @method handlePromptDefnComplete
          */
         handlePromptDefnComplete: function() {
+            this.review().stop();
             this.canvas.revealDefinitionAnswer();
             this.details.revealDefinition();
-            this.grading.select(this.item().get('score'));
+            this.grading.select(this.review().get('score'));
         },
         /**
          * @method handlePromptRdngComplete
          */
         handlePromptRdngComplete: function() {
+            this.review().stop();
             this.canvas.revealReadingAnswer();
             this.details.revealReading();
-            this.grading.select(this.item().get('score'));
+            this.grading.select(this.review().get('score'));
         },
         /**
          * @method handlePromptRuneComplete
          */
         handlePromptRuneComplete: function() {
+            this.review().stop();
             this.canvas.disableInput();
-            this.canvas.injectLayerColor('surface', this.item().getGradingColor());
+            this.canvas.injectLayerColor('surface', this.review().getGradingColor());
             this.details.revealWriting(this.position());
-            this.grading.select(this.item().get('score'));
+            this.grading.select(this.review().get('score'));
         },
         /**
          * @method handlePromptToneComplete
          */
         handlePromptToneComplete: function() {
+            this.review().stop();
             this.canvas.disableInput();
-            this.canvas.injectLayerColor('surface', this.item().getGradingColor());
-            this.details.revealReading(this.position(), true);
-            this.grading.select(this.item().get('score'));
+            this.canvas.injectLayerColor('surface', this.review().getGradingColor());
+            this.details.revealReading(this.position());
+            this.grading.select(this.review().get('score'));
         },
         /**
          * @method handleSelectGrading
          * @param {Number} score
          */
         handleSelectGrading: function(score) {
-            this.item().set('score', score);
+            this.review().set('score', score);
             if (this.character().isComplete()) {
                 this.renderPrompt();
             }
         },
         /**
-         * @method item
-         * @returns {PromptReview}
+         * @method next
          */
-        item: function() {
-            return this.reviews.getItem();
+        next: function() {
+            if (this.reviews.next()) {
+                this.renderPrompt();
+            } else {
+                this.trigger('complete', this.reviews);
+            }
         },
         /**
          * @method position
@@ -252,6 +286,16 @@ define([
          */
         position: function() {
             return this.reviews.position;
+        },
+        /**
+         * @method previous
+         */
+        previous: function() {
+            if (this.reviews.previous()) {
+                this.renderPrompt();
+            } else {
+                this.trigger('previous', this.reviews);
+            }
         },
         /**
          * @method recognizeRune
@@ -283,10 +327,10 @@ define([
                 var userShape = stroke.getUserShape();
                 if (possibleTones.indexOf(stroke.get('tone')) > -1) {
                     this.canvas.tweenShape('surface', userShape, targetShape);
-                    this.item().set('score', 3);
+                    this.review().set('score', 3);
                 } else {
                     this.canvas.drawShape('surface', expectedTone.getTargetShape());
-                    this.item().set('score', 1);
+                    this.review().set('score', 1);
                 }
                 if (this.character().isComplete()) {
                     this.handlePromptToneComplete();
@@ -313,6 +357,13 @@ define([
             var panelRight = this.$('#panel-right');
             this.canvas.resize(450);
             return this;
+        },
+        /**
+         * @method review
+         * @returns {PromptReview}
+         */
+        review: function() {
+            return this.reviews.active();
         },
         /**
          * @method set

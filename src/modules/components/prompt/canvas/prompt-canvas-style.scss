@@ -53,4 +53,16 @@ gelato-component[data-name="prompt-canvas"] {
     .writing { font-size: 128px; }
   }
 
+  #prompt-navigation {
+    i {
+      font-size: 64px;
+      opacity: 0.2;
+      position: absolute;
+      top: 190px;
+      &:hover { opacity: 0.6; }
+    }
+    #navigate-left { left: -50px; }
+    #navigate-right { right: -50px; }
+  }
+
 }
