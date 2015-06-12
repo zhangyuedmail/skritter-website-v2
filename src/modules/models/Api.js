@@ -248,6 +248,42 @@ define([
             });
         },
         /**
+         * @method fetchReviewErrors
+         * @param {Number} [offset]
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        fetchReviewErrors: function(offset, callbackSuccess, callbackError) {
+            var self = this;
+            var errors = [];
+            (function next(cursor) {
+                $.ajax({
+                    url: self.getUrl() + 'reviews/errors',
+                    headers: self.getHeaders(),
+                    context: self,
+                    type: 'GET',
+                    data: {
+                        bearer_token: self.getToken(),
+                        cursor: cursor,
+                        offset: offset
+                    }
+                }).done(function(data) {
+                    errors = errors.concat(data.ReviewErrors);
+                    if (data.statusCode === 200) {
+                        if (data.cursor) {
+                            setTimeout(next, 100, data.cursor);
+                        } else {
+                            callbackSuccess(errors);
+                        }
+                    } else {
+                        callbackError(data);
+                    }
+                }).fail(function(error) {
+                    callbackError(error);
+                });
+            })();
+        },
+        /**
          * @method fetchStats
          * @param {Object} [options]
          * @param {Function} callbackSuccess
@@ -448,8 +484,12 @@ define([
                     bearer_token: this.getToken(),
                     fields: options.fields,
                     ids: options.ids,
+                    include_containing: options.include_containing,
                     include_decomps: options.include_decomps,
+                    include_heisigs: options.include_heisigs,
+                    include_sentences: options.include_sentences,
                     include_strokes: options.include_strokes,
+                    include_top_mnemonics: options.include_top_mnemonics,
                     q: options.q
                 }
             }).done(function(data) {
@@ -522,6 +562,31 @@ define([
                 context: this,
                 type: 'POST',
                 data: JSON.stringify(body)
+            }).done(function(data) {
+                if (data.statusCode === 200) {
+                    callbackSuccess();
+                } else {
+                    callbackError(data);
+                }
+            }).fail(function(error) {
+                callbackError(error);
+            });
+        },
+        /**
+         * @method postReviews
+         * @param {Array} reviews
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        postReviews: function(reviews, callbackSuccess, callbackError) {
+            $.ajax({
+                url: this.getUrl() + 'reviews' +
+                '?bearer_token=' + this.getToken() +
+                '&spaceItems=false',
+                headers: this.getHeaders(),
+                context: this,
+                type: 'POST',
+                data: JSON.stringify(reviews)
             }).done(function(data) {
                 if (data.statusCode === 200) {
                     callbackSuccess();
