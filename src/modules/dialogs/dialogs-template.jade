@@ -1,0 +1,12 @@
+gelato-dialog(data-name='about')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(data-action='close', type='button', data-dismiss='modal')
+            span ×
+          h4.modal-title About
+        .modal-body
+          p This is an example of a Gelato Framework popup dialog!
+        .modal-footer
+          button.btn.btn-default(data-action='close', type='button', data-dismiss='modal') Close
