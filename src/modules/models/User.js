@@ -221,7 +221,7 @@ define([
                     callbackError(error);
                 } else {
                     var now = Moment().unix();
-                    self.data.set({lastItemUpdate: now, lastVocabUpdate: now});
+                    self.data.set({lastErrorCheck: now, lastItemUpdate: now, lastVocabUpdate: now});
                     app.user.data.set('lastItemUpdate', Moment().startOf('day').unix());
                     app.setSetting('user', self.id);
                     callbackSuccess();

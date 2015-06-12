@@ -52,6 +52,7 @@ define([
          * @type Object
          */
         defaults: {
+            lastErrorCheck: 0,
             lastItemUpdate: 0,
             lastVocabUpdate: 0
         },
@@ -92,6 +93,14 @@ define([
         cache: function() {
             localStorage.setItem(app.user.getDataPath('data', true), JSON.stringify(this.toJSON()));
             return this;
+        },
+        /**
+         * @method fixReviewErrors
+         */
+        fixReviewErrors: function() {
+            app.api.fetchReviewErrors(this.get('lastErrorCheck'), function(errors) {
+                console.log('REVIEW ERRORS:', errors);
+            }, function(error) {});
         },
         /**
          * @method initializeStorage
