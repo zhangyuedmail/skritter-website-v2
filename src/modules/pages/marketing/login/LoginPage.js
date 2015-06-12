@@ -63,11 +63,9 @@ define([
                 return;
             }
             this.disableForm('#login-form');
-            app.dialogs.open('loading');
             app.user.login(fieldUsername, fieldPassword, function() {
                 app.router.navigate('', {trigger: false});
-                app.dialogs.once('hidden', app.reload);
-                app.dialogs.close();
+                app.reload();
             }, function(error) {
                 self.$('#response-message').text(JSON.stringify(error));
                 self.enableForm('#login-form');

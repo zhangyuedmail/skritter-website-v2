@@ -45,6 +45,7 @@ define([
         render: function() {
             this.renderTemplate(Template);
             this.prompt.setElement(this.$('#prompt-container')).render();
+            this.prompt.hide();
             return this;
         },
         /**
@@ -52,8 +53,13 @@ define([
          * @param {PromptReviews} reviews
          */
         handlePromptComplete: function(reviews) {
-            this.item.set('next', 9999999999999);
-            this.loadNext();
+            var self = this;
+            reviews.updateItems(function() {
+                app.user.history.save();
+                self.loadNext();
+            }, function(error) {
+                console.error('ITEM UPDATE ERROR:', error);
+            });
         },
         /**
          * @method load
@@ -62,9 +68,17 @@ define([
          * @returns {StudyPage}
          */
         load: function(listId, sectionId) {
+            var self = this;
             this.listId = listId || null;
             this.sectionId = sectionId || null;
-            this.loadNext();
+            self.loadNext();
+            /**
+            app.user.data.items.fetchNext(function() {
+                self.loadNext();
+            }, function(error) {
+                console.error(error);
+            });
+             **/
             return this;
         },
         /**
@@ -75,7 +89,8 @@ define([
             var self = this;
             app.user.data.items.loadNext(function(result) {
                 self.item = result;
-                self.prompt.set(result.getPromptReviews());
+                self.prompt.set(self.item.getPromptReviews());
+                self.prompt.show();
             }, function(error) {
                 console.error(error);
             });
