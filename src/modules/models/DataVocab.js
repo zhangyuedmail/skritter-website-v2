@@ -109,7 +109,7 @@ define([
          * @returns {String}
          */
         getHeisig: function() {
-            return null;
+            return this.get('heisigDefinition');
         },
         /**
          * @method getMnemonic
