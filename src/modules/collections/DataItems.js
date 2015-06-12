@@ -44,8 +44,8 @@ define([
                     sort: 'changed'
                 }, function(result) {
                     app.user.data.insert(result, function() {
+                        self.add(result.Items, {merge: true});
                         if (result.cursor) {
-                            self.add(result.Items, {merge: true});
                             next(result.cursor);
                         } else {
                             app.user.data.set('lastItemUpdate', Moment().unix());
