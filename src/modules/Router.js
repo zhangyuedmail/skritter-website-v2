@@ -108,6 +108,7 @@ define([
             'tutorial/:module': 'showTutorial',
             'tutorial/:module/:index': 'showTutorial',
             'words': 'showWords',
+            'words/:vocabId': 'showWords',
             '*route': 'showDefault'
         },
         /**
@@ -316,10 +317,11 @@ define([
         },
         /**
          * @method showWords
+         * @param {String} vocabId
          */
-        showWords: function() {
+        showWords: function(vocabId) {
             this.page = new WordsPage();
-            this.page.render();
+            this.page.render().load(vocabId);
         }
     });
 
