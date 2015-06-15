@@ -133,7 +133,9 @@ define([
          * @returns {Object}
          */
         getGoal: function() {
-            return this.get('goals')[app.user.getLanguageCode()];
+            var goal = this.get('goals')[app.user.getLanguageCode()];
+            var type = Object.keys(goal)[0];
+            return {type: type, value: goal[type]};
         },
         /**
          * @method isJIT
@@ -219,11 +221,10 @@ define([
          * @returns {UserSettings}
          */
         setGoal: function(type, value) {
-            var languageCode = app.user.getLanguageCode();
+            var goal = {};
             var goals = this.get('goals');
-            var newGoal = {};
-            newGoal[type] = parseInt(value, 10);
-            goals[languageCode] = newGoal;
+            goal[type] = parseInt(value, 10);
+            goals[app.user.getLanguageCode()] = goal;
             this.set('goals', goals);
             this.save();
             return this;
