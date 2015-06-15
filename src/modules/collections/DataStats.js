@@ -137,7 +137,7 @@ define([
             var currentStreak = 0;
             var timeStudied = this.pluck('timeStudied');
             for (var i = 0, length = timeStudied.length; i < length; i++) {
-                if (timeStudied[i].day > 0) {
+                if (timeStudied[i].day !== 0) {
                     currentStreak++;
                 }
                 if (currentStreak > bestStreak) {
