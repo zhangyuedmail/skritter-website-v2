@@ -26,11 +26,13 @@ define([
             this.doughnutList = null;
             this.heatmap = new CalHeatMap();
             this.listQueue = new ListsTableComponent();
+            this.listenTo(app.dialogs, 'goal-settings:save', this.saveGoalSettings);
+            this.listenTo(app.dialogs, 'goal-settings:show', this.renderGoalSettings);
             this.listenTo(app.user.data.items, 'add change', this.renderDailyGoal);
             this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
             this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
             this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
-            this.listenTo(app.user.data.vocablists, 'add change', this.renderListQueue);
+            //this.listenTo(app.user.data.vocablists, 'add change', this.renderListQueue);
         },
         /**
          * @property title
@@ -53,7 +55,7 @@ define([
             this.renderHeatmap();
             this.renderAllTime();
             this.renderDailyGoal();
-            this.renderListQueue();
+            //this.renderListQueue();
             return this;
         },
         /**
@@ -84,15 +86,13 @@ define([
         renderGoalDoughnut: function() {
             var context = this.$('#goal-doughnut').get(0).getContext('2d');
             var goal = app.user.settings.getGoal();
-            var goalType = Object.keys(goal)[0];
-            var goalValue = goal[goalType];
             var data = [];
-            if (goalType === 'items') {
+            if (goal.type === 'items') {
                 //TODO: pull doughnut data from stats
-                var remaining = goalValue - app.user.data.items.getReviewedCount();
+                var remaining = goal.value - app.user.data.items.getReviewedCount();
                 remaining = remaining < 0 ? 0 : remaining;
                 data = [
-                    {value: goalValue - remaining, color:'#c5da4b'},
+                    {value: goal.value - remaining, color:'#c5da4b'},
                     {value: remaining, color: '#efeef3'}
                 ];
             } else {
@@ -104,6 +104,15 @@ define([
                     animateRotate : false
                 }
             );
+        },
+        /**
+         * @method renderGoalSettings
+         * @param {jQuery} dialog
+         */
+        renderGoalSettings: function(dialog) {
+            var goal = app.user.settings.getGoal();
+            dialog.find('input[value="' + goal.type + '"]').prop('checked', true);
+            dialog.find('#goal-value').val(goal.value);
         },
         /**
          * @method renderListDoughnut
@@ -153,7 +162,7 @@ define([
                 name: 'Name',
                 progress: 'Progress'
             });
-            //this.renderListDoughnut();
+            this.renderListDoughnut();
             return this;
         },
         /**
@@ -161,6 +170,16 @@ define([
          * @type {Object}
          */
         events: {},
+        /**
+         * @method saveGoalSettings
+         * @param {jQuery} dialog
+         */
+        saveGoalSettings: function(dialog) {
+            var goalType = dialog.find('input[name="goal-type"]:checked').val();
+            var goalValue = dialog.find('#goal-value').val();
+            app.user.settings.setGoal(goalType, goalValue);
+            this.renderGoalDoughnut();
+        },
         /**
          * @method updateHeatmap
          */

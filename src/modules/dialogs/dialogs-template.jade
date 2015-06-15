@@ -10,3 +10,22 @@ gelato-dialog(data-name='about')
           p This is an example of a Gelato Framework popup dialog!
         .modal-footer
           button.btn.btn-default(data-action='close', type='button', data-dismiss='modal') Close
+gelato-dialog(data-name='goal-settings')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(data-action='close', type='button', data-dismiss='modal')
+            span ×
+          h4.modal-title.text-uppercase Daily Goal
+        .modal-body.text-center
+          p I want to study
+          input#goal-value(type="number", value="20")
+          label.radio-inline
+            input(type="radio", name="goal-type", value="items", checked="checked")
+            | items
+          label.radio-inline
+            input(type="radio", name="goal-type", value="time")
+            | minutes
+        .modal-footer.text-center
+          button.btn.btn-success(data-action='save', type='button', data-dismiss='modal') Save
