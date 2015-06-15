@@ -165,8 +165,9 @@ define([
                 this.navigate('dashboard', {trigger: false});
                 this.showDashboard();
             } else {
-                this.navigate('', {trigger: false});
-                this.showLanding();
+                //TODO: revert to marketing
+                this.navigate('login', {trigger: false});
+                this.showLogin();
             }
         },
         /**
