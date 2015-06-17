@@ -41,20 +41,19 @@ define([
          * @returns {Object}
          */
         generateBaseReview: function() {
-            //TODO: talk to scott about defaults
             return {
                 itemId: this.item.id,
-                score: this.getScore(),
+                score: this.getScore() | 3,
                 bearTime: true,
                 submitTime: this.getSubmitTime(),
-                reviewTime: this.getReviewingTime(),
-                thinkingTime: this.getThinkingTime(),
-                currentInterval: this.item.interval,
-                actualInterval: this.getActualInterval(),
+                reviewTime: this.getReviewingTime() || 5,
+                thinkingTime: this.getThinkingTime() || 1,
+                currentInterval: this.item.interval || 0,
+                actualInterval: this.getActualInterval() || 0,
                 newInterval: this.getNewInterval(),
                 wordGroup: this.group,
                 previousInterval: this.item.previousInterval || 0,
-                previousSuccess: this.item.previousSuccess
+                previousSuccess: this.item.previousSuccess || false
             };
         },
         /**
@@ -62,23 +61,22 @@ define([
          * @returns {Array}
          */
         generateChildReviews: function() {
-            //TODO: talk to scott about defaults
             var reviews = [];
             for (var i = 0, length = this.length; i < length; i++) {
                 var review = this.at(i);
                 reviews.push({
                     itemId: review.item.id,
-                    score: review.get('score'),
+                    score: review.get('score') | 3,
                     bearTime: false,
                     submitTime: review.get('submitTime'),
-                    reviewTime: review.getReviewingTime(),
-                    thinkingTime: review.getThinkingTime(),
-                    currentInterval: review.item.interval,
-                    actualInterval: review.getActualInterval(),
+                    reviewTime: review.getReviewingTime() || 5,
+                    thinkingTime: review.getThinkingTime() || 1,
+                    currentInterval: review.item.interval || 0,
+                    actualInterval: review.getActualInterval() || 0,
                     newInterval: review.getNewInterval(),
                     wordGroup: this.group,
                     previousInterval: review.item.previousInterval || 0,
-                    previousSuccess: review.item.previousSuccess
+                    previousSuccess: review.item.previousSuccess || false
                 });
             }
             return reviews;
