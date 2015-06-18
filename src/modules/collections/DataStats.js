@@ -55,12 +55,8 @@ define([
                         start: Moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.data.storage.put('stats', result, function() {
-                            self.add(result, {merge: true});
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
+                        self.add(result, {merge: true});
+                        callback();
                     }, function(error) {
                         callback(error);
                     });
@@ -70,12 +66,8 @@ define([
                         start: Moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.data.storage.put('stats', result, function() {
-                            self.add(result, {merge: true});
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
+                        self.add(result, {merge: true});
+                        callback();
                     }, function(error) {
                         callback(error);
                     });
@@ -85,12 +77,8 @@ define([
                         start: Moment(momentMonthStart).format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.data.storage.put('stats', result, function() {
-                            self.add(result, {merge: true});
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
+                        self.add(result, {merge: true});
+                        callback();
                     }, function(error) {
                         callback(error);
                     });
@@ -106,6 +94,20 @@ define([
                     }
                 }
             });
+        },
+        /**
+         * @method getDailyWordsLearned
+         * @returns {Number}
+         */
+        getDailyWordsLearned: function() {
+            var total = 0;
+            var today = Moment().format('YYYY-MM-DD');
+            var stat = this.get(today);
+            total += stat.get('word').defn.studied.day;
+            total += stat.get('word').rdng.studied.day;
+            total += stat.get('word').rune.studied.day;
+            total += stat.get('word').tone.studied.day;
+            return total;
         },
         /**
          * @method getHeatmapData
@@ -162,22 +164,6 @@ define([
          */
         getTotalWordsLearned: function() {
             return this.length ? this.at(0).get('word').rune.learned.all : 0;
-        },
-        /**
-         * @method load
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         * @returns {DataStats}
-         */
-        load: function(callbackSuccess, callbackError) {
-            var self = this;
-            app.user.data.storage.all('stats', function(result) {
-                self.add(result, {merge: true, silent: true});
-                callbackSuccess();
-            }, function(error) {
-                callbackError(error);
-            });
-            return this;
         }
     });
 

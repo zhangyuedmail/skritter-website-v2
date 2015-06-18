@@ -17,7 +17,8 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.lastSorted = null;
+            this.filtered = [];
+            this.ids = [];
         },
         /**
          * @property model
@@ -25,42 +26,25 @@ define([
          */
         model: DataItem,
         /**
-         * @method comparator
-         * @param {DataItem} item
-         * @returns {Number}
-         */
-        comparator: function(item) {
-            return -item.getReadiness();
-        },
-        /**
-         * @method fetchNext
+         * @method fetch
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
-        fetchChanged: function(callbackSuccess, callbackError) {
-            var self = this;
+        fetch: function(callbackSuccess, callbackError) {
             (function next(cursor) {
                 app.api.fetchItems({
                     cursor: cursor,
-                    offset: app.user.data.get('lastItemUpdate'),
+                    offset: Moment().startOf('day').add(3, 'hours').unix(),
                     sort: 'changed'
                 }, function(result) {
-                    app.user.data.insert(result, function() {
-                        self.add(result.Items, {merge: true});
-                        if (result.cursor) {
-                            next(result.cursor);
-                        } else {
-                            app.user.data.set('lastItemUpdate', Moment().unix());
-                            self.trigger('change', self);
-                            if (typeof callbackSuccess === 'function') {
-                                callbackSuccess();
-                            }
+                    app.user.data.add(result);
+                    if (result.cursor) {
+                        next(result.cursor);
+                    } else {
+                        if (typeof callbackSuccess === 'function') {
+                            callbackSuccess();
                         }
-                    }, function(error) {
-                        if (typeof callbackError === 'function') {
-                            callbackError(error);
-                        }
-                    });
+                    }
                 }, function(error) {
                     if (typeof callbackError === 'function') {
                         callbackError(error);
@@ -70,12 +54,13 @@ define([
         },
         /**
          * @method fetchNext
-         * @param {Function}
+         * @param {Number} [limit]
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
         fetchNext: function(limit, callbackSuccess, callbackError) {
             var self = this;
+            var activeIds = [];
             app.api.fetchItems({
                 sort: 'next',
                 include_contained: true,
@@ -84,26 +69,18 @@ define([
                 include_strokes: true,
                 include_top_mnemonics: true,
                 include_vocabs: true,
-                limit: 5
+                limit: limit || 1
             }, function(result) {
-                var items = result.Items;
-                result.Items = result.Items.concat(result.ContainedItems || []);
-                app.user.data.insert(result, function() {
-                    callbackSuccess(self.add(items));
-                }, function(error) {
-                    callbackError(error);
-                });
+                activeIds = _.pluck(result.Items, 'id');
+                self.ids = _.uniq(self.ids.concat(activeIds));
+                app.user.data.add(result);
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
             }, function(error) {
-                callbackError(error);
-            });
-        },
-        /**
-         * @method getActive
-         * @returns {Array}
-         */
-        getActive: function() {
-            return this.sort().filter(function(item) {
-                return item.get('vocabIds').length;
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             });
         },
         /**
@@ -117,30 +94,13 @@ define([
             }).length;
         },
         /**
-         * @method getDue
-         * @returns {Number}
+         * @method getNext
+         * @returns {DataItem}
          */
-        getDue: function() {
-            var now = Moment().unix();
-            return _.filter(this.filtered, function(item) {
-                return item.get('next') > now;
-            });
-        },
-        /**
-         * @method getDueCount
-         */
-        getDueCount: function() {
-            return this.getDue().length;
-        },
-        /**
-         * @method getLast
-         * @param {Number} [quantity]
-         * @returns {Array}
-         */
-        getLast: function(quantity) {
-            return this.sortBy(function(item) {
-                return -item.get('last');
-            }).slice(0, quantity || 1);
+        getNext: function() {
+            this.updateFilter();
+            this.sortFilter();
+            return this.filtered.length ? this.filtered[0] : null;
         },
         /**
          * @method getItemReviewedCount
@@ -182,48 +142,35 @@ define([
             });
         },
         /**
-         * @method loadNext
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         */
-        loadNext: function(callbackSuccess, callbackError) {
-            if (this.length) {
-                var items = this.getActive();
-                var last = this.getLast(4);
-                for (var i = 0, length = items.length; i < length; i++) {
-                    var item = items[0];
-                    if (last.indexOf(item.id) === -1) {
-                        item.load(function(result) {
-                            callbackSuccess(result);
-                        }, function(error) {
-                            callbackError(error);
-                        });
-                        return;
-                    } else {
-                        console.log('SKIPPING FUCKING ITEM!');
-                    }
-                }
-            } else {
-                callbackError(new Error('No items founds.'));
-            }
-        },
-        /**
          * @method printSchedule
          */
         printSchedule: function() {
-            this.sort();
-            for (var i = 0, length = this.length; i < length; i++) {
-                var item = this.at(i);
-                console.log(item.id, item.getReadiness());
+            var now = Moment().unix();
+            this.updateFilter();
+            this.sortFilter();
+            console.log('-----SCHEDULE-----');
+            for (var i = 0, length = this.filtered.length; i < length; i++) {
+                var item = this.filtered[i];
+                console.log(item.id, item.getReadiness(now));
             }
         },
         /**
-         * @method sort
-         * @returns {Array}
+         * @method updateFilter
          */
-        sort: function() {
-            this.lastSorted = Moment().unix();
-            return GelatoCollection.prototype.sort.call(this);
+        updateFilter: function() {
+            var self = this;
+            this.filtered = _.filter(this.models, function(item) {
+                return self.ids.indexOf(item.id) > -1;
+            });
+        },
+        /**
+         * @method sortFilter
+         */
+        sortFilter: function() {
+            var now = Moment().unix();
+            this.filtered = _.sortBy(this.filtered, function(item) {
+                return -item.getReadiness(now);
+            });
         }
     });
 

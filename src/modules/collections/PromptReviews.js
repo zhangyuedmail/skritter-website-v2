@@ -217,12 +217,9 @@ define([
                     reviews: item.get('reviews') + 1,
                     successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                     timeStudied: item.get('timeStudied') + review.reviewTime
-                }).cache(function() {
-                    updatedItems.push(item);
-                    callback();
-                }, function(error) {
-                    callback(error);
                 });
+                updatedItems.push(item);
+                callback();
             }, function(error) {
                 if (error) {
                     callbackError(error);

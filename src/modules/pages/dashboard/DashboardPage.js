@@ -32,7 +32,7 @@ define([
             this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
             this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
             this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
-            //this.listenTo(app.user.data.vocablists, 'add change', this.renderListQueue);
+            this.listenTo(app.user.data.vocablists, 'add change remove', this.renderListQueue);
         },
         /**
          * @property title
@@ -55,7 +55,8 @@ define([
             this.renderHeatmap();
             this.renderAllTime();
             this.renderDailyGoal();
-            //this.renderListQueue();
+            this.renderListQueue();
+            app.user.data.items.fetch();
             app.user.data.stats.fetch();
             app.user.data.vocablists.fetch();
             return this;

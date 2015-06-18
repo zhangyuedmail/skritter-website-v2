@@ -151,15 +151,11 @@ define([
                     } else {
                         callback();
                     }
-                },
-                function(callback) {
-                    self.data.load(callback, callback);
                 }
             ], function(error) {
                 if (error) {
                     callbackError(error);
                 } else {
-                    self.data.items.fetchChanged();
                     callbackSuccess();
                 }
             });
@@ -197,9 +193,6 @@ define([
                     }, function(error) {
                         callback(error);
                     });
-                },
-                function(callback) {
-                    self.data.load(callback, callback);
                 }
             ], function(error) {
                 if (error) {
@@ -245,22 +238,18 @@ define([
          * @method logout
          */
         logout: function() {
-            this.data.storage.destroy(function() {
-                localStorage.removeItem(app.user.getDataPath('authentication', false));
-                localStorage.removeItem(app.user.getDataPath('ja-data', false));
-                localStorage.removeItem(app.user.getDataPath('zh-data', false));
-                localStorage.removeItem(app.user.getDataPath('ja-history', false));
-                localStorage.removeItem(app.user.getDataPath('zh-history', false));
-                localStorage.removeItem(app.user.getDataPath('settings', false));
-                localStorage.removeItem(app.user.getDataPath('ja-stats', false));
-                localStorage.removeItem(app.user.getDataPath('zh-stats', false));
-                localStorage.removeItem(app.user.getDataPath('subscription', false));
-                app.removeSetting('user');
-                app.router.navigate('', {trigger: false});
-                app.reload();
-            }, function(error) {
-                console.error('USER LOGOUT ERROR:', error);
-            });
+            localStorage.removeItem(app.user.getDataPath('authentication', false));
+            localStorage.removeItem(app.user.getDataPath('ja-data', false));
+            localStorage.removeItem(app.user.getDataPath('zh-data', false));
+            localStorage.removeItem(app.user.getDataPath('ja-history', false));
+            localStorage.removeItem(app.user.getDataPath('zh-history', false));
+            localStorage.removeItem(app.user.getDataPath('settings', false));
+            localStorage.removeItem(app.user.getDataPath('ja-stats', false));
+            localStorage.removeItem(app.user.getDataPath('zh-stats', false));
+            localStorage.removeItem(app.user.getDataPath('subscription', false));
+            app.removeSetting('user');
+            app.router.navigate('', {trigger: false});
+            app.reload();
         }
     });
 

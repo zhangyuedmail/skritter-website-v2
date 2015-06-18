@@ -38,7 +38,8 @@ define([
                             lang: app.user.getLanguageCode(),
                             sort: 'studying'
                         }, function(result) {
-                            vocablistIds = _.pluck(result.VocabLists, 'id').concat(vocablistIds);
+                            var resultIds = _.pluck(result.VocabLists, 'id');
+                            vocablistIds = vocablistIds.concat(resultIds);
                             if (result.cursor) {
                                 next(result.cursor);
                             } else {
@@ -77,13 +78,10 @@ define([
         fetchById: function(id, callbackSuccess, callbackError) {
             var self = this;
             app.api.fetchVocabList(id, null, function(result) {
-                app.user.data.insert({VocabLists: result}, function() {
-                    result = self.add(result, {merge: true, silent: true});
-                    self.trigger('add', self);
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess(result);
-                    }
-                });
+                result = self.add(result, {merge: true});
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess(result);
+                }
             }, function(error) {
                 if (typeof callbackError === 'function') {
                     callbackError(error);
@@ -103,17 +101,14 @@ define([
                     lang: app.user.getLanguageCode(),
                     sort: 'custom'
                 }, function(result) {
-                    app.user.data.insert(result, function() {
-                        self.add(result.VocabLists, {merge: true, silent: true});
-                        self.trigger('add', self);
-                        if (result.cursor) {
-                            next(result.cursor);
-                        } else {
-                            if (typeof callbackSuccess === 'function') {
-                                callbackSuccess(self);
-                            }
+                    self.add(result.VocabLists, {merge: true});
+                    if (result.cursor) {
+                        next(result.cursor);
+                    } else {
+                        if (typeof callbackSuccess === 'function') {
+                            callbackSuccess(self);
                         }
-                    });
+                    }
                 }, function(error) {
                     if (typeof callbackError === 'function') {
                         callbackError(error);
@@ -134,17 +129,14 @@ define([
                     lang: app.user.getLanguageCode(),
                     sort: 'official'
                 }, function(result) {
-                    app.user.data.insert(result, function() {
-                        self.add(result.VocabLists, {merge: true, silent: true});
-                        self.trigger('add', self);
-                        if (result.cursor) {
-                            next(result.cursor);
-                        } else {
-                            if (typeof callbackSuccess === 'function') {
-                                callbackSuccess(self);
-                            }
+                    self.add(result.VocabLists, {merge: true});
+                    if (result.cursor) {
+                        next(result.cursor);
+                    } else {
+                        if (typeof callbackSuccess === 'function') {
+                            callbackSuccess(self);
                         }
-                    });
+                    }
                 }, function(error) {
                     if (typeof callbackError === 'function') {
                         callbackError(error);
@@ -205,22 +197,6 @@ define([
             return _.filter(this.models, function(list) {
                 return list.get('studyingMode') === 'reviewing';
             });
-        },
-        /**
-         * @method load
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         * @returns {DataVocabLists}
-         */
-        load: function(callbackSuccess, callbackError) {
-            var self = this;
-            app.user.data.storage.all('vocablists', function(result) {
-                self.add(result, {silent: true});
-                callbackSuccess();
-            }, function(error) {
-                callbackError(error);
-            });
-            return this;
         }
     });
 
