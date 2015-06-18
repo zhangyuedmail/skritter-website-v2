@@ -1,40 +1,5 @@
-gelato-dialog {
+gelato-dialogs {
 
-  color: $grey9;
-
-  #goal-settings {
-    color: #7d8288;
-    font-family: $font-muli;
-    font-size: 24px;
-    font-weight: 300;
-    button {
-      height: 50px;
-      width: 150px;
-    }
-    .modal-title {
-      color: #404851;
-      font-family: $font-slab;
-      font-size: 12px;
-      font-weight: 400;
-      text-transform: uppercase;
-    }
-    .radio {
-      font-size: 16px;
-      font-weight: 300;
-    }
-    #goal-value { margin-top: 15px; }
-  }
-
-  #tutorial-select-language {
-    .modal-content {
-      background-color: #404851;
-    }
-  }
-
-  #tutorial-select-level {
-    .modal-content {
-      background-color: #404851;
-    }
-  }
+  gelato-dialog[data-name="goal-settings"] {}
 
 }

@@ -53,7 +53,7 @@ define([
         },
         /**
          * @method save
-         * @param {Number} startFrom
+         * @param {Number} [startFrom]
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */

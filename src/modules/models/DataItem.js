@@ -21,7 +21,6 @@ define([
             this.containedItems = [];
             this.containedVocabs = [];
             this.decomps = [];
-            this.readiness = 0;
             this.sentences = [];
             this.strokes = [];
             this.vocabs = [];
@@ -37,6 +36,7 @@ define([
          */
         defaults: function() {
             return {
+                score: 3,
                 vocabIds: []
             };
         },
@@ -101,13 +101,20 @@ define([
          */
         getReadiness: function() {
             if (this.get('vocabIds').length) {
-                var actualAgo = Moment().unix() - this.get('last');
-                var scheduledAgo = this.get('next') - this.get('last');
-                this.readiness = actualAgo / scheduledAgo;
-            } else {
-                this.readiness = 0;
+                var now = this.collection.lastSorted || Moment().unix();
+                var itemLast = this.get('last') || 0;
+                var itemNext = this.get('next') || 0;
+                var actualAgo = now - itemLast;
+                var scheduledAgo = itemNext - itemLast;
+                if (!itemLast && itemNext - now > 600) {
+                    return 9999;
+                }
+                if (!itemLast || itemNext - itemLast === 1) {
+                    return 0.2;
+                }
+                return actualAgo / scheduledAgo;
             }
-            return this.readiness;
+            return 0;
         },
         /**
          * @method getVocab

@@ -55,7 +55,6 @@ define([
         handlePromptComplete: function(reviews) {
             var self = this;
             reviews.updateItems(function() {
-                app.user.history.save();
                 self.loadNext();
             }, function(error) {
                 console.error('ITEM UPDATE ERROR:', error);
@@ -71,14 +70,11 @@ define([
             var self = this;
             this.listId = listId || null;
             this.sectionId = sectionId || null;
-            self.loadNext();
-            /**
-            app.user.data.items.fetchNext(function() {
+             app.user.data.items.fetchNext(function() {
                 self.loadNext();
             }, function(error) {
                 console.error(error);
             });
-             **/
             return this;
         },
         /**
@@ -87,7 +83,7 @@ define([
          */
         loadNext: function() {
             var self = this;
-            app.user.data.items.loadNext(function(result) {
+             app.user.data.items.loadNext(function(result) {
                 self.item = result;
                 self.prompt.set(self.item.getPromptReviews());
                 self.prompt.show();

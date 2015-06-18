@@ -59,10 +59,10 @@ define([
         /**
          * @method add
          * @param {Object} result
-         * @param {Function} callback
          * @param {Object} [options]
+         * @param {Function} [callback]
          */
-        add: function(result, callback, options) {
+        add: function(result, options, callback) {
             Async.parallel([
                 function(callback) {
                     app.user.data.decomps.add(result.Decomps || [], options);

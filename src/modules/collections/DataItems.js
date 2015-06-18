@@ -16,7 +16,9 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.lastSorted = null;
+        },
         /**
          * @property model
          * @type DataItem
@@ -68,74 +70,11 @@ define([
         },
         /**
          * @method fetchNext
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         */
-        fetchIds: function(callbackSuccess, callbackError) {
-            var self = this;
-            app.api.fetchItemIds({
-                lang: app.user.getLanguageCode()
-            }, function(result) {
-                app.user.data.insert(result, function() {
-                    self.add(result, {merge: true});
-                    callbackSuccess();
-                }, function(error) {
-                    callbackError(error);
-                });
-            }, function(error) {
-                callbackError(error);
-            });
-        },
-        /**
-         * @method fetchMissing
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         * @param {Function} [callbackStatus]
-         */
-        fetchMissing: function(callbackSuccess, callbackError, callbackStatus) {
-            var self = this;
-            var missingIds = this.getMissingIds();
-            var missingTotal = missingIds.length;
-            if (missingIds.length) {
-                (function next() {
-                    app.api.fetchItems({
-                        ids: missingIds.slice(0,29).join('|'),
-                        include_contained: true,
-                        include_decomps: true,
-                        include_sentences: true,
-                        include_strokes: true,
-                        include_top_mnemonics: true,
-                        include_vocabs: true
-                    }, function(result) {
-                        app.user.data.insert(result, function() {
-                            self.add(result.Items, {merge: true});
-                            if (missingIds.length) {
-                                missingIds = self.getMissingIds();
-                                if (typeof callbackStatus === 'function') {
-                                    var completion = 1 - (missingIds.length / missingTotal);
-                                    callbackStatus(Math.floor(completion * 100));
-                                }
-                                next();
-                            } else {
-                                callbackSuccess();
-                            }
-                        }, function(error) {
-                            callbackError(error);
-                        });
-                    }, function(error) {
-                        callbackError(error);
-                    });
-                }());
-            } else {
-                callbackSuccess();
-            }
-        },
-        /**
-         * @method fetchNext
+         * @param {Function}
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
-        fetchNext: function(callbackSuccess, callbackError) {
+        fetchNext: function(limit, callbackSuccess, callbackError) {
             var self = this;
             app.api.fetchItems({
                 sort: 'next',
@@ -144,15 +83,27 @@ define([
                 include_sentences: true,
                 include_strokes: true,
                 include_top_mnemonics: true,
-                include_vocabs: true
+                include_vocabs: true,
+                limit: 5
             }, function(result) {
+                var items = result.Items;
+                result.Items = result.Items.concat(result.ContainedItems || []);
                 app.user.data.insert(result, function() {
-                    callbackSuccess(self.add(result.Items, {merge: true}));
+                    callbackSuccess(self.add(items));
                 }, function(error) {
                     callbackError(error);
                 });
             }, function(error) {
                 callbackError(error);
+            });
+        },
+        /**
+         * @method getActive
+         * @returns {Array}
+         */
+        getActive: function() {
+            return this.sort().filter(function(item) {
+                return item.get('vocabIds').length;
             });
         },
         /**
@@ -182,15 +133,14 @@ define([
             return this.getDue().length;
         },
         /**
-         * @method getMissingIds
+         * @method getLast
+         * @param {Number} [quantity]
          * @returns {Array}
          */
-        getMissingIds: function() {
-            return _.map(_.filter(this.models, function(item) {
-                return !item.has('next');
-            }), function(item) {
-                return item.id;
-            });
+        getLast: function(quantity) {
+            return this.sortBy(function(item) {
+                return -item.get('last');
+            }).slice(0, quantity || 1);
         },
         /**
          * @method getItemReviewedCount
@@ -238,16 +188,42 @@ define([
          */
         loadNext: function(callbackSuccess, callbackError) {
             if (this.length) {
-                this.sort().filter(function(item) {
-                    return item.get('vocabIds').length;
-                })[0].load(function(result) {
-                        callbackSuccess(result);
-                    }, function(error) {
-                        callbackError(error);
-                    });
+                var items = this.getActive();
+                var last = this.getLast(4);
+                for (var i = 0, length = items.length; i < length; i++) {
+                    var item = items[0];
+                    if (last.indexOf(item.id) === -1) {
+                        item.load(function(result) {
+                            callbackSuccess(result);
+                        }, function(error) {
+                            callbackError(error);
+                        });
+                        return;
+                    } else {
+                        console.log('SKIPPING FUCKING ITEM!');
+                    }
+                }
             } else {
                 callbackError(new Error('No items founds.'));
             }
+        },
+        /**
+         * @method printSchedule
+         */
+        printSchedule: function() {
+            this.sort();
+            for (var i = 0, length = this.length; i < length; i++) {
+                var item = this.at(i);
+                console.log(item.id, item.getReadiness());
+            }
+        },
+        /**
+         * @method sort
+         * @returns {Array}
+         */
+        sort: function() {
+            this.lastSorted = Moment().unix();
+            return GelatoCollection.prototype.sort.call(this);
         }
     });
 
