@@ -154,6 +154,15 @@ define([
             });
         },
         /**
+         * @method getCustom
+         * @returns {Array}
+         */
+        getCustom: function() {
+            return _.filter(this.models, function(list) {
+                return list.get('sort') === 'custom';
+            });
+        },
+        /**
          * @method getFinished
          * @returns {Array}
          */
@@ -172,15 +181,6 @@ define([
             });
         },
         /**
-         * @method getCustom
-         * @returns {Array}
-         */
-        getCustom: function() {
-            return _.filter(this.models, function(list) {
-                return list.get('sort') === 'custom';
-            });
-        },
-        /**
          * @method getOfficial
          * @returns {Array}
          */
@@ -188,6 +188,18 @@ define([
             return _.filter(this.models, function(list) {
                 return list.get('sort') === 'official';
             });
+        },
+        /**
+         * @method getProgress
+         * @returns {Number}
+         */
+        getProgress: function() {
+            var progress = 0;
+            var lists = this.getAdding();
+            for (var i = 0, length = lists.length; i < length; i++) {
+                progress += lists[i].getProgress();
+            }
+            return progress ? Math.round(progress / lists.length) : 0;
         },
         /**
          * @method getReviewing

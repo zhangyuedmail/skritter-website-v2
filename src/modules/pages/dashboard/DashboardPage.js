@@ -95,8 +95,8 @@ define([
                 var remaining = goal.value - app.user.data.items.getReviewedCount();
                 remaining = remaining < 0 ? 0 : remaining;
                 data = [
-                    {value: goal.value - remaining, color:'#c5da4b'},
-                    {value: remaining, color: '#efeef3'}
+                    {label: "Completed", value: goal.value - remaining, color:'#c5da4b'},
+                    {label: "Remaining", value: remaining, color: '#efeef3'}
                 ];
             } else {
                 //TODO: display remaining goal based on time
@@ -123,10 +123,11 @@ define([
          */
         renderListDoughnut: function() {
             var context = this.$('#list-queue-doughnut').get(0).getContext('2d');
+            var progress = app.user.data.vocablists.getProgress();
             this.doughnutList = new Chart(context).Doughnut(
                 [
-                    {value: 0, color:'#c5da4b'},
-                    {value: 100, color: '#efeef3'}
+                    {label: "Completed", value: progress, color:'#c5da4b'},
+                    {label: "Remaining", value: 100 - progress, color: '#efeef3'}
                 ],
                 {
                     percentageInnerCutout : 80,

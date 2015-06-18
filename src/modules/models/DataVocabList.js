@@ -53,7 +53,7 @@ define([
                 }
                 total += section.rows.length;
             }
-            return total ? (100 * added / total).toFixed(1) : 100;
+            return total ? Math.round(100 * added / total) : 100;
         },
         /**
          * @method getSectionById
