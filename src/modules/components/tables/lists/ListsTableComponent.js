@@ -58,7 +58,7 @@ define([
                             tableBody += this.getAddStatus({status: list.get('studyingMode')});
                             break;
                         case 'progress':
-                            tableBody += this.getProgressBar({value: list.getPercentAdded()});
+                            tableBody += this.getProgressBar({value: list.getProgress()});
                             break;
                         case 'remove':
                             tableBody += '<i class="fa fa-close"></i>';

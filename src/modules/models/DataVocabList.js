@@ -30,21 +30,30 @@ define([
             return $.extend(this.changed, {id: this.id});
         },
         /**
-         * @method getPercentAdded
+         * @method getProgress
          * @returns {Number}
          */
-        getPercentAdded: function() {
-            var addedRows = 0;
-            var totalRows = 0;
-            var sections = this.get('sections') || [];
-            for (var a = 0, lengthA = sections.length; a < lengthA; a++) {
-                var rows = sections[a].rows || [];
-                for (var b = 0, lengthB = rows.length; b < lengthB; b++) {
-                    addedRows += app.user.data.items.hasVocabId(rows[b].vocabId) ? 1 : 0;
-                    totalRows++;
+        getProgress: function() {
+            var added = 0;
+            var passed = false;
+            var total = 0;
+            var sections = this.get('sections');
+            var currentIndex = this.get('currentIndex') || 0;
+            var currentSection = this.get('currentSection') || sections[0];
+            for (var i = 0, length = sections.length; i < length; i++) {
+                var section = sections[0];
+                if (this.get('sectionsSkipping').indexOf(section.id) > -1) {
+                    continue;
                 }
+                if (section.id === currentSection) {
+                    added += currentIndex;
+                    passed = true;
+                } else if (passed) {
+                    added += section.rows.length;
+                }
+                total += section.rows.length;
             }
-            return totalRows > 0 ? (addedRows / totalRows) * 100 : 0;
+            return total ? (100 * added / total).toFixed(1) : 100;
         },
         /**
          * @method getSectionById
@@ -74,30 +83,14 @@ define([
          */
         save: function(callbackSuccess, callbackError) {
             var self = this;
-            Async.series([
-                function(callback) {
-                    app.api.putVocabList(self.getChanged(), function(result) {
-                        self.set(result, {silent: true});
-                        callback();
-                    }, function(error) {
-                        callbackError(error);
-                    });
-                }, function(callback) {
-                    app.user.data.storage.put('vocablists', self.toJSON(), function() {
-                        callback();
-                    }, function(error) {
-                        callbackError(error);
-                    });
+            app.api.putVocabList(this.getChanged(), function(result) {
+                self.set(result, {silent: true});
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess(self);
                 }
-            ], function(error) {
-                if (error) {
-                    if (typeof callbackError === 'function') {
-                        callbackError(error);
-                    }
-                } else {
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess(self);
-                    }
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
                 }
             });
             return this;
