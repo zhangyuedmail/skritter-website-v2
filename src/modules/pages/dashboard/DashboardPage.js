@@ -56,6 +56,8 @@ define([
             this.renderAllTime();
             this.renderDailyGoal();
             //this.renderListQueue();
+            app.user.data.stats.fetch();
+            app.user.data.vocablists.fetch();
             return this;
         },
         /**
@@ -144,7 +146,7 @@ define([
                 domainDynamicDimension: false,
                 domainGutter: 20,
                 itemSelector: '#heatmap-container',
-                legend: [1, 50, 100, 200],
+                legend: [0, 50, 100, 200],
                 range: 1,
                 start: new Date(2015, new Date().getMonth(), 1),
                 subDomain: 'x_day'

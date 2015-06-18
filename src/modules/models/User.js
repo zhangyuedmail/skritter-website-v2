@@ -200,20 +200,6 @@ define([
                 },
                 function(callback) {
                     self.data.load(callback, callback);
-                },
-                function(callback) {
-                    app.user.data.stats.fetch(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
-                },
-                function(callback) {
-                    app.user.data.vocablists.fetch(function() {
-                        callback();
-                    }, function(error) {
-                        callback(error);
-                    });
                 }
             ], function(error) {
                 if (error) {
