@@ -54,13 +54,15 @@ define([
         },
         /**
          * @method fetchNext
-         * @param {Number} [limit]
+         * @param {Object} [options]
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
          */
-        fetchNext: function(limit, callbackSuccess, callbackError) {
+        fetchNext: function(options, callbackSuccess, callbackError) {
             var self = this;
             var activeIds = [];
+            options = options || {};
+            options.limit = options.limit || 1;
             app.api.fetchItems({
                 sort: 'next',
                 include_contained: true,
@@ -69,7 +71,9 @@ define([
                 include_strokes: true,
                 include_top_mnemonics: true,
                 include_vocabs: true,
-                limit: limit || 1
+                limit: options.limit,
+                parts: options.parts,
+                styles: options.styles
             }, function(result) {
                 activeIds = _.pluck(result.Items, 'id');
                 self.ids = _.uniq(self.ids.concat(activeIds));

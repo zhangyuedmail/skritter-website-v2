@@ -100,13 +100,13 @@ define([
             var characters = [];
             var items = [];
             var vocabs = [];
-            if (['rune', 'tone'].indexOf(part) > -1) {
+            if (['defn', 'rdng'].indexOf(part) > -1) {
+                items = [this];
+                vocabs = [vocab];
+            } else {
                 characters = (part === 'tone') ? vocab.getCanvasTones() : vocab.getCanvasCharacters();
                 items = containedItems.length ? containedItems : [this];
                 vocabs = containedVocabs.length ? containedVocabs : [vocab];
-            } else {
-                items = [this];
-                vocabs = [vocab];
             }
             for (var i = 0, length = vocabs.length; i < length; i++) {
                 var review = new PromptReview();

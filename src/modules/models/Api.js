@@ -196,7 +196,9 @@ define([
                     lang: options.lang,
                     limit: options.limit,
                     offset: options.offset,
-                    sort: options.sort
+                    parts: options.parts,
+                    sort: options.sort,
+                    styles: options.styles
                 }
             }).done(function(data) {
                 if (data.statusCode === 200) {

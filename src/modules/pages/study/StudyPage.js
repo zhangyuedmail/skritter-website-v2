@@ -5,11 +5,13 @@
 define([
     'core/modules/GelatoPage',
     'require.text!modules/pages/study/study-template.html',
-    'modules/components/prompt/PromptComponent'
+    'modules/components/prompt/PromptComponent',
+    'modules/components/study/toolbar/StudyToolbarComponent'
 ], function(
     GelatoPage,
     Template,
-    PromptComponent
+    PromptComponent,
+    StudyToolbarComponent
 ) {
 
     /**
@@ -27,8 +29,10 @@ define([
             this.listId = null;
             this.prompt = new PromptComponent();
             this.sectionId = null;
+            this.toolbar = new StudyToolbarComponent();
             this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
             this.listenTo(app.dialogs, 'feedback:submit', this.submitFeedback);
+            this.listenTo(app.dialogs, 'logout-confirm:yes', app.user.logout);
         },
         /**
          * @property title
@@ -46,8 +50,8 @@ define([
          */
         render: function() {
             this.renderTemplate(Template);
-            this.prompt.setElement(this.$('#prompt-container')).render();
-            this.prompt.hide();
+            this.prompt.setElement(this.$('#prompt-container')).render().hide();
+            this.toolbar.setElement(this.$('#study-toolbar-container')).render().hide();
             return this;
         },
         /**
@@ -73,7 +77,9 @@ define([
             var self = this;
             this.listId = listId || null;
             this.sectionId = sectionId || null;
-            app.user.data.items.fetchNext(10, function() {
+            app.user.data.items.fetchNext({
+                limit: 10
+            }, function() {
                 self.loadNext();
             }, function(error) {
                 console.error(error);
@@ -93,7 +99,7 @@ define([
                 this.prompt.show();
                 if (this.counter % 5 === 0) {
                     console.log('FETCHING ITEMS:', 5);
-                    app.user.data.items.fetch(5);
+                    app.user.data.items.fetch({limit: 5});
                 }
             } else {
                 console.error(new Error('Unable to get next item.'));
@@ -107,7 +113,6 @@ define([
         submitFeedback: function(dialog) {
             var message = dialog.find('#contact-message').val();
             var subject = dialog.find('#contact-topic-select').val();
-            console.log(message, subject);
             app.api.postContact('feedback', {
                 custom: {page: 'Study'},
                 message: message,

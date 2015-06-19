@@ -138,8 +138,6 @@ define([
          */
         loadUser: function(callbackSuccess, callbackError) {
             var self = this;
-            this.history.load();
-            this.subscription.load();
             Async.series([
                 function(callback) {
                     if (self.authentication.isExpired()) {

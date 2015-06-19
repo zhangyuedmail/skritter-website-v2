@@ -137,32 +137,25 @@ define([
          */
         getPromptReviews: function(part) {
             var reviews = new PromptReviews();
-            var containedVocabIds = this.getContainedVocabIds();
+            var containedVocabs = this.get('containedVocabIds');
+            var vocab = this;
             var characters = [];
-            var vocabIds = [];
-            if (['rune', 'tone'].indexOf(part) > -1) {
-                if (containedVocabIds.length) {
-                    vocabIds = containedVocabIds;
-                } else {
-                    vocabIds = [this.id];
-                }
-                if (part === 'tone') {
-                    characters = this.getCanvasTones();
-                } else {
-                    characters = this.getCanvasCharacters();
-                }
+            var vocabs = [];
+            if (['defn', 'rdng'].indexOf(part) > -1) {
+                vocabs = [vocab];
             } else {
-                vocabIds = [this.id];
+                characters = (part === 'tone') ? vocab.getCanvasTones() : vocab.getCanvasCharacters();
+                vocabs = containedVocabs.length ? containedVocabs : [vocab];
             }
-            for (var i = 0, length = vocabIds.length; i < length; i++) {
+            for (var i = 0, length = vocabs.length; i < length; i++) {
                 var review = new PromptReview();
-                review.character = characters.length ? characters[i] : null;
-                review.item = this.toJSON();
-                review.vocab = app.user.data.vocabs.get(vocabIds[i]);
+                review.character = characters[i];
+                review.vocab = vocabs[i];
                 reviews.add(review);
             }
-            reviews.vocab = this;
+            reviews.group = Date.now() + '_' + this.id;
             reviews.part = part;
+            reviews.vocab = vocab;
             return reviews;
         },
         /**
