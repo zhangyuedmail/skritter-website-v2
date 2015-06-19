@@ -266,7 +266,7 @@ define([
          */
         handleSelectGrading: function(score) {
             this.review().set('score', score);
-            if (this.character().isComplete()) {
+            if (this.review().isComplete()) {
                 this.renderPrompt();
             }
         },
@@ -355,7 +355,14 @@ define([
         resize: function() {
             var panelLeft = this.$('#panel-left');
             var panelRight = this.$('#panel-right');
-            this.canvas.resize(450);
+            if (app.getWidth() < 1280) {
+                this.canvas.resize(400);
+            } else {
+                this.canvas.resize(450);
+            }
+            if (this.reviews) {
+                this.renderPrompt();
+            }
             return this;
         },
         /**

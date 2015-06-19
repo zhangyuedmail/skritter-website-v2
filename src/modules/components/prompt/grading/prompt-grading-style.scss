@@ -1,6 +1,6 @@
 gelato-component[data-name="prompt-grading"] {
 
-  button {
+  .btn-default {
     background-color: transparent;
     border: none;
     box-shadow: none;
@@ -12,7 +12,7 @@ gelato-component[data-name="prompt-grading"] {
       border: none;
       box-shadow: none;
       color: #b2b3b4;
-      outline: 0 !important;
+      outline: 0;
     }
     &.selected {
       &.grade1 { color: $grade1; }

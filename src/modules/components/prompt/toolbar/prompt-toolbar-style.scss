@@ -1,6 +1,6 @@
 gelato-component[data-name="prompt-toolbar"] {
 
-  button {
+  .btn-default {
     background-color: transparent;
     border: none;
     box-shadow: none;
@@ -10,7 +10,7 @@ gelato-component[data-name="prompt-toolbar"] {
       background-color: transparent;
       border: none;
       box-shadow: none;
-      outline: 0 !important;
+      outline: 0;
     }
   }
 
