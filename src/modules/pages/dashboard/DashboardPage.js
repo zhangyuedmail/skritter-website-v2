@@ -28,9 +28,7 @@ define([
             this.listQueue = new ListsTableComponent();
             this.listenTo(app.dialogs, 'goal-settings:save', this.saveGoalSettings);
             this.listenTo(app.dialogs, 'goal-settings:show', this.renderGoalSettings);
-            this.listenTo(app.user.data.items, 'add change', this.renderDailyGoal);
-            this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
-            this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
+            this.listenTo(app.user.data.stats, 'add change', this.renderDailyGoal);
             this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
             this.listenTo(app.user.data.vocablists, 'add change remove', this.renderListQueue);
         },
@@ -78,7 +76,7 @@ define([
          */
         renderDailyGoal: function() {
             this.$('#items-added .value').text(app.user.data.items.getAddedCount());
-            this.$('#items-reviewed .value').text(app.user.data.items.getReviewedCount());
+            this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
             this.renderGoalDoughnut();
             return this;
         },

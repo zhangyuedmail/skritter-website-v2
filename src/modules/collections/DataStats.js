@@ -96,17 +96,23 @@ define([
             });
         },
         /**
-         * @method getDailyWordsLearned
+         * @method getDailyItemsReviewed
          * @returns {Number}
          */
-        getDailyWordsLearned: function() {
+        getDailyItemsReviewed: function() {
             var total = 0;
             var today = Moment().format('YYYY-MM-DD');
             var stat = this.get(today);
-            total += stat.get('word').defn.studied.day;
-            total += stat.get('word').rdng.studied.day;
-            total += stat.get('word').rune.studied.day;
-            total += stat.get('word').tone.studied.day;
+            if (stat) {
+                total += stat.get('char').defn.studied.day;
+                total += stat.get('char').rdng.studied.day;
+                total += stat.get('char').rune.studied.day;
+                total += stat.get('char').tone.studied.day;
+                total += stat.get('word').defn.studied.day;
+                total += stat.get('word').rdng.studied.day;
+                total += stat.get('word').rune.studied.day;
+                total += stat.get('word').tone.studied.day;
+            }
             return total;
         },
         /**
