@@ -23,21 +23,24 @@ gelato-dialog(data-name='goal-settings')
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
       .modal-content
-        .modal-header
-          button.close(data-action='close', type='button', data-dismiss='modal')
-            span ×
-          h4.modal-title.text-uppercase Daily Goal
         .modal-body.text-center
           p I want to study
-          input#goal-value(type="number", value="20")
-          label.radio-inline
-            input(type="radio", name="goal-type", value="items", checked="checked")
-            | items
-          label.radio-inline
-            input(type="radio", name="goal-type", value="time")
-            | minutes
-        .modal-footer.text-center
-          button.btn.btn-success(data-action='save', type='button', data-dismiss='modal') Save
+          .row
+            .col-xs-6.text-right
+              input#goal-value(type="text", value="20")
+            .col-xs-6.text-left
+              form
+                .form-group
+                  label.radio-inline
+                    input(type="radio", name="goal-type", value="items", checked="checked")
+                    | items
+                .form-group
+                  label.radio-inline
+                    input(type="radio", name="goal-type", value="time")
+                    | minutes
+          p every day.
+          .text-center
+            button.btn.btn-lg.btn-success(data-action='save', type='button') Save
 gelato-dialog(data-name='logout-confirm')
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
