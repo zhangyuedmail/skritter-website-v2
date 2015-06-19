@@ -164,7 +164,7 @@ define([
                 name: 'Name',
                 progress: 'Progress'
             });
-            this.renderListDoughnut();
+            //this.renderListDoughnut();
             return this;
         },
         /**
