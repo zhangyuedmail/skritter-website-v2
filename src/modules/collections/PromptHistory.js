@@ -63,7 +63,6 @@ define([
             if (!this.syncing) {
                 this.syncing = true;
                 Async.each(reviews, function(review, callback) {
-                    console.log('SAVING REVIEW:', review);
                     app.api.postReviews(review.get('reviews'), function() {
                         self.remove(review);
                         callback();

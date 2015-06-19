@@ -22,6 +22,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.counter = 0;
             this.item = null;
             this.listId = null;
             this.prompt = new PromptComponent();
@@ -71,7 +72,7 @@ define([
             var self = this;
             this.listId = listId || null;
             this.sectionId = sectionId || null;
-            app.user.data.items.fetchNext(5, function() {
+            app.user.data.items.fetchNext(10, function() {
                 self.loadNext();
             }, function(error) {
                 console.error(error);
@@ -85,9 +86,14 @@ define([
         loadNext: function() {
             var item = app.user.data.items.getNext();
             if (item) {
+                this.counter++;
                 this.item = item;
                 this.prompt.set(item.getPromptReviews());
                 this.prompt.show();
+                if (this.counter % 5 === 0) {
+                    console.log('FETCHING ITEMS:', 5);
+                    app.user.data.items.fetch(5);
+                }
             } else {
                 console.error(new Error('Unable to get next item.'));
             }
