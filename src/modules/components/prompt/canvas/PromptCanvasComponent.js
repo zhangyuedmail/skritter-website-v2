@@ -369,6 +369,7 @@ define([
          * @method injectLayerColor
          * @param {String} layerName
          * @param {String} color
+         * @returns {PromptCanvasComponent}
          */
         injectLayerColor: function(layerName, color) {
             return this.injectColor(this.getLayer(layerName), color);

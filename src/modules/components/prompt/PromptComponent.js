@@ -267,7 +267,7 @@ define([
         handleSelectGrading: function(score) {
             this.review().set('score', score);
             if (this.review().isComplete()) {
-                this.renderPrompt();
+                this.canvas.injectLayerColor('surface', this.review().getGradingColor());
             }
         },
         /**
