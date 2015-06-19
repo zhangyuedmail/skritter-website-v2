@@ -43,7 +43,7 @@ define([
         generateBaseReview: function() {
             return {
                 itemId: this.item.id,
-                score: this.getScore() | 3,
+                score: this.getScore() || 3,
                 bearTime: true,
                 submitTime: this.getSubmitTime(),
                 reviewTime: this.getReviewingTime() || 5,
@@ -66,7 +66,7 @@ define([
                 var review = this.at(i);
                 reviews.push({
                     itemId: review.item.id,
-                    score: review.get('score') | 3,
+                    score: review.get('score') || 3,
                     bearTime: false,
                     submitTime: review.get('submitTime'),
                     reviewTime: review.getReviewingTime() || 5,
