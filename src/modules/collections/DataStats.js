@@ -116,6 +116,15 @@ define([
             return total;
         },
         /**
+         * @method getDailyTimeStudied
+         * @returns {Number}
+         */
+        getDailyTimeStudied: function() {
+            var today = Moment().format('YYYY-MM-DD');
+            var stat = this.get(today);
+            return stat ? stat.get('timeStudied').day : 0;
+        },
+        /**
          * @method getHeatmapData
          * @returns {Object}
          */

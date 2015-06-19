@@ -98,12 +98,11 @@ define([
                     {label: "Remaining", value: remainingItems, color: '#efeef3'}
                 ];
             } else {
-                //TODO: display remaining goal based on time
-                //var remainingTime = goal.value - app.user.data.stats.getDailyItemsReviewed();
-                //remainingItems = remainingItems < 0 ? 0 : remainingItems;
+                var remainingTime = goal.value - (app.user.data.stats.getDailyTimeStudied() / 60);
+                remainingTime = remainingTime < 0 ? 0 : remainingTime;
                 data = [
-                    {label: "Completed", value: 0, color:'#c5da4b'},
-                    {label: "Remaining", value: 100, color: '#efeef3'}
+                    {label: "Completed", value: (goal.value - remainingTime).toFixed(2), color:'#c5da4b'},
+                    {label: "Remaining", value: remainingTime.toFixed(2), color: '#efeef3'}
                 ];
             }
             this.doughnutGoal = new Chart(context).Doughnut(data,
