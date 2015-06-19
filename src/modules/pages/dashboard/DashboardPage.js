@@ -28,6 +28,7 @@ define([
             this.listQueue = new ListsTableComponent();
             this.listenTo(app.dialogs, 'goal-settings:save', this.saveGoalSettings);
             this.listenTo(app.dialogs, 'goal-settings:show', this.renderGoalSettings);
+            this.listenTo(app.dialogs, 'logout-confirm:yes', app.user.logout);
             this.listenTo(app.user.data.stats, 'add change', this.renderDailyGoal);
             this.listenTo(app.user.data.stats, 'add change', this.renderAllTime);
             this.listenTo(app.user.data.vocablists, 'add change remove', this.renderListQueue);

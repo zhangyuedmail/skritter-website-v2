@@ -1,15 +1,12 @@
-gelato-dialog(data-name='about')
+gelato-dialog(data-name='logout-confirm')
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
       .modal-content
-        .modal-header
-          button.close(data-action='close', type='button', data-dismiss='modal')
-            span ×
-          h4.modal-title About
-        .modal-body
-          p This is an example of a Gelato Framework popup dialog!
-        .modal-footer
-          button.btn.btn-default(data-action='close', type='button', data-dismiss='modal') Close
+        .modal-body.text-center
+          p.lead Are you sure you want to log out?
+          button.btn.btn-lg.btn-default(data-action='no', type='button', data-dismiss='modal') No, go back.
+          | &nbsp;&nbsp;
+          button.btn.btn-lg.btn-danger(data-action='yes', type='button') Yes, log out!
 gelato-dialog(data-name='goal-settings')
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
