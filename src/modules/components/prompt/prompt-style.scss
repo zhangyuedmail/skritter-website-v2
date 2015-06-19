@@ -15,6 +15,10 @@ gelato-component[data-name="prompt"] {
     padding-left: 95px;
     padding-right: 95px;
     width: 640px;
+    #prompt-grading-container {
+      margin-bottom: 15px;
+      min-height: 80px;
+    }
   }
 
   #panel-right {
@@ -25,6 +29,21 @@ gelato-component[data-name="prompt"] {
     height: 640px;
     padding: 42px 45px;
     width: 640px;
+  }
+
+  @media (max-width: 1280px) {
+    height: 500px;
+    width: 1000px;
+    #panel-left {
+      height: 500px;
+      padding-left: 50px;
+    padding-right: 50px;
+      width: 500px;
+    }
+    #panel-right {
+      height: 500px;
+      width: 500px;
+    }
   }
 
 }
