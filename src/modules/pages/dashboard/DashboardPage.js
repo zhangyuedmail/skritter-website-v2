@@ -26,6 +26,7 @@ define([
             this.doughnutList = null;
             this.heatmap = new CalHeatMap();
             this.listQueue = new ListsTableComponent();
+            this.listenTo(app.dialogs, 'feedback:submit', this.submitFeedback);
             this.listenTo(app.dialogs, 'goal-settings:save', this.saveGoalSettings);
             this.listenTo(app.dialogs, 'goal-settings:show', this.renderGoalSettings);
             this.listenTo(app.dialogs, 'logout-confirm:yes', app.user.logout);
@@ -90,15 +91,20 @@ define([
             var goal = app.user.settings.getGoal();
             var data = [];
             if (goal.type === 'items') {
-                //TODO: pull doughnut data from stats
-                var remaining = goal.value - app.user.data.items.getReviewedCount();
-                remaining = remaining < 0 ? 0 : remaining;
+                var remainingItems = goal.value - app.user.data.stats.getDailyItemsReviewed();
+                remainingItems = remainingItems < 0 ? 0 : remainingItems;
                 data = [
-                    {label: "Completed", value: goal.value - remaining, color:'#c5da4b'},
-                    {label: "Remaining", value: remaining, color: '#efeef3'}
+                    {label: "Completed", value: goal.value - remainingItems, color:'#c5da4b'},
+                    {label: "Remaining", value: remainingItems, color: '#efeef3'}
                 ];
             } else {
                 //TODO: display remaining goal based on time
+                //var remainingTime = goal.value - app.user.data.stats.getDailyItemsReviewed();
+                //remainingItems = remainingItems < 0 ? 0 : remainingItems;
+                data = [
+                    {label: "Completed", value: 0, color:'#c5da4b'},
+                    {label: "Remaining", value: 100, color: '#efeef3'}
+                ];
             }
             this.doughnutGoal = new Chart(context).Doughnut(data,
                 {
@@ -182,6 +188,26 @@ define([
             var goalValue = dialog.find('#goal-value').val();
             app.user.settings.setGoal(goalType, goalValue);
             this.renderGoalDoughnut();
+        },
+        /**
+         * @method submitFeedback
+         * @param {jQuery} dialog
+         */
+        submitFeedback: function(dialog) {
+            var message = dialog.find('#contact-message').val();
+            var subject = dialog.find('#contact-topic-select').val();
+            console.log(message, subject);
+            app.api.postContact('feedback', {
+                custom: {page: 'Dashboard'},
+                message: message,
+                subject: subject
+            }, function() {
+                app.dialogs.close();
+            }, function(error) {
+                dialog.find('.status-message').removeClass();
+                dialog.find('.status-message').addClass('text-danger');
+                dialog.find('.status-message').text(JSON.stringify(error));
+            });
         },
         /**
          * @method updateHeatmap

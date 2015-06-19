@@ -4,8 +4,9 @@ gelato-page(data-name="dashboard")
       .left
         .item.item-header(data-url="#") {{global.title}}
       .right
-        .item.item-icon(data-dialog="logout-confirm")
-          i.fa.fa-sign-out
+        .item.item-link(data-dialog="feedback") Contact
+        .item.item-text |
+        .item.item-link(data-dialog="logout-confirm") Logout
   gelato-content
     .container
       section#section-expired.row

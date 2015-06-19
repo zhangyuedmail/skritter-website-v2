@@ -1,12 +1,22 @@
-gelato-dialog(data-name='logout-confirm')
+gelato-dialog(data-name='feedback')
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
       .modal-content
         .modal-body.text-center
-          p.lead Are you sure you want to log out?
-          button.btn.btn-lg.btn-default(data-action='no', type='button', data-dismiss='modal') No, go back.
-          | &nbsp;&nbsp;
-          button.btn.btn-lg.btn-danger(data-action='yes', type='button') Yes, log out!
+          p.status-message
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label(for="contact-topic-select") Category
+              .col-sm-10
+                select#contact-topic-select.form-control
+                  option(value="[Beta] Feedback") Feedback
+                  option(value="[Beta] Bug") Bug report
+            .form-group
+              label.col-sm-2.control-label(for="contact-message") Message
+              textarea#contact-message.col-sm-10(rows="5")
+          button.btn.btn-lg.btn-default(data-action='close', type='button', data-dismiss='modal') Cancel
+          | &nbsp;&nbsp;&nbsp;&nbsp;
+          button.btn.btn-lg.btn-success(data-action='submit', type='button') Submit
 gelato-dialog(data-name='goal-settings')
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
@@ -26,3 +36,12 @@ gelato-dialog(data-name='goal-settings')
             | minutes
         .modal-footer.text-center
           button.btn.btn-success(data-action='save', type='button', data-dismiss='modal') Save
+gelato-dialog(data-name='logout-confirm')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-body.text-center
+          p.lead Are you sure you want to log out?
+          button.btn.btn-lg.btn-default(data-action='no', type='button', data-dismiss='modal') No, go back.
+          | &nbsp;&nbsp;
+          button.btn.btn-lg.btn-danger(data-action='yes', type='button') Yes, log out!

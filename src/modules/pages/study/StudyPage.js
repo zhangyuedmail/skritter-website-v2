@@ -28,6 +28,7 @@ define([
             this.prompt = new PromptComponent();
             this.sectionId = null;
             this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
+            this.listenTo(app.dialogs, 'feedback:submit', this.submitFeedback);
         },
         /**
          * @property title
@@ -98,6 +99,26 @@ define([
                 console.error(new Error('Unable to get next item.'));
             }
             return this;
+        },
+        /**
+         * @method submitFeedback
+         * @param {jQuery} dialog
+         */
+        submitFeedback: function(dialog) {
+            var message = dialog.find('#contact-message').val();
+            var subject = dialog.find('#contact-topic-select').val();
+            console.log(message, subject);
+            app.api.postContact('feedback', {
+                custom: {page: 'Study'},
+                message: message,
+                subject: subject
+            }, function() {
+                app.dialogs.close();
+            }, function(error) {
+                dialog.find('.status-message').removeClass();
+                dialog.find('.status-message').addClass('text-danger');
+                dialog.find('.status-message').text(JSON.stringify(error));
+            });
         }
     });
 
