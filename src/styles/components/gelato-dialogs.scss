@@ -1,5 +1,7 @@
 gelato-dialogs {
 
+  gelato-dialog .modal-content { border-radius: 25px; }
+
   gelato-dialog[data-name="feedback"] {
     form { margin: 0 30px 0 15px; }
     p { margin: 15px; }

@@ -187,6 +187,7 @@ define([
             var goalValue = dialog.find('#goal-value').val();
             app.user.settings.setGoal(goalType, goalValue);
             this.renderGoalDoughnut();
+            app.dialogs.close();
         },
         /**
          * @method submitFeedback
