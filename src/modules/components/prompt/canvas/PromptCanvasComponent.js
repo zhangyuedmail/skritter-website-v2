@@ -32,7 +32,7 @@ define([
             this.prompt = options.prompt;
             this.size = 500;
             this.stage = null;
-            this.strokeColor = '#5e5d60';
+            this.strokeColor = '#38240c';
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
                 this.moveTo(x1 , y1);
                 var dX = x2 - x1;
@@ -464,12 +464,20 @@ define([
          * @param {Array} path
          */
         tracePath: function(layerName, path) {
-            var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: '#337ab7'});
+            var size = this.size;
+            var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: '#38240c'});
             var tween = createjs.Tween.get(circle, {loop: true});
             for (var i = 1, length = path.length; i < length; i++) {
-                var adjustedX = path[i].x - path[0].x;
-                var adjustedY = path[i].y - path[0].y;
-                tween.to({x: adjustedX, y: adjustedY}, 1000);
+                var adjustedPoint = new createjs.Point(path[i].x - path[0].x, path[i].y - path[0].y);
+                var throttle = (app.fn.getDistance(path[i], path[i - 1]) / size) * 2000;
+                if (path.length < 3) {
+                    tween.to({x: adjustedPoint.x, y: adjustedPoint.y}, 1000);
+                } else {
+                    tween.to({x: adjustedPoint.x, y: adjustedPoint.y}, throttle);
+                }
+                if (i === length - 1) {
+                    tween.wait(1000);
+                }
             }
         },
         /**

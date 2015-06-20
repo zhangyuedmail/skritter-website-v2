@@ -37,7 +37,67 @@ define([
             'vclick #toolbar-correct': 'handleClickOptionCorrect',
             'vclick #toolbar-erase': 'handleClickOptionErase',
             'vclick #toolbar-show': 'handleClickOptionShow',
-            'vclick #toolbar-teach': 'handleClickOptionTeach'
+            'vclick #toolbar-stroke-order': 'handleClickOptionTeach'
+        },
+        /**
+         * @method disable
+         */
+        disable: function() {
+            this.$('button i').addClass('disabled');
+        },
+        /**
+         * @method disableCorrect
+         */
+        disableCorrect: function() {
+            this.$('#toolbar-correct i').addClass('disabled');
+        },
+        /**
+         * @method disableErase
+         */
+        disableErase: function() {
+            this.$('#toolbar-erase i').addClass('disabled');
+        },
+        /**
+         * @method disableShow
+         */
+        disableShow: function() {
+            this.$('#toolbar-show i').addClass('disabled');
+        },
+        /**
+         * @method disableStrokeOrder
+         */
+        disableStrokeOrder: function() {
+            this.$('#toolbar-stroke-order i').addClass('disabled');
+        },
+        /**
+         * @method enable
+         */
+        enable: function() {
+            this.$('button i').removeClass('disabled');
+        },
+        /**
+         * @method enableCorrect
+         */
+        enableCorrect: function() {
+            this.$('#toolbar-correct i').removeClass('disabled');
+        },
+        /**
+         * @method enableErase
+         */
+        enableErase: function() {
+            this.$('#toolbar-erase i').removeClass('disabled');
+        },
+        /**
+         * @method enableShow
+         */
+        enableShow: function() {
+            this.$('#toolbar-show i').removeClass('disabled');
+        },
+        /**
+         * @method enableStrokeOrder
+         */
+        enableStrokeOrder: function() {
+            this.$('#toolbar-stroke-order i').removeClass('disabled');
         },
         /**
          * @method handleClickOptionCorrect
@@ -52,10 +112,7 @@ define([
          */
         handleClickOptionErase: function(event) {
             event.preventDefault();
-            this.prompt.character().reset();
-            this.prompt.canvas.reset();
-            this.prompt.details.hideWriting(this.prompt.position());
-            this.prompt.renderPrompt();
+            this.prompt.erase();
         },
         /**
          * @method handleClickOptionShow
@@ -63,6 +120,7 @@ define([
          */
         handleClickOptionShow: function(event) {
             event.preventDefault();
+            this.prompt.reveal();
         },
         /**
          * @method handleClickOptionTeach

@@ -88,6 +88,7 @@ define([
             this.canvas.reset();
             this.canvas.disableGrid();
             this.grading.unselect();
+            this.toolbar.enable();
             if (this.review().isComplete()) {
                 this.handlePromptDefnComplete();
             } else {
@@ -96,6 +97,7 @@ define([
                 this.details.hideDefinition();
                 this.details.revealReading();
                 this.details.revealWriting();
+                this.grading.hide();
             }
             return this;
         },
@@ -107,6 +109,7 @@ define([
             this.canvas.reset();
             this.canvas.disableGrid();
             this.grading.unselect();
+            this.toolbar.enable();
             if (this.review().isComplete()) {
                 this.handlePromptRdngComplete();
             } else {
@@ -114,6 +117,10 @@ define([
                 this.canvas.revealReadingQuestion();
                 this.details.hideReading();
                 this.details.revealWriting();
+                this.grading.hide();
+                this.toolbar.disableErase();
+                this.toolbar.disableShow();
+                this.toolbar.disableStrokeOrder();
             }
             return this;
         },
@@ -128,12 +135,14 @@ define([
             this.details.revealDefinition();
             this.details.selectWriting(this.position());
             this.grading.unselect();
+            this.toolbar.enable();
             if (this.review().isComplete()) {
                 this.handlePromptRuneComplete();
             } else {
                 this.review().start();
                 this.canvas.enableInput();
                 this.details.revealReading();
+                this.grading.show();
             }
             return this;
         },
@@ -145,19 +154,23 @@ define([
             this.canvas.reset();
             this.canvas.disableGrid();
             this.canvas.drawCharacter('surface-background2', this.review().vocab.get('writing'), {
-                color: '#ebeaf0',
+                color: '#e8ded2',
                 font: this.review().vocab.getFontName()
             });
             this.canvas.drawShape('surface', this.character().getUserShape());
             this.details.revealDefinition();
             this.details.revealWriting();
             this.grading.unselect();
+            this.toolbar.enable();
             if (this.review().isComplete()) {
                 this.handlePromptToneComplete();
             } else {
                 this.review().start();
                 this.canvas.enableInput();
                 this.details.revealReading();
+                this.grading.show();
+                this.toolbar.disableErase();
+                this.toolbar.disableStrokeOrder();
             }
             return this;
         },
@@ -167,6 +180,18 @@ define([
          */
         character: function() {
             return this.review().character;
+        },
+        /**
+         * @method erase
+         */
+        erase: function() {
+            if (this.character()) {
+                this.character().reset();
+                this.canvas.reset();
+                this.details.hideWriting(this.position());
+                this.toolbar.enableShow();
+                this.renderPrompt();
+            }
         },
         /**
          * @method handleCanvasClick
@@ -230,6 +255,7 @@ define([
             this.canvas.revealDefinitionAnswer();
             this.details.revealDefinition();
             this.grading.select(this.review().get('score'));
+            this.grading.show();
         },
         /**
          * @method handlePromptRdngComplete
@@ -239,6 +265,7 @@ define([
             this.canvas.revealReadingAnswer();
             this.details.revealReading();
             this.grading.select(this.review().get('score'));
+            this.grading.show();
         },
         /**
          * @method handlePromptRuneComplete
@@ -249,6 +276,7 @@ define([
             this.canvas.injectLayerColor('surface', this.review().getGradingColor());
             this.details.revealWriting(this.position());
             this.grading.select(this.review().get('score'));
+            this.toolbar.disableShow();
         },
         /**
          * @method handlePromptToneComplete
@@ -259,6 +287,7 @@ define([
             this.canvas.injectLayerColor('surface', this.review().getGradingColor());
             this.details.revealReading(this.position());
             this.grading.select(this.review().get('score'));
+            this.toolbar.disableShow();
         },
         /**
          * @method handleSelectGrading
@@ -353,8 +382,6 @@ define([
          * @returns {PromptComponent}
          */
         resize: function() {
-            var panelLeft = this.$('#panel-left');
-            var panelRight = this.$('#panel-right');
             if (app.getWidth() < 1280) {
                 this.canvas.resize(400);
             } else {
@@ -373,6 +400,21 @@ define([
             return this.reviews.active();
         },
         /**
+         * @method reveal
+         * @returns {PromptComponent}
+         */
+        reveal: function() {
+            if (this.character() && !this.review().isComplete()) {
+                var shape = this.character().getTargetShape();
+                this.canvas.clearLayer('surface-background2');
+                this.canvas.drawShape('surface-background2', shape, {
+                    color: '#e8ded2'
+                });
+                this.toolbar.disableShow();
+            }
+            return this;
+        },
+        /**
          * @method set
          * @param {PromptReviews} reviews
          * @returns {PromptComponent}
@@ -384,6 +426,19 @@ define([
             this.canvas.renderFields();
             this.details.renderFields();
             this.renderPrompt();
+            return this;
+        },
+        /**
+         * @method teach
+         * @returns {PromptComponent}
+         */
+        teach: function() {
+            if (!this.review().isComplete()) {
+                var path = this.character().getExpectedStroke().getParamPath();
+                this.reveal();
+                this.canvas.clearLayer('input-background2');
+                this.canvas.tracePath('input-background2', path);
+            }
             return this;
         }
     });

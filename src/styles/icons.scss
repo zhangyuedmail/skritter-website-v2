@@ -120,15 +120,23 @@
   height: 23px;
   width: 23px;
 }
+.icon-study-correct {
+  background-image: url('#{$dir-assets}/vectors/study-correct.svg');
+  height: 44px;
+  width: 59px;
+  &.disabled { background-image: url('#{$dir-assets}/vectors/study-correct-disabled.svg'); }
+}
 .icon-study-erase {
   background-image: url('#{$dir-assets}/vectors/study-erase.svg');
   height: 48px;
   width: 44px;
+  &.disabled { background-image: url('#{$dir-assets}/vectors/study-erase-disabled.svg'); }
 }
 .icon-study-incorrect {
   background-image: url('#{$dir-assets}/vectors/study-incorrect.svg');
   height: 44px;
   width: 59px;
+  &.disabled { background-image: url('#{$dir-assets}/vectors/study-incorrect-disabled.svg'); }
 }
 .icon-study-info {
   background-image: url('#{$dir-assets}/vectors/study-info.svg');
@@ -144,11 +152,13 @@
   background-image: url('#{$dir-assets}/vectors/study-show.svg');
   height: 34px;
   width: 58px;
+  &.disabled { background-image: url('#{$dir-assets}/vectors/study-show-disabled.svg'); }
 }
 .icon-study-stroke-order {
   background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
   height: 50px;
   width: 52px;
+  &.disabled { background-image: url('#{$dir-assets}/vectors/study-stroke-order-disabled.svg'); }
 }
 .icon-study-word-edit {
   background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
@@ -164,4 +174,16 @@
   background-image: url('#{$dir-assets}/vectors/study-word-volume.svg');
   height: 24px;
   width: 24px;
+}
+
+/*** STUDY: LIGHT ***/
+.icon-light-add-word {
+  background-image: url('#{$dir-assets}/vectors/study-light-add-word.svg');
+  height: 31px;
+  width: 31px;
+}
+.icon-light-collapse-nav {
+  background-image: url('#{$dir-assets}/vectors/study-light-collapse-nav.svg');
+  height: 31px;
+  width: 31px;
 }

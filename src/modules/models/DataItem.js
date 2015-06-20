@@ -132,11 +132,8 @@ define([
                 var itemNext = this.get('next') || 0;
                 var actualAgo = now - itemLast;
                 var scheduledAgo = itemNext - itemLast;
-                if (!itemLast && itemNext - now > 600) {
+                if (!itemLast) {
                     return 9999;
-                }
-                if (!itemLast || itemNext - itemLast === 1) {
-                    return 0.2;
                 }
                 return actualAgo / scheduledAgo;
             }

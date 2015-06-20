@@ -33,6 +33,27 @@ define([
             return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
         },
         /**
+         * @method getParamPath
+         * @returns {DataParam}
+         */
+        getParamPath: function() {
+            var matrix = this.getTargetShape().getMatrix();
+            var param = app.user.data.params.findWhere({strokeId: this.get('strokeId'), trace: true});
+            if (!param) {
+                var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+                param = params[params.length - 1];
+            }
+            param = param.clone();
+            var corners = _.cloneDeep(param.get('corners'));
+            for (var i = 0, length = corners.length; i < length; i++) {
+                var inflatedCorner = matrix.transformPoint(corners[i].x, corners[i].y);
+                corners[i].x = inflatedCorner.x;
+                corners[i].y = inflatedCorner.y;
+            }
+            param.set('corners', corners);
+            return param.get('corners');
+        },
+        /**
          * @method getParams
          * @returns {Array}
          */
@@ -71,38 +92,25 @@ define([
         getTargetShape: function() {
             var data = this.inflateData();
             var shape = this.get('shape').clone(true);
-            var ms = shape.getMatrix();
-            ms.scale(data.scaleX, data.scaleY);
-            ms.translate(-data.w / 2, -data.h / 2);
-            ms.rotate(data.rot * createjs.Matrix2D.DEG_TO_RAD);
-            var t = ms.decompose();
-            shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
-            var finalBounds = shape.getTransformedBounds();
-            shape.x += finalBounds.width / 2 + data.x;
-            shape.y += finalBounds.height / 2 + data.y;
+            if (this.isKana()) {
+                shape.x = data.x;
+                shape.y = data.y;
+                shape.scaleX = data.w / 500;
+                shape.scaleY = data.h / 500;
+                shape.rotation = data.rot;
+            } else {
+                var ms = shape.getMatrix();
+                ms.scale(data.scaleX, data.scaleY);
+                ms.translate(-data.w / 2, -data.h / 2);
+                ms.rotate(data.rot * createjs.Matrix2D.DEG_TO_RAD);
+                var t = ms.decompose();
+                shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
+                var finalBounds = shape.getTransformedBounds();
+                shape.x += finalBounds.width / 2 + data.x;
+                shape.y += finalBounds.height / 2 + data.y;
+            }
             shape.name = 'stroke-' + this.get('position');
             return shape;
-        },
-        /**
-         * @method getTraceParam
-         * @returns {DataParam}
-         */
-        getTraceParam: function() {
-            var matrix = this.getTargetShape().getMatrix();
-            var param = app.user.data.params.findWhere({strokeId: this.get('strokeId'), trace: true});
-            if (!param) {
-                var params = app.user.data.params.where({strokeId: this.get('strokeId')});
-                param = params[params.length - 1];
-            }
-            param = param.clone();
-            var corners = _.cloneDeep(param.get('corners'));
-            for (var i = 0, length = corners.length; i < length; i++) {
-                var inflatedCorner = matrix.transformPoint(corners[i].x, corners[i].y);
-                corners[i].x = inflatedCorner.x;
-                corners[i].y = inflatedCorner.y;
-            }
-            param.set('corners', corners);
-            return param;
         },
         /**
          * @method getUserRectangle
@@ -146,6 +154,13 @@ define([
                 scaleY: (data[4] * size) / bounds.height,
                 rot: -data[5]
             };
+        },
+        /**
+         * @method isKana
+         * @returns {Boolean}
+         */
+        isKana: function() {
+            return this.get('strokeId') >= 600 && this.get('strokeId') <= 834;
         },
         /**
          * @method updateCorners

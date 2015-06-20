@@ -3148,7 +3148,7 @@ define([], function () {
      * @param {String} [color]
      */
     function get(strokeId, color) {
-        return data[strokeId](color || '#000000');
+        return data[strokeId](color || '#38240c');
     }
 
     return {
