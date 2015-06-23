@@ -31,7 +31,8 @@ define([
             this.sectionId = null;
             this.toolbar = new StudyToolbarComponent();
             this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
-            this.listenTo(app.dialogs, 'feedback:submit', this.submitFeedback);
+            this.listenTo(app.dialogs, 'feedback:show', this.handleFeedbackShow);
+            this.listenTo(app.dialogs, 'feedback:submit', this.handleFeedbackSubmit);
             this.listenTo(app.dialogs, 'logout-confirm:yes', app.user.logout);
         },
         /**
@@ -53,6 +54,37 @@ define([
             this.prompt.setElement(this.$('#prompt-container')).render().hide();
             this.toolbar.setElement(this.$('#study-toolbar-container')).render().hide();
             return this;
+        },
+        /**
+         * @method handleFeedbackShow
+         * @param {jQuery} dialog
+         */
+        handleFeedbackShow: function(dialog) {
+            dialog.find('#contact-message').val('');
+            dialog.find('.status-message').empty();
+        },
+        /**
+         * @method handleFeedbackSubmit
+         * @param {jQuery} dialog
+         */
+        handleFeedbackSubmit: function(dialog) {
+            var message = dialog.find('#contact-message').val();
+            var subject = dialog.find('#contact-topic-select').val();
+            if (message.trim().length < 25) {
+                dialog.find('.status-message').text('Message must be longer than 25 characters.');
+                return;
+            }
+            app.api.postContact('feedback', {
+                custom: {page: 'Study'},
+                message: message,
+                subject: subject
+            }, function() {
+                app.dialogs.close();
+            }, function(error) {
+                dialog.find('.status-message').removeClass();
+                dialog.find('.status-message').addClass('text-danger');
+                dialog.find('.status-message').text(JSON.stringify(error));
+            });
         },
         /**
          * @method handlePromptComplete
@@ -105,25 +137,6 @@ define([
                 console.error(new Error('Unable to get next item.'));
             }
             return this;
-        },
-        /**
-         * @method submitFeedback
-         * @param {jQuery} dialog
-         */
-        submitFeedback: function(dialog) {
-            var message = dialog.find('#contact-message').val();
-            var subject = dialog.find('#contact-topic-select').val();
-            app.api.postContact('feedback', {
-                custom: {page: 'Study'},
-                message: message,
-                subject: subject
-            }, function() {
-                app.dialogs.close();
-            }, function(error) {
-                dialog.find('.status-message').removeClass();
-                dialog.find('.status-message').addClass('text-danger');
-                dialog.find('.status-message').text(JSON.stringify(error));
-            });
         }
     });
 
