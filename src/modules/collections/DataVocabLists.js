@@ -63,6 +63,7 @@ define([
                         callbackError(error);
                     }
                 } else {
+                    self.trigger('update', self);
                     if (typeof callbackSuccess === 'function') {
                         callbackSuccess();
                     }
