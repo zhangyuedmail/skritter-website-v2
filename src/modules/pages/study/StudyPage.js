@@ -53,6 +53,7 @@ define([
             this.renderTemplate(Template);
             this.prompt.setElement(this.$('#prompt-container')).render().hide();
             this.toolbar.setElement(this.$('#study-toolbar-container')).render().hide();
+            app.user.data.stats.fetch();
             return this;
         },
         /**
@@ -129,9 +130,9 @@ define([
                 this.item = item;
                 this.prompt.set(item.getPromptReviews());
                 this.prompt.show();
+                this.toolbar.show();
                 if (this.counter % 5 === 0) {
-                    console.log('FETCHING ITEMS:', 5);
-                    app.user.data.items.fetch({limit: 5});
+                    app.user.data.items.fetchNext({limit: 5});
                 }
             } else {
                 console.error(new Error('Unable to get next item.'));
