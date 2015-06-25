@@ -22,10 +22,9 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.doughnutGoal = null;
-            this.doughnutList = null;
             this.heatmap = new CalHeatMap();
             this.listQueue = new ListsTableComponent();
+            this.listenTo(app.dialogs, 'feedback:show', this.handleFeedbackShow);
             this.listenTo(app.dialogs, 'feedback:submit', this.submitFeedback);
             this.listenTo(app.dialogs, 'goal-settings:save', this.saveGoalSettings);
             this.listenTo(app.dialogs, 'goal-settings:show', this.renderGoalSettings);
@@ -91,19 +90,9 @@ define([
             var goal = app.user.settings.getGoal();
             var data = [];
             if (goal.type === 'items') {
-                var remainingItems = goal.value - app.user.data.stats.getDailyItemsReviewed();
-                remainingItems = remainingItems < 0 ? 0 : remainingItems;
-                data = [
-                    {label: "Completed", value: goal.value - remainingItems, color:'#c5da4b'},
-                    {label: "Remaining", value: remainingItems, color: '#efeef3'}
-                ];
+                data = app.user.data.stats.getGoalItemData();
             } else {
-                var remainingTime = goal.value - (app.user.data.stats.getDailyTimeStudied() / 60);
-                remainingTime = remainingTime < 0 ? 0 : remainingTime;
-                data = [
-                    {label: "Completed", value: (goal.value - remainingTime).toFixed(2), color:'#c5da4b'},
-                    {label: "Remaining", value: remainingTime.toFixed(2), color: '#efeef3'}
-                ];
+                data = app.user.data.stats.getGoalTimeData();
             }
             this.doughnutGoal = new Chart(context).Doughnut(data,
                 {
@@ -170,7 +159,6 @@ define([
                 name: 'Name',
                 progress: 'Progress'
             });
-            //this.renderListDoughnut();
             return this;
         },
         /**
@@ -178,6 +166,14 @@ define([
          * @type {Object}
          */
         events: {},
+        /**
+         * @method handleFeedbackShow
+         * @param {jQuery} dialog
+         */
+        handleFeedbackShow: function(dialog) {
+            dialog.find('#contact-message').val('');
+            dialog.find('.status-message').empty();
+        },
         /**
          * @method saveGoalSettings
          * @param {jQuery} dialog
