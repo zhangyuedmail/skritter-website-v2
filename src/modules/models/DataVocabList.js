@@ -39,16 +39,16 @@ define([
             var total = 0;
             var sections = this.get('sections');
             var currentIndex = this.get('currentIndex') || 0;
-            var currentSection = this.get('currentSection') || sections[0];
+            var currentSection = this.get('currentSection') || sections[0].id;
             for (var i = 0, length = sections.length; i < length; i++) {
-                var section = sections[0];
+                var section = sections[i];
                 if (this.get('sectionsSkipping').indexOf(section.id) > -1) {
                     continue;
                 }
                 if (section.id === currentSection) {
                     added += currentIndex;
                     passed = true;
-                } else if (passed) {
+                } else if (!passed) {
                     added += section.rows.length;
                 }
                 total += section.rows.length;
