@@ -113,10 +113,10 @@ define([
         getScore: function() {
             var score = this.at(0).get('score');
             if (this.length > 1) {
-                var totalCount = this.length;
+                var totalCount = this.length - 1;
                 var totalScore = 0;
                 var totalWrong = 0;
-                for (var i = 0, length = this.length; i < length; i++) {
+                for (var i = 1, length = this.length; i < length; i++) {
                     var reviewScore = this.at(i).get('score');
                     totalScore += reviewScore;
                     if (reviewScore === 3) {
@@ -224,6 +224,7 @@ define([
                 if (error) {
                     callbackError(error);
                 } else {
+                    console.log('HISTORY REVIEWS:', reviews);
                     app.user.history.add({reviews: reviews, timestamp: Date.now()});
                     callbackSuccess();
                 }
