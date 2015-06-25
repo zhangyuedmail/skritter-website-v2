@@ -420,7 +420,6 @@ define([
          * @returns {PromptComponent}
          */
         set: function(reviews) {
-            console.log('PROMPT:', reviews.part, reviews.vocab.id, reviews);
             this.reviews = reviews;
             this.canvas.reset();
             this.canvas.renderFields();
