@@ -36,7 +36,6 @@ define([
          */
         defaults: function() {
             return {
-                score: 3,
                 vocabIds: []
             };
         },
@@ -171,6 +170,13 @@ define([
          */
         isNew: function() {
             return this.get('reviews') > 0;
+        },
+        /**
+         * @method isReady
+         * @returns {Boolean}
+         */
+        isReady: function() {
+            return this.get('vocabIds').length ? true : false;
         }
     });
 
