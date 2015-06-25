@@ -126,6 +126,48 @@ define([
             return stat ? stat.get('timeStudied').day : 0;
         },
         /**
+         * @method getGoalItemData
+         * @returns {Array}
+         */
+        getGoalItemData: function() {
+            var goal = app.user.settings.getGoal();
+            var remainingItems = goal.value - this.getDailyItemsReviewed() || 0;
+            return [
+                {label: "Completed", value: goal.value - remainingItems, color:'#c5da4b'},
+                {label: "Remaining", value: remainingItems, color: '#efeef3'}
+            ];
+        },
+        /**
+         * @method getGoalItemPercent
+         * @returns {Number}
+         */
+        getGoalItemPercent: function() {
+            var data = this.getGoalItemData();
+            var total = data[0].value + data[1].value;
+            return Math.round(data[0].value / total * 100);
+        },
+        /**
+         * @method getGoalTimeData
+         * @returns {Array}
+         */
+        getGoalTimeData: function() {
+            var goal = app.user.settings.getGoal();
+            var remainingTime = goal.value - (app.user.data.stats.getDailyTimeStudied() / 60) || 0;
+            return [
+                {label: "Completed", value: (goal.value - remainingTime).toFixed(2), color:'#c5da4b'},
+                {label: "Remaining", value: remainingTime.toFixed(2), color: '#efeef3'}
+            ];
+        },
+        /**
+         * @method getGoalTimePercent
+         * @returns {Number}
+         */
+        getGoalTimePercent: function() {
+            var data = this.getGoalTimeData();
+            var total = data[0].value + data[1].value;
+            return Math.round(data[0].value / total * 100);
+        },
+        /**
          * @method getHeatmapData
          * @returns {Object}
          */
