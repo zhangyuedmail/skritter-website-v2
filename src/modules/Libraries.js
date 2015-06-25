@@ -7,9 +7,9 @@ define([
     'bootstrap.datetimepicker',
     'chart',
     'createjs.easel',
-    'createjs.tween',
-    'd3',
-    'heatmap'
+    'createjs.tween'
+    //'d3',
+    //'heatmap'
 ], function(Keypress) {
     window.Keypress = Keypress;
 });
