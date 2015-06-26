@@ -36,7 +36,8 @@ define([
          * @type Object
          */
         events: {
-            'vclick .btn': 'handleClickButton'
+            'vclick .btn': 'handleClickButton',
+            'vmousedown .btn': 'handleMousedownButton'
         },
         /**
          * @method handleClickButton
@@ -44,8 +45,18 @@ define([
          */
         handleClickButton: function(event) {
             event.preventDefault();
-            this.select(parseInt($(event.currentTarget).data('value'), 10));
+            var target = $(event.currentTarget);
+            this.select(parseInt(target.data('value'), 10));
             this.trigger('select', this.value);
+        },
+        /**
+         * @method handleMousedownButton
+         * @param {Event} event
+         */
+        handleMousedownButton: function(event) {
+            event.preventDefault();
+            var target = $(event.currentTarget);
+            target.addClass('selected');
         },
         /**
          * @method select
