@@ -286,6 +286,7 @@ define([
             this.canvas.disableInput();
             this.canvas.injectLayerColor('surface', this.review().getGradingColor());
             this.details.revealReading(this.position());
+            this.details.revealReadingTone(this.position());
             this.grading.select(this.review().get('score'));
             this.toolbar.disableShow();
         },

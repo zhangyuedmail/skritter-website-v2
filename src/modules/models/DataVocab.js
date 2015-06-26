@@ -171,38 +171,23 @@ define([
          */
         getReadingElement: function() {
             var element = '';
-            //var fillers = [" ... ", "'", " "];
-            var variations = this.getSegmentedReading();
+            var variations = this.get('reading').split(', ');
             for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
                 var variation = variations[a];
-                for (var b = 0, lengthB = variation.length; b < lengthB; b++) {
-                    var reading = variation[b];
-                    var readingMarks = app.fn.pinyin.toTone(reading);
-                    var readingToneless = reading.replace(/[1-5]/g, '');
-                    element += "<div class='reading-element mask' data-position='" + b + "'>";
-                    element += "<span class='pinyin-marks'>" + readingMarks + "</span>";
-                    element += "<span class='pinyin-toneless hidden'>" + readingToneless + "</span>";
-                    element += "</div>";
+                var segments = variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g);
+                element += '<div class="variation" data-variation="' + a + '">';
+                for (var b = 0, lengthB = segments.length; b < lengthB; b++) {
+                    var segment = segments[b];
+                    var segmentMarks = app.fn.pinyin.toTone(segment);
+                    var segmentRaw = segment.replace(/[1-5]/g, '');
+                    element += '<div class="segment mask" data-segment="' + b + '">';
+                    element += '<span class="raw">' + segmentRaw + '</span>';
+                    element += '<span class="tone hidden">' + segmentMarks + '</span>';
+                    element += '</div>';
                 }
+                element += '</div>';
             }
             return element;
-        },
-        /**
-         * @method getSegmentedReading
-         * @returns {Array}
-         */
-        getSegmentedReading: function() {
-            var segments = [];
-            if (this.isChinese()) {
-                var variations = this.get('reading').split(', ');
-                for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
-                    var variation = variations[a];
-                    segments.push(variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g));
-                }
-            } else {
-                //TODO: properly segment Japanese
-            }
-            return segments;
         },
         /**
          * @method getSentence

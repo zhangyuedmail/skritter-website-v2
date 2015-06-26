@@ -121,10 +121,23 @@ define([
          * @param {Number} [position]
          */
         hideReading: function(position) {
-            if (position === undefined) {
-                this.$('#vocab-reading .reading-element').addClass('mask');
+            if (position !== undefined) {
+                this.$('#vocab-reading .segment[data-segment="' + position + '"]').addClass('mask');
             } else {
-                this.$('#vocab-reading [data-position="' + position + '"]').addClass('mask');
+                this.$('#vocab-reading .segment').addClass('mask');
+            }
+        },
+        /**
+         * @method hideReadingTone
+         * @param {Number} [position]
+         */
+        hideReadingTone: function(position) {
+            if (position !== undefined) {
+                this.$('#vocab-reading .segment[data-segment="' + position + '"] .raw').removeClass('hidden');
+                this.$('#vocab-reading .segment[data-segment="' + position + '"] .tone').addClass('hidden');
+            } else {
+                this.$('#vocab-reading .segment .raw').removeClass('hidden');
+                this.$('#vocab-reading .segment .tone').addClass('hidden');
             }
         },
         /**
@@ -132,10 +145,10 @@ define([
          * @param {Number} [position]
          */
         hideWriting: function(position) {
-            if (position === undefined) {
-                this.$('#writing-reading .writing-element').addClass('mask');
-            } else {
+            if (position !== undefined) {
                 this.$('#writing-reading [data-position="' + position + '"]').addClass('mask');
+            } else {
+                this.$('#writing-reading .writing-element').addClass('mask');
             }
         },
         /**
@@ -149,10 +162,23 @@ define([
          * @param {Number} [position]
          */
         revealReading: function(position) {
-            if (position === undefined) {
-                this.$('#vocab-reading .reading-element').removeClass('mask');
+            if (position !== undefined) {
+                this.$('#vocab-reading .segment[data-segment="' + position + '"]').removeClass('mask');
             } else {
-                this.$('#vocab-reading [data-position="' + position + '"]').removeClass('mask');
+                this.$('#vocab-reading .segment').removeClass('mask');
+            }
+        },
+        /**
+         * @method revealReadingTone
+         * @param {Number} [position]
+         */
+        revealReadingTone: function(position) {
+            if (position !== undefined) {
+                this.$('#vocab-reading .segment[data-segment="' + position + '"] .raw').addClass('hidden');
+                this.$('#vocab-reading .segment[data-segment="' + position + '"] .tone').removeClass('hidden');
+            } else {
+                this.$('#vocab-reading .segment .raw').addClass('hidden');
+                this.$('#vocab-reading .segment .tone').removeClass('hidden');
             }
         },
         /**

@@ -298,32 +298,18 @@ define([
     }
 
     /**
-     * @method segmentReading
-     * @param {String} reading
-     * @returns {Array}
-     */
-    function segmentReading(reading) {
-        var segments = [];
-        var variations = reading.split(', ');
-        for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
-            var variation = variations[a];
-            segments.push(variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g));
-        }
-        return segments;
-    }
-
-    /**
      * @method textToHTML
      * @param {String} text
      */
     function textToHTML(text) {
-        if (text) {
-            return text.replace(/img:(http:\/\/\S+)/gi, '<img src="$1"/>')
-                .replace(/_([^ _][^_]*)_(?!\S{4})/gi, '<em>$1</em>')
-                .replace(/\n/gi, '<br/>')
-                .replace(/\*([^*]+)\*/gi, '<strong>$1</strong>');
+        if (!text) {
+            return '';
         }
-        return '';
+        return text
+            .replace(/img:(http:\/\/\S+)/gi, '<img src="$1"/>')
+            .replace(/_([^ _][^_]*)_(?!\S{4})/gi, '<em>$1</em>')
+            .replace(/\n/gi, '<br/>')
+            .replace(/\*([^*]+)\*/gi, '<strong>$1</strong>');
     }
 
     /**
@@ -366,7 +352,6 @@ define([
         pinyin: pinyin,
         randomDecimal: randomDecimal,
         recognizer: recognizer,
-        segmentReading: segmentReading,
         shortstraw: shortstraw,
         textToHTML: textToHTML,
         toLowerCase: toLowerCase,
