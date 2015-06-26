@@ -105,6 +105,16 @@ define([
          */
         handleClickOptionCorrect: function(event) {
             event.preventDefault();
+            var review = this.prompt.review();
+            if (review.get('score') < 2) {
+                review.set('score', 3);
+                this.prompt.grading.select(3);
+                this.toggleCorrect();
+            } else {
+                review.set('score', 1);
+                this.prompt.grading.select(1);
+                this.toggleIncorrect();
+            }
         },
         /**
          * @method handleClickOptionErase
@@ -128,6 +138,21 @@ define([
          */
         handleClickOptionTeach: function(event) {
             event.preventDefault();
+            this.prompt.enableTeaching();
+        },
+        /**
+         * @method toggleCorrect
+         */
+        toggleCorrect: function() {
+            this.$('#toolbar-correct i').removeClass('icon-study-incorrect');
+            this.$('#toolbar-correct i').addClass('icon-study-correct');
+        },
+        /**
+         * @method toggleIncorrect
+         */
+        toggleIncorrect: function() {
+            this.$('#toolbar-correct i').removeClass('icon-study-correct');
+            this.$('#toolbar-correct i').addClass('icon-study-incorrect');
         }
     });
 

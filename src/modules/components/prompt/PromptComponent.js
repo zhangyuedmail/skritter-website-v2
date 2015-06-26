@@ -99,6 +99,9 @@ define([
                 this.details.revealReadingTone();
                 this.details.revealWriting();
                 this.grading.hide();
+                this.toolbar.disableErase();
+                this.toolbar.disableShow();
+                this.toolbar.disableStrokeOrder();
             }
             return this;
         },
@@ -172,6 +175,7 @@ define([
                 this.details.revealReading();
                 this.grading.show();
                 this.toolbar.disableErase();
+                this.toolbar.disableShow();
                 this.toolbar.disableStrokeOrder();
             }
             return this;
@@ -184,10 +188,26 @@ define([
             return this.review().character;
         },
         /**
+         * @method disableTeaching
+         * @returns {PromptComponent}
+         */
+        disableTeaching: function() {
+            this.canvas.clearLayer('input-background2');
+            this.toolbar.disableStrokeOrder();
+            this.teaching = false;
+        },
+        /**
+         * @method enableTeaching
+         * @returns {PromptComponent}
+         */
+        enableTeaching: function() {
+            this.teach();
+        },
+        /**
          * @method erase
          */
         erase: function() {
-            if (this.character()) {
+            if (this.reviews.part === 'rune' && this.character()) {
                 this.character().reset();
                 this.canvas.reset();
                 this.details.hideWriting(this.position());
@@ -258,7 +278,10 @@ define([
             this.details.revealDefinition();
             this.grading.select(this.review().get('score'));
             this.grading.show();
-            if (app.user.settings.get('audio')) {
+            this.toolbar.disableErase();
+            this.toolbar.disableShow();
+            this.toolbar.disableStrokeOrder();
+            if (app.user.settings.isAudioEnabled()) {
                 this.reviews.vocab.play();
             }
         },
@@ -272,7 +295,10 @@ define([
             this.details.revealReadingTone();
             this.grading.select(this.review().get('score'));
             this.grading.show();
-            if (app.user.settings.get('audio')) {
+            this.toolbar.disableErase();
+            this.toolbar.disableShow();
+            this.toolbar.disableStrokeOrder();
+            if (app.user.settings.isAudioEnabled()) {
                 this.reviews.vocab.play();
             }
         },
@@ -286,6 +312,8 @@ define([
             this.details.revealWriting(this.position());
             this.grading.select(this.review().get('score'));
             this.toolbar.disableShow();
+            this.toolbar.disableStrokeOrder();
+            this.disableTeaching();
         },
         /**
          * @method handlePromptToneComplete
@@ -298,7 +326,8 @@ define([
             this.details.revealReadingTone(this.position());
             this.grading.select(this.review().get('score'));
             this.toolbar.disableShow();
-            if (app.user.settings.get('audio')) {
+            this.toolbar.disableStrokeOrder();
+            if (app.user.settings.isAudioEnabled()) {
                 this.reviews.vocab.play();
             }
         },
@@ -350,6 +379,9 @@ define([
                 var targetShape = stroke.getTargetShape();
                 var userShape = stroke.getUserShape();
                 this.canvas.tweenShape('surface', userShape, targetShape);
+                if (this.teaching) {
+                    this.teach();
+                }
                 if (this.character().isComplete()) {
                     this.handlePromptRuneComplete();
                 }
@@ -417,8 +449,9 @@ define([
          * @returns {PromptComponent}
          */
         reveal: function() {
-            if (this.character() && !this.review().isComplete()) {
+            if (this.reviews.part === 'rune' && this.character() && !this.review().isComplete()) {
                 var shape = this.character().getTargetShape();
+                this.review().set('score', 1);
                 this.canvas.clearLayer('surface-background2');
                 this.canvas.drawShape('surface-background2', shape, {
                     color: '#e8ded2'
@@ -438,22 +471,25 @@ define([
             this.canvas.renderFields();
             this.details.renderFields();
             if (this.reviews.part === 'rune' &&
-                app.user.settings.get('audio')) {
+                app.user.settings.isAudioEnabled()) {
                 this.reviews.vocab.play();
             }
             this.renderPrompt();
             return this;
         },
         /**
-         * @method teach
+         * @method enableTeaching
          * @returns {PromptComponent}
          */
         teach: function() {
-            if (!this.review().isComplete()) {
-                var path = this.character().getExpectedStroke().getParamPath();
+            if (this.reviews.part === 'rune' && this.character() && !this.review().isComplete()) {
                 this.reveal();
                 this.canvas.clearLayer('input-background2');
-                this.canvas.tracePath('input-background2', path);
+                this.canvas.tracePath('input-background2', this.character().getExpectedStroke().getParamPath());
+                this.toolbar.disableStrokeOrder();
+                this.teaching = true;
+            } else {
+                this.disableTeaching();
             }
             return this;
         }
