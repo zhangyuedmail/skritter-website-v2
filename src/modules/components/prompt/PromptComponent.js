@@ -96,6 +96,7 @@ define([
                 this.canvas.revealDefinitionQuestion();
                 this.details.hideDefinition();
                 this.details.revealReading();
+                this.details.revealReadingTone();
                 this.details.revealWriting();
                 this.grading.hide();
             }
@@ -142,6 +143,7 @@ define([
                 this.review().start();
                 this.canvas.enableInput();
                 this.details.revealReading();
+                this.details.revealReadingTone();
                 this.grading.show();
             }
             return this;
@@ -264,6 +266,7 @@ define([
             this.review().stop();
             this.canvas.revealReadingAnswer();
             this.details.revealReading();
+            this.details.revealReadingTone();
             this.grading.select(this.review().get('score'));
             this.grading.show();
         },
