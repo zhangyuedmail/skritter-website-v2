@@ -63,6 +63,10 @@ gelato-component[data-name="prompt-canvas"] {
     }
     #navigate-left { left: -50px; }
     #navigate-right { right: -50px; }
+    @media (max-width: 1280px) {
+      #navigate-left { left: -30px; }
+      #navigate-right { right: -30px; }
+    }
   }
 
 }
