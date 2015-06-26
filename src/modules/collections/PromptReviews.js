@@ -224,7 +224,6 @@ define([
                 if (error) {
                     callbackError(error);
                 } else {
-                    console.log('HISTORY REVIEWS:', reviews);
                     app.user.history.add({reviews: reviews, timestamp: Date.now()});
                     callbackSuccess();
                 }

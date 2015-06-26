@@ -177,6 +177,14 @@ define([
          */
         isReady: function() {
             return this.get('vocabIds').length ? true : false;
+        },
+        /**
+         * @method play
+         * @returns {DataItem}
+         */
+        play: function() {
+            this.getVocab().play();
+            return this;
         }
     });
 

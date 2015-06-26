@@ -258,6 +258,9 @@ define([
             this.details.revealDefinition();
             this.grading.select(this.review().get('score'));
             this.grading.show();
+            if (app.user.settings.get('audio')) {
+                this.reviews.vocab.play();
+            }
         },
         /**
          * @method handlePromptRdngComplete
@@ -269,6 +272,9 @@ define([
             this.details.revealReadingTone();
             this.grading.select(this.review().get('score'));
             this.grading.show();
+            if (app.user.settings.get('audio')) {
+                this.reviews.vocab.play();
+            }
         },
         /**
          * @method handlePromptRuneComplete
@@ -292,6 +298,9 @@ define([
             this.details.revealReadingTone(this.position());
             this.grading.select(this.review().get('score'));
             this.toolbar.disableShow();
+            if (app.user.settings.get('audio')) {
+                this.reviews.vocab.play();
+            }
         },
         /**
          * @method handleSelectGrading
@@ -428,6 +437,10 @@ define([
             this.canvas.reset();
             this.canvas.renderFields();
             this.details.renderFields();
+            if (this.reviews.part === 'rune' &&
+                app.user.settings.get('audio')) {
+                this.reviews.vocab.play();
+            }
             this.renderPrompt();
             return this;
         },
