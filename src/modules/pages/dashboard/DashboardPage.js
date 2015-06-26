@@ -104,8 +104,9 @@ define([
             }
             this.doughnutGoal = new Chart(context).Doughnut(data,
                 {
+                    animateRotate : false,
                     percentageInnerCutout : 80,
-                    animateRotate : false
+                    tooltipTemplate : "<%if (label){%><%=label%>: <%}%><%= value %>%"
                 }
             );
         },
