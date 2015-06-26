@@ -90,9 +90,17 @@ define([
             var goal = app.user.settings.getGoal();
             var data = [];
             if (goal.type === 'items') {
-                data = app.user.data.stats.getGoalItemData();
+                var percentItems = app.user.data.stats.getGoalItemPercent();
+                data = [
+                    {value: percentItems, color:'#c5da4b'},
+                    {value: 100 - percentItems, color: '#efeef3'}
+                ];
             } else {
-                data = app.user.data.stats.getGoalTimeData();
+                var percentTime = app.user.data.stats.getGoalTimePercent();
+                data = [
+                    {value: percentTime, color:'#c5da4b'},
+                    {value: 100 - percentTime, color: '#efeef3'}
+                ];
             }
             this.doughnutGoal = new Chart(context).Doughnut(data,
                 {
