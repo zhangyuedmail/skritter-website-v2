@@ -110,9 +110,11 @@ define([
             var self = this;
             this.listId = listId || null;
             this.sectionId = sectionId || null;
+            app.dialogs.open('loading');
             app.user.data.items.fetchNext({
                 limit: 10
             }, function() {
+                app.dialogs.close();
                 self.loadNext();
             }, function(error) {
                 console.error(error);
@@ -130,7 +132,7 @@ define([
                 this.item = item;
                 this.prompt.set(item.getPromptReviews());
                 this.prompt.show();
-                this.toolbar.show();
+                //this.toolbar.show();
                 if (this.counter % 5 === 0) {
                     app.user.data.items.fetchNext({limit: 5});
                 }
@@ -138,6 +140,15 @@ define([
                 console.error(new Error('Unable to get next item.'));
             }
             return this;
+        },
+        /**
+         * @method remove
+         * @returns {GelatoView}
+         */
+        remove: function() {
+            this.prompt.remove();
+            this.toolbar.remove();
+            return GelatoPage.prototype.remove.call(this);
         }
     });
 

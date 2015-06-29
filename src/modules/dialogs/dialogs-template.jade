@@ -43,6 +43,12 @@ gelato-dialog(data-name='goal-settings')
             button.btn.btn-lg.btn-default(data-action='cancel', type='button', data-dismiss='modal') Cancel
             | &nbsp;&nbsp;&nbsp;&nbsp;
             button.btn.btn-lg.btn-success(data-action='save', type='button') Save
+gelato-dialog(data-name='loading')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-body.text-center
+          img(src='assets/ajax-loader.gif', width='100', height='100', alt='')
 gelato-dialog(data-name='logout-confirm')
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog

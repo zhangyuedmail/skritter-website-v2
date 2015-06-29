@@ -54,10 +54,29 @@ define([
             this.renderHeatmap();
             this.renderAllTime();
             this.renderDailyGoal();
-            this.renderListQueue();
-            app.user.data.items.fetch();
-            app.user.data.stats.fetch();
-            app.user.data.vocablists.fetch();
+            Async.parallel([
+                function(callback) {
+                    app.dialogs.open('loading');
+                    app.user.data.items.fetch(function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.user.data.stats.fetch(function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.user.data.vocablists.fetch();
+                    callback();
+                }
+            ], function() {
+                app.dialogs.close();
+            });
             return this;
         },
         /**
@@ -164,10 +183,15 @@ define([
          */
         renderListQueue: function() {
             var addingLists = app.user.data.vocablists.getAdding();
-            this.listQueue.set(addingLists, {
-                name: 'Name',
-                progress: 'Progress'
-            });
+            if (addingLists.length) {
+                this.listQueue.set(addingLists, {
+                    name: 'Name',
+                    progress: 'Progress'
+                });
+                this.$('#lists-loading').hide();
+            } else {
+                this.$('#lists-loading').html('<h3>Not currently adding from any lists.</h3>');
+            }
             return this;
         },
         /**
