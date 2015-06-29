@@ -30,7 +30,8 @@ define([
             filterChineseParts: ['defn', 'rdng', 'rune', 'tone'],
             filterJapaneseParts: ['defn', 'rdng', 'rune'],
             gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
-            goals: {ja: {time: 20}, zh: {time: 20}}
+            goals: {ja: {time: 20}, zh: {time: 20}},
+            syncMode: 'jit'
         },
         /**
          * @method cache
@@ -132,7 +133,23 @@ define([
          * @returns {Object}
          */
         getGoal: function() {
-            return this.get('goals')[app.user.getLanguageCode()];
+            var goal = this.get('goals')[app.user.getLanguageCode()];
+            var type = Object.keys(goal)[0];
+            return {type: type, value: goal[type]};
+        },
+        /**
+         * @method isAudioEnabled
+         * @returns {Boolean}
+         */
+        isAudioEnabled: function() {
+            return this.get('volume') > 0;
+        },
+        /**
+         * @method isJIT
+         * @returns {Boolean}
+         */
+        isJIT: function() {
+            return this.get('syncMode') === 'jit';
         },
         /**
          * @method load
@@ -211,11 +228,10 @@ define([
          * @returns {UserSettings}
          */
         setGoal: function(type, value) {
-            var languageCode = app.user.getLanguageCode();
+            var goal = {};
             var goals = this.get('goals');
-            var newGoal = {};
-            newGoal[type] = parseInt(value, 10);
-            goals[languageCode] = newGoal;
+            goal[type] = parseInt(value, 10);
+            goals[app.user.getLanguageCode()] = goal;
             this.set('goals', goals);
             this.save();
             return this;

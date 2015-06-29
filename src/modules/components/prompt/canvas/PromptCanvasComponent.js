@@ -6,7 +6,7 @@ define([
     'require.text!modules/components/prompt/canvas/prompt-canvas-template.html',
     'core/modules/GelatoComponent'
 ], function(
-    Template, 
+    Template,
     GelatoComponent
 ) {
 
@@ -32,7 +32,7 @@ define([
             this.prompt = options.prompt;
             this.size = 500;
             this.stage = null;
-            this.strokeColor = '#5e5d60';
+            this.strokeColor = '#38240c';
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
                 this.moveTo(x1 , y1);
                 var dX = x2 - x1;
@@ -56,7 +56,7 @@ define([
          * @returns {PromptCanvasComponent}
          */
         render: function(size) {
-            this.$el.html(Template);
+            this.renderTemplate(Template);
             this.stage = this.createStage();
             createjs.Ticker.addEventListener('tick', this.stage);
             createjs.Touch.enable(this.stage);
@@ -69,6 +69,19 @@ define([
             this.createLayer('input-background1');
             this.createLayer('input');
             this.resize(size || this.size);
+            return this;
+        },
+        /**
+         * @method renderFields
+         * @returns {PromptCanvasComponent}
+         */
+        renderFields: function() {
+            this.$('#prompt-canvas-definition .answer').html(this.prompt.reviews.vocab.getDefinition());
+            this.$('#prompt-canvas-definition .writing').html(this.prompt.reviews.vocab.get('writing'));
+            this.$('#prompt-canvas-definition .writing').addClass(this.prompt.reviews.vocab.getFontClass());
+            this.$('#prompt-canvas-reading .answer').html(this.prompt.reviews.vocab.getReading());
+            this.$('#prompt-canvas-reading .writing').html(this.prompt.reviews.vocab.get('writing'));
+            this.$('#prompt-canvas-reading .writing').addClass(this.prompt.reviews.vocab.getFontClass());
             return this;
         },
         /**
@@ -97,7 +110,7 @@ define([
          * @returns {PromptCanvasComponent}
          */
         clearMessage: function() {
-            this.$('#canvas-message').empty();
+            this.$('#prompt-canvas-message').empty();
             return this;
         },
         /**
@@ -116,7 +129,7 @@ define([
          * @returns {createjs.Stage}
          */
         createStage: function() {
-            var canvas = this.$('canvas').get(0);
+            var canvas = $('#prompt-canvas-element').get(0);
             var stage = new createjs.Stage(canvas);
             stage.autoClear = true;
             stage.enableDOMEvents(true);
@@ -228,18 +241,30 @@ define([
             var self = this;
             var oldPoint, oldMidPoint, points, marker;
             this.disableInput().$el.on('vmousedown.Input pointerdown.Input', down);
-            function down() {
+            function down(event) {
                 points = [];
                 marker = new createjs.Shape();
                 marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round').beginStroke(self.strokeColor);
-                oldPoint = oldMidPoint = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
+                if (event.offsetX && event.offsetY) {
+                    points.push(new createjs.Point(event.offsetX, event.offsetY));
+                } else {
+                    points.push(new createjs.Point(self.stage.mouseX, self.stage.mouseY));
+                }
+                oldPoint = oldMidPoint = points[0];
                 self.triggerInputDown(oldPoint);
                 self.getLayer('input').addChild(marker);
                 self.$el.on('vmouseout.Input vmouseup.Input pointerup.Input', up);
                 self.$el.on('vmousemove.Input pointermove.Input', move);
             }
-            function move() {
-                var point = new createjs.Point(self.stage.mouseX, self.stage.mouseY);
+            function move(event) {
+                var point = new createjs.Point();
+                if (event.offsetX && event.offsetY) {
+                    point.x = event.offsetX;
+                    point.y = event.offsetY;
+                } else {
+                    point.x = self.stage.mouseX;
+                    point.y = self.stage.mouseY;
+                }
                 var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
                 marker.graphics.moveTo(midPoint.x, midPoint.y).curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
                 oldPoint = point;
@@ -248,10 +273,15 @@ define([
                 self.triggerInputMove(point);
                 self.stage.update();
             }
-            function up() {
+            function up(event) {
                 marker.graphics.endStroke();
                 self.$el.off('vmousemove.Input pointermove.Input', move);
                 self.$el.off('vmouseout.Input vmouseup.Input pointerup.Input', up);
+                if (event.offsetX && event.offsetY) {
+                    points.push(new createjs.Point(event.offsetX, event.offsetY));
+                } else {
+                    points.push(new createjs.Point(self.stage.mouseX, self.stage.mouseY));
+                }
                 self.triggerInputUp(points, marker.clone(true));
                 self.getLayer('input').removeAllChildren();
             }
@@ -303,6 +333,18 @@ define([
             return this.size;
         },
         /**
+         * @method hideDefinition
+         */
+        hideDefinition: function() {
+            this.$('#prompt-canvas-definition').hide();
+        },
+        /**
+         * @method hideReading
+         */
+        hideReading: function() {
+            this.$('#prompt-canvas-reading').hide();
+        },
+        /**
          * @method injectColor
          * @param {createjs.Container|createjs.Shape} object
          * @param {String} color
@@ -327,6 +369,7 @@ define([
          * @method injectLayerColor
          * @param {String} layerName
          * @param {String} color
+         * @returns {PromptCanvasComponent}
          */
         injectLayerColor: function(layerName, color) {
             return this.injectColor(this.getLayer(layerName), color);
@@ -342,6 +385,8 @@ define([
             this.getLayer('input-background2').removeAllChildren();
             this.getLayer('input-background1').removeAllChildren();
             this.getLayer('input').removeAllChildren();
+            this.hideDefinition();
+            this.hideReading();
             this.stage.update();
             return this;
         },
@@ -354,6 +399,8 @@ define([
             app.user.settings.set('canvasSize', size);
             this.stage.canvas.height = size;
             this.stage.canvas.width = size;
+            this.$component.height(size);
+            this.$component.width(size);
             this.size = size;
             if (this.grid) {
                 this.drawGrid().reset();
@@ -363,15 +410,51 @@ define([
             return this;
         },
         /**
+         * @method revealDefinitionAnswer
+         */
+        revealDefinitionAnswer: function() {
+            var element = this.$('#prompt-canvas-definition');
+            element.find('.answer').show();
+            element.find('.question').hide();
+            element.show();
+        },
+        /**
+         * @method revealDefinitionQuestion
+         */
+        revealDefinitionQuestion: function() {
+            var element = this.$('#prompt-canvas-definition');
+            element.find('.answer').hide();
+            element.find('.question').show();
+            element.show();
+        },
+        /**
+         * @method revealReadingAnswer
+         */
+        revealReadingAnswer: function() {
+            var element = this.$('#prompt-canvas-reading');
+            element.find('.answer').show();
+            element.find('.question').hide();
+            element.show();
+        },
+        /**
+         * @method revealReadingQuestion
+         */
+        revealReadingQuestion: function() {
+            var element = this.$('#prompt-canvas-reading');
+            element.find('.answer').hide();
+            element.find('.question').show();
+            element.show();
+        },
+        /**
          * @method setMessage
          * @param {String} text
          * @param {Number} [duration]
          * @returns {PromptCanvasComponent}
          */
         setMessage: function(text, duration) {
-            this.$('#canvas-message').text(text);
+            this.$('#prompt-canvas-message').text(text);
             if (duration) {
-                this.$('#canvas-message').fadeOut(duration);
+                this.$('#prompt-canvas-message').fadeOut(duration);
             }
             return this;
         },
@@ -381,12 +464,20 @@ define([
          * @param {Array} path
          */
         tracePath: function(layerName, path) {
-            var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: '#337ab7'});
+            var size = this.size;
+            var circle = this.drawCircle(layerName, path[0].x, path[0].y, 10, {alpha: 0.6, fill: '#38240c'});
             var tween = createjs.Tween.get(circle, {loop: true});
             for (var i = 1, length = path.length; i < length; i++) {
-                var adjustedX = path[i].x - path[0].x;
-                var adjustedY = path[i].y - path[0].y;
-                tween.to({x: adjustedX, y: adjustedY}, 1000);
+                var adjustedPoint = new createjs.Point(path[i].x - path[0].x, path[i].y - path[0].y);
+                var throttle = (app.fn.getDistance(path[i], path[i - 1]) / size) * 2000;
+                if (path.length < 3) {
+                    tween.to({x: adjustedPoint.x, y: adjustedPoint.y}, 1000);
+                } else {
+                    tween.to({x: adjustedPoint.x, y: adjustedPoint.y}, throttle);
+                }
+                if (i === length - 1) {
+                    tween.wait(1000);
+                }
             }
         },
         /**

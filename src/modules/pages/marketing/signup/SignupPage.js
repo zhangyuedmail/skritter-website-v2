@@ -55,7 +55,7 @@ define([
         },
         /**
          * @method remove
-         * @returns {PageHome}
+         * @returns {GelatoView}
          */
         remove: function() {
             this.footer.remove();

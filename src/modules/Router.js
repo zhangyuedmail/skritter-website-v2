@@ -25,10 +25,10 @@ define([
     'modules/pages/settings/study/StudySettingsPage',
     'modules/pages/stats/summary/SummaryStatsPage',
     'modules/pages/stats/timeline/TimelineStatsPage',
+    'modules/pages/study/StudyPage',
     'modules/pages/words/WordsPage',
     'modules/pages/Demo',
     'modules/pages/Scratchpad',
-    'modules/pages/Study',
     'modules/pages/Tutorial'
 ], function(
     GelatoRouter,
@@ -53,10 +53,10 @@ define([
     StudySettingsPage,
     SummaryStatsPage,
     TimelineStatsPage,
+    StudyPage,
     WordsPage,
     PageDemo,
     PageScratchpad,
-    PageStudy,
     PageTutorial
 ) {
 
@@ -108,6 +108,7 @@ define([
             'tutorial/:module': 'showTutorial',
             'tutorial/:module/:index': 'showTutorial',
             'words': 'showWords',
+            'words/:vocabId': 'showWords',
             '*route': 'showDefault'
         },
         /**
@@ -164,8 +165,9 @@ define([
                 this.navigate('dashboard', {trigger: false});
                 this.showDashboard();
             } else {
-                this.navigate('', {trigger: false});
-                this.showLanding();
+                //TODO: revert to marketing
+                this.navigate('login', {trigger: false});
+                this.showLogin();
             }
         },
         /**
@@ -288,7 +290,7 @@ define([
          * @param {String} sectionId
          */
         showStudy: function(listId, sectionId) {
-            this.page = new PageStudy();
+            this.page = new StudyPage();
             this.page.render().load(listId, sectionId);
         },
         /**
@@ -316,10 +318,11 @@ define([
         },
         /**
          * @method showWords
+         * @param {String} vocabId
          */
-        showWords: function() {
+        showWords: function(vocabId) {
             this.page = new WordsPage();
-            this.page.render();
+            this.page.render().load(vocabId);
         }
     });
 

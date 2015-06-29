@@ -1,0 +1,64 @@
+gelato-component[data-name="word-details"] {
+
+  background-color: $white1;
+  border-radius: 25px;
+
+  .detail-row {
+    .title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .value {
+      font-size: 14px;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+  }
+
+  #section-content {
+    padding: 20px;
+    .panel-container {
+      .panel-left {
+        float: left;
+        padding-left: 20px;
+        width: 50%;
+      }
+      .panel-right {
+        float: left;
+        padding-right: 20px;
+        width: 50%;
+      }
+    }
+  }
+
+  #section-header {
+    background-color: #f3f2f6;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    padding: 30px 40px 20px 20px;
+    .header-block {
+      display: inline-block;
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+    .value-label {
+      color: #b2b5b9;
+      font-size: 12px;
+      font-weight: 400;
+    }
+    #vocab-reading {
+      font-size: 12px;
+      font-weight: 400;
+    }
+    #vocab-writing-secondary {
+      font-size: 36px;
+      font-weight: 400;
+    }
+    #vocab-writing-primary {
+      font-size: 36px;
+      font-weight: 400;
+    }
+  }
+
+}

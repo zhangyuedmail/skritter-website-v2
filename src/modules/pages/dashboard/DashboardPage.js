@@ -22,15 +22,16 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.doughnutGoal = null;
-            this.doughnutList = null;
             this.heatmap = new CalHeatMap();
             this.listQueue = new ListsTableComponent();
-            this.listenTo(app.dialog, 'goal-settings:confirm', this.updateGoalSettings);
-            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
-            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
-            this.listenTo(app.user.data.stats, 'add change', this.renderStats);
-            this.listenTo(app.user.data.vocablists, 'add change', this.renderListQueue);
+            this.listenTo(app.dialogs, 'feedback:show', this.handleFeedbackShow);
+            this.listenTo(app.dialogs, 'feedback:submit', this.submitFeedback);
+            this.listenTo(app.dialogs, 'goal-settings:save', this.saveGoalSettings);
+            this.listenTo(app.dialogs, 'goal-settings:show', this.renderGoalSettings);
+            this.listenTo(app.dialogs, 'logout-confirm:yes', app.user.logout);
+            this.listenTo(app.user.data.stats, 'update', this.renderDailyGoal);
+            this.listenTo(app.user.data.stats, 'update', this.renderAllTime);
+            this.listenTo(app.user.data.vocablists, 'update', this.renderListQueue);
         },
         /**
          * @property title
@@ -51,10 +52,52 @@ define([
             this.listQueue.setElement(this.$('#list-queue-table')).render();
             this.$('#section-expired').hide();
             this.renderHeatmap();
+            this.renderAllTime();
+            this.renderDailyGoal();
+            Async.parallel([
+                function(callback) {
+                    app.dialogs.open('loading');
+                    app.user.data.items.fetch(function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.user.data.stats.fetch(function() {
+                        callback();
+                    }, function() {
+                        callback();
+                    });
+                },
+                function(callback) {
+                    app.user.data.vocablists.fetch();
+                    callback();
+                }
+            ], function() {
+                app.dialogs.close();
+            });
+            return this;
+        },
+        /**
+         * @method renderAllTime
+         * @returns {DashboardPage}
+         */
+        renderAllTime: function() {
+            this.$('#characters-learned .value').text(app.user.data.stats.getTotalCharactersLearned());
+            this.$('#month-streak .value').text(app.user.data.stats.getStreak());
+            this.$('#words-learned .value').text(app.user.data.stats.getTotalWordsLearned());
+            this.updateHeatmap();
+            return this;
+        },
+        /**
+         * @method renderDailyGoal
+         * @returns {DashboardPage}
+         */
+        renderDailyGoal: function() {
+            this.$('#items-added .value').text(app.user.data.items.getAddedCount());
+            this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
             this.renderGoalDoughnut();
-            this.renderListDoughnut();
-            this.renderListQueue();
-            this.renderStats();
             return this;
         },
         /**
@@ -64,26 +107,36 @@ define([
         renderGoalDoughnut: function() {
             var context = this.$('#goal-doughnut').get(0).getContext('2d');
             var goal = app.user.settings.getGoal();
-            var goalType = Object.keys(goal)[0];
-            var goalValue = goal[goalType];
             var data = [];
-            if (goalType === 'items') {
-                //TODO: pull doughnut data from stats
-                var remaining = goalValue - app.user.data.items.getReviewedCount();
-                remaining = remaining < 0 ? 0 : remaining;
+            if (goal.type === 'items') {
+                var percentItems = app.user.data.stats.getGoalItemPercent();
                 data = [
-                    {value: goalValue - remaining, color:'#c5da4b'},
-                    {value: remaining, color: '#efeef3'}
+                    {value: percentItems, color:'#c5da4b'},
+                    {value: 100 - percentItems, color: '#efeef3'}
                 ];
             } else {
-                //TODO: display remaining goal based on time
+                var percentTime = app.user.data.stats.getGoalTimePercent();
+                data = [
+                    {value: percentTime, color:'#c5da4b'},
+                    {value: 100 - percentTime, color: '#efeef3'}
+                ];
             }
             this.doughnutGoal = new Chart(context).Doughnut(data,
                 {
+                    animateRotate : false,
                     percentageInnerCutout : 80,
-                    animateRotate : false
+                    tooltipTemplate : "<%if (label){%><%=label%>: <%}%><%= value %>%"
                 }
             );
+        },
+        /**
+         * @method renderGoalSettings
+         * @param {jQuery} dialog
+         */
+        renderGoalSettings: function(dialog) {
+            var goal = app.user.settings.getGoal();
+            dialog.find('input[value="' + goal.type + '"]').prop('checked', true);
+            dialog.find('#goal-value').val(goal.value);
         },
         /**
          * @method renderListDoughnut
@@ -91,10 +144,11 @@ define([
          */
         renderListDoughnut: function() {
             var context = this.$('#list-queue-doughnut').get(0).getContext('2d');
+            var progress = app.user.data.vocablists.getProgress();
             this.doughnutList = new Chart(context).Doughnut(
                 [
-                    {value: 0, color:'#c5da4b'},
-                    {value: 100, color: '#efeef3'}
+                    {label: "Completed", value: progress, color:'#c5da4b'},
+                    {label: "Remaining", value: 100 - progress, color: '#efeef3'}
                 ],
                 {
                     percentageInnerCutout : 80,
@@ -115,12 +169,12 @@ define([
                 domainDynamicDimension: false,
                 domainGutter: 20,
                 itemSelector: '#heatmap-container',
-                legend: [1, 50, 100, 200],
+                legend: [0, 50, 100, 200],
                 range: 1,
                 start: new Date(2015, new Date().getMonth(), 1),
                 subDomain: 'x_day'
             });
-            this.heatmap.update(app.user.data.stats.getHeatmapData());
+            this.updateHeatmap();
             return this;
         },
         /**
@@ -129,52 +183,66 @@ define([
          */
         renderListQueue: function() {
             var addingLists = app.user.data.vocablists.getAdding();
-            this.listQueue.set(addingLists, {
-                name: 'Name',
-                progress: 'Progress'
-            });
-            return this;
-        },
-        /**
-         * @method renderStats
-         * @returns {DashboardPage}
-         */
-        renderStats: function() {
-            this.$('#characters-learned .value').text(app.user.data.stats.getTotalCharactersLearned());
-            this.$('#items-added .value').text(app.user.data.items.getAddedCount());
-            this.$('#items-reviewed .value').text(app.user.data.items.getReviewedCount());
-            this.$('#month-streak .value').text(app.user.data.stats.getStreak());
-            this.$('#words-learned .value').text(app.user.data.stats.getTotalWordsLearned());
+            if (addingLists.length) {
+                this.listQueue.set(addingLists, {
+                    name: 'Name',
+                    progress: 'Progress'
+                });
+                this.$('#lists-loading').hide();
+            } else {
+                this.$('#lists-loading').html('<h3>Not currently adding from any lists.</h3>');
+            }
             return this;
         },
         /**
          * @property events
          * @type {Object}
          */
-        events: {
-            'vclick #goal-settings-button': 'handleClickGoalSettings'
+        events: {},
+        /**
+         * @method handleFeedbackShow
+         * @param {jQuery} dialog
+         */
+        handleFeedbackShow: function(dialog) {
+            dialog.find('#contact-message').val('');
+            dialog.find('.status-message').empty();
         },
         /**
-         * @method handleClickGoalSettings
-         * @param {Event} event
+         * @method saveGoalSettings
+         * @param {jQuery} dialog
          */
-        handleClickGoalSettings: function(event) {
-            event.preventDefault();
-            var goal = app.user.settings.getGoal();
-            var goalType = Object.keys(goal)[0];
-            var goalValue = goal[goalType];
-            $('gelato-dialog [name="goal-type"][value="' + goalType + '"]').prop('checked', 'checked');
-            $('gelato-dialog #goal-value').val(goalValue);
-            app.dialogs.open('goal-settings');
-        },
-        /**
-         * @method updateGoalSettings
-         */
-        updateGoalSettings: function() {
-            var goalType = $('gelato-dialog [name="goal-type"]:checked').val();
-            var goalValue = $('gelato-dialog #goal-value').val();
+        saveGoalSettings: function(dialog) {
+            var goalType = dialog.find('input[name="goal-type"]:checked').val();
+            var goalValue = dialog.find('#goal-value').val();
             app.user.settings.setGoal(goalType, goalValue);
-            app.dialog.close();
+            this.renderGoalDoughnut();
+            app.dialogs.close();
+        },
+        /**
+         * @method submitFeedback
+         * @param {jQuery} dialog
+         */
+        submitFeedback: function(dialog) {
+            var message = dialog.find('#contact-message').val();
+            var subject = dialog.find('#contact-topic-select').val();
+            console.log(message, subject);
+            app.api.postContact('feedback', {
+                custom: {page: 'Dashboard'},
+                message: message,
+                subject: subject
+            }, function() {
+                app.dialogs.close();
+            }, function(error) {
+                dialog.find('.status-message').removeClass();
+                dialog.find('.status-message').addClass('text-danger');
+                dialog.find('.status-message').text(JSON.stringify(error));
+            });
+        },
+        /**
+         * @method updateHeatmap
+         */
+        updateHeatmap: function() {
+            this.heatmap.update(app.user.data.stats.getHeatmapData());
         }
     });
 

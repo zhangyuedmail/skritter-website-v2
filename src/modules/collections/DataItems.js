@@ -16,128 +16,79 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.sorted = Moment().unix();
+        },
         /**
          * @property model
          * @type DataItem
          */
         model: DataItem,
         /**
-         * @method fetchNext
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @method comparator
+         * @param {DataItem} item
          */
-        fetchChanged: function(callbackSuccess, callbackError) {
-            var self = this;
+        comparator: function(item) {
+            return -item.getReadiness(this.sorted);
+        },
+        /**
+         * @method fetch
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
+         */
+        fetch: function(callbackSuccess, callbackError) {
             (function next(cursor) {
                 app.api.fetchItems({
                     cursor: cursor,
-                    offset: app.user.data.get('lastItemUpdate'),
-                    sort: 'changed',
-                    include_contained: true,
-                    include_decomps: true,
-                    include_strokes: true,
-                    include_vocabs: true
+                    offset: Moment().startOf('day').add(3, 'hours').unix(),
+                    sort: 'changed'
                 }, function(result) {
-                    app.user.data.insert(result, function() {
-                        if (result.cursor) {
-                            self.add(result.Items, {merge: true});
-                            next(result.cursor);
-                        } else {
-                            app.user.data.set('lastItemUpdate', Moment().unix());
+                    app.user.data.add(result);
+                    if (result.cursor) {
+                        next(result.cursor);
+                    } else {
+                        if (typeof callbackSuccess === 'function') {
                             callbackSuccess();
                         }
-                    }, function(error) {
-                        callbackError(error);
-                    });
+                    }
                 }, function(error) {
-                    callbackError(error);
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
                 });
             })();
         },
         /**
          * @method fetchNext
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @param {Object} [options]
+         * @param {Function} [callbackSuccess]
+         * @param {Function} [callbackError]
          */
-        fetchIds: function(callbackSuccess, callbackError) {
-            var self = this;
-            app.api.fetchItemIds({
-                lang: app.user.getLanguageCode()
-            }, function(result) {
-                app.user.data.insert(result, function() {
-                    self.add(result, {merge: true});
-                    callbackSuccess();
-                }, function(error) {
-                    callbackError(error);
-                });
-            }, function(error) {
-                callbackError(error);
-            });
-        },
-        /**
-         * @method fetchMissing
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         * @param {Function} [callbackStatus]
-         */
-        fetchMissing: function(callbackSuccess, callbackError, callbackStatus) {
-            var self = this;
-            var missingIds = this.getMissingIds();
-            var missingTotal = missingIds.length;
-            if (missingIds.length) {
-                (function next() {
-                    app.api.fetchItems({
-                        ids: missingIds.slice(0,29).join('|'),
-                        include_contained: true,
-                        include_decomps: true,
-                        include_strokes: true,
-                        include_vocabs: true
-                    }, function(result) {
-                        app.user.data.insert(result, function() {
-                            self.add(result.Items, {merge: true});
-                            if (missingIds.length) {
-                                missingIds = self.getMissingIds();
-                                if (typeof callbackStatus === 'function') {
-                                    var completion = 1 - (missingIds.length / missingTotal);
-                                    callbackStatus(Math.floor(completion * 100));
-                                }
-                                next();
-                            } else {
-                                callbackSuccess();
-                            }
-                        }, function(error) {
-                            callbackError(error);
-                        });
-                    }, function(error) {
-                        callbackError(error);
-                    });
-                }());
-            } else {
-                callbackSuccess();
-            }
-        },
-        /**
-         * @method fetchNext
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         */
-        fetchNext: function(callbackSuccess, callbackError) {
-            var self = this;
+        fetchNext: function(options, callbackSuccess, callbackError) {
+            options = options || {};
+            options.limit = options.limit || 1;
+            console.log('FETCHING:', options.limit);
             app.api.fetchItems({
-                sort: 'next',
+                cursor: options.cursor,
                 include_contained: true,
                 include_decomps: true,
+                include_sentences: true,
                 include_strokes: true,
-                include_vocabs: true
+                include_top_mnemonics: true,
+                include_vocabs: true,
+                limit: options.limit,
+                parts: options.parts,
+                sort: 'next',
+                styles: options.styles
             }, function(result) {
-                app.user.data.insert(result, function() {
-                    callbackSuccess(self.add(result.Items, {merge: true}));
-                }, function(error) {
-                    callbackError(error);
-                });
+                app.user.data.add(result);
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
             }, function(error) {
-                callbackError(error);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             });
         },
         /**
@@ -151,31 +102,18 @@ define([
             }).length;
         },
         /**
-         * @method getDue
-         * @returns {Number}
+         * @method getNext
+         * @returns {DataItem}
          */
-        getDue: function() {
-            var now = Moment().unix();
-            return _.filter(this.filtered, function(item) {
-                return item.get('next') > now;
-            });
-        },
-        /**
-         * @method getDueCount
-         */
-        getDueCount: function() {
-            return this.getDue().length;
-        },
-        /**
-         * @method getMissingIds
-         * @returns {Array}
-         */
-        getMissingIds: function() {
-            return _.map(_.filter(this.models, function(item) {
-                return !item.has('next');
-            }), function(item) {
-                return item.id;
-            });
+        getNext: function() {
+            this.sort();
+            for (var i = 0, length = this.length; i < length; i++) {
+                var item = this.at(i);
+                if (item.isReady()) {
+                    console.log('NEXT:', item.id);
+                    return item;
+                }
+            }
         },
         /**
          * @method getItemReviewedCount
@@ -217,12 +155,12 @@ define([
             });
         },
         /**
-         * @method loadNext
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
+         * @method sort
+         * @returns {Array}
          */
-        loadNext: function(callbackSuccess, callbackError) {
-            //TODO: figure out what is next
+        sort: function() {
+            this.sorted = Moment().unix();
+            return GelatoCollection.prototype.sort.call(this);
         }
     });
 

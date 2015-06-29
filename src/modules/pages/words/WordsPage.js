@@ -3,11 +3,13 @@
  * @submodule Pages
  */
 define([
+    'core/modules/GelatoPage',
     'require.text!modules/pages/words/words-template.html',
-    'core/modules/GelatoPage'
+    'modules/components/word/details/WordDetailsComponent'
 ], function(
-    Template, 
-    GelatoPage
+    GelatoPage,
+    Template,
+    WordComponent
 ) {
 
     /**
@@ -19,18 +21,35 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.word = new WordComponent();
+        },
         /**
          * @property title
          * @type String
          */
         title: 'Words - ' + i18n.global.title,
         /**
+         * @property bodyClass
+         * @type {String}
+         */
+        bodyClass: 'background-light',
+        /**
          * @method render
          * @returns {WordsPage}
          */
         render: function() {
             this.renderTemplate(Template);
+            this.word.setElement(this.$('#word-container')).render();
+            return this;
+        },
+        /**
+         * @method load
+         * @param {String} vocabId
+         * @returns {WordsPage}
+         */
+        load: function(vocabId) {
+            this.word.load(vocabId);
             return this;
         }
     });

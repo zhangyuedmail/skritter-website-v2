@@ -1,0 +1,60 @@
+gelato-dialog(data-name='feedback')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-body.text-center
+          p.status-message.text-danger
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label(for="contact-topic-select") Category
+              .col-sm-10
+                select#contact-topic-select.form-control
+                  option(value="[Beta] Feedback") Feedback
+                  option(value="[Beta] Bug") Bug report
+            .form-group
+              label.col-sm-2.control-label(for="contact-message") Message
+              textarea#contact-message.col-sm-10(rows="5")
+          .text-left
+            p All submissions will be read and analyzed by the Skritter team and we'll be working hard to making improvements. We'll be sure to get in touch if we need additional follow-up information.
+          button.btn.btn-lg.btn-default(data-action='close', type='button', data-dismiss='modal') Cancel
+          | &nbsp;&nbsp;&nbsp;&nbsp;
+          button.btn.btn-lg.btn-success(data-action='submit', type='button') Submit
+gelato-dialog(data-name='goal-settings')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-body.text-center
+          p I want to study
+          .row
+            .col-xs-6.text-right
+              input#goal-value(type="text", value="20")
+            .col-xs-6.text-left
+              form
+                .form-group
+                  label.radio-inline
+                    input(type="radio", name="goal-type", value="items", checked="checked")
+                    | items
+                .form-group
+                  label.radio-inline
+                    input(type="radio", name="goal-type", value="time")
+                    | minutes
+          p every day.
+          .text-center
+            button.btn.btn-lg.btn-default(data-action='cancel', type='button', data-dismiss='modal') Cancel
+            | &nbsp;&nbsp;&nbsp;&nbsp;
+            button.btn.btn-lg.btn-success(data-action='save', type='button') Save
+gelato-dialog(data-name='loading')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-body.text-center
+          img(src='assets/ajax-loader.gif', width='100', height='100', alt='')
+gelato-dialog(data-name='logout-confirm')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-body.text-center
+          p.lead Are you sure you want to log out?
+          button.btn.btn-lg.btn-default(data-action='no', type='button', data-dismiss='modal') No, go back.
+          | &nbsp;&nbsp;
+          button.btn.btn-lg.btn-danger(data-action='yes', type='button') Yes, log out!

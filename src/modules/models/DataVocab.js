@@ -4,8 +4,9 @@
  */
 define([
     'core/modules/GelatoModel',
-    'modules/collections/PromptItems'
-], function(GelatoModel, PromptItems) {
+    'modules/collections/PromptReviews',
+    'modules/models/PromptReview'
+], function(GelatoModel, PromptReviews, PromptReview) {
 
     /**
      * @class DataVocab
@@ -16,12 +17,27 @@ define([
          * @method initialize
          * @constructor
          */
-        initialize: function() {},
+        initialize: function() {
+            this.on('change', this.cache);
+        },
         /**
          * @property idAttribute
          * @type String
          */
         idAttribute: 'id',
+        /**
+         * @method cache
+         */
+        cache: function() {
+            app.user.data.storage.put('vocabs', this.toJSON());
+        },
+        /**
+         * @method getContainedVocabIds
+         * @returns {Array}
+         */
+        getContainedVocabIds: function() {
+            return this.get('containedVocabIds') || [];
+        },
         /**
          * @method getCanvasCharacters
          * @returns {Array}
@@ -43,7 +59,7 @@ define([
          */
         getCanvasTones: function() {
             var characters = [];
-            var strokes = this.getStrokes();
+            var strokes = this.getCharacters();
             for (var i = 0, length = strokes.length; i < length; i++) {
                 var tones = app.user.data.strokes.get('tones');
                 if (tones) {
@@ -93,40 +109,54 @@ define([
          * @returns {String}
          */
         getHeisig: function() {
-            return null;
+            return this.get('heisigDefinition');
         },
         /**
          * @method getMnemonic
-         * @returns {String}
+         * @returns {Object}
          */
         getMnemonic: function() {
+            if (this.get('mnemonic')) {
+                return this.get('mnemonic');
+            } else if (this.get('topMnemonic')) {
+                return this.get('topMnemonic');
+            }
             return null;
         },
         /**
-         * @method getPromptResult
-         * @param {String} part
-         * @returns {PromptItems}
+         * @method getMnemonicText
+         * @returns {String}
          */
-        getPromptItems: function(part) {
-            var promptItems = new PromptItems();
-            var canvasCharacters = part === 'tone' ? this.getCanvasTones() : this.getCanvasCharacters();
-            var containedVocabIds = this.get('containedVocabIds') || [];
-            if (containedVocabIds.length && ['rune', 'tone'].indexOf(part) > -1) {
-                for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                    promptItems.add({
-                        character: canvasCharacters[i],
-                        vocabId: containedVocabIds[i]
-                    });
-                }
+        getMnemonicText: function() {
+            return this.getMnemonic() ? app.fn.textToHTML(this.getMnemonic().text) : null;
+        },
+        /**
+         * @method getPromptReviews
+         * @param {String} part
+         * @returns {PromptReviews}
+         */
+        getPromptReviews: function(part) {
+            var reviews = new PromptReviews();
+            var containedVocabs = this.get('containedVocabIds');
+            var vocab = this;
+            var characters = [];
+            var vocabs = [];
+            if (['defn', 'rdng'].indexOf(part) > -1) {
+                vocabs = [vocab];
             } else {
-                promptItems.add({
-                    character: canvasCharacters[0],
-                    vocabId: this.id
-                });
+                characters = (part === 'tone') ? vocab.getCanvasTones() : vocab.getCanvasCharacters();
+                vocabs = containedVocabs.length ? containedVocabs : [vocab];
             }
-            promptItems.id = this.id;
-            promptItems.part = part;
-            return promptItems;
+            for (var i = 0, length = vocabs.length; i < length; i++) {
+                var review = new PromptReview();
+                review.character = characters[i];
+                review.vocab = vocabs[i];
+                reviews.add(review);
+            }
+            reviews.group = Date.now() + '_' + this.id;
+            reviews.part = part;
+            reviews.vocab = vocab;
+            return reviews;
         },
         /**
          * @method getReading
@@ -141,47 +171,37 @@ define([
          */
         getReadingElement: function() {
             var element = '';
-            //TODO: handle fillers for both languages
-            //var fillers = [" ... ", "'", " "];
-            var variations = this.getSegmentedReading();
+            var variations = this.get('reading').split(', ');
             for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
                 var variation = variations[a];
-                for (var b = 0, lengthB = variation.length; b < lengthB; b++) {
-                    var reading = variation[b];
-                    var readingMarks = app.fn.pinyin.toTone(reading);
-                    var readingToneless = reading.replace(/[1-5]/g, '');
-                    var position = b + 1;
-                    element += "<div id='reading-position-" + position + "' class='cursor mask'>";
-                    element += "<span class='pinyin-marks'>" + readingMarks + "</span>";
-                    element += "<span class='pinyin-toneless hidden'>" + readingToneless + "</span>";
-                    element += "</div>";
+                var segments = variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g);
+                element += '<div class="variation" data-variation="' + a + '">';
+                for (var b = 0, lengthB = segments.length; b < lengthB; b++) {
+                    var segment = segments[b];
+                    var segmentMarks = app.fn.pinyin.toTone(segment);
+                    var segmentRaw = segment.replace(/[1-5]/g, '');
+                    element += '<div class="segment mask" data-segment="' + b + '">';
+                    element += '<span class="raw">' + segmentRaw + '</span>';
+                    element += '<span class="tone hidden">' + segmentMarks + '</span>';
+                    element += '</div>';
                 }
+                element += '</div>';
             }
             return element;
         },
         /**
-         * @method getSegmentedReading
-         * @returns {Array}
-         */
-        getSegmentedReading: function() {
-            var segments = [];
-            if (this.isChinese()) {
-                var variations = this.get('reading').split(', ');
-                for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
-                    var variation = variations[a];
-                    segments.push(variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g));
-                }
-            } else {
-                //TODO: properly segment Japanese
-            }
-            return segments;
-        },
-        /**
          * @method getSentence
-         * @returns {String}
+         * @returns {DataSentence}
          */
         getSentence: function() {
-            return null;
+            return this.get('sentenceId') ? app.user.data.sentences.get(this.get('sentenceId')) : null;
+        },
+        /**
+         * @method getSentenceWriting
+         * @returns {String}
+         */
+        getSentenceWriting: function() {
+            return this.getSentence() ? this.getSentence().getWriting() : null;
         },
         /**
          * @method getStrokes
@@ -213,9 +233,10 @@ define([
         },
         /**
          * @method getToneNumbers
+         * @param {Number} [position]
          * @returns {Array}
          */
-        getToneNumbers: function() {
+        getToneNumbers: function(position) {
             var tones = [];
             if (this.isChinese()) {
                 var readings = this.get('reading').split(', ');
@@ -227,7 +248,14 @@ define([
                     }
                 }
             }
-            return tones;
+            return position === undefined ? tones : tones[position];
+        },
+        /**
+         * @method getVocabIds
+         * @returns {Array}
+         */
+        getVocabIds: function() {
+            return [this.id].concat(this.get('containedVocabIds') || []);
         },
         /**
          * @method getWritingElement
@@ -238,8 +266,7 @@ define([
             var characters = this.getCharacters();
             for (var i = 0, length = characters.length; i < length; i++) {
                 var character = characters[i];
-                var position = i + 1;
-                element += "<div id='writing-position-" + position + "' class='cursor mask'><span>";
+                element += "<div class='writing-element mask' data-position='" + i + "'><span>";
                 element += character;
                 element += "</span></div>";
             }
@@ -267,6 +294,13 @@ define([
             return this.get('lang') === 'ja';
         },
         /**
+         * @method isStarred
+         * @returns {Boolean}
+         */
+        isStarred: function() {
+            return this.get('starred');
+        },
+        /**
          * @method play
          * @returns {DataVocab}
          */
@@ -275,6 +309,34 @@ define([
                 app.media.play(this.get('audioURL'));
             }
             return this;
+        },
+        /**
+         * @method toggleBanned
+         * @returns {Boolean}
+         */
+        toggleBanned: function() {
+            if (this.isBanned()) {
+                this.set('bannedParts', []);
+                return false;
+            }
+            if (this.isChinese()) {
+                this.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
+            } else {
+                this.set('bannedParts', ['defn', 'rdng', 'rune']);
+            }
+            return true;
+        },
+        /**
+         * @method toggleStarred
+         * @returns {Boolean}
+         */
+        toggleStarred: function() {
+            if (this.get('starred')) {
+                this.set('starred', false);
+                return false;
+            }
+            this.set('starred', true);
+            return true;
         }
     });
 

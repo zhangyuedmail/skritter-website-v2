@@ -3,8 +3,10 @@
  * @submodule Models
  */
 define([
-    'core/modules/GelatoModel'
-], function(GelatoModel) {
+    'core/modules/GelatoModel',
+    'modules/collections/PromptReviews',
+    'modules/models/PromptReview'
+], function(GelatoModel, PromptReviews, PromptReview) {
 
     /**
      * @class DataItem
@@ -16,8 +18,10 @@ define([
          * @constructor
          */
         initialize: function() {
-            this.contained = [];
+            this.containedItems = [];
+            this.containedVocabs = [];
             this.decomps = [];
+            this.sentences = [];
             this.strokes = [];
             this.vocabs = [];
         },
@@ -43,132 +47,143 @@ define([
             return this.getVocab().get('writing').split('');
         },
         /**
+         * @method getContainedItems
+         * @returns {Array}
+         */
+        getContainedItems: function() {
+            var containedItems = [];
+            var containedVocabIds = [];
+            var part = this.get('part');
+            if (this.get('part') !== 'defn') {
+                containedVocabIds = this.getVocab().getContainedVocabIds();
+            }
+            for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                var splitId = containedVocabIds[i].split('-');
+                var fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
+                var intendedId = [app.user.id, containedVocabIds[i], part].join('-');
+                if (app.user.data.items.get(intendedId)) {
+                    containedItems.push(app.user.data.items.get(intendedId));
+                } else if (app.user.data.items.get(fallbackId)) {
+                    containedItems.push(app.user.data.items.get(fallbackId));
+                } else {
+                    console.error(new Error('Unable to get contained items.'));
+                }
+            }
+            return containedItems;
+        },
+        /**
+         * @method getContainedVocabs
+         * @returns {Array}
+         */
+        getContainedVocabs: function() {
+            var containedVocabs = [];
+            var containedVocabIds = this.getVocab().getContainedVocabIds();
+            for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                var containedVocab = app.user.data.vocabs.get(containedVocabIds[i]);
+                if (containedVocab) {
+                    containedVocabs.push(containedVocab);
+                }
+            }
+            return containedVocabs;
+        },
+        /**
+         * @method getPromptReviews
+         * @returns {PromptReviews}
+         */
+        getPromptReviews: function() {
+            var reviews = new PromptReviews();
+            var containedItems = this.getContainedItems();
+            var containedVocabs = this.getContainedVocabs();
+            var part = this.get('part');
+            var vocab = this.getVocab();
+            var characters = [];
+            var items = [];
+            var vocabs = [];
+            if (['defn', 'rdng'].indexOf(part) > -1) {
+                items = [this];
+                vocabs = [vocab];
+            } else {
+                characters = (part === 'tone') ? vocab.getCanvasTones() : vocab.getCanvasCharacters();
+                items = containedItems.length ? containedItems : [this];
+                vocabs = containedVocabs.length ? containedVocabs : [vocab];
+            }
+            for (var i = 0, length = vocabs.length; i < length; i++) {
+                var review = new PromptReview();
+                review.character = characters[i];
+                review.item = items[i].toJSON();
+                review.vocab = vocabs[i];
+                reviews.add(review);
+            }
+            reviews.group = Date.now() + '_' + this.id;
+            reviews.item = this.toJSON();
+            reviews.part = part;
+            reviews.vocab = vocab;
+            return reviews;
+        },
+        /**
+         * @method getReadiness
+         * @param {Number} now
+         * @returns {Number}
+         */
+        getReadiness: function(now) {
+            if (this.get('vocabIds').length) {
+                var itemLast = this.get('last') || 0;
+                var itemNext = this.get('next') || 0;
+                var actualAgo = now - itemLast;
+                var scheduledAgo = itemNext - itemLast;
+                if (!itemLast) {
+                    return 9999;
+                }
+                return actualAgo / scheduledAgo;
+            }
+            return 0;
+        },
+        /**
          * @method getVocab
          * @returns {DataVocab}
          */
         getVocab: function() {
-            var vocabs = this.vocabs;
+            var vocabs = this.getVocabs();
             if (app.user.isChinese()) {
                 return vocabs[this.get('reviews') % vocabs.length];
             }
             return vocabs[0];
         },
         /**
+         * @method getVocabs
+         * @returns {Array}
+         */
+        getVocabs: function() {
+            var vocabs = [];
+            var vocabIds = this.get('vocabIds');
+            for (var i = 0, length = vocabIds.length; i < length; i++) {
+                var vocab = app.user.data.vocabs.get(vocabIds[i]);
+                if (vocab) {
+                    vocabs.push(vocab);
+                }
+            }
+            return vocabs;
+        },
+        /**
          * @method isNew
          * @returns {Boolean}
          */
         isNew: function() {
-            return this.get('reviews') ? false : true;
+            return this.get('reviews') > 0;
         },
         /**
-         * @method isValid
+         * @method isReady
          * @returns {Boolean}
          */
-        isValid: function() {
-            //filter out any items not loaded yet
-            if (this.get('changed') === undefined) {
-                return false;
-            }
-            //filter out items that contain no vocab ids
-            if (!this.get('vocabIds').length) {
-                return false;
-            }
-            //filter out items not matching an active part
-            if (this.collection.activeParts.indexOf(this.get('part')) === -1) {
-                return false;
-            }
-            //chinese specific filters
-            if (this.collection.languageCode === 'zh') {
-                //filter out items not matching an active style
-                if (this.collection.activeStyles.indexOf(this.get('style')) === -1) {
-                    return false;
-                }
-            }
-            //japanese specific filters
-            if (this.collection.languageCode === 'ja') {
-                //TODO: add japanese specific kana filters
-            }
-            return true;
+        isReady: function() {
+            return this.get('vocabIds').length ? true : false;
         },
         /**
-         * @method load
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         */
-        load: function(callbackSuccess, callbackError) {
-            var self = this;
-            var options = {merge: true, silent: true, sort: false};
-            var part = this.get('part');
-            var userId = app.user.id;
-            var vocabIds = this.get('vocabIds');
-            //TODO: first check if item is valid
-            Async.series([
-                //vocabs
-                function(callback) {
-                    app.user.data.storage.get('vocabs', vocabIds, function(result) {
-                        self.vocabs = app.user.data.vocabs.add(result, options);
-                        callback();
-                    }, function() {
-                        callback(new Error('Unable to load vocabs.'));
-                    });
-                },
-                //contained items
-                function(callback) {
-                    var containedVocabIds = self.getVocab().get('containedVocabIds');
-                    if (containedVocabIds && part !== 'defn') {
-                        var contained = [];
-                        for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                            var splitId = containedVocabIds[i].split('-');
-                            var fallbackId = [userId, splitId[0], splitId[1], 0, part].join('-');
-                            var intendedId = [userId, containedVocabIds[i], part].join('-');
-                            if (self.collection.get(intendedId)) {
-                                contained.push(self.collection.get(intendedId));
-                            } else if (self.collection.get(fallbackId)) {
-                                contained.push(self.collection.get(fallbackId));
-                            } else {
-                                callback(new Error('Unable to load contained item ids.'));
-                                return;
-                            }
-                        }
-                        self.contained = contained;
-                        callback();
-                    } else {
-                        callback();
-                    }
-                },
-                //strokes
-                function(callback) {
-                    app.user.data.storage.get('strokes', self.getCharacters(), function(result) {
-                        self.strokes = app.user.data.strokes.add(result, options);
-                        callback();
-                    }, function() {
-                        callback(new Error('Unable to load strokes.'));
-                    });
-                },
-                //decomps
-                function(callback) {
-                    app.user.data.storage.get('decomps', self.getCharacters(), function(result) {
-                        self.decomps = app.user.data.decomps.add(result, options);
-                        callback();
-                    }, function() {
-                        callback(new Error('Unable to load decomps.'));
-                    });
-                }
-            ], function(error) {
-                if (error) {
-                    callbackError(error);
-                } else {
-                    callbackSuccess(self);
-                }
-            });
-        },
-        /**
-         * @method update
-         * @param {PromptResult} result
+         * @method play
          * @returns {DataItem}
          */
-        update: function(result) {
-            this.set('next', 999999999999);
+        play: function() {
+            this.getVocab().play();
             return this;
         }
     });

@@ -1,0 +1,65 @@
+gelato-page(data-name="dashboard")
+  gelato-navbar.fixed-top
+    .container
+      .left
+        .item.item-header(data-url="#") {{global.title}}
+      .right
+        .item.item-link(data-dialog="feedback") Contact
+        .item.item-text |
+        .item.item-link(data-dialog="logout-confirm") Logout
+  gelato-content
+    .container
+      section#section-expired.row
+        .col-xs-12
+          .alert.alert-warning.alert-dismissible(role="alert")
+            strong Subscription expired!
+            | Purchase a subscription to continue adding new items and lists to study.
+            button.btn.btn-success.text-right(type="button", data-url="study") Go to Billing
+            a(href="#", data-dismiss="alert") Hide
+      section.row
+        #section-daily-goal.col-md-6
+          .content-block
+            .content-block-header
+              .content-block-label Daily Goal
+              .content-block-options
+                span#goal-settings-button.cursor
+                  i.fa.fa-cog(data-dialog="goal-settings")
+            #daily-goal-row.row
+              .col-xs-6
+                canvas#goal-doughnut
+              .col-xs-6
+                #items-reviewed
+                  .value
+                  div items reviewed
+                #items-added
+                  .value
+                  div items added
+            .text-center
+              button.btn.btn-success(type="button", data-url="study") Study
+        #section-month-overview.col-md-3
+          .content-block
+            .content-block-label This Month
+            #heatmap-container
+            #month-streak.text-center
+              .value
+              div day streak
+        #section-all-time.col-md-3
+          .content-block
+            .content-block-label All Time
+            .text-center
+              #characters-learned
+                .value
+                div characters learned
+              #words-learned
+                .value
+                div words learned
+      section#section-list-queue.row
+        .col-xs-12
+          .content-block
+            .content-block-label List Queue
+            #lists-loading.row
+              .col-xs12.text-center
+                img(src='assets/ajax-loader.gif', width='50', height='50', alt='')
+            .row
+              .col-xs12
+                #list-queue-table

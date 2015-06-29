@@ -1,0 +1,157 @@
+/**
+ * @module Application
+ * @submodule Pages
+ */
+define([
+    'core/modules/GelatoPage',
+    'require.text!modules/pages/study/study-template.html',
+    'modules/components/prompt/PromptComponent',
+    'modules/components/study/toolbar/StudyToolbarComponent'
+], function(
+    GelatoPage,
+    Template,
+    PromptComponent,
+    StudyToolbarComponent
+) {
+
+    /**
+     * @class StudyPage
+     * @extends GelatoPage
+     */
+    var StudyPage = GelatoPage.extend({
+        /**
+         * @method initialize
+         * @constructor
+         */
+        initialize: function() {
+            this.counter = 0;
+            this.item = null;
+            this.listId = null;
+            this.prompt = new PromptComponent();
+            this.sectionId = null;
+            this.toolbar = new StudyToolbarComponent();
+            this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
+            this.listenTo(app.dialogs, 'feedback:show', this.handleFeedbackShow);
+            this.listenTo(app.dialogs, 'feedback:submit', this.handleFeedbackSubmit);
+            this.listenTo(app.dialogs, 'logout-confirm:yes', app.user.logout);
+        },
+        /**
+         * @property title
+         * @type String
+         */
+        title: 'Study - ' + i18n.global.title,
+        /**
+         * @property bodyClass
+         * @type {String}
+         */
+        bodyClass: 'background-light',
+        /**
+         * @method render
+         * @returns {StudyPage}
+         */
+        render: function() {
+            this.renderTemplate(Template);
+            this.prompt.setElement(this.$('#prompt-container')).render().hide();
+            this.toolbar.setElement(this.$('#study-toolbar-container')).render().hide();
+            app.user.data.stats.fetch();
+            return this;
+        },
+        /**
+         * @method handleFeedbackShow
+         * @param {jQuery} dialog
+         */
+        handleFeedbackShow: function(dialog) {
+            dialog.find('#contact-message').val('');
+            dialog.find('.status-message').empty();
+        },
+        /**
+         * @method handleFeedbackSubmit
+         * @param {jQuery} dialog
+         */
+        handleFeedbackSubmit: function(dialog) {
+            var message = dialog.find('#contact-message').val();
+            var subject = dialog.find('#contact-topic-select').val();
+            if (message.trim().length < 25) {
+                dialog.find('.status-message').text('Message must be longer than 25 characters.');
+                return;
+            }
+            app.api.postContact('feedback', {
+                custom: {page: 'Study'},
+                message: message,
+                subject: subject
+            }, function() {
+                app.dialogs.close();
+            }, function(error) {
+                dialog.find('.status-message').removeClass();
+                dialog.find('.status-message').addClass('text-danger');
+                dialog.find('.status-message').text(JSON.stringify(error));
+            });
+        },
+        /**
+         * @method handlePromptComplete
+         * @param {PromptReviews} reviews
+         */
+        handlePromptComplete: function(reviews) {
+            var self = this;
+            reviews.updateItems(function() {
+                app.user.history.save();
+                self.loadNext();
+            }, function(error) {
+                console.error('ITEM UPDATE ERROR:', error);
+            });
+        },
+        /**
+         * @method load
+         * @param {String} [listId]
+         * @param {String} [sectionId]
+         * @returns {StudyPage}
+         */
+        load: function(listId, sectionId) {
+            var self = this;
+            this.listId = listId || null;
+            this.sectionId = sectionId || null;
+            app.dialogs.open('loading');
+            app.user.data.items.fetchNext({
+                limit: 10
+            }, function() {
+                app.dialogs.close();
+                self.loadNext();
+            }, function(error) {
+                console.error(error);
+            });
+            return this;
+        },
+        /**
+         * @method loadNext
+         * @returns {StudyPage}
+         */
+        loadNext: function() {
+            var item = app.user.data.items.getNext();
+            if (item) {
+                this.counter++;
+                this.item = item;
+                this.prompt.set(item.getPromptReviews());
+                this.prompt.show();
+                //this.toolbar.show();
+                if (this.counter % 5 === 0) {
+                    app.user.data.items.fetchNext({limit: 5});
+                }
+            } else {
+                console.error(new Error('Unable to get next item.'));
+            }
+            return this;
+        },
+        /**
+         * @method remove
+         * @returns {GelatoView}
+         */
+        remove: function() {
+            this.prompt.remove();
+            this.toolbar.remove();
+            return GelatoPage.prototype.remove.call(this);
+        }
+    });
+
+    return StudyPage;
+
+});

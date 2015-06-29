@@ -55,12 +55,8 @@ define([
                         start: Moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.data.storage.put('stats', result, function() {
-                            self.add(result, {merge: true});
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
+                        self.add(result, {merge: true});
+                        callback();
                     }, function(error) {
                         callback(error);
                     });
@@ -70,12 +66,8 @@ define([
                         start: Moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.data.storage.put('stats', result, function() {
-                            self.add(result, {merge: true});
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
+                        self.add(result, {merge: true});
+                        callback();
                     }, function(error) {
                         callback(error);
                     });
@@ -85,12 +77,8 @@ define([
                         start: Moment(momentMonthStart).format('YYYY-MM-DD'),
                         end: Moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
                     }, function(result) {
-                        app.user.data.storage.put('stats', result, function() {
-                            self.add(result, {merge: true});
-                            callback();
-                        }, function(error) {
-                            callback(error);
-                        });
+                        self.add(result, {merge: true});
+                        callback();
                     }, function(error) {
                         callback(error);
                     });
@@ -101,11 +89,61 @@ define([
                         callbackError(error);
                     }
                 } else {
+                    self.trigger('update', self);
                     if (typeof callbackSuccess === 'function') {
                         callbackSuccess();
                     }
                 }
             });
+        },
+        /**
+         * @method getDailyItemsReviewed
+         * @returns {Number}
+         */
+        getDailyItemsReviewed: function() {
+            var total = 0;
+            var today = Moment().format('YYYY-MM-DD');
+            var stat = this.get(today);
+            if (stat) {
+                total += stat.get('char').defn.studied.day;
+                total += stat.get('char').rdng.studied.day;
+                total += stat.get('char').rune.studied.day;
+                total += stat.get('char').tone.studied.day;
+                total += stat.get('word').defn.studied.day;
+                total += stat.get('word').rdng.studied.day;
+                total += stat.get('word').rune.studied.day;
+                total += stat.get('word').tone.studied.day;
+            }
+            return total;
+        },
+        /**
+         * @method getDailyTimeStudied
+         * @returns {Number}
+         */
+        getDailyTimeStudied: function() {
+            var today = Moment().format('YYYY-MM-DD');
+            var stat = this.get(today);
+            return stat ? stat.get('timeStudied').day : 0;
+        },
+        /**
+         * @method getGoalItemPercent
+         * @returns {Number}
+         */
+        getGoalItemPercent: function() {
+            var goal = app.user.settings.getGoal();
+            var totalItems = app.user.data.stats.getDailyItemsReviewed();
+            var percentItems = Math.round(totalItems / goal.value * 100);
+            return percentItems > 100 ? 100 : percentItems.toFixed(2);
+        },
+        /**
+         * @method getGoalTimePercent
+         * @returns {Number}
+         */
+        getGoalTimePercent: function() {
+            var goal = app.user.settings.getGoal();
+            var totalTime = app.user.data.stats.getDailyTimeStudied() / 60;
+            var percentTime = Math.round(totalTime / goal.value * 100);
+            return percentTime > 100 ? 100 : percentTime.toFixed(2);
         },
         /**
          * @method getHeatmapData
@@ -116,7 +154,15 @@ define([
             for (var i = 0, length = this.length; i < length; i++) {
                 var stat = this.at(i);
                 var date = Moment(stat.get('date')).unix();
-                data[date] = stat.get('char').rune.studied.day;
+                data[date] = 0;
+                data[date] += stat.get('char').defn.studied.day;
+                data[date] += stat.get('char').rdng.studied.day;
+                data[date] += stat.get('char').rune.studied.day;
+                data[date] += stat.get('char').tone.studied.day;
+                data[date] += stat.get('word').defn.studied.day;
+                data[date] += stat.get('word').rdng.studied.day;
+                data[date] += stat.get('word').rune.studied.day;
+                data[date] += stat.get('word').tone.studied.day;
             }
             return data;
         },
@@ -129,7 +175,7 @@ define([
             var currentStreak = 0;
             var timeStudied = this.pluck('timeStudied');
             for (var i = 0, length = timeStudied.length; i < length; i++) {
-                if (timeStudied[i].day > 0) {
+                if (timeStudied[i].day !== 0) {
                     currentStreak++;
                 }
                 if (currentStreak > bestStreak) {
@@ -154,22 +200,6 @@ define([
          */
         getTotalWordsLearned: function() {
             return this.length ? this.at(0).get('word').rune.learned.all : 0;
-        },
-        /**
-         * @method load
-         * @param {Function} callbackSuccess
-         * @param {Function} callbackError
-         * @returns {DataStats}
-         */
-        load: function(callbackSuccess, callbackError) {
-            var self = this;
-            app.user.data.storage.all('stats', function(result) {
-                self.add(result, {merge: true, silent: true});
-                callbackSuccess();
-            }, function(error) {
-                callbackError(error);
-            });
-            return this;
         }
     });
 

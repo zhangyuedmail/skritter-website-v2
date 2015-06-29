@@ -117,6 +117,31 @@ define([
             });
         },
         /**
+         * @method fetchWord
+         * @param {String} id
+         * @param {Function} callbackSuccess
+         * @param {Function} callbackError
+         */
+        fetchWord: function(id, callbackSuccess, callbackError) {
+            var self = this;
+            var vocab = null;
+            app.api.fetchVocabs({
+                ids: id,
+                include_decomps: true,
+                include_heisigs: true,
+                include_sentences: true,
+                include_top_mnemonics: true
+            }, function(result) {
+                vocab = self.add(result.Vocabs[0], {merge: true});
+                vocab.containing = self.add(result.ContainingVocabs, {merge: true});
+                vocab.decomps = app.user.data.decomps.add(result.Decomps, {merge: true});
+                vocab.sentences = app.user.data.sentences.add(result.Sentences, {merge: true});
+                callbackSuccess(vocab);
+            }, function(error) {
+                callbackError(error);
+            });
+        },
+        /**
          * @method load
          * @param {Function} callbackSuccess
          * @param {Function} callbackError
