@@ -31,5 +31,39 @@ module.exports = GelatoModel.extend({
      * @property defaults
      * @type {Object}
      */
-    defaults: {}
+    defaults: {},
+    /**
+     * @method add
+     * @param {Object} result
+     * @param {Object} [options]
+     * @param {Function} [callback]
+     */
+    add: function(result, options, callback) {
+        async.parallel([
+            function(callback) {
+                app.user.data.decomps.add(result.Decomps || [], options);
+                callback();
+            },
+            function(callback) {
+                app.user.data.items.add(result.ContainedItems || [], options);
+                callback();
+            },
+            function(callback) {
+                app.user.data.items.add(result.Items || [], options);
+                callback();
+            },
+            function(callback) {
+                app.user.data.sentences.add(result.Sentences || [], options);
+                callback();
+            },
+            function(callback) {
+                app.user.data.strokes.add(result.Strokes || [], options);
+                callback();
+            },
+            function(callback) {
+                app.user.data.vocabs.add(result.Vocabs || [], options);
+                callback();
+            }
+        ], callback);
+    }
 });

@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
         var resize = null;
         this.$('[data-dialog]').off().on('vclick', $.proxy(this.handleClickDataDialog, this));
         this.$('[data-navigate]').off().on('vclick', $.proxy(this.handleClickDataNavigate, this));
-        $(window).off('resize').resize(function(event) {
+        $(window).resize(function(event) {
             clearTimeout(resize);
             resize = setTimeout(function() {
                 self.trigger('resize', event);

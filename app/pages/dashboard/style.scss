@@ -3,15 +3,16 @@
 gelato-page[data-name='dashboard'] {
 
   .content-block {
+    height: 250px;
     padding-top: 30px;
     .options {
       i { cursor: pointer; }
       position: absolute;
-      right: 10px;
+      right: 20px;
       top: 10px;
     }
     .title {
-      left: 10px;
+      left: 20px;
       position: absolute;
       text-transform: uppercase;
       top: 10px;

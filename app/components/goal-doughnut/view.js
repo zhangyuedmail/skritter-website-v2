@@ -13,6 +13,7 @@ module.exports = GelatoComponent.extend({
         this.doughnut = null;
         this.listenTo(app.user.settings, 'change:goals', this.updateDoughnut);
         this.listenTo(app.user.data.stats, 'update', this.updateDoughnut);
+        this.on('resize', this.resize);
     },
     /**
      * @property template
@@ -28,13 +29,13 @@ module.exports = GelatoComponent.extend({
         this.doughnut = new Highcharts.Chart({
             chart: {
                 backgroundColor: 'transparent',
-                height: 200,
+                height: this.getSize(),
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
                 renderTo: this.$component.get(0),
                 type: 'pie',
-                width: 200
+                width: this.getSize()
             },
             credits: {
                 enabled: false
@@ -69,12 +70,25 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method getSize
+     * @returns {Number}
+     */
+    getSize: function() {
+        return this.$el.width() > 200 ? 200 : this.$el.width();
+    },
+    /**
      * @method remove
      * @returns {GoalDoughnut}
      */
     remove: function() {
         this.doughnut.destroy();
         return GelatoComponent.prototype.remove.call(this);
+    },
+    /**
+     * @method resize
+     */
+    resize: function() {
+        this.doughnut.setSize(this.getSize(), this.getSize());
     },
     /**
      * @method updateDoughnut

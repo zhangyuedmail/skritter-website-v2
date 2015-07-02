@@ -48,6 +48,7 @@ module.exports = GelatoModel.extend({
             this.set('id', user);
             this.credentials.load();
             this.settings.load();
+            this.data.items.fetch();
             this.data.stats.fetch();
             this.settings.fetch();
         }

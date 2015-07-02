@@ -25,7 +25,7 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
         this.heatmap.init({
-            cellSize: 25,
+            cellSize: 22,
             cellPadding: 5,
             cellRadius: 25,
             domain: 'month',

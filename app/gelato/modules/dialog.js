@@ -32,14 +32,13 @@ module.exports = GelatoView.extend({
      * @returns {GelatoDialog}
      */
     render: function() {
-        console.log('RENDERING');
         this.renderTemplate();
         this.dialog = this.$('[role="dialog"]');
         return this;
     },
     /**
      * @method renderTemplate
-     * @param {String template}
+     * @param {String} template
      * @returns {GelatoView}
      */
     renderTemplate: function(template) {
