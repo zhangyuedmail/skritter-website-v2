@@ -1,0 +1,56 @@
+var GelatoDialog = require('gelato/modules/dialog');
+
+/**
+ * @class GoalSettingsDialog
+ * @extends {GelatoDialog}
+ */
+module.exports = GelatoDialog.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        GelatoDialog.prototype.initialize.call(this);
+        this.updateSettings();
+    },
+    /**
+     * @property template
+     * @type {Function}
+     */
+    template: require('dialogs/goal-settings/template'),
+    /**
+     * @property events
+     * @type {Object}
+     */
+    events: {
+        'vclick #button-close': 'handleClickClose',
+        'vclick #button-save': 'handleClickSave'
+    },
+    /**
+     * @method handleClickClose
+     * @param {Event} event
+     */
+    handleClickClose: function(event) {
+        event.preventDefault();
+        app.closeDialog();
+    },
+    /**
+     * @method handleClickSave
+     * @param {Event} event
+     */
+    handleClickSave: function(event) {
+        event.preventDefault();
+        var type = this.$('input[name="goal-type"]:checked').val();
+        var value = this.$('#goal-value').val();
+        app.user.settings.setGoal(type, value);
+        app.closeDialog();
+    },
+    /**
+     * @method updateSettings
+     */
+    updateSettings: function() {
+        var goal = app.user.settings.getGoal();
+        this.$('input[value="' + goal.type + '"]').prop('checked', true);
+        this.$('#goal-value').val(goal.value);
+    }
+});

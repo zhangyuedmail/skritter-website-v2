@@ -1,0 +1,29 @@
+gelato-page(data-name='dashboard')
+  gelato-navbar.fixed-top
+    .container-fluid
+      .container
+        .left
+          .item.item-header(data-navigate="") Skritter
+  gelato-content
+    .container
+      .row
+        .col-md-4
+          .content-block
+            .title Daily Goal
+            .options
+              i.fa.fa-2x.fa-gear(data-dialog="goal-settings")
+            #goal-doughnut-container
+        .col-md-4
+          .content-block
+            .title This Month
+            #month-heatmap-container
+            #month-streak-container
+        .col-md-4
+          .content-block
+            .title All Time
+            #alltime-container
+      .row
+        .col-xs-12
+          .content-block
+            .title List Queue
+            #list-queue-container

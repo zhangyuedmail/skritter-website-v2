@@ -1,0 +1,72 @@
+gelato-navbar {
+
+  background-color: #080808;
+  color: #ffffff;
+  display: block;
+  height: 50px;
+  width: 100%;
+  z-index: 7000;
+
+  &.fixed-bottom {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+  }
+
+  &.fixed-top {
+    left: 0;
+    position: fixed;
+    top: 0;
+  }
+
+  .item {
+    float: left;
+    &.item-button {
+      font-size: 16px;
+      font-weight: 400;
+      padding: 7px;
+    }
+    &.item-header {
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 700;
+      margin-right: 10px;
+      padding: 8px 10px;
+    }
+    &.item-icon {
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 400;
+      padding: 8px 10px;
+    }
+    &.item-link {
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 400;
+      padding: 12.5px 7px;
+    }
+    &.item-select {
+      font-size: 16px;
+      font-weight: 400;
+      padding: 14px 7px;
+    }
+    &.item-text {
+      font-size: 20px;
+      font-weight: 400;
+      padding: 11px 7px;
+    }
+  }
+
+  .left { float: left; }
+
+  .right { float: right; }
+
+  @media (max-width: 767px) {
+    .container,
+    .container-fluid {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+
+}

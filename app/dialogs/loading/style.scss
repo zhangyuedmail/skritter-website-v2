@@ -1,0 +1,9 @@
+@import "../../styles/variables";
+
+gelato-dialog[data-name="loading"] {
+
+  .modal-content { background-color: $white5; }
+
+  .modal-dialog { width: 200px; }
+
+}

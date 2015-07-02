@@ -1,0 +1,33 @@
+@import "../../styles/variables";
+
+gelato-component[data-name='month-heatmap'] {
+
+  margin-bottom: -100px;
+
+  rect { shape-rendering: auto; }
+  .graph-label,
+  .graph-legend { display: none; }
+  .graph-rect { cursor: pointer; }
+  .heatmap-container { margin: 0 auto; }
+  .q1 {
+    background-color: #ededed;
+    fill: #ededed
+  }
+  .q2 {
+    background-color: #cedb9c;
+    fill: #9cc069
+  }
+  .q3 {
+    background-color: #b5cf6b;
+    fill: #669d45
+  }
+  .q4 {
+    background-color: #637939;
+    fill: #637939
+  }
+  .q5 {
+    background-color: #3b6427;
+    fill: #3b6427
+  }
+
+}

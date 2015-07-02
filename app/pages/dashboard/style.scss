@@ -1,0 +1,21 @@
+@import "../../styles/variables";
+
+gelato-page[data-name='dashboard'] {
+
+  .content-block {
+    padding-top: 30px;
+    .options {
+      i { cursor: pointer; }
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+    .title {
+      left: 10px;
+      position: absolute;
+      text-transform: uppercase;
+      top: 10px;
+    }
+  }
+
+}
