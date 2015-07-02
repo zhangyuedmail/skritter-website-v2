@@ -171,21 +171,28 @@ define([
          */
         getReadingElement: function() {
             var element = '';
-            var variations = this.get('reading').split(', ');
-            for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
-                var variation = variations[a];
-                var segments = variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g);
-                element += '<div class="variation" data-variation="' + a + '">';
-                for (var b = 0, lengthB = segments.length; b < lengthB; b++) {
-                    var segment = segments[b];
-                    var segmentMarks = app.fn.pinyin.toTone(segment);
-                    var segmentRaw = segment.replace(/[1-5]/g, '');
-                    element += '<div class="segment mask" data-segment="' + b + '">';
-                    element += '<span class="raw">' + segmentRaw + '</span>';
-                    element += '<span class="tone hidden">' + segmentMarks + '</span>';
+            if (app.user.isChinese()) {
+                var variations = this.get('reading').split(', ');
+                for (var a = 0, lengthA = variations.length; a < lengthA; a++) {
+                    var variation = variations[a];
+                    var segments = variation.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g) || [];
+                    element += '<div class="variation" data-variation="' + a + '">';
+                    for (var b = 0, lengthB = segments.length; b < lengthB; b++) {
+                        var segment = segments[b];
+                        var segmentMarks = app.fn.pinyin.toTone(segment);
+                        var segmentRaw = segment.replace(/[1-5]/g, '');
+                        element += '<div class="segment mask" data-segment="' + b + '">';
+                        element += '<span class="raw">' + segmentRaw + '</span>';
+                        element += '<span class="tone hidden">' + segmentMarks + '</span>';
+                        element += '</div>';
+                    }
                     element += '</div>';
                 }
-                element += '</div>';
+            } else {
+                element += '<div class="variation" data-variation="0">';
+                element += '<div class="segment" data-segment="0">';
+                element += '<span class="raw">' + this.get('reading') + '</span>';
+                element += '</div></div>';
             }
             return element;
         },
