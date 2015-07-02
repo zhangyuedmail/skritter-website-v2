@@ -17,6 +17,7 @@ define([
          * @constructor
          */
         initialize: function() {
+            this.active = [];
             this.sorted = Moment().unix();
         },
         /**
@@ -32,6 +33,14 @@ define([
             return -item.getReadiness(this.sorted);
         },
         /**
+         * @method addActive
+         * @param {Array} items
+         */
+        addActive: function(items) {
+            var itemIds = _.pluck(items|| [], 'id');
+            this.active = _.uniq(this.active.concat(itemIds));
+        },
+        /**
          * @method fetch
          * @param {Function} [callbackSuccess]
          * @param {Function} [callbackError]
@@ -40,6 +49,7 @@ define([
             (function next(cursor) {
                 app.api.fetchItems({
                     cursor: cursor,
+                    lang: app.user.getLanguageCode(),
                     offset: Moment().startOf('day').add(3, 'hours').unix(),
                     sort: 'changed'
                 }, function(result) {
@@ -65,6 +75,7 @@ define([
          * @param {Function} [callbackError]
          */
         fetchNext: function(options, callbackSuccess, callbackError) {
+            var self = this;
             options = options || {};
             options.limit = options.limit || 1;
             console.log('FETCHING:', options.limit);
@@ -76,11 +87,13 @@ define([
                 include_strokes: true,
                 include_top_mnemonics: true,
                 include_vocabs: true,
+                lang: app.user.getLanguageCode(),
                 limit: options.limit,
-                parts: options.parts,
+                parts: app.user.settings.getRequestParts(),
                 sort: 'next',
-                styles: options.styles
+                styles: app.user.settings.getRequestStyles()
             }, function(result) {
+                self.addActive(result.Items);
                 app.user.data.add(result);
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
@@ -109,7 +122,7 @@ define([
             this.sort();
             for (var i = 0, length = this.length; i < length; i++) {
                 var item = this.at(i);
-                if (item.isReady()) {
+                if (this.active.indexOf(item.id) > -1 && item.isReady()) {
                     console.log('NEXT:', item.id);
                     return item;
                 }
