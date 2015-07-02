@@ -90,6 +90,20 @@ module.exports = GelatoCollection.extend({
         });
     },
     /**
+     * @method getAllTimeCharactersLearned
+     * @returns {Number}
+     */
+    getAllTimeCharactersLearned: function() {
+        return this.length ? this.at(0).get('char').rune.learned.all : 0;
+    },
+    /**
+     * @method getAllTimeWordsLearned
+     * @returns {Number}
+     */
+    getAllTimeWordsLearned: function() {
+        return this.length ? this.at(0).get('word').rune.learned.all : 0;
+    },
+    /**
      * @method getDailyItemsReviewed
      * @returns {Number}
      */

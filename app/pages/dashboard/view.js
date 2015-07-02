@@ -1,5 +1,7 @@
 var GelatoPage = require('gelato/modules/page');
 var GoalDoughnut = require('components/goal-doughnut/view');
+var LearnedCharacters = require('components/learned-characters/view');
+var LearnedWords = require('components/learned-words/view');
 var MonthHeatmap = require('components/month-heatmap/view');
 var MonthStreak = require('components/month-streak/view');
 
@@ -14,6 +16,8 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.goalDoughnut = new GoalDoughnut();
+        this.learnedCharacters = new LearnedCharacters();
+        this.learnedWords = new LearnedWords();
         this.monthHeatmap = new MonthHeatmap();
         this.monthStreak = new MonthStreak();
     },
@@ -34,6 +38,8 @@ module.exports = GelatoPage.extend({
     render: function() {
         this.renderTemplate();
         this.goalDoughnut.setElement('#goal-doughnut-container').render();
+        this.learnedCharacters.setElement('#learned-characters-container').render();
+        this.learnedWords.setElement('#learned-words-container').render();
         this.monthHeatmap.setElement('#month-heatmap-container').render();
         this.monthStreak.setElement('#month-streak-container').render();
         return this;
@@ -44,6 +50,8 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.goalDoughnut.remove();
+        this.learnedCharacters.remove();
+        this.learnedWords.remove();
         this.monthHeatmap.remove();
         this.monthStreak.remove();
         return GelatoPage.prototype.remove.call(this);
