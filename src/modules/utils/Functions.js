@@ -184,6 +184,21 @@ define([
     }
 
     /**
+     * @method getLength
+     * @param {Array} points
+     * @return {Number}
+     */
+    function getLength(points) {
+        var total = 0;
+        if (points.length > 1) {
+            for (var i = 1, length = points.length; i < length; i++) {
+                total += getDistance(points[i-1], points[i]);
+            }
+        }
+        return total;
+    }
+
+    /**
      * @method hasKana
      * @param {String} text
      * @returns {Boolean}
@@ -341,6 +356,7 @@ define([
         getBoundingRectangle: getBoundingRectangle,
         getDistance: getDistance,
         getGuid: getGuid,
+        getLength: getLength,
         hasKana: hasKana,
         imageExists: imageExists,
         interval: interval,
