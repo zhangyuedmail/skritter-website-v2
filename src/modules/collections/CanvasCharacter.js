@@ -62,6 +62,13 @@ define([
             return expected.length ? expected : [this.targets[0]];
         },
         /**
+         * @method getExpectedTone
+         * @returns {CanvasStroke}
+         */
+        getExpectedTone: function() {
+            return;
+        },
+        /**
          * @method getMaxPosition
          * @returns {Number}
          */

@@ -113,13 +113,13 @@ define([
         getScore: function() {
             var score = this.at(0).get('score');
             if (this.length > 1) {
-                var totalCount = this.length - 1;
+                var totalCount = this.length;
                 var totalScore = 0;
                 var totalWrong = 0;
-                for (var i = 1, length = this.length; i < length; i++) {
+                for (var i = 0, length = this.length; i < length; i++) {
                     var reviewScore = this.at(i).get('score');
                     totalScore += reviewScore;
-                    if (reviewScore === 3) {
+                    if (reviewScore === 1) {
                         totalWrong++;
                     }
                 }

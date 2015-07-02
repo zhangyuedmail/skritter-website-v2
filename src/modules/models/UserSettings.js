@@ -138,6 +138,28 @@ define([
             return {type: type, value: goal[type]};
         },
         /**
+         * @method getRequestParts
+         * @returns {String}
+         */
+        getRequestParts: function() {
+            return this.getActiveParts().join(',');
+        },
+        /**
+         * @method getRequestStyles
+         * @returns {String}
+         */
+        getRequestStyles: function() {
+            if (app.user.isChinese()) {
+                if (this.get('reviewSimplified') && this.get('reviewTraditional')) {
+                    return ['both', 'simp', 'trad'].join(',');
+                } else if (this.get('reviewSimplified') && !this.get('reviewTraditional')) {
+                    return ['both', 'simp'].join(',');
+                } else if (!this.get('reviewSimplified') && this.get('reviewTraditional')) {
+                    return ['both', 'trad'].join(',');
+                }
+            }
+        },
+        /**
          * @method isAudioEnabled
          * @returns {Boolean}
          */
