@@ -393,10 +393,11 @@ define([
          * @param {createjs.Shape} shape
          */
         recognizeTone: function(points, shape) {
-            var stroke = this.character().recognize(points, shape);
+            var character = this.character();
+            var stroke = character.recognize(points, shape);
             var possibleTones = this.reviews.getToneNumbers();
             var expectedTone = this.character().getTone(possibleTones[0]);
-            if (stroke) {
+            if (stroke && app.fn.getLength(points) > 30) {
                 var targetShape = stroke.getTargetShape();
                 var userShape = stroke.getUserShape();
                 if (possibleTones.indexOf(stroke.get('tone')) > -1) {
@@ -406,9 +407,18 @@ define([
                     this.canvas.drawShape('surface', expectedTone.getTargetShape());
                     this.review().set('score', 1);
                 }
-                if (this.character().isComplete()) {
-                    this.handlePromptToneComplete();
+            } else {
+                character.add(character.getExpectedStroke());
+                if (possibleTones.indexOf(5) > -1) {
+                    this.canvas.drawShape('surface', character.getTargetShape());
+                    this.review().set('score', 3);
+                } else {
+                    this.canvas.drawShape('surface', expectedTone.getTargetShape());
+                    this.review().set('score', 1);
                 }
+            }
+            if (this.character().isComplete()) {
+                this.handlePromptToneComplete();
             }
         },
         /**
