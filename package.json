@@ -1,11 +1,22 @@
 {
-    "name": "skritter-html5",
-    "title": "Skritter",
-    "description": "Learn to write Chinese and Japanese characters.",
-    "version": "0.0.1",
-    "type": "gelato",
-    "license": "MIT",
-    "packageId": "com.inkren.skritter",
-    "packageName": "Skritter",
-    "packageVersion": "1"
+  "name": "skritter-html5",
+  "description": "Learn to write Chinese and Japanese characters.",
+  "author": "Inkren, LLC",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/skritter/skritter-html5.git"
+  },
+  "dependencies": {
+    "auto-reload-brunch": "1.8.0",
+    "clean-css-brunch": "1.7.2",
+    "coffee-script-brunch": "1.8.2",
+    "css-brunch": "1.7.0",
+    "jade-brunch": "1.8.1",
+    "javascript-brunch": "1.7.1",
+    "keyword-brunch": "1.7.8",
+    "sass-brunch": "1.8.10",
+    "uglify-js-brunch": "1.7.8"
+  }
 }

@@ -1,1 +1,1 @@
-![](http://html5.skritter.com/files/images/skritter-github-banner-beta.png)
+# Skritter 2.0
