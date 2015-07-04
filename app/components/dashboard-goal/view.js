@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/modules/component');
 
 /**
- * @class GoalDoughnut
+ * @class DashboardGoal
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -12,6 +12,7 @@ module.exports = GelatoComponent.extend({
     initialize: function() {
         this.doughnut = null;
         this.listenTo(app.user.settings, 'change:goals', this.updateDoughnut);
+        this.listenTo(app.user.data.items, 'update', this.updateItems);
         this.listenTo(app.user.data.stats, 'update', this.updateDoughnut);
         this.on('resize', this.resize);
     },
@@ -19,7 +20,7 @@ module.exports = GelatoComponent.extend({
      * @property template
      * @type {Function}
      */
-    template: require('components/goal-doughnut/template'),
+    template: require('components/dashboard-goal/template'),
     /**
      * @method render
      * @returns {GoalDoughnut}
@@ -33,7 +34,7 @@ module.exports = GelatoComponent.extend({
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
-                renderTo: this.$component.get(0),
+                renderTo: 'goal-doughnut',
                 type: 'pie',
                 width: this.getSize()
             },
@@ -88,7 +89,7 @@ module.exports = GelatoComponent.extend({
      * @method resize
      */
     resize: function() {
-        this.doughnut.setSize(this.getSize(), this.getSize());
+        this.doughnut.setSize(this.getSize(), this.getSize(), true);
     },
     /**
      * @method updateDoughnut
@@ -116,5 +117,12 @@ module.exports = GelatoComponent.extend({
             {name: "Completed", color: '#c5da4b', y: percent},
             {name: "Remaining", color: '#efeef3', y: 100 - percent}
         ]);
+    },
+    /**
+     * @method updateItems
+     */
+    updateItems: function() {
+        this.$('#items-added .value').text(app.user.data.items.getAddedCount());
+        this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
     }
 });

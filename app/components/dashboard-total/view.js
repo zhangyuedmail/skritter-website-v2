@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/modules/component');
 
 /**
- * @class LearnedCharacters
+ * @class LearnedWords
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -10,26 +10,27 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        this.listenTo(app.user.data.stats, 'update', this.updateLearned);
+        this.listenTo(app.user.data.stats, 'update', this.update);
     },
     /**
      * @property template
      * @type {Function}
      */
-    template: require('components/learned-characters/template'),
+    template: require('components/dashboard-total/template'),
     /**
      * @method render
      * @returns {Component}
      */
     render: function() {
         this.renderTemplate();
-        this.updateLearned();
+        this.update();
         return this;
     },
     /**
-     * @method updateLearned
+     * @method update
      */
-    updateLearned: function() {
-        this.$('.learned-value').text(app.user.data.stats.getAllTimeCharactersLearned());
+    update: function() {
+        this.$('#characters-learned .value').text(app.user.data.stats.getAllTimeCharactersLearned());
+        this.$('#words-learned .value').text(app.user.data.stats.getAllTimeWordsLearned());
     }
 });

@@ -2,11 +2,7 @@
 
 gelato-dialog[data-name="goal-settings"] {
 
-  button {
-    height: 50px;
-    margin: 20px 0;
-    width: 150px;
-  }
+  form { margin-left: 25px; }
   label {
     color: #7d8288;
     font-family: $font-muli;
@@ -20,13 +16,14 @@ gelato-dialog[data-name="goal-settings"] {
     font-weight: 300;
   }
 
-  .modal-content { background-color: $white5; }
+  .modal-content { background-color: $white1; }
 
   .row {
     padding: 10px 0;
   }
 
   #goal-value {
+    background-color: transparent;
     border: none;
     border-bottom: 1px solid #7d8288;
     color: #7d8288;

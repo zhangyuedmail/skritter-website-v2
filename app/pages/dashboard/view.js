@@ -1,11 +1,7 @@
 var GelatoPage = require('gelato/modules/page');
-var GoalDoughnut = require('components/goal-doughnut/view');
-var ItemsAdded = require('components/items-added/view');
-var ItemsReviewed = require('components/items-reviewed/view');
-var LearnedCharacters = require('components/learned-characters/view');
-var LearnedWords = require('components/learned-words/view');
-var MonthHeatmap = require('components/month-heatmap/view');
-var MonthStreak = require('components/month-streak/view');
+var DashboardGoal = require('components/dashboard-goal/view');
+var DashboardMonth = require('components/dashboard-month/view');
+var DashboardTotal = require('components/dashboard-total/view');
 
 /**
  * @class Dashboard
@@ -17,13 +13,9 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.goalDoughnut = new GoalDoughnut();
-        this.itemsAdded = new ItemsAdded();
-        this.itemsReviewed = new ItemsReviewed();
-        this.learnedCharacters = new LearnedCharacters();
-        this.learnedWords = new LearnedWords();
-        this.monthHeatmap = new MonthHeatmap();
-        this.monthStreak = new MonthStreak();
+        this.dashboardGoal = new DashboardGoal();
+        this.dashboardMonth = new DashboardMonth();
+        this.dashboardTotal = new DashboardTotal();
     },
     /**
      * @property title
@@ -41,13 +33,9 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.goalDoughnut.setElement('#goal-doughnut-container').render();
-        this.itemsAdded.setElement('#items-added-container').render();
-        this.itemsReviewed.setElement('#items-reviewed-container').render();
-        this.learnedCharacters.setElement('#learned-characters-container').render();
-        this.learnedWords.setElement('#learned-words-container').render();
-        this.monthHeatmap.setElement('#month-heatmap-container').render();
-        this.monthStreak.setElement('#month-streak-container').render();
+        this.dashboardGoal.setElement('#dashboard-goal-container').render();
+        this.dashboardMonth.setElement('#dashboard-month-container').render();
+        this.dashboardTotal.setElement('#dashboard-total-container').render();
         return this;
     },
     /**
@@ -55,13 +43,9 @@ module.exports = GelatoPage.extend({
      * @returns {GelatoPage}
      */
     remove: function() {
-        this.goalDoughnut.remove();
-        this.itemsAdded.remove();
-        this.itemsReviewed.remove();
-        this.learnedCharacters.remove();
-        this.learnedWords.remove();
-        this.monthHeatmap.remove();
-        this.monthStreak.remove();
+        this.dashboardGoal.remove();
+        this.dashboardMonth.remove();
+        this.dashboardTotal.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });
