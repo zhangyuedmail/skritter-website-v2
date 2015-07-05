@@ -1,4 +1,6 @@
 var GelatoModel = require('gelato/modules/model');
+var HistoryItems = require('collections/history-items');
+var ScheduleItems = require('collections/schedule-items');
 var UserCredentials = require('models/user-credentials');
 var UserData = require('models/user-data');
 var UserSettings = require('models/user-settings');
@@ -15,6 +17,8 @@ module.exports = GelatoModel.extend({
     initialize: function() {
         this.credentials = new UserCredentials();
         this.data = new UserData();
+        this.history = new HistoryItems();
+        this.schedule = new ScheduleItems();
         this.settings = new UserSettings();
     },
     /**
@@ -50,6 +54,7 @@ module.exports = GelatoModel.extend({
             this.settings.load();
             this.data.items.fetch();
             this.data.stats.fetch();
+            this.schedule.fetch();
             this.settings.fetch();
         }
     },
@@ -74,8 +79,8 @@ module.exports = GelatoModel.extend({
     },
     /**
      * @method logout
-     * @param {Function} callbackSuccess
-     * @param {Function} callbackError
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
      */
     logout: function(callbackSuccess, callbackError) {},
     /**

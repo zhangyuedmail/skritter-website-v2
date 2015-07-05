@@ -13,12 +13,26 @@ module.exports = Backbone.Model.extend({
         }
     },
     /**
+     * @method getHeight
+     * @returns {Number}
+     */
+    getHeight: function() {
+        return $(window).height();
+    },
+    /**
      * @method getSetting
      * @param {String} key
      * @returns {Boolean|Number|Object|String}
      */
     getSetting: function(key) {
         return JSON.parse(localStorage.getItem('application-' + key));
+    },
+    /**
+     * @method getWidth
+     * @returns {Number}
+     */
+    getWidth: function() {
+        return $(window).width();
     },
     /**
      * @method isDevelopment

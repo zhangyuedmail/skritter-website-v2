@@ -1,7 +1,17 @@
 @import "variables";
 
+body {
+  background: url('#{$dir-assets}/backgrounds/landscape4.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 .content-block {
   background-color: $white1;
+  border-radius: 25px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
   margin-bottom: 30px;
   padding: 15px;
   position: relative;

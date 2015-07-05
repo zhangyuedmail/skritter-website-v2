@@ -15,9 +15,9 @@ module.exports = GelatoRouter.extend({
      * @type {Object}
      */
     routes: {
-        '': 'navigateHome',
         'dashboard': 'navigateDashboard',
         'login': 'navigateLogin',
+        'study(/:listId)(/:sectionId)': 'navigateStudy',
         '*route': 'navigateHome'
     },
     /**
@@ -33,5 +33,14 @@ module.exports = GelatoRouter.extend({
     navigateHome: function() {
         this.page = new (require('pages/marketing-home/view'));
         this.page.render();
+    },
+    /**
+     * @method navigateStudy
+     * @param {String} [listId]
+     * @param {String} [sectionId]
+     */
+    navigateStudy: function(listId, sectionId) {
+        this.page = new (require('pages/study/view'));
+        this.page.render().load(listId, sectionId);
     }
 });

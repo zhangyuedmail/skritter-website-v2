@@ -1,12 +1,12 @@
 /*** DIRECTORIES ***/
 $dir-assets: '../media';
 
-/*** BACKGROUND ***/
-$background-characters: url('#{$dir-assets}/backgrounds/bg-characters.png');
-$background-dark: url('#{$dir-assets}/backgrounds/bg-dark-wood.png');
-$background-light: url('#{$dir-assets}/backgrounds/bg-retina-wood.png');
-$background-expired: url('#{$dir-assets}/backgrounds/bg-expired.png');
-$background-footer: url('#{$dir-assets}/backgrounds/bg-footer.png');
+/*** TEXTURES ***/
+$texture-characters: url('#{$dir-assets}/textures/bg-characters.png');
+$texture-dark: url('#{$dir-assets}/textures/bg-dark-wood.png');
+$texture-light: url('#{$dir-assets}/textures/bg-retina-wood.png');
+$texture-expired: url('#{$dir-assets}/textures/bg-expired.png');
+$texture-footer: url('#{$dir-assets}/textures/bg-footer.png');
 
 /*** FONTS ***/
 $font-helv: "Helvetica Neue", "Arial Unicode MS", "Arial";

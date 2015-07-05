@@ -27,6 +27,27 @@ module.exports = GelatoApplication.extend({
         version: '{!application-version!}'
     },
     /**
+     * @method getLanguage
+     * @returns {String}
+     */
+    getLanguage: function() {
+        return this.get('language');
+    },
+    /**
+     * @method isChinese
+     * @returns {Boolean}
+     */
+    isChinese: function() {
+        return this.get('language') === 'zh';
+    },
+    /**
+     * @method isJapanese
+     * @returns {Boolean}
+     */
+    isJapanese: function() {
+        return this.get('language') === 'ja';
+    },
+    /**
      * @method start
      */
     start: function() {

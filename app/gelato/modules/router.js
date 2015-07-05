@@ -23,13 +23,5 @@ module.exports = Backbone.Router.extend({
         if (this.page) {
             this.page.remove();
         }
-    },
-    /**
-     * @method navigate
-     * @param {String} fragment
-     * @param {Object} [options]
-     */
-    navigate: function(fragment, options) {
-        Backbone.Router.prototype.navigate.call(this, fragment, options);
     }
 });
