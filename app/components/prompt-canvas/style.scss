@@ -1,0 +1,75 @@
+@import "../../styles/variables";
+
+gelato-component[data-name="prompt-canvas"] {
+
+  position: relative;
+
+  #prompt-canvas-definition {
+    display: none;
+    padding-top: 100px;
+    text-align: center;
+    .answer {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+    }
+    .question {
+      color: #b2b3b4;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 300;
+    }
+    .writing { font-size: 128px; }
+  }
+
+  #prompt-canvas-element {
+    position: absolute;
+    z-index: 5000;
+  }
+
+  #prompt-canvas-message {
+    bottom: 5px;
+    font-size: 24px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
+
+  #prompt-canvas-reading {
+    display: none;
+    padding-top: 100px;
+    text-align: center;
+    .answer {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 300;
+    }
+    .question {
+      color: #b2b3b4;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 300;
+    }
+    .writing { font-size: 128px; }
+  }
+
+  #prompt-navigation {
+    i {
+      font-size: 64px;
+      opacity: 0.2;
+      position: absolute;
+      top: 190px;
+      &:hover { opacity: 0.6; }
+    }
+    #navigate-left { left: -50px; }
+    #navigate-right { right: -50px; }
+    @media (max-width: 1280px) {
+      i { top: 165px; }
+      #navigate-left { left: -30px; }
+      #navigate-right { right: -30px; }
+    }
+  }
+
+}
