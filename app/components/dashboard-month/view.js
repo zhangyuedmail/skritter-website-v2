@@ -21,7 +21,7 @@ module.exports = GelatoComponent.extend({
     template: require('components/dashboard-month/template'),
     /**
      * @method render
-     * @returns {MonthHeatmap}
+     * @returns {DashboardMonth}
      */
     render: function() {
         this.renderTemplate();
@@ -40,11 +40,12 @@ module.exports = GelatoComponent.extend({
             subDomainTextFormat: "%d"
         });
         this.updateHeatmap();
+        this.updateStreak();
         return this;
     },
     /**
      * @method remove
-     * @returns {MonthHeatmap}
+     * @returns {DashboardMonth}
      */
     remove: function() {
         this.heatmap.destroy();
@@ -60,6 +61,8 @@ module.exports = GelatoComponent.extend({
      * @method updateStreak
      */
     updateStreak: function() {
-        this.$('#streak .value').text(app.user.data.stats.getStreak());
+        if (app.user.data.stats.length) {
+            this.$('#streak .value').text(app.user.data.stats.getStreak());
+        }
     }
 });

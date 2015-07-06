@@ -23,7 +23,7 @@ module.exports = GelatoComponent.extend({
     template: require('components/dashboard-goal/template'),
     /**
      * @method render
-     * @returns {GoalDoughnut}
+     * @returns {DashboardGoal}
      */
     render: function() {
         this.renderTemplate();
@@ -51,6 +51,7 @@ module.exports = GelatoComponent.extend({
             },
             series: [{
                 name: "Goal",
+                animation: false,
                 colorByPoint: true,
                 data: [
                     {name: "Completed", color: '#c5da4b', y: 0},
@@ -73,6 +74,8 @@ module.exports = GelatoComponent.extend({
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
             }
         });
+        this.updateDoughnut();
+        this.updateItems();
         return this;
     },
     /**
@@ -84,7 +87,7 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method remove
-     * @returns {GoalDoughnut}
+     * @returns {DashboardGoal}
      */
     remove: function() {
         this.doughnut.destroy();
@@ -121,13 +124,15 @@ module.exports = GelatoComponent.extend({
         this.doughnut.series[0].setData([
             {name: "Completed", color: '#c5da4b', y: percent},
             {name: "Remaining", color: '#efeef3', y: 100 - percent}
-        ]);
+        ], true);
     },
     /**
      * @method updateItems
      */
     updateItems: function() {
-        this.$('#items-added .value').text(app.user.data.items.getAddedCount());
-        this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
+        if (app.user.data.items.length && app.user.data.stats.length) {
+            this.$('#items-added .value').text(app.user.data.items.getAddedCount());
+            this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
+        }
     }
 });
