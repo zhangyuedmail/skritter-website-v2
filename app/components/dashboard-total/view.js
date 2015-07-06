@@ -30,7 +30,9 @@ module.exports = GelatoComponent.extend({
      * @method update
      */
     update: function() {
-        this.$('#characters-learned .value').text(app.user.data.stats.getAllTimeCharactersLearned());
-        this.$('#words-learned .value').text(app.user.data.stats.getAllTimeWordsLearned());
+        if (app.user.data.stats.length) {
+            this.$('#characters-learned .value').text(app.user.data.stats.getAllTimeCharactersLearned());
+            this.$('#words-learned .value').text(app.user.data.stats.getAllTimeWordsLearned());
+        }
     }
 });

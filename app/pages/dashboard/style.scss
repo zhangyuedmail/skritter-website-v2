@@ -7,15 +7,19 @@ gelato-page[data-name='dashboard'] {
     padding-top: 30px;
     .options {
       i { cursor: pointer; }
+      color: $grey2;
       position: absolute;
       right: 20px;
-      top: 10px;
+      top: 20px;
     }
     .title {
+      font-family: $font-slab;
+      font-size: 12px;
+      font-weight: 400;
       left: 20px;
       position: absolute;
       text-transform: uppercase;
-      top: 10px;
+      top: 20px;
     }
   }
 

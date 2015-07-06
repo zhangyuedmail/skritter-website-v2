@@ -2,6 +2,35 @@
 
 gelato-component[data-name='learned-words'] {
 
+  margin-top: 50px;
   text-align: center;
+
+  #characters-learned {
+    .text {
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .value {
+      color: #87a64b;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 300;
+    }
+  }
+
+  #words-learned {
+    .text {
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .value {
+      color: #87a64b;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 300;
+    }
+  }
 
 }

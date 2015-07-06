@@ -3,7 +3,8 @@
 gelato-component[data-name='dashboard-month'] {
 
   #heatmap {
-    margin-bottom: -50px;
+    margin-bottom: -100px;
+    margin-top: 50px;
     rect { shape-rendering: auto; }
     .graph-label,
     .graph-legend { display: none; }
@@ -31,6 +32,21 @@ gelato-component[data-name='dashboard-month'] {
     }
   }
 
-  #streak { text-align: center; }
+  #streak {
+    > div { display: inline-block; }
+    margin-top: 30px;
+    text-align: center;
+    .text {
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .value {
+      color: #87a64b;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 300;
+    }
+  }
 
 }

@@ -36,7 +36,8 @@ module.exports = GelatoComponent.extend({
             legend: [0, 50, 100, 200],
             range: 1,
             start: new Date(2015, new Date().getMonth(), 1),
-            subDomain: 'x_day'
+            subDomain: 'x_day',
+            subDomainTextFormat: "%d"
         });
         this.updateHeatmap();
         return this;

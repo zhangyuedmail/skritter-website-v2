@@ -61,6 +61,11 @@ module.exports = GelatoComponent.extend({
             title: {
                 text: '',
                 align: 'center',
+                style: {
+                    color: '#87a64b',
+                    fontSize: '24px',
+                    fontWeight: '300'
+                },
                 verticalAlign: 'middle',
                 y: 0
             },
