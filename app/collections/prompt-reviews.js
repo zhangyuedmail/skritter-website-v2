@@ -196,7 +196,7 @@ module.exports = GelatoCollection.extend({
         if (this.length > 1) {
             reviews = reviews.concat(this.generateChildReviews());
         }
-        Async.eachSeries(reviews, function(review, callback) {
+        async.eachSeries(reviews, function(review, callback) {
             var item = app.user.data.items.get(review.itemId);
             item.set({
                 changed: review.submitTime,

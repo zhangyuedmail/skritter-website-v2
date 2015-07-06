@@ -3,6 +3,7 @@
 gelato-component[data-name="prompt"] {
 
   border-radius: 25px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
   color: $grey4;
   height: 640px;
   margin: 0 auto;
@@ -30,16 +31,16 @@ gelato-component[data-name="prompt"] {
   }
 
   @media (max-width: 1280px) {
-    height: 600px;
+    height: 575px;
     width: 1000px;
     #panel-left {
-      height: 600px;
+      height: 575px;
       padding-left: 50px;
       padding-right: 50px;
       width: 500px;
     }
     #panel-right {
-      height: 600px;
+      height: 575px;
       width: 500px;
     }
   }

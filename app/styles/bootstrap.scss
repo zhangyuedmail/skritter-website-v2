@@ -9,5 +9,10 @@
   width: 150px;
 }
 
+.btn-success {
+  background-color: $green5;
+  &:hover { background-color: $green6; }
+}
+
 /*** MODALS ***/
 .modal-content { border-radius: 25px; }

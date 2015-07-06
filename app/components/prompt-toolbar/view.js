@@ -103,7 +103,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionCorrect: function(event) {
         event.preventDefault();
-        var review = this.prompt.review();
+        var review = this.prompt.review;
         if (review.get('score') < 2) {
             review.set('score', 3);
             this.prompt.grading.select(3);
@@ -128,7 +128,6 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionShow: function(event) {
         event.preventDefault();
-        this.prompt.reveal();
     },
     /**
      * @method handleClickOptionTeach
@@ -136,7 +135,6 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionTeach: function(event) {
         event.preventDefault();
-        this.prompt.enableTeaching();
     },
     /**
      * @method toggleCorrect

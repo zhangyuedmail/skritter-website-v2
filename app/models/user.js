@@ -1,6 +1,5 @@
 var GelatoModel = require('gelato/modules/model');
 var HistoryItems = require('collections/history-items');
-var ScheduleItems = require('collections/schedule-items');
 var UserCredentials = require('models/user-credentials');
 var UserData = require('models/user-data');
 var UserSettings = require('models/user-settings');
@@ -18,7 +17,6 @@ module.exports = GelatoModel.extend({
         this.credentials = new UserCredentials();
         this.data = new UserData();
         this.history = new HistoryItems();
-        this.schedule = new ScheduleItems();
         this.settings = new UserSettings();
     },
     /**
@@ -52,9 +50,9 @@ module.exports = GelatoModel.extend({
             this.set('id', user);
             this.credentials.load();
             this.settings.load();
-            this.data.items.fetch();
+            this.data.items.fetchDaily();
+            this.data.items.fetchNext();
             this.data.stats.fetch();
-            this.schedule.fetch();
             this.settings.fetch();
         }
     },

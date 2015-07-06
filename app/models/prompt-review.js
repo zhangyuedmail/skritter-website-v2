@@ -91,6 +91,14 @@ module.exports = GelatoModel.extend({
         return this.character ? this.character.isComplete() : this.get('complete');
     },
     /**
+     * @method reset
+     * @returns {PromptReview}
+     */
+    reset: function() {
+        this.character.reset();
+        return this;
+    },
+    /**
      * @method start
      * @returns {PromptReview}
      */

@@ -12,6 +12,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.prompt = new Prompt();
+        this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
     },
     /**
      * @property title
@@ -33,21 +34,36 @@ module.exports = GelatoPage.extend({
         return this;
     },
     /**
+     * @method handlePromptComplete
+     * @param {PromptReviews} reviews
+     */
+    handlePromptComplete: function(reviews) {
+        var self = this;
+        reviews.updateItems(function() {
+            self.loadNext();
+        }, function(error) {
+            console.error('ITEM UPDATE ERROR:', error);
+        });
+    },
+    /**
      * @method load
      * @param {String} [listId]
      * @param {String} [sectionId]
      */
     load: function(listId, sectionId) {
-        if (app.user.schedule.getNext()) {
+        if (app.user.data.items.getNext()) {
             app.closeDialog();
-            this.next();
+            this.loadNext();
         } else {
             app.openDialog('loading');
-            this.listenToOnce(app.user.schedule, 'update', $.proxy(this.load, this));
+            this.listenToOnce(app.user.data.items, 'fetch:next', $.proxy(this.load, this));
         }
     },
-    next: function() {
-        var item = app.user.schedule.getNext();
+    /**
+     * @method loadNext
+     */
+    loadNext: function() {
+        var item = app.user.data.items.getNext();
         var reviews = item.getPromptReviews();
         this.prompt.set(reviews);
         this.prompt.show();

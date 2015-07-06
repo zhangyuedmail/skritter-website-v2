@@ -12,6 +12,7 @@ module.exports = GelatoCollection.extend({
      */
     initialize: function() {
         this.targets = [];
+        this.writing = null;
     },
     /**
      * @property model
@@ -148,7 +149,7 @@ module.exports = GelatoCollection.extend({
      */
     recognize: function(points, shape) {
         if (points && points.length > 1) {
-            var newStroke = new CanvasStroke({points: points});
+            var newStroke = new PromptStroke({points: points});
             var stroke = app.fn.recognizer.recognize(newStroke, this, this.getSize());
             if (stroke) {
                 stroke.set('squig', shape);

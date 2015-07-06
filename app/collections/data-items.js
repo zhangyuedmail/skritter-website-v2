@@ -10,18 +10,28 @@ module.exports = GelatoCollection.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+        this.scheduled = [];
+        this.sorted = moment().unix();
+    },
     /**
      * @property model
      * @type {DataItem}
      */
     model: DataItem,
     /**
-     * @method fetch
+     * @method comparator
+     * @param {DataItem} item
+     */
+    comparator: function(item) {
+        return -item.getReadiness(this.sorted);
+    },
+    /**
+     * @method fetchDaily
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
      */
-    fetch: function(callbackSuccess, callbackError) {
+    fetchDaily: function(callbackSuccess, callbackError) {
         var self = this;
         (function next(cursor) {
             app.api.fetchItems({
@@ -34,7 +44,48 @@ module.exports = GelatoCollection.extend({
                 if (result.cursor) {
                     next(result.cursor);
                 } else {
-                    self.trigger('update', self);
+                    self.trigger('fetch:daily', self);
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
+                }
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
+        })();
+    },
+    /**
+     * @method fetchNext
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    fetchNext: function(callbackSuccess, callbackError) {
+        var self = this;
+        var counter = 0;
+        (function next(cursor) {
+            app.api.fetchItems({
+                cursor: cursor,
+                include_contained: true,
+                include_decomps: true,
+                include_sentences: true,
+                include_strokes: true,
+                include_top_mnemonics: true,
+                include_vocabs: true,
+                lang: app.get('language'),
+                limit: 5,
+                sort: 'next'
+            }, function(result) {
+                for (var i = 0, length = result.Items.length; i < length; i++) {
+                    result.Items[i].active = true;
+                }
+                app.user.data.add(result);
+                self.trigger('fetch:next', self);
+                if (counter < 0 && result.cursor) {
+                    counter++;
+                    next(result.cursor);
+                } else {
                     if (typeof callbackSuccess === 'function') {
                         callbackSuccess();
                     }
@@ -57,6 +108,13 @@ module.exports = GelatoCollection.extend({
         }).length;
     },
     /**
+     * @method getNext
+     * @returns {ScheduleItem}
+     */
+    getNext: function() {
+        return this.sort().at(0);
+    },
+    /**
      * @method getItemReviewedCount
      * @returns {Number}
      */
@@ -65,5 +123,35 @@ module.exports = GelatoCollection.extend({
         return _.filter(this.models, function(item) {
             return item.attributes.last >= today;
         }).length;
+    },
+    /**
+     * @method getSchedule
+     * @returns {Array}
+     */
+    getSchedule: function() {
+        return this.sort().filter(function(item) {
+            return item.get('active');
+        });
+    },
+    /**
+     * @method printNext
+     * @returns {ScheduleItems}
+     */
+    printNext: function() {
+        var schedule = this.getSchedule();
+        console.log('---', 'SCHEDULED ITEMS', '---');
+        for (var i = 0, length = schedule.length; i < length; i ++) {
+            var item = schedule[i];
+            console.log(item.id, item.getReadiness(this.sorted));
+        }
+        return this;
+    },
+    /**
+     * @method sort
+     * @returns {Array}
+     */
+    sort: function() {
+        this.sorted = moment().unix();
+        return GelatoCollection.prototype.sort.call(this);
     }
 });

@@ -10,7 +10,7 @@ module.exports = GelatoModel.extend({
      * @constructor
      */
     initialize: function() {
-        this.on('change', this.cache);
+        this.on('change', this.save);
     },
     /**
      * @property defaults
@@ -74,6 +74,26 @@ module.exports = GelatoModel.extend({
         return this;
     },
     /**
+     * @method save
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    save: function(callbackSuccess, callbackError) {
+        var self = this;
+        app.api.putUser(this.toJSON(), function(result) {
+            self.set(result, {merge: true, silent: true});
+            self.cache();
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess(self);
+            }
+        }, function(error) {
+            self.cache();
+            if (typeof callbackError === 'function') {
+                callbackError(error);
+            }
+        });
+    },
+    /**
      * @method setGoal
      * @param {String} type
      * @param {String} value
@@ -85,7 +105,8 @@ module.exports = GelatoModel.extend({
         goal[type] = parseInt(value, 10);
         goals[app.get('language')] = goal;
         this.set('goals', goals);
-        this.trigger('change:goals');
+        this.trigger('change:goals', this);
+        this.save();
         return this;
     }
 });

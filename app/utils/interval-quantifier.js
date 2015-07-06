@@ -17,7 +17,7 @@ function IntervalQuantifier() {
  */
 IntervalQuantifier.prototype.quantify = function(item, score) {
     var newInterval = 0;
-    var now = Moment().unix();
+    var now = moment().unix();
     //return new items with randomized default config values
     if (!item.last) {
         switch (score) {

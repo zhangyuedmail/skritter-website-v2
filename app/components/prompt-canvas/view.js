@@ -144,7 +144,7 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     disableInput: function() {
-        this.$el.off('.Input');
+        this.$('canvas').off('.Input');
         return this;
     },
     /**
@@ -235,7 +235,7 @@ module.exports = GelatoComponent.extend({
     enableInput: function() {
         var self = this;
         var oldPoint, oldMidPoint, points, marker;
-        this.disableInput().$el.on('vmousedown.Input pointerdown.Input', down);
+        this.disableInput().$('canvas').on('vmousedown.Input pointerdown.Input', down);
         function down(event) {
             points = [];
             marker = new createjs.Shape();

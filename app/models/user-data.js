@@ -45,6 +45,10 @@ module.exports = GelatoModel.extend({
                 callback();
             },
             function(callback) {
+                app.user.data.items.add(result.Items || [], options);
+                callback();
+            },
+            function(callback) {
                 app.user.data.items.add(result.ContainedItems || [], options);
                 callback();
             },
@@ -58,10 +62,6 @@ module.exports = GelatoModel.extend({
             },
             function(callback) {
                 app.user.data.vocabs.add(result.Vocabs || [], options);
-                callback();
-            },
-            function(callback) {
-                app.user.schedule.add(result.Items || [], options);
                 callback();
             }
         ], callback);
