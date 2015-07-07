@@ -1,0 +1,8 @@
+<ifModule mod_rewrite.c>
+    RewriteEngine On
+    # RewriteCond %{HTTP_HOST} ^skritter.com$ [NC]
+    # RewriteRule (.*)$ http://www.skritter.space/$1 [R=301,L,QSA]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule (.*) /index.html [L,QSA]
+</ifModule>
