@@ -58,10 +58,26 @@ module.exports = GelatoView.extend({
         return this.$('gelato-page').data('name');
     },
     /**
+     * @method hide
+     * @returns {GelatoComponent}
+     */
+    hide: function() {
+        this.$page.hide();
+        return this;
+    },
+    /**
      * @method remove
      * @returns {GelatoPage}
      */
     remove: function() {
         return GelatoView.prototype.remove.call(this);
+    },
+    /**
+     * @method show
+     * @returns {GelatoComponent}
+     */
+    show: function() {
+        this.$page.show();
+        return this;
     }
 });

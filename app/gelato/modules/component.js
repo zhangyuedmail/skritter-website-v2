@@ -19,5 +19,21 @@ module.exports = GelatoView.extend({
         GelatoView.prototype.renderTemplate.call(this, template);
         this.$component = $(this.$('gelato-component').get(0));
         return this;
+    },
+    /**
+     * @method hide
+     * @returns {GelatoComponent}
+     */
+    hide: function() {
+        this.$component.hide();
+        return this;
+    },
+    /**
+     * @method show
+     * @returns {GelatoComponent}
+     */
+    show: function() {
+        this.$component.show();
+        return this;
     }
 });

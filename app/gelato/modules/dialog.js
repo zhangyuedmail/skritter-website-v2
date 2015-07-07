@@ -43,7 +43,7 @@ module.exports = GelatoView.extend({
      */
     renderTemplate: function(template) {
         GelatoView.prototype.renderTemplate.call(this, template);
-        this.$dialog = $(this.$('gelato-page').get(0));
+        this.$dialog = $(this.$('gelato-dialog').get(0));
         return this;
     },
     /**
