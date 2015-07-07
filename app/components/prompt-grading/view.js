@@ -53,6 +53,7 @@ module.exports = GelatoComponent.extend({
     handleMousedownButton: function(event) {
         event.preventDefault();
         var target = $(event.currentTarget);
+        this.trigger('mousedown', parseInt(target.data('value'), 10));
         target.addClass('selected');
     },
     /**

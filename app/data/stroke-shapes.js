@@ -3129,7 +3129,7 @@ var data = {
 
 module.exports = {
     get: function(strokeId, color) {
-        return data[strokeId](color || '#38240c');
+        return data[strokeId](color || '#080808');
     },
     getData: function() {
         return data;

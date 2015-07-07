@@ -22,7 +22,7 @@ module.exports = GelatoComponent.extend({
         this.prompt = options.prompt;
         this.size = 500;
         this.stage = null;
-        this.strokeColor = '#38240c';
+        this.strokeColor = '#4b4b4b';
         createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
             this.moveTo(x1 , y1);
             var dX = x2 - x1;

@@ -9,6 +9,8 @@ gelato-component[data-name="prompt"] {
   margin: 0 auto;
   width: 1280px;
 
+  #prompt-grading-container { min-height: 85px; }
+
   #panel-left {
     background-color: $white1;
     border-bottom-left-radius: 25px;
@@ -29,6 +31,8 @@ gelato-component[data-name="prompt"] {
     padding: 42px 45px;
     width: 640px;
   }
+
+  #prompt-toolbar-container { min-height: 85px; }
 
   @media (max-width: 1280px) {
     height: 575px;

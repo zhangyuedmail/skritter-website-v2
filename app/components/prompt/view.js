@@ -24,6 +24,7 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:left', this.handleNavigateLeft);
         this.listenTo(this.canvas, 'navigate:right', this.handleNavigateRight);
+        this.listenTo(this.grading, 'mousedown', this.handleHighlightGrading);
         this.listenTo(this.grading, 'select', this.handleSelectGrading);
         this.on('resize', this.resize);
     },
@@ -73,6 +74,7 @@ module.exports = GelatoComponent.extend({
      */
     renderBeforePrompt: function() {
         this.review = this.reviews.active();
+        this.details.renderFields();
         switch (this.reviews.part) {
             case 'defn':
                 this.renderBeforePromptDefn();
@@ -117,6 +119,11 @@ module.exports = GelatoComponent.extend({
      */
     renderAfterPromptDefn: function() {
         this.review.stop();
+        this.review.set('complete', true);
+        this.canvas.revealDefinitionAnswer();
+        this.details.revealDefinition();
+        this.grading.select(this.review.get('score'));
+        this.grading.show();
         return this;
     },
     /**
@@ -125,6 +132,11 @@ module.exports = GelatoComponent.extend({
      */
     renderAfterPromptRdng: function() {
         this.review.stop();
+        this.review.set('complete', true);
+        this.canvas.revealReadingAnswer();
+        this.details.revealReadingTone();
+        this.grading.select(this.review.get('score'));
+        this.grading.show();
         return this;
     },
     /**
@@ -135,6 +147,10 @@ module.exports = GelatoComponent.extend({
         this.review.stop();
         this.canvas.disableInput();
         this.canvas.injectLayerColor('surface', this.review.getGradingColor());
+        this.details.revealWriting(this.reviews.position);
+        this.grading.select(this.review.get('score'));
+        this.toolbar.disableShow();
+        this.toolbar.disableStrokeOrder();
         return this;
     },
     /**
@@ -157,6 +173,15 @@ module.exports = GelatoComponent.extend({
     renderBeforePromptDefn: function() {
         this.canvas.disableGrid();
         this.canvas.disableInput();
+        this.canvas.renderFields();
+        this.details.hideDefinition();
+        this.details.revealReading();
+        this.details.revealReadingTone();
+        this.details.revealWriting();
+        this.grading.hide();
+        this.toolbar.disableErase();
+        this.toolbar.disableShow();
+        this.toolbar.disableStrokeOrder();
         return this;
     },
     /**
@@ -164,8 +189,16 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderBeforePromptRdng: function() {
+        this.canvas.renderFields();
         this.canvas.disableGrid();
         this.canvas.disableInput();
+        this.canvas.revealReadingQuestion();
+        this.details.hideReading();
+        this.details.revealWriting();
+        this.grading.hide();
+        this.toolbar.disableErase();
+        this.toolbar.disableShow();
+        this.toolbar.disableStrokeOrder();
         return this;
     },
     /**
@@ -173,6 +206,8 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderBeforePromptRune: function() {
+        this.details.revealDefinition();
+        this.details.selectWriting(this.reviews.position);
         return this;
     },
     /**
@@ -181,7 +216,6 @@ module.exports = GelatoComponent.extend({
      */
     renderBeforePromptTone: function() {
         this.canvas.disableGrid();
-        this.details.renderFields();
         this.details.revealDefinition();
         this.details.revealReading();
         this.details.revealWriting();
@@ -192,10 +226,12 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptDefn: function() {
+        this.clear();
         if (this.review.isComplete()) {
             this.renderAfterPrompt();
         } else {
             this.review.start();
+            this.canvas.revealDefinitionQuestion();
         }
         return this;
     },
@@ -204,6 +240,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptRdng: function() {
+        this.clear();
         if (this.review.isComplete()) {
             this.renderAfterPrompt();
         } else {
@@ -216,6 +253,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptRune: function() {
+        this.clear();
         if (this.review.isComplete()) {
             this.renderAfterPrompt();
         } else {
@@ -229,7 +267,6 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptTone: function() {
-        console.log(this.review.item.id);
         this.clear();
         this.canvas.drawCharacter(
             'surface-background2',
@@ -275,7 +312,19 @@ module.exports = GelatoComponent.extend({
     /**
      * @method handleCanvasClick
      */
-    handleCanvasClick: function() {},
+    handleCanvasClick: function() {
+        if (this.review.isComplete()) {
+            this.next();
+        } else if (this.reviews.part === 'defn') {
+            this.renderAfterPrompt();
+        } else if (this.reviews.part === 'rdng') {
+            this.renderAfterPrompt();
+        } else if (this.reviews.part === 'rune') {
+            this.review.stopThinking();
+        } else if (this.reviews.part === 'tone') {
+            this.review.stopThinking();
+        }
+    },
     /**
      * @method handleCanvasInputUp
      * @param {Array} points
@@ -306,10 +355,25 @@ module.exports = GelatoComponent.extend({
         this.next();
     },
     /**
+     * @method handleHighlightGrading
+     * @param {Number} score
+     */
+    handleHighlightGrading: function(score) {
+        if (this.review.isComplete()) {
+            var gradingColor = app.user.settings.get('gradingColors')[score];
+            this.canvas.injectLayerColor('surface', gradingColor);
+        }
+    },
+    /**
      * @method handleSelectGrading
      * @param {Number} score
      */
-    handleSelectGrading: function(score) {},
+    handleSelectGrading: function(score) {
+        this.review.set('score', score);
+        if (this.review.isComplete()) {
+            this.next();
+        }
+    },
     /**
      * @method next
      */
@@ -341,6 +405,9 @@ module.exports = GelatoComponent.extend({
             var targetShape = stroke.getTargetShape();
             var userShape = stroke.getUserShape();
             this.canvas.tweenShape('surface', userShape, targetShape);
+            if (this.review.isComplete()) {
+                this.renderAfterPrompt();
+            }
         }
     },
     /**
