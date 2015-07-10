@@ -13,6 +13,13 @@ module.exports = GelatoModel.extend({
      */
     initialize: function() {},
     /**
+     * @method getBaseWriting
+     * @returns {String}
+     */
+    getBaseWriting: function() {
+        return this.id.split('-')[2];
+    },
+    /**
      * @method getContainedItems
      * @returns {Array}
      */
@@ -99,7 +106,7 @@ module.exports = GelatoModel.extend({
             var scheduledAgo = itemNext - itemLast;
             return itemLast ? actualAgo / scheduledAgo : 9999;
         }
-        return 0;
+        return Number.NEGATIVE_INFINITY;
     },
     /**
      * @method getVocab
@@ -107,10 +114,7 @@ module.exports = GelatoModel.extend({
      */
     getVocab: function() {
         var vocabs = this.getVocabs();
-        if (app.isChinese()) {
-            return vocabs[this.get('reviews') % vocabs.length];
-        }
-        return vocabs[0];
+        return vocabs[this.get('reviews') % vocabs.length];
     },
     /**
      * @method getVocabs
@@ -119,9 +123,35 @@ module.exports = GelatoModel.extend({
     getVocabs: function() {
         var vocabs = [];
         var vocabIds = this.get('vocabIds');
+        var reviewSimplified = app.user.settings.get('reviewSimplified');
+        var reviewTraditional = app.user.settings.get('reviewTraditional');
         for (var i = 0, length = vocabIds.length; i < length; i++) {
-            vocabs.push(app.user.data.vocabs.get(vocabIds[i]));
+            var vocab = app.user.data.vocabs.get(vocabIds[i]);
+            var vocabStyle = vocab.get('style');
+            if (reviewSimplified && vocabStyle === 'simp') {
+                vocabs.push(vocab);
+            } else if (reviewTraditional && vocabStyle === 'trad') {
+                vocabs.push(vocab);
+            } else if (vocabStyle === 'both') {
+                vocabs.push(vocab);
+            } else if (vocabStyle === 'none') {
+                vocabs.push(vocab);
+            }
         }
         return _.without(vocabs, undefined);
+    },
+    /**
+     * @method isChinese
+     * @returns {Boolean}
+     */
+    isChinese: function() {
+        return this.get('lang') === 'zh';
+    },
+    /**
+     * @method isJapanese
+     * @returns {Boolean}
+     */
+    isJapanese: function() {
+        return this.get('lang') === 'ja';
     }
 });

@@ -33,9 +33,23 @@ module.exports = GelatoComponent.extend({
      */
     renderFields: function() {
         this.$('#vocab-definition .value').html(this.prompt.reviews.vocab.getDefinition());
-        this.$('#vocab-mnemonic .value').html(this.prompt.reviews.vocab.getMnemonicText());
+
+        var mnemonic = this.prompt.reviews.vocab.getMnemonicText();
+        if (mnemonic) {
+            this.$('#vocab-mnemonic .value').html(mnemonic);
+        } else {
+            this.$('#vocab-mnemonic').hide();
+        }
+
         this.$('#vocab-reading .value').html(this.prompt.reviews.vocab.getReadingElement());
-        this.$('#vocab-sentence .value').html(this.prompt.reviews.vocab.getSentenceWriting());
+
+        var sentence = this.prompt.reviews.vocab.getSentenceWriting();
+        if (sentence) {
+            this.$('#vocab-sentence .value').html(sentence);
+        } else {
+            this.$('#vocab-sentence').hide();
+        }
+
         this.$('#vocab-style .value').html(this.prompt.reviews.vocab.getStyle());
         this.$('#vocab-writing .value').addClass(this.prompt.reviews.vocab.getFontClass());
         this.$('#vocab-writing .value').html(this.prompt.reviews.vocab.getWritingElement());
@@ -48,6 +62,8 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
+        'vclick #vocab-mnemonic button': 'handleClickRevealMnemonic',
+        'vclick #vocab-sentence button': 'handleClickRevealSentence',
         'vclick #button-detail-audio': 'handleClickDetailAudio',
         'vclick #button-detail-ban': 'handleClickDetailBan',
         'vclick #button-detail-edit': 'handleClickDetailEdit',
@@ -96,6 +112,22 @@ module.exports = GelatoComponent.extend({
         this.updateDetailStarred();
     },
     /**
+     * @method handleClickRevealMnemonic
+     * @param {Event} event
+     */
+    handleClickRevealMnemonic: function(event) {
+        event.preventDefault();
+        this.showMnemonic();
+    },
+    /**
+     * @method handleClickRevealSentence
+     * @param {Event} event
+     */
+    handleClickRevealSentence: function(event) {
+        event.preventDefault();
+        this.showSentence();
+    },
+    /**
      * @method handleClickWritingElement
      * @param {Event} event
      */
@@ -110,6 +142,13 @@ module.exports = GelatoComponent.extend({
      */
     hideDefinition: function() {
         this.$('#vocab-definition .value').hide();
+    },
+    /**
+     * @method hideMnemonic
+     */
+    hideMnemonic: function() {
+        this.$('#vocab-mnemonic .button').show();
+        this.$('#vocab-mnemonic .value').hide();
     },
     /**
      * @method hideReading
@@ -134,6 +173,13 @@ module.exports = GelatoComponent.extend({
             this.$('#vocab-reading .segment .raw').removeClass('hidden');
             this.$('#vocab-reading .segment .tone').addClass('hidden');
         }
+    },
+    /**
+     * @method hideSentence
+     */
+    hideSentence: function() {
+        this.$('#vocab-sentence .button').hide();
+        this.$('#vocab-sentence .value').show();
     },
     /**
      * @method hideWriting
@@ -194,6 +240,20 @@ module.exports = GelatoComponent.extend({
     selectWriting: function(position) {
         this.$('#vocab-writing .writing-element').removeClass('active');
         this.$('#vocab-writing [data-position="' + position + '"]').addClass('active');
+    },
+    /**
+     * @method showMnemonic
+     */
+    showMnemonic: function() {
+        this.$('#vocab-mnemonic .button').hide();
+        this.$('#vocab-mnemonic .value').show();
+    },
+    /**
+     * @method showSentence
+     */
+    showSentence: function() {
+        this.$('#vocab-sentence .button').hide();
+        this.$('#vocab-sentence .value').show();
     },
     /**
      * @method updateDetailBanned

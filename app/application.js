@@ -20,6 +20,7 @@ module.exports = GelatoApplication.extend({
      * @type {Object}
      */
     defaults: {
+        canvasSize: 450,
         date: '{!date!}',
         language: '{!application-language!}',
         name: '{!application-name!}',

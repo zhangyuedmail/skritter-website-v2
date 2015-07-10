@@ -55,8 +55,9 @@ module.exports = GelatoPage.extend({
             app.closeDialog();
             this.loadNext();
         } else {
-            app.openDialog('loading');
             this.listenToOnce(app.user.data.items, 'fetch:next', $.proxy(this.load, this));
+            app.openDialog('loading');
+            app.user.data.items.fetchNext();
         }
     },
     /**

@@ -122,6 +122,8 @@ module.exports = GelatoComponent.extend({
         this.review.set('complete', true);
         this.canvas.revealDefinitionAnswer();
         this.details.revealDefinition();
+        this.details.showMnemonic();
+        this.details.showSentence();
         this.grading.select(this.review.get('score'));
         this.grading.show();
         return this;
@@ -135,6 +137,8 @@ module.exports = GelatoComponent.extend({
         this.review.set('complete', true);
         this.canvas.revealReadingAnswer();
         this.details.revealReadingTone();
+        this.details.showMnemonic();
+        this.details.showSentence();
         this.grading.select(this.review.get('score'));
         this.grading.show();
         return this;
@@ -148,6 +152,8 @@ module.exports = GelatoComponent.extend({
         this.canvas.disableInput();
         this.canvas.injectLayerColor('surface', this.review.getGradingColor());
         this.details.revealWriting(this.reviews.position);
+        this.details.showMnemonic();
+        this.details.showSentence();
         this.grading.select(this.review.get('score'));
         this.toolbar.disableShow();
         this.toolbar.disableStrokeOrder();
@@ -163,6 +169,8 @@ module.exports = GelatoComponent.extend({
         this.canvas.injectLayerColor('surface', this.review.getGradingColor());
         this.details.revealReading(this.review.position);
         this.details.revealReadingTone(this.review.position);
+        this.details.showMnemonic();
+        this.details.showSentence();
         this.grading.select(this.review.get('score'));
         return this;
     },
@@ -206,8 +214,10 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderBeforePromptRune: function() {
+        this.canvas.enableGrid();
         this.details.revealDefinition();
-        this.details.selectWriting(this.reviews.position);
+        this.details.revealReading();
+        this.details.revealReadingTone();
         return this;
     },
     /**
@@ -254,6 +264,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptRune: function() {
         this.clear();
+        this.details.selectWriting(this.reviews.position);
         if (this.review.isComplete()) {
             this.renderAfterPrompt();
         } else {

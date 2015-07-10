@@ -10,12 +10,23 @@ module.exports = GelatoCollection.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+        this.syncing = false;
+        this.on('add', this.handleAdd);
+    },
     /**
      * @property model
      * @type {HistoryItems}
      */
     model: HistoryItem,
+    /**
+     * @method handleAdd
+     */
+    handleAdd: function() {
+        if (this.length > 4) {
+            this.save();
+        }
+    },
     /**
      * @method save
      * @param {Number} [startFrom]
@@ -24,24 +35,32 @@ module.exports = GelatoCollection.extend({
      */
     save: function(startFrom, callbackSuccess, callbackError) {
         var self = this;
-        var reviews = this.slice(startFrom || 0, Number.MAX_VALUE);
-        async.each(reviews, function(review, callback) {
-            app.api.postReviews(review.get('reviews'), function() {
-                self.remove(review);
-                callback();
-            }, function(error) {
-                callback(error);
-            });
-        }, function(error) {
-            if (error) {
-                if (typeof callbackError === 'function') {
-                    callbackError(error);
-                }
-            } else {
-                if (typeof callbackSuccess === 'function') {
-                    callbackSuccess();
-                }
+        var reviews = this.slice(startFrom || 1, Number.MAX_VALUE);
+        if (this.syncing) {
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess();
             }
-        });
+        } else {
+            async.eachSeries(reviews, function(review, callback) {
+                self.syncing = true;
+                app.api.postReviews(review.get('reviews'), function() {
+                    self.remove(review);
+                    callback();
+                }, function(error) {
+                    callback(error);
+                });
+            }, function(error) {
+                self.syncing = false;
+                if (error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
+                }
+            });
+        }
     }
 });

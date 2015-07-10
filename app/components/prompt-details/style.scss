@@ -7,6 +7,7 @@ gelato-component[data-name="prompt-details"] {
 
   .detail-row {
     color: #8c9196;
+    max-width: 500px;
     .title {
       font-size: 14px;
       font-weight: 700;
@@ -14,7 +15,7 @@ gelato-component[data-name="prompt-details"] {
   }
 
   #details-toolbar {
-    right: 25px;
+    right: 0;
     position: absolute;
     i {
       cursor: pointer;
@@ -33,7 +34,9 @@ gelato-component[data-name="prompt-details"] {
 
   #vocab-mnemonic {
     margin-bottom: 30px;
+    .title { margin-bottom: 5px; }
     .value {
+      display: none;
       font-size: 14px;
       font-weight: 300;
     }
@@ -57,7 +60,9 @@ gelato-component[data-name="prompt-details"] {
 
   #vocab-sentence {
     margin-bottom: 30px;
+    .title { margin-bottom: 5px; }
     .value {
+      display: none;
       font-size: 18px;
       font-weight: 300;
     }

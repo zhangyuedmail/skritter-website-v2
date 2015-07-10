@@ -11,7 +11,9 @@ module.exports = GelatoCollection.extend({
      * @constructor
      */
     initialize: function() {
-        this.scheduled = [];
+        this.fetchingDaily = false;
+        this.fetchingNext = false;
+        this.ignoreBase = null;
         this.sorted = moment().unix();
     },
     /**
@@ -24,7 +26,18 @@ module.exports = GelatoCollection.extend({
      * @param {DataItem} item
      */
     comparator: function(item) {
+        if (item.id.indexOf(this.ignoreBase) > -1) {
+            return 0;
+        }
         return -item.getReadiness(this.sorted);
+    },
+    /**
+     * @method clearActive
+     */
+    clearActive: function() {
+        for (var i = 0, length = this.length; i < length; i++) {
+            this.at(i).unset('active', {silent: true});
+        }
     },
     /**
      * @method fetchDaily
@@ -33,69 +46,89 @@ module.exports = GelatoCollection.extend({
      */
     fetchDaily: function(callbackSuccess, callbackError) {
         var self = this;
-        (function next(cursor) {
-            app.api.fetchItems({
-                cursor: cursor,
-                lang: app.get('language'),
-                offset: moment().startOf('day').add(3, 'hours').unix(),
-                sort: 'changed'
-            }, function(result) {
-                app.user.data.add(result);
-                if (result.cursor) {
-                    next(result.cursor);
-                } else {
-                    self.trigger('fetch:daily', self);
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess();
+        if (this.fetchingDaily) {
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess();
+            }
+        } else {
+            (function next(cursor) {
+                self.fetchingDaily = true;
+                app.api.fetchItems({
+                    cursor: cursor,
+                    lang: app.get('language'),
+                    offset: moment().startOf('day').add(3, 'hours').unix(),
+                    sort: 'changed'
+                }, function(result) {
+                    app.user.data.add(result);
+                    if (result.cursor) {
+                        next(result.cursor);
+                    } else {
+                        self.fetchingDaily = false;
+                        self.trigger('fetch:daily', self);
+                        if (typeof callbackSuccess === 'function') {
+                            callbackSuccess();
+                        }
                     }
-                }
-            }, function(error) {
-                if (typeof callbackError === 'function') {
-                    callbackError(error);
-                }
-            });
-        })();
+                }, function(error) {
+                    self.fetchingDaily = false;
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                });
+            })();
+        }
     },
     /**
      * @method fetchNext
+     * @param {Object} [options]
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
      */
-    fetchNext: function(callbackSuccess, callbackError) {
+    fetchNext: function(options, callbackSuccess, callbackError) {
         var self = this;
         var counter = 0;
-        (function next(cursor) {
-            app.api.fetchItems({
-                cursor: cursor,
-                include_contained: true,
-                include_decomps: true,
-                include_sentences: true,
-                include_strokes: true,
-                include_top_mnemonics: true,
-                include_vocabs: true,
-                lang: app.get('language'),
-                limit: 5,
-                sort: 'next'
-            }, function(result) {
-                for (var i = 0, length = result.Items.length; i < length; i++) {
-                    result.Items[i].active = true;
-                }
-                app.user.data.add(result);
-                self.trigger('fetch:next', self);
-                if (counter < 0 && result.cursor) {
-                    counter++;
-                    next(result.cursor);
-                } else {
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess();
+        options = options || {};
+        if (this.fetchingNext) {
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess();
+            }
+        } else {
+            (function next(cursor) {
+                self.fetchingNext = true;
+                app.api.fetchItems({
+                    cursor: cursor,
+                    include_contained: true,
+                    include_decomps: true,
+                    include_sentences: true,
+                    include_strokes: true,
+                    include_top_mnemonics: true,
+                    include_vocabs: true,
+                    lang: app.get('language'),
+                    limit: 5,
+                    parts: options.parts,
+                    sort: 'next',
+                    styles: options.styles
+                }, function(result) {
+                    app.user.data.add(result);
+                    self.markActive(result.Items);
+                    self.trigger('fetch:next', self);
+                    if (counter < 5 && result.cursor) {
+                        counter++;
+                        next(result.cursor);
+                    } else {
+                        self.fetchingNext = false;
+                        if (typeof callbackSuccess === 'function') {
+                            callbackSuccess();
+                        }
                     }
-                }
-            }, function(error) {
-                if (typeof callbackError === 'function') {
-                    callbackError(error);
-                }
-            });
-        })();
+                }, function(error) {
+                    self.fetchingNext = false;
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                });
+            })();
+        }
     },
     /**
      * @method getItemAddedCount
@@ -106,6 +139,15 @@ module.exports = GelatoCollection.extend({
         return _.filter(this.models, function(item) {
             return item.get('created') >= today;
         }).length;
+    },
+    /**
+     * @method getLast
+     * @returns {ScheduleItem}
+     */
+    getLast: function() {
+        return _.sortBy(this.models, function(item) {
+            return -item.get('last');
+        })[0];
     },
     /**
      * @method getNext
@@ -121,7 +163,7 @@ module.exports = GelatoCollection.extend({
     getReviewedCount: function() {
         var today = moment().startOf('day').add(3, 'hours').unix();
         return _.filter(this.models, function(item) {
-            return item.attributes.last >= today;
+            return item.get('last') >= today;
         }).length;
     },
     /**
@@ -132,6 +174,15 @@ module.exports = GelatoCollection.extend({
         return this.sort().filter(function(item) {
             return item.get('active');
         });
+    },
+    /**
+     * @method addActive
+     * @param {Array} items
+     */
+    markActive: function(items) {
+        for (var i = 0, length = items.length; i < length; i++) {
+            this.get(items[i].id).set('active', true, {silent: true});
+        }
     },
     /**
      * @method printNext
@@ -151,6 +202,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Array}
      */
     sort: function() {
+        this.ignoreBase = this.getLast() ? this.getLast().getBaseWriting() : null;
         this.sorted = moment().unix();
         return GelatoCollection.prototype.sort.call(this);
     }

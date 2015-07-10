@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        this.listenTo(app.user.data.stats, 'update', this.update);
+        this.listenTo(app.user.data.stats, 'fetch', this.update);
     },
     /**
      * @property template

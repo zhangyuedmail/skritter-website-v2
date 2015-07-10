@@ -76,7 +76,7 @@ module.exports = GelatoModel.extend({
      * @returns {Number}
      */
     getSize: function() {
-        return app.user.settings.get('canvasSize');
+        return app.get('canvasSize');
     },
     /**
      * @method getTargetShape

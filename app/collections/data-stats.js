@@ -47,7 +47,7 @@ module.exports = GelatoCollection.extend({
                     end: moment(momentMonthEnd).format('YYYY-MM-DD')
                 }, function(result) {
                     self.add(result, {merge: true});
-                    self.trigger('update', self);
+                    self.trigger('fetch', self);
                     callback();
                 }, function(error) {
                     callback(error);
@@ -59,7 +59,7 @@ module.exports = GelatoCollection.extend({
                     end: moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
                 }, function(result) {
                     self.add(result, {merge: true});
-                    self.trigger('update', self);
+                    self.trigger('fetch', self);
                     callback();
                 }, function(error) {
                     callback(error);
@@ -71,7 +71,7 @@ module.exports = GelatoCollection.extend({
                     end: moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
                 }, function(result) {
                     self.add(result, {merge: true});
-                    self.trigger('update', self);
+                    self.trigger('fetch', self);
                     callback();
                 }, function(error) {
                     callback(error);

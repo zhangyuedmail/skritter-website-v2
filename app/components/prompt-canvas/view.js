@@ -391,6 +391,7 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     resize: function(size) {
+        app.set('canvasSize', size);
         this.stage.canvas.height = size;
         this.stage.canvas.width = size;
         this.$component.height(size);

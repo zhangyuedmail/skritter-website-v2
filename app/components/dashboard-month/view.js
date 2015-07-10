@@ -11,8 +11,8 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function() {
         this.heatmap = new Heatmap();
-        this.listenTo(app.user.data.stats, 'update', this.updateHeatmap);
-        this.listenTo(app.user.data.stats, 'update', this.updateStreak);
+        this.listenTo(app.user.data.stats, 'fetch', this.updateHeatmap);
+        this.listenTo(app.user.data.stats, 'fetch', this.updateStreak);
     },
     /**
      * @property template

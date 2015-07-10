@@ -12,8 +12,9 @@ module.exports = GelatoComponent.extend({
     initialize: function() {
         this.doughnut = null;
         this.listenTo(app.user.settings, 'change:goals', this.updateDoughnut);
-        this.listenTo(app.user.data.items, 'update', this.updateItems);
-        this.listenTo(app.user.data.stats, 'update', this.updateDoughnut);
+        this.listenTo(app.user.data.items, 'fetch:daily', this.updateItems);
+        this.listenTo(app.user.data.stats, 'fetch', this.updateDoughnut);
+        this.listenTo(app.user.data.stats, 'fetch', this.updateItems);
         this.on('resize', this.resize);
     },
     /**
@@ -108,19 +109,28 @@ module.exports = GelatoComponent.extend({
         var type = '';
         switch (goal.type) {
             case 'items':
+                var totalReviews = app.user.data.stats.getDailyItemsReviewed();
+                this.doughnut.setTitle({
+                    text: totalReviews + '<br>items',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    y: 0
+                });
                 percent = app.user.data.stats.getGoalItemPercent();
                 break;
             case 'time':
-                type = 'Time';
+                var totalTime = app.user.data.stats.getDailyTimeStudied();
+                this.doughnut.setTitle({
+                    text: moment(totalTime * 1000).format('mm:ss') + '<br>minutes',
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    y: 0
+                });
                 percent = app.user.data.stats.getGoalTimePercent();
                 break;
         }
-        this.doughnut.setTitle({
-            text: goal.type.toUpperCase(),
-            align: 'center',
-            verticalAlign: 'middle',
-            y: 0
-        });
+        //goal.type.toUpperCase()
+
         this.doughnut.series[0].setData([
             {name: "Completed", color: '#c5da4b', y: percent},
             {name: "Remaining", color: '#efeef3', y: 100 - percent}
@@ -130,8 +140,10 @@ module.exports = GelatoComponent.extend({
      * @method updateItems
      */
     updateItems: function() {
-        if (app.user.data.items.length && app.user.data.stats.length) {
+        if (app.user.data.items.length) {
             this.$('#items-added .value').text(app.user.data.items.getAddedCount());
+        }
+        if (app.user.data.stats.length) {
             this.$('#items-reviewed .value').text(app.user.data.stats.getDailyItemsReviewed());
         }
     }

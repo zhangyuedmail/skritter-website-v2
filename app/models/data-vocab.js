@@ -187,6 +187,13 @@ module.exports = GelatoModel.extend({
         return position === undefined ? tones : tones[position];
     },
     /**
+     * @method getVariation
+     * @returns {Number}
+     */
+    getVariation: function() {
+        return this.id.split('-')[2];
+    },
+    /**
      * @method getWritingElement
      * @returns {String}
      */
