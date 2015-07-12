@@ -15,11 +15,11 @@ module.exports = GelatoModel.extend({
      * @type {Object}
      */
     defaults: {
-        client: 'Web',
+        client: 'skritterweb',
         keys: {
-            android: 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==',
-            ios: 'c2tyaXR0ZXJpb3M6NGZmYjFiZDViYTczMWJhNTc1YWI4OWYzYzY5ODQ0',
-            web: 'c2tyaXR0ZXJ3ZWI6YTI2MGVhNWZkZWQyMzE5YWY4MTYwYmI4ZTQwZTdk'
+            skritterandroid: 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==',
+            skritterios: 'c2tyaXR0ZXJpb3M6NGZmYjFiZDViYTczMWJhNTc1YWI4OWYzYzY5ODQ0',
+            skritterweb: 'c2tyaXR0ZXJ3ZWI6YTI2MGVhNWZkZWQyMzE5YWY4MTYwYmI4ZTQwZTdk'
         },
         root: 'https://beta.skritter',
         tld: location.host.indexOf('.cn') > -1 ? '.cn' : '.com',
@@ -511,15 +511,15 @@ module.exports = GelatoModel.extend({
         switch (platform) {
             case 'Android':
                 this.set('client', 'skritterandroid');
-                credentials = this.get('keys').android;
+                credentials = this.get('keys').skritterandroid;
                 break;
             case 'iOS':
                 this.set('client', 'skritterios');
-                credentials = this.get('keys').ios;
+                credentials = this.get('keys').skritterios;
                 break;
             default:
                 this.set('client', 'skritterweb');
-                credentials = this.get('keys').web;
+                credentials = this.get('keys').skritterweb;
 
         }
         return 'basic ' + credentials;
@@ -710,7 +710,7 @@ module.exports = GelatoModel.extend({
             type: 'POST',
             data: {
                 grant_type: 'refresh_token',
-                client_id: this.get('clientId'),
+                client_id: this.get('client'),
                 refresh_token: token
             }
         }).done(function(data) {
