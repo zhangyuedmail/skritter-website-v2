@@ -6,13 +6,6 @@ var GelatoView = require('gelato/modules/view');
  */
 module.exports = GelatoView.extend({
     /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.render();
-    },
-    /**
      * @property el
      * @type {String}
      */
@@ -28,21 +21,12 @@ module.exports = GelatoView.extend({
      */
     $dialog: null,
     /**
-     * @method render
-     * @returns {GelatoDialog}
-     */
-    render: function() {
-        this.renderTemplate();
-        this.dialog = this.$('[role="dialog"]');
-        return this;
-    },
-    /**
      * @method renderTemplate
-     * @param {String} template
+     * @param {Object} [options]
      * @returns {GelatoView}
      */
-    renderTemplate: function(template) {
-        GelatoView.prototype.renderTemplate.call(this, template);
+    renderTemplate: function(options) {
+        GelatoView.prototype.renderTemplate.call(this, options);
         this.$dialog = $(this.$('gelato-dialog').get(0));
         return this;
     },
@@ -65,6 +49,7 @@ module.exports = GelatoView.extend({
         options.keyboard = options.keyboard || false;
         options.show = options.show || true;
         options.remote = options.remote || false;
+        this.dialog = this.$('[role="dialog"]');
         this.dialog.modal(options);
         return this;
     }

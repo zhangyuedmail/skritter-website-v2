@@ -54,7 +54,7 @@ module.exports = Backbone.Model.extend({
     openDialog: function(name, options) {
         if (!this.dialog) {
             this.dialog = new (require('dialogs/' + name + '/view'));
-            this.dialog.open(options);
+            this.dialog.render().open(options);
         }
     },
     /**
