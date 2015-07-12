@@ -103,6 +103,8 @@ module.exports = GelatoComponent.extend({
      */
     handleClickDetailInfo: function(event) {
         event.preventDefault();
+        app.openDialog('vocab');
+        app.dialog.set(this.prompt.reviews.vocab.id);
     },
     /**
      * @method handleClickDetailStar

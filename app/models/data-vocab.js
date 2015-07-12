@@ -9,7 +9,9 @@ module.exports = GelatoModel.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+        this.on('change', this.save);
+    },
     /**
      * @method getPromptCharacters
      * @returns {Array}
@@ -242,6 +244,23 @@ module.exports = GelatoModel.extend({
      */
     isStarred: function() {
         return this.get('starred');
+    },
+    /**
+     * @method save
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    save: function(callbackSuccess, callbackError) {
+        var self = this;
+        app.api.putVocab(this.toJSON(), function() {
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess(self);
+            }
+        }, function(error) {
+            if (typeof callbackError === 'function') {
+                callbackError(error);
+            }
+        });
     },
     /**
      * @method toggleBanned

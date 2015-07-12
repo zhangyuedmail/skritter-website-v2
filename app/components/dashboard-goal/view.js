@@ -106,7 +106,6 @@ module.exports = GelatoComponent.extend({
     updateDoughnut: function() {
         var goal = app.user.settings.getGoal();
         var percent = 0;
-        var type = '';
         switch (goal.type) {
             case 'items':
                 var totalReviews = app.user.data.stats.getDailyItemsReviewed();
@@ -129,8 +128,6 @@ module.exports = GelatoComponent.extend({
                 percent = app.user.data.stats.getGoalTimePercent();
                 break;
         }
-        //goal.type.toUpperCase()
-
         this.doughnut.series[0].setData([
             {name: "Completed", color: '#c5da4b', y: percent},
             {name: "Remaining", color: '#efeef3', y: 100 - percent}
