@@ -11,6 +11,14 @@ module.exports = GelatoDialog.extend({
      */
     template: require('dialogs/login/template'),
     /**
+     * @method render
+     * @returns {LoginDialog}
+     */
+    render: function() {
+        this.renderTemplate();
+        return this;
+    },
+    /**
      * @property events
      * @type {Object}
      */

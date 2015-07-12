@@ -19,6 +19,14 @@ module.exports = GelatoDialog.extend({
      */
     template: require('dialogs/goal-settings/template'),
     /**
+     * @method render
+     * @returns {GoalSettingsDialog}
+     */
+    render: function() {
+        this.renderTemplate();
+        return this;
+    },
+    /**
      * @property events
      * @type {Object}
      */
