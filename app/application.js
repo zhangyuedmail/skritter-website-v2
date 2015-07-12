@@ -35,6 +35,16 @@ module.exports = GelatoApplication.extend({
         return this.get('language');
     },
     /**
+     * @method getTemplate
+     * @returns {Object}
+     */
+    getTemplate: function() {
+        return {
+            app: this.toJSON(),
+            user: this.user.toJSON()
+        };
+    },
+    /**
      * @method isChinese
      * @returns {Boolean}
      */

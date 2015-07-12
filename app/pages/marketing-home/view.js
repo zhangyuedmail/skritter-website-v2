@@ -25,11 +25,19 @@ module.exports = GelatoPage.extend({
     template: require('pages/marketing-home/template'),
     /**
      * @method render
-     * @returns {Page}
+     * @returns {MarketingHome}
      */
     render: function() {
-        this.renderTemplate();
+        this.renderTemplate(app.getTemplate());
         this.footer.setElement('#footer-container').render();
         return this;
+    },
+    /**
+     * @method remove
+     * @returns {MarketingHome}
+     */
+    remove: function() {
+        this.footer.remove();
+        return GelatoPage.prototype.remove.call(this);
     }
 });

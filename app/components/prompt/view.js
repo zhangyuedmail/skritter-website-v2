@@ -179,9 +179,9 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderBeforePromptDefn: function() {
+        this.canvas.renderFields();
         this.canvas.disableGrid();
         this.canvas.disableInput();
-        this.canvas.renderFields();
         this.details.hideDefinition();
         this.details.revealReading();
         this.details.revealReadingTone();
@@ -200,7 +200,6 @@ module.exports = GelatoComponent.extend({
         this.canvas.renderFields();
         this.canvas.disableGrid();
         this.canvas.disableInput();
-        this.canvas.revealReadingQuestion();
         this.details.hideReading();
         this.details.revealWriting();
         this.grading.hide();
@@ -255,6 +254,7 @@ module.exports = GelatoComponent.extend({
             this.renderAfterPrompt();
         } else {
             this.review.start();
+            this.canvas.revealReadingQuestion();
         }
         return this;
     },

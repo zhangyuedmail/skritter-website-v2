@@ -36,6 +36,7 @@ module.exports = GelatoComponent.extend({
 
         var mnemonic = this.prompt.reviews.vocab.getMnemonicText();
         if (mnemonic) {
+            this.hideMnemonic();
             this.$('#vocab-mnemonic .value').html(mnemonic);
         } else {
             this.$('#vocab-mnemonic').hide();
@@ -45,6 +46,7 @@ module.exports = GelatoComponent.extend({
 
         var sentence = this.prompt.reviews.vocab.getSentenceWriting();
         if (sentence) {
+            this.hideSentence();
             this.$('#vocab-sentence .value').html(sentence);
         } else {
             this.$('#vocab-sentence').hide();
@@ -178,8 +180,8 @@ module.exports = GelatoComponent.extend({
      * @method hideSentence
      */
     hideSentence: function() {
-        this.$('#vocab-sentence .button').hide();
-        this.$('#vocab-sentence .value').show();
+        this.$('#vocab-sentence .button').show();
+        this.$('#vocab-sentence .value').hide();
     },
     /**
      * @method hideWriting
