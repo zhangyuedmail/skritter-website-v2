@@ -1,3 +1,7 @@
 @import "../../styles/variables";
 
-gelato-dialog[data-name="vocab"] {}
+gelato-dialog[data-name="vocab"] {
+
+  .modal-body { padding: 0; }
+
+}
