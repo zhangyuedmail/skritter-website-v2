@@ -38,8 +38,8 @@ module.exports = GelatoCollection.extend({
      */
     fetch: function(callbackSuccess, callbackError) {
         var self = this;
-        var momentMonthStart = moment().startOf('month');
-        var momentMonthEnd = moment().endOf('month');
+        var momentMonthStart = moment().subtract(4, 'hours').startOf('month');
+        var momentMonthEnd = moment().subtract(4, 'hours').endOf('month');
         async.parallel([
             function(callback) {
                 app.api.fetchStats({
@@ -109,7 +109,7 @@ module.exports = GelatoCollection.extend({
      */
     getDailyItemsReviewed: function() {
         var total = 0;
-        var today = moment().format('YYYY-MM-DD');
+        var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
         var stat = this.get(today);
         if (stat) {
             total += stat.get('char').defn.studied.day;
@@ -128,7 +128,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Number}
      */
     getDailyTimeStudied: function() {
-        var today = moment().format('YYYY-MM-DD');
+        var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
         var stat = this.get(today);
         return stat ? stat.get('timeStudied').day : 0;
     },
