@@ -9,8 +9,8 @@ exports.config =
   files:
     javascripts:
       joinTo:
-        'js/app.js': /^app/
-        'js/vendor.js': /^(bower_components|vendor)/
+        'js/application.js': /^(app)/
+        'js/libraries.js': /^(bower_components|vendor)/
       order:
         before: [
           'bower_components/jquery/dist/jquery.js',
@@ -30,11 +30,11 @@ exports.config =
         ]
     stylesheets:
       joinTo:
-        'styles/app.css': /^(app)/
-        'styles/vendor.css': /^(bower_components|vendor)/
+        'styles/application.css': /^(app)/
+        'styles/libraries.css': /^(bower_components|vendor)/
     templates:
       joinTo:
-        'js/app.js': /^app/
+        'js/application.js': /^(app)/
   keyword:
     filePattern: /\.(js|css|html)$/
     map:

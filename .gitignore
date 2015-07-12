@@ -1,10 +1,11 @@
 # Directories #
 /.idea
 /.sass-cache
+/app/gelato
 /bower_components
 /cordova
-/node_modules
 /nbproject
+/node_modules
 /public
 
 # Files #

@@ -4,6 +4,7 @@
   "author": "Inkren, LLC",
   "version": "0.0.1",
   "license": "MIT",
+  "framework": "gelato",
   "repository": {
     "type": "git",
     "url": "https://www.github.com/skritter/skritter-html5.git"
