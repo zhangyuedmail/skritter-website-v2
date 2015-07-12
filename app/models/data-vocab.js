@@ -194,6 +194,13 @@ module.exports = GelatoModel.extend({
         return this.id.split('-')[2];
     },
     /**
+     * @method getWriting
+     * @returns {String}
+     */
+    getWriting: function() {
+        return this.get('writing');
+    },
+    /**
      * @method getWritingElement
      * @returns {String}
      */

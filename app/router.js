@@ -18,6 +18,7 @@ module.exports = GelatoRouter.extend({
         'dashboard': 'navigateDashboard',
         'login': 'navigateLogin',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
+        'vocabs(/:vocabId)': 'navigateVocabs',
         '*route': 'navigateHome'
     },
     /**
@@ -42,5 +43,13 @@ module.exports = GelatoRouter.extend({
     navigateStudy: function(listId, sectionId) {
         this.page = new (require('pages/study/view'));
         this.page.render().load(listId, sectionId);
+    },
+    /**
+     * @method navigateVocabs
+     * @param {String} [vocabId]
+     */
+    navigateVocabs: function(vocabId) {
+        this.page = new (require('pages/vocabs/view'));
+        this.page.render().set(vocabId);
     }
 });
