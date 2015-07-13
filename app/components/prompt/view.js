@@ -275,10 +275,31 @@ module.exports = GelatoComponent.extend({
             var targetShape = stroke.getTargetShape();
             var userShape = stroke.getUserShape();
             this.canvas.tweenShape('surface', userShape, targetShape);
+            this.review.character.attempts = 0;
             if (this.review.isComplete()) {
                 this.renderPromptComplete();
             } else if (this.teaching) {
                 this.teach();
+            }
+        } else {
+            var character = this.review.character;
+            var expectedStroke = character.getExpectedStroke();
+            var maxStrokes = character.getMaxPosition();
+            character.attempts++;
+            if (maxStrokes > 4) {
+                if (character.attempts === 2) {
+                    this.review.set('score', 2);
+                } else if (character.attempts >= 3) {
+                    this.canvas.fadeShape(
+                        'input-background2',
+                        expectedStroke.getTargetShape()
+                    );
+                    this.review.set('score', 1);
+                }
+            } else {
+                if (character.attempts >= 2) {
+                    this.review.set('score', 1);
+                }
             }
         }
     },

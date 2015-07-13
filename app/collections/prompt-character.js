@@ -11,6 +11,7 @@ module.exports = GelatoCollection.extend({
      * @constructor
      */
     initialize: function() {
+        this.attempts = 0;
         this.targets = [];
         this.writing = null;
     },

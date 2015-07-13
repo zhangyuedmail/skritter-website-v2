@@ -27,10 +27,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Number}
      */
     comparator: function(item) {
-        if (item.id.indexOf(this.ignoreBase) > -1) {
-            return 0;
-        }
-        return -item.getReadiness(this.sorted);
+        return item.id.indexOf(this.ignoreBase) > -1 ? -item.getReadiness(this.sorted) : 0;
     },
     /**
      * @method clearActive
@@ -87,8 +84,8 @@ module.exports = GelatoCollection.extend({
      */
     fetchNext: function(options, callbackSuccess, callbackError) {
         var self = this;
-        var counter = 0;
         options = options || {};
+        options.pages = options.pages || 5;
         if (this.fetchingNext) {
             if (typeof callbackSuccess === 'function') {
                 callbackSuccess();
@@ -98,7 +95,6 @@ module.exports = GelatoCollection.extend({
                 self.fetchingNext = true;
                 app.api.fetchItems({
                     cursor: cursor,
-                    ids: 'mcfarljwtest1-zh-你好-0-rune',
                     include_contained: true,
                     include_decomps: true,
                     include_sentences: true,
@@ -107,15 +103,15 @@ module.exports = GelatoCollection.extend({
                     include_vocabs: true,
                     lang: app.get('language'),
                     limit: 5,
-                    parts: options.parts,
+                    parts: options.parts || 'rune',
                     sort: 'next',
                     styles: options.styles
                 }, function(result) {
                     app.user.data.add(result);
                     self.markActive(result.Items);
                     self.trigger('fetch:next', self);
-                    if (counter < 5 && result.cursor) {
-                        counter++;
+                    if (options.pages < 5 && result.cursor) {
+                        options.pages++;
                         next(result.cursor);
                     } else {
                         self.fetchingNext = false;
