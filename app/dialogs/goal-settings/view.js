@@ -11,7 +11,6 @@ module.exports = GelatoDialog.extend({
      */
     initialize: function() {
         GelatoDialog.prototype.initialize.call(this);
-        this.updateSettings();
     },
     /**
      * @property template
@@ -24,6 +23,7 @@ module.exports = GelatoDialog.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.updateSettings();
         return this;
     },
     /**
@@ -58,6 +58,7 @@ module.exports = GelatoDialog.extend({
      */
     updateSettings: function() {
         var goal = app.user.settings.getGoal();
+        console.log(goal);
         this.$('input[value="' + goal.type + '"]').prop('checked', true);
         this.$('#goal-value').val(goal.value);
     }
