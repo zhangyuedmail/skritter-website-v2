@@ -47,6 +47,7 @@ module.exports = GelatoComponent.extend({
         var sentence = this.prompt.reviews.vocab.getSentenceWriting();
         if (sentence) {
             this.hideSentence();
+            this.$('#vocab-sentence .value').addClass(this.prompt.reviews.vocab.getFontClass());
             this.$('#vocab-sentence .value').html(sentence);
         } else {
             this.$('#vocab-sentence').hide();

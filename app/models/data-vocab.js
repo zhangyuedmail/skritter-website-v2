@@ -70,7 +70,7 @@ module.exports = GelatoModel.extend({
      * @return {String}
      */
     getFontName: function() {
-        return this.isChinese() ? 'Simkai' : 'Kaisho';
+        return this.isChinese() ? 'Chinese' : 'Japanese';
     },
     /**
      * @method getMnemonic

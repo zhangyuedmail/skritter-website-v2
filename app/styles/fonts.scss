@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'Chinese';
+  font-style: normal;
+  font-weight: 400;
+  src: local('KaiTi'), url('/fonts/Chinese-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Japanese';
+  font-style: normal;
+  font-weight: 400;
+  src: local('DFPKaiSho-Md'), url('/fonts/Japanese-Regular.ttf') format('truetype');
+}

@@ -48,9 +48,10 @@ gelato-component[data-name="prompt-details"] {
       color: #8c9196;
       font-size: 18px;
       font-weight: 300;
+      text-align: center;
       .segment {
         cursor: pointer;
-        display: inline;
+        display: inline-block;
         &.active { background-color: $white1 !important; }
         &.mask { background-color: $white5; }
         &.mask span { visibility: hidden; }
@@ -86,7 +87,8 @@ gelato-component[data-name="prompt-details"] {
       font-weight: 400;
       .writing-element {
         cursor: pointer;
-        display: inline;
+        display: inline-block;
+        text-align: center;
         width: 60px;
         &.active { background-color: $white1 !important; }
         &.mask { background-color: $white5; }
