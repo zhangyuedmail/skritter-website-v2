@@ -10,6 +10,7 @@ module.exports = GelatoModel.extend({
      * @constructor
      */
     initialize: function() {
+        this.audio = this.has('audio') ? new Audio(this.get('audio')) : null;
         this.on('change', this.save);
     },
     /**
@@ -244,6 +245,14 @@ module.exports = GelatoModel.extend({
      */
     isStarred: function() {
         return this.get('starred');
+    },
+    /**
+     * @method play
+     */
+    play: function() {
+        if (this.audio && this.audio.paused) {
+            this.audio.play();
+        }
     },
     /**
      * @method save

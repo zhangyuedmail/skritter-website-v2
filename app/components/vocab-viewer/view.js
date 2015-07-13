@@ -21,7 +21,7 @@ module.exports = GelatoComponent.extend({
     template: require('components/vocab-viewer/template'),
     /**
      * @method render
-     * @returns {Component}
+     * @returns {VocabViewer}
      */
     render: function() {
         this.renderTemplate().hide();
@@ -33,7 +33,6 @@ module.exports = GelatoComponent.extend({
      * @returns {VocabViewer}
      */
     renderFields: function() {
-        console.log(this.vocab);
         this.$('#vocab-difficulty').text(this.vocab.get('toughnessString'));
         this.$('#vocab-definition').html(this.vocab.getDefinition());
         this.$('#vocab-mnemonic').html(this.vocab.getMnemonicText());

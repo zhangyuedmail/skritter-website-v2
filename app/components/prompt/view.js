@@ -149,6 +149,9 @@ module.exports = GelatoComponent.extend({
         this.details.showDefinition();
         this.details.showMnemonic();
         this.details.showSentence();
+        if (app.user.settings.isAudioEnabled()) {
+            this.reviews.vocab.play();
+        }
         return this;
     },
     /**
@@ -169,8 +172,6 @@ module.exports = GelatoComponent.extend({
         this.toolbar.disableStrokeOrder();
         return this;
     },
-
-    
     /**
      * @method renderPromptRdng
      * @returns {Prompt}
@@ -195,6 +196,9 @@ module.exports = GelatoComponent.extend({
         this.details.showReadingTone();
         this.details.showMnemonic();
         this.details.showSentence();
+        if (app.user.settings.isAudioEnabled()) {
+            this.reviews.vocab.play();
+        }
         return this;
     },
     /**
@@ -213,8 +217,6 @@ module.exports = GelatoComponent.extend({
         this.toolbar.disableStrokeOrder();
         return this;
     },
-
-
     /**
      * @method renderPromptRune
      * @returns {Prompt}
@@ -245,6 +247,9 @@ module.exports = GelatoComponent.extend({
         this.toolbar.disableShow();
         this.toolbar.disableStrokeOrder();
         this.stopTeaching();
+        if (this.reviews.isLast() && app.user.settings.isAudioEnabled()) {
+            this.reviews.vocab.play();
+        }
         return this;
     },
     /**
@@ -277,8 +282,6 @@ module.exports = GelatoComponent.extend({
             }
         }
     },
-
-
     /**
      * @method renderPromptTone
      * @returns {Prompt}
@@ -318,6 +321,9 @@ module.exports = GelatoComponent.extend({
         this.details.showMnemonic();
         this.details.showSentence();
         this.grading.select(this.review.get('score'));
+        if (this.reviews.isLast() && app.user.settings.isAudioEnabled()) {
+            this.reviews.vocab.play();
+        }
         return this;
     },
     /**

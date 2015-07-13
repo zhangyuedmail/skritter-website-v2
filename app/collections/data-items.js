@@ -98,6 +98,7 @@ module.exports = GelatoCollection.extend({
                 self.fetchingNext = true;
                 app.api.fetchItems({
                     cursor: cursor,
+                    ids: 'mcfarljwtest1-zh-你好-0-rune',
                     include_contained: true,
                     include_decomps: true,
                     include_sentences: true,

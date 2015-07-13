@@ -60,6 +60,13 @@ module.exports = GelatoModel.extend({
         return {type: type, value: goal[type]};
     },
     /**
+     * @method isAudioEnabled
+     * @returns {Boolean}
+     */
+    isAudioEnabled: function() {
+        return this.get('volume') > 0;
+    },
+    /**
      * @method load
      * @returns {UserCredentials}
      */

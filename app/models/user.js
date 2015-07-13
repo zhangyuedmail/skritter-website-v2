@@ -77,7 +77,10 @@ module.exports = GelatoModel.extend({
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
      */
-    logout: function(callbackSuccess, callbackError) {},
+    logout: function(callbackSuccess, callbackError) {
+        app.removeSetting('user');
+        app.reload();
+    },
     /**
      * @method setLocalData
      * @param {String} key
