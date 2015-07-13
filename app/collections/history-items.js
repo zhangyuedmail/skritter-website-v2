@@ -11,6 +11,7 @@ module.exports = GelatoCollection.extend({
      * @constructor
      */
     initialize: function() {
+        this.checking = false;
         this.syncing = false;
         this.on('add', this.handleAdd);
     },
@@ -20,12 +21,50 @@ module.exports = GelatoCollection.extend({
      */
     model: HistoryItem,
     /**
+     * @method comparator
+     * @param {HistoryItem} item
+     * @return {Number}
+     */
+    comparator: function(item) {
+        return -item.id;
+    },
+    /**
+     * @method checkReviews
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    checkReviews: function(callbackSuccess, callbackError) {
+        var last = app.get('lastReviewCheck');
+        var now = moment().unix();
+        if (this.checking) {
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess();
+            }
+        } else {
+            app.api.fetchReviewErrors(last, function(result) {
+                console.error('REVIEW ERRORS:', result);
+                if (result.length) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(result);
+                    }
+                    app.set('lastReviewCheck', now);
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
+                }
+            }, function(error) {
+                console.error('REVIEW ERROR:', error);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
+        }
+    },
+    /**
      * @method handleAdd
      */
     handleAdd: function() {
-        if (this.length > 4) {
-            this.save();
-        }
+        this.save();
     },
     /**
      * @method save
@@ -35,7 +74,7 @@ module.exports = GelatoCollection.extend({
      */
     save: function(startFrom, callbackSuccess, callbackError) {
         var self = this;
-        var reviews = this.slice(startFrom || 1, Number.MAX_VALUE);
+        var reviews = this.slice(startFrom || 0, Number.MAX_VALUE);
         if (this.syncing) {
             if (typeof callbackSuccess === 'function') {
                 callbackSuccess();
