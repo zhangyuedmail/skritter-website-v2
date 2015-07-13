@@ -28,6 +28,21 @@ module.exports = GelatoDialog.extend({
         return this;
     },
     /**
+     * @property events
+     * @type {Object}
+     */
+    events: {
+        'vclick #button-close': 'handleClickButtonClose'
+    },
+    /**
+     * @method handleClickButtonClose
+     * @param {Event} event
+     */
+    handleClickButtonClose: function(event) {
+        event.preventDefault();
+        app.closeDialog();
+    },
+    /**
      * @method remove
      * @returns {Vocabs}
      */
