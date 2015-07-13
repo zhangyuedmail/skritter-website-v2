@@ -120,7 +120,8 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionErase: function(event) {
         event.preventDefault();
-        this.prompt.erase();
+        this.prompt.review.reset();
+        this.prompt.renderPrompt();
     },
     /**
      * @method handleClickOptionShow

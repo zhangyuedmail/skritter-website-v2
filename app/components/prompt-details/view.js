@@ -198,16 +198,23 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
-     * @method revealDefinition
+     * @method showDefinition
      */
-    revealDefinition: function() {
+    showDefinition: function() {
         this.$('#vocab-definition .value').show();
     },
     /**
-     * @method revealReading
+     * @method showMnemonic
+     */
+    showMnemonic: function() {
+        this.$('#vocab-mnemonic .button').hide();
+        this.$('#vocab-mnemonic .value').show();
+    },
+    /**
+     * @method showReading
      * @param {Number} [position]
      */
-    revealReading: function(position) {
+    showReading: function(position) {
         if (position !== undefined) {
             this.$('#vocab-reading .segment[data-segment="' + position + '"]').removeClass('mask');
         } else {
@@ -215,10 +222,10 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
-     * @method revealReadingTone
+     * @method showReadingTone
      * @param {Number} [position]
      */
-    revealReadingTone: function(position) {
+    showReadingTone: function(position) {
         if (position !== undefined) {
             this.$('#vocab-reading .segment[data-segment="' + position + '"] .raw').addClass('hidden');
             this.$('#vocab-reading .segment[data-segment="' + position + '"] .tone').removeClass('hidden');
@@ -228,10 +235,17 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
-     * @method revealWriting
+     * @method showSentence
+     */
+    showSentence: function() {
+        this.$('#vocab-sentence .button').hide();
+        this.$('#vocab-sentence .value').show();
+    },
+    /**
+     * @method showWriting
      * @param {Number} [position]
      */
-    revealWriting: function(position) {
+    showWriting: function(position) {
         if (position === undefined) {
             this.$('#vocab-writing .writing-element').removeClass('mask');
         } else {
@@ -245,20 +259,6 @@ module.exports = GelatoComponent.extend({
     selectWriting: function(position) {
         this.$('#vocab-writing .writing-element').removeClass('active');
         this.$('#vocab-writing [data-position="' + position + '"]').addClass('active');
-    },
-    /**
-     * @method showMnemonic
-     */
-    showMnemonic: function() {
-        this.$('#vocab-mnemonic .button').hide();
-        this.$('#vocab-mnemonic .value').show();
-    },
-    /**
-     * @method showSentence
-     */
-    showSentence: function() {
-        this.$('#vocab-sentence .button').hide();
-        this.$('#vocab-sentence .value').show();
     },
     /**
      * @method updateDetailBanned

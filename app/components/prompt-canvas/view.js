@@ -15,7 +15,7 @@ module.exports = GelatoComponent.extend({
         this.brushScale = 0.04;
         this.defaultFadeEasing = createjs.Ease.sineOut;
         this.defaultFadeSpeed = 500;
-        this.grid = true;
+        this.grid = false;
         this.gridColor = '#d8dadc';
         this.gridDashLength = 5;
         this.gridLineWidth = 0.75;
@@ -405,36 +405,36 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @method revealDefinitionAnswer
+     * @method showDefinitionAnswer
      */
-    revealDefinitionAnswer: function() {
+    showDefinitionAnswer: function() {
         var element = this.$('#prompt-canvas-definition');
         element.find('.answer').show();
         element.find('.question').hide();
         element.show();
     },
     /**
-     * @method revealDefinitionQuestion
+     * @method showDefinitionQuestion
      */
-    revealDefinitionQuestion: function() {
+    showDefinitionQuestion: function() {
         var element = this.$('#prompt-canvas-definition');
         element.find('.answer').hide();
         element.find('.question').show();
         element.show();
     },
     /**
-     * @method revealReadingAnswer
+     * @method showReadingAnswer
      */
-    revealReadingAnswer: function() {
+    showReadingAnswer: function() {
         var element = this.$('#prompt-canvas-reading');
         element.find('.answer').show();
         element.find('.question').hide();
         element.show();
     },
     /**
-     * @method revealReadingQuestion
+     * @method showReadingQuestion
      */
-    revealReadingQuestion: function() {
+    showReadingQuestion: function() {
         var element = this.$('#prompt-canvas-reading');
         element.find('.answer').hide();
         element.find('.question').show();

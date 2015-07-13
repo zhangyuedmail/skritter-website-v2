@@ -47,51 +47,6 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @method renderAfterPrompt
-     * @returns {Prompt}
-     */
-    renderAfterPrompt: function() {
-        this.review = this.reviews.active();
-        switch (this.reviews.part) {
-            case 'defn':
-                this.renderAfterPromptDefn();
-                break;
-            case 'rdng':
-                this.renderAfterPromptRdng();
-                break;
-            case 'rune':
-                this.renderAfterPromptRune();
-                break;
-            case 'tone':
-                this.renderAfterPromptTone();
-                break;
-        }
-        return this;
-    },
-    /**
-     * @method renderBeforePrompt
-     * @returns {Prompt}
-     */
-    renderBeforePrompt: function() {
-        this.review = this.reviews.active();
-        this.details.renderFields();
-        switch (this.reviews.part) {
-            case 'defn':
-                this.renderBeforePromptDefn();
-                break;
-            case 'rdng':
-                this.renderBeforePromptRdng();
-                break;
-            case 'rune':
-                this.renderBeforePromptRune();
-                break;
-            case 'tone':
-                this.renderBeforePromptTone();
-                break;
-        }
-        return this;
-    },
-    /**
      * @method renderPrompt
      * @returns {Prompt}
      */
@@ -111,162 +66,163 @@ module.exports = GelatoComponent.extend({
                 this.renderPromptTone();
                 break;
         }
+        if (this.reviews.isFirst()) {
+            this.$('#navigate-left').hide();
+        } else {
+            this.$('#navigate-left').show();
+        }
         return this;
     },
     /**
-     * @method renderAfterPromptDefn
+     * @method renderPromptComplete
      * @returns {Prompt}
      */
-    renderAfterPromptDefn: function() {
-        this.review.stop();
-        this.review.set('complete', true);
-        this.canvas.revealDefinitionAnswer();
-        this.details.revealDefinition();
-        this.details.showMnemonic();
-        this.details.showSentence();
+    renderPromptComplete: function() {
+        this.review = this.reviews.active();
+        switch (this.reviews.part) {
+            case 'defn':
+                this.renderPromptDefnComplete();
+                break;
+            case 'rdng':
+                this.renderPromptRdngComplete();
+                break;
+            case 'rune':
+                this.renderPromptRuneComplete();
+                break;
+            case 'tone':
+                this.renderPromptToneComplete();
+                break;
+        }
         this.grading.select(this.review.get('score'));
         this.grading.show();
         return this;
     },
     /**
-     * @method renderAfterPromptRdng
+     * @method renderPromptLoad
      * @returns {Prompt}
      */
-    renderAfterPromptRdng: function() {
-        this.review.stop();
-        this.review.set('complete', true);
-        this.canvas.revealReadingAnswer();
-        this.details.revealReadingTone();
-        this.details.showMnemonic();
-        this.details.showSentence();
-        this.grading.select(this.review.get('score'));
-        this.grading.show();
-        return this;
-    },
-    /**
-     * @method renderAfterPromptRune
-     * @returns {Prompt}
-     */
-    renderAfterPromptRune: function() {
-        this.review.stop();
-        this.canvas.disableInput();
-        this.canvas.injectLayerColor('surface', this.review.getGradingColor());
-        this.details.revealWriting(this.reviews.position);
-        this.details.showMnemonic();
-        this.details.showSentence();
-        this.grading.select(this.review.get('score'));
-        this.toolbar.disableShow();
-        this.toolbar.disableStrokeOrder();
-        return this;
-    },
-    /**
-     * @method renderAfterPromptTone
-     * @returns {Prompt}
-     */
-    renderAfterPromptTone: function() {
-        this.review.stop();
-        this.canvas.disableInput();
-        this.canvas.injectLayerColor('surface', this.review.getGradingColor());
-        this.details.revealReading(this.review.position);
-        this.details.revealReadingTone(this.review.position);
-        this.details.showMnemonic();
-        this.details.showSentence();
-        this.grading.select(this.review.get('score'));
-        return this;
-    },
-    /**
-     * @method renderBeforePromptDefn
-     * @returns {Prompt}
-     */
-    renderBeforePromptDefn: function() {
+    renderPromptLoad: function() {
+        this.reset();
+        this.review = this.reviews.active();
         this.canvas.renderFields();
-        this.canvas.disableGrid();
-        this.canvas.disableInput();
-        this.details.hideDefinition();
-        this.details.revealReading();
-        this.details.revealReadingTone();
-        this.details.revealWriting();
-        this.grading.hide();
-        this.toolbar.disableErase();
-        this.toolbar.disableShow();
-        this.toolbar.disableStrokeOrder();
+        this.details.renderFields();
+        switch (this.reviews.part) {
+            case 'defn':
+                this.renderPromptDefnLoad();
+                break;
+            case 'rdng':
+                this.renderPromptRdngLoad();
+                break;
+            case 'rune':
+                this.renderPromptRuneLoad();
+                break;
+            case 'tone':
+                this.renderPromptToneLoad();
+                break;
+        }
         return this;
     },
-    /**
-     * @method renderBeforePromptRdng
-     * @returns {Prompt}
-     */
-    renderBeforePromptRdng: function() {
-        this.canvas.renderFields();
-        this.canvas.disableGrid();
-        this.canvas.disableInput();
-        this.details.hideReading();
-        this.details.revealWriting();
-        this.grading.hide();
-        this.toolbar.disableErase();
-        this.toolbar.disableShow();
-        this.toolbar.disableStrokeOrder();
-        return this;
-    },
-    /**
-     * @method renderBeforePromptRune
-     * @returns {Prompt}
-     */
-    renderBeforePromptRune: function() {
-        this.canvas.enableGrid();
-        this.details.revealDefinition();
-        this.details.revealReading();
-        this.details.revealReadingTone();
-        return this;
-    },
-    /**
-     * @method renderBeforePromptTone
-     * @returns {Prompt}
-     */
-    renderBeforePromptTone: function() {
-        this.canvas.disableGrid();
-        this.details.revealDefinition();
-        this.details.revealReading();
-        this.details.revealWriting();
-        return this;
-    },
+
+    
     /**
      * @method renderPromptDefn
      * @returns {Prompt}
      */
     renderPromptDefn: function() {
-        this.clear();
         if (this.review.isComplete()) {
-            this.renderAfterPrompt();
+            this.renderPromptComplete();
         } else {
             this.review.start();
-            this.canvas.revealDefinitionQuestion();
         }
         return this;
     },
+    /**
+     * @method renderPromptDefnComplete
+     * @returns {Prompt}
+     */
+    renderPromptDefnComplete: function() {
+        this.review.stop();
+        this.review.set('complete', true);
+        this.canvas.showDefinitionAnswer();
+        this.details.showDefinition();
+        this.details.showMnemonic();
+        this.details.showSentence();
+        return this;
+    },
+    /**
+     * @method renderPromptDefnLoad
+     * @returns {Prompt}
+     */
+    renderPromptDefnLoad: function() {
+        this.canvas.disableGrid();
+        this.canvas.disableInput();
+        this.canvas.showDefinitionQuestion();
+        this.details.hideDefinition();
+        this.details.showReading();
+        this.details.showReadingTone();
+        this.details.showWriting();
+        this.grading.hide();
+        this.toolbar.disableErase();
+        this.toolbar.disableShow();
+        this.toolbar.disableStrokeOrder();
+        return this;
+    },
+
+    
     /**
      * @method renderPromptRdng
      * @returns {Prompt}
      */
     renderPromptRdng: function() {
-        this.clear();
         if (this.review.isComplete()) {
-            this.renderAfterPrompt();
+            this.renderPromptComplete();
         } else {
             this.review.start();
-            this.canvas.revealReadingQuestion();
         }
         return this;
     },
+    /**
+     * @method renderPromptRdngComplete
+     * @returns {Prompt}
+     */
+    renderPromptRdngComplete: function() {
+        this.review.stop();
+        this.review.set('complete', true);
+        this.canvas.showReadingAnswer();
+        this.details.showReading();
+        this.details.showReadingTone();
+        this.details.showMnemonic();
+        this.details.showSentence();
+        return this;
+    },
+    /**
+     * @method renderPromptRdngLoad
+     * @returns {Prompt}
+     */
+    renderPromptRdngLoad: function() {
+        this.canvas.disableGrid();
+        this.canvas.disableInput();
+        this.canvas.showReadingQuestion();
+        this.details.hideReading();
+        this.details.showWriting();
+        this.grading.hide();
+        this.toolbar.disableErase();
+        this.toolbar.disableShow();
+        this.toolbar.disableStrokeOrder();
+        return this;
+    },
+
+
     /**
      * @method renderPromptRune
      * @returns {Prompt}
      */
     renderPromptRune: function() {
-        this.clear();
+        this.canvas.reset();
+        this.canvas.drawShape('surface', this.review.character.getUserShape());
         this.details.selectWriting(this.reviews.position);
         if (this.review.isComplete()) {
-            this.renderAfterPrompt();
+            this.renderPromptComplete();
         } else {
             this.review.start();
             this.canvas.enableInput();
@@ -274,11 +230,56 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method renderPromptRuneComplete
+     * @returns {Prompt}
+     */
+    renderPromptRuneComplete: function() {
+        this.review.stop();
+        this.canvas.disableInput();
+        this.canvas.injectLayerColor('surface', this.review.getGradingColor());
+        this.details.showWriting(this.reviews.position);
+        this.details.showMnemonic();
+        this.details.showSentence();
+        this.toolbar.disableShow();
+        this.toolbar.disableStrokeOrder();
+        return this;
+    },
+    /**
+     * @method renderPromptRuneLoad
+     * @returns {Prompt}
+     */
+    renderPromptRuneLoad: function() {
+        this.canvas.enableGrid();
+        this.details.showDefinition();
+        this.details.showReading();
+        this.details.showReadingTone();
+        this.grading.show();
+        return this;
+    },
+    /**
+     * @method handlePromptRuneRecognize
+     * @param {Array} points
+     * @param {createjs.Shape} shape
+     */
+    handlePromptRuneRecognize: function(points, shape) {
+        var stroke = this.review.character.recognize(points, shape);
+        if (stroke) {
+            var targetShape = stroke.getTargetShape();
+            var userShape = stroke.getUserShape();
+            this.canvas.tweenShape('surface', userShape, targetShape);
+            if (this.review.isComplete()) {
+                this.renderPromptComplete();
+            }
+        }
+    },
+
+
+    /**
      * @method renderPromptTone
      * @returns {Prompt}
      */
     renderPromptTone: function() {
-        this.clear();
+        this.canvas.reset();
         this.canvas.drawCharacter(
             'surface-background2',
             this.review.vocab.get('writing'),
@@ -291,11 +292,8 @@ module.exports = GelatoComponent.extend({
             'surface',
             this.review.character.getUserShape()
         );
-        this.toolbar.disableErase();
-        this.toolbar.disableShow();
-        this.toolbar.disableStrokeOrder();
         if (this.review.isComplete()) {
-            this.renderAfterPrompt();
+            this.renderPromptComplete();
         } else {
             this.review.start();
             this.canvas.enableInput();
@@ -303,22 +301,69 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @method clear
+     * @method renderPromptToneComplete
      * @returns {Prompt}
      */
-    clear: function() {
-        this.canvas.reset();
-        this.grading.unselect();
-        this.toolbar.enable();
+    renderPromptToneComplete: function() {
+        this.review.stop();
+        this.canvas.disableInput();
+        this.canvas.injectLayerColor('surface', this.review.getGradingColor());
+        this.details.showReading(this.reviews.position);
+        this.details.showReadingTone(this.reviews.position);
+        this.details.showMnemonic();
+        this.details.showSentence();
+        this.grading.select(this.review.get('score'));
         return this;
     },
     /**
-     * @method erase
+     * @method renderPromptToneLoad
+     * @returns {Prompt}
      */
-    erase: function() {
-        this.clear();
-        this.review.reset();
-        this.renderPrompt();
+    renderPromptToneLoad: function() {
+        this.canvas.disableGrid();
+        this.details.showDefinition();
+        this.details.showReading();
+        this.details.showWriting();
+        this.toolbar.disableErase();
+        this.toolbar.disableShow();
+        this.toolbar.disableStrokeOrder();
+        return this;
+    },
+    /**
+     * @method handlePromptToneRecognize
+     * @param {Array} points
+     * @param {createjs.Shape} shape
+     */
+    handlePromptToneRecognize: function(points, shape) {
+        var character = this.review.character;
+        var stroke = character.recognize(points, shape);
+        var possibleTones = this.reviews.getToneNumbers();
+        var expectedTone = character.getTone(possibleTones[0]);
+        if (stroke && app.fn.getLength(points) > 30) {
+            var targetShape = stroke.getTargetShape();
+            var userShape = stroke.getUserShape();
+            if (possibleTones.indexOf(stroke.get('tone')) > -1) {
+                this.canvas.tweenShape('surface', userShape, targetShape);
+                this.review.set('score', 3);
+            } else {
+                character.reset();
+                character.add(expectedTone);
+                this.canvas.drawShape('surface', expectedTone.getTargetShape());
+                this.review.set('score', 1);
+            }
+        } else {
+            character.add(expectedTone);
+            if (possibleTones.indexOf(5) > -1) {
+                this.canvas.drawShape('surface', character.getTargetShape());
+                this.review.set('score', 3);
+            } else {
+                this.canvas.drawShape('surface', expectedTone.getTargetShape());
+                this.review.set('score', 1);
+            }
+        }
+        if (this.review.isComplete()) {
+            this.renderPromptComplete();
+        }
     },
     /**
      * @method handleCanvasClick
@@ -327,9 +372,9 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.next();
         } else if (this.reviews.part === 'defn') {
-            this.renderAfterPrompt();
+            this.renderPromptComplete();
         } else if (this.reviews.part === 'rdng') {
-            this.renderAfterPrompt();
+            this.renderPromptComplete();
         } else if (this.reviews.part === 'rune') {
             this.review.stopThinking();
         } else if (this.reviews.part === 'tone') {
@@ -344,10 +389,10 @@ module.exports = GelatoComponent.extend({
     handleCanvasInputUp: function(points, shape) {
         switch (this.reviews.part) {
             case 'rune':
-                this.recognizeRune(points, shape);
+                this.handlePromptRuneRecognize(points, shape);
                 break;
             case 'tone':
-                this.recognizeTone(points, shape);
+                this.handlePromptToneRecognize(points, shape);
                 break;
         }
     },
@@ -390,7 +435,7 @@ module.exports = GelatoComponent.extend({
      */
     next: function() {
         if (this.reviews.next()) {
-            this.renderPrompt();
+            this.reset().renderPrompt();
         } else {
             this.trigger('complete', this.reviews);
         }
@@ -400,61 +445,9 @@ module.exports = GelatoComponent.extend({
      */
     previous: function() {
         if (this.reviews.previous()) {
-            this.renderPrompt();
+            this.reset().renderPrompt();
         } else {
             this.trigger('previous', this.reviews);
-        }
-    },
-    /**
-     * @method recognizeRune
-     * @param {Array} points
-     * @param {createjs.Shape} shape
-     */
-    recognizeRune: function(points, shape) {
-        var stroke = this.review.character.recognize(points, shape);
-        if (stroke) {
-            var targetShape = stroke.getTargetShape();
-            var userShape = stroke.getUserShape();
-            this.canvas.tweenShape('surface', userShape, targetShape);
-            if (this.review.isComplete()) {
-                this.renderAfterPrompt();
-            }
-        }
-    },
-    /**
-     * @method recognizeTone
-     * @param {Array} points
-     * @param {createjs.Shape} shape
-     */
-    recognizeTone: function(points, shape) {
-        var character = this.review.character;
-        var stroke = character.recognize(points, shape);
-        var possibleTones = this.reviews.getToneNumbers();
-        var expectedTone = character.getTone(possibleTones[0]);
-        if (stroke && app.fn.getLength(points) > 30) {
-            var targetShape = stroke.getTargetShape();
-            var userShape = stroke.getUserShape();
-            if (possibleTones.indexOf(stroke.get('tone')) > -1) {
-                this.canvas.tweenShape('surface', userShape, targetShape);
-                this.review.set('score', 3);
-            } else {
-                character.reset();
-                character.add(expectedTone);
-                this.canvas.drawShape('surface', expectedTone.getTargetShape());
-                this.review.set('score', 1);
-            }
-        } else {
-            character.add(expectedTone);
-            if (possibleTones.indexOf(5) > -1) {
-                this.canvas.drawShape('surface', character.getTargetShape());
-                this.review.set('score', 3);
-            } else {
-                this.canvas.drawShape('surface', expectedTone.getTargetShape());
-                this.review.set('score', 1);
-            }
-        }
-        if (this.review.isComplete()) {
-            this.renderAfterPrompt();
         }
     },
     /**
@@ -484,6 +477,16 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method reset
+     * @returns {Prompt}
+     */
+    reset: function() {
+        this.canvas.reset();
+        this.grading.unselect();
+        this.toolbar.enable();
+        return this;
+    },
+    /**
      * @method set
      * @param {PromptReviews} reviews
      * @returns {Prompt}
@@ -491,7 +494,7 @@ module.exports = GelatoComponent.extend({
     set: function(reviews) {
         console.info('PROMPT:', reviews.item.id, reviews);
         this.reviews = reviews;
-        this.renderBeforePrompt();
+        this.renderPromptLoad();
         this.renderPrompt();
         return this;
     }

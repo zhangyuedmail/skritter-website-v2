@@ -13,8 +13,8 @@
 
     /**
      * @method recognize
-     * @param {CanvasStroke} stroke
-     * @param {CanvasCharacter} character
+     * @param {PromptStroke} stroke
+     * @param {PromptCharacter} character
      * @param {Number} size
      */
     Recognizer.prototype.recognize = function(stroke, character, size) {
@@ -92,7 +92,7 @@
 
     /**
      * @method checkAngle
-     * @param {CanvasStroke} userStroke
+     * @param {PromptStroke} userStroke
      * @param {DataParam} targetParam
      * @returns {Number}
      */
@@ -109,7 +109,7 @@
 
     /**
      * @method checkCorners
-     * @param {CanvasStroke} userStroke
+     * @param {PromptStroke} userStroke
      * @param {DataParam} targetParam
      * @returns {Number}
      */
@@ -126,7 +126,7 @@
 
     /**
      * @method checkDistance
-     * @param {CanvasStroke} userStroke
+     * @param {PromptStroke} userStroke
      * @param {DataParam} targetParam
      * @returns {Number}
      */

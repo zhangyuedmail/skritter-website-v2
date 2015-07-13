@@ -24,6 +24,7 @@ module.exports = GelatoCollection.extend({
     /**
      * @method comparator
      * @param {DataItem} item
+     * @returns {Number}
      */
     comparator: function(item) {
         if (item.id.indexOf(this.ignoreBase) > -1) {
