@@ -20,11 +20,13 @@ module.exports = GelatoComponent.extend({
         this.toolbar = new PromptToolbar({prompt: this});
         this.review = null;
         this.reviews = null;
+        this.teaching = false;
         this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
         this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:left', this.handleNavigateLeft);
         this.listenTo(this.canvas, 'navigate:right', this.handleNavigateRight);
         this.listenTo(this.grading, 'mousedown', this.handleHighlightGrading);
+        this.listenTo(this.grading, 'change', this.handleChangeGrading);
         this.listenTo(this.grading, 'select', this.handleSelectGrading);
         this.on('resize', this.resize);
     },
@@ -242,6 +244,7 @@ module.exports = GelatoComponent.extend({
         this.details.showSentence();
         this.toolbar.disableShow();
         this.toolbar.disableStrokeOrder();
+        this.stopTeaching();
         return this;
     },
     /**
@@ -269,6 +272,8 @@ module.exports = GelatoComponent.extend({
             this.canvas.tweenShape('surface', userShape, targetShape);
             if (this.review.isComplete()) {
                 this.renderPromptComplete();
+            } else if (this.teaching) {
+                this.teach();
             }
         }
     },
@@ -397,6 +402,13 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method handleChangeGrading
+     * @param {Number} score
+     */
+    handleChangeGrading: function(score) {
+        this.review.set('score', score);
+    },
+    /**
      * @method handleNavigateLeft
      */
     handleNavigateLeft: function() {
@@ -429,6 +441,17 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.next();
         }
+    },
+    /**
+     * @method hideCharacter
+     * @returns {Prompt}
+     */
+    hideCharacter: function() {
+        if (this.review.character) {
+            this.canvas.clearLayer('surface-background2');
+            this.toolbar.enableShow();
+        }
+        return this;
     },
     /**
      * @method next
@@ -487,6 +510,40 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method showCharacter
+     * @returns {Prompt}
+     */
+    showCharacter: function() {
+        if (this.review.character && !this.review.isComplete()) {
+            var shape = this.review.character.getTargetShape();
+            this.review.set('score', 1);
+            this.canvas.clearLayer('surface-background2');
+            this.canvas.drawShape('surface-background2', shape, {color: '#e8ded2'});
+            this.toolbar.disableShow();
+        }
+        return this;
+    },
+    /**
+     * @method startTeaching
+     * @returns {Prompt}
+     */
+    startTeaching: function() {
+        this.showCharacter();
+        this.teaching = true;
+        this.teach();
+        return this;
+    },
+    /**
+     * @method stopTeaching
+     * @returns {Prompt}
+     */
+    stopTeaching: function() {
+        this.hideCharacter();
+        this.canvas.clearLayer('input-background2');
+        this.teaching = false;
+        return this;
+    },
+    /**
      * @method set
      * @param {PromptReviews} reviews
      * @returns {Prompt}
@@ -496,6 +553,19 @@ module.exports = GelatoComponent.extend({
         this.reviews = reviews;
         this.renderPromptLoad();
         this.renderPrompt();
+        return this;
+    },
+    /**
+     * @method teach
+     * @returns {Prompt}
+     */
+    teach: function() {
+        if (this.review.character && !this.review.isComplete()) {
+            var stroke = this.review.character.getExpectedStroke();
+            this.canvas.clearLayer('input-background2');
+            this.canvas.tracePath('input-background2', stroke.getParamPath());
+            this.toolbar.disableStrokeOrder();
+        }
         return this;
     }
 });

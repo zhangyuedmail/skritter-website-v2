@@ -129,6 +129,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionShow: function(event) {
         event.preventDefault();
+        this.prompt.showCharacter();
     },
     /**
      * @method handleClickOptionTeach
@@ -136,6 +137,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionTeach: function(event) {
         event.preventDefault();
+        this.prompt.startTeaching();
     },
     /**
      * @method toggleCorrect

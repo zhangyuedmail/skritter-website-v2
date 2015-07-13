@@ -43,8 +43,13 @@ module.exports = GelatoComponent.extend({
     handleClickButton: function(event) {
         event.preventDefault();
         var target = $(event.currentTarget);
+        var value = this.value;
         this.select(parseInt(target.data('value'), 10));
-        this.trigger('select', this.value);
+        if (this.value === value) {
+            this.trigger('select', this.value);
+        } else {
+            this.trigger('change', this.value);
+        }
     },
     /**
      * @method handleMousedownButton
