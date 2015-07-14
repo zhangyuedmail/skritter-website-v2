@@ -5,13 +5,11 @@
   border: none;
   border-radius: 25px;
 }
-
 .btn-fixed {
   height: 50px;
   padding: 15px 0;
   width: 150px;
 }
-
 .btn-success {
   background-color: $green5;
   &:hover { background-color: $green6; }
@@ -19,3 +17,6 @@
 
 /*** MODALS ***/
 .modal-content { border-radius: 25px; }
+
+/*** PROGRESS ***/
+.progress { border-radius: 25px; }
