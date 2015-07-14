@@ -22,6 +22,7 @@ module.exports = GelatoComponent.extend({
         this.reviews = null;
         this.teaching = false;
         this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
+        this.listenTo(this.canvas, 'canvas:swipeup', this.handleCanvasSwipeUp);
         this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:left', this.handleNavigateLeft);
         this.listenTo(this.canvas, 'navigate:right', this.handleNavigateRight);
@@ -124,8 +125,6 @@ module.exports = GelatoComponent.extend({
         }
         return this;
     },
-
-    
     /**
      * @method renderPromptDefn
      * @returns {Prompt}
@@ -247,9 +246,6 @@ module.exports = GelatoComponent.extend({
         this.toolbar.disableShow();
         this.toolbar.disableStrokeOrder();
         this.stopTeaching();
-        if (this.reviews.isLast() && app.user.settings.isAudioEnabled()) {
-            this.reviews.vocab.play();
-        }
         return this;
     },
     /**
@@ -262,46 +258,10 @@ module.exports = GelatoComponent.extend({
         this.details.showReading();
         this.details.showReadingTone();
         this.grading.show();
-        return this;
-    },
-    /**
-     * @method handlePromptRuneRecognize
-     * @param {Array} points
-     * @param {createjs.Shape} shape
-     */
-    handlePromptRuneRecognize: function(points, shape) {
-        var stroke = this.review.character.recognize(points, shape);
-        if (stroke) {
-            var targetShape = stroke.getTargetShape();
-            var userShape = stroke.getUserShape();
-            this.canvas.tweenShape('surface', userShape, targetShape);
-            this.review.character.attempts = 0;
-            if (this.review.isComplete()) {
-                this.renderPromptComplete();
-            } else if (this.teaching) {
-                this.teach();
-            }
-        } else {
-            var character = this.review.character;
-            var expectedStroke = character.getExpectedStroke();
-            var maxStrokes = character.getMaxPosition();
-            character.attempts++;
-            if (maxStrokes > 4) {
-                if (character.attempts === 2) {
-                    this.review.set('score', 2);
-                } else if (character.attempts >= 3) {
-                    this.canvas.fadeShape(
-                        'input-background2',
-                        expectedStroke.getTargetShape()
-                    );
-                    this.review.set('score', 1);
-                }
-            } else {
-                if (character.attempts >= 2) {
-                    this.review.set('score', 1);
-                }
-            }
+        if (app.user.settings.isAudioEnabled()) {
+            this.reviews.vocab.play();
         }
+        return this;
     },
     /**
      * @method renderPromptTone
@@ -362,6 +322,116 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method handleCanvasClick
+     */
+    handleCanvasClick: function() {
+        if (this.review.isComplete()) {
+            this.next();
+        } else if (this.reviews.part === 'defn') {
+            this.renderPromptComplete();
+        } else if (this.reviews.part === 'rdng') {
+            this.renderPromptComplete();
+        } else if (this.reviews.part === 'rune') {
+            this.review.stopThinking();
+        } else if (this.reviews.part === 'tone') {
+            this.review.stopThinking();
+        }
+    },
+    /**
+     * @method handleCanvasInputUp
+     * @param {Array} points
+     * @param {createjs.Shape} shape
+     */
+    handleCanvasInputUp: function(points, shape) {
+        switch (this.reviews.part) {
+            case 'rune':
+                this.handlePromptRuneRecognize(points, shape);
+                break;
+            case 'tone':
+                this.handlePromptToneRecognize(points, shape);
+                break;
+        }
+    },
+    /**
+     * @method handleCanvasSwipeUp
+     */
+    handleCanvasSwipeUp: function() {
+        if (this.reviews.isPartRune()) {
+            this.review.reset();
+            this.renderPrompt();
+        }
+    },
+    /**
+     * @method handleChangeGrading
+     * @param {Number} score
+     */
+    handleChangeGrading: function(score) {
+        this.review.set('score', score);
+    },
+    /**
+     * @method handleHighlightGrading
+     * @param {Number} score
+     */
+    handleHighlightGrading: function(score) {
+        if (this.review.isComplete()) {
+            var gradingColor = app.user.settings.get('gradingColors')[score];
+            this.canvas.injectLayerColor('surface', gradingColor);
+        }
+    },
+    /**
+     * @method handleNavigateLeft
+     */
+    handleNavigateLeft: function() {
+        this.review.stop();
+        this.previous();
+    },
+    /**
+     * @method handleNavigateRight
+     */
+    handleNavigateRight: function() {
+        this.review.stop();
+        this.next();
+    },
+    /**
+     * @method handlePromptRuneRecognize
+     * @param {Array} points
+     * @param {createjs.Shape} shape
+     */
+    handlePromptRuneRecognize: function(points, shape) {
+        var stroke = this.review.character.recognize(points, shape);
+        if (stroke) {
+            var targetShape = stroke.getTargetShape();
+            var userShape = stroke.getUserShape();
+            this.canvas.tweenShape('surface', userShape, targetShape);
+            this.review.character.attempts = 0;
+            if (this.review.isComplete()) {
+                this.renderPromptComplete();
+            } else if (this.teaching) {
+                this.teach();
+            }
+        } else {
+            var character = this.review.character;
+            var expectedStroke = character.getExpectedStroke();
+            var maxStrokes = character.getMaxPosition();
+            character.attempts++;
+            if (maxStrokes > 4) {
+                if (character.attempts === 2) {
+                    this.review.set('score', 2);
+                } else if (character.attempts >= 3) {
+                    this.canvas.fadeShape(
+                        'input-background2',
+                        expectedStroke.getTargetShape()
+                    );
+                    this.review.set('score', 1);
+                }
+            } else {
+                if (character.attempts >= 2) {
+                    this.review.set('score', 1);
+                }
+            }
+        }
+    },
+    /**
      * @method handlePromptToneRecognize
      * @param {Array} points
      * @param {createjs.Shape} shape
@@ -395,68 +465,6 @@ module.exports = GelatoComponent.extend({
         }
         if (this.review.isComplete()) {
             this.renderPromptComplete();
-        }
-    },
-    /**
-     * @method handleCanvasClick
-     */
-    handleCanvasClick: function() {
-        if (this.review.isComplete()) {
-            this.next();
-        } else if (this.reviews.part === 'defn') {
-            this.renderPromptComplete();
-        } else if (this.reviews.part === 'rdng') {
-            this.renderPromptComplete();
-        } else if (this.reviews.part === 'rune') {
-            this.review.stopThinking();
-        } else if (this.reviews.part === 'tone') {
-            this.review.stopThinking();
-        }
-    },
-    /**
-     * @method handleCanvasInputUp
-     * @param {Array} points
-     * @param {createjs.Shape} shape
-     */
-    handleCanvasInputUp: function(points, shape) {
-        switch (this.reviews.part) {
-            case 'rune':
-                this.handlePromptRuneRecognize(points, shape);
-                break;
-            case 'tone':
-                this.handlePromptToneRecognize(points, shape);
-                break;
-        }
-    },
-    /**
-     * @method handleChangeGrading
-     * @param {Number} score
-     */
-    handleChangeGrading: function(score) {
-        this.review.set('score', score);
-    },
-    /**
-     * @method handleNavigateLeft
-     */
-    handleNavigateLeft: function() {
-        this.review.stop();
-        this.previous();
-    },
-    /**
-     * @method handleNavigateRight
-     */
-    handleNavigateRight: function() {
-        this.review.stop();
-        this.next();
-    },
-    /**
-     * @method handleHighlightGrading
-     * @param {Number} score
-     */
-    handleHighlightGrading: function(score) {
-        if (this.review.isComplete()) {
-            var gradingColor = app.user.settings.get('gradingColors')[score];
-            this.canvas.injectLayerColor('surface', gradingColor);
         }
     },
     /**

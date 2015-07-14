@@ -19,6 +19,10 @@ module.exports = GelatoComponent.extend({
         this.gridColor = '#d8dadc';
         this.gridDashLength = 5;
         this.gridLineWidth = 0.75;
+        this.mouseDownEvent = null;
+        this.mouseLastDownEvent = null;
+        this.mouseLastUpEvent = null;
+        this.mouseUpEvent = null;
         this.prompt = options.prompt;
         this.size = 500;
         this.stage = null;
@@ -481,7 +485,8 @@ module.exports = GelatoComponent.extend({
      */
     triggerCanvasMouseDown: function(event) {
         event.preventDefault();
-        this.trigger('canvas:click');
+        this.trigger('canvas:mousedown', event);
+        this.mouseDownEvent = event;
     },
     /**
      * @method triggerCanvasMouseUp
@@ -489,6 +494,36 @@ module.exports = GelatoComponent.extend({
      */
     triggerCanvasMouseUp: function(event) {
         event.preventDefault();
+        this.trigger('canvas:mouseup', event);
+        this.mouseLastDownEvent = this.mouseDownEvent;
+        this.mouseLastUpEvent = this.mouseUpEvent;
+        this.mouseUpEvent = event;
+        var linePositionStart = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
+        var linePositionEnd = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
+        var lineAngle = app.fn.getAngle(linePositionStart, linePositionEnd);
+        var lineDistance = app.fn.getDistance(linePositionStart, linePositionEnd);
+        var lineDuration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
+        if (this.mouseLastUpEvent) {
+            var lineLastPositionStart = {x: this.mouseLastDownEvent.pageX, y: this.mouseLastDownEvent.pageY};
+            var lineLastPositionEnd = {x: this.mouseLastUpEvent.pageX, y: this.mouseLastUpEvent.pageY};
+            var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
+            var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
+            if (lineLastDistance < 50 && lineLastDuration > 50 && lineLastDuration < 200) {
+                this.trigger('canvas:doubleclick', event);
+                return;
+            }
+        }
+        if (this.mouseDownEvent) {
+            if (lineDistance > this.size / 2 && lineAngle < - 70 && lineAngle > -110) {
+                this.trigger('canvas:swipeup', event);
+                return;
+            }
+            if (lineDuration > 1000) {
+                this.trigger('canvas:clickhold', event);
+                return;
+            }
+        }
+        this.trigger('canvas:click', event);
     },
     /**
      * @method triggerInputDown

@@ -164,6 +164,34 @@ module.exports = GelatoCollection.extend({
         return this.position >= this.length - 1;
     },
     /**
+     * @method isPartDefn
+     * @returns {Boolean}
+     */
+    isPartDefn: function() {
+        return this.item.part === 'defn';
+    },
+    /**
+     * @method isPartRdng
+     * @returns {Boolean}
+     */
+    isPartRdng: function() {
+        return this.item.part === 'rdng';
+    },
+    /**
+     * @method isPartRune
+     * @returns {Boolean}
+     */
+    isPartRune: function() {
+        return this.item.part === 'rune';
+    },
+    /**
+     * @method isPartTone
+     * @returns {Boolean}
+     */
+    isPartTone: function() {
+        return this.item.part === 'tone';
+    },
+    /**
      * @method next
      * @return {Boolean}
      */
