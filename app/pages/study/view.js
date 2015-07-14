@@ -11,6 +11,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
+        this.counter = 0;
         this.prompt = new Prompt();
         this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
     },
@@ -40,6 +41,11 @@ module.exports = GelatoPage.extend({
     handlePromptComplete: function(reviews) {
         var self = this;
         reviews.updateItems(function() {
+            self.counter += reviews.length;
+            if (self.counter >= 20) {
+                self.counter = 0;
+                app.user.data.items.fetchNext();
+            }
             self.loadNext();
         }, function(error) {
             console.error('ITEM UPDATE ERROR:', error);

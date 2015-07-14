@@ -27,7 +27,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Number}
      */
     comparator: function(item) {
-        return item.id.indexOf(this.ignoreBase) > -1 ? -item.getReadiness(this.sorted) : 0;
+        return item.id.indexOf(this.ignoreBase) > -1 ? 0 : -item.getReadiness(this.sorted);
     },
     /**
      * @method clearActive
@@ -84,6 +84,7 @@ module.exports = GelatoCollection.extend({
      */
     fetchNext: function(options, callbackSuccess, callbackError) {
         var self = this;
+        var counter = 0;
         options = options || {};
         options.pages = options.pages || 5;
         if (this.fetchingNext) {
@@ -103,15 +104,15 @@ module.exports = GelatoCollection.extend({
                     include_vocabs: true,
                     lang: app.get('language'),
                     limit: 5,
-                    parts: options.parts || 'rune',
+                    parts: options.parts,
                     sort: 'next',
                     styles: options.styles
                 }, function(result) {
                     app.user.data.add(result);
                     self.markActive(result.Items);
                     self.trigger('fetch:next', self);
-                    if (options.pages < 5 && result.cursor) {
-                        options.pages++;
+                    if (counter < options.pages && result.cursor) {
+                        counter++;
                         next(result.cursor);
                     } else {
                         self.fetchingNext = false;
