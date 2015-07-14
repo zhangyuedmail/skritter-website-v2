@@ -26,7 +26,8 @@ exports.config =
           'vendor/heatmap/heatmap-3.5.2.js',
           'vendor/highcharts/highcharts-4.1.7.js',
           'vendor/jquery/jquery.mobile.events-1.4.5.js',
-          'vendor/jquery/jquery.ui.events-1.11.4.js'
+          'vendor/jquery/jquery.ui.events-1.11.4.js',
+          'vendor/keypress/keypress-2.1.1.js'
         ]
     stylesheets:
       joinTo:
