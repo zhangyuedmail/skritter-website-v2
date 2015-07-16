@@ -1,0 +1,16 @@
+gelato-dialog(data-name='login')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-body
+          form#login-form
+            #login-message.text-danger
+            .form-group
+              label(for="login-username") Username
+              input#login-username.form-control(type="text", placeholder="Username")
+            .form-group
+              label(for="login-password") Password
+              input#login-password.form-control(type="password", placeholder="Password")
+            button#button-close.btn.btn-default(type="button") Close
+            | &nbsp;&nbsp;&nbsp;
+            button#button-login.btn.btn-primary(type="button") Login

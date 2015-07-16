@@ -1,0 +1,13 @@
+gelato-page(data-name='home')
+  gelato-navbar.fixed-top
+    .container-fluid
+      .container
+        .left
+          .item.item-header(data-navigate="") Skritter
+        .right
+          if user.id !== 'guest'
+            .item.item-link(data-navigate="dashboard") Dashboard
+          else
+            .item.item-link(data-dialog="login") Login
+  gelato-content
+    #footer-container

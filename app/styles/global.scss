@@ -1,0 +1,31 @@
+@import "variables";
+
+body {
+  background: url("#{$dir-assets}/textures/bg-retina-wood.png") repeat;
+}
+
+gelato-navbar {
+  background-color: $wood8;
+  box-shadow: 0 1px 10px rgba(56, 36, 12, 0.15);
+}
+
+.content-block {
+  background-color: $white1;
+  border-radius: 25px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  margin-bottom: 30px;
+  padding: 15px;
+  position: relative;
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.text-chinese { font-family: "Chinese", "KaiTi", sans-serif; }
+
+.text-japanese { font-family: "Japanese", "DFPKaiSho-Md", sans-serif; }
