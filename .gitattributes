@@ -1,10 +1,13 @@
+# Default
 * text eol=lf
 
+# Images
 *.gif binary
 *.jpg binary
 *.ico binary
 *.png binary
 
+# Fonts
 *.eot binary
 *.otf binary
 *.svg binary
@@ -12,4 +15,7 @@
 *.woff binary
 *.woff2 binary
 
+# Other
+*.jar binary
+*.mp3 binary
 *.zip binary

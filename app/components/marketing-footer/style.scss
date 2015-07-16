@@ -1,0 +1,33 @@
+@import "../../styles/variables";
+
+gelato-component[data-name='marketing-footer'] {
+
+  background: $texture-footer repeat;
+
+  .list {
+    margin-bottom: 75px;
+    a {
+      display: block;
+      color: #8c9196;
+      font-family: $font-muli;
+      font-size: 14px;
+      font-weight: 300;
+    }
+    i {
+      color: #8c9196;
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 300;
+    }
+  }
+
+  .header {
+    color: #b2b5b9;
+    font-family: $font-slab;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 25px;
+    margin-top: 75px;
+  }
+
+}

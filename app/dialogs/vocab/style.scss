@@ -1,0 +1,15 @@
+@import "../../styles/variables";
+
+gelato-dialog[data-name="vocab"] {
+
+  #button-close {
+    cursor: pointer;
+    float: right;
+    font-size: 28px;
+    margin-right: 20px;
+    margin-top: 10px;
+  }
+
+  .modal-body { padding: 0; }
+
+}
