@@ -1,12 +1,12 @@
 # Directories #
 /.idea
 /.sass-cache
-/app/gelato
 /bower_components
 /cordova
 /nbproject
 /node_modules
 /public
+/vendor/gelato
 
 # Files #
 .DS_Store

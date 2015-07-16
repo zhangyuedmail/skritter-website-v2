@@ -1,7 +1,7 @@
 {
   "name": "skritter-html5",
   "description": "Learn to write Chinese and Japanese characters.",
-  "author": "Inkren, LLC",
+  "author": "Inkren, Inc",
   "version": "0.0.1",
   "license": "MIT",
   "framework": "gelato",
@@ -12,7 +12,6 @@
   "dependencies": {
     "auto-reload-brunch": "1.8.0",
     "clean-css-brunch": "1.7.2",
-    "coffee-script-brunch": "1.8.2",
     "css-brunch": "1.7.0",
     "jade-brunch": "1.8.1",
     "javascript-brunch": "1.7.1",

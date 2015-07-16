@@ -2,45 +2,18 @@
   "name": "skritter-html5",
   "main": "public/js/app.js",
   "dependencies": {
-    "async": "1.3.0",
-    "backbone": "1.2.1",
-    "bootstrap": "3.3.5",
     "d3": "3.5.6",
     "fontawesome": "4.3.0",
-    "jquery": "2.1.4",
-    "lodash": "3.10.0",
     "moment": "2.10.3",
     "moment-timezone": "0.4.0",
     "raygun4js": "1.18.4"
   },
   "overrides": {
-    "async": {
-      "main": "lib/async.js"
-    },
-    "backbone": {
-      "dependencies": {
-        "lodash": "*",
-        "jquery": "*"
-      },
-      "main": "backbone.js"
-    },
-    "bootstrap": {
-      "main": [
-        "dist/css/bootstrap.css",
-        "dist/js/bootstrap.js"
-      ]
-    },
     "d3": {
       "main": "d3.js"
     },
     "fontawesome": {
       "main": "css/font-awesome.css"
-    },
-    "jquery": {
-      "main": "dist/jquery.js"
-    },
-    "lodash": {
-      "main": "lodash.js"
     },
     "moment": {
       "main": "moment.js"

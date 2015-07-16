@@ -13,27 +13,25 @@ exports.config =
         'js/libraries.js': /^(bower_components|vendor)/
       order:
         before: [
-          'bower_components/jquery/dist/jquery.js',
-          'bower_components/lodash/lodash.js',
-          'bower_components/backbone/backbone.js',
-          'bower_components/bootstrap/dist/js/bootstrap.js',
+          'vendor/gelato/js/gelato.js',
           'bower_components/moment/moment.js',
           'bower_components/moment-timezone/moment-timezone.js',
           'bower_components/d3/d3.js',
-          'vendor/backbone/backbone.routefilter-0.2.0.js',
           'vendor/bootstrap/bootstrap.notify-3.1.3.js',
           'vendor/createjs/createjs.easel-NEXT.min.js',
           'vendor/createjs/createjs.tween-NEXT.min.js',
           'vendor/heatmap/heatmap-3.5.2.js',
           'vendor/highcharts/highcharts-4.1.7.js',
-          'vendor/jquery/jquery.mobile.events-1.4.5.js',
-          'vendor/jquery/jquery.ui.events-1.11.4.js',
           'vendor/keypress/keypress-2.1.1.js'
         ]
     stylesheets:
       joinTo:
         'styles/application.css': /^(app)/
         'styles/libraries.css': /^(bower_components|vendor)/
+      order:
+        before: [
+          'vendor/gelato/styles/gelato.css',
+        ]
     templates:
       joinTo:
         'js/application.js': /^(app)/
