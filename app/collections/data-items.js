@@ -12,6 +12,7 @@ module.exports = GelatoCollection.extend({
      */
     initialize: function() {
         this.fetchingDaily = false;
+        this.fetchingNew = false;
         this.fetchingNext = false;
         this.ignoreBase = null;
         this.sorted = moment().unix();
@@ -75,6 +76,26 @@ module.exports = GelatoCollection.extend({
                 });
             })();
         }
+    },
+    /**
+     * @method fetchNew
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    fetchNew: function(callbackSuccess, callbackError) {
+        var self = this;
+        app.api.postItemAdd({
+            lang: app.get('language')
+        }, function(result) {
+            self.trigger('fetch:new', self);
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess(result);
+            }
+        }, function(error) {
+            if (typeof callbackError === 'function') {
+                callbackError(error);
+            }
+        });
     },
     /**
      * @method fetchNext

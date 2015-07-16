@@ -562,7 +562,33 @@ module.exports = GelatoModel.extend({
             data: JSON.stringify(body)
         }).done(function(data) {
             if (data.statusCode === 200) {
-                callbackSuccess();
+                callbackSuccess(data);
+            } else {
+                callbackError(data);
+            }
+        }).fail(function(error) {
+            callbackError(error);
+        });
+    },
+    /**
+     * @method postItemAdd
+     * @param {Object} [options]
+     * @param {Function} callbackSuccess
+     * @param {Function} callbackError
+     */
+    postItemAdd: function(options, callbackSuccess, callbackError) {
+        $.ajax({
+            url: this.getUrl() + 'items/add' +
+            '?bearer_token=' + this.getToken() +
+            Object.keys(options).map(function(key) {
+                return '&' + key + '=' + options[key];
+            }).join(''),
+            headers: this.getHeaders(),
+            context: this,
+            type: 'POST'
+        }).done(function(data) {
+            if (data.statusCode === 200) {
+                callbackSuccess(data);
             } else {
                 callbackError(data);
             }
