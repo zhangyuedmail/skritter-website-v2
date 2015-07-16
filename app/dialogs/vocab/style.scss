@@ -6,8 +6,16 @@ gelato-dialog[data-name="vocab"] {
     cursor: pointer;
     float: right;
     font-size: 28px;
-    margin-right: 20px;
-    margin-top: 10px;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    z-index: 9999;
+  }
+
+  #loading-spinner {
+    margin: 30px 0;
+    text-align: center;
+    width: 100%;
   }
 
   .modal-body { padding: 0; }

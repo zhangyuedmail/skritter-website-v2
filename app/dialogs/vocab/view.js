@@ -43,6 +43,12 @@ module.exports = GelatoDialog.extend({
         app.closeDialog();
     },
     /**
+     * @method handleLoadVocab
+     */
+    handleLoadVocab: function() {
+        this.$('#loading-spinner').hide();
+    },
+    /**
      * @method remove
      * @returns {Vocabs}
      */
@@ -55,6 +61,8 @@ module.exports = GelatoDialog.extend({
      * @param {String} [vocabId]
      */
     set: function(vocabId) {
+        this.$('#loading-spinner').show();
+        this.listenToOnce(this.viewer, 'load', this.handleLoadVocab);
         this.viewer.load(vocabId);
     }
 });

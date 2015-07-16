@@ -51,15 +51,16 @@ module.exports = GelatoComponent.extend({
         var self = this;
         app.api.fetchVocabs({
             ids: vocabId,
-            include_containing: true,
             include_decomps: true,
             include_heisigs: true,
             include_sentences: true,
             include_strokes: true,
             include_top_mnemonics: true
         }, function(result) {
+            console.log(result);
             app.user.data.add(result);
             self.vocab = app.user.data.vocabs.get(result.Vocabs[0].id);
+            self.trigger('load', self.vocab);
             self.renderFields();
             self.show();
         }, function(error) {
