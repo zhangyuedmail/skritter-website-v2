@@ -1,4 +1,4 @@
-var GelatoCollection = require('gelato/modules/collection');
+var GelatoCollection = require('gelato/collection');
 var DataStroke = require('models/data-stroke');
 var KanaStrokes = require('data/kana-strokes');
 var StrokeShapes = require('data/stroke-shapes');

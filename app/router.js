@@ -1,4 +1,4 @@
-var GelatoRouter = require('gelato/modules/router');
+var GelatoRouter = require('gelato/router');
 
 /**
  * @class Router

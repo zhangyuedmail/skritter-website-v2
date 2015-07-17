@@ -1,4 +1,4 @@
-var GelatoCollection = require('gelato/modules/collection');
+var GelatoCollection = require('gelato/collection');
 var DataParam = require('models/data-param');
 var ParamData = require('data/param-data');
 

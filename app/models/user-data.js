@@ -1,4 +1,4 @@
-var GelatoModel = require('gelato/modules/model');
+var GelatoModel = require('gelato/model');
 var DataDecomps = require('collections/data-decomps');
 var DataItems = require('collections/data-items');
 var DataParams = require('collections/data-params');

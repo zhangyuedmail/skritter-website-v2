@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/modules/component');
+var GelatoComponent = require('gelato/component');
 var PromptCanvas = require('components/prompt-canvas/view');
 var PromptDetails = require('components/prompt-details/view');
 var PromptGrading = require('components/prompt-grading/view');

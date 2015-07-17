@@ -1,4 +1,4 @@
-var GelatoModel = require('gelato/modules/model');
+var GelatoModel = require('gelato/model');
 
 /**
  * @class PromptStroke

@@ -1,4 +1,4 @@
-var GelatoCollection = require('gelato/modules/collection');
+var GelatoCollection = require('gelato/collection');
 var DataItem = require('models/data-item');
 
 /**
@@ -29,6 +29,68 @@ module.exports = GelatoCollection.extend({
      */
     comparator: function(item) {
         return item.id.indexOf(this.ignoreBase) > -1 ? 0 : -item.getReadiness(this.sorted);
+    },
+    /**
+     * @method addNew
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    addNew: function(callbackSuccess, callbackError) {
+        var self = this;
+        var items = [];
+        if (this.fetchingNew) {
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess();
+            }
+        } else {
+            async.series([
+                function(callback) {
+                    self.fetchingNew = true;
+                    app.api.postItemAdd({
+                        lang: app.get('language')
+                    }, function(result) {
+                        items = items.concat(result.Items);
+                        callback();
+                    }, function(error) {
+                        callback(error);
+                    });
+                },
+                function(callback) {
+                    if (items.length) {
+                        app.api.fetchItems({
+                            ids: _.pluck(items, 'id').join('|'),
+                            include_contained: true,
+                            include_decomps: true,
+                            include_sentences: true,
+                            include_strokes: true,
+                            include_top_mnemonics: true,
+                            include_vocabs: true,
+                            lang: app.get('language')
+                        }, function(result) {
+                            app.user.data.add(result);
+                            self.markActive(result.Items);
+                            callback();
+                        }, function(error) {
+                            callback(error);
+                        });
+                    } else {
+                        callback(new Error('No items in queue.'));
+                    }
+                }
+            ], function(error) {
+                self.fetchingNew = false;
+                if (error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                } else {
+                    self.trigger('fetch:new', self);
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess(result);
+                    }
+                }
+            });
+        }
     },
     /**
      * @method clearActive
@@ -76,26 +138,6 @@ module.exports = GelatoCollection.extend({
                 });
             })();
         }
-    },
-    /**
-     * @method fetchNew
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
-     */
-    fetchNew: function(callbackSuccess, callbackError) {
-        var self = this;
-        app.api.postItemAdd({
-            lang: app.get('language')
-        }, function(result) {
-            self.trigger('fetch:new', self);
-            if (typeof callbackSuccess === 'function') {
-                callbackSuccess(result);
-            }
-        }, function(error) {
-            if (typeof callbackError === 'function') {
-                callbackError(error);
-            }
-        });
     },
     /**
      * @method fetchNext

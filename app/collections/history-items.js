@@ -1,4 +1,4 @@
-var GelatoCollection = require('gelato/modules/collection');
+var GelatoCollection = require('gelato/collection');
 var HistoryItem = require('models/history-item');
 
 /**

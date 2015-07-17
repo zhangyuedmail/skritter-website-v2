@@ -1,4 +1,4 @@
-var GelatoPage = require('gelato/modules/page');
+var GelatoPage = require('gelato/page');
 var MarketingFooter = require('components/marketing-footer/view');
 
 /**

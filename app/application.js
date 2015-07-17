@@ -1,6 +1,8 @@
-var GelatoApplication = require('gelato/modules/application');
+var GelatoApplication = require('gelato/application');
 var Api = require('models/api');
 var User = require('models/user');
+var Functions = require('functions');
+var Router = require('router');
 
 /**
  * @class Application
@@ -13,6 +15,8 @@ module.exports = GelatoApplication.extend({
      */
     initialize: function() {
         this.api = new Api();
+        this.fn = Functions;
+        this.router = new Router();
         this.user = new User();
     },
     /**

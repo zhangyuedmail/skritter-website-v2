@@ -1,4 +1,4 @@
-var GelatoModel = require('gelato/modules/model');
+var GelatoModel = require('gelato/model');
 var PromptReviews = require('collections/prompt-reviews');
 var PromptReview = require('models/prompt-review');
 

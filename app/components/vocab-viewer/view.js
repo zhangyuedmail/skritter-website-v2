@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/modules/component');
+var GelatoComponent = require('gelato/component');
 var DictionaryLookup = require('components/dictionary-lookup/view');
 
 /**
@@ -51,6 +51,7 @@ module.exports = GelatoComponent.extend({
         var self = this;
         app.api.fetchVocabs({
             ids: vocabId,
+            include_containing: true,
             include_decomps: true,
             include_heisigs: true,
             include_sentences: true,

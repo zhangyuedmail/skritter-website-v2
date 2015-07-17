@@ -1,4 +1,4 @@
-var GelatoDialog = require('gelato/modules/dialog');
+var GelatoDialog = require('gelato/dialog');
 var VocabViewer = require('components/vocab-viewer/view');
 
 /**

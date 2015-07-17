@@ -1,4 +1,4 @@
-var GelatoDialog = require('gelato/modules/dialog');
+var GelatoDialog = require('gelato/dialog');
 
 /**
  * @class LoginDialog

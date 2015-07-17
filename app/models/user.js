@@ -1,4 +1,4 @@
-var GelatoModel = require('gelato/modules/model');
+var GelatoModel = require('gelato/model');
 var HistoryItems = require('collections/history-items');
 var UserCredentials = require('models/user-credentials');
 var UserData = require('models/user-data');

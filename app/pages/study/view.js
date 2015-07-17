@@ -1,4 +1,4 @@
-var GelatoPage = require('gelato/modules/page');
+var GelatoPage = require('gelato/page');
 var Prompt = require('components/prompt/view');
 
 /**

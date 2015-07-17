@@ -1,4 +1,4 @@
-var GelatoPage = require('gelato/modules/page');
+var GelatoPage = require('gelato/page');
 var DashboardGoal = require('components/dashboard-goal/view');
 var DashboardMonth = require('components/dashboard-month/view');
 var DashboardTotal = require('components/dashboard-total/view');

@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/modules/component');
+var GelatoComponent = require('gelato/component');
 
 /**
  * @class VocablistTable
