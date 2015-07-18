@@ -275,9 +275,11 @@ module.exports = GelatoComponent.extend({
      */
     updateDetailStarred: function() {
         if (this.prompt.reviews.vocab.isStarred()) {
-            this.$('#button-detail-star').css('background-color', 'yellow');
+            this.$('#button-detail-star').removeClass('fa-star-o');
+            this.$('#button-detail-star').addClass('fa-star text-gold');
         } else {
-            this.$('#button-detail-star').css('background-color', '');
+            this.$('#button-detail-star').removeClass('fa-star text-gold');
+            this.$('#button-detail-star').addClass('fa-star-o');
         }
     }
 });

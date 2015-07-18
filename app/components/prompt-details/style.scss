@@ -18,8 +18,10 @@ gelato-component[data-name="prompt-details"] {
     right: 0;
     position: absolute;
     i {
+      color: $green5;
       cursor: pointer;
       float: left;
+      font-size: 24px;
       margin-right: 20px;
     }
   }
