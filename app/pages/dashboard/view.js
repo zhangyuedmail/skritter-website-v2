@@ -41,8 +41,8 @@ module.exports = GelatoPage.extend({
         this.vocablistTable.setElement('#vocablist-table-container').render();
         app.user.data.items.fetchDaily();
         app.user.data.items.fetchNext();
-        app.user.data.stats.fetch();
-        app.user.data.vocablists.fetch();
+        app.user.data.stats.fetchMonth();
+        app.user.data.vocablists.fetchAdding();
         return this;
     },
     /**

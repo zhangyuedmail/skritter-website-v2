@@ -1,5 +1,6 @@
 var GelatoPage = require('gelato/page');
 var Prompt = require('components/prompt/view');
+var StudyToolbar = require('components/study-toolbar/view');
 
 /**
  * @class Study
@@ -13,6 +14,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.counter = 0;
         this.prompt = new Prompt();
+        this.toolbar = new StudyToolbar();
         this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
     },
     /**
@@ -27,11 +29,12 @@ module.exports = GelatoPage.extend({
     template: require('pages/study/template'),
     /**
      * @method render
-     * @returns {GelatoPage}
+     * @returns {Study}
      */
     render: function() {
         this.renderTemplate();
         this.prompt.setElement('#prompt-container').render().hide();
+        this.toolbar.setElement('#toolbar-container').render().hide();
         return this;
     },
     /**
@@ -74,5 +77,15 @@ module.exports = GelatoPage.extend({
         var reviews = item.getPromptReviews();
         this.prompt.set(reviews);
         this.prompt.show();
+        this.toolbar.show();
+    },
+    /**
+     * @method remove
+     * @returns {Study}
+     */
+    remove: function() {
+        this.prompt.remove();
+        this.toolbar.remove();
+        return GelatoPage.prototype.remove.call(this);
     }
 });

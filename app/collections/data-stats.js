@@ -32,11 +32,32 @@ module.exports = GelatoCollection.extend({
         }
     },
     /**
-     * @method fetch
+     * @method fetchDay
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
      */
-    fetch: function(callbackSuccess, callbackError) {
+    fetchDay: function(callbackSuccess, callbackError) {
+        var self = this;
+        app.api.fetchStats({
+            start: moment().format('YYYY-MM-DD')
+        }, function(result) {
+            self.add(result, {merge: true});
+            self.trigger('fetch', self);
+            if (typeof callbackSuccess === 'function') {
+                callbackSuccess();
+            }
+        }, function(error) {
+            if (typeof callbackError === 'function') {
+                callbackError(error);
+            }
+        });
+    },
+    /**
+     * @method fetchMonth
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    fetchMonth: function(callbackSuccess, callbackError) {
         var self = this;
         var momentMonthStart = moment().subtract(4, 'hours').startOf('month');
         var momentMonthEnd = moment().subtract(4, 'hours').endOf('month');
