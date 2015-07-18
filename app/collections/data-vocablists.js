@@ -66,6 +66,55 @@ module.exports = GelatoCollection.extend({
         });
     },
     /**
+     * @method fetchAdding
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    fetchAdding: function(callbackSuccess, callbackError) {
+        var self = this;
+        var ids = [];
+        async.series([
+            function(callback) {
+                (function next(cursor) {
+                    app.api.fetchVocabLists({
+                        cursor: cursor,
+                        fields: 'id',
+                        lang: app.get('language'),
+                        sort: 'adding'
+                    }, function(result) {
+                        var resultIds = _.pluck(result.VocabLists, 'id');
+                        ids = ids.concat(resultIds);
+                        if (result.cursor) {
+                            next(result.cursor);
+                        } else {
+                            callback();
+                        }
+                    }, function(error) {
+                        callback(error);
+                    });
+                })();
+            },
+            function(callback) {
+                self.fetchById(ids, function() {
+                    callback();
+                }, function(error) {
+                    callback(error);
+                });
+            }
+        ], function(error) {
+            if (error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            } else {
+                self.trigger('fetch', self);
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
+            }
+        });
+    },
+    /**
      * @method fetchById
      * @param {Array|String} id
      * @param {Function} [callbackSuccess]
