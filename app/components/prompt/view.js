@@ -74,6 +74,11 @@ module.exports = GelatoComponent.extend({
         } else {
             this.$('#navigate-left').show();
         }
+        if (this.reviews.isNew()) {
+            this.showNewBanner();
+        } else {
+            this.hideNewBanner();
+        }
         return this;
     },
     /**
@@ -489,6 +494,12 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method hideNewBanner
+     */
+    hideNewBanner: function() {
+        this.$('#prompt-newness').hide();
+    },
+    /**
      * @method next
      */
     next: function() {
@@ -557,6 +568,12 @@ module.exports = GelatoComponent.extend({
             this.toolbar.disableShow();
         }
         return this;
+    },
+    /**
+     * @method showNewBanner
+     */
+    showNewBanner: function() {
+        this.$('#prompt-newness').show();
     },
     /**
      * @method startTeaching

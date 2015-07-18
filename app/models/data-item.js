@@ -153,5 +153,12 @@ module.exports = GelatoModel.extend({
      */
     isJapanese: function() {
         return this.get('lang') === 'ja';
+    },
+    /**
+     * @method isNew
+     * @returns {Boolean}
+     */
+    isNew: function() {
+        return !this.get('reviews');
     }
 });

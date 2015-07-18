@@ -192,6 +192,13 @@ module.exports = GelatoCollection.extend({
         return this.item.part === 'tone';
     },
     /**
+     * @method isNew
+     * @returns {Boolean}
+     */
+    isNew: function() {
+        return !this.item.reviews;
+    },
+    /**
      * @method next
      * @return {Boolean}
      */

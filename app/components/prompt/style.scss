@@ -19,7 +19,14 @@ gelato-component[data-name="prompt"] {
     float: left;
     padding-left: 95px;
     padding-right: 95px;
+    position: relative;
     width: 640px;
+  }
+
+  #prompt-newness {
+    left: 0;
+    position: absolute;
+    top: 0;
   }
 
   #panel-right {
@@ -29,6 +36,7 @@ gelato-component[data-name="prompt"] {
     float: right;
     height: 640px;
     padding: 42px 45px;
+    position: relative;
     width: 640px;
   }
 
