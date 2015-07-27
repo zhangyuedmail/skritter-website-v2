@@ -1,0 +1,26 @@
+gelato-page(data-name='vocablist-queue')
+  gelato-navbar.fixed-top
+    .container-fluid
+      .container
+        .left
+          .item.item-header(data-navigate="dashboard") Skritter
+  gelato-content
+    .container
+      .content-block
+        .row
+          .col-md-3
+            #section-menu
+              button.btn.btn-fixed.btn-success(data-navigate="vocablist/create") Create new list
+              .options
+                .active Study Queue
+                div(data-navigate="vocablist/browse") Browse Lists
+                div(data-navigate="vocablist/browse") Browse Lists
+                div(data-navigate="vocablist/my-lists") My Lists
+                div(data-navigate="vocablist/chinesepod") ChinesePod
+          .col-md-9
+            #section-content
+              .title Study Queue
+              .header Adding words from
+              #adding-container
+              .header Reviewing words from
+              #reviewing-container

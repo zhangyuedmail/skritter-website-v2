@@ -2,10 +2,7 @@ project = require('./package.json')
 
 exports.config =
   conventions:
-    ignored: [
-      'app/styles/variables.scss',
-      'bower_components/raygun4js/dist/raygun.js'
-    ]
+    ignored: ['app/styles/variables.scss']
   files:
     javascripts:
       joinTo:
@@ -17,7 +14,6 @@ exports.config =
           'bower_components/moment/moment.js',
           'bower_components/moment-timezone/moment-timezone.js',
           'bower_components/d3/d3.js',
-          'vendor/bootstrap/bootstrap.notify-3.1.3.js',
           'vendor/createjs/createjs.easel-NEXT.min.js',
           'vendor/createjs/createjs.tween-NEXT.min.js',
           'vendor/heatmap/heatmap-3.5.2.js',

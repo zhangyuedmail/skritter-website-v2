@@ -39,6 +39,7 @@ module.exports = GelatoPage.extend({
         this.dashboardMonth.setElement('#dashboard-month-container').render();
         this.dashboardTotal.setElement('#dashboard-total-container').render();
         this.vocablistTable.setElement('#vocablist-table-container').render();
+        this.vocablistTable.setType('adding');
         app.user.data.items.fetchDaily();
         app.user.data.items.fetchNext();
         app.user.data.stats.fetchMonth();

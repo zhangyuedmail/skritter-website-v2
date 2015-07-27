@@ -2,7 +2,7 @@ var GelatoPage = require('gelato/page');
 var VocabViewer = require('components/vocab-viewer/view');
 
 /**
- * @class Vocabs
+ * @class Vocab
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
      * @property title
      * @type {String}
      */
-    title: 'Vocabs - Skritter',
+    title: 'Vocab - Skritter',
     /**
      * @property template
      * @type {Function}
@@ -25,7 +25,7 @@ module.exports = GelatoPage.extend({
     template: require('pages/vocabs/template'),
     /**
      * @method render
-     * @returns {Vocabs}
+     * @returns {Vocab}
      */
     render: function() {
         this.renderTemplate();
@@ -41,7 +41,7 @@ module.exports = GelatoPage.extend({
     },
     /**
      * @method remove
-     * @returns {Vocabs}
+     * @returns {Vocab}
      */
     remove: function() {
         this.viewer.remove();

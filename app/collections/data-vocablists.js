@@ -134,6 +134,35 @@ module.exports = GelatoCollection.extend({
         });
     },
     /**
+     * @method fetchOfficial
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    fetchOfficial: function(callbackSuccess, callbackError) {
+        var self = this;
+        (function next(cursor) {
+            app.api.fetchVocabLists({
+                cursor: cursor,
+                lang: app.getLanguage(),
+                sort: 'official'
+            }, function(result) {
+                self.add(result.VocabLists);
+                self.trigger('fetch', self);
+                if (result.cursor) {
+                    next(result.cursor);
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess(self);
+                    }
+                }
+            }, function(error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
+            });
+        })();
+    },
+    /**
      * @method getAdding
      * @returns {Array}
      */

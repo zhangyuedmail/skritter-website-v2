@@ -10,8 +10,9 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        this.fields = {};
+        this.fields = {name: 'Name', progress: 'Progress'};
         this.lists = [];
+        this.type = null;
         this.listenTo(app.user.data.vocablists, 'fetch', this.update);
     },
     /**
@@ -141,11 +142,29 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method setType
+     * @param {String} type
+     * @returns {VocablistTable}
+     */
+    setType: function(type) {
+        this.type = type;
+        this.update();
+        return this;
+    },
+    /**
      * @method update
      */
     update: function() {
-        this.fields = {name: '', progress: ''};
-        this.lists = app.user.data.vocablists.getAdding();
+        switch (this.type) {
+            case 'adding':
+                this.lists = app.user.data.vocablists.getAdding();
+                break;
+            case 'reviewing':
+                this.lists = app.user.data.vocablists.getReviewing();
+                break;
+            default:
+                this.lists = app.user.data.vocablists.models;
+        }
         this.renderTable();
     }
 });

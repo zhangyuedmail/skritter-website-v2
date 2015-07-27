@@ -18,22 +18,45 @@ module.exports = GelatoRouter.extend({
         'dashboard': 'navigateDashboard',
         'login': 'navigateLogin',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
-        'vocabs(/:vocabId)': 'navigateVocabs',
+        'vocab(/:vocabId)': 'navigateVocab',
+        'vocablist/browse': 'navigateVocablistBrowse',
+        'vocablist/queue': 'navigateVocablistQueue',
         '*route': 'navigateHome'
     },
     /**
      * @method navigateDashboard
      */
     navigateDashboard: function() {
-        this.page = new (require('pages/dashboard/view'));
-        this.page.render();
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/dashboard/view'));
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
     },
     /**
      * @method navigateHome
      */
     navigateHome: function() {
-        this.page = new (require('pages/marketing-home/view'));
-        this.page.render();
+        //TODO: enable normal marketing routes after testing
+        //this.page = new (require('pages/marketing-home/view'));
+        //this.page.render();
+        if (app.user.isLoggedIn()) {
+            this.navigateDashboard();
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateLogin
+     */
+    navigateLogin: function() {
+        if (app.user.isLoggedIn()) {
+            this.navigateHome();
+        } else {
+            this.page = new (require('pages/login/view'));
+            this.page.render();
+        }
     },
     /**
      * @method navigateStudy
@@ -41,15 +64,45 @@ module.exports = GelatoRouter.extend({
      * @param {String} [sectionId]
      */
     navigateStudy: function(listId, sectionId) {
-        this.page = new (require('pages/study/view'));
-        this.page.render().load(listId, sectionId);
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/study/view'));
+            this.page.render().load(listId, sectionId);
+        } else {
+            this.navigateHome();
+        }
     },
     /**
-     * @method navigateVocabs
+     * @method navigateVocab
      * @param {String} [vocabId]
      */
-    navigateVocabs: function(vocabId) {
-        this.page = new (require('pages/vocabs/view'));
-        this.page.render().set(vocabId);
+    navigateVocab: function(vocabId) {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/vocab/view'));
+            this.page.render().set(vocabId);
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateVocablistBrowse
+     */
+    navigateVocablistBrowse: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/vocablist-browse/view'));
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateVocablistQueue
+     */
+    navigateVocablistQueue: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/vocablist-queue/view'));
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
     }
 });
