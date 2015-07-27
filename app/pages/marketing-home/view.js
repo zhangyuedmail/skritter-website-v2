@@ -28,7 +28,7 @@ module.exports = GelatoPage.extend({
      * @returns {MarketingHome}
      */
     render: function() {
-        this.renderTemplate(app.getTemplate());
+        this.renderTemplate();
         this.footer.setElement('#footer-container').render();
         return this;
     },
