@@ -16,7 +16,7 @@ exports.config =
           'bower_components/d3/d3.js',
           'vendor/createjs/createjs.easel-NEXT.min.js',
           'vendor/createjs/createjs.tween-NEXT.min.js',
-          'vendor/heatmap/heatmap-3.5.3.js',
+          'vendor/heatmap/heatmap-3.5.6.js',
           'vendor/highcharts/highcharts-4.1.7.js',
           'vendor/keypress/keypress-2.1.1.js'
         ]
