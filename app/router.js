@@ -21,7 +21,8 @@ module.exports = GelatoRouter.extend({
         'vocab(/:vocabId)': 'navigateVocab',
         'vocablist/browse': 'navigateVocablistBrowse',
         'vocablist/queue': 'navigateVocablistQueue',
-        '*route': 'navigateHome'
+        '': 'navigateHome',
+        '*route': 'navigateNotFound'
     },
     /**
      * @method navigateDashboard
@@ -104,5 +105,12 @@ module.exports = GelatoRouter.extend({
         } else {
             this.navigateHome();
         }
+    },
+    /**
+     * @method navigateNotFound
+     */
+    navigateNotFound: function() {
+        this.page = new (require('pages/not-found/view'));
+        this.page.render();
     }
 });
