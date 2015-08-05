@@ -33,14 +33,32 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-login': 'handleClickLogin'
+        'keyup #login-password': 'handleKeyUpLoginPassword',
+        'vclick #button-login': 'handleClickLoginButton'
     },
     /**
-     * @method handleClickLogin
+     * @method handleClickLoginButton
      * @param {Event} event
      */
-    handleClickLogin: function(event) {
+    handleClickLoginButton: function(event) {
         event.preventDefault();
+        this.handleLogin(event);
+    },
+    /**
+     * @method handleKeyUpLoginPassword
+     * @param {Event} event
+     */
+    handleKeyUpLoginPassword: function(event) {
+        event.preventDefault();
+        if (event.which === 13 || event.keyCode === 13) {
+            this.handleLogin(event);
+        }
+    },
+    /**
+     * @method handleLogin
+     * @param {Event} event
+     */
+    handleLogin: function(event) {
         var self = this;
         var password = this.$('#login-password').val();
         var username = this.$('#login-username').val();
