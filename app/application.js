@@ -68,6 +68,16 @@ module.exports = GelatoApplication.extend({
         return this.get('language') === 'ja';
     },
     /**
+     * @method sendRaygunTestError
+     */
+    sendRaygunTestError: function() {
+        try {
+            throw new Error('TEST ERROR');
+        } catch(error) {
+            Raygun.send(error);
+        }
+    },
+    /**
      * @method start
      */
     start: function() {
