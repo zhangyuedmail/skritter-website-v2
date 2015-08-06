@@ -41,6 +41,7 @@ module.exports = GelatoModel.extend({
         var self = this;
         app.api.fetchUsers(app.user.id, null, function(data) {
             self.set(data, {merge: true});
+            self.updateRaygun();
             if (typeof callbackSuccess === 'function') {
                 callbackSuccess();
             }
@@ -60,6 +61,26 @@ module.exports = GelatoModel.extend({
         return {type: type, value: goal[type]};
     },
     /**
+     * @method getRaygunTags
+     * @returns {Array}
+     */
+    getRaygunTags: function() {
+        var tags = [];
+        if (app.isChinese()) {
+            tags.push('chinese');
+            if (this.get('reviewSimplified')) {
+                tags.push('simplified');
+            }
+            if (this.get('reviewTraditional')) {
+                tags.push('traditional')
+            }
+        }
+        if (app.isJapanese()) {
+            tags.push('japanese')
+        }
+        return tags;
+    },
+    /**
      * @method isAudioEnabled
      * @returns {Boolean}
      */
@@ -77,6 +98,7 @@ module.exports = GelatoModel.extend({
             if (app.get('language') === 'undefined') {
                 app.set('language', this.get('targetLang'));
             }
+            this.updateRaygun();
         }
         return this;
     },
@@ -89,6 +111,7 @@ module.exports = GelatoModel.extend({
         var self = this;
         app.api.putUser(this.toJSON(), function(result) {
             self.set(result, {merge: true, silent: true});
+            self.updateRaygun();
             self.cache();
             if (typeof callbackSuccess === 'function') {
                 callbackSuccess(self);
@@ -115,5 +138,12 @@ module.exports = GelatoModel.extend({
         this.trigger('change:goals', this);
         this.save();
         return this;
+    },
+    /**
+     * @method updateRaygun
+     */
+    updateRaygun: function() {
+        Raygun.setUser(this.get('name'), false, this.get('email'));
+        Raygun.withTags(this.getRaygunTags());
     }
 });
