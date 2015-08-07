@@ -6,15 +6,117 @@ gelato-component[data-name='vocablist-table'] {
   font-family: $font-muli;
   font-size: 16px;
   font-weight: 300;
-  padding: 0 15px;
 
-  table {
-    thead { display: none; }
-    tbody {
-      td { border: none; }
-      tr { cursor: pointer; }
+  #header-row {
+    background: #f2f2f6;
+    .glyphicon {
+      margin-left: 10px;
+      font-size: 10px;
     }
-    .field-progress { width: 50%; }
+
+    .table-sort.chosen {
+      font-weight: bold;
+    }
+    .table-sort {
+      cursor: pointer;
+      color: $grey9;
+    }
+  }
+
+  .row {
+    clear: both;
+    .col-md-6 {
+      padding-left: 40px;
+      padding-right: 60px;
+    }
+    .col-md-3 {
+      white-space: nowrap;
+      .progress {
+        margin-bottom: 0;
+      }
+      .progress-bar {
+        background-color: $grey1;
+      }
+    }
+    .col-md-3, .col-md-6 {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+    &.odd-row {
+      background-color: $white1;
+    }
+    &.even-row {
+      background-color: $white2;
+    }
+
+    .add-to-queue-link .glyphicon {
+      margin-right: 5px;
+    }
+  }
+
+  #grid {
+    .col-md-3 {
+      margin-bottom: 40px;
+    }
+
+    .grid-tile {
+      width: 90%;
+      position: relative;
+      height: 250px;
+      overflow: hidden;
+      .header {
+        padding: 11px;
+        opacity: 0.5;
+        color: $white2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(25,28,32, 0.85);
+        z-index: 2;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        z-index: 1;
+      }
+      .background {
+        background: #e6e4ec;
+        text-align: center;
+        .glyphicon {
+          font-size: 100px;
+        }
+        position: absolute;
+        padding-top: 90px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+      }
+      .footer {
+        padding: 11px;
+        color: $white2;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(25,28,32,0.85);
+        opacity: 0;
+        z-index: 1;
+      }
+      &:hover {
+        .header, .footer {
+          opacity: 1;
+        }
+      }
+
+    }
+  }
+
+  .add-to-queue-link {
+    cursor: pointer;
   }
 
 }

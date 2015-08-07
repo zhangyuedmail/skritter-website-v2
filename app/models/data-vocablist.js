@@ -25,6 +25,19 @@ module.exports = GelatoModel.extend({
         return $.extend(this.changed, {id: this.id});
     },
     /**
+     * @method getPopularity
+     * @returns {Number}
+     */
+    getPopularity: function() {
+        var peopleStudying = this.get('peopleStudying');
+        var CEIL = 2000;
+        if (peopleStudying === 0)
+            return 0;
+        if (peopleStudying >= 2000)
+            return 1;
+        return Math.pow(peopleStudying/CEIL, 0.3);
+    },
+    /**
      * @method getProgress
      * @returns {Number}
      */

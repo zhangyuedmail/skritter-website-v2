@@ -1,4 +1,50 @@
 gelato-component(data-name='vocablist-table')
-  table.table
-    thead
-    tbody
+  if view.layout === 'list'
+    #header-row.row
+      .col-md-6
+        #title-sort.table-sort(class=view.sort==='title' ? 'chosen' : '')
+          span Title
+          span.glyphicon.glyphicon-chevron-down
+      .col-md-3
+        #popularity-sort.table-sort(class=view.sort==='popularity' ? 'chosen' : '')
+          span Popularity
+          span.glyphicon.glyphicon-chevron-down
+      .col-md-3
+
+    for list, i in view.lists
+      .row(class=i%2 ? 'even-row' : 'odd-row')
+        .col-md-6
+          span= list.get('name')
+        .col-md-3
+          .progress(style="width:"+(100*list.getPopularity())+'%')
+            .progress-bar(style="width:100%")
+
+        .col-md-3
+          if list.get('studyingMode') === 'not studying'
+            span.add-to-queue-link(data-vocablist-id=list.id)
+              span.glyphicon.glyphicon-plus-sign.text-success
+              span Add to queue
+          else
+            span= _.capitalize(list.get('studyingMode'))
+
+
+  if view.layout === 'grid'
+    #grid
+      for list, i in view.lists
+        .col-md-3
+          .grid-tile
+            .header.text-center.text-capitalize= list.get('name')
+            img(src='http://www.skritter.com/vocab/listimage?list=' + list.id)
+            .background
+              span.glyphicon.glyphicon-book
+            .footer.text-center
+              if list.get('studyingMode') === 'not studying'
+                span.add-to-queue-link(data-vocablist-id=list.id)
+                  span.glyphicon.glyphicon-plus-sign.text-success
+                  span Add to queue
+              else
+                span= _.capitalize(list.get('studyingMode'))
+        if i % 4 === 3
+          .clearfix
+      .clearfix
+    .clearfix

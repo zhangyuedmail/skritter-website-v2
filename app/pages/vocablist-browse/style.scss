@@ -4,6 +4,10 @@ gelato-page[data-name='vocablist-browse'] {
 
   .content-block { background-color: #f2f2f6; }
 
+  .col-md-9 {
+    background-color: #fbfafc;
+  }
+
   #section-content {
     background-color: $white1; //TODO: check color
     border-bottom-right-radius: 25px;
@@ -29,6 +33,26 @@ gelato-page[data-name='vocablist-browse'] {
         border-top-left-radius: 25px;
       }
       .input-group-addon { background-color: transparent; }
+    }
+
+    .glyphicon.layout-selector {
+      font-size: 38px;
+      color: $grey1;
+      cursor: pointer;
+      &.chosen {
+        color: $grey5;
+      }
+    }
+    .form-inline {
+      margin-top: 15px;
+      color: $grey4;
+      label {
+        margin-right: 10px;
+      }
+      input {
+        margin-right: 10px;
+        margin-left: 20px;
+      }
     }
     .header {
       font-family: $font-muli;
