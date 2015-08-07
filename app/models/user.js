@@ -48,9 +48,14 @@ module.exports = GelatoModel.extend({
         var user = app.getSetting('user');
         if (user) {
             this.set('id', user);
+            Raygun.setUser(this.id, false);
             this.credentials.load();
             this.settings.load();
             this.settings.fetch();
+
+        } else {
+            this.set('id', 'guest');
+            Raygun.setUser(this.id, true);
         }
     },
     /**

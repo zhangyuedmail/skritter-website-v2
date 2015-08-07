@@ -14,6 +14,8 @@ module.exports = GelatoApplication.extend({
      * @constructor
      */
     initialize: function() {
+        Raygun.init(this.getRaygunKey()).attach();
+        Raygun.setVersion(this.get('version'));
         this.api = new Api();
         this.fn = Functions;
         this.router = new Router();
@@ -29,6 +31,8 @@ module.exports = GelatoApplication.extend({
         language: '{!application-language!}',
         lastReviewCheck: moment().unix(),
         name: '{!application-name!}',
+        raygunDevelopmentKey: 'pnuASksvclqTdDmVXWYRAA==',
+        raygunProductionKey: 'zs/KbhbvZ3sX1Qq9bdQ9Zw==',
         timestamp: '{!timestamp!}',
         version: '{!application-version!}'
     },
@@ -38,6 +42,16 @@ module.exports = GelatoApplication.extend({
      */
     getLanguage: function() {
         return this.get('language');
+    },
+    /**
+     * @method getRaygunKey
+     * @returns {String}
+     */
+    getRaygunKey: function() {
+        if (this.isProduction()) {
+            return this.get('raygunProductionKey');
+        }
+        return this.get('raygunDevelopmentKey');
     },
     /**
      * @method isChinese
@@ -54,10 +68,20 @@ module.exports = GelatoApplication.extend({
         return this.get('language') === 'ja';
     },
     /**
+     * @method sendRaygunTestError
+     */
+    sendRaygunTestError: function() {
+        try {
+            throw new Error('TEST ERROR');
+        } catch(error) {
+            Raygun.send(error);
+        }
+    },
+    /**
      * @method start
      */
     start: function() {
         this.user.load();
-        Backbone.history.start({pushState: true});
+        this.router.start();
     }
 });
