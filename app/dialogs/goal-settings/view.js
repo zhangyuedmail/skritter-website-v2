@@ -40,7 +40,7 @@ module.exports = GelatoDialog.extend({
      */
     handleClickClose: function(event) {
         event.preventDefault();
-        app.closeDialog();
+        this.close();
     },
     /**
      * @method handleClickSave
@@ -51,14 +51,13 @@ module.exports = GelatoDialog.extend({
         var type = this.$('input[name="goal-type"]:checked').val();
         var value = this.$('#goal-value').val();
         app.user.settings.setGoal(type, value);
-        app.closeDialog();
+        this.close();
     },
     /**
      * @method updateSettings
      */
     updateSettings: function() {
         var goal = app.user.settings.getGoal();
-        console.log(goal);
         this.$('input[value="' + goal.type + '"]').prop('checked', true);
         this.$('#goal-value').val(goal.value);
     }

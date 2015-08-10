@@ -20,7 +20,7 @@ module.exports = GelatoDialog.extend({
     template: require('dialogs/vocab/template'),
     /**
      * @method render
-     * @returns {Vocabs}
+     * @returns {VocabDialog}
      */
     render: function() {
         this.renderTemplate();
@@ -40,7 +40,7 @@ module.exports = GelatoDialog.extend({
      */
     handleClickButtonClose: function(event) {
         event.preventDefault();
-        app.closeDialog();
+        this.close();
     },
     /**
      * @method handleLoadVocab
@@ -49,20 +49,20 @@ module.exports = GelatoDialog.extend({
         this.$('#loading-spinner').hide();
     },
     /**
+     * @method set
+     * @param {String} [vocabId]
+     */
+    load: function(vocabId) {
+        this.$('#loading-spinner').show();
+        this.listenToOnce(this.viewer, 'load', this.handleLoadVocab);
+        this.viewer.load(vocabId);
+    },
+    /**
      * @method remove
-     * @returns {Vocabs}
+     * @returns {VocabDialog}
      */
     remove: function() {
         this.viewer.remove();
         return GelatoDialog.prototype.remove.call(this);
-    },
-    /**
-     * @method set
-     * @param {String} [vocabId]
-     */
-    set: function(vocabId) {
-        this.$('#loading-spinner').show();
-        this.listenToOnce(this.viewer, 'load', this.handleLoadVocab);
-        this.viewer.load(vocabId);
     }
 });

@@ -1,4 +1,5 @@
 var GelatoComponent = require('gelato/component');
+var VocabDialog = require('dialogs/vocab/view');
 
 /**
  * @class PromptDetails
@@ -104,8 +105,8 @@ module.exports = GelatoComponent.extend({
      */
     handleClickDetailInfo: function(event) {
         event.preventDefault();
-        app.openDialog('vocab');
-        app.dialog.set(this.prompt.reviews.vocab.id);
+        this.dialog = new VocabDialog();
+        this.dialog.open().load(this.prompt.reviews.vocab.id);
     },
     /**
      * @method handleClickDetailStar

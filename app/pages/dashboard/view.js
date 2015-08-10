@@ -3,6 +3,7 @@ var DashboardGoal = require('components/dashboard-goal/view');
 var DashboardMonth = require('components/dashboard-month/view');
 var DashboardTotal = require('components/dashboard-total/view');
 var VocablistTable = require('components/vocablist-table/view');
+var GoalSettingsDialog = require('dialogs/goal-settings/view');
 
 /**
  * @class Dashboard
@@ -45,6 +46,22 @@ module.exports = GelatoPage.extend({
         app.user.data.stats.fetchMonth();
         app.user.data.vocablists.fetchAdding();
         return this;
+    },
+    /**
+     * @property events
+     * @type {Object}
+     */
+    events: {
+        'vclick #button-goal-settings': 'handleClickGoalSettings'
+    },
+    /**
+     * @method handleClickGoalSettings
+     * @param {Object} event
+     */
+    handleClickGoalSettings: function(event) {
+        event.preventDefault();
+        this.dialog = new GoalSettingsDialog();
+        this.dialog.open();
     },
     /**
      * @method remove
