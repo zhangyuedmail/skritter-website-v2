@@ -1,0 +1,44 @@
+gelato-page(data-name='settings-study')
+  gelato-navbar.fixed-top
+    .container-fluid
+      .container
+        .left
+          .item.item-header(data-navigate="dashboard") Skritter
+  gelato-content
+    .container
+      .content-block
+        .row
+          .col-md-3
+            #section-menu
+              .options
+                .header Account
+                div(data-navigate="settings/general") General
+                div(data-navigate="settings/study") Study
+                .header Billing
+                div(data-navigate="settings/billing-history") Billing history
+                div(data-navigate="settings/subscription") Subscription
+          .col-md-9
+            #section-content
+              .title General Settings
+              form.form-horizontal
+                .form-group
+                  label.col-sm-2.control-label(for="field-target-language") Target language
+                  .col-sm-10
+                    select#field-target-language.form-control
+                      option Chinese
+                      option Japanese
+                .form-group
+                  label.col-sm-2.control-label(for="field-source-language") Source language
+                  .col-sm-10
+                    select#field-source-language.form-control
+                      option English
+                .form-group
+                  label.col-sm-2.control-label(for="field-style") Character style
+                  .col-sm-10
+                    select#field-style.form-control
+                      option Simplified
+                      option Traditional
+                      option Both
+                .form-group
+                  .col-sm-12
+                    button.btn.btn-fixed.btn-success(type="submit") Sign in

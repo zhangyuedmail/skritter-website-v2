@@ -1,0 +1,38 @@
+gelato-page(data-name='settings-general')
+  gelato-navbar.fixed-top
+    .container-fluid
+      .container
+        .left
+          .item.item-header(data-navigate="dashboard") Skritter
+  gelato-content
+    .container
+      .content-block
+        .row
+          .col-md-3
+            #section-menu
+              .options
+                .header Account
+                div(data-navigate="settings/general") General
+                div(data-navigate="settings/study") Study
+                .header Billing
+                div(data-navigate="settings/billing-history") Billing history
+                div(data-navigate="settings/subscription") Subscription
+          .col-md-9
+            #section-content
+              .title General Settings
+              form.form-horizontal
+                .form-group
+                  label.col-sm-2.control-label(for="field-username") Username
+                  .col-sm-10
+                    input#field-username.form-control(type="text", placeholder="")
+                .form-group
+                  label.col-sm-2.control-label(for="field-display-name") Display name
+                  .col-sm-10
+                    input#field-displayname.form-control(type="text", placeholder="")
+                .form-group
+                  label.col-sm-2.control-label(for="field-email") Email
+                  .col-sm-10
+                    input#field-email.form-control(type="email", placeholder="")
+                .form-group
+                  .col-sm-12
+                    button.btn.btn-fixed.btn-success(type="submit") Sign in
