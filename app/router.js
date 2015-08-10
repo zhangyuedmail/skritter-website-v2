@@ -17,6 +17,8 @@ module.exports = GelatoRouter.extend({
     routes: {
         'dashboard': 'navigateDashboard',
         'login': 'navigateLogin',
+        'settings/general': 'navigateSettingsGeneral',
+        'settings/study': 'navigateSettingsStudy',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'vocab(/:vocabId)': 'navigateVocab',
         'vocablist/browse': 'navigateVocablistBrowse',
@@ -57,6 +59,28 @@ module.exports = GelatoRouter.extend({
         } else {
             this.page = new (require('pages/login/view'));
             this.page.render();
+        }
+    },
+    /**
+     * @method navigateSettingsGeneral
+     */
+    navigateSettingsGeneral: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/settings-general/view'));
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateSettingsStudy
+     */
+    navigateSettingsStudy: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/settings-study/view'));
+            this.page.render();
+        } else {
+            this.navigateHome();
         }
     },
     /**
