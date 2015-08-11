@@ -1,4 +1,5 @@
 var GelatoPage = require('gelato/page');
+var LoadingDialog = require('dialogs/loading/view');
 var Prompt = require('components/prompt/view');
 var StudyToolbar = require('components/study-toolbar/view');
 
@@ -61,11 +62,14 @@ module.exports = GelatoPage.extend({
      */
     load: function(listId, sectionId) {
         if (app.user.data.items.getNext()) {
-            app.closeDialog();
+            if (this.dialog) {
+                this.dialog.close();
+            }
             this.loadNext();
         } else {
             this.listenToOnce(app.user.data.items, 'fetch:next', $.proxy(this.load, this));
-            app.openDialog('loading');
+            this.dialog = new LoadingDialog();
+            this.dialog.open();
             app.user.data.items.fetchNext();
         }
     },

@@ -71,10 +71,10 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method remove
-     * @returns {Vocabs}
+     * @returns {VocabViewer}
      */
     remove: function() {
         this.lookup.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return GelatoComponent.prototype.remove.call(this);
     }
 });
