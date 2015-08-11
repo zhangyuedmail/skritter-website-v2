@@ -48,6 +48,9 @@ module.exports = GelatoModel.extend({
         var sections = this.get('sections');
         var currentIndex = this.get('currentIndex') || 0;
         var currentSection = this.get('currentSection') || sections[0].id;
+        if (this.get('studyingMode') === 'finished') {
+            return 100;
+        }
         for (var i = 0, length = sections.length; i < length; i++) {
             var section = sections[i];
             if (this.get('sectionsSkipping').indexOf(section.id) > -1) {

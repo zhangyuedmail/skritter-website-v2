@@ -1,0 +1,23 @@
+gelato-component(data-name='vocablist-review-table')
+  for list, i in view.lists
+    .row(data-list-id=list.id)
+      .col-md-3
+        span= list.get('name')
+      .col-md-3
+        .progress
+          .progress-bar(style="width:"+(list.getProgress())+'%')
+
+      .col-md-2
+        a(href="/study/"+list.id) Study List
+
+      .col-md-2
+        if list.get('studyingMode') === 'reviewing'
+          a.restart-adding-link Restart Adding
+        if list.get('studyingMode') === 'finished'
+          span Finished
+
+      .col-md-1
+        span.glyphicon.glyphicon-cog.list-settings-span
+
+      .col-md-1
+        span.glyphicon.glyphicon-remove

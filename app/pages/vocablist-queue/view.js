@@ -1,5 +1,6 @@
 var GelatoPage = require('gelato/page');
-var VocablistTable = require('components/vocablist-table/view');
+var VocablistAddTable = require('components/vocablist-add-table/view');
+var VocablistReviewTable = require('components/vocablist-review-table/view');
 
 /**
  * @class VocablistQueue
@@ -11,8 +12,8 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.addingTable = new VocablistTable();
-        this.reviewingTable = new VocablistTable();
+        this.addingTable = new VocablistAddTable();
+        this.reviewingTable = new VocablistReviewTable();
     },
     /**
      * @property title
@@ -32,8 +33,6 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.addingTable.setElement('#adding-container').render();
         this.reviewingTable.setElement('#reviewing-container').render();
-        this.addingTable.setType('adding');
-        this.reviewingTable.setType('reviewing');
         app.user.data.vocablists.fetch();
         return this;
     },

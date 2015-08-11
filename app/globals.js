@@ -1,5 +1,5 @@
 module.exports = {
-    app: app.toJSON(),
-    user: app.user.toJSON(),
+    app: app,
+    user: app.user,
     _: _
 };

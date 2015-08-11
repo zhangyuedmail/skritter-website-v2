@@ -1,0 +1,22 @@
+@import "../../styles/variables";
+
+gelato-component[data-name='vocablist-review-table'] {
+  .col-md-3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  a {
+    color: $grade3;
+    cursor: pointer;
+  }
+
+  .glyphicon {
+    color: $grey3;
+    cursor: pointer;
+    &:hover {
+      color: $grey5;
+    }
+  }
+}

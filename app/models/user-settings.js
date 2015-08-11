@@ -145,5 +145,17 @@ module.exports = GelatoModel.extend({
     updateRaygun: function() {
         Raygun.setUser(this.get('name'), false, this.get('email'));
         Raygun.withTags(this.getRaygunTags());
+    },
+    /**
+     * @method getAllParts
+     * @returns {Object}
+     */
+    getAllParts: function() {
+        if (this.get('targetLang') === 'zh') {
+            return this.get('allChineseParts');
+        }
+        else {
+            return this.get('allJapaneseParts');
+        }
     }
 });

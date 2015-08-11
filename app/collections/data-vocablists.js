@@ -177,7 +177,7 @@ module.exports = GelatoCollection.extend({
      */
     getReviewing: function() {
         return this.filter(function(list) {
-            return list.get('studyingMode') === 'reviewing';
+            return _.contains(['reviewing', 'finished'], list.get('studyingMode'));
         });
     }
 });
