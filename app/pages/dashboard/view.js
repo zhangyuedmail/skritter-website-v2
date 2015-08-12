@@ -2,7 +2,6 @@ var GelatoPage = require('gelato/page');
 var DashboardGoal = require('components/dashboard-goal/view');
 var DashboardMonth = require('components/dashboard-month/view');
 var DashboardTotal = require('components/dashboard-total/view');
-var VocablistTable = require('components/vocablist-table/view');
 var GoalSettingsDialog = require('dialogs/goal-settings/view');
 
 /**
@@ -18,7 +17,6 @@ module.exports = GelatoPage.extend({
         this.dashboardGoal = new DashboardGoal();
         this.dashboardMonth = new DashboardMonth();
         this.dashboardTotal = new DashboardTotal();
-        this.vocablistTable = new VocablistTable();
     },
     /**
      * @property title
@@ -39,7 +37,6 @@ module.exports = GelatoPage.extend({
         this.dashboardGoal.setElement('#dashboard-goal-container').render();
         this.dashboardMonth.setElement('#dashboard-month-container').render();
         this.dashboardTotal.setElement('#dashboard-total-container').render();
-        this.vocablistTable.setElement('#vocablist-table-container').render();
         this.vocablistTable.setType('adding');
         app.user.data.items.fetchDaily();
         app.user.data.items.fetchNext();
@@ -71,7 +68,6 @@ module.exports = GelatoPage.extend({
         this.dashboardGoal.remove();
         this.dashboardMonth.remove();
         this.dashboardTotal.remove();
-        this.vocablistTable.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });
