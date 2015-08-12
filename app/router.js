@@ -15,6 +15,7 @@ module.exports = GelatoRouter.extend({
      * @type {Object}
      */
     routes: {
+        '': 'navigateHome',
         'dashboard': 'navigateDashboard',
         'login': 'navigateLogin',
         'settings/general': 'navigateSettingsGeneral',
@@ -23,7 +24,6 @@ module.exports = GelatoRouter.extend({
         'vocab(/:vocabId)': 'navigateVocab',
         'vocablist/browse': 'navigateVocablistBrowse',
         'vocablist/queue': 'navigateVocablistQueue',
-        '': 'navigateHome',
         '*route': 'navigateNotFound'
     },
     /**

@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
 var LoadingDialog = require('dialogs/loading/view');
 var Prompt = require('components/prompt/view');
-var StudyToolbar = require('components/study-toolbar/view');
 
 /**
  * @class Study
@@ -15,19 +14,25 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.counter = 0;
         this.prompt = new Prompt();
-        this.toolbar = new StudyToolbar();
         this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
     },
     /**
-     * @property title
-     * @type {String}
+     * @property events
+     * @type Object
      */
-    title: 'Study - Skritter',
+    events: {
+        'vclick #button-add-item': 'handleClickButtonAddItem'
+    },
     /**
      * @property template
      * @type {Function}
      */
     template: require('pages/study/template'),
+    /**
+     * @property title
+     * @type {String}
+     */
+    title: 'Study - Skritter',
     /**
      * @method render
      * @returns {Study}
@@ -35,8 +40,15 @@ module.exports = GelatoPage.extend({
     render: function() {
         this.renderTemplate();
         this.prompt.setElement('#prompt-container').render().hide();
-        this.toolbar.setElement('#toolbar-container').render().hide();
         return this;
+    },
+    /**
+     * @method handleClickButtonAdd
+     * @param {Event} event
+     */
+    handleClickButtonAddItem: function(event) {
+        event.preventDefault();
+        app.user.data.items.fetchNew();
     },
     /**
      * @method handlePromptComplete
@@ -81,7 +93,6 @@ module.exports = GelatoPage.extend({
         var reviews = item.getPromptReviews();
         this.prompt.set(reviews);
         this.prompt.show();
-        this.toolbar.show();
     },
     /**
      * @method remove
@@ -89,7 +100,6 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.prompt.remove();
-        this.toolbar.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });
