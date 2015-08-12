@@ -16,7 +16,8 @@ module.exports = GelatoApplication.extend({
     initialize: function() {
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
-            excludedUserAgents: ['PhantomJS']
+            excludedUserAgents: ['PhantomJS'],
+            ignore3rdPartyErrors: true
         }).attach();
         Raygun.setVersion(this.get('version'));
         this.api = new Api();
