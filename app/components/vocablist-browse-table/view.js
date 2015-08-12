@@ -1,15 +1,10 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class VocablistTable
+ * @class VocablistBrowseTable
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
-    events: {
-        'vclick #title-sort': 'handleClickTitleSort',
-        'vclick #popularity-sort': 'handleClickPopularitySort',
-        'vclick .add-to-queue-link': 'handleClickAddToQueueLink'
-    },
     /**
      * @method initialize
      * @constructor
@@ -25,10 +20,19 @@ module.exports = GelatoComponent.extend({
         this.filterTypes = [];
     },
     /**
+     * @property events
+     * @typeof {Object}
+     */
+    events: {
+        'vclick #title-sort': 'handleClickTitleSort',
+        'vclick #popularity-sort': 'handleClickPopularitySort',
+        'vclick .add-to-queue-link': 'handleClickAddToQueueLink'
+    },
+    /**
      * @property template
      * @type {Function}
      */
-    template: require('components/vocablist-table/template'),
+    template: require('components/vocablist-browse-table/template'),
     /**
      * @method render
      * @returns {VocablistTable}

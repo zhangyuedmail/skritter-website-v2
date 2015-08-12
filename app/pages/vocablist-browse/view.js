@@ -1,11 +1,18 @@
 var GelatoPage = require('gelato/page');
-var VocablistTable = require('components/vocablist-table/view');
+var VocablistTable = require('components/vocablist-browse-table/view');
 
 /**
  * @class VocablistBrowse
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.vocablistTable = new VocablistTable();
+    },
     /**
      * @property events
      * @type {Object}
@@ -17,22 +24,15 @@ module.exports = GelatoPage.extend({
         'keyup #list-search-input': 'handleKeypressListSearchInput'
     },
     /**
-     * @method initialize
-     * @constructor
+     * @property template
+     * @type {Function}
      */
-    initialize: function() {
-        this.vocablistTable = new VocablistTable();
-    },
+    template: require('pages/vocablist-browse/template'),
     /**
      * @property title
      * @type {String}
      */
     title: 'Browse - Skritter',
-    /**
-     * @property template
-     * @type {Function}
-     */
-    template: require('pages/vocablist-browse/template'),
     /**
      * @method render
      * @returns {VocablistBrowse}
