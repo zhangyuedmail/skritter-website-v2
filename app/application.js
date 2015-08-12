@@ -14,7 +14,10 @@ module.exports = GelatoApplication.extend({
      * @constructor
      */
     initialize: function() {
-        Raygun.init(this.getRaygunKey()).attach();
+        Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
+            excludedHostnames: ['localhost'],
+            excludedUserAgents: ['PhantomJS']
+        }).attach();
         Raygun.setVersion(this.get('version'));
         this.api = new Api();
         this.fn = Functions;
@@ -31,8 +34,6 @@ module.exports = GelatoApplication.extend({
         language: '{!application-language!}',
         lastReviewCheck: moment().unix(),
         name: '{!application-name!}',
-        raygunDevelopmentKey: 'pnuASksvclqTdDmVXWYRAA==',
-        raygunProductionKey: 'zs/KbhbvZ3sX1Qq9bdQ9Zw==',
         timestamp: '{!timestamp!}',
         version: '{!application-version!}'
     },
@@ -42,16 +43,6 @@ module.exports = GelatoApplication.extend({
      */
     getLanguage: function() {
         return this.get('language');
-    },
-    /**
-     * @method getRaygunKey
-     * @returns {String}
-     */
-    getRaygunKey: function() {
-        if (this.isProduction()) {
-            return this.get('raygunProductionKey');
-        }
-        return this.get('raygunDevelopmentKey');
     },
     /**
      * @method isChinese
