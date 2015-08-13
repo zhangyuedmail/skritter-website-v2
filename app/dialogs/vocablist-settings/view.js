@@ -49,34 +49,35 @@ module.exports = GelatoDialog.extend({
     handleClickSaveButton: function () {
         var getVals = function(el) { return $(el).val(); };
 
-        this.vocablist.set('studyingMode', this.$el.find('input[name="studyingMode"]:checked').val());
-
-        this.vocablist.set('partsStudying', $.map(this.$el.find('input[name="partsStudying"]:checked'), getVals));
-
-        this.vocablist.set('limitSentenceParts', this.$el.find('input[name="limitSentenceParts"]').is(':checked'));
+        var attributes = {
+            studyingMode: this.$el.find('input[name="studyingMode"]:checked').val(),
+            partsStudying: $.map(this.$el.find('input[name="partsStudying"]:checked'), getVals),
+            limitSentenceParts: this.$el.find('input[name="limitSentenceParts"]').is(':checked'),
+        };
 
         var studyAllListWritingsEl = this.$el.find('input[name="studyAllListWritings"]');
         if (studyAllListWritingsEl.length) {
-            this.vocablist.set('studyAllListWritings', studyAllListWritingsEl.is(':checked'));
+            attributes.studyAllListWritings = studyAllListWritingsEl.is(':checked');
         }
 
-        var currentSectionSelect = this.$el.find('input[name="currentSection"]');
+        var currentSectionSelect = this.$el.find('select[name="currentSection"]');
         if (currentSectionSelect.length) {
-            this.vocablist.set('currentSection', currentSectionSelect.val());
+            attributes.currentSection = currentSectionSelect.val();
         }
 
         var skipSectionsInputs = this.$el.find('input[name="sectionsSkipping"]');
         if (skipSectionsInputs.length) {
             var skippingInputs =  skipSectionsInputs.filter(':not(:checked)');
-            this.vocablist.set('sectionsSkipping', $.map(skippingInputs, getVals));
+            attributes.sectionsSkipping = $.map(skippingInputs, getVals);
         }
 
         var autoSectionMovementEl = this.$el.find('input[name="autoSectionMovement"]');
         if (autoSectionMovementEl.length) {
-            this.vocablist.set('autoSectionMovement', autoSectionMovementEl.is(':not(:checked)'));
+            attributes.autoSectionMovement = autoSectionMovementEl.is(':not(:checked)');
         }
 
-        //this.vocablist.save();
+        console.log('saving', JSON.stringify(attributes, null, '\t'));
+        this.vocablist.set(attributes); // TODO: Change to use this.vocablist.save(attributes);
         this.close();
     }
 });
