@@ -1,5 +1,6 @@
 var GelatoComponent = require('gelato/component');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
+var VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
 
 /**
  * @class VocablistReviewTable
@@ -12,7 +13,8 @@ module.exports = GelatoComponent.extend({
      */
     events: {
         'vclick .restart-adding-link': 'handleClickRestartAddingLink',
-        'vclick .list-settings-span': 'handleClickListSettingsSpan'
+        'vclick .list-settings-span': 'handleClickListSettingsSpan',
+        'vclick .remove-list-span': 'handleClickRemoveListSpan'
     },
     /**
      * @method initialize
@@ -62,6 +64,16 @@ module.exports = GelatoComponent.extend({
         var listID = $(e.target).closest('.row').data('list-id');
         var list = _.find(this.lists, {id: listID.toString()});
         this.dialog = new VocablistSettings({vocablist: list});
+        this.dialog.render().open();
+    },
+    /**
+     * @method handleClickRemoveListSpan
+     * @param {Event} e
+     */
+    handleClickRemoveListSpan: function(e) {
+        var listID = $(e.target).closest('.row').data('list-id');
+        var list = _.find(this.lists, {id: listID.toString()});
+        this.dialog = new VocablistRemoveDialog({vocablist: list});
         this.dialog.render().open();
     }
 });
