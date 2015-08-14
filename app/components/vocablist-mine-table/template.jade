@@ -5,6 +5,15 @@ gelato-component(data-name='vocablist-mine-table')
     .col-md-2 Published
     .col-md-3
 
+  if view.vocablists.state === 'fetching'
+    p.text-center
+      i.fa.fa-5x.fa-spinner.fa-pulse
+
+  else if view.vocablists.length === 0
+    p.text-center
+      span You have not created any lists.
+      a(href="/vocablists/create")  Make one!
+
   for list, i in view.vocablists.models
     .row(class=i%2 ? 'even-row' : 'odd-row')
       .col-md-5

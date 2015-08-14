@@ -12,7 +12,7 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function() {
         this.vocablists = new MyVocablists();
-        this.listenTo(this.vocablists, 'sync', this.render);
+        this.listenTo(this.vocablists, 'state', this.render);
         this.fetchOptions = {
             data: {
                 limit: 10,
