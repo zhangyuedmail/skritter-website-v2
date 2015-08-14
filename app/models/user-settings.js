@@ -1,16 +1,16 @@
-var GelatoModel = require('gelato/model');
+var SkritterModel = require('base/skritter-model');
 
 /**
  * @class UserSettings
- * @extends {GelatoModel}
+ * @extends {SkritterModel}
  */
-module.exports = GelatoModel.extend({
+module.exports = SkritterModel.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.on('change', this.save);
+        this.on('sync', this.cache);
     },
     /**
      * @property defaults
@@ -26,30 +26,24 @@ module.exports = GelatoModel.extend({
     },
     /**
      * @method cache
-     * @returns {UserCredentials}
+     * @returns {UserSettings}
      */
     cache: function() {
         app.user.setLocalData('settings', this.toJSON());
+        this.updateRaygun();
         return this;
     },
     /**
-     * @method fetch
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
+     * @method getAllParts
+     * @returns {Object}
      */
-    fetch: function(callbackSuccess, callbackError) {
-        var self = this;
-        app.api.fetchUsers(app.user.id, null, function(data) {
-            self.set(data, {merge: true});
-            self.updateRaygun();
-            if (typeof callbackSuccess === 'function') {
-                callbackSuccess();
-            }
-        }, function(error) {
-            if (typeof callbackError === 'function') {
-                callbackError(error);
-            }
-        });
+    getAllParts: function() {
+        if (this.get('targetLang') === 'zh') {
+            return this.get('allChineseParts');
+        }
+        else {
+            return this.get('allJapaneseParts');
+        }
     },
     /**
      * @method getGoal
@@ -89,7 +83,7 @@ module.exports = GelatoModel.extend({
     },
     /**
      * @method load
-     * @returns {UserCredentials}
+     * @returns {UserSettings}
      */
     load: function() {
         var settings = app.user.getLocalData('settings');
@@ -103,25 +97,12 @@ module.exports = GelatoModel.extend({
         return this;
     },
     /**
-     * @method save
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
+     * @method parse
+     * @param {Object} response
+     * @returns {Object}
      */
-    save: function(callbackSuccess, callbackError) {
-        var self = this;
-        app.api.putUser(this.toJSON(), function(result) {
-            self.set(result, {merge: true, silent: true});
-            self.updateRaygun();
-            self.cache();
-            if (typeof callbackSuccess === 'function') {
-                callbackSuccess(self);
-            }
-        }, function(error) {
-            self.cache();
-            if (typeof callbackError === 'function') {
-                callbackError(error);
-            }
-        });
+    parse: function(response) {
+        return response.User;
     },
     /**
      * @method setGoal
@@ -141,21 +122,18 @@ module.exports = GelatoModel.extend({
     },
     /**
      * @method updateRaygun
+     * @returns {UserSettings}
      */
     updateRaygun: function() {
         Raygun.setUser(this.get('name'), false, this.get('email'));
         Raygun.withTags(this.getRaygunTags());
+        return this;
     },
     /**
-     * @method getAllParts
-     * @returns {Object}
+     * @method url
+     * @returns {String}
      */
-    getAllParts: function() {
-        if (this.get('targetLang') === 'zh') {
-            return this.get('allChineseParts');
-        }
-        else {
-            return this.get('allJapaneseParts');
-        }
+    url: function() {
+        return 'users/' + app.user.id;
     }
 });
