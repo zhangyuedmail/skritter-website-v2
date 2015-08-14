@@ -1,6 +1,6 @@
 var GelatoModel = require('gelato/model');
 var HistoryItems = require('collections/history-items');
-var UserCredentials = require('models/user-credentials');
+var UserAuth = require('models/user-auth');
 var UserData = require('models/user-data');
 var UserSettings = require('models/user-settings');
 
@@ -14,7 +14,7 @@ module.exports = GelatoModel.extend({
      * @constructor
      */
     initialize: function() {
-        this.credentials = new UserCredentials();
+        this.auth = new UserAuth();
         this.data = new UserData();
         this.history = new HistoryItems();
         this.settings = new UserSettings();
@@ -47,15 +47,14 @@ module.exports = GelatoModel.extend({
     load: function() {
         var user = app.getSetting('user');
         if (user) {
+            Raygun.setUser(user.id, false);
             this.set('id', user);
-            Raygun.setUser(this.id, false);
-            this.credentials.load();
+            this.auth.load();
             this.settings.load();
             this.settings.fetch();
 
         } else {
-            this.set('id', 'guest');
-            Raygun.setUser(this.id, true);
+            Raygun.setUser('guest', true);
         }
     },
     /**
@@ -66,25 +65,23 @@ module.exports = GelatoModel.extend({
      * @param {Function} callbackError
      */
     login: function(username, password, callbackSuccess, callbackError) {
-        var self = this;
-        app.api.authenticateUser(username, password, function(result) {
-            self.set('id', result.user_id);
-            self.credentials.set(result);
-            self.credentials.set('created', moment().unix());
-            app.setSetting('user', self.id);
-            callbackSuccess(result);
-        }, function(error) {
-            callbackError(error);
-        });
+        this.auth.authenticateUser(username, password, callbackSuccess, callbackError);
     },
     /**
      * @method logout
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
      */
-    logout: function(callbackSuccess, callbackError) {
+    logout: function() {
+        this.removeLocalData('auth');
+        this.removeLocalData('settings');
         app.removeSetting('user');
         app.reload();
+    },
+    /**
+     * @method removeLocalData
+     * @param {String} key
+     */
+    removeLocalData: function(key) {
+        localStorage.removeItem(this.id + '-' + key);
     },
     /**
      * @method setLocalData
