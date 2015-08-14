@@ -51,8 +51,11 @@ gelato-component[data-name='vocablist-mine-table'] {
 
     .add-to-queue-link .glyphicon {
       margin-right: 5px;
-      cursor: pointer;
     }
+  }
+
+  .add-to-queue-link {
+    cursor: pointer;
   }
 
 }

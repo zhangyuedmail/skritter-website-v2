@@ -20,3 +20,11 @@ gelato-component(data-name='vocablist-mine-table')
             span Add to queue
         else
           span= _.capitalize(list.get('studyingMode'))
+
+
+  if view.fetchingMore
+    p.text-center
+      i.fa.fa-2x.fa-spinner.fa-pulse
+
+  else if view.vocablists.cursor
+    button#load-more-btn.btn.btn-primary.btn-block Load More
