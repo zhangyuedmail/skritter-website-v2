@@ -69,7 +69,7 @@ module.exports = GelatoPage.extend({
             app.reload();
         }, function(error) {
             self.enableForm('#login-form');
-            self.$('#login-message').text(error.message);
+            self.$('#login-message').text(error.responseJSON.message);
         });
     },
     /**
