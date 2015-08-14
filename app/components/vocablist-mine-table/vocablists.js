@@ -1,30 +1,35 @@
 var DataVocablist = require('models/data-vocablist');
-var GelatoCollection = require('gelato/collection');
+var SkritterCollection = require('base/skritter-collection');
 
 /**
  * @class MyVocablists
- * @extends {GelatoComponent}
+ * @extends {SkritterCollection}
  */
-module.exports = GelatoCollection.extend({
-  /**
-   * @property model
-   * @type {DataVocablist}
-   */
-  model: DataVocablist,
-  /**
-   * @method url
-   * @returns String
-   */
-  url: function() {
-    return app.api.getUrl() + 'vocablists';
-  },
-  /**
-   * @method parse
-   * @param {Object} response
-   * @returns Array
-   */
-  parse: function(response) {
-    this.cursor = response.cursor;
-    return response.VocabLists;
-  }
+module.exports = SkritterCollection.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.cursor = null;
+    },
+    /**
+     * @property model
+     * @type {DataVocablist}
+     */
+    model: DataVocablist,
+    /**
+     * @method parse
+     * @param {Object} response
+     * @returns Array
+     */
+    parse: function(response) {
+        this.cursor = response.cursor;
+        return response.VocabLists;
+    },
+    /**
+     * @property url
+     * @type {String}
+     */
+    url: 'vocablists'
 });

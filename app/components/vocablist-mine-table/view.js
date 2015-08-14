@@ -14,7 +14,6 @@ module.exports = GelatoComponent.extend({
         this.vocablists = new MyVocablists();
         this.listenTo(this.vocablists, 'sync', this.render);
         this.fetchOptions = {
-            headers: { 'Authorization': 'bearer '+app.api.getToken() },
             data: {
                 limit: 10,
                 sort: 'custom'
