@@ -1,5 +1,6 @@
 module.exports = {
     _: _,
     app: app,
-    user: app.user
+    user: app.user,
+    moment: moment
 };

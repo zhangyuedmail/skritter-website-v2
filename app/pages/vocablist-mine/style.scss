@@ -1,0 +1,32 @@
+@import "../../styles/variables";
+
+gelato-page[data-name='vocablist-browse'] {
+
+  .content-block { background-color: #f2f2f6; }
+
+  .col-md-9 {
+    background-color: #fbfafc;
+  }
+
+  #section-content {
+    background-color: $white1; //TODO: check color
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    color: #404851;
+    margin: -15px;
+    padding: 55px 40px;
+    .title {
+      font-family: $font-muli;
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 25px;
+    }
+  }
+
+  #section-menu {
+    color: #8c9196;
+    margin: 45px auto 0 auto;
+    width: 140px;
+  }
+
+}
