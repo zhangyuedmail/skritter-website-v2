@@ -1,8 +1,8 @@
-var DataVocablist = require('models/data-vocablist');
+var Vocablist = require('models/vocablist');
 var SkritterCollection = require('base/skritter-collection');
 
 /**
- * @class MyVocablists
+ * @class Vocablists
  * @extends {SkritterCollection}
  */
 module.exports = SkritterCollection.extend({
@@ -15,9 +15,9 @@ module.exports = SkritterCollection.extend({
     },
     /**
      * @property model
-     * @type {DataVocablist}
+     * @type {Vocablist}
      */
-    model: DataVocablist,
+    model: Vocablist,
     /**
      * @method parse
      * @param {Object} response
