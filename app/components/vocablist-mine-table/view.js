@@ -1,5 +1,5 @@
 var GelatoComponent = require('gelato/component');
-var MyVocablists = require('./vocablists');
+var Vocablists = require('collections/vocablists');
 
 /**
  * @class VocablistMineTable
@@ -11,15 +11,14 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        this.vocablists = new MyVocablists();
+        this.vocablists = new Vocablists();
         this.listenTo(this.vocablists, 'state', this.render);
-        this.fetchOptions = {
+        this.vocablists.fetch({
             data: {
                 limit: 10,
                 sort: 'custom'
             }
-        };
-        this.vocablists.fetch(this.fetchOptions);
+        });
     },
     /**
      * @property events
@@ -44,36 +43,36 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method handleClickAddToQueueLink
-     * @param {Event} e
+     * @param {Event} event
      */
-    handleClickAddToQueueLink: function(e) {
+    handleClickAddToQueueLink: function(event) {
+        event.preventDefault();
         var listID = $(e.target).closest('.add-to-queue-link').data('vocablist-id');
         var vocablist = this.vocablists.get(listID);
-        if (vocablist.get('studyingMode') !== 'not studying')
+        if (vocablist.get('studyingMode') !== 'not studying') {
             return;
-
+        }
         vocablist.set('studyingMode', 'adding');
         vocablist.save();
         this.render();
     },
     /**
      * @method handleClickLoadMoreButton
-     * @param {Event} e
+     * @param {Event} event
      */
-    handleClickLoadMoreButton: function(e) {
+    handleClickLoadMoreButton: function(event) {
+        event.preventDefault();
         if (!this.vocablists.cursor) {
             return;
         }
-        var moreVocabLists = new MyVocablists();
-        this.fetchOptions.data.cursor = this.vocablists.cursor;
-        this.fetchingMore = true;
-        this.listenToOnce(moreVocabLists, 'sync', function() {
-            this.vocablists.cursor = moreVocabLists.cursor;
-            this.vocablists.add(moreVocabLists.slice());
-            this.fetchingMore = false;
-            this.render();
+        this.vocablists.fetch({
+            data: {
+                cursor: this.vocablists.cursor,
+                limit: 10,
+                sort: 'custom'
+            },
+            remove: false
         });
-        moreVocabLists.fetch(this.fetchOptions);
         this.render();
     }
 });
