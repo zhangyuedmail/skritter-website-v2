@@ -54,20 +54,22 @@ module.exports = GelatoApplication.extend({
      * @returns {Boolean}
      */
     handleError: function(message, url, line) {
-        console.log(message, url, line);
-        $.notify({
-            icon: 'fa fa-exclamation-circle',
-            title: 'Error',
-            message: message
-        },{
-            type: 'minimalist',
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
+        $.notify(
+            {
+                icon: 'fa fa-exclamation-circle',
+                title: 'Error',
+                message: message
             },
-            delay: 5000,
-            icon_type: 'class'
-        });
+            {
+                type: 'minimalist',
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                delay: 5000,
+                icon_type: 'class'
+            }
+        );
         return false;
     },
     /**
