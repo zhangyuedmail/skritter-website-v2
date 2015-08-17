@@ -1,4 +1,5 @@
 var GelatoComponent = require('gelato/component');
+var Vocablists = require('collections/vocablists');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
 
@@ -8,8 +9,22 @@ var VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
  */
 module.exports = GelatoComponent.extend({
     /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.vocablists = new Vocablists();
+        this.listenTo(this.vocablists, 'state', this.render);
+        this.vocablists.fetch({
+            data: {
+                limit: 10,
+                sort: 'studying'
+            }
+        });
+    },
+    /**
      * @property events
-     * @type Object
+     * @type {Object}
      */
     events: {
         'vclick .restart-adding-link': 'handleClickRestartAddingLink',
@@ -17,62 +32,46 @@ module.exports = GelatoComponent.extend({
         'vclick .remove-list-span': 'handleClickRemoveListSpan'
     },
     /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        var throttledRender = _.throttle(_.bind(this.render, this));
-        this.lists = [];
-        this.listenTo(app.user.data.vocablists, 'all', throttledRender);
-    },
-    /**
      * @property template
      * @type {Function}
      */
-    template: require('components/vocablist-review-table/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {VocablistTable}
      */
     render: function() {
-        this.update();
         this.renderTemplate();
         return this;
     },
     /**
-     * @method update
-     */
-    update: function() {
-        this.lists = app.user.data.vocablists.getReviewing();
-    },
-    /**
      * @method handleClickRestartAddingLink
-     * @param {Event} e
+     * @param {Event} event
      */
-    handleClickRestartAddingLink: function(e) {
-        var listID = $(e.target).closest('.row').data('list-id');
-        var list = _.find(this.lists, {id: listID.toString()});
+    handleClickRestartAddingLink: function(event) {
+        var listID = $(event.target).closest('.row').data('list-id');
+        var list = _.find(this.vocablists, {id: listID.toString()});
         list.set('studyingMode', 'adding');
         list.save();
         this.render();
     },
     /**
      * @method handleClickListSettingsSpan
-     * @param {Event} e
+     * @param {Event} event
      */
-    handleClickListSettingsSpan: function(e) {
-        var listID = $(e.target).closest('.row').data('list-id');
-        var list = _.find(this.lists, {id: listID.toString()});
+    handleClickListSettingsSpan: function(event) {
+        var listID = $(event.target).closest('.row').data('list-id');
+        var list = _.find(this.vocablists, {id: listID.toString()});
         this.dialog = new VocablistSettings({vocablist: list});
         this.dialog.render().open();
     },
     /**
      * @method handleClickRemoveListSpan
-     * @param {Event} e
+     * @param {Event} event
      */
-    handleClickRemoveListSpan: function(e) {
-        var listID = $(e.target).closest('.row').data('list-id');
-        var list = _.find(this.lists, {id: listID.toString()});
+    handleClickRemoveListSpan: function(event) {
+        var listID = $(event.target).closest('.row').data('list-id');
+        var list = _.find(this.vocablists, {id: listID.toString()});
         this.dialog = new VocablistRemoveDialog({vocablist: list});
         this.dialog.render().open();
     }

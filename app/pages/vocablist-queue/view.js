@@ -24,7 +24,7 @@ module.exports = GelatoPage.extend({
      * @property template
      * @type {Function}
      */
-    template: require('pages/vocablist-queue/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {VocablistQueue}
@@ -33,7 +33,6 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.addingTable.setElement('#adding-container').render();
         this.reviewingTable.setElement('#reviewing-container').render();
-        app.user.data.vocablists.fetch();
         return this;
     },
     /**

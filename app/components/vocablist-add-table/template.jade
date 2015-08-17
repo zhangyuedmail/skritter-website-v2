@@ -1,23 +1,23 @@
 gelato-component(data-name='vocablist-add-table')
-  if !view.lists.length
+  if view.vocablists.length
+    for list, i in view.vocablists.models
+      .row(data-list-id=list.id)
+        .col-md-3
+          span= list.get('name')
+        .col-md-3
+          .progress
+            .progress-bar(style="width:"+(list.getProgress())+'%')
+
+        .col-md-2
+          a(href="/study/" + list.id) Study List
+
+        .col-md-2
+          a.stop-adding-link Stop Adding
+
+        .col-md-1
+          span.glyphicon.glyphicon-cog.list-settings-span
+
+        .col-md-1
+          span.glyphicon.glyphicon-remove.remove-list-span
+  else
     em None
-
-  for list, i in view.lists
-    .row(data-list-id=list.id)
-      .col-md-3
-        span= list.get('name')
-      .col-md-3
-        .progress
-          .progress-bar(style="width:"+(list.getProgress())+'%')
-
-      .col-md-2
-        a(href="/study/"+list.id) Study List
-
-      .col-md-2
-        a.stop-adding-link Stop Adding
-
-      .col-md-1
-        span.glyphicon.glyphicon-cog.list-settings-span
-
-      .col-md-1
-        span.glyphicon.glyphicon-remove.remove-list-span
