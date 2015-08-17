@@ -48,13 +48,16 @@ gelato-page[data-name='vocablist-queue'] {
       font-weight: 300;
       margin-top: 30px;
       padding: 10px;
-      > div {
+      > a {
+        color: #8c9196;
         cursor: pointer;
+        display: block;
         margin-bottom: 20px;
       }
       .active {
         color: #404851;
         font-weight: 400;
+        margin-bottom: 20px;
       }
     }
   }
