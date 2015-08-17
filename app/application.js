@@ -14,6 +14,7 @@ module.exports = GelatoApplication.extend({
      * @constructor
      */
     initialize: function() {
+        window.onerror = this.handleError;
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
             excludedUserAgents: ['PhantomJS'],
@@ -44,6 +45,30 @@ module.exports = GelatoApplication.extend({
      */
     getLanguage: function() {
         return this.get('language');
+    },
+    /**
+     * @method handleError
+     * @param {String} message
+     * @param {String} url
+     * @param {Number} line
+     * @returns {Boolean}
+     */
+    handleError: function(message, url, line) {
+        console.log(message, url, line);
+        $.notify({
+            icon: 'fa fa-exclamation-circle',
+            title: 'Error',
+            message: message
+        },{
+            type: 'minimalist',
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+            delay: 5000,
+            icon_type: 'class'
+        });
+        return false;
     },
     /**
      * @method isChinese
