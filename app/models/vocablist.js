@@ -32,26 +32,28 @@ module.exports = SkritterModel.extend({
         var passed = false;
         var total = 0;
         var sections = this.get('sections');
-        var currentIndex = this.get('currentIndex') || 0;
-        var currentSection = this.get('currentSection') || sections[0].id;
         if (this.get('studyingMode') === 'finished') {
             return 100;
         }
-        for (var i = 0, length = sections.length; i < length; i++) {
-            var section = sections[i];
-            if (section.id === currentSection) {
-                added += currentIndex;
-                passed = true;
+        if (sections) {
+            var currentIndex = this.get('currentIndex') || 0;
+            var currentSection = this.get('currentSection') || sections[0].id;
+            for (var i = 0, length = sections.length; i < length; i++) {
+                var section = sections[i];
+                if (section.id === currentSection) {
+                    added += currentIndex;
+                    passed = true;
+                }
+                if (this.get('sectionsSkipping').indexOf(section.id) > -1) {
+                    continue;
+                }
+                if (!passed) {
+                    added += section.rows.length;
+                }
+                total += section.rows.length;
             }
-            if (this.get('sectionsSkipping').indexOf(section.id) > -1) {
-                continue;
-            }
-            if (!passed) {
-                added += section.rows.length;
-            }
-            total += section.rows.length;
         }
-        return total ? Math.round(100 * added / total) : 100;
+        return total ? Math.round(100 * added / total) : 0;
     },
     /**
      * @method getSectionById
