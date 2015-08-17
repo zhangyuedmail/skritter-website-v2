@@ -27,7 +27,7 @@ module.exports = GelatoPage.extend({
      * @property template
      * @type {Function}
      */
-    template: require('pages/vocablist-browse/template'),
+    template: require('./template'),
     /**
      * @property title
      * @type {String}
@@ -41,7 +41,6 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.vocablistTable.fields = {name: 'Name'};
         this.vocablistTable.setElement('#vocablist-container').render();
-        app.user.data.vocablists.fetchOfficial();
         return this;
     },
     /**

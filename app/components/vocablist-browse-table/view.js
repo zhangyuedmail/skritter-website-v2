@@ -1,4 +1,5 @@
 var GelatoComponent = require('gelato/component');
+var Vocablists = require('collections/vocablists');
 
 /**
  * @class VocablistBrowseTable
@@ -10,13 +11,19 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        this.lists = [];
+        this.vocablists = new Vocablists();
+        this.listenTo(this.vocablists, 'state', this.render);
         this.type = null;
-        this.listenTo(app.user.data.vocablists, 'fetch', this.render);
         this.layout = 'list';
         this.sort = 'title';
         this.searchString = '';
         this.filterTypes = [];
+        this.vocablists.fetch({
+            data: {
+                limit: 10,
+                sort: 'official'
+            }
+        });
     },
     /**
      * @property events
@@ -31,7 +38,7 @@ module.exports = GelatoComponent.extend({
      * @property template
      * @type {Function}
      */
-    template: require('components/vocablist-browse-table/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {VocablistTable}
@@ -45,6 +52,11 @@ module.exports = GelatoComponent.extend({
         this.delegateEvents();
         return this;
     },
+    /**
+     * @method setType
+     * @param {String} type
+     * @returns {exports}
+     */
     setType: function(type) {
         this.type = type;
         this.update();
@@ -102,16 +114,16 @@ module.exports = GelatoComponent.extend({
         };
 
         predicate = _.bind(predicate, this);
-        this.lists = app.user.data.vocablists.filter(predicate);
+        this.vocablists = app.user.data.vocablists.filter(predicate);
 
         if (this.sort === 'title') {
-            this.lists = _.sortBy(this.lists, function(vocablist) {
+            this.vocablists = _.sortBy(this.vocablists, function(vocablist) {
                 return vocablist.get('name').toLowerCase();
             })
         }
 
         if (this.sort === 'popularity') {
-            this.lists = _.sortBy(this.lists, function(vocablist) {
+            this.vocablists = _.sortBy(this.vocablists, function(vocablist) {
                 return -vocablist.get('peopleStudying');
             });
         }
