@@ -11,16 +11,15 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
+        this._lists = [];
+        this._filterString = '';
+        this._filterType = [];
+        this._layout = 'list';
+        this._sortType = 'title';
         this.vocablists = new Vocablists();
         this.listenTo(this.vocablists, 'state', this.render);
-        this.type = null;
-        this.layout = 'list';
-        this.sort = 'title';
-        this.searchString = '';
-        this.filterTypes = [];
         this.vocablists.fetch({
             data: {
-                limit: 10,
                 sort: 'official'
             }
         });
@@ -46,113 +45,107 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.update();
         this.renderTemplate();
-        this.$el.find('img').error(function(e) {
-            $(e.target).remove();
-        });
+        this.$('#grid img').error(this.handleLoadImageError);
         this.delegateEvents();
         return this;
     },
     /**
-     * @method setType
-     * @param {String} type
-     * @returns {exports}
-     */
-    setType: function(type) {
-        this.type = type;
-        this.update();
-        return this;
-    },
-    /**
-     * @method setSearchString
-     * @param {String} searchString
-     * @returns {VocablistTable}
-     */
-    setSearchString: function(searchString) {
-        this.searchString = searchString;
-        return this;
-    },
-    /**
-     * @method update
-     * @param {Array} filterTypes
-     * @returns {VocablistTable}
-     */
-    setFilterTypes: function(filterTypes) {
-        if (!filterTypes)
-            filterTypes = [];
-        this.filterTypes = filterTypes;
-        return this;
-    },
-    /**
-     * @method update
-     */
-    update: function() {
-        var predicate = function(vocablist) {
-            if(this.searchString) {
-                var name = (vocablist.get('name') || '').toLowerCase();
-                var shortName = (vocablist.get('shortName') || '').toLowerCase();
-                var contained = _.contains(name, this.searchString) || _.contains(shortName, this.searchString);
-                if (!contained) {
-                    return false;
-                }
-            }
-
-            if (this.filterTypes.length) {
-                var sort = vocablist.get('sort');
-                var majorCategory = (vocablist.get('categories') || [])[0];
-                if (sort === 'custom' && _.contains(this.filterTypes, 'custom'))
-                    return true;
-
-                if (sort === 'official' && _.contains(this.filterTypes, 'other-official') && majorCategory === 'Other')
-                    return true;
-
-                if (sort === 'official' && _.contains(this.filterTypes, 'textbooks') && majorCategory === 'Textbooks')
-                    return true;
-
-                return false;
-            }
-            return true;
-        };
-
-        predicate = _.bind(predicate, this);
-        this.vocablists = app.user.data.vocablists.filter(predicate);
-
-        if (this.sort === 'title') {
-            this.vocablists = _.sortBy(this.vocablists, function(vocablist) {
-                return vocablist.get('name').toLowerCase();
-            })
-        }
-
-        if (this.sort === 'popularity') {
-            this.vocablists = _.sortBy(this.vocablists, function(vocablist) {
-                return -vocablist.get('peopleStudying');
-            });
-        }
-    },
-    /**
      * @method handleClickTitleSort
+     * @param {Event} event
      */
-    handleClickTitleSort: function() {
-        this.sort = 'title';
+    handleClickTitleSort: function(event) {
+        event.preventDefault();
+        this._sortType = 'title';
         this.render();
     },
     /**
      * @method handleClickPopularitySort
+     * @param {Event} event
      */
-    handleClickPopularitySort: function() {
-        this.sort = 'popularity';
+    handleClickPopularitySort: function(event) {
+        event.preventDefault();
+        this._sortType = 'popularity';
         this.render();
     },
     /**
      * @method handleClickAddToQueueLink
+     * @param {Event} event
      */
-    handleClickAddToQueueLink: function(e) {
-        var listID = $(e.target).closest('.add-to-queue-link').data('vocablist-id');
-        var vocablist = app.user.data.vocablists.get(listID);
-        if (vocablist.get('studyingMode') !== 'not studying')
-            return;
-
-        vocablist.set('studyingMode', 'adding');
-        vocablist.save();
+    handleClickAddToQueueLink: function(event) {
+        event.preventDefault();
+        var listId = $(event.currentTarget).data('vocablist-id');
+        var vocablist = this.vocablists.get(listId);
+        if (vocablist.get('studyingMode') === 'not studying') {
+            vocablist.set('studyingMode', 'adding');
+            vocablist.save();
+            this.render();
+        }
+    },
+    /**
+     * @method handleLoadImageError
+     * @param {Event} event
+     */
+    handleLoadImageError: function(event) {
+        $(event.target).remove();
+    },
+    /**
+     * @method setFilterString
+     * @param {String} value
+     */
+    setFilterString: function(value) {
+        this._filterString = value.toLowerCase();
         this.render();
+    },
+    /**
+     * @method setLayout
+     * @param {String} value
+     */
+    setLayout: function(value) {
+        this._layout = value.toLowerCase();
+        this.render();
+    },
+    /**
+     * @method update
+     * @returns {VocablistBrowseTable}
+     */
+    update: function() {
+        this._lists = this.vocablists.models;
+        this.updateFilter();
+        this.updateSort();
+        return this;
+    },
+    /**
+     * @method updateFilter
+     */
+    updateFilter: function() {
+        this._lists = _.filter(this._lists, (function(vocablist) {
+            if (this._filterString !== '') {
+                var name = vocablist.get('name').toLowerCase();
+                var shortName = vocablist.get('shortName').toLowerCase();
+                if (_.contains(name, this._filterString)) {
+                    return true;
+                }
+                if (_.contains(shortName, this._filterString)) {
+                    return true;
+                }
+                return false
+            }
+            if (this._filterType.length) {
+                //TODO: support checkbox filters
+                return false;
+            }
+            return true;
+        }).bind(this));
+    },
+    /**
+     * @method updateSort
+     */
+    updateSort: function() {
+        this._lists = _.sortBy(this._lists, (function(vocablist) {
+            if (this._sortType === 'popularity') {
+                return -vocablist.get('peopleStudying');
+            }
+            return vocablist.get('name');
+        }).bind(this));
     }
 });

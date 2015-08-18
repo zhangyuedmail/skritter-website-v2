@@ -1,25 +1,24 @@
 gelato-component(data-name='vocablist-browse-table')
 
-  if view.layout === 'list'
+  if view._layout === 'list'
     #header-row.row
       .col-md-6
-        #title-sort.table-sort(class=view.sort==='title' ? 'chosen' : '')
+        #title-sort.table-sort(class=view._sortType==='title' ? 'chosen' : '')
           span Title
           span.glyphicon.glyphicon-chevron-down
       .col-md-3
-        #popularity-sort.table-sort(class=view.sort==='popularity' ? 'chosen' : '')
+        #popularity-sort.table-sort(class=view._sortType==='popularity' ? 'chosen' : '')
           span Popularity
           span.glyphicon.glyphicon-chevron-down
       .col-md-3
-    if view.vocablists.length
-      for list, i in view.vocablists
-        .row(class=i%2 ? 'even-row' : 'odd-row')
+    if view._lists.length
+      for list, i in view._lists
+        .row
           .col-md-6
             span= list.get('name')
           .col-md-3
-            .progress(style="width:"+(100*list.getPopularity())+'%')
+            .progress(style="width:" + (100 * list.getPopularity()) + '%')
               .progress-bar(style="width:100%")
-
           .col-md-3
             if list.get('studyingMode') === 'not studying'
               span.add-to-queue-link(data-vocablist-id=list.id)
@@ -28,10 +27,10 @@ gelato-component(data-name='vocablist-browse-table')
             else
               span= _.capitalize(list.get('studyingMode'))
 
-  if view.layout === 'grid'
+  if view._layout === 'grid'
       #grid
-        if view.vocablists.length
-          for list, i in view.vocablists
+        if view._lists.length
+          for list, i in view._lists
             .col-md-3
               .grid-tile
                 .header.text-center.text-capitalize= list.get('name')

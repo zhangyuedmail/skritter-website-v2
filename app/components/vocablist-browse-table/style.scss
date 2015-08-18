@@ -7,21 +7,7 @@ gelato-component[data-name='vocablist-browse-table'] {
   font-size: 16px;
   font-weight: 300;
 
-  #header-row {
-    background: #f2f2f6;
-    .glyphicon {
-      margin-left: 10px;
-      font-size: 10px;
-    }
-
-    .table-sort.chosen {
-      font-weight: bold;
-    }
-    .table-sort {
-      cursor: pointer;
-      color: $grey9;
-    }
-  }
+  .add-to-queue-link { cursor: pointer; }
 
   .row {
     clear: both;
@@ -60,6 +46,7 @@ gelato-component[data-name='vocablist-browse-table'] {
     }
 
     .grid-tile {
+      cursor: pointer;
       width: 90%;
       position: relative;
       height: 250px;
@@ -115,8 +102,19 @@ gelato-component[data-name='vocablist-browse-table'] {
     }
   }
 
-  .add-to-queue-link {
-    cursor: pointer;
+  #header-row {
+    background: #f2f2f6;
+    .glyphicon {
+      margin-left: 10px;
+      font-size: 10px;
+    }
+    .table-sort.chosen {
+      font-weight: bold;
+    }
+    .table-sort {
+      cursor: pointer;
+      color: $grey9;
+    }
   }
 
 }

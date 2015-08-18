@@ -18,10 +18,10 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #list-option': 'handleClickListOption',
-        'vclick #grid-option': 'handleClickGridOption',
         'change input[type="checkbox"]': 'handleChangeCheckbox',
-        'keyup #list-search-input': 'handleKeypressListSearchInput'
+        'keyup #list-search-input': 'handleKeypressListSearchInput',
+        'vclick #list-option': 'handleClickListOption',
+        'vclick #grid-option': 'handleClickGridOption'
     },
     /**
      * @property template
@@ -39,9 +39,48 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.vocablistTable.fields = {name: 'Name'};
         this.vocablistTable.setElement('#vocablist-container').render();
         return this;
+    },
+    /**
+     * @method handleChangeCheckbox
+     */
+    handleChangeCheckbox: function() {
+        /** TODO: support checkbox filters
+        var checkedBoxes = $('input[type="checkbox"]:checked');
+        var filterTypes = checkedBoxes.map(function(i, el) {
+            return $(el).attr('name');
+        });
+        this.vocablistTable.setFilterTypes(filterTypes);
+        this.vocablistTable.render();
+         **/
+    },
+    /**
+     * @method onClickListOption
+     * @param {Event} event
+     */
+    handleClickListOption: function(event) {
+        event.preventDefault();
+        this.vocablistTable.setLayout('list');
+        this.$('#list-option').addClass('chosen');
+        this.$('#grid-option').removeClass('chosen');
+    },
+    /**
+     * @method onClickGridOption
+     * @param {Event} event
+     */
+    handleClickGridOption: function(event) {
+        event.preventDefault();
+        this.vocablistTable.setLayout('grid');
+        this.$('#list-option').removeClass('chosen');
+        this.$('#grid-option').addClass('chosen');
+    },
+    /**
+     * @method handleKeypressListSearchInput
+     * @param {Event} event
+     */
+    handleKeypressListSearchInput: function(event) {
+        this.vocablistTable.setFilterString(event.target.value);
     },
     /**
      * @method remove
@@ -50,42 +89,5 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.vocablistTable.remove();
         return GelatoPage.prototype.remove.call(this);
-    },
-    /**
-     * @method onClickListOption
-     */
-    handleClickListOption: function() {
-        this.vocablistTable.layout = 'list';
-        this.$el.find('#list-option').addClass('chosen');
-        this.$el.find('#grid-option').removeClass('chosen');
-        this.vocablistTable.render();
-    },
-    /**
-     * @method onClickGridOption
-     */
-    handleClickGridOption: function() {
-        this.vocablistTable.layout = 'grid';
-        this.$el.find('#list-option').removeClass('chosen');
-        this.$el.find('#grid-option').addClass('chosen');
-        this.vocablistTable.render();
-    },
-    /**
-     * @method handleChangeCheckbox
-     */
-    handleChangeCheckbox: function() {
-        var checkedBoxes = $('input[type="checkbox"]:checked');
-        var filterTypes = checkedBoxes.map(function(i, el) {
-            return $(el).attr('name');
-        });
-        this.vocablistTable.setFilterTypes(filterTypes);
-        this.vocablistTable.render();
-    },
-    /**
-     * @method handleKeypressListSearchInput
-     */
-    handleKeypressListSearchInput: function() {
-        var searchString = this.$el.find('#list-search-input').val();
-        this.vocablistTable.setSearchString(searchString);
-        this.vocablistTable.render();
     }
 });
