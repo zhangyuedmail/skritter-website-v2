@@ -77,5 +77,19 @@ module.exports = SkritterModel.extend({
             count += rows[i].length;
         }
         return count;
+    },
+    /**
+     * @method isChinese
+     * @returns {Boolean}
+     */
+    isChinese: function() {
+        return this.get('lang') === 'zh';
+    },
+    /**
+     * @method isJapanese
+     * @returns {Boolean}
+     */
+    isJapanese: function() {
+        return this.get('lang') === 'ja';
     }
 });
