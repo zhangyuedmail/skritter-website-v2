@@ -1,5 +1,6 @@
 var GelatoPage = require('gelato/page');
 var VocablistTable = require('components/vocablist-mine-table/view');
+var NavbarLoggedIn = require('components/navbar-logged-in/view');
 
 /**
  * @class VocablistMine
@@ -12,6 +13,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.vocablistTable = new VocablistTable();
+        this.navbar = new NavbarLoggedIn();
     },
     /**
      * @property events
@@ -36,6 +38,7 @@ module.exports = GelatoPage.extend({
     render: function() {
         this.renderTemplate();
         this.vocablistTable.setElement('#vocablist-container').render();
+        this.navbar.setElement('#navbar-container').render();
         return this;
     },
     /**
