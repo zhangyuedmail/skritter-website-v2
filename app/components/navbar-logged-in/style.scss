@@ -4,8 +4,11 @@ gelato-component[data-name='navbar-logged-in'] {
 
   a {
     color: $white1;
-    margin-left: 25px;
     text-decoration: none;
+
+    &.item-link {
+      margin-left: 25px;
+    }
 
     &:hover {
       color: $white5;
