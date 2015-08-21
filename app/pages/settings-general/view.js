@@ -1,4 +1,5 @@
 var GelatoPage = require('gelato/page');
+var ChangePasswordDialog = require('dialogs/change-password/view');
 
 /**
  * @class SettingsGeneral
@@ -9,7 +10,18 @@ module.exports = GelatoPage.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+        this.listenTo(app.user.settings, 'state', this.render);
+        app.user.settings.fetch();
+    },
+    /**
+     * @property events
+     * @type {Object}
+     */
+    events: {
+        'vclick #button-save': 'handleClickButtonSave',
+        'vclick #button-change-password': 'handleClickButtonChangePassword'
+    },
     /**
      * @property title
      * @type {String}
@@ -19,23 +31,36 @@ module.exports = GelatoPage.extend({
      * @property template
      * @type {Function}
      */
-    template: require('pages/settings-general/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {SettingsGeneral}
      */
     render: function() {
         this.renderTemplate();
-        this.renderFields();
-        app.user.settings.fetch();
         return this;
     },
     /**
-     * @method renderFields
-     * @returns {SettingsGeneral}
+     * @method handleClickButtonChangePassword
+     * @param {Event} event
      */
-    renderFields: function() {
-        return this;
+    handleClickButtonChangePassword: function(event) {
+        event.preventDefault();
+        this.dialog = new ChangePasswordDialog();
+        this.dialog.open();
+    },
+    /**
+     * @method handleClickButtonSave
+     * @param {Event} event
+     */
+    handleClickButtonSave: function(event) {
+        event.preventDefault();
+        app.user.settings.set({
+            aboutMe: this.$('#field-about').val(),
+            email: this.$('#field-email').val(),
+            name: this.$('#field-name').val(),
+            private: this.$('#field-private').is(':checked')
+        }).save();
     },
     /**
      * @method remove

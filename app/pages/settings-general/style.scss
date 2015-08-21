@@ -11,15 +11,35 @@ gelato-page[data-name='settings-general'] {
     color: #404851;
     margin: -15px;
     padding: 55px 40px;
+    input {
+      border-radius: 0;
+      height: 50px;
+      &[type="email"],
+      &[type="text"] {
+        max-width: 300px;
+      }
+    }
+    label {
+      font-family: $font-muli;
+      font-weight: 300;
+      text-align: left;
+    }
+    textarea {
+      max-width: 300px;
+    }
     .title {
       font-family: $font-muli;
       font-size: 24px;
       font-weight: 400;
+      margin-bottom: 30px;
+    }
+    #field-avatar {
+      height: 100px;
+      width: 100px;
     }
   }
 
   #section-menu {
-    color: #8c9196;
     margin: 45px auto 0 auto;
     width: 140px;
     button {
@@ -39,6 +59,10 @@ gelato-page[data-name='settings-general'] {
       }
       .active {
         color: #404851;
+        font-weight: 400;
+      }
+      .header {
+        font-size: 18px;
         font-weight: 400;
       }
     }

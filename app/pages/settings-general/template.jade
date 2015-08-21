@@ -1,9 +1,11 @@
 gelato-page(data-name='settings-general')
+
   gelato-navbar.fixed-top
     .container-fluid
       .container
         .left
           .item.item-header(data-navigate="dashboard") Skritter
+
   gelato-content
     .container
       .content-block
@@ -14,25 +16,42 @@ gelato-page(data-name='settings-general')
                 .header Account
                 div(data-navigate="settings/general") General
                 div(data-navigate="settings/study") Study
-                .header Billing
-                div(data-navigate="settings/billing-history") Billing history
-                div(data-navigate="settings/subscription") Subscription
           .col-md-9
             #section-content
               .title General Settings
-              form.form-horizontal
+              form#general-settings-form.form-horizontal
                 .form-group
-                  label.col-sm-2.control-label(for="field-username") Username
-                  .col-sm-10
-                    input#field-username.form-control(type="text", placeholder="")
+                  label.col-sm-3.control-label(for="field-avatar") Avatar
+                  .col-sm-9
+                    img#field-avatar(src="data:image/png;base64, " + user.settings.get('avatar'), alt="")
                 .form-group
-                  label.col-sm-2.control-label(for="field-display-name") Display name
-                  .col-sm-10
-                    input#field-displayname.form-control(type="text", placeholder="")
+                  label.col-sm-3.control-label(for="field-id") Username
+                  .col-sm-9
+                    input#field-id.form-control(type="text", disabled="disabled", value=user.id)
                 .form-group
-                  label.col-sm-2.control-label(for="field-email") Email
-                  .col-sm-10
-                    input#field-email.form-control(type="email", placeholder="")
+                  label.col-sm-3.control-label(for="field-name") Display name
+                  .col-sm-9
+                    input#field-name.form-control(type="text", value=user.settings.get('name'))
+                .form-group
+                  label.col-sm-3.control-label(for="field-email") Email
+                  .col-sm-9
+                    input#field-email.form-control(type="email", value=user.settings.get('email'))
+                .form-group
+                  label.col-sm-3.control-label(for="field-change-password") Password
+                  .col-sm-9
+                    a#button-change-password(href="") Change password
+                .form-group
+                  label.col-sm-3.control-label(for="field-about") About me
+                  .col-sm-9
+                    textarea#field-about.form-control(rows="5")= user.settings.get('aboutMe')
+                .form-group
+                  label.col-sm-3.control-label(for="field-private") Private account
+                  .col-sm-9
+                    if user.settings.get('private')
+                      input#field-private(type="checkbox", checked="checked")
+                    else
+                      input#field-private(type="checkbox")
+
                 .form-group
                   .col-sm-12
-                    button.btn.btn-fixed.btn-success(type="submit") Sign in
+                    button#button-save.btn.btn-fixed.btn-success(type="submit") Save
