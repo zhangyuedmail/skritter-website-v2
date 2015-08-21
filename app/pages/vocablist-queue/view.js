@@ -1,8 +1,8 @@
 var GelatoPage = require('gelato/page');
 var VocablistAddTable = require('components/vocablist-add-table/view');
 var VocablistReviewTable = require('components/vocablist-review-table/view');
-var NavbarLoggedIn = require('components/navbar-logged-in/view');
 var VocablistSidebar = require('components/vocablist-sidebar/view');
+var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class VocablistQueue
@@ -16,7 +16,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.addingTable = new VocablistAddTable();
         this.reviewingTable = new VocablistReviewTable();
-        this.navbar = new NavbarLoggedIn();
+        this.navbar = new DefaultNavbar();
         this.sidebar = new VocablistSidebar();
     },
     /**
@@ -35,9 +35,9 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.navbar.render();
         this.addingTable.setElement('#adding-container').render();
         this.reviewingTable.setElement('#reviewing-container').render();
-        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#vocablist-sidebar-container').render();
         return this;
     },

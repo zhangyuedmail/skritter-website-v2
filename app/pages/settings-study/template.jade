@@ -14,31 +14,62 @@ gelato-page(data-name='settings-study')
                 .header Account
                 div(data-navigate="settings/general") General
                 div(data-navigate="settings/study") Study
-                .header Billing
-                div(data-navigate="settings/billing-history") Billing history
-                div(data-navigate="settings/subscription") Subscription
           .col-md-9
             #section-content
               .title General Settings
               form.form-horizontal
                 .form-group
-                  label.col-sm-2.control-label(for="field-target-language") Target language
-                  .col-sm-10
+                  label.col-sm-3.control-label(for="field-target-language") Target language
+                  .col-sm-9
                     select#field-target-language.form-control
-                      option Chinese
-                      option Japanese
+                      if (app.getLanguage() === 'zh')
+                        option(selected="") Chinese
+                      else
+                        option Chinese
+                      if (app.getLanguage() === 'ja')
+                        option(selected="") Japanese
+                      else
+                        option Japanese
                 .form-group
-                  label.col-sm-2.control-label(for="field-source-language") Source language
-                  .col-sm-10
+                  label.col-sm-3.control-label(for="field-source-language") Source language
+                  .col-sm-9
                     select#field-source-language.form-control
                       option English
+                if (app.getLanguage() === 'zh')
+                  .form-group
+                    label.col-sm-3.control-label(for="field-style") Character style
+                    .col-sm-9
+                      select#field-style.form-control
+                        option Simplified
+                        option Traditional
+                        option Both
                 .form-group
-                  label.col-sm-2.control-label(for="field-style") Character style
-                  .col-sm-10
-                    select#field-style.form-control
-                      option Simplified
-                      option Traditional
-                      option Both
+                  label.col-sm-3.control-label(for="field-parts") Parts studying
+                  .col-sm-9
+                    label.checkbox-inline
+                      input(type="checkbox", name="parts", value="rune", checked=user.settings.hasStudyPart('rune'))
+                      | Writing
+                    if (app.getLanguage() === 'zh')
+                      label.checkbox-inline
+                        input(type="checkbox", name="parts", value="tone", checked=user.settings.hasStudyPart('tone'))
+                        | Tone
+                    label.checkbox-inline
+                      input(type="checkbox", name="parts", value="rdng", checked=user.settings.hasStudyPart('rdng'))
+                      | Reading
+                    label.checkbox-inline
+                      input(type="checkbox", name="parts", value="defn", checked=user.settings.hasStudyPart('defn'))
+                      | Definition
+                .form-group
+                  label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
+                  .col-sm-9
+                    input(type="checkbox")
+                .form-group
+                  label.col-sm-3.control-label(for="field-add-contained") Also add characters when adding words
+                  .col-sm-9
+                    input(type="checkbox")
+
+                hr
+
                 .form-group
                   .col-sm-12
-                    button.btn.btn-fixed.btn-success(type="submit") Sign in
+                    button#button-save.btn.btn-fixed.btn-success(type="submit") Save
