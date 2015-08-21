@@ -1,6 +1,10 @@
 gelato-component(data-name='vocablist-browse-table')
 
-  if view._layout === 'list'
+  if view.vocablists.state === 'fetching'
+    p.text-center
+      i.fa.fa-3x.fa-spinner.fa-pulse
+
+  else if view._layout === 'list'
     #header-row.row
       .col-md-6
         #title-sort.table-sort(class=view._sortType==='title' ? 'chosen' : '')
@@ -27,7 +31,7 @@ gelato-component(data-name='vocablist-browse-table')
             else
               span= _.capitalize(list.get('studyingMode'))
 
-  if view._layout === 'grid'
+  else if view._layout === 'grid'
       #grid
         if view._lists.length
           for list, i in view._lists

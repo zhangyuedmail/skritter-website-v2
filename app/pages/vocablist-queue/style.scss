@@ -33,33 +33,4 @@ gelato-page[data-name='vocablist-queue'] {
     }
   }
 
-  #section-menu {
-    color: #8c9196;
-    margin: 45px auto 0 auto;
-    width: 140px;
-    button {
-      height: 50px;
-      padding: 0 20px;
-    }
-    .options {
-      color: #8c9196;
-      font-family: $font-muli;
-      font-size: 16px;
-      font-weight: 300;
-      margin-top: 30px;
-      padding: 10px;
-      > a {
-        color: #8c9196;
-        cursor: pointer;
-        display: block;
-        margin-bottom: 20px;
-      }
-      .active {
-        color: #404851;
-        font-weight: 400;
-        margin-bottom: 20px;
-      }
-    }
-  }
-
 }

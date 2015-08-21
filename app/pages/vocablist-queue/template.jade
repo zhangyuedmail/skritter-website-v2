@@ -1,21 +1,11 @@
 gelato-page(data-name='vocablist-queue')
-  gelato-navbar.fixed-top
-    .container-fluid
-      .container
-        .left
-          .item.item-header(data-navigate="dashboard") Skritter
+  #navbar-container
   gelato-content
     .container
       .content-block
         .row
           .col-md-3
-            #section-menu
-              button.btn.btn-fixed.btn-success(data-navigate="vocablist/create") Create new list
-              .options
-                .active Study Queue
-                a(href="/vocablist/browse") Browse Lists
-                a(href="/vocablist/my-lists") My Lists
-                a(href="/vocablist/chinesepod") ChinesePod
+            #vocablist-sidebar-container
           .col-md-9
             #section-content
               .title Study Queue
