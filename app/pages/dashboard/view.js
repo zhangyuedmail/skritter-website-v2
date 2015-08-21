@@ -37,9 +37,6 @@ module.exports = GelatoPage.extend({
         this.dashboardGoal.setElement('#dashboard-goal-container').render();
         this.dashboardMonth.setElement('#dashboard-month-container').render();
         this.dashboardTotal.setElement('#dashboard-total-container').render();
-        app.user.data.items.fetchDaily();
-        app.user.data.items.fetchNext();
-        app.user.data.stats.fetchMonth();
         return this;
     },
     /**
