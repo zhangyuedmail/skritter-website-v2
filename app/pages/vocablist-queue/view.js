@@ -48,6 +48,8 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.addingTable.remove();
         this.reviewingTable.remove();
+        this.navbar.remove();
+        this.sidebar.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });

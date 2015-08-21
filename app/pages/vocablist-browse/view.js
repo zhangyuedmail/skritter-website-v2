@@ -94,6 +94,8 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.vocablistTable.remove();
+        this.navbar.remove();
+        this.sidebar.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });
