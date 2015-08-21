@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class NavbarLoggedIn
+ * @class VocablistSideBar
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -18,10 +18,15 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {NavbarLoggedIn}
+     * @returns {VocablistSideBar}
      */
     render: function() {
         this.renderTemplate();
-        this.$('[data-toggle="tooltip"]').tooltip()
+        this.$('[data-toggle="tooltip"]').tooltip();
+        $.each(this.$('.options a'), function(i, el) {
+            if ($(el).attr('href') === document.location.pathname) {
+                $(el).addClass('active');
+            }
+        });
     }
 });

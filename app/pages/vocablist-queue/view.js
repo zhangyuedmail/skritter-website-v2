@@ -2,6 +2,7 @@ var GelatoPage = require('gelato/page');
 var VocablistAddTable = require('components/vocablist-add-table/view');
 var VocablistReviewTable = require('components/vocablist-review-table/view');
 var NavbarLoggedIn = require('components/navbar-logged-in/view');
+var VocablistSidebar = require('components/vocablist-sidebar/view');
 
 /**
  * @class VocablistQueue
@@ -16,6 +17,7 @@ module.exports = GelatoPage.extend({
         this.addingTable = new VocablistAddTable();
         this.reviewingTable = new VocablistReviewTable();
         this.navbar = new NavbarLoggedIn();
+        this.sidebar = new VocablistSidebar();
     },
     /**
      * @property title
@@ -36,6 +38,7 @@ module.exports = GelatoPage.extend({
         this.addingTable.setElement('#adding-container').render();
         this.reviewingTable.setElement('#reviewing-container').render();
         this.navbar.setElement('#navbar-container').render();
+        this.sidebar.setElement('#vocablist-sidebar-container').render();
         return this;
     },
     /**
