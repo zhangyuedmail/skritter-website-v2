@@ -2,43 +2,8 @@
 
 gelato-page[data-name='vocablist-browse'] {
 
-  .content-block { background-color: #f2f2f6; }
-
-  .col-md-9 { background-color: #fbfafc; }
-
-  #section-content {
-    background-color: $white1;
-    border-bottom-right-radius: 25px;
-    border-top-right-radius: 25px;
-    color: #404851;
-    padding: 55px 40px;
-    .header {
-      font-family: $font-muli;
-      font-size: 20px;
-      font-weight: 300;
-      margin-bottom: 15px;
-      margin-top: 40px;
-    }
-    .title {
-      font-family: $font-muli;
-      font-size: 24px;
-      font-weight: 400;
-      margin-bottom: 25px;
-    }
-  }
-
   #table-options {
     margin-bottom: 40px;
-    padding-left: 15px;
-    padding-right: 15px;
-    table {
-      font-size: 16px;
-      margin-top: 40px;
-      td, th { border: none; }
-      tr:nth-child(even) { background-color: #f7f6f9; }
-      .field-name { max-width: 400px; }
-      .field-progress { min-width: 200px; }
-    }
     .input-group {
       input {
         border-bottom-right-radius: 25px;
@@ -50,6 +15,7 @@ gelato-page[data-name='vocablist-browse'] {
       }
       .input-group-addon { background-color: transparent; }
     }
+
     .glyphicon.layout-selector {
       font-size: 38px;
       color: $grey1;
@@ -58,6 +24,7 @@ gelato-page[data-name='vocablist-browse'] {
         color: $grey5;
       }
     }
+
     .form-inline {
       margin-top: 15px;
       color: $grey4;

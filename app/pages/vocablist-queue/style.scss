@@ -1,36 +1,4 @@
 @import "../../styles/variables";
 
 gelato-page[data-name='vocablist-queue'] {
-
-  .content-block { background-color: #f2f2f6; }
-
-  #section-content {
-    background-color: $white1;
-    border-bottom-right-radius: 25px;
-    border-top-right-radius: 25px;
-    color: #404851;
-    margin: -15px;
-    padding: 55px 40px;
-    table {
-      border: 1px $grey1 solid;
-      font-size: 16px;
-      padding: 20px 20px 0 20px;
-      td, th { border: none; }
-      thead { display: none; }
-      .field-progress { min-width: 200px; }
-    }
-    .header {
-      font-family: $font-muli;
-      font-size: 20px;
-      font-weight: 300;
-      margin-bottom: 15px;
-      margin-top: 40px;
-    }
-    .title {
-      font-family: $font-muli;
-      font-size: 24px;
-      font-weight: 400;
-    }
-  }
-
 }
