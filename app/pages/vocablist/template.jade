@@ -1,0 +1,70 @@
+gelato-page(data-name='vocablist')
+  #navbar-container
+  gelato-content
+    .container
+      .content-block
+        .row
+          .col-md-3.sidebar
+            .sidebar-spacer
+              div
+                a.back-link(href="/vocablist/browse")
+                  span.glyphicon.glyphicon-chevron-left
+                  span back to lists
+
+              - var imgURL = 'http://www.skritter.com/vocab/listimage?list=' + view.vocablist.id;
+              img#list-img.img-thumbnail(src=imgURL)
+
+              if view.vocablist.state !== 'fetching'
+
+                p
+                  if view.vocablist.state === 'saving'
+                    button.btn.btn-fixed.btn-success(disabled=true) Saving changes
+
+                  else if view.vocablist.get('studyingMode') === 'not studying'
+                    button#add-to-queue-btn.btn.btn-fixed.btn-success Add to queue
+
+                  else
+                    a.btn.btn-fixed.btn-primary Study now
+
+                p.status-p
+                  span.spr Status:
+                  span= _.capitalize(view.vocablist.get('studyingMode'))
+
+                if view.vocablist.get('studyingMode') !== 'not studying'
+                  .progress
+                    - var progress = view.vocablist.getProgress();
+                    .progress-bar(style="width:"+progress+'%')= progress+'%'
+
+                hr
+
+                .actions
+                  div.action
+                    span.glyphicon.glyphicon-share
+                    span Publish
+
+                  div.action
+                    span.glyphicon.glyphicon-duplicate
+                    span Copy
+
+                  div.action
+                    span.glyphicon.glyphicon-trash
+                    span Delete
+
+                  div.action
+                    span.glyphicon.glyphicon-blackboard
+                    span Assign to group
+
+                  div.action
+                    span.glyphicon.glyphicon-export
+                    span Export
+
+
+          .col-md-9.main-content
+            if view.vocablist.state === 'fetching'
+              p.text-center
+                i.fa.fa-3x.fa-spinner.fa-pulse
+
+            else
+              .title= view.vocablist.get('name')
+
+              p= view.vocablist.get('description')

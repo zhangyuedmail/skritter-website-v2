@@ -14,6 +14,16 @@ module.exports = GelatoDialog.extend({
         if (!this.vocablist) {
             throw new Error('VocablistSettingsDialog requires a vocablist passed in!')
         }
+        if (!this.vocablist.get('sections')) {
+            this.vocablist.fetch();
+            //this.listenTo(this.vocablist, 'state', this.render);
+
+            // Hack until state event and property works.
+            this.listenTo(this.vocablist, 'sync', function() {
+                this.vocablist.state = 'standby';
+                this.renderContent();
+            });
+        }
     },
     /**
      * @property template
@@ -27,6 +37,13 @@ module.exports = GelatoDialog.extend({
     render: function() {
         this.renderTemplate();
         return this;
+    },
+    /**
+     * @method renderContent
+     */
+    renderContent: function() {
+        var rendering = $(this.template(require('globals')));
+        this.$('.modal-content').replaceWith(rendering.find('.modal-content'));
     },
     /**
      * @property events
@@ -76,8 +93,7 @@ module.exports = GelatoDialog.extend({
             attributes.autoSectionMovement = autoSectionMovementEl.is(':not(:checked)');
         }
 
-        console.log('saving', JSON.stringify(attributes, null, '\t'));
-        this.vocablist.set(attributes); // TODO: Change to use this.vocablist.save(attributes);
+        this.vocablist.set(attributes).save();
         this.close();
     }
 });

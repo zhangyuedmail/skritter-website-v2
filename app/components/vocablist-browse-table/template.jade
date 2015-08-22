@@ -19,7 +19,7 @@ gelato-component(data-name='vocablist-browse-table')
       for list, i in view._lists
         .row
           .col-md-6
-            span= list.get('name')
+            a(href="/vocablist/view/"+list.id)= list.get('name')
           .col-md-3
             .progress(style="width:" + (100 * list.getPopularity()) + '%')
               .progress-bar(style="width:100%")

@@ -91,5 +91,16 @@ module.exports = SkritterModel.extend({
      */
     isJapanese: function() {
         return this.get('lang') === 'ja';
+    },
+    /**
+     * @property urlRoot
+     */
+    urlRoot: 'vocablists',
+    /**
+     * @method parse
+     * @returns {Object}
+     */
+    parse: function(response) {
+        return response.VocabList || response;
     }
 });

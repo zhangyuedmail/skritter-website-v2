@@ -3,6 +3,7 @@ var VocablistAddTable = require('components/vocablist-add-table/view');
 var VocablistReviewTable = require('components/vocablist-review-table/view');
 var NavbarLoggedIn = require('components/navbar-logged-in/view');
 var VocablistSidebar = require('components/vocablist-sidebar/view');
+var Vocablists = require('collections/vocablists');
 
 /**
  * @class VocablistQueue
@@ -14,8 +15,15 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.addingTable = new VocablistAddTable();
-        this.reviewingTable = new VocablistReviewTable();
+        this.vocablists = new Vocablists();
+        this.vocablists.fetch({
+            data: {
+                limit: 100,
+                sort: 'studying'
+            }
+        });
+        this.addingTable = new VocablistAddTable({vocablists: this.vocablists});
+        this.reviewingTable = new VocablistReviewTable({vocablists: this.vocablists});
         this.navbar = new NavbarLoggedIn();
         this.sidebar = new VocablistSidebar();
     },

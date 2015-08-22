@@ -1,0 +1,49 @@
+@import "../../styles/variables";
+
+gelato-page[data-name='vocablist'] {
+  .sidebar-spacer {
+    margin: 45px 2% 0;
+    text-align: center;
+
+    .back-link {
+      color: $grey3;
+      .glyphicon {
+        margin-right: 5px;
+      }
+    }
+
+    #list-img {
+      margin: 20px 0 20px;
+    }
+
+    .status-p {
+      margin-top: 20px;
+    }
+
+    .progress {
+      width: 120px;
+      margin: 0 auto;
+
+      .progress-bar {
+        min-width: 2em;
+      }
+
+    }
+
+    .actions {
+      text-align: left;
+      width: 140px;
+      margin: 0 auto;
+
+      .action {
+        margin-bottom: 15px;
+      }
+
+      .glyphicon {
+        margin-right: 10px;
+      }
+    }
+
+  }
+
+}

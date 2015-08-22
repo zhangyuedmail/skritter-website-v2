@@ -1,5 +1,4 @@
 var GelatoComponent = require('gelato/component');
-var Vocablists = require('collections/vocablists');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
 
@@ -12,15 +11,9 @@ module.exports = GelatoComponent.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {
-        this.vocablists = new Vocablists();
+    initialize: function(options) {
+        this.vocablists = options.vocablists;
         this.listenTo(this.vocablists, 'state', this.render);
-        this.vocablists.fetch({
-            data: {
-                limit: 10,
-                sort: 'adding'
-            }
-        });
     },
     /**
      * @property events
@@ -63,7 +56,7 @@ module.exports = GelatoComponent.extend({
     handleClickListSettingsSpan: function(event) {
         event.preventDefault();
         var listID = $(event.target).closest('.row').data('list-id');
-        var list = _.find(this.vocablists, {id: listID.toString()});
+        var list = this.vocablists.get(listID.toString());
         this.dialog = new VocablistSettings({vocablist: list});
         this.dialog.render().open();
     },

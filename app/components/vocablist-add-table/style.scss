@@ -7,8 +7,8 @@ gelato-component[data-name='vocablist-add-table'] {
     white-space: nowrap;
   }
 
-  a {
-    color: $grade3;
+  a.action-link {
+    color: $green5;
     cursor: pointer;
   }
 

@@ -35,3 +35,16 @@ gelato-navbar {
 .text-chinese { font-family: "Chinese", "KaiTi", sans-serif; }
 
 .text-japanese { font-family: "Japanese", "DFPKaiSho-Md", sans-serif; }
+
+.spr:after {
+  content: " "
+}
+
+.spl:before {
+  content: " "
+}
+
+a {
+  text-decoration: none !important;
+  color: $grey4;
+}
