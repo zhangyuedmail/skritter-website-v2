@@ -18,6 +18,8 @@ module.exports = GelatoComponent.extend({
         this._sortType = 'title';
         this.vocablists = new Vocablists();
         this.listenTo(this.vocablists, 'state', this.render);
+        // TODO: only fetches first 200 Chinese lists. Either change server to return all,
+        //   or have client automatically load more.
         this.vocablists.fetch({
             data: {
                 sort: 'official'
