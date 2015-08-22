@@ -35,7 +35,8 @@ module.exports = GelatoPage.extend({
         'vclick #add-to-queue-btn': 'handleClickAddToQueueButton',
         'vclick #study-settings-link': 'handleClickStudySettingsLink',
         'vclick #publish-link': 'handleClickPublishLink',
-        'vclick #delete-link': 'handleClickDeleteLink'
+        'vclick #delete-link': 'handleClickDeleteLink',
+        'vclick #copy-link': 'handleClickCopyLink'
     },
     /**
      * @property title
@@ -128,6 +129,31 @@ module.exports = GelatoPage.extend({
             this.listenToOnce(this.vocablist, 'state', function() {
                 confirmDialog.close();
                 app.router.navigate('/vocablist/my-lists', {trigger: true});
+            })
+        });
+    },
+    /**
+     * @method handleClickCopyLink
+     */
+    handleClickCopyLink: function() {
+        var confirmDialog = new ConfirmDialog({
+            title: 'Confirm Copy',
+            body: 'Are you sure you want to make a copy of this list?',
+            okText: 'Yes - Copy!',
+            onConfirm: 'show-spinner'
+        });
+        confirmDialog.render().open();
+        this.listenTo(confirmDialog, 'confirm', function() {
+            var copyUrl = app.api.getUrl() + _.result(this.vocablist, 'url') + '/copy';
+            $.ajax({
+                url: copyUrl,
+                method: 'POST',
+                headers: app.api.getUserHeaders(),
+                success: function(response) {
+                    confirmDialog.close();
+                    var newListId = response.VocabList.id;
+                    app.router.navigate('/vocablist/view/'+newListId, {trigger: true});
+                }
             })
         });
     }

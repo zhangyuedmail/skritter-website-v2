@@ -50,9 +50,11 @@ gelato-page(data-name='vocablist')
                         span.glyphicon.glyphicon-share
                         span Publish
 
-                  //div.action
-                  //  span.glyphicon.glyphicon-duplicate
-                  //  span Copy
+                  if view.vocablist.copyable()
+                    a#copy-link
+                      div.action
+                        span.glyphicon.glyphicon-duplicate
+                        span Copy
 
                   if view.vocablist.deletable()
                     a#delete-link

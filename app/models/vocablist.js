@@ -122,10 +122,20 @@ module.exports = SkritterModel.extend({
      */
     deletable: function() {
         return _.all([
-            //!this.get('disabled'),
+            !this.get('disabled'),
             !this.get('published'),
             this.get('sort') === 'custom',
             this.get('user') === app.user.id
+        ]);
+    },
+    /**
+     * @method copyable
+     * @return {Boolean}
+     */
+    copyable: function() {
+        return _.all([
+            !this.get('disabled'),
+            this.get('sort') !== 'chinesepod-lesson'
         ]);
     }
 });
