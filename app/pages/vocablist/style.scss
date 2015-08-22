@@ -12,8 +12,19 @@ gelato-page[data-name='vocablist'] {
       }
     }
 
-    #list-img {
+    #list-img, #missing-image-stub {
       margin: 20px 0 20px;
+      width: 70%;
+    }
+
+    #missing-image-stub {
+      display: inline-block;
+      background: #e6e4ec;
+      text-align: center;
+      padding: 20px 0;
+      .glyphicon {
+        font-size: 100px;
+      }
     }
 
     .status-p {

@@ -12,7 +12,10 @@ gelato-page(data-name='vocablist')
                   span back to lists
 
               - var imgURL = 'http://www.skritter.com/vocab/listimage?list=' + view.vocablist.id;
+
               img#list-img.img-thumbnail(src=imgURL)
+              #missing-image-stub.hide
+                span.glyphicon.glyphicon-book
 
               if !view.vocablist.get('disabled') && view.vocablist.state !== 'fetching'
 

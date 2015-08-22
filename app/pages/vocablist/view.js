@@ -55,7 +55,16 @@ module.exports = GelatoPage.extend({
     render: function() {
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
+        this.$('#list-img').error(_.bind(this.handleLoadImageError, this));
         return this;
+    },
+    /**
+     * @method handleLoadImageError
+     * @param {Event} event
+     */
+    handleLoadImageError: function(event) {
+        $(event.target).remove();
+        this.$('#missing-image-stub').removeClass('hide');
     },
     /**
      * @method remove
