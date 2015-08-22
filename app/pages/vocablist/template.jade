@@ -14,7 +14,7 @@ gelato-page(data-name='vocablist')
               - var imgURL = 'http://www.skritter.com/vocab/listimage?list=' + view.vocablist.id;
               img#list-img.img-thumbnail(src=imgURL)
 
-              if view.vocablist.state !== 'fetching'
+              if !view.vocablist.get('disabled') && view.vocablist.state !== 'fetching'
 
                 p
                   if view.vocablist.state === 'saving'
@@ -38,25 +38,35 @@ gelato-page(data-name='vocablist')
                 hr
 
                 .actions
-                  div.action
-                    span.glyphicon.glyphicon-share
-                    span Publish
+                  if view.vocablist.get('studyingMode') !== 'not studying'
+                    div.action
+                      a#study-settings-link
+                        span.glyphicon.glyphicon-cog
+                        span Study Settings
 
-                  div.action
-                    span.glyphicon.glyphicon-duplicate
-                    span Copy
+                  if view.vocablist.publishable()
+                    a#publish-link
+                      div.action
+                        span.glyphicon.glyphicon-share
+                        span Publish
 
-                  div.action
-                    span.glyphicon.glyphicon-trash
-                    span Delete
+                  //div.action
+                  //  span.glyphicon.glyphicon-duplicate
+                  //  span Copy
 
-                  div.action
-                    span.glyphicon.glyphicon-blackboard
-                    span Assign to group
+                  if view.vocablist.deletable()
+                    a#delete-link
+                      div.action
+                        span.glyphicon.glyphicon-trash
+                        span Delete
 
-                  div.action
-                    span.glyphicon.glyphicon-export
-                    span Export
+                  //div.action
+                  //  span.glyphicon.glyphicon-blackboard
+                  //  span Assign to group
+                  //
+                  //div.action
+                  //  span.glyphicon.glyphicon-export
+                  //  span Export
 
 
           .col-md-9.main-content

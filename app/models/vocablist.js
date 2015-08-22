@@ -102,5 +102,30 @@ module.exports = SkritterModel.extend({
      */
     parse: function(response) {
         return response.VocabList || response;
+    },
+    /**
+     * @method publishable
+     * @return {Boolean}
+     */
+    publishable: function() {
+        return _.all([
+            !this.get('disabled'),
+            !this.get('published'),
+            this.get('sort') === 'custom',
+            this.get('user') === app.user.id,
+            (this.get('sections') || []).length
+        ]);
+    },
+    /**
+     * @method deletable
+     * @return {Boolean}
+     */
+    deletable: function() {
+        return _.all([
+            //!this.get('disabled'),
+            !this.get('published'),
+            this.get('sort') === 'custom',
+            this.get('user') === app.user.id
+        ]);
     }
 });
