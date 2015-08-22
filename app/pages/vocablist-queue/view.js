@@ -22,8 +22,8 @@ module.exports = GelatoPage.extend({
                 sort: 'studying'
             }
         });
-        this.addingTable = new VocablistAddTable();
-        this.reviewingTable = new VocablistReviewTable();
+        this.addingTable = new VocablistAddTable({vocablists: this.vocablists});
+        this.reviewingTable = new VocablistReviewTable({vocablists: this.vocablists});
         this.navbar = new DefaultNavbar();
         this.sidebar = new VocablistSidebar();
     },
