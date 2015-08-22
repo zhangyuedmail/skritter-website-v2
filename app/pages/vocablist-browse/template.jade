@@ -1,37 +1,35 @@
 gelato-page(data-name='vocablist-browse')
-  #navbar-container
-  gelato-content
-    .container
-      .content-block
-        .row
-          .col-md-3.sidebar
-            #vocablist-sidebar-container
-          .col-md-9.main-content
-            .title Browse Lists
-            #table-options
-              .row
-                .col-md-10
-                  .input-group.input-group-lg
-                    span.input-group-addon
-                      i.fa.fa-search
-                    input#list-search-input.form-control(type="text", placeholder="Type to search by title")
-                .col-md-1
-                  span#list-option.glyphicon.glyphicon-th-list.layout-selector.chosen
-                .col-md-1
-                  span#grid-option.glyphicon.glyphicon-th-large.layout-selector
-              .form-inline
-                label View only:
-                .checkbox
-                  label
-                    input#textbooks(type="checkbox" name='textbooks')
-                    span Textbooks
-                .checkbox
-                  label
-                    input#other-official-lists(type="checkbox" name='other-official')
-                    span Other official lists
-                //TODO: allow custom list searches
-                //.checkbox
-                  label
-                    input#user-created-lists(type="checkbox" name='custom')
-                    span User-created lists
-            #vocablist-container
+  .container
+    .content-block
+      .row
+        .col-md-3.sidebar
+          #vocablist-sidebar-container
+        .col-md-9.main-content
+          .title Browse Lists
+          #table-options
+            .row
+              .col-md-10
+                .input-group.input-group-lg
+                  span.input-group-addon
+                    i.fa.fa-search
+                  input#list-search-input.form-control(type="text", placeholder="Type to search by title")
+              .col-md-1
+                span#list-option.glyphicon.glyphicon-th-list.layout-selector.chosen
+              .col-md-1
+                span#grid-option.glyphicon.glyphicon-th-large.layout-selector
+            .form-inline
+              label View only:
+              .checkbox
+                label
+                  input#textbooks(type="checkbox" name='textbooks')
+                  span Textbooks
+              .checkbox
+                label
+                  input#other-official-lists(type="checkbox" name='other-official')
+                  span Other official lists
+              //TODO: allow custom list searches
+              //.checkbox
+                label
+                  input#user-created-lists(type="checkbox" name='custom')
+                  span User-created lists
+          #vocablist-container

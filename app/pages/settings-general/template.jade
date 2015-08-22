@@ -52,6 +52,21 @@ gelato-page(data-name='settings-general')
                     else
                       input#field-private(type="checkbox")
 
+                hr
+
+                .form-group
+                  label.col-sm-3.control-label(for="field-country") Country
+                  .col-sm-9
+                    select#field-country.form-control
+                      option Country1
+                      option Country2
+                .form-group
+                  label.col-sm-3.control-label(for="field-timezone") Timezone
+                  .col-sm-9
+                    select#field-timezone.form-control
+                      option Timezone1
+                      option Timezone2
+
                 .form-group
                   .col-sm-12
                     button#button-save.btn.btn-fixed.btn-success(type="submit") Save

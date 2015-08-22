@@ -11,11 +11,37 @@ gelato-page[data-name='settings-study'] {
     color: #404851;
     margin: -15px;
     padding: 55px 40px;
+    input {
+      border-radius: 0;
+      height: 50px;
+      &[type="checkbox"] { height: auto; }
+      &[type="email"],
+      &[type="text"] {
+        max-width: 300px;
+      }
+    }
+    label {
+      font-family: $font-muli;
+      font-weight: 300;
+      text-align: left;
+    }
+    select {
+      background-color: white;
+      border: 0;
+      max-width: 300px;
+      outline: 1px solid #cccccc;
+    }
+    textarea {
+      border-radius: 0;
+      max-width: 300px;
+    }
     .title {
       font-family: $font-muli;
       font-size: 24px;
       font-weight: 400;
+      margin-bottom: 30px;
     }
+    #button-save { margin-top: 30px; }
   }
 
   #section-menu {
