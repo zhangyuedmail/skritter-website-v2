@@ -105,7 +105,7 @@ module.exports = SkritterModel.extend({
     },
     /**
      * @method publishable
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     publishable: function() {
         return _.all([
@@ -118,7 +118,7 @@ module.exports = SkritterModel.extend({
     },
     /**
      * @method deletable
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     deletable: function() {
         return _.all([
@@ -130,7 +130,7 @@ module.exports = SkritterModel.extend({
     },
     /**
      * @method copyable
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     copyable: function() {
         return _.all([
@@ -140,7 +140,7 @@ module.exports = SkritterModel.extend({
     },
     /**
      * @method editable
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     editable: function() {
         if (app.user.settings.get('isAdmin')) {
@@ -156,5 +156,12 @@ module.exports = SkritterModel.extend({
                 this.get('public')
             ])
         ]);
+    },
+    /**
+     * @method getImageUrl
+     * @returns {String}
+     */
+    getImageUrl: function() {
+        return app.api.getUrl() + 'vocablists/' + this.id + '/image';
     }
 });

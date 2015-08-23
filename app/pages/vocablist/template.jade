@@ -14,10 +14,8 @@ gelato-page(data-name='vocablist')
                   span.glyphicon.glyphicon-chevron-left
                   span back to lists
 
-              - var imgURL = 'http://www.skritter.com/vocab/listimage?list=' + view.vocablist.id;
-
               div#list-img-wrapper
-                img#list-img.img-thumbnail(src=imgURL)
+                img#list-img.img-thumbnail(src=view.vocablist.getImageUrl())
                 #missing-image-stub.hide
                   span.glyphicon.glyphicon-book
 
