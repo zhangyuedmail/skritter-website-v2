@@ -44,7 +44,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickRestartAddingLink: function(event) {
         var listID = $(event.target).closest('.row').data('list-id');
-        var list = _.find(this.vocablists, {id: listID.toString()});
+        var list = this.vocablists.get(listID.toString());
         list.set('studyingMode', 'adding');
         list.save();
         this.render();
@@ -65,7 +65,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickRemoveListSpan: function(event) {
         var listID = $(event.target).closest('.row').data('list-id');
-        var list = _.find(this.vocablists, {id: listID.toString()});
+        var list = this.vocablists.get(listID.toString());
         this.dialog = new VocablistRemoveDialog({vocablist: list});
         this.dialog.render().open();
     }
