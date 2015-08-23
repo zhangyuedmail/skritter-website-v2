@@ -5,9 +5,8 @@ gelato-page(data-name='settings-study')
         .col-md-3
           #section-menu
             .options
-              .header Account
-              div(data-navigate="settings/general") General
-              div(data-navigate="settings/study") Study
+              a(href="/settings/general") General
+              a(href="/settings/study") Study
         .col-md-9
           #section-content
             .title General Settings
@@ -16,14 +15,8 @@ gelato-page(data-name='settings-study')
                 label.col-sm-3.control-label(for="field-target-language") Target language
                 .col-sm-9
                   select#field-target-language.form-control
-                    if (app.getLanguage() === 'zh')
-                      option(selected="") Chinese
-                    else
-                      option Chinese
-                    if (app.getLanguage() === 'ja')
-                      option(selected="") Japanese
-                    else
-                      option Japanese
+                    option(value="zh", selected=(app.getLanguage() === 'zh')) Chinese
+                    option(value="ja", selected=(app.getLanguage() === 'ja')) Japanese
               .form-group
                 label.col-sm-3.control-label(for="field-source-language") Source language
                 .col-sm-9
@@ -33,10 +26,12 @@ gelato-page(data-name='settings-study')
                 .form-group
                   label.col-sm-3.control-label(for="field-style") Character style
                   .col-sm-9
-                    select#field-style.form-control
-                      option Simplified
-                      option Traditional
-                      option Both
+                    label.checkbox-inline
+                      input(type="checkbox", name="styles", value="simp", checked=user.settings.get('addSimplified'))
+                      | Simplified
+                    label.checkbox-inline
+                      input(type="checkbox", name="styles", value="trad", checked=user.settings.get('addTraditional'))
+                      | Traditional
               .form-group
                 label.col-sm-3.control-label(for="field-parts") Parts studying
                 .col-sm-9
@@ -56,11 +51,11 @@ gelato-page(data-name='settings-study')
               .form-group
                 label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
                 .col-sm-9
-                  input(type="checkbox")
+                  input#field-heisig(type="checkbox", checked=user.settings.get('showHeisig'))
               .form-group
                 label.col-sm-3.control-label(for="field-add-contained") Also add characters when adding words
                 .col-sm-9
-                  input(type="checkbox")
+                  input#field-add-contained(type="checkbox", checked=user.settings.get('autoAddComponentCharacters'))
 
               hr
 

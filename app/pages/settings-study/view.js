@@ -16,6 +16,13 @@ module.exports = GelatoPage.extend({
         app.user.settings.fetch();
     },
     /**
+     * @property events
+     * @type {Object}
+     */
+    events: {
+        'vclick #button-save': 'handleClickButtonSave'
+    },
+    /**
      * @property title
      * @type {String}
      */
@@ -24,7 +31,7 @@ module.exports = GelatoPage.extend({
      * @property template
      * @type {Function}
      */
-    template: require('pages/settings-study/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {SettingsStudy}
@@ -32,15 +39,18 @@ module.exports = GelatoPage.extend({
     render: function() {
         this.renderTemplate();
         this.navbar.render();
-        this.renderFields();
         return this;
     },
     /**
-     * @method renderFields
-     * @returns {SettingsStudy}
+     * @method handleClickButtonSave
+     * @param {Event} event
      */
-    renderFields: function() {
-        return this;
+    handleClickButtonSave: function(event) {
+        event.preventDefault();
+        app.user.settings.set({
+            autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
+            showHeisig: this.$('#field-heisig').is(':checked')
+        }).save();
     },
     /**
      * @method remove

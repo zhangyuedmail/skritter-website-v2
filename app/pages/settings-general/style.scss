@@ -61,17 +61,14 @@ gelato-page[data-name='settings-general'] {
       font-weight: 300;
       margin-top: 30px;
       padding: 10px;
-      > div {
-        cursor: pointer;
+
+      > a {
+        color: $grey3;
+        display: block;
         margin-bottom: 20px;
-      }
-      .active {
-        color: #404851;
-        font-weight: 400;
-      }
-      .header {
-        font-size: 18px;
-        font-weight: 400;
+        text-decoration: none;
+        &:hover { color: $grey6; }
+        &.active { color: $grey9;  }
       }
     }
   }
