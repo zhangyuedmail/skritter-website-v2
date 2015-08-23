@@ -129,12 +129,10 @@ module.exports = SkritterModel.extend({
         return this;
     },
     /**
-     * @method url
+     * @method urlRoot
      * @returns {String}
      */
-    url: function() {
-        return 'users/' + app.user.id;
-    },
+    urlRoot: 'users',
     /**
      * @method getAllParts
      * @returns {Object}
