@@ -58,14 +58,20 @@ gelato-page(data-name='settings-general')
                   label.col-sm-3.control-label(for="field-country") Country
                   .col-sm-9
                     select#field-country.form-control
-                      option Country1
-                      option Country2
+                      for name, code in view.countries
+                        if code === view.getSelectedCountryCode()
+                          option(value=code, selected="selected")= name
+                        else
+                          option(value=code)= name
                 .form-group
                   label.col-sm-3.control-label(for="field-timezone") Timezone
                   .col-sm-9
                     select#field-timezone.form-control
-                      option Timezone1
-                      option Timezone2
+                      for timezone, code in view.timezones[view.getSelectedCountryCode()]
+                        if timezone === user.settings.get('timezone')
+                          option(value=timezone, selected="selected")= timezone
+                        else
+                          option(value=timezone)= timezone
 
                 .form-group
                   .col-sm-12
