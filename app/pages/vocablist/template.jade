@@ -4,6 +4,9 @@ gelato-page(data-name='vocablist')
     .container
       .content-block
         .row
+
+          //----------------- SIDEBAR -----------------------------------------
+
           .col-md-3.sidebar
             .sidebar-spacer
               div
@@ -74,12 +77,39 @@ gelato-page(data-name='vocablist')
                   //  span Export
 
 
+          //----------------- CONTENT -----------------------------------------
+
           .col-md-9.main-content
             if view.vocablist.state === 'fetching'
               p.text-center
                 i.fa.fa-3x.fa-spinner.fa-pulse
 
             else
-              .title= view.vocablist.get('name')
+              - var tags = view.vocablist.get('tags') || [];
 
-              p= view.vocablist.get('description')
+              #static-version
+
+                if view.vocablist.editable()
+                  a#edit-link.glyphicon.glyphicon-pencil.pull-right.static-el
+
+                .title.static-el= view.vocablist.get('name')
+
+                p.static-el!= view.vocablist.get('description').replace(/\n/g, '<br />')
+
+                #tags.static-el
+                  for tag in tags
+                    span.tag
+                      span.glyphicon.glyphicon-tag
+                      span.spl= tag
+
+              #editing-version.hide
+
+                #edit-row
+                  input#name-input.form-control.input-lg(value=view.vocablist.get('name'))
+                  a#cancel-edits-link Cancel
+                  button#save-edits-btn.btn.btn-success.btn-fixed Save edits
+
+                textarea#description-textarea.form-control= view.vocablist.get('description')
+
+                input#tags-input.form-control(value=tags.join(', '))
+                .help-block Separate tags with commas

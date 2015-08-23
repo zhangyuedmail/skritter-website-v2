@@ -1,6 +1,9 @@
 @import "../../styles/variables";
 
 gelato-page[data-name='vocablist'] {
+
+  //----------------- SIDEBAR -----------------------------------------
+
   .sidebar-spacer {
     margin: 45px 2% 0;
     text-align: center;
@@ -55,6 +58,55 @@ gelato-page[data-name='vocablist'] {
       }
     }
 
+  }
+
+
+  //----------------- CONTENT -----------------------------------------
+
+  .main-content {
+
+    #edit-link {
+      color: $green5;
+      font-size: 20px;
+    }
+
+    #edit-row {
+      & > * {
+        display: inline-block;
+      }
+
+      #name-input {
+        width: 60%;
+      }
+
+      #cancel-edits-link {
+        width: 20%;
+        text-align: center;
+        color: $grey2;
+      }
+
+      #save-edits-btn {
+        width: 20%;
+      }
+    }
+
+    #description-textarea {
+      height: 150px;
+      margin: 40px 0 10px;
+    }
+
+    #tags {
+      margin-top: 20px;
+
+      .tag {
+        margin-right: 20px;
+
+        .glyphicon-tag {
+          color: $green5;
+        }
+      }
+
+    }
   }
 
 }

@@ -36,7 +36,10 @@ module.exports = GelatoPage.extend({
         'vclick #study-settings-link': 'handleClickStudySettingsLink',
         'vclick #publish-link': 'handleClickPublishLink',
         'vclick #delete-link': 'handleClickDeleteLink',
-        'vclick #copy-link': 'handleClickCopyLink'
+        'vclick #copy-link': 'handleClickCopyLink',
+        'vclick #edit-link': 'handleClickEditLink',
+        'vclick #cancel-edits-link': 'handleClickCancelEditsLink',
+        'vclick #save-edits-btn': 'handleClickSaveEditsButton'
     },
     /**
      * @property title
@@ -165,5 +168,36 @@ module.exports = GelatoPage.extend({
                 }
             })
         });
+    },
+    /**
+     * @method handleClickEditLink
+     */
+    handleClickEditLink: function() {
+        this.$('#editing-version').removeClass('hide');
+        this.$('#static-version').addClass('hide');
+    },
+    /**
+     * @method handleClickCancelEditsLink
+     */
+    handleClickCancelEditsLink: function() {
+        this.$('#editing-version').addClass('hide');
+        this.$('#static-version').removeClass('hide');
+    },
+    /**
+     * @method handleClickSaveEditsButton
+     */
+    handleClickSaveEditsButton: function() {
+        var tags = this.$('#tags-input').val().split(',');
+        tags = _.map(tags, _.trim);
+        tags = _.filter(tags);
+
+        var attrs = {
+            name: this.$('#name-input').val(),
+            description: this.$('#description-textarea').val(),
+            tags: tags
+        };
+
+        this.vocablist.set(attrs);
+        this.vocablist.save(attrs, {patch: true, method: 'PUT'});
     }
 });

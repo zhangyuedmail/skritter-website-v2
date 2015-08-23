@@ -137,5 +137,24 @@ module.exports = SkritterModel.extend({
             !this.get('disabled'),
             this.get('sort') !== 'chinesepod-lesson'
         ]);
+    },
+    /**
+     * @method editable
+     * @return {Boolean}
+     */
+    editable: function() {
+        if (app.user.settings.get('isAdmin')) {
+            return true;
+        }
+
+        return _.all([
+            !this.get('disabled'),
+            this.get('sort') === 'custom',
+            _.any([
+                this.get('user') === app.user.id,
+                _.contains(this.get('editors'), app.user.id),
+                this.get('public')
+            ])
+        ]);
     }
 });
