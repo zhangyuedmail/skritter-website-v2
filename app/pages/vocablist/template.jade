@@ -113,3 +113,21 @@ gelato-page(data-name='vocablist')
 
                 input#tags-input.form-control(value=tags.join(', '))
                 .help-block Separate tags with commas
+
+              .header Sections
+
+              table.table.table-striped
+                - var sectionsSkipping = view.vocablist.get('sectionsSkipping') || [];
+
+                for section in view.vocablist.get('sections')
+                  tr
+                    td= section.name
+                    td
+                      | #{section.rows.length} word
+                      if section.rows.length !== 1
+                        | s
+                    td
+                      if _.contains(sectionsSkipping, section.id)
+                        | Skipping
+                      else if section.id === view.vocablist.get('currentSection')
+                        | Adding
