@@ -3,6 +3,7 @@ var DefaultNavbar = require('navbars/default/view');
 var Vocablist = require('models/vocablist');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var ConfirmDialog = require('dialogs/confirm/view');
+var User = require('models/user-settings');
 
 /**
  * @class VocablistView
@@ -23,9 +24,29 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.vocablist, 'sync', function() {
             this.vocablist.state = 'standby';
             this.render();
+            this.loadCreatorNameIfNeeded();
         });
 
         this.navbar = new DefaultNavbar();
+    },
+    /**
+     * @method loadCreatorNameIfNeeded
+     */
+    loadCreatorNameIfNeeded: function() {
+        // Only need to find the real name of the creator if this is a custom list made by someone
+        // other than the logged in user.
+        if (this.vocablist.get('sort') !== 'custom' || this.vocablist.get('creator') === app.user.id) {
+            return;
+        }
+        this.creator = new User({id: this.vocablist.get('creator')});
+        this.creator.fetch({
+            data: { fields: 'name' }
+        });
+        this.listenTo(this.creator, 'sync', function() {
+            var selector = '[data-user-id="'+this.creator.id+'"]';
+            var text = this.creator.get('name') || this.creator.id;
+            this.$(selector).text(text);
+        });
     },
     /**
      * @property events

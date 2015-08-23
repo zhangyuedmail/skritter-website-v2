@@ -100,7 +100,37 @@ gelato-page(data-name='vocablist')
                 if view.vocablist.editable()
                   a#edit-link.glyphicon.glyphicon-pencil.pull-right.static-el
 
-                .title.static-el= view.vocablist.get('name')
+                .title.static-el
+                  span= view.vocablist.get('name')
+
+                div#stats-line
+                  span.spr Made by:
+                  - var sort = view.vocablist.get('sort');
+                  if sort === 'official'
+                    span Skritter
+                  else if sort === 'chinesepod-lesson'
+                    span ChinesePod
+                  else if view.vocablist.get('creator') === app.user.id
+                    span= app.user.settings.get('name') || app.user.id
+                  else
+                    if view.creator && view.creator.state === 'standby'
+                      span= view.creator.get('name') || view.creator.id
+                    else
+                      span(data-user-id=view.vocablist.get('creator')) ...
+                  span.spl.spr |
+
+                  if view.vocablist.get('published')
+                    span.spr Published:
+                    span= moment(view.vocablist.get('published')).format('LL')
+                    span.spl.spr |
+
+                  if view.vocablist.get('published') && view.vocablist.get('peopleStudying')
+                    span.spr Studied by:
+                    span= view.vocablist.get('peopleStudying')
+                    span.spl.spr |
+
+                  span.spr Words:
+                  span= view.vocablist.getWordCount()
 
                 p.static-el!= view.vocablist.get('description').replace(/\n/g, '<br />')
 
