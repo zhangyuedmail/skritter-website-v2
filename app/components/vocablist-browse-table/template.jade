@@ -38,7 +38,7 @@ gelato-component(data-name='vocablist-browse-table')
             .col-md-3
               .grid-tile
                 .header.text-center.text-capitalize= list.get('name')
-                img(src='http://www.skritter.com/vocab/listimage?list=' + list.id)
+                img(src=list.getImageUrl())
                 .background
                   span.glyphicon.glyphicon-book
                 .footer.text-center
