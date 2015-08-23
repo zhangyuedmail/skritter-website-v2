@@ -134,5 +134,17 @@ module.exports = SkritterModel.extend({
      */
     url: function() {
         return 'users/' + app.user.id;
+    },
+    /**
+     * @method getAllParts
+     * @returns {Object}
+     */
+    getAllParts: function() {
+        if (this.get('targetLang') === 'zh') {
+            return this.get('allChineseParts');
+        }
+        else {
+            return this.get('allJapaneseParts');
+        }
     }
 });
