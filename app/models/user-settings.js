@@ -17,6 +17,8 @@ module.exports = SkritterModel.extend({
      * @type {Object}
      */
     defaults: {
+        allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+        allJapaneseParts: ['defn', 'rdng', 'rune'],
         gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
         goals: {ja: {items: 20}, zh: {items: 20}}
     },
@@ -28,6 +30,13 @@ module.exports = SkritterModel.extend({
         app.user.setLocalData('settings', this.toJSON());
         this.updateRaygun();
         return this;
+    },
+    /**
+     * @method getAllParts
+     * @returns {Array}
+     */
+    getAllParts: function() {
+        return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
     },
     /**
      * @method getGoal
@@ -134,17 +143,5 @@ module.exports = SkritterModel.extend({
      */
     url: function() {
         return 'users/' + app.user.id;
-    },
-    /**
-     * @method getAllParts
-     * @returns {Object}
-     */
-    getAllParts: function() {
-        if (this.get('targetLang') === 'zh') {
-            return this.get('allChineseParts');
-        }
-        else {
-            return this.get('allJapaneseParts');
-        }
     }
 });
