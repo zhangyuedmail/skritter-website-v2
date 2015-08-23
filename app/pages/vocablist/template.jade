@@ -16,9 +16,18 @@ gelato-page(data-name='vocablist')
 
               - var imgURL = 'http://www.skritter.com/vocab/listimage?list=' + view.vocablist.id;
 
-              img#list-img.img-thumbnail(src=imgURL)
-              #missing-image-stub.hide
-                span.glyphicon.glyphicon-book
+              div#list-img-wrapper
+                img#list-img.img-thumbnail(src=imgURL)
+                #missing-image-stub.hide
+                  span.glyphicon.glyphicon-book
+
+                i.fa.fa-5x.fa-spinner.fa-pulse.hide
+
+                #image-upload-prompt
+                  a#image-upload-link
+                    span.glyphicon.glyphicon-plus-sign
+                    span.spl Change photo
+                input#image-upload-input.hide(type="file", accept="image/*")
 
               if !view.vocablist.get('disabled') && view.vocablist.state !== 'fetching'
 

@@ -39,7 +39,9 @@ module.exports = GelatoPage.extend({
         'vclick #copy-link': 'handleClickCopyLink',
         'vclick #edit-link': 'handleClickEditLink',
         'vclick #cancel-edits-link': 'handleClickCancelEditsLink',
-        'vclick #save-edits-btn': 'handleClickSaveEditsButton'
+        'vclick #save-edits-btn': 'handleClickSaveEditsButton',
+        'vclick #image-upload-link': 'handleClickImageUploadLink',
+        'change #image-upload-input': 'handleChangeImageUploadInput'
     },
     /**
      * @property title
@@ -114,7 +116,7 @@ module.exports = GelatoPage.extend({
                 success: function() {
                     document.location.reload()
                 }
-            })
+            });
         });
     },
     /**
@@ -141,7 +143,7 @@ module.exports = GelatoPage.extend({
             this.listenToOnce(this.vocablist, 'state', function() {
                 confirmDialog.close();
                 app.router.navigate('/vocablist/my-lists', {trigger: true});
-            })
+            });
         });
     },
     /**
@@ -166,7 +168,7 @@ module.exports = GelatoPage.extend({
                     var newListId = response.VocabList.id;
                     app.router.navigate('/vocablist/view/'+newListId, {trigger: true});
                 }
-            })
+            });
         });
     },
     /**
@@ -199,5 +201,36 @@ module.exports = GelatoPage.extend({
 
         this.vocablist.set(attrs);
         this.vocablist.save(attrs, {patch: true, method: 'PUT'});
+    },
+    /**
+     * @method handleClickImageUploadLink
+     */
+    handleClickImageUploadLink: function() {
+        $('#image-upload-input').trigger('click');
+    },
+    /**
+     * @method handleChangeImageUploadInput
+     * @param {Event} e
+     */
+    handleChangeImageUploadInput: function(e) {
+        var file = e.target.files[0];
+        var data = new FormData();
+        data.append('image', file);
+        this.$('#list-img-wrapper .fa-spinner').removeClass('hide');
+        this.$('#list-img').remove();
+        this.$('#missing-image-stub').removeClass('hide');
+
+        var imageUrl = app.api.getUrl() + _.result(this.vocablist, 'url') + '/image';
+        $.ajax({
+            url: imageUrl,
+            method: 'POST',
+            headers: app.api.getUserHeaders(),
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function() {
+                document.location.reload();
+            }
+        });
     }
 });
