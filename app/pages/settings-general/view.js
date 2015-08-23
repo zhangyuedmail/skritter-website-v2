@@ -1,5 +1,6 @@
 var GelatoPage = require('gelato/page');
 var ChangePasswordDialog = require('dialogs/change-password/view');
+var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class SettingsGeneral
@@ -13,6 +14,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.countries = require('data/country-codes');
         this.timezones = require('data/country-timezones');
+        this.navbar = new DefaultNavbar();
         this.listenTo(app.user.settings, 'state', this.render);
         app.user.settings.fetch();
     },
@@ -40,8 +42,8 @@ module.exports = GelatoPage.extend({
      * @returns {SettingsGeneral}
      */
     render: function() {
-        console.log('render');
         this.renderTemplate();
+        this.navbar.render();
         return this;
     },
     /**

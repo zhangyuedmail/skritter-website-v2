@@ -1,78 +1,70 @@
 gelato-page(data-name='settings-general')
+  .container
+    .content-block
+      .row
+        .col-md-3
+          #section-menu
+            .options
+              .header Account
+              div(data-navigate="settings/general") General
+              div(data-navigate="settings/study") Study
+        .col-md-9
+          #section-content
+            .title General Settings
+            form#general-settings-form.form-horizontal
+              .form-group
+                label.col-sm-3.control-label(for="field-avatar") Avatar
+                .col-sm-9
+                  img#field-avatar(src="data:image/png;base64, " + user.settings.get('avatar'), alt="")
+              .form-group
+                label.col-sm-3.control-label(for="field-id") Username
+                .col-sm-9
+                  input#field-id.form-control(type="text", disabled="disabled", value=user.id)
+              .form-group
+                label.col-sm-3.control-label(for="field-name") Display name
+                .col-sm-9
+                  input#field-name.form-control(type="text", value=user.settings.get('name'))
+              .form-group
+                label.col-sm-3.control-label(for="field-email") Email
+                .col-sm-9
+                  input#field-email.form-control(type="email", value=user.settings.get('email'))
+              .form-group
+                label.col-sm-3.control-label(for="field-change-password") Password
+                .col-sm-9
+                  a#button-change-password(href="") Change password
+              .form-group
+                label.col-sm-3.control-label(for="field-about") About me
+                .col-sm-9
+                  textarea#field-about.form-control(rows="5")= user.settings.get('aboutMe')
+              .form-group
+                label.col-sm-3.control-label(for="field-private") Private account
+                .col-sm-9
+                  if user.settings.get('private')
+                    input#field-private(type="checkbox", checked="checked")
+                  else
+                    input#field-private(type="checkbox")
 
-  gelato-navbar.fixed-top
-    .container-fluid
-      .container
-        .left
-          .item.item-header(data-navigate="dashboard") Skritter
+              hr
 
-  gelato-content
-    .container
-      .content-block
-        .row
-          .col-md-3
-            #section-menu
-              .options
-                .header Account
-                div(data-navigate="settings/general") General
-                div(data-navigate="settings/study") Study
-          .col-md-9
-            #section-content
-              .title General Settings
-              form#general-settings-form.form-horizontal
-                .form-group
-                  label.col-sm-3.control-label(for="field-avatar") Avatar
-                  .col-sm-9
-                    img#field-avatar(src="data:image/png;base64, " + user.settings.get('avatar'), alt="")
-                .form-group
-                  label.col-sm-3.control-label(for="field-id") Username
-                  .col-sm-9
-                    input#field-id.form-control(type="text", disabled="disabled", value=user.id)
-                .form-group
-                  label.col-sm-3.control-label(for="field-name") Display name
-                  .col-sm-9
-                    input#field-name.form-control(type="text", value=user.settings.get('name'))
-                .form-group
-                  label.col-sm-3.control-label(for="field-email") Email
-                  .col-sm-9
-                    input#field-email.form-control(type="email", value=user.settings.get('email'))
-                .form-group
-                  label.col-sm-3.control-label(for="field-change-password") Password
-                  .col-sm-9
-                    a#button-change-password(href="") Change password
-                .form-group
-                  label.col-sm-3.control-label(for="field-about") About me
-                  .col-sm-9
-                    textarea#field-about.form-control(rows="5")= user.settings.get('aboutMe')
-                .form-group
-                  label.col-sm-3.control-label(for="field-private") Private account
-                  .col-sm-9
-                    if user.settings.get('private')
-                      input#field-private(type="checkbox", checked="checked")
-                    else
-                      input#field-private(type="checkbox")
+              .form-group
+                label.col-sm-3.control-label(for="field-country") Country
+                .col-sm-9
+                  select#field-country.form-control
+                    for name, code in view.countries
+                      if code === view.getSelectedCountryCode()
+                        option(value=code, selected="selected")= name
+                      else
+                        option(value=code)= name
+              .form-group
+                label.col-sm-3.control-label(for="field-timezone") Timezone
+                .col-sm-9
+                  select#field-timezone.form-control
+                    for timezone, code in view.timezones[view.getSelectedCountryCode()]
+                      if timezone === user.settings.get('timezone')
+                        option(value=timezone, selected="selected")= timezone
+                      else
+                        option(value=timezone)= timezone
 
-                hr
-
-                .form-group
-                  label.col-sm-3.control-label(for="field-country") Country
-                  .col-sm-9
-                    select#field-country.form-control
-                      for name, code in view.countries
-                        if code === view.getSelectedCountryCode()
-                          option(value=code, selected="selected")= name
-                        else
-                          option(value=code)= name
-                .form-group
-                  label.col-sm-3.control-label(for="field-timezone") Timezone
-                  .col-sm-9
-                    select#field-timezone.form-control
-                      for timezone, code in view.timezones[view.getSelectedCountryCode()]
-                        if timezone === user.settings.get('timezone')
-                          option(value=timezone, selected="selected")= timezone
-                        else
-                          option(value=timezone)= timezone
-
-                .form-group
-                  .col-sm-12
-                    button#button-save.btn.btn-fixed.btn-success(type="submit") Save
+              .form-group
+                .col-sm-12
+                  button#button-save.btn.btn-fixed.btn-success(type="submit") Save

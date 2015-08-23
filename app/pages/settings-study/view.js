@@ -1,4 +1,5 @@
 var GelatoPage = require('gelato/page');
+var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class SettingsStudy
@@ -9,7 +10,11 @@ module.exports = GelatoPage.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+        this.navbar = new DefaultNavbar();
+        this.listenTo(app.user.settings, 'state', this.render);
+        app.user.settings.fetch();
+    },
     /**
      * @property title
      * @type {String}
@@ -26,8 +31,8 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.navbar.render();
         this.renderFields();
-        app.user.settings.fetch();
         return this;
     },
     /**
