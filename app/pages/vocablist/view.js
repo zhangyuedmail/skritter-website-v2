@@ -1,9 +1,9 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
-var Vocablist = require('models/vocablist');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var ConfirmDialog = require('dialogs/confirm/view');
-var User = require('models/user-settings');
+var DefaultNavbar = require('navbars/default/view');
+var User = require('models/user');
+var Vocablist = require('models/vocablist');
 
 /**
  * @class VocablistView
@@ -15,19 +15,10 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function(options) {
+        this.navbar = new DefaultNavbar();
         this.vocablist = new Vocablist({id: options.vocablistId});
         this.vocablist.fetch();
-
         this.listenTo(this.vocablist, 'state', this.render);
-
-        // Hack until state event and property works.
-        this.listenTo(this.vocablist, 'sync', function() {
-            this.vocablist.state = 'standby';
-            this.render();
-            this.loadCreatorNameIfNeeded();
-        });
-
-        this.navbar = new DefaultNavbar();
     },
     /**
      * @method loadCreatorNameIfNeeded
