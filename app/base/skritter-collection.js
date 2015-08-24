@@ -10,7 +10,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Object}
      */
     headers: function() {
-        return app.api.getUserHeaders();
+        return app.user.session.getHeaders();
     },
     /**
      * @method sync
@@ -20,7 +20,7 @@ module.exports = GelatoCollection.extend({
      */
     sync: function(method, model, options) {
         options.headers = typeof this.headers === 'function' ? this.headers() : this.headers;
-        options.url = app.api.getUrl() + (typeof this.url === 'function' ? this.url() : this.url);
+        options.url = app.getApiUrl() + (typeof this.url === 'function' ? this.url() : this.url);
         GelatoCollection.prototype.sync.call(this, method, model, options);
     }
 });

@@ -1,5 +1,4 @@
 var GelatoApplication = require('gelato/application');
-var Api = require('models/api');
 var User = require('models/user');
 var Functions = require('functions');
 var Router = require('router');
@@ -21,16 +20,18 @@ module.exports = GelatoApplication.extend({
             ignore3rdPartyErrors: true
         }).attach();
         Raygun.setVersion(this.get('version'));
-        this.api = new Api();
         this.fn = Functions;
         this.router = new Router();
-        this.user = new User();
+        this.user = new User({id: this.getSetting('user')});
     },
     /**
      * @property defaults
      * @type {Object}
      */
     defaults: {
+        apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
+        apiRoot: 'https://beta.skritter',
+        apiVersion: 0,
         canvasSize: 450,
         date: '{!date!}',
         language: '{!application-language!}',
@@ -38,6 +39,13 @@ module.exports = GelatoApplication.extend({
         name: '{!application-name!}',
         timestamp: '{!timestamp!}',
         version: '{!application-version!}'
+    },
+    /**
+     * @method getApiUrl
+     * @returns {String}
+     */
+    getApiUrl: function() {
+        return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
     },
     /**
      * @method getLanguage
@@ -100,7 +108,7 @@ module.exports = GelatoApplication.extend({
      * @method start
      */
     start: function() {
-        this.user.load();
+        this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
         this.router.start();
     }
 });
