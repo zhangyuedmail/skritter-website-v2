@@ -15,8 +15,8 @@ module.exports = GelatoPage.extend({
         this.countries = require('data/country-codes');
         this.timezones = require('data/country-timezones');
         this.navbar = new DefaultNavbar().render();
-        this.listenTo(app.user.settings, 'state', this.renderTemplate);
-        app.user.settings.fetch();
+        this.listenTo(app.user, 'state', this.renderTemplate);
+        app.user.fetch();
     },
     /**
      * @property events
@@ -50,7 +50,7 @@ module.exports = GelatoPage.extend({
      * @returns {String}
      */
     getSelectedCountryCode: function() {
-        return this.$('#field-country :selected').val() || app.user.settings.get('country');
+        return this.$('#field-country :selected').val() || app.user.get('country');
     },
     /**
      * @method handleClickButtonChangePassword
@@ -67,7 +67,7 @@ module.exports = GelatoPage.extend({
      */
     handleClickButtonSave: function(event) {
         event.preventDefault();
-        app.user.settings.set({
+        app.user.set({
             aboutMe: this.$('#field-about').val(),
             country: this.$('#field-country').find(':selected').val(),
             email: this.$('#field-email').val(),

@@ -14,7 +14,7 @@ gelato-page(data-name='settings-general')
               .form-group
                 label.col-sm-3.control-label(for="field-avatar") Avatar
                 .col-sm-9
-                  img#field-avatar(src="data:image/png;base64, " + user.settings.get('avatar'), alt="")
+                  img#field-avatar(src="data:image/png;base64, " + user.get('avatar'), alt="")
               .form-group
                 label.col-sm-3.control-label(for="field-id") Username
                 .col-sm-9
@@ -22,11 +22,11 @@ gelato-page(data-name='settings-general')
               .form-group
                 label.col-sm-3.control-label(for="field-name") Display name
                 .col-sm-9
-                  input#field-name.form-control(type="text", value=user.settings.get('name'))
+                  input#field-name.form-control(type="text", value=user.get('name'))
               .form-group
                 label.col-sm-3.control-label(for="field-email") Email
                 .col-sm-9
-                  input#field-email.form-control(type="email", value=user.settings.get('email'))
+                  input#field-email.form-control(type="email", value=user.get('email'))
               .form-group
                 label.col-sm-3.control-label(for="field-change-password") Password
                 .col-sm-9
@@ -34,11 +34,11 @@ gelato-page(data-name='settings-general')
               .form-group
                 label.col-sm-3.control-label(for="field-about") About me
                 .col-sm-9
-                  textarea#field-about.form-control(rows="5")= user.settings.get('aboutMe')
+                  textarea#field-about.form-control(rows="5")= user.get('aboutMe')
               .form-group
                 label.col-sm-3.control-label(for="field-private") Private account
                 .col-sm-9
-                  if user.settings.get('private')
+                  if user.get('private')
                     input#field-private(type="checkbox", checked="checked")
                   else
                     input#field-private(type="checkbox")
@@ -59,7 +59,7 @@ gelato-page(data-name='settings-general')
                 .col-sm-9
                   select#field-timezone.form-control
                     for timezone, code in view.timezones[view.getSelectedCountryCode()]
-                      if timezone === user.settings.get('timezone')
+                      if timezone === user.get('timezone')
                         option(value=timezone, selected="selected")= timezone
                       else
                         option(value=timezone)= timezone

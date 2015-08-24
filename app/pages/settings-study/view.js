@@ -12,8 +12,8 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.navbar = new DefaultNavbar();
-        this.listenTo(app.user.settings, 'state', this.render);
-        app.user.settings.fetch();
+        this.listenTo(app.user, 'state', this.render);
+        app.user.fetch();
     },
     /**
      * @property events
@@ -47,7 +47,7 @@ module.exports = GelatoPage.extend({
      */
     handleClickButtonSave: function(event) {
         event.preventDefault();
-        app.user.settings.set({
+        app.user.set({
             autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
             showHeisig: this.$('#field-heisig').is(':checked')
         }).save();

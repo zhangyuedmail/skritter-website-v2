@@ -27,35 +27,35 @@ gelato-page(data-name='settings-study')
                   label.col-sm-3.control-label(for="field-style") Character style
                   .col-sm-9
                     label.checkbox-inline
-                      input(type="checkbox", name="styles", value="simp", checked=user.settings.get('addSimplified'))
+                      input(type="checkbox", name="styles", value="simp", checked=user.get('addSimplified'))
                       | Simplified
                     label.checkbox-inline
-                      input(type="checkbox", name="styles", value="trad", checked=user.settings.get('addTraditional'))
+                      input(type="checkbox", name="styles", value="trad", checked=user.get('addTraditional'))
                       | Traditional
               .form-group
                 label.col-sm-3.control-label(for="field-parts") Parts studying
                 .col-sm-9
                   label.checkbox-inline
-                    input(type="checkbox", name="parts", value="rune", checked=user.settings.hasStudyPart('rune'))
+                    input(type="checkbox", name="parts", value="rune", checked=user.hasStudyPart('rune'))
                     | Writing
                   if (app.getLanguage() === 'zh')
                     label.checkbox-inline
-                      input(type="checkbox", name="parts", value="tone", checked=user.settings.hasStudyPart('tone'))
+                      input(type="checkbox", name="parts", value="tone", checked=user.hasStudyPart('tone'))
                       | Tone
                   label.checkbox-inline
-                    input(type="checkbox", name="parts", value="rdng", checked=user.settings.hasStudyPart('rdng'))
+                    input(type="checkbox", name="parts", value="rdng", checked=user.hasStudyPart('rdng'))
                     | Reading
                   label.checkbox-inline
-                    input(type="checkbox", name="parts", value="defn", checked=user.settings.hasStudyPart('defn'))
+                    input(type="checkbox", name="parts", value="defn", checked=user.hasStudyPart('defn'))
                     | Definition
               .form-group
                 label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
                 .col-sm-9
-                  input#field-heisig(type="checkbox", checked=user.settings.get('showHeisig'))
+                  input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
               .form-group
                 label.col-sm-3.control-label(for="field-add-contained") Also add characters when adding words
                 .col-sm-9
-                  input#field-add-contained(type="checkbox", checked=user.settings.get('autoAddComponentCharacters'))
+                  input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
 
               hr
 
