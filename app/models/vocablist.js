@@ -143,7 +143,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     editable: function() {
-        if (app.user.settings.get('isAdmin')) {
+        if (app.user.get('isAdmin')) {
             return true;
         }
 
@@ -162,6 +162,6 @@ module.exports = SkritterModel.extend({
      * @returns {String}
      */
     getImageUrl: function() {
-        return app.api.getUrl() + 'vocablists/' + this.id + '/image';
+        return app.getApiUrl() + 'vocablists/' + this.id + '/image';
     }
 });

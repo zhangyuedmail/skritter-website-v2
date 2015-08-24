@@ -108,6 +108,7 @@ module.exports = GelatoApplication.extend({
      * @method start
      */
     start: function() {
+        this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
         this.router.start();
     }

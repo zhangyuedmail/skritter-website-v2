@@ -1,61 +1,72 @@
-var GelatoModel = require('gelato/model');
-var HistoryItems = require('collections/history-items');
-var UserAuth = require('models/user-auth');
-var UserData = require('models/user-data');
-var UserSettings = require('models/user-settings');
+var SkritterModel = require('base/skritter-model');
+var Session = require('models/session');
 
 /**
  * @class User
- * @extends {GelatoModel}
+ * @extends {SkritterModel}
  */
-module.exports = GelatoModel.extend({
+module.exports = SkritterModel.extend({
     /**
-     * @method initialize
-     * @constructor
+     * @property session
+     * @type {Session}
      */
-    initialize: function() {
-        this.auth = new UserAuth();
-        this.data = new UserData();
-        this.history = new HistoryItems();
-        this.settings = new UserSettings();
-    },
+    session: new Session(),
+    /**
+     * @property urlRoot
+     * @type {String}
+     */
+    urlRoot: '/users',
     /**
      * @property defaults
-     * @type Object
+     * @type {Object}
      */
     defaults: {
-        id: 'guest'
+        allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+        allJapaneseParts: ['defn', 'rdng', 'rune'],
+        gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
+        goals: {ja: {items: 20}, zh: {items: 20}}
     },
     /**
-     * @method getLocalData
-     * @param {String} key
-     * @returns {Number|Object|String}
+     * @method cache
      */
-    getLocalData: function(key) {
-        return JSON.parse(localStorage.getItem(this.id + '-' + key));
+    cache: function() {
+        app.setLocalStorage(this.id + '-user', this.toJSON());
+    },
+    /**
+     * @method getAllParts
+     * @returns {Array}
+     */
+    getAllParts: function() {
+        return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
+    },
+    /**
+     * @method getStudyParts
+     * @returns {Object}
+     */
+    getStudyParts: function() {
+        return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+    },
+    /**
+     * @method hasStudyPart
+     * @param {String} part
+     * @returns {Boolean}
+     */
+    hasStudyPart: function(part) {
+        return this.getStudyParts().indexOf(part) > -1;
+    },
+    /**
+     * @method isAudioEnabled
+     * @returns {Boolean}
+     */
+    isAudioEnabled: function() {
+        return this.get('volume') > 0;
     },
     /**
      * @method isLoggedIn
      * @returns {Boolean}
      */
     isLoggedIn: function() {
-        return this.id !== 'guest';
-    },
-    /**
-     * @method load
-     */
-    load: function() {
-        var user = app.getSetting('user');
-        if (user) {
-            Raygun.setUser(user.id, false);
-            this.set('id', user);
-            this.auth.load();
-            this.settings.load();
-            this.settings.fetch();
-
-        } else {
-            Raygun.setUser('guest', true);
-        }
+        return !this.session.isExpired();
     },
     /**
      * @method login
@@ -65,30 +76,47 @@ module.exports = GelatoModel.extend({
      * @param {Function} callbackError
      */
     login: function(username, password, callbackSuccess, callbackError) {
-        this.auth.authenticateUser(username, password, callbackSuccess, callbackError);
+        async.waterfall([
+            _.bind(function(callback) {
+                this.session.authenticate('password', username, password,
+                    function(result) {
+                        callback(null, result);
+                    }, function(error) {
+                        callback(error);
+                    });
+            }, this),
+            _.bind(function(result, callback) {
+                this.set('id', result.id);
+                this.fetch({
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function(user) {
+                        callback(null, user);
+                    }
+                })
+            }, this)
+        ], _.bind(function(error, user) {
+            if (error) {
+                callbackError(error);
+            } else {
+                this.cache();
+                this.session.cache();
+                app.setSetting('user', this.id);
+                callbackSuccess(user);
+            }
+        }, this));
     },
     /**
      * @method logout
      */
-    logout: function() {
-        this.removeLocalData('auth');
-        this.removeLocalData('settings');
-        app.removeSetting('user');
-        app.reload();
-    },
+    logout: function() {},
     /**
-     * @method removeLocalData
-     * @param {String} key
+     * @method parse
+     * @param {Object} response
+     * @returns Array
      */
-    removeLocalData: function(key) {
-        localStorage.removeItem(this.id + '-' + key);
-    },
-    /**
-     * @method setLocalData
-     * @param {String} key
-     * @param {Number|Object|String} data
-     */
-    setLocalData: function(key, data) {
-        localStorage.setItem(this.id + '-' + key, JSON.stringify(data));
+    parse: function(response) {
+        return response.User;
     }
 });
