@@ -29,16 +29,16 @@ module.exports = GelatoPage.extend({
      * @property template
      * @type {Function}
      */
-    template: require('pages/dashboard/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {Dashboard}
      */
     render: function() {
         this.renderTemplate();
-        this.dashboardGoal.setElement('#dashboard-goal-container').render();
-        this.dashboardMonth.setElement('#dashboard-month-container').render();
-        this.dashboardTotal.setElement('#dashboard-total-container').render();
+        //this.dashboardGoal.setElement('#dashboard-goal-container').render();
+        //this.dashboardMonth.setElement('#dashboard-month-container').render();
+        //this.dashboardTotal.setElement('#dashboard-total-container').render();
         this.navbar.render();
         return this;
     },

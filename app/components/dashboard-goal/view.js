@@ -11,10 +11,6 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function() {
         this.doughnut = null;
-        this.listenTo(app.user.settings, 'change:goals', this.updateDoughnut);
-        this.listenTo(app.user.data.items, 'fetch:daily', this.updateItems);
-        this.listenTo(app.user.data.stats, 'fetch', this.updateDoughnut);
-        this.listenTo(app.user.data.stats, 'fetch', this.updateItems);
         this.on('resize', this.resize);
     },
     /**
