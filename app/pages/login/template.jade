@@ -1,18 +1,12 @@
 gelato-page(data-name='login')
-  gelato-navbar.fixed-top
-    .container-fluid
-      .container
-        .left
-          .item.item-header(data-navigate="") Skritter
-  gelato-content
-    .container
-      .content-block
-        form#login-form
-          #login-message.text-danger
-          .form-group
-            label(for="login-username") Username
-            input#login-username.form-control(type="text", placeholder="Username")
-          .form-group
-            label(for="login-password") Password
-            input#login-password.form-control(type="password", placeholder="Password")
-          button#button-login.btn.btn-fixed.btn-primary(type="button") Login
+  .container
+    .content-block
+      form#login-form
+        #login-message.text-danger
+        .form-group
+          label(for="login-username") Username
+          input#login-username.form-control(type="text", placeholder="Username")
+        .form-group
+          label(for="login-password") Password
+          input#login-password.form-control(type="password", placeholder="Password")
+        button#button-login.btn.btn-fixed.btn-primary(type="button") Login

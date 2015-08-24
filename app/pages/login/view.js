@@ -1,4 +1,5 @@
 var GelatoPage = require('gelato/page');
+var MarketingNavbar = require('navbars/marketing/view');
 
 /**
  * @class Login
@@ -9,7 +10,9 @@ module.exports = GelatoPage.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+        this.navbar = new MarketingNavbar();
+    },
     /**
      * @property title
      * @type {String}
@@ -19,13 +22,14 @@ module.exports = GelatoPage.extend({
      * @property template
      * @type {Function}
      */
-    template: require('pages/login/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {MarketingHome}
      */
     render: function() {
         this.renderTemplate();
+        this.navbar.render();
         return this;
     },
     /**
