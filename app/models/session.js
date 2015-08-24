@@ -1,0 +1,143 @@
+var SkritterModel = require('base/skritter-model');
+
+/**
+ * @class Session
+ * @extends {SkritterModel}
+ */
+module.exports = SkritterModel.extend({
+    /**
+     * @property idAttribute
+     * @type {String}
+     */
+    idAttribute: 'user_id',
+    /**
+     * @property defaults
+     * @type {Object}
+     */
+    defaults: {
+        created: 0,
+        expires_in: 0
+    },
+    /**
+     * @method headers
+     * @returns {Object}
+     */
+    headers: function() {
+        return this.getLoginHeaders();
+    },
+    /**
+     * @property url
+     * @type {String}
+     */
+    url: 'oauth2/token',
+    /**
+     * @method authenticate
+     * @param {String} type
+     * @param {String} username
+     * @param {String} password
+     * @param {Function} callbackSuccess
+     * @param {Function} callbackError
+     */
+    authenticate: function(type, username, password, callbackSuccess, callbackError) {
+        this.fetch({
+            data: {
+                client_id: this.getClientId(),
+                grant_type: type,
+                password: password,
+                username: username
+            },
+            type: 'post',
+            success: _.bind(function(model) {
+                this.set('created', moment().unix(), {silent: true});
+                callbackSuccess(model);
+            }, this),
+            error: _.bind(function(model, error) {
+                callbackError(error, model);
+            }, this)
+        });
+    },
+    /**
+     * @method cache
+     */
+    cache: function() {
+        app.setLocalStorage(this.id + '-session', this.toJSON());
+    },
+    /**
+     * @method getClientId
+     * @returns {String}
+     */
+    getClientId: function() {
+        switch (app.getPlatform()) {
+            case 'Android':
+                return 'skritterandroid';
+            case 'iOS':
+                return 'skritterios';
+            default:
+                return 'skritterweb';
+        }
+    },
+    /**
+     * @method getExpires
+     * @returns {Number}
+     */
+    getExpires: function() {
+        return this.get('created') + this.get('expires_in');
+    },
+    /**
+     * @method isExpired
+     * @returns {Boolean}
+     */
+    isExpired: function() {
+        return this.getExpires() < moment().unix();
+    },
+    /**
+     * @method getHeaders
+     * @returns {Object}
+     */
+    getHeaders: function() {
+        return {'Authorization': 'bearer ' + this.get('access_token')};
+    },
+    /**
+     * @method getLoginCredentials
+     * @returns {String}
+     */
+    getLoginCredentials: function() {
+        switch (app.getPlatform()) {
+            case 'Android':
+                return 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==';
+            case 'iOS':
+                return 'c2tyaXR0ZXJpb3M6NGZmYjFiZDViYTczMWJhNTc1YWI4OWYzYzY5ODQ0';
+            default:
+                return 'c2tyaXR0ZXJ3ZWI6YTI2MGVhNWZkZWQyMzE5YWY4MTYwYmI4ZTQwZTdk';
+        }
+    },
+    /**
+     * @method getLoginHeaders
+     * @returns {Object}
+     */
+    getLoginHeaders: function() {
+        return {'Authorization': 'basic ' + this.getLoginCredentials()};
+    },
+    /**
+     * @method refresh
+     * @param {Function} callbackSuccess
+     * @param {Function} callbackError
+     */
+    refresh: function(callbackSuccess, callbackError) {
+        this.fetch({
+            data: {
+                client_id: this.getClientId(),
+                grant_type: 'refresh_token',
+                refresh_token: token
+            },
+            type: 'POST',
+            success: _.bind(function(model) {
+                this.set('created', moment().unix(), {silent: true});
+                callbackSuccess(model);
+            }, this),
+            error: _.bind(function(model, error) {
+                callbackError(error, model);
+            }, this)
+        });
+    }
+});
