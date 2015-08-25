@@ -73,6 +73,7 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
         this.$('#list-img').error(_.bind(this.handleLoadImageError, this));
+        this.$('[data-toggle="tooltip"]').tooltip();
         return this;
     },
     /**

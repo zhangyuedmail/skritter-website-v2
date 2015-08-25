@@ -45,9 +45,12 @@ gelato-page(data-name='vocablist')
                   span= _.capitalize(view.vocablist.get('studyingMode'))
 
                 if view.vocablist.get('studyingMode') !== 'not studying'
-                  .progress
-                    - var progress = view.vocablist.getProgress();
-                    .progress-bar(style="width:"+progress+'%')= progress+'%'
+                  - var progress = view.vocablist.getProgress();
+                  - var title = progress.percent.toFixed(1)+'% complete';
+                  if progress.total
+                    - title += ' ('+(progress.total - progress.added)+' left)';
+                  .progress(title=title, data-toggle="tooltip" data-placement="top")
+                    .progress-bar(style="width:"+progress.percent+'%')
 
                 hr
 
