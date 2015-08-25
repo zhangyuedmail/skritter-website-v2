@@ -15,7 +15,8 @@ module.exports = GelatoRouter.extend({
      * @type {Object}
      */
     routes: {
-        '': 'navigateHome',
+        '': 'defaultRoute',
+        'home': 'navigateHome',
         'dashboard': 'navigateDashboard',
         'login': 'navigateLogin',
         'settings/general': 'navigateSettingsGeneral',
@@ -27,6 +28,16 @@ module.exports = GelatoRouter.extend({
         'vocablist/my-lists': 'navigateVocablistMyLists',
         'vocablist/view/(:vocablistId)': 'navigateVocablist',
         '*route': 'navigateNotFound'
+    },
+    /**
+     * @method defaultRoute
+     */
+    defaultRoute: function() {
+        if (app.user.isLoggedIn()) {
+            this.navigateDashboard();
+        } else {
+            this.navigateHome();
+        }
     },
     /**
      * @method navigateDashboard
@@ -43,14 +54,9 @@ module.exports = GelatoRouter.extend({
      * @method navigateHome
      */
     navigateHome: function() {
-        //TODO: enable normal marketing routes after testing
-        //this.page = new (require('pages/marketing-home/view'));
-        //this.page.render();
-        if (app.user.isLoggedIn()) {
-            this.navigateDashboard();
-        } else {
-            this.navigateLogin();
-        }
+        this.navigate('home');
+        this.page = new (require('pages/home/view'));
+        this.page.render();
     },
     /**
      * @method navigateLogin

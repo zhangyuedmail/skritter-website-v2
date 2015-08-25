@@ -110,7 +110,12 @@ module.exports = SkritterModel.extend({
     /**
      * @method logout
      */
-    logout: function() {},
+    logout: function() {
+        app.removeLocalStorage(this.id + '-session');
+        app.removeLocalStorage(this.id + '-user');
+        app.removeSetting('user');
+        app.reload();
+    },
     /**
      * @method parse
      * @param {Object} response
