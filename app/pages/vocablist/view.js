@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
     initialize: function(options) {
         this.navbar = new DefaultNavbar();
         this.vocablist = new Vocablist({id: options.vocablistId});
-        this.vocablist.fetch();
+        this.vocablist.fetch({data: {includeSectionCompletion: true}});
         this.listenTo(this.vocablist, 'state', this.render);
     },
     /**

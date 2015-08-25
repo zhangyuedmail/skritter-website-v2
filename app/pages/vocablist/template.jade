@@ -166,7 +166,10 @@ gelato-page(data-name='vocablist')
                         if section.rows.length !== 1
                           | s
                       td
-                        if _.contains(sectionsSkipping, section.id)
+                        if section.completed
+                          span.spr Completed
+                          span= moment(section.completed).format('L')
+                        else if _.contains(sectionsSkipping, section.id)
                           | Skipping
                         else if section.id === view.vocablist.get('currentSection')
                           | Adding
