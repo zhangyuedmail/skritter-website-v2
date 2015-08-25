@@ -1,7 +1,8 @@
 var GelatoComponent = require('gelato/component');
+var Vocablists = require('collections/vocablists');
 
 /**
- * @class LearnedWords
+ * @class DashboardQueue
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -10,26 +11,26 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        this.listenTo(app.user.data.stats, 'fetch', this.updateLearned);
+        //this.listenTo(app.user.data.stats, 'fetch', this.updateLearned);
+        this.vocablists = new Vocablists();
+        this.listenTo(this.vocablists, 'state', this.render);
+        this.vocablists.fetch({
+            data: {
+                sort: 'adding'
+            }
+        });
     },
     /**
      * @property template
      * @type {Function}
      */
-    template: require('components/learned-words/template'),
+    template: require('./template'),
     /**
      * @method render
-     * @returns {Component}
+     * @returns {DashboardQueue}
      */
     render: function() {
         this.renderTemplate();
-        this.updateLearned();
         return this;
-    },
-    /**
-     * @method updateLearned
-     */
-    updateLearned: function() {
-        this.$('.learned-value').text(app.user.data.stats.getAllTimeWordsLearned());
     }
 });
