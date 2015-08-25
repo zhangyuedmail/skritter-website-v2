@@ -154,18 +154,19 @@ gelato-page(data-name='vocablist')
 
               .header Sections
 
-              table.table.table-striped
-                - var sectionsSkipping = view.vocablist.get('sectionsSkipping') || [];
+              .table-oversized-wrapper
+                table.table
+                  - var sectionsSkipping = view.vocablist.get('sectionsSkipping') || [];
 
-                for section in view.vocablist.get('sections')
-                  tr
-                    td= section.name
-                    td
-                      | #{section.rows.length} word
-                      if section.rows.length !== 1
-                        | s
-                    td
-                      if _.contains(sectionsSkipping, section.id)
-                        | Skipping
-                      else if section.id === view.vocablist.get('currentSection')
-                        | Adding
+                  for section, i in view.vocablist.get('sections')
+                    tr(class=i%2 ? 'even-row' : 'odd-row')
+                      td= section.name
+                      td
+                        | #{section.rows.length} word
+                        if section.rows.length !== 1
+                          | s
+                      td
+                        if _.contains(sectionsSkipping, section.id)
+                          | Skipping
+                        else if section.id === view.vocablist.get('currentSection')
+                          | Adding
