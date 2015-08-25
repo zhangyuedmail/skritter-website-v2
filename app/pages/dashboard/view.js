@@ -1,7 +1,7 @@
 var GelatoPage = require('gelato/page');
-//var DashboardGoal = require('components/dashboard-goal/view');
-//var DashboardMonth = require('components/dashboard-month/view');
-//var DashboardTotal = require('components/dashboard-total/view');
+var DashboardGoal = require('components/dashboard-goal/view');
+var DashboardMonth = require('components/dashboard-month/view');
+var DashboardTotal = require('components/dashboard-total/view');
 var DashboardQueue = require('components/dashboard-queue/view');
 var GoalSettingsDialog = require('dialogs/goal-settings/view');
 var DefaultNavbar = require('navbars/default/view');
@@ -16,9 +16,9 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        //this.dashboardGoal = new DashboardGoal();
-        //this.dashboardMonth = new DashboardMonth();
-        //this.dashboardTotal = new DashboardTotal();
+        this.dashboardGoal = new DashboardGoal();
+        this.dashboardMonth = new DashboardMonth();
+        this.dashboardTotal = new DashboardTotal();
         this.dashboardQueue = new DashboardQueue();
         this.navbar = new DefaultNavbar();
     },
@@ -38,9 +38,9 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        //this.dashboardGoal.setElement('#dashboard-goal-container').render();
-        //this.dashboardMonth.setElement('#dashboard-month-container').render();
-        //this.dashboardTotal.setElement('#dashboard-total-container').render();
+        this.dashboardGoal.setElement('#dashboard-goal-container').render();
+        this.dashboardMonth.setElement('#dashboard-month-container').render();
+        this.dashboardTotal.setElement('#dashboard-total-container').render();
         this.dashboardQueue.setElement('#dashboard-queue-container').render();
         this.navbar.render();
         return this;
@@ -66,9 +66,9 @@ module.exports = GelatoPage.extend({
      * @returns {GelatoPage}
      */
     remove: function() {
-        //this.dashboardGoal.remove();
-        //this.dashboardMonth.remove();
-        //this.dashboardTotal.remove();
+        this.dashboardGoal.remove();
+        this.dashboardMonth.remove();
+        this.dashboardTotal.remove();
         this.dashboardQueue.remove();
         return GelatoPage.prototype.remove.call(this);
     }

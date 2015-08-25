@@ -1,4 +1,5 @@
 var GelatoComponent = require('gelato/component');
+var ProgressStats = require('collections/progress-stats');
 
 /**
  * @class DashboardMonth
@@ -11,12 +12,16 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function() {
         this.heatmap = new Heatmap();
+        this.stats = new ProgressStats();
+        this.listenTo(this.stats, 'state:standby', this.updateHeatmap);
+        this.listenTo(this.stats, 'state:standby', this.updateStreak);
+        this.stats.fetchMonth();
     },
     /**
      * @property template
      * @type {Function}
      */
-    template: require('components/dashboard-month/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {DashboardMonth}
@@ -53,14 +58,14 @@ module.exports = GelatoComponent.extend({
      * @method updateHeatmap
      */
     updateHeatmap: function() {
-        this.heatmap.update(app.user.data.stats.getMonthlyHeatmapData());
+        this.heatmap.update(this.stats.getMonthlyHeatmapData());
     },
     /**
      * @method updateStreak
      */
     updateStreak: function() {
-        if (app.user.data.stats.length) {
-            this.$('#streak .value').text(app.user.data.stats.getStreak());
+        if (this.stats.length) {
+            this.$('#streak .value').text(this.stats.getStreak());
         }
     }
 });
