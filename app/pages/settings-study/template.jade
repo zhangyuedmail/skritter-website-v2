@@ -61,4 +61,8 @@ gelato-page(data-name='settings-study')
 
               .form-group
                 .col-sm-12
-                  button#button-save.btn.btn-fixed.btn-success(type="submit") Save
+                  if user.state === 'standby'
+                    button#button-save.btn.btn-fixed.btn-success(type="submit") Save
+                  else
+                    button#button-save.btn.btn-fixed.btn-success(type="submit", disabled="disabled")
+                      i.fa.fa-2x.fa-spinner.fa-pulse
