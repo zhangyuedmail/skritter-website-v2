@@ -5,14 +5,28 @@ gelato-page(data-name='vocablist')
       .content-block
         .row
 
+          - var sort = view.vocablist.get('sort');
+
           //----------------- SIDEBAR -----------------------------------------
 
           .col-md-3.sidebar
             .sidebar-spacer
               div
-                a.back-link(href="/vocablist/browse")
-                  span.glyphicon.glyphicon-chevron-left
-                  span back to lists
+                if sort === 'official'
+                  a.back-link(href="/vocablist/browse")
+                    span.glyphicon.glyphicon-chevron-left
+                    span back to official lists
+
+                else if sort === 'custom' && view.vocablist.get('creator') === app.user.id
+                  a.back-link(href="/vocablist/my-lists")
+                    span.glyphicon.glyphicon-chevron-left
+                    span back to my lists
+
+                else if sort
+                  // TODO: add links to other custom lists and ChinesePod
+                  a.back-link(href="/vocablist/queue")
+                    span.glyphicon.glyphicon-chevron-left
+                    span back to lists
 
               div#list-img-wrapper
                 img#list-img.img-thumbnail(src=view.vocablist.getImageUrl())
@@ -108,7 +122,6 @@ gelato-page(data-name='vocablist')
 
                 div#stats-line
                   span.spr Made by:
-                  - var sort = view.vocablist.get('sort');
                   if sort === 'official'
                     span Skritter
                   else if sort === 'chinesepod-lesson'
