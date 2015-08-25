@@ -111,7 +111,7 @@ gelato-page(data-name='vocablist')
                   else if sort === 'chinesepod-lesson'
                     span ChinesePod
                   else if view.vocablist.get('creator') === app.user.id
-                    span= app.user.settings.get('name') || app.user.id
+                    span= app.user.get('name') || app.user.id
                   else
                     if view.creator && view.creator.state === 'standby'
                       span= view.creator.get('name') || view.creator.id
