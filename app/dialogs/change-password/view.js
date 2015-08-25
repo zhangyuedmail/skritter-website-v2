@@ -49,7 +49,7 @@ module.exports = GelatoDialog.extend({
             this.enableForm('form');
             return;
         }
-        app.user.settings.save(
+        app.user.save(
             {
                 password: password1
             },

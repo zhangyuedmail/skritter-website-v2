@@ -32,7 +32,7 @@ gelato-dialog(data-name='vocablist-settings')
                 label.col-sm-3.control-label Parts Studying
                 .col-sm-9
                   - var vlparts = view.vocablist.get('partsStudying');
-                  - var uparts = app.user.settings.getAllParts();
+                  - var uparts = app.user.getAllParts();
                   .checkbox(class=_.contains(uparts, 'rune') ? '' : 'disabled')
                     label
                       input(type="checkbox" name="partsStudying" value='rune' checked=_.contains(vlparts, 'rune'), disabled=!_.contains(uparts, 'rune'))
@@ -45,7 +45,7 @@ gelato-dialog(data-name='vocablist-settings')
                     label
                       input(type="checkbox" name="partsStudying" value='defn' checked=_.contains(vlparts, 'defn'), disabled=!_.contains(uparts, 'defn'))
                       span Definition
-                  if app.user.settings.get('targetLang') === 'zh'
+                  if app.user.get('targetLang') === 'zh'
                     .checkbox(class=_.contains(uparts, 'tone') ? '' : 'disabled')
                       label
                         input(type="checkbox" name="partsStudying" value='tone' checked=_.contains(vlparts, 'tone'), disabled=!_.contains(uparts, 'tone'))

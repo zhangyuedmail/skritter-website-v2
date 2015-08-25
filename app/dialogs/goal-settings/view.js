@@ -50,14 +50,14 @@ module.exports = GelatoDialog.extend({
         event.preventDefault();
         var type = this.$('input[name="goal-type"]:checked').val();
         var value = this.$('#goal-value').val();
-        app.user.settings.setGoal(type, value);
+        app.user.setGoal(type, value);
         this.close();
     },
     /**
      * @method updateSettings
      */
     updateSettings: function() {
-        var goal = app.user.settings.getGoal();
+        var goal = app.user.getGoal();
         this.$('input[value="' + goal.type + '"]').prop('checked', true);
         this.$('#goal-value').val(goal.value);
     }

@@ -153,7 +153,7 @@ module.exports = GelatoComponent.extend({
         this.details.showDefinition();
         this.details.showMnemonic();
         this.details.showSentence();
-        if (app.user.settings.isAudioEnabled()) {
+        if (app.user.isAudioEnabled()) {
             this.reviews.vocab.play();
         }
         return this;
@@ -200,7 +200,7 @@ module.exports = GelatoComponent.extend({
         this.details.showReadingTone();
         this.details.showMnemonic();
         this.details.showSentence();
-        if (app.user.settings.isAudioEnabled()) {
+        if (app.user.isAudioEnabled()) {
             this.reviews.vocab.play();
         }
         return this;
@@ -263,7 +263,7 @@ module.exports = GelatoComponent.extend({
         this.details.showReading();
         this.details.showReadingTone();
         this.grading.show();
-        if (app.user.settings.isAudioEnabled()) {
+        if (app.user.isAudioEnabled()) {
             this.reviews.vocab.play();
         }
         return this;
@@ -307,7 +307,7 @@ module.exports = GelatoComponent.extend({
         this.details.showMnemonic();
         this.details.showSentence();
         this.grading.select(this.review.get('score'));
-        if (this.reviews.isLast() && app.user.settings.isAudioEnabled()) {
+        if (this.reviews.isLast() && app.user.isAudioEnabled()) {
             this.reviews.vocab.play();
         }
         return this;
@@ -379,7 +379,7 @@ module.exports = GelatoComponent.extend({
      */
     handleHighlightGrading: function(score) {
         if (this.review.isComplete()) {
-            var gradingColor = app.user.settings.get('gradingColors')[score];
+            var gradingColor = app.user.get('gradingColors')[score];
             this.canvas.injectLayerColor('surface', gradingColor);
         }
     },

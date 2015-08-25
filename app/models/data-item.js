@@ -123,8 +123,8 @@ module.exports = GelatoModel.extend({
     getVocabs: function() {
         var vocabs = [];
         var vocabIds = this.get('vocabIds');
-        var reviewSimplified = app.user.settings.get('reviewSimplified');
-        var reviewTraditional = app.user.settings.get('reviewTraditional');
+        var reviewSimplified = app.user.get('reviewSimplified');
+        var reviewTraditional = app.user.get('reviewTraditional');
         for (var i = 0, length = vocabIds.length; i < length; i++) {
             var vocab = app.user.data.vocabs.get(vocabIds[i]);
             var vocabStyle = vocab.get('style');

@@ -158,7 +158,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Number}
      */
     getGoalItemPercent: function() {
-        var goal = app.user.settings.getGoal();
+        var goal = app.user.getGoal();
         var totalItems = app.user.data.stats.getDailyItemsReviewed();
         var percentItems = Math.round(totalItems / goal.value * 100);
         return percentItems > 100 ? 100 : parseFloat(percentItems.toFixed(2));
@@ -168,7 +168,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Number}
      */
     getGoalTimePercent: function() {
-        var goal = app.user.settings.getGoal();
+        var goal = app.user.getGoal();
         var totalTime = app.user.data.stats.getDailyTimeStudied() / 60;
         var percentTime = Math.round(totalTime / goal.value * 100);
         return percentTime > 100 ? 100 : parseFloat(percentTime.toFixed(2));

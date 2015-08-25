@@ -100,7 +100,7 @@ module.exports = GelatoComponent.extend({
      * @method updateDoughnut
      */
     updateDoughnut: function() {
-        var goal = app.user.settings.getGoal();
+        var goal = app.user.getGoal();
         var percent = 0;
         switch (goal.type) {
             case 'items':
