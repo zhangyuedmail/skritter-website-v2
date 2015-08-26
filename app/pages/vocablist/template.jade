@@ -137,7 +137,7 @@ gelato-page(data-name='vocablist')
 
                   if view.vocablist.get('published')
                     span.spr Published:
-                    span= moment(view.vocablist.get('published')).format('LL')
+                    span= moment(view.vocablist.get('published')*1000).format('LL')
                     span.spl.spr |
 
                   if view.vocablist.get('published') && view.vocablist.get('peopleStudying')
