@@ -17,7 +17,7 @@ module.exports = GelatoComponent.extend({
      * @property template
      * @type {Function}
      */
-    template: require('components/dashboard-goal/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {DashboardGoal}
@@ -71,8 +71,8 @@ module.exports = GelatoComponent.extend({
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
             }
         });
-        this.updateDoughnut();
-        this.updateItems();
+        //this.updateDoughnut();
+        //this.updateItems();
         return this;
     },
     /**
@@ -100,7 +100,7 @@ module.exports = GelatoComponent.extend({
      * @method updateDoughnut
      */
     updateDoughnut: function() {
-        var goal = app.user.settings.getGoal();
+        var goal = app.user.getGoal();
         var percent = 0;
         switch (goal.type) {
             case 'items':

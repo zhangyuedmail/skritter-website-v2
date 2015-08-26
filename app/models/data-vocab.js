@@ -51,7 +51,7 @@ module.exports = GelatoModel.extend({
      */
     getDefinition: function(ignoreFormat) {
         var customDefinition = this.get('customDefinition');
-        var definition = this.get('definitions')[app.user.settings.get('sourceLang')];
+        var definition = this.get('definitions')[app.user.get('sourceLang')];
         if (customDefinition && customDefinition !== '') {
             definition = this.get('customDefinition');
         } else if (!definition) {

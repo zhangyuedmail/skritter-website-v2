@@ -1,11 +1,11 @@
-var GelatoCollection = require('gelato/collection');
-var DataStat = require('models/data-stat');
+var SkritterCollection = require('base/skritter-collection');
+var ProgressStat = require('models/progress-stat');
 
 /**
- * @class DataStats
- * @extends {GelatoCollection}
+ * @class ProgressStats
+ * @extends {SkritterCollection}
  */
-module.exports = GelatoCollection.extend({
+module.exports = SkritterCollection.extend({
     /**
      * @method initialize
      * @constructor
@@ -13,13 +13,18 @@ module.exports = GelatoCollection.extend({
     initialize: function() {},
     /**
      * @property model
-     * @type {DataStat}
+     * @type {ProgressStat}
      */
-    model: DataStat,
+    model: ProgressStat,
+    /**
+     * @property url
+     * @type {String}
+     */
+    url: 'progstats',
     /**
      * @method comparator
-     * @param {DataStat} statA
-     * @param {DataStat} statB
+     * @param {ProgressStats} statA
+     * @param {ProgressStats} statB
      * @returns {Number}
      */
     comparator: function(statA, statB) {
@@ -32,25 +37,12 @@ module.exports = GelatoCollection.extend({
         }
     },
     /**
-     * @method fetchDay
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
+     * @method parse
+     * @param {Object} response
+     * @returns Array
      */
-    fetchDay: function(callbackSuccess, callbackError) {
-        var self = this;
-        app.api.fetchStats({
-            start: moment().format('YYYY-MM-DD')
-        }, function(result) {
-            self.add(result, {merge: true});
-            self.trigger('fetch', self);
-            if (typeof callbackSuccess === 'function') {
-                callbackSuccess();
-            }
-        }, function(error) {
-            if (typeof callbackError === 'function') {
-                callbackError(error);
-            }
-        });
+    parse: function(response) {
+        return response.ProgressStats;
     },
     /**
      * @method fetchMonth
@@ -58,56 +50,83 @@ module.exports = GelatoCollection.extend({
      * @param {Function} [callbackError]
      */
     fetchMonth: function(callbackSuccess, callbackError) {
-        var self = this;
         var momentMonthStart = moment().subtract(4, 'hours').startOf('month');
         var momentMonthEnd = moment().subtract(4, 'hours').endOf('month');
-        async.parallel([
-            function(callback) {
-                app.api.fetchStats({
-                    start: moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
-                    end: moment(momentMonthEnd).format('YYYY-MM-DD')
-                }, function(result) {
-                    self.add(result, {merge: true});
-                    self.trigger('fetch', self);
-                    callback();
-                }, function(error) {
-                    callback(error);
+        async.series([
+            _.bind(function(callback) {
+                this.fetch({
+                    data: {
+                        start: moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
+                        end: moment(momentMonthEnd).format('YYYY-MM-DD')
+                    },
+                    success: function() {
+                        callback();
+                    },
+                    error: function(model, error) {
+                        callback(error, model);
+                    }
                 });
-            },
-            function(callback) {
-                app.api.fetchStats({
-                    start: moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
-                    end: moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
-                }, function(result) {
-                    self.add(result, {merge: true});
-                    self.trigger('fetch', self);
-                    callback();
-                }, function(error) {
-                    callback(error);
+            }, this),
+            _.bind(function(callback) {
+                this.fetch({
+                    data: {
+                        start: moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
+                        end: moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
+                    },
+                    success: function() {
+                        callback();
+                    },
+                    error: function(model, error) {
+                        callback(error, model);
+                    }
                 });
-            },
-            function(callback) {
-                app.api.fetchStats({
-                    start: moment(momentMonthStart).format('YYYY-MM-DD'),
-                    end: moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
-                }, function(result) {
-                    self.add(result, {merge: true});
-                    self.trigger('fetch', self);
-                    callback();
-                }, function(error) {
-                    callback(error);
+            }, this),
+            _.bind(function(callback) {
+                this.fetch({
+                    data: {
+                        start: moment(momentMonthStart).format('YYYY-MM-DD'),
+                        end: moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
+                    },
+                    success: function() {
+                        callback();
+                    },
+                    error: function(model, error) {
+                        callback(error, model);
+                    }
                 });
-            }
-        ], function(error) {
+            }, this)
+        ], _.bind(function(error) {
             if (error) {
                 if (typeof callbackError === 'function') {
                     callbackError(error);
                 }
             } else {
                 if (typeof callbackSuccess === 'function') {
-                    callbackSuccess();
+                    callbackSuccess(this);
                 }
             }
+        }, this));
+    },
+    /**
+     * @method fetchToday
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    fetchToday: function(callbackSuccess, callbackError) {
+        this.fetch({
+            data: {
+                start: moment().format('YYYY-MM-DD')
+            },
+            success: _.bind(function(model) {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess(model);
+                }
+            }, this),
+            error: _.bind(function(model, error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error, model);
+                }
+            }, this)
         });
     },
     /**

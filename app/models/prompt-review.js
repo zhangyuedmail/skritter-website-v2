@@ -52,7 +52,7 @@ module.exports = GelatoModel.extend({
      * @returns {String}
      */
     getGradingColor: function() {
-        return app.user.settings.get('gradingColors')[this.get('score')];
+        return app.user.get('gradingColors')[this.get('score')];
     },
     /**
      * @method getReviewingTime
