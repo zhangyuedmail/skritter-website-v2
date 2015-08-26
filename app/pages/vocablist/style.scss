@@ -148,7 +148,24 @@ gelato-page[data-name='vocablist'] {
           color: $green5;
         }
       }
+    }
 
+    #add-section-link {
+      .glyphicon {
+        color: $green5;
+      }
+    }
+
+    #add-section-editing-version {
+      text-align: right;
+
+      .form-control {
+        margin-bottom: 15px;
+      }
+
+      button {
+        margin-left: 10px;
+      }
     }
   }
 

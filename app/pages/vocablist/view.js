@@ -53,7 +53,10 @@ module.exports = GelatoPage.extend({
         'vclick #cancel-edits-link': 'handleClickCancelEditsLink',
         'vclick #save-edits-btn': 'handleClickSaveEditsButton',
         'vclick #image-upload-link': 'handleClickImageUploadLink',
-        'change #image-upload-input': 'handleChangeImageUploadInput'
+        'change #image-upload-input': 'handleChangeImageUploadInput',
+        'vclick #add-section-link': 'handleClickAddSectionLink',
+        'vclick #cancel-add-section-btn': 'handleClickCancelAddSectionButton',
+        'vclick #confirm-add-section-btn': 'handleClickConfirmAddSectionButton'
     },
     /**
      * @property title
@@ -188,15 +191,15 @@ module.exports = GelatoPage.extend({
      * @method handleClickEditLink
      */
     handleClickEditLink: function() {
-        this.$('#editing-version').removeClass('hide');
-        this.$('#static-version').addClass('hide');
+        this.$('#list-editing-version').removeClass('hide');
+        this.$('#list-static-version').addClass('hide');
     },
     /**
      * @method handleClickCancelEditsLink
      */
     handleClickCancelEditsLink: function() {
-        this.$('#editing-version').addClass('hide');
-        this.$('#static-version').removeClass('hide');
+        this.$('#list-editing-version').addClass('hide');
+        this.$('#list-static-version').removeClass('hide');
     },
     /**
      * @method handleClickSaveEditsButton
@@ -245,5 +248,39 @@ module.exports = GelatoPage.extend({
                 document.location.reload();
             }
         });
+    },
+    /**
+     * @method handleClickAddSectionLink
+     */
+    handleClickAddSectionLink: function() {
+        this.$('#add-section-static-version').addClass('hide');
+        this.$('#add-section-editing-version').removeClass('hide');
+    },
+    /**
+     * @method handleClickCancelAddSectionButton
+     */
+    handleClickCancelAddSectionButton: function() {
+        this.$('#add-section-static-version').removeClass('hide');
+        this.$('#add-section-editing-version').addClass('hide');
+    },
+    /**
+     * @method handleClickConfirmAddSectionButton
+     */
+    handleClickConfirmAddSectionButton: function() {
+        var sectionName = this.$('#add-section-editing-version input').val();
+
+        if (!sectionName) {
+            return;
+        }
+
+        var sections = _.clone(this.vocablist.get('sections') || []);
+        sections.push({
+            'name': sectionName,
+            'rows': []
+        });
+        this.vocablist.set('sections', sections);
+        this.vocablist.save();
+
+        this.render();
     }
 });
