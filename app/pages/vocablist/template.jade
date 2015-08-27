@@ -112,7 +112,7 @@ gelato-page(data-name='vocablist')
             else
               - var tags = view.vocablist.get('tags') || [];
 
-              #static-version
+              #list-static-version
 
                 if view.vocablist.editable()
                   a#edit-link.glyphicon.glyphicon-pencil.pull-right.static-el
@@ -137,7 +137,7 @@ gelato-page(data-name='vocablist')
 
                   if view.vocablist.get('published')
                     span.spr Published:
-                    span= moment(view.vocablist.get('published')).format('LL')
+                    span= moment(view.vocablist.get('published')*1000).format('LL')
                     span.spl.spr |
 
                   if view.vocablist.get('published') && view.vocablist.get('peopleStudying')
@@ -156,7 +156,7 @@ gelato-page(data-name='vocablist')
                       span.glyphicon.glyphicon-tag
                       span.spl= tag
 
-              #editing-version.hide
+              #list-editing-version.hide
 
                 #edit-row
                   input#name-input.form-control.input-lg(value=view.vocablist.get('name'))
@@ -168,7 +168,10 @@ gelato-page(data-name='vocablist')
                 input#tags-input.form-control(value=tags.join(', '))
                 .help-block Separate tags with commas
 
-              .header Sections
+              .header
+                | Sections
+                if view.vocablist.editable()
+                  a#edit-sections-link.glyphicon.glyphicon-pencil.pull-right.static-el
 
               .table-oversized-wrapper
                 table.table
@@ -187,5 +190,20 @@ gelato-page(data-name='vocablist')
                           span= moment(section.completed).format('L')
                         else if _.contains(sectionsSkipping, section.id)
                           | Skipping
-                        else if section.id === view.vocablist.get('currentSection')
+                        else if section.id && section.id === view.vocablist.get('currentSection')
                           | Adding
+
+                  if view.vocablist.editable()
+                    - var rowClass = view.vocablist.get('sections').length % 2 ? 'even-row' : 'odd-row';
+                    tr#add-section-static-version(class=rowClass)
+
+                      td(colspan=3)
+                        a#add-section-link
+                          span.glyphicon.glyphicon-plus-sign
+                          span.spl Add Section
+
+                    tr#add-section-editing-version.hide(class=rowClass)
+                      td(colspan=3).add-section
+                        input.form-control
+                        button#cancel-add-section-btn.btn.btn-default Cancel
+                        button#confirm-add-section-btn.btn.btn-primary Make Section
