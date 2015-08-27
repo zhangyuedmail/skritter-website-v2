@@ -28,6 +28,11 @@ module.exports = GelatoPage.extend({
      */
     title: 'Dashboard - Skritter',
     /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: 'background1',
+    /**
      * @property template
      * @type {Function}
      */

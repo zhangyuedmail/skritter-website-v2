@@ -21,8 +21,7 @@ module.exports = GelatoPage.extend({
      * @property events
      * @type {Object}
      */
-    events: {
-    },
+    events: {},
     /**
      * @property template
      * @type {Function}
@@ -33,6 +32,11 @@ module.exports = GelatoPage.extend({
      * @type {String}
      */
     title: 'My Lists - Skritter',
+    /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: 'background1',
     /**
      * @method render
      * @returns {VocablistBrowse}

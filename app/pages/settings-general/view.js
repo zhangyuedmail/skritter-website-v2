@@ -33,6 +33,11 @@ module.exports = GelatoPage.extend({
      */
     title: 'General Settings - Skritter',
     /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: 'background1',
+    /**
      * @property template
      * @type {Function}
      */
