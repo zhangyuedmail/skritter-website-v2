@@ -1,6 +1,7 @@
 var GelatoPage = require('gelato/page');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var ConfirmDialog = require('dialogs/confirm/view');
+var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
 var DefaultNavbar = require('navbars/default/view');
 var User = require('models/user');
 var Vocablist = require('models/vocablist');
@@ -56,7 +57,8 @@ module.exports = GelatoPage.extend({
         'change #image-upload-input': 'handleChangeImageUploadInput',
         'vclick #add-section-link': 'handleClickAddSectionLink',
         'vclick #cancel-add-section-btn': 'handleClickCancelAddSectionButton',
-        'vclick #confirm-add-section-btn': 'handleClickConfirmAddSectionButton'
+        'vclick #confirm-add-section-btn': 'handleClickConfirmAddSectionButton',
+        'vclick #edit-sections-link': 'handleClickEditSectionsLink'
     },
     /**
      * @property title
@@ -282,5 +284,14 @@ module.exports = GelatoPage.extend({
         this.vocablist.save();
 
         this.render();
+    },
+    /**
+     * @method handleClickEditSectionsLink
+     */
+    handleClickEditSectionsLink: function() {
+        var dialog = new VocablistSectionsEditDialog({
+            vocablist: this.vocablist
+        });
+        dialog.render().open();
     }
 });

@@ -168,7 +168,10 @@ gelato-page(data-name='vocablist')
                 input#tags-input.form-control(value=tags.join(', '))
                 .help-block Separate tags with commas
 
-              .header Sections
+              .header
+                | Sections
+                if view.vocablist.editable()
+                  a#edit-sections-link.glyphicon.glyphicon-pencil.pull-right.static-el
 
               .table-oversized-wrapper
                 table.table
