@@ -10,6 +10,10 @@
   padding: 15px 0;
   width: 150px;
 }
+.btn-default {
+  background-color: $white5;
+  &:hover { background-color: $white6; }
+}
 .btn-success {
   background-color: $green5;
   &:hover { background-color: $green6; }
