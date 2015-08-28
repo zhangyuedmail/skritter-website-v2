@@ -3,5 +3,37 @@ gelato-page(data-name='vocablist-section')
 
   gelato-content
     .container
-      .content-block
-        | Nothing here yet
+      .content-block.main-content
+        p
+          a(href="/vocablist/view/"+view.vocablist.id)
+            span.glyphicon.glyphicon-chevron-left
+            if view.vocablist.state === 'standby'
+              span.spl back to #{view.vocablist.get('name')}
+
+        if view.section.state === 'fetching' || view.vocablist.state === 'fetching'
+          p.text-center
+            i.fa.fa-5x.fa-spinner.fa-pulse
+
+        else
+          .row
+            .col-md-7
+              .title= view.section.get('name')
+            .col-md-3
+              select.form-control.input-lg
+                option Select words...
+            .col-md-2
+              button.btn.btn-fixed.btn-success Edit Section
+
+          .table-oversized-wrapper
+            table.table
+              for vocab, i in view.vocabs.models
+                tr(class=i%2 ? 'even-row' : 'odd-row')
+                  td.checkbox-td
+                    input(type="checkbox")
+                  td.writing-td= vocab.getWriting()
+                  td.reading-td= vocab.getReading()
+                  td.definition-td!= vocab.getDefinition()
+
+          if view.vocabs.state === 'fetching'
+            p.text-center
+              i.fa.fa-5x.fa-spinner.fa-pulse
