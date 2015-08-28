@@ -11,6 +11,12 @@ var Vocabs = require('collections/vocabs');
  */
 module.exports = GelatoPage.extend({
     /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: 'background1',
+
+    /**
      * @method initialize
      * @constructor
      */
