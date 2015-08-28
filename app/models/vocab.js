@@ -66,5 +66,28 @@ module.exports = SkritterModel.extend({
    */
   isJapanese: function() {
     return this.get('lang') === 'ja';
+  },
+  /**
+   * @method isBanned
+   * @returns {Boolean}
+   */
+  isBanned: function() {
+    return this.get('bannedParts').length ? true : false;
+  },
+  /**
+   * @method toggleBanned
+   * @returns {Boolean}
+   */
+  toggleBanned: function() {
+    if (this.isBanned()) {
+      this.set('bannedParts', []);
+      return false;
+    }
+    if (this.isChinese()) {
+      this.set('bannedParts', ['defn', 'rdng', 'rune', 'tone']);
+    } else {
+      this.set('bannedParts', ['defn', 'rdng', 'rune']);
+    }
+    return true;
   }
 });

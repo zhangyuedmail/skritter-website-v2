@@ -4,6 +4,7 @@ var User = require('models/user');
 var Vocablist = require('models/vocablist');
 var VocablistSection = require('models/vocablist-section');
 var Vocabs = require('collections/vocabs');
+var ProgressDialog = require('dialogs/progress/view');
 
 /**
  * @class VocablistView
@@ -31,6 +32,7 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.vocabs, 'state', this.renderTable);
         this.showTrad = app.user.get('reviewTraditional');
         this.showSimp = app.user.get('reviewSimplified') || this.vocablist.get('lang') === 'ja';
+        this.action = {}; // see handleChangeActionSelect
     },
     /**
      * @method renderTable
@@ -50,6 +52,7 @@ module.exports = GelatoPage.extend({
      * @method handleSectionLoaded
      */
     handleSectionLoaded: function() {
+        this.render();
         var vocabIds = [];
         _.forEach(this.section.get('rows'), function(row) {
             if (this.showSimp) {
@@ -68,7 +71,7 @@ module.exports = GelatoPage.extend({
      */
     loadVocabChunks: function() {
         if (!this.chunks.length) {
-            this.render();
+            this.renderTable();
             return;
         }
         var chunk = this.chunks.shift();
@@ -138,6 +141,7 @@ module.exports = GelatoPage.extend({
         vocab.set('checked', checkbox.is(':checked'));
     },
     /**
+     * Initializes the action object runAction uses to serially process words
      * @method handleChangeActionSelect
      */
     handleChangeActionSelect: function(e) {
@@ -145,7 +149,61 @@ module.exports = GelatoPage.extend({
         if (!action) {
             return;
         }
-        var selected = this.vocabs.filter({selected: true});
-        console.log('run action', action, 'on selected', selected);
+        $(e.target).val('');
+        var selected = new Vocabs(this.vocabs.filter(function(vocab) {
+            return vocab.get('checked');
+        }));
+
+        var progressDialog = new ProgressDialog();
+        progressDialog.render().open();
+
+        this.action = {
+            name: action,
+            queue: selected,
+            total: selected.size(),
+            dialog: progressDialog
+        };
+        this.runAction();
+    },
+    /**
+     * @method runAction
+     */
+    runAction: function() {
+        var vocab = this.action.queue.shift();
+        if (!vocab) {
+            return this.finishAction();
+        }
+        if (this.action.name === 'ban') {
+            if (vocab.isBanned()) {
+                return this.runAction();
+            }
+            vocab.toggleBanned();
+        }
+        else if (this.action.name === 'unban') {
+            if (!vocab.isBanned()) {
+                return this.runAction();
+            }
+            vocab.toggleBanned();
+        }
+        else {
+            return this.finishAction();
+        }
+        var attrs = {
+            id: vocab.id,
+            bannedParts: vocab.get('bannedParts')
+        };
+        vocab.save(attrs, { patch: true, 'method': 'PUT' });
+        this.listenToOnce(vocab, 'sync', function() {
+            this.action.dialog.setProgress(100 * (this.action.total - this.action.queue.size()) / this.action.total);
+            this.runAction();
+        });
+    },
+    /**
+     * @method finishAction
+     */
+    finishAction: function() {
+        this.action.dialog.close();
+        this.action = {};
+        this.$('input[type="checkbox"]').attr('checked', false);
     }
 });

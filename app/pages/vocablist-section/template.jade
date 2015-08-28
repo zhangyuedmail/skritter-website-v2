@@ -1,8 +1,6 @@
 gelato-page(data-name='vocablist-section')
   #navbar-container
 
-  - console.log('view?', view);
-
   gelato-content
     .container
       .content-block.main-content
@@ -22,7 +20,7 @@ gelato-page(data-name='vocablist-section')
               .title= view.section.get('name')
             .col-md-3
               select#action-select.form-control.input-lg
-                option Select words...
+                option(value="") Select words...
                 option(value="ban") Ban from words
                 option(value="unban") Unban from words
             .col-md-2
