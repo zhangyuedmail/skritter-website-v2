@@ -19,6 +19,11 @@ module.exports = GelatoPage.extend({
      */
     title: 'Vocab - Skritter',
     /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: 'background1',
+    /**
      * @property template
      * @type {Function}
      */

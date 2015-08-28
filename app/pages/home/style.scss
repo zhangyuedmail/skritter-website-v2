@@ -1,3 +1,30 @@
 @import "../../styles/variables";
 
-gelato-page[data-name='home'] {}
+gelato-page[data-name='home'] {
+
+  margin-top: -30px;
+  padding-bottom: 0;
+
+  section {
+    padding-bottom: 100px;
+    padding-top: 75px;
+    .header {
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+    }
+    &.dark {
+      background-color: #262b30;
+      color: #404851;
+    }
+    &.light {
+      background-color: #fbfafc;
+      color: #838f98;
+    }
+  }
+
+  .carousel {
+    img { width: 100%; }
+  }
+
+}
