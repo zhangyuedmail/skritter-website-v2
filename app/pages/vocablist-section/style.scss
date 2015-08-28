@@ -3,7 +3,12 @@
 gelato-page[data-name='vocablist-section'] {
 
   .checkbox-td {
+    cursor: pointer;
     width: 5%;
+
+    input {
+      cursor: pointer;
+    }
   }
 
   .writing-td {

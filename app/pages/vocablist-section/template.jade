@@ -1,6 +1,8 @@
 gelato-page(data-name='vocablist-section')
   #navbar-container
 
+  - console.log('view?', view);
+
   gelato-content
     .container
       .content-block.main-content
@@ -19,17 +21,19 @@ gelato-page(data-name='vocablist-section')
             .col-md-7
               .title= view.section.get('name')
             .col-md-3
-              select.form-control.input-lg
+              select#action-select.form-control.input-lg
                 option Select words...
+                option(value="ban") Ban from words
+                option(value="unban") Unban from words
             .col-md-2
               button.btn.btn-fixed.btn-success Edit Section
 
           .table-oversized-wrapper
             table.table
               for vocab, i in view.vocabs.models
-                tr(class=i%2 ? 'even-row' : 'odd-row')
+                tr(class=i%2 ? 'even-row' : 'odd-row', data-vocab-id=vocab.id)
                   td.checkbox-td
-                    input(type="checkbox")
+                    input(type="checkbox", checked=vocab.get('checked'))
                   td.writing-td= vocab.getWriting()
                   td.reading-td= vocab.getReading()
                   td.definition-td!= vocab.getDefinition()
