@@ -21,6 +21,12 @@ module.exports = SkritterModel.extend({
   parse: function(response) {
     return response.Vocab || response;
   },
+  getWritingDifference: function(otherVocab) {
+    var diff = _.zipWith(this.getWriting(), otherVocab.getWriting(), function(thisChar, otherChar) {
+      return thisChar === otherChar ? '-' : otherChar;
+    });
+    return diff.join('');
+  },
 
   // everything that follows is stolen from data-vocab.js
 

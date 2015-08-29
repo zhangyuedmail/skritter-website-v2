@@ -28,14 +28,32 @@ gelato-page(data-name='vocablist-section')
 
           .table-oversized-wrapper
             table.table
-              for vocab, i in view.vocabs.models
-                tr(class=i%2 ? 'even-row' : 'odd-row', data-vocab-id=vocab.id)
+              for row, i in view.section.get('rows')
+                tr(class=i%2 ? 'even-row' : 'odd-row', data-row-index=i)
+                  - var vocab = view.vocabMap[row.vocabId];
+                  - var tradVocab = view.vocabMap[row.tradVocabId];
                   td.checkbox-td
-                    input(type="checkbox", checked=vocab.get('checked'))
-                  td.writing-td= vocab.getWriting()
-                  td.reading-td= vocab.getReading()
-                  td.definition-td!= vocab.getDefinition()
+                    if vocab
+                      input(type="checkbox", checked=vocab.get('checked'))
+                  td.writing-td
+                    if vocab
+                      span= vocab.getWriting()
+                  td.trad-writing-td
+                    if vocab && tradVocab
+                      span= vocab.getWritingDifference(tradVocab)
+                    else if vocab
+                      span= _.pad('', vocab.getWriting().length, '-')
+                  td.reading-td
+                    if vocab
+                      span= vocab.getReading()
+                  td.definition-td
+                    if vocab
+                      span!= vocab.getDefinition()
+                    if tradVocab && tradVocab.getDefinition() !== vocab.getDefinition()
+                      br
+                      em.spr traditional:
+                      span!= tradVocab.getDefinition()
 
-          if view.vocabs.state === 'fetching'
-            p.text-center
-              i.fa.fa-5x.fa-spinner.fa-pulse
+            if view.vocabs.state === 'fetching'
+              p.text-center
+                i.fa.fa-5x.fa-spinner.fa-pulse

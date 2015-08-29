@@ -30,9 +30,11 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.vocablist, 'state', this.render);
         this.listenTo(this.section, 'state', this.handleSectionLoaded);
         this.listenTo(this.vocabs, 'state', this.renderTable);
-        this.showTrad = app.user.get('reviewTraditional');
-        this.showSimp = app.user.get('reviewSimplified') || this.vocablist.get('lang') === 'ja';
         this.action = {}; // see handleChangeActionSelect
+        this.vocabMap = {};
+        this.listenTo(this.vocabs, 'add', function(vocab) {
+            this.vocabMap[vocab.id] = vocab;
+        });
     },
     /**
      * @method renderTable
@@ -46,7 +48,7 @@ module.exports = GelatoPage.extend({
         // this does not
         //var rendering = $(this.template(require('globals')));
 
-        this.$('table').replaceWith(rendering.find('table'));
+        this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
     },
     /**
      * @method handleSectionLoaded
@@ -55,14 +57,10 @@ module.exports = GelatoPage.extend({
         this.render();
         var vocabIds = [];
         _.forEach(this.section.get('rows'), function(row) {
-            if (this.showSimp) {
-                vocabIds.push(row.vocabId);
-            }
-            if (this.showTrad) {
-                vocabIds.push(row.tradVocabId);
-            }
+            vocabIds.push(row.vocabId);
+            vocabIds.push(row.tradVocabId);
         }, this);
-        var vocabIds = _.uniq(_.filter(vocabIds));
+        vocabIds = _.uniq(_.filter(vocabIds));
         this.chunks = _.chunk(vocabIds, 50);
         this.loadVocabChunks();
     },
@@ -136,9 +134,14 @@ module.exports = GelatoPage.extend({
 
         var anyChecked = this.$('input:checked').length;
         this.$('#action-select').attr('disabled', !anyChecked);
-        var vocabId = checkbox.closest('tr').data('vocab-id');
-        var vocab = this.vocabs.get(vocabId);
+        var rowIndex = checkbox.closest('tr').data('row-index');
+        var row = this.section.get('rows')[rowIndex];
+        var vocab = this.vocabMap[row.vocabId];
         vocab.set('checked', checkbox.is(':checked'));
+        var tradVocab = this.vocabMap[row.tradVocabId];
+        if (tradVocab) {
+            tradVocab.set('checked', checkbox.is(':checked'));
+        }
     },
     /**
      * Initializes the action object runAction uses to serially process words
