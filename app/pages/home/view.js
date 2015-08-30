@@ -1,5 +1,6 @@
 var GelatoPage = require('gelato/page');
 var MarketingFooter = require('components/marketing-footer/view');
+var MarketingNavbar = require('navbars/marketing/view');
 
 /**
  * @class Home
@@ -12,6 +13,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.footer = new MarketingFooter();
+        this.navbar = new MarketingNavbar();
     },
     /**
      * @property title
@@ -29,7 +31,8 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.footer.setElement('#footer-container').render();;
+        this.navbar.render();
+        this.footer.setElement('#footer-container').render();
         return this;
     },
     /**

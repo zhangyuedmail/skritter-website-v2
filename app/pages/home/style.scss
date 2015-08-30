@@ -23,8 +23,115 @@ gelato-page[data-name='home'] {
     }
   }
 
-  .carousel {
+  #hero-slider {
     img { width: 100%; }
+    .carousel-header {
+      color: #ebeaf0;
+      font-family: $font-slab;
+      font-size: 48px;
+      font-weight: 400;
+      margin-top: 50px;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+      z-index: 1000;
+    }
+  }
+
+  #section-features {
+    .header { margin-bottom: 90px; }
+    .media { margin-bottom: 60px; }
+    .icon { width: 75px; }
+    .media-body {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+      max-width: 350px;
+    }
+    .media-heading {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 15px;
+    }
+  }
+
+  #section-plans {
+    .header { margin-bottom: 65px; }
+    .plan {
+      padding-bottom: 12px;
+      padding-top: 12px;
+      position: relative;
+      &.border-right { border-right: 1px solid $white3; }
+      .discount {
+        color: #87a64b;
+        font-family: $font-muli;
+        font-size: 16px;
+        font-weight: 300;
+        margin-bottom: 60px;
+      }
+      .icon {
+        display: none;
+        position: absolute;
+        right: -25px;
+        top: -10px;
+      }
+      .monthly {
+        color: #b2b5b9;
+        font-family: $font-muli;
+        font-size: 18px;
+        font-weight: 300;
+        margin-bottom: 60px;
+      }
+      .price {
+        color: #404851;
+        font-family: $font-muli;
+        font-size: 48px;
+        font-weight: 300;
+        margin-bottom: 10px;
+      }
+      .subscribe { margin-bottom: 10px; }
+      .title {
+        color: #8c9196;
+        font-family: $font-slab;
+        font-size: 24px;
+        font-weight: 300;
+        margin-bottom: 12px;
+      }
+      .trial {
+        color: #6c7a85;
+        font-family: $font-muli;
+        font-size: 12px;
+        font-weight: 300;
+      }
+    }
+  }
+
+  #section-testimonials {
+    .header { margin-bottom: 65px; }
+    .quote-avatar { margin-right: 25px; }
+    .quote-block {
+      background-color: #333940;
+      border-radius: 25px;
+      color: #9ba4ac;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 300;
+      margin-bottom: 20px;
+      min-height: 140px;
+      padding: 25px;
+      text-align: center;
+    }
+    .quote-footer {
+      color: #666c73;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .quote-footer-text { padding-top: 15px; }
   }
 
 }
