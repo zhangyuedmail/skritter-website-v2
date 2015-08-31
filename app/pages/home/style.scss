@@ -38,6 +38,15 @@ gelato-page[data-name='home'] {
     }
   }
 
+  #section-action {
+    background: url("#{$dir-assets}/textures/bg-characters.png") #262b30 repeat;
+    button {
+      font-size: 24px;
+      padding: 15px 25px;
+    }
+    .header { margin-bottom: 90px; }
+  }
+
   #section-features {
     .header { margin-bottom: 90px; }
     .media { margin-bottom: 60px; }
@@ -60,6 +69,7 @@ gelato-page[data-name='home'] {
 
   #section-plans {
     .header { margin-bottom: 65px; }
+    .institutions { margin-top: 75px; }
     .plan {
       padding-bottom: 12px;
       padding-top: 12px;

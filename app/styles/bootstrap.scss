@@ -3,7 +3,9 @@
 /*** BUTTONS ***/
 .btn {
   border: none;
-  border-radius: 25px;
+  border-radius: 50px;
+  font-family: $font-muli;
+  font-weight: 300;
 }
 .btn-fixed {
   height: 50px;
