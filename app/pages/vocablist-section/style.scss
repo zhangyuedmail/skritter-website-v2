@@ -1,0 +1,25 @@
+@import "../../styles/variables";
+
+gelato-page[data-name='vocablist-section'] {
+
+  .checkbox-td {
+    cursor: pointer;
+    width: 5%;
+
+    input {
+      cursor: pointer;
+    }
+  }
+
+  .writing-td {
+    width: 15%;
+  }
+
+  .reading-td {
+    width: 15%;
+  }
+
+  .definition-td {
+    width: 60%;
+  }
+}

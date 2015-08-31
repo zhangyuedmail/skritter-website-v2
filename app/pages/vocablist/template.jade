@@ -179,7 +179,8 @@ gelato-page(data-name='vocablist')
 
                   for section, i in view.vocablist.get('sections')
                     tr(class=i%2 ? 'even-row' : 'odd-row')
-                      td= section.name
+                      td
+                        a(href="/vocablist/view/"+view.vocablist.id+"/"+section.id)= section.name
                       td
                         | #{section.rows.length} word
                         if section.rows.length !== 1

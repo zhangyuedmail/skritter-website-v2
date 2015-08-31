@@ -1,0 +1,59 @@
+gelato-page(data-name='vocablist-section')
+  #navbar-container
+
+  gelato-content
+    .container
+      .content-block.main-content
+        p
+          a(href="/vocablist/view/"+view.vocablist.id)
+            span.glyphicon.glyphicon-chevron-left
+            if view.vocablist.state === 'standby'
+              span.spl back to #{view.vocablist.get('name')}
+
+        if view.section.state === 'fetching' || view.vocablist.state === 'fetching'
+          p.text-center
+            i.fa.fa-5x.fa-spinner.fa-pulse
+
+        else
+          .row
+            .col-md-7
+              .title= view.section.get('name')
+            .col-md-3
+              select#action-select.form-control.input-lg
+                option(value="") Select words...
+                option(value="ban") Ban from words
+                option(value="unban") Unban from words
+            .col-md-2
+              button.btn.btn-fixed.btn-success Edit Section
+
+          .table-oversized-wrapper
+            table.table
+              for row, i in view.section.get('rows')
+                tr(class=i%2 ? 'even-row' : 'odd-row', data-row-index=i)
+                  - var vocab = view.vocabMap[row.vocabId];
+                  - var tradVocab = view.vocabMap[row.tradVocabId];
+                  td.checkbox-td
+                    if vocab
+                      input(type="checkbox", checked=vocab.get('checked'))
+                  td.writing-td
+                    if vocab
+                      span= vocab.getWriting()
+                  td.trad-writing-td
+                    if vocab && tradVocab
+                      span= vocab.getWritingDifference(tradVocab)
+                    else if vocab
+                      span= _.pad('', vocab.getWriting().length, '-')
+                  td.reading-td
+                    if vocab
+                      span= vocab.getReading()
+                  td.definition-td
+                    if vocab
+                      span!= vocab.getDefinition()
+                    if tradVocab && tradVocab.getDefinition() !== vocab.getDefinition()
+                      br
+                      em.spr traditional:
+                      span!= tradVocab.getDefinition()
+
+            if view.vocabs.state === 'fetching'
+              p.text-center
+                i.fa.fa-5x.fa-spinner.fa-pulse
