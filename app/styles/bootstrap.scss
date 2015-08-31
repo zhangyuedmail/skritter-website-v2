@@ -28,6 +28,14 @@
   .container { width: 100%; }
 }
 
+/*** LINKS ***/
+a {
+  text-decoration: none !important;
+  color: $green5;
+  cursor: pointer;
+  &:hover { color: $green6; }
+}
+
 /*** MODALS ***/
 .modal-content { border-radius: 25px; }
 
