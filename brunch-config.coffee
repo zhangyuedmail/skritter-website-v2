@@ -11,6 +11,7 @@ exports.config =
       order:
         before: [
           'vendor/gelato/js/gelato.js',
+          'vendor/jquery/jquery.ui-1.11.4.js',
           'bower_components/moment/moment.js',
           'bower_components/moment-timezone/moment-timezone.js',
           'bower_components/d3/d3.js',
