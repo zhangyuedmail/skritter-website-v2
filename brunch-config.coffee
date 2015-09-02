@@ -15,6 +15,7 @@ exports.config =
           'bower_components/moment/moment.js',
           'bower_components/moment-timezone/moment-timezone.js',
           'bower_components/d3/d3.js',
+          'vendor/bootstrap/bootstrap.datetimepicker-4.15.35.js',
           'vendor/createjs/createjs.easel-NEXT.min.js',
           'vendor/createjs/createjs.tween-NEXT.min.js',
           'vendor/heatmap/heatmap-3.5.6.js',
