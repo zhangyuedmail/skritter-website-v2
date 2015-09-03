@@ -30,6 +30,12 @@
   .container { width: 100%; }
 }
 
+/*** INPUT ***/
+select {
+  border: 0;
+  outline: 1px solid #cccccc;
+}
+
 /*** LINKS ***/
 a {
   text-decoration: none !important;

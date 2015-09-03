@@ -16,11 +16,16 @@ module.exports = GelatoRouter.extend({
      */
     routes: {
         '': 'defaultRoute',
-        'home': 'navigateHome',
+        'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
+        'features': 'navigateFeatures',
+        'home': 'navigateHome',
+        'institutions': 'navigateInstitutions',
+        'legal': 'navigateLegal',
         'login': 'navigateLogin',
         'settings/general': 'navigateSettingsGeneral',
         'settings/study': 'navigateSettingsStudy',
+        'signup': 'navigateSignup',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'vocab(/:vocabId)': 'navigateVocab',
         'vocablist/browse': 'navigateVocablistBrowse',
@@ -41,10 +46,18 @@ module.exports = GelatoRouter.extend({
         }
     },
     /**
+     * @method navigateContact
+     */
+    navigateContact: function() {
+        this.page = new (require('pages/contact/view'));
+        this.page.render();
+    },
+    /**
      * @method navigateDashboard
      */
     navigateDashboard: function() {
         if (app.user.isLoggedIn()) {
+            this.navigate('dashboard');
             this.page = new (require('pages/dashboard/view'));
             this.page.render();
         } else {
@@ -52,11 +65,32 @@ module.exports = GelatoRouter.extend({
         }
     },
     /**
+     * @method navigateFeatures
+     */
+    navigateFeatures: function() {
+        this.page = new (require('pages/features/view'));
+        this.page.render();
+    },
+    /**
      * @method navigateHome
      */
     navigateHome: function() {
         this.navigate('home');
         this.page = new (require('pages/home/view'));
+        this.page.render();
+    },
+    /**
+     * @method navigateInstitutions
+     */
+    navigateInstitutions: function() {
+        this.page = new (require('pages/institutions/view'));
+        this.page.render();
+    },
+    /**
+     * @method navigateLegal
+     */
+    navigateLegal: function() {
+        this.page = new (require('pages/legal/view'));
         this.page.render();
     },
     /**
@@ -91,6 +125,13 @@ module.exports = GelatoRouter.extend({
         } else {
             this.navigateHome();
         }
+    },
+    /**
+     * @method navigateSignup
+     */
+    navigateSignup: function() {
+        this.page = new (require('pages/signup/view'));
+        this.page.render();
     },
     /**
      * @method navigateStudy
