@@ -1,0 +1,31 @@
+tr(data-vocab-id=row.vocabId, data-trad-vocab-id=row.tradVocabId)
+  - var vocab = view.vocabMap[row.vocabId];
+  - var tradVocab = view.vocabMap[row.tradVocabId];
+  td.checkbox-td
+    span.glyphicon.glyphicon-option-vertical.hide
+    if vocab
+      input(type="checkbox", checked=vocab.get('checked'))
+  td.writing-td
+    if vocab
+      span= vocab.getWriting()
+  td.trad-writing-td
+    if vocab && tradVocab
+      span= vocab.getWritingDifference(tradVocab)
+    else if vocab
+      span= _.pad('', vocab.getWriting().length, '-')
+  td.reading-td
+    if vocab
+      span= vocab.getReading()
+  td.definition-td
+    if vocab
+      span!= vocab.getDefinition()
+    if tradVocab && tradVocab.getDefinition() !== vocab.getDefinition()
+      br
+      em.spr traditional:
+      span!= tradVocab.getDefinition()
+  td.remove-td
+    span.glyphicon.glyphicon-trash.hide
+  td.edit-cell.hide
+  td(colspan=4).edit-cell.hide
+    input.form-control
+  td.edit-cell.hide

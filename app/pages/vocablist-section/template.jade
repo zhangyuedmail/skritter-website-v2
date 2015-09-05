@@ -15,7 +15,7 @@ gelato-page(data-name='vocablist-section')
             i.fa.fa-5x.fa-spinner.fa-pulse
 
         else
-          .row
+          .row#static-header-row
             .col-md-7
               .title= view.section.get('name')
             .col-md-3
@@ -24,35 +24,21 @@ gelato-page(data-name='vocablist-section')
                 option(value="ban") Ban from words
                 option(value="unban") Unban from words
             .col-md-2
-              button.btn.btn-fixed.btn-success Edit Section
+              if view.vocablist.editable()
+                button#edit-section-btn.btn.btn-fixed.btn-success Edit Section
+          .row#editing-header-row.hide
+            .col-md-9
+              input#name-input.input-lg.form-control(value=view.section.get('name'))
+            .col-md-1.text-center
+              a#cancel-edit-section-link Cancel
+            .col-md-2
+              button#save-edit-section-btn.btn.btn-fixed.btn-success Save edits
+
 
           .table-oversized-wrapper
-            table.table
+            table.table.table-striped
               for row, i in view.section.get('rows')
-                tr(class=i%2 ? 'even-row' : 'odd-row', data-row-index=i)
-                  - var vocab = view.vocabMap[row.vocabId];
-                  - var tradVocab = view.vocabMap[row.tradVocabId];
-                  td.checkbox-td
-                    if vocab
-                      input(type="checkbox", checked=vocab.get('checked'))
-                  td.writing-td
-                    if vocab
-                      span= vocab.getWriting()
-                  td.trad-writing-td
-                    if vocab && tradVocab
-                      span= vocab.getWritingDifference(tradVocab)
-                    else if vocab
-                      span= _.pad('', vocab.getWriting().length, '-')
-                  td.reading-td
-                    if vocab
-                      span= vocab.getReading()
-                  td.definition-td
-                    if vocab
-                      span!= vocab.getDefinition()
-                    if tradVocab && tradVocab.getDefinition() !== vocab.getDefinition()
-                      br
-                      em.spr traditional:
-                      span!= tradVocab.getDefinition()
+                include ./row-template
 
             if view.vocabs.state === 'fetching'
               p.text-center

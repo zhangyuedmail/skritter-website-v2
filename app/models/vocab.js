@@ -27,7 +27,13 @@ module.exports = SkritterModel.extend({
     });
     return diff.join('');
   },
-
+  /**
+   * @method getBase
+   * @returns {Number}
+   */
+  getBase: function() {
+    return this.id.split('-')[1];
+  },
   // everything that follows is stolen from data-vocab.js
 
   /**
@@ -95,5 +101,12 @@ module.exports = SkritterModel.extend({
       this.set('bannedParts', ['defn', 'rdng', 'rune']);
     }
     return true;
+  },
+  /**
+   * @method getVariation
+   * @returns {Number}
+   */
+  getVariation: function() {
+    return parseInt(this.id.split('-')[2]);
   }
 });
