@@ -98,7 +98,8 @@ module.exports = GelatoPage.extend({
         'vclick #cancel-edit-section-link': 'handleCancelEditSectionLink',
         'vclick #save-edit-section-btn': 'handleClickSaveEditSectionButton',
         'keydown tr input': 'handleKeydownInput',
-        'blur tr input': 'stopEditingRow'
+        'blur tr input': 'stopEditingRow',
+        'vclick .remove-td': 'handleClickRemoveCell'
     },
     /**
      * @property title
@@ -471,5 +472,16 @@ module.exports = GelatoPage.extend({
             this.stopEditingRow();
         }
         this.startEditingRow(toRow);
+    },
+    /**
+     * @method handleClickRemoveCell
+     * @param {Event} e
+     */
+    handleClickRemoveCell: function(e) {
+        if (!this.editing) {
+            return;
+        }
+        this.stopEditingRow();
+        $(e.target).closest('tr').remove();
     }
 });

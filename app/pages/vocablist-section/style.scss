@@ -34,4 +34,11 @@ gelato-page[data-name='vocablist-section'] {
   .remove-td {
     width: 5%;
   }
+
+  .glyphicon-trash {
+    color: $grey3;
+    &:hover {
+      color: $grey5;
+    }
+  }
 }
