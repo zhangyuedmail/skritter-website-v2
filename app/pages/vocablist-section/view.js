@@ -185,8 +185,14 @@ module.exports = GelatoPage.extend({
         input.autocomplete({
             source: _.bind(this.vocabAutocompleteSource, this)
         });
+        input.on('autocompletesearch', function() {
+            $(editCell[0]).append($(" <i class='fa fa-2x fa-spinner fa-pulse' />"));
+        });
         input.on('autocompleteopen', function() {
             view.autocompleteOpen = true;
+        });
+        input.on('autocompleteresponse', function() {
+            editCell.find('i.fa-spinner').remove();
         });
         input.on('autocompleteclose', function() {
             view.autocompleteOpen = false;

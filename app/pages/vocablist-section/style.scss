@@ -35,6 +35,10 @@ gelato-page[data-name='vocablist-section'] {
     width: 5%;
   }
 
+  .edit-cell {
+    text-align: right;
+  }
+
   .glyphicon-trash {
     color: $grey3;
     &:hover {
