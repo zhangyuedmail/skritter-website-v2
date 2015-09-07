@@ -22,8 +22,13 @@ gelato-page(data-name='vocablist')
                     span.glyphicon.glyphicon-chevron-left
                     span back to my lists
 
+                else if sort === 'chinesepod-label' || sort === 'chinesepod-lesson'
+                  a.back-link(href="/vocablist/chinesepod")
+                    span.glyphicon.glyphicon-chevron-left
+                    span back to ChinesePod lists
+
                 else if sort
-                  // TODO: add links to other custom lists and ChinesePod
+                  // TODO: add links to other custom lists
                   a.back-link(href="/vocablist/queue")
                     span.glyphicon.glyphicon-chevron-left
                     span back to lists
