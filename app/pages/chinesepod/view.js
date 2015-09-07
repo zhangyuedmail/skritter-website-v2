@@ -148,11 +148,11 @@ module.exports = GelatoPage.extend({
         var lookupToken = $(e.target).data('lookup-token');
         var url = app.getApiUrl() + 'cpod/list/' + lookupToken;
         var headers = app.user.session.getHeaders();
+        $(e.target).append($(" <i class='fa fa-1x fa-spinner fa-pulse' />"));
         $.ajax({
             url: url,
             headers: headers,
             success: function (response) {
-                console.log('success', response);
                 document.location.href = '/vocablist/view/' + response.vocabListID;
             }
         });
