@@ -29,6 +29,7 @@ module.exports = GelatoRouter.extend({
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'vocab(/:vocabId)': 'navigateVocab',
         'vocablist/browse': 'navigateVocablistBrowse',
+        'vocablist/chinesepod': 'navigateChinesepod',
         'vocablist/queue': 'navigateVocablistQueue',
         'vocablist/my-lists': 'navigateVocablistMyLists',
         'vocablist/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
@@ -204,12 +205,26 @@ module.exports = GelatoRouter.extend({
             this.navigateHome();
         }
     },
+    /**
+     * @method navigateVocablistSection
+     */
     navigateVocablistSection: function(vocablistId, sectionId) {
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/vocablist-section/view'))({
                 vocablistId: vocablistId,
                 sectionId: sectionId
             });
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateChinesepod
+     */
+    navigateChinesepod: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/chinesepod/view'))();
             this.page.render();
         } else {
             this.navigateHome();
