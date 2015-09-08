@@ -22,7 +22,8 @@ module.exports = GelatoComponent.extend({
         //   or have client automatically load more.
         this.vocablists.fetch({
             data: {
-                sort: 'official'
+                sort: 'official',
+                lang: app.getLanguage()
             }
         });
     },

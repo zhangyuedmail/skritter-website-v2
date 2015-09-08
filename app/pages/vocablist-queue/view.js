@@ -19,7 +19,8 @@ module.exports = GelatoPage.extend({
         var data = {
             limit: 10,
             sort: 'studying',
-            include_percent_done: 'true'
+            include_percent_done: 'true',
+            lang: app.getLanguage()
         };
         this.vocablists.fetch({
             data: data
