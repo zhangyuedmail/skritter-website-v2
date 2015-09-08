@@ -52,7 +52,7 @@ module.exports = GelatoApplication.extend({
      * @returns {String}
      */
     getLanguage: function() {
-        return this.get('language');
+        return this.get('language') === 'undefined' ? this.user.get('targetLang') : this.get('language');
     },
     /**
      * @method handleError
