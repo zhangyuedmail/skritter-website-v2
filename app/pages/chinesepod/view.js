@@ -104,6 +104,7 @@ module.exports = GelatoPage.extend({
         });
         this.listenToOnce(this.chinesepodSession, 'error', function(model, jqxhr) {
             this.errorMessage = jqxhr.responseJSON.message;
+            this.stopListening(this.chinesepodSession);
             this.render();
         });
         this.render();
