@@ -37,7 +37,8 @@ gelato-component(data-name='vocablist-browse-table')
           for list, i in view._lists
             .col-md-3
               .grid-tile
-                .header.text-center.text-capitalize= list.get('name')
+                .tile-header.text-center.text-capitalize
+                  a(href="/vocablist/view/"+list.id)= list.get('name')
                 img(src=list.getImageUrl())
                 .background
                   span.glyphicon.glyphicon-book
