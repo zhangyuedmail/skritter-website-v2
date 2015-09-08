@@ -48,7 +48,7 @@ module.exports = GelatoDialog.extend({
      * @param {Event} e
      */
     handleClickConfirmButton: function (e) {
-        this.vocablist.set('studyingMode', 'not studying');
+        this.vocablist.save({'studyingMode': 'not studying'}, {patch: true, method: 'PUT'});
         this.close();
     }
 });
