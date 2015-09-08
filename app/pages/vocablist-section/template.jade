@@ -1,7 +1,7 @@
 gelato-page(data-name='vocablist-section')
   #navbar-container
 
-  gelato-content
+  gelato-page
     .container
       .content-block.main-content
         p
@@ -17,7 +17,12 @@ gelato-page(data-name='vocablist-section')
         else
           .row#static-header-row
             .col-md-7
-              .title= view.section.get('name')
+              .title
+                - var name = view.section.get('name');
+                if name
+                  span= name
+                else
+                  em Unnamed section
             .col-md-3
               select#action-select.form-control.input-lg
                 option(value="") Select words...
