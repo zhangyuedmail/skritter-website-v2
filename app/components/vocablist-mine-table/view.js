@@ -48,7 +48,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickAddToQueueLink: function(event) {
         event.preventDefault();
-        var listID = $(e.target).closest('.add-to-queue-link').data('vocablist-id');
+        var listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
         var vocablist = this.vocablists.get(listID);
         if (vocablist.get('studyingMode') !== 'not studying') {
             return;
