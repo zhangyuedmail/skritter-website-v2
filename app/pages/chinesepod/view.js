@@ -24,6 +24,8 @@ module.exports = GelatoPage.extend({
         this.chinesepodLessons = new ChinesePodLessons();
         this.listenTo(this.chinesepodLabels, 'state', this.render);
         this.listenTo(this.chinesepodLessons, 'state', this.render);
+        this.listenTo(this.chinesepodLabels, 'error', this.handleChinesePodError)
+        this.listenTo(this.chinesepodLessons, 'error', this.handleChinesePodError)
         this.viewOption = 'lessons';
         this.email = '';
         this.password = '';
@@ -126,6 +128,16 @@ module.exports = GelatoPage.extend({
         this.searchString = $(e.target).val().toLowerCase();
         this.renderTable();
     }, 500),
+    /**
+     * @method handleChinesePodError
+     * @param {GelatoCollection} collection
+     * @param {jqXHR} jqxhr
+     */
+    handleChinesePodError: function(collection, jqxhr) {
+        if (jqxhr.status === 504) {
+            collection.fetch();
+        }
+    },
     /**
      * @method renderTable
      */
