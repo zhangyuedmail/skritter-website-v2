@@ -19,7 +19,9 @@ gelato-page(data-name='vocablist-section')
             .col-md-7
               .title
                 - var name = view.section.get('name');
-                if name
+                if view.vocablist.get('singleSect')
+                  em Single section
+                else if name
                   span= name
                 else
                   em Unnamed section
@@ -39,11 +41,16 @@ gelato-page(data-name='vocablist-section')
             .col-md-2
               button#save-edit-section-btn.btn.btn-fixed.btn-success Save edits
 
-
           .table-oversized-wrapper
             table.table.table-striped
               for row, i in view.section.get('rows')
                 include ./row-template
+                
+              tr#add-word-row.hide
+                td.checkbox-td
+                  span.glyphicon.glyphicon-plus-sign
+                  
+                td(colspan=5) Add word
 
             if view.vocabs.state === 'fetching'
               p.text-center
