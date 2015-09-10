@@ -65,7 +65,7 @@ module.exports = GelatoPage.extend({
             name: this.$('#name').val(),
             description: this.$('#description').val(),
             singleSect: this.$('#small-list-input').is(':checked'),
-            lang: app.user.get('targetLang') // TODO: replace with app.getLanguage
+            lang: app.getLanguage()
         });
         this.vocablist.save();
         this.listenToOnce(this.vocablist, 'sync', function() {

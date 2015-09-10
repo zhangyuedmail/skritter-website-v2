@@ -16,10 +16,22 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.vocablists = new Vocablists();
+        var data = {
+            limit: 10,
+            sort: 'studying',
+            include_percent_done: 'true',
+            lang: app.getLanguage()
+        };
         this.vocablists.fetch({
-            data: {
-                limit: 100,
-                sort: 'studying'
+            data: data
+        });
+        this.listenTo(this.vocablists, 'sync', function() {
+            if (this.vocablists.cursor) {
+                data.cursor = this.vocablists.cursor;
+                this.vocablists.fetch({
+                    data: data,
+                    remove: false
+                })
             }
         });
         this.addingTable = new VocablistAddTable({vocablists: this.vocablists});

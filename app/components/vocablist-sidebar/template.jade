@@ -4,4 +4,5 @@ gelato-component(data-name='vocablist-sidebar')
     a(href="/vocablist/queue") Study Queue
     a(href="/vocablist/browse") Browse Lists
     a(href="/vocablist/my-lists") My Lists
-    a(href="/vocablist/chinesepod") ChinesePod
+    if app.getLanguage() === 'zh'
+      a(href="/vocablist/chinesepod") ChinesePod

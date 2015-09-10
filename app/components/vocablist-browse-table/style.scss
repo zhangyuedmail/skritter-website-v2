@@ -51,16 +51,18 @@ gelato-component[data-name='vocablist-browse-table'] {
       position: relative;
       height: 250px;
       overflow: hidden;
-      .header {
+      .tile-header {
         padding: 11px;
         opacity: 0.5;
-        color: $white2;
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         background: rgba(25,28,32, 0.85);
         z-index: 2;
+        a {
+          color: $white2;
+        }
       }
       img {
         width: 100%;
@@ -94,7 +96,7 @@ gelato-component[data-name='vocablist-browse-table'] {
         z-index: 1;
       }
       &:hover {
-        .header, .footer {
+        .tile-header, .footer {
           opacity: 1;
         }
       }

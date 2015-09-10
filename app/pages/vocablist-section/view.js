@@ -99,7 +99,8 @@ module.exports = GelatoPage.extend({
         'vclick #save-edit-section-btn': 'handleClickSaveEditSectionButton',
         'keydown tr input': 'handleKeydownInput',
         'blur tr input': 'stopEditingRow',
-        'vclick .remove-td': 'handleClickRemoveCell'
+        'vclick .remove-td': 'handleClickRemoveCell',
+        'vclick .study-writing-link': 'handleClickStudyWritingLink'
     },
     /**
      * @property title
@@ -141,10 +142,17 @@ module.exports = GelatoPage.extend({
             if ($(e.target).closest('tr').is(this.rowEditing)) {
                 return;
             }
-            if(this.rowEditing) {
+            if (this.rowEditing) {
                 this.stopEditingRow();
             }
-            this.startEditingRow($(e.target).closest('tr'));
+            if ($(e.target).closest('#add-word-row').length) {
+                var newRow = this.createNewRow();
+                newRow.insertBefore($(e.target).closest('tr'));
+                this.startEditingRow(newRow);
+            }
+            else {
+                this.startEditingRow($(e.target).closest('tr'));
+            }
             return;
         }
 
@@ -310,12 +318,17 @@ module.exports = GelatoPage.extend({
             this.removingRow = false;
         }
         else {
+            var rowData = {
+                vocabId: vocabId,
+                tradVocabId: tradVocabId,
+            };
+            if (this.vocablist.get('lang') === 'ja') {
+                var studyLink = this.rowEditing.find('.study-writing-link');
+                rowData.studyWriting = !studyLink.hasClass('text-muted');
+            }
             var newRow = $(rowTemplate({
                 view: this,
-                row: {
-                    vocabId: vocabId,
-                    tradVocabId: tradVocabId
-                }
+                row: rowData
             }));
             newRow.find('.glyphicon-option-vertical, .glyphicon-trash').removeClass('hide');
             newRow.find('input[type="checkbox"]').addClass('hide');
@@ -349,6 +362,17 @@ module.exports = GelatoPage.extend({
             dialog: progressDialog
         };
         this.runAction();
+    },
+    /**
+     * @method handleClickStudyWritingLink
+     * @param {Event} e
+     */
+    handleClickStudyWritingLink: function(e) {
+        if (!this.editing) {
+            return;
+        }
+        $(e.target).toggleClass('text-muted');
+        e.stopPropagation();
     },
     /**
      * @method runAction
@@ -399,6 +423,7 @@ module.exports = GelatoPage.extend({
         this.$('input[type="checkbox"]').addClass('hide');
         this.$('#static-header-row').addClass('hide');
         this.$('#editing-header-row').removeClass('hide');
+        this.$('#add-word-row').removeClass('hide');
         $(this.el).find('tbody').sortable({
             handle:'.glyphicon-option-vertical'
         });
@@ -411,6 +436,7 @@ module.exports = GelatoPage.extend({
         this.renderTable();
         this.$('#static-header-row').removeClass('hide');
         this.$('#editing-header-row').addClass('hide');
+        this.$('#add-word-row').addClass('hide');
         this.editing = false;
     },
     /**
@@ -418,18 +444,27 @@ module.exports = GelatoPage.extend({
      */
     handleClickSaveEditSectionButton: function() {
         var rows = [];
+        var lang = this.vocablist.get('lang');
         _.forEach(this.$('tr'), function(el, i) {
-            rows.push({
-                'vocabId': $(el).data('vocab-id'),
-                'tradVocabId': $(el).data('trad-vocab-id')
-            })
-        });
+            var vocabID = $(el).data('vocab-id');
+            var tradVocabID = $(el).data('trad-vocab-id');
+            if (!vocabID) {
+                return;
+            }
+            var rowData = { vocabId: vocabID, tradVocabId: tradVocabID };
+            if (lang === 'ja') {
+                var studyLink = $(el).find('.study-writing-link');
+                rowData.studyWriting = !studyLink.hasClass('text-muted');
+            }
+            rows.push(rowData);
+        }, this);
         this.section.set('rows', rows);
         this.section.set('name', this.$('#name-input').val());
         this.section.save();
         this.renderTable();
         this.$('#static-header-row').removeClass('hide');
         this.$('#editing-header-row').addClass('hide');
+        this.$('#add-word-row').addClass('hide');
         this.editing = false;
     },
     /**
@@ -446,13 +481,7 @@ module.exports = GelatoPage.extend({
 
         var fromRow = $(e.target).closest('tr');
         var toRow = null;
-        var newRow = $(rowTemplate({
-            view: this,
-            row: {
-                vocabId: '',
-                tradVocabId: ''
-            }
-        }));
+        var newRow = this.createNewRow();
 
         if (e.which === 38) { // up-arrow
             toRow = fromRow.prev();
@@ -478,6 +507,19 @@ module.exports = GelatoPage.extend({
             this.stopEditingRow();
         }
         this.startEditingRow(toRow);
+    },
+    /**
+     * @method createNewRow
+     * @returns {jQuery}
+     */
+    createNewRow: function() {
+      return $(rowTemplate({
+          view: this,
+          row: {
+              vocabId: '',
+              tradVocabId: ''
+          }
+      }));
     },
     /**
      * @method handleClickRemoveCell

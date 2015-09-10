@@ -1,10 +1,11 @@
+- var sort = view.vocablist.get('sort');
+- var singleSect = view.vocablist.get('singleSect');
+
 gelato-page(data-name='vocablist')
   #navbar-container
   .container
     .content-block
       .row
-
-        - var sort = view.vocablist.get('sort');
 
         //----------------- SIDEBAR -----------------------------------------
 
@@ -97,6 +98,13 @@ gelato-page(data-name='vocablist')
                       span.glyphicon.glyphicon-trash
                       span Delete
 
+                if view.vocablist.get('sort') === 'chinesepod-label'
+                  a#update-link
+                    div.action
+                      i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                      span.glyphicon.glyphicon-refresh
+                      span Update
+
                 //div.action
                 //  span.glyphicon.glyphicon-blackboard
                 //  span Assign to group
@@ -172,10 +180,11 @@ gelato-page(data-name='vocablist')
               input#tags-input.form-control(value=tags.join(', '))
               .help-block Separate tags with commas
 
-            .header
-              | Sections
-              if view.vocablist.editable()
-                a#edit-sections-link.glyphicon.glyphicon-pencil.pull-right.static-el
+            if !singleSect
+              .header
+                | Sections
+                if view.vocablist.editable()
+                  a#edit-sections-link.glyphicon.glyphicon-pencil.pull-right.static-el
 
             .table-oversized-wrapper
               table.table
@@ -185,7 +194,9 @@ gelato-page(data-name='vocablist')
                   tr(class=i%2 ? 'even-row' : 'odd-row')
                     td
                       a(href="/vocablist/view/"+view.vocablist.id+"/"+section.id)
-                        if section.name
+                        if singleSect
+                          em Single section
+                        else if section.name
                           span= section.name
                         else
                           em Unnamed section
@@ -202,7 +213,7 @@ gelato-page(data-name='vocablist')
                       else if section.id && section.id === view.vocablist.get('currentSection')
                         | Adding
 
-                if view.vocablist.editable()
+                if view.vocablist.editable() && !singleSect
                   - var rowClass = view.vocablist.get('sections').length % 2 ? 'even-row' : 'odd-row';
                   tr#add-section-static-version(class=rowClass)
 

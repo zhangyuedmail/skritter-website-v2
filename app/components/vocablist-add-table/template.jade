@@ -1,28 +1,27 @@
 gelato-component(data-name='vocablist-add-table')
+  for list, i in view.vocablists.getAdding()
+    .row(data-list-id=list.id)
+      .col-md-3
+        a(href="/vocablist/view/"+list.id)= list.get('name')
+      .col-md-3
+        .progress
+          .progress-bar(style="width:"+(list.getProgress().percent)+'%')
+
+      .col-md-2
+        a(href="/study/" + list.id).action-link Study List
+
+      .col-md-2
+        a.stop-adding-link.action-link Stop Adding
+
+      .col-md-1
+        span.glyphicon.glyphicon-cog.list-settings-span
+
+      .col-md-1
+        span.glyphicon.glyphicon-remove.remove-list-span
+
   if view.vocablists.state === 'fetching'
     p.text-center
       i.fa.fa-3x.fa-spinner.fa-pulse
 
-  else if view.vocablists.length
-    for list, i in view.vocablists.getAdding()
-      .row(data-list-id=list.id)
-        .col-md-3
-          a(href="/vocablist/view/"+list.id)= list.get('name')
-        .col-md-3
-          .progress
-            .progress-bar(style="width:"+(list.getProgress().percent)+'%')
-
-        .col-md-2
-          a(href="/study/" + list.id).action-link Study List
-
-        .col-md-2
-          a.stop-adding-link.action-link Stop Adding
-
-        .col-md-1
-          span.glyphicon.glyphicon-cog.list-settings-span
-
-        .col-md-1
-          span.glyphicon.glyphicon-remove.remove-list-span
-
-  else
+  else if !view.vocablists.length
     em None

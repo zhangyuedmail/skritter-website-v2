@@ -16,7 +16,8 @@ module.exports = GelatoComponent.extend({
         this.vocablists.fetch({
             data: {
                 limit: 10,
-                sort: 'custom'
+                sort: 'custom',
+                lang: app.getLanguage()
             }
         });
     },
@@ -69,7 +70,8 @@ module.exports = GelatoComponent.extend({
             data: {
                 cursor: this.vocablists.cursor,
                 limit: 10,
-                sort: 'custom'
+                sort: 'custom',
+                lang: app.getLanguage()
             },
             remove: false
         });

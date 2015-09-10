@@ -15,7 +15,7 @@ module.exports = SkritterModel.extend({
      * @property urlRoot
      * @type {String}
      */
-    urlRoot: '/users',
+    urlRoot: 'users',
     /**
      * @property defaults
      * @type {Object}

@@ -20,14 +20,17 @@ module.exports = GelatoPage.extend({
         this.vocablist = new Vocablist({id: options.vocablistId});
         this.vocablist.fetch({data: {includeSectionCompletion: true}});
         this.listenTo(this.vocablist, 'state', this.render);
+        this.updating = false;
     },
     /**
      * @method loadCreatorNameIfNeeded
      */
     loadCreatorNameIfNeeded: function() {
-        // Only need to find the real name of the creator if this is a custom list made by someone
-        // other than the logged in user.
-        if (this.vocablist.get('sort') !== 'custom' || this.vocablist.get('creator') === app.user.id) {
+        // Only need to find the real name of the creator if this is a
+        // custom list made by someone other than the logged in user.
+        var isCustom = this.vocablist.get('sort') !== 'custom';
+        var isOwned = this.vocablist.get('creator') === app.user.id;
+        if (isCustom || isOwned) {
             return;
         }
         this.creator = new User({id: this.vocablist.get('creator')});
@@ -58,7 +61,8 @@ module.exports = GelatoPage.extend({
         'vclick #add-section-link': 'handleClickAddSectionLink',
         'vclick #cancel-add-section-btn': 'handleClickCancelAddSectionButton',
         'vclick #confirm-add-section-btn': 'handleClickConfirmAddSectionButton',
-        'vclick #edit-sections-link': 'handleClickEditSectionsLink'
+        'vclick #edit-sections-link': 'handleClickEditSectionsLink',
+        'vclick #update-link': 'handleClickUpdateLink'
     },
     /**
      * @property title
@@ -107,8 +111,9 @@ module.exports = GelatoPage.extend({
      */
     handleClickAddToQueueButton: function() {
         if (this.vocablist.get('studyingMode') === 'not studying') {
-            this.vocablist.set('studyingMode', 'adding');
-            this.vocablist.save();
+            var attrs = {'studyingMode': 'adding'};
+            var options = {patch: true, method: 'PUT'};
+            this.vocablist.save(attrs, options);
             this.render();
         }
     },
@@ -131,11 +136,11 @@ module.exports = GelatoPage.extend({
         });
         confirmDialog.render().open();
         this.listenTo(confirmDialog, 'confirm', function() {
-            var publishUrl = app.api.getUrl() + _.result(this.vocablist, 'url') + '/publish';
+            var publishUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/publish';
             $.ajax({
                 url: publishUrl,
                 method: 'POST',
-                headers: app.api.getUserHeaders(),
+                headers: app.user.headers(),
                 success: function() {
                     document.location.reload()
                 }
@@ -181,11 +186,11 @@ module.exports = GelatoPage.extend({
         });
         confirmDialog.render().open();
         this.listenTo(confirmDialog, 'confirm', function() {
-            var copyUrl = app.api.getUrl() + _.result(this.vocablist, 'url') + '/copy';
+            var copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
             $.ajax({
                 url: copyUrl,
                 method: 'POST',
-                headers: app.api.getUserHeaders(),
+                headers: app.user.headers(),
                 success: function(response) {
                     confirmDialog.close();
                     var newListId = response.VocabList.id;
@@ -243,11 +248,11 @@ module.exports = GelatoPage.extend({
         this.$('#list-img').remove();
         this.$('#missing-image-stub').removeClass('hide');
 
-        var imageUrl = app.api.getUrl() + _.result(this.vocablist, 'url') + '/image';
+        var imageUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/image';
         $.ajax({
             url: imageUrl,
             method: 'POST',
-            headers: app.api.getUserHeaders(),
+            headers: app.user.headers(),
             data: data,
             processData: false,
             contentType: false,
@@ -298,5 +303,25 @@ module.exports = GelatoPage.extend({
             vocablist: this.vocablist
         });
         dialog.render().open();
+    },
+    /**
+     * @method handleClickUpdateLink
+     */
+    handleClickUpdateLink: function() {
+        if (this.updating) {
+            return;
+        }
+        var updateUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/update';
+        this.updating = true;
+        $.ajax({
+            url: updateUrl,
+            method: 'POST',
+            headers: app.user.headers(),
+            success: function() {
+                document.location.reload();
+            }
+        });
+        this.$('#update-link .fa-spinner').removeClass('hide');
+        this.$('#update-link .glyphicon').addClass('hide');
     }
 });

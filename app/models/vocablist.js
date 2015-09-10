@@ -58,6 +58,8 @@ module.exports = SkritterModel.extend({
                 total: total,
                 percent: total ? Math.round(100 * added / total) : 0
             };
+        } else if (this.get('percentDone')) {
+            return { percent: this.get('percentDone')};
         } else {
             return { percent: 0 };
         }
