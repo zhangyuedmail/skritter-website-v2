@@ -47,15 +47,31 @@ module.exports = GelatoPage.extend({
         return this;
     },
     /**
+     * @method getSelectedParts
+     * @returns {Array}
+     */
+    getSelectedParts: function() {
+        var parts = [];
+        this.$('#field-parts :checked').each(function() {
+            parts.push($(this).val());
+        });
+        return parts;
+    },
+    /**
      * @method handleClickButtonSave
      * @param {Event} event
      */
     handleClickButtonSave: function(event) {
         event.preventDefault();
         app.user.set({
+            addSimplified: this.$('#field-styles [value="simp"]').is(':checked'),
+            addTraditional: this.$('#field-styles [value="trad"]').is(':checked'),
             autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
-            showHeisig: this.$('#field-heisig').is(':checked')
-        }).save();
+            showHeisig: this.$('#field-heisig').is(':checked'),
+            targetLang: this.$('#field-target-language').val()
+        });
+        app.user.set(app.isChinese() ? 'chineseStudyParts' : 'japaneseStudyParts', this.getSelectedParts());
+        app.user.save();
     },
     /**
      * @method remove

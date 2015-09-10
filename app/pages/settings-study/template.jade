@@ -24,8 +24,8 @@ gelato-page(data-name='settings-study')
                     option English
               if (app.getLanguage() === 'zh')
                 .form-group
-                  label.col-sm-3.control-label(for="field-style") Character style
-                  .col-sm-9
+                  label.col-sm-3.control-label(for="field-styles") Character styles
+                  .col-sm-9#field-styles
                     label.checkbox-inline
                       input(type="checkbox", name="styles", value="simp", checked=user.get('addSimplified'))
                       | Simplified
@@ -34,7 +34,7 @@ gelato-page(data-name='settings-study')
                       | Traditional
               .form-group
                 label.col-sm-3.control-label(for="field-parts") Parts studying
-                .col-sm-9
+                .col-sm-9#field-parts
                   label.checkbox-inline
                     input(type="checkbox", name="parts", value="rune", checked=user.hasStudyPart('rune'))
                     | Writing
