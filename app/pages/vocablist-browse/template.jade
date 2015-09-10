@@ -17,7 +17,8 @@ gelato-page(data-name='vocablist-browse')
                 span#list-option.glyphicon.glyphicon-th-list.layout-selector.chosen
               .col-md-1
                 span#grid-option.glyphicon.glyphicon-th-large.layout-selector
-            .form-inline
+            // TODO: support checkbox filters
+            //- .form-inline
               label View only:
               .checkbox
                 label
@@ -27,9 +28,4 @@ gelato-page(data-name='vocablist-browse')
                 label
                   input#other-official-lists(type="checkbox" name='other-official')
                   span Other official lists
-              //TODO: allow custom list searches
-              //.checkbox
-                label
-                  input#user-created-lists(type="checkbox" name='custom')
-                  span User-created lists
           #vocablist-container
