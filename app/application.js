@@ -110,6 +110,7 @@ module.exports = GelatoApplication.extend({
     start: function() {
         this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
+        this.on('state:standby', this.user.cache);
         this.router.start();
     }
 });
