@@ -31,6 +31,7 @@ module.exports = GelatoRouter.extend({
         'vocablist/browse': 'navigateVocablistBrowse',
         'vocablist/chinesepod': 'navigateChinesepod',
         'vocablist/queue': 'navigateVocablistQueue',
+        'vocablist/published': 'navigateVocablistPublished',
         'vocablist/my-lists': 'navigateVocablistMyLists',
         'vocablist/create': 'navigateCreateVocablist',
         'vocablist/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
@@ -237,6 +238,17 @@ module.exports = GelatoRouter.extend({
     navigateCreateVocablist: function() {
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/vocablist-create/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateVocablistPublished
+     */
+    navigateVocablistPublished: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/vocablist-published/view'))();
             this.page.render();
         } else {
             this.navigateHome();
