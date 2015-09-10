@@ -99,7 +99,8 @@ module.exports = GelatoPage.extend({
         'vclick #save-edit-section-btn': 'handleClickSaveEditSectionButton',
         'keydown tr input': 'handleKeydownInput',
         'blur tr input': 'stopEditingRow',
-        'vclick .remove-td': 'handleClickRemoveCell'
+        'vclick .remove-td': 'handleClickRemoveCell',
+        'vclick .study-writing-link': 'handleClickStudyWritingLink'
     },
     /**
      * @property title
@@ -317,12 +318,17 @@ module.exports = GelatoPage.extend({
             this.removingRow = false;
         }
         else {
+            var rowData = {
+                vocabId: vocabId,
+                tradVocabId: tradVocabId,
+            };
+            if (this.vocablist.get('lang') === 'ja') {
+                var studyLink = this.rowEditing.find('.study-writing-link');
+                rowData.studyWriting = !studyLink.hasClass('text-muted');
+            }
             var newRow = $(rowTemplate({
                 view: this,
-                row: {
-                    vocabId: vocabId,
-                    tradVocabId: tradVocabId
-                }
+                row: rowData
             }));
             newRow.find('.glyphicon-option-vertical, .glyphicon-trash').removeClass('hide');
             newRow.find('input[type="checkbox"]').addClass('hide');
@@ -356,6 +362,17 @@ module.exports = GelatoPage.extend({
             dialog: progressDialog
         };
         this.runAction();
+    },
+    /**
+     * @method handleClickStudyWritingLink
+     * @param {Event} e
+     */
+    handleClickStudyWritingLink: function(e) {
+        if (!this.editing) {
+            return;
+        }
+        $(e.target).toggleClass('text-muted');
+        e.stopPropagation();
     },
     /**
      * @method runAction
@@ -427,14 +444,20 @@ module.exports = GelatoPage.extend({
      */
     handleClickSaveEditSectionButton: function() {
         var rows = [];
+        var lang = this.vocablist.get('lang');
         _.forEach(this.$('tr'), function(el, i) {
             var vocabID = $(el).data('vocab-id');
             var tradVocabID = $(el).data('trad-vocab-id');
             if (!vocabID) {
                 return;
             }
-            rows.push({ vocabId: vocabID, tradVocabId: tradVocabID })
-        });
+            var rowData = { vocabId: vocabID, tradVocabId: tradVocabID };
+            if (lang === 'ja') {
+                var studyLink = $(el).find('.study-writing-link');
+                rowData.studyWriting = !studyLink.hasClass('text-muted');
+            }
+            rows.push(rowData);
+        }, this);
         this.section.set('rows', rows);
         this.section.set('name', this.$('#name-input').val());
         this.section.save();

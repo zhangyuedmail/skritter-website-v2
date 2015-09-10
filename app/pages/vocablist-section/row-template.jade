@@ -1,6 +1,7 @@
 tr(data-vocab-id=row.vocabId, data-trad-vocab-id=row.tradVocabId)
   - var vocab = view.vocabMap[row.vocabId];
   - var tradVocab = view.vocabMap[row.tradVocabId];
+  - var lang = view.vocablist.get('lang');
   td.checkbox-td
     span.glyphicon.glyphicon-option-vertical.hide
     if vocab
@@ -8,11 +9,12 @@ tr(data-vocab-id=row.vocabId, data-trad-vocab-id=row.tradVocabId)
   td.writing-td
     if vocab
       span= vocab.getWriting()
-  td.trad-writing-td
-    if vocab && tradVocab
-      span= vocab.getWritingDifference(tradVocab)
-    else if vocab
-      span= _.pad('', vocab.getWriting().length, '-')
+  if lang === 'zh'
+    td.trad-writing-td
+      if vocab && tradVocab
+        span= vocab.getWritingDifference(tradVocab)
+      else if vocab
+        span= _.pad('', vocab.getWriting().length, '-')
   td.reading-td
     if vocab
       span= vocab.getReading()
@@ -23,6 +25,9 @@ tr(data-vocab-id=row.vocabId, data-trad-vocab-id=row.tradVocabId)
       br
       em.spr traditional:
       span!= tradVocab.getDefinition()
+  if lang === 'ja'
+    td.study-writing-td
+      a.study-writing-link(class=row.studyWriting ? '' : 'text-muted') W
   td.remove-td
     a.glyphicon.glyphicon-trash.hide
   td.edit-cell.hide

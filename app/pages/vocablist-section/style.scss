@@ -39,6 +39,20 @@ gelato-page[data-name='vocablist-section'] {
     text-align: right;
   }
 
+  .study-writing-link {
+    border-width: 1px;
+    border-color: $green5;
+    border-style: solid;
+    padding: 2px 5px;
+    background-color: $green2;
+    user-select: none;
+
+    &.text-muted {
+      border-color: $grey1;
+      background-color: $grey1;
+    }
+  }
+
   .glyphicon-trash {
     color: $grey3;
     &:hover {
