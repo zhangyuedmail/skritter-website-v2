@@ -25,9 +25,11 @@ module.exports = GelatoPage.extend({
      * @method loadCreatorNameIfNeeded
      */
     loadCreatorNameIfNeeded: function() {
-        // Only need to find the real name of the creator if this is a custom list made by someone
-        // other than the logged in user.
-        if (this.vocablist.get('sort') !== 'custom' || this.vocablist.get('creator') === app.user.id) {
+        // Only need to find the real name of the creator if this is a
+        // custom list made by someone other than the logged in user.
+        var isCustom = this.vocablist.get('sort') !== 'custom';
+        var isOwned = this.vocablist.get('creator') === app.user.id;
+        if (isCustom || isOwned) {
             return;
         }
         this.creator = new User({id: this.vocablist.get('creator')});
@@ -107,8 +109,9 @@ module.exports = GelatoPage.extend({
      */
     handleClickAddToQueueButton: function() {
         if (this.vocablist.get('studyingMode') === 'not studying') {
-            this.vocablist.set('studyingMode', 'adding');
-            this.vocablist.save();
+            var attrs = {'studyingMode': 'adding'};
+            var options = {patch: true, method: 'PUT'};
+            this.vocablist.save(attrs, options);
             this.render();
         }
     },
