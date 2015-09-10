@@ -98,6 +98,13 @@ gelato-page(data-name='vocablist')
                       span.glyphicon.glyphicon-trash
                       span Delete
 
+                if view.vocablist.get('sort') === 'chinesepod-label'
+                  a#update-link
+                    div.action
+                      i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                      span.glyphicon.glyphicon-refresh
+                      span Update
+
                 //div.action
                 //  span.glyphicon.glyphicon-blackboard
                 //  span Assign to group
