@@ -35,7 +35,8 @@ gelato-page(data-name='vocablist-section')
                 button#edit-section-btn.btn.btn-fixed.btn-success Edit Section
           .row#editing-header-row.hide
             .col-md-9
-              input#name-input.input-lg.form-control(value=view.section.get('name'))
+              if !view.vocablist.get('singleSect')
+                input#name-input.input-lg.form-control(value=view.section.get('name'))
             .col-md-1.text-center
               a#cancel-edit-section-link Cancel
             .col-md-2
