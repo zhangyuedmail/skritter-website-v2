@@ -4,10 +4,10 @@ gelato-navbar(data-name='default').fixed-top
       a.item.item-header(href="/dashboard") Skritter
       a.item.item-link(href="/study") Study
       a.item.item-link(href="/vocablist/queue") Lists
-      a.item.item-link(data-toggle="tooltip" data-placement="bottom" title="Working on it") Words
+      a.item.item-link(href="/words/all") Words
       a.item.item-link(data-toggle="tooltip" data-placement="bottom" title="Working on it") Stats
     .right
-      .item.item-link(data-toggle="tooltip" data-placement="bottom" title="Working on it")= user.get('name') || user.id
+      a.item.item-link(href="/settings/general")= user.get('name') || user.id
       if user.get('avatar')
         .item.item-icon
           img(src='data:image/png;base64,' + user.get('avatar'))

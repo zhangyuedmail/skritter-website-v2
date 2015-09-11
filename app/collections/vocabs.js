@@ -11,7 +11,7 @@ module.exports = SkritterCollection.extend({
    * @constructor
    */
   initialize: function() {
-    this.cursor = null;
+      this.cursor = null;
   },
   /**
    * @property model
@@ -24,8 +24,13 @@ module.exports = SkritterCollection.extend({
    * @returns Array
    */
   parse: function(response) {
-    this.cursor = response.cursor;
-    return response.Vocabs;
+      this.cursor = response.cursor;
+      var vocabs = response.Vocabs;
+      if (response.ContainingVocabs) {
+          vocabs = vocabs.concat(response.ContainingVocabs);
+          this.containingCursor = response.containingCursor;
+      }
+      return vocabs;
   },
   /**
    * @property url

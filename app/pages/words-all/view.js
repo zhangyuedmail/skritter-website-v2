@@ -1,12 +1,29 @@
 var GelatoPage = require('gelato/page');
 var WordsSidebar = require('components/words-sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
+var Items = require('collections/items');
+var Vocabs = require('collections/vocabs');
 
 /**
- * @class VocablistBrowse
+ * @class AllWords
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+    /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: 'background1',
+    /**
+     * @property events
+     * @type {Object}
+     */
+    events: {
+        'vclick #next-sort-link': 'handleClickNextSortLink',
+        'vclick #previous-sort-link': 'handleClickPreviousSortLink',
+        'change #word-search-input': 'handleChangeWordSearchInput',
+        'vclick #load-more-btn': 'handleClickLoadMoreButton'
+    },
     /**
      * @method initialize
      * @constructor
@@ -14,12 +31,34 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.navbar = new DefaultNavbar();
         this.sidebar = new WordsSidebar();
+        this.items = new Items();
+        this.searchVocabs = new Vocabs();
+        this.vocabsToFetchItemsFor = new Vocabs();
+        this.searchVocabItems = new Items();
+        this.vocabMap = {};
+        this.initAllCollections();
+        this.sort = 'last';
+        this.limit = 20;
+        this.fetchItems();
+        this.searchString = '';
     },
     /**
-     * @property events
-     * @type {Object}
+     * @method remove
      */
-    events: {
+    remove: function() {
+        this.navbar.remove();
+        this.sidebar.remove();
+        return GelatoPage.prototype.remove.call(this);
+    },
+    /**
+     * @method render
+     * @returns {VocablistBrowse}
+     */
+    render: function() {
+        this.renderTemplate();
+        this.navbar.render();
+        this.sidebar.setElement('#words-sidebar-container').render();
+        return this;
     },
     /**
      * @property template
@@ -32,23 +71,159 @@ module.exports = GelatoPage.extend({
      */
     title: 'All Words - Skritter',
     /**
-     * @property bodyClass
-     * @type {String}
+     * @method fetchItems
+     * @param {string} cursor
      */
-    bodyClass: 'background1',
-    /**
-     * @method render
-     * @returns {VocablistBrowse}
-     */
-    render: function() {
-        this.renderTemplate();
-        this.navbar.render();
-        this.sidebar.setElement('#words-sidebar-container').render();
-        return this;
+    fetchItems: function(cursor) {
+        this.items.fetch({
+            data: {
+                sort: this.sort,
+                limit: this.limit,
+                include_vocabs: true,
+                cursor: cursor || ''
+            },
+            remove: false
+        });
     },
-    remove: function() {
-        this.navbar.remove();
-        this.sidebar.remove();
-        return GelatoPage.prototype.remove.call(this);
-    }
+    /**
+     * @method fetchItemsForSearchVocabs
+     */
+    fetchItemsForSearchVocabs: function() {
+        var vocabs = this.vocabsToFetchItemsFor.slice(0, 5);
+        if (!vocabs.length) {
+            return;
+        }
+        this.stopListening(this.searchVocabItems);
+        this.searchVocabItems = new Items();
+        this.searchVocabItems.fetch({
+            data: {
+                vocab_ids: _.pluck(vocabs, 'id').join('|')
+            }
+        });
+        this.searchVocabItems.vocabs = vocabs;
+        this.listenToOnce(this.searchVocabItems, 'sync', this.fetchItemsForSearchVocabsSync);
+    },
+    /**
+     * @method fetchItemsForSearchVocabsSync
+     */
+    fetchItemsForSearchVocabsSync: function(items, response) {
+        var vocabs = items.vocabs;
+        _.forEach(vocabs, function(vocab) {
+            // having gotten items for each vocab, assign each vocab
+            // its last-studied and next-to-study item
+            var vocabItemKeys = response.vocabItemMap[vocab.id];
+            var vocabItems = _.map(vocabItemKeys, function(vocabItemKey) {
+                var item = items.get(vocabItemKey);
+                // TODO: Also filter out items which whose parts
+                // or style are not being studied.
+                if (!item || !(item.get('vocabIds') || []).length) {
+                    return null;
+                }
+                return items.get(vocabItemKey);
+            });
+            vocabItems = _.filter(vocabItems); // return
+            vocab.nextItem = _.first(_.sortBy(vocabItems, function(item) {
+                return item.get('next') || 10000000000000000;
+            }));
+            vocab.lastItem = _.last(_.sortBy(vocabItems, function(item) {
+                return item.get('last') || 0;
+            }));
+            vocab.set('itemState', 'fetched');
+        }, this);
+        this.vocabsToFetchItemsFor.remove(vocabs);
+        this.renderTable();
+        this.fetchItemsForSearchVocabs();
+    },
+    /**
+     * @method handleChangeWordSearchInput
+     */
+    handleChangeWordSearchInput: function() {
+        this.initAllCollections();
+        this.searchString = this.$('#word-search-input').val();
+        if (this.searchString) {
+            this.searchVocabs.fetch({
+                data: {
+                    q: this.searchString,
+                    limit: this.limit,
+                    include_containing: true
+                }
+            });
+        }
+        else {
+            this.fetchItems();
+        }
+    },
+    /**
+     * @method handleClickLoadMoreButton
+     */
+    handleClickLoadMoreButton: function() {
+        if (this.searchString) {
+            this.searchVocabs.fetch({
+                data: {
+                    q: this.searchString,
+                    cursor: this.searchVocabs.cursor,
+                    containing_cursor: this.searchVocabs.containingCursor,
+                    limit: this.limit,
+                    include_containing: true
+                },
+                remove: false
+            })
+        }
+        else {
+            this.fetchItems(this.items.cursor);
+        }
+    },
+    /**
+     * @method handleClickNextSortLink
+     */
+    handleClickNextSortLink: function() {
+        this.sort = 'next';
+        this.initAllCollections();
+        this.fetchItems();
+    },
+    /**
+     * @method handleClickPreviousSortLink
+     */
+    handleClickPreviousSortLink: function() {
+        this.sort = 'last';
+        this.initAllCollections();
+        this.fetchItems();
+    },
+    /**
+     * @method initAllCollections
+     */
+    initAllCollections: function() {
+        this.stopListening(this.items);
+        this.stopListening(this.items.vocabs);
+        this.stopListening(this.vocabs);
+        this.stopListening(this.vocabsToFetchItemsFor);
+        this.stopListening(this.searchVocabItems);
+
+        this.vocabsToFetchItemsFor = new Vocabs();
+        this.items = new Items();
+        this.searchVocabs = new Vocabs();
+        this.vocabsToFetchItemsFor = new Vocabs();
+        this.searchVocabItems = new Items();
+        this.vocabMap = {};
+
+        this.listenTo(this.items.vocabs, 'add', function(vocab) {
+            this.vocabMap[vocab.id] = vocab;
+        });
+        this.listenTo(this.items, 'state', this.renderTable);
+        this.listenTo(this.searchVocabs, 'state', this.renderTable);
+        this.listenTo(this.searchVocabs, 'add', function(vocab) {
+            this.vocabsToFetchItemsFor.add(vocab);
+            vocab.set('itemState', 'queued')
+        });
+        this.listenTo(this.searchVocabs, 'sync', this.fetchItemsForSearchVocabs);
+    },
+    /**
+     * @method renderTable
+     */
+    renderTable: function() {
+        var context = require('globals');
+        context.view = this;
+        var rendering = $(this.template(context));
+        this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
+    },
 });
