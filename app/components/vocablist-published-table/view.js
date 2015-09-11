@@ -2,10 +2,18 @@ var GelatoComponent = require('gelato/component');
 var Vocablists = require('collections/vocablists');
 
 /**
- * @class VocablistMineTable
+ * @class VocablistPublishedTable
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+    /**
+     * @property events
+     * @typeof {Object}
+     */
+    events: {
+        'vclick .add-to-queue-link': 'handleClickAddToQueueLink',
+        'vclick #load-more-btn': 'handleClickLoadMoreButton'
+    },
     /**
      * @method initialize
      * @constructor
@@ -15,33 +23,26 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.vocablists, 'state', this.render);
         this.vocablists.fetch({
             data: {
-                limit: 10,
-                sort: 'custom',
+                limit: 20,
+                sort: 'published',
+                include_user_names: 'true',
                 lang: app.getLanguage()
             }
         });
     },
     /**
-     * @property events
-     * @typeof {Object}
+     * @method render
+     * @returns {VocablistPublishedTable}
      */
-    events: {
-        'vclick #load-more-btn': 'handleClickLoadMoreButton',
-        'vclick .add-to-queue-link': 'handleClickAddToQueueLink'
+    render: function() {
+        this.renderTemplate();
+        return this;
     },
     /**
      * @property template
      * @type {Function}
      */
     template: require('./template'),
-    /**
-     * @method render
-     * @returns {VocablistMineTable}
-     */
-    render: function() {
-        this.renderTemplate();
-        return this;
-    },
     /**
      * @method handleClickAddToQueueLink
      * @param {Event} event
@@ -69,8 +70,9 @@ module.exports = GelatoComponent.extend({
         this.vocablists.fetch({
             data: {
                 cursor: this.vocablists.cursor,
-                limit: 10,
-                sort: 'custom',
+                limit: 20,
+                sort: 'published',
+                include_user_names: 'true',
                 lang: app.getLanguage()
             },
             remove: false

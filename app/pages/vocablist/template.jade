@@ -21,6 +21,11 @@ gelato-page(data-name='vocablist')
                 a.back-link(href="/vocablist/my-lists")
                   span.glyphicon.glyphicon-chevron-left
                   span back to my lists
+                  
+              else if sort === 'custom' && view.vocablist.get('creator') !== app.user.id
+                a.back-link(href="/vocablist/published")
+                  span.glyphicon.glyphicon-chevron-left
+                  span back to published lists
 
               else if sort === 'chinesepod-label' || sort === 'chinesepod-lesson'
                 a.back-link(href="/vocablist/chinesepod")
