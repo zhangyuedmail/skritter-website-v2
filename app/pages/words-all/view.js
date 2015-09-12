@@ -3,6 +3,7 @@ var WordsSidebar = require('components/words-sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
 var Items = require('collections/items');
 var Vocabs = require('collections/vocabs');
+var VocabActionMixin = require('pages/vocab-action-mixin');
 
 /**
  * @class AllWords
@@ -22,7 +23,9 @@ module.exports = GelatoPage.extend({
         'vclick #next-sort-link': 'handleClickNextSortLink',
         'vclick #previous-sort-link': 'handleClickPreviousSortLink',
         'change #word-search-input': 'handleChangeWordSearchInput',
-        'vclick #load-more-btn': 'handleClickLoadMoreButton'
+        'vclick #load-more-btn': 'handleClickLoadMoreButton',
+        'change input[type="checkbox"]': 'handleChangeCheckbox',
+        'change #action-select': 'handleChangeActionSelect'
     },
     /**
      * @method initialize
@@ -135,6 +138,41 @@ module.exports = GelatoPage.extend({
         this.fetchItemsForSearchVocabs();
     },
     /**
+     * Initializes the action object runAction uses to serially process words
+     * @method handleChangeActionSelect
+     */
+    handleChangeActionSelect: function(e) {
+        var action = $(e.target).val();
+        if (!action) {
+            return;
+        }
+        $(e.target).val('');
+        var vocabs = new Vocabs();
+        _.forEach(this.$('input:checked'), function(el) {
+            var vocabID = $(el).closest('tr').data('vocab-id');
+            if (!vocabID) {
+                return;
+            }
+            vocabs.add(
+              this.items.vocabs.get(vocabID) || this.searchVocabs.get(vocabID));
+        }, this);
+
+        this.$('input[type="checkbox"]').attr('checked', false);
+        this.beginVocabAction(action, vocabs);
+    },
+    /**
+     * @method handleChangeCheckbox
+     * @param {Event} event
+     */
+    handleChangeCheckbox: function(event) {
+        var checkbox = $(event.target);
+        if (checkbox.attr('id') === 'all-checkbox') {
+            this.$('input[type="checkbox"]').prop('checked', checkbox.prop('checked'));
+        }
+        var anyChecked = this.$('input[type="checkbox"]:checked').length;
+        this.$('#action-select').prop('disabled', !anyChecked);
+    },
+    /**
      * @method handleChangeWordSearchInput
      */
     handleChangeWordSearchInput: function() {
@@ -227,3 +265,5 @@ module.exports = GelatoPage.extend({
         this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
     },
 });
+
+_.extend(module.exports.prototype, VocabActionMixin);

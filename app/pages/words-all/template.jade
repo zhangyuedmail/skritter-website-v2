@@ -10,17 +10,22 @@ gelato-page(data-name='words-all')
           .title All Words
           #table-options
             .row
-              .col-md-10
+              .col-md-8
                 .input-group.input-group-lg
                   span.input-group-addon
                     i.fa.fa-search
                   input#word-search-input.form-control(type="text", placeholder="Type to search our dictionary")
+              .col-md-4
+                select#action-select.form-control.input-lg(disabled=true)
+                  option(value="") Select words...
+                  option(value="ban") Ban from words
+                  option(value="unban") Unban from words)
 
           .table-oversized-wrapper
             table.table.table-striped
               tr
                 td.checkbox-td
-                  input(type="checkbox")
+                  input#all-checkbox(type="checkbox")
                 td.word-td(colspan=3) Word
                 if view.searchString
                   td.last-td Prev
@@ -37,14 +42,14 @@ gelato-page(data-name='words-all')
                       span.glyphicon.glyphicon-chevron-down
                 
               mixin itemRow(lastItem, nextItem, vocab)
-                tr
+                tr(data-vocab-id=vocab.id)
                   td.checkbox-td
                     input(type="checkbox")
                   td.writing-td= vocab.getWriting()
                   td.reading-td= vocab.getReading()
                   td.definition-td!= vocab.getDefinition()
                   
-                  if lastItem
+                  if lastItem && lastItem.get('last')
                     - var last = moment(lastItem.get('last')*1000);
                     td.last-td(title=last.format('LLLL'))
                       | #{last.fromNow()}
