@@ -108,5 +108,24 @@ module.exports = SkritterModel.extend({
    */
   getVariation: function() {
     return parseInt(this.id.split('-')[2]);
+  },
+  /**
+   * @method getMnemonic
+   * @returns {Object}
+   */
+  getMnemonic: function() {
+      if (this.get('mnemonic')) {
+          return this.get('mnemonic');
+      } else if (this.get('topMnemonic')) {
+          return this.get('topMnemonic');
+      }
+      return null;
+  },
+  /**
+   * @method getMnemonicText
+   * @returns {String}
+   */
+  getMnemonicText: function() {
+      return this.getMnemonic() ? app.fn.textToHTML(this.getMnemonic().text) : null;
   }
 });

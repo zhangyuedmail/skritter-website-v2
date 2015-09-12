@@ -37,6 +37,7 @@ module.exports = GelatoRouter.extend({
         'vocablist/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
         'vocablist/view/(:vocablistId)': 'navigateVocablist',
         'words/all': 'navigateAllWords',
+        'words/mnemonics': 'navigateMnemonics',
         '*route': 'navigateNotFound'
     },
     /**
@@ -261,6 +262,17 @@ module.exports = GelatoRouter.extend({
     navigateAllWords: function() {
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/words-all/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateMnemonics
+     */
+    navigateMnemonics: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-mnemonics/view'))();
             this.page.render();
         } else {
             this.navigateHome();
