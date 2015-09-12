@@ -33,6 +33,7 @@ module.exports = GelatoPage.extend({
         this.navbar = new DefaultNavbar();
         this.sidebar = new WordsSidebar();
         this.starredVocabs = new Vocabs();
+        this.listenTo(this.starredVocabs, 'sync', this.renderTable);
         this.limit = 20;
         this.fetchStarredVocabs();
     },
@@ -111,7 +112,6 @@ module.exports = GelatoPage.extend({
             },
             remove: false
         });
-        this.listenToOnce(this.starredVocabs, 'sync', this.renderTable);
     },
     /**
      * @method handleChangeCheckbox
