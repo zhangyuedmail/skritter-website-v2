@@ -19,18 +19,19 @@ gelato-page(data-name='words-all')
           .table-oversized-wrapper
             table.table.table-striped
               tr
-                th
-                th(colspan=3) Word
+                td.checkbox-td
+                  input(type="checkbox")
+                td.word-td(colspan=3) Word
                 if view.searchString
-                  th Prev
-                  th Next
+                  td.last-td Prev
+                  td.next-td Next
                 else
-                  th(class=view.sort === 'last' ? 'active' : '')
+                  td.last-td(class=view.sort === 'last' ? 'active' : '')
                     a#previous-sort-link
                       | Prev
                       span.glyphicon.glyphicon-chevron-down
                       
-                  th(class=view.sort === 'next' ? 'active' : '')
+                  td.next-td(class=view.sort === 'next' ? 'active' : '')
                     a#next-sort-link
                       | Next
                       span.glyphicon.glyphicon-chevron-down
