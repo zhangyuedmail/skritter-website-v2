@@ -1,5 +1,12 @@
 var ProgressDialog = require('dialogs/progress/view');
 
+var availableVocabActions = [
+  'ban',
+  'unban',
+  'delete-mnemonic',
+  'remove-star'
+];
+
 module.exports = {
     /**
      * @method banVocabAction
@@ -22,8 +29,12 @@ module.exports = {
      * @param {Vocabs} vocabs
      */
     beginVocabAction: function(action, vocabs) {
-        if (!_.contains(['ban', 'unban', 'delete-mnemonic'], action)) {
-            throw new Error('Invalid action');
+        if (!_.contains(availableVocabActions, action)) {
+            throw new Error('Invalid action, must be one of: '
+             + availableVocabActions.join(', '));
+        }
+        if (!vocabs.size()) {
+            return;
         }
 
         var progressDialog = new ProgressDialog();
@@ -43,11 +54,21 @@ module.exports = {
      * @returns {Object|null} Vocab attrs to be saved, if any
      */
     deleteVocabMnemonicAction: function(vocab) {
-        var mnemonic = vocab.getMnemonicText();
-        if (!mnemonic) {
+      if (!vocab.getMnemonicText()) {
+          return null;
+      }
+      return { mnemonic: { text: '' } };
+    },
+    /**
+     * @method removeStarVocabAction
+     * @param {Vocab} vocab
+     * @returns {Object|null} Vocab attrs to be saved, if any
+     */
+    removeStarVocabAction: function(vocab) {
+        if (!vocab.get('starred')) {
             return null;
         }
-        return { mnemonic: { text: '' } };
+        return { starred: false };
     },
     /**
      * @method runVocabAction
@@ -66,6 +87,9 @@ module.exports = {
         }
         if (this.action.name === 'delete-mnemonic') {
             vocabAttrs = this.deleteVocabMnemonicAction(vocab);
+        }
+        if (this.action.name === 'remove-star') {
+            vocabAttrs = this.removeStarVocabAction(vocab);
         }
         if (!vocabAttrs) {
             return this.finishVocabAction();

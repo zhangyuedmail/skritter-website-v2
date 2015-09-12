@@ -127,5 +127,24 @@ module.exports = SkritterModel.extend({
    */
   getMnemonicText: function() {
       return this.getMnemonic() ? app.fn.textToHTML(this.getMnemonic().text) : null;
+  },
+  /**
+   * @method toggleStarred
+   * @returns {Boolean}
+   */
+  toggleStarred: function() {
+      if (this.get('starred')) {
+          this.set('starred', false);
+          return false;
+      }
+      this.set('starred', true);
+      return true;
+  },
+  /**
+   * @method isStarred
+   * @returns {Boolean}
+   */
+  isStarred: function() {
+      return this.get('starred');
   }
 });

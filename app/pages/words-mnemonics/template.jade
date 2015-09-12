@@ -1,6 +1,6 @@
 - var now = new Date().getTime();
 
-gelato-page(data-name='words-all')
+gelato-page(data-name='words-mnemonics')
   .container
     .content-block
       .row
@@ -29,7 +29,7 @@ gelato-page(data-name='words-all')
                   td.writing-td= vocab.getWriting()
                   td.reading-td= vocab.getReading()
                   td.mnemonic-td!= vocab.getMnemonicText()
-                  td.edited-td= moment(vocab.getMnemonic().changed*1000).format('L')
+                  td.edited-td= moment(vocab.getMnemonic().changed*1000).format('LL')
 
             if view.mnemonicVocabs.state === 'fetching'
               p.text-center

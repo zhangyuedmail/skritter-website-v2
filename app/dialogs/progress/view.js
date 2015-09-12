@@ -16,6 +16,7 @@ module.exports = GelatoDialog.extend({
      */
     initialize: function(options) {
         this.title = _.result(options, 'title');
+        this.showBar = _.result(options, 'showBar', true);
     },
     /**
      * @method render

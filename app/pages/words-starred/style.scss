@@ -1,11 +1,15 @@
 @import "../../styles/variables";
 
-gelato-page[data-name='words-mnemonics'] {
+gelato-page[data-name='words-starred'] {
   .table-oversized-wrapper {
     margin-top: 30px;
   }
 
-  .checkbox-td {
+  .glyphicon-star {
+    color: $green5;
+  }
+
+  .star-td {
     width: 10%;
   }
 
@@ -21,11 +25,11 @@ gelato-page[data-name='words-mnemonics'] {
     width: 10%;
   }
 
-  .mnemonic-td {
+  .definition-td {
     width: 50%;
   }
 
-  .edited-td {
+  .date-starred-td {
     width: 20%;
   }
 

@@ -38,6 +38,7 @@ module.exports = GelatoRouter.extend({
         'vocablist/view/(:vocablistId)': 'navigateVocablist',
         'words/all': 'navigateAllWords',
         'words/mnemonics': 'navigateMnemonics',
+        'words/starred': 'navigateStarredWords',
         '*route': 'navigateNotFound'
     },
     /**
@@ -277,6 +278,17 @@ module.exports = GelatoRouter.extend({
         } else {
             this.navigateHome();
         }
+    },
+    /**
+     * @method navigateStarredWords
+     */
+    navigateStarredWords: function() {
+      if (app.user.isLoggedIn()) {
+          this.page = new (require('pages/words-starred/view'))();
+          this.page.render();
+      } else {
+          this.navigateHome();
+      }
     },
     /**
      * @method navigateNotFound
