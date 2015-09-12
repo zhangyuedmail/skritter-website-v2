@@ -37,6 +37,7 @@ module.exports = GelatoRouter.extend({
         'vocablist/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
         'vocablist/view/(:vocablistId)': 'navigateVocablist',
         'words/all': 'navigateAllWords',
+        'words/banned': 'navigateBannedWords',
         'words/mnemonics': 'navigateMnemonics',
         'words/starred': 'navigateStarredWords',
         '*route': 'navigateNotFound'
@@ -285,6 +286,17 @@ module.exports = GelatoRouter.extend({
     navigateStarredWords: function() {
       if (app.user.isLoggedIn()) {
           this.page = new (require('pages/words-starred/view'))();
+          this.page.render();
+      } else {
+          this.navigateHome();
+      }
+    },
+    /**
+     * @method navigateBannedWords
+     */
+    navigateBannedWords: function() {
+      if (app.user.isLoggedIn()) {
+          this.page = new (require('pages/words-banned/view'))();
           this.page.render();
       } else {
           this.navigateHome();
