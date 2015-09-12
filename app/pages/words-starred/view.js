@@ -21,7 +21,6 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'vclick #load-more-btn': 'handleClickLoadMoreButton',
-        'change input[type="checkbox"]': 'handleChangeCheckbox',
         'vclick #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
         'vclick .star-td a': 'handleClickStarLink'
     },
@@ -112,16 +111,6 @@ module.exports = GelatoPage.extend({
             },
             remove: false
         });
-    },
-    /**
-     * @method handleChangeCheckbox
-     * @param {Event} event
-     */
-    handleChangeCheckbox: function(event) {
-        var checkbox = $(event.target);
-        if (checkbox.attr('id') === 'all-checkbox') {
-            this.$('input[type="checkbox"]').prop('checked', checkbox.prop('checked'));
-        }
     },
     /**
      * @method handleClickLoadMoreButton
