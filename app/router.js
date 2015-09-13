@@ -23,6 +23,7 @@ module.exports = GelatoRouter.extend({
         'institutions': 'navigateInstitutions',
         'legal': 'navigateLegal',
         'login': 'navigateLogin',
+        'scratchpad': 'navigateScratchpad',
         'settings/general': 'navigateSettingsGeneral',
         'settings/study': 'navigateSettingsStudy',
         'signup': 'navigateSignup',
@@ -106,6 +107,13 @@ module.exports = GelatoRouter.extend({
             this.page = new (require('pages/login/view'));
             this.page.render();
         }
+    },
+    /**
+     * @method navigateScratchpad
+     */
+    navigateScratchpad: function() {
+        this.page = new (require('pages/scratchpad/view'));
+        this.page.render();
     },
     /**
      * @method navigateSettingsGeneral
