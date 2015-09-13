@@ -1,0 +1,12 @@
+gelato-component(data-name='prompt-vocab-sentence')
+
+  if view.reviews
+    - var sentence = view.reviews.vocab.getSentence()
+    if sentence
+      = sentence.getWriting()
+    else
+      em Click here add your own custom sentence
+
+  else
+
+    i.fa.fa-spinner.fa-pulse
