@@ -1,5 +1,6 @@
 var Prompt = require('components/prompt/view');
 var PromptVocabDefinition = require('components/prompt-vocab-definition/view');
+var PromptVocabMnemonic = require('components/prompt-vocab-mnemonic/view');
 var PromptVocabReading = require('components/prompt-vocab-reading/view');
 var PromptVocabSentence = require('components/prompt-vocab-sentence/view');
 var PromptVocabWriting = require('components/prompt-vocab-writing/view');
@@ -16,6 +17,7 @@ module.exports = Prompt.extend({
     initialize: function() {
         this.reviews = null;
         this.vocabDefinition = new PromptVocabDefinition();
+        this.vocabMnemonic = new PromptVocabMnemonic();
         this.vocabReading = new PromptVocabReading();
         this.vocabSentence = new PromptVocabSentence();
         this.vocabWriting = new PromptVocabWriting();
@@ -32,6 +34,7 @@ module.exports = Prompt.extend({
     render: function() {
         this.renderTemplate();
         this.vocabDefinition.setElement('#vocab-definition-container').render();
+        this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
         this.vocabReading.setElement('#vocab-reading-container').render();
         this.vocabSentence.setElement('#vocab-sentence-container').render();
         this.vocabWriting.setElement('#vocab-writing-container').render();
@@ -43,6 +46,7 @@ module.exports = Prompt.extend({
      */
     remove: function() {
         this.vocabDefinition.remove();
+        this.vocabMnemonic.remove();
         this.vocabReading.remove();
         this.vocabSentence.remove();
         this.vocabWriting.remove();
@@ -56,6 +60,7 @@ module.exports = Prompt.extend({
     set: function(reviews) {
         this.reviews = reviews;
         this.vocabDefinition.set(reviews);
+        this.vocabMnemonic.set(reviews);
         this.vocabReading.set(reviews);
         this.vocabSentence.set(reviews);
         this.vocabWriting.set(reviews);

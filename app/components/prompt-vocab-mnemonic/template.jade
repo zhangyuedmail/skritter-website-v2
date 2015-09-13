@@ -1,0 +1,12 @@
+gelato-component(data-name='prompt-vocab-mnemonic')
+
+  if view.reviews
+    - var mnemonic = view.reviews.vocab.getMnemonic();
+    if (mnemonic)
+      = mnemonic.text
+    else
+      em Click here to add your own custom mnemonic
+
+  else
+
+    i.fa.fa-spinner.fa-pulse
