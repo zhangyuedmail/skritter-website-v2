@@ -11,6 +11,18 @@ module.exports = SkritterModel.extend({
      */
     idAttribute: 'id',
     /**
+     * @property urlRoot
+     * @type {String}
+     */
+    urlRoot: 'vocablists',
+    /**
+     * @method parse
+     * @returns {Object}
+     */
+    parse: function(response) {
+        return response.VocabList || response;
+    },
+    /**
      * @method getPopularity
      * @returns {Number}
      */
@@ -97,17 +109,6 @@ module.exports = SkritterModel.extend({
      */
     isJapanese: function() {
         return this.get('lang') === 'ja';
-    },
-    /**
-     * @property urlRoot
-     */
-    urlRoot: 'vocablists',
-    /**
-     * @method parse
-     * @returns {Object}
-     */
-    parse: function(response) {
-        return response.VocabList || response;
     },
     /**
      * @method publishable

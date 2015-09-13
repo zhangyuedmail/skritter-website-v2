@@ -1,8 +1,9 @@
 var GelatoCollection = require('gelato/collection');
-var DataDecomp = require('models/data-decomp');
+var Param = require('models/param');
+var ParamData = require('data/param-data');
 
 /**
- * @class DataDecomps
+ * @class Params
  * @extends {GelatoCollection}
  */
 module.exports = GelatoCollection.extend({
@@ -10,10 +11,12 @@ module.exports = GelatoCollection.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+        this.add(ParamData.getData());
+    },
     /**
      * @property model
-     * @type {DataDecomp}
+     * @type {Param}
      */
-    model: DataDecomp
+    model: Param
 });

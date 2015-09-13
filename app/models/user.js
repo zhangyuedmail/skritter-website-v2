@@ -30,7 +30,6 @@ module.exports = SkritterModel.extend({
      * @method cache
      */
     cache: function() {
-        console.log('CACHING', this.get('targetLang'));
         app.setLocalStorage(this.id + '-user', this.toJSON());
     },
     /**
