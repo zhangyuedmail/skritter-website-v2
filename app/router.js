@@ -17,6 +17,7 @@ module.exports = GelatoRouter.extend({
     routes: {
         '': 'defaultRoute',
         'billing/history': 'navigateBillingHistory',
+        'billing/subscription': 'navigateBillingSubscription',
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
         'features': 'navigateFeatures',
@@ -309,6 +310,17 @@ module.exports = GelatoRouter.extend({
     navigateBillingHistory: function() {
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/billing-history/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateBillingSubscription
+     */
+    navigateBillingSubscription: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/billing-subscription/view'))();
             this.page.render();
         } else {
             this.navigateHome();

@@ -4,7 +4,7 @@ var DefaultNavbar = require('navbars/default/view');
 var Payments = require('collections/payments');
 
 /**
- * @class BillingHistory
+ * @class BillingSubscription
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
@@ -18,7 +18,6 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #load-more-btn': 'handleClickLoadMoreButton'
     },
     /**
      * @method initialize
@@ -27,13 +26,6 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.navbar = new DefaultNavbar();
         this.sidebar = new SettingsSidebar();
-        this.payments = new Payments();
-        this.payments.comparator = function(payment) {
-            return -payment.get('created');
-        };
-        this.listenTo(this.payments, 'sync', this.renderTable);
-        this.limit = 20;
-        this.fetchPayments();
     },
     /**
      * @method remove
@@ -62,27 +54,7 @@ module.exports = GelatoPage.extend({
      * @property title
      * @type {String}
      */
-    title: 'Billing History - Skritter',
-    /**
-     * @method fetchPayments
-     * @param {string} cursor
-     */
-    fetchPayments: function(cursor) {
-        this.payments.fetch({
-            data: {
-                cursor: cursor || '',
-                limit: 100
-            },
-            remove: false
-        });
-    },
-    /**
-     * @method handleClickLoadMoreButton
-     */
-    handleClickLoadMoreButton: function() {
-        this.fetchPayments(this.payments.cursor);
-        this.renderTable();
-    },
+    title: 'Subscription - Skritter',
     /**
      * @method renderTable
      */
