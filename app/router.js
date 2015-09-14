@@ -16,6 +16,7 @@ module.exports = GelatoRouter.extend({
      */
     routes: {
         '': 'defaultRoute',
+        'billing/history': 'navigateBillingHistory',
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
         'features': 'navigateFeatures',
@@ -284,23 +285,34 @@ module.exports = GelatoRouter.extend({
      * @method navigateStarredWords
      */
     navigateStarredWords: function() {
-      if (app.user.isLoggedIn()) {
-          this.page = new (require('pages/words-starred/view'))();
-          this.page.render();
-      } else {
-          this.navigateHome();
-      }
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-starred/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
     },
     /**
      * @method navigateBannedWords
      */
     navigateBannedWords: function() {
-      if (app.user.isLoggedIn()) {
-          this.page = new (require('pages/words-banned/view'))();
-          this.page.render();
-      } else {
-          this.navigateHome();
-      }
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-banned/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateBillingHistory
+     */
+    navigateBillingHistory: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/billing-history/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
     },
     /**
      * @method navigateNotFound
