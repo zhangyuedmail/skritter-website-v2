@@ -4,7 +4,7 @@ gelato-component[data-name='settings-sidebar'] {
 
   color: $white1;
   margin: 45px auto 0 auto;
-  width: 140px;
+  width: 180px;
   button {
     height: 50px;
     padding: 0 20px;
@@ -38,6 +38,24 @@ gelato-component[data-name='settings-sidebar'] {
       }
 
     }
+
+    .header {
+      margin-top: 9px;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+      color: $grey7;
+    }
+
+    .header-stripe {
+      background: $white5;
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 45px;
+      z-index: 0;
+    }
+
   }
 
 }
