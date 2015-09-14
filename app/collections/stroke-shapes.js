@@ -1,9 +1,9 @@
 var GelatoCollection = require('gelato/collection');
-var Param = require('models/param');
-var ParamData = require('data/param-data');
+var StrokeShape = require('models/stroke-shape');
+var ShapeData = require('data/shape-data');
 
 /**
- * @class Params
+ * @class StrokeShapes
  * @extends {GelatoCollection}
  */
 module.exports = GelatoCollection.extend({
@@ -12,11 +12,11 @@ module.exports = GelatoCollection.extend({
      * @constructor
      */
     initialize: function() {
-        this.add(ParamData.getData());
+        this.add(ShapeData.getData());
     },
     /**
      * @property model
-     * @type {Param}
+     * @type {StrokeShape}
      */
-    model: Param
+    model: StrokeShape
 });

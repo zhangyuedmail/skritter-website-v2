@@ -1,18 +1,13 @@
 var GelatoModel = require('gelato/model');
 
 /**
- * @class DataParam
+ * @class StrokeParam
  * @extends {GelatoModel}
  */
 module.exports = GelatoModel.extend({
     /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {},
-    /**
      * @property idAttribute
-     * @type String
+     * @type {String}
      */
     idAttribute: 'id',
     /**

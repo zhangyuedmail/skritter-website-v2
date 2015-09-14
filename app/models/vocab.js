@@ -31,6 +31,18 @@ module.exports = SkritterModel.extend({
         return this.id.split('-')[1];
     },
     /**
+     * @method getPromptCharacters
+     * @returns {Array}
+     */
+    getPromptCharacters: function() {
+        var characters = [];
+        var strokes = this.getStrokes();
+        for (var i = 0, length = strokes.length; i < length; i++) {
+            characters.push(strokes[i].getPromptCharacter());
+        }
+        return characters;
+    },
+    /**
      * @method getCharacters
      * @returns {Array}
      */
@@ -91,6 +103,21 @@ module.exports = SkritterModel.extend({
      */
     getSentence: function() {
         return this.collection.sentences.get(this.get('sentenceId'));
+    },
+    /**
+     * @method getStrokes
+     * @returns {Array}
+     */
+    getStrokes: function() {
+        var strokes = [];
+        var characters = this.getCharacters();
+        for (var i = 0, length = characters.length; i < length; i++) {
+            var stroke = this.collection.strokes.get(characters[i]);
+            if (stroke) {
+                strokes.push(stroke);
+            }
+        }
+        return strokes;
     },
     /**
      * @method getVariation
