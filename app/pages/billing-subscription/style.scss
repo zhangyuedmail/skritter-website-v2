@@ -1,4 +1,7 @@
 @import "../../styles/variables";
 
 gelato-page[data-name='billing-subscription'] {
+  label.control-label {
+    text-align: left;
+  }
 }

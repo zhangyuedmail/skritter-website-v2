@@ -9,3 +9,42 @@ gelato-page(data-name='billing-subscription')
           
         .col-md-9.main-content
           .title Subscription
+
+          if view.subscription.state === 'fetching'
+            p.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
+
+          else
+            .form-horizontal
+              .form-group.form-group-lg
+                label.control-label.col-sm-3 Account status
+                .col-sm-9
+                  p.form-control-static= view.subscription.getStatus()
+                  
+              .form-group.form-group-lg
+                label.control-label.col-sm-3 Expires
+                .col-sm-9
+                  p.form-control-static
+                    - var expires = view.subscription.get('expires');
+                    if expires
+                      | #{moment(expires).format('LL')}
+                    else
+                      | Never
+                    
+              - var couponError = view.coupon.error;
+              - var couponUsed = view.coupon.wasUsed;
+              .form-group.form-group-lg(class=couponError ? 'has-error' : couponUsed ? 'has-success' : '' )
+                label.control-label.col-sm-3 Coupon code
+                .col-sm-4
+                  input#code-input.form-control(value=view.coupon.get('code'))
+                  if couponError
+                    .help-block= couponError
+                  if couponUsed
+                    .help-block Coupon used successfully
+                .col-sm-2
+                  if view.coupon.state === 'standby'
+                    button#redeem-code-btn.btn.btn-fixed.btn-success
+                      | Redeem code
+                  else
+                    button.btn.btn-fixed.btn-success(disabled=true)
+                      i.fa.fa-1x.fa-spinner.fa-pulse

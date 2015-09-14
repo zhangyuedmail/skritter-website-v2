@@ -1,7 +1,8 @@
 var GelatoPage = require('gelato/page');
 var SettingsSidebar = require('components/settings-sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
-var Payments = require('collections/payments');
+var Subscription = require('models/subscription');
+var Coupon = require('models/coupon');
 
 /**
  * @class BillingSubscription
@@ -18,6 +19,7 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
+        'vclick #redeem-code-btn': 'handleClickRedeemCodeButton'
     },
     /**
      * @method initialize
@@ -26,6 +28,15 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.navbar = new DefaultNavbar();
         this.sidebar = new SettingsSidebar();
+        this.subscription = new Subscription({ id: app.user.id });
+        this.subscription.fetch();
+        this.listenTo(this.subscription, 'state', this.renderMainContent);
+        this.coupon = new Coupon({ code: '' });
+        this.listenTo(this.coupon, 'sync', function(model, response) {
+            this.subscription.set(response.Subscription);
+            this.coupon.unset('code');
+        });
+        this.listenTo(this.coupon, 'state', this.renderMainContent);
     },
     /**
      * @method remove
@@ -56,12 +67,20 @@ module.exports = GelatoPage.extend({
      */
     title: 'Subscription - Skritter',
     /**
-     * @method renderTable
+     * @method handleClickRedeemCodeButton
      */
-    renderTable: function() {
+    handleClickRedeemCodeButton: function() {
+        this.coupon.set('code', this.$('#code-input').val());
+        this.coupon.use();
+        this.renderMainContent();
+    },
+    /**
+     * @method renderSectionContent
+     */
+    renderMainContent: function() {
         var context = require('globals');
         context.view = this;
         var rendering = $(this.template(context));
-        this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
+        this.$('.main-content').replaceWith(rendering.find('.main-content'));
     }
 });
