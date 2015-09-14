@@ -3,6 +3,7 @@ var SettingsSidebar = require('components/settings-sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
 var Subscription = require('models/subscription');
 var Coupon = require('models/coupon');
+var VacationDialog = require('dialogs/vacation/view');
 
 /**
  * @class BillingSubscription
@@ -19,7 +20,9 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #redeem-code-btn': 'handleClickRedeemCodeButton'
+        'vclick #redeem-code-btn': 'handleClickRedeemCodeButton',
+        'vclick #go-on-vacation-link': 'handleClickGoOnVacationLink',
+        'vclick #cancel-vacation-link': 'handleClickCancelVacationLink'
     },
     /**
      * @method initialize
@@ -66,6 +69,24 @@ module.exports = GelatoPage.extend({
      * @type {String}
      */
     title: 'Subscription - Skritter',
+    /**
+     * @method handleClickCancelVacationLink
+     */
+    handleClickCancelVacationLink: function() {
+        this.subscription.save({ vacation: false }, {
+            parse: true,
+            method: 'PUT'
+        });
+        this.$('#cancel-vacation-spinner').removeClass('hide');
+        this.$('#cancel-vacation-link').addClass('hide');
+    },
+    /**
+     * @method handleClickGoOnVacationLink
+     */
+    handleClickGoOnVacationLink: function() {
+        var dialog = new VacationDialog({subscription: this.subscription});
+        dialog.render().open();
+    },
     /**
      * @method handleClickRedeemCodeButton
      */
