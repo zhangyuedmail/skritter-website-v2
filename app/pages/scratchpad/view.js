@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
-var PromptRune = require('components/prompt-rune/view');
-
 var Items = require('collections/items');
+var Prompt = require('components/prompt/view');
 
 /**
  * @class Scratchpad
@@ -13,7 +12,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.prompt = null;
+        this.prompt = new Prompt();
         this.items = new Items();
     },
     /**
@@ -37,6 +36,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.prompt.setElement('#prompt-container').render();
 
         this.items.fetch({
             data: {
@@ -51,9 +51,7 @@ module.exports = GelatoPage.extend({
             success: (function() {
                 var item = this.items.at(3);
                 var reviews = item.getPromptReviews();
-                this.prompt = new PromptRune({el: '#prompt-container'});
-                this.prompt.render().set(reviews);
-                console.log(reviews);
+                this.prompt.set('defn', reviews);
             }).bind(this)
         });
 

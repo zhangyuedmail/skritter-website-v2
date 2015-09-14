@@ -1,16 +1,17 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class PromptVocabWriting
+ * @class PromptVocabSentence
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
     /**
      * @method initialize
+     * @param {Object} options
      * @constructor
      */
-    initialize: function() {
-        this.reviews = null;
+    initialize: function(options) {
+        this.prompt = options.prompt;
     },
     /**
      * @property template
@@ -19,21 +20,10 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {PromptVocabWriting}
+     * @returns {PromptVocabSentence}
      */
     render: function() {
         this.renderTemplate();
         return this;
-    },
-    /**
-     * @method set
-     * @param {PromptReviews} reviews
-     * @returns {PromptVocabWriting}
-     */
-    set: function(reviews) {
-        this.reviews = reviews;
-        this.stopListening();
-        this.listenTo(this.reviews, 'change', this.render);
-        return this.render();
     }
 });

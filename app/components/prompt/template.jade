@@ -1,11 +1,12 @@
-gelato-component(data-name='prompt-rune')
-
-  if view.reviews
+gelato-component(data-name='prompt')
 
     #new-ribbon.hidden
       .icon.icon-study-new-character
 
     #panel-left
+      #input-canvas-container
+      #grading-toolbar-container
+      #action-toolbar-container
 
     #panel-right
       #vocab-writing-container
@@ -19,8 +20,3 @@ gelato-component(data-name='prompt-rune')
 
       label Mnemonic
       #vocab-mnemonic-container
-
-  else
-
-    #loading-spinner
-      i.fa.fa-5x.fa-spinner.fa-pulse

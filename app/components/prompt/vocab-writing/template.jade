@@ -1,15 +1,17 @@
 gelato-component(data-name='prompt-vocab-writing')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
 
-  if view.reviews
-
+  if reviews
     - var index = 0
-    for character in view.reviews.vocab.getCharacters()
+
+    for character in reviews.vocab.getCharacters()
       if (['~'].indexOf(character) === -1)
-        - var review = view.reviews.at(index)
+        - var review = reviews.at(index)
         - var classes = []
         if (review.get('maskWriting'))
           - classes.push('masked')
-        if (view.reviews.getPosition() === index)
+        if (reviews.getPosition() === index)
           - classes.push('active')
         div.character(class=classes.join(' '), data-position=index)
           span= character

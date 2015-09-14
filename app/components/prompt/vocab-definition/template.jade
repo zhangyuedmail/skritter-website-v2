@@ -1,0 +1,11 @@
+gelato-component(data-name='prompt-vocab-definition')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if reviews
+
+    = reviews.vocab.getDefinition()
+
+  else
+
+    i.fa.fa-spinner.fa-pulse

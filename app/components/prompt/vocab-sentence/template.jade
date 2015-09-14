@@ -1,7 +1,9 @@
 gelato-component(data-name='prompt-vocab-sentence')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
 
-  if view.reviews
-    - var sentence = view.reviews.vocab.getSentence()
+  if reviews
+    - var sentence = reviews.vocab.getSentence()
     if sentence
       = sentence.getWriting()
     else

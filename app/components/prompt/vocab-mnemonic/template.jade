@@ -1,7 +1,10 @@
 gelato-component(data-name='prompt-vocab-mnemonic')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
 
-  if view.reviews
-    - var mnemonic = view.reviews.vocab.getMnemonic();
+  if reviews
+    - var mnemonic = reviews.vocab.getMnemonic();
+
     if (mnemonic)
       = mnemonic.text
     else

@@ -1,11 +1,11 @@
-@import "../../styles/variables";
+@import "../../../styles/variables";
 
-gelato-component[data-name='prompt-vocab-writing'] {
+gelato-component[data-name='prompt-vocab-reading'] {
 
-  font-size: 42px;
-  font-weight: 400;
+  font-size: 18px;
+  font-weight: 300;
 
-  .character {
+  .reading {
     cursor: pointer;
     display: inline;
     margin-right: 2px;
