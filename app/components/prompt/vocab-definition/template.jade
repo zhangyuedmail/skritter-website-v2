@@ -3,9 +3,11 @@ gelato-component(data-name='prompt-vocab-definition')
   - var reviews = view.prompt.reviews
 
   if reviews
+    - definiton = reviews.vocab.getDefinition();
+    label Definition
 
-    = reviews.vocab.getDefinition()
-
-  else
-
-    i.fa.fa-spinner.fa-pulse
+    div.value
+      if definiton
+        = definiton
+      else
+        | Click here to add your own custom definition

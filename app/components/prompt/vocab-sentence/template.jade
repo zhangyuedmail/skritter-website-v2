@@ -4,11 +4,11 @@ gelato-component(data-name='prompt-vocab-sentence')
 
   if reviews
     - var sentence = reviews.vocab.getSentence()
-    if sentence
-      = sentence.getWriting()
-    else
-      em Click here add your own custom sentence
 
-  else
+    label Example sentence
 
-    i.fa.fa-spinner.fa-pulse
+    div.value
+      if sentence
+        = sentence.getWriting()
+      else
+        em Click here add your own custom sentence

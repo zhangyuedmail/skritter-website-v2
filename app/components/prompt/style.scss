@@ -1,6 +1,18 @@
-@import "../../../styles/variables";
+@import "../../styles/variables";
 
 gelato-component[data-name='prompt'] {
+
+  background-color: $white1;
+  border-radius: 50px;
+  height: 640px;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+
+  #loading-spinner {
+    text-align: center;
+    i { margin-top: 250px; }
+  }
 
   #new-ribbon {
     left: 0;
@@ -31,7 +43,7 @@ gelato-component[data-name='prompt'] {
     width: 640px;
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1310px) {
 
     #panel-left { width: 50%; }
 

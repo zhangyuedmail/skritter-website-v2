@@ -5,11 +5,10 @@ gelato-component(data-name='prompt-vocab-mnemonic')
   if reviews
     - var mnemonic = reviews.vocab.getMnemonic();
 
-    if (mnemonic)
-      = mnemonic.text
-    else
-      em Click here to add your own custom mnemonic
+    label Mnemonic
 
-  else
-
-    i.fa.fa-spinner.fa-pulse
+    div.value
+      if (mnemonic)
+        = mnemonic.text
+      else
+        em Click here to add your own custom mnemonic

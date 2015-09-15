@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class PromptInputCanvas
+ * @class PromptCanvas
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -11,11 +11,9 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.prompt = options.prompt;
-
         this.brushScale = 0.04;
         this.defaultFadeEasing = createjs.Ease.sineOut;
-        this.defaultFadeSpeed = 500;
+        this.defaultFadeSpeed = 1000;
         this.defaultTraceFill = '#38240c';
         this.grid = true;
         this.gridColor = '#d8dadc';
@@ -25,11 +23,12 @@ module.exports = GelatoComponent.extend({
         this.mouseLastDownEvent = null;
         this.mouseLastUpEvent = null;
         this.mouseUpEvent = null;
+        this.prompt = options.prompt;
         this.size = 450;
         this.stage = null;
         this.strokeColor = '#4b4b4b';
-
-        this.listenTo(this.prompt, 'resize', this.resize);
+        this.on('input:up', this.handleCanvasInputUp);
+        this.on('resize', this.resize);
     },
     /**
      * @property template
@@ -38,23 +37,24 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     render: function() {
         this.renderTemplate();
         this.stage = this.createStage();
         this.createLayer('grid');
-        this.createLayer('surface-background2');
-        this.createLayer('surface-background1');
+        this.createLayer('surface-character-hint');
         this.createLayer('surface');
         this.createLayer('input-background2');
         this.createLayer('input-background1');
+        this.createLayer('input-stroke-hint');
         this.createLayer('input');
         this.resize();
         return this;
     },
     /**
      * @property events
+     * @type {Object}
      */
     events: {
         'pointerdown.Canvas canvas': 'triggerCanvasMouseDown',
@@ -67,7 +67,7 @@ module.exports = GelatoComponent.extend({
     /**
      * @method clearLayer
      * @param {String} name
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     clearLayer: function(name) {
         this.getLayer(name).removeAllChildren();
@@ -102,7 +102,7 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method disableGrid
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     disableGrid: function() {
         this.clearLayer('grid');
@@ -111,7 +111,7 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method disableInput
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     disableInput: function() {
         this.$('#input-canvas').off('.Input');
@@ -140,7 +140,7 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method drawGrid
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     drawGrid: function() {
         var grid = new createjs.Shape();
@@ -191,7 +191,7 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method enableGrid
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     enableGrid: function() {
         this.drawGrid();
@@ -200,7 +200,7 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method enableInput
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     enableInput: function() {
         var self = this;
@@ -305,28 +305,28 @@ module.exports = GelatoComponent.extend({
      * @method injectLayerColor
      * @param {String} layerName
      * @param {String} color
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     injectLayerColor: function(layerName, color) {
         return this.injectColor(this.getLayer(layerName), color);
     },
     /**
      * @method reset
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     reset: function() {
-        this.getLayer('surface-background2').removeAllChildren();
-        this.getLayer('surface-background1').removeAllChildren();
+        this.getLayer('surface-character-hint').removeAllChildren();
         this.getLayer('surface').removeAllChildren();
         this.getLayer('input-background2').removeAllChildren();
         this.getLayer('input-background1').removeAllChildren();
+        this.getLayer('input-stroke-hint').removeAllChildren();
         this.getLayer('input').removeAllChildren();
         this.stage.update();
         return this;
     },
     /**
      * @method resize
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     resize: function() {
         var size = app.getWidth() < 1280 ? 400 : 450;
@@ -346,6 +346,7 @@ module.exports = GelatoComponent.extend({
             default:
                 this.disableGrid();
         }
+        app.set('canvasSize', size);
         return this;
     },
     /**
@@ -464,7 +465,7 @@ module.exports = GelatoComponent.extend({
      * @param {createjs.Shape} toShape
      * @param {Object} [options]
      * @param {Function} [callback]
-     * @returns {PromptInputCanvas}
+     * @returns {PromptCanvas}
      */
     tweenShape: function(layerName, fromShape, toShape, options, callback) {
         this.getLayer(layerName).addChild(fromShape);
@@ -482,6 +483,127 @@ module.exports = GelatoComponent.extend({
                 callback();
             }
         });
+        return this;
+    },
+
+
+
+
+
+
+
+
+
+    /**
+     * @method handleCanvasInputUp
+     * @param {Array} points
+     * @param {createjs.Shape} shape
+     */
+    handleCanvasInputUp: function(points, shape) {
+        switch (this.prompt.part) {
+            case 'rune':
+                this.recognizeRune(points, shape);
+                break;
+            case 'tone':
+                this.recognizeTone(points, shape);
+                break;
+        }
+    },
+    /**
+     * @method hideCharacterHint
+     * @returns {PromptCanvas}
+     */
+    hideCharacterHint: function() {
+        this.clearLayer('surface-character-hint');
+        return this;
+    },
+    /**
+     * @method hideCharacterHint
+     * @returns {PromptCanvas}
+     */
+    hideStrokeHint: function() {
+        this.clearLayer('input-stroke-hint');
+        return this;
+    },
+    /**
+     * @method recognizeRune
+     * @param {Array} points
+     * @param {createjs.Shape} shape
+     */
+    recognizeRune: function(points, shape) {
+        var review = this.prompt.reviews.getActive();
+        var character = review.character;
+        var stroke = character.recognize(points, shape);
+        if (stroke) {
+            var targetShape = stroke.getTargetShape();
+            var userShape = stroke.getUserShape();
+            this.tweenShape('surface', userShape, targetShape);
+            this.trigger('attempt:success');
+        } else {
+            this.trigger('attempt:fail');
+        }
+        if (character.isComplete()) {
+            this.disableInput();
+            this.trigger('input:complete');
+        }
+    },
+    /**
+     * @method recognizeTone
+     * @param {Array} points
+     * @param {createjs.Shape} shape
+     */
+    recognizeTone: function(points, shape) {
+        var review = this.prompt.reviews.getActive();
+        var character = review.character;
+        var stroke = character.recognize(points, shape);
+        var possibleTones = review.getTones();
+        var expectedTone = character.getTone(possibleTones[0]);
+        if (stroke && app.fn.getLength(points) > 30) {
+            var targetShape = stroke.getTargetShape();
+            var userShape = stroke.getUserShape();
+            if (possibleTones.indexOf(stroke.get('tone')) > -1) {
+                this.tweenShape('surface', userShape, targetShape);
+                review.set('score', 3);
+            } else {
+                character.reset();
+                character.add(expectedTone);
+                this.drawShape('surface', expectedTone.getTargetShape());
+                review.set('score', 1);
+            }
+        } else {
+            character.add(expectedTone);
+            if (possibleTones.indexOf(5) > -1) {
+                this.drawShape('surface', character.getTargetShape());
+                review.set('score', 3);
+            } else {
+                this.drawShape('surface', expectedTone.getTargetShape());
+                review.set('score', 1);
+            }
+        }
+        if (character.isComplete()) {
+            this.disableInput();
+            this.trigger('input:complete');
+        }
+    },
+    /**
+     * @method showCharacterHint
+     * @returns {PromptCanvas}
+     */
+    showCharacterHint: function() {
+        var review = this.prompt.reviews.getActive();
+        var shape = review.character.getTargetShape();
+        this.hideCharacterHint();
+        this.drawShape('surface-character-hint', shape, {color: '#e8ded2'});
+        return this;
+    },
+    /**
+     * @method showStrokeHint
+     * @returns {PromptCanvas}
+     */
+    showStrokeHint: function() {
+        var review = this.prompt.reviews.getActive();
+        var shape = review.character.getExpectedStroke().getTargetShape();
+        this.fadeShape('input-stroke-hint', shape);
         return this;
     }
 });

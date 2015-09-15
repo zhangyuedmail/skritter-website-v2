@@ -1,22 +1,23 @@
 gelato-component(data-name='prompt')
 
+  if view.reviews
+
     #new-ribbon.hidden
       .icon.icon-study-new-character
 
     #panel-left
-      #input-canvas-container
+      #canvas-container
       #grading-toolbar-container
       #action-toolbar-container
 
     #panel-right
       #vocab-writing-container
       #vocab-reading-container
-
-      label Definition
       #vocab-definition-container
-
-      label Example sentence
       #vocab-sentence-container
-
-      label Mnemonic
       #vocab-mnemonic-container
+
+  else
+
+    #loading-spinner
+      i.fa.fa-5x.fa-spinner.fa-pulse
