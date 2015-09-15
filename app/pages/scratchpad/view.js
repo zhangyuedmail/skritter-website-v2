@@ -1,6 +1,7 @@
 var GelatoPage = require('gelato/page');
-var Items = require('collections/items');
+var Vocabs = require('collections/vocabs');
 var Prompt = require('components/prompt/view');
+var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class Scratchpad
@@ -12,8 +13,9 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
+        this.navbar = new DefaultNavbar();
         this.prompt = new Prompt();
-        this.items = new Items();
+        this.vocabs = new Vocabs();
     },
     /**
      * @property bodyClass
@@ -36,25 +38,65 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.navbar.render();
         this.prompt.setElement('#prompt-container').render();
-
-        this.items.fetch({
-            data: {
-                include_contained: true,
-                include_decomps: true,
-                include_sentences: true,
-                include_strokes: true,
-                include_vocabs: true,
-                limit: 5,
-                sort: 'next'
-            },
-            success: (function() {
-                var item = this.items.at(3);
-                var reviews = item.getPromptReviews();
-                this.prompt.set('defn', reviews);
-            }).bind(this)
-        });
-
         return this;
+    },
+    /**
+     * @method load
+     * @param {String} vocabId
+     */
+    load: function(vocabId) {
+        async.waterfall([
+            (function(callback) {
+                this.vocabs.fetch({
+                    data: {
+                        include_decomps: true,
+                        include_sentences: true,
+                        include_strokes: true,
+                        ids: vocabId
+                    },
+                    error: function(vocabs, error) {
+                        callback(error);
+                    },
+                    success: function(vocabs) {
+                        callback(null, vocabs.at(0));
+                    }
+                });
+            }).bind(this),
+            (function(vocab, callback) {
+                this.vocabs.fetch({
+                    data: {
+                        include_decomps: true,
+                        include_sentences: true,
+                        include_strokes: true,
+                        ids: vocab.get('containedVocabIds').join('|')
+                    },
+                    error: function(error) {
+                        callback(error);
+                    },
+                    remove: false,
+                    success: function() {
+                        callback(null, vocab);
+                    }
+                });
+            }).bind(this)
+        ], (function(error, vocab) {
+            if (error) {
+                //TODO: display error message to user
+                console.error('SCRATCHPAD LOAD ERROR:', error);
+            } else {
+                this.prompt.set(vocab.getPromptReviews('rune'));
+            }
+        }).bind(this));
+    },
+    /**
+     * @method remove
+     * @returns {Scratchpad}
+     */
+    remove: function() {
+        this.navbar.remove();
+        this.prompt.remove();
+        return GelatoPage.prototype.remove.call(this);
     }
 });

@@ -23,7 +23,7 @@ module.exports = GelatoRouter.extend({
         'institutions': 'navigateInstitutions',
         'legal': 'navigateLegal',
         'login': 'navigateLogin',
-        'scratchpad': 'navigateScratchpad',
+        'scratchpad/:vocabId': 'navigateScratchpad',
         'settings/general': 'navigateSettingsGeneral',
         'settings/study': 'navigateSettingsStudy',
         'signup': 'navigateSignup',
@@ -110,10 +110,15 @@ module.exports = GelatoRouter.extend({
     },
     /**
      * @method navigateScratchpad
+     * @param {String} vocabId
      */
-    navigateScratchpad: function() {
-        this.page = new (require('pages/scratchpad/view'));
-        this.page.render();
+    navigateScratchpad: function(vocabId) {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/scratchpad/view'));
+            this.page.render().load(vocabId);
+        } else {
+            this.navigateHome();
+        }
     },
     /**
      * @method navigateSettingsGeneral
