@@ -31,18 +31,6 @@ module.exports = SkritterModel.extend({
         return this.id.split('-')[1];
     },
     /**
-     * @method getPromptCharacters
-     * @returns {Array}
-     */
-    getPromptCharacters: function() {
-        var characters = [];
-        var strokes = this.getStrokes();
-        for (var i = 0, length = strokes.length; i < length; i++) {
-            characters.push(strokes[i].getPromptCharacter());
-        }
-        return characters;
-    },
-    /**
      * @method getCharacters
      * @returns {Array}
      */
@@ -75,6 +63,30 @@ module.exports = SkritterModel.extend({
             return this.get('topMnemonic');
         }
         return null;
+    },
+    /**
+     * @method getPromptCharacters
+     * @returns {Array}
+     */
+    getPromptCharacters: function() {
+        var characters = [];
+        var strokes = this.getStrokes();
+        for (var i = 0, length = strokes.length; i < length; i++) {
+            characters.push(strokes[i].getPromptCharacter());
+        }
+        return characters;
+    },
+    /**
+     * @method getPromptTones
+     * @returns {Array}
+     */
+    getPromptTones: function() {
+        var tones = [];
+        var strokes = this.getCharacters();
+        for (var i = 0, length = strokes.length; i < length; i++) {
+            tones.push(this.collection.strokes.getPromptTones());
+        }
+        return tones;
     },
     /**
      * @method getReading
@@ -118,6 +130,22 @@ module.exports = SkritterModel.extend({
             }
         }
         return strokes;
+    },
+    /**
+     * @method getTones
+     * @returns {Array}
+     */
+    getTones: function() {
+        var tones = [];
+        var readings = this.get('reading').split(', ');
+        for (var a = 0, lengthA = readings.length; a < lengthA; a++) {
+            var reading = readings[a].match(/[1-5]+/g);
+            for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                var tone = parseInt(reading[b], 10);
+                tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
+            }
+        }
+        return this.isChinese() ? tones : [];
     },
     /**
      * @method getVariation

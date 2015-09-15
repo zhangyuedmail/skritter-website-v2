@@ -6,10 +6,10 @@ var GelatoModel = require('gelato/model');
  */
 module.exports = GelatoModel.extend({
     /**
-     * @method initialize
-     * @constructor
+     * @property character
+     * @type {PromptCharacter}
      */
-    initialize: function() {},
+    character: null,
     /**
      * @method defaults
      * @returns {Object}
@@ -19,5 +19,19 @@ module.exports = GelatoModel.extend({
             maskReading: true,
             maskWriting: true
         };
+    },
+    /**
+     * @method getPosition
+     * @returns {Number}
+     */
+    getPosition: function() {
+        return this.collection.indexOf(this);
+    },
+    /**
+     * @method getTones
+     * @returns {Array}
+     */
+    getTones: function() {
+        return this.collection.vocab.getTones()[this.getPosition()];
     }
 });

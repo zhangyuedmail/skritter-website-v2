@@ -72,12 +72,12 @@ module.exports = SkritterModel.extend({
         var vocabs = [];
         switch (part) {
             case 'rune':
-                //characters = vocab.getCanvasCharacters();
+                characters = vocab.getPromptCharacters();
                 items = containedItems.length ? containedItems : [this];
                 vocabs = containedVocabs.length ? containedVocabs : [vocab];
                 break;
             case 'tone':
-                //characters = vocab.getCanvasTones();
+                characters = vocab.getPromptTones();
                 items = containedItems.length ? containedItems : [this];
                 vocabs = containedVocabs.length ? containedVocabs : [vocab];
                 break;
@@ -88,12 +88,12 @@ module.exports = SkritterModel.extend({
         for (var i = 0, length = vocabs.length; i < length; i++) {
             var review = new PromptReview();
             review.character = characters[i];
-            review.item = items[i].toJSON();
+            review.item = items[i];
             review.vocab = vocabs[i];
             reviews.add(review);
         }
         reviews.group = Date.now() + '_' + this.id;
-        reviews.item = this.toJSON();
+        reviews.item = this;
         reviews.part = part;
         reviews.vocab = vocab;
         return reviews;
