@@ -1,5 +1,7 @@
 var GelatoCollection = require('gelato/collection');
 var StrokeParams = require('collections/stroke-params');
+var KanaStrokes = require('data/kana-strokes');
+var ToneStrokes = require('data/tone-strokes');
 var Stroke = require('models/stroke');
 
 
@@ -19,10 +21,19 @@ module.exports = GelatoCollection.extend({
     initialize: function() {
         this.params = new StrokeParams();
         this.shapes = ShapeData;
+        this.add(KanaStrokes.getData());
+        this.add(ToneStrokes.getData());
     },
     /**
      * @property model
      * @type {Stroke}
      */
-    model: Stroke
+    model: Stroke,
+    /**
+     * @method getPromptTones
+     * @returns {PromptCharacter}
+     */
+    getPromptTones: function() {
+        return this.get('tones').getPromptCharacter();
+    }
 });
