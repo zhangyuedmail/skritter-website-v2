@@ -115,6 +115,14 @@ module.exports = GelatoApplication.extend({
         return this.get('language') === 'ja';
     },
     /**
+     * @method isMobile
+     * @returns {String}
+     */
+    isMobile: function() {
+        // TODO: Get this to return the right thing
+        return true;
+    },
+    /**
      * @method sendRaygunTestError
      */
     sendRaygunTestError: function() {
