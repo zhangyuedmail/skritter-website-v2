@@ -15,11 +15,15 @@ gelato-component(data-name="prompt-canvas").cursor.no-select
       when 'defn'
         #canvas-definition
           .writing= reviews.vocab.get('writing')
-          .question What's the definition?
-          .answer.hidden= reviews.vocab.getDefinition()
+          if reviews.isComplete()
+            .answer= reviews.vocab.getDefinition()
+          else
+            .question What's the definition?
 
       when 'rdng'
         #canvas-reading
           .writing= reviews.vocab.get('writing')
-          .question What's the reading?
-          .answer.hidden= reviews.vocab.getReading()
+          if reviews.isComplete()
+            .answer= reviews.vocab.getReading()
+          else
+            .question What's the reading?

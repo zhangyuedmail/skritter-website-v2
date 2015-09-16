@@ -3,19 +3,34 @@ gelato-component(data-name='prompt-vocab-writing')
   - var reviews = view.prompt.reviews
 
   if reviews
+    - var fillers = []
     - var index = 0
 
-    for character in reviews.vocab.getCharacters()
-      if (['~'].indexOf(character) === -1)
-        - var review = reviews.at(index)
-        - var classes = []
-        if (review.get('maskWriting'))
-          - classes.push('masked')
-        if (reviews.getPosition() === index)
-          - classes.push('active')
-        div.character(class=classes.join(' '), data-position=index)
-          span= character
-        - index++
-      else
-        div.filler
-          span= character
+    case prompt.part
+
+      when 'rune'
+        for character in reviews.vocab.getCharacters()
+          if (fillers.indexOf(character) === -1)
+            - var review = reviews.at(index)
+            - var classes = []
+            if (!review.get('complete'))
+              - classes.push('masked')
+            if (reviews.getPosition() === index)
+              - classes.push('active')
+            div.character(class=classes.join(' '), data-position=index)
+              span= character
+            - index++
+          else
+            div.filler
+              span= character
+
+      default
+        for character in reviews.vocab.getCharacters()
+          if (fillers.indexOf(character) === -1)
+            - var review = reviews.at(index)
+            div.character(data-position=index)
+              span= character
+            - index++
+          else
+            div.filler
+              span= character

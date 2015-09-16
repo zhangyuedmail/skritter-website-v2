@@ -41,6 +41,10 @@ gelato-component[data-name='prompt'] {
     padding: 42px 45px;
     position: relative;
     width: 640px;
+
+    #vocab-definition-container { margin-top: 30px; }
+    #vocab-mnemonic-container { margin-top: 30px; }
+    #vocab-sentence-container { margin-top: 30px; }
   }
 
   @media (max-width: 1310px) {

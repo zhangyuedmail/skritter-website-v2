@@ -510,6 +510,13 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method handleStrokeTweenComplete
+     * @param {PromptCharacter} character
+     */
+    handleStrokeTweenComplete: function(character) {
+
+    },
+    /**
      * @method hideCharacterHint
      * @returns {PromptCanvas}
      */
@@ -537,7 +544,12 @@ module.exports = GelatoComponent.extend({
         if (stroke) {
             var targetShape = stroke.getTargetShape();
             var userShape = stroke.getUserShape();
-            this.tweenShape('character', userShape, targetShape);
+            stroke.set('tweening', true);
+            this.tweenShape(
+                'character',
+                userShape,
+                targetShape
+            );
             this.trigger('attempt:success');
         } else {
             this.trigger('attempt:fail');
@@ -580,8 +592,7 @@ module.exports = GelatoComponent.extend({
             }
         }
         if (character.isComplete()) {
-            this.disableInput();
-            this.trigger('input:complete');
+            this.trigger('complete');
         }
     },
     /**

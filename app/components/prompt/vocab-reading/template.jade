@@ -6,17 +6,34 @@ gelato-component(data-name='prompt-vocab-reading')
     - var index = 0
     - var fillers = ['...']
 
-    for reading in reviews.vocab.getReadings()
-      if (fillers.indexOf(reading) === -1)
-        - var review = reviews.at(index)
-        - var classes = []
-        if (review.get('maskReading'))
-          - classes.push('masked')
-        if (reviews.getPosition() === index)
-          - classes.push('active')
-        div.reading(class=classes.join(' '), data-position=index)
-          span= reading
-        - index++
-      else
-        div.filler
-          span= reading
+    case prompt.part
+
+      when 'tone'
+        for reading in reviews.vocab.getReadings()
+          if (fillers.indexOf(reading) === -1)
+            - var review = reviews.at(index)
+            - var classes = []
+            if (!review.get('complete'))
+              - classes.push('masked')
+            if (reviews.getPosition() === index)
+              - classes.push('active')
+            div.reading(class=classes.join(' '), data-position=index)
+              span= reading
+            - index++
+          else
+            div.filler
+              span= reading
+
+      default
+        for reading in reviews.vocab.getReadings()
+          if (fillers.indexOf(reading) === -1)
+            - var review = reviews.at(index)
+            div.reading(data-position=index)
+              if reviews.vocab.isChinese()
+                span= app.fn.pinyin.toTone(reading)
+              else
+                span= reading
+            - index++
+          else
+            div.filler
+              span= reading

@@ -77,6 +77,28 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method renderPromptComplete
+     * @returns {Prompt}
+     */
+    renderPromptComplete: function() {
+        this.review = this.reviews.getActive();
+        switch (this.part) {
+            case 'defn':
+                this.renderPromptPartDefnComplete();
+                break;
+            case 'rdng':
+                this.renderPromptPartRdngComplete();
+                break;
+            case 'rune':
+                this.renderPromptPartRuneComplete();
+                break;
+            case 'tone':
+                this.renderPromptPartToneComplete();
+                break;
+        }
+        return this;
+    },
+    /**
      * @method renderPromptLoad
      * @returns {Prompt}
      */
@@ -97,6 +119,24 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptPartDefn: function() {
+        if (this.review.isComplete()) {
+            this.renderPromptComplete();
+        } else {
+            this.vocabDefinition.render();
+        }
+        return this;
+    },
+    /**
+     * @method renderPromptPartDefnComplete
+     * @returns {Prompt}
+     */
+    renderPromptPartDefnComplete: function() {
+        if (this.review.isComplete()) {
+            this.canvas.render();
+            this.vocabDefinition.render();
+        } else {
+            this.renderPromptPartRune();
+        }
         return this;
     },
     /**
@@ -104,6 +144,24 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptPartRdng: function() {
+        if (this.review.isComplete()) {
+            this.renderPromptComplete();
+        } else {
+            this.vocabReading.render();
+        }
+        return this;
+    },
+    /**
+     * @method renderPromptPartRdngComplete
+     * @returns {Prompt}
+     */
+    renderPromptPartRdngComplete: function() {
+        if (this.review.isComplete()) {
+            this.canvas.render();
+            this.vocabReading.render();
+        } else {
+            this.renderPromptPartRune();
+        }
         return this;
     },
     /**
@@ -112,12 +170,26 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartRune: function() {
         this.canvas.redrawCharacter();
-        this.vocabReading.render();
-        this.vocabWriting.render();
+        if (this.review.isComplete()) {
+            this.renderPromptComplete();
+        } else {
+            this.vocabReading.render();
+            this.vocabWriting.render();
+            this.canvas.enableInput();
+        }
+        return this;
+    },
+    /**
+     * @method renderPromptPartRuneComplete
+     * @returns {Prompt}
+     */
+    renderPromptPartRuneComplete: function() {
         if (this.review.isComplete()) {
             this.canvas.disableInput();
+            this.vocabReading.render();
+            this.vocabWriting.render();
         } else {
-            this.canvas.enableInput();
+            this.renderPromptPartRune();
         }
         return this;
     },
@@ -126,13 +198,28 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptPartTone: function() {
-        this.canvas.showCharacterHint();
-        this.vocabReading.render();
-        this.vocabWriting.render();
+        if (this.review.isComplete()) {
+            this.renderPromptComplete();
+        } else {
+            this.canvas.showCharacterHint();
+            this.vocabReading.render();
+            this.vocabWriting.render();
+            this.canvas.enableInput();
+        }
+        return this;
+    },
+    /**
+     * @method renderPromptPartToneComplete
+     * @returns {Prompt}
+     */
+    renderPromptPartToneComplete: function() {
         if (this.review.isComplete()) {
             this.canvas.disableInput();
+            this.canvas.showCharacterHint();
+            this.vocabReading.render();
+            this.vocabWriting.render();
         } else {
-            this.canvas.enableInput();
+            this.renderPromptPartTone();
         }
         return this;
     },
@@ -157,14 +244,39 @@ module.exports = GelatoComponent.extend({
     handleCanvasClick: function() {
         if (this.review.isComplete()) {
             this.next();
+        } else {
+            switch (this.part) {
+                case 'defn':
+                    this.review.set('complete', true);
+                    this.renderPromptComplete();
+                    break;
+                case 'rdng':
+                    this.review.set('complete', true);
+                    this.renderPromptComplete();
+                    break;
+            }
         }
+
     },
     /**
      * @method handleCanvasComplete
      */
     handleCanvasComplete: function() {
         this.review.set('complete', true);
-        this.renderPrompt();
+        switch (this.part) {
+            case 'defn':
+                this.renderPromptPartDefnComplete();
+                break;
+            case 'rdng':
+                this.renderPromptPartRdngComplete();
+                break;
+            case 'rune':
+                this.renderPromptPartRuneComplete();
+                break;
+            case 'tone':
+                this.renderPromptPartToneComplete();
+                break;
+        }
     },
     /**
      * @method handleCanvasNavigateNext

@@ -2,7 +2,15 @@
 
 gelato-component[data-name='prompt-vocab-sentence'] {
 
-  font-size: 14px;
-  font-weight: 300;
+
+  label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .value {
+    font-size: 18px;
+    font-weight: 400;
+  }
 
 }

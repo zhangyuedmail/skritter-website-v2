@@ -1,13 +1,14 @@
 gelato-component(data-name='prompt-vocab-definition')
   - var prompt = view.prompt
-  - var reviews = view.prompt.reviews
+  - var review = view.prompt.review
 
-  if reviews
-    - definiton = reviews.vocab.getDefinition();
+  if review
+    - var definition = review.vocab.getDefinition()
+
     label Definition
 
-    div.value
-      if definiton
-        = definiton
+    div.value(class=(review.isComplete() ? 'visible' : 'invisible'))
+      if definition
+        = definition
       else
         | Click here to add your own custom definition
