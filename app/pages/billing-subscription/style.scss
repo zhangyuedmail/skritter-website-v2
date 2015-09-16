@@ -4,4 +4,12 @@ gelato-page[data-name='billing-subscription'] {
   label.control-label {
     text-align: left;
   }
+
+  p.form-control-static {
+    padding-left: 0;
+  }
+
+  #cancel-vacation-wrapper {
+    margin-left: 20px;
+  }
 }

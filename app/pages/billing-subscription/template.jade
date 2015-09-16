@@ -1,4 +1,4 @@
-- var now = new Date().getTime();
+- var vacation = view.subscription.get('vacation');
 
 gelato-page(data-name='billing-subscription')
   .container
@@ -28,6 +28,11 @@ gelato-page(data-name='billing-subscription')
                     - var expires = view.subscription.get('expires');
                     if expires
                       | #{moment(expires).format('LL')}
+                      if vacation
+                        .help-block
+                          | This date will be moved forward when your vacation
+                          | ends, for as long as the vacation was in effect.
+                        
                     else
                       | Never
                     
@@ -48,3 +53,19 @@ gelato-page(data-name='billing-subscription')
                   else
                     button.btn.btn-fixed.btn-success(disabled=true)
                       i.fa.fa-1x.fa-spinner.fa-pulse
+
+              .form-group.form-group-lg
+                label.control-label.col-sm-3 Vacation
+                .col-sm-9
+                  p.form-control-static
+                    if vacation
+                      span= moment(vacation.begin).format('dddd, MMMM Do')
+                      span.spr.spl -
+                      span.spr= moment(vacation.end).format('dddd, MMMM Do')
+                      span#cancel-vacation-wrapper
+                        a#cancel-vacation-link Cancel
+                        i#cancel-vacation-spinner.fa.fa-1x.fa-spinner.fa-pulse.hide
+                    else
+                      a#go-on-vacation-link Go on vacation
+                      
+                  
