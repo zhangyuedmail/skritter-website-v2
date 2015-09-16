@@ -25,7 +25,7 @@ module.exports = GelatoRouter.extend({
         'institutions': 'navigateInstitutions',
         'legal': 'navigateLegal',
         'login': 'navigateLogin',
-        'scratchpad/:vocabId': 'navigateScratchpad',
+        'scratchpad/:vocabId(/:part)': 'navigateScratchpad',
         'settings/general': 'navigateSettingsGeneral',
         'settings/study': 'navigateSettingsStudy',
         'signup': 'navigateSignup',
@@ -51,6 +51,72 @@ module.exports = GelatoRouter.extend({
     defaultRoute: function() {
         if (app.user.isLoggedIn()) {
             this.navigateDashboard();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateAllWords
+     */
+    navigateAllWords: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-all/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateBannedWords
+     */
+    navigateBannedWords: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-banned/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateBillingHistory
+     */
+    navigateBillingHistory: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/billing-history/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateBillingSubscription
+     */
+    navigateBillingSubscription: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/billing-subscription/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateChinesepod
+     */
+    navigateChinesepod: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/chinesepod/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateCreateVocablist
+     */
+    navigateCreateVocablist: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/vocablist-create/view'))();
+            this.page.render();
         } else {
             this.navigateHome();
         }
@@ -115,13 +181,32 @@ module.exports = GelatoRouter.extend({
         }
     },
     /**
+     * @method navigateMnemonics
+     */
+    navigateMnemonics: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-mnemonics/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateNotFound
+     */
+    navigateNotFound: function() {
+        this.page = new (require('pages/not-found/view'));
+        this.page.render();
+    },
+    /**
      * @method navigateScratchpad
      * @param {String} vocabId
+     * @param {String} [part]
      */
-    navigateScratchpad: function(vocabId) {
+    navigateScratchpad: function(vocabId, part) {
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/scratchpad/view'));
-            this.page.render().load(vocabId);
+            this.page.render().load(vocabId, part);
         } else {
             this.navigateHome();
         }
@@ -164,6 +249,17 @@ module.exports = GelatoRouter.extend({
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/study/view'));
             this.page.render().load(listId, sectionId);
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateStarredWords
+     */
+    navigateStarredWords: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-starred/view'))();
+            this.page.render();
         } else {
             this.navigateHome();
         }
@@ -241,28 +337,6 @@ module.exports = GelatoRouter.extend({
         }
     },
     /**
-     * @method navigateChinesepod
-     */
-    navigateChinesepod: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/chinesepod/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateCreateVocablist
-     */
-    navigateCreateVocablist: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocablist-create/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
      * @method navigateVocablistPublished
      */
     navigateVocablistPublished: function() {
@@ -272,78 +346,5 @@ module.exports = GelatoRouter.extend({
         } else {
             this.navigateHome();
         }
-    },
-    /**
-     * @method navigateAllWords
-     */
-    navigateAllWords: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/words-all/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateMnemonics
-     */
-    navigateMnemonics: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/words-mnemonics/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateStarredWords
-     */
-    navigateStarredWords: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/words-starred/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateBannedWords
-     */
-    navigateBannedWords: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/words-banned/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateBillingHistory
-     */
-    navigateBillingHistory: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/billing-history/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateBillingSubscription
-     */
-    navigateBillingSubscription: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/billing-subscription/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateNotFound
-     */
-    navigateNotFound: function() {
-        this.page = new (require('pages/not-found/view'));
-        this.page.render();
     }
 });

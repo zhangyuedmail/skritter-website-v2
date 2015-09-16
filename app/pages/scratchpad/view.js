@@ -45,8 +45,9 @@ module.exports = GelatoPage.extend({
     /**
      * @method load
      * @param {String} vocabId
+     * @param {String} [part]
      */
-    load: function(vocabId) {
+    load: function(vocabId, part) {
         async.waterfall([
             (function(callback) {
                 this.vocabs.fetch({
@@ -65,28 +66,32 @@ module.exports = GelatoPage.extend({
                 });
             }).bind(this),
             (function(vocab, callback) {
-                this.vocabs.fetch({
-                    data: {
-                        include_decomps: true,
-                        include_sentences: true,
-                        include_strokes: true,
-                        ids: vocab.get('containedVocabIds').join('|')
-                    },
-                    error: function(error) {
-                        callback(error);
-                    },
-                    remove: false,
-                    success: function() {
-                        callback(null, vocab);
-                    }
-                });
+                if (vocab.has('containedVocabIds')) {
+                    this.vocabs.fetch({
+                        data: {
+                            include_decomps: true,
+                            include_sentences: true,
+                            include_strokes: true,
+                            ids: vocab.get('containedVocabIds').join('|')
+                        },
+                        error: function(error) {
+                            callback(error);
+                        },
+                        remove: false,
+                        success: function() {
+                            callback(null, vocab);
+                        }
+                    });
+                } else {
+                    callback(null, vocab);
+                }
             }).bind(this)
         ], (function(error, vocab) {
             if (error) {
                 //TODO: display error message to user
                 console.error('SCRATCHPAD LOAD ERROR:', error);
             } else {
-                this.prompt.set(vocab.getPromptReviews('rune'));
+                this.prompt.set(vocab.getPromptReviews(part || 'rune'));
             }
         }).bind(this));
     },
