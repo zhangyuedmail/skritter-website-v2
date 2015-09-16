@@ -3,7 +3,7 @@ var WordsSidebar = require('components/words-sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
 var Items = require('collections/items');
 var Vocabs = require('collections/vocabs');
-var VocabActionMixin = require('pages/vocab-action-mixin');
+var VocabActionMixin = require('mixins/vocab-action');
 
 /**
  * @class AllWords

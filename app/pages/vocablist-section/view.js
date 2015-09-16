@@ -1,12 +1,12 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
-var User = require('models/user');
-var Vocablist = require('models/vocablist');
-var VocablistSection = require('models/vocablist-section');
 var Vocabs = require('collections/vocabs');
 var ProgressDialog = require('dialogs/progress/view');
+var VocabActionMixin = require('mixins/vocab-action');
+var User = require('models/user');
+var DefaultNavbar = require('navbars/default/view');
+var Vocablist = require('models/vocablist');
+var VocablistSection = require('models/vocablist-section');
 var rowTemplate = require('./row-template');
-var VocabActionMixin = require('pages/vocab-action-mixin');
 
 /**
  * @class VocablistView

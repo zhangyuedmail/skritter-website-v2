@@ -1,9 +1,9 @@
 var GelatoPage = require('gelato/page');
-var WordsSidebar = require('components/words-sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
-var VocabActionMixin = require('pages/vocab-action-mixin');
+var WordsSidebar = require('components/words-sidebar/view');
 var ProgressDialog = require('dialogs/progress/view');
+var DefaultNavbar = require('navbars/default/view');
+var VocabActionMixin = require('mixins/vocab-action');
 
 /**
  * @class StarredWords

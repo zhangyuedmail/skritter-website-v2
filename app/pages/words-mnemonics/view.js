@@ -1,8 +1,8 @@
 var GelatoPage = require('gelato/page');
+var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words-sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
-var Vocabs = require('collections/vocabs');
-var VocabActionMixin = require('pages/vocab-action-mixin');
+var VocabActionMixin = require('mixins/vocab-action');
 
 /**
  * @class Mnemonics
