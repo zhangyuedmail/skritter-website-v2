@@ -33,6 +33,13 @@ module.exports = GelatoCollection.extend({
         return this.position;
     },
     /**
+     * @method isComplete
+     * @returns {Boolean}
+     */
+    isComplete: function() {
+        return this.pluck('complete').indexOf(false) === -1;
+    },
+    /**
      * @method isFirst
      * @returns {Boolean}
      */

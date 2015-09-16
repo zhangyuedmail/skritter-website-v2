@@ -19,6 +19,15 @@ module.exports = GelatoModel.extend({
      */
     idAttribute: 'id',
     /**
+     * @method defaults
+     * @returns {Object}
+     */
+    defaults: function() {
+        return {
+            tweening: false
+        };
+    },
+    /**
      * @method getFirstAngle
      * @returns {Number}
      */

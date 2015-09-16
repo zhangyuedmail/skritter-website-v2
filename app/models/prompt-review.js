@@ -17,9 +17,7 @@ module.exports = GelatoModel.extend({
     defaults: function() {
         return {
             attempts: 0,
-            complete: false,
-            maskReading: true,
-            maskWriting: true
+            complete: false
         };
     },
     /**

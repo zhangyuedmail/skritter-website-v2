@@ -143,6 +143,13 @@ module.exports = GelatoCollection.extend({
         return this.getPosition() >= this.getMaxPosition();
     },
     /**
+     * @method isTweening
+     * @returns {Boolean}
+     */
+    isTweening: function() {
+        return this.pluck('tweening').indexOf(true) > -1;
+    },
+    /**
      * @method recognize
      * @param {Array} points
      * @param {createjs.Shape} shape
