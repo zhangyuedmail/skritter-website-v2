@@ -43,11 +43,11 @@ module.exports = GelatoComponent.extend({
         this.renderTemplate();
         this.stage = this.createStage();
         this.createLayer('grid');
-        this.createLayer('surface-character-hint');
-        this.createLayer('surface');
+        this.createLayer('character-hint');
+        this.createLayer('character');
         this.createLayer('input-background2');
         this.createLayer('input-background1');
-        this.createLayer('input-stroke-hint');
+        this.createLayer('stroke-hint');
         this.createLayer('input');
         this.resize();
         return this;
@@ -61,8 +61,8 @@ module.exports = GelatoComponent.extend({
         'pointerup.Canvas canvas': 'triggerCanvasMouseUp',
         'vmousedown.Canvas canvas': 'triggerCanvasMouseDown',
         'vmouseup.Canvas canvas': 'triggerCanvasMouseUp',
-        'vclick #navigate-left': 'triggerNavigateLeft',
-        'vclick #navigate-right': 'triggerNavigateRight'
+        'vclick #navigate-next': 'triggerNavigateNext',
+        'vclick #navigate-previous': 'triggerNavigatePrevious'
     },
     /**
      * @method clearLayer
@@ -315,11 +315,11 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     reset: function() {
-        this.getLayer('surface-character-hint').removeAllChildren();
-        this.getLayer('surface').removeAllChildren();
+        this.getLayer('character-hint').removeAllChildren();
+        this.getLayer('character').removeAllChildren();
         this.getLayer('input-background2').removeAllChildren();
         this.getLayer('input-background1').removeAllChildren();
-        this.getLayer('input-stroke-hint').removeAllChildren();
+        this.getLayer('stroke-hint').removeAllChildren();
         this.getLayer('input').removeAllChildren();
         this.stage.update();
         return this;
@@ -329,13 +329,13 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     resize: function() {
-        var size = app.getWidth() < 1280 ? 400 : 450;
-        this.reset();
-        this.size = size;
+        var size = app.getWidth() < 1280 ? this.$el.width() : 450;
+        this.reset().size = size;
         this.stage.canvas.height = size;
         this.stage.canvas.width = size;
         this.$component.height(size);
         this.$component.width(size);
+        this.$('#canvas-navigation').css('top', (size / 2) - 35);
         switch (this.prompt.part) {
             case 'rune':
                 this.enableGrid();
@@ -380,7 +380,7 @@ module.exports = GelatoComponent.extend({
      */
     triggerCanvasMouseDown: function(event) {
         event.preventDefault();
-        this.trigger('canvas:mousedown', event);
+        this.trigger('mousedown', event);
         this.mouseDownEvent = event;
     },
     /**
@@ -389,7 +389,7 @@ module.exports = GelatoComponent.extend({
      */
     triggerCanvasMouseUp: function(event) {
         event.preventDefault();
-        this.trigger('canvas:mouseup', event);
+        this.trigger('mouseup', event);
         this.mouseLastDownEvent = this.mouseDownEvent;
         this.mouseLastUpEvent = this.mouseUpEvent;
         this.mouseUpEvent = event;
@@ -404,21 +404,21 @@ module.exports = GelatoComponent.extend({
             var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
             var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
             if (lineLastDistance < 50 && lineLastDuration > 50 && lineLastDuration < 200) {
-                this.trigger('canvas:doubleclick', event);
+                this.trigger('doubleclick', event);
                 return;
             }
         }
         if (this.mouseDownEvent) {
             if (lineDistance > this.size / 2 && lineAngle < - 70 && lineAngle > -110) {
-                this.trigger('canvas:swipeup', event);
+                this.trigger('swipeup', event);
                 return;
             }
             if (lineDuration > 1000) {
-                this.trigger('canvas:clickhold', event);
+                this.trigger('clickhold', event);
                 return;
             }
         }
-        this.trigger('canvas:click', event);
+        this.trigger('click', event);
     },
     /**
      * @method triggerInputDown
@@ -443,20 +443,20 @@ module.exports = GelatoComponent.extend({
         this.trigger('input:up', points, shape);
     },
     /**
-     * @method triggerNavigateLeft
+     * @method triggerNavigateNext
      * @param {Event} event
      */
-    triggerNavigateLeft: function(event) {
+    triggerNavigateNext: function(event) {
         event.preventDefault();
-        this.trigger('navigate:left');
+        this.trigger('navigate:next');
     },
     /**
-     * @method triggerNavigateRight
+     * @method triggerNavigatePrevious
      * @param {Event} event
      */
-    triggerNavigateRight: function(event) {
+    triggerNavigatePrevious: function(event) {
         event.preventDefault();
-        this.trigger('navigate:right');
+        this.trigger('navigate:previous');
     },
     /**
      * @method tweenShape
@@ -514,7 +514,7 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     hideCharacterHint: function() {
-        this.clearLayer('surface-character-hint');
+        this.clearLayer('character-hint');
         return this;
     },
     /**
@@ -522,7 +522,7 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     hideStrokeHint: function() {
-        this.clearLayer('input-stroke-hint');
+        this.clearLayer('stroke-hint');
         return this;
     },
     /**
@@ -537,14 +537,13 @@ module.exports = GelatoComponent.extend({
         if (stroke) {
             var targetShape = stroke.getTargetShape();
             var userShape = stroke.getUserShape();
-            this.tweenShape('surface', userShape, targetShape);
+            this.tweenShape('character', userShape, targetShape);
             this.trigger('attempt:success');
         } else {
             this.trigger('attempt:fail');
         }
         if (character.isComplete()) {
-            this.disableInput();
-            this.trigger('input:complete');
+            this.trigger('complete');
         }
     },
     /**
@@ -562,22 +561,22 @@ module.exports = GelatoComponent.extend({
             var targetShape = stroke.getTargetShape();
             var userShape = stroke.getUserShape();
             if (possibleTones.indexOf(stroke.get('tone')) > -1) {
-                this.tweenShape('surface', userShape, targetShape);
-                review.set('score', 3);
+                this.tweenShape('character', userShape, targetShape);
+                this.trigger('attempt:success');
             } else {
                 character.reset();
                 character.add(expectedTone);
-                this.drawShape('surface', expectedTone.getTargetShape());
-                review.set('score', 1);
+                this.drawShape('character', expectedTone.getTargetShape());
+                this.trigger('attempt:fail');
             }
         } else {
             character.add(expectedTone);
             if (possibleTones.indexOf(5) > -1) {
-                this.drawShape('surface', character.getTargetShape());
-                review.set('score', 3);
+                this.drawShape('character', character.getTargetShape());
+                this.trigger('attempt:success');
             } else {
-                this.drawShape('surface', expectedTone.getTargetShape());
-                review.set('score', 1);
+                this.drawShape('character', expectedTone.getTargetShape());
+                this.trigger('attempt:fail');
             }
         }
         if (character.isComplete()) {
@@ -586,14 +585,38 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method redrawCharacter
+     * @returns {PromptCanvas}
+     */
+    redrawCharacter: function() {
+        this.clearLayer('character');
+        this.drawShape('character', this.prompt.review.character.getUserShape());
+        return this;
+    },
+    /**
      * @method showCharacterHint
      * @returns {PromptCanvas}
      */
     showCharacterHint: function() {
-        var review = this.prompt.reviews.getActive();
+        var review = this.prompt.review;
         var shape = review.character.getTargetShape();
         this.hideCharacterHint();
-        this.drawShape('surface-character-hint', shape, {color: '#e8ded2'});
+        switch (this.prompt.reviews.part) {
+            case 'rune':
+                this.drawShape(
+                    'character-hint',
+                    shape,
+                    {color: '#e8ded2'}
+                );
+                break;
+            case 'tone':
+                this.drawCharacter(
+                    'character-hint',
+                    review.vocab.get('writing'),
+                    {color: '#e8ded2', font: review.vocab.getFontName()}
+                );
+                break;
+        }
         return this;
     },
     /**
@@ -603,7 +626,7 @@ module.exports = GelatoComponent.extend({
     showStrokeHint: function() {
         var review = this.prompt.reviews.getActive();
         var shape = review.character.getExpectedStroke().getTargetShape();
-        this.fadeShape('input-stroke-hint', shape);
+        this.fadeShape('stroke-hint', shape);
         return this;
     }
 });

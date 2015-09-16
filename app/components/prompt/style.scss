@@ -45,9 +45,17 @@ gelato-component[data-name='prompt'] {
 
   @media (max-width: 1310px) {
 
-    #panel-left { width: 50%; }
+    #panel-left {
+      padding-left: 50px;
+      padding-right: 50px;
+      width: 50%;
+    }
 
-    #panel-right { width: 50%; }
+    #panel-right {
+      padding-left: 50px;
+      padding-right: 50px;
+      width: 50%;
+    }
 
   }
 

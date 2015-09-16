@@ -16,6 +16,8 @@ module.exports = GelatoModel.extend({
      */
     defaults: function() {
         return {
+            attempts: 0,
+            complete: false,
             maskReading: true,
             maskWriting: true
         };
@@ -33,5 +35,12 @@ module.exports = GelatoModel.extend({
      */
     getTones: function() {
         return this.collection.vocab.getTones()[this.getPosition()];
+    },
+    /**
+     * @method isComplete
+     * @returns {Boolean}
+     */
+    isComplete: function() {
+        return this.get('complete');
     }
 });

@@ -3,9 +3,9 @@ gelato-component(data-name='prompt-vocab-reading')
   - var reviews = view.prompt.reviews
 
   if reviews
-
     - var index = 0
     - var fillers = ['...']
+
     for reading in reviews.vocab.getReadings()
       if (fillers.indexOf(reading) === -1)
         - var review = reviews.at(index)

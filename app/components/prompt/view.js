@@ -1,9 +1,9 @@
 var GelatoComponent = require('gelato/component');
 
 var Prompt = require('components/prompt/view');
-var PromptActionToolbar = require('components/prompt/action-toolbar/view');
-var PromptGradingToolbar = require('components/prompt/grading-toolbar/view');
 var PromptCanvas = require('components/prompt/canvas/view');
+var PromptToolbarAction = require('components/prompt/toolbar-action/view');
+var PromptToolbarGrading = require('components/prompt/toolbar-grading/view');
 var PromptVocabDefinition = require('components/prompt/vocab-definition/view');
 var PromptVocabMnemonic = require('components/prompt/vocab-mnemonic/view');
 var PromptVocabReading = require('components/prompt/vocab-reading/view');
@@ -20,25 +20,25 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
+        //properties
         this.part = null;
         this.reviews = null;
-        this.actionToolbar = new PromptActionToolbar({prompt: this});
+        //components
         this.canvas = new PromptCanvas({prompt: this});
-        this.gradingToolbar = new PromptGradingToolbar({prompt: this});
+        this.toolbarAction = new PromptToolbarAction({prompt: this});
+        this.toolbarGrading = new PromptToolbarGrading({prompt: this});
         this.vocabDefinition = new PromptVocabDefinition({prompt: this});
         this.vocabMnemonic = new PromptVocabMnemonic({prompt: this});
         this.vocabReading = new PromptVocabReading({prompt: this});
         this.vocabSentence = new PromptVocabSentence({prompt: this});
         this.vocabWriting = new PromptVocabWriting({prompt: this});
-
-        //this.listenTo(this.canvas, 'canvas:click', this.handleCanvasClick);
-        //this.listenTo(this.canvas, 'canvas:swipeup', this.handleCanvasSwipeUp);
-        //this.listenTo(this.inputCanvas, 'input:up', this.handleCanvasInputUp);
-        //this.listenTo(this.canvas, 'navigate:left', this.handleNavigateLeft);
-        //this.listenTo(this.canvas, 'navigate:right', this.handleNavigateRight);
-        //this.listenTo(this.grading, 'mousedown', this.handleHighlightGrading);
-        //this.listenTo(this.grading, 'change', this.handleChangeGrading);
-        //this.listenTo(this.grading, 'select', this.handleSelectGrading);
+        //listeners
+        this.listenTo(this.canvas, 'attempt:fail', this.handleCanvasAttemptFail);
+        this.listenTo(this.canvas, 'attempt:success', this.handleCanvasAttemptSuccess);
+        this.listenTo(this.canvas, 'click', this.handleCanvasClick);
+        this.listenTo(this.canvas, 'complete', this.handleCanvasComplete);
+        this.listenTo(this.canvas, 'navigate:next', this.handleCanvasNavigateNext);
+        this.listenTo(this.canvas, 'navigate:previous', this.handleCanvasNavigatePrevious);
     },
     /**
      * @property template
@@ -58,33 +58,150 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPrompt: function() {
+        this.reset();
+        this.review = this.reviews.getActive();
+        switch (this.part) {
+            case 'defn':
+                this.renderPromptPartDefn();
+                break;
+            case 'rdng':
+                this.renderPromptPartRdng();
+                break;
+            case 'rune':
+                this.renderPromptPartRune();
+                break;
+            case 'tone':
+                this.renderPromptPartTone();
+                break;
+        }
         return this;
     },
     /**
-     * @method renderPromptInitialize
+     * @method renderPromptLoad
      * @returns {Prompt}
      */
-    renderPromptInitialize: function() {
+    renderPromptLoad: function() {
         this.render();
-        this.actionToolbar.setElement('#action-toolbar-container').render();
         this.canvas.setElement('#canvas-container').render();
-        this.gradingToolbar.setElement('#grading-toolbar-container').render();
+        this.toolbarAction.setElement('#action-toolbar-container').render();
+        this.toolbarGrading.setElement('#grading-toolbar-container').render();
         this.vocabDefinition.setElement('#vocab-definition-container').render();
         this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
         this.vocabReading.setElement('#vocab-reading-container').render();
         this.vocabSentence.setElement('#vocab-sentence-container').render();
         this.vocabWriting.setElement('#vocab-writing-container').render();
-        this.reset();
         return this;
+    },
+    /**
+     * @method renderPromptPartDefn
+     * @returns {Prompt}
+     */
+    renderPromptPartDefn: function() {
+        return this;
+    },
+    /**
+     * @method renderPromptPartRdng
+     * @returns {Prompt}
+     */
+    renderPromptPartRdng: function() {
+        return this;
+    },
+    /**
+     * @method renderPromptPartRune
+     * @returns {Prompt}
+     */
+    renderPromptPartRune: function() {
+        this.canvas.redrawCharacter();
+        this.vocabReading.render();
+        this.vocabWriting.render();
+        if (this.review.isComplete()) {
+            this.canvas.disableInput();
+        } else {
+            this.canvas.enableInput();
+        }
+        return this;
+    },
+    /**
+     * @method renderPromptPartTone
+     * @returns {Prompt}
+     */
+    renderPromptPartTone: function() {
+        this.canvas.showCharacterHint();
+        this.vocabReading.render();
+        this.vocabWriting.render();
+        if (this.review.isComplete()) {
+            this.canvas.disableInput();
+        } else {
+            this.canvas.enableInput();
+        }
+        return this;
+    },
+    /**
+     * @method handleCanvasAttemptFail
+     */
+    handleCanvasAttemptFail: function() {
+        this.review.set('attempts', this.review.get('attempts') + 1);
+        if (this.review.get('attempts') > 2) {
+            this.canvas.showStrokeHint();
+        }
+    },
+    /**
+     * @method handleCanvasAttemptSuccess
+     */
+    handleCanvasAttemptSuccess: function() {
+        this.review.set('attempts', 0);
+    },
+    /**
+     * @method handleCanvasClick
+     */
+    handleCanvasClick: function() {
+        if (this.review.isComplete()) {
+            this.next();
+        }
+    },
+    /**
+     * @method handleCanvasComplete
+     */
+    handleCanvasComplete: function() {
+        this.review.set('complete', true);
+        this.renderPrompt();
+    },
+    /**
+     * @method handleCanvasNavigateNext
+     */
+    handleCanvasNavigateNext: function() {
+        this.next();
+    },
+    /**
+     * @method handleCanvasNavigatePrevious
+     */
+    handleCanvasNavigatePrevious: function() {
+        this.previous();
+    },
+    /**
+     * @method next
+     */
+    next: function() {
+        if (this.reviews.next()) {
+            this.renderPrompt()
+        }
+    },
+    /**
+     * @method previous
+     */
+    previous: function() {
+        if (this.reviews.previous()) {
+            this.renderPrompt()
+        }
     },
     /**
      * @method remove
      * @returns {Prompt}
      */
     remove: function() {
-        this.actionToolbar.remove();
         this.canvas.remove();
-        this.gradingToolbar.remove();
+        this.toolbarAction.remove();
+        this.toolbarGrading.remove();
         this.vocabDefinition.remove();
         this.vocabMnemonic.remove();
         this.vocabReading.remove();
@@ -97,19 +214,19 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     reset: function() {
+        this.canvas.reset();
         return this;
     },
     /**
      * @method set
-     * @param {String} part
      * @param {PromptReviews} reviews
      * @returns {Prompt}
      */
-    set: function(part, reviews) {
-        console.info('PROMPT:', part, reviews.vocab.id, reviews);
-        this.part = part;
+    set: function(reviews) {
+        console.info('PROMPT:', reviews.part, reviews.vocab.id, reviews);
+        this.part = reviews.part;
         this.reviews = reviews;
-        this.renderPromptInitialize();
+        this.renderPromptLoad();
         this.renderPrompt();
         return this;
     }

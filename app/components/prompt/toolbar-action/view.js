@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class PromptActionToolbar
+ * @class PromptToolbarAction
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -20,7 +20,7 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {PromptActionToolbar}
+     * @returns {PromptToolbarAction}
      */
     render: function() {
         this.renderTemplate();

@@ -35,19 +35,23 @@ gelato-component[data-name="prompt-canvas"] {
   }
 
   #canvas-navigation {
+    font-size: 64px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 6000;
     i {
-      font-size: 64px;
       opacity: 0.2;
       position: absolute;
-      top: 190px;
       &:hover { opacity: 0.6; }
+      &#navigate-next { right: -50px; }
+      &#navigate-previous { left: -50px; }
     }
-    #navigate-left { left: -50px; }
-    #navigate-right { right: -50px; }
     @media (max-width: 1280px) {
-      i { top: 165px; }
-      #navigate-left { left: -30px; }
-      #navigate-right { right: -30px; }
+      i {
+        &#navigate-next { right: -30px; }
+        &#navigate-previous { left: -30px; }
+      }
     }
   }
 

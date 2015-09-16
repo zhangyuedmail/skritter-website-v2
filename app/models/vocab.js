@@ -1,4 +1,6 @@
 var SkritterModel = require('base/skritter-model');
+var PromptReviews = require('collections/prompt-reviews');
+var PromptReview = require('models/prompt-review');
 
 /**
  * @class Vocab
@@ -38,6 +40,18 @@ module.exports = SkritterModel.extend({
         return this.get('writing').split('');
     },
     /**
+     * @method getContained
+     * @returns {Array}
+     */
+    getContained: function() {
+        var containedVocabs = [];
+        var containedVocabIds = this.get('containedVocabIds') || [];
+        for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+            containedVocabs.push(this.collection.get(containedVocabIds[i]));
+        }
+        return containedVocabs;
+    },
+    /**
      * @method getDefinition
      * @param {Boolean} [ignoreFormat]
      * @returns {String}
@@ -51,6 +65,20 @@ module.exports = SkritterModel.extend({
             definition = this.get('definitions').en;
         }
         return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
+    },
+    /**
+     * @method getFontClass
+     * @returns {String}
+     */
+    getFontClass: function() {
+        return this.isChinese() ? 'text-chinese' : 'text-japanese';
+    },
+    /**
+     * @method getFontName
+     * @returns {String}
+     */
+    getFontName: function() {
+        return this.isChinese() ? 'KaiTi' : 'DFKaiSho-Md';
     },
     /**
      * @method getMnemonic
@@ -75,6 +103,40 @@ module.exports = SkritterModel.extend({
             characters.push(strokes[i].getPromptCharacter());
         }
         return characters;
+    },
+    /**
+     * @method getPromptReviews
+     * @param {String} part
+     * @returns {PromptReviews}
+     */
+    getPromptReviews: function(part) {
+        var reviews = new PromptReviews();
+        var containedVocabs = this.getContained();
+        var vocab = this;
+        var characters = [];
+        var vocabs = [];
+        switch (part) {
+            case 'rune':
+                characters = vocab.getPromptCharacters();
+                vocabs = containedVocabs.length ? containedVocabs : [vocab];
+                break;
+            case 'tone':
+                characters = vocab.getPromptTones();
+                vocabs = containedVocabs.length ? containedVocabs : [vocab];
+                break;
+            default:
+                vocabs = [vocab];
+        }
+        for (var i = 0, length = vocabs.length; i < length; i++) {
+            var review = new PromptReview();
+            review.character = characters[i];
+            review.vocab = vocabs[i];
+            reviews.add(review);
+        }
+        reviews.group = Date.now() + '_' + this.id;
+        reviews.part = part;
+        reviews.vocab = vocab;
+        return reviews;
     },
     /**
      * @method getPromptTones

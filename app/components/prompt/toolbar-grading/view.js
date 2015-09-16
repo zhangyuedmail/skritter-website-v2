@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class PromptGradingToolbar
+ * @class PromptToolbarGrading
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -21,7 +21,7 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {PromptGradingToolbar}
+     * @returns {PromptToolbarGrading}
      */
     render: function() {
         this.renderTemplate();
@@ -63,7 +63,7 @@ module.exports = GelatoComponent.extend({
     /**
      * @method select
      * @param {Number} [value]
-     * @returns {PromptGradingToolbar}
+     * @returns {PromptToolbarGrading}
      */
     select: function(value) {
         this.unselect();
@@ -77,7 +77,7 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method unselect
-     * @returns {PromptGradingToolbar}
+     * @returns {PromptToolbarGrading}
      */
     unselect: function() {
         this.$('.btn-group .btn').removeClass('selected');
