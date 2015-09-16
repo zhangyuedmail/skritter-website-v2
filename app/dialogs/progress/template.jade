@@ -5,5 +5,6 @@ gelato-dialog(data-name='loading')
         .modal-body.text-center
           i.fa.fa-5x.fa-spinner.fa-pulse
           h3= view.title || 'Working'
-          .progress
-            .progress-bar
+          if view.showBar
+            .progress
+              .progress-bar

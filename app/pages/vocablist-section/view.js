@@ -6,6 +6,7 @@ var VocablistSection = require('models/vocablist-section');
 var Vocabs = require('collections/vocabs');
 var ProgressDialog = require('dialogs/progress/view');
 var rowTemplate = require('./row-template');
+var VocabActionMixin = require('pages/vocab-action-mixin');
 
 /**
  * @class VocablistView
@@ -348,20 +349,11 @@ module.exports = GelatoPage.extend({
             return;
         }
         $(e.target).val('');
-        var selected = new Vocabs(this.vocabs.filter(function(vocab) {
+        var vocabs = new Vocabs(this.vocabs.filter(function(vocab) {
             return vocab.get('checked');
         }));
-
-        var progressDialog = new ProgressDialog();
-        progressDialog.render().open();
-
-        this.action = {
-            name: action,
-            queue: selected,
-            total: selected.size(),
-            dialog: progressDialog
-        };
-        this.runAction();
+        this.$('input[type="checkbox"]').attr('checked', false);
+        this.beginVocabAction(action, vocabs);
     },
     /**
      * @method handleClickStudyWritingLink
@@ -373,47 +365,6 @@ module.exports = GelatoPage.extend({
         }
         $(e.target).toggleClass('text-muted');
         e.stopPropagation();
-    },
-    /**
-     * @method runAction
-     */
-    runAction: function() {
-        var vocab = this.action.queue.shift();
-        if (!vocab) {
-            return this.finishAction();
-        }
-        if (this.action.name === 'ban') {
-            if (vocab.isBanned()) {
-                return this.runAction();
-            }
-            vocab.toggleBanned();
-        }
-        else if (this.action.name === 'unban') {
-            if (!vocab.isBanned()) {
-                return this.runAction();
-            }
-            vocab.toggleBanned();
-        }
-        else {
-            return this.finishAction();
-        }
-        var attrs = {
-            id: vocab.id,
-            bannedParts: vocab.get('bannedParts')
-        };
-        vocab.save(attrs, { patch: true, 'method': 'PUT' });
-        this.listenToOnce(vocab, 'sync', function() {
-            this.action.dialog.setProgress(100 * (this.action.total - this.action.queue.size()) / this.action.total);
-            this.runAction();
-        });
-    },
-    /**
-     * @method finishAction
-     */
-    finishAction: function() {
-        this.action.dialog.close();
-        this.action = {};
-        this.$('input[type="checkbox"]').attr('checked', false);
     },
     /**
      * @method handleClickEditSectionButton
@@ -533,3 +484,5 @@ module.exports = GelatoPage.extend({
         $(e.target).closest('tr').remove();
     }
 });
+
+_.extend(module.exports.prototype, VocabActionMixin);

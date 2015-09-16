@@ -1,5 +1,6 @@
 var GelatoPage = require('gelato/page');
 var ChangePasswordDialog = require('dialogs/change-password/view');
+var SettingsSidebar = require('components/settings-sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
 
 /**
@@ -15,7 +16,8 @@ module.exports = GelatoPage.extend({
         this.countries = require('data/country-codes');
         this.timezones = require('data/country-timezones');
         this.navbar = new DefaultNavbar().render();
-        this.listenTo(app.user, 'state', this.renderTemplate);
+        this.sidebar = new SettingsSidebar();
+        this.listenTo(app.user, 'state', this.renderSectionContent);
         app.user.fetch();
     },
     /**
@@ -48,6 +50,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.sidebar.setElement(this.$('#settings-sidebar-container')[0]).render();
         return this;
     },
     /**
@@ -95,5 +98,14 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         return GelatoPage.prototype.remove.call(this);
+    },
+    /**
+     * @method renderSectionContent
+     */
+    renderSectionContent: function() {
+        var context = require('globals');
+        context.view = this;
+        var rendering = $(this.template(context));
+        this.$('#section-content').replaceWith(rendering.find('#section-content'));
     }
 });

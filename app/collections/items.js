@@ -23,24 +23,12 @@ module.exports = SkritterCollection.extend({
      */
     model: Item,
     /**
-     * @property url
-     * @type {String}
-     */
-    url: 'items',
-    /**
      * @method comparator
      * @param {Item} item
      * @return {Number}
      */
     comparator: function(item) {
         return -item.get('next');
-    },
-    /**
-     * @method getNext
-     * @returns {Item}
-     */
-    getNext: function() {
-        return this.sort().at(0);
     },
     /**
      * @method parse
@@ -55,5 +43,17 @@ module.exports = SkritterCollection.extend({
         this.vocabs.sentences.add(response.Sentences);
         this.vocabs.strokes.add(response.Strokes);
         return response.Items;
+    },
+    /**
+     * @property url
+     * @type {String}
+     */
+    url: 'items',
+    /**
+     * @method getNext
+     * @returns {Item}
+     */
+    getNext: function() {
+        return this.sort().at(0);
     }
 });

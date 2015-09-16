@@ -16,6 +16,8 @@ module.exports = GelatoRouter.extend({
      */
     routes: {
         '': 'defaultRoute',
+        'billing/history': 'navigateBillingHistory',
+        'billing/subscription': 'navigateBillingSubscription',
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
         'features': 'navigateFeatures',
@@ -37,6 +39,10 @@ module.exports = GelatoRouter.extend({
         'vocablist/create': 'navigateCreateVocablist',
         'vocablist/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
         'vocablist/view/(:vocablistId)': 'navigateVocablist',
+        'words/all': 'navigateAllWords',
+        'words/banned': 'navigateBannedWords',
+        'words/mnemonics': 'navigateMnemonics',
+        'words/starred': 'navigateStarredWords',
         '*route': 'navigateNotFound'
     },
     /**
@@ -262,6 +268,72 @@ module.exports = GelatoRouter.extend({
     navigateVocablistPublished: function() {
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/vocablist-published/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateAllWords
+     */
+    navigateAllWords: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-all/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateMnemonics
+     */
+    navigateMnemonics: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-mnemonics/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateStarredWords
+     */
+    navigateStarredWords: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-starred/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateBannedWords
+     */
+    navigateBannedWords: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/words-banned/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateBillingHistory
+     */
+    navigateBillingHistory: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/billing-history/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateBillingSubscription
+     */
+    navigateBillingSubscription: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/billing-subscription/view'))();
             this.page.render();
         } else {
             this.navigateHome();

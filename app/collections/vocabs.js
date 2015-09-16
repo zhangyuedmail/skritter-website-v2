@@ -9,36 +9,38 @@ var Vocab = require('models/vocab');
  * @extends {SkritterCollection}
  */
 module.exports = SkritterCollection.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this._cursor = null;
-        this.decomps = new Decomps();
-        this.sentences = new Sentences();
-        this.strokes = new Strokes();
-    },
-    /**
-     * @property model
-     * @type {Vocab}
-     */
-    model: Vocab,
-    /**
-     * @property url
-     * @type {String}
-     */
-    url: 'vocabs',
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns Array
-     */
-    parse: function(response) {
-        this._cursor = response.cursor;
-        this.decomps.add(response.Decomps);
-        this.sentences.add(response.Sentences);
-        this.strokes.add(response.Strokes);
-        return response.Vocabs;
-    }
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this._cursor = null;
+    this._cursorContaining = null;
+    this.decomps = new Decomps();
+    this.sentences = new Sentences();
+    this.strokes = new Strokes();
+  },
+  /**
+   * @property model
+   * @type {Vocab}
+   */
+  model: Vocab,
+  /**
+   * @property url
+   * @type {String}
+   */
+  url: 'vocabs',
+  /**
+   * @method parse
+   * @param {Object} response
+   * @returns Array
+   */
+  parse: function(response) {
+    this._cursor = response.cursor;
+    this._cursorContaining = response.containingCursor;
+    this.decomps.add(response.Decomps);
+    this.sentences.add(response.Sentences);
+    this.strokes.add(response.Strokes);
+    return response.Vocabs.concat(response.ContainingVocabs || []);
+  }
 });

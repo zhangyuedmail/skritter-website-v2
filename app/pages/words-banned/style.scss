@@ -1,0 +1,32 @@
+@import "../../styles/variables";
+
+gelato-page[data-name='words-banned'] {
+  .table-oversized-wrapper {
+    margin-top: 30px;
+  }
+
+  .checkbox-td {
+    width: 10%;
+  }
+
+  .word-td {
+    width: 70%;
+  }
+
+  .writing-td {
+    width: 10%;
+  }
+
+  .reading-td {
+    width: 10%;
+  }
+
+  .definition-td {
+    width: 50%;
+  }
+
+  .date-changed-td {
+    width: 20%;
+  }
+
+}
