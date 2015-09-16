@@ -1,0 +1,25 @@
+gelato-component(data-name="prompt-canvas").cursor.no-select
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  canvas#input-canvas
+
+  #canvas-navigation
+    i#navigate-previous.fa.fa-angle-left
+    i#navigate-next.fa.fa-angle-right
+
+  if reviews
+
+    case prompt.part
+
+      when 'defn'
+        #canvas-definition
+          .writing= reviews.vocab.get('writing')
+          .question What's the definition?
+          .answer.hidden= reviews.vocab.getDefinition()
+
+      when 'rdng'
+        #canvas-reading
+          .writing= reviews.vocab.get('writing')
+          .question What's the reading?
+          .answer.hidden= reviews.vocab.getReading()

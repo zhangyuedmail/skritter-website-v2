@@ -1,6 +1,7 @@
 var SkritterCollection = require('base/skritter-collection');
-var Item = require('models/item');
+var ContainedItems = require('collections/contained-items');
 var Vocabs = require('collections/vocabs');
+var Item = require('models/item');
 
 /**
  * @class Items
@@ -9,8 +10,11 @@ var Vocabs = require('collections/vocabs');
 module.exports = SkritterCollection.extend({
     /**
      * @method initialize
+     * @constructor
      */
     initialize: function() {
+        this._cursor = null;
+        this.contained = new ContainedItems();
         this.vocabs = new Vocabs();
     },
     /**
@@ -19,20 +23,37 @@ module.exports = SkritterCollection.extend({
      */
     model: Item,
     /**
+     * @method comparator
+     * @param {Item} item
+     * @return {Number}
+     */
+    comparator: function(item) {
+        return -item.get('next');
+    },
+    /**
      * @method parse
      * @param {Object} response
-     * @returns Array
+     * @returns {Object}
      */
     parse: function(response) {
-        if (response.Vocabs) {
-            this.vocabs.add(response.Vocabs);
-        }
-        this.cursor = response.cursor;
-        return response.Items || response;
+        this._cursor = response.cursor;
+        this.contained.add(response.ContainedItems);
+        this.vocabs.add(response.Vocabs);
+        this.vocabs.decomps.add(response.Decomps);
+        this.vocabs.sentences.add(response.Sentences);
+        this.vocabs.strokes.add(response.Strokes);
+        return response.Items;
     },
     /**
      * @property url
      * @type {String}
      */
-    url: 'items'
+    url: 'items',
+    /**
+     * @method getNext
+     * @returns {Item}
+     */
+    getNext: function() {
+        return this.sort().at(0);
+    }
 });

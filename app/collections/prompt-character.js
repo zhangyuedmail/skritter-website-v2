@@ -113,6 +113,14 @@ module.exports = GelatoCollection.extend({
         return container;
     },
     /**
+     * @method getTone
+     * @param {Number} number
+     * @returns {PromptStroke}
+     */
+    getTone: function(number) {
+        return this.writing === 'tones' ? this.targets[number - 1].at(0) : null;
+    },
+    /**
      * @method getUserShape
      * @param {Number} [excludeStrokes]
      * @returns {createjs.Container}
@@ -126,14 +134,6 @@ module.exports = GelatoCollection.extend({
         }
         container.name = 'character';
         return container;
-    },
-    /**
-     * @method getTone
-     * @param {Number} number
-     * @returns {PromptStroke}
-     */
-    getTone: function(number) {
-        return this.writing === 'tones' ? this.targets[number - 1].at(0) : null;
     },
     /**
      * @method isComplete

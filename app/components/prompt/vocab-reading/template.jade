@@ -1,0 +1,22 @@
+gelato-component(data-name='prompt-vocab-reading')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if reviews
+    - var index = 0
+    - var fillers = ['...']
+
+    for reading in reviews.vocab.getReadings()
+      if (fillers.indexOf(reading) === -1)
+        - var review = reviews.at(index)
+        - var classes = []
+        if (review.get('maskReading'))
+          - classes.push('masked')
+        if (reviews.getPosition() === index)
+          - classes.push('active')
+        div.reading(class=classes.join(' '), data-position=index)
+          span= reading
+        - index++
+      else
+        div.filler
+          span= reading

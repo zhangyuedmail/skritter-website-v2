@@ -1,8 +1,23 @@
-gelato-component(data-name="prompt")
-  #panel-left.no-select
-    #prompt-newness.icon.icon-study-new-character
-    #prompt-canvas-container
-    #prompt-grading-container
-    #prompt-toolbar-container
-  #panel-right
-    #prompt-details-container
+gelato-component(data-name='prompt')
+
+  if view.reviews
+
+    #new-ribbon.hidden
+      .icon.icon-study-new-character
+
+    #panel-left
+      #canvas-container
+      #grading-toolbar-container
+      #action-toolbar-container
+
+    #panel-right
+      #vocab-writing-container
+      #vocab-reading-container
+      #vocab-definition-container
+      #vocab-sentence-container
+      #vocab-mnemonic-container
+
+  else
+
+    #loading-spinner
+      i.fa.fa-5x.fa-spinner.fa-pulse

@@ -1,0 +1,14 @@
+gelato-component(data-name='prompt-vocab-sentence')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if reviews
+    - var sentence = reviews.vocab.getSentence()
+
+    label Example sentence
+
+    div.value
+      if sentence
+        = sentence.getWriting()
+      else
+        em Click here add your own custom sentence

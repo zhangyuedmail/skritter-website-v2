@@ -54,7 +54,7 @@ module.exports = GelatoModel.extend({
         var inflatedParams = [];
         var size = this.getSize();
         var matrix = this.getTargetShape().getMatrix();
-        var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+        var params = this.get('params');
         for (var a = 0, lengthA = params.length; a < lengthA; a++) {
             var param = params[a].clone();
             if (!param.has('trace')) {

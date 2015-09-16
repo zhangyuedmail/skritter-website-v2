@@ -1,0 +1,14 @@
+gelato-component(data-name='prompt-vocab-mnemonic')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if reviews
+    - var mnemonic = reviews.vocab.getMnemonic();
+
+    label Mnemonic
+
+    div.value
+      if (mnemonic)
+        = mnemonic.text
+      else
+        em Click here to add your own custom mnemonic

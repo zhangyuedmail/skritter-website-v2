@@ -1,5 +1,5 @@
-var Vocablist = require('models/vocablist');
 var SkritterCollection = require('base/skritter-collection');
+var Vocablist = require('models/vocablist');
 
 /**
  * @class Vocablists
@@ -19,19 +19,20 @@ module.exports = SkritterCollection.extend({
      */
     model: Vocablist,
     /**
+     * @property url
+     * @type {String}
+     */
+    url: 'vocablists',
+    /**
      * @method parse
      * @param {Object} response
      * @returns Array
      */
     parse: function(response) {
+        console.log(response);
         this.cursor = response.cursor;
         return response.VocabLists;
     },
-    /**
-     * @property url
-     * @type {String}
-     */
-    url: 'vocablists',
     /**
      * @method getAdding
      */

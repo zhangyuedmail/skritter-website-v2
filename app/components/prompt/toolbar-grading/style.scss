@@ -1,0 +1,37 @@
+@import "../../../styles/variables";
+
+gelato-component[data-name="prompt-toolbar-grading"] {
+
+  .btn-default {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    color: #b2b3b4;
+    font-family: $font-slab;
+    min-height: 85px;
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      color: #b2b3b4;
+      outline: 0;
+    }
+    &.selected {
+      &.grade1 { color: $grade1; }
+      &.grade2 { color: $grade2; }
+      &.grade3 { color: $grade3; }
+      &.grade4 { color: $grade4; }
+    }
+    .grade-text {
+      font-size: 12px;
+      font-weight: 300;
+    }
+    .grade-value {
+      font-size: 36px;
+      font-weight: 400;
+    }
+  }
+
+}

@@ -1,0 +1,22 @@
+@import "../../../styles/variables";
+
+gelato-component[data-name='prompt-vocab-reading'] {
+
+  font-size: 18px;
+  font-weight: 300;
+
+  .reading {
+    cursor: pointer;
+    display: inline;
+    margin-right: 2px;
+    &.active { background-color: $white1 !important; }
+    &.masked { background-color: $white5; }
+    &.masked span { visibility: hidden; }
+  }
+
+  .filler {
+    display: inline;
+    margin-right: 2px;
+  }
+
+}
