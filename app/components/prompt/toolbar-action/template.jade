@@ -1,65 +1,23 @@
 gelato-component(data-name="prompt-toolbar-action")
   - var prompt = view.prompt
-  - var reviews = view.prompt.reviews
+  - var review = view.prompt.review
 
-  if reviews
+  if review
 
     .btn-group.btn-group-justified.cursor.text-center(role="group")
 
-      case prompt.part
-
-        when 'defn'
-          .btn-group(role="group")
-            button#toolbar-stroke-order.btn.btn-default(type="button")
-              i.icon.icon-study-stroke-order.disabled
-          .btn-group(role="group")
-            button#toolbar-erase.btn.btn-default(type="button")
-              i.icon.icon-study-erase.disabled
-          .btn-group(role="group")
-            button#toolbar-show.btn.btn-default(type="button")
-              i.icon.icon-study-show.disabled
-          .btn-group(role="group")
-            button#toolbar-correct.btn.btn-default(type="button")
-              i.icon.icon-study-correct
-
-        when 'rdng'
-          .btn-group(role="group")
-            button#toolbar-stroke-order.btn.btn-default(type="button")
-              i.icon.icon-study-stroke-order.disabled
-          .btn-group(role="group")
-            button#toolbar-erase.btn.btn-default(type="button")
-              i.icon.icon-study-erase.disabled
-          .btn-group(role="group")
-            button#toolbar-show.btn.btn-default(type="button")
-              i.icon.icon-study-show.disabled
-          .btn-group(role="group")
-            button#toolbar-correct.btn.btn-default(type="button")
-              i.icon.icon-study-correct
-
-        when 'rune'
-          .btn-group(role="group")
-            button#toolbar-stroke-order.btn.btn-default(type="button")
-              i.icon.icon-study-stroke-order
-          .btn-group(role="group")
-            button#toolbar-erase.btn.btn-default(type="button")
-              i.icon.icon-study-erase
-          .btn-group(role="group")
-            button#toolbar-show.btn.btn-default(type="button")
-              i.icon.icon-study-show
-          .btn-group(role="group")
-            button#toolbar-correct.btn.btn-default(type="button")
-              i.icon.icon-study-correct
-
-        when 'tone'
-          .btn-group(role="group")
-            button#toolbar-stroke-order.btn.btn-default(type="button")
-              i.icon.icon-study-stroke-order.disabled
-          .btn-group(role="group")
-            button#toolbar-erase.btn.btn-default(type="button")
-              i.icon.icon-study-erase.disabled
-          .btn-group(role="group")
-            button#toolbar-show.btn.btn-default(type="button")
-              i.icon.icon-study-show.disabled
-          .btn-group(role="group")
-            button#toolbar-correct.btn.btn-default(type="button")
-              i.icon.icon-study-correct
+      .btn-group(role="group")
+        button#toolbar-stroke-order.btn.btn-default(type="button")
+          i.icon.icon-study-stroke-order(class=(view.buttonTeach ? '' : 'disabled'))
+      .btn-group(role="group")
+        button#toolbar-erase.btn.btn-default(type="button")
+          i.icon.icon-study-erase(class=(view.buttonErase ? '' : 'disabled'))
+      .btn-group(role="group")
+        button#toolbar-show.btn.btn-default(type="button")
+          i.icon.icon-study-show(class=(view.buttonShow ? '' : 'disabled'))
+      .btn-group(role="group")
+        button#toolbar-correct.btn.btn-default(type="button")
+          if (review.get('score') > 1)
+            i.icon.icon-study-correct(class=(view.buttonCorrect ? '' : 'disabled'))
+          else
+            i.icon.icon-study-incorrect(class=(view.buttonCorrect ? '' : 'disabled'))

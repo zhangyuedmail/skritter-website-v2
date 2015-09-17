@@ -32,7 +32,8 @@ module.exports = GelatoModel.extend({
             reviewingStop: 0,
             score: 3,
             submitTime: 0,
-            thinkingStop: 0
+            thinkingStop: 0,
+            teach: false
         };
     },
     /**

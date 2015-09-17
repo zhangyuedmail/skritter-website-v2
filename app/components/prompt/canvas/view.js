@@ -44,6 +44,7 @@ module.exports = GelatoComponent.extend({
         this.stage = this.createStage();
         this.createLayer('grid');
         this.createLayer('character-hint');
+        this.createLayer('character-teach');
         this.createLayer('character');
         this.createLayer('input-background2');
         this.createLayer('input-background1');
@@ -316,6 +317,7 @@ module.exports = GelatoComponent.extend({
      */
     reset: function() {
         this.getLayer('character-hint').removeAllChildren();
+        this.getLayer('character-teach').removeAllChildren();
         this.getLayer('character').removeAllChildren();
         this.getLayer('input-background2').removeAllChildren();
         this.getLayer('input-background1').removeAllChildren();
@@ -640,6 +642,29 @@ module.exports = GelatoComponent.extend({
         var review = this.prompt.reviews.current();
         var shape = review.character.getExpectedStroke().getTargetShape();
         this.fadeShape('stroke-hint', shape);
+        return this;
+    },
+    /**
+     * @method startTeaching
+     * @returns {PromptCanvas}
+     */
+    startTeaching: function() {
+        var review = this.prompt.reviews.current();
+        if (review.character && !review.isComplete()) {
+            var stroke = review.character.getExpectedStroke();
+            if (stroke) {
+                this.clearLayer('character-teach');
+                this.tracePath('character-teach', stroke.getParamPath());
+            }
+        }
+        return this;
+    },
+    /**
+     * @method stopTeaching
+     * @returns {PromptCanvas}
+     */
+    stopTeaching: function() {
+        this.clearLayer('character-teach');
         return this;
     }
 });

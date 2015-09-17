@@ -14,6 +14,26 @@ module.exports = GelatoComponent.extend({
         this.prompt = options.prompt;
     },
     /**
+     * @property buttonCorrect
+     * @type {Boolean}
+     */
+    buttonCorrect: true,
+    /**
+     * @property buttonErase
+     * @type {Boolean}
+     */
+    buttonErase: true,
+    /**
+     * @property buttonShow
+     * @type {Boolean}
+     */
+    buttonShow: true,
+    /**
+     * @property buttonTeach
+     * @type {Boolean}
+     */
+    buttonTeach: true,
+    /**
      * @property template
      * @type {Function}
      */
@@ -37,71 +57,12 @@ module.exports = GelatoComponent.extend({
         'vclick #toolbar-stroke-order': 'handleClickOptionTeach'
     },
     /**
-     * @method disable
-     */
-    disable: function() {
-        this.$('button i').addClass('disabled');
-    },
-    /**
-     * @method disableCorrect
-     */
-    disableCorrect: function() {
-        this.$('#toolbar-correct i').addClass('disabled');
-    },
-    /**
-     * @method disableErase
-     */
-    disableErase: function() {
-        this.$('#toolbar-erase i').addClass('disabled');
-    },
-    /**
-     * @method disableShow
-     */
-    disableShow: function() {
-        this.$('#toolbar-show i').addClass('disabled');
-    },
-    /**
-     * @method disableStrokeOrder
-     */
-    disableStrokeOrder: function() {
-        this.$('#toolbar-stroke-order i').addClass('disabled');
-    },
-    /**
-     * @method enable
-     */
-    enable: function() {
-        this.$('button i').removeClass('disabled');
-    },
-    /**
-     * @method enableCorrect
-     */
-    enableCorrect: function() {
-        this.$('#toolbar-correct i').removeClass('disabled');
-    },
-    /**
-     * @method enableErase
-     */
-    enableErase: function() {
-        this.$('#toolbar-erase i').removeClass('disabled');
-    },
-    /**
-     * @method enableShow
-     */
-    enableShow: function() {
-        this.$('#toolbar-show i').removeClass('disabled');
-    },
-    /**
-     * @method enableStrokeOrder
-     */
-    enableStrokeOrder: function() {
-        this.$('#toolbar-stroke-order i').removeClass('disabled');
-    },
-    /**
      * @method handleClickOptionCorrect
      * @param {Event} event
      */
     handleClickOptionCorrect: function(event) {
         event.preventDefault();
+        this.trigger('click:correct');
     },
     /**
      * @method handleClickOptionErase
@@ -109,6 +70,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionErase: function(event) {
         event.preventDefault();
+        this.trigger('click:erase');
     },
     /**
      * @method handleClickOptionShow
@@ -116,6 +78,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionShow: function(event) {
         event.preventDefault();
+        this.trigger('click:show');
     },
     /**
      * @method handleClickOptionTeach
@@ -123,19 +86,6 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionTeach: function(event) {
         event.preventDefault();
-    },
-    /**
-     * @method toggleCorrect
-     */
-    toggleCorrect: function() {
-        this.$('#toolbar-correct i').removeClass('icon-study-incorrect');
-        this.$('#toolbar-correct i').addClass('icon-study-correct');
-    },
-    /**
-     * @method toggleIncorrect
-     */
-    toggleIncorrect: function() {
-        this.$('#toolbar-correct i').removeClass('icon-study-correct');
-        this.$('#toolbar-correct i').addClass('icon-study-incorrect');
+        this.trigger('click:teach');
     }
 });

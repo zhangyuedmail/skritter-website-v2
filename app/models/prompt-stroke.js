@@ -39,10 +39,11 @@ module.exports = GelatoModel.extend({
      * @returns {DataParam}
      */
     getParamPath: function() {
+        //TODO: make sure to get the trace parameter
         var matrix = this.getTargetShape().getMatrix();
-        var param = app.user.data.params.findWhere({strokeId: this.get('strokeId'), trace: true});
+        var param = this.get('params')[0];
         if (!param) {
-            var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+            var params = this.get('params');
             param = params[params.length - 1];
         }
         param = param.clone();

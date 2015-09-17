@@ -40,6 +40,10 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:next', this.handleCanvasNavigateNext);
         this.listenTo(this.canvas, 'navigate:previous', this.handleCanvasNavigatePrevious);
+        this.listenTo(this.toolbarAction, 'click:correct', this.handleToolbarActionCorrect);
+        this.listenTo(this.toolbarAction, 'click:erase', this.handleToolbarActionErase);
+        this.listenTo(this.toolbarAction, 'click:show', this.handleToolbarActionShow);
+        this.listenTo(this.toolbarAction, 'click:teach', this.handleToolbarActionTeach);
         this.listenTo(this.toolbarGrading, 'change', this.handleToolbarGradingChange);
         this.listenTo(this.toolbarGrading, 'mousedown', this.handleToolbarGradingMousedown);
         this.listenTo(this.toolbarGrading, 'select', this.handleToolbarGradingSelect);
@@ -124,8 +128,16 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartDefn: function() {
         if (this.review.isComplete()) {
+            console.log('complete');
             this.renderPromptComplete();
         } else {
+            console.log('no complete');
+            this.toolbarAction.buttonCorrect = true;
+            this.toolbarAction.buttonErase = false;
+            this.toolbarAction.buttonShow = false;
+            this.toolbarAction.buttonTeach = false;
+            this.toolbarAction.render();
+            console.log(this.toolbarAction);
             this.vocabDefinition.render();
             this.review.start();
         }
@@ -154,6 +166,11 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.renderPromptComplete();
         } else {
+            this.toolbarAction.buttonCorrect = true;
+            this.toolbarAction.buttonErase = false;
+            this.toolbarAction.buttonShow = false;
+            this.toolbarAction.buttonTeach = false;
+            this.toolbarAction.render();
             this.vocabReading.render();
             this.review.start();
         }
@@ -167,6 +184,11 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.review.stop();
             this.canvas.render();
+            this.toolbarAction.buttonCorrect = true;
+            this.toolbarAction.buttonErase = false;
+            this.toolbarAction.buttonShow = false;
+            this.toolbarAction.buttonTeach = false;
+            this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
         } else {
@@ -183,6 +205,11 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.renderPromptComplete();
         } else {
+            this.toolbarAction.buttonCorrect = true;
+            this.toolbarAction.buttonErase = true;
+            this.toolbarAction.buttonShow = true;
+            this.toolbarAction.buttonTeach = true;
+            this.toolbarAction.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
@@ -197,8 +224,15 @@ module.exports = GelatoComponent.extend({
     renderPromptPartRuneComplete: function() {
         if (this.review.isComplete()) {
             this.review.stop();
+            this.review.set('teach', false);
             this.canvas.disableInput();
             this.canvas.injectGradingColor();
+            this.canvas.stopTeaching();
+            this.toolbarAction.buttonCorrect = true;
+            this.toolbarAction.buttonErase = true;
+            this.toolbarAction.buttonShow = false;
+            this.toolbarAction.buttonTeach = false;
+            this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -217,7 +251,11 @@ module.exports = GelatoComponent.extend({
             this.renderPromptComplete();
         } else {
             this.canvas.showCharacterHint();
-            this.toolbarGrading.select(this.review.get('score'));
+            this.toolbarAction.buttonCorrect = true;
+            this.toolbarAction.buttonErase = true;
+            this.toolbarAction.buttonShow = true;
+            this.toolbarAction.buttonTeach = false;
+            this.toolbarAction.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
@@ -232,9 +270,17 @@ module.exports = GelatoComponent.extend({
     renderPromptPartToneComplete: function() {
         if (this.review.isComplete()) {
             this.review.stop();
+            this.review.set('teach', false);
             this.canvas.disableInput();
             this.canvas.injectGradingColor();
             this.canvas.showCharacterHint();
+            this.canvas.stopTeaching();
+            this.toolbarAction.buttonCorrect = true;
+            this.toolbarAction.buttonErase = true;
+            this.toolbarAction.buttonShow = false;
+            this.toolbarAction.buttonTeach = false;
+            this.toolbarAction.render();
+            this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
             this.vocabWriting.render();
         } else {
@@ -256,6 +302,9 @@ module.exports = GelatoComponent.extend({
      */
     handleCanvasAttemptSuccess: function() {
         this.review.set('attempts', 0);
+        if (this.review.get('teach')) {
+            this.canvas.startTeaching();
+        }
     },
     /**
      * @method handleCanvasClick
@@ -321,6 +370,57 @@ module.exports = GelatoComponent.extend({
      */
     handleCanvasNavigatePrevious: function() {
         this.previous();
+    },
+    /**
+     * @method handleToolbarActionCorrect
+     */
+    handleToolbarActionCorrect: function() {
+        this.review.set('score', this.review.get('score') > 1 ? 1 : 3);
+        this.toolbarAction.render();
+        if (this.review.isComplete()) {
+            this.toolbarGrading.select(this.review.get('score'));
+            this.canvas.injectGradingColor();
+        }
+    },
+    /**
+     * @method handleToolbarActionErase
+     */
+    handleToolbarActionErase: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.set({complete: false, teach: false});
+                this.review.character.reset();
+                this.renderPrompt();
+                break;
+            case 'tone':
+                this.review.set({complete: false, teach: false});
+                this.review.character.reset();
+                this.renderPrompt();
+                break;
+        }
+    },
+    /**
+     * @method handleToolbarActionShow
+     */
+    handleToolbarActionShow: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.set('score', 1);
+                this.canvas.showCharacterHint();
+                break;
+        }
+    },
+    /**
+     * @method handleToolbarActionTeach
+     */
+    handleToolbarActionTeach: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.set({score: 1, teach: true});
+                this.canvas.showCharacterHint();
+                this.canvas.startTeaching();
+                break;
+        }
     },
     /**
      * @method handleToolbarGradingChange
