@@ -37,8 +37,12 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.canvas, 'attempt:success', this.handleCanvasAttemptSuccess);
         this.listenTo(this.canvas, 'click', this.handleCanvasClick);
         this.listenTo(this.canvas, 'complete', this.handleCanvasComplete);
+        this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:next', this.handleCanvasNavigateNext);
         this.listenTo(this.canvas, 'navigate:previous', this.handleCanvasNavigatePrevious);
+        this.listenTo(this.toolbarGrading, 'change', this.handleToolbarGradingChange);
+        this.listenTo(this.toolbarGrading, 'mousedown', this.handleToolbarGradingMousedown);
+        this.listenTo(this.toolbarGrading, 'select', this.handleToolbarGradingSelect);
     },
     /**
      * @property template
@@ -59,7 +63,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPrompt: function() {
         this.reset();
-        this.review = this.reviews.getActive();
+        this.review = this.reviews.current();
         switch (this.part) {
             case 'defn':
                 this.renderPromptPartDefn();
@@ -81,7 +85,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptComplete: function() {
-        this.review = this.reviews.getActive();
+        this.review = this.reviews.current();
         switch (this.part) {
             case 'defn':
                 this.renderPromptPartDefnComplete();
@@ -123,6 +127,7 @@ module.exports = GelatoComponent.extend({
             this.renderPromptComplete();
         } else {
             this.vocabDefinition.render();
+            this.review.start();
         }
         return this;
     },
@@ -132,7 +137,9 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartDefnComplete: function() {
         if (this.review.isComplete()) {
+            this.review.stop();
             this.canvas.render();
+            this.toolbarGrading.select(this.review.get('score'));
             this.vocabDefinition.render();
         } else {
             this.renderPromptPartRune();
@@ -148,6 +155,7 @@ module.exports = GelatoComponent.extend({
             this.renderPromptComplete();
         } else {
             this.vocabReading.render();
+            this.review.start();
         }
         return this;
     },
@@ -157,7 +165,9 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartRdngComplete: function() {
         if (this.review.isComplete()) {
+            this.review.stop();
             this.canvas.render();
+            this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
         } else {
             this.renderPromptPartRune();
@@ -176,6 +186,7 @@ module.exports = GelatoComponent.extend({
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
+            this.review.start();
         }
         return this;
     },
@@ -185,7 +196,10 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartRuneComplete: function() {
         if (this.review.isComplete()) {
+            this.review.stop();
             this.canvas.disableInput();
+            this.canvas.injectGradingColor();
+            this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
             this.vocabWriting.render();
         } else {
@@ -198,13 +212,16 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptPartTone: function() {
+        this.canvas.redrawCharacter();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
         } else {
             this.canvas.showCharacterHint();
+            this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
+            this.review.start();
         }
         return this;
     },
@@ -214,7 +231,9 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartToneComplete: function() {
         if (this.review.isComplete()) {
+            this.review.stop();
             this.canvas.disableInput();
+            this.canvas.injectGradingColor();
             this.canvas.showCharacterHint();
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -279,6 +298,19 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method handleCanvasInputUp
+     */
+    handleCanvasInputUp: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.stopThinking();
+                break;
+            case 'tone':
+                this.review.stopThinking();
+                break;
+        }
+    },
+    /**
      * @method handleCanvasNavigateNext
      */
     handleCanvasNavigateNext: function() {
@@ -291,11 +323,41 @@ module.exports = GelatoComponent.extend({
         this.previous();
     },
     /**
+     * @method handleToolbarGradingChange
+     * @param {Number} value
+     */
+    handleToolbarGradingChange: function(value) {
+        this.review.set('score', value);
+    },
+    /**
+     * @method handleToolbarGradingMousedown
+     * @param {Number} value
+     */
+    handleToolbarGradingMousedown: function(value) {
+        if (this.review.isComplete()) {
+            this.review.set('score', value);
+            this.canvas.injectGradingColor();
+        }
+    },
+    /**
+     * @method handleToolbarGradingSelect
+     * @param {Number} value
+     */
+    handleToolbarGradingSelect: function(value) {
+        this.review.set('score', value);
+        if (this.review.isComplete()) {
+            this.next();
+        }
+    },
+    /**
      * @method next
      */
     next: function() {
         if (this.reviews.next()) {
             this.renderPrompt()
+        } else {
+            console.log('next', this.reviews.getItemReviews());
+            this.trigger('next', this.reviews);
         }
     },
     /**
@@ -304,6 +366,8 @@ module.exports = GelatoComponent.extend({
     previous: function() {
         if (this.reviews.previous()) {
             this.renderPrompt()
+        } else {
+            this.trigger('previous', this.reviews);
         }
     },
     /**

@@ -1,5 +1,6 @@
 var GelatoCollection = require('gelato/collection');
 var PromptReview = require('models/prompt-review');
+var Review = require('models/review');
 
 /**
  * @class PromptReviews
@@ -7,67 +8,148 @@ var PromptReview = require('models/prompt-review');
  */
 module.exports = GelatoCollection.extend({
     /**
-     * @method initialize
-     * @constructor
+     * @property group
+     * @type {String}
      */
-    initialize: function() {
-        this.position = 0;
-    },
+    group: null,
+    /**
+     * @property item
+     * @type {Item}
+     */
+    item: null,
+    /**
+     * @property position
+     * @type {Number}
+     */
+    position: 0,
+    /**
+     * @property vocab
+     * @type {Vocab}
+     */
+    vocab: null,
     /**
      * @property model
      * @type {PromptReview}
      */
     model: PromptReview,
     /**
-     * @method getPosition
+     * @method current
      * @returns {PromptReview}
      */
-    getActive: function() {
+    current: function() {
         return this.at(this.position);
     },
     /**
-     * @method getPosition
+     * @method getBaseItemReview
+     * @returns {Object}
+     */
+    getBaseItemReview: function() {
+        return {
+            bearTime: true,
+            itemId: this.item ? this.item.id : this.vocab.id,
+            reviewTime: this.getBaseReviewingTime(),
+            score: this.getBaseScore(),
+            submitTime: this.getBaseSubmitTime(),
+            thinkingTime: this.getBaseThinkingTime(),
+            wordGroup: this.group
+        };
+    },
+    /**
+     * @method getBaseSubmitTime
      * @returns {Number}
      */
-    getPosition: function() {
-        return this.position;
+    getBaseSubmitTime: function() {
+        return this.at(0).get('submitTime');
+    },
+    /**
+     * @method getBaseReviewingTime
+     * @returns {Number}
+     */
+    getBaseReviewingTime: function() {
+        var reviewingTime = 0;
+        for (var i = 0, length = this.length; i < length; i++) {
+            reviewingTime += this.at(i).getReviewingTime();
+        }
+        return reviewingTime;
+    },
+    /**
+     * @method getBaseScore
+     * @returns {Number}
+     */
+    getBaseScore: function() {
+        var score = null;
+        if (this.length > 1) {
+            var totalCount = this.length;
+            var totalScore = 0;
+            var totalWrong = 0;
+            for (var i = 0, length = this.length; i < length; i++) {
+                var reviewScore = this.at(i).get('score');
+                totalScore += reviewScore;
+                if (reviewScore === 1) {
+                    totalWrong++;
+                }
+            }
+            if (totalCount === 2 && totalWrong === 1) {
+                score = 1;
+            } else if (totalWrong > 1) {
+                score = 1;
+            } else {
+                score = Math.floor(totalScore / totalCount);
+            }
+        }
+        return score || this.at(0).get('score');
+    },
+    /**
+     * @method getBaseThinkingTime
+     * @returns {Number}
+     */
+    getBaseThinkingTime: function() {
+        var thinkingTime = 0;
+        for (var i = 0, length = this.length; i < length; i++) {
+            thinkingTime += this.at(i).getThinkingTime();
+        }
+        return thinkingTime;
+    },
+    /**
+     * @method getChildItemReviews
+     * @returns {Array}
+     */
+    getChildItemReviews: function() {
+        return this.map(function(model) {
+            return model.getItemReview();
+        });
+    },
+    /**
+     * @method getItemReviews
+     * @returns {Array}
+     */
+    getItemReviews: function() {
+        var reviews = [this.getBaseItemReview()];
+        if (this.length > 1) {
+            reviews = reviews.concat(this.getChildItemReviews());
+        }
+        return reviews;
     },
     /**
      * @method isComplete
      * @returns {Boolean}
      */
     isComplete: function() {
-        return this.pluck('complete').indexOf(false) === -1;
+        return _.includes(this.pluck('complete'), false);
     },
     /**
      * @method isFirst
      * @returns {Boolean}
      */
     isFirst: function() {
-        return this.getPosition() === 0;
+        return this.position === 0;
     },
     /**
      * @method isLast
      * @returns {Boolean}
      */
     isLast: function() {
-        return this.getPosition() >= this.length;
-    },
-    /**
-     * @method maskAllReadings
-     */
-    maskAllReadings: function() {
-        this.each(function(review) {
-            review.set('maskReading', true);
-        });
-    },
-    /**
-     * @method maskAllWritings
-     */
-    maskAllWritings: function() {
-        this.each(function(review) {
-            review.set('maskWriting', true);
-        });
+        return this.position >= this.length;
     },
     /**
      * @method next
@@ -75,9 +157,9 @@ module.exports = GelatoCollection.extend({
      */
     next: function() {
         if (!this.isLast()) {
-            this.setPosition(this.position + 1);
+            this.position++;
         }
-        return this.getActive();
+        return this.current();
     },
     /**
      * @method previous
@@ -85,35 +167,8 @@ module.exports = GelatoCollection.extend({
      */
     previous: function() {
         if (!this.isFirst()) {
-            this.setPosition(this.position - 1);
+            this.position--;
         }
-        return this.getActive();
-    },
-    /**
-     * @method setPosition
-     * @param {Number} value
-     * @returns {Number}
-     */
-    setPosition: function(value) {
-        this.position = value;
-        this.trigger('change:position', this);
-        this.trigger('change', this);
-        return this.position;
-    },
-    /**
-     * @method unmaskAllReadings
-     */
-    unmaskAllReadings: function() {
-        this.each(function(review) {
-            review.set('maskReading', false);
-        });
-    },
-    /**
-     * @method unmaskAllWritings
-     */
-    unmaskAllWritings: function() {
-        this.each(function(review) {
-            review.set('maskWriting', false);
-        });
+        return this.current();
     }
 });

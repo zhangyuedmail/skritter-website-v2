@@ -15,7 +15,7 @@ gelato-component(data-name='prompt-vocab-writing')
             - var classes = []
             if (!review.get('complete'))
               - classes.push('masked')
-            if (reviews.getPosition() === index)
+            if (reviews.position === index)
               - classes.push('active')
             div.character(class=classes.join(' '), data-position=index)
               span= character

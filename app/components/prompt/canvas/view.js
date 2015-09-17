@@ -488,12 +488,6 @@ module.exports = GelatoComponent.extend({
 
 
 
-
-
-
-
-
-
     /**
      * @method handleCanvasInputUp
      * @param {Array} points
@@ -533,12 +527,20 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method injectGradingColor
+     * @returns {PromptCanvas}
+     */
+    injectGradingColor: function() {
+        this.injectLayerColor('character', this.prompt.review.getGradingColor());
+        return this;
+    },
+    /**
      * @method recognizeRune
      * @param {Array} points
      * @param {createjs.Shape} shape
      */
     recognizeRune: function(points, shape) {
-        var review = this.prompt.reviews.getActive();
+        var review = this.prompt.reviews.current();
         var character = review.character;
         var stroke = character.recognize(points, shape);
         if (stroke) {
@@ -564,7 +566,7 @@ module.exports = GelatoComponent.extend({
      * @param {createjs.Shape} shape
      */
     recognizeTone: function(points, shape) {
-        var review = this.prompt.reviews.getActive();
+        var review = this.prompt.reviews.current();
         var character = review.character;
         var stroke = character.recognize(points, shape);
         var possibleTones = review.getTones();
@@ -635,7 +637,7 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     showStrokeHint: function() {
-        var review = this.prompt.reviews.getActive();
+        var review = this.prompt.reviews.current();
         var shape = review.character.getExpectedStroke().getTargetShape();
         this.fadeShape('stroke-hint', shape);
         return this;
