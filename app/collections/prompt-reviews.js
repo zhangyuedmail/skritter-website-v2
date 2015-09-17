@@ -135,7 +135,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Boolean}
      */
     isComplete: function() {
-        return _.includes(this.pluck('complete'), false);
+        return _.includes(false, this.pluck('complete'));
     },
     /**
      * @method isFirst
