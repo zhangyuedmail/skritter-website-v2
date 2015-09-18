@@ -131,16 +131,13 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartDefn: function() {
         if (this.review.isComplete()) {
-            console.log('complete');
             this.renderPromptComplete();
         } else {
-            console.log('no complete');
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
-            console.log(this.toolbarAction);
             this.vocabDefinition.render();
             this.review.start();
         }
@@ -154,6 +151,11 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.review.stop();
             this.canvas.render();
+            this.toolbarAction.buttonCorrect = true;
+            this.toolbarAction.buttonErase = false;
+            this.toolbarAction.buttonShow = false;
+            this.toolbarAction.buttonTeach = false;
+            this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabDefinition.render();
         } else {

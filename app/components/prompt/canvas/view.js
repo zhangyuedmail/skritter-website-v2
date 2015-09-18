@@ -93,7 +93,7 @@ module.exports = GelatoComponent.extend({
     createStage: function() {
         var canvas = this.$('#input-canvas').get(0);
         var stage = new createjs.Stage(canvas);
-        createjs.Ticker.removeAllEventListeners();
+        createjs.Ticker.removeEventListener('tick', stage);
         createjs.Ticker.addEventListener('tick', stage);
         createjs.Touch.enable(stage);
         createjs.Ticker.setFPS(24);
