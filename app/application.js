@@ -105,14 +105,14 @@ module.exports = GelatoApplication.extend({
      * @returns {Boolean}
      */
     isChinese: function() {
-        return this.get('language') === 'zh';
+        return this.getLanguage() === 'zh';
     },
     /**
      * @method isJapanese
      * @returns {Boolean}
      */
     isJapanese: function() {
-        return this.get('language') === 'ja';
+        return this.getLanguage() === 'ja';
     },
     /**
      * @method isMobile
