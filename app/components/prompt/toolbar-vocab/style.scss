@@ -1,0 +1,13 @@
+@import "../../../styles/variables";
+
+gelato-component[data-name="prompt-toolbar-vocab"] {
+
+  position: absolute;
+  right: 30px;
+
+  i {
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+}

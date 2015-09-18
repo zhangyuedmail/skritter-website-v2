@@ -4,6 +4,7 @@ var Prompt = require('components/prompt/view');
 var PromptCanvas = require('components/prompt/canvas/view');
 var PromptToolbarAction = require('components/prompt/toolbar-action/view');
 var PromptToolbarGrading = require('components/prompt/toolbar-grading/view');
+var PromptToolbarVocab = require('components/prompt/toolbar-vocab/view');
 var PromptVocabDefinition = require('components/prompt/vocab-definition/view');
 var PromptVocabMnemonic = require('components/prompt/vocab-mnemonic/view');
 var PromptVocabReading = require('components/prompt/vocab-reading/view');
@@ -28,6 +29,7 @@ module.exports = GelatoComponent.extend({
         this.canvas = new PromptCanvas({prompt: this});
         this.toolbarAction = new PromptToolbarAction({prompt: this});
         this.toolbarGrading = new PromptToolbarGrading({prompt: this});
+        this.toolbarVocab = new PromptToolbarVocab({prompt: this});
         this.vocabDefinition = new PromptVocabDefinition({prompt: this});
         this.vocabMnemonic = new PromptVocabMnemonic({prompt: this});
         this.vocabReading = new PromptVocabReading({prompt: this});
@@ -115,8 +117,9 @@ module.exports = GelatoComponent.extend({
     renderPromptLoad: function() {
         this.render();
         this.canvas.setElement('#canvas-container').render();
-        this.toolbarAction.setElement('#action-toolbar-container').render();
-        this.toolbarGrading.setElement('#grading-toolbar-container').render();
+        this.toolbarAction.setElement('#toolbar-action-container').render();
+        this.toolbarGrading.setElement('#toolbar-grading-container').render();
+        this.toolbarVocab.setElement('#toolbar-vocab-container').render();
         this.vocabDefinition.setElement('#vocab-definition-container').render();
         this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
         this.vocabReading.setElement('#vocab-reading-container').render();
@@ -482,6 +485,7 @@ module.exports = GelatoComponent.extend({
         this.canvas.remove();
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
+        this.toolbarVocab.remove();
         this.vocabDefinition.remove();
         this.vocabMnemonic.remove();
         this.vocabReading.remove();
