@@ -43,6 +43,10 @@ module.exports = GelatoRouter.extend({
         'words/banned': 'navigateBannedWords',
         'words/mnemonics': 'navigateMnemonics',
         'words/starred': 'navigateStarredWords',
+        'test/offcanvas': function() {
+            this.page = new (require('pages/test-offcanvas/view'));
+            this.page.render();
+        },
         '*route': 'navigateNotFound'
     },
     /**

@@ -20,7 +20,7 @@ module.exports = GelatoPage.extend({
         this.dashboardGoal = new DashboardGoal();
         this.mobileNavbar = new MobileDashboardNavbar();
         this.navbar = new DefaultNavbar();
-        this.mobileNavbar = new MobileDashboardNavbar();
+        // this.mobileNavbar = new MobileDashboardNavbar();
         this.dashboardMonth = new DashboardMonth();
         this.dashboardTotal = new DashboardTotal();
         this.dashboardQueue = new DashboardQueue();
@@ -51,7 +51,7 @@ module.exports = GelatoPage.extend({
         this.dashboardTotal.setElement('#dashboard-total-container').render();
         this.dashboardQueue.setElement('#dashboard-queue-container').render();
         this.navbar.render();
-        this.mobileNavbar.setElement('#dashboard-mobile-navbar-container').render();
+        // this.mobileNavbar.setElement('#dashboard-mobile-navbar-container').render();
         return this;
     },
     /**
