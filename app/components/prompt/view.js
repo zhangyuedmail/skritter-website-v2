@@ -8,6 +8,7 @@ var PromptVocabDefinition = require('components/prompt/vocab-definition/view');
 var PromptVocabMnemonic = require('components/prompt/vocab-mnemonic/view');
 var PromptVocabReading = require('components/prompt/vocab-reading/view');
 var PromptVocabSentence = require('components/prompt/vocab-sentence/view');
+var PromptVocabStyle = require('components/prompt/vocab-style/view');
 var PromptVocabWriting = require('components/prompt/vocab-writing/view');
 
 /**
@@ -31,6 +32,7 @@ module.exports = GelatoComponent.extend({
         this.vocabMnemonic = new PromptVocabMnemonic({prompt: this});
         this.vocabReading = new PromptVocabReading({prompt: this});
         this.vocabSentence = new PromptVocabSentence({prompt: this});
+        this.vocabStyle = new PromptVocabStyle({prompt: this});
         this.vocabWriting = new PromptVocabWriting({prompt: this});
         //listeners
         this.listenTo(this.canvas, 'attempt:fail', this.handleCanvasAttemptFail);
@@ -119,6 +121,7 @@ module.exports = GelatoComponent.extend({
         this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
         this.vocabReading.setElement('#vocab-reading-container').render();
         this.vocabSentence.setElement('#vocab-sentence-container').render();
+        this.vocabStyle.setElement('#vocab-style-container').render();
         this.vocabWriting.setElement('#vocab-writing-container').render();
         return this;
     },
@@ -456,7 +459,6 @@ module.exports = GelatoComponent.extend({
         if (this.reviews.next()) {
             this.renderPrompt()
         } else {
-            console.log('next', this.reviews.getItemReviews());
             this.trigger('next', this.reviews);
         }
     },
@@ -482,6 +484,7 @@ module.exports = GelatoComponent.extend({
         this.vocabMnemonic.remove();
         this.vocabReading.remove();
         this.vocabSentence.remove();
+        this.vocabStyle.remove();
         this.vocabWriting.remove();
         return GelatoComponent.prototype.remove.call(this);
     },
