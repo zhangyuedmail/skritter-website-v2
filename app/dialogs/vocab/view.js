@@ -17,7 +17,7 @@ module.exports = GelatoDialog.extend({
      * @property template
      * @type {Function}
      */
-    template: require('dialogs/vocab/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {VocabDialog}
