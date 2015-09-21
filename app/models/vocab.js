@@ -8,6 +8,13 @@ var PromptReview = require('models/prompt-review');
  */
 module.exports = SkritterModel.extend({
     /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.audio = this.has('audio') ? new Audio(this.get('audio')) : null;
+    },
+    /**
      * @property idAttribute
      * @type {String}
      */
@@ -113,6 +120,7 @@ module.exports = SkritterModel.extend({
         var reviews = new PromptReviews();
         var containedVocabs = this.getContained();
         var characters = [];
+        var now = Date.now();
         var vocab = this;
         var vocabs = [];
         switch (part) {
@@ -129,11 +137,12 @@ module.exports = SkritterModel.extend({
         }
         for (var i = 0, length = vocabs.length; i < length; i++) {
             var review = new PromptReview();
+            review.set('id', [now, i, vocabs[i].id].join('_'));
             review.character = characters[i];
             review.vocab = vocabs[i];
             reviews.add(review);
         }
-        reviews.group = Date.now() + '_' + this.id;
+        reviews.group = now + '_' + this.id;
         reviews.part = part;
         reviews.vocab = vocab;
         return reviews;
@@ -241,6 +250,13 @@ module.exports = SkritterModel.extend({
         return this.get('bannedParts').length ? true : false;
     },
     /**
+     * @method isStarred
+     * @returns {Boolean}
+     */
+    isStarred: function() {
+        return this.get('starred');
+    },
+    /**
      * @method isChinese
      * @returns {Boolean}
      */
@@ -255,6 +271,16 @@ module.exports = SkritterModel.extend({
         return this.get('lang') === 'ja';
     },
     /**
+     * @method play
+     * @returns {Audio}
+     */
+    play: function() {
+        if (this.audio && this.audio.paused) {
+            this.audio.play();
+        }
+        return this.audio;
+    },
+    /**
      * @method toggleBanned
      * @returns {Boolean}
      */
@@ -264,10 +290,22 @@ module.exports = SkritterModel.extend({
             return false;
         }
         if (this.isChinese()) {
-            this.set('bannedParts', this.get('allChineseParts'));
+            this.set('bannedParts', app.user.get('allChineseParts'));
         } else {
-            this.set('bannedParts', this.get('allJapaneseParts'));
+            this.set('bannedParts', app.user.get('allJapaneseParts'));
         }
+        return true;
+    },
+    /**
+     * @method toggleStarred
+     * @returns {Boolean}
+     */
+    toggleStarred: function() {
+        if (this.get('starred')) {
+            this.set('starred', false);
+            return false;
+        }
+        this.set('starred', true);
         return true;
     }
 });

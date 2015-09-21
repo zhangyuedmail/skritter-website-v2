@@ -7,16 +7,6 @@ var Session = require('models/session');
  */
 module.exports = SkritterModel.extend({
     /**
-     * @property session
-     * @type {Session}
-     */
-    session: new Session(),
-    /**
-     * @property urlRoot
-     * @type {String}
-     */
-    urlRoot: 'users',
-    /**
      * @property defaults
      * @type {Object}
      */
@@ -26,6 +16,24 @@ module.exports = SkritterModel.extend({
         gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
         goals: {ja: {items: 20}, zh: {items: 20}}
     },
+    /**
+     * @method parse
+     * @param {Object} response
+     * @returns Array
+     */
+    parse: function(response) {
+        return response.User;
+    },
+    /**
+     * @property session
+     * @type {Session}
+     */
+    session: new Session(),
+    /**
+     * @property urlRoot
+     * @type {String}
+     */
+    urlRoot: 'users',
     /**
      * @method cache
      */
@@ -41,10 +49,26 @@ module.exports = SkritterModel.extend({
     },
     /**
      * @method getStudyParts
-     * @returns {Object}
+     * @returns {Array}
      */
     getStudyParts: function() {
         return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+    },
+    /**
+     * @method getStudyStyles
+     * @returns {Array}
+     */
+    getStudyStyles: function() {
+        var styles = ['both'];
+        if (app.isChinese()) {
+            if (this.get('reviewSimplified')) {
+                styles.push('simp');
+            }
+            if (this.get('reviewTraditional')) {
+                styles.push('trad');
+            }
+        }
+        return styles;
     },
     /**
      * @method hasStudyPart
@@ -52,7 +76,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     hasStudyPart: function(part) {
-        return this.getStudyParts().indexOf(part) > -1;
+        return _.includes(part, this.getStudyParts());
     },
     /**
      * @method isAudioEnabled
@@ -115,13 +139,5 @@ module.exports = SkritterModel.extend({
         app.removeLocalStorage(this.id + '-user');
         app.removeSetting('user');
         app.reload();
-    },
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns Array
-     */
-    parse: function(response) {
-        return response.User;
     }
 });

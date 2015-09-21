@@ -50,6 +50,7 @@ module.exports = GelatoModel.extend({
     getItemReview: function() {
         return {
             bearTime: false,
+            id: this.id,
             itemId: this.item ? this.item.id : this.vocab.id,
             reviewTime: this.getReviewingTime(),
             score: this.get('score'),

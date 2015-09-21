@@ -46,6 +46,7 @@ module.exports = GelatoCollection.extend({
     getBaseItemReview: function() {
         return {
             bearTime: true,
+            id: this.at(0).id,
             itemId: this.item ? this.item.id : this.vocab.id,
             reviewTime: this.getBaseReviewingTime(),
             score: this.getBaseScore(),
@@ -121,14 +122,14 @@ module.exports = GelatoCollection.extend({
     },
     /**
      * @method getItemReviews
-     * @returns {Array}
+     * @returns {Object}
      */
     getItemReviews: function() {
         var reviews = [this.getBaseItemReview()];
         if (this.length > 1) {
             reviews = reviews.concat(this.getChildItemReviews());
         }
-        return reviews;
+        return {id: this.group, data: reviews};
     },
     /**
      * @method isComplete

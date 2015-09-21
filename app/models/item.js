@@ -65,6 +65,7 @@ module.exports = SkritterModel.extend({
         var reviews = new PromptReviews();
         var containedItems = this.getContainedItems();
         var containedVocabs = this.getContainedVocabs();
+        var now = Date.now();
         var part = this.get('part');
         var vocab = this.getVocab();
         var characters = [];
@@ -87,16 +88,29 @@ module.exports = SkritterModel.extend({
         }
         for (var i = 0, length = vocabs.length; i < length; i++) {
             var review = new PromptReview();
+            review.set('id', [now, i, vocabs[i].id].join('_'));
             review.character = characters[i];
             review.item = items[i];
             review.vocab = vocabs[i];
             reviews.add(review);
         }
-        reviews.group = Date.now() + '_' + this.id;
+        reviews.group = now + '_' + vocabs[0].id;
         reviews.item = this;
         reviews.part = part;
         reviews.vocab = vocab;
         return reviews;
+    },
+    /**
+     * @method getReadiness
+     * @returns {Number}
+     */
+    getReadiness: function() {
+        var now = this.collection._sorted || moment().unix();
+        var itemLast = this.get('last');
+        var itemNext = this.get('next');
+        var actualAgo = now - itemLast;
+        var scheduledAgo = itemNext - itemLast;
+        return itemLast ? actualAgo / scheduledAgo : 9999;
     },
     /**
      * @method getVariation
@@ -107,7 +121,7 @@ module.exports = SkritterModel.extend({
     },
     /**
      * @method getVocab
-     * @returns {DataVocab}
+     * @returns {Vocab}
      */
     getVocab: function() {
         var vocabs = this.getVocabs();
@@ -125,13 +139,17 @@ module.exports = SkritterModel.extend({
         for (var i = 0, length = vocabIds.length; i < length; i++) {
             var vocab = this.collection.vocabs.get(vocabIds[i]);
             var vocabStyle = vocab.get('style');
-            if (reviewSimplified && vocabStyle === 'simp') {
-                vocabs.push(vocab);
-            } else if (reviewTraditional && vocabStyle === 'trad') {
-                vocabs.push(vocab);
-            } else if (vocabStyle === 'both') {
-                vocabs.push(vocab);
-            } else if (vocabStyle === 'none') {
+            if (vocab.isChinese()) {
+                if (reviewSimplified && vocabStyle === 'simp') {
+                    vocabs.push(vocab);
+                } else if (reviewTraditional && vocabStyle === 'trad') {
+                    vocabs.push(vocab);
+                } else if (vocabStyle === 'both') {
+                    vocabs.push(vocab);
+                } else if (vocabStyle === 'none') {
+                    vocabs.push(vocab);
+                }
+            } else {
                 vocabs.push(vocab);
             }
         }
