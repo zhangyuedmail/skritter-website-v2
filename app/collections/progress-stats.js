@@ -59,6 +59,7 @@ module.exports = SkritterCollection.extend({
                         start: moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
                         end: moment(momentMonthEnd).format('YYYY-MM-DD')
                     },
+                    remove: false,
                     success: function() {
                         callback();
                     },
@@ -73,6 +74,7 @@ module.exports = SkritterCollection.extend({
                         start: moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
                         end: moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
                     },
+                    remove: false,
                     success: function() {
                         callback();
                     },
@@ -87,6 +89,7 @@ module.exports = SkritterCollection.extend({
                         start: moment(momentMonthStart).format('YYYY-MM-DD'),
                         end: moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
                     },
+                    remove: false,
                     success: function() {
                         callback();
                     },
