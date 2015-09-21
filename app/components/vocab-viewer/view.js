@@ -1,4 +1,5 @@
 var GelatoComponent = require('gelato/component');
+var Vocabs = require('collections/vocabs');
 var DictionaryLookup = require('components/dictionary-lookup/view');
 
 /**
@@ -13,12 +14,13 @@ module.exports = GelatoComponent.extend({
     initialize: function() {
         this.lookup = new DictionaryLookup();
         this.vocab = null;
+        this.vocabs = new Vocabs();
     },
     /**
      * @property template
      * @type {Function}
      */
-    template: require('components/vocab-viewer/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {VocabViewer}
@@ -35,10 +37,10 @@ module.exports = GelatoComponent.extend({
     renderFields: function() {
         this.$('#vocab-difficulty').text(this.vocab.get('toughnessString'));
         this.$('#vocab-definition').html(this.vocab.getDefinition());
-        this.$('#vocab-mnemonic').html(this.vocab.getMnemonicText());
-        this.$('#vocab-reading').text(this.vocab.getReading());
-        this.$('#vocab-sentence').text(this.vocab.getSentenceWriting());
-        this.$('#vocab-writing').text(this.vocab.getWriting());
+        this.$('#vocab-mnemonic').html(this.vocab.getMnemonic().text);
+        this.$('#vocab-reading').text(this.vocab.get('reading'));
+        this.$('#vocab-sentence').text(this.vocab.getSentence().getWriting());
+        this.$('#vocab-writing').text(this.vocab.get('writing'));
         this.lookup.set(this.vocab.get('dictionaryLinks'));
         return this;
     },
@@ -49,23 +51,22 @@ module.exports = GelatoComponent.extend({
      */
     load: function(vocabId) {
         var self = this;
-        app.api.fetchVocabs({
-            ids: vocabId,
-            include_containing: true,
-            include_decomps: true,
-            include_heisigs: true,
-            include_sentences: true,
-            include_strokes: true,
-            include_top_mnemonics: true
-        }, function(result) {
-            console.log(result);
-            app.user.data.add(result);
-            self.vocab = app.user.data.vocabs.get(result.Vocabs[0].id);
-            self.trigger('load', self.vocab);
-            self.renderFields();
-            self.show();
-        }, function(error) {
-            console.error('VOCAB LOAD ERROR:', error);
+        this.vocabs.fetch({
+            data: {
+                include_containing: true,
+                include_decomps: true,
+                include_heisigs: true,
+                include_sentences: true,
+                include_strokes: true,
+                include_top_mnemonics: true,
+                ids: vocabId
+            },
+            success: function(vocabs) {
+                self.vocab = vocabs.at(0);
+                self.trigger('load', self.vocab);
+                self.renderFields();
+                self.show();
+            }
         });
         return this;
     },
