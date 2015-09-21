@@ -23,13 +23,16 @@ gelato-page(data-name='words-mnemonics')
                 td.edited-td Edited
 
               for vocab in view.mnemonicVocabs.models
-                tr(data-vocab-id=vocab.id)
-                  td.checkbox-td
-                    input(type="checkbox")
-                  td.writing-td= vocab.getWriting()
-                  td.reading-td= vocab.getReading()
-                  td.mnemonic-td!= vocab.getMnemonic().text
-                  td.edited-td= moment(vocab.getMnemonic().changed*1000).format('LL')
+                - var mnemonic = vocab.getMnemonic()
+
+                if mnemonic
+                  tr(data-vocab-id=vocab.id)
+                    td.checkbox-td
+                      input(type="checkbox")
+                    td.writing-td= vocab.getWriting()
+                    td.reading-td= vocab.getReading()
+                    td.mnemonic-td!= mnemonic.text
+                    td.edited-td= moment(mnemonic.changed * 1000).format('LL')
 
             if view.mnemonicVocabs.state === 'fetching'
               p.text-center
