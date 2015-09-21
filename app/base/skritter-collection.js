@@ -19,8 +19,10 @@ module.exports = GelatoCollection.extend({
      * @param {Object} options
      */
     sync: function(method, model, options) {
-        options.headers = typeof this.headers === 'function' ? this.headers() : this.headers;
-        options.url = app.getApiUrl() + (typeof this.url === 'function' ? this.url() : this.url);
+        options.headers = _.result(this, 'headers');
+        if (!options.url) {
+            options.url = app.getApiUrl() + _.result(this, 'url');
+        }
         GelatoCollection.prototype.sync.call(this, method, model, options);
     }
 });
