@@ -5,7 +5,7 @@ gelato-page(data-name='vocablist-section')
     .container
       .content-block.main-content
         p
-          a(href="/vocablist/view/"+view.vocablist.id)
+          a(href="/vocablists/view/"+view.vocablist.id)
             span.glyphicon.glyphicon-chevron-left
             if view.vocablist.state === 'standby'
               span.spl back to #{view.vocablist.get('name')}

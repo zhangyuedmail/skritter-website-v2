@@ -13,28 +13,28 @@ gelato-page(data-name='vocablist')
           .sidebar-spacer
             div
               if sort === 'official'
-                a.back-link(href="/vocablist/browse")
+                a.back-link(href="/vocablists/browse")
                   span.glyphicon.glyphicon-chevron-left
                   span back to official lists
 
               else if sort === 'custom' && view.vocablist.get('creator') === app.user.id
-                a.back-link(href="/vocablist/my-lists")
+                a.back-link(href="/vocablists/my-lists")
                   span.glyphicon.glyphicon-chevron-left
                   span back to my lists
                   
               else if sort === 'custom' && view.vocablist.get('creator') !== app.user.id
-                a.back-link(href="/vocablist/published")
+                a.back-link(href="/vocablists/published")
                   span.glyphicon.glyphicon-chevron-left
                   span back to published lists
 
               else if sort === 'chinesepod-label' || sort === 'chinesepod-lesson'
-                a.back-link(href="/vocablist/chinesepod")
+                a.back-link(href="/vocablists/chinesepod")
                   span.glyphicon.glyphicon-chevron-left
                   span back to ChinesePod lists
 
               else if sort
                 // TODO: add links to other custom lists
-                a.back-link(href="/vocablist/queue")
+                a.back-link(href="/vocablists/queue")
                   span.glyphicon.glyphicon-chevron-left
                   span back to lists
 
@@ -198,7 +198,7 @@ gelato-page(data-name='vocablist')
                 for section, i in view.vocablist.get('sections')
                   tr(class=i%2 ? 'even-row' : 'odd-row')
                     td
-                      a(href="/vocablist/view/"+view.vocablist.id+"/"+section.id)
+                      a(href="/vocablists/view/"+view.vocablist.id+"/"+section.id)
                         if singleSect
                           em Single section
                         else if section.name
