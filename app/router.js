@@ -16,8 +16,13 @@ module.exports = GelatoRouter.extend({
      */
     routes: {
         '': 'defaultRoute',
-        'billing/history': 'navigateBillingHistory',
-        'billing/subscription': 'navigateBillingSubscription',
+        'account': 'navigateAccount',
+        'account/billing/history': 'navigateAccountBillingHistory',
+        'account/billing/subscription': 'navigateAccountBillingSubscription',
+        'account/general-settings': 'navigateAccountSettingsGeneral', //LEGACY
+        'account/settings/general': 'navigateAccountSettingsGeneral',
+        'account/settings/study': 'navigateAccountSettingsStudy',
+        'account/study-settings': 'navigateAccountSettingsStudy', //LEGACY
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
         'features': 'navigateFeatures',
@@ -26,27 +31,21 @@ module.exports = GelatoRouter.extend({
         'legal': 'navigateLegal',
         'login': 'navigateLogin',
         'scratchpad/:vocabId(/:part)': 'navigateScratchpad',
-        'settings/general': 'navigateSettingsGeneral',
-        'settings/study': 'navigateSettingsStudy',
         'signup': 'navigateSignup',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'vocab(/:vocabId)': 'navigateVocab',
-        'vocablist/browse': 'navigateVocablistBrowse',
-        'vocablist/chinesepod': 'navigateChinesepod',
-        'vocablist/queue': 'navigateVocablistQueue',
-        'vocablist/published': 'navigateVocablistPublished',
-        'vocablist/my-lists': 'navigateVocablistMyLists',
-        'vocablist/create': 'navigateCreateVocablist',
-        'vocablist/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
-        'vocablist/view/(:vocablistId)': 'navigateVocablist',
+        'vocablists/browse': 'navigateVocablistBrowse',
+        'vocablists/chinesepod': 'navigateChinesepod',
+        'vocablists/queue': 'navigateVocablistQueue',
+        'vocablists/published': 'navigateVocablistPublished',
+        'vocablists/my-lists': 'navigateVocablistMyLists',
+        'vocablists/create': 'navigateCreateVocablist',
+        'vocablists/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
+        'vocablists/view/(:vocablistId)': 'navigateVocablist',
         'words/all': 'navigateAllWords',
         'words/banned': 'navigateBannedWords',
         'words/mnemonics': 'navigateMnemonics',
         'words/starred': 'navigateStarredWords',
-        'test/offcanvas': function() {
-            this.page = new (require('pages/test-offcanvas/view'));
-            this.page.render();
-        },
         '*route': 'navigateNotFound'
     },
     /**
@@ -55,6 +54,61 @@ module.exports = GelatoRouter.extend({
     defaultRoute: function() {
         if (app.user.isLoggedIn()) {
             this.navigateDashboard();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateAccount
+     */
+    navigateAccount: function() {
+        if (app.user.isLoggedIn()) {
+            this.navigate('account/settings/general');
+            this.navigateAccountSettingsGeneral();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateAccountBillingHistory
+     */
+    navigateAccountBillingHistory: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/billing-history/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateAccountBillingSubscription
+     */
+    navigateAccountBillingSubscription: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/billing-subscription/view'))();
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateAccountSettingsGeneral
+     */
+    navigateAccountSettingsGeneral: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/settings-general/view'));
+            this.page.render();
+        } else {
+            this.navigateHome();
+        }
+    },
+    /**
+     * @method navigateAccountSettingsStudy
+     */
+    navigateAccountSettingsStudy: function() {
+        if (app.user.isLoggedIn()) {
+            this.page = new (require('pages/settings-study/view'));
+            this.page.render();
         } else {
             this.navigateHome();
         }
@@ -76,28 +130,6 @@ module.exports = GelatoRouter.extend({
     navigateBannedWords: function() {
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/words-banned/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateBillingHistory
-     */
-    navigateBillingHistory: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/billing-history/view'))();
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateBillingSubscription
-     */
-    navigateBillingSubscription: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/billing-subscription/view'))();
             this.page.render();
         } else {
             this.navigateHome();
@@ -211,28 +243,6 @@ module.exports = GelatoRouter.extend({
         if (app.user.isLoggedIn()) {
             this.page = new (require('pages/scratchpad/view'));
             this.page.render().load(vocabId, part);
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateSettingsGeneral
-     */
-    navigateSettingsGeneral: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/settings-general/view'));
-            this.page.render();
-        } else {
-            this.navigateHome();
-        }
-    },
-    /**
-     * @method navigateSettingsStudy
-     */
-    navigateSettingsStudy: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/settings-study/view'));
-            this.page.render();
         } else {
             this.navigateHome();
         }
