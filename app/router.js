@@ -19,10 +19,10 @@ module.exports = GelatoRouter.extend({
         'account': 'navigateAccount',
         'account/billing/history': 'navigateAccountBillingHistory',
         'account/billing/subscription': 'navigateAccountBillingSubscription',
-        'account/general-settings': 'navigateAccountSettingsGeneral', //LEGACY
         'account/settings/general': 'navigateAccountSettingsGeneral',
+        'account/settings-general': 'navigateAccountSettingsGeneral', //LEGACY
         'account/settings/study': 'navigateAccountSettingsStudy',
-        'account/study-settings': 'navigateAccountSettingsStudy', //LEGACY
+        'account/settings-study': 'navigateAccountSettingsStudy', //LEGACY
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
         'features': 'navigateFeatures',
