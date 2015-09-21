@@ -1,9 +1,12 @@
 gelato-component(data-name='prompt')
+  - var reviews = view.reviews
 
-  if view.reviews
+  if reviews
+    - var item = reviews.item
 
-    #new-ribbon.hidden
-      .icon.icon-study-new-character
+    if item
+      #new-ribbon(class=item.isNew() ? '' : 'hidden')
+        .icon.icon-study-new-character
 
     #panel-left
       #canvas-container

@@ -8,6 +8,7 @@ gelato-component[data-name='prompt'] {
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
 
   #loading-spinner {
     text-align: center;
@@ -18,6 +19,7 @@ gelato-component[data-name='prompt'] {
     left: 0;
     position: absolute;
     top: 0;
+    z-index: 5000;
   }
 
   #panel-left {

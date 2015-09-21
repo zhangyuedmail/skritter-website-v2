@@ -10,6 +10,7 @@ gelato-component(data-name='prompt-vocab-writing')
 
       when 'rune'
         for character in reviews.vocab.getCharacters()
+          //TODO: properly handle japanese kana
           if (fillers.indexOf(character) === -1)
             - var review = reviews.at(index)
             - var classes = []

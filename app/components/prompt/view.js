@@ -12,6 +12,9 @@ var PromptVocabSentence = require('components/prompt/vocab-sentence/view');
 var PromptVocabStyle = require('components/prompt/vocab-style/view');
 var PromptVocabWriting = require('components/prompt/vocab-writing/view');
 
+var ConfirmBanDialog = require('dialogs/confirm-ban/view');
+var VocabDialog = require('dialogs/vocab/view');
+
 /**
  * @class Prompt
  * @extends {GelatoComponent}
@@ -51,6 +54,10 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.toolbarGrading, 'change', this.handleToolbarGradingChange);
         this.listenTo(this.toolbarGrading, 'mousedown', this.handleToolbarGradingMousedown);
         this.listenTo(this.toolbarGrading, 'select', this.handleToolbarGradingSelect);
+        this.listenTo(this.toolbarVocab, 'click:audio', this.handleToolbarVocabAudio);
+        this.listenTo(this.toolbarVocab, 'click:ban', this.handleToolbarVocabBan);
+        this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
+        this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
     },
     /**
      * @property template
@@ -458,13 +465,45 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method handleToolbarVocabAudio
+     */
+    handleToolbarVocabAudio: function() {
+        this.reviews.vocab.play();
+    },
+    /**
+     * @method handleToolbarVocabBan
+     */
+    handleToolbarVocabBan: function() {
+        var dialog = new ConfirmBanDialog();
+        dialog.on('ban', _.bind(function() {
+            this.reviews.vocab.toggleBanned();
+            this.reviews.vocab.save();
+            this.trigger('next', this.reviews);
+        }, this));
+        dialog.open();
+    },
+    /**
+     * @method handleToolbarVocabInfo
+     */
+    handleToolbarVocabInfo: function() {
+        var dialog = new VocabDialog();
+        dialog.open().load(this.reviews.vocab.id);
+    },
+    /**
+     * @method handleToolbarVocabStar
+     */
+    handleToolbarVocabStar: function() {
+        this.reviews.vocab.toggleStarred();
+        this.toolbarVocab.render();
+    },
+    /**
      * @method next
      */
     next: function() {
         if (this.reviews.next()) {
             this.renderPrompt()
         } else {
-            this.trigger('next', this.reviews);
+            this.trigger('next', this.reviews.getItemReviews());
         }
     },
     /**
@@ -474,7 +513,7 @@ module.exports = GelatoComponent.extend({
         if (this.reviews.previous()) {
             this.renderPrompt()
         } else {
-            this.trigger('previous', this.reviews);
+            this.trigger('previous', this.reviews.getItemReviews());
         }
     },
     /**

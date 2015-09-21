@@ -5,7 +5,8 @@ gelato-component(data-name="prompt-canvas").cursor.no-select
   canvas#input-canvas
 
   #canvas-navigation
-    i#navigate-previous.fa.fa-angle-left
+    if !reviews.isFirst()
+      i#navigate-previous.fa.fa-angle-left
     i#navigate-next.fa.fa-angle-right
 
   if reviews

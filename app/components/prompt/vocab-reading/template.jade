@@ -18,7 +18,10 @@ gelato-component(data-name='prompt-vocab-reading')
             if (reviews.position === index)
               - classes.push('active')
             div.reading(class=classes.join(' '), data-position=index)
-              span= reading
+              if reviews.vocab.isChinese()
+                span= app.fn.pinyin.toTone(reading)
+              else
+                span= reading
             - index++
           else
             div.filler

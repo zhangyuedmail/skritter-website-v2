@@ -8,6 +8,8 @@ gelato-component[data-name="prompt-toolbar-vocab"] {
   i {
     cursor: pointer;
     margin-right: 10px;
+    &.banned { background-color: red; }
+    &.starred { background-color: yellow; }
   }
 
 }
