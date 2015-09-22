@@ -33,6 +33,24 @@ module.exports = SkritterModel.extend({
         return response.Vocab || response;
     },
     /**
+     * @method fetchMissing
+     * @param {Function} [callback]
+     */
+    fetchMissing: function(callback) {
+        $.ajax({
+            context: this,
+            headers: app.user.session.getHeaders(),
+            type: 'POST',
+            url: app.getApiUrl() + 'items/addmissing?vocabId=' + this.id,
+            error: function(error) {
+                typeof callback === 'function' && callback(error);
+            },
+            success: function() {
+                typeof callback === 'function' && callback();
+            }
+        });
+    },
+    /**
      * @method getBase
      * @returns {String}
      */
