@@ -21,6 +21,7 @@ module.exports = GelatoPage.extend({
         this.sectionId = null;
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+        this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
     },
     /**
      * @property events
@@ -57,7 +58,7 @@ module.exports = GelatoPage.extend({
      * @param {PromptReviews} reviews
      */
     handlePromptNext: function(reviews) {
-        this.items.addReviews(reviews);
+        this.items.addReviews(reviews.getItemReviews());
         this.items.reviews.save();
         this.counter++;
         this.next();
@@ -66,7 +67,16 @@ module.exports = GelatoPage.extend({
      * @method handlePromptPrevious
      * @param {PromptReviews} reviews
      */
-    handlePromptPrevious: function(reviews) {},
+    handlePromptPrevious: function(reviews) {
+        this.previous();
+    },
+    /**
+     * @method handlePromptSkip
+     * @param {PromptReviews} reviews
+     */
+    handlePromptSkip: function(reviews) {
+        this.next();
+    },
     /**
      * @method load
      * @param {String} [listId]

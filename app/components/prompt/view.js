@@ -216,6 +216,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptPartRune: function() {
+        this.canvas.render();
         this.canvas.redrawCharacter();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
@@ -261,6 +262,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptPartTone: function() {
+        this.canvas.render();
         this.canvas.redrawCharacter();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
@@ -477,8 +479,12 @@ module.exports = GelatoComponent.extend({
         var dialog = new ConfirmBanDialog();
         dialog.on('ban', _.bind(function() {
             this.reviews.vocab.toggleBanned();
-            this.reviews.vocab.save();
-            this.trigger('next', this.reviews);
+            this.reviews.vocab.save(null, {
+                complete: _.bind(function() {
+                    this.trigger('skip', this.reviews);
+                    dialog.close();
+                }, this)
+            });
         }, this));
         dialog.open();
     },
@@ -494,7 +500,11 @@ module.exports = GelatoComponent.extend({
      */
     handleToolbarVocabStar: function() {
         this.reviews.vocab.toggleStarred();
-        this.toolbarVocab.render();
+        this.reviews.vocab.save(null, {
+            complete: _.bind(function() {
+                this.toolbarVocab.render();
+            }, this)
+        });
     },
     /**
      * @method next
@@ -503,7 +513,7 @@ module.exports = GelatoComponent.extend({
         if (this.reviews.next()) {
             this.renderPrompt()
         } else {
-            this.trigger('next', this.reviews.getItemReviews());
+            this.trigger('next', this.reviews);
         }
     },
     /**
@@ -513,7 +523,7 @@ module.exports = GelatoComponent.extend({
         if (this.reviews.previous()) {
             this.renderPrompt()
         } else {
-            this.trigger('previous', this.reviews.getItemReviews());
+            this.trigger('previous', this.reviews);
         }
     },
     /**

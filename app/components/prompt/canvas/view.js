@@ -506,13 +506,6 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
-     * @method handleStrokeTweenComplete
-     * @param {PromptCharacter} character
-     */
-    handleStrokeTweenComplete: function(character) {
-
-    },
-    /**
      * @method hideCharacterHint
      * @returns {PromptCanvas}
      */

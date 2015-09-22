@@ -123,7 +123,7 @@ module.exports = SkritterModel.extend({
         var itemNext = this.get('next');
         var actualAgo = now - itemLast;
         var scheduledAgo = itemNext - itemLast;
-        return itemLast ? actualAgo / scheduledAgo : 9999;
+        return this.isActive() ? (itemLast ? actualAgo / scheduledAgo : 9999) : Number.NEGATIVE_INFINITY;
     },
     /**
      * @method getVariation
@@ -167,6 +167,13 @@ module.exports = SkritterModel.extend({
             }
         }
         return vocabs;
+    },
+    /**
+     * @method isActive
+     * @returns {Boolean}
+     */
+    isActive: function() {
+        return this.get('vocabIds').length && !this.getVocab().isBanned();
     },
     /**
      * @method isChinese

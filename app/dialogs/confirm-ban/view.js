@@ -33,7 +33,6 @@ module.exports = GelatoDialog.extend({
     handleClickButtonBan: function(event) {
         event.preventDefault();
         this.trigger('ban');
-        this.close();
     },
     /**
      * @method handleClickButtonCancel
