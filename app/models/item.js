@@ -13,6 +13,14 @@ module.exports = SkritterModel.extend({
      */
     idAttribute: 'id',
     /**
+     * @method parse
+     * @param {Object} response
+     * @returns {Object}
+     */
+    parse: function(response) {
+        return response.Item || response;
+    },
+    /**
      * @property urlRoot
      * @type {String}
      */
@@ -30,20 +38,22 @@ module.exports = SkritterModel.extend({
      */
     getContainedItems: function() {
         var containedItems = [];
-        var containedVocabs = this.getContainedVocabs();
         var part = this.get('part');
-        for (var i = 0, length = containedVocabs.length; i < length; i++) {
-            var vocabId = containedVocabs[i].id;
-            var splitId = vocabId.split('-');
-            var fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
-            var intendedId = [app.user.id, vocabId, part].join('-');
-            if (this.collection.contained.get(intendedId)) {
-                containedItems.push(this.collection.contained.get(intendedId));
-            } else {
-                containedItems.push(this.collection.contained.get(fallbackId));
+        if (['rune', 'tone'].indexOf(part) > -1) {
+            var containedVocabs =  this.getContainedVocabs();
+            for (var i = 0, length = containedVocabs.length; i < length; i++) {
+                var vocabId = containedVocabs[i].id;
+                var splitId = vocabId.split('-');
+                var fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
+                var intendedId = [app.user.id, vocabId, part].join('-');
+                if (this.collection.contained.get(intendedId)) {
+                    containedItems.push(this.collection.contained.get(intendedId));
+                } else {
+                    containedItems.push(this.collection.contained.get(fallbackId));
+                }
             }
         }
-        return _.includes(['rune', 'tone'], part) ? containedItems : [];
+        return  containedItems;
     },
     /**
      * @method getContainedVocabs
@@ -51,9 +61,12 @@ module.exports = SkritterModel.extend({
      */
     getContainedVocabs: function() {
         var containedVocabs = [];
-        var containedVocabIds = this.getVocab().get('containedVocabIds') || [];
-        for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-            containedVocabs.push(this.collection.vocabs.get(containedVocabIds[i]));
+        var vocab = this.getVocab();
+        if (vocab) {
+            var containedVocabIds = vocab.get('containedVocabIds') || [];
+            for (var i = 0, length = containedVocabIds.length; i < length; i++) {
+                containedVocabs.push(this.collection.vocabs.get(containedVocabIds[i]));
+            }
         }
         return containedVocabs;
     },
@@ -175,13 +188,5 @@ module.exports = SkritterModel.extend({
      */
     isNew: function() {
         return !this.get('reviews');
-    },
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns {Object}
-     */
-    parse: function(response) {
-        return response.Item || response;
     }
 });
