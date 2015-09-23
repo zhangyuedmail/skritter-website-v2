@@ -26,6 +26,7 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function() {
         //properties
+        this.editing = false;
         this.part = null;
         this.reviews = null;
         //components
@@ -56,6 +57,7 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.toolbarGrading, 'select', this.handleToolbarGradingSelect);
         this.listenTo(this.toolbarVocab, 'click:audio', this.handleToolbarVocabAudio);
         this.listenTo(this.toolbarVocab, 'click:ban', this.handleToolbarVocabBan);
+        this.listenTo(this.toolbarVocab, 'click:edit', this.handleToolbarVocabEdit);
         this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
         this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
     },
@@ -487,6 +489,27 @@ module.exports = GelatoComponent.extend({
             });
         }, this));
         dialog.open();
+    },
+    /**
+     * @method handleToolbarVocabEdit
+     */
+    handleToolbarVocabEdit: function() {
+        if (this.editing) {
+            this.editing = false;
+            this.vocabDefinition.editable = false;
+            this.vocabMnemonic.editable = false;
+            this.reviews.vocab.save({
+                customDefinition: this.vocabDefinition.getValue(),
+                mnemonic: this.vocabMnemonic.getValue()
+            });
+        } else {
+            this.editing = true;
+            this.vocabDefinition.editable = true;
+            this.vocabMnemonic.editable = true;
+
+        }
+        this.vocabDefinition.render();
+        this.vocabMnemonic.render();
     },
     /**
      * @method handleToolbarVocabInfo

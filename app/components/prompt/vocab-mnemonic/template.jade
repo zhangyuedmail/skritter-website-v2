@@ -8,7 +8,10 @@ gelato-component(data-name='prompt-vocab-mnemonic')
     label Mnemonic
 
     .value
-      if (mnemonic)
-        = mnemonic.text
+      if view.editable
+        textarea= mnemonic ? mnemonic.text : ''
       else
-        em Click here to add your own custom mnemonic
+        if (mnemonic && mnemonic.text != '')
+          span!= app.fn.textToHTML(mnemonic.text)
+        else
+          em Click the 'edit' icon to add a mnemonic

@@ -25,5 +25,12 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
         return this;
+    },
+    /**
+     * @method getValue
+     * @returns {Object}
+     */
+    getValue: function() {
+        return this.$('textarea').val();
     }
 });

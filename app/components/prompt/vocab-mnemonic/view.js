@@ -11,6 +11,7 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function(options) {
+        this.editable = false;
         this.prompt = options.prompt;
     },
     /**
@@ -25,5 +26,12 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
         return this;
+    },
+    /**
+     * @method getValue
+     * @returns {Object}
+     */
+    getValue: function() {
+        return {text: this.$('textarea').val()}
     }
 });
