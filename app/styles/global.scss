@@ -1,16 +1,16 @@
 @import "variables";
 
-.background1 {
+.background1 { background: url("#{$dir-assets}/textures/bg-retina-wood.png") repeat; }
+
+.background2 { background: url("#{$dir-assets}/textures/bg-characters.png") repeat; }
+
+.background3 {
   background: url("#{$dir-assets}/backgrounds/landscape4.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
 }
-
-.background2 { background: url("#{$dir-assets}/textures/bg-retina-wood.png") repeat; }
-
-.background3 { background: url("#{$dir-assets}/textures/bg-characters.png") repeat; }
 
 .content-block {
   background-color: $white1;

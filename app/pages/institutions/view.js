@@ -21,6 +21,11 @@ module.exports = GelatoPage.extend({
         }
     },
     /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: '',
+    /**
      * @property events
      * @type {Object}
      */

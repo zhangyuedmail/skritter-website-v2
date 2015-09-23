@@ -14,6 +14,11 @@ module.exports = GelatoPage.extend({
         this.navbar = new MarketingNavbar();
     },
     /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: 'background2',
+    /**
      * @property title
      * @type {String}
      */
