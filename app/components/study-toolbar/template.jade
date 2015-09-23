@@ -1,0 +1,9 @@
+gelato-component(data-name='study-toolbar')
+  .row
+    .col-xs-4.text-left
+      i.fa.fa-plus-circle
+    .col-xs-4.text-center
+      span= app.fn.convertTimeToClock(view.stats.getDailyTimeStudied() * 1000)
+    .col-xs-4.text-right
+      i.fa.fa-list-ul
+      i.fa.fa-gear
