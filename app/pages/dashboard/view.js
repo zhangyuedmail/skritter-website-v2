@@ -1,6 +1,7 @@
 var GelatoPage = require('gelato/page');
 var DashboardGoal = require('components/dashboard-goal/view');
 var DashboardMonth = require('components/dashboard-month/view');
+var DashboardStatus = require('components/dashboard-status/view');
 var DashboardTotal = require('components/dashboard-total/view');
 var DashboardQueue = require('components/dashboard-queue/view');
 var GoalSettingsDialog = require('dialogs/goal-settings/view');
@@ -17,10 +18,11 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.dashboardGoal = new DashboardGoal();
         this.mobileNavbar = new MobileDashboardNavbar();
         this.navbar = new DefaultNavbar();
-        // this.mobileNavbar = new MobileDashboardNavbar();
+
+        //TODO: replace dashboard status with goal
+        this.dashboardGoal = new DashboardStatus();
         this.dashboardMonth = new DashboardMonth();
         this.dashboardTotal = new DashboardTotal();
         this.dashboardQueue = new DashboardQueue();
