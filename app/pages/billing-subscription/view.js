@@ -41,7 +41,7 @@ module.exports = GelatoPage.extend({
             this.coupon.unset('code');
         });
         // this.listenToOnce(this.subscription, 'sync', function() {
-        //     this.subscription.set('subscribed', 'ios'); // TESTING
+        //     this.subscription.set('subscribed', 'paypal'); // TESTING
         // });
         this.listenTo(this.coupon, 'state', this.renderMainContent);
     },

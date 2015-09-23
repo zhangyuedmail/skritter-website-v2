@@ -88,6 +88,23 @@ gelato-page(data-name='billing-subscription')
                   button.btn.btn-block.btn-primary#unsubscribe-itunes-btn
                     span I have unsubscribed through iTunes
                     i.fa.fa-1x.fa-spinner.fa-pulse.hide
-                  
+                    
+              if subscribed === 'paypal'
+                .title Paypal Subscriptions
+                .alert.alert-info
+                  p
+                    | Your subscription is controlled through Paypal.
+                    | To cancel or get more info about your subscription,
+                    | please go to
+                    a.spl(href="https://www.paypal.com/" target="_blank") the Paypal website
+                    | .
+
+                  p 
+                    | If you would like to pay with a credit card here,
+                    | or through some other service, such as Apple or Google
+                    | Play, first you should unsubscribe from your Paypal Skritter
+                    | subscription. Otherwise you may be erroneously billed twice.
+
+                              
             
                   
