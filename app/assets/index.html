@@ -10,15 +10,34 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300,400' rel='stylesheet' type='text/css'>
     <link rel="apple-touch-icon" href="/favicon.png"/>
     <link rel="shortcut icon" href="/favicon.ico"/>
-    <link rel="stylesheet" href="/styles/libraries.css"/>
-    <link rel="stylesheet" href="/styles/application.css"/>
-    <script src="/js/libraries.js"></script>
-    <script src="/js/application.js"></script>
-    <script>require('initialize');</script>
+    <script>
+        (function () {
+            //TODO: merge this into gelato framework
+            function insertElement(type, target) {
+                var element = document.createElement(type);
+                var prefix = document.location.protocol === 'file:' ? '' : '/';
+                switch (type) {
+                    case 'link':
+                        element.href = prefix + target;
+                        element.rel = 'stylesheet';
+                        break;
+                    case 'script':
+                        element.src = prefix + target;
+                        break;
+                }
+                document.head.appendChild(element);
+                return element;
+            }
+            insertElement('link', 'styles/libraries.css');
+            insertElement('link', 'styles/application.css');
+            insertElement('script', 'js/libraries.js').onload = function() {
+                insertElement('script', 'js/application.js').onload = function() {
+                    require("initialize");
+                };
+            };
+        })();
+    </script>
 </head>
 <body>
-<gelato-application></gelato-application>
-<gelato-dialogs></gelato-dialogs>
-<gelato-sidebars></gelato-sidebars>
 </body>
 </html>
