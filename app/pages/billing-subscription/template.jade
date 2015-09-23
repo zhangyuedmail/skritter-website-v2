@@ -1,4 +1,5 @@
 - var vacation = view.subscription.get('vacation');
+- var subscribed = view.subscription.get('subscribed');
 
 gelato-page(data-name='billing-subscription')
   .container
@@ -68,4 +69,25 @@ gelato-page(data-name='billing-subscription')
                     else
                       a#go-on-vacation-link Go on vacation
                       
+              hr
+              
+              if subscribed === 'ios'
+                .title Apple Subscriptions
+                .alert.alert-info
+                  p
+                    | Your subscription is controlled through Apple.
+                    | To cancel or get more info about your subscription,
+                    | please go to iTunes.
+
+                  p 
+                    | If you would like to pay with a credit card here,
+                    | or through some other service, such as Paypal or Google
+                    | Play, first you should unsubscribe from your Apple Skritter
+                    | subscription. Otherwise you may be erroneously billed twice.
+                  
+                  button.btn.btn-block.btn-primary#unsubscribe-itunes-btn
+                    span I have unsubscribed through iTunes
+                    i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                  
+            
                   

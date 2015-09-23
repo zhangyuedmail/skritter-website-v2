@@ -22,7 +22,8 @@ module.exports = GelatoPage.extend({
     events: {
         'vclick #redeem-code-btn': 'handleClickRedeemCodeButton',
         'vclick #go-on-vacation-link': 'handleClickGoOnVacationLink',
-        'vclick #cancel-vacation-link': 'handleClickCancelVacationLink'
+        'vclick #cancel-vacation-link': 'handleClickCancelVacationLink',
+        'vclick #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton'
     },
     /**
      * @method initialize
@@ -39,6 +40,9 @@ module.exports = GelatoPage.extend({
             this.subscription.set(response.Subscription);
             this.coupon.unset('code');
         });
+        // this.listenToOnce(this.subscription, 'sync', function() {
+        //     this.subscription.set('subscribed', 'ios'); // TESTING
+        // });
         this.listenTo(this.coupon, 'state', this.renderMainContent);
     },
     /**
@@ -94,6 +98,24 @@ module.exports = GelatoPage.extend({
         this.coupon.set('code', this.$('#code-input').val());
         this.coupon.use();
         this.renderMainContent();
+    },
+    /**
+     * @method handleClickUnsubscribeITunesButton
+     */
+    handleClickUnsubscribeITunesButton: function() {
+        var url = app.getApiUrl() + this.subscription.url() + '/ios/cancel';
+        var headers = app.user.session.getHeaders();
+        this.$('#unsubscribe-itunes-btn *').toggleClass('hide');
+        $.ajax({
+            url: url,
+            headers: headers,
+            method: 'POST',
+            context: this,
+            success: function(response) {
+                this.subscription.set(response.Subscription);
+                this.renderMainContent();
+            }
+        })
     },
     /**
      * @method renderSectionContent
