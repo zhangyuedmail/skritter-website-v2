@@ -1,7 +1,7 @@
 var GelatoNavbar = require('gelato/navbar');
 
 /**
- * @class DefaultAuthenticatedNavbar
+ * @class DefaultNavbar
  * @extends {GelatoNavbar}
  */
 module.exports = GelatoNavbar.extend({
@@ -12,7 +12,7 @@ module.exports = GelatoNavbar.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {DefaultAuthenticatedNavbar}
+     * @returns {DefaultNavbar}
      */
     render: function() {
         this.renderTemplate();
