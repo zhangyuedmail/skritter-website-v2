@@ -47,12 +47,12 @@ module.exports = GelatoApplication.extend({
         if (localStorage.getItem('guest-authentication')) {
             var user = localStorage.getItem('application-user');
             if (user) {
-                localStorage.clearItem(user + '-authentication');
-                localStorage.clearItem(user + '-settings');
-                localStorage.clearItem(user + '-ja-data');
-                localStorage.clearItem(user + '-zh-data');
+                localStorage.removeItem(user + '-authentication');
+                localStorage.removeItem(user + '-settings');
+                localStorage.removeItem(user + '-ja-data');
+                localStorage.removeItem(user + '-zh-data');
             }
-            localStorage.clearItem('guest-authentication');
+            localStorage.removeItem('guest-authentication');
             app.reload();
         }
 
