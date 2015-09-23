@@ -87,8 +87,8 @@ module.exports = GelatoPage.extend({
      */
     load: function(listId, sectionId) {
         //TODO: support list and section parameters
-        this.listId = listId;
-        this.sectionid = sectionId;
+        this._listId = listId;
+        this._sectionid = sectionId;
         async.waterfall([
             _.bind(function(callback) {
                 this.items.fetch({

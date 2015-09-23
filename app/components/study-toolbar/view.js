@@ -1,5 +1,7 @@
 var GelatoComponent = require('gelato/component');
 var ProgressStats = require('collections/progress-stats');
+var ListSettingsDialog = require('dialogs/list-settings/view');
+var StudySettingsDialog = require('dialogs/study-settings/view');
 
 /**
  * @class StudyToolbar
@@ -16,6 +18,14 @@ module.exports = GelatoComponent.extend({
         this.stats.fetchToday();
     },
     /**
+     * @property events
+     * @type {Object}
+     */
+    events: {
+        'vclick #button-list-settings': 'handleClickListSettings',
+        'vclick #button-study-settings': 'handleClickStudySettings'
+    },
+    /**
      * @property template
      * @type {Function}
      */
@@ -27,5 +37,23 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
         return this;
+    },
+    /**
+     * @method handleClickStudySettings
+     * @param {Event} event
+     */
+    handleClickListSettings: function(event) {
+        event.preventDefault();
+        var dialog = new ListSettingsDialog();
+        dialog.open();
+    },
+    /**
+     * @method handleClickStudySettings
+     * @param {Event} event
+     */
+    handleClickStudySettings: function(event) {
+        event.preventDefault();
+        var dialog = new StudySettingsDialog();
+        dialog.open();
     }
 });
