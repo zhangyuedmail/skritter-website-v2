@@ -67,10 +67,7 @@ module.exports = SkritterCollection.extend({
     addReviews: function(reviews) {
         for (var i = 0, length = reviews.data.length; i < length; i++) {
             var review = reviews.data[i];
-            var item = this.get(review.itemId);
-            if (!item) {
-                console.error('REVIEW ADD ERROR:', reviews);
-            }
+            var item = this.get(review.itemId) || this.contained.get(review.itemId);
             review.actualInterval = item.get('last') ? review.submitTime - item.get('last') : 0;
             review.currentInterval = item.get('interval') || 0;
             review.newInterval = app.fn.interval.quantify(item, review.score);
