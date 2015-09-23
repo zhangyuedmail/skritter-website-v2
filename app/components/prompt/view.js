@@ -311,18 +311,36 @@ module.exports = GelatoComponent.extend({
      * @method handleCanvasAttemptFail
      */
     handleCanvasAttemptFail: function() {
-        this.review.set('attempts', this.review.get('attempts') + 1);
-        if (this.review.get('attempts') > 2) {
-            this.canvas.showStrokeHint();
+        switch (this.part) {
+            case 'rune':
+                this.review.set('attempts', this.review.get('attempts') + 1);
+                if (this.review.get('attempts') > 3) {
+                    this.canvas.showStrokeHint();
+                    this.review.set('score', 1);
+                } else if (this.review.get('attempts') > 2) {
+                    this.canvas.showStrokeHint();
+                }
+                break;
+            case 'tone':
+                this.review.set('score', 1);
+                break;
         }
+
     },
     /**
      * @method handleCanvasAttemptSuccess
      */
     handleCanvasAttemptSuccess: function() {
-        this.review.set('attempts', 0);
-        if (this.review.get('teach')) {
-            this.canvas.startTeaching();
+        switch (this.part) {
+            case 'rune':
+                this.review.set('attempts', 0);
+                if (this.review.get('teach')) {
+                    this.canvas.startTeaching();
+                }
+                break;
+            case 'tone':
+                this.review.set('score', 3);
+                break;
         }
     },
     /**
