@@ -43,6 +43,19 @@ module.exports = GelatoApplication.extend({
             };
         }
 
+        //TODO: depreciate this code after some time
+        if (localStorage.getItem('guest-authentication')) {
+            var user = localStorage.getItem('application-user');
+            if (user) {
+                localStorage.clearItem(user + '-authentication');
+                localStorage.clearItem(user + '-settings');
+                localStorage.clearItem(user + '-ja-data');
+                localStorage.clearItem(user + '-zh-data');
+            }
+            localStorage.clearItem('guest-authentication');
+            app.reload();
+        }
+
     },
     /**
      * @property defaults
