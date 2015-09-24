@@ -1,0 +1,16 @@
+@import "../../../styles/variables";
+
+gelato-component[data-name='prompt-vocab-mnemonic'] {
+
+  label {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .value {
+    font-size: 14px;
+    font-weight: 300;
+    textarea { width: 100%; }
+  }
+
+}

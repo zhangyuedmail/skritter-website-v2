@@ -2,8 +2,11 @@
 
 gelato-page[data-name='dashboard'] {
 
-  .content-block {
+  #first-row .content-block {
     height: 300px;
+  }
+
+  .content-block {
     padding-top: 30px;
     .options {
       i { cursor: pointer; }
@@ -21,6 +24,10 @@ gelato-page[data-name='dashboard'] {
       text-transform: uppercase;
       top: 20px;
     }
+  }
+
+  #vocablist-table-container {
+    margin-top: 15px;
   }
 
 }

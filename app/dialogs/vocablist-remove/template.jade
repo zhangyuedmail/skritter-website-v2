@@ -1,0 +1,23 @@
+gelato-dialog(data-name='vocablist-remove')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h4.modal-title
+            | Remove From Studies:
+            br
+            em  "#{view.vocablist.get('name')}"
+        .modal-body
+          p.text-danger Are you sure you want to delete all words in this list from study?
+
+          strong About Word Deletion
+
+          ul.text-muted
+            li Words that have also been added from other lists will not be deleted
+            li We recommend continuing to study the words. Then you won't forget them!
+            li Progress on these words are not removed.
+              | If you add them again later, you'll start where you left off.
+
+        .modal-footer
+          button#cancel-btn.btn.btn-default(type="button") Cancel
+          button#confirm-btn.btn.btn-danger(type="button") Confirm - Remove this list!

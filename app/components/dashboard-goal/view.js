@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/modules/component');
+var GelatoComponent = require('gelato/component');
 
 /**
  * @class DashboardGoal
@@ -11,17 +11,13 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function() {
         this.doughnut = null;
-        this.listenTo(app.user.settings, 'change:goals', this.updateDoughnut);
-        this.listenTo(app.user.data.items, 'fetch:daily', this.updateItems);
-        this.listenTo(app.user.data.stats, 'fetch', this.updateDoughnut);
-        this.listenTo(app.user.data.stats, 'fetch', this.updateItems);
         this.on('resize', this.resize);
     },
     /**
      * @property template
      * @type {Function}
      */
-    template: require('components/dashboard-goal/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {DashboardGoal}
@@ -75,8 +71,8 @@ module.exports = GelatoComponent.extend({
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
             }
         });
-        this.updateDoughnut();
-        this.updateItems();
+        //this.updateDoughnut();
+        //this.updateItems();
         return this;
     },
     /**
@@ -104,7 +100,7 @@ module.exports = GelatoComponent.extend({
      * @method updateDoughnut
      */
     updateDoughnut: function() {
-        var goal = app.user.settings.getGoal();
+        var goal = app.user.getGoal();
         var percent = 0;
         switch (goal.type) {
             case 'items':

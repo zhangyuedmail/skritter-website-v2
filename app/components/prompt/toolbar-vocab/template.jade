@@ -1,0 +1,11 @@
+gelato-component(data-name="prompt-toolbar-vocab")
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if reviews
+
+    i#button-vocab-audio.icon.icon-study-word-volume
+    i#button-vocab-star.icon.icon-study-word-star(class=(reviews.vocab.isStarred() ? 'starred' : ''))
+    i#button-vocab-edit.icon.icon-study-word-edit
+    i#button-vocab-ban.icon.icon-study-ban(class=(reviews.vocab.isBanned() ? 'banned' : ''))
+    i#button-vocab-info.icon.icon-study-info

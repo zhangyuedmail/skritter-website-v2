@@ -2,10 +2,7 @@ project = require('./package.json')
 
 exports.config =
   conventions:
-    ignored: [
-      'app/styles/variables.scss',
-      'bower_components/raygun4js/dist/raygun.js'
-    ]
+    ignored: ['app/styles/variables.scss']
   files:
     javascripts:
       joinTo:
@@ -14,15 +11,16 @@ exports.config =
       order:
         before: [
           'vendor/gelato/js/gelato.js',
+          'vendor/jquery/jquery.ui-1.11.4.js',
           'bower_components/moment/moment.js',
           'bower_components/moment-timezone/moment-timezone.js',
           'bower_components/d3/d3.js',
-          'vendor/bootstrap/bootstrap.notify-3.1.3.js',
+          'vendor/bootstrap/bootstrap.datetimepicker-4.15.35.js',
           'vendor/createjs/createjs.easel-NEXT.min.js',
           'vendor/createjs/createjs.tween-NEXT.min.js',
-          'vendor/heatmap/heatmap-3.5.2.js',
-          'vendor/highcharts/highcharts-4.1.7.js',
-          'vendor/keypress/keypress-2.1.1.js'
+          'vendor/heatmap/heatmap-3.5.6.js',
+          'vendor/highcharts/highcharts-4.1.8.js',
+          'vendor/keypress/keypress-2.1.3.js'
         ]
     stylesheets:
       joinTo:
@@ -38,6 +36,7 @@ exports.config =
   keyword:
     filePattern: /\.(js|css|html)$/
     map:
+      "application-description": project.description
       "application-language": project.language
       "application-name": project.name
       "application-version": project.version

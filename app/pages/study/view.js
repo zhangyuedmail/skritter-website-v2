@@ -1,5 +1,8 @@
-var GelatoPage = require('gelato/modules/page');
+var GelatoPage = require('gelato/page');
+var Items = require('collections/items');
 var Prompt = require('components/prompt/view');
+var StudyToolbar = require('components/study-toolbar/view');
+var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class Study
@@ -11,45 +14,71 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.counter = 0;
+        this._listId = null;
+        this._sectionId = null;
+        this.counter = 1;
+        this.items = new Items();
+        this.navbar = new DefaultNavbar();
         this.prompt = new Prompt();
-        this.listenTo(this.prompt, 'complete', this.handlePromptComplete);
+        this.toolbar = new StudyToolbar();
+        this.listenTo(this.prompt, 'next', this.handlePromptNext);
+        this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+        this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
     },
+    /**
+     * @property events
+     * @type Object
+     */
+    events: {},
+    /**
+     * @property template
+     * @type {Function}
+     */
+    template: require('./template'),
     /**
      * @property title
      * @type {String}
      */
     title: 'Study - Skritter',
     /**
-     * @property template
-     * @type {Function}
+     * @property bodyClass
+     * @type {String}
      */
-    template: require('pages/study/template'),
+    bodyClass: 'background1',
     /**
      * @method render
-     * @returns {GelatoPage}
+     * @returns {Study}
      */
     render: function() {
         this.renderTemplate();
-        this.prompt.setElement('#prompt-container').render().hide();
+        this.navbar.render();
+        this.prompt.setElement('#prompt-container').render();
+        this.toolbar.setElement('#toolbar-container').render();
         return this;
     },
     /**
-     * @method handlePromptComplete
+     * @method handlePromptNext
      * @param {PromptReviews} reviews
      */
-    handlePromptComplete: function(reviews) {
-        var self = this;
-        reviews.updateItems(function() {
-            self.counter += reviews.length;
-            if (self.counter >= 20) {
-                self.counter = 0;
-                app.user.data.items.fetchNext();
-            }
-            self.loadNext();
-        }, function(error) {
-            console.error('ITEM UPDATE ERROR:', error);
-        });
+    handlePromptNext: function(reviews) {
+        this.items.addReviews(reviews.getItemReviews());
+        this.items.reviews.save();
+        this.counter++;
+        this.next();
+    },
+    /**
+     * @method handlePromptPrevious
+     * @param {PromptReviews} reviews
+     */
+    handlePromptPrevious: function(reviews) {
+        this.previous();
+    },
+    /**
+     * @method handlePromptSkip
+     * @param {PromptReviews} reviews
+     */
+    handlePromptSkip: function(reviews) {
+        this.next();
     },
     /**
      * @method load
@@ -57,22 +86,87 @@ module.exports = GelatoPage.extend({
      * @param {String} [sectionId]
      */
     load: function(listId, sectionId) {
-        if (app.user.data.items.getNext()) {
-            app.closeDialog();
-            this.loadNext();
+        //TODO: support list and section parameters
+        this._listId = listId;
+        this._sectionid = sectionId;
+        async.waterfall([
+            _.bind(function(callback) {
+                this.items.fetch({
+                    data: {
+                        include_contained: true,
+                        include_decomps: true,
+                        include_sentences: true,
+                        include_strokes: true,
+                        include_vocabs: true,
+                        limit: 10,
+                        parts: app.user.getStudyParts().join(','),
+                        sort: 'next',
+                        styles: app.user.getStudyStyles().join(',')
+                    },
+                    merge: false,
+                    remove: false,
+                    error: function(items, error) {
+                        callback(error);
+                    },
+                    success: function(items) {
+                        callback(null, items);
+                    }
+                });
+            }, this)
+        ], _.bind(function(error, items) {
+            if (error) {
+                console.error('ITEM LOAD ERROR:', error, items);
+            } else {
+                this.next();
+            }
+        }, this))
+    },
+    /**
+     * @method loadMore
+     */
+    loadMore: function() {
+        this.items.fetch({
+            data: {
+                include_contained: true,
+                include_decomps: true,
+                include_sentences: true,
+                include_strokes: true,
+                include_vocabs: true,
+                limit: 10,
+                parts: app.user.getStudyParts().join(','),
+                sort: 'next',
+                styles: app.user.getStudyStyles().join(',')
+            },
+            merge: false,
+            remove: false
+        });
+    },
+    /**
+     * @method next
+     */
+    next: function() {
+        var nextItem = this.items.getNext();
+        if (nextItem) {
+            this.prompt.set(nextItem.getPromptReviews());
         } else {
-            this.listenToOnce(app.user.data.items, 'fetch:next', $.proxy(this.load, this));
-            app.openDialog('loading');
-            app.user.data.items.fetchNext();
+            console.error('ITEM LOAD ERROR:', 'no items');
+        }
+        if (this.counter % 10 === 0) {
+            console.log('LOADING MORE ITEMS:', 10);
+            this.loadMore();
         }
     },
     /**
-     * @method loadNext
+     * @method previous
      */
-    loadNext: function() {
-        var item = app.user.data.items.getNext();
-        var reviews = item.getPromptReviews();
-        this.prompt.set(reviews);
-        this.prompt.show();
+    previous: function() {},
+    /**
+     * @method remove
+     * @returns {Study}
+     */
+    remove: function() {
+        this.navbar.remove();
+        this.prompt.remove();
+        return GelatoPage.prototype.remove.call(this);
     }
 });

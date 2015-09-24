@@ -1,0 +1,64 @@
+@import "../../styles/variables";
+
+gelato-page[data-name='features'] {
+
+  padding-bottom: 0;
+
+  #section-additional-features {
+    margin-bottom: 50px;
+    .block { padding-bottom: 60px; }
+    .media-heading {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 18px;
+      font-weight: 300;
+    }
+    .media-subtext {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
+
+  #section-call-to-action {
+    margin-bottom: 50px;
+  }
+
+  #section-main-features {
+    margin-bottom: 50px;
+    .block { padding-bottom: 60px; }
+    .media-heading {
+      color: #8c9196;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 300;
+    }
+    .media-subtext {
+      color: #404851;
+      font-family: $font-muli;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .title {
+      color: #666c73;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 90px;
+      margin-top: 75px;
+    }
+  }
+
+  #section-top {
+    margin-bottom: 50px;
+    .title {
+      color: #363b40;
+      font-family: $font-slab;
+      font-size: 48px;
+      font-weight: 400;
+      margin-bottom: 50px;
+    }
+  }
+
+}

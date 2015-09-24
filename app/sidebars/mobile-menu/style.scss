@@ -1,0 +1,27 @@
+@import "../../styles/variables";
+
+gelato-sidebar[data-name="menu"] {
+
+  nav {
+    background-color: black;
+  }
+
+  .glyphicon {
+    font-size: 20px;
+  }
+
+  .navmenu-default .navmenu-nav > li > a {
+    color: $sand1;
+    font-size: 20px;
+  }
+
+  img {
+    margin-bottom: 10px;
+  }
+
+  #name {
+    color: $sand3;
+    font-size: 20px;
+  }
+
+}

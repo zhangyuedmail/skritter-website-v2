@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+
+gelato-dialog[data-name="vacation"] {
+
+  .modal-content {
+    background-color: $white5;
+  }
+
+  .modal-body, .modal-footer {
+    background-color: $white2;
+  }
+
+  .modal-dialog { width: 425px; }
+
+  .modal-footer {
+    text-align: center;
+  }
+
+}

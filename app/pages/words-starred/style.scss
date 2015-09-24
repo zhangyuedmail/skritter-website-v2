@@ -1,0 +1,36 @@
+@import "../../styles/variables";
+
+gelato-page[data-name='words-starred'] {
+  .table-oversized-wrapper {
+    margin-top: 30px;
+  }
+
+  .glyphicon-star {
+    color: $green5;
+  }
+
+  .star-td {
+    width: 10%;
+  }
+
+  .word-td {
+    width: 70%;
+  }
+
+  .writing-td {
+    width: 10%;
+  }
+
+  .reading-td {
+    width: 10%;
+  }
+
+  .definition-td {
+    width: 50%;
+  }
+
+  .date-starred-td {
+    width: 20%;
+  }
+
+}

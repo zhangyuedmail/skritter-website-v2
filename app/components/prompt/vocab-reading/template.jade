@@ -1,0 +1,55 @@
+gelato-component(data-name='prompt-vocab-reading')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if reviews
+    - var index = 0
+
+    case prompt.part
+
+      when 'rdng'
+        for reading in reviews.vocab.getReadings()
+          if (reading.type === 'character')
+            - var review = reviews.at(index)
+            div.reading(class=reviews.isComplete() ? '' : 'masked', data-position=index)
+              if reviews.vocab.isChinese()
+                span= app.fn.pinyin.toTone(reading.value)
+              else
+                span= reading.value
+            - index++
+          else
+            div.filler
+              span= reading.value
+
+      when 'tone'
+        for reading in reviews.vocab.getReadings()
+          if (reading.type === 'character')
+            - var review = reviews.at(index)
+            - var classes = []
+            if (!review.get('complete'))
+              - classes.push('masked')
+            if (reviews.position === index)
+              - classes.push('active')
+            div.reading(class=classes.join(' '), data-position=index)
+              if reviews.vocab.isChinese()
+                span= app.fn.pinyin.toTone(reading.value)
+              else
+                span= reading.value
+            - index++
+          else
+            div.filler
+              span= reading.value
+
+      default
+        for reading in reviews.vocab.getReadings()
+          if (reading.type === 'character')
+            - var review = reviews.at(index)
+            div.reading(data-position=index)
+              if reviews.vocab.isChinese()
+                span= app.fn.pinyin.toTone(reading.value)
+              else
+                span= reading.value
+            - index++
+          else
+            div.filler
+              span= reading.value

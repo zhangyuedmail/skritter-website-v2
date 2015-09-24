@@ -1,4 +1,5 @@
-var GelatoComponent = require('gelato/modules/component');
+var GelatoComponent = require('gelato/component');
+var ProgressStats = require('collections/progress-stats');
 
 /**
  * @class LearnedWords
@@ -10,13 +11,15 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        this.listenTo(app.user.data.stats, 'fetch', this.update);
+        this.stats = new ProgressStats();
+        this.listenTo(this.stats, 'state:standby', this.update);
+        this.stats.fetchToday();
     },
     /**
      * @property template
      * @type {Function}
      */
-    template: require('components/dashboard-total/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {Component}
@@ -30,9 +33,9 @@ module.exports = GelatoComponent.extend({
      * @method update
      */
     update: function() {
-        if (app.user.data.stats.length) {
-            this.$('#characters-learned .value').text(app.user.data.stats.getAllTimeCharactersLearned());
-            this.$('#words-learned .value').text(app.user.data.stats.getAllTimeWordsLearned());
+        if (this.stats.length) {
+            this.$('#characters-learned .value').text(this.stats.getAllTimeCharactersLearned());
+            this.$('#words-learned .value').text(this.stats.getAllTimeWordsLearned());
         }
     }
 });

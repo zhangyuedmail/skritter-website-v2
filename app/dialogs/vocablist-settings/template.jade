@@ -1,0 +1,121 @@
+gelato-dialog(data-name='vocablist-settings')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h4.modal-title
+            | Study Settings for
+            em  "#{view.vocablist.get('name')}"
+        .modal-body
+
+          if this.vocablist.state === 'fetching'
+            p.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
+
+          else
+            form#vocablist-form.form-horizontal
+              .form-group
+                label.col-sm-3.control-label Study Mode
+                .col-sm-9
+                  .radio
+                    label
+                      input(type="radio" checked=view.vocablist.get('studyingMode')==='adding' value='adding' name="studyingMode")
+                      span Add
+                      .help-block Add more words while you practice
+                  .radio
+                    label
+                      input(type="radio" checked=view.vocablist.get('studyingMode')!=='adding' value='reviewing' name="studyingMode")
+                      span Review.
+                      .help-block Just study words that have already been added
+
+              .form-group
+                label.col-sm-3.control-label Parts Studying
+                .col-sm-9
+                  - var vlparts = view.vocablist.get('partsStudying');
+                  - var uparts = app.user.getAllParts();
+                  .checkbox(class=_.contains(uparts, 'rune') ? '' : 'disabled')
+                    label
+                      input(type="checkbox" name="partsStudying" value='rune' checked=_.contains(vlparts, 'rune'), disabled=!_.contains(uparts, 'rune'))
+                      span Writing
+                  .checkbox(class=_.contains(uparts, 'rdng') ? '' : 'disabled')
+                    label
+                      input(type="checkbox" name="partsStudying" value='rdng' checked=_.contains(vlparts, 'rdng'), disabled=!_.contains(uparts, 'rdng'))
+                      span Reading
+                  .checkbox(class=_.contains(uparts, 'defn') ? '' : 'disabled')
+                    label
+                      input(type="checkbox" name="partsStudying" value='defn' checked=_.contains(vlparts, 'defn'), disabled=!_.contains(uparts, 'defn'))
+                      span Definition
+                  if app.user.get('targetLang') === 'zh'
+                    .checkbox(class=_.contains(uparts, 'tone') ? '' : 'disabled')
+                      label
+                        input(type="checkbox" name="partsStudying" value='tone' checked=_.contains(vlparts, 'tone'), disabled=!_.contains(uparts, 'tone'))
+                        span Tone
+
+              hr
+
+              .form-group
+                .col-sm-offset-3.col-sm-9
+                  .checkbox
+                    label
+                      input(type="checkbox" name="limitSentenceParts" checked=view.vocablist.get('limitSentenceParts'))
+                      span Limit Sentence Parts
+
+              if view.vocablist.get('lang') === 'ja'
+                .form-group
+                  .col-sm-offset-3.col-sm-9
+                    .checkbox
+                      label
+                        input(type="checkbox" name="studyAllListWritings" checked=view.vocablist.get('studyAllListWritings'))
+                        span Study Optional Kanji
+                        .help-block
+                          | Many Japanese textbooks stagger the learning of kanji, so the lists
+                          | for these textbooks by default do not teach the kanji for every word.
+                          |  If you would like to learn how to write all the words in this list,
+                          | whether the book teaches them or not, enable this setting.
+
+              - var sections = view.vocablist.get('sections');
+              - var currentSection = view.vocablist.get('currentSection');
+
+              if sections.length > 1
+                hr
+
+                .form-group
+                  label.col-sm-3.control-label Add Vocab From
+                  .col-sm-9
+                    select.form-control(name="currentSection")
+                      for section in sections
+                        option(value=section.id selected=section.id === currentSection)= section.name
+                    .help-block All sections before chosen section will not be studied.
+
+                - var sectionsSkipping = view.vocablist.get('sectionsSkipping');
+                .form-group
+                  label.col-sm-3.control-label Sections Studying
+                  .col-sm-9
+                    a.btn.btn-primary(data-toggle="collapse" href="#skip-sections")
+                      | Show/Hide
+                    .collapse#skip-sections
+                      for section, i in sections
+                        .checkbox
+                          label
+                            input(type="checkbox" name="sectionsSkipping" value=section.id checked=!_.contains(sectionsSkipping, section.id) disabled=!i)
+                            span= section.name
+
+                .form-group
+                  .col-sm-offset-3.col-sm-9
+                    .checkbox
+                      label
+                        input(type="checkbox" name="autoSectionMovement" checked=!view.vocablist.get('autoSectionMovement'))
+                        span Pause Adding After Each Section
+                        .help-block
+                          | Whenever a section has been finished, lists by default will move on to the following section.
+                          |  Enable this setting so that whenever a section is complete, the list is paused and
+                          |  needs to be manually started again to continue.
+                          |  This is convenient if you want to control your pace of learning,
+                          |  such as if you are studying a textbook for a class.
+
+
+        .modal-footer
+
+          button#close-btn.btn.btn-default(type="button") Close
+          | &nbsp;&nbsp;&nbsp;
+          button#save-btn.btn.btn-primary(type="button") Save

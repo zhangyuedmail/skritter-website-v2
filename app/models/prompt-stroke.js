@@ -1,4 +1,4 @@
-var GelatoModel = require('gelato/modules/model');
+var GelatoModel = require('gelato/model');
 
 /**
  * @class PromptStroke
@@ -19,6 +19,15 @@ module.exports = GelatoModel.extend({
      */
     idAttribute: 'id',
     /**
+     * @method defaults
+     * @returns {Object}
+     */
+    defaults: function() {
+        return {
+            tweening: false
+        };
+    },
+    /**
      * @method getFirstAngle
      * @returns {Number}
      */
@@ -30,10 +39,11 @@ module.exports = GelatoModel.extend({
      * @returns {DataParam}
      */
     getParamPath: function() {
+        //TODO: make sure to get the trace parameter
         var matrix = this.getTargetShape().getMatrix();
-        var param = app.user.data.params.findWhere({strokeId: this.get('strokeId'), trace: true});
+        var param = this.get('params')[0];
         if (!param) {
-            var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+            var params = this.get('params');
             param = params[params.length - 1];
         }
         param = param.clone();
@@ -54,7 +64,7 @@ module.exports = GelatoModel.extend({
         var inflatedParams = [];
         var size = this.getSize();
         var matrix = this.getTargetShape().getMatrix();
-        var params = app.user.data.params.where({strokeId: this.get('strokeId')});
+        var params = this.get('params');
         for (var a = 0, lengthA = params.length; a < lengthA; a++) {
             var param = params[a].clone();
             if (!param.has('trace')) {

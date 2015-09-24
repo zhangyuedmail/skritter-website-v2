@@ -1,0 +1,15 @@
+@import "../../styles/variables";
+
+gelato-dialog[data-name="confirm"] {
+
+  .modal-content {
+    background-color: $white5;
+  }
+
+  .modal-dialog { width: 300px; }
+
+  .modal-footer {
+    text-align: center;
+  }
+
+}

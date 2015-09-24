@@ -1,57 +1,115 @@
-var GelatoModel = require('gelato/modules/model');
-var HistoryItems = require('collections/history-items');
-var UserCredentials = require('models/user-credentials');
-var UserData = require('models/user-data');
-var UserSettings = require('models/user-settings');
+var SkritterModel = require('base/skritter-model');
+var Session = require('models/session');
 
 /**
  * @class User
- * @extends {GelatoModel}
+ * @extends {SkritterModel}
  */
-module.exports = GelatoModel.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.credentials = new UserCredentials();
-        this.data = new UserData();
-        this.history = new HistoryItems();
-        this.settings = new UserSettings();
-    },
+module.exports = SkritterModel.extend({
     /**
      * @property defaults
-     * @type Object
+     * @type {Object}
      */
     defaults: {
-        id: 'guest'
+        allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+        allJapaneseParts: ['defn', 'rdng', 'rune'],
+        gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
+        goals: {ja: {items: 20}, zh: {items: 20}}
     },
     /**
-     * @method getLocalData
-     * @param {String} key
-     * @returns {Number|Object|String}
+     * @method parse
+     * @param {Object} response
+     * @returns Array
      */
-    getLocalData: function(key) {
-        return JSON.parse(localStorage.getItem(this.id + '-' + key));
+    parse: function(response) {
+        return response.User;
+    },
+    /**
+     * @property session
+     * @type {Session}
+     */
+    session: new Session(),
+    /**
+     * @property urlRoot
+     * @type {String}
+     */
+    urlRoot: 'users',
+    /**
+     * @method cache
+     */
+    cache: function() {
+        app.setLocalStorage(this.id + '-user', this.toJSON());
+    },
+    /**
+     * @method getAllParts
+     * @returns {Array}
+     */
+    getAllParts: function() {
+        return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
+    },
+    /**
+     * @method getRaygunTags
+     * @returns {Array}
+     */
+    getRaygunTags: function() {
+        var tags = [];
+        if (app.isChinese()) {
+            tags.push('chinese');
+            if (this.get('reviewSimplified')) {
+                tags.push('simplified');
+            }
+            if (this.get('reviewTraditional')) {
+                tags.push('traditional');
+            }
+        } else if (app.isJapanese()) {
+            tags.push('japanese');
+        }
+        return tags;
+    },
+    /**
+     * @method getStudyParts
+     * @returns {Array}
+     */
+    getStudyParts: function() {
+        return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+    },
+    /**
+     * @method getStudyStyles
+     * @returns {Array}
+     */
+    getStudyStyles: function() {
+        var styles = ['both'];
+        if (app.isChinese()) {
+            if (this.get('reviewSimplified')) {
+                styles.push('simp');
+            }
+            if (this.get('reviewTraditional')) {
+                styles.push('trad');
+            }
+        }
+        return styles;
+    },
+    /**
+     * @method hasStudyPart
+     * @param {String} part
+     * @returns {Boolean}
+     */
+    hasStudyPart: function(part) {
+        return _.includes(this.getStudyParts(), part);
+    },
+    /**
+     * @method isAudioEnabled
+     * @returns {Boolean}
+     */
+    isAudioEnabled: function() {
+        return this.get('volume') > 0;
     },
     /**
      * @method isLoggedIn
      * @returns {Boolean}
      */
     isLoggedIn: function() {
-        return this.id !== 'guest';
-    },
-    /**
-     * @method load
-     */
-    load: function() {
-        var user = app.getSetting('user');
-        if (user) {
-            this.set('id', user);
-            this.credentials.load();
-            this.settings.load();
-            this.settings.fetch();
-        }
+        return !this.session.isExpired();
     },
     /**
      * @method login
@@ -61,32 +119,44 @@ module.exports = GelatoModel.extend({
      * @param {Function} callbackError
      */
     login: function(username, password, callbackSuccess, callbackError) {
-        var self = this;
-        app.api.authenticateUser(username, password, function(result) {
-            self.set('id', result.user_id);
-            self.credentials.set(result);
-            self.credentials.set('created', moment().unix());
-            app.setSetting('user', self.id);
-            callbackSuccess(result);
-        }, function(error) {
-            callbackError(error);
-        });
+        async.waterfall([
+            _.bind(function(callback) {
+                this.session.authenticate('password', username, password,
+                    function(result) {
+                        callback(null, result);
+                    }, function(error) {
+                        callback(error);
+                    });
+            }, this),
+            _.bind(function(result, callback) {
+                this.set('id', result.id);
+                this.fetch({
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function(user) {
+                        callback(null, user);
+                    }
+                })
+            }, this)
+        ], _.bind(function(error, user) {
+            if (error) {
+                callbackError(error);
+            } else {
+                this.cache();
+                this.session.cache();
+                app.setSetting('user', this.id);
+                callbackSuccess(user);
+            }
+        }, this));
     },
     /**
      * @method logout
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
      */
-    logout: function(callbackSuccess, callbackError) {
+    logout: function() {
+        app.removeLocalStorage(this.id + '-session');
+        app.removeLocalStorage(this.id + '-user');
         app.removeSetting('user');
         app.reload();
-    },
-    /**
-     * @method setLocalData
-     * @param {String} key
-     * @param {Number|Object|String} data
-     */
-    setLocalData: function(key, data) {
-        localStorage.setItem(this.id + '-' + key, JSON.stringify(data));
     }
 });

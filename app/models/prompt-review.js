@@ -1,4 +1,4 @@
-var GelatoModel = require('gelato/modules/model');
+var GelatoModel = require('gelato/model');
 
 /**
  * @class PromptReview
@@ -6,53 +6,65 @@ var GelatoModel = require('gelato/modules/model');
  */
 module.exports = GelatoModel.extend({
     /**
-     * @method initialize
-     * @constructor
+     * @property character
+     * @type {PromptCharacter}
      */
-    initialize: function() {
-        this.character = null;
-        this.item = null;
-        this.vocab = null;
-    },
+    character: null,
     /**
-     * @property idAttribute
-     * @type {String}
+     * @property item
+     * @type {Item}
      */
-    idAttribute: 'id',
+    item: null,
+    /**
+     * @property vocab
+     * @type {Vocab}
+     */
+    vocab: null,
     /**
      * @method defaults
      * @returns {Object}
      */
     defaults: function() {
         return {
+            attempts: 0,
             complete: false,
             reviewingStart: 0,
             reviewingStop: 0,
             score: 3,
             submitTime: 0,
-            thinkingStop: 0
+            thinkingStop: 0,
+            teach: false
         };
-    },
-    /**
-     * @method getActualInterval
-     * @returns {number}
-     */
-    getActualInterval: function() {
-        return this.get('submitTime') - this.item.last;
-    },
-    /**
-     * @method getNewInterval
-     * @returns {Number}
-     */
-    getNewInterval: function() {
-        return app.fn.interval.quantify(this.item, this.get('score'));
     },
     /**
      * @method getGradingColor
      * @returns {String}
      */
     getGradingColor: function() {
-        return app.user.settings.get('gradingColors')[this.get('score')];
+        return app.user.get('gradingColors')[this.get('score')];
+    },
+    /**
+     * @method getItemReview
+     * @returns {Object}
+     */
+    getItemReview: function() {
+        return {
+            bearTime: false,
+            id: this.id,
+            itemId: this.item ? this.item.id : this.vocab.id,
+            reviewTime: this.getReviewingTime(),
+            score: this.get('score'),
+            submitTime: this.get('submitTime'),
+            thinkingTime: this.getThinkingTime(),
+            wordGroup: this.collection.group
+        };
+    },
+    /**
+     * @method getPosition
+     * @returns {Number}
+     */
+    getPosition: function() {
+        return this.collection.indexOf(this);
     },
     /**
      * @method getReviewingTime
@@ -77,26 +89,18 @@ module.exports = GelatoModel.extend({
         return thinkingTime > 15 ? 15 : thinkingTime;
     },
     /**
-     * @method getVocab
-     * @returns {DataVocab}
+     * @method getTones
+     * @returns {Array}
      */
-    getVocab: function() {
-        return this.vocab;
+    getTones: function() {
+        return this.collection.vocab.getTones()[this.getPosition()];
     },
     /**
      * @method isComplete
      * @returns {Boolean}
      */
     isComplete: function() {
-        return this.character ? this.character.isComplete() : this.get('complete');
-    },
-    /**
-     * @method reset
-     * @returns {PromptReview}
-     */
-    reset: function() {
-        this.character.reset();
-        return this;
+        return this.get('complete');
     },
     /**
      * @method start
@@ -104,7 +108,10 @@ module.exports = GelatoModel.extend({
      */
     start: function() {
         if (this.get('reviewingStart') === 0) {
-            this.set({reviewingStart: new Date().getTime(), submitTime: moment().unix()});
+            this.set({
+                reviewingStart: new Date().getTime(),
+                submitTime: moment().unix()
+            });
         }
         return this;
     },

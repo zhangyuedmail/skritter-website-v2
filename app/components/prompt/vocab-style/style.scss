@@ -1,0 +1,12 @@
+@import "../../../styles/variables";
+
+gelato-component[data-name='prompt-vocab-style'] {
+
+  .value {
+    font-size: 10px;
+    font-weight: 400;
+    margin-left: 5px;
+    text-transform: uppercase;
+  }
+
+}

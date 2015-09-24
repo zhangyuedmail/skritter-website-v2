@@ -1,15 +1,26 @@
 @import "../../styles/variables";
 
-gelato-component[data-name="prompt"] {
+gelato-component[data-name='prompt'] {
 
-  border-radius: 25px;
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
-  color: $grey4;
+  background-color: $white1;
+  border-radius: 50px;
   height: 640px;
-  margin: 0 auto;
-  width: 1280px;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 
-  #prompt-grading-container { min-height: 85px; }
+  #loading-spinner {
+    text-align: center;
+    i { margin-top: 250px; }
+  }
+
+  #new-ribbon {
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 5000;
+  }
 
   #panel-left {
     background-color: $white1;
@@ -19,6 +30,7 @@ gelato-component[data-name="prompt"] {
     float: left;
     padding-left: 95px;
     padding-right: 95px;
+    position: relative;
     width: 640px;
   }
 
@@ -29,24 +41,28 @@ gelato-component[data-name="prompt"] {
     float: right;
     height: 640px;
     padding: 42px 45px;
+    position: relative;
     width: 640px;
+
+    #vocab-definition-container { margin-top: 30px; }
+    #vocab-mnemonic-container { margin-top: 30px; }
+    #vocab-sentence-container { margin-top: 30px; }
   }
 
-  #prompt-toolbar-container { min-height: 85px; }
+  @media (max-width: 1310px) {
 
-  @media (max-width: 1280px) {
-    height: 575px;
-    width: 1000px;
     #panel-left {
-      height: 575px;
       padding-left: 50px;
       padding-right: 50px;
-      width: 500px;
+      width: 50%;
     }
+
     #panel-right {
-      height: 575px;
-      width: 500px;
+      padding-left: 50px;
+      padding-right: 50px;
+      width: 50%;
     }
+
   }
 
 }

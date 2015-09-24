@@ -97,9 +97,9 @@ function convertTimeToClock(time) {
     time = time % (60 * 1000);
     var seconds = (time / 1000) >> 0;
     if (hours > 0) {
-        return hours + ':' + pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
+        return pad(hours, 0, 2) + ':' + pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
     }
-    return minutes + ':' + pad(seconds, 0, 2);
+    return pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
 }
 
 /**

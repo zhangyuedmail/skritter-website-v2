@@ -1,0 +1,44 @@
+- var now = new Date().getTime();
+
+gelato-page(data-name='words-mnemonics')
+  .container
+    .content-block
+      .row
+        .col-md-3.sidebar
+          #words-sidebar-container
+        .col-md-9.main-content
+          .title Mnemonics
+          p View all the mnemonics you've created.
+          #table-options
+            .row
+              .col-md-4
+                button#delete-mnemonics-btn.btn.btn-fixed.btn-danger(disabled=true) Delete Mnemonics
+
+          .table-oversized-wrapper
+            table.table.table-striped
+              tr
+                td.checkbox-td
+                  input#all-checkbox(type="checkbox")
+                td.word-td(colspan=3) Word
+                td.edited-td Edited
+
+              for vocab in view.mnemonicVocabs.models
+                - var mnemonic = vocab.getMnemonic()
+
+                if mnemonic
+                  tr(data-vocab-id=vocab.id)
+                    td.checkbox-td
+                      input(type="checkbox")
+                    td.writing-td= vocab.getWriting()
+                    td.reading-td= vocab.getReading()
+                    td.mnemonic-td!= mnemonic.text
+                    td.edited-td= moment(mnemonic.changed * 1000).format('LL')
+
+            if view.mnemonicVocabs.state === 'fetching'
+              p.text-center
+                i.fa.fa-3x.fa-spinner.fa-pulse
+
+            else if view.mnemonicVocabs.cursor
+              button#load-more-btn.btn.btn-primary.btn-block Load More
+
+

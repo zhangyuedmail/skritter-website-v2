@@ -1,4 +1,4 @@
-var GelatoDialog = require('gelato/modules/dialog');
+var GelatoDialog = require('gelato/dialog');
 
 /**
  * @class ConfirmBanDialog
@@ -9,7 +9,7 @@ module.exports = GelatoDialog.extend({
      * @property template
      * @type {Function}
      */
-    template: require('dialogs/confirm-ban/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {ConfirmBanDialog}
@@ -32,7 +32,7 @@ module.exports = GelatoDialog.extend({
      */
     handleClickButtonBan: function(event) {
         event.preventDefault();
-        app.closeDialog();
+        this.trigger('ban');
     },
     /**
      * @method handleClickButtonCancel
@@ -40,6 +40,6 @@ module.exports = GelatoDialog.extend({
      */
     handleClickButtonCancel: function(event) {
         event.preventDefault();
-        app.closeDialog();
+        this.close();
     }
 });

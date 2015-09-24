@@ -1,4 +1,4 @@
-var GelatoCollection = require('gelato/modules/collection');
+var GelatoCollection = require('gelato/collection');
 var PromptStroke = require('models/prompt-stroke');
 
 /**
@@ -94,7 +94,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Number}
      */
     getSize: function() {
-        return app.user.settings.get('canvasSize');
+        return app.get('canvasSize');
     },
     /**
      * @method getTargetShape
@@ -113,6 +113,14 @@ module.exports = GelatoCollection.extend({
         return container;
     },
     /**
+     * @method getTone
+     * @param {Number} number
+     * @returns {PromptStroke}
+     */
+    getTone: function(number) {
+        return this.writing === 'tones' ? this.targets[number - 1].at(0) : null;
+    },
+    /**
      * @method getUserShape
      * @param {Number} [excludeStrokes]
      * @returns {createjs.Container}
@@ -128,19 +136,18 @@ module.exports = GelatoCollection.extend({
         return container;
     },
     /**
-     * @method getTone
-     * @param {Number} number
-     * @returns {PromptStroke}
-     */
-    getTone: function(number) {
-        return this.writing === 'tones' ? this.targets[number - 1].at(0) : null;
-    },
-    /**
      * @method isComplete
      * @returns {Boolean}
      */
     isComplete: function() {
         return this.getPosition() >= this.getMaxPosition();
+    },
+    /**
+     * @method isTweening
+     * @returns {Boolean}
+     */
+    isTweening: function() {
+        return this.pluck('tweening').indexOf(true) > -1;
     },
     /**
      * @method recognize

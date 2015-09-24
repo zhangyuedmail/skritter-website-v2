@@ -1,0 +1,13 @@
+gelato-navbar(data-name='default').fixed-top.hidden-sm.hidden-xs
+  .container
+    .left
+      a.item.item-header(href="/dashboard") Skritter
+      a.item.item-link(href="/study") Study
+      a.item.item-link(href="/vocablists/queue") Lists
+      a.item.item-link(href="/words/all") Words
+      a.item.item-link(data-toggle="tooltip" data-placement="bottom" title="Working on it") Stats
+    .right
+      a.item.item-link(href="/account")= user.get('name') || user.id
+      if user.get('avatar')
+        .item.item-icon
+          img(src='data:image/png;base64,' + user.get('avatar'))

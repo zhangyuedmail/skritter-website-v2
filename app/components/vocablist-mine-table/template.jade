@@ -1,0 +1,37 @@
+gelato-component(data-name='vocablist-mine-table')
+
+  if view.vocablists.state === 'standby' && view.vocablists.length === 0
+    p.text-center
+      span You have not created any lists.
+      a(href="/vocablists/create")  Make one!
+
+  if view.vocablists.state === 'standby' || view.vocablists.cursor
+    #header-row.row
+      .col-md-5 Title
+      .col-md-2 Changed
+      .col-md-2 Published
+      .col-md-3
+
+  for list, i in view.vocablists.models
+    .row(class=i%2 ? 'even-row' : 'odd-row')
+      .col-md-5
+        a(href="/vocablists/view/"+list.id)= list.get('name')
+      .col-md-2= moment(list.get('changed')*1000).format('l')
+      .col-md-2
+        if list.get('published')
+          span= moment(list.get('published')*1000).format('l')
+      .col-md-3
+        if list.get('studyingMode') === 'not studying'
+          span.add-to-queue-link(data-vocablist-id=list.id)
+            span.glyphicon.glyphicon-plus-sign.text-success
+            span Add to queue
+        else
+          span= _.capitalize(list.get('studyingMode'))
+
+
+  if view.vocablists.state === 'standby' && view.vocablists.cursor
+    button#load-more-btn.btn.btn-primary.btn-block Load More
+
+  if view.vocablists.state === 'fetching'
+    p.text-center
+      i.fa.fa-3x.fa-spinner.fa-pulse

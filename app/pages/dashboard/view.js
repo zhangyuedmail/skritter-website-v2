@@ -1,8 +1,11 @@
-var GelatoPage = require('gelato/modules/page');
+var GelatoPage = require('gelato/page');
 var DashboardGoal = require('components/dashboard-goal/view');
 var DashboardMonth = require('components/dashboard-month/view');
+var DashboardStatus = require('components/dashboard-status/view');
 var DashboardTotal = require('components/dashboard-total/view');
-var VocablistTable = require('components/vocablist-table/view');
+var DashboardQueue = require('components/dashboard-queue/view');
+var GoalSettingsDialog = require('dialogs/goal-settings/view');
+var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class Dashboard
@@ -14,10 +17,11 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.dashboardGoal = new DashboardGoal();
+        this.navbar = new DefaultNavbar();
+        this.dashboardGoal = new DashboardStatus();
         this.dashboardMonth = new DashboardMonth();
         this.dashboardTotal = new DashboardTotal();
-        this.vocablistTable = new VocablistTable();
+        this.dashboardQueue = new DashboardQueue();
     },
     /**
      * @property title
@@ -25,10 +29,15 @@ module.exports = GelatoPage.extend({
      */
     title: 'Dashboard - Skritter',
     /**
+     * @property bodyClass
+     * @type {String}
+     */
+    bodyClass: 'background1',
+    /**
      * @property template
      * @type {Function}
      */
-    template: require('pages/dashboard/template'),
+    template: require('./template'),
     /**
      * @method render
      * @returns {Dashboard}
@@ -38,12 +47,25 @@ module.exports = GelatoPage.extend({
         this.dashboardGoal.setElement('#dashboard-goal-container').render();
         this.dashboardMonth.setElement('#dashboard-month-container').render();
         this.dashboardTotal.setElement('#dashboard-total-container').render();
-        this.vocablistTable.setElement('#vocablist-table-container').render();
-        app.user.data.items.fetchDaily();
-        app.user.data.items.fetchNext();
-        app.user.data.stats.fetch();
-        app.user.data.vocablists.fetch();
+        this.dashboardQueue.setElement('#dashboard-queue-container').render();
+        this.navbar.render();
         return this;
+    },
+    /**
+     * @property events
+     * @type {Object}
+     */
+    events: {
+        'vclick #button-goal-settings': 'handleClickGoalSettings'
+    },
+    /**
+     * @method handleClickGoalSettings
+     * @param {Object} event
+     */
+    handleClickGoalSettings: function(event) {
+        event.preventDefault();
+        this.dialog = new GoalSettingsDialog();
+        this.dialog.open();
     },
     /**
      * @method remove
@@ -53,7 +75,8 @@ module.exports = GelatoPage.extend({
         this.dashboardGoal.remove();
         this.dashboardMonth.remove();
         this.dashboardTotal.remove();
-        this.vocablistTable.remove();
+        this.dashboardQueue.remove();
+        this.navbar.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });

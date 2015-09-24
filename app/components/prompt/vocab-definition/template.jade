@@ -1,0 +1,30 @@
+gelato-component(data-name='prompt-vocab-definition')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if reviews
+    - var definition = reviews.vocab.getDefinition()
+
+    label Definition
+
+    case prompt.part
+
+      when 'defn'
+        .value(class=(reviews.isComplete() ? 'visible' : 'invisible'))
+          if view.editable
+            textarea= definition
+          else
+            if definition
+              span!= definition
+            else
+              em Click the 'edit' icon to add a definition
+
+      default
+        .value
+          if view.editable
+            textarea= definition
+          else
+            if definition
+              span!= definition
+            else
+              em Click the 'edit' icon to add a definition
