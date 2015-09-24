@@ -95,7 +95,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     hasStudyPart: function(part) {
-        return _.includes(part, this.getStudyParts());
+        return _.includes(this.getStudyParts(), part);
     },
     /**
      * @method isAudioEnabled
