@@ -7,15 +7,24 @@ gelato-component(data-name='prompt-vocab-definition')
 
     label Definition
 
-    if prompt.part === 'defn'
-      .value(class=(reviews.isComplete() ? 'visible' : 'invisible'))
-    else
-      .value
+    case prompt.part
 
-        if view.editable
-          textarea= definition
-        else
-          if definition
-            span!= definition
+      when 'defn'
+        .value(class=(reviews.isComplete() ? 'visible' : 'invisible'))
+          if view.editable
+            textarea= definition
           else
-            em Click the 'edit icon to add a definition'
+            if definition
+              span!= definition
+            else
+              em Click the 'edit' icon to add a definition
+
+      default
+        .value
+          if view.editable
+            textarea= definition
+          else
+            if definition
+              span!= definition
+            else
+              em Click the 'edit' icon to add a definition
