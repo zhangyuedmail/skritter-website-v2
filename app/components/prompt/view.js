@@ -170,6 +170,9 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabDefinition.render();
+            if (app.user.isAudioEnabled()) {
+                this.reviews.vocab.play();
+            }
         } else {
             this.renderPromptPartRune();
         }
@@ -208,6 +211,9 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
+            if (app.user.isAudioEnabled()) {
+                this.reviews.vocab.play();
+            }
         } else {
             this.renderPromptPartRune();
         }
@@ -232,6 +238,9 @@ module.exports = GelatoComponent.extend({
             this.vocabWriting.render();
             this.canvas.enableInput();
             this.review.start();
+            if (app.user.isAudioEnabled() && this.reviews.isFirst()) {
+                this.reviews.vocab.play();
+            }
         }
         return this;
     },
@@ -302,6 +311,9 @@ module.exports = GelatoComponent.extend({
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
             this.vocabWriting.render();
+            if (app.user.isAudioEnabled()) {
+                this.reviews.vocab.play();
+            }
         } else {
             this.renderPromptPartTone();
         }
