@@ -1,27 +1,41 @@
 gelato-component(data-name='vocab-viewer')
-  #header-section
-    .block.separator
-      #vocab-writing
-      #vocab-reading
-    .block
-      #vocab-difficulty
-      | LEVEL
-  #content-section
-    #panel-left
+  - var vocab = view.vocab
+
+  if vocab
+    - var definition = vocab.getDefinition()
+    - var mnemonic = vocab.getMnemonic()
+    - var sentence = vocab.getSentence()
+
+    #header-section
+      .block.separator
+        #vocab-writing= vocab.get('writing')
+        #vocab-reading= vocab.getReading()
       .block
-        .header Definition
-        .value
-          #vocab-definition
-      .block
-        .header Sentence
-        .value
-          #vocab-sentence
-      .block
-        .header Mnemonic
-        .value
-          #vocab-mnemonic
-      .block
-        .header Dictionary
-        .value
-          #vocab-lookup
-    #panel-right
+        #vocab-difficulty= vocab.get('toughnessString')
+        | LEVEL
+
+    #content-section
+      #panel-left
+        .block
+          .header Definition
+          .value
+            #vocab-definition
+              if definition
+                span!= definition
+        .block
+          .header Sentence
+          .value
+            #vocab-sentence
+              if sentence
+                span!= sentence.getWriting()
+        .block
+          .header Mnemonic
+          .value
+            #vocab-mnemonic
+              if mnemonic
+                span!= mnemonic.text
+        .block
+          .header Dictionary
+          .value
+            #vocab-lookup-container
+      #panel-right
