@@ -48,6 +48,25 @@ module.exports = SkritterModel.extend({
         return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
     },
     /**
+     * @method getRaygunTags
+     * @returns {Array}
+     */
+    getRaygunTags: function() {
+        var tags = [];
+        if (app.isChinese()) {
+            tags.push('chinese');
+            if (this.get('reviewSimplified')) {
+                tags.push('simplified');
+            }
+            if (this.get('reviewTraditional')) {
+                tags.push('traditional');
+            }
+        } else if (app.isJapanese()) {
+            tags.push('japanese');
+        }
+        return tags;
+    },
+    /**
      * @method getStudyParts
      * @returns {Array}
      */

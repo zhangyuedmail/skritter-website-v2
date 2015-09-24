@@ -10,7 +10,7 @@ var Router = require('router');
 module.exports = GelatoApplication.extend({
     /**
      * @method initialize
-     * @constructor
+     * @constructorApply
      */
     initialize: function() {
         window.onerror = this.handleError;
@@ -129,10 +129,10 @@ module.exports = GelatoApplication.extend({
     },
     /**
      * @method isMobile
-     * @returns {String}
+     * @returns {Boolean}
      */
     isMobile: function() {
-        // TODO: Get this to return the right thing
+        // TODO: properly check if application is mobile
         return true;
     },
     /**
@@ -152,6 +152,14 @@ module.exports = GelatoApplication.extend({
         this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
         this.user.on('state:standby', this.user.cache);
+
+        if (this.user.isLoggedIn()) {
+            Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
+            Raygun.withTags(this.user.getRaygunTags());
+        } else {
+            Raygun.setUser('guest', true);
+        }
+
         this.router.start();
     }
 });
