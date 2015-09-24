@@ -24,7 +24,7 @@ module.exports = GelatoApplication.extend({
         this.router = new Router();
         this.user = new User({id: this.getSetting('user')});
 
-        if (createjs) {
+        if (window.createjs) {
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
                 this.moveTo(x1 , y1);
                 var dX = x2 - x1;
@@ -161,5 +161,8 @@ module.exports = GelatoApplication.extend({
         }
 
         this.router.start();
+        $('#application-loading').fadeOut(500, function() {
+            $(this).remove();
+        });
     }
 });
