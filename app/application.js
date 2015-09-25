@@ -114,6 +114,13 @@ module.exports = GelatoApplication.extend({
         return false;
     },
     /**
+     * @method hideLoading
+     * @param {Number} [speed]
+     */
+    hideLoading: function(speed) {
+        $('#application-loading').fadeOut(speed);
+    },
+    /**
      * @method isChinese
      * @returns {Boolean}
      */
@@ -179,24 +186,27 @@ module.exports = GelatoApplication.extend({
         }
     },
     /**
+     * @method showLoading
+     * @param {Number} [speed]
+     */
+    showLoading: function(speed) {
+        $('#application-loading').fadeIn(speed);
+    },
+    /**
      * @method start
      */
     start: function() {
         this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
         this.user.on('state:standby', this.user.cache);
-
         if (this.user.isLoggedIn()) {
             Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
             Raygun.withTags(this.user.getRaygunTags());
         } else {
             Raygun.setUser('guest', true);
         }
-
-        this.loadHelpscout();
         this.router.start();
-        $('#application-loading').fadeOut(500, function() {
-            $(this).remove();
-        });
+        this.loadHelpscout();
+        this.hideLoading();
     }
 });
