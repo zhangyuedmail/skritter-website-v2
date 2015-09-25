@@ -26,7 +26,8 @@ module.exports = GelatoPage.extend({
         'vclick #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton',
         'vclick #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
         'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
-        'vclick .spoof-button-area button': 'handleClickSpoofButtonAreaButton'
+        'vclick .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
+        'vclick #unsubscribe-btn': 'handleClickUnsubscribeButton'
     },
     /**
      * @method initialize
@@ -290,6 +291,28 @@ module.exports = GelatoPage.extend({
         }
     },
     /**
+     * @method handleClickUnsubscribeButton
+     */
+    handleClickUnsubscribeButton: function() {
+        var service = this.subscription.get('subscribed');
+        if (!_.contains(['stripe', 'gplay'], service)) {
+            return false;
+        }
+        var url = app.getApiUrl() + this.subscription.url() + '/' + service + '/cancel';
+        var headers = app.user.session.getHeaders();
+        this.$('#unsubscribe-btn *').toggleClass('hide');
+        $.ajax({
+            url: url,
+            headers: headers,
+            method: 'POST',
+            context: this,
+            success: function(response) {
+                this.subscription.set(response.Subscription);
+                this.renderMainContent();
+            }
+        });
+    },
+    /**
      * @method handleClickUnsubscribeITunesButton
      */
     handleClickUnsubscribeITunesButton: function() {
@@ -305,7 +328,7 @@ module.exports = GelatoPage.extend({
                 this.subscription.set(response.Subscription);
                 this.renderMainContent();
             }
-        })
+        });
     },
     /**
      * @method handleClickUpdateStripeSubscriptionButton
