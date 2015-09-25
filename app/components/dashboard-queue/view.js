@@ -16,7 +16,10 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.vocablists, 'state', this.render);
         this.vocablists.fetch({
             data: {
-                sort: 'adding'
+                limit: 10,
+                sort: 'adding',
+                include_percent_done: 'true',
+                lang: app.getLanguage()
             }
         });
     },
