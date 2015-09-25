@@ -23,7 +23,9 @@ module.exports = GelatoPage.extend({
         'vclick #redeem-code-btn': 'handleClickRedeemCodeButton',
         'vclick #go-on-vacation-link': 'handleClickGoOnVacationLink',
         'vclick #cancel-vacation-link': 'handleClickCancelVacationLink',
-        'vclick #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton'
+        'vclick #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton',
+        'vclick #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
+        'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton'
     },
     /**
      * @method initialize
@@ -100,6 +102,55 @@ module.exports = GelatoPage.extend({
         this.renderMainContent();
     },
     /**
+     * @method handleClickSubscribeStripeButton
+     */
+    handleClickSubscribeStripeButton: function() {
+        var cardData = {
+            number: this.$('#card-number-input').val(),
+            exp_month: this.$('#card-month-select').val(),
+            exp_year: this.$('#card-year-select').val()
+        };
+        var handler = _.bind(this.handleClickSubscribeStripeButtonResponse, this);
+        Stripe.setPublishableKey(app.getStripeKey());
+        Stripe.card.createToken(cardData, handler);
+        this.setSubscribeStripeButtonDisabled(true);
+        this.$('#card-error-alert').addClass('hide');
+    },
+    /**
+     * @method this.handleClickSubscribeStripeButtonResponse
+     */
+    handleClickSubscribeStripeButtonResponse: function(status, response) {
+        if (response.error) {
+            this.setSubscribeStripeButtonDisabled(false);
+            this.$('#card-error-alert')
+              .text(response.error.message)
+              .removeClass('hide');
+        }
+        else {
+            var token = response.id;
+            var url = (
+                app.getApiUrl() +
+                this.subscription.url() +
+                '/stripe/subscribe');
+            var headers = app.user.session.getHeaders();
+            var data = {
+                token: token,
+                plan: this.$('#plan-select').val()
+            };
+            $.ajax({
+                url: url,
+                headers: headers,
+                method: 'POST',
+                data: data,
+                context: this,
+                success: function(response) {
+                    this.subscription.set(response.Subscription);
+                    this.renderMainContent();
+                }
+            })
+        }
+    },
+    /**
      * @method handleClickUnsubscribeITunesButton
      */
     handleClickUnsubscribeITunesButton: function() {
@@ -118,6 +169,75 @@ module.exports = GelatoPage.extend({
         })
     },
     /**
+     * @method handleClickUpdateStripeSubscriptionButton
+     */
+    handleClickUpdateStripeSubscriptionButton: function() {
+        var cardData = {
+            number: this.$('#card-number-input').val(),
+            exp_month: this.$('#card-month-select').val(),
+            exp_year: this.$('#card-year-select').val()
+        };
+        if (cardData.number) {
+            var handler = _.bind(this.handleClickUpdateStripeSubscriptionButtonResponse, this);
+            Stripe.setPublishableKey(app.getStripeKey());
+            Stripe.card.createToken(cardData, handler);
+            this.setSubscribeStripeButtonDisabled(true);
+        }
+        else {
+            var url = (
+                app.getApiUrl() + this.subscription.url() + '/stripe');
+            var headers = app.user.session.getHeaders();
+            var data = { plan: this.$('#plan-select').val() };
+            $.ajax({
+                url: url,
+                headers: headers,
+                method: 'PUT',
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                context: this,
+                success: function(response) {
+                    this.subscription.set(response.Subscription);
+                    this.renderMainContent();
+                }
+            });
+            this.setSubscribeStripeButtonDisabled(true);
+        }
+        this.$('#card-error-alert').addClass('hide');
+    },
+    /**
+     * @method this.handleClickSubscribeStripeButtonResponse
+     */
+    handleClickUpdateStripeSubscriptionButtonResponse: function(status, response) {
+        if (response.error) {
+            this.setSubscribeStripeButtonDisabled(false);
+            this.$('#card-error-alert')
+              .text(response.error.message)
+              .removeClass('hide');
+        }
+        else {
+            var token = response.id;
+            var url = (
+                app.getApiUrl() + this.subscription.url() + '/stripe');
+            var headers = app.user.session.getHeaders();
+            var data = {
+                token: token,
+                plan: this.$('#plan-select').val()
+            };
+            $.ajax({
+                url: url,
+                headers: headers,
+                method: 'PUT',
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                context: this,
+                success: function(response) {
+                    this.subscription.set(response.Subscription);
+                    this.renderMainContent();
+                }
+            })
+        }
+    },
+    /**
      * @method renderSectionContent
      */
     renderMainContent: function() {
@@ -125,5 +245,14 @@ module.exports = GelatoPage.extend({
         context.view = this;
         var rendering = $(this.template(context));
         this.$('.main-content').replaceWith(rendering.find('.main-content'));
+    },
+    /**
+     * @method setSubscribeStripeButtonDisabled
+     */
+    setSubscribeStripeButtonDisabled: function(disabled) {
+        var button = this.$('#update-stripe-subscription-btn, #subscribe-stripe-btn');
+        button.attr('disabled', disabled);
+        button.find('span').toggleClass('hide', disabled);
+        button.find('i').toggleClass('hide', !disabled);
     }
 });

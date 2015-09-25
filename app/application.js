@@ -75,6 +75,19 @@ module.exports = GelatoApplication.extend({
         return this.get('language') === 'undefined' ? this.user.get('targetLang') : this.get('language');
     },
     /**
+     * @method getStripeKey
+     * @returns {String}
+     */
+    getStripeKey: function() {
+        return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc'; // TESTING
+        if (this.isTesting()) {
+            return 'pk_test_24FOCKPSEtJHVpcA3oErEw2I';
+        }
+        else {
+            return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc';
+        }
+    },
+    /**
      * @method handleError
      * @param {String} message
      * @param {String} url
@@ -119,6 +132,22 @@ module.exports = GelatoApplication.extend({
      * @returns {String}
      */
     isMobile: function() {
+        // TODO: Get this to return the right thing
+        return true;
+    },
+    /**
+     * @method isTesting
+     * @returns {String}
+     */
+    isTesting: function() {
+        // TODO: Get this to return the right thing
+        return _.contains(document.location.origin, 'localhost');
+    },
+    /**
+     * @method isWebsite
+     * @returns {String}
+     */
+    isWebsite: function() {
         // TODO: Get this to return the right thing
         return true;
     },

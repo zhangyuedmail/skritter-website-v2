@@ -1,5 +1,6 @@
 - var vacation = view.subscription.get('vacation');
 - var subscribed = view.subscription.get('subscribed');
+- var expires = view.subscription.get('expires');
 
 gelato-page(data-name='billing-subscription')
   .container
@@ -26,7 +27,6 @@ gelato-page(data-name='billing-subscription')
                 label.control-label.col-sm-3 Expires
                 .col-sm-9
                   p.form-control-static
-                    - var expires = view.subscription.get('expires');
                     if expires
                       | #{moment(expires).format('LL')}
                       if vacation
@@ -41,7 +41,7 @@ gelato-page(data-name='billing-subscription')
               - var couponUsed = view.coupon.wasUsed;
               .form-group.form-group-lg(class=couponError ? 'has-error' : couponUsed ? 'has-success' : '' )
                 label.control-label.col-sm-3 Coupon code
-                .col-sm-4
+                .col-sm-5
                   input#code-input.form-control(value=view.coupon.get('code'))
                   if couponError
                     .help-block= couponError
@@ -89,7 +89,7 @@ gelato-page(data-name='billing-subscription')
                     span I have unsubscribed through iTunes
                     i.fa.fa-1x.fa-spinner.fa-pulse.hide
                     
-              if subscribed === 'paypal'
+              else if subscribed === 'paypal'
                 .title Paypal Subscriptions
                 .alert.alert-info
                   p
@@ -104,7 +104,111 @@ gelato-page(data-name='billing-subscription')
                     | or through some other service, such as Apple or Google
                     | Play, first you should unsubscribe from your Paypal Skritter
                     | subscription. Otherwise you may be erroneously billed twice.
-
+                    
+              else if subscribed === 'anet'
+                // TODO: Remove once migrated away from Authorize.NET
+                .alert.alert-info
+                  | Please go to the
+                  a.spl.spr(href="http://www.skritter.com/account") legacy site
+                  | to cancel.
+                  
+              else if !expires
+              
+              else if app.isWebsite() && _.contains([false, 'stripe'], subscribed)
+                <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+                if subscribed === 'stripe'
+                  .title Edit subscription
+                if !subscribed
+                  .title Add subscription
+              
+                .form-group.form-group-lg
+                  label.control-label.col-sm-3 Payment method
+                  .col-sm-9
+                    label.radio-inline
+                      input(type="radio", name="payment-method", value="stripe", checked=true)
+                      | Credit card
+                    label.radio-inline
+                      input(type="radio", name="payment-method", value="paypal", disabled=subscribed==='stripe')
+                      span(class=subscribed ? 'text-mutedI' : '') Paypal
+                    if subscribed === 'stripe'
+                      .help-block 
+                        | Cancel your current subscription in order to subscribe
+                        | through Paypal
+                      
+                .form-group.form-group-lg.credit-card-form-group
+                  label.control-label.col-sm-3
+                    if subscribed === 'stripe'
+                      | Next payment
+                    if !subscribed
+                      | First payment
+                  .col-sm-9
+                    p.form-control-static
+                      if new Date(expires).getTime() > new Date().getTime()
+                         | #{moment(expires).format('LL')}
+                      else
+                        if subscribed === 'stripe'
+                          | Soon
+                        if !subscribed
+                          | Immediately
+                          
+                .form-group.form-group-lg.credit-card-form-group
+                  label.control-label.col-sm-3 Plan
+                  .col-sm-6
+                    select#plan-select.form-control
+                      - var currentPlan = _.result(view.subscription, 'attributes.stripe.plan');
+                      for plan in view.subscription.get('availablePlans')
+                        option(value=plan.key, selected=plan.key===currentPlan)
+                          | #{plan.fullName}
+                          
+                .form-group.form-group-lg.credit-card-form-group
+                  label.control-label.col-sm-3 Card number
+                  .col-sm-6
+                    input#card-number-input.form-control
+                    if subscribed === 'stripe'
+                      .help-block
+                        - var cn = view.subscription.get('stripe').cardNumber;
+                        | Currently using card 
+                        strong.spl x#{cn}
+                        | . Leave this field blank to keep the same card.
+                    
+                .form-group.form-group-lg.credit-card-form-group
+                  label.control-label.col-sm-3 Expiration date
+                  .col-sm-4
+                    select#card-month-select.form-control
+                      option(value='01') 01 - January
+                      option(value='02') 02 - February
+                      option(value='03') 03 - March
+                      option(value='04') 04 - April
+                      option(value='05') 05 - May
+                      option(value='06') 06 - June
+                      option(value='07') 07 - July
+                      option(value='08') 08 - August
+                      option(value='09') 09 - September
+                      option(value='10') 10 - October
+                      option(value='11') 11 - November
+                      option(value='12') 12 - December
+                  .col-sm-2
+                    select#card-year-select.form-control
+                      - var year = moment().year();
+                      for i in _.range(10)
+                        option(value=year+i)= year+i
+                    
+                .form-group.form-group-lg.credit-card-form-group
+                  .col-sm-3
+                    if subscribed === 'stripe'
+                      button#update-stripe-subscription-btn.btn.btn-fixed.btn-success
+                        span Update subscription
+                        i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                    if !subscribed
+                      button#subscribe-stripe-btn.btn.btn-fixed.btn-success
+                        span Subscribe now
+                        i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                      
+                  .col-sm-9
+                    #card-error-alert.alert.alert-danger.hide
+                        
+              //- else if subscribed ==
+                
                               
             
                   
