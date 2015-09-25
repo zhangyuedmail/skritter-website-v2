@@ -11,10 +11,11 @@ module.exports = SkritterModel.extend({
      * @type {Object}
      */
     defaults: {
+        addItemOffset: 0,
         allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
         allJapaneseParts: ['defn', 'rdng', 'rune'],
         gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
-        goals: {ja: {items: 20}, zh: {items: 20}}
+        goals: {ja: {items: 20}, zh: {items: 20}},
     },
     /**
      * @method parse
@@ -48,6 +49,25 @@ module.exports = SkritterModel.extend({
         return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
     },
     /**
+     * @method getRaygunTags
+     * @returns {Array}
+     */
+    getRaygunTags: function() {
+        var tags = [];
+        if (app.isChinese()) {
+            tags.push('chinese');
+            if (this.get('reviewSimplified')) {
+                tags.push('simplified');
+            }
+            if (this.get('reviewTraditional')) {
+                tags.push('traditional');
+            }
+        } else if (app.isJapanese()) {
+            tags.push('japanese');
+        }
+        return tags;
+    },
+    /**
      * @method getStudyParts
      * @returns {Array}
      */
@@ -76,7 +96,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     hasStudyPart: function(part) {
-        return _.includes(part, this.getStudyParts());
+        return _.includes(this.getStudyParts(), part);
     },
     /**
      * @method isAudioEnabled

@@ -10,7 +10,7 @@ var Router = require('router');
 module.exports = GelatoApplication.extend({
     /**
      * @method initialize
-     * @constructor
+     * @constructorApply
      */
     initialize: function() {
         window.onerror = this.handleError;
@@ -24,7 +24,7 @@ module.exports = GelatoApplication.extend({
         this.router = new Router();
         this.user = new User({id: this.getSetting('user')});
 
-        if (createjs) {
+        if (window.createjs) {
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
                 this.moveTo(x1 , y1);
                 var dX = x2 - x1;
@@ -41,6 +41,19 @@ module.exports = GelatoApplication.extend({
                 this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x2, y2);
                 return this;
             };
+        }
+
+        //TODO: depreciate this code after some time
+        if (localStorage.getItem('guest-authentication')) {
+            var user = localStorage.getItem('application-user');
+            if (user) {
+                localStorage.removeItem(user + '-authentication');
+                localStorage.removeItem(user + '-settings');
+                localStorage.removeItem(user + '-ja-data');
+                localStorage.removeItem(user + '-zh-data');
+            }
+            localStorage.removeItem('guest-authentication');
+            app.reload();
         }
 
     },
@@ -114,6 +127,13 @@ module.exports = GelatoApplication.extend({
         return false;
     },
     /**
+     * @method hideLoading
+     * @param {Number} [speed]
+     */
+    hideLoading: function(speed) {
+        $('#application-loading').fadeOut(speed);
+    },
+    /**
      * @method isChinese
      * @returns {Boolean}
      */
@@ -129,10 +149,10 @@ module.exports = GelatoApplication.extend({
     },
     /**
      * @method isMobile
-     * @returns {String}
+     * @returns {Boolean}
      */
     isMobile: function() {
-        // TODO: Get this to return the right thing
+        // TODO: properly check if application is mobile
         return true;
     },
     /**
@@ -152,14 +172,54 @@ module.exports = GelatoApplication.extend({
         return true;
     },
     /**
-     * @method sendRaygunTestError
+     * @method loadHelpscout
      */
-    sendRaygunTestError: function() {
+    loadHelpscout: function() {
+        var HSCW = {config: {}};
+        var HS = {beacon: {}};
+
+        HSCW.config = {
+            contact: {
+                enabled: true,
+                formId: '34a3fef0-62f6-11e5-8846-0e599dc12a51'
+            },
+            docs: {
+                enabled: true,
+                baseUrl: 'http://skritter.helpscoutdocs.com/'
+            }
+        };
+
+        HS.beacon.userConfig = {
+            color: '#32a8d9',
+            icon: 'question',
+            modal: false
+        };
+
+        var parent = document.getElementsByTagName('script')[0];
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://djtflbt20bdde.cloudfront.net/';
+        parent.parentNode.insertBefore(script, parent);
+
+        window.HSCW = HSCW;
+        window.HS = HS;
+    },
+    /**
+     * @method sendRaygunTest
+     */
+    sendRaygunTest: function() {
         try {
             throw new Error('TEST ERROR');
         } catch(error) {
             Raygun.send(error);
         }
+    },
+    /**
+     * @method showLoading
+     * @param {Number} [speed]
+     */
+    showLoading: function(speed) {
+        $('#application-loading').fadeIn(speed);
     },
     /**
      * @method start
@@ -168,6 +228,14 @@ module.exports = GelatoApplication.extend({
         this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
         this.user.on('state:standby', this.user.cache);
+        if (this.user.isLoggedIn()) {
+            Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
+            Raygun.withTags(this.user.getRaygunTags());
+        } else {
+            Raygun.setUser('guest', true);
+        }
         this.router.start();
+        this.loadHelpscout();
+        this.hideLoading();
     }
 });

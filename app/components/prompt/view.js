@@ -26,6 +26,7 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function() {
         //properties
+        this.editing = false;
         this.part = null;
         this.reviews = null;
         //components
@@ -56,6 +57,7 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.toolbarGrading, 'select', this.handleToolbarGradingSelect);
         this.listenTo(this.toolbarVocab, 'click:audio', this.handleToolbarVocabAudio);
         this.listenTo(this.toolbarVocab, 'click:ban', this.handleToolbarVocabBan);
+        this.listenTo(this.toolbarVocab, 'click:edit', this.handleToolbarVocabEdit);
         this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
         this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
     },
@@ -168,6 +170,9 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabDefinition.render();
+            if (app.user.isAudioEnabled()) {
+                this.reviews.vocab.play();
+            }
         } else {
             this.renderPromptPartRune();
         }
@@ -206,6 +211,9 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
+            if (app.user.isAudioEnabled()) {
+                this.reviews.vocab.play();
+            }
         } else {
             this.renderPromptPartRune();
         }
@@ -230,6 +238,9 @@ module.exports = GelatoComponent.extend({
             this.vocabWriting.render();
             this.canvas.enableInput();
             this.review.start();
+            if (app.user.isAudioEnabled() && this.reviews.isFirst()) {
+                this.reviews.vocab.play();
+            }
         }
         return this;
     },
@@ -300,6 +311,9 @@ module.exports = GelatoComponent.extend({
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
             this.vocabWriting.render();
+            if (app.user.isAudioEnabled()) {
+                this.reviews.vocab.play();
+            }
         } else {
             this.renderPromptPartTone();
         }
@@ -309,18 +323,36 @@ module.exports = GelatoComponent.extend({
      * @method handleCanvasAttemptFail
      */
     handleCanvasAttemptFail: function() {
-        this.review.set('attempts', this.review.get('attempts') + 1);
-        if (this.review.get('attempts') > 2) {
-            this.canvas.showStrokeHint();
+        switch (this.part) {
+            case 'rune':
+                this.review.set('attempts', this.review.get('attempts') + 1);
+                if (this.review.get('attempts') > 3) {
+                    this.canvas.showStrokeHint();
+                    this.review.set('score', 1);
+                } else if (this.review.get('attempts') > 2) {
+                    this.canvas.showStrokeHint();
+                }
+                break;
+            case 'tone':
+                this.review.set('score', 1);
+                break;
         }
+
     },
     /**
      * @method handleCanvasAttemptSuccess
      */
     handleCanvasAttemptSuccess: function() {
-        this.review.set('attempts', 0);
-        if (this.review.get('teach')) {
-            this.canvas.startTeaching();
+        switch (this.part) {
+            case 'rune':
+                this.review.set('attempts', 0);
+                if (this.review.get('teach')) {
+                    this.canvas.startTeaching();
+                }
+                break;
+            case 'tone':
+                this.review.set('score', 3);
+                break;
         }
     },
     /**
@@ -487,6 +519,27 @@ module.exports = GelatoComponent.extend({
             });
         }, this));
         dialog.open();
+    },
+    /**
+     * @method handleToolbarVocabEdit
+     */
+    handleToolbarVocabEdit: function() {
+        if (this.editing) {
+            this.editing = false;
+            this.vocabDefinition.editable = false;
+            this.vocabMnemonic.editable = false;
+            this.reviews.vocab.save({
+                customDefinition: this.vocabDefinition.getValue(),
+                mnemonic: this.vocabMnemonic.getValue()
+            });
+        } else {
+            this.editing = true;
+            this.vocabDefinition.editable = true;
+            this.vocabMnemonic.editable = true;
+
+        }
+        this.vocabDefinition.render();
+        this.vocabMnemonic.render();
     },
     /**
      * @method handleToolbarVocabInfo

@@ -1,0 +1,15 @@
+@import "../../styles/variables";
+
+gelato-dialog[data-name="list-settings"] {
+
+  #button-close {
+    cursor: pointer;
+    float: right;
+    font-size: 28px;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    z-index: 9999;
+  }
+
+}

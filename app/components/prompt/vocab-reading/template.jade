@@ -4,13 +4,26 @@ gelato-component(data-name='prompt-vocab-reading')
 
   if reviews
     - var index = 0
-    - var fillers = ['...']
 
     case prompt.part
 
+      when 'rdng'
+        for reading in reviews.vocab.getReadings()
+          if (reading.type === 'character')
+            - var review = reviews.at(index)
+            div.reading(class=reviews.isComplete() ? '' : 'masked', data-position=index)
+              if reviews.vocab.isChinese()
+                span= app.fn.pinyin.toTone(reading.value)
+              else
+                span= reading.value
+            - index++
+          else
+            div.filler
+              span= reading.value
+
       when 'tone'
         for reading in reviews.vocab.getReadings()
-          if (fillers.indexOf(reading) === -1)
+          if (reading.type === 'character')
             - var review = reviews.at(index)
             - var classes = []
             if (!review.get('complete'))
@@ -19,24 +32,24 @@ gelato-component(data-name='prompt-vocab-reading')
               - classes.push('active')
             div.reading(class=classes.join(' '), data-position=index)
               if reviews.vocab.isChinese()
-                span= app.fn.pinyin.toTone(reading)
+                span= app.fn.pinyin.toTone(reading.value)
               else
-                span= reading
+                span= reading.value
             - index++
           else
             div.filler
-              span= reading
+              span= reading.value
 
       default
         for reading in reviews.vocab.getReadings()
-          if (fillers.indexOf(reading) === -1)
+          if (reading.type === 'character')
             - var review = reviews.at(index)
             div.reading(data-position=index)
               if reviews.vocab.isChinese()
-                span= app.fn.pinyin.toTone(reading)
+                span= app.fn.pinyin.toTone(reading.value)
               else
-                span= reading
+                span= reading.value
             - index++
           else
             div.filler
-              span= reading
+              span= reading.value

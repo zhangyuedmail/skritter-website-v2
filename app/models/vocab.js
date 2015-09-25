@@ -182,6 +182,7 @@ module.exports = SkritterModel.extend({
      * @returns {String}
      */
     getReading: function() {
+        //TODO: depreciate this for direct usage in templates
         return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');
     },
     /**
@@ -189,14 +190,23 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getReadings: function() {
+        var readings = [];
         var reading = this.get('reading');
         if (this.isChinese()) {
-            if (reading.indexOf(', ') > -1) {
-                return [reading];
+            if (reading.indexOf(', ') === -1) {
+                readings = reading.match(/[a-z|A-Z]+[1-5]+|'| ... |\s/g);
+            } else {
+                readings = [reading];
             }
-            return reading.match(/\s|[a-z|A-Z]+[1-5]+| ... |'/g);
+        } else {
+            readings = [reading];
         }
-        return [reading];
+        return readings.map(function(value) {
+            if ([' ', ' ... ', '\''].indexOf(value) > -1) {
+                return {type: 'filler', value: value};
+            }
+            return {type: 'character', value: value};
+        });
     },
     /**
      * @method getSentence

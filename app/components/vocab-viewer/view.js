@@ -26,22 +26,11 @@ module.exports = GelatoComponent.extend({
      * @returns {VocabViewer}
      */
     render: function() {
-        this.renderTemplate().hide();
-        this.lookup.setElement('#vocab-lookup').render();
-        return this;
-    },
-    /**
-     * @method renderFields
-     * @returns {VocabViewer}
-     */
-    renderFields: function() {
-        this.$('#vocab-difficulty').text(this.vocab.get('toughnessString'));
-        this.$('#vocab-definition').html(this.vocab.getDefinition());
-        this.$('#vocab-mnemonic').html(this.vocab.getMnemonic().text);
-        this.$('#vocab-reading').text(this.vocab.get('reading'));
-        this.$('#vocab-sentence').text(this.vocab.getSentence().getWriting());
-        this.$('#vocab-writing').text(this.vocab.get('writing'));
-        this.lookup.set(this.vocab.get('dictionaryLinks'));
+        this.renderTemplate();
+        this.lookup.setElement('#vocab-lookup-container').render();
+        if (this.vocab) {
+            this.lookup.set(this.vocab.get('dictionaryLinks'));
+        }
         return this;
     },
     /**
@@ -64,8 +53,7 @@ module.exports = GelatoComponent.extend({
             success: function(vocabs) {
                 self.vocab = vocabs.at(0);
                 self.trigger('load', self.vocab);
-                self.renderFields();
-                self.show();
+                self.render();
             }
         });
         return this;

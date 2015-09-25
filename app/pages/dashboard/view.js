@@ -6,7 +6,6 @@ var DashboardTotal = require('components/dashboard-total/view');
 var DashboardQueue = require('components/dashboard-queue/view');
 var GoalSettingsDialog = require('dialogs/goal-settings/view');
 var DefaultNavbar = require('navbars/default/view');
-var MobileDashboardNavbar = require('navbars/mobile-dashboard/view');
 
 /**
  * @class Dashboard
@@ -18,10 +17,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.mobileNavbar = new MobileDashboardNavbar();
         this.navbar = new DefaultNavbar();
-
-        //TODO: replace dashboard status with goal
         this.dashboardGoal = new DashboardStatus();
         this.dashboardMonth = new DashboardMonth();
         this.dashboardTotal = new DashboardTotal();
@@ -53,7 +49,6 @@ module.exports = GelatoPage.extend({
         this.dashboardTotal.setElement('#dashboard-total-container').render();
         this.dashboardQueue.setElement('#dashboard-queue-container').render();
         this.navbar.render();
-        // this.mobileNavbar.setElement('#dashboard-mobile-navbar-container').render();
         return this;
     },
     /**
@@ -78,12 +73,10 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.dashboardGoal.remove();
-        if (!app.isMobile()) {
-          this.dashboardMonth.remove();
-          this.dashboardTotal.remove();
-          this.navbar.remove();
-        }
+        this.dashboardMonth.remove();
+        this.dashboardTotal.remove();
         this.dashboardQueue.remove();
+        this.navbar.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });

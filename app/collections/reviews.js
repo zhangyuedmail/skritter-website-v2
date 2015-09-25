@@ -7,6 +7,13 @@ var Review = require('models/review');
  */
 module.exports = SkritterCollection.extend({
     /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.timeOffset = 0;
+    },
+    /**
      * @method comparator
      * @param {Review} review
      * @return {String}
@@ -38,13 +45,16 @@ module.exports = SkritterCollection.extend({
                         headers: app.user.session.getHeaders(),
                         context: this,
                         type: 'POST',
-                        data: JSON.stringify(review.data)
-                    }).done(function() {
-                        this.remove(review);
-                        callback();
-                    }).fail(function(error) {
-                        //TODO: better handle conflicts
-                        callback(error);
+                        data: JSON.stringify(review.data),
+                        error: function() {
+                            //TODO: better handle conflicts
+                            callback(error);
+                        },
+                        success: function() {
+                            this.timeOffset += review.data[0].reviewTime;
+                            this.remove(review);
+                            callback();
+                        }
                     });
                 }, this),
                 _.bind(function(error) {

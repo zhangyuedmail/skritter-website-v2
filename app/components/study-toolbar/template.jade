@@ -1,0 +1,11 @@
+gelato-component(data-name='study-toolbar')
+  - var items = view.items
+
+  .row
+    .col-xs-4.text-left
+      i#button-add-item.fa.fa-plus-circle(class=items.state === 'standby' ? 'visible' : 'invisible')
+    .col-xs-4.text-center
+      span= app.fn.convertTimeToClock(view.stats.getDailyTimeStudied() * 1000)
+    .col-xs-4.text-right
+      i#button-list-settings.fa.fa-list-ul
+      i#button-study-settings.fa.fa-gear

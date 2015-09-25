@@ -1,6 +1,7 @@
 var GelatoPage = require('gelato/page');
 var Items = require('collections/items');
 var Prompt = require('components/prompt/view');
+var StudyToolbar = require('components/study-toolbar/view');
 var DefaultNavbar = require('navbars/default/view');
 
 /**
@@ -13,15 +14,17 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
+        this._listId = null;
+        this._sectionId = null;
         this.counter = 1;
         this.items = new Items();
-        this.listId = null;
         this.navbar = new DefaultNavbar();
         this.prompt = new Prompt();
-        this.sectionId = null;
+        this.toolbar = new StudyToolbar({items: this.items});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
+        this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
     },
     /**
      * @property events
@@ -51,6 +54,7 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.navbar.render();
         this.prompt.setElement('#prompt-container').render();
+        this.toolbar.setElement('#toolbar-container').render();
         return this;
     },
     /**
@@ -78,14 +82,57 @@ module.exports = GelatoPage.extend({
         this.next();
     },
     /**
+     * @method handleToolbarAddItem
+     */
+    handleToolbarAddItem: function() {
+        this.items.add(
+            _.bind(function(result) {
+                $.notify(
+                    {
+                        icon: 'fa fa-plus-circle',
+                        title: '',
+                        message: result.numVocabsAdded + ' word has been added.'
+                    },
+                    {
+                        type: 'minimalist',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 5000,
+                        icon_type: 'class'
+                    }
+                );
+            }, this),
+            _.bind(function() {
+                $.notify(
+                    {
+                        icon: 'fa fa-exclamation-circle',
+                        title: 'Error',
+                        message: 'Unable to add a new word.'
+                    },
+                    {
+                        type: 'minimalist',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 5000,
+                        icon_type: 'class'
+                    }
+                );
+            }, this)
+        );
+    },
+    /**
      * @method load
      * @param {String} [listId]
      * @param {String} [sectionId]
      */
     load: function(listId, sectionId) {
         //TODO: support list and section parameters
-        this.listId = listId;
-        this.sectionid = sectionId;
+        this._listId = listId;
+        this._sectionid = sectionId;
         async.waterfall([
             _.bind(function(callback) {
                 this.items.fetch({
