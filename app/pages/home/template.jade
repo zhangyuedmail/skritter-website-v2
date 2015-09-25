@@ -11,12 +11,10 @@ gelato-page(data-name='home')
         img(src="/media/images/home_hero1.png", alt="")
       .item
         img(src="/media/images/home_hero2.png", alt="")
-    a.left.carousel-control(href="#hero-slider", role="button", data-slide="prev")
-      span.glyphicon.glyphicon-chevron-left(aria-hidden="true")
-      span.sr-only Previous
-    a.right.carousel-control(href="#hero-slider", role="button", data-slide="next")
-      span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
-      span.sr-only Next
+    a.left.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="prev")
+      span.glyphicon.glyphicon-chevron-left
+    a.right.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="next")
+      span.glyphicon.glyphicon-chevron-right
 
   section#section-features.light
     .container
