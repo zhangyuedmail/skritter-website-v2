@@ -9,6 +9,37 @@ gelato-page(data-name='billing-subscription')
         .col-md-3.sidebar
           #settings-sidebar-container
           
+          if user.get('isAdmin')
+            .spoof-button-area
+              
+              h4 Spoof
+              h5 Subscription
+              .list-group
+                button.list-group-item(data-subscribed='off') None
+                button.list-group-item(data-subscribed='ios') iTunes
+                button.list-group-item(data-subscribed='gplay') Google Play
+                button.list-group-item(data-subscribed='paypal') Paypal
+                button.list-group-item(data-subscribed='stripe') Stripe
+                button.list-group-item(data-subscribed='anet') Authorize.NET
+                
+              h5 Client
+              .list-group
+                button.list-group-item(data-client='site') Website
+                button.list-group-item(data-client='android') Android
+                button.list-group-item(data-client='ios') iOS
+                
+              h5 Discount
+              .list-group
+                button.list-group-item(data-discount='on') On
+                button.list-group-item(data-discount='off') Off
+              
+              h5 Vacation
+              .list-group
+                button.list-group-item(data-vacation='on') On
+                button.list-group-item(data-vacation='off') Off
+
+                
+          
         .col-md-9.main-content
           .title Subscription
 
@@ -55,24 +86,27 @@ gelato-page(data-name='billing-subscription')
                     button.btn.btn-fixed.btn-success(disabled=true)
                       i.fa.fa-1x.fa-spinner.fa-pulse
 
-              .form-group.form-group-lg
-                label.control-label.col-sm-3 Vacation
-                .col-sm-9
-                  p.form-control-static
-                    if vacation
-                      span= moment(vacation.begin).format('dddd, MMMM Do')
-                      span.spr.spl -
-                      span.spr= moment(vacation.end).format('dddd, MMMM Do')
-                      span#cancel-vacation-wrapper
-                        a#cancel-vacation-link Cancel
-                        i#cancel-vacation-spinner.fa.fa-1x.fa-spinner.fa-pulse.hide
-                    else
-                      a#go-on-vacation-link Go on vacation
+              if subscribed === 'stripe' || subscribed === false
+                .form-group.form-group-lg
+                  label.control-label.col-sm-3 Vacation
+                  .col-sm-9
+                    p.form-control-static
+                      if vacation
+                        span= moment(vacation.begin).format('dddd, MMMM Do')
+                        span.spr.spl -
+                        span.spr= moment(vacation.end).format('dddd, MMMM Do')
+                        span#cancel-vacation-wrapper
+                          a#cancel-vacation-link Cancel
+                          i#cancel-vacation-spinner.fa.fa-1x.fa-spinner.fa-pulse.hide
+                      else
+                        a#go-on-vacation-link Go on vacation
                       
               hr
               
-              if subscribed === 'ios'
-                .title Apple Subscriptions
+              
+              if !app.isIOS() && subscribed === 'ios'
+                // - SUBSCRIBED THROUGH IOS, NOT ON IOS APP
+                .title Edit Subscription
                 .alert.alert-info
                   p
                     | Your subscription is controlled through Apple.
@@ -80,41 +114,56 @@ gelato-page(data-name='billing-subscription')
                     | please go to iTunes.
 
                   p 
-                    | If you would like to pay with a credit card here,
-                    | or through some other service, such as Paypal or Google
-                    | Play, first you should unsubscribe from your Apple Skritter
+                    | If you would like to change your payment method,
+                    | first you should unsubscribe from your Apple Skritter
                     | subscription. Otherwise you may be erroneously billed twice.
                   
                   button.btn.btn-block.btn-primary#unsubscribe-itunes-btn
                     span I have unsubscribed through iTunes
                     i.fa.fa-1x.fa-spinner.fa-pulse.hide
                     
+                    
+                //- TODO: ON IOS, SUBSCRIBED THROUGH IOS OR UNSUBSCRIBED
+                      
+                    
               else if subscribed === 'paypal'
-                .title Paypal Subscriptions
+                //- SUBSCRIBED THROUGH PAYPAL
+
+                .title Edit Subscription
                 .alert.alert-info
                   p
                     | Your subscription is controlled through Paypal.
                     | To cancel or get more info about your subscription,
                     | please go to
-                    a.spl(href="https://www.paypal.com/" target="_blank") the Paypal website
+                    a.spl(href="https://www.paypal.com/" target="_blank")
+                      | the Paypal website
                     | .
 
                   p 
-                    | If you would like to pay with a credit card here,
-                    | or through some other service, such as Apple or Google
-                    | Play, first you should unsubscribe from your Paypal Skritter
+                    | If you would like to change your payment method,
+                    | first you should unsubscribe from your Paypal Skritter
                     | subscription. Otherwise you may be erroneously billed twice.
                     
+                    
               else if subscribed === 'anet'
+                // - SUBSCRIBED THROUGH AUTHORIZE.NET
+                
                 // TODO: Remove once migrated away from Authorize.NET
+                .title Edit Subscription
                 .alert.alert-info
                   | Please go to the
                   a.spl.spr(href="http://www.skritter.com/account") legacy site
-                  | to cancel.
+                  | to cancel or change your subscription.
+                  
                   
               else if !expires
+                // - FREE ACCOUNT, NOT SUBSCRIBED
+              
+                // show nothing
+
               
               else if app.isWebsite() && _.contains([false, 'stripe'], subscribed)
+                // - ON WEBSITE, NOT SUBSCRIBED OR SUBSCRIBED TO STRIPE
                 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
                 if subscribed === 'stripe'
                   .title Edit subscription
@@ -159,6 +208,11 @@ gelato-page(data-name='billing-subscription')
                       for plan in view.subscription.get('availablePlans')
                         option(value=plan.key, selected=plan.key===currentPlan)
                           | #{plan.fullName}
+                    - var discount = view.subscription.get('discount')
+                    if discount
+                      .help-block 
+                        | Discount available until
+                        span.spl= moment(discount.expires).format('LL')
                           
                 .form-group.form-group-lg.credit-card-form-group
                   label.control-label.col-sm-3 Card number
@@ -206,9 +260,90 @@ gelato-page(data-name='billing-subscription')
                       
                   .col-sm-9
                     #card-error-alert.alert.alert-danger.hide
-                        
-              //- else if subscribed ==
+                    
+                    
+              else if app.isMobile() && subscribed === 'stripe'
+                //- ON MOBILE, SUBSCRIBED TO STRIPE
+              
+                .title Edit Subscription
+                .alert.alert-info
+                  p
+                    | Your subscription is controlled through the
+                    a.spl(href="https://www.skritter.com/") Skritter website
+                    | .
+                    
+                    
+              else if !app.isAndroid() && subscribed === 'gplay'
+                //- NOT ON ANDROID, SUBSCRIBED THROUGH GOOGLE PLAY 
+              
+                .title Edit Subscription
+                .alert.alert-info
+                  p
+                    | Your subscription is controlled through Google Play.
+                    | To cancel or get more info about your subscription,
+                    | please use the Android app or go to
+                    a.spl(href="https://payments.google.com/" target="_blank")
+                      | https://payments.google.com/
+
+                  p 
+                    | If you would like to pay with a credit card here,
+                    | or through some other service, such as Paypal, Apple,
+                    | first you should unsubscribe from your Google Play
+                    | subscription. Otherwise you may be erroneously billed twice.
+                    
+                    
+                //- TODO: ON ANDROID, SUBSCRIBED THROUGH GOOGLE PLAY OR UNSUBSCRIBED
+              
+
+              else
+                .title Subscription
+                .alert.alert-warning
+                  | Your subscription is not yet supported by Skritter HTML5.
+                  
+                  
+              //- POLICIES
+              
+              p
+                strong.spr Refund Policy:
+                | If you are unsatisfied with your subscription for any reason,
+                | let us know and we will issue you a full refund, no questions
+                | asked. Just
+                a.spl(href="/contact") contact us
+                | ; we'll make you happy.
                 
+              p
+                strong.spr Note:
+                | We cannot issue refunds for Apple purchases. Sorry, but 
+                | they won't let us! Please try
+                a.spl.spr(href="http://www.labnol.org/software/itunes-app-store-refunds/13838/" target="_blank")
+                  | these instructions
+                | to get refunds for any purchase made through an iOS device.
+
+              p 
+                | Also, we cannot make refunds directly to your card that 
+                | are too old (more than three months). If this is the case, 
+                | we can refund older payments via Paypal.
+                
+              p
+                strong.spr Downtime Policy:
+                | If you have been unable to use Skritter due to a bug in the
+                | system, let us know and we will extend your account by the
+                | number of days it was unusable.
+                
+                
+              //- CANCEL STRIPE/GOOGLE PLAY
+              
+              //- TODO: CANCEL IOS
+              
+              if subscribed === 'stripe' || subscribed === 'gplay'
+                hr
+                .title Cancel subscription
+                
+                .form-group.form-group-lg
+                  .col-sm-3
+                    button#unsubscribe-subscription-btn.btn.btn-fixed.btn-success
+                        span Cancel subscription
+                        i.fa.fa-1x.fa-spinner.fa-pulse.hide
                               
             
                   

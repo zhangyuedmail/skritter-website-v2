@@ -25,7 +25,8 @@ module.exports = GelatoPage.extend({
         'vclick #cancel-vacation-link': 'handleClickCancelVacationLink',
         'vclick #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton',
         'vclick #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
-        'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton'
+        'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
+        'vclick .spoof-button-area button': 'handleClickSpoofButtonAreaButton'
     },
     /**
      * @method initialize
@@ -99,6 +100,144 @@ module.exports = GelatoPage.extend({
     handleClickRedeemCodeButton: function() {
         this.coupon.set('code', this.$('#code-input').val());
         this.coupon.use();
+        this.renderMainContent();
+    },
+    /**
+     * @method handleClickSpoofButtonAreaButton
+     * @param {Event} event
+     */
+    handleClickSpoofButtonAreaButton: function(event) {
+        var subscribed = $(event.target).data('subscribed');
+        var client = $(event.target).data('client');
+        var discount = $(event.target).data('discount');
+        var vacation = $(event.target).data('vacation');
+        if (subscribed) {
+            // reset first
+            this.subscription.set({
+                subscribed: false,
+                ios: false,
+                gplay: false,
+                stripe: false,
+                anet: false,
+                paypal: false
+            })
+            if (subscribed === 'ios') {
+                this.subscription.set({
+                    subscribed: 'ios',
+                    ios: {
+                        'localizedPrice': '£9.99 (localized price test)'
+                    }
+                });
+            }
+            if (subscribed === 'gplay') {
+                this.subscription.set({
+                    subscribed: 'gplay',
+                    gplay: {
+                        'subscription': 'one.month.sub',
+                        'token': '-- gplay token id --',
+                        'package': 'com.inkren.skritter.chinese'
+                    }
+                });
+            }
+            if (subscribed === 'paypal') {
+                this.subscription.set({
+                    subscribed: 'paypal',
+                    paypal: {
+                        'plan': 'Month Plan'
+                    }
+                });
+            }
+            if (subscribed === 'stripe') {
+                this.subscription.set({
+                    subscribed: 'stripe',
+                    stripe: {
+                        plan: 'one_month',
+                        cardNumber: '1234',
+                        price: '9.99',
+                        months: 1,
+                        discount: false
+                    }
+                });
+            }
+            if (subscribed === 'anet') {
+                this.subscription.set({
+                    subscribed: 'anet',
+                    stripe: {
+                        plan: 'one_month',
+                        cardNumber: '1234',
+                        price: '9.99',
+                        months: 1,
+                        discount: false
+                    }
+                });
+            }
+        }
+        if (client) {
+            if (client === 'site') {
+                app.isWebsite = function() { return true; }
+                app.isMobile = function() { return false; }
+                app.isAndroid = function() { return false; }
+                app.isIOS = function() { return false; }
+            }
+            if (client === 'ios') {
+                app.isWebsite = function() { return false; }
+                app.isMobile = function() { return true; }
+                app.isAndroid = function() { return false; }
+                app.isIOS = function() { return true; }
+            }
+            if (client === 'android') {
+                app.isWebsite = function() { return false; }
+                app.isMobile = function() { return true; }
+                app.isAndroid = function() { return true; }
+                app.isIOS = function() { return false; }
+            }
+        }
+        if (discount) {
+            if (discount === 'on') {
+                this.subscription.set({
+                    discount: {
+                      price: 4.99,
+                      expires: "2020-01-01"
+                    },
+                    availablePlans: [{
+                  		"name": "1 month",
+                  		"price": "4.99",
+                  		"months": 1,
+                  		"discount": true,
+                  		"key": "one_month",
+                  		"fullName": "$4.99/month (discount)"
+                  	}]
+                });
+            }
+            if (discount === 'off') {
+                this.subscription.set({
+                    discount: false,
+                    availablePlans: [{
+                      "name": "1 month",
+                      "price": "14.99",
+                      "months": 1,
+                      "discount": true,
+                      "key": "one_month",
+                      "fullName": "$14.99/month"
+                    }]
+                });
+            }
+        }
+        if (vacation) {
+            if (vacation === 'on') {
+                this.subscription.set({
+                    vacation: {
+                        start: moment().subtract('1', 'month').format('YYYY-MM-DD'),
+                        end: moment().add('1', 'month').format('YYYY-MM-DD')
+                    }
+                });
+            }
+            if (vacation === 'off') {
+                this.subscription.set({ vacation: false });
+            }
+        }
+        $(event.target).closest('.list-group').find('button').removeClass('active');
+        $(event.target).closest('button').addClass('active');
         this.renderMainContent();
     },
     /**

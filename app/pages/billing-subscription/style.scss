@@ -16,4 +16,12 @@ gelato-page[data-name='billing-subscription'] {
   .alert p {
     margin: 10px 0;
   }
+
+  .spoof-button-area {
+    margin: 0 auto 0 auto;
+    width: 180px;
+    .list-group-item {
+      padding: 5px 10px;
+    }
+  }
 }

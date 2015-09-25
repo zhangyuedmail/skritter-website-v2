@@ -134,6 +134,14 @@ module.exports = GelatoApplication.extend({
         $('#application-loading').fadeOut(speed);
     },
     /**
+     * @method isAndroid
+     * @returns {Boolean}
+     */
+    isAndroid: function() {
+        // TODO: properly check if application is mobile
+        return false;
+    },
+    /**
      * @method isChinese
      * @returns {Boolean}
      */
@@ -148,12 +156,20 @@ module.exports = GelatoApplication.extend({
         return this.getLanguage() === 'ja';
     },
     /**
+     * @method isIOS
+     * @returns {Boolean}
+     */
+    isIOS: function() {
+        // TODO: properly check if application is mobile
+        return false;
+    },
+    /**
      * @method isMobile
      * @returns {Boolean}
      */
     isMobile: function() {
         // TODO: properly check if application is mobile
-        return true;
+        return false;
     },
     /**
      * @method isTesting
