@@ -61,6 +61,57 @@ module.exports = SkritterCollection.extend({
      */
     url: 'items',
     /**
+     * @method add
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    add: function(callbackSuccess, callbackError) {
+        var offset = app.user.get('addItemOffset');
+        async.waterfall([
+            _.bind(function(callback) {
+                this.fetch({
+                    type: 'POST',
+                    remove: false,
+                    url: app.getApiUrl() + 'items/add?offset=' + offset,
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function(items, result) {
+                        result.offset = offset + result.numVocabsAdded;
+                        callback(null, result);
+                    }
+                });
+            }, this),
+            _.bind(function(result, callback) {
+                this.fetch({
+                    data: {
+                        ids: _.pluck(result.Items, 'id').join('|'),
+                        include_contained: true,
+                        include_decomps: true,
+                        include_sentences: true,
+                        include_strokes: true,
+                        include_vocabs: true
+                    },
+                    remove: false,
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback(null, result);
+                    }
+                });
+            }, this)
+        ], function(error, result) {
+            if (error) {
+                console.error('ITEM ADD ERROR:', error);
+                typeof callbackError === 'function' && callbackError(error);
+            } else {
+                app.user.set('addItemOffset', result.offset).cache();
+                typeof callbackSuccess === 'function' && callbackSuccess(result);
+            }
+        });
+    },
+    /**
      * @method addReviews
      * @param {Array} reviews
      */

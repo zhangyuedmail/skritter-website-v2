@@ -151,19 +151,21 @@ module.exports = SkritterModel.extend({
         var reviewTraditional = app.user.get('reviewTraditional');
         for (var i = 0, length = vocabIds.length; i < length; i++) {
             var vocab = this.collection.vocabs.get(vocabIds[i]);
-            var vocabStyle = vocab.get('style');
-            if (vocab.isChinese()) {
-                if (reviewSimplified && vocabStyle === 'simp') {
-                    vocabs.push(vocab);
-                } else if (reviewTraditional && vocabStyle === 'trad') {
-                    vocabs.push(vocab);
-                } else if (vocabStyle === 'both') {
-                    vocabs.push(vocab);
-                } else if (vocabStyle === 'none') {
+            if (vocab) {
+                var vocabStyle = vocab.get('style');
+                if (vocab.isChinese()) {
+                    if (reviewSimplified && vocabStyle === 'simp') {
+                        vocabs.push(vocab);
+                    } else if (reviewTraditional && vocabStyle === 'trad') {
+                        vocabs.push(vocab);
+                    } else if (vocabStyle === 'both') {
+                        vocabs.push(vocab);
+                    } else if (vocabStyle === 'none') {
+                        vocabs.push(vocab);
+                    }
+                } else {
                     vocabs.push(vocab);
                 }
-            } else {
-                vocabs.push(vocab);
             }
         }
         return vocabs;
@@ -173,7 +175,8 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     isActive: function() {
-        return this.get('vocabIds').length && !this.getVocab().isBanned();
+        var vocab = this.getVocab();
+        return vocab ? !vocab.isBanned() : false;
     },
     /**
      * @method isChinese
