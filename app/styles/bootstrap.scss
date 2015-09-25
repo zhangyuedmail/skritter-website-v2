@@ -52,10 +52,10 @@ a {
   z-index: 9999 !important;
 }
 .alert-minimalist {
-  background-color: rgb(241, 242, 240);
+  background-color: rgba(241, 242, 240, 1);
   border-color: rgba(149, 149, 149, 0.3);
   border-radius: 3px;
-  color: rgb(149, 149, 149);
+  color: rgba(149, 149, 149, 1);
   padding: 10px;
 }
 .alert-minimalist > [data-notify="icon"] {

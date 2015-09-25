@@ -20,10 +20,11 @@ module.exports = GelatoPage.extend({
         this.items = new Items();
         this.navbar = new DefaultNavbar();
         this.prompt = new Prompt();
-        this.toolbar = new StudyToolbar();
+        this.toolbar = new StudyToolbar({items: this.items});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
+        this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
     },
     /**
      * @property events
@@ -79,6 +80,49 @@ module.exports = GelatoPage.extend({
      */
     handlePromptSkip: function(reviews) {
         this.next();
+    },
+    /**
+     * @method handleToolbarAddItem
+     */
+    handleToolbarAddItem: function() {
+        this.items.add(
+            _.bind(function(result) {
+                $.notify(
+                    {
+                        icon: 'fa fa-plus-circle',
+                        title: '',
+                        message: result.numVocabsAdded + ' word has been added.'
+                    },
+                    {
+                        type: 'minimalist',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 5000,
+                        icon_type: 'class'
+                    }
+                );
+            }, this),
+            _.bind(function() {
+                $.notify(
+                    {
+                        icon: 'fa fa-exclamation-circle',
+                        title: 'Error',
+                        message: 'Unable to add a new word.'
+                    },
+                    {
+                        type: 'minimalist',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 5000,
+                        icon_type: 'class'
+                    }
+                );
+            }, this)
+        );
     },
     /**
      * @method load
