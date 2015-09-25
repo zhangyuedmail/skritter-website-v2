@@ -136,9 +136,42 @@ module.exports = GelatoApplication.extend({
         return true;
     },
     /**
-     * @method sendRaygunTestError
+     * @method loadHelpscout
      */
-    sendRaygunTestError: function() {
+    loadHelpscout: function() {
+        var HSCW = {config: {}};
+        var HS = {beacon: {}};
+
+        HSCW.config = {
+            contact: {
+                enabled: true,
+                formId: '34a3fef0-62f6-11e5-8846-0e599dc12a51'
+            },
+            docs: {
+                enabled: true,
+                baseUrl: 'http://skritter.helpscoutdocs.com/'
+            }
+        };
+
+        HS.beacon.userConfig = {
+            color: '#32a8d9',
+            icon: 'question',
+            modal: false
+        };
+
+        var parent = document.getElementsByTagName('script')[0];
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://djtflbt20bdde.cloudfront.net/';
+        parent.parentNode.insertBefore(script, parent);
+
+        window.HSCW = HSCW;
+        window.HS = HS;
+    },
+    /**
+     * @method sendRaygunTest
+     */
+    sendRaygunTest: function() {
         try {
             throw new Error('TEST ERROR');
         } catch(error) {
@@ -160,6 +193,7 @@ module.exports = GelatoApplication.extend({
             Raygun.setUser('guest', true);
         }
 
+        this.loadHelpscout();
         this.router.start();
         $('#application-loading').fadeOut(500, function() {
             $(this).remove();
