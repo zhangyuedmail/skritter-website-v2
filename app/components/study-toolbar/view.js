@@ -12,9 +12,11 @@ module.exports = GelatoComponent.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {
+    initialize: function(options) {
+        this.items = options.items;
         this.stats = new ProgressStats();
-        this.listenTo(this.stats, 'state:standby', this.render);
+        this.listenTo(this.items, 'state', this.render);
+        this.listenTo(this.stats, 'state', this.render);
         this.stats.fetchToday();
     },
     /**
@@ -22,6 +24,7 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
+        'vclick #button-add-item': 'handleClickAddItem',
         'vclick #button-list-settings': 'handleClickListSettings',
         'vclick #button-study-settings': 'handleClickStudySettings'
     },
@@ -39,11 +42,20 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method handleClickAddItem
+     * @param {Event} event
+     */
+    handleClickAddItem: function(event) {
+        event.preventDefault();
+        this.trigger('click:add-item');
+    },
+    /**
      * @method handleClickStudySettings
      * @param {Event} event
      */
     handleClickListSettings: function(event) {
         event.preventDefault();
+        this.trigger('click:list-settings');
         var dialog = new ListSettingsDialog();
         dialog.open();
     },
@@ -53,6 +65,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickStudySettings: function(event) {
         event.preventDefault();
+        this.trigger('click:study-settings');
         var dialog = new StudySettingsDialog();
         dialog.open();
     }
