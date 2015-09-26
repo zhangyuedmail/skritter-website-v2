@@ -41,7 +41,7 @@ module.exports = GelatoPage.extend({
         this.vocabMap = {};
         this.initAllCollections();
         this.sort = 'last';
-        this.limit = 2;
+        this.limit = 20;
         this.fetchItems();
         this.searchString = '';
     },
