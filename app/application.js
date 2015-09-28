@@ -201,7 +201,7 @@ module.exports = GelatoApplication.extend({
             },
             docs: {
                 enabled: true,
-                baseUrl: 'http://skritter.helpscoutdocs.com/'
+                baseUrl: 'https://skritter.helpscoutdocs.com/'
             }
         };
 
