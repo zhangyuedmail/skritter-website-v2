@@ -44,7 +44,8 @@ module.exports = GelatoPage.extend({
      * @type Object
      */
     events: {
-        'submit form': 'handleSubmitForm'
+        'submit form': 'handleSubmitForm',
+        'change input[name="payment-method"]': 'handleChangePaymentMethod'
     },
     /**
      * @property title
@@ -77,67 +78,109 @@ module.exports = GelatoPage.extend({
         return GelatoPage.prototype.remove.call(this);
     },
     /**
-     * @method handleSubmitForm
-     * @param {Event} event
+     * @method createUser
+     * @param {object} attrs
      */
-    handleSubmitForm: function(event) {
-        event.preventDefault();
-        var cardData = {
-            number: this.$('#signup-card-number').val(),
-            exp_month: this.$('#card-month-select').val(),
-            exp_year: this.$('#card-year-select').val()
-        };
-        if (cardData.number) {
-            var handler = _.bind(this.handleSubmitFormResponse, this);
-            Stripe.setPublishableKey(app.getStripeKey());
-            Stripe.card.createToken(cardData, handler);
-            this.setSignupSubmitButtonDisabled(true);
-        }
-        else {
-            // TODO, coupon/school validation
-        }
-        this.$('#signup-error-alert').addClass('hide');
+    createUser: function(attrs) {
+        attrs = attrs || {};
+        this.username = this.$('#signup-username').val();
+        this.password = this.$('#signup-password1').val();
+        _.extend(attrs, {
+            'name': this.username,
+            'password': this.password,
+            'email': this.$('#signup-email').val(),
+            'plan': this.$('#signup-plan').val()
+        });
+        var user = new User(attrs);
+        user.headers = this.session.getHeaders();
+        user.save();
+        this.listenToOnce(user, 'sync', this.createUserSync);
+        this.listenToOnce(user, 'error', this.createUserError);
     },
     /**
-     * @method handleSubmitFormResponse
+     * @method createUserError
      */
-    handleSubmitFormResponse: function(status, response) {
-        if (response.error) {
-            this.setSignupSubmitButtonDisabled(false);
-            this.$('#signup-error-alert')
-              .text(response.error.message)
-              .removeClass('hide');
-        }
-        else {
-            var token = response.id;
-            this.username = $('#signup-username').val();
-            this.password = $('#signup-password1').val();
-            var user = new User({
-                'name': this.username,
-                'password': this.password,
-                'email': $('#signup-email').val(),
-                'plan': $('#signup-plan').val(),
-                'token': token,
-            });
-            user.headers = this.session.getHeaders();
-            user.save();
-            this.listenToOnce(user, 'sync', this.handleSubmitFormResponseCreateUser);
-
-        }
+    createUserError: function(user, jqxhr) {
+        this.setSignupSubmitButtonDisabled(false);
+        this.setSignupErrorAlertMessage(jqxhr.responseJSON.message);
     },
     /**
-     * @method handleSubmitFormResponseCreateUser
+     * @method createUserSync
      */
-    handleSubmitFormResponseCreateUser: function() {
+    createUserSync: function() {
         app.user.login(this.username, this.password, function() {
             app.router.navigate('dashboard', {trigger: false});
             app.reload();
         }, _.bind(function(error) {
             this.setSignupSubmitButtonDisabled(false);
-            this.$('#signup-error-alert')
-              .text(error.responseJSON.message)
-              .removeClass('hide');
+            this.setSignupErrorAlertMessage(error.responseJSON.message);
         }, this));
+    },
+    /**
+     * @method handleChangePaymentMethod
+     */
+    handleChangePaymentMethod: function() {
+        var value = $('input[name="payment-method"]:checked').val();
+        this.$('.form-group.credit').toggleClass('hide', value !== 'credit');
+        this.$('.form-group.coupon').toggleClass('hide', value !== 'coupon');
+    },
+    /**
+     * @method handleSubmitForm
+     * @param {Event} event
+     */
+    handleSubmitForm: function(event) {
+        event.preventDefault();
+        this.$('.form-group').removeClass('has-error');
+        var inputs = this.$('input:visible');
+        var allFilledIn = _.all(inputs, function(el) { return $(el).val(); });
+        if (!allFilledIn) {
+            this.setSignupErrorAlertMessage('Please fill in all fields.');
+            _.forEach(inputs, function(el) {
+                if (!$(el).val()) {
+                    $(el).closest('.form-group').addClass('has-error');
+                }
+            })
+            return;
+        }
+        if (this.$('#signup-password1').val() !== this.$('#signup-password2').val()) {
+            this.setSignupErrorAlertMessage('Passwords do not match.');
+            this.$('#signup-password1, #signup-password2')
+              .closest('.form-group')
+              .addClass('has-error');
+            return;
+        }
+
+        var value = this.$('input[name="payment-method"]:checked').val();
+        if (value === 'credit') {
+            var cardData = {
+                number: this.$('#signup-card-number').val(),
+                exp_month: this.$('#card-month-select').val(),
+                exp_year: this.$('#card-year-select').val()
+            };
+            var handler = _.bind(this.handleSubmitFormStripeResponse, this);
+            Stripe.setPublishableKey(app.getStripeKey());
+            Stripe.card.createToken(cardData, handler);
+        }
+        if (value === 'coupon') {
+            var coupon = $('#signup-coupon').val();
+            this.createUser({ couponCode: coupon });
+        }
+        this.setSignupSubmitButtonDisabled(true);
+        this.$('#signup-error-alert').addClass('hide');
+    },
+    /**
+     * @method handleSubmitFormResponse
+     */
+    handleSubmitFormStripeResponse: function(status, response) {
+        if (response.error) {
+            this.setSignupErrorAlertMessage(response.error.message);
+            this.$('.credit').closest('.form-group').addClass('has-error');
+            this.setSignupSubmitButtonDisabled(false);
+        }
+        else {
+            var token = response.id;
+            this.createUser({ token: token });
+        }
     },
     /**
      * property products
@@ -176,9 +219,16 @@ module.exports = GelatoPage.extend({
      * @method setSignupSubmitButtonDisabled
      */
     setSignupSubmitButtonDisabled: function(disabled) {
-      var button = this.$('#signup-submit');
-      button.attr('disabled', disabled);
-      button.find('span').toggleClass('hide', disabled);
-      button.find('i').toggleClass('hide', !disabled);
+        var button = this.$('#signup-submit');
+        button.attr('disabled', disabled);
+        button.find('span').toggleClass('hide', disabled);
+        button.find('i').toggleClass('hide', !disabled);
+    },
+    /**
+     * @method setSignupErrorAlertMessage
+     * @param {String} message
+     */
+    setSignupErrorAlertMessage: function(message) {
+        this.$('#signup-error-alert').text(message).removeClass('hide');
     }
 });

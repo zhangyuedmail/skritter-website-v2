@@ -35,30 +35,27 @@ gelato-page(data-name='signup')
               select#signup-plan.form-control(name='signup-plan')
                 for product in view.products
                   option(value=product.key)= product.fullName
-          //- .form-group
-          //-   label.col-sm-5.control-label(for='signup-coupon') Coupon
-          //-   .col-sm-7
-          //-     input#signup-coupon.form-control(type='text', placeholder='')
-          //- .form-group
-          //-   label.col-sm-5.control-label(for='signup-payment-method')
-          //-     | Payment method
-          //-   #signup-payment-method.col-sm-7
-          //-     label#credit-radio.radio-inline
-          //-       input#method-credit(
-          //-         type='radio', name='payment-method', value='credit')
-          //-       |                                         Credit card
-          //-     label#paypal-radio.radio-inline
-          //-       input#method-paypal(type='radio', name='payment-method', value='paypal')
-          //-       img(src='/media/images/signup/paypal_logo.gif', alt='')
-          //-     #accepted-payments
-          //-       img(src='/media/images/signup/credit_cards.png', alt='')
           .form-group
+            label.col-sm-5.control-label(for='signup-payment-method')
+              | Payment method
+            #signup-payment-method.col-sm-7
+              label#credit-radio.radio-inline
+                input#method-credit(
+                  type='radio', name='payment-method', value='credit', checked=true)
+                | Credit card
+              label#paypal-radio.radio-inline
+                input#method-coupon(
+                  type='radio', name='payment-method', value='coupon')
+                | Coupon
+          .form-group.credit
             label.col-sm-5.control-label(for='signup-card-number') Card number
             .col-sm-7
               input#signup-card-number.form-control(
                 type='text', placeholder='1234 1234 1234 1234')
-          .form-group
-            label.col-sm-5.control-label(for='signup-password2')
+              #accepted-payments
+                img(src='/media/images/signup/credit_cards.png', alt='')
+          .form-group.credit
+            label.col-sm-5.control-label(for='card-year-select')
               | Expiration date
             .col-sm-4
               select#card-month-select.form-control
@@ -79,6 +76,11 @@ gelato-page(data-name='signup')
                 - var year = moment().year();
                 for i in _.range(10)
                   option(value=year+i)= year+i
+          .form-group.coupon.hide
+            label.col-sm-5.control-label(for='signup-coupon') Coupon
+            .col-sm-7
+              input#signup-coupon.form-control(type='text', placeholder='')
+          
           .text-center
             button#signup-submit.btn.btn-success(type='submit')
               span Sign up
