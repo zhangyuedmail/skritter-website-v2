@@ -118,7 +118,7 @@ module.exports = SkritterModel.extend({
      * @returns {Number}
      */
     getReadiness: function() {
-        var now = this.collection._sorted || moment().unix();
+        var now = this.collection.sorted || moment().unix();
         var itemLast = this.get('last');
         var itemNext = this.get('next');
         var actualAgo = now - itemLast;

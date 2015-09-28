@@ -6,6 +6,11 @@ var GelatoCollection = require('gelato/collection');
  */
 module.exports = GelatoCollection.extend({
     /**
+     * @property cursor
+     * @type {String}
+     */
+    cursor: null,
+    /**
      * @method headers
      * @returns {Object}
      */

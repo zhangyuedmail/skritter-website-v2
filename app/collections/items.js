@@ -14,8 +14,8 @@ module.exports = SkritterCollection.extend({
      * @constructor
      */
     initialize: function() {
-        this._cursor = null;
-        this._sorted = null;
+        this.cursor = null;
+        this.sorted = null;
         this.contained = new ContainedItems();
         this.reviews = new Reviews();
         this.vocabs = new Vocabs();
@@ -39,7 +39,7 @@ module.exports = SkritterCollection.extend({
      * @returns {Object}
      */
     parse: function(response) {
-        this._cursor = response.cursor;
+        this.cursor = response.cursor;
         this.contained.add(response.ContainedItems);
         this.vocabs.add(response.Vocabs);
         this.vocabs.decomps.add(response.Decomps);
@@ -52,7 +52,7 @@ module.exports = SkritterCollection.extend({
      * @returns {Items}
      */
     sort: function() {
-        this._sorted = moment().unix();
+        this.sorted = moment().unix();
         return SkritterCollection.prototype.sort.call(this);
     },
     /**
