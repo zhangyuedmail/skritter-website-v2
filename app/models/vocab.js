@@ -12,7 +12,7 @@ module.exports = SkritterModel.extend({
      * @constructor
      */
     initialize: function() {
-        this.audio = this.has('audio') ? new Audio(this.get('audio')) : null;
+        this.audio = this.has('audio') ? new Audio(this.get('audio').replace('http://', 'https://')) : null;
     },
     /**
      * @property idAttribute
