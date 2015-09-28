@@ -17,7 +17,7 @@ gelato-component(data-name="prompt-canvas").cursor.no-select
         #canvas-definition
           .writing= reviews.vocab.get('writing')
           if reviews.isComplete()
-            .answer= reviews.vocab.getDefinition()
+            .answer!= reviews.vocab.getDefinition()
           else
             .question What's the definition?
 
@@ -25,6 +25,6 @@ gelato-component(data-name="prompt-canvas").cursor.no-select
         #canvas-reading
           .writing= reviews.vocab.get('writing')
           if reviews.isComplete()
-            .answer= reviews.vocab.getReading()
+            .answer!= reviews.vocab.getReading()
           else
             .question What's the reading?
