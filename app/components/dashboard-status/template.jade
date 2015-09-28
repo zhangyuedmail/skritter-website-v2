@@ -4,7 +4,7 @@ gelato-component(data-name='dashboard-status')
       a(href="/account")= user.get('name')
       | , you have &nbsp;
       if view.dueCount === null
-        i.fa.fa-spinner.fa-pulse
+        | -
       else
         span= view.dueCount
       | &nbsp; items ready to review.
