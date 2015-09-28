@@ -2217,7 +2217,7 @@ function pinyinToTone(text, includeSpaces) {
 function pinyinToZhuyin(text) {
     text = text.toLowerCase();
     var zhuyinArray = [];
-    var textArray = text.match(/[a-z|A-Z]+[0-9]+|\,\s|\s\.\.\.\s|\'/g);
+    var textArray = text.match(/[a-z|A-Z]+[0-9]+|,\s|'|\s\.\.\.\s/g);
     if (textArray) {
         for (var i = 0, length = textArray.length; i < length; i++) {
             var textItem = textArray[i];

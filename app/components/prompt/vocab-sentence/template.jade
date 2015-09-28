@@ -19,7 +19,7 @@ gelato-component(data-name='prompt-vocab-sentence')
           = sentence.getWriting()
 
         .hint
-          .hint-reading= app.isChinese() ? app.fn.pinyin.toTone(sentenceReading) : sentenceReading
+          .hint-reading= app.isChinese() ? app.fn.pinyin.toTone(sentenceReading, true) : sentenceReading
           .hint-definition= sentenceDefinition
 
       else
