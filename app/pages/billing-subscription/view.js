@@ -4,6 +4,7 @@ var DefaultNavbar = require('navbars/default/view');
 var Subscription = require('models/subscription');
 var Coupon = require('models/coupon');
 var VacationDialog = require('dialogs/vacation/view');
+var StripeLoader = require('utils/stripe-loader');
 
 /**
  * @class BillingSubscription
@@ -34,6 +35,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
+        StripeLoader.load();
         this.navbar = new DefaultNavbar();
         this.sidebar = new SettingsSidebar();
         this.subscription = new Subscription({ id: app.user.id });
@@ -410,6 +412,7 @@ module.exports = GelatoPage.extend({
     },
     /**
      * @method setSubscribeStripeButtonDisabled
+     * @param {Boolean} disabled
      */
     setSubscribeStripeButtonDisabled: function(disabled) {
         var button = this.$('#update-stripe-subscription-btn, #subscribe-stripe-btn');

@@ -164,7 +164,6 @@ gelato-page(data-name='billing-subscription')
               
               else if app.isWebsite() && _.contains([false, 'stripe'], subscribed)
                 // - ON WEBSITE, NOT SUBSCRIBED OR SUBSCRIBED TO STRIPE
-                <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
                 if subscribed === 'stripe'
                   .title Edit subscription
                 if !subscribed
