@@ -14,6 +14,13 @@ module.exports = GelatoComponent.extend({
         this.prompt = options.prompt;
     },
     /**
+     * @property events
+     * @type Object
+     */
+    events: {
+        'vclick .value': 'handleClickValue'
+    },
+    /**
      * @property template
      * @type {Function}
      */
@@ -25,5 +32,20 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
         return this;
+    },
+    /**
+     * @method handleClickValue
+     * @param {Event} event
+     */
+    handleClickValue: function(event) {
+        event.preventDefault();
+        if (this.$('.hint').hasClass('open')) {
+            this.$('.hint').removeClass('open');
+            this.$('.hint').hide('slide', {direction: 'up'}, '500');
+        } else {
+            this.$('.hint').addClass('open');
+            this.$('.hint').show('slide', {direction: 'up'}, '500');
+        }
+
     }
 });

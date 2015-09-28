@@ -8,7 +8,19 @@ gelato-component(data-name='prompt-vocab-sentence')
     label Example sentence
 
     .value
+
       if sentence
-        = sentence.getWriting()
+        - var sentenceDefinition = sentence.getDefinition()
+        - var sentenceReading = sentence.get('reading')
+
+        if prompt.part === 'rune' && !reviews.isComplete()
+          = sentence.getWriting(reviews.vocab.get('writing'))
+        else
+          = sentence.getWriting()
+
+        .hint
+          .hint-reading= app.isChinese() ? app.fn.pinyin.toTone(sentenceReading) : sentenceReading
+          .hint-definition= sentenceDefinition
+
       else
         em Click here add your own custom sentence

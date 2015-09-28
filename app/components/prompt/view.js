@@ -262,6 +262,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabReading.render();
+            this.vocabSentence.render();
             this.vocabWriting.render();
         } else {
             this.renderPromptPartRune();
