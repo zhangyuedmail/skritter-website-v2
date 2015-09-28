@@ -79,7 +79,8 @@ module.exports = GelatoPage.extend({
             });
         } else if (app.isJapanese()) {
             app.user.set({
-                japaneseStudyParts: this.getSelectedParts()
+                japaneseStudyParts: this.getSelectedParts(),
+                studyKana: this.$('#field-study-kana').is(':checked')
             });
         }
 
