@@ -22,6 +22,7 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
+        'change #field-target-language': 'handleChangeTargetLanguage',
         'vclick #button-save': 'handleClickButtonSave'
     },
     /**
@@ -50,6 +51,24 @@ module.exports = GelatoPage.extend({
         return this;
     },
     /**
+     * @method renderSectionContent
+     * @returns {SettingsStudy}
+     */
+    renderSectionContent: function() {
+        var context = require('globals');
+        context.view = this;
+        var rendering = $(this.template(context));
+        this.$('#section-content').replaceWith(rendering.find('#section-content'));
+        return this;
+    },
+    /**
+     * @method remove
+     * @returns {SettingsStudy}
+     */
+    remove: function() {
+        return GelatoPage.prototype.remove.call(this);
+    },
+    /**
      * @method getSelectedParts
      * @returns {Array}
      */
@@ -59,6 +78,15 @@ module.exports = GelatoPage.extend({
             parts.push($(this).val());
         });
         return parts;
+    },
+    /**
+     * @method handleChangeTargetLanguage
+     * @param {Event} event
+     */
+    handleChangeTargetLanguage: function(event) {
+        event.preventDefault();
+        app.user.set('targetLang', this.$('#field-target-language').val());
+        this.renderSectionContent();
     },
     /**
      * @method handleClickButtonSave
@@ -83,23 +111,6 @@ module.exports = GelatoPage.extend({
                 studyKana: this.$('#field-study-kana').is(':checked')
             });
         }
-
         app.user.save();
-    },
-    /**
-     * @method remove
-     * @returns {SettingsStudy}
-     */
-    remove: function() {
-        return GelatoPage.prototype.remove.call(this);
-    },
-    /**
-     * @method renderSectionContent
-     */
-    renderSectionContent: function() {
-        var context = require('globals');
-        context.view = this;
-        var rendering = $(this.template(context));
-        this.$('#section-content').replaceWith(rendering.find('#section-content'));
     }
 });
