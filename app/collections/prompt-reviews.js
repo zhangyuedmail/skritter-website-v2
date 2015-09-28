@@ -116,7 +116,9 @@ module.exports = GelatoCollection.extend({
      * @returns {Array}
      */
     getChildItemReviews: function() {
-        return this.map(function(model) {
+        return this.filter(function(review) {
+            return !review.get('kana');
+        }).map(function(model) {
             return model.getItemReview();
         });
     },

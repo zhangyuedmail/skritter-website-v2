@@ -65,7 +65,16 @@ module.exports = SkritterModel.extend({
         if (vocab) {
             var containedVocabIds = vocab.get('containedVocabIds') || [];
             for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                containedVocabs.push(this.collection.vocabs.get(containedVocabIds[i]));
+                var vocab = this.collection.vocabs.get(containedVocabIds[i]);
+                if (this.isJapanese()) {
+                    if (app.user.get('studyKana')) {
+                        containedVocabs.push(vocab);
+                    } else if (!vocab.isKana()) {
+                        containedVocabs.push(vocab);
+                    }
+                } else {
+                    containedVocabs.push(vocab);
+                }
             }
         }
         return containedVocabs;
@@ -102,6 +111,7 @@ module.exports = SkritterModel.extend({
         for (var i = 0, length = vocabs.length; i < length; i++) {
             var review = new PromptReview();
             review.set('id', [now, i, vocabs[i].id].join('_'));
+            review.set('kana', vocabs[i].isKana());
             review.character = characters[i];
             review.item = items[i];
             review.vocab = vocabs[i];

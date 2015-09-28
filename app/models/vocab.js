@@ -186,20 +186,17 @@ module.exports = SkritterModel.extend({
         return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');
     },
     /**
-     * @method getReadings
+     * @method getReadingObjects
      * @returns {Array}
      */
-    getReadings: function() {
-        var readings = [];
-        var reading = this.get('reading');
+    getReadingObjects: function() {
+        var readings = [this.get('reading')];
         if (this.isChinese()) {
             if (reading.indexOf(', ') === -1) {
                 readings = reading.match(/[a-z|A-Z]+[1-5]+|'| ... |\s/g);
             } else {
                 readings = [reading];
             }
-        } else {
-            readings = [reading];
         }
         return readings.map(function(value) {
             if ([' ', ' ... ', '\''].indexOf(value) > -1) {
@@ -261,6 +258,20 @@ module.exports = SkritterModel.extend({
         return this.get('writing');
     },
     /**
+     * @method getWritingObjects
+     * @returns {Array}
+     */
+    getWritingObjects: function() {
+        return this.getCharacters().map(function(value) {
+            if (app.isJapanese()) {
+                if (app.fn.isKana(value) && !app.user.get('studyKana')) {
+                    return {type: 'filler', value: value};
+                }
+            }
+            return {type: 'character', value: value};
+        });
+    },
+    /**
      * @method getWritingDifference
      * @param {String} otherVocab
      * @returns {String}
@@ -278,13 +289,6 @@ module.exports = SkritterModel.extend({
         return this.get('bannedParts').length ? true : false;
     },
     /**
-     * @method isStarred
-     * @returns {Boolean}
-     */
-    isStarred: function() {
-        return this.get('starred');
-    },
-    /**
      * @method isChinese
      * @returns {Boolean}
      */
@@ -297,6 +301,20 @@ module.exports = SkritterModel.extend({
      */
     isJapanese: function() {
         return this.get('lang') === 'ja';
+    },
+    /**
+     * @method isKana
+     * @returns {Boolean}
+     */
+    isKana: function() {
+        return app.fn.isKana(this.get('writing'));
+    },
+    /**
+     * @method isStarred
+     * @returns {Boolean}
+     */
+    isStarred: function() {
+        return this.get('starred');
     },
     /**
      * @method play
