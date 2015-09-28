@@ -3,12 +3,13 @@ gelato-component(data-name='prompt-vocab-reading')
   - var reviews = view.prompt.reviews
 
   if reviews
+    - var readings = reviews.vocab.getReadingObjects()
     - var index = 0
 
     case prompt.part
 
       when 'rdng'
-        for reading in reviews.vocab.getReadings()
+        for reading in readings
           if (reading.type === 'character')
             - var review = reviews.at(index)
             div.reading(class=reviews.isComplete() ? '' : 'masked', data-position=index)
@@ -22,7 +23,7 @@ gelato-component(data-name='prompt-vocab-reading')
               span= reading.value
 
       when 'tone'
-        for reading in reviews.vocab.getReadings()
+        for reading in readings
           if (reading.type === 'character')
             - var review = reviews.at(index)
             - var classes = []
@@ -41,7 +42,7 @@ gelato-component(data-name='prompt-vocab-reading')
               span= reading.value
 
       default
-        for reading in reviews.vocab.getReadings()
+        for reading in readings
           if (reading.type === 'character')
             - var review = reviews.at(index)
             div.reading(data-position=index)
