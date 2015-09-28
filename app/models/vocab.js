@@ -190,13 +190,16 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getReadingObjects: function() {
-        var readings = [this.get('reading')];
+        var readings = [];
+        var reading = this.get('reading');
         if (this.isChinese()) {
             if (reading.indexOf(', ') === -1) {
                 readings = reading.match(/[a-z|A-Z]+[1-5]+|'| ... |\s/g);
             } else {
                 readings = [reading];
             }
+        } else {
+            readings = [reading];
         }
         return readings.map(function(value) {
             if ([' ', ' ... ', '\''].indexOf(value) > -1) {
