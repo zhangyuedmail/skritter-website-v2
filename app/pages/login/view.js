@@ -1,4 +1,5 @@
 var GelatoPage = require('gelato/page');
+var MarketingFooter = require('components/marketing-footer/view');
 var MarketingNavbar = require('navbars/marketing/view');
 
 /**
@@ -11,6 +12,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
+        this.footer = new MarketingFooter();
         this.navbar = new MarketingNavbar();
     },
     /**
@@ -30,11 +32,15 @@ module.exports = GelatoPage.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {MarketingHome}
+     * @returns {Login}
      */
     render: function() {
         this.renderTemplate();
         this.navbar.render();
+        this.footer.setElement('#footer-container').render();
+        if (this.$page.height() < app.getHeight()) {
+            this.$('#footer-container').css('margin-top', app.getHeight() - this.$page.height() - 51);
+        }
         return this;
     },
     /**
@@ -51,7 +57,7 @@ module.exports = GelatoPage.extend({
      */
     handleClickLoginButton: function(event) {
         event.preventDefault();
-        this.handleLogin(event);
+        this.login();
     },
     /**
      * @method handleKeyUpLoginPassword
@@ -60,14 +66,14 @@ module.exports = GelatoPage.extend({
     handleKeyUpLoginPassword: function(event) {
         event.preventDefault();
         if (event.which === 13 || event.keyCode === 13) {
-            this.handleLogin(event);
+            this.login();
         }
     },
     /**
-     * @method handleLogin
+     * @method login
      * @param {Event} event
      */
-    handleLogin: function(event) {
+    login: function() {
         var self = this;
         var password = this.$('#login-password').val();
         var username = this.$('#login-username').val();
@@ -85,7 +91,7 @@ module.exports = GelatoPage.extend({
     },
     /**
      * @method remove
-     * @returns {MarketingHome}
+     * @returns {Login}
      */
     remove: function() {
         return GelatoPage.prototype.remove.call(this);
