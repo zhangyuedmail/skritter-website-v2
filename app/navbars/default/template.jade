@@ -1,4 +1,5 @@
 gelato-navbar(data-name='default').fixed-top.hidden-sm.hidden-xs
+
   .container
     .left
       a.item.item-header(href="/dashboard") Skritter
@@ -7,7 +8,17 @@ gelato-navbar(data-name='default').fixed-top.hidden-sm.hidden-xs
       a.item.item-link(href="/words/all") Words
       a.item.item-link(data-toggle="tooltip" data-placement="bottom" title="Working on it") Stats
     .right
-      a.item.item-link(href="/account")= user.get('name') || user.id
-      if user.get('avatar')
-        .item.item-icon
-          img(src='data:image/png;base64,' + user.get('avatar'))
+      .item.item-dropdown.no-select
+        i.fa.fa-ellipsis-h
+        .dropdown.hidden
+          ul
+            li
+              a(href='/account/settings/general')
+                i.fa.fa-gear
+                | &nbsp;
+                | Settings
+            li
+              a#button-logout(href='', data-ignore='true')
+                i.fa.fa-sign-out
+                | &nbsp;
+                | Logout

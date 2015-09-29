@@ -27,19 +27,19 @@ module.exports = GelatoDialog.extend({
         'vclick #button-logout': 'handleClickButtonLogout'
     },
     /**
-     * @method handleClickButtonCancel
-     * @param {Event} event
-     */
-    handleClickButtonCancel: function(event) {
-        event.preventDefault();
-        app.closeDialog();
-    },
-    /**
      * @method handleClickButtonLogout
      * @param {Event} event
      */
     handleClickButtonLogout: function(event) {
         event.preventDefault();
-        app.closeDialog();
+        this.trigger('logout');
+    },
+    /**
+     * @method handleClickButtonCancel
+     * @param {Event} event
+     */
+    handleClickButtonCancel: function(event) {
+        event.preventDefault();
+        this.close();
     }
 });

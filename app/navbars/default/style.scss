@@ -11,4 +11,31 @@ gelato-navbar[data-name='default'] {
 
   img { height: 30px; }
 
+  .dropdown {
+    background-color: $grey5;
+    margin-top: 11px;
+    min-width: 200px;
+    position: absolute;
+    right: 0;
+    ul {
+      margin: 0;
+      padding: 0;
+      a {
+        cursor: pointer;
+        display: block;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        font-size: 14px;
+        list-style-type: none;
+        padding: 10px 15px;
+        text-align: left;
+        &:hover { background-color: $grey3; }
+      }
+    }
+  }
+
+  .item-dropdown.open { background-color: $grey5; }
+
 }
