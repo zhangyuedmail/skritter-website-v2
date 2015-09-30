@@ -5,6 +5,7 @@ var Subscription = require('models/subscription');
 var Coupon = require('models/coupon');
 var VacationDialog = require('dialogs/vacation/view');
 var StripeLoader = require('utils/stripe-loader');
+var CancelSubscriptionDialog = require('dialogs/cancel-subscription/view');
 
 /**
  * @class BillingSubscription
@@ -28,7 +29,9 @@ module.exports = GelatoPage.extend({
         'vclick #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
         'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
         'vclick .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
-        'vclick #unsubscribe-btn': 'handleClickUnsubscribeButton'
+        'vclick #unsubscribe-btn': 'handleClickUnsubscribeButton',
+        'change input[name="payment-method"]': 'handleChangePaymentMethod',
+        'vclick #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
     },
     /**
      * @method initialize
@@ -46,9 +49,6 @@ module.exports = GelatoPage.extend({
             this.subscription.set(response.Subscription);
             this.coupon.unset('code');
         });
-        // this.listenToOnce(this.subscription, 'sync', function() {
-        //     this.subscription.set('subscribed', 'paypal'); // TESTING
-        // });
         this.listenTo(this.coupon, 'state', this.renderMainContent);
     },
     /**
@@ -80,6 +80,14 @@ module.exports = GelatoPage.extend({
      */
     title: 'Subscription - Skritter',
     /**
+     * @method handleChangePaymentMethod
+     */
+    handleChangePaymentMethod: function() {
+        var method = this.$('input[name="payment-method"]:checked').val();
+        this.$('.credit-card-form-group').toggleClass('hide', method!=='stripe');
+        this.$('.paypal-form-group').toggleClass('hide', method!=='paypal');
+    },
+    /**
      * @method handleClickCancelVacationLink
      */
     handleClickCancelVacationLink: function() {
@@ -94,8 +102,7 @@ module.exports = GelatoPage.extend({
      * @method handleClickGoOnVacationLink
      */
     handleClickGoOnVacationLink: function() {
-        var dialog = new VacationDialog({subscription: this.subscription});
-        dialog.render().open();
+        this.openVacationDialog();
     },
     /**
      * @method handleClickRedeemCodeButton
@@ -244,6 +251,13 @@ module.exports = GelatoPage.extend({
         this.renderMainContent();
     },
     /**
+     * @method handleClickSubscribePaypalButton
+     */
+    handleClickSubscribePaypalButton: function() {
+        $('#paypal-subscribe-form select').val($('#paypal-plan-select').val());
+        $('#paypal-subscribe-form').submit();
+    },
+    /**
      * @method handleClickSubscribeStripeButton
      */
     handleClickSubscribeStripeButton: function() {
@@ -296,21 +310,14 @@ module.exports = GelatoPage.extend({
      * @method handleClickUnsubscribeButton
      */
     handleClickUnsubscribeButton: function() {
-        var service = this.subscription.get('subscribed');
-        if (!_.contains(['stripe', 'gplay'], service)) {
-            return false;
-        }
-        var url = app.getApiUrl() + this.subscription.url() + '/' + service + '/cancel';
-        var headers = app.user.session.getHeaders();
-        this.$('#unsubscribe-btn *').toggleClass('hide');
-        $.ajax({
-            url: url,
-            headers: headers,
-            method: 'POST',
-            context: this,
-            success: function(response) {
-                this.subscription.set(response.Subscription);
-                this.renderMainContent();
+        var dialog = new CancelSubscriptionDialog({
+            subscription: this.subscription
+        });
+        dialog.render().open();
+        this.listenToOnce(dialog, 'hidden', function() {
+            if (dialog.choseVacation) {
+                var open = _.bind(this.openVacationDialog, this);
+                _.delay(open, 200);
             }
         });
     },
@@ -401,6 +408,26 @@ module.exports = GelatoPage.extend({
             })
         }
     },
+    /**
+     * @method openVacationDialog
+     */
+    openVacationDialog: function() {
+        var dialog = new VacationDialog({subscription: this.subscription});
+        dialog.render().open();
+    },
+    /**
+     * @property paypalPlans
+     */
+    paypalPlans: [
+        {
+            key: 'Month Plan',
+            fullName: 'Month Plan : $14.99 USD - monthly'
+        },
+        {
+            key: 'Year Plan',
+            fullName: 'Year Plan : $99.99 USD - yearly'
+        }
+    ],
     /**
      * @method renderSectionContent
      */
