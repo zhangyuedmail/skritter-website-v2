@@ -9,7 +9,9 @@ module.exports = GelatoRouter.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+        this.on('route', this.handleRoute);
+    },
     /**
      * @property routes
      * @type {Object}
@@ -56,6 +58,17 @@ module.exports = GelatoRouter.extend({
             this.navigateDashboard();
         } else {
             this.navigateHome();
+        }
+    },
+    /**
+     * @method handleRoute
+     */
+    handleRoute: function() {
+        if (window.ga) {
+            ga('send', 'pageview', {
+                page: document.location.pathname,
+                title: this.page.title
+            });
         }
     },
     /**

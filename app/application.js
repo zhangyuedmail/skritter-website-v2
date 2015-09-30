@@ -43,6 +43,11 @@ module.exports = GelatoApplication.extend({
             };
         }
 
+        if (window.ga) {
+            ga('create', 'UA-4642573-1', 'auto');
+            ga('set', 'forceSSL', true);
+        }
+
         //TODO: depreciate this code after some time
         if (localStorage.getItem('guest-authentication')) {
             var user = localStorage.getItem('application-user');
