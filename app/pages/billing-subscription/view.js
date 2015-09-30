@@ -28,7 +28,9 @@ module.exports = GelatoPage.extend({
         'vclick #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
         'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
         'vclick .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
-        'vclick #unsubscribe-btn': 'handleClickUnsubscribeButton'
+        'vclick #unsubscribe-btn': 'handleClickUnsubscribeButton',
+        'change input[name="payment-method"]': 'handleChangePaymentMethod',
+        'vclick #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
     },
     /**
      * @method initialize
@@ -79,6 +81,14 @@ module.exports = GelatoPage.extend({
      * @type {String}
      */
     title: 'Subscription - Skritter',
+    /**
+     * @method handleChangePaymentMethod
+     */
+    handleChangePaymentMethod: function() {
+        var method = this.$('input[name="payment-method"]:checked').val();
+        this.$('.credit-card-form-group').toggleClass('hide', method!=='stripe');
+        this.$('.paypal-form-group').toggleClass('hide', method!=='paypal');
+    },
     /**
      * @method handleClickCancelVacationLink
      */
@@ -244,6 +254,13 @@ module.exports = GelatoPage.extend({
         this.renderMainContent();
     },
     /**
+     * @method handleClickSubscribePaypalButton
+     */
+    handleClickSubscribePaypalButton: function() {
+        $('#paypal-subscribe-form select').val($('#paypal-plan-select').val());
+        $('#paypal-subscribe-form').submit();
+    },
+    /**
      * @method handleClickSubscribeStripeButton
      */
     handleClickSubscribeStripeButton: function() {
@@ -401,6 +418,19 @@ module.exports = GelatoPage.extend({
             })
         }
     },
+    /**
+     * @property paypalPlans
+     */
+    paypalPlans: [
+        {
+            key: 'Month Plan',
+            fullName: 'Month Plan : $14.99 USD - monthly'
+        },
+        {
+            key: 'Year Plan',
+            fullName: 'Year Plan : $99.99 USD - yearly'
+        }
+    ],
     /**
      * @method renderSectionContent
      */
