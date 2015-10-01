@@ -6,7 +6,7 @@
     "fontawesome": "4.4.0",
     "moment": "2.10.6",
     "moment-timezone": "0.4.0",
-    "raygun4js": "1.18.4"
+    "raygun4js": "1.18.6"
   },
   "overrides": {
     "d3": {
