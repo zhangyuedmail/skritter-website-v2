@@ -24,6 +24,21 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
+        if (this.prompt.review) {
+            this.resizeText();
+        }
         return this;
+    },
+    /**
+     * @method resizeText
+     */
+    resizeText: function() {
+        var vocab = this.prompt.review.vocab;
+        var writingLength = vocab.get('writing').length;
+        if (writingLength > 2) {
+            this.$('.writing').css('font-size', 75);
+        } else if (writingLength > 4) {
+            this.$('.writing').css('font-size', 50);
+        }
     }
 });
