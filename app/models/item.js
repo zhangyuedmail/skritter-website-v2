@@ -186,7 +186,13 @@ module.exports = SkritterModel.extend({
      */
     isActive: function() {
         var vocab = this.getVocab();
-        return vocab ? !vocab.isBanned() : false;
+        var strokes = vocab.getStrokes();
+        if (vocab.isBanned()) {
+            return false;
+        } else if (this.get('part') === 'rune' && !strokes.length) {
+            return false;
+        }
+        return true;
     },
     /**
      * @method isChinese
