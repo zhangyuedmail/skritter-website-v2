@@ -260,7 +260,26 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @method fadeShapeOut
+     * @method fadeLayer
+     * @param {String} layerName
+     * @param {Object} [options]
+     * @param {Function} [callback]
+     */
+    fadeLayer: function(layerName, options, callback) {
+        var layer = this.getLayer(layerName);
+        options = options || {};
+        options.easing = options.easing || this.defaultFadeEasing;
+        options.milliseconds = options.milliseconds || this.defaultFadeSpeed;
+        createjs.Tween.get(layer).to({alpha: 0}, options.milliseconds, options.easing).call(function() {
+            layer.removeAllChildren();
+            layer.alpha = 1;
+            if (typeof callback === 'function') {
+                callback();
+            }
+        });
+    },
+    /**
+     * @method fadeShape
      * @param {String} layerName
      * @param {createjs.Shape} shape
      * @param {Object} [options]
@@ -274,6 +293,7 @@ module.exports = GelatoComponent.extend({
         layer.addChild(shape);
         createjs.Tween.get(shape).to({alpha: 0}, options.milliseconds, options.easing).call(function() {
             layer.removeChild(shape);
+            shape.alpha = 1;
             if (typeof callback === 'function') {
                 callback();
             }
@@ -497,6 +517,14 @@ module.exports = GelatoComponent.extend({
 
 
     /**
+     * @method fadeCharacterHint
+     * @returns {PromptCanvas}
+     */
+    fadeCharacterHint: function() {
+        this.fadeLayer('character-hint');
+        return this;
+    },
+    /**
      * @method handleCanvasInputUp
      * @param {Array} points
      * @param {createjs.Shape} shape
@@ -649,10 +677,12 @@ module.exports = GelatoComponent.extend({
      */
     startTeaching: function() {
         var review = this.prompt.reviews.current();
+        var shape = review.character.getTargetShape();
         if (review.character && !review.isComplete()) {
             var stroke = review.character.getExpectedStroke();
             if (stroke) {
                 this.clearLayer('character-teach');
+                this.drawShape('character-teach', shape, {color: '#e8ded2'});
                 this.tracePath('character-teach', stroke.getParamPath());
             }
         }

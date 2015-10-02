@@ -387,6 +387,9 @@ module.exports = GelatoComponent.extend({
                     this.review.set('complete', true);
                     this.renderPromptComplete();
                     break;
+                case 'rune':
+                    this.canvas.fadeCharacterHint();
+                    break;
             }
         }
 
@@ -482,7 +485,6 @@ module.exports = GelatoComponent.extend({
         switch (this.part) {
             case 'rune':
                 this.review.set({score: 1, teach: true});
-                this.canvas.showCharacterHint();
                 this.canvas.startTeaching();
                 break;
         }
