@@ -130,7 +130,7 @@ module.exports = GelatoPage.extend({
      * @param {String} [sectionId]
      */
     load: function(listId, sectionId) {
-        //TODO: support list and section parameters
+        //TODO: support section parameter
         this._listId = listId;
         this._sectionid = sectionId;
         async.waterfall([
@@ -145,7 +145,8 @@ module.exports = GelatoPage.extend({
                         limit: 10,
                         parts: app.user.getStudyParts().join(','),
                         sort: 'next',
-                        styles: app.user.getStudyStyles().join(',')
+                        styles: app.user.getStudyStyles().join(','),
+                        vocab_list: this._listId
                     },
                     merge: false,
                     remove: false,

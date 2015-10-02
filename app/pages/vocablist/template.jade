@@ -1,8 +1,9 @@
-- var sort = view.vocablist.get('sort');
-- var singleSect = view.vocablist.get('singleSect');
-
 gelato-page(data-name='vocablist')
+  - var sort = view.vocablist.get('sort');
+  - var singleSect = view.vocablist.get('singleSect');
+
   #navbar-container
+
   .container
     .content-block
       .row
@@ -62,7 +63,7 @@ gelato-page(data-name='vocablist')
                   button#add-to-queue-btn.btn.btn-fixed.btn-success Add to queue
 
                 else
-                  a.btn.btn-fixed.btn-primary Study now
+                  a.btn.btn-fixed.btn-primary(href="/study/" + view.vocablist.id) Study now
 
               p.status-p
                 span.spr Status:
