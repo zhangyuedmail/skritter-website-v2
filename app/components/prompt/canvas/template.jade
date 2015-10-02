@@ -2,29 +2,15 @@ gelato-component(data-name="prompt-canvas").cursor.no-select
   - var prompt = view.prompt
   - var reviews = view.prompt.reviews
 
-  canvas#input-canvas
-
-  #canvas-navigation
-    if !reviews.isFirst()
-      i#navigate-previous.fa.fa-angle-left
-    i#navigate-next.fa.fa-angle-right
-
   if reviews
 
-    case prompt.part
+    canvas#input-canvas
 
-      when 'defn'
-        #canvas-definition
-          .writing= reviews.vocab.get('writing')
-          if reviews.isComplete()
-            .answer!= reviews.vocab.getDefinition()
-          else
-            .question What's the definition?
+    #canvas-navigation
+      if !reviews.isFirst()
+        i#navigate-previous.fa.fa-angle-left
+      i#navigate-next.fa.fa-angle-right
 
-      when 'rdng'
-        #canvas-reading
-          .writing= reviews.vocab.get('writing')
-          if reviews.isComplete()
-            .answer!= reviews.vocab.getReading()
-          else
-            .question What's the reading?
+    #canvas-definition-container
+
+    #canvas-reading-container

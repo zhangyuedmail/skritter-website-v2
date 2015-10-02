@@ -1,4 +1,6 @@
 var GelatoComponent = require('gelato/component');
+var PromptCanvasDefinition = require('components/prompt/canvas-definition/view');
+var PromptCanvasReading = require('components/prompt/canvas-reading/view');
 
 /**
  * @class PromptCanvas
@@ -27,6 +29,8 @@ module.exports = GelatoComponent.extend({
         this.size = 450;
         this.stage = null;
         this.strokeColor = '#4b4b4b';
+        this.definition = new PromptCanvasDefinition({prompt: this.prompt});
+        this.reading = new PromptCanvasReading({prompt: this.prompt});
         this.on('input:up', this.handleCanvasInputUp);
         this.on('resize', this.resize);
     },
@@ -41,6 +45,8 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.definition.setElement('#canvas-definition-container').render();
+        this.reading.setElement('#canvas-reading-container').render();
         this.stage = this.createStage();
         this.createLayer('grid');
         this.createLayer('character-hint');

@@ -1,0 +1,12 @@
+gelato-component(data-name='prompt-canvas-definition')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if prompt.part === 'defn' && reviews
+
+    .writing= reviews.vocab.get('writing')
+
+    if reviews.isComplete()
+      .answer!= reviews.vocab.getDefinition()
+    else
+      .question What's the definition?

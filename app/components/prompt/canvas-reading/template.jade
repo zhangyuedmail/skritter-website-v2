@@ -1,0 +1,12 @@
+gelato-component(data-name='prompt-canvas-reading')
+  - var prompt = view.prompt
+  - var reviews = view.prompt.reviews
+
+  if prompt.part === 'rdng' && reviews
+
+    .writing= reviews.vocab.get('writing')
+
+    if reviews.isComplete()
+      .answer!= reviews.vocab.getReading()
+    else
+      .question What's the reading?

@@ -72,6 +72,19 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.canvas.setElement('#canvas-container');
+        this.toolbarAction.setElement('#toolbar-action-container');
+        this.toolbarGrading.setElement('#toolbar-grading-container');
+        this.toolbarVocab.setElement('#toolbar-vocab-container');
+        this.vocabDefinition.setElement('#vocab-definition-container');
+        this.vocabMnemonic.setElement('#vocab-mnemonic-container');
+        this.vocabReading.setElement('#vocab-reading-container');
+        this.vocabSentence.setElement('#vocab-sentence-container');
+        this.vocabStyle.setElement('#vocab-style-container');
+        this.vocabWriting.setElement('#vocab-writing-container');
+        if (this.reviews) {
+            this.canvas.render();
+        }
         return this;
     },
     /**
@@ -124,17 +137,17 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptLoad: function() {
-        this.render();
-        this.canvas.setElement('#canvas-container').render();
-        this.toolbarAction.setElement('#toolbar-action-container').render();
-        this.toolbarGrading.setElement('#toolbar-grading-container').render();
-        this.toolbarVocab.setElement('#toolbar-vocab-container').render();
-        this.vocabDefinition.setElement('#vocab-definition-container').render();
-        this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
-        this.vocabReading.setElement('#vocab-reading-container').render();
-        this.vocabSentence.setElement('#vocab-sentence-container').render();
-        this.vocabStyle.setElement('#vocab-style-container').render();
-        this.vocabWriting.setElement('#vocab-writing-container').render();
+        this.canvas.definition.render();
+        this.canvas.reading.render();
+        this.toolbarAction.render();
+        this.toolbarGrading.render();
+        this.toolbarVocab.render();
+        this.vocabDefinition.render();
+        this.vocabMnemonic.render();
+        this.vocabReading.render();
+        this.vocabSentence.render();
+        this.vocabStyle.render();
+        this.vocabWriting.render();
         return this;
     },
     /**
@@ -145,6 +158,7 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.renderPromptComplete();
         } else {
+            this.canvas.definition.render();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
@@ -162,7 +176,7 @@ module.exports = GelatoComponent.extend({
     renderPromptPartDefnComplete: function() {
         if (this.review.isComplete()) {
             this.review.stop();
-            this.canvas.render();
+            this.canvas.definition.render();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
@@ -174,7 +188,7 @@ module.exports = GelatoComponent.extend({
                 this.reviews.vocab.play();
             }
         } else {
-            this.renderPromptPartRune();
+            this.renderPromptPartDefn();
         }
         return this;
     },
@@ -186,6 +200,7 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.renderPromptComplete();
         } else {
+            this.canvas.reading.render();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
@@ -203,7 +218,7 @@ module.exports = GelatoComponent.extend({
     renderPromptPartRdngComplete: function() {
         if (this.review.isComplete()) {
             this.review.stop();
-            this.canvas.render();
+            this.canvas.reading.render();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
@@ -215,7 +230,7 @@ module.exports = GelatoComponent.extend({
                 this.reviews.vocab.play();
             }
         } else {
-            this.renderPromptPartRune();
+            this.renderPromptPartRdng();
         }
         return this;
     },
@@ -224,7 +239,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptPartRune: function() {
-        this.canvas.render();
+        this.canvas.reset();
         this.canvas.redrawCharacter();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
@@ -274,7 +289,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPromptPartTone: function() {
-        this.canvas.render();
+        this.canvas.reset();
         this.canvas.redrawCharacter();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
@@ -614,6 +629,7 @@ module.exports = GelatoComponent.extend({
         console.info('PROMPT:', reviews.part, reviews.vocab.id, reviews);
         this.part = reviews.part;
         this.reviews = reviews;
+        this.render();
         this.renderPromptLoad();
         this.renderPrompt();
         return this;
