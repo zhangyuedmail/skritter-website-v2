@@ -128,7 +128,7 @@ module.exports = SkritterModel.extend({
             data: {
                 client_id: this.getClientId(),
                 grant_type: 'refresh_token',
-                refresh_token: token
+                refresh_token: this.get('refresh_token')
             },
             type: 'POST',
             success: _.bind(function(model) {

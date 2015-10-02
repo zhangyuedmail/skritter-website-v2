@@ -196,9 +196,10 @@ module.exports = GelatoApplication.extend({
      * @method loadHelpscout
      */
     loadHelpscout: function() {
+        var parent = document.getElementsByTagName('script')[0];
+        var script = document.createElement('script');
         var HSCW = {config: {}};
         var HS = {beacon: {}};
-
         HSCW.config = {
             contact: {
                 enabled: true,
@@ -209,19 +210,14 @@ module.exports = GelatoApplication.extend({
                 baseUrl: 'https://skritter.helpscoutdocs.com/'
             }
         };
-
         HS.beacon.userConfig = {
             color: '#32a8d9',
             icon: 'question',
             modal: false
         };
-
-        var parent = document.getElementsByTagName('script')[0];
-        var script = document.createElement('script');
         script.async = true;
         script.src = 'https://djtflbt20bdde.cloudfront.net/';
         parent.parentNode.insertBefore(script, parent);
-
         window.HSCW = HSCW;
         window.HS = HS;
     },
@@ -248,13 +244,31 @@ module.exports = GelatoApplication.extend({
     start: function() {
         this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
-        this.user.on('state:standby', this.user.cache);
+        this.user.on('state', this.user.cache);
+        this.user.session.on('state', this.user.session.cache);
         if (this.user.isLoggedIn()) {
             Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
             Raygun.withTags(this.user.getRaygunTags());
         } else {
             Raygun.setUser('guest', true);
         }
+        if (this.user.session.isExpired()) {
+            this.user.session.refresh(
+                _.bind(function() {
+                    this.startRouter();
+                }, this),
+                _.bind(function() {
+                    this.startRouter();
+                }, this)
+            );
+        } else {
+            this.startRouter();
+        }
+    },
+    /**
+     * @method startRouter
+     */
+    startRouter: function() {
         this.router.start();
         this.loadHelpscout();
         this.hideLoading();
