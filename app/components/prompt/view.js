@@ -602,6 +602,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     remove: function() {
+        console.log('removing prompt');
         this.canvas.remove();
         this.toolbarAction.remove();
         this.toolbarGrading.remove();

@@ -191,10 +191,12 @@ module.exports = GelatoPage.extend({
      */
     next: function() {
         var nextItem = this.items.getNext();
-        if (nextItem) {
-            this.prompt.set(nextItem.getPromptReviews());
-        } else {
-            console.error('ITEM LOAD ERROR:', 'no items');
+        if (this.prompt) {
+            if (nextItem) {
+                this.prompt.set(nextItem.getPromptReviews());
+            } else {
+                console.error('ITEM LOAD ERROR:', 'no items');
+            }
         }
         if (this.counter % 10 === 0) {
             console.log('LOADING MORE ITEMS:', 10);
@@ -210,8 +212,11 @@ module.exports = GelatoPage.extend({
      * @returns {Study}
      */
     remove: function() {
+        //TODO: figure out a better way to handle canceling ajax request
         this.navbar.remove();
         this.prompt.remove();
+        this.navbar = null;
+        this.prompt = null;
         return GelatoPage.prototype.remove.call(this);
     }
 });
