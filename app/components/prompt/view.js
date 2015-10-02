@@ -431,12 +431,14 @@ module.exports = GelatoComponent.extend({
      * @method handleCanvasNavigateNext
      */
     handleCanvasNavigateNext: function() {
+        this.review.stop();
         this.next();
     },
     /**
      * @method handleCanvasNavigatePrevious
      */
     handleCanvasNavigatePrevious: function() {
+        this.review.stop();
         this.previous();
     },
     /**
@@ -602,7 +604,6 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     remove: function() {
-        console.log('removing prompt');
         this.canvas.remove();
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
