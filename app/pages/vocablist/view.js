@@ -173,7 +173,7 @@ module.exports = GelatoPage.extend({
             this.vocablist.save(attrs, options);
             this.listenToOnce(this.vocablist, 'state', function() {
                 confirmDialog.close();
-                app.router.navigate('/vocablist/my-lists', {trigger: true});
+                app.router.navigate('/vocablists/my-lists', {trigger: true});
             });
         });
     },
