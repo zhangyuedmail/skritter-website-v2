@@ -43,7 +43,7 @@ module.exports = GelatoApplication.extend({
             };
         }
 
-        if (window.ga) {
+        if (window.ga && this.isProduction()) {
             ga('create', 'UA-4642573-1', 'auto');
             ga('set', 'forceSSL', true);
         }
