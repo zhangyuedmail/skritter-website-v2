@@ -166,6 +166,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.vocabDefinition.render();
             this.review.start();
+            this.trigger('review:start', this.reviews);
         }
         return this;
     },
@@ -175,6 +176,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartDefnComplete: function() {
         if (this.review.isComplete()) {
+            this.trigger('review:stop', this.reviews);
             this.review.stop();
             this.canvas.definition.render();
             this.toolbarAction.buttonCorrect = true;
@@ -208,6 +210,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.vocabReading.render();
             this.review.start();
+            this.trigger('review:start', this.reviews);
         }
         return this;
     },
@@ -217,6 +220,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartRdngComplete: function() {
         if (this.review.isComplete()) {
+            this.trigger('review:stop', this.reviews);
             this.review.stop();
             this.canvas.reading.render();
             this.toolbarAction.buttonCorrect = true;
@@ -253,6 +257,7 @@ module.exports = GelatoComponent.extend({
             this.vocabWriting.render();
             this.canvas.enableInput();
             this.review.start();
+            this.trigger('review:start', this.reviews);
             if (app.user.isAudioEnabled() && this.reviews.isFirst()) {
                 this.reviews.vocab.play();
             }
@@ -265,6 +270,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartRuneComplete: function() {
         if (this.review.isComplete()) {
+            this.trigger('review:stop', this.reviews);
             this.review.stop();
             this.review.set('teach', false);
             this.canvas.disableInput();
@@ -304,6 +310,7 @@ module.exports = GelatoComponent.extend({
             this.vocabWriting.render();
             this.canvas.enableInput();
             this.review.start();
+            this.trigger('review:start', this.reviews);
         }
         return this;
     },
@@ -313,6 +320,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartToneComplete: function() {
         if (this.review.isComplete()) {
+            this.trigger('review:stop', this.reviews);
             this.review.stop();
             this.review.set('teach', false);
             this.canvas.disableInput();
@@ -431,6 +439,7 @@ module.exports = GelatoComponent.extend({
      * @method handleCanvasNavigateNext
      */
     handleCanvasNavigateNext: function() {
+        this.trigger('review:stop', this.reviews);
         this.review.stop();
         this.next();
     },
@@ -438,6 +447,7 @@ module.exports = GelatoComponent.extend({
      * @method handleCanvasNavigatePrevious
      */
     handleCanvasNavigatePrevious: function() {
+        this.trigger('review:stop', this.reviews);
         this.review.stop();
         this.previous();
     },
@@ -584,6 +594,7 @@ module.exports = GelatoComponent.extend({
      */
     next: function() {
         if (this.reviews.next()) {
+            this.trigger('review:next', this.reviews);
             this.renderPrompt()
         } else {
             this.trigger('next', this.reviews);
@@ -594,6 +605,7 @@ module.exports = GelatoComponent.extend({
      */
     previous: function() {
         if (this.reviews.previous()) {
+            this.trigger('review:previous', this.reviews);
             this.renderPrompt()
         } else {
             this.trigger('previous', this.reviews);

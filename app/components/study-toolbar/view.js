@@ -1,5 +1,6 @@
 var GelatoComponent = require('gelato/component');
 var ProgressStats = require('collections/progress-stats');
+var StudyToolbarTimer = require('components/study-toolbar/timer/view');
 var ListSettingsDialog = require('dialogs/list-settings/view');
 var StudySettingsDialog = require('dialogs/study-settings/view');
 
@@ -15,8 +16,9 @@ module.exports = GelatoComponent.extend({
     initialize: function(options) {
         this.items = options.items;
         this.stats = new ProgressStats();
+        this.timer = new StudyToolbarTimer();
         this.listenTo(this.items, 'state', this.render);
-        this.listenTo(this.stats, 'state', this.render);
+        this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
         this.stats.fetchToday();
     },
     /**
@@ -34,11 +36,20 @@ module.exports = GelatoComponent.extend({
      */
     template: require('./template'),
     /**
+     * @function remove
+     * @returns {StudyToolbar}
+     */
+    remove: function() {
+      this.timer.remove();
+      return this;
+    },
+    /**
      * @method render
      * @returns {StudyToolbar}
      */
     render: function() {
         this.renderTemplate();
+        this.timer.setElement('#timer-container').render();
         return this;
     },
     /**
@@ -68,5 +79,11 @@ module.exports = GelatoComponent.extend({
         this.trigger('click:study-settings');
         var dialog = new StudySettingsDialog();
         dialog.open();
+    },
+    /**
+     * @method updateTimerOffset
+     */
+    updateTimerOffset: function(stats) {
+        this.timer.setServerOffset(stats.getDailyTimeStudied());
     }
 });

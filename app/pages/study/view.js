@@ -23,6 +23,10 @@ module.exports = GelatoPage.extend({
         this.toolbar = new StudyToolbar({items: this.items});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+        this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
+        this.listenTo(this.prompt, 'review:previous', this.handlePromptReviewPrevious);
+        this.listenTo(this.prompt, 'review:start', this.handlePromptReviewStart);
+        this.listenTo(this.prompt, 'review:stop', this.handlePromptReviewStop);
         this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
         this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
     },
@@ -62,6 +66,7 @@ module.exports = GelatoPage.extend({
      * @param {PromptReviews} reviews
      */
     handlePromptNext: function(reviews) {
+        this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
         this.items.addReviews(reviews.getItemReviews());
         this.items.reviews.save();
         this.counter++;
@@ -73,6 +78,30 @@ module.exports = GelatoPage.extend({
      */
     handlePromptPrevious: function(reviews) {
         this.previous();
+    },
+    /**
+     * @method handlePromptReviewNext
+     * @param {PromptReviews} reviews
+     */
+    handlePromptReviewNext: function(reviews) {},
+    /**
+     * @method handlePromptPrevious
+     * @param {PromptReviews} reviews
+     */
+    handlePromptReviewPrevious: function(reviews) {},
+    /**
+     * @method handlePromptPrevious
+     * @param {PromptReviews} reviews
+     */
+    handlePromptReviewStart: function(reviews) {
+        this.toolbar.timer.start();
+    },
+    /**
+     * @method handlePromptPrevious
+     * @param {PromptReviews} reviews
+     */
+    handlePromptReviewStop: function(reviews) {
+        this.toolbar.timer.stop();
     },
     /**
      * @method handlePromptSkip
@@ -135,56 +164,54 @@ module.exports = GelatoPage.extend({
         this._sectionid = sectionId;
         async.waterfall([
             _.bind(function(callback) {
-                this.items.fetch({
-                    data: {
-                        include_contained: true,
-                        include_decomps: true,
-                        include_sentences: true,
-                        include_strokes: true,
-                        include_vocabs: true,
-                        limit: 10,
-                        parts: app.user.getStudyParts().join(','),
-                        sort: 'next',
-                        styles: app.user.getStudyStyles().join(','),
-                        vocab_list: this._listId
-                    },
-                    merge: false,
-                    remove: false,
-                    error: function(items, error) {
-                        callback(error);
-                    },
-                    success: function(items) {
-                        callback(null, items);
-                    }
+                this.loadMore(null, function(items) {
+                    callback(null, items);
+                }, function(error) {
+                    callback(error, items);
                 });
             }, this)
         ], _.bind(function(error, items) {
             if (error) {
                 console.error('ITEM LOAD ERROR:', error, items);
             } else {
+                this.loadMore(items.cursor);
                 this.next();
             }
         }, this))
     },
     /**
      * @method loadMore
+     * @param {String} [cursor]
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
      */
-    loadMore: function() {
-        this.items.fetch({
-            data: {
-                include_contained: true,
-                include_decomps: true,
-                include_sentences: true,
-                include_strokes: true,
-                include_vocabs: true,
-                limit: 10,
-                parts: app.user.getStudyParts().join(','),
-                sort: 'next',
-                styles: app.user.getStudyStyles().join(',')
-            },
-            merge: false,
-            remove: false
-        });
+    loadMore: function(cursor, callbackSuccess, callbackError) {
+        if (this.items.state === 'standby') {
+            this.items.fetch({
+                data: {
+                    cursor: cursor,
+                    include_contained: true,
+                    include_decomps: true,
+                    include_sentences: true,
+                    include_strokes: true,
+                    include_vocabs: true,
+                    limit: 10,
+                    parts: app.user.getStudyParts().join(','),
+                    sort: 'next',
+                    styles: app.user.getStudyStyles().join(',')
+                },
+                merge: false,
+                remove: false,
+                error: function(items, error) {
+                    _.isFunction(callbackError) ? callbackError(error, items) : undefined;
+                },
+                success: function(items) {
+                    _.isFunction(callbackSuccess) ? callbackSuccess(items) : undefined;
+                }
+            });
+        } else {
+            console.error('ITEM LOAD ERROR:', 'fetch already in progress');
+        }
     },
     /**
      * @method next
@@ -193,6 +220,7 @@ module.exports = GelatoPage.extend({
         var nextItem = this.items.getNext();
         if (this.prompt) {
             if (nextItem) {
+                this.toolbar.timer.reset();
                 this.prompt.set(nextItem.getPromptReviews());
             } else {
                 console.error('ITEM LOAD ERROR:', 'no items');
