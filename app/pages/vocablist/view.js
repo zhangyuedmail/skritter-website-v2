@@ -170,7 +170,7 @@ module.exports = GelatoPage.extend({
                 patch: true,
                 method: 'PUT'
             };
-            this.vocablist.save(attrs, options);
+            Upd.save(attrs, options);
             this.listenToOnce(this.vocablist, 'state', function() {
                 confirmDialog.close();
                 app.router.navigate('/vocablists/my-lists', {trigger: true});
@@ -293,9 +293,7 @@ module.exports = GelatoPage.extend({
             'name': sectionName,
             'rows': []
         });
-        this.vocablist.set('sections', sections);
-        this.vocablist.save();
-
+        this.vocablist.save({'sections': sections}, {patch: true});
         this.render();
     },
     /**

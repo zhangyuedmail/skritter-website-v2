@@ -39,7 +39,7 @@ module.exports = GelatoPage.extend({
                         lang: app.getLanguage()
                     },
                     remove: false
-                })
+                });
             }
         });
     },
