@@ -69,7 +69,7 @@ module.exports = GelatoPage.extend({
         });
         this.vocablist.save();
         this.listenToOnce(this.vocablist, 'sync', function() {
-            app.router.navigate("/vocablist/view/" + this.vocablist.id, {trigger: true});
+            app.router.navigate("/vocablists/view/" + this.vocablist.id, {trigger: true});
         });
         this.listenToOnce(this.vocablist, 'error', function(model, jqxhr) {
             this.errorMessage = jqxhr.responseJSON.message;
