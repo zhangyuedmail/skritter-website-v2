@@ -191,6 +191,8 @@ module.exports = SkritterModel.extend({
             return false;
         } else if (this.get('part') === 'rune' && !strokes.length) {
             return false;
+        } else if (this.collection.history.indexOf(this.getBase()) > -1) {
+            return false;
         }
         return true;
     },

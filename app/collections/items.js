@@ -15,6 +15,7 @@ module.exports = SkritterCollection.extend({
      */
     initialize: function() {
         this.cursor = null;
+        this.history = [];
         this.sorted = null;
         this.contained = new ContainedItems();
         this.reviews = new Reviews();
@@ -70,8 +71,9 @@ module.exports = SkritterCollection.extend({
         async.waterfall([
             _.bind(function(callback) {
                 this.fetch({
-                    type: 'POST',
                     remove: false,
+                    sort: false,
+                    type: 'POST',
                     url: app.getApiUrl() + 'items/add?offset=' + offset,
                     error: function(error) {
                         callback(error);
@@ -112,6 +114,16 @@ module.exports = SkritterCollection.extend({
         });
     },
     /**
+     * @method addHistory
+     * @param {String} base
+     */
+    addHistory: function(base) {
+        if (this.history.length > 2) {
+            this.history.pop();
+        }
+        this.history.unshift(base);
+    },
+    /**
      * @method addReviews
      * @param {Array} reviews
      */
@@ -135,6 +147,9 @@ module.exports = SkritterCollection.extend({
                 successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                 timeStudied: item.get('timeStudied') + review.reviewTime
             });
+            if (i === 0) {
+                this.addHistory(item.getBase());
+            }
         }
         this.reviews.add(reviews);
     },
