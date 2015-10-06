@@ -1,9 +1,10 @@
 var GelatoPage = require('gelato/page');
-var WordsSidebar = require('components/words-sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 var Items = require('collections/items');
 var Vocabs = require('collections/vocabs');
+var WordsSidebar = require('components/words-sidebar/view');
+var VocabDialog = require('dialogs/vocab/view');
 var VocabActionMixin = require('mixins/vocab-action');
+var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class AllWords
@@ -20,12 +21,13 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
+        'vclick .writing-td': 'handleClickWritingTd',
+        'vclick #load-more-btn': 'handleClickLoadMoreButton',
         'vclick #next-sort-link': 'handleClickNextSortLink',
         'vclick #previous-sort-link': 'handleClickPreviousSortLink',
-        'change #word-search-input': 'handleChangeWordSearchInput',
-        'vclick #load-more-btn': 'handleClickLoadMoreButton',
         'change input[type="checkbox"]': 'handleChangeCheckbox',
-        'change #action-select': 'handleChangeActionSelect'
+        'change #action-select': 'handleChangeActionSelect',
+        'change #word-search-input': 'handleChangeWordSearchInput'
     },
     /**
      * @method initialize
@@ -227,6 +229,19 @@ module.exports = GelatoPage.extend({
         this.sort = 'last';
         this.initAllCollections();
         this.fetchItems();
+    },
+    /**
+     * @method handleClickWritingTd
+     * @param {Event} event
+     */
+    handleClickWritingTd: function(event) {
+        event.preventDefault();
+        var row = $(event.target).parent('tr');
+        var vocabId = row.data('vocab-id');
+        if (vocabId) {
+            var dialog = new VocabDialog();
+            dialog.open().load(vocabId);
+        }
     },
     /**
      * @method initAllCollections
