@@ -1,6 +1,11 @@
 @import "../../styles/variables";
 
 gelato-page[data-name='words-starred'] {
+
+  img {
+    max-width: 100%;
+  }
+
   .table-oversized-wrapper {
     margin-top: 30px;
   }
@@ -31,6 +36,11 @@ gelato-page[data-name='words-starred'] {
 
   .date-starred-td {
     width: 20%;
+  }
+
+  #load-more-btn {
+    margin: 0 auto;
+    max-width: 300px;
   }
 
 }

@@ -85,7 +85,8 @@ module.exports = GelatoPage.extend({
                 include_vocabs: true,
                 cursor: cursor || ''
             },
-            remove: false
+            remove: false,
+            sort: false
         });
     },
     /**
@@ -263,7 +264,7 @@ module.exports = GelatoPage.extend({
         context.view = this;
         var rendering = $(this.template(context));
         this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
-    },
+    }
 });
 
 _.extend(module.exports.prototype, VocabActionMixin);
