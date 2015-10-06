@@ -162,15 +162,7 @@ module.exports = GelatoPage.extend({
         });
         confirmDialog.render().open();
         this.listenTo(confirmDialog, 'confirm', function() {
-            var attrs = {
-                disabled: true,
-                studyingMode: 'not studying'
-            };
-            var options = {
-                patch: true,
-                method: 'PUT'
-            };
-            Upd.save(attrs, options);
+            this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
             this.listenToOnce(this.vocablist, 'state', function() {
                 confirmDialog.close();
                 app.router.navigate('/vocablists/my-lists', {trigger: true});
