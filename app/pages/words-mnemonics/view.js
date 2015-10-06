@@ -74,7 +74,8 @@ module.exports = GelatoPage.extend({
                 limit: this.limit,
                 cursor: cursor || ''
             },
-            remove: false
+            remove: false,
+            sort: false
         });
     },
     /**
