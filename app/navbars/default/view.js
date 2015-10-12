@@ -11,8 +11,8 @@ module.exports = GelatoNavbar.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-logout': 'handleClickButtonLogout',
-        'vclick .item-dropdown': 'handleClickDropdown'
+        'click #button-logout': 'handleClickButtonLogout',
+        'click .item-dropdown': 'handleClickDropdown'
     },
     /**
      * @property template

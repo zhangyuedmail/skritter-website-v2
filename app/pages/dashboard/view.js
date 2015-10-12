@@ -56,7 +56,7 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-goal-settings': 'handleClickGoalSettings'
+        'click #button-goal-settings': 'handleClickGoalSettings'
     },
     /**
      * @method handleClickGoalSettings

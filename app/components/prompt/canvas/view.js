@@ -68,8 +68,8 @@ module.exports = GelatoComponent.extend({
         'pointerup.Canvas canvas': 'triggerCanvasMouseUp',
         'vmousedown.Canvas canvas': 'triggerCanvasMouseDown',
         'vmouseup.Canvas canvas': 'triggerCanvasMouseUp',
-        'vclick #navigate-next': 'triggerNavigateNext',
-        'vclick #navigate-previous': 'triggerNavigatePrevious'
+        'click #navigate-next': 'triggerNavigateNext',
+        'click #navigate-previous': 'triggerNavigatePrevious'
     },
     /**
      * @method clearLayer

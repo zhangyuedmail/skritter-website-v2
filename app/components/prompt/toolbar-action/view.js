@@ -51,10 +51,10 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #toolbar-correct': 'handleClickOptionCorrect',
-        'vclick #toolbar-erase': 'handleClickOptionErase',
-        'vclick #toolbar-show': 'handleClickOptionShow',
-        'vclick #toolbar-stroke-order': 'handleClickOptionTeach'
+        'click #toolbar-correct': 'handleClickOptionCorrect',
+        'click #toolbar-erase': 'handleClickOptionErase',
+        'click #toolbar-show': 'handleClickOptionShow',
+        'click #toolbar-stroke-order': 'handleClickOptionTeach'
     },
     /**
      * @method handleClickOptionCorrect

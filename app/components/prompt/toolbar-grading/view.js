@@ -32,7 +32,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick .btn': 'handleClickButton',
+        'click .btn': 'handleClickButton',
         'vmousedown .btn': 'handleMousedownButton'
     },
     /**

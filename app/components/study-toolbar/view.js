@@ -26,9 +26,9 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-add-item': 'handleClickAddItem',
-        'vclick #button-list-settings': 'handleClickListSettings',
-        'vclick #button-study-settings': 'handleClickStudySettings'
+        'click #button-add-item': 'handleClickAddItem',
+        'click #button-list-settings': 'handleClickListSettings',
+        'click #button-study-settings': 'handleClickStudySettings'
     },
     /**
      * @property template

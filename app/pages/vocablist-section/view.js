@@ -93,15 +93,15 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick tr': 'handleClickTableRow',
+        'click tr': 'handleClickTableRow',
         'change #action-select': 'handleChangeActionSelect',
-        'vclick #edit-section-btn': 'handleClickEditSectionButton',
-        'vclick #cancel-edit-section-link': 'handleCancelEditSectionLink',
-        'vclick #save-edit-section-btn': 'handleClickSaveEditSectionButton',
+        'click #edit-section-btn': 'handleClickEditSectionButton',
+        'click #cancel-edit-section-link': 'handleCancelEditSectionLink',
+        'click #save-edit-section-btn': 'handleClickSaveEditSectionButton',
         'keydown tr input': 'handleKeydownInput',
         'blur tr input': 'stopEditingRow',
-        'vclick .remove-td': 'handleClickRemoveCell',
-        'vclick .study-writing-link': 'handleClickStudyWritingLink'
+        'click .remove-td': 'handleClickRemoveCell',
+        'click .study-writing-link': 'handleClickStudyWritingLink'
     },
     /**
      * @property title

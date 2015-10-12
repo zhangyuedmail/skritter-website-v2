@@ -38,8 +38,11 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.navbar.render();
         this.footer.setElement('#footer-container').render();
-        if (this.$page.height() < app.getHeight()) {
-            this.$('#footer-container').css('margin-top', app.getHeight() - this.$page.height() - 51);
+        if (this.getHeight() < app.getHeight()) {
+            this.$('#footer-container').css(
+                'margin-top',
+                app.getHeight() - this.getHeight() + 4
+            );
         }
         return this;
     },
@@ -49,7 +52,7 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keyup #login-password': 'handleKeyUpLoginPassword',
-        'vclick #button-login': 'handleClickLoginButton'
+        'click #button-login': 'handleClickLoginButton'
     },
     /**
      * @method handleClickLoginButton
@@ -78,14 +81,14 @@ module.exports = GelatoPage.extend({
         var password = this.$('#login-password').val();
         var username = this.$('#login-username').val();
         this.$('#login-message').empty();
-        this.disableForm('#login-form');
+        this.$('#login-form').prop('disabled', true);
         app.showLoading();
         app.user.login(username, password, function() {
             app.router.navigate('dashboard', {trigger: false});
             app.reload();
         }, function(error) {
-            self.enableForm('#login-form');
             self.$('#login-message').text(error.responseJSON.message);
+            self.$('#login-form').prop('disabled', false);
             app.hideLoading();
         });
     },

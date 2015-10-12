@@ -18,7 +18,7 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #load-more-btn': 'handleClickLoadMoreButton'
+        'click #load-more-btn': 'handleClickLoadMoreButton'
     },
     /**
      * @method initialize

@@ -20,9 +20,9 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #load-more-btn': 'handleClickLoadMoreButton',
-        'vclick #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
-        'vclick .star-td a': 'handleClickStarLink'
+        'click #load-more-btn': 'handleClickLoadMoreButton',
+        'click #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
+        'click .star-td a': 'handleClickStarLink'
     },
     /**
      * @method initialize

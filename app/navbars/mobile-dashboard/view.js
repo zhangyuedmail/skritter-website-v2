@@ -11,7 +11,7 @@ module.exports = GelatoNavbar.extend({
      * @type {Object}
      */
     events: {
-        'vclick .glyphicon-menu-hamburger': 'handleClickMenuHamburger'
+        'click .glyphicon-menu-hamburger': 'handleClickMenuHamburger'
     },
     /**
      * @method initialize
