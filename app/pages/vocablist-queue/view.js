@@ -16,23 +16,15 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.vocablists = new Vocablists();
-        this.vocablists.fetch({
-            data: {
-                limit: 10,
-                sort: 'studying',
-                include_percent_done: 'true',
-                lang: app.getLanguage()
-            }
-        });
         this.addingTable = new VocablistAddTable({vocablists: this.vocablists});
         this.reviewingTable = new VocablistReviewTable({vocablists: this.vocablists});
         this.navbar = new DefaultNavbar();
         this.sidebar = new VocablistSidebar();
-        this.listenTo(this.vocablists, 'state', function() {
+        this.listenTo(this.vocablists, 'state:standby', function() {
             if (this.vocablists.cursor) {
-                data.cursor = this.vocablists.cursor;
                 this.vocablists.fetch({
                     data: {
+                        cursor: this.vocablists.cursor,
                         limit: 10,
                         sort: 'studying',
                         include_percent_done: 'true',
@@ -40,6 +32,14 @@ module.exports = GelatoPage.extend({
                     },
                     remove: false
                 });
+            }
+        });
+        this.vocablists.fetch({
+            data: {
+                limit: 10,
+                sort: 'studying',
+                include_percent_done: 'true',
+                lang: app.getLanguage()
             }
         });
     },
