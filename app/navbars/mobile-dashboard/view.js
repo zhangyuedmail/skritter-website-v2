@@ -1,4 +1,4 @@
-var GelatoNavbar = require('gelato/navbar');
+var GelatoNavbar = require('gelato/bootstrap/navbar');
 var MobileMenuSidebar = require('sidebars/mobile-menu/view');
 
 /**

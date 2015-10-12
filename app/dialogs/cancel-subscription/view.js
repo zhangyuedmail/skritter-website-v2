@@ -1,4 +1,4 @@
-var GelatoDialog = require('gelato/dialog');
+var GelatoDialog = require('gelato/bootstrap/dialog');
 var CancellationReasons = require('collections/cancellation-reasons');
 var Cancellation = require('models/cancellation');
 

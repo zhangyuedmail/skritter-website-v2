@@ -1,4 +1,4 @@
-var GelatoNavbar = require('gelato/navbar');
+var GelatoNavbar = require('gelato/bootstrap/navbar');
 
 /**
  * @class MarketingNavbar
