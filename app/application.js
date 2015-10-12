@@ -13,6 +13,10 @@ module.exports = GelatoApplication.extend({
      * @constructorApply
      */
     initialize: function() {
+
+        //TODO: depreciate usage of global app object
+        window.app = this;
+
         window.onerror = this.handleError;
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
