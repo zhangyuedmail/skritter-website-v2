@@ -62,6 +62,7 @@ module.exports = GelatoComponent.extend({
      */
     addLocalOffset: function(value) {
         this.localOffset += value;
+        this.update();
     },
     /**
      * @method addServerOffset
@@ -69,6 +70,7 @@ module.exports = GelatoComponent.extend({
      */
     addServerOffset: function(value) {
         this.serverOffset += value;
+        this.update();
     },
     /**
      * @method getOffset
@@ -104,6 +106,7 @@ module.exports = GelatoComponent.extend({
      */
     setLocalOffset: function(value) {
         this.localOffset = value;
+        this.update();
     },
     /**
      * @method setServerOffset
@@ -111,6 +114,7 @@ module.exports = GelatoComponent.extend({
      */
     setServerOffset: function(value) {
         this.serverOffset = value;
+        this.update();
     },
     /**
      * @method start
