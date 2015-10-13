@@ -357,12 +357,12 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     resize: function() {
-        var size = app.getWidth() < 1280 ? this.$el.width() - 50 : 450;
+        var size = app.getWidth() < 1280 ? this.getWidth() - 50 : 450;
         this.reset().size = size;
         this.stage.canvas.height = size;
         this.stage.canvas.width = size;
-        this.$el.height(size);
-        this.$el.width(size);
+        this.$view.height(size);
+        this.$view.width(size);
         this.$('#canvas-navigation').css('top', (size / 2) - 35);
         switch (this.prompt.part) {
             case 'rune':
