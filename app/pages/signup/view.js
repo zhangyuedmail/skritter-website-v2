@@ -22,7 +22,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         StripeLoader.load();
         this.footer = new MarketingFooter();
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = this.createComponent('navbars/marketing');
         this.user = null;
         this.password = null;
         this.session = new Session();

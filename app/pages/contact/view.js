@@ -1,7 +1,5 @@
 var GelatoPage = require('gelato/page');
 var MarketingFooter = require('components/marketing-footer/view');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingNavbar = require('navbars/marketing/view');
 
 /**
  * @class Contact
@@ -14,11 +12,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.footer = new MarketingFooter();
-        if (app.user.isLoggedIn()) {
-            this.navbar = this.createComponent('navbars/default');
-        } else {
-            this.navbar = new MarketingNavbar();
-        }
+        this.navbar = this.createComponent('navbars/marketing');
     },
     /**
      * @property bodyClass

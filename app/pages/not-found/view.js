@@ -10,7 +10,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = this.createComponent('navbars/marketing');
     },
     /**
      * @property bodyClass

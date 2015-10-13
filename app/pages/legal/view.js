@@ -12,7 +12,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.footer = new MarketingFooter();
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = this.createComponent('navbars/marketing');
     },
     /**
      * @property bodyClass
