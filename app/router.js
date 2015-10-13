@@ -44,10 +44,10 @@ module.exports = GelatoRouter.extend({
         'vocablists/create': 'navigateCreateVocablist',
         'vocablists/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
         'vocablists/view/(:vocablistId)': 'navigateVocablist',
-        'words/all': 'navigateAllWords',
-        'words/banned': 'navigateBannedWords',
-        'words/mnemonics': 'navigateMnemonics',
-        'words/starred': 'navigateStarredWords',
+        'words/all': 'navigateWordsAll',
+        'words/banned': 'navigateWordsBanned',
+        'words/mnemonics': 'navigateWordsMnemonics',
+        'words/starred': 'navigateWordsStarred',
         '*route': 'navigateNotFound'
     },
     /**
@@ -76,7 +76,6 @@ module.exports = GelatoRouter.extend({
      */
     navigateAccount: function() {
         if (app.user.isLoggedIn()) {
-            this.navigate('account/settings/general');
             this.navigateAccountSettingsGeneral();
         } else {
             this.navigateLogin();
@@ -87,8 +86,8 @@ module.exports = GelatoRouter.extend({
      */
     navigateAccountBillingHistory: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/billing-history/view'))();
-            this.page.render();
+            this.navigate('account/billing/history');
+            this.go('pages/billing-history');
         } else {
             this.navigateLogin();
         }
@@ -98,8 +97,8 @@ module.exports = GelatoRouter.extend({
      */
     navigateAccountBillingSubscription: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/billing-subscription/view'))();
-            this.page.render();
+            this.navigate('account/billing-subscription');
+            this.go('pages/billing-subscription');
         } else {
             this.navigateLogin();
         }
@@ -109,8 +108,8 @@ module.exports = GelatoRouter.extend({
      */
     navigateAccountSettingsGeneral: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/settings-general/view'));
-            this.page.render();
+            this.navigate('account/settings/general');
+            this.go('pages/settings-general');
         } else {
             this.navigateLogin();
         }
@@ -120,30 +119,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateAccountSettingsStudy: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/settings-study/view'));
-            this.page.render();
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateAllWords
-     */
-    navigateAllWords: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/words-all/view'))();
-            this.page.render();
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateBannedWords
-     */
-    navigateBannedWords: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/words-banned/view'))();
-            this.page.render();
+            this.go('pages/settings-study');
         } else {
             this.navigateLogin();
         }
@@ -153,8 +129,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateChinesepod: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/chinesepod/view'))();
-            this.page.render();
+            this.go('pages/chinesepod');
         } else {
             this.navigateLogin();
         }
@@ -164,8 +139,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateCreateVocablist: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocablist-create/view'))();
-            this.page.render();
+            this.go('pages/vocablist-create');
         } else {
             this.navigateLogin();
         }
@@ -174,8 +148,7 @@ module.exports = GelatoRouter.extend({
      * @method navigateContact
      */
     navigateContact: function() {
-        this.page = new (require('pages/contact/view'));
-        this.page.render();
+        this.go('pages/contact');
     },
     /**
      * @method navigateDashboard
@@ -183,8 +156,7 @@ module.exports = GelatoRouter.extend({
     navigateDashboard: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('dashboard');
-            this.page = new (require('pages/dashboard/view'));
-            this.page.render();
+            this.go('pages/dashboard');
         } else {
             this.navigateLogin();
         }
@@ -193,30 +165,27 @@ module.exports = GelatoRouter.extend({
      * @method navigateFeatures
      */
     navigateFeatures: function() {
-        this.page = new (require('pages/features/view'));
-        this.page.render();
+        this.navigate('features');
+        this.go('pages/features');
     },
     /**
      * @method navigateHome
      */
     navigateHome: function() {
         this.navigate('home');
-        this.page = new (require('pages/home/view'));
-        this.page.render();
+        this.go('pages/home');
     },
     /**
      * @method navigateInstitutions
      */
     navigateInstitutions: function() {
-        this.page = new (require('pages/institutions/view'));
-        this.page.render();
+        this.go('pages/institutions');
     },
     /**
      * @method navigateLegal
      */
     navigateLegal: function() {
-        this.page = new (require('pages/legal/view'));
-        this.page.render();
+        this.go('pages/legal');
     },
     /**
      * @method navigateLogin
@@ -225,27 +194,16 @@ module.exports = GelatoRouter.extend({
         if (app.user.isLoggedIn()) {
             this.navigateHome();
         } else {
-            this.page = new (require('pages/login/view'));
-            this.page.render();
-        }
-    },
-    /**
-     * @method navigateMnemonics
-     */
-    navigateMnemonics: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/words-mnemonics/view'))();
-            this.page.render();
-        } else {
-            this.navigateLogin();
+            this.navigate('login');
+            this.go('pages/login');
         }
     },
     /**
      * @method navigateNotFound
      */
     navigateNotFound: function() {
-        this.page = new (require('pages/not-found/view'));
-        this.page.render();
+        this.navigate('not-found');
+        this.go('pages/not-found');
     },
     /**
      * @method navigateScratchpad
@@ -254,8 +212,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateScratchpad: function(vocabId, part) {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/scratchpad/view'));
-            this.page.render().load(vocabId, part);
+            this.go('pages/scratchpad').load(vocabId, part);
         } else {
             this.navigateLogin();
         }
@@ -264,8 +221,8 @@ module.exports = GelatoRouter.extend({
      * @method navigateSignup
      */
     navigateSignup: function() {
-        this.page = new (require('pages/signup/view'));
-        this.page.render();
+        this.navigate('signup');
+        this.go('pages/signup');
     },
     /**
      * @method navigateStudy
@@ -274,19 +231,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateStudy: function(listId, sectionId) {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/study/view'));
-            this.page.render().load(listId, sectionId);
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateStarredWords
-     */
-    navigateStarredWords: function() {
-        if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/words-starred/view'))();
-            this.page.render();
+            this.go('pages/study').load(listId, sectionId);
         } else {
             this.navigateLogin();
         }
@@ -297,8 +242,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateVocab: function(vocabId) {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocab/view'));
-            this.page.render().set(vocabId);
+            this.go('pages/vocab').set(vocabId);
         } else {
             this.navigateLogin();
         }
@@ -308,8 +252,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateVocablistBrowse: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocablist-browse/view'));
-            this.page.render();
+            this.go('pages/vocablist-browse');
         } else {
             this.navigateLogin();
         }
@@ -319,8 +262,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateVocablistQueue: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocablist-queue/view'));
-            this.page.render();
+            this.go('pages/vocablist-queue');
         } else {
             this.navigateLogin();
         }
@@ -330,8 +272,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateVocablistMyLists: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocablist-mine/view'));
-            this.page.render();
+            this.go('pages/vocablist-mine');
         } else {
             this.navigateLogin();
         }
@@ -341,10 +282,7 @@ module.exports = GelatoRouter.extend({
      */
     navigateVocablist: function(vocablistId) {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocablist/view'))({
-                vocablistId: vocablistId
-            });
-            this.page.render();
+            this.go('pages/vocablist', {vocablistId: vocablistId});
         } else {
             this.navigateLogin();
         }
@@ -354,11 +292,10 @@ module.exports = GelatoRouter.extend({
      */
     navigateVocablistSection: function(vocablistId, sectionId) {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocablist-section/view'))({
+            this.go('pages/vocablist-section', {
                 vocablistId: vocablistId,
                 sectionId: sectionId
             });
-            this.page.render();
         } else {
             this.navigateLogin();
         }
@@ -368,8 +305,47 @@ module.exports = GelatoRouter.extend({
      */
     navigateVocablistPublished: function() {
         if (app.user.isLoggedIn()) {
-            this.page = new (require('pages/vocablist-published/view'))();
-            this.page.render();
+            this.go('pages/vocablist-published');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateWordsAll
+     */
+    navigateWordsAll: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('pages/words-all');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateWordsBanned
+     */
+    navigateWordsBanned: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('pages/words-banned');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateWordsMnemonics
+     */
+    navigateWordsMnemonics: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('pages/words-mnemonics');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateWordsStarred
+     */
+    navigateWordsStarred: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('pages/words-starred');
         } else {
             this.navigateLogin();
         }
