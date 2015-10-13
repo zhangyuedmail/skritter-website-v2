@@ -7,6 +7,13 @@ var Session = require('models/session');
  */
 module.exports = SkritterModel.extend({
     /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.session.user = this;
+    },
+    /**
      * @property defaults
      * @type {Object}
      */
@@ -15,7 +22,7 @@ module.exports = SkritterModel.extend({
         allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
         allJapaneseParts: ['defn', 'rdng', 'rune'],
         gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
-        goals: {ja: {items: 20}, zh: {items: 20}},
+        goals: {ja: {items: 20}, zh: {items: 20}}
     },
     /**
      * @method parse
@@ -110,7 +117,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     isLoggedIn: function() {
-        return !this.session.isExpired();
+        return this.session.get('user_id');
     },
     /**
      * @method login
