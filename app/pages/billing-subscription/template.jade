@@ -1,8 +1,10 @@
-- var vacation = view.subscription.get('vacation');
-- var subscribed = view.subscription.get('subscribed');
-- var expires = view.subscription.get('expires');
-
 gelato-page(data-name='billing-subscription')
+  - var vacation = view.subscription.get('vacation');
+  - var subscribed = view.subscription.get('subscribed');
+  - var expires = view.subscription.get('expires');
+
+  #navbar-container
+
   .container
     .content-block
       .row

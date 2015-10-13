@@ -1,6 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingNavbar = require('navbars/marketing/view');
 
 /**
  * @class NotFound
@@ -12,11 +10,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        if (app.user.isLoggedIn()) {
-            this.navbar = new DefaultNavbar();
-        } else {
-            this.navbar = new MarketingNavbar();
-        }
+        this.navbar = this.createComponent('navbars/default');
     },
     /**
      * @property bodyClass
@@ -39,7 +33,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         return this;
     }
 });

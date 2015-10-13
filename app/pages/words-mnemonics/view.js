@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words-sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
 /**
@@ -9,6 +8,18 @@ var VocabActionMixin = require('mixins/vocab-action');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.navbar = this.createComponent('navbars/default');
+        this.sidebar = new WordsSidebar();
+        this.mnemonicVocabs = new Vocabs();
+        this.limit = 20;
+        this.listenTo(this.mnemonicVocabs, 'state', this.renderTable);
+        this.fetchMnemonics();
+    },
     /**
      * @property bodyClass
      * @type {String}
@@ -24,18 +35,6 @@ module.exports = GelatoPage.extend({
         'click #delete-mnemonics-btn': 'handleClickDeleteMnemonicsButton'
     },
     /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.navbar = new DefaultNavbar();
-        this.sidebar = new WordsSidebar();
-        this.mnemonicVocabs = new Vocabs();
-        this.listenTo(this.mnemonicVocabs, 'state', this.renderTable);
-        this.limit = 20;
-        this.fetchMnemonics();
-    },
-    /**
      * @method remove
      */
     remove: function() {
@@ -49,7 +48,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#words-sidebar-container').render();
         return this;
     },
@@ -65,7 +64,7 @@ module.exports = GelatoPage.extend({
     title: 'Mnemonics - Skritter',
     /**
      * @method fetchItems
-     * @param {string} cursor
+     * @param {string} [cursor]
      */
     fetchMnemonics: function(cursor) {
         this.mnemonicVocabs.fetch({

@@ -4,13 +4,30 @@ var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words-sidebar/view');
 var VocabDialog = require('dialogs/vocab/view');
 var VocabActionMixin = require('mixins/vocab-action');
-var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class AllWords
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.navbar = this.createComponent('navbars/default');
+        this.sidebar = new WordsSidebar();
+        this.items = new Items();
+        this.searchVocabs = new Vocabs();
+        this.vocabsToFetchItemsFor = new Vocabs();
+        this.searchVocabItems = new Items();
+        this.vocabMap = {};
+        this.sort = 'last';
+        this.limit = 20;
+        this.searchString = '';
+        this.initAllCollections();
+        this.fetchItems();
+    },
     /**
      * @property bodyClass
      * @type {String}
@@ -30,24 +47,6 @@ module.exports = GelatoPage.extend({
         'change #word-search-input': 'handleChangeWordSearchInput'
     },
     /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.navbar = new DefaultNavbar();
-        this.sidebar = new WordsSidebar();
-        this.items = new Items();
-        this.searchVocabs = new Vocabs();
-        this.vocabsToFetchItemsFor = new Vocabs();
-        this.searchVocabItems = new Items();
-        this.vocabMap = {};
-        this.initAllCollections();
-        this.sort = 'last';
-        this.limit = 20;
-        this.fetchItems();
-        this.searchString = '';
-    },
-    /**
      * @method remove
      */
     remove: function() {
@@ -61,7 +60,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#words-sidebar-container').render();
         return this;
     },
@@ -77,7 +76,7 @@ module.exports = GelatoPage.extend({
     title: 'All Words - Skritter',
     /**
      * @method fetchItems
-     * @param {string} cursor
+     * @param {string} [cursor]
      */
     fetchItems: function(cursor) {
         this.items.fetch({

@@ -1,5 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
 var Vocablist = require('models/vocablist');
 
 /**
@@ -12,7 +11,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
         this.vocablist = new Vocablist();
         this.errorMessage = '';
     },

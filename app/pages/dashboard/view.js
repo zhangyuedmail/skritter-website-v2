@@ -5,7 +5,6 @@ var DashboardStatus = require('components/dashboard-status/view');
 var DashboardTotal = require('components/dashboard-total/view');
 var DashboardQueue = require('components/dashboard-queue/view');
 var GoalSettingsDialog = require('dialogs/goal-settings/view');
-var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class Dashboard
@@ -17,7 +16,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
         this.dashboardGoal = new DashboardStatus();
         this.dashboardMonth = new DashboardMonth();
         this.dashboardTotal = new DashboardTotal();
@@ -48,7 +47,7 @@ module.exports = GelatoPage.extend({
         this.dashboardMonth.setElement('#dashboard-month-container').render();
         this.dashboardTotal.setElement('#dashboard-total-container').render();
         this.dashboardQueue.setElement('#dashboard-queue-container').render();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         return this;
     },
     /**

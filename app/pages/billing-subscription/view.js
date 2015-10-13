@@ -1,6 +1,5 @@
 var GelatoPage = require('gelato/page');
 var SettingsSidebar = require('components/settings-sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 var Subscription = require('models/subscription');
 var Coupon = require('models/coupon');
 var VacationDialog = require('dialogs/vacation/view');
@@ -12,6 +11,24 @@ var CancelSubscriptionDialog = require('dialogs/cancel-subscription/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        StripeLoader.load();
+        this.coupon = new Coupon({ code: '' });
+        this.navbar = this.createComponent('navbars/default');
+        this.sidebar = new SettingsSidebar();
+        this.subscription = new Subscription({ id: app.user.id });
+        this.listenTo(this.subscription, 'state', this.renderMainContent);
+        this.listenTo(this.coupon, 'sync', function(model, response) {
+            this.subscription.set(response.Subscription);
+            this.coupon.unset('code');
+        });
+        this.listenTo(this.coupon, 'state', this.renderMainContent);
+        this.subscription.fetch();
+    },
     /**
      * @property bodyClass
      * @type {String}
@@ -34,24 +51,6 @@ module.exports = GelatoPage.extend({
         'click #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
     },
     /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        StripeLoader.load();
-        this.navbar = new DefaultNavbar();
-        this.sidebar = new SettingsSidebar();
-        this.subscription = new Subscription({ id: app.user.id });
-        this.subscription.fetch();
-        this.listenTo(this.subscription, 'state', this.renderMainContent);
-        this.coupon = new Coupon({ code: '' });
-        this.listenTo(this.coupon, 'sync', function(model, response) {
-            this.subscription.set(response.Subscription);
-            this.coupon.unset('code');
-        });
-        this.listenTo(this.coupon, 'state', this.renderMainContent);
-    },
-    /**
      * @method remove
      */
     remove: function() {
@@ -65,7 +64,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#settings-sidebar-container').render();
         return this;
     },

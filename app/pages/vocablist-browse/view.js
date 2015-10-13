@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
 var VocablistTable = require('components/vocablist-browse-table/view');
 var VocablistSidebar = require('components/vocablist-sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class VocablistBrowse
@@ -13,9 +12,9 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.vocablistTable = new VocablistTable();
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
         this.sidebar = new VocablistSidebar();
+        this.vocablistTable = new VocablistTable();
     },
     /**
      * @property events
@@ -48,9 +47,9 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
-        this.vocablistTable.setElement('#vocablist-container').render();
+        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#vocablist-sidebar-container').render();
+        this.vocablistTable.setElement('#vocablist-container').render();
         return this;
     },
     /**
@@ -98,9 +97,9 @@ module.exports = GelatoPage.extend({
      * @returns {VocablistBrowse}
      */
     remove: function() {
-        this.vocablistTable.remove();
         this.navbar.remove();
         this.sidebar.remove();
+        this.vocablistTable.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });

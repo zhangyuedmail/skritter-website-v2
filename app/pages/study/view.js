@@ -2,7 +2,6 @@ var GelatoPage = require('gelato/page');
 var Items = require('collections/items');
 var Prompt = require('components/prompt/view');
 var StudyToolbar = require('components/study-toolbar/view');
-var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class Study
@@ -18,7 +17,7 @@ module.exports = GelatoPage.extend({
         this._sectionId = null;
         this.counter = 1;
         this.items = new Items();
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
         this.prompt = new Prompt();
         this.toolbar = new StudyToolbar({items: this.items});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
@@ -56,7 +55,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.prompt.setElement('#prompt-container').render();
         this.toolbar.setElement('#toolbar-container').render();
         return this;

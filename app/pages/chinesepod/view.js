@@ -1,5 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
 var VocablistSidebar = require('components/vocablist-sidebar/view');
 var ChinesePodSession = require('models/chinesepod-session');
 var ChinesePodLabels = require('collections/chinesepod-labels');
@@ -15,22 +14,22 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
         this.sidebar = new VocablistSidebar();
         this.chinesepodSession = new ChinesePodSession();
-        this.chinesepodSession.fetch();
-        this.listenToOnce(this.chinesepodSession, 'state', this.handleChinesepodSessionLoaded);
         this.chinesepodLabels = new ChinesePodLabels();
         this.chinesepodLessons = new ChinesePodLessons();
-        this.listenTo(this.chinesepodLabels, 'state', this.render);
-        this.listenTo(this.chinesepodLessons, 'state', this.render);
-        this.listenTo(this.chinesepodLabels, 'error', this.handleChinesePodError);
-        this.listenTo(this.chinesepodLessons, 'error', this.handleChinesePodError);
         this.viewOption = 'lessons';
         this.email = '';
         this.password = '';
         this.errorMessage = '';
         this.searchString = '';
+        this.listenToOnce(this.chinesepodSession, 'state', this.handleChinesepodSessionLoaded);
+        this.listenTo(this.chinesepodLabels, 'state', this.render);
+        this.listenTo(this.chinesepodLessons, 'state', this.render);
+        this.listenTo(this.chinesepodLabels, 'error', this.handleChinesePodError);
+        this.listenTo(this.chinesepodLessons, 'error', this.handleChinesePodError);
+        this.chinesepodSession.fetch();
     },
     /**
      * @property bodyClass
@@ -64,7 +63,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#vocablist-sidebar-container').render();
         return this;
     },

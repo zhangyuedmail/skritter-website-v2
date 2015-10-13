@@ -2,7 +2,6 @@ var GelatoPage = require('gelato/page');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words-sidebar/view');
 var ProgressDialog = require('dialogs/progress/view');
-var DefaultNavbar = require('navbars/default/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
 /**
@@ -10,6 +9,18 @@ var VocabActionMixin = require('mixins/vocab-action');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.navbar = this.createComponent('navbars/default');
+        this.sidebar = new WordsSidebar();
+        this.starredVocabs = new Vocabs();
+        this.limit = 20;
+        this.listenTo(this.starredVocabs, 'sync', this.renderTable);
+        this.fetchStarredVocabs();
+    },
     /**
      * @property bodyClass
      * @type {String}
@@ -25,18 +36,6 @@ module.exports = GelatoPage.extend({
         'click .star-td a': 'handleClickStarLink'
     },
     /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.navbar = new DefaultNavbar();
-        this.sidebar = new WordsSidebar();
-        this.starredVocabs = new Vocabs();
-        this.listenTo(this.starredVocabs, 'sync', this.renderTable);
-        this.limit = 20;
-        this.fetchStarredVocabs();
-    },
-    /**
      * @method remove
      */
     remove: function() {
@@ -50,7 +49,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#words-sidebar-container').render();
         return this;
     },
@@ -100,7 +99,7 @@ module.exports = GelatoPage.extend({
     },
     /**
      * @method fetchItems
-     * @param {string} cursor
+     * @param {string} [cursor]
      */
     fetchStarredVocabs: function(cursor) {
         this.starredVocabs.fetch({

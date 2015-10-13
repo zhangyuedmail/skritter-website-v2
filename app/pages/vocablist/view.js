@@ -2,7 +2,6 @@ var GelatoPage = require('gelato/page');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var ConfirmDialog = require('dialogs/confirm/view');
 var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
-var DefaultNavbar = require('navbars/default/view');
 var User = require('models/user');
 var Vocablist = require('models/vocablist');
 
@@ -16,14 +15,15 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
+        this.updating = false;
         this.vocablist = new Vocablist({id: options.vocablistId});
-        this.vocablist.fetch({data: {includeSectionCompletion: true}});
         this.listenTo(this.vocablist, 'sync', function() {
             this.loadCreatorNameIfNeeded();
             this.render();
         });
-        this.updating = false;
+        this.vocablist.fetch({data: {includeSectionCompletion: true}});
+
     },
     /**
      * @method loadCreatorNameIfNeeded

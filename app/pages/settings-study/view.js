@@ -1,5 +1,4 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
 var SettingsSidebar = require('components/settings-sidebar/view');
 
 /**
@@ -12,7 +11,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
         this.listenTo(app.user, 'state', this.renderSectionContent);
         this.sidebar = new SettingsSidebar();
         app.user.fetch();
@@ -46,8 +45,8 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
-        this.sidebar.setElement(this.$('#settings-sidebar-container')[0]).render();
+        this.navbar.setElement('#navbar-container').render();
+        this.sidebar.setElement('#settings-sidebar-container').render();
         return this;
     },
     /**
@@ -66,6 +65,8 @@ module.exports = GelatoPage.extend({
      * @returns {SettingsStudy}
      */
     remove: function() {
+        this.navbar.remove();
+        this.sidebar.remove();
         return GelatoPage.prototype.remove.call(this);
     },
     /**

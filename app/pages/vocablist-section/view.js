@@ -3,7 +3,6 @@ var Vocabs = require('collections/vocabs');
 var ProgressDialog = require('dialogs/progress/view');
 var VocabActionMixin = require('mixins/vocab-action');
 var User = require('models/user');
-var DefaultNavbar = require('navbars/default/view');
 var Vocablist = require('models/vocablist');
 var VocablistSection = require('models/vocablist-section');
 var rowTemplate = require('./row-template');
@@ -23,7 +22,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
         this.vocablist = new Vocablist({id: options.vocablistId});
         this.vocablist.fetch();
         this.section = new VocablistSection({vocablistId: options.vocablistId, id:options.sectionId});
