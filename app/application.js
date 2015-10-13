@@ -26,7 +26,7 @@ module.exports = GelatoApplication.extend({
         Raygun.setVersion(this.get('version'));
         this.fn = Functions;
         this.router = this.createRouter('router');
-        this.user = this.createModel('models/user', {id: this.getSetting('user')});
+        this.user = this.createModel('models/user', {id: this.getSetting('user') || 'application'});
 
         if (window.createjs) {
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
@@ -104,8 +104,7 @@ module.exports = GelatoApplication.extend({
         return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc'; // TESTING
         if (this.isTesting()) {
             return 'pk_test_24FOCKPSEtJHVpcA3oErEw2I';
-        }
-        else {
+        } else {
             return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc';
         }
     },
@@ -257,14 +256,25 @@ module.exports = GelatoApplication.extend({
             Raygun.setUser('guest', true);
         }
         if (this.user.session.isExpired()) {
-            this.user.session.refresh(
-                _.bind(function() {
-                    this.startRouter();
-                }, this),
-                _.bind(function() {
-                    this.startRouter();
-                }, this)
-            );
+            if (this.user.id === 'application') {
+                this.user.session.authenticate('client_credentials', null, null,
+                    _.bind(function() {
+                        this.startRouter();
+                    }, this),
+                    _.bind(function() {
+                        this.startRouter();
+                    }, this)
+                );
+            } else {
+                this.user.session.refresh(
+                    _.bind(function() {
+                        this.startRouter();
+                    }, this),
+                    _.bind(function() {
+                        this.startRouter();
+                    }, this)
+                );
+            }
         } else {
             this.startRouter();
         }
