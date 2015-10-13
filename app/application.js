@@ -25,8 +25,8 @@ module.exports = GelatoApplication.extend({
         }).attach();
         Raygun.setVersion(this.get('version'));
         this.fn = Functions;
-        this.router = new Router();
-        this.user = new User({id: this.getSetting('user')});
+        this.router = this.createRouter('router');
+        this.user = this.createModel('models/user', {id: this.getSetting('user')});
 
         if (window.createjs) {
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
