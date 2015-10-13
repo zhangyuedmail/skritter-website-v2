@@ -45,6 +45,7 @@ module.exports = GelatoRouter.extend({
         'vocablists/create': 'navigateCreateVocablist',
         'vocablists/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
         'vocablists/view/(:vocablistId)': 'navigateVocablist',
+        'words': 'navigateWordsAll',
         'words/all': 'navigateWordsAll',
         'words/banned': 'navigateWordsBanned',
         'words/mnemonics': 'navigateWordsMnemonics',
