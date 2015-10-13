@@ -1,5 +1,6 @@
 @import "variables";
 
+
 /*** BUTTONS ***/
 .btn {
   border: none;
@@ -21,6 +22,7 @@
   &:hover { background-color: $green6; }
 }
 
+
 /*** CONTAINER ***/
 .container { width: 1280px; }
 @media (max-width: 1280px) {
@@ -30,11 +32,13 @@
   .container { width: 100%; }
 }
 
+
 /*** INPUT ***/
 select {
   border: 0;
   outline: 1px solid #cccccc;
 }
+
 
 /*** LINKS ***/
 a {
@@ -44,8 +48,10 @@ a {
   &:hover { color: $green6; }
 }
 
+
 /*** MODALS ***/
 .modal-content { border-radius: 25px; }
+
 
 /*** NOTIFY ***/
 [data-notify="container"] {
@@ -76,6 +82,7 @@ a {
 .alert-minimalist > [data-notify="message"] {
   font-size: 80%;
 }
+
 
 /*** PROGRESS ***/
 .progress { border-radius: 25px; }

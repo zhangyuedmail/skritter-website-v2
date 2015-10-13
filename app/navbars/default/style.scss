@@ -4,9 +4,18 @@ bootstrap-navbar[data-name='default'] {
 
   img { height: 30px; }
 
+  nav {
+    background-color: #262b30;
+    border-color: #262b30;
+    box-shadow: 0 1px 10px rgba(38,43,48,.15);
+  }
+
   .navbar-header {
     a {
       color: $white1;
+      font-family: $font-slab;
+      font-size: 24px;
+      font-weight: 700;
       text-decoration: none;
       &:hover { color: $white5; }
     }
@@ -15,11 +24,18 @@ bootstrap-navbar[data-name='default'] {
   .navbar-nav {
     a {
       color: $white1;
+      font-family: $font-muli;
+      font-size: 18px;
+      font-weight: 400;
       text-decoration: none;
       &:hover { color: $white5; }
     }
-    .dropdown li {
-      a { color: $grey7; }
+    .dropdown {
+      li > a { color: $grey7; }
+    }
+    .open > a {
+      &:hover { background-color: $grey7; }
+      &:focus { background-color: $grey7; }
     }
   }
 
