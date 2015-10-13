@@ -186,10 +186,11 @@ module.exports = SkritterModel.extend({
      */
     isActive: function() {
         var vocab = this.getVocab();
-        var strokes = vocab.getStrokes();
-        if (vocab.isBanned()) {
+        if (!vocab) {
+          return false;
+        } else if (vocab.isBanned()) {
             return false;
-        } else if (this.get('part') === 'rune' && !strokes.length) {
+        } else if (this.get('part') === 'rune' && !vocab.getStrokes().length) {
             return false;
         } else if (this.collection.history.indexOf(this.getBase()) > -1) {
             return false;
