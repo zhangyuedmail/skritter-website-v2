@@ -14,23 +14,41 @@ bootstrap-navbar(data-name='default')
 
       #navbar-collapse.collapse.navbar-collapse
 
-        ul.nav.navbar-nav
-          li
-            a(href="/study") Study
-          li
-            a(href="/vocablists") Lists
+        if user.isLoggedIn()
 
-        ul.nav.navbar-nav.navbar-right
-          li.dropdown
-            a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
-              span= user.get('name')
-              | &nbsp;&nbsp;&nbsp;
-              span.caret
-            ul.dropdown-menu
+          ul.nav.navbar-nav
+            li
+              a(href="/study") Study
+            li
+              a(href="/vocablists") Lists
+
+          ul.nav.navbar-nav.navbar-right
+            li.dropdown
+              a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
+                span= user.get('name')
+                | &nbsp;&nbsp;&nbsp;
+                span.caret
+              ul.dropdown-menu
+                li
+                  a(href="/account") Account
+                li
+                  a(href="http://discourse.skritter.com/t/skritter-2-0-beta-is-up-and-were-looking-for-feedback", target="_blank") Forum
+                li.divider(role="separator")
+                li
+                  a#button-logout(href="#") Logout
+
+        else
+
+          ul.nav.navbar-nav
+            li
+              a(href="/features") Features
+            li
+              a(href="/signup") Signup
+
+          ul.nav.navbar-nav.navbar-right
+            if user.isLoggedIn()
               li
-                a(href="/account") Account
+                a(href="/dashboard") Dashboard
+            else
               li
-                a(href="http://discourse.skritter.com/t/skritter-2-0-beta-is-up-and-were-looking-for-feedback", target="_blank") Forum
-              li.divider(role="separator")
-              li
-                a#button-logout(href="#") Logout
+                a(href="/login") Login
