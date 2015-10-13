@@ -63,18 +63,23 @@ module.exports = SkritterCollection.extend({
     url: 'items',
     /**
      * @method add
+     * @param {Object} [lists]
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
      */
-    add: function(callbackSuccess, callbackError) {
+    add: function(lists, callbackSuccess, callbackError) {
         var offset = app.user.get('addItemOffset');
+        var params = '?offset=' + offset;
+        if (lists) {
+            params += '&lists=' + lists;
+        }
         async.waterfall([
             _.bind(function(callback) {
                 this.fetch({
                     remove: false,
                     sort: false,
                     type: 'POST',
-                    url: app.getApiUrl() + 'items/add?offset=' + offset,
+                    url: app.getApiUrl() + 'items/add' + params,
                     error: function(error) {
                         callback(error);
                     },
