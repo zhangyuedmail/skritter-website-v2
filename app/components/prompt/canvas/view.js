@@ -66,8 +66,8 @@ module.exports = GelatoComponent.extend({
     events: {
         'pointerdown.Canvas canvas': 'triggerCanvasMouseDown',
         'pointerup.Canvas canvas': 'triggerCanvasMouseUp',
-        'vmousedown.Canvas canvas': 'triggerCanvasMouseDown',
-        'vmouseup.Canvas canvas': 'triggerCanvasMouseUp',
+        'mousedown.Canvas canvas': 'triggerCanvasMouseDown',
+        'mouseup.Canvas canvas': 'triggerCanvasMouseUp',
         'click #navigate-next': 'triggerNavigateNext',
         'click #navigate-previous': 'triggerNavigatePrevious'
     },
@@ -212,7 +212,7 @@ module.exports = GelatoComponent.extend({
     enableInput: function() {
         var self = this;
         var oldPoint, oldMidPoint, points, marker;
-        this.disableInput().$('#input-canvas').on('vmousedown.Input pointerdown.Input', down);
+        this.disableInput().$('#input-canvas').on('mousedown.Input pointerdown.Input', down);
         function down(event) {
             points = [];
             marker = new createjs.Shape();
@@ -225,8 +225,8 @@ module.exports = GelatoComponent.extend({
             oldPoint = oldMidPoint = points[0];
             self.triggerInputDown(oldPoint);
             self.getLayer('input').addChild(marker);
-            self.$el.on('vmouseout.Input vmouseup.Input pointerup.Input', up);
-            self.$el.on('vmousemove.Input pointermove.Input', move);
+            self.$el.on('mouseout.Input mouseup.Input pointerup.Input', up);
+            self.$el.on('mousemove.Input pointermove.Input', move);
         }
         function move(event) {
             var point = new createjs.Point();
@@ -247,8 +247,8 @@ module.exports = GelatoComponent.extend({
         }
         function up(event) {
             marker.graphics.endStroke();
-            self.$el.off('vmousemove.Input pointermove.Input', move);
-            self.$el.off('vmouseout.Input vmouseup.Input pointerup.Input', up);
+            self.$el.off('mousemove.Input pointermove.Input', move);
+            self.$el.off('mouseout.Input mouseup.Input pointerup.Input', up);
             if (event.offsetX && event.offsetY) {
                 points.push(new createjs.Point(event.offsetX, event.offsetY));
             } else {
@@ -361,8 +361,8 @@ module.exports = GelatoComponent.extend({
         this.reset().size = size;
         this.stage.canvas.height = size;
         this.stage.canvas.width = size;
-        this.$component.height(size);
-        this.$component.width(size);
+        this.$el.height(size);
+        this.$el.width(size);
         this.$('#canvas-navigation').css('top', (size / 2) - 35);
         switch (this.prompt.part) {
             case 'rune':
