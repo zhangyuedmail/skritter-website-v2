@@ -2,13 +2,25 @@
 
 bootstrap-navbar[data-name='marketing'] {
 
-  a {
-    color: $white1;
-    margin-left: 25px;
-    text-decoration: none;
-    &:hover { color: $white5; }
+  img { height: 30px; }
+
+  .navbar-header {
+    a {
+      color: $white1;
+      text-decoration: none;
+      &:hover { color: $white5; }
+    }
   }
 
-  img { height: 30px; }
+  .navbar-nav {
+    a {
+      color: $white1;
+      text-decoration: none;
+      &:hover { color: $white5; }
+    }
+    .dropdown li {
+      a { color: $grey7; }
+    }
+  }
 
 }
