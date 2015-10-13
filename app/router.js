@@ -36,6 +36,7 @@ module.exports = GelatoRouter.extend({
         'signup': 'navigateSignup',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'vocab(/:vocabId)': 'navigateVocab',
+        'vocablists': 'navigateVocablistQueue',
         'vocablists/browse': 'navigateVocablistBrowse',
         'vocablists/chinesepod': 'navigateChinesepod',
         'vocablists/queue': 'navigateVocablistQueue',
@@ -211,11 +212,7 @@ module.exports = GelatoRouter.extend({
      * @param {String} [part]
      */
     navigateScratchpad: function(vocabId, part) {
-        if (app.user.isLoggedIn()) {
-            this.go('pages/scratchpad').load(vocabId, part);
-        } else {
-            this.navigateLogin();
-        }
+        this.go('pages/scratchpad').load(vocabId, part);
     },
     /**
      * @method navigateSignup
