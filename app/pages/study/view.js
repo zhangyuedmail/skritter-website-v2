@@ -13,13 +13,13 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this._listId = null;
-        this._sectionId = null;
+        this.listId = null;
+        this.sectionId = null;
         this.counter = 1;
-        this.items = new Items();
+        this.items = this.createCollection('collections/items');
         this.navbar = this.createComponent('navbars/default');
-        this.prompt = new Prompt();
-        this.toolbar = new StudyToolbar({items: this.items});
+        this.prompt = this.createComponent('components/prompt');
+        this.toolbar = this.createComponent('components/study-toolbar', {items: this.items});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
@@ -65,6 +65,7 @@ module.exports = GelatoPage.extend({
      * @param {PromptReviews} reviews
      */
     handlePromptNext: function(reviews) {
+        console.log(reviews.getBaseReviewingTime());
         this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
         this.items.addReviews(reviews.getItemReviews());
         this.items.reviews.save();
@@ -93,14 +94,14 @@ module.exports = GelatoPage.extend({
      * @param {PromptReviews} reviews
      */
     handlePromptReviewStart: function(reviews) {
-        this.toolbar.timer.start();
+        //this.toolbar.timer.start();
     },
     /**
      * @method handlePromptPrevious
      * @param {PromptReviews} reviews
      */
     handlePromptReviewStop: function(reviews) {
-        this.toolbar.timer.stop();
+        //this.toolbar.timer.stop();
     },
     /**
      * @method handlePromptSkip
@@ -113,7 +114,7 @@ module.exports = GelatoPage.extend({
      * @method handleToolbarAddItem
      */
     handleToolbarAddItem: function() {
-        this.items.add(
+        this.items.add(this.listId,
             _.bind(function(result) {
                 $.notify(
                     {
@@ -159,8 +160,8 @@ module.exports = GelatoPage.extend({
      */
     load: function(listId, sectionId) {
         //TODO: support section parameter
-        this._listId = listId;
-        this._sectionid = sectionId;
+        this.listId = listId;
+        this.sectionid = sectionId;
         async.waterfall([
             _.bind(function(callback) {
                 this.loadMore(null, function(items) {
@@ -197,7 +198,8 @@ module.exports = GelatoPage.extend({
                     limit: 10,
                     parts: app.user.getStudyParts().join(','),
                     sort: 'next',
-                    styles: app.user.getStudyStyles().join(',')
+                    styles: app.user.getStudyStyles().join(','),
+                    vocab_list: this.listId
                 },
                 merge: false,
                 remove: false,
@@ -239,11 +241,8 @@ module.exports = GelatoPage.extend({
      * @returns {Study}
      */
     remove: function() {
-        //TODO: figure out a better way to handle canceling ajax request
         this.navbar.remove();
         this.prompt.remove();
-        this.navbar = null;
-        this.prompt = null;
         return GelatoPage.prototype.remove.call(this);
     }
 });
