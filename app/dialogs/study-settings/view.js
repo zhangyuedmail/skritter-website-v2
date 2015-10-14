@@ -27,11 +27,38 @@ module.exports = GelatoDialog.extend({
         return this;
     },
     /**
+     * @method getSelectedParts
+     * @returns {Array}
+     */
+    getSelectedParts: function() {
+        var parts = [];
+        this.$('#field-parts :checked').each(function() {
+            parts.push($(this).val());
+        });
+        return parts;
+    },
+    /**
+     * @method getSettings
+     * @returns {Object}
+     */
+    getSettings: function() {
+        if (app.isJapanese()) {
+            return {
+                filteredJapaneseParts: this.getSelectedParts()
+            };
+        } else {
+            return {
+                filteredChineseParts: this.getSelectedParts()
+            };
+        }
+    },
+    /**
      * @method handleClickClose
      * @param {Event} event
      */
     handleClickClose: function(event) {
         event.preventDefault();
+        this.trigger('close');
         this.close();
     },
     /**
@@ -40,6 +67,6 @@ module.exports = GelatoDialog.extend({
      */
     handleClickSave: function(event) {
         event.preventDefault();
-        this.close();
+        this.trigger('save', this.getSettings());
     }
 });
