@@ -21,6 +21,8 @@ module.exports = SkritterModel.extend({
         addItemOffset: 0,
         allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
         allJapaneseParts: ['defn', 'rdng', 'rune'],
+        filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
+        filteredJapaneseParts: ['defn', 'rdng', 'rune'],
         gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
         goals: {ja: {items: 20}, zh: {items: 20}}
     },
@@ -54,6 +56,19 @@ module.exports = SkritterModel.extend({
      */
     getAllParts: function() {
         return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
+    },
+    /**
+     * @method getFilterParts
+     * @returns {Array}
+     */
+    getFilteredParts: function() {
+        var filteredParts = [];
+        if (app.isChinese()) {
+            filteredParts =  this.get('filteredChineseParts');
+        } else {
+            filteredParts = this.get('filteredJapaneseParts');
+        }
+        return _.intersection(filteredParts, this.getStudyParts());
     },
     /**
      * @method getRaygunTags
@@ -96,6 +111,14 @@ module.exports = SkritterModel.extend({
             }
         }
         return styles;
+    },
+    /**
+     * @method hasFilteredPart
+     * @param {String} part
+     * @returns {Boolean}
+     */
+    hasFilteredPart: function(part) {
+        return _.includes(this.getFilteredParts(), part);
     },
     /**
      * @method hasStudyPart

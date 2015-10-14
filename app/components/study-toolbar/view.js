@@ -78,6 +78,10 @@ module.exports = GelatoComponent.extend({
         event.preventDefault();
         this.trigger('click:study-settings');
         var dialog = new StudySettingsDialog();
+        dialog.on('save', _.bind(function(settings) {
+            this.trigger('save:study-settings', settings);
+            dialog.close();
+        }, this));
         dialog.open();
     },
     /**

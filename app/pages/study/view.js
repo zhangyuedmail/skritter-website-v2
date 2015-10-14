@@ -28,6 +28,7 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.prompt, 'review:stop', this.handlePromptReviewStop);
         this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
         this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
+        this.listenTo(this.toolbar, 'save:study-settings', this.handleToolbarSaveStudySettings);
     },
     /**
      * @property events
@@ -65,7 +66,6 @@ module.exports = GelatoPage.extend({
      * @param {PromptReviews} reviews
      */
     handlePromptNext: function(reviews) {
-        console.log(reviews.getBaseReviewingTime());
         this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
         this.items.addReviews(reviews.getItemReviews());
         this.items.reviews.save();
@@ -154,6 +154,26 @@ module.exports = GelatoPage.extend({
         );
     },
     /**
+     * @method handleToolbarSaveStudySettings
+     * @param {Object} settings
+     */
+    handleToolbarSaveStudySettings: function(settings) {
+        this.prompt.remove();
+        this.prompt = this.createComponent('components/prompt');
+        this.prompt.setElement('#prompt-container').render();
+        this.app.user.set(settings, {merge: true}).cache();
+        this.items = this.createCollection('collections/items');
+        this.loadMore(null,
+            _.bind(function(items) {
+                this.loadMore(items.cursor);
+                this.next();
+            }, this),
+            _.bind(function(error) {
+                console.error('ITEM LOAD ERROR:', error);
+            }, this)
+        );
+    },
+    /**
      * @method load
      * @param {String} [listId]
      * @param {String} [sectionId]
@@ -161,13 +181,13 @@ module.exports = GelatoPage.extend({
     load: function(listId, sectionId) {
         //TODO: support section parameter
         this.listId = listId;
-        this.sectionid = sectionId;
+        this.sectionId = sectionId;
         async.waterfall([
             _.bind(function(callback) {
                 this.loadMore(null, function(items) {
                     callback(null, items);
                 }, function(error) {
-                    callback(error, items);
+                    callback(error);
                 });
             }, this)
         ], _.bind(function(error, items) {
@@ -196,7 +216,7 @@ module.exports = GelatoPage.extend({
                     include_strokes: true,
                     include_vocabs: true,
                     limit: 10,
-                    parts: app.user.getStudyParts().join(','),
+                    parts: app.user.getFilteredParts().join(','),
                     sort: 'next',
                     styles: app.user.getStudyStyles().join(','),
                     vocab_list: this.listId
