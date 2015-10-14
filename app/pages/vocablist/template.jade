@@ -218,6 +218,8 @@ gelato-page(data-name='vocablist')
                         | Skipping
                       else if section.id && section.id === view.vocablist.get('currentSection')
                         | Adding
+                      else if section.rows.length === 0
+                        a(href="/vocablists/view/" + view.vocablist.id + "/" + section.id) (click to add words)
 
                 if view.vocablist.editable() && !singleSect
                   - var rowClass = view.vocablist.get('sections').length % 2 ? 'even-row' : 'odd-row';
