@@ -4,22 +4,18 @@ gelato-component(data-name='dashboard-lists')
 
   if vocablist
     #sections-table
-      .title= 'Lists - ' + vocablist.get('name')
-      - console.log(vocablist)
       for section, index in vocablist.get('sections')
         .row(data-section-id=section.id)
           .col-md-5
-            a(href='/vocablists/view/' + section.id)= section.name
-          .col-md-5
-            .progress
-              .progress-bar(style='width:0%;')
+            a(href='/vocablists/view/' + vocablist.id  + '/' + section.id)= section.name
+          .col-md-5.text-center
+            span= section.rows.length + ' words'
           .col-md-2.text-center
             a(href='study/' + vocablist.id + '/' + section.id) Study
       a.text-primary.button-show-lists(href="#") Back to all lists
 
   else if vocablists.length
     #vocablists-table
-      .title Lists
       for list, index in vocablists.models
         - var progress = list.getProgress();
         .row(data-list-id=list.id)
@@ -35,4 +31,4 @@ gelato-component(data-name='dashboard-lists')
 
   if vocablists.state === 'fetching'
     p.text-center
-      i.fa.fa-2x.fa-spinner.fa-pulse
+      i.fa.fa-3x.fa-spinner.fa-pulse

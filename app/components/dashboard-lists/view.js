@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
                 limit: 10,
                 sort: 'adding',
                 include_percent_done: 'true',
-                lang: this.app.getLanguage()
+                lang: app.getLanguage()
             }
         });
     },
@@ -61,8 +61,15 @@ module.exports = GelatoComponent.extend({
      */
     handleClickShowLists: function(event) {
         event.preventDefault();
-        var $link =  $(event.target);
         this.vocablist = null;
-        this.render();
+        this.listenToOnce(this.vocablist, 'state:standby', this.render);
+        this.vocablists.fetch({
+            data: {
+                limit: 10,
+                sort: 'adding',
+                include_percent_done: 'true',
+                lang: app.getLanguage()
+            }
+        });
     }
 });
