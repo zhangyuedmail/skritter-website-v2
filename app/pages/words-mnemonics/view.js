@@ -30,9 +30,9 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'click #load-more-btn': 'handleClickLoadMoreButton',
+        'vclick #load-more-btn': 'handleClickLoadMoreButton',
         'change input[type="checkbox"]': 'handleChangeCheckbox',
-        'click #delete-mnemonics-btn': 'handleClickDeleteMnemonicsButton'
+        'vclick #delete-mnemonics-btn': 'handleClickDeleteMnemonicsButton'
     },
     /**
      * @method remove

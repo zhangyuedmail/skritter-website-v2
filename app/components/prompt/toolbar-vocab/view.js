@@ -31,11 +31,11 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'click #button-vocab-audio': 'handleClickButtonVocabAudio',
-        'click #button-vocab-ban': 'handleClickButtonVocabBan',
-        'click #button-vocab-edit': 'handleClickButtonVocabEdit',
-        'click #button-vocab-info': 'handleClickButtonVocabInfo',
-        'click #button-vocab-star': 'handleClickButtonVocabStar'
+        'vclick #button-vocab-audio': 'handleClickButtonVocabAudio',
+        'vclick #button-vocab-ban': 'handleClickButtonVocabBan',
+        'vclick #button-vocab-edit': 'handleClickButtonVocabEdit',
+        'vclick #button-vocab-info': 'handleClickButtonVocabInfo',
+        'vclick #button-vocab-star': 'handleClickButtonVocabStar'
     },
     /**
      * @method handleClickButtonVocabAudio
@@ -43,7 +43,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabAudio: function(event) {
         event.preventDefault();
-        this.trigger('click:audio');
+        this.trigger('vclick:audio');
     },
     /**
      * @method handleClickButtonVocabBan
@@ -51,7 +51,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabBan: function(event) {
         event.preventDefault();
-        this.trigger('click:ban');
+        this.trigger('vclick:ban');
     },
     /**
      * @method handleClickButtonVocabEdit
@@ -59,7 +59,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabEdit: function(event) {
         event.preventDefault();
-        this.trigger('click:edit');
+        this.trigger('vclick:edit');
     },
     /**
      * @method handleClickButtonVocabInfo
@@ -67,7 +67,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabInfo: function(event) {
         event.preventDefault();
-        this.trigger('click:info');
+        this.trigger('vclick:info');
     },
     /**
      * @method handleClickButtonVocabStar
@@ -75,6 +75,6 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabStar: function(event) {
         event.preventDefault();
-        this.trigger('click:star');
+        this.trigger('vclick:star');
     }
 });

@@ -51,7 +51,7 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keyup #login-password': 'handleKeyUpLoginPassword',
-        'click #button-login': 'handleClickLoginButton'
+        'vclick #button-login': 'handleClickLoginButton'
     },
     /**
      * @method handleClickLoginButton

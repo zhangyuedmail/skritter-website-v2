@@ -51,21 +51,21 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'click #add-to-queue-btn': 'handleClickAddToQueueButton',
-        'click #study-settings-link': 'handleClickStudySettingsLink',
-        'click #publish-link': 'handleClickPublishLink',
-        'click #delete-link': 'handleClickDeleteLink',
-        'click #copy-link': 'handleClickCopyLink',
-        'click #edit-link': 'handleClickEditLink',
-        'click #cancel-edits-link': 'handleClickCancelEditsLink',
-        'click #save-edits-btn': 'handleClickSaveEditsButton',
-        'click #image-upload-link': 'handleClickImageUploadLink',
+        'vclick #add-to-queue-btn': 'handleClickAddToQueueButton',
+        'vclick #study-settings-link': 'handleClickStudySettingsLink',
+        'vclick #publish-link': 'handleClickPublishLink',
+        'vclick #delete-link': 'handleClickDeleteLink',
+        'vclick #copy-link': 'handleClickCopyLink',
+        'vclick #edit-link': 'handleClickEditLink',
+        'vclick #cancel-edits-link': 'handleClickCancelEditsLink',
+        'vclick #save-edits-btn': 'handleClickSaveEditsButton',
+        'vclick #image-upload-link': 'handleClickImageUploadLink',
         'change #image-upload-input': 'handleChangeImageUploadInput',
-        'click #add-section-link': 'handleClickAddSectionLink',
-        'click #cancel-add-section-btn': 'handleClickCancelAddSectionButton',
-        'click #confirm-add-section-btn': 'handleClickConfirmAddSectionButton',
-        'click #edit-sections-link': 'handleClickEditSectionsLink',
-        'click #update-link': 'handleClickUpdateLink'
+        'vclick #add-section-link': 'handleClickAddSectionLink',
+        'vclick #cancel-add-section-btn': 'handleClickCancelAddSectionButton',
+        'vclick #confirm-add-section-btn': 'handleClickConfirmAddSectionButton',
+        'vclick #edit-sections-link': 'handleClickEditSectionsLink',
+        'vclick #update-link': 'handleClickUpdateLink'
     },
     /**
      * @property title
@@ -229,7 +229,7 @@ module.exports = GelatoPage.extend({
      * @method handleClickImageUploadLink
      */
     handleClickImageUploadLink: function() {
-        $('#image-upload-input').trigger('click');
+        $('#image-upload-input').trigger('vclick');
     },
     /**
      * @method handleChangeImageUploadInput

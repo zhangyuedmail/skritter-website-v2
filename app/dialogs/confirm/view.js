@@ -33,8 +33,8 @@ module.exports = GelatoDialog.extend({
      * @type {Object}
      */
     events: {
-        'click #button-cancel': 'handleClickButtonCancel',
-        'click #button-confirm': 'handleClickButtonConfirm'
+        'vclick #button-cancel': 'handleClickButtonCancel',
+        'vclick #button-confirm': 'handleClickButtonConfirm'
     },
     /**
      * @method handleClickButtonCancel

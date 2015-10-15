@@ -24,9 +24,9 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'click #purchase-license': 'handleClickRequestPurchase',
-        'click #request-trial': 'handleClickRequestTrial',
-        'click #request-submit': 'handleClickRequestSubmit'
+        'vclick #purchase-license': 'handleClickRequestPurchase',
+        'vclick #request-trial': 'handleClickRequestTrial',
+        'vclick #request-submit': 'handleClickRequestSubmit'
     },
     /**
      * @property title

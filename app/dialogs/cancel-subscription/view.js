@@ -12,9 +12,9 @@ module.exports = GelatoDialog.extend({
      * @type {Object}
      */
     events: {
-        'click #go-on-vacation-link': 'handleClickGoOnVacationLink',
-        'click #continue-cancel-btn': 'handleClickContinueCancelButton',
-        'click #submit-btn': 'handleClickSubmitButton'
+        'vclick #go-on-vacation-link': 'handleClickGoOnVacationLink',
+        'vclick #continue-cancel-btn': 'handleClickContinueCancelButton',
+        'vclick #submit-btn': 'handleClickSubmitButton'
     },
     /**
      * @method initialize

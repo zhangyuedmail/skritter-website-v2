@@ -23,8 +23,8 @@ module.exports = GelatoPage.extend({
     events: {
         'change input[type="checkbox"]': 'handleChangeCheckbox',
         'keyup #list-search-input': 'handleKeypressListSearchInput',
-        'click #list-option': 'handleClickListOption',
-        'click #grid-option': 'handleClickGridOption'
+        'vclick #list-option': 'handleClickListOption',
+        'vclick #grid-option': 'handleClickGridOption'
     },
     /**
      * @property template

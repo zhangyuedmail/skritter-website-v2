@@ -24,7 +24,7 @@ module.exports = GelatoPage.extend({
      * @type Object
      */
     events: {
-        'click #contact-submit': 'handleClickContactSubmit'
+        'vclick #contact-submit': 'handleClickContactSubmit'
     },
     /**
      * @property title

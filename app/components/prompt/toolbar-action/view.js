@@ -51,10 +51,10 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'click #toolbar-correct': 'handleClickOptionCorrect',
-        'click #toolbar-erase': 'handleClickOptionErase',
-        'click #toolbar-show': 'handleClickOptionShow',
-        'click #toolbar-stroke-order': 'handleClickOptionTeach'
+        'vclick #toolbar-correct': 'handleClickOptionCorrect',
+        'vclick #toolbar-erase': 'handleClickOptionErase',
+        'vclick #toolbar-show': 'handleClickOptionShow',
+        'vclick #toolbar-stroke-order': 'handleClickOptionTeach'
     },
     /**
      * @method handleClickOptionCorrect
@@ -62,7 +62,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionCorrect: function(event) {
         event.preventDefault();
-        this.trigger('click:correct');
+        this.trigger('vclick:correct');
     },
     /**
      * @method handleClickOptionErase
@@ -70,7 +70,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionErase: function(event) {
         event.preventDefault();
-        this.trigger('click:erase');
+        this.trigger('vclick:erase');
     },
     /**
      * @method handleClickOptionShow
@@ -78,7 +78,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionShow: function(event) {
         event.preventDefault();
-        this.trigger('click:show');
+        this.trigger('vclick:show');
     },
     /**
      * @method handleClickOptionTeach
@@ -86,6 +86,6 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionTeach: function(event) {
         event.preventDefault();
-        this.trigger('click:teach');
+        this.trigger('vclick:teach');
     }
 });

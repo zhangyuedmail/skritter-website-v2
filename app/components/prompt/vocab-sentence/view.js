@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'click .value': 'handleClickValue'
+        'vclick .value': 'handleClickValue'
     },
     /**
      * @property template

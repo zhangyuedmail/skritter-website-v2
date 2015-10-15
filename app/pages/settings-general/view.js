@@ -25,8 +25,8 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'change #field-country': 'handleSelectCountry',
-        'click #button-save': 'handleClickButtonSave',
-        'click #button-change-password': 'handleClickButtonChangePassword'
+        'vclick #button-save': 'handleClickButtonSave',
+        'vclick #button-change-password': 'handleClickButtonChangePassword'
     },
     /**
      * @property title

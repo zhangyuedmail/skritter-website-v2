@@ -35,9 +35,9 @@ module.exports = GelatoComponent.extend({
      * @typeof {Object}
      */
     events: {
-        'click #title-sort': 'handleClickTitleSort',
-        'click #popularity-sort': 'handleClickPopularitySort',
-        'click .add-to-queue-link': 'handleClickAddToQueueLink'
+        'vclick #title-sort': 'handleClickTitleSort',
+        'vclick #popularity-sort': 'handleClickPopularitySort',
+        'vclick .add-to-queue-link': 'handleClickAddToQueueLink'
     },
     /**
      * @property template

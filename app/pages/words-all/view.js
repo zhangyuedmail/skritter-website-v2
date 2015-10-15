@@ -38,10 +38,10 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'click .writing-td': 'handleClickWritingTd',
-        'click #load-more-btn': 'handleClickLoadMoreButton',
-        'click #next-sort-link': 'handleClickNextSortLink',
-        'click #previous-sort-link': 'handleClickPreviousSortLink',
+        'vclick .writing-td': 'handleClickWritingTd',
+        'vclick #load-more-btn': 'handleClickLoadMoreButton',
+        'vclick #next-sort-link': 'handleClickNextSortLink',
+        'vclick #previous-sort-link': 'handleClickPreviousSortLink',
         'change input[type="checkbox"]': 'handleChangeCheckbox',
         'change #action-select': 'handleChangeActionSelect',
         'change #word-search-input': 'handleChangeWordSearchInput'

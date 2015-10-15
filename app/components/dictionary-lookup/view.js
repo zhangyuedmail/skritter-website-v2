@@ -44,7 +44,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'click #button-lookup': 'handleClickLookup'
+        'vclick #button-lookup': 'handleClickLookup'
     },
     /**
      * @method handleClickLookup
