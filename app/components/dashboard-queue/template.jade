@@ -6,11 +6,12 @@ gelato-component(data-name='dashboard-queue')
   else if view.vocablists.length
     for list, i in view.vocablists.models
       .row(data-list-id=list.id)
-        .col-md-3
+        .col-md-4
           a(href="/vocablists/view/"+list.id)= list.get('name')
-        .col-md-8
+        .col-md-6
           .progress
             .progress-bar(style="width:"+(list.getProgress().percent)+'%')
-        .col-md-1
+        .col-md-2.text-center
+          a(href='study/' + list.id) Study
   else
     em None

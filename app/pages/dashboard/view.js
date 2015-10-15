@@ -20,7 +20,7 @@ module.exports = GelatoPage.extend({
         this.dashboardGoal = new DashboardStatus();
         this.dashboardMonth = new DashboardMonth();
         this.dashboardTotal = new DashboardTotal();
-        this.dashboardQueue = new DashboardQueue();
+        this.dashboardQueue = this.createComponent('components/dashboard-queue');
     },
     /**
      * @property title
