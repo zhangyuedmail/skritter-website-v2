@@ -100,6 +100,7 @@ module.exports = SkritterCollection.extend({
                         include_vocabs: true
                     },
                     remove: false,
+                    sort: true,
                     error: function(error) {
                         callback(error);
                     },

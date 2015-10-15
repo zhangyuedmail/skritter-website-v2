@@ -14,7 +14,7 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.items = options.items;
+        this.page = options.page;
         this.stats = new ProgressStats();
         this.timer = new StudyToolbarTimer();
         this.listenTo(this.items, 'state', this.render);

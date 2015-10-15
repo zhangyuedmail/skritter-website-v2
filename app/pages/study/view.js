@@ -1,7 +1,4 @@
 var GelatoPage = require('gelato/page');
-var Items = require('collections/items');
-var Prompt = require('components/prompt/view');
-var StudyToolbar = require('components/study-toolbar/view');
 
 /**
  * @class Study
@@ -19,7 +16,7 @@ module.exports = GelatoPage.extend({
         this.items = this.createCollection('collections/items');
         this.navbar = this.createComponent('navbars/default');
         this.prompt = this.createComponent('components/prompt');
-        this.toolbar = this.createComponent('components/study-toolbar', {items: this.items});
+        this.toolbar = this.createComponent('components/study-toolbar', {page: this});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
@@ -194,6 +191,7 @@ module.exports = GelatoPage.extend({
             if (error) {
                 console.error('ITEM LOAD ERROR:', error, items);
             } else {
+                this.toolbar.render();
                 this.loadMore(items.cursor);
                 this.next();
             }

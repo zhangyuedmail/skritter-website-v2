@@ -1,11 +1,16 @@
 gelato-component(data-name='study-toolbar')
-  - var items = view.items
+  - var page = view.page;
+  - var items = view.page.items;
 
   .row
+
     .col-xs-4.text-left
-      i#button-add-item.fa.fa-plus-circle(class=items.state === 'standby' ? 'visible' : 'invisible')
+      if page.listId
+        i#button-add-item.fa.fa-plus-circle
+
     .col-xs-4.text-center
       #timer-container
+
     .col-xs-4.text-right
       //i#button-list-settings.fa.fa-list-ul
       i#button-study-settings.fa.fa-gear
