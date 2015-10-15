@@ -1,0 +1,17 @@
+@import "../../styles/variables";
+
+gelato-component[data-name='dashboard-lists'] {
+
+  font-family: $font-muli;
+  font-weight: 300;
+  margin: 30px 10px 0 10px;
+
+  #sections-table {
+    .row a { color: $green5; }
+  }
+
+  #vocablists-table {
+    .row a { color: $green5; }
+  }
+
+}
