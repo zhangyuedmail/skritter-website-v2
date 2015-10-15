@@ -85,6 +85,20 @@ module.exports = SkritterModel.extend({
         return _.find(this.get('sections'), {id: sectionId});
     },
     /**
+     * @method getSectionVocabIds
+     * @param {String} sectionId
+     * @returns {Array}
+     */
+    getSectionVocabIds: function(sectionId) {
+        var vocabIds = [];
+        var section = this.getSectionById(sectionId);
+        if (section) {
+            vocabIds = vocabIds.concat(_.pluck(section.rows, 'vocabId'));
+            vocabIds = vocabIds.concat(_.pluck(section.rows, 'tradVocabId'));
+        }
+        return vocabIds;
+    },
+    /**
      * @method getWordCount
      * @returns {Number}
      */
