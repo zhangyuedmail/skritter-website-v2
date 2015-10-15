@@ -40,7 +40,7 @@ module.exports = GelatoPage.extend({
         if (this.getHeight() < app.getHeight()) {
             this.$('#footer-container').css(
                 'margin-top',
-                app.getHeight() - this.getHeight() + 4
+                app.getHeight() - this.getHeight() - 51
             );
         }
         return this;
