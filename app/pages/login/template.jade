@@ -13,5 +13,8 @@ gelato-page(data-name='login')
           label(for="login-password") Password
           input#login-password.form-control(type="password", placeholder="Password")
         button#button-login.btn.btn-fixed.btn-primary(type="button") Login
+        if app.isDevelopment()
+          | &nbsp;&nbsp;
+          button#button-skeleton.btn.btn-fixed.btn-default(type="button") Skeleton
 
    #footer-container

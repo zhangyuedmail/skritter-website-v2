@@ -51,7 +51,8 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keyup #login-password': 'handleKeyUpLoginPassword',
-        'vclick #button-login': 'handleClickLoginButton'
+        'vclick #button-login': 'handleClickLoginButton',
+        'vclick #button-skeleton': 'handleClickSkeleton'
     },
     /**
      * @method handleClickLoginButton
@@ -72,24 +73,44 @@ module.exports = GelatoPage.extend({
         }
     },
     /**
-     * @method login
+     * @method handleClickSkeleton
      * @param {Event} event
      */
+    handleClickSkeleton: function(event) {
+        event.preventDefault();
+        switch (app.getPlatform()) {
+            case 'Android':
+                this.$('#login-password').val('5f26f50983');
+                break;
+            case 'iOS':
+                this.$('#login-password').val('40e9095b1d');
+                break;
+            case 'Website':
+                this.$('#login-password').val('0e78bfa162');
+                break;
+        }
+        this.login();
+    },
+    /**
+     * @method login
+     */
     login: function() {
-        var self = this;
         var password = this.$('#login-password').val();
         var username = this.$('#login-username').val();
         this.$('#login-message').empty();
         this.$('#login-form').prop('disabled', true);
         app.showLoading();
-        app.user.login(username, password, function() {
-            app.router.navigate('dashboard', {trigger: false});
-            app.reload();
-        }, function(error) {
-            self.$('#login-message').text(error.responseJSON.message);
-            self.$('#login-form').prop('disabled', false);
-            app.hideLoading();
-        });
+        app.user.login(username, password,
+            _.bind(function() {
+                app.router.navigate('dashboard', {trigger: false});
+                app.reload();
+            }, this),
+            _.bind(function(error) {
+                self.$('#login-message').text(error.responseJSON.message);
+                self.$('#login-form').prop('disabled', false);
+                app.hideLoading();
+            }, this)
+        );
     },
     /**
      * @method remove
