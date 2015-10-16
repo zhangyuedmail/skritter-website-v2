@@ -1,6 +1,9 @@
 @import "../../styles/variables";
 
 gelato-page[data-name='vocablist-create'] {
+
+  padding-top: 75px;
+
   .back-link {
     color: $grey3;
     .glyphicon {
@@ -25,4 +28,5 @@ gelato-page[data-name='vocablist-create'] {
   .form-control {
     width: 50%;
   }
+
 }
