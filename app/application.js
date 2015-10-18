@@ -17,7 +17,6 @@ module.exports = GelatoApplication.extend({
         //TODO: depreciate usage of global app object
         window.app = this;
 
-        window.onerror = this.handleError;
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
             excludedUserAgents: ['PhantomJS'],
@@ -50,6 +49,10 @@ module.exports = GelatoApplication.extend({
         if (window.ga && this.isProduction()) {
             ga('create', 'UA-4642573-1', 'auto');
             ga('set', 'forceSSL', true);
+        }
+
+        if (this.isDevelopment()) {
+            window.onerror = this.handleError;
         }
 
         //TODO: depreciate this code after some time
