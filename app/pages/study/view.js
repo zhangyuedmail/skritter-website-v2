@@ -112,44 +112,29 @@ module.exports = GelatoPage.extend({
      * @method handleToolbarAddItem
      */
     handleToolbarAddItem: function() {
-        this.items.add(this.listId,
-            _.bind(function(result) {
-                $.notify(
-                    {
-                        icon: 'fa fa-plus-circle',
-                        title: '',
-                        message: result.numVocabsAdded + ' word has been added.'
-                    },
-                    {
-                        type: 'minimalist',
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
+        if (this.listId) {
+            this.items.createListItems(
+                [this.listId],
+                function(result) {
+                    $.notify(
+                        {
+                            icon: 'fa fa-plus-circle',
+                            title: '',
+                            message: result.numVocabsAdded + ' word has been added.'
                         },
-                        delay: 5000,
-                        icon_type: 'class'
-                    }
-                );
-            }, this),
-            _.bind(function() {
-                $.notify(
-                    {
-                        icon: 'fa fa-exclamation-circle',
-                        title: 'Error',
-                        message: 'Unable to add a new word.'
-                    },
-                    {
-                        type: 'minimalist',
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        },
-                        delay: 5000,
-                        icon_type: 'class'
-                    }
-                );
-            }, this)
-        );
+                        {
+                            type: 'minimalist',
+                            animate: {
+                                enter: 'animated fadeInDown',
+                                exit: 'animated fadeOutUp'
+                            },
+                            delay: 5000,
+                            icon_type: 'class'
+                        }
+                    );
+                }
+            );
+        }
     },
     /**
      * @method handleToolbarSaveStudySettings
@@ -177,93 +162,116 @@ module.exports = GelatoPage.extend({
         this.listId = listId;
         this.sectionId = sectionId;
         if (sectionId) {
-            async.waterfall([
-                _.bind(function(callback) {
-                    this.vocablist.set('id', this.listId);
-                    this.vocablist.fetch({
-                        error: function(items, error) {
-                            callback(error);
-                        },
-                        success: function() {
-                            callback();
-                        }
-                    })
-                }, this),
-                _.bind(function(callback) {
-                    this.items.fetchByVocabIds(
-                        this.vocablist.getSectionVocabIds(sectionId),
-                        function() {
-                            callback();
-                        },
-                        function(error) {
-                            callback(error);
-                        }
-                    );
-                }, this)
-            ], _.bind(function(error, items) {
-                if (error) {
-                    console.error('ITEM LOAD ERROR:', error, items);
-                } else {
-                    this.toolbar.render();
-                    this.next();
-                }
-            }, this));
+            this.loadSection();
         } else if (listId) {
-            async.waterfall([
-                _.bind(function(callback) {
-                    this.vocablist.set('id', this.listId);
-                    this.vocablist.fetch({
-                        error: function(items, error) {
-                            callback(error);
-                        },
-                        success: function() {
-                            callback();
-                        }
-                    })
-                }, this),
-                _.bind(function(callback) {
-                    this.items.fetchNext(
-                        {listId: listId},
-                        function() {
-                            callback();
-                        },
-                        function() {
-                            callback();
-                        }
-                    );
-                }, this)
-            ], _.bind(function(error, items) {
-                if (error) {
-                    console.error('ITEM LOAD ERROR:', error, items);
-                } else {
-                    this.toolbar.render();
-                    this.items.fetchNext({cursor: this.items.cursor});
-                    this.next();
-                }
-            }, this));
+            this.loadList();
         } else {
-            async.waterfall([
-                _.bind(function(callback) {
-                    this.items.fetchNext(
-                        null,
-                        function() {
-                            callback();
-                        },
-                        function() {
-                            callback();
-                        }
-                    );
-                }, this)
-            ], _.bind(function(error, items) {
-                if (error) {
-                    console.error('ITEM LOAD ERROR:', error, items);
-                } else {
-                    this.toolbar.render();
-                    this.items.fetchNext({cursor: this.items.cursor});
-                    this.next();
-                }
-            }, this));
+            this.loadAll();
         }
+    },
+    /**
+     * @method loadAll
+     */
+    loadAll: function() {
+        async.waterfall([
+            _.bind(function(callback) {
+                this.items.fetchNext(
+                    null,
+                    function() {
+                        callback();
+                    },
+                    function() {
+                        callback();
+                    }
+                );
+            }, this)
+        ], _.bind(function(error, items) {
+            if (error) {
+                console.error('ITEM LOAD ERROR:', error, items);
+            } else {
+                this.toolbar.render();
+                this.items.fetchNext({cursor: this.items.cursor});
+                this.next();
+            }
+        }, this));
+    },
+    /**
+     * @method loadList
+     */
+    loadList: function() {
+        async.waterfall([
+            _.bind(function(callback) {
+                this.vocablist.set('id', this.listId);
+                this.vocablist.fetch({
+                    error: function(items, error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback();
+                    }
+                })
+            }, this),
+            _.bind(function(callback) {
+                this.items.fetchNext(
+                    {listId: this.listId},
+                    function() {
+                        callback();
+                    },
+                    function() {
+                        callback();
+                    }
+                );
+            }, this)
+        ], _.bind(function(error, items) {
+            if (error) {
+                console.error('ITEM LOAD ERROR:', error, items);
+            } else {
+                this.toolbar.render();
+                this.items.fetchNext({cursor: this.items.cursor});
+                this.next();
+            }
+        }, this));
+    },
+    /**
+     * @method loadSection
+     */
+    loadSection: function() {
+        async.waterfall([
+            _.bind(function(callback) {
+                this.vocablist.set('id', this.listId);
+                this.vocablist.fetch({
+                    error: function(items, error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback();
+                    }
+                })
+            }, this),
+            _.bind(function(callback) {
+                this.items.fetchByVocabIds(
+                    this.vocablist.getSectionVocabIds(this.sectionId),
+                    function() {
+                        callback();
+                    },
+                    function(error) {
+                        callback(error);
+                    }
+                );
+            }, this),
+            _.bind(function(callback) {
+                console.log(this.items.length);
+                callback();
+            }, this)
+        ], _.bind(function(error, items) {
+            if (error) {
+                console.error('ITEM LOAD ERROR:', error, items);
+            } else {
+                console.log(this.vocablist.get('sections'));
+                this.toolbar.render();
+                this.next();
+            }
+        }, this));
     },
     /**
      * @method next

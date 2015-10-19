@@ -15,7 +15,6 @@ module.exports = SkritterCollection.extend({
      */
     initialize: function() {
         this.cursor = null;
-        this.history = [];
         this.sorted = null;
         this.contained = new ContainedItems();
         this.reviews = new Reviews();
@@ -62,29 +61,51 @@ module.exports = SkritterCollection.extend({
      */
     url: 'items',
     /**
-     * @method add
-     * @param {Object} [lists]
+     * @method addReviews
+     * @param {Array} reviews
+     */
+    addReviews: function(reviews) {
+        for (var i = 0, length = reviews.data.length; i < length; i++) {
+            var review = reviews.data[i];
+            var item = this.get(review.itemId) || this.contained.get(review.itemId);
+            review.actualInterval = item.get('last') ? review.submitTime - item.get('last') : 0;
+            review.currentInterval = item.get('interval') || 0;
+            review.newInterval = app.fn.interval.quantify(item, review.score);
+            review.previousInterval = item.get('previousInterval') || 0;
+            review.previousSuccess = item.get('previousSuccess') || false;
+            item.set({
+                changed: review.submitTime,
+                last: review.submitTime,
+                interval: review.newInterval,
+                next: review.submitTime + review.newInterval,
+                previousInterval: review.currentInterval,
+                previousSuccess: review.score > 1,
+                reviews: item.get('reviews') + 1,
+                successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
+                timeStudied: item.get('timeStudied') + review.reviewTime
+            });
+        }
+        this.reviews.add(reviews);
+    },
+    /**
+     * @method createListItems
+     * @param {Array} listIds
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
      */
-    add: function(lists, callbackSuccess, callbackError) {
-        var offset = app.user.get('addItemOffset');
-        var params = '?offset=' + offset;
-        if (lists) {
-            params += '&lists=' + lists;
-        }
+    createListItems: function(listIds, callbackSuccess, callbackError) {
         async.waterfall([
             _.bind(function(callback) {
                 this.fetch({
+                    data: JSON.stringify(listIds.join('|')),
                     remove: false,
                     sort: false,
                     type: 'POST',
-                    url: app.getApiUrl() + 'items/add' + params,
+                    url: app.getApiUrl() + 'items/add',
                     error: function(error) {
                         callback(error);
                     },
                     success: function(items, result) {
-                        result.offset = offset + result.numVocabsAdded;
                         callback(null, result);
                     }
                 });
@@ -112,52 +133,64 @@ module.exports = SkritterCollection.extend({
         ], function(error, result) {
             if (error) {
                 console.error('ITEM ADD ERROR:', error);
-                typeof callbackError === 'function' && callbackError(error);
+                callbackError(error)
             } else {
-                app.user.set('addItemOffset', result.offset).cache();
-                typeof callbackSuccess === 'function' && callbackSuccess(result);
+                callbackSuccess(result);
             }
         });
     },
     /**
-     * @method addHistory
-     * @param {String} base
+     * @method createListSectionItems
+     * @param {Array} items
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
      */
-    addHistory: function(base) {
-        if (this.history.length > 2) {
-            this.history.pop();
-        }
-        this.history.unshift(base);
-    },
-    /**
-     * @method addReviews
-     * @param {Array} reviews
-     */
-    addReviews: function(reviews) {
-        for (var i = 0, length = reviews.data.length; i < length; i++) {
-            var review = reviews.data[i];
-            var item = this.get(review.itemId) || this.contained.get(review.itemId);
-            review.actualInterval = item.get('last') ? review.submitTime - item.get('last') : 0;
-            review.currentInterval = item.get('interval') || 0;
-            review.newInterval = app.fn.interval.quantify(item, review.score);
-            review.previousInterval = item.get('previousInterval') || 0;
-            review.previousSuccess = item.get('previousSuccess') || false;
-            item.set({
-                changed: review.submitTime,
-                last: review.submitTime,
-                interval: review.newInterval,
-                next: review.submitTime + review.newInterval,
-                previousInterval: review.currentInterval,
-                previousSuccess: review.score > 1,
-                reviews: item.get('reviews') + 1,
-                successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
-                timeStudied: item.get('timeStudied') + review.reviewTime
-            });
-            if (i === 0) {
-                this.addHistory(item.getBase());
+    createListSectionItems: function(items, callbackSuccess, callbackError) {
+        async.waterfall([
+            _.bind(function(callback) {
+                this.fetch({
+                    data: JSON.stringify(items),
+                    remove: false,
+                    sort: false,
+                    type: 'POST',
+                    url: app.getApiUrl() + 'items',
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function(items, result) {
+                        console.log(result);
+                        callback(null, result);
+                    }
+                });
+            }, this),
+            _.bind(function(result, callback) {
+                this.fetch({
+                    data: {
+                        ids: _.pluck(result.Items, 'id').join('|'),
+                        include_contained: true,
+                        include_decomps: true,
+                        include_sentences: true,
+                        include_strokes: true,
+                        include_vocabs: true
+                    },
+                    remove: false,
+                    sort: false,
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback(null, result);
+                    }
+                });
+            }, this)
+        ], function(error, result) {
+            if (error) {
+                console.error('ITEM ADD ERROR:', error);
+                callbackError(error);
+            } else {
+                callbackSuccess(result);
             }
-        }
-        this.reviews.add(reviews);
+        });
     },
     /**
      * @method fetchByVocabIds
