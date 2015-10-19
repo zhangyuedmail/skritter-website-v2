@@ -114,7 +114,7 @@ module.exports = GelatoPage.extend({
      */
     handleToolbarAddItem: function() {
         this.items.addItems(
-            null,
+            {vocab_list: this.listId},
             function(result) {
                 $.notify(
                     {
@@ -183,7 +183,10 @@ module.exports = GelatoPage.extend({
                 console.error('ITEM LOAD ERROR:', error, items);
             } else {
                 this.toolbar.render();
-                this.items.fetchNext({cursor: this.items.cursor});
+                this.items.fetchNext({
+                    cursor: this.items.cursor,
+                    listId: this.listId
+                });
                 this.next();
             }
         }, this));
@@ -203,7 +206,7 @@ module.exports = GelatoPage.extend({
         }
         if (!this.sectionId && this.counter % 10 === 0) {
             console.log('LOADING MORE ITEMS:', 10);
-            this.items.fetchNext();
+            this.items.fetchNext({listId: this.listId});
         }
     },
     /**
