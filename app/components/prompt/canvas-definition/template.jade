@@ -4,7 +4,10 @@ gelato-component(data-name='prompt-canvas-definition')
 
   if prompt.part === 'defn' && reviews
 
-    .writing= reviews.vocab.get('writing')
+    if (app.isChinese())
+      .writing.text-chinese= reviews.vocab.get('writing')
+    else
+      .writing.text-japanese= reviews.vocab.get('writing')
 
     if reviews.isComplete()
       .answer!= reviews.vocab.getDefinition()
