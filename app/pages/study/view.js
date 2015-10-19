@@ -25,7 +25,7 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.prompt, 'review:start', this.handlePromptReviewStart);
         this.listenTo(this.prompt, 'review:stop', this.handlePromptReviewStop);
         this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
-        this.listenTo(this.toolbar, 'vclick:add-item', this.handleToolbarAddItem);
+        this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
         this.listenTo(this.toolbar, 'save:study-settings', this.handleToolbarSaveStudySettings);
     },
     /**

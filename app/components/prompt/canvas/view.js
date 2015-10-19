@@ -352,7 +352,6 @@ module.exports = GelatoComponent.extend({
         this.getLayer('stroke-hint').removeAllChildren();
         this.getLayer('input').removeAllChildren();
         this.stage.update();
-        console.log(this.stage);
         return this;
     },
     /**

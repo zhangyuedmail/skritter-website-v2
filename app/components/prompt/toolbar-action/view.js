@@ -62,7 +62,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionCorrect: function(event) {
         event.preventDefault();
-        this.trigger('vclick:correct');
+        this.trigger('click:correct');
     },
     /**
      * @method handleClickOptionErase
@@ -70,7 +70,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionErase: function(event) {
         event.preventDefault();
-        this.trigger('vclick:erase');
+        this.trigger('click:erase');
     },
     /**
      * @method handleClickOptionShow
@@ -78,7 +78,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionShow: function(event) {
         event.preventDefault();
-        this.trigger('vclick:show');
+        this.trigger('click:show');
     },
     /**
      * @method handleClickOptionTeach
@@ -86,6 +86,6 @@ module.exports = GelatoComponent.extend({
      */
     handleClickOptionTeach: function(event) {
         event.preventDefault();
-        this.trigger('vclick:teach');
+        this.trigger('click:teach');
     }
 });

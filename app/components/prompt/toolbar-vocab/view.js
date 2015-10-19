@@ -43,7 +43,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabAudio: function(event) {
         event.preventDefault();
-        this.trigger('vclick:audio');
+        this.trigger('click:audio');
     },
     /**
      * @method handleClickButtonVocabBan
@@ -51,7 +51,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabBan: function(event) {
         event.preventDefault();
-        this.trigger('vclick:ban');
+        this.trigger('click:ban');
     },
     /**
      * @method handleClickButtonVocabEdit
@@ -59,7 +59,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabEdit: function(event) {
         event.preventDefault();
-        this.trigger('vclick:edit');
+        this.trigger('click:edit');
     },
     /**
      * @method handleClickButtonVocabInfo
@@ -67,7 +67,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabInfo: function(event) {
         event.preventDefault();
-        this.trigger('vclick:info');
+        this.trigger('click:info');
     },
     /**
      * @method handleClickButtonVocabStar
@@ -75,6 +75,6 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabStar: function(event) {
         event.preventDefault();
-        this.trigger('vclick:star');
+        this.trigger('click:star');
     }
 });

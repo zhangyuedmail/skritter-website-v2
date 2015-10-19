@@ -48,18 +48,18 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:next', this.handleCanvasNavigateNext);
         this.listenTo(this.canvas, 'navigate:previous', this.handleCanvasNavigatePrevious);
-        this.listenTo(this.toolbarAction, 'vclick:correct', this.handleToolbarActionCorrect);
-        this.listenTo(this.toolbarAction, 'vclick:erase', this.handleToolbarActionErase);
-        this.listenTo(this.toolbarAction, 'vclick:show', this.handleToolbarActionShow);
-        this.listenTo(this.toolbarAction, 'vclick:teach', this.handleToolbarActionTeach);
+        this.listenTo(this.toolbarAction, 'click:correct', this.handleToolbarActionCorrect);
+        this.listenTo(this.toolbarAction, 'click:erase', this.handleToolbarActionErase);
+        this.listenTo(this.toolbarAction, 'click:show', this.handleToolbarActionShow);
+        this.listenTo(this.toolbarAction, 'click:teach', this.handleToolbarActionTeach);
         this.listenTo(this.toolbarGrading, 'change', this.handleToolbarGradingChange);
         this.listenTo(this.toolbarGrading, 'mousedown', this.handleToolbarGradingMousedown);
         this.listenTo(this.toolbarGrading, 'select', this.handleToolbarGradingSelect);
-        this.listenTo(this.toolbarVocab, 'vclick:audio', this.handleToolbarVocabAudio);
-        this.listenTo(this.toolbarVocab, 'vclick:ban', this.handleToolbarVocabBan);
-        this.listenTo(this.toolbarVocab, 'vclick:edit', this.handleToolbarVocabEdit);
-        this.listenTo(this.toolbarVocab, 'vclick:info', this.handleToolbarVocabInfo);
-        this.listenTo(this.toolbarVocab, 'vclick:star', this.handleToolbarVocabStar);
+        this.listenTo(this.toolbarVocab, 'click:audio', this.handleToolbarVocabAudio);
+        this.listenTo(this.toolbarVocab, 'click:ban', this.handleToolbarVocabBan);
+        this.listenTo(this.toolbarVocab, 'click:edit', this.handleToolbarVocabEdit);
+        this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
+        this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
     },
     /**
      * @property template
