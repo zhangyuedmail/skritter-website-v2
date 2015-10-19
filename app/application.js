@@ -10,7 +10,7 @@ var Router = require('router');
 module.exports = GelatoApplication.extend({
     /**
      * @method initialize
-     * @constructorApply
+     * @constructor
      */
     initialize: function() {
 

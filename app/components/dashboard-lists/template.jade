@@ -6,7 +6,7 @@ gelato-component(data-name='dashboard-lists')
     #sections-table
       for section, index in vocablist.get('sections')
         .row(data-section-id=section.id)
-          .col-md-5
+          .col-md-5.section-name
             a(href='/vocablists/view/' + vocablist.id  + '/' + section.id)= section.name
           .col-md-5.text-center
             span= section.rows.length + ' words'
@@ -19,9 +19,9 @@ gelato-component(data-name='dashboard-lists')
       for list, index in vocablists.models
         - var progress = list.getProgress();
         .row(data-list-id=list.id)
-          .col-md-5
+          .col-md-6.list-name
             a(href='/vocablists/view/' + list.id)= list.get('name')
-          .col-md-5
+          .col-md-4.list-progress
             .progress
               .progress-bar(style='width:' + progress.percent + '%')
           .col-md-1.text-center
