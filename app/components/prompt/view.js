@@ -186,6 +186,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabDefinition.render();
+            this.vocabMnemonic.render();
             if (app.user.isAudioEnabled()) {
                 this.reviews.vocab.play();
             }
@@ -229,6 +230,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.vocabMnemonic.render();
             this.vocabReading.render();
             if (app.user.isAudioEnabled()) {
                 this.reviews.vocab.play();
@@ -282,6 +284,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabSentence.render();
             this.vocabWriting.render();
@@ -333,6 +336,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             if (app.user.isAudioEnabled()) {
