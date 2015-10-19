@@ -65,15 +65,15 @@ module.exports = SkritterModel.extend({
         if (vocab) {
             var containedVocabIds = vocab.get('containedVocabIds') || [];
             for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                var vocab = this.collection.vocabs.get(containedVocabIds[i]);
+                var containedVocab = this.collection.vocabs.get(containedVocabIds[i]);
                 if (this.isJapanese()) {
                     if (app.user.get('studyKana')) {
-                        containedVocabs.push(vocab);
+                        containedVocabs.push(containedVocab);
                     } else if (!vocab.isKana()) {
-                        containedVocabs.push(vocab);
+                        containedVocabs.push(containedVocab);
                     }
                 } else {
-                    containedVocabs.push(vocab);
+                    containedVocabs.push(containedVocab);
                 }
             }
         }
@@ -133,7 +133,7 @@ module.exports = SkritterModel.extend({
         var itemNext = this.get('next');
         var actualAgo = now - itemLast;
         var scheduledAgo = itemNext - itemLast;
-        return this.isActive() ? (itemLast ? actualAgo / scheduledAgo : 9999) : Number.NEGATIVE_INFINITY;
+        return itemLast ? actualAgo / scheduledAgo : Number.NEGATIVE_INFINITY;
     },
     /**
      * @method getVariation
@@ -179,23 +179,6 @@ module.exports = SkritterModel.extend({
             }
         }
         return vocabs;
-    },
-    /**
-     * @method isActive
-     * @returns {Boolean}
-     */
-    isActive: function() {
-        var vocab = this.getVocab();
-        if (!vocab) {
-          return false;
-        } else if (vocab.isBanned()) {
-            return false;
-        } else if (this.get('part') === 'rune' && !vocab.getStrokes().length) {
-            return false;
-        } else if (this.collection.history.indexOf(this.getBase()) > -1) {
-            return false;
-        }
-        return true;
     },
     /**
      * @method isChinese

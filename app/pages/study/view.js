@@ -17,6 +17,7 @@ module.exports = GelatoPage.extend({
         this.navbar = this.createComponent('navbars/default');
         this.prompt = this.createComponent('components/prompt');
         this.toolbar = this.createComponent('components/study-toolbar', {page: this});
+        this.vocablist = this.createModel('models/vocablist');
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
@@ -176,60 +177,95 @@ module.exports = GelatoPage.extend({
      * @param {String} [sectionId]
      */
     load: function(listId, sectionId) {
-        //TODO: support section parameter
         this.listId = listId;
         this.sectionId = sectionId;
-        async.waterfall([
-            _.bind(function(callback) {
-                this.loadMore(null, function(items) {
-                    callback(null, items);
-                }, function(error) {
-                    callback(error);
-                });
-            }, this)
-        ], _.bind(function(error, items) {
-            if (error) {
-                console.error('ITEM LOAD ERROR:', error, items);
-            } else {
-                this.toolbar.render();
-                this.loadMore(items.cursor);
-                this.next();
-            }
-        }, this))
-    },
-    /**
-     * @method loadMore
-     * @param {String} [cursor]
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
-     */
-    loadMore: function(cursor, callbackSuccess, callbackError) {
-        if (this.items.state === 'standby') {
-            this.items.fetch({
-                data: {
-                    cursor: cursor,
-                    include_contained: true,
-                    include_decomps: true,
-                    include_sentences: true,
-                    include_strokes: true,
-                    include_vocabs: true,
-                    limit: 10,
-                    parts: app.user.getFilteredParts().join(','),
-                    sort: 'next',
-                    styles: app.user.getStudyStyles().join(','),
-                    vocab_list: this.listId
-                },
-                merge: false,
-                remove: false,
-                error: function(items, error) {
-                    _.isFunction(callbackError) ? callbackError(error, items) : undefined;
-                },
-                success: function(items) {
-                    _.isFunction(callbackSuccess) ? callbackSuccess(items) : undefined;
+        if (sectionId) {
+            async.waterfall([
+                _.bind(function(callback) {
+                    this.vocablist.set('id', this.listId);
+                    this.vocablist.fetch({
+                        error: function(items, error) {
+                            callback(error);
+                        },
+                        success: function() {
+                            callback();
+                        }
+                    })
+                }, this),
+                _.bind(function(callback) {
+                    this.items.fetchByVocabIds(
+                        this.vocablist.getSectionVocabIds(sectionId),
+                        function() {
+                            callback();
+                        },
+                        function(error) {
+                            callback(error);
+                        }
+                    );
+                }, this)
+            ], _.bind(function(error, items) {
+                if (error) {
+                    console.error('ITEM LOAD ERROR:', error, items);
+                } else {
+                    this.toolbar.render();
+                    this.next();
                 }
-            });
+            }, this));
+        } else if (listId) {
+            async.waterfall([
+                _.bind(function(callback) {
+                    this.vocablist.set('id', this.listId);
+                    this.vocablist.fetch({
+                        error: function(items, error) {
+                            callback(error);
+                        },
+                        success: function() {
+                            callback();
+                        }
+                    })
+                }, this),
+                _.bind(function(callback) {
+                    this.items.fetchNext(
+                        {listId: listId},
+                        function() {
+                            callback();
+                        },
+                        function() {
+                            callback();
+                        }
+                    );
+                }, this)
+            ], _.bind(function(error, items) {
+                if (error) {
+                    console.error('ITEM LOAD ERROR:', error, items);
+                } else {
+                    this.toolbar.render();
+                    this.items.fetchNext({cursor: this.items.cursor});
+                    this.next();
+                }
+            }, this));
         } else {
-            console.error('ITEM LOAD ERROR:', 'fetch already in progress');
+            async.waterfall([
+                _.bind(function(callback) {
+                    this.items.fetchNext(
+                        null,
+                        function() {
+                            callback();
+                        },
+                        function() {
+                            callback();
+                        }
+                    );
+                }, this)
+            ], _.bind(function(error, items) {
+                if (error) {
+                    console.error('ITEM LOAD ERROR:', error, items);
+                } else {
+                    this.toolbar.render();
+                    this.items.fetchNext({cursor: this.items.cursor});
+                    this.next();
+                }
+            }, this));
         }
     },
     /**
@@ -245,9 +281,9 @@ module.exports = GelatoPage.extend({
                 console.error('ITEM LOAD ERROR:', 'no items');
             }
         }
-        if (this.counter % 10 === 0) {
+        if (!this.sectionId && this.counter % 10 === 0) {
             console.log('LOADING MORE ITEMS:', 10);
-            this.loadMore();
+            this.items.fetchNext();
         }
     },
     /**

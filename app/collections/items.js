@@ -100,7 +100,7 @@ module.exports = SkritterCollection.extend({
                         include_vocabs: true
                     },
                     remove: false,
-                    sort: true,
+                    sort: false,
                     error: function(error) {
                         callback(error);
                     },
@@ -158,6 +158,91 @@ module.exports = SkritterCollection.extend({
             }
         }
         this.reviews.add(reviews);
+    },
+    /**
+     * @method fetchByVocabIds
+     * @param {Array} vocabIds
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     * @param {Function} [callbackStatus]
+     */
+    fetchByVocabIds: function(vocabIds, callbackSuccess, callbackError, callbackStatus) {
+        var chunks = _.chunk(vocabIds, 5);
+        var index = 0;
+        async.eachSeries(
+            chunks,
+            _.bind(function(chunk, callback) {
+                this.fetch({
+                    data: {
+                        include_contained: true,
+                        include_decomps: true,
+                        include_sentences: true,
+                        include_strokes: true,
+                        include_vocabs: true,
+                        vocab_ids: chunk.join('|')
+                    },
+                    merge: false,
+                    remove: false,
+                    error: function(items, error) {
+                        callback(error);
+                    },
+                    success: function(items, result) {
+                        index++;
+                        if (typeof callbackStatus === 'function') {
+                            callbackStatus(index / chunks.length);
+                        }
+                        callback();
+                    }
+                });
+            }, this),
+            function(error) {
+                if (error) {
+                    if (typeof callbackError === 'function') {
+                        callbackError(error);
+                    }
+                } else {
+                    if (typeof callbackSuccess === 'function') {
+                        callbackSuccess();
+                    }
+                }
+            }
+        );
+    },
+    /**
+     * @method fetchNext
+     * @param {Object} [options]
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
+     */
+    fetchNext: function(options, callbackSuccess, callbackError) {
+        options = options || {};
+        this.fetch({
+            data: {
+                cursor: options.cursor,
+                include_contained: true,
+                include_decomps: true,
+                include_sentences: true,
+                include_strokes: true,
+                include_vocabs: true,
+                limit: options.limit || 10,
+                parts: app.user.getFilteredParts().join(','),
+                sort: 'next',
+                styles: app.user.getStudyStyles().join(','),
+                vocab_list: options.listId
+            },
+            merge: false,
+            remove: false,
+            error: function(items, error) {
+                if (typeof callbackError === 'function') {
+                    callbackError(error, items);
+                }
+            },
+            success: function(items) {
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess(items);
+                }
+            }
+        });
     },
     /**
      * @method getNext
