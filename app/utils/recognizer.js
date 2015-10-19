@@ -6,7 +6,7 @@
         this.baseAngleThreshold = 30;
         this.baseCornerPenalty = 50;
         this.baseCornerThreshold = 0;
-        this.baseDistanceThreshold = 100;
+        this.baseDistanceThreshold = 75;
         this.baseSize = 450;
         this.canvasSize = 450;
     }
@@ -93,7 +93,7 @@
     /**
      * @method checkAngle
      * @param {PromptStroke} userStroke
-     * @param {DataParam} targetParam
+     * @param {Param} targetParam
      * @returns {Number}
      */
     Recognizer.prototype.checkAngle = function(userStroke, targetParam) {
@@ -110,7 +110,7 @@
     /**
      * @method checkCorners
      * @param {PromptStroke} userStroke
-     * @param {DataParam} targetParam
+     * @param {Param} targetParam
      * @returns {Number}
      */
     Recognizer.prototype.checkCorners = function(userStroke, targetParam) {
@@ -127,7 +127,7 @@
     /**
      * @method checkDistance
      * @param {PromptStroke} userStroke
-     * @param {DataParam} targetParam
+     * @param {Param} targetParam
      * @returns {Number}
      */
     Recognizer.prototype.checkDistance = function(userStroke, targetParam) {
