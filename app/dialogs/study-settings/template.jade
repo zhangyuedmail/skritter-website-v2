@@ -32,6 +32,11 @@ bootstrap-dialog(data-name='study-settings')
               .col-sm-9#field-squigs
                 label.checkbox-inline
                   input(type="checkbox", checked=user.get('squigs'))
+            .form-group
+              label.col-sm-3.control-label(for="field-teaching-mode") Teaching mode
+              .col-sm-9#field-teaching-mode
+                label.checkbox-inline
+                  input(type="checkbox", checked=user.get('teachingMode'))
 
           .text-right
             button#button-save.btn.btn-fixed.btn-primary(type='button') Save

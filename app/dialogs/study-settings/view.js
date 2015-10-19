@@ -45,12 +45,14 @@ module.exports = GelatoDialog.extend({
         if (app.isJapanese()) {
             return {
                 filteredJapaneseParts: this.getSelectedParts(),
-                squigs: this.$('#field-squigs input').is(':checked')
+                squigs: this.$('#field-squigs input').is(':checked'),
+                teachingMode: this.$('#field-teaching-mode input').is(':checked')
             };
         } else {
             return {
                 filteredChineseParts: this.getSelectedParts(),
-                squigs: this.$('#field-squigs input').is(':checked')
+                squigs: this.$('#field-squigs input').is(':checked'),
+                teachingMode: this.$('#field-teaching-mode input').is(':checked')
             };
         }
     },
