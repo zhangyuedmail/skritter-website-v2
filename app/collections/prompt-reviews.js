@@ -171,7 +171,10 @@ module.exports = GelatoCollection.extend({
      * @returns {Boolean}
      */
     isTeachable: function() {
-        return app.user.get('teachingMode') && this.item.isNew();
+        if (app.user.get('teachingMode')) {
+            return this.item.isNew() || this.item.consecutiveWrong >= 2;
+        }
+        return false;
     },
     /**
      * @method next

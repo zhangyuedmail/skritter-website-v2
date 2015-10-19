@@ -125,6 +125,13 @@ module.exports = SkritterCollection.extend({
             review.newInterval = app.fn.interval.quantify(item, review.score);
             review.previousInterval = item.get('previousInterval') || 0;
             review.previousSuccess = item.get('previousSuccess') || false;
+            if (i === 0) {
+                if (item.consecutiveWrong >= 2) {
+                    item.consecutiveWrong = 0;
+                } else {
+                    item.consecutiveWrong = review.score > 1 ? 0 : item.consecutiveWrong + 1;
+                }
+            }
             item.set({
                 changed: review.submitTime,
                 last: review.submitTime,

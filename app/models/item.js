@@ -8,6 +8,11 @@ var PromptReview = require('models/prompt-review');
  */
 module.exports = SkritterModel.extend({
     /**
+     * @property consecutiveWrong
+     * @type {Number}
+     */
+    consecutiveWrong: 0,
+    /**
      * @property idAttribute
      * @type {String}
      */
