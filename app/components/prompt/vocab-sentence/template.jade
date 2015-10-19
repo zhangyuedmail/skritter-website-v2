@@ -11,7 +11,7 @@ gelato-component(data-name='prompt-vocab-sentence')
 
         label Example sentence
 
-        .value
+        .value(class=app.isChinese() ? 'text-chinese' : 'text-japanese')
 
           if prompt.part === 'rune' && !reviews.isComplete()
             = sentence.getWriting(reviews.vocab.get('writing'))
