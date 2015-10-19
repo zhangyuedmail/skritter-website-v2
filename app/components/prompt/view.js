@@ -27,6 +27,7 @@ module.exports = GelatoComponent.extend({
     initialize: function() {
         //properties
         this.editing = false;
+        this.leech = false;
         this.part = null;
         this.reviews = null;
         //components

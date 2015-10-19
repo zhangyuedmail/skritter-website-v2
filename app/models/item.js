@@ -200,6 +200,13 @@ module.exports = SkritterModel.extend({
         return this.get('lang') === 'ja';
     },
     /**
+     * @method isLeech
+     * @returns {Boolean}
+     */
+    isLeech: function() {
+        return this.consecutiveWrong >= 2;
+    },
+    /**
      * @method isNew
      * @returns {Boolean}
      */

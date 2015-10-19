@@ -5,7 +5,9 @@ gelato-component(data-name='prompt')
     - var item = reviews.item
 
     if item
-      #new-ribbon(class=item.isNew() ? '' : 'hidden')
+      #leech-ribbon.ribbon(class=item.isLeech() ? '' : 'hidden')
+        .icon.icon-study-leech
+      #new-ribbon.ribbon(class=item.isNew() ? '' : 'hidden')
         .icon.icon-study-new-character
 
     #panel-left.no-select
