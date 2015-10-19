@@ -26,8 +26,9 @@ module.exports = GelatoModel.extend({
      */
     defaults: function() {
         return {
-            attempts: 0,
             complete: false,
+            failedConsecutive: 0,
+            failedTotal: 0,
             reviewingStart: 0,
             reviewingStop: 0,
             score: 3,

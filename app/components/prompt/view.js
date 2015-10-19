@@ -27,7 +27,6 @@ module.exports = GelatoComponent.extend({
     initialize: function() {
         //properties
         this.editing = false;
-        this.leech = false;
         this.part = null;
         this.reviews = null;
         //components
@@ -369,11 +368,14 @@ module.exports = GelatoComponent.extend({
     handleCanvasAttemptFail: function() {
         switch (this.part) {
             case 'rune':
-                this.review.set('attempts', this.review.get('attempts') + 1);
-                if (this.review.get('attempts') > 3) {
-                    this.canvas.showStrokeHint();
+                this.review.set('failedConsecutive', this.review.get('failedConsecutive') + 1);
+                this.review.set('failedTotal', this.review.get('failedTotal') + 1);
+                if (this.review.get('failedTotal') > 3) {
                     this.review.set('score', 1);
-                } else if (this.review.get('attempts') > 2) {
+                } else if (this.review.get('failedTotal') > 2) {
+                    this.review.set('score', 2);
+                }
+                if (this.review.get('failedConsecutive') > 3) {
                     this.canvas.showStrokeHint();
                 }
                 break;
@@ -389,6 +391,7 @@ module.exports = GelatoComponent.extend({
     handleCanvasAttemptSuccess: function() {
         switch (this.part) {
             case 'rune':
+                this.review.set('failedConsecutive', 0);
                 if (this.review.get('teach')) {
                     this.canvas.startTeaching();
                 }
@@ -613,7 +616,6 @@ module.exports = GelatoComponent.extend({
      */
     next: function() {
         if (this.reviews.next()) {
-            this.review.set('attempts', 0);
             this.trigger('review:next', this.reviews);
             this.renderPrompt()
         } else {
@@ -625,7 +627,6 @@ module.exports = GelatoComponent.extend({
      */
     previous: function() {
         if (this.reviews.previous()) {
-            this.review.set('attempts', 0);
             this.trigger('review:previous', this.reviews);
             this.renderPrompt()
         } else {
