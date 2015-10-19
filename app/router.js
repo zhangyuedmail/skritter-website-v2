@@ -229,7 +229,13 @@ module.exports = GelatoRouter.extend({
      */
     navigateStudy: function(listId, sectionId) {
         if (app.user.isLoggedIn()) {
-            this.go('pages/study').load(listId, sectionId);
+            if (sectionId) {
+                this.go('pages/study-section', {listId: listId, sectionId: sectionId});
+            } else if (listId) {
+                this.go('pages/study-list', {listId: listId});
+            } else {
+                this.go('pages/study');
+            }
         } else {
             this.navigateLogin();
         }

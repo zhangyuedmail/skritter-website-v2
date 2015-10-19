@@ -1,20 +1,23 @@
 var GelatoPage = require('gelato/page');
 
 /**
- * @class Study
+ * @class StudyList
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
     /**
      * @method initialize
+     * @param {Object} options
      * @constructor
      */
-    initialize: function() {
+    initialize: function(options) {
         this.counter = 1;
+        this.listId = options.listId;
         this.items = this.createCollection('collections/items');
         this.navbar = this.createComponent('navbars/default');
         this.prompt = this.createComponent('components/prompt');
         this.toolbar = this.createComponent('components/study-toolbar', {page: this});
+        this.vocablist = this.createCollection('models/vocablist', {id: options.listId});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
@@ -48,7 +51,7 @@ module.exports = GelatoPage.extend({
     bodyClass: 'background1',
     /**
      * @method render
-     * @returns {Study}
+     * @returns {StudyList}
      */
     render: function() {
         this.renderTemplate();
@@ -155,8 +158,18 @@ module.exports = GelatoPage.extend({
     load: function() {
         async.waterfall([
             _.bind(function(callback) {
+                this.vocablist.fetch({
+                    error: function(items, error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback();
+                    }
+                })
+            }, this),
+            _.bind(function(callback) {
                 this.items.fetchNext(
-                    null,
+                    {listId: this.listId},
                     function() {
                         callback();
                     },

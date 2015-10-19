@@ -1,20 +1,23 @@
 var GelatoPage = require('gelato/page');
 
 /**
- * @class Study
+ * @class StudySection
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
     /**
      * @method initialize
+     * @param {Object} options
      * @constructor
      */
-    initialize: function() {
-        this.counter = 1;
+    initialize: function(options) {
+        this.listId = options.listId;
+        this.sectionId = options.sectionId;
         this.items = this.createCollection('collections/items');
         this.navbar = this.createComponent('navbars/default');
         this.prompt = this.createComponent('components/prompt');
         this.toolbar = this.createComponent('components/study-toolbar', {page: this});
+        this.vocablist = this.createModel('models/vocablist', {id: options.listId});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
@@ -48,7 +51,7 @@ module.exports = GelatoPage.extend({
     bodyClass: 'background1',
     /**
      * @method render
-     * @returns {Study}
+     * @returns {StudySection}
      */
     render: function() {
         this.renderTemplate();
@@ -110,27 +113,29 @@ module.exports = GelatoPage.extend({
      * @method handleToolbarAddItem
      */
     handleToolbarAddItem: function() {
-        this.items.addItems(
-            null,
-            function(result) {
-                $.notify(
-                    {
-                        icon: 'fa fa-plus-circle',
-                        title: '',
-                        message: result.numVocabsAdded + ' word has been added.'
-                    },
-                    {
-                        type: 'minimalist',
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
+        if (this.listId) {
+            this.items.createListItems(
+                [this.listId],
+                function(result) {
+                    $.notify(
+                        {
+                            icon: 'fa fa-plus-circle',
+                            title: '',
+                            message: result.numVocabsAdded + ' word has been added.'
                         },
-                        delay: 5000,
-                        icon_type: 'class'
-                    }
-                );
-            }
-        );
+                        {
+                            type: 'minimalist',
+                            animate: {
+                                enter: 'animated fadeInDown',
+                                exit: 'animated fadeOutUp'
+                            },
+                            delay: 5000,
+                            icon_type: 'class'
+                        }
+                    );
+                }
+            );
+        }
     },
     /**
      * @method handleToolbarSaveStudySettings
@@ -155,13 +160,23 @@ module.exports = GelatoPage.extend({
     load: function() {
         async.waterfall([
             _.bind(function(callback) {
-                this.items.fetchNext(
-                    null,
+                this.vocablist.fetch({
+                    error: function(items, error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback();
+                    }
+                })
+            }, this),
+            _.bind(function(callback) {
+                this.items.fetchByVocabIds(
+                    this.vocablist.getSectionVocabIds(this.sectionId),
                     function() {
                         callback();
                     },
-                    function() {
-                        callback();
+                    function(error) {
+                        callback(error);
                     }
                 );
             }, this)
@@ -170,7 +185,6 @@ module.exports = GelatoPage.extend({
                 console.error('ITEM LOAD ERROR:', error, items);
             } else {
                 this.toolbar.render();
-                this.items.fetchNext({cursor: this.items.cursor});
                 this.next();
             }
         }, this));
@@ -180,17 +194,17 @@ module.exports = GelatoPage.extend({
      */
     next: function() {
         var nextItem = this.items.getNext();
+        console.log(nextItem);
         if (this.prompt) {
             if (nextItem) {
                 this.toolbar.timer.reset();
                 this.prompt.set(nextItem.getPromptReviews());
+                if (nextItem.get('part') === 'rune' && nextItem.isNew()) {
+                    this.prompt.canvas.startTeaching();
+                }
             } else {
                 console.error('ITEM LOAD ERROR:', 'no items');
             }
-        }
-        if (!this.sectionId && this.counter % 10 === 0) {
-            console.log('LOADING MORE ITEMS:', 10);
-            this.items.fetchNext();
         }
     },
     /**
@@ -199,7 +213,7 @@ module.exports = GelatoPage.extend({
     previous: function() {},
     /**
      * @method remove
-     * @returns {Study}
+     * @returns {StudySection}
      */
     remove: function() {
         this.navbar.remove();
