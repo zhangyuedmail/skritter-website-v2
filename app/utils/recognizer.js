@@ -6,7 +6,7 @@
         this.baseAngleThreshold = 30;
         this.baseCornerPenalty = 50;
         this.baseCornerThreshold = 0;
-        this.baseDistanceThreshold = 75;
+        this.baseDistanceThreshold = 85;
         this.baseSize = 450;
         this.canvasSize = 450;
     }
