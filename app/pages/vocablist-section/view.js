@@ -320,7 +320,7 @@ module.exports = GelatoPage.extend({
         else {
             var rowData = {
                 vocabId: vocabId,
-                tradVocabId: tradVocabId,
+                tradVocabId: tradVocabId
             };
             if (this.vocablist.get('lang') === 'ja') {
                 var studyLink = this.rowEditing.find('.study-writing-link');
@@ -467,7 +467,8 @@ module.exports = GelatoPage.extend({
           view: this,
           row: {
               vocabId: '',
-              tradVocabId: ''
+              tradVocabId: '',
+              studyWriting: true
           }
       }));
     },
