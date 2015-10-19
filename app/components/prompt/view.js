@@ -108,6 +108,11 @@ module.exports = GelatoComponent.extend({
                 this.renderPromptPartTone();
                 break;
         }
+        if (this.reviews.isFirst()) {
+            this.$('#navigate-previous').hide();
+        } else {
+            this.$('#navigate-previous').show();
+        }
         return this;
     },
     /**
