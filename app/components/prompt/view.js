@@ -263,6 +263,11 @@ module.exports = GelatoComponent.extend({
             if (app.user.isAudioEnabled() && this.reviews.isFirst()) {
                 this.reviews.vocab.play();
             }
+            if (this.reviews.isTeachable()) {
+                this.canvas.startTeaching();
+                this.review.set('score', 1);
+                this.review.set('teach', true);
+            }
         }
         return this;
     },
@@ -276,18 +281,23 @@ module.exports = GelatoComponent.extend({
             this.review.stop();
             this.review.set('teach', false);
             this.canvas.disableInput();
-            this.canvas.injectGradingColor();
             this.canvas.stopTeaching();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = true;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
-            this.toolbarGrading.select(this.review.get('score'));
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabSentence.render();
             this.vocabWriting.render();
+            if (this.reviews.isTeachable()) {
+                this.review.set('score', 1);
+                this.toolbarGrading.deselect();
+            } else {
+                this.toolbarGrading.select(this.review.get('score'));
+                this.canvas.injectGradingColor();
+            }
         } else {
             this.renderPromptPartRune();
         }

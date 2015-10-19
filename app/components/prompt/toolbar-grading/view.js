@@ -36,6 +36,14 @@ module.exports = GelatoComponent.extend({
         'vmousedown .btn': 'handleMousedownButton'
     },
     /**
+     * @method deselect
+     * @returns {PromptToolbarGrading}
+     */
+    deselect: function() {
+        this.$('.btn-group .btn').removeClass('selected');
+        return this;
+    },
+    /**
      * @method handleClickButton
      * @param {Event} event
      */
@@ -66,21 +74,13 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptToolbarGrading}
      */
     select: function(value) {
-        this.unselect();
+        this.deselect();
         if (value) {
             this.$('.btn-group .btn[data-value="' + value + '"]').addClass('selected');
             this.value = value;
         } else {
             this.value = null;
         }
-        return this;
-    },
-    /**
-     * @method unselect
-     * @returns {PromptToolbarGrading}
-     */
-    unselect: function() {
-        this.$('.btn-group .btn').removeClass('selected');
         return this;
     }
 });

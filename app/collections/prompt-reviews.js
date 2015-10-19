@@ -167,6 +167,13 @@ module.exports = GelatoCollection.extend({
         return this.position >= this.length;
     },
     /**
+     * @method isTeachable
+     * @returns {Boolean}
+     */
+    isTeachable: function() {
+        return app.user.get('teachingMode') && this.item.isNew();
+    },
+    /**
      * @method next
      * @returns {PromptReview}
      */

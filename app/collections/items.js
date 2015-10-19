@@ -61,43 +61,16 @@ module.exports = SkritterCollection.extend({
      */
     url: 'items',
     /**
-     * @method addReviews
-     * @param {Array} reviews
-     */
-    addReviews: function(reviews) {
-        for (var i = 0, length = reviews.data.length; i < length; i++) {
-            var review = reviews.data[i];
-            var item = this.get(review.itemId) || this.contained.get(review.itemId);
-            review.actualInterval = item.get('last') ? review.submitTime - item.get('last') : 0;
-            review.currentInterval = item.get('interval') || 0;
-            review.newInterval = app.fn.interval.quantify(item, review.score);
-            review.previousInterval = item.get('previousInterval') || 0;
-            review.previousSuccess = item.get('previousSuccess') || false;
-            item.set({
-                changed: review.submitTime,
-                last: review.submitTime,
-                interval: review.newInterval,
-                next: review.submitTime + review.newInterval,
-                previousInterval: review.currentInterval,
-                previousSuccess: review.score > 1,
-                reviews: item.get('reviews') + 1,
-                successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
-                timeStudied: item.get('timeStudied') + review.reviewTime
-            });
-        }
-        this.reviews.add(reviews);
-    },
-    /**
-     * @method createListItems
-     * @param {Array} listIds
+     * @method addItems
+     * @param {Object} [options]
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
      */
-    createListItems: function(listIds, callbackSuccess, callbackError) {
+    addItems: function(options, callbackSuccess, callbackError) {
         async.waterfall([
             _.bind(function(callback) {
                 this.fetch({
-                    data: JSON.stringify(listIds.join('|')),
+                    data: JSON.stringify(options),
                     remove: false,
                     sort: false,
                     type: 'POST',
@@ -140,12 +113,39 @@ module.exports = SkritterCollection.extend({
         });
     },
     /**
-     * @method createListSectionItems
+     * @method addReviews
+     * @param {Array} reviews
+     */
+    addReviews: function(reviews) {
+        for (var i = 0, length = reviews.data.length; i < length; i++) {
+            var review = reviews.data[i];
+            var item = this.get(review.itemId) || this.contained.get(review.itemId);
+            review.actualInterval = item.get('last') ? review.submitTime - item.get('last') : 0;
+            review.currentInterval = item.get('interval') || 0;
+            review.newInterval = app.fn.interval.quantify(item, review.score);
+            review.previousInterval = item.get('previousInterval') || 0;
+            review.previousSuccess = item.get('previousSuccess') || false;
+            item.set({
+                changed: review.submitTime,
+                last: review.submitTime,
+                interval: review.newInterval,
+                next: review.submitTime + review.newInterval,
+                previousInterval: review.currentInterval,
+                previousSuccess: review.score > 1,
+                reviews: item.get('reviews') + 1,
+                successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
+                timeStudied: item.get('timeStudied') + review.reviewTime
+            });
+        }
+        this.reviews.add(reviews);
+    },
+    /**
+     * @method createItems
      * @param {Array} items
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
      */
-    createListSectionItems: function(items, callbackSuccess, callbackError) {
+    createItems: function(items, callbackSuccess, callbackError) {
         async.waterfall([
             _.bind(function(callback) {
                 this.fetch({
