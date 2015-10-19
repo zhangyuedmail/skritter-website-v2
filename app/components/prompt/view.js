@@ -373,7 +373,6 @@ module.exports = GelatoComponent.extend({
     handleCanvasAttemptSuccess: function() {
         switch (this.part) {
             case 'rune':
-                this.review.set('attempts', 0);
                 if (this.review.get('teach')) {
                     this.canvas.startTeaching();
                 }
@@ -598,6 +597,7 @@ module.exports = GelatoComponent.extend({
      */
     next: function() {
         if (this.reviews.next()) {
+            this.review.set('attempts', 0);
             this.trigger('review:next', this.reviews);
             this.renderPrompt()
         } else {
@@ -609,6 +609,7 @@ module.exports = GelatoComponent.extend({
      */
     previous: function() {
         if (this.reviews.previous()) {
+            this.review.set('attempts', 0);
             this.trigger('review:previous', this.reviews);
             this.renderPrompt()
         } else {
