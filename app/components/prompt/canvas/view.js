@@ -77,7 +77,9 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     clearLayer: function(name) {
-        this.getLayer(name).removeAllChildren();
+        var layer = this.getLayer(name);
+        layer.removeAllChildren();
+        layer.uncache();
         this.stage.update();
         return this;
     },
@@ -350,6 +352,7 @@ module.exports = GelatoComponent.extend({
         this.getLayer('stroke-hint').removeAllChildren();
         this.getLayer('input').removeAllChildren();
         this.stage.update();
+        console.log(this.stage);
         return this;
     },
     /**
