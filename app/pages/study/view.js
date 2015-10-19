@@ -161,13 +161,10 @@ module.exports = GelatoPage.extend({
         this.prompt.setElement('#prompt-container').render();
         this.app.user.set(settings, {merge: true}).cache();
         this.items = this.createCollection('collections/items');
-        this.loadMore(null,
-            _.bind(function(items) {
-                this.loadMore(items.cursor);
+        this.items.fetchNext(
+            {listId: this.listId},
+            _.bind(function() {
                 this.next();
-            }, this),
-            _.bind(function(error) {
-                console.error('ITEM LOAD ERROR:', error);
             }, this)
         );
     },

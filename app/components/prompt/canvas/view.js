@@ -444,11 +444,11 @@ module.exports = GelatoComponent.extend({
                 return;
             }
             if (lineDuration > 1000) {
-                this.trigger('vclickhold', event);
+                this.trigger('clickhold', event);
                 return;
             }
         }
-        this.trigger('vclick', event);
+        this.trigger('click', event);
     },
     /**
      * @method triggerInputDown
@@ -577,12 +577,19 @@ module.exports = GelatoComponent.extend({
         if (stroke) {
             var targetShape = stroke.getTargetShape();
             var userShape = stroke.getUserShape();
-            stroke.set('tweening', true);
-            this.tweenShape(
-                'character',
-                userShape,
-                targetShape
-            );
+            if (app.user.get('squigs')) {
+                this.drawShape(
+                    'character',
+                    shape
+                );
+            } else {
+                stroke.set('tweening', true);
+                this.tweenShape(
+                    'character',
+                    userShape,
+                    targetShape
+                );
+            }
             this.trigger('attempt:success');
         } else {
             this.trigger('attempt:fail');

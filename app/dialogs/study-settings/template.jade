@@ -27,6 +27,11 @@ bootstrap-dialog(data-name='study-settings')
                 label.checkbox-inline
                   input(type="checkbox", name="parts", value="defn", checked=user.hasFilteredPart('defn'))
                   | Definition
+            .form-group
+              label.col-sm-3.control-label(for="field-squigs") Raw squigs
+              .col-sm-9#field-squigs
+                label.checkbox-inline
+                  input(type="checkbox", checked=user.get('squigs'))
 
           .text-right
             button#button-save.btn.btn-fixed.btn-primary(type='button') Save

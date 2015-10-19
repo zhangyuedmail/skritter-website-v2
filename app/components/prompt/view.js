@@ -43,7 +43,7 @@ module.exports = GelatoComponent.extend({
         //listeners
         this.listenTo(this.canvas, 'attempt:fail', this.handleCanvasAttemptFail);
         this.listenTo(this.canvas, 'attempt:success', this.handleCanvasAttemptSuccess);
-        this.listenTo(this.canvas, 'vclick', this.handleCanvasClick);
+        this.listenTo(this.canvas, 'click', this.handleCanvasClick);
         this.listenTo(this.canvas, 'complete', this.handleCanvasComplete);
         this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:next', this.handleCanvasNavigateNext);
