@@ -121,12 +121,11 @@ module.exports = GelatoApplication.extend({
     handleError: function(message, url, line) {
         $.notify(
             {
-                icon: 'fa fa-exclamation-circle',
-                title: 'Error',
+                title: 'Application Error',
                 message: message
             },
             {
-                type: 'minimalist',
+                type: 'pastel-danger',
                 animate: {
                     enter: 'animated fadeInDown',
                     exit: 'animated fadeOutUp'
