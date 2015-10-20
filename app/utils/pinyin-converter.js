@@ -2243,7 +2243,7 @@ function pinyinToZhuyin(text) {
  * @param {String} text
  * @return {String}
  */
-function removeTones(text) {
+function removeToneMarks(text) {
     for (var syllable in syllables) {
         var letter = syllables[syllable];
         text = text.replace(syllable, letter);
@@ -2251,9 +2251,19 @@ function removeTones(text) {
     return text;
 }
 
+/**
+ * @method removeToneNumbers
+ * @param {String} text
+ * @return {String}
+ */
+function removeToneNumbers(text) {
+    return text.replace(/[0-9]/g, '');
+}
+
 module.exports = {
     getData: getData,
     toTone: pinyinToTone,
     toZhuyin: pinyinToZhuyin,
-    removeTones: removeTones
+    removeToneMarks: removeToneMarks,
+    removeToneNumbers: removeToneNumbers
 };

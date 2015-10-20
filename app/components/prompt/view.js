@@ -60,6 +60,7 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.toolbarVocab, 'click:edit', this.handleToolbarVocabEdit);
         this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
         this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
+        this.listenTo(this.vocabReading, 'click:show', this.handleVocabReadingShow);
     },
     /**
      * @property template
@@ -610,6 +611,14 @@ module.exports = GelatoComponent.extend({
                 this.toolbarVocab.render();
             }, this)
         });
+    },
+    /**
+     * @method handleVocabReadingShow
+     * @param {Number} position
+     */
+    handleVocabReadingShow: function(position) {
+        this.reviews.at(position).set('showReading', true);
+        this.vocabReading.render();
     },
     /**
      * @method next

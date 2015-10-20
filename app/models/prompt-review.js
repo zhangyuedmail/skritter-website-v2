@@ -32,6 +32,8 @@ module.exports = GelatoModel.extend({
             reviewingStart: 0,
             reviewingStop: 0,
             score: 3,
+            showDefinition: false,
+            showReading: false,
             submitTime: 0,
             thinkingStop: 0,
             teach: false
@@ -102,6 +104,26 @@ module.exports = GelatoModel.extend({
      */
     isComplete: function() {
         return this.get('complete');
+    },
+    /**
+     * @method isDefinitionHidden
+     * @returns {Boolean}
+     */
+    isDefinitionHidden: function() {
+        if (this.get('showDefinition')) {
+            return false;
+        }
+        return app.user.get('hideDefinition') && !this.isComplete();
+    },
+    /**
+     * @method isReadingHidden
+     * @returns {Boolean}
+     */
+    isReadingHidden: function() {
+        if (this.get('showReading')) {
+            return false;
+        }
+        return (app.user.get('hideReading') && !this.isComplete());
     },
     /**
      * @method start
