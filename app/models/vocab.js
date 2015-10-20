@@ -77,6 +77,13 @@ module.exports = SkritterModel.extend({
         return containedVocabs;
     },
     /**
+     * @method getDecomp
+     * @returns {Decomp}
+     */
+    getDecomp: function() {
+        return this.collection.decomps.get(this.get('writing'));
+    },
+    /**
      * @method getDefinition
      * @param {Boolean} [ignoreFormat]
      * @returns {String}

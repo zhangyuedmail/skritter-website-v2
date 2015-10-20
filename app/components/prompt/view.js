@@ -5,6 +5,8 @@ var PromptCanvas = require('components/prompt/canvas/view');
 var PromptToolbarAction = require('components/prompt/toolbar-action/view');
 var PromptToolbarGrading = require('components/prompt/toolbar-grading/view');
 var PromptToolbarVocab = require('components/prompt/toolbar-vocab/view');
+var PromptVocabCharacters = require('components/prompt/vocab-characters/view');
+var PromptVocabDecomp = require('components/prompt/vocab-decomp/view');
 var PromptVocabDefinition = require('components/prompt/vocab-definition/view');
 var PromptVocabMnemonic = require('components/prompt/vocab-mnemonic/view');
 var PromptVocabReading = require('components/prompt/vocab-reading/view');
@@ -34,6 +36,8 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction = new PromptToolbarAction({prompt: this});
         this.toolbarGrading = new PromptToolbarGrading({prompt: this});
         this.toolbarVocab = new PromptToolbarVocab({prompt: this});
+        this.vocabCharacters = new PromptVocabCharacters({prompt: this});
+        this.vocabDecomp = new PromptVocabDecomp({prompt: this});
         this.vocabDefinition = new PromptVocabDefinition({prompt: this});
         this.vocabMnemonic = new PromptVocabMnemonic({prompt: this});
         this.vocabReading = new PromptVocabReading({prompt: this});
@@ -77,6 +81,8 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.setElement('#toolbar-action-container');
         this.toolbarGrading.setElement('#toolbar-grading-container');
         this.toolbarVocab.setElement('#toolbar-vocab-container');
+        this.vocabCharacters.setElement('#vocab-characters-container');
+        this.vocabDecomp.setElement('#vocab-decomp-container');
         this.vocabDefinition.setElement('#vocab-definition-container');
         this.vocabMnemonic.setElement('#vocab-mnemonic-container');
         this.vocabReading.setElement('#vocab-reading-container');
@@ -148,6 +154,8 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.render();
         this.toolbarGrading.render();
         this.toolbarVocab.render();
+        this.vocabCharacters.render();
+        this.vocabDecomp.render();
         this.vocabDefinition.render();
         this.vocabMnemonic.render();
         this.vocabReading.render();
@@ -192,6 +200,8 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.vocabCharacters.render();
+            this.vocabDecomp.render();
             this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
@@ -238,6 +248,8 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.vocabCharacters.render();
+            this.vocabDecomp.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             if (app.user.isAudioEnabled()) {
@@ -295,6 +307,8 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.vocabCharacters.render();
+            this.vocabDecomp.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabSentence.render();
@@ -354,6 +368,8 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.vocabCharacters.render();
+            this.vocabDecomp.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -653,6 +669,8 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
         this.toolbarVocab.remove();
+        this.vocabCharacters.remove();
+        this.vocabDecomp.remove();
         this.vocabDefinition.remove();
         this.vocabMnemonic.remove();
         this.vocabReading.remove();
