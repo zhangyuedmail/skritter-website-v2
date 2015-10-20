@@ -1,6 +1,5 @@
 var GelatoPage = require('gelato/page');
 var SettingsSidebar = require('components/settings-sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 var Payments = require('collections/payments');
 
 /**
@@ -8,6 +7,21 @@ var Payments = require('collections/payments');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.navbar = this.createComponent('navbars/default');
+        this.sidebar = new SettingsSidebar();
+        this.payments = new Payments();
+        this.payments.comparator = function(payment) {
+            return -payment.get('created');
+        };
+        this.listenTo(this.payments, 'sync', this.renderTable);
+        this.limit = 20;
+        this.fetchPayments();
+    },
     /**
      * @property bodyClass
      * @type {String}
@@ -19,21 +33,6 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'vclick #load-more-btn': 'handleClickLoadMoreButton'
-    },
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.navbar = new DefaultNavbar();
-        this.sidebar = new SettingsSidebar();
-        this.payments = new Payments();
-        this.payments.comparator = function(payment) {
-            return -payment.get('created');
-        };
-        this.listenTo(this.payments, 'sync', this.renderTable);
-        this.limit = 20;
-        this.fetchPayments();
     },
     /**
      * @method remove
@@ -49,7 +48,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#settings-sidebar-container').render();
         return this;
     },

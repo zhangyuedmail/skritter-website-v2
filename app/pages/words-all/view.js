@@ -1,8 +1,8 @@
 var GelatoPage = require('gelato/page');
-var WordsSidebar = require('components/words-sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 var Items = require('collections/items');
 var Vocabs = require('collections/vocabs');
+var WordsSidebar = require('components/words-sidebar/view');
+var VocabDialog = require('dialogs/vocab/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
 /**
@@ -10,6 +10,24 @@ var VocabActionMixin = require('mixins/vocab-action');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.navbar = this.createComponent('navbars/default');
+        this.sidebar = new WordsSidebar();
+        this.items = new Items();
+        this.searchVocabs = new Vocabs();
+        this.vocabsToFetchItemsFor = new Vocabs();
+        this.searchVocabItems = new Items();
+        this.vocabMap = {};
+        this.sort = 'last';
+        this.limit = 20;
+        this.searchString = '';
+        this.initAllCollections();
+        this.fetchItems();
+    },
     /**
      * @property bodyClass
      * @type {String}
@@ -20,30 +38,13 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
+        'vclick .writing-td': 'handleClickWritingTd',
+        'vclick #load-more-btn': 'handleClickLoadMoreButton',
         'vclick #next-sort-link': 'handleClickNextSortLink',
         'vclick #previous-sort-link': 'handleClickPreviousSortLink',
-        'change #word-search-input': 'handleChangeWordSearchInput',
-        'vclick #load-more-btn': 'handleClickLoadMoreButton',
         'change input[type="checkbox"]': 'handleChangeCheckbox',
-        'change #action-select': 'handleChangeActionSelect'
-    },
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.navbar = new DefaultNavbar();
-        this.sidebar = new WordsSidebar();
-        this.items = new Items();
-        this.searchVocabs = new Vocabs();
-        this.vocabsToFetchItemsFor = new Vocabs();
-        this.searchVocabItems = new Items();
-        this.vocabMap = {};
-        this.initAllCollections();
-        this.sort = 'last';
-        this.limit = 20;
-        this.fetchItems();
-        this.searchString = '';
+        'change #action-select': 'handleChangeActionSelect',
+        'change #word-search-input': 'handleChangeWordSearchInput'
     },
     /**
      * @method remove
@@ -59,7 +60,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#words-sidebar-container').render();
         return this;
     },
@@ -75,7 +76,7 @@ module.exports = GelatoPage.extend({
     title: 'All Words - Skritter',
     /**
      * @method fetchItems
-     * @param {string} cursor
+     * @param {string} [cursor]
      */
     fetchItems: function(cursor) {
         this.items.fetch({
@@ -85,7 +86,8 @@ module.exports = GelatoPage.extend({
                 include_vocabs: true,
                 cursor: cursor || ''
             },
-            remove: false
+            remove: false,
+            sort: false
         });
     },
     /**
@@ -228,6 +230,19 @@ module.exports = GelatoPage.extend({
         this.fetchItems();
     },
     /**
+     * @method handleClickWritingTd
+     * @param {Event} event
+     */
+    handleClickWritingTd: function(event) {
+        event.preventDefault();
+        var row = $(event.target).parent('tr');
+        var vocabId = row.data('vocab-id');
+        if (vocabId) {
+            var dialog = new VocabDialog();
+            dialog.open().load(vocabId);
+        }
+    },
+    /**
      * @method initAllCollections
      */
     initAllCollections: function() {
@@ -263,7 +278,7 @@ module.exports = GelatoPage.extend({
         context.view = this;
         var rendering = $(this.template(context));
         this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
-    },
+    }
 });
 
 _.extend(module.exports.prototype, VocabActionMixin);

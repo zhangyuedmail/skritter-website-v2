@@ -11,10 +11,29 @@ module.exports = GelatoModel.extend({
      */
     idAttribute: 'id',
     /**
-     * @method getWriting
+     * @method getDefinition
+     * @param {Boolean} [ignoreFormat]
      * @returns {String}
      */
-    getWriting: function() {
-        return this.get('writing').replace(/\s+/g, '');
+    getDefinition: function(ignoreFormat) {
+        var definition = this.get('definitions')[app.user.get('sourceLang')];
+        if (!definition) {
+            definition = this.get('definitions').en;
+        }
+        return ignoreFormat === false ? definition : app.fn.textToHTML(definition);
+    },
+    /**
+     * @method getWriting
+     * @param {String} mask
+     * @returns {String}
+     */
+    getWriting: function(mask) {
+        var writing = this.get('writing');
+        if (mask !== undefined) {
+            writing = writing.replace(mask, mask.split('').map(function() {
+                return '_';
+            }).join(''));
+        }
+        return writing.replace(/\s+/g, '');
     }
 });

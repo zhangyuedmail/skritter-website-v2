@@ -1,11 +1,15 @@
-- var now = new Date().getTime();
-
 gelato-page(data-name='words-banned')
-  .container
+  - var now = new Date().getTime();
+
+  #navbar-container
+
+  section.container
     .content-block
       .row
+
         .col-md-3.sidebar
           #words-sidebar-container
+
         .col-md-9.main-content
           .title Banned Words
           p Words that you have banned.

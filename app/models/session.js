@@ -19,17 +19,15 @@ module.exports = SkritterModel.extend({
         expires_in: 0
     },
     /**
-     * @method headers
-     * @returns {Object}
-     */
-    headers: function() {
-        return this.getLoginHeaders();
-    },
-    /**
      * @property url
      * @type {String}
      */
     url: 'oauth2/token',
+    /**
+     * @property user
+     * @type {User}
+     */
+    user: null,
     /**
      * @method authenticate
      * @param {String} type
@@ -60,7 +58,7 @@ module.exports = SkritterModel.extend({
      * @method cache
      */
     cache: function() {
-        app.setLocalStorage(this.id + '-session', this.toJSON());
+        app.setLocalStorage(this.user.id + '-session', this.toJSON());
     },
     /**
      * @method getClientId
@@ -119,6 +117,13 @@ module.exports = SkritterModel.extend({
         return {'Authorization': 'basic ' + this.getLoginCredentials()};
     },
     /**
+     * @method headers
+     * @returns {Object}
+     */
+    headers: function() {
+        return this.getLoginHeaders();
+    },
+    /**
      * @method refresh
      * @param {Function} callbackSuccess
      * @param {Function} callbackError
@@ -128,7 +133,7 @@ module.exports = SkritterModel.extend({
             data: {
                 client_id: this.getClientId(),
                 grant_type: 'refresh_token',
-                refresh_token: token
+                refresh_token: this.get('refresh_token')
             },
             type: 'POST',
             success: _.bind(function(model) {

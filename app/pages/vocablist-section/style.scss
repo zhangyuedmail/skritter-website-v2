@@ -2,6 +2,8 @@
 
 gelato-page[data-name='vocablist-section'] {
 
+  padding-top: 75px;
+
   #editing-header-row {
     margin-bottom: 25px;
 
@@ -40,9 +42,7 @@ gelato-page[data-name='vocablist-section'] {
   }
 
   .study-writing-link {
-    border-width: 1px;
-    border-color: $green5;
-    border-style: solid;
+    border: 1px solid $green5;
     padding: 2px 5px;
     background-color: $green2;
     user-select: none;

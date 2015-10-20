@@ -1,13 +1,56 @@
-gelato-navbar(data-name='default').fixed-top.hidden-sm.hidden-xs
-  .container
-    .left
-      a.item.item-header(href="/dashboard") Skritter
-      a.item.item-link(href="/study") Study
-      a.item.item-link(href="/vocablists/queue") Lists
-      a.item.item-link(href="/words/all") Words
-      a.item.item-link(data-toggle="tooltip" data-placement="bottom" title="Working on it") Stats
-    .right
-      a.item.item-link(href="/account")= user.get('name') || user.id
-      if user.get('avatar')
-        .item.item-icon
-          img(src='data:image/png;base64,' + user.get('avatar'))
+bootstrap-navbar(data-name='default')
+  - var user = view.app.user;
+
+  nav.navbar.navbar-inverse.navbar-fixed-top
+    .container
+
+      .navbar-header
+        button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar-collapse", aria-expanded="false")
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.navbar-brand(href="/") Skritter
+
+      #navbar-collapse.collapse.navbar-collapse
+
+        if user.isLoggedIn()
+
+          ul.nav.navbar-nav
+            li
+              a(href="/study") Study
+            li
+              a(href="/vocablists") Lists
+            li
+              a(href="/words") Words
+
+          ul.nav.navbar-nav.navbar-right
+            li.dropdown
+              a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
+                span= user.get('name')
+                | &nbsp;&nbsp;&nbsp;
+                span.caret
+              ul.dropdown-menu
+                li
+                  a(href="/account") Account
+                li
+                  a(href="https://discourse.skritter.com/", target="_blank") Forum
+                li.divider(role="separator")
+                li
+                  a#button-logout(href="#") Logout
+
+        else
+
+          ul.nav.navbar-nav
+            li
+              a(href="/features") Features
+            li
+              a(href="/signup") Signup
+
+          ul.nav.navbar-nav.navbar-right
+            if user.isLoggedIn()
+              li
+                a(href="/dashboard") Dashboard
+            else
+              li
+                a(href="/login") Login

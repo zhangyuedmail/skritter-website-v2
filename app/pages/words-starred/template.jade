@@ -1,11 +1,15 @@
-- var now = new Date().getTime();
-
 gelato-page(data-name='words-starred')
-  .container
+  - var now = new Date().getTime();
+
+  #navbar-container
+
+  section.container
     .content-block
       .row
+
         .col-md-3.sidebar
           #words-sidebar-container
+
         .col-md-9.main-content
           .title Starred Words
           p View all the words you've starred while studying.
@@ -42,5 +46,3 @@ gelato-page(data-name='words-starred')
                 
             else if view.starredVocabs.cursor
               button#load-more-btn.btn.btn-primary.btn-block Load More
-                
-                            

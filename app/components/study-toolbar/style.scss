@@ -5,6 +5,7 @@ gelato-component[data-name='study-toolbar'] {
   font-family: $font-slab;
   font-size: 24px;
   font-weight: 300;
+  height: 35px;
   margin: 20px auto;
   max-width: 1280px;
   padding-left: 30px;
@@ -15,8 +16,17 @@ gelato-component[data-name='study-toolbar'] {
     font-size: 28px;
   }
 
-  .text-left i { margin-right: 15px; }
+  .text-left i { margin-right: 20px; }
 
-  .text-right i { margin-left: 15px; }
+  .text-right i { margin-left: 20px; }
+
+  .vocablist-name {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .vocablist-section {
+    font-size: 14px;
+  }
 
 }

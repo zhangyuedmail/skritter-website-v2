@@ -2,7 +2,6 @@ var GelatoPage = require('gelato/page');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var ConfirmDialog = require('dialogs/confirm/view');
 var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
-var DefaultNavbar = require('navbars/default/view');
 var User = require('models/user');
 var Vocablist = require('models/vocablist');
 
@@ -16,14 +15,15 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
+        this.updating = false;
         this.vocablist = new Vocablist({id: options.vocablistId});
-        this.vocablist.fetch({data: {includeSectionCompletion: true}});
         this.listenTo(this.vocablist, 'sync', function() {
             this.loadCreatorNameIfNeeded();
             this.render();
         });
-        this.updating = false;
+        this.vocablist.fetch({data: {includeSectionCompletion: true}});
+
     },
     /**
      * @method loadCreatorNameIfNeeded
@@ -162,18 +162,10 @@ module.exports = GelatoPage.extend({
         });
         confirmDialog.render().open();
         this.listenTo(confirmDialog, 'confirm', function() {
-            var attrs = {
-                disabled: true,
-                studyingMode: 'not studying'
-            };
-            var options = {
-                patch: true,
-                method: 'PUT'
-            };
-            this.vocablist.save(attrs, options);
+            this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
             this.listenToOnce(this.vocablist, 'state', function() {
                 confirmDialog.close();
-                app.router.navigate('/vocablist/my-lists', {trigger: true});
+                app.router.navigate('/vocablists/my-lists', {trigger: true});
             });
         });
     },
@@ -237,7 +229,7 @@ module.exports = GelatoPage.extend({
      * @method handleClickImageUploadLink
      */
     handleClickImageUploadLink: function() {
-        $('#image-upload-input').trigger('click');
+        $('#image-upload-input').trigger('vclick');
     },
     /**
      * @method handleChangeImageUploadInput
@@ -293,9 +285,7 @@ module.exports = GelatoPage.extend({
             'name': sectionName,
             'rows': []
         });
-        this.vocablist.set('sections', sections);
-        this.vocablist.save();
-
+        this.vocablist.save({'sections': sections}, {patch: true});
         this.render();
     },
     /**

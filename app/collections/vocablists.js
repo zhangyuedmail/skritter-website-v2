@@ -29,7 +29,6 @@ module.exports = SkritterCollection.extend({
      * @returns Array
      */
     parse: function(response) {
-        console.log(response);
         this.cursor = response.cursor;
         return response.VocabLists;
     },

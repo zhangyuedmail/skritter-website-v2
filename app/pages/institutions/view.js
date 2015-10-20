@@ -1,7 +1,5 @@
 var GelatoPage = require('gelato/page');
 var MarketingFooter = require('components/marketing-footer/view');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingNavbar = require('navbars/marketing/view');
 
 /**
  * @class Institutions
@@ -14,11 +12,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.footer = new MarketingFooter();
-        if (app.user.isLoggedIn()) {
-            this.navbar = new DefaultNavbar();
-        } else {
-            this.navbar = new MarketingNavbar();
-        }
+        this.navbar = this.createComponent('navbars/default');
     },
     /**
      * @property bodyClass
@@ -38,7 +32,7 @@ module.exports = GelatoPage.extend({
      * @property title
      * @type {String}
      */
-    title: 'Institutions- Skritter',
+    title: 'Institutions - Skritter',
     /**
      * @property template
      * @type {Function}
@@ -50,10 +44,9 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.footer.setElement('#footer-container').render();
+        this.navbar.setElement('#navbar-container').render();
         this.$('#institution-datepicker').datetimepicker({format: 'YYYY-MM-DD'});
-        this.footer.setElement('#footer-container');
-        this.footer.render();
-        this.navbar.render();
         return this;
     },
     /**

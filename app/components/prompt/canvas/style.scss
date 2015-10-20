@@ -7,27 +7,6 @@ gelato-component[data-name="prompt-canvas"] {
   margin-right: auto;
   position: relative;
 
-  #canvas-definition {
-    padding-top: 50px;
-    text-align: center;
-    .answer {
-      color: #404851;
-      font-family: $font-muli;
-      font-size: 18px;
-      font-weight: 300;
-    }
-    .question {
-      color: #b2b3b4;
-      font-family: $font-slab;
-      font-size: 28px;
-      font-weight: 300;
-    }
-    .writing {
-      color: #333950;
-      font-size: 120px;
-    }
-  }
-
   #canvas-message {
     bottom: 5px;
     font-size: 24px;
@@ -54,27 +33,6 @@ gelato-component[data-name="prompt-canvas"] {
         &#navigate-next { right: -30px; }
         &#navigate-previous { left: -30px; }
       }
-    }
-  }
-
-  #canvas-reading {
-    padding-top: 50px;
-    text-align: center;
-    .answer {
-      color: #404851;
-      font-family: $font-muli;
-      font-size: 18px;
-      font-weight: 300;
-    }
-    .question {
-      color: #b2b3b4;
-      font-family: $font-slab;
-      font-size: 28px;
-      font-weight: 300;
-    }
-    .writing {
-      color: #333950;
-      font-size: 120px;
     }
   }
 

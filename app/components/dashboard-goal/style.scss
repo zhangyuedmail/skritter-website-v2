@@ -2,6 +2,8 @@
 
 gelato-component[data-name='goal-doughnut'] {
 
+  margin-top: 30px;
+
   .highcharts-container {
     margin-left: auto;
     .highcharts-title { font-family: $font-slab; }
@@ -16,7 +18,7 @@ gelato-component[data-name='goal-doughnut'] {
     .text {
       color: #8c9196;
       display: inline-block;
-      font-family: $font-muli;
+      font-family: $font-ubuntu;
       font-size: 16px;
       font-weight: 300;
     }

@@ -2,6 +2,8 @@
 
 gelato-page[data-name='settings-study'] {
 
+  padding-top: 75px;
+
   .content-block { background-color: #f2f2f6; }
 
   #section-content {
@@ -21,7 +23,7 @@ gelato-page[data-name='settings-study'] {
       }
     }
     label {
-      font-family: $font-muli;
+      font-family: $font-ubuntu;
       font-weight: 300;
       text-align: left;
     }
@@ -36,7 +38,7 @@ gelato-page[data-name='settings-study'] {
       max-width: 300px;
     }
     .title {
-      font-family: $font-muli;
+      font-family: $font-ubuntu;
       font-size: 24px;
       font-weight: 400;
       margin-bottom: 30px;

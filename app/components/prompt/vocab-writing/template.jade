@@ -3,35 +3,48 @@ gelato-component(data-name='prompt-vocab-writing')
   - var reviews = view.prompt.reviews
 
   if reviews
-    - var fillers = []
+    - var writings = reviews.vocab.getWritingObjects()
     - var index = 0
+
+    if app.isChinese()
+      .text-chinese
+    else
+      .text-japanese
 
     case prompt.part
 
       when 'rune'
-        for character in reviews.vocab.getCharacters()
-          //TODO: properly handle japanese kana
-          if (fillers.indexOf(character) === -1)
+        for character in writings
+          if (character.type === 'character')
             - var review = reviews.at(index)
             - var classes = []
             if (!review.get('complete'))
               - classes.push('masked')
             if (reviews.position === index)
               - classes.push('active')
+            if (app.isChinese())
+              - classes.push('text-chinese')
+            else
+              - classes.push('text-japanese')
             div.character(class=classes.join(' '), data-position=index)
-              span= character
+              span= character.value
             - index++
           else
             div.filler
-              span= character
+              span= character.value
 
       default
-        for character in reviews.vocab.getCharacters()
-          if (fillers.indexOf(character) === -1)
+        for character in writings
+          if (character.type === 'character')
             - var review = reviews.at(index)
-            div.character(data-position=index)
-              span= character
+            - var classes = []
+            if (app.isChinese())
+              - classes.push('text-chinese')
+            else
+              - classes.push('text-japanese')
+            div.character(class=classes.join(' '), data-position=index)
+              span= character.value
             - index++
           else
             div.filler
-              span= character
+              span= character.value

@@ -3,17 +3,21 @@ gelato-component(data-name='prompt-vocab-reading')
   - var reviews = view.prompt.reviews
 
   if reviews
+    - var readings = reviews.vocab.getReadingObjects()
     - var index = 0
 
     case prompt.part
 
-      when 'rdng'
-        for reading in reviews.vocab.getReadings()
+      when 'rune'
+        for reading in readings
           if (reading.type === 'character')
             - var review = reviews.at(index)
-            div.reading(class=reviews.isComplete() ? '' : 'masked', data-position=index)
+            div.reading(data-position=index)
               if reviews.vocab.isChinese()
-                span= app.fn.pinyin.toTone(reading.value)
+                if review.isReadingHidden()
+                  button.show-reading.btn.btn-sm.btn-default show
+                else
+                  span= app.fn.pinyin.toTone(reading.value)
               else
                 span= reading.value
             - index++
@@ -22,17 +26,21 @@ gelato-component(data-name='prompt-vocab-reading')
               span= reading.value
 
       when 'tone'
-        for reading in reviews.vocab.getReadings()
+        for reading in readings
           if (reading.type === 'character')
             - var review = reviews.at(index)
             - var classes = []
-            if (!review.get('complete'))
-              - classes.push('masked')
             if (reviews.position === index)
               - classes.push('active')
             div.reading(class=classes.join(' '), data-position=index)
               if reviews.vocab.isChinese()
-                span= app.fn.pinyin.toTone(reading.value)
+                if review.isReadingHidden()
+                  button.show-reading.btn.btn-sm.btn-default show
+                else
+                  if review.isComplete()
+                    span= app.fn.pinyin.toTone(reading.value)
+                  else
+                    span= app.fn.pinyin.removeToneNumbers(reading.value)
               else
                 span= reading.value
             - index++
@@ -41,10 +49,10 @@ gelato-component(data-name='prompt-vocab-reading')
               span= reading.value
 
       default
-        for reading in reviews.vocab.getReadings()
+        for reading in readings
           if (reading.type === 'character')
             - var review = reviews.at(index)
-            div.reading(data-position=index)
+            div.reading(class=reviews.isComplete() ? '' : 'invisible', data-position=index)
               if reviews.vocab.isChinese()
                 span= app.fn.pinyin.toTone(reading.value)
               else

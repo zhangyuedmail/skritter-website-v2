@@ -2,7 +2,6 @@ var GelatoPage = require('gelato/page');
 var VocablistAddTable = require('components/vocablist-add-table/view');
 var VocablistReviewTable = require('components/vocablist-review-table/view');
 var VocablistSidebar = require('components/vocablist-sidebar/view');
-var DefaultNavbar = require('navbars/default/view');
 var Vocablists = require('collections/vocablists');
 
 /**
@@ -16,28 +15,32 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.vocablists = new Vocablists();
-        var data = {
-            limit: 10,
-            sort: 'studying',
-            include_percent_done: 'true',
-            lang: app.getLanguage()
-        };
-        this.vocablists.fetch({
-            data: data
-        });
-        this.listenTo(this.vocablists, 'sync', function() {
-            if (this.vocablists.cursor) {
-                data.cursor = this.vocablists.cursor;
-                this.vocablists.fetch({
-                    data: data,
-                    remove: false
-                })
-            }
-        });
         this.addingTable = new VocablistAddTable({vocablists: this.vocablists});
         this.reviewingTable = new VocablistReviewTable({vocablists: this.vocablists});
-        this.navbar = new DefaultNavbar();
+        this.navbar = this.createComponent('navbars/default');
         this.sidebar = new VocablistSidebar();
+        this.listenTo(this.vocablists, 'state:standby', function() {
+            if (this.vocablists.cursor) {
+                this.vocablists.fetch({
+                    data: {
+                        cursor: this.vocablists.cursor,
+                        limit: 10,
+                        sort: 'studying',
+                        include_percent_done: 'true',
+                        lang: app.getLanguage()
+                    },
+                    remove: false
+                });
+            }
+        });
+        this.vocablists.fetch({
+            data: {
+                limit: 10,
+                sort: 'studying',
+                include_percent_done: 'true',
+                lang: app.getLanguage()
+            }
+        });
     },
     /**
      * @property title
@@ -60,7 +63,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.addingTable.setElement('#adding-container').render();
         this.reviewingTable.setElement('#reviewing-container').render();
         this.sidebar.setElement('#vocablist-sidebar-container').render();

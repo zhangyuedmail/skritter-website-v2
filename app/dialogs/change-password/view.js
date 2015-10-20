@@ -1,4 +1,4 @@
-var GelatoDialog = require('gelato/dialog');
+var GelatoDialog = require('gelato/bootstrap/dialog');
 
 /**
  * @class ChangePasswordDialog
@@ -43,10 +43,10 @@ module.exports = GelatoDialog.extend({
         var password1 = this.$('#field-password1').val();
         var password2 = this.$('#field-password2').val();
         this.$('#error-message').empty();
-        this.disableForm('form');
+        this.$('form').prop('disabled', true);
         if (password1 !== password2) {
             this.$('#error-message').text("Passwords must match.");
-            this.enableForm('form');
+            this.$('form').prop('disabled', false);
             return;
         }
         app.user.save(
@@ -56,7 +56,7 @@ module.exports = GelatoDialog.extend({
             {
                 error: (function(error) {
                     this.$('#error-message').text(JSON.stringify(error));
-                    this.enableForm('form');
+                    this.$('form').prop('disabled', false);
                 }).bind(this),
                 success: (function() {
                     this.close();

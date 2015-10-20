@@ -1,5 +1,5 @@
 var GelatoPage = require('gelato/page');
-var MarketingNavbar = require('navbars/marketing/view');
+var MarketingFooter = require('components/marketing-footer/view');
 
 /**
  * @class Login
@@ -11,7 +11,8 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.navbar = new MarketingNavbar();
+        this.footer = new MarketingFooter();
+        this.navbar = this.createComponent('navbars/default');
     },
     /**
      * @property bodyClass
@@ -30,11 +31,18 @@ module.exports = GelatoPage.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {MarketingHome}
+     * @returns {Login}
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
+        this.footer.setElement('#footer-container').render();
+        if (this.getHeight() < app.getHeight()) {
+            this.$('#footer-container').css(
+                'margin-top',
+                app.getHeight() - this.getHeight() - 51
+            );
+        }
         return this;
     },
     /**
@@ -43,7 +51,8 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keyup #login-password': 'handleKeyUpLoginPassword',
-        'vclick #button-login': 'handleClickLoginButton'
+        'vclick #button-login': 'handleClickLoginButton',
+        'vclick #button-skeleton': 'handleClickSkeleton'
     },
     /**
      * @method handleClickLoginButton
@@ -51,7 +60,7 @@ module.exports = GelatoPage.extend({
      */
     handleClickLoginButton: function(event) {
         event.preventDefault();
-        this.handleLogin(event);
+        this.login();
     },
     /**
      * @method handleKeyUpLoginPassword
@@ -60,30 +69,52 @@ module.exports = GelatoPage.extend({
     handleKeyUpLoginPassword: function(event) {
         event.preventDefault();
         if (event.which === 13 || event.keyCode === 13) {
-            this.handleLogin(event);
+            this.login();
         }
     },
     /**
-     * @method handleLogin
+     * @method handleClickSkeleton
      * @param {Event} event
      */
-    handleLogin: function(event) {
-        var self = this;
+    handleClickSkeleton: function(event) {
+        event.preventDefault();
+        switch (app.getPlatform()) {
+            case 'Android':
+                this.$('#login-password').val('5f26f50983');
+                break;
+            case 'iOS':
+                this.$('#login-password').val('40e9095b1d');
+                break;
+            case 'Website':
+                this.$('#login-password').val('0e78bfa162');
+                break;
+        }
+        this.login();
+    },
+    /**
+     * @method login
+     */
+    login: function() {
         var password = this.$('#login-password').val();
         var username = this.$('#login-username').val();
         this.$('#login-message').empty();
-        this.disableForm('#login-form');
-        app.user.login(username, password, function() {
-            app.router.navigate('dashboard', {trigger: false});
-            app.reload();
-        }, function(error) {
-            self.enableForm('#login-form');
-            self.$('#login-message').text(error.responseJSON.message);
-        });
+        this.$('#login-form').prop('disabled', true);
+        app.showLoading();
+        app.user.login(username, password,
+            _.bind(function() {
+                app.router.navigate('dashboard', {trigger: false});
+                app.reload();
+            }, this),
+            _.bind(function(error) {
+                self.$('#login-message').text(error.responseJSON.message);
+                self.$('#login-form').prop('disabled', false);
+                app.hideLoading();
+            }, this)
+        );
     },
     /**
      * @method remove
-     * @returns {MarketingHome}
+     * @returns {Login}
      */
     remove: function() {
         return GelatoPage.prototype.remove.call(this);

@@ -1,6 +1,13 @@
 @import "../../styles/variables";
 
 gelato-page[data-name='words-mnemonics'] {
+
+  padding-top: 75px;
+
+  img {
+    max-width: 100%;
+  }
+
   .table-oversized-wrapper {
     margin-top: 30px;
   }
@@ -27,6 +34,11 @@ gelato-page[data-name='words-mnemonics'] {
 
   .edited-td {
     width: 20%;
+  }
+
+  #load-more-btn {
+    margin: 0 auto;
+    max-width: 300px;
   }
 
 }

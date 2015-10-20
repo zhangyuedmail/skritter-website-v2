@@ -1,0 +1,60 @@
+bootstrap-dialog(data-name='cancel-subscription')
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          a.glyphicon.glyphicon-remove-circle.pull-right(data-dismiss='modal')
+          .modal-title Cancel subscription
+        
+        .modal-body
+          #page-1
+            p
+              | If you need to temporarily pause your subscription,
+              a.spl.spr#go-on-vacation-link go on vacation
+              | instead.
+            p
+              | Cancelling your subscription means:
+            ul
+              li You can review existing words but cannot add new words.
+              li Your subscription will continue until the end of your
+                | current billing period.
+                
+            .text-center
+              button#continue-cancel-btn.btn.btn-primary.btn-fixed
+                | Cancel subscription
+        
+          #page-2.hide
+            p
+              | Please take a moment to tell us your thoughts!
+            p
+              | We want to make Skritter the best it can be, so we'd very
+              | much appriate it if you told us why you are conceling so
+              | we can improve this service.
+              
+            #reasons-form.form
+              if view.reasons.state === 'fetching'
+                .text-center
+                  i.fa.fa-3x.fa-spinner.fa-pulse
+              else
+                for reason in view.reasons.models
+                  .radio
+                    label
+                      input(type="radio" name="reason" value=reason.id, checked=reason.get('isDefault'))
+                      | #{reason.get('text')}
+              
+              .form-group
+                label Notes
+                textarea#notes-textarea.form-control
+                
+              .checkbox
+                label
+                  input(type="checkbox" name="receive-newsletters")
+                  | Keep getting newsletters
+              
+              .text-center
+                button#submit-btn.btn.btn-lg.btn-success
+                  span Submit
+                  i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                  
+          
+        

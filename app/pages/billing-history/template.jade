@@ -1,6 +1,8 @@
-- var now = new Date().getTime();
-
 gelato-page(data-name='billing-history')
+  - var now = new Date().getTime();
+
+  #navbar-container
+
   .container
     .content-block
       .row
@@ -35,7 +37,6 @@ gelato-page(data-name='billing-history')
             if view.payments.state === 'fetching'
               p.text-center
                 i.fa.fa-3x.fa-spinner.fa-pulse
-                
             else if view.payments.cursor
               button#load-more-btn.btn.btn-primary.btn-block Load More
                 

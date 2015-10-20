@@ -1,8 +1,4 @@
 var GelatoPage = require('gelato/page');
-var Items = require('collections/items');
-var Prompt = require('components/prompt/view');
-var StudyToolbar = require('components/study-toolbar/view');
-var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class Study
@@ -14,16 +10,21 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this._listId = null;
-        this._sectionId = null;
         this.counter = 1;
-        this.items = new Items();
-        this.navbar = new DefaultNavbar();
-        this.prompt = new Prompt();
-        this.toolbar = new StudyToolbar();
+        this.items = this.createCollection('collections/items');
+        this.navbar = this.createComponent('navbars/default');
+        this.prompt = this.createComponent('components/prompt');
+        this.toolbar = this.createComponent('components/study-toolbar', {page: this});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+        this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
+        this.listenTo(this.prompt, 'review:previous', this.handlePromptReviewPrevious);
+        this.listenTo(this.prompt, 'review:start', this.handlePromptReviewStart);
+        this.listenTo(this.prompt, 'review:stop', this.handlePromptReviewStop);
         this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
+        this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
+        this.listenTo(this.toolbar, 'save:study-settings', this.handleToolbarSaveStudySettings);
+        this.load();
     },
     /**
      * @property events
@@ -51,7 +52,7 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         this.prompt.setElement('#prompt-container').render();
         this.toolbar.setElement('#toolbar-container').render();
         return this;
@@ -61,6 +62,7 @@ module.exports = GelatoPage.extend({
      * @param {PromptReviews} reviews
      */
     handlePromptNext: function(reviews) {
+        this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
         this.items.addReviews(reviews.getItemReviews());
         this.items.reviews.save();
         this.counter++;
@@ -74,6 +76,30 @@ module.exports = GelatoPage.extend({
         this.previous();
     },
     /**
+     * @method handlePromptReviewNext
+     * @param {PromptReviews} reviews
+     */
+    handlePromptReviewNext: function(reviews) {},
+    /**
+     * @method handlePromptPrevious
+     * @param {PromptReviews} reviews
+     */
+    handlePromptReviewPrevious: function(reviews) {},
+    /**
+     * @method handlePromptPrevious
+     * @param {PromptReviews} reviews
+     */
+    handlePromptReviewStart: function(reviews) {
+        //this.toolbar.timer.start();
+    },
+    /**
+     * @method handlePromptPrevious
+     * @param {PromptReviews} reviews
+     */
+    handlePromptReviewStop: function(reviews) {
+        //this.toolbar.timer.stop();
+    },
+    /**
      * @method handlePromptSkip
      * @param {PromptReviews} reviews
      */
@@ -81,79 +107,90 @@ module.exports = GelatoPage.extend({
         this.next();
     },
     /**
-     * @method load
-     * @param {String} [listId]
-     * @param {String} [sectionId]
+     * @method handleToolbarAddItem
      */
-    load: function(listId, sectionId) {
-        //TODO: support list and section parameters
-        this._listId = listId;
-        this._sectionid = sectionId;
+    handleToolbarAddItem: function() {
+        this.items.addItems(
+            null,
+            function(result) {
+                var added = result.numVocabsAdded;
+                $.notify(
+                    {
+                        title: 'Update',
+                        message: added + (added > 1 ? ' words have ' : ' word has ')  + 'been added.'
+                    },
+                    {
+                        type: 'pastel-info',
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 5000,
+                        icon_type: 'class'
+                    }
+                );
+            }
+        );
+    },
+    /**
+     * @method handleToolbarSaveStudySettings
+     * @param {Object} settings
+     */
+    handleToolbarSaveStudySettings: function(settings) {
+        this.prompt.remove();
+        this.prompt = this.createComponent('components/prompt');
+        this.prompt.setElement('#prompt-container').render();
+        this.app.user.set(settings, {merge: true}).cache();
+        this.items = this.createCollection('collections/items');
+        this.items.fetchNext(
+            {listId: this.listId},
+            _.bind(function() {
+                this.next();
+            }, this)
+        );
+    },
+    /**
+     * @method load
+     */
+    load: function() {
         async.waterfall([
             _.bind(function(callback) {
-                this.items.fetch({
-                    data: {
-                        include_contained: true,
-                        include_decomps: true,
-                        include_sentences: true,
-                        include_strokes: true,
-                        include_vocabs: true,
-                        limit: 10,
-                        parts: app.user.getStudyParts().join(','),
-                        sort: 'next',
-                        styles: app.user.getStudyStyles().join(',')
+                this.items.fetchNext(
+                    null,
+                    function() {
+                        callback();
                     },
-                    merge: false,
-                    remove: false,
-                    error: function(items, error) {
-                        callback(error);
-                    },
-                    success: function(items) {
-                        callback(null, items);
+                    function() {
+                        callback();
                     }
-                });
+                );
             }, this)
         ], _.bind(function(error, items) {
             if (error) {
                 console.error('ITEM LOAD ERROR:', error, items);
             } else {
+                this.toolbar.render();
+                this.items.fetchNext({cursor: this.items.cursor});
                 this.next();
             }
-        }, this))
-    },
-    /**
-     * @method loadMore
-     */
-    loadMore: function() {
-        this.items.fetch({
-            data: {
-                include_contained: true,
-                include_decomps: true,
-                include_sentences: true,
-                include_strokes: true,
-                include_vocabs: true,
-                limit: 10,
-                parts: app.user.getStudyParts().join(','),
-                sort: 'next',
-                styles: app.user.getStudyStyles().join(',')
-            },
-            merge: false,
-            remove: false
-        });
+        }, this));
     },
     /**
      * @method next
      */
     next: function() {
         var nextItem = this.items.getNext();
-        if (nextItem) {
-            this.prompt.set(nextItem.getPromptReviews());
-        } else {
-            console.error('ITEM LOAD ERROR:', 'no items');
+        if (this.prompt) {
+            if (nextItem) {
+                this.toolbar.timer.reset();
+                this.prompt.set(nextItem.getPromptReviews());
+            } else {
+                console.error('ITEM LOAD ERROR:', 'no items');
+            }
         }
-        if (this.counter % 10 === 0) {
+        if (!this.sectionId && this.counter % 10 === 0) {
             console.log('LOADING MORE ITEMS:', 10);
-            this.loadMore();
+            this.items.fetchNext();
         }
     },
     /**

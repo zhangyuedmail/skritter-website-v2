@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        this.dueCount = 0;
+        this.dueCount = null;
         this.updateDueCount();
     },
     /**

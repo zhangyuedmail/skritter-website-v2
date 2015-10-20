@@ -25,16 +25,17 @@ module.exports = SkritterModel.extend({
      * @method getStatus
      */
     getStatus: function() {
-        if (this.get('subscribed') === 'gplay') {
+        var subscribed = this.get('subscribed');
+        if (subscribed === 'gplay') {
             return 'Subscribed through Google Play';
         }
-        if (this.get('subscribed') === 'ios') {
+        if (subscribed === 'ios') {
             return 'Subscribed through Apple';
         }
-        if (this.get('subscribed') === 'paypal') {
+        if (subscribed === 'paypal') {
             return 'Subscribed through Paypal';
         }
-        if (this.get('subscribed') === 'ios') {
+        if (subscribed === 'stripe' || subscribed === 'anet') {
             return 'Subscribed through Skritter Website';
         }
         if (!this.get('expires')) {

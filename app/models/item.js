@@ -8,6 +8,11 @@ var PromptReview = require('models/prompt-review');
  */
 module.exports = SkritterModel.extend({
     /**
+     * @property consecutiveWrong
+     * @type {Number}
+     */
+    consecutiveWrong: 0,
+    /**
      * @property idAttribute
      * @type {String}
      */
@@ -65,7 +70,16 @@ module.exports = SkritterModel.extend({
         if (vocab) {
             var containedVocabIds = vocab.get('containedVocabIds') || [];
             for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                containedVocabs.push(this.collection.vocabs.get(containedVocabIds[i]));
+                var containedVocab = this.collection.vocabs.get(containedVocabIds[i]);
+                if (this.isJapanese()) {
+                    if (app.user.get('studyKana')) {
+                        containedVocabs.push(containedVocab);
+                    } else if (!vocab.isKana()) {
+                        containedVocabs.push(containedVocab);
+                    }
+                } else {
+                    containedVocabs.push(containedVocab);
+                }
             }
         }
         return containedVocabs;
@@ -102,6 +116,7 @@ module.exports = SkritterModel.extend({
         for (var i = 0, length = vocabs.length; i < length; i++) {
             var review = new PromptReview();
             review.set('id', [now, i, vocabs[i].id].join('_'));
+            review.set('kana', vocabs[i].isKana());
             review.character = characters[i];
             review.item = items[i];
             review.vocab = vocabs[i];
@@ -118,12 +133,12 @@ module.exports = SkritterModel.extend({
      * @returns {Number}
      */
     getReadiness: function() {
-        var now = this.collection._sorted || moment().unix();
+        var now = this.collection.sorted || moment().unix();
         var itemLast = this.get('last');
         var itemNext = this.get('next');
         var actualAgo = now - itemLast;
         var scheduledAgo = itemNext - itemLast;
-        return this.isActive() ? (itemLast ? actualAgo / scheduledAgo : 9999) : Number.NEGATIVE_INFINITY;
+        return itemLast ? actualAgo / scheduledAgo : Number.POSITIVE_INFINITY;
     },
     /**
      * @method getVariation
@@ -151,29 +166,24 @@ module.exports = SkritterModel.extend({
         var reviewTraditional = app.user.get('reviewTraditional');
         for (var i = 0, length = vocabIds.length; i < length; i++) {
             var vocab = this.collection.vocabs.get(vocabIds[i]);
-            var vocabStyle = vocab.get('style');
-            if (vocab.isChinese()) {
-                if (reviewSimplified && vocabStyle === 'simp') {
-                    vocabs.push(vocab);
-                } else if (reviewTraditional && vocabStyle === 'trad') {
-                    vocabs.push(vocab);
-                } else if (vocabStyle === 'both') {
-                    vocabs.push(vocab);
-                } else if (vocabStyle === 'none') {
+            if (vocab) {
+                var vocabStyle = vocab.get('style');
+                if (vocab.isChinese()) {
+                    if (reviewSimplified && vocabStyle === 'simp') {
+                        vocabs.push(vocab);
+                    } else if (reviewTraditional && vocabStyle === 'trad') {
+                        vocabs.push(vocab);
+                    } else if (vocabStyle === 'both') {
+                        vocabs.push(vocab);
+                    } else if (vocabStyle === 'none') {
+                        vocabs.push(vocab);
+                    }
+                } else {
                     vocabs.push(vocab);
                 }
-            } else {
-                vocabs.push(vocab);
             }
         }
         return vocabs;
-    },
-    /**
-     * @method isActive
-     * @returns {Boolean}
-     */
-    isActive: function() {
-        return this.get('vocabIds').length && !this.getVocab().isBanned();
     },
     /**
      * @method isChinese
@@ -188,6 +198,13 @@ module.exports = SkritterModel.extend({
      */
     isJapanese: function() {
         return this.get('lang') === 'ja';
+    },
+    /**
+     * @method isLeech
+     * @returns {Boolean}
+     */
+    isLeech: function() {
+        return this.consecutiveWrong >= 2;
     },
     /**
      * @method isNew

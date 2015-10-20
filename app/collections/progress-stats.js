@@ -118,7 +118,7 @@ module.exports = SkritterCollection.extend({
     fetchToday: function(callbackSuccess, callbackError) {
         this.fetch({
             data: {
-                start: moment().format('YYYY-MM-DD')
+                start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD')
             },
             success: _.bind(function(model) {
                 if (typeof callbackSuccess === 'function') {
@@ -171,7 +171,7 @@ module.exports = SkritterCollection.extend({
      * @returns {Number}
      */
     getDailyTimeStudied: function() {
-        var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
+        var today = moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD');
         var stat = this.get(today);
         return stat ? stat.get('timeStudied').day : 0;
     },

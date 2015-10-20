@@ -1,0 +1,7 @@
+gelato-component(data-name='prompt-timer')
+  - var time = view.time
+
+  if time
+    span= app.fn.convertTimeToClock(time)
+  else
+    span 00:00

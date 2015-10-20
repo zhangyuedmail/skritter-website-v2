@@ -1,5 +1,7 @@
 gelato-page(data-name='home')
 
+  #navbar-container
+
   #hero-slider.carousel.slide(data-ride="carousel", data-interval="false")
     .carousel-header Chinese & Japanese characters, made fun
     //TODO: enable indicators and navigation with more hero images
@@ -11,12 +13,10 @@ gelato-page(data-name='home')
         img(src="/media/images/home_hero1.png", alt="")
       .item
         img(src="/media/images/home_hero2.png", alt="")
-    a.left.carousel-control(href="#hero-slider", role="button", data-slide="prev")
-      span.glyphicon.glyphicon-chevron-left(aria-hidden="true")
-      span.sr-only Previous
-    a.right.carousel-control(href="#hero-slider", role="button", data-slide="next")
-      span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
-      span.sr-only Next
+    a.left.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="prev")
+      span.glyphicon.glyphicon-chevron-left
+    a.right.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="next")
+      span.glyphicon.glyphicon-chevron-right
 
   section#section-features.light
     .container
@@ -91,7 +91,7 @@ gelato-page(data-name='home')
             .discount
             .price $14.99
             .monthly per month
-            button.subscribe.btn.btn-fixed.btn-default Subscribe
+            a.subscribe.btn.btn-fixed.btn-default(href='/signup') Subscribe
             .trial Includes 7-day free trial
         .col-md-3
           .plan.border-right
@@ -99,7 +99,7 @@ gelato-page(data-name='home')
             .discount
             .price $59.99
             .monthly $10.00 / month
-            button.subscribe.btn.btn-fixed.btn-default Subscribe
+            a.subscribe.btn.btn-fixed.btn-default(href='/signup') Subscribe
             .trial Includes 7-day free trial
         .col-md-3
           .plan.border-right
@@ -108,7 +108,7 @@ gelato-page(data-name='home')
             .discount
             .price $99.99
             .monthly $8.33 / month
-            button.subscribe.btn.btn-fixed.btn-success Subscribe
+            a.subscribe.btn.btn-fixed.btn-success(href='/signup') Subscribe
             .trial Includes 7-day free trial
         .col-md-3
           .plan
@@ -117,7 +117,7 @@ gelato-page(data-name='home')
             .discount
             .price $179.99
             .monthly $7.50 / month
-            button.subscribe.btn.btn-fixed.btn-default Subscribe
+            a.subscribe.btn.btn-fixed.btn-default(href='/signup') Subscribe
             .trial Includes 7-day free trial
       .institutions
         | Buying for a school? Check out our
@@ -128,6 +128,6 @@ gelato-page(data-name='home')
   section#section-action.dark
     .container.text-center
       .header Ready to start learning?
-      button.btn.btn-success Start your 7-day free trial
+      a.btn.btn-success(href='/signup') Start your 7-day free trial
 
   #footer-container

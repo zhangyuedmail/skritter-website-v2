@@ -1,5 +1,15 @@
-gelato-navbar {
+bootstrap-navbar {
   background-color: #262b30;
   border-color: #262b30;
   box-shadow: 0 1px 10px rgba(38, 43, 48, 0.15);
+  .container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  @media (max-width: 991px) {
+    .container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
 }

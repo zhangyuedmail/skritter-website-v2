@@ -18,6 +18,16 @@ module.exports = GelatoCollection.extend({
      */
     item: null,
     /**
+     * @property model
+     * @type {PromptReview}
+     */
+    model: PromptReview,
+    /**
+     * @property part
+     * @type {String}
+     */
+    part: null,
+    /**
      * @property position
      * @type {Number}
      */
@@ -27,11 +37,6 @@ module.exports = GelatoCollection.extend({
      * @type {Vocab}
      */
     vocab: null,
-    /**
-     * @property model
-     * @type {PromptReview}
-     */
-    model: PromptReview,
     /**
      * @method current
      * @returns {PromptReview}
@@ -116,7 +121,9 @@ module.exports = GelatoCollection.extend({
      * @returns {Array}
      */
     getChildItemReviews: function() {
-        return this.map(function(model) {
+        return this.filter(function(review) {
+            return !review.get('kana');
+        }).map(function(model) {
             return model.getItemReview();
         });
     },
@@ -130,6 +137,13 @@ module.exports = GelatoCollection.extend({
             reviews = reviews.concat(this.getChildItemReviews());
         }
         return {id: this.group, data: reviews};
+    },
+    /**
+     * @method getLimit
+     * @returns {Number}
+     */
+    getLimit: function() {
+        return this.part === 'tone' ? 15000 : 30000;
     },
     /**
      * @method isComplete
@@ -151,6 +165,16 @@ module.exports = GelatoCollection.extend({
      */
     isLast: function() {
         return this.position >= this.length;
+    },
+    /**
+     * @method isTeachable
+     * @returns {Boolean}
+     */
+    isTeachable: function() {
+        if (app.user.get('teachingMode')) {
+            return this.item.isNew() || this.item.isLeech();
+        }
+        return false;
     },
     /**
      * @method next

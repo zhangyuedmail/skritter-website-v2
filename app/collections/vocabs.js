@@ -14,8 +14,8 @@ module.exports = SkritterCollection.extend({
    * @constructor
    */
   initialize: function() {
-    this._cursor = null;
-    this._cursorContaining = null;
+    this.cursor = null;
+    this.cursorContaining = null;
     this.decomps = new Decomps();
     this.sentences = new Sentences();
     this.strokes = new Strokes();
@@ -36,8 +36,8 @@ module.exports = SkritterCollection.extend({
    * @returns Array
    */
   parse: function(response) {
-    this._cursor = response.cursor;
-    this._cursorContaining = response.containingCursor;
+    this.cursor = response.cursor;
+    this.cursorContaining = response.containingCursor;
     this.decomps.add(response.Decomps);
     this.sentences.add(response.Sentences);
     this.strokes.add(response.Strokes);

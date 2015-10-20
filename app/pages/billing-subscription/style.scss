@@ -1,6 +1,9 @@
 @import "../../styles/variables";
 
 gelato-page[data-name='billing-subscription'] {
+
+  padding-top: 75px;
+
   label.control-label {
     text-align: left;
   }
@@ -11,5 +14,21 @@ gelato-page[data-name='billing-subscription'] {
 
   #cancel-vacation-wrapper {
     margin-left: 20px;
+  }
+
+  .alert p {
+    margin: 10px 0;
+  }
+
+  .spoof-button-area {
+    margin: 0 auto 0 auto;
+    width: 180px;
+    .list-group-item {
+      padding: 5px 10px;
+    }
+  }
+
+  #policies {
+    margin: 40px 0;
   }
 }

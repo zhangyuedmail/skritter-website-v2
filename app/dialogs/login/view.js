@@ -1,4 +1,4 @@
-var GelatoDialog = require('gelato/dialog');
+var GelatoDialog = require('gelato/bootstrap/dialog');
 
 /**
  * @class LoginDialog
@@ -35,13 +35,13 @@ module.exports = GelatoDialog.extend({
         var password = this.$('#login-password').val();
         var username = this.$('#login-username').val();
         this.$('#login-message').empty();
-        this.disableForm('#login-form');
+        this.$('#login-form').prop('disabled', true);
         app.user.login(username, password, function() {
             app.router.navigate('dashboard', {trigger: false});
             app.reload();
         }, function(error) {
-            self.enableForm('#login-form');
             self.$('#login-message').text(error.message);
+            self.$('#login-form').prop('disabled', false);
         });
     }
 });

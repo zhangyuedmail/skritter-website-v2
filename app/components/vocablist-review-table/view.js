@@ -45,8 +45,7 @@ module.exports = GelatoComponent.extend({
     handleClickRestartAddingLink: function(event) {
         var listID = $(event.target).closest('.row').data('list-id');
         var list = this.vocablists.get(listID.toString());
-        list.set('studyingMode', 'adding');
-        list.save();
+        list.save({'studyingMode': 'adding'}, {patch: true});
         this.render();
     },
     /**

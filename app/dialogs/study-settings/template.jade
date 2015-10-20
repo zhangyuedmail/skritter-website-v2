@@ -1,9 +1,47 @@
-gelato-dialog(data-name='study-settings')
+bootstrap-dialog(data-name='study-settings')
+
   .modal.fade(tabindex='-1', role='dialog')
     .modal-dialog
       .modal-content
+
         #button-close.fa.fa-close
-        .modal-body.text-center
-          h3 {Study Settings}
-          //.text-center
-            button#button-save.btn.btn-primary(type='button') Save
+
+        .modal-body
+
+          .title Study Settings
+
+          form.form-horizontal
+            .form-group
+              label.col-sm-3.control-label(for="field-parts") Filter parts
+              .col-sm-9#field-parts
+                label.checkbox-inline
+                  input(type="checkbox", name="parts", value="rune", checked=user.hasFilteredPart('rune'))
+                  | Writing
+                if (app.getLanguage() === 'zh')
+                  label.checkbox-inline
+                    input(type="checkbox", name="parts", value="tone", checked=user.hasFilteredPart('tone'))
+                    | Tone
+                label.checkbox-inline
+                  input(type="checkbox", name="parts", value="rdng", checked=user.hasFilteredPart('rdng'))
+                  | Reading
+                label.checkbox-inline
+                  input(type="checkbox", name="parts", value="defn", checked=user.hasFilteredPart('defn'))
+                  | Definition
+            .form-group
+              label.col-sm-3.control-label(for="field-hide-reading") Hide reading
+              .col-sm-9#field-hide-reading
+                label.checkbox-inline
+                  input(type="checkbox", checked=user.get('hideReading'))
+            .form-group
+              label.col-sm-3.control-label(for="field-squigs") Raw squigs
+              .col-sm-9#field-squigs
+                label.checkbox-inline
+                  input(type="checkbox", checked=user.get('squigs'))
+            .form-group
+              label.col-sm-3.control-label(for="field-teaching-mode") Teaching mode
+              .col-sm-9#field-teaching-mode
+                label.checkbox-inline
+                  input(type="checkbox", checked=user.get('teachingMode'))
+
+          .text-right
+            button#button-save.btn.btn-fixed.btn-primary(type='button') Save

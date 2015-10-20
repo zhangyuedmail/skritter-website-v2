@@ -82,8 +82,7 @@ module.exports = GelatoComponent.extend({
         var listId = $(event.currentTarget).data('vocablist-id');
         var vocablist = this.vocablists.get(listId);
         if (vocablist.get('studyingMode') === 'not studying') {
-            vocablist.set('studyingMode', 'adding');
-            vocablist.save();
+            vocablist.save({'studyingMode': 'adding'}, {patch: true});
             this.render();
         }
     },

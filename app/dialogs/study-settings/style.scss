@@ -1,6 +1,10 @@
 @import "../../styles/variables";
 
-gelato-dialog[data-name="study-settings"] {
+bootstrap-dialog[data-name="study-settings"] {
+
+  .modal-body {
+    .title { font-size: 22px; }
+  }
 
   #button-close {
     cursor: pointer;

@@ -3,7 +3,10 @@ gelato-component(data-name='dashboard-status')
     .col-xs-12.text-center
       a(href="/account")= user.get('name')
       | , you have &nbsp;
-      span= view.dueCount
+      if view.dueCount === null
+        | -
+      else
+        span= view.dueCount
       | &nbsp; items ready to review.
   .row
     .col-xs-12.text-center

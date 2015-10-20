@@ -1,7 +1,5 @@
 var GelatoPage = require('gelato/page');
 var MarketingFooter = require('components/marketing-footer/view');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingNavbar = require('navbars/marketing/view');
 
 /**
  * @class Contact
@@ -14,11 +12,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.footer = new MarketingFooter();
-        if (app.user.isLoggedIn()) {
-            this.navbar = new DefaultNavbar();
-        } else {
-            this.navbar = new MarketingNavbar();
-        }
+        this.navbar = this.createComponent('navbars/default');
     },
     /**
      * @property bodyClass
@@ -36,7 +30,7 @@ module.exports = GelatoPage.extend({
      * @property title
      * @type {String}
      */
-    title: 'Contact- Skritter',
+    title: 'Contact - Skritter',
     /**
      * @property template
      * @type {Function}
@@ -53,7 +47,7 @@ module.exports = GelatoPage.extend({
         }
         this.footer.setElement('#footer-container');
         this.footer.render();
-        this.navbar.render();
+        this.navbar.setElement('#navbar-container').render();
         return this;
     },
     /**

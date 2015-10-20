@@ -1,17 +1,17 @@
 @import "../../styles/variables";
 
-gelato-dialog[data-name="goal-settings"] {
+bootstrap-dialog[data-name="goal-settings"] {
 
   form { margin-left: 25px; }
   label {
     color: #7d8288;
-    font-family: $font-muli;
+    font-family: $font-ubuntu;
     font-size: 16px;
     font-weight: 300;
   }
   p {
     color: #7d8288;
-    font-family: $font-muli;
+    font-family: $font-ubuntu;
     font-size: 24px;
     font-weight: 300;
   }
@@ -27,7 +27,7 @@ gelato-dialog[data-name="goal-settings"] {
     border: none;
     border-bottom: 1px solid #7d8288;
     color: #7d8288;
-    font-family: $font-muli;
+    font-family: $font-ubuntu;
     font-size: 32px;
     font-weight: 300;
     height: 60px;

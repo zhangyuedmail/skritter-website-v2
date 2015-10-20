@@ -1,0 +1,22 @@
+gelato-component(data-name='prompt-vocab-characters')
+  - var prompt = view.prompt;
+  - var reviews = view.prompt.reviews;
+
+  if reviews
+    - var vocabs = reviews.vocab.getContained();
+
+    if vocabs.length > 1
+
+      label Characters
+
+      div.value
+        if view.reveal || reviews.isComplete()
+            for vocab in vocabs
+              .child
+                span.writing= vocab.get('writing')
+                | &nbsp;
+                span.reading= app.isChinese() ? app.fn.pinyin.toTone(vocab.get('reading')) : vocab.get('reading')
+                | &nbsp;
+                span.definition= vocab.getDefinition()
+        else
+            button#show-characters.btn.btn-default show

@@ -1,11 +1,46 @@
-- var vacation = view.subscription.get('vacation');
-
 gelato-page(data-name='billing-subscription')
+  - var vacation = view.subscription.get('vacation');
+  - var subscribed = view.subscription.get('subscribed');
+  - var expires = view.subscription.get('expires');
+
+  #navbar-container
+
   .container
     .content-block
       .row
         .col-md-3.sidebar
           #settings-sidebar-container
+          
+          if user.get('isAdmin')
+            .spoof-button-area
+              
+              h4 Spoof
+              h5 Subscription
+              .list-group
+                button.list-group-item(data-subscribed='off') None
+                button.list-group-item(data-subscribed='ios') iTunes
+                button.list-group-item(data-subscribed='gplay') Google Play
+                button.list-group-item(data-subscribed='paypal') Paypal
+                button.list-group-item(data-subscribed='stripe') Stripe
+                button.list-group-item(data-subscribed='anet') Authorize.NET
+                
+              h5 Client
+              .list-group
+                button.list-group-item(data-client='site') Website
+                button.list-group-item(data-client='android') Android
+                button.list-group-item(data-client='ios') iOS
+                
+              h5 Discount
+              .list-group
+                button.list-group-item(data-discount='on') On
+                button.list-group-item(data-discount='off') Off
+              
+              h5 Vacation
+              .list-group
+                button.list-group-item(data-vacation='on') On
+                button.list-group-item(data-vacation='off') Off
+
+                
           
         .col-md-9.main-content
           .title Subscription
@@ -25,7 +60,6 @@ gelato-page(data-name='billing-subscription')
                 label.control-label.col-sm-3 Expires
                 .col-sm-9
                   p.form-control-static
-                    - var expires = view.subscription.get('expires');
                     if expires
                       | #{moment(expires).format('LL')}
                       if vacation
@@ -40,7 +74,7 @@ gelato-page(data-name='billing-subscription')
               - var couponUsed = view.coupon.wasUsed;
               .form-group.form-group-lg(class=couponError ? 'has-error' : couponUsed ? 'has-success' : '' )
                 label.control-label.col-sm-3 Coupon code
-                .col-sm-4
+                .col-sm-5
                   input#code-input.form-control(value=view.coupon.get('code'))
                   if couponError
                     .help-block= couponError
@@ -54,18 +88,297 @@ gelato-page(data-name='billing-subscription')
                     button.btn.btn-fixed.btn-success(disabled=true)
                       i.fa.fa-1x.fa-spinner.fa-pulse
 
-              .form-group.form-group-lg
-                label.control-label.col-sm-3 Vacation
-                .col-sm-9
-                  p.form-control-static
-                    if vacation
-                      span= moment(vacation.begin).format('dddd, MMMM Do')
-                      span.spr.spl -
-                      span.spr= moment(vacation.end).format('dddd, MMMM Do')
-                      span#cancel-vacation-wrapper
-                        a#cancel-vacation-link Cancel
-                        i#cancel-vacation-spinner.fa.fa-1x.fa-spinner.fa-pulse.hide
-                    else
-                      a#go-on-vacation-link Go on vacation
+              if subscribed === 'stripe' || subscribed === false
+                .form-group.form-group-lg
+                  label.control-label.col-sm-3 Vacation
+                  .col-sm-9
+                    p.form-control-static
+                      if vacation
+                        span= moment(vacation.begin).format('dddd, MMMM Do')
+                        span.spr.spl -
+                        span.spr= moment(vacation.end).format('dddd, MMMM Do')
+                        span#cancel-vacation-wrapper
+                          a#cancel-vacation-link Cancel
+                          i#cancel-vacation-spinner.fa.fa-1x.fa-spinner.fa-pulse.hide
+                      else
+                        a#go-on-vacation-link Go on vacation
                       
+              hr
+              
+              
+              if !app.isIOS() && subscribed === 'ios'
+                // - SUBSCRIBED THROUGH IOS, NOT ON IOS APP
+                .title Edit Subscription
+                .alert.alert-info
+                  p
+                    | Your subscription is controlled through Apple.
+                    | To cancel or get more info about your subscription,
+                    | please go to iTunes.
+
+                  p 
+                    | If you would like to change your payment method,
+                    | first you should unsubscribe from your Apple Skritter
+                    | subscription. Otherwise you may be erroneously billed twice.
+                  
+                  button.btn.btn-block.btn-primary#unsubscribe-itunes-btn
+                    span I have unsubscribed through iTunes
+                    i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                    
+                    
+                //- TODO: ON IOS, SUBSCRIBED THROUGH IOS OR UNSUBSCRIBED
+                      
+                    
+              else if subscribed === 'paypal'
+                //- SUBSCRIBED THROUGH PAYPAL
+
+                .title Edit Subscription
+                .alert.alert-info
+                  p
+                    | Your subscription is controlled through Paypal.
+                    | To cancel or get more info about your subscription,
+                    | please go to
+                    a.spl(href="https://www.paypal.com/" target="_blank")
+                      | the Paypal website
+                    | .
+
+                  p 
+                    | If you would like to change your payment method,
+                    | first you should unsubscribe from your Paypal Skritter
+                    | subscription. Otherwise you may be erroneously billed twice.
+                    
+                    
+              else if subscribed === 'anet'
+                // - SUBSCRIBED THROUGH AUTHORIZE.NET
+                
+                // TODO: Remove once migrated away from Authorize.NET
+                .title Edit Subscription
+                .alert.alert-info
+                  | Please go to the
+                  a.spl.spr(href="http://www.skritter.com/account") legacy site
+                  | to cancel or change your subscription.
+                  
+                  
+              else if !expires
+                // - FREE ACCOUNT, NOT SUBSCRIBED
+              
+                // show nothing
+
+              
+              else if app.isWebsite() && _.contains([false, 'stripe'], subscribed)
+                // - ON WEBSITE, NOT SUBSCRIBED OR SUBSCRIBED TO STRIPE
+                if subscribed === 'stripe'
+                  .title Edit subscription
+                if !subscribed
+                  .title Add subscription
+              
+                .form-group.form-group-lg
+                  label.control-label.col-sm-3 Payment method
+                  .col-sm-9
+                    label.radio-inline
+                      input(type="radio", name="payment-method", 
+                            value="stripe", checked=true)
+                      | Credit card
+                    label.radio-inline
+                      input(type="radio", name="payment-method", 
+                            value="paypal", disabled=subscribed==='stripe')
+                      span(class=subscribed ? 'text-mutedI' : '') Paypal
+                    if subscribed === 'stripe'
+                      .help-block 
+                        | Cancel your current subscription in order to subscribe
+                        | through Paypal
+                      
+                .form-group.form-group-lg.credit-card-form-group
+                  label.control-label.col-sm-3
+                    if subscribed === 'stripe'
+                      | Next payment
+                    if !subscribed
+                      | First payment
+                  .col-sm-9
+                    p.form-control-static
+                      if new Date(expires).getTime() > new Date().getTime()
+                         | #{moment(expires).format('LL')}
+                      else
+                        if subscribed === 'stripe'
+                          | Soon
+                        if !subscribed
+                          | Immediately
+                          
+                .form-group.form-group-lg.paypal-form-group.hide
+                  label.control-label.col-sm-3 First payment
+                  .col-sm-9
+                    p.form-control-static Immediately
+                          
+                .form-group.form-group-lg.credit-card-form-group
+                  label.control-label.col-sm-3 Plan
+                  .col-sm-6
+                    select#plan-select.form-control
+                      - var currentPlan = _.result(view.subscription, 'attributes.stripe.plan');
+                      for plan in view.subscription.get('availablePlans')
+                        option(value=plan.key, selected=plan.key===currentPlan)
+                          | #{plan.fullName}
+                    - var discount = view.subscription.get('discount')
+                    if discount
+                      .help-block 
+                        | Discount available until
+                        span.spl= moment(discount.expires).format('LL')
+                        
+                .form-group.form-group-lg.paypal-form-group.hide
+                  label.control-label.col-sm-3 Plan
+                  .col-sm-6
+                    select#paypal-plan-select.form-control
+                      for plan in view.paypalPlans
+                        option(value=plan.key)
+                          | #{plan.fullName}
+                          
+                .form-group.form-group-lg.credit-card-form-group
+                  label.control-label.col-sm-3 Card number
+                  .col-sm-6
+                    input#card-number-input.form-control
+                    if subscribed === 'stripe'
+                      .help-block
+                        - var cn = view.subscription.get('stripe').cardNumber;
+                        | Currently using card 
+                        strong.spl x#{cn}
+                        | . Leave this field blank to keep the same card.
+                    
+                .form-group.form-group-lg.credit-card-form-group
+                  label.control-label.col-sm-3 Expiration date
+                  .col-sm-4
+                    select#card-month-select.form-control
+                      option(value='01') 01 - January
+                      option(value='02') 02 - February
+                      option(value='03') 03 - March
+                      option(value='04') 04 - April
+                      option(value='05') 05 - May
+                      option(value='06') 06 - June
+                      option(value='07') 07 - July
+                      option(value='08') 08 - August
+                      option(value='09') 09 - September
+                      option(value='10') 10 - October
+                      option(value='11') 11 - November
+                      option(value='12') 12 - December
+                  .col-sm-2
+                    select#card-year-select.form-control
+                      - var year = moment().year();
+                      for i in _.range(10)
+                        option(value=year+i)= year+i
+                    
+                .form-group.form-group-lg.credit-card-form-group
+                  .col-sm-3
+                    if subscribed === 'stripe'
+                      button#update-stripe-subscription-btn.btn.btn-fixed.btn-success
+                        span Update subscription
+                        i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                    if !subscribed
+                      button#subscribe-stripe-btn.btn.btn-fixed.btn-success
+                        span Subscribe now
+                        i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                      
+                  .col-sm-9
+                    #card-error-alert.alert.alert-danger.hide
+                    
+                .form-group.form-group-lg.paypal-form-group.hide
+                  .col-sm-3
+                    button#subscribe-paypal-btn.btn.btn-fixed.btn-success
+                      span Subscribe now
+                      
+                  form#paypal-subscribe-form(action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top").hide
+                    input(type="hidden" name="cmd" value="_s-xclick")
+                    input(type="hidden" name="hosted_button_id" value="KNXCYJ7LW72V2")
+                    input(type="hidden" name="on0" value="Plan")
+                    select(name="os0")
+                      option(value="Month Plan") Month Plan : $14.99 USD - monthly
+                      option(value="Year Plan") Year Plan : $99.99 USD - yearly
+                    input(type="hidden" name="currency_code" value="USD")
+                    input(type="hidden" name="custom" value=user.id)
+                      
+                  .col-sm-9
+                    #card-error-alert.alert.alert-danger.hide
+                    
+                    
+              else if app.isMobile() && subscribed === 'stripe'
+                //- ON MOBILE, SUBSCRIBED TO STRIPE
+              
+                .title Edit Subscription
+                .alert.alert-info
+                  p
+                    | Your subscription is controlled through the
+                    a.spl(href="https://www.skritter.com/") Skritter website
+                    | .
+                    
+                    
+              else if !app.isAndroid() && subscribed === 'gplay'
+                //- NOT ON ANDROID, SUBSCRIBED THROUGH GOOGLE PLAY 
+              
+                .title Edit Subscription
+                .alert.alert-info
+                  p
+                    | Your subscription is controlled through Google Play.
+                    | To cancel or get more info about your subscription,
+                    | please use the Android app or go to
+                    a.spl(href="https://payments.google.com/" target="_blank")
+                      | https://payments.google.com/
+
+                  p 
+                    | If you would like to pay with a credit card here,
+                    | or through some other service, such as Paypal, Apple,
+                    | first you should unsubscribe from your Google Play
+                    | subscription. Otherwise you may be erroneously billed twice.
+                    
+                    
+                //- TODO: ON ANDROID, SUBSCRIBED THROUGH GOOGLE PLAY OR UNSUBSCRIBED
+              
+
+              else
+                .title Subscription
+                .alert.alert-warning
+                  | Your subscription is not yet supported by Skritter HTML5.
+                  
+                  
+              //- POLICIES
+              
+              #policies
+                p
+                  strong.spr Refund Policy:
+                  | If you are unsatisfied with your subscription for any reason,
+                  | let us know and we will issue you a full refund, no questions
+                  | asked. Just
+                  a.spl(href="/contact") contact us
+                  | ; we'll make you happy.
+                  
+                p
+                  strong.spr Note:
+                  | We cannot issue refunds for Apple purchases. Sorry, but 
+                  | they won't let us! Please try
+                  a.spl.spr(href="http://www.labnol.org/software/itunes-app-store-refunds/13838/" target="_blank")
+                    | these instructions
+                  | to get refunds for any purchase made through an iOS device.
+
+                p 
+                  | Also, we cannot make refunds directly to your card that 
+                  | are too old (more than three months). If this is the case, 
+                  | we can refund older payments via Paypal.
+                  
+                p
+                  strong.spr Downtime Policy:
+                  | If you have been unable to use Skritter due to a bug in the
+                  | system, let us know and we will extend your account by the
+                  | number of days it was unusable.
+                
+                
+              //- CANCEL STRIPE/GOOGLE PLAY
+              
+              //- TODO: CANCEL IOS
+              
+              if subscribed === 'stripe' || subscribed === 'gplay'
+                hr
+                .title Cancel subscription
+                
+                .form-group.form-group-lg
+                  .col-sm-3
+                    button#unsubscribe-btn.btn.btn-fixed.btn-success
+                        span Cancel subscription
+                        i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                              
+            
                   

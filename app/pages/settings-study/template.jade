@@ -1,5 +1,8 @@
 gelato-page(data-name='settings-study')
-  .container
+
+  #navbar-container
+
+  section.container
     .content-block
       .row
         .col-md-3
@@ -7,7 +10,7 @@ gelato-page(data-name='settings-study')
           
         .col-md-9
           #section-content
-            .title General Settings
+            .title Study Settings
             form.form-horizontal
               .form-group
                 label.col-sm-3.control-label(for="field-target-language") Target language
@@ -46,6 +49,11 @@ gelato-page(data-name='settings-study')
                   label.checkbox-inline
                     input(type="checkbox", name="parts", value="defn", checked=user.hasStudyPart('defn'))
                     | Definition
+              if (app.getLanguage() === 'ja')
+                .form-group
+                  label.col-sm-3.control-label(for="field-study-kana") Study kana
+                  .col-sm-9
+                    input#field-study-kana(type="checkbox", checked=user.get('studyKana'))
               .form-group
                 label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
                 .col-sm-9

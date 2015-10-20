@@ -5,10 +5,12 @@ gelato-component(data-name='prompt')
     - var item = reviews.item
 
     if item
-      #new-ribbon(class=item.isNew() ? '' : 'hidden')
+      #leech-ribbon.ribbon(class=item.isLeech() ? '' : 'hidden')
+        .icon.icon-study-leech
+      #new-ribbon.ribbon(class=item.isNew() ? '' : 'hidden')
         .icon.icon-study-new-character
 
-    #panel-left
+    #panel-left.no-select
       #canvas-container
       #toolbar-grading-container
       #toolbar-action-container
@@ -21,6 +23,8 @@ gelato-component(data-name='prompt')
       #vocab-definition-container
       #vocab-sentence-container
       #vocab-mnemonic-container
+      #vocab-characters-container
+      #vocab-decomp-container
 
   else
 

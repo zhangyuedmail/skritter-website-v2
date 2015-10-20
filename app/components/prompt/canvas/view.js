@@ -1,4 +1,6 @@
 var GelatoComponent = require('gelato/component');
+var PromptCanvasDefinition = require('components/prompt/canvas-definition/view');
+var PromptCanvasReading = require('components/prompt/canvas-reading/view');
 
 /**
  * @class PromptCanvas
@@ -27,6 +29,8 @@ module.exports = GelatoComponent.extend({
         this.size = 450;
         this.stage = null;
         this.strokeColor = '#4b4b4b';
+        this.definition = new PromptCanvasDefinition({prompt: this.prompt});
+        this.reading = new PromptCanvasReading({prompt: this.prompt});
         this.on('input:up', this.handleCanvasInputUp);
         this.on('resize', this.resize);
     },
@@ -41,6 +45,8 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.definition.setElement('#canvas-definition-container').render();
+        this.reading.setElement('#canvas-reading-container').render();
         this.stage = this.createStage();
         this.createLayer('grid');
         this.createLayer('character-hint');
@@ -71,7 +77,9 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     clearLayer: function(name) {
-        this.getLayer(name).removeAllChildren();
+        var layer = this.getLayer(name);
+        layer.removeAllChildren();
+        layer.uncache();
         this.stage.update();
         return this;
     },
@@ -254,7 +262,26 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @method fadeShapeOut
+     * @method fadeLayer
+     * @param {String} layerName
+     * @param {Object} [options]
+     * @param {Function} [callback]
+     */
+    fadeLayer: function(layerName, options, callback) {
+        var layer = this.getLayer(layerName);
+        options = options || {};
+        options.easing = options.easing || this.defaultFadeEasing;
+        options.milliseconds = options.milliseconds || this.defaultFadeSpeed;
+        createjs.Tween.get(layer).to({alpha: 0}, options.milliseconds, options.easing).call(function() {
+            layer.removeAllChildren();
+            layer.alpha = 1;
+            if (typeof callback === 'function') {
+                callback();
+            }
+        });
+    },
+    /**
+     * @method fadeShape
      * @param {String} layerName
      * @param {createjs.Shape} shape
      * @param {Object} [options]
@@ -268,6 +295,7 @@ module.exports = GelatoComponent.extend({
         layer.addChild(shape);
         createjs.Tween.get(shape).to({alpha: 0}, options.milliseconds, options.easing).call(function() {
             layer.removeChild(shape);
+            shape.alpha = 1;
             if (typeof callback === 'function') {
                 callback();
             }
@@ -331,12 +359,12 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptCanvas}
      */
     resize: function() {
-        var size = app.getWidth() < 1280 ? this.$el.width() - 50 : 450;
+        var size = app.getWidth() < 1280 ? this.getWidth() - 50 : 450;
         this.reset().size = size;
         this.stage.canvas.height = size;
         this.stage.canvas.width = size;
-        this.$component.height(size);
-        this.$component.width(size);
+        this.$view.height(size);
+        this.$view.width(size);
         this.$('#canvas-navigation').css('top', (size / 2) - 35);
         switch (this.prompt.part) {
             case 'rune':
@@ -491,6 +519,14 @@ module.exports = GelatoComponent.extend({
 
 
     /**
+     * @method fadeCharacterHint
+     * @returns {PromptCanvas}
+     */
+    fadeCharacterHint: function() {
+        this.fadeLayer('character-hint');
+        return this;
+    },
+    /**
      * @method handleCanvasInputUp
      * @param {Array} points
      * @param {createjs.Shape} shape
@@ -541,12 +577,19 @@ module.exports = GelatoComponent.extend({
         if (stroke) {
             var targetShape = stroke.getTargetShape();
             var userShape = stroke.getUserShape();
-            stroke.set('tweening', true);
-            this.tweenShape(
-                'character',
-                userShape,
-                targetShape
-            );
+            if (app.user.get('squigs')) {
+                this.drawShape(
+                    'character',
+                    shape
+                );
+            } else {
+                stroke.set('tweening', true);
+                this.tweenShape(
+                    'character',
+                    userShape,
+                    targetShape
+                );
+            }
             this.trigger('attempt:success');
         } else {
             this.trigger('attempt:fail');
@@ -643,10 +686,12 @@ module.exports = GelatoComponent.extend({
      */
     startTeaching: function() {
         var review = this.prompt.reviews.current();
+        var shape = review.character.getTargetShape();
         if (review.character && !review.isComplete()) {
             var stroke = review.character.getExpectedStroke();
             if (stroke) {
                 this.clearLayer('character-teach');
+                this.drawShape('character-teach', shape, {color: '#e8ded2'});
                 this.tracePath('character-teach', stroke.getParamPath());
             }
         }

@@ -1,4 +1,4 @@
-var GelatoDialog = require('gelato/dialog');
+var GelatoDialog = require('gelato/bootstrap/dialog');
 
 /**
  * @class StudySettingsDialog
@@ -27,11 +27,44 @@ module.exports = GelatoDialog.extend({
         return this;
     },
     /**
+     * @method getSelectedParts
+     * @returns {Array}
+     */
+    getSelectedParts: function() {
+        var parts = [];
+        this.$('#field-parts :checked').each(function() {
+            parts.push($(this).val());
+        });
+        return parts;
+    },
+    /**
+     * @method getSettings
+     * @returns {Object}
+     */
+    getSettings: function() {
+        if (app.isJapanese()) {
+            return {
+                filteredJapaneseParts: this.getSelectedParts(),
+                hideReading: this.$('#field-hide-reading input').is(':checked'),
+                squigs: this.$('#field-squigs input').is(':checked'),
+                teachingMode: this.$('#field-teaching-mode input').is(':checked')
+            };
+        } else {
+            return {
+                filteredChineseParts: this.getSelectedParts(),
+                hideReading: this.$('#field-hide-reading input').is(':checked'),
+                squigs: this.$('#field-squigs input').is(':checked'),
+                teachingMode: this.$('#field-teaching-mode input').is(':checked')
+            };
+        }
+    },
+    /**
      * @method handleClickClose
      * @param {Event} event
      */
     handleClickClose: function(event) {
         event.preventDefault();
+        this.trigger('close');
         this.close();
     },
     /**
@@ -40,6 +73,6 @@ module.exports = GelatoDialog.extend({
      */
     handleClickSave: function(event) {
         event.preventDefault();
-        this.close();
+        this.trigger('save', this.getSettings());
     }
 });

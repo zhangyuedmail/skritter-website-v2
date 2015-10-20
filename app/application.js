@@ -10,10 +10,13 @@ var Router = require('router');
 module.exports = GelatoApplication.extend({
     /**
      * @method initialize
-     * @constructorApply
+     * @constructor
      */
     initialize: function() {
-        window.onerror = this.handleError;
+
+        //TODO: depreciate usage of global app object
+        window.app = this;
+
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
             excludedUserAgents: ['PhantomJS'],
@@ -21,8 +24,8 @@ module.exports = GelatoApplication.extend({
         }).attach();
         Raygun.setVersion(this.get('version'));
         this.fn = Functions;
-        this.router = new Router();
-        this.user = new User({id: this.getSetting('user')});
+        this.router = this.createRouter('router');
+        this.user = this.createModel('models/user', {id: this.getSetting('user') || 'application'});
 
         if (window.createjs) {
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
@@ -41,6 +44,15 @@ module.exports = GelatoApplication.extend({
                 this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x2, y2);
                 return this;
             };
+        }
+
+        if (window.ga && this.isProduction()) {
+            ga('create', 'UA-4642573-1', 'auto');
+            ga('set', 'forceSSL', true);
+        }
+
+        if (this.isDevelopment()) {
+            window.onerror = this.handleError;
         }
 
         //TODO: depreciate this code after some time
@@ -88,6 +100,18 @@ module.exports = GelatoApplication.extend({
         return this.get('language') === 'undefined' ? this.user.get('targetLang') : this.get('language');
     },
     /**
+     * @method getStripeKey
+     * @returns {String}
+     */
+    getStripeKey: function() {
+        return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc'; // TESTING
+        if (this.isTesting()) {
+            return 'pk_test_24FOCKPSEtJHVpcA3oErEw2I';
+        } else {
+            return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc';
+        }
+    },
+    /**
      * @method handleError
      * @param {String} message
      * @param {String} url
@@ -97,12 +121,11 @@ module.exports = GelatoApplication.extend({
     handleError: function(message, url, line) {
         $.notify(
             {
-                icon: 'fa fa-exclamation-circle',
-                title: 'Error',
+                title: 'Application Error',
                 message: message
             },
             {
-                type: 'minimalist',
+                type: 'pastel-danger',
                 animate: {
                     enter: 'animated fadeInDown',
                     exit: 'animated fadeOutUp'
@@ -111,6 +134,21 @@ module.exports = GelatoApplication.extend({
                 icon_type: 'class'
             }
         );
+        return false;
+    },
+    /**
+     * @method hideLoading
+     * @param {Number} [speed]
+     */
+    hideLoading: function(speed) {
+        $('#application-loading').fadeOut(speed);
+    },
+    /**
+     * @method isAndroid
+     * @returns {Boolean}
+     */
+    isAndroid: function() {
+        // TODO: properly check if application is mobile
         return false;
     },
     /**
@@ -128,17 +166,70 @@ module.exports = GelatoApplication.extend({
         return this.getLanguage() === 'ja';
     },
     /**
+     * @method isIOS
+     * @returns {Boolean}
+     */
+    isIOS: function() {
+        // TODO: properly check if application is mobile
+        return false;
+    },
+    /**
      * @method isMobile
      * @returns {Boolean}
      */
     isMobile: function() {
         // TODO: properly check if application is mobile
+        return false;
+    },
+    /**
+     * @method isTesting
+     * @returns {String}
+     */
+    isTesting: function() {
+        // TODO: Get this to return the right thing
+        return _.contains(document.location.origin, 'localhost');
+    },
+    /**
+     * @method isWebsite
+     * @returns {String}
+     */
+    isWebsite: function() {
+        // TODO: Get this to return the right thing
         return true;
     },
     /**
-     * @method sendRaygunTestError
+     * @method loadHelpscout
      */
-    sendRaygunTestError: function() {
+    loadHelpscout: function() {
+        var parent = document.getElementsByTagName('script')[0];
+        var script = document.createElement('script');
+        var HSCW = {config: {}};
+        var HS = {beacon: {}};
+        HSCW.config = {
+            contact: {
+                enabled: true,
+                formId: '34a3fef0-62f6-11e5-8846-0e599dc12a51'
+            },
+            docs: {
+                enabled: true,
+                baseUrl: 'https://skritter.helpscoutdocs.com/'
+            }
+        };
+        HS.beacon.userConfig = {
+            color: '#32a8d9',
+            icon: 'question',
+            modal: false
+        };
+        script.async = true;
+        script.src = 'https://djtflbt20bdde.cloudfront.net/';
+        parent.parentNode.insertBefore(script, parent);
+        window.HSCW = HSCW;
+        window.HS = HS;
+    },
+    /**
+     * @method sendRaygunTest
+     */
+    sendRaygunTest: function() {
         try {
             throw new Error('TEST ERROR');
         } catch(error) {
@@ -146,23 +237,56 @@ module.exports = GelatoApplication.extend({
         }
     },
     /**
+     * @method showLoading
+     * @param {Number} [speed]
+     */
+    showLoading: function(speed) {
+        $('#application-loading').fadeIn(speed);
+    },
+    /**
      * @method start
      */
     start: function() {
         this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
-        this.user.on('state:standby', this.user.cache);
-
+        this.user.on('state', this.user.cache);
+        this.user.session.on('state', this.user.session.cache);
         if (this.user.isLoggedIn()) {
             Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
             Raygun.withTags(this.user.getRaygunTags());
         } else {
             Raygun.setUser('guest', true);
         }
-
+        if (this.user.session.isExpired()) {
+            if (this.user.id === 'application') {
+                this.user.session.authenticate('client_credentials', null, null,
+                    _.bind(function() {
+                        this.startRouter();
+                    }, this),
+                    _.bind(function() {
+                        this.startRouter();
+                    }, this)
+                );
+            } else {
+                this.user.session.refresh(
+                    _.bind(function() {
+                        this.startRouter();
+                    }, this),
+                    _.bind(function() {
+                        this.startRouter();
+                    }, this)
+                );
+            }
+        } else {
+            this.startRouter();
+        }
+    },
+    /**
+     * @method startRouter
+     */
+    startRouter: function() {
         this.router.start();
-        $('#application-loading').fadeOut(500, function() {
-            $(this).remove();
-        });
+        this.loadHelpscout();
+        this.hideLoading();
     }
 });

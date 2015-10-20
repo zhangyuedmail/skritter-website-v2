@@ -45,8 +45,7 @@ module.exports = GelatoComponent.extend({
         event.preventDefault();
         var listID = $(event.target).closest('.row').data('list-id');
         var list = this.vocablists.get(listID.toString());
-        list.set('studyingMode', 'reviewing');
-        list.save();
+        list.save({'studyingMode': 'reviewing'}, {patch: true});
         this.render();
     },
     /**

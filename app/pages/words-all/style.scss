@@ -1,8 +1,11 @@
 @import "../../styles/variables";
 
 gelato-page[data-name='words-all'] {
-  .table-oversized-wrapper {
-    margin-top: 30px;
+
+  padding-top: 75px;
+
+  img {
+    max-width: 100%;
   }
 
   td .glyphicon {
@@ -20,16 +23,8 @@ gelato-page[data-name='words-all'] {
     width: 10%;
   }
 
-  .word-td {
-    width: 50%;
-  }
-
-  .writing-td {
-    width: 10%;
-  }
-
-  .reading-td {
-    width: 15%;
+  .table-oversized-wrapper {
+    margin-top: 30px;
   }
 
   .definition-td {
@@ -43,4 +38,22 @@ gelato-page[data-name='words-all'] {
   .next-td {
     width: 20%;
   }
+
+  .reading-td {
+    width: 15%;
+  }
+
+  .word-td {
+    width: 50%;
+  }
+
+  .writing-td {
+    width: 10%;
+  }
+
+  #load-more-btn {
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
 }
