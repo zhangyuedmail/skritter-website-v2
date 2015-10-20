@@ -171,6 +171,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.vocabDefinition.render();
+            this.vocabReading.render();
             this.review.start();
             this.trigger('review:start', this.reviews);
         }
@@ -193,6 +194,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarGrading.select(this.review.get('score'));
             this.vocabDefinition.render();
             this.vocabMnemonic.render();
+            this.vocabReading.render();
             if (app.user.isAudioEnabled()) {
                 this.reviews.vocab.play();
             }

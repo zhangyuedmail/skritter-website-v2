@@ -8,34 +8,6 @@ gelato-component(data-name='prompt-vocab-reading')
 
     case prompt.part
 
-      when 'defn'
-        for reading in readings
-          if (reading.type === 'character')
-            - var review = reviews.at(index)
-            div.reading(data-position=index)
-              if reviews.vocab.isChinese()
-                span= app.fn.pinyin.toTone(reading.value)
-              else
-                span= reading.value
-            - index++
-          else
-            div.filler
-              span= reading.value
-
-      when 'rdng'
-        for reading in readings
-          if (reading.type === 'character')
-            - var review = reviews.at(index)
-            div.reading(class=reviews.isComplete() ? '' : 'masked', data-position=index)
-              if reviews.vocab.isChinese()
-                span= app.fn.pinyin.toTone(reading.value)
-              else
-                span= reading.value
-            - index++
-          else
-            div.filler
-              span= reading.value
-
       when 'rune'
         for reading in readings
           if (reading.type === 'character')
@@ -58,8 +30,6 @@ gelato-component(data-name='prompt-vocab-reading')
           if (reading.type === 'character')
             - var review = reviews.at(index)
             - var classes = []
-            //if (!review.get('complete'))
-              - classes.push('masked')
             if (reviews.position === index)
               - classes.push('active')
             div.reading(class=classes.join(' '), data-position=index)
@@ -71,6 +41,20 @@ gelato-component(data-name='prompt-vocab-reading')
                     span= app.fn.pinyin.toTone(reading.value)
                   else
                     span= app.fn.pinyin.removeToneNumbers(reading.value)
+              else
+                span= reading.value
+            - index++
+          else
+            div.filler
+              span= reading.value
+
+      default
+        for reading in readings
+          if (reading.type === 'character')
+            - var review = reviews.at(index)
+            div.reading(class=reviews.isComplete() ? '' : 'invisible', data-position=index)
+              if reviews.vocab.isChinese()
+                span= app.fn.pinyin.toTone(reading.value)
               else
                 span= reading.value
             - index++
