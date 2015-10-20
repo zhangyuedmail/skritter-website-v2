@@ -116,14 +116,14 @@ module.exports = GelatoPage.extend({
         this.items.addItems(
             {vocab_list: this.listId},
             function(result) {
+                var added = result.numVocabsAdded;
                 $.notify(
                     {
-                        icon: 'fa fa-plus-circle',
-                        title: '',
-                        message: result.numVocabsAdded + ' word has been added.'
+                        title: 'Update',
+                        message: added + (added > 1 ? ' words have ' : ' word has ')  + 'been added.'
                     },
                     {
-                        type: 'minimalist',
+                        type: 'pastel-info',
                         animate: {
                             enter: 'animated fadeInDown',
                             exit: 'animated fadeOutUp'
