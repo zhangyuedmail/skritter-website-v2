@@ -28,6 +28,11 @@ bootstrap-dialog(data-name='study-settings')
                   input(type="checkbox", name="parts", value="defn", checked=user.hasFilteredPart('defn'))
                   | Definition
             .form-group
+              label.col-sm-3.control-label(for="field-hide-reading") Hide reading
+              .col-sm-9#field-hide-reading
+                label.checkbox-inline
+                  input(type="checkbox", checked=user.get('hideReading'))
+            .form-group
               label.col-sm-3.control-label(for="field-squigs") Raw squigs
               .col-sm-9#field-squigs
                 label.checkbox-inline
