@@ -140,6 +140,13 @@ module.exports = GelatoModel.extend({
         return shape;
     },
     /**
+     * @method getUserSquig
+     * @returns {createjs.Shape}
+     */
+    getUserSquig: function() {
+        return this.get('squig');
+    },
+    /**
      * @method inflatedData
      * @return {Object}
      */

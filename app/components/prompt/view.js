@@ -65,6 +65,7 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
         this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
         this.listenTo(this.vocabReading, 'click:show', this.handleVocabReadingShow);
+        this.on('resize', this.resize);
     },
     /**
      * @property template
@@ -688,6 +689,12 @@ module.exports = GelatoComponent.extend({
     reset: function() {
         this.canvas.reset();
         return this;
+    },
+    /**
+     * @method resize
+     */
+    resize: function() {
+        //TODO: redraw and resize
     },
     /**
      * @method set

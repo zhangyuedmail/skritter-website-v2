@@ -136,6 +136,21 @@ module.exports = GelatoCollection.extend({
         return container;
     },
     /**
+     * @method getUserSquig
+     * @param {Number} [excludeStrokes]
+     * @returns {createjs.Container}
+     */
+    getUserSquig: function(excludeStrokes) {
+        var container = new createjs.Container();
+        for (var i = 0, length = this.length; i < length; i++) {
+            if (!excludeStrokes) {
+                container.addChild(this.at(i).getUserSquig());
+            }
+        }
+        container.name = 'character';
+        return container;
+    },
+    /**
      * @method isComplete
      * @returns {Boolean}
      */

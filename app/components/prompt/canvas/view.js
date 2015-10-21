@@ -651,7 +651,11 @@ module.exports = GelatoComponent.extend({
      */
     redrawCharacter: function() {
         this.clearLayer('character');
-        this.drawShape('character', this.prompt.review.character.getUserShape());
+        if (app.user.get('squigs')) {
+            this.drawShape('character', this.prompt.review.character.getUserSquig());
+        } else {
+            this.drawShape('character', this.prompt.review.character.getUserShape());
+        }
         return this;
     },
     /**
