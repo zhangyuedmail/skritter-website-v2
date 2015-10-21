@@ -50,6 +50,7 @@ module.exports = GelatoComponent.extend({
         this.stage = this.createStage();
         this.createLayer('grid');
         this.createLayer('character-hint');
+        this.createLayer('character-reveal');
         this.createLayer('character-teach');
         this.createLayer('character');
         this.createLayer('input-background2');
@@ -345,6 +346,7 @@ module.exports = GelatoComponent.extend({
      */
     reset: function() {
         this.getLayer('character-hint').removeAllChildren();
+        this.getLayer('character-reveal').removeAllChildren();
         this.getLayer('character-teach').removeAllChildren();
         this.getLayer('character').removeAllChildren();
         this.getLayer('input-background2').removeAllChildren();
@@ -550,6 +552,14 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method hideCharacterReveal
+     * @returns {PromptCanvas}
+     */
+    hideCharacterReveal: function() {
+        this.clearLayer('character-reveal');
+        return this;
+    },
+    /**
      * @method hideCharacterHint
      * @returns {PromptCanvas}
      */
@@ -663,6 +673,32 @@ module.exports = GelatoComponent.extend({
             case 'tone':
                 this.drawCharacter(
                     'character-hint',
+                    review.vocab.get('writing'),
+                    {color: '#e8ded2', font: review.vocab.getFontName()}
+                );
+                break;
+        }
+        return this;
+    },
+    /**
+     * @method review
+     * @returns {PromptCanvas}
+     */
+    showCharacterReveal: function() {
+        var review = this.prompt.review;
+        var shape = review.character.getTargetShape();
+        this.hideCharacterReveal();
+        switch (this.prompt.reviews.part) {
+            case 'rune':
+                this.drawShape(
+                    'character-reveal',
+                    shape,
+                    {color: '#e8ded2'}
+                );
+                break;
+            case 'tone':
+                this.drawCharacter(
+                    'character-reveal',
                     review.vocab.get('writing'),
                     {color: '#e8ded2', font: review.vocab.getFontName()}
                 );

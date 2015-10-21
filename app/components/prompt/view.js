@@ -320,6 +320,9 @@ module.exports = GelatoComponent.extend({
                 this.toolbarGrading.select(this.review.get('score'));
                 this.canvas.injectGradingColor();
             }
+            if (app.user.get('squigs')) {
+                this.canvas.showCharacterReveal();
+            }
         } else {
             this.renderPromptPartRune();
         }
@@ -332,10 +335,10 @@ module.exports = GelatoComponent.extend({
     renderPromptPartTone: function() {
         this.canvas.reset();
         this.canvas.redrawCharacter();
+        this.canvas.showCharacterReveal();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
         } else {
-            this.canvas.showCharacterHint();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = true;
             this.toolbarAction.buttonShow = true;
@@ -360,7 +363,6 @@ module.exports = GelatoComponent.extend({
             this.review.set('teach', false);
             this.canvas.disableInput();
             this.canvas.injectGradingColor();
-            this.canvas.showCharacterHint();
             this.canvas.stopTeaching();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = true;
