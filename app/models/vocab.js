@@ -33,6 +33,20 @@ module.exports = SkritterModel.extend({
         return response.Vocab || response;
     },
     /**
+     * @method banAll
+     */
+    banAll: function() {
+        this.set('bannedParts', []);
+    },
+    /**
+     * @method banPart
+     * @param {String} part
+     */
+    banPart: function(part) {
+        this.get('bannedParts').push(part);
+        this.set('bannedParts', _.uniq(this.get('bannedParts')));
+    },
+    /**
      * @method fetchMissing
      * @param {Function} [callback]
      */
@@ -337,22 +351,6 @@ module.exports = SkritterModel.extend({
         return this.audio;
     },
     /**
-     * @method toggleBanned
-     * @returns {Boolean}
-     */
-    toggleBanned: function() {
-        if (this.isBanned()) {
-            this.set('bannedParts', []);
-            return false;
-        }
-        if (this.isChinese()) {
-            this.set('bannedParts', app.user.get('allChineseParts'));
-        } else {
-            this.set('bannedParts', app.user.get('allJapaneseParts'));
-        }
-        return true;
-    },
-    /**
      * @method toggleStarred
      * @returns {Boolean}
      */
@@ -363,5 +361,22 @@ module.exports = SkritterModel.extend({
         }
         this.set('starred', true);
         return true;
+    },
+    /**
+     * @method unbanAll
+     */
+    unbanAll: function() {
+        if (this.isChinese()) {
+            this.set('bannedParts', app.user.get('allChineseParts'));
+        } else {
+            this.set('bannedParts', app.user.get('allJapaneseParts'));
+        }
+    },
+    /**
+     * @method unbanPart
+     * @param {String} part
+     */
+    unbanPart: function(part) {
+        this.set('bannedParts', _.remove(this.get('bannedParts'), part));
     }
 });

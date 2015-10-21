@@ -581,7 +581,7 @@ module.exports = GelatoComponent.extend({
     handleToolbarVocabBan: function() {
         var dialog = new ConfirmBanDialog();
         dialog.on('ban', _.bind(function() {
-            this.reviews.vocab.toggleBanned();
+            this.reviews.item.ban();
             this.reviews.vocab.save(null, {
                 complete: _.bind(function() {
                     this.trigger('skip', this.reviews);

@@ -31,6 +31,12 @@ module.exports = SkritterModel.extend({
      */
     urlRoot: 'items',
     /**
+     * @method ban
+     */
+    ban: function() {
+        this.getVocab().banPart(this.get('part'));
+    },
+    /**
      * @method getBase
      * @returns {String}
      */
@@ -186,6 +192,13 @@ module.exports = SkritterModel.extend({
         return vocabs;
     },
     /**
+     * @method isBanned
+     * @returns {Boolean}
+     */
+    isBanned: function() {
+        return _.includes(this.getVocab().get('bannedParts'), this.get('part'));
+    },
+    /**
      * @method isChinese
      * @returns {Boolean}
      */
@@ -212,5 +225,11 @@ module.exports = SkritterModel.extend({
      */
     isNew: function() {
         return !this.get('reviews');
+    },
+    /**
+     * @method unban
+     */
+    unban: function() {
+        this.getVocab().unbanPart(this.get('part'));
     }
 });

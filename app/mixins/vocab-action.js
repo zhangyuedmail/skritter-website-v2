@@ -17,10 +17,8 @@ module.exports = {
         if (vocab.isBanned()) {
             return null;
         }
-        vocab.toggleBanned();
-        return {
-            bannedParts: vocab.get('bannedParts')
-        };
+        vocab.banAll();
+        return {bannedParts: vocab.get('bannedParts')};
     },
     /**
      * Initializes the action object runAction uses to serially process words
@@ -118,9 +116,7 @@ module.exports = {
         if (!vocab.isBanned()) {
             return null;
         }
-        vocab.toggleBanned();
-        return {
-            bannedParts: vocab.get('bannedParts')
-        };
+        vocab.unbanAll();
+        return {bannedParts: vocab.get('bannedParts')};
     }
 }
