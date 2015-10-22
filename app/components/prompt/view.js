@@ -52,6 +52,7 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:next', this.handleCanvasNavigateNext);
         this.listenTo(this.canvas, 'navigate:previous', this.handleCanvasNavigatePrevious);
+        this.listenTo(this.canvas, 'swipeup', this.handleCanvasSwipeUp);
         this.listenTo(this.toolbarAction, 'click:correct', this.handleToolbarActionCorrect);
         this.listenTo(this.toolbarAction, 'click:erase', this.handleToolbarActionErase);
         this.listenTo(this.toolbarAction, 'click:show', this.handleToolbarActionShow);
@@ -494,6 +495,23 @@ module.exports = GelatoComponent.extend({
         this.trigger('review:stop', this.reviews);
         this.review.stop();
         this.previous();
+    },
+    /**
+     * @method handleCanvasSwipeUp
+     */
+    handleCanvasSwipeUp: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.set({complete: false, teach: false});
+                this.review.character.reset();
+                this.renderPrompt();
+                break;
+            case 'tone':
+                this.review.set({complete: false, teach: false});
+                this.review.character.reset();
+                this.renderPrompt();
+                break;
+        }
     },
     /**
      * @method handleToolbarActionCorrect
