@@ -435,7 +435,7 @@ module.exports = GelatoComponent.extend({
             var lineLastPositionEnd = {x: this.mouseLastUpEvent.pageX, y: this.mouseLastUpEvent.pageY};
             var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
             var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
-            if (lineLastDistance < 50 && lineLastDuration > 50 && lineLastDuration < 200) {
+            if (lineLastDistance < 5 && lineLastDuration > 50 && lineLastDuration < 200) {
                 this.trigger('doubleclick', event);
                 return;
             }
@@ -451,7 +451,7 @@ module.exports = GelatoComponent.extend({
             }
         }
         if (this.mouseUpEvent) {
-            if (lineDistance < 50 && lineDuration < 1000) {
+            if (lineDistance < 5 && lineDuration < 1000) {
                 this.trigger('tap', event);
             }
         }
