@@ -586,31 +586,33 @@ module.exports = GelatoComponent.extend({
      * @param {createjs.Shape} shape
      */
     recognizeRune: function(points, shape) {
-        var review = this.prompt.reviews.current();
-        var character = review.character;
-        var stroke = character.recognize(points, shape);
-        if (stroke) {
-            var targetShape = stroke.getTargetShape();
-            var userShape = stroke.getUserShape();
-            if (app.user.get('squigs')) {
-                this.drawShape(
-                    'character',
-                    shape
-                );
+        if (app.fn.getLength(points) >= 5) {
+            var review = this.prompt.reviews.current();
+            var character = review.character;
+            var stroke = character.recognize(points, shape);
+            if (stroke) {
+                var targetShape = stroke.getTargetShape();
+                var userShape = stroke.getUserShape();
+                if (app.user.get('squigs')) {
+                    this.drawShape(
+                        'character',
+                        shape
+                    );
+                } else {
+                    stroke.set('tweening', true);
+                    this.tweenShape(
+                        'character',
+                        userShape,
+                        targetShape
+                    );
+                }
+                this.trigger('attempt:success');
             } else {
-                stroke.set('tweening', true);
-                this.tweenShape(
-                    'character',
-                    userShape,
-                    targetShape
-                );
+                this.trigger('attempt:fail');
             }
-            this.trigger('attempt:success');
-        } else {
-            this.trigger('attempt:fail');
-        }
-        if (character.isComplete()) {
-            this.trigger('complete');
+            if (character.isComplete()) {
+                this.trigger('complete');
+            }
         }
     },
     /**
