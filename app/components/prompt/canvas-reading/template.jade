@@ -1,6 +1,6 @@
 gelato-component(data-name='prompt-canvas-reading')
-  - var prompt = view.prompt
-  - var reviews = view.prompt.reviews
+  - var prompt = view.prompt;
+  - var reviews = view.prompt.reviews;
 
   if prompt.part === 'rdng' && reviews
 
@@ -10,6 +10,12 @@ gelato-component(data-name='prompt-canvas-reading')
       .writing.text-japanese= reviews.vocab.get('writing')
 
     if reviews.isComplete()
-      .answer!= reviews.vocab.getReading()
+      - var writing = reviews.vocab.get('writing');
+      - var reading = reviews.vocab.get('reading');
+      - console.log(wanakana)
+      if app.fn.isKana(writing)
+        .answer!= kana.toRomaji(reading)
+      else
+        .answer!= app.isChinese() ? app.fn.pinyin.toTone(reading) : reading
     else
       .question What's the reading?

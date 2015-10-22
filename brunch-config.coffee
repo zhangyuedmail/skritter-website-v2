@@ -25,7 +25,8 @@ exports.config =
           'vendor/createjs/createjs.tween-NEXT.min.js',
           'vendor/heatmap/heatmap-3.5.6.js',
           'vendor/highcharts/highcharts-4.1.8.js',
-          'vendor/keypress/keypress-2.1.3.js'
+          'vendor/keypress/keypress-2.1.3.js',
+          'vendor/wanakana/wanakana-1.3.7.js'
         ]
     stylesheets:
       joinTo:
