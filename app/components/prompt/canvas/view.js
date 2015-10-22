@@ -450,6 +450,11 @@ module.exports = GelatoComponent.extend({
                 return;
             }
         }
+        if (this.mouseUpEvent) {
+            if (lineDistance < 50 && lineDuration < 1000) {
+                this.trigger('tap', event);
+            }
+        }
         this.trigger('click', event);
     },
     /**
@@ -716,8 +721,10 @@ module.exports = GelatoComponent.extend({
      */
     showStrokeHint: function() {
         var review = this.prompt.reviews.current();
-        var shape = review.character.getExpectedStroke().getTargetShape();
-        this.fadeShape('stroke-hint', shape);
+        if (!review.isComplete()) {
+            var shape = review.character.getExpectedStroke().getTargetShape();
+            this.fadeShape('stroke-hint', shape);
+        }
         return this;
     },
     /**
