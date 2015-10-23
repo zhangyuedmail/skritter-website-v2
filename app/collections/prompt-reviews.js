@@ -164,7 +164,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Boolean}
      */
     isLast: function() {
-        return this.position >= this.length;
+        return this.position >= this.length - 1;
     },
     /**
      * @method isTeachable

@@ -378,7 +378,7 @@ module.exports = GelatoComponent.extend({
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabWriting.render();
-            if (app.user.isAudioEnabled()) {
+            if (app.user.isAudioEnabled() && this.reviews.isLast()) {
                 this.reviews.vocab.play();
             }
         } else {
