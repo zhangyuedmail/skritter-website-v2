@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class PromptVocabCharacters
+ * @class PromptVocabCharacter
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -19,7 +19,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #show-characters': 'handleClickShowCharacters'
+        'vclick #show-character': 'handleClickShowCharacter'
     },
     /**
      * @property template
@@ -28,17 +28,17 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {PromptVocabCharacters}
+     * @returns {PromptVocabCharacter}
      */
     render: function() {
         this.renderTemplate();
         return this;
     },
     /**
-     * @method handleClickShowCharacters
+     * @method handleClickShowCharacter
      * @param {Event} event
      */
-    handleClickShowCharacters: function(event) {
+    handleClickShowCharacter: function(event) {
         event.preventDefault();
         this.reveal = true;
         this.render();

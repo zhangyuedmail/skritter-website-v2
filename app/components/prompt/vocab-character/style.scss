@@ -1,12 +1,15 @@
 @import "../../../styles/variables";
 
-gelato-component[data-name='prompt-vocab-decomp'] {
+gelato-component[data-name='prompt-vocab-character'] {
 
   button { border-radius: 4px; }
+
+  hr { border-top: 1px solid $grey1; }
 
   label {
     font-size: 14px;
     font-weight: 700;
+    margin-top: 15px;
   }
 
   .value {

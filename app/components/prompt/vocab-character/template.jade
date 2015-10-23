@@ -1,0 +1,56 @@
+gelato-component(data-name='prompt-vocab-character')
+  - var prompt = view.prompt;
+  - var reviews = view.prompt.reviews;
+
+  if reviews
+    - var review = reviews.current();
+    - var vocabs = reviews.vocab.getContained();
+
+    if !vocabs.length
+      - vocabs = [reviews.vocab];
+
+    if vocabs.length
+      - var vocab = vocabs[reviews.position];
+      - var decomp = vocab.getDecomp();
+
+      hr
+
+      div.value
+        if view.reveal || review.isComplete()
+
+          if vocabs.length > 1
+
+            .character
+
+              label Character
+
+              .child
+                span.writing= vocab.get('writing')
+                | &nbsp;
+                span.reading= app.isChinese() ? app.fn.pinyin.toTone(vocab.get('reading')) : vocab.get('reading')
+                | &nbsp;
+                span.definition= vocab.getDefinition()
+
+          if decomp && !decomp.get('atomic')
+            - var children = decomp.get('Children');
+
+            .decompositions
+
+              label Decompositions
+
+              for child in children
+                .child
+                  span.writing= child.writing
+                  | &nbsp;
+                  span.reading= app.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                  | &nbsp;
+                  if child.definitions[app.user.get('sourceLang')]
+                    span.definition= child.definitions[app.user.get('sourceLang')]
+                  else
+                    span.definition= child.definitions['en']
+
+        else
+
+          if decomp && !decomp.get('atomic')
+
+            button#show-character.btn.btn-default show
