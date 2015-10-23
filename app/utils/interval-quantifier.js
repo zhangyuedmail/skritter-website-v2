@@ -11,7 +11,7 @@ function IntervalQuantifier() {
 
 /**
  * @method quantify
- * @param {Object} item
+ * @param {Item} item
  * @param {Number} score
  * @returns {Number}
  */
@@ -19,7 +19,7 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
     var newInterval = 0;
     var now = moment().unix();
     //return new items with randomized default config values
-    if (!item.last) {
+    if (!item.get('last')) {
         switch (score) {
             case 1:
                 newInterval = this.initialWrongInterval;
@@ -37,10 +37,10 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
         return this.randomizeInterval(newInterval);
     }
     //set values for further calculations
-    var actualInterval = now - item.last;
+    var actualInterval = now - item.get('last');
     var factor = 0.9;
-    var pctRight = item.successes / item.reviews;
-    var scheduledInterval = item.next - item.last;
+    var pctRight = item.get('successes') / item.get('reviews');
+    var scheduledInterval = item.get('next') - item.get('last');
     //get the factor
     if (score === 2) {
         factor = 0.9;
@@ -51,7 +51,7 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
         var divisions = [2, 1200, 18000, 691200];
         var index;
         for (var i in divisions) {
-            if (item.interval > divisions[i]) {
+            if (item.get('interval') > divisions[i]) {
                 index = i;
             }
         }
@@ -64,17 +64,17 @@ IntervalQuantifier.prototype.quantify = function(item, score) {
         factor += 1;
     }
     //accelerate new items that appear to be known
-    if (item.successes === item.reviews && item.reviews < 5) {
+    if (item.get('successes') === item.get('reviews') && item.get('reviews') < 5) {
         factor *= 1.5;
     }
     //decelerate hard items consistently marked wrong
-    if (item.reviews > 8) {
+    if (item.get('reviews') > 8) {
         if (pctRight < 0.5) {
             factor *= Math.pow(pctRight, 0.7);
         }
     }
     //multiple by the factor and randomize the interval
-    newInterval = this.randomizeInterval(item.interval * factor);
+    newInterval = this.randomizeInterval(item.get('interval') * factor);
     //bound the interval
     if (score === 1) {
         if (newInterval > 604800) {
