@@ -132,6 +132,14 @@ module.exports = SkritterCollection.extend({
                     item.consecutiveWrong = review.score > 1 ? 0 : item.consecutiveWrong + 1;
                 }
             }
+            if (app.isDevelopment()) {
+                console.log(
+                    item.id,
+                    'scheduled for',
+                    moment.duration(review.newInterval, 'seconds').as('days'),
+                    'days'
+                );
+            }
             item.set({
                 changed: review.submitTime,
                 last: review.submitTime,
