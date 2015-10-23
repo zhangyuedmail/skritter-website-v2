@@ -42,6 +42,11 @@ bootstrap-dialog(data-name='study-settings')
               .col-sm-9#field-teaching-mode
                 label.checkbox-inline
                   input(type="checkbox", checked=user.get('teachingMode'))
+            .form-group
+              label.col-sm-3.control-label(for="field-audio") Audio
+              .col-sm-9#field-audio
+                label.checkbox-inline
+                  input(type="checkbox", checked=user.isAudioEnabled())
 
           .text-right
             button#button-save.btn.btn-fixed.btn-primary(type='button') Save

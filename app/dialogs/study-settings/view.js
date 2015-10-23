@@ -47,14 +47,16 @@ module.exports = GelatoDialog.extend({
                 filteredJapaneseParts: this.getSelectedParts(),
                 hideReading: this.$('#field-hide-reading input').is(':checked'),
                 squigs: this.$('#field-squigs input').is(':checked'),
-                teachingMode: this.$('#field-teaching-mode input').is(':checked')
+                teachingMode: this.$('#field-teaching-mode input').is(':checked'),
+                volume: this.$('#field-audio input').is(':checked') ? 1 : 0
             };
         } else {
             return {
                 filteredChineseParts: this.getSelectedParts(),
                 hideReading: this.$('#field-hide-reading input').is(':checked'),
                 squigs: this.$('#field-squigs input').is(':checked'),
-                teachingMode: this.$('#field-teaching-mode input').is(':checked')
+                teachingMode: this.$('#field-teaching-mode input').is(':checked'),
+                volume: this.$('#field-audio input').is(':checked') ? 1 : 0
             };
         }
     },
