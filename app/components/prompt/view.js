@@ -177,6 +177,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.hide();
             this.vocabCharacter.render();
             this.vocabDefinition.render();
             this.vocabReading.render();
@@ -200,6 +201,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.toolbarGrading.show();
             this.vocabCharacter.render();
             this.vocabDefinition.render();
             this.vocabMnemonic.render();
@@ -226,6 +228,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.hide();
             this.vocabCharacter.render();
             this.vocabReading.render();
             this.review.start();
@@ -248,6 +251,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.toolbarGrading.show();
             this.vocabCharacter.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
@@ -274,6 +278,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = true;
             this.toolbarAction.buttonTeach = true;
             this.toolbarAction.render();
+            this.toolbarGrading.hide();
             this.vocabCharacter.render();
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -315,8 +320,10 @@ module.exports = GelatoComponent.extend({
             if (this.reviews.isTeachable()) {
                 this.review.set('score', 1);
                 this.toolbarGrading.deselect();
+                this.toolbarGrading.hide();
             } else {
                 this.toolbarGrading.select(this.review.get('score'));
+                this.toolbarGrading.show();
                 this.canvas.injectGradingColor();
             }
             if (app.user.get('squigs')) {
@@ -343,6 +350,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = true;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.hide();
             this.vocabCharacter.render();
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -370,6 +378,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
+            this.toolbarGrading.show();
             this.vocabCharacter.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();

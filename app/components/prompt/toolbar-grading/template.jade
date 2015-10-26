@@ -1,19 +1,20 @@
-gelato-component(data-name="prompt-toolbar-grading")
+gelato-component(data-name='prompt-toolbar-grading')
+  - var value = view.value;
 
-  .btn-group.btn-group-justified.cursor.text-center(role="group", aria-label="grading-buttons")
-    .btn-group(role="group")
-      button.btn.btn-default.grade1(type="button", data-value="1")
+  .btn-group.btn-group-justified.cursor.text-center(role='group')
+    .btn-group(role='group')
+      button.btn.btn-default.grade1(class=value=== 1 ? 'selected' : '', type='button', data-value='1')
         .grade-value 1
         .grade-text forgot
-    .btn-group(role="group")
-      button.btn.btn-default.grade2(type="button", data-value="2")
+    .btn-group(role='group')
+      button.btn.btn-default.grade2(class=value=== 2 ? 'selected' : '', type='button', data-value='2')
         .grade-value 2
         .grade-text so-so
-    .btn-group(role="group")
-      button.btn.btn-default.grade3(type="button", data-value="3")
+    .btn-group(role='group')
+      button.btn.btn-default.grade3(class=value=== 3 ? 'selected' : '', type='button', data-value='3')
         .grade-value 3
         .grade-text got it
-    .btn-group(role="group")
-      button.btn.btn-default.grade4(type="button", data-value="4")
+    .btn-group(role='group')
+      button.btn.btn-default.grade4(class=value=== 4 ? 'selected' : '', type='button', data-value='4')
         .grade-value 4
         .grade-text too easy

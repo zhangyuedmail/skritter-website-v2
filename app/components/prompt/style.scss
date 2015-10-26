@@ -32,6 +32,7 @@ gelato-component[data-name='prompt'] {
     padding-right: 95px;
     position: relative;
     width: 640px;
+    #toolbar-grading-container { height: 85px; }
   }
 
   #panel-right {
@@ -71,11 +72,7 @@ gelato-component[data-name='prompt'] {
       width: 50%;
     }
 
-    #panel-right {
-      //padding-left: 50px;
-      //padding-right: 50px;
-      width: 50%;
-    }
+    #panel-right { width: 50%; }
 
   }
 
