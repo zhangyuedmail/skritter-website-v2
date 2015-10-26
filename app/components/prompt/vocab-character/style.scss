@@ -7,16 +7,28 @@ gelato-component[data-name='prompt-vocab-character'] {
   hr { border-top: 1px solid $grey1; }
 
   label {
+    color: $grey3;
     font-size: 14px;
     font-weight: 700;
     margin-top: 15px;
   }
 
   .value {
+    color: $grey3;
     font-size: 14px;
     font-weight: 400;
     margin-bottom: 5px;
-    .reading { font-weight: 700; }
+    .child-character {
+      margin-top: 15px;
+    }
+    .child-reading {
+      color: $grey3;
+      margin-left: 15px;
+    }
+    .child-writing {
+      color: $grey5;
+      font-size: 24px;
+    }
   }
 
 }
