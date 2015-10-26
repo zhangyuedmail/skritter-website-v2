@@ -32,7 +32,8 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vmousedown button': 'handleMousedownButton'
+        'vmousedown button': 'handleMousedownButton',
+        'vmouseup button': 'handleMouseupButton'
     },
     /**
      * @method deselect
@@ -53,6 +54,14 @@ module.exports = GelatoComponent.extend({
         var value = parseInt($target.data('value'), 10);
         this.trigger('mousedown', value);
         this.select(value);
+    },
+    /**
+     * @method handleMousedownButton
+     * @param {Event} event
+     */
+    handleMouseupButton: function(event) {
+        event.preventDefault();
+        this.trigger('mouseup', this.value);
     },
     /**
      * @method select
