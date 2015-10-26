@@ -12,3 +12,6 @@ gelato-component(data-name="prompt-toolbar-vocab")
     else
       i#button-vocab-ban.icon.icon-study-ban(class=(reviews.vocab.isBanned() ? 'banned' : ''))
     i#button-vocab-info.icon.icon-study-info
+
+    if reviews.item && reviews.item.get('last')
+      #item-last-studied= 'studied ' + moment(reviews.item.get('last') * 1000).fromNow()
