@@ -19,6 +19,14 @@ module.exports = GelatoDialog.extend({
      */
     template: require('./template'),
     /**
+     * @method remove
+     * @returns {VocabDialog}
+     */
+    remove: function() {
+        this.viewer.remove();
+        return GelatoDialog.prototype.remove.call(this);
+    },
+    /**
      * @method render
      * @returns {VocabDialog}
      */
@@ -56,13 +64,5 @@ module.exports = GelatoDialog.extend({
         this.$('#loading-spinner').show();
         this.listenToOnce(this.viewer, 'load', this.handleLoadVocab);
         this.viewer.load(vocabId);
-    },
-    /**
-     * @method remove
-     * @returns {VocabDialog}
-     */
-    remove: function() {
-        this.viewer.remove();
-        return GelatoDialog.prototype.remove.call(this);
     }
 });

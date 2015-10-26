@@ -12,7 +12,7 @@ gelato-component(data-name='vocab-viewer')
         #vocab-reading= vocab.getReading()
       .block
         #vocab-difficulty= vocab.get('toughnessString')
-        | LEVEL
+        #vocab-difficulty-text LEVEL
 
     #content-section
       #panel-left
@@ -33,7 +33,7 @@ gelato-component(data-name='vocab-viewer')
           .value
             #vocab-mnemonic
               if mnemonic
-                span!= mnemonic.text
+                span!= app.fn.textToHTML(mnemonic.text)
         .block
           .header Dictionary
           .value
