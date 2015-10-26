@@ -30,9 +30,10 @@ module.exports = GelatoModel.extend({
     getWriting: function(mask) {
         var writing = this.get('writing');
         if (mask !== undefined) {
-            writing = writing.replace(mask, mask.split('').map(function() {
-                return '_';
-            }).join(''));
+            var pieces = mask.split('');
+            for (var i = 0, length = pieces.length; i < length; i++) {
+                writing = writing.replace(pieces[0], '_');
+            }
         }
         return writing.replace(/\s+/g, '');
     }
