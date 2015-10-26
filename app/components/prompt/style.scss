@@ -40,9 +40,30 @@ gelato-component[data-name='prompt'] {
     border-top-right-radius: 25px;
     float: right;
     height: 640px;
-    padding: 42px 45px;
+    padding: 42px 2px 42px 45px;
     position: relative;
     width: 640px;
+    .panel-container {
+      height: 100%;
+      overflow-y: auto;
+      margin-right: 100px;
+      width: 100%;
+      &::-webkit-scrollbar {
+        background-color: $white3;
+        width: 12px;
+      }
+      &::-webkit-scrollbar-thumb {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+        background-color: $grey3;
+        border-radius: 55px;
+      }
+      &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0 ,0 ,0 , 0.3);
+        background-color: $white3;
+        border-radius: 5px;
+      }
+    }
+
     #vocab-characters-container { margin-top: 30px; }
     #vocab-decomp-container { margin-top: 30px; }
     #vocab-definition-container { margin-top: 30px; }
@@ -59,8 +80,8 @@ gelato-component[data-name='prompt'] {
     }
 
     #panel-right {
-      padding-left: 50px;
-      padding-right: 50px;
+      //padding-left: 50px;
+      //padding-right: 50px;
       width: 50%;
     }
 
