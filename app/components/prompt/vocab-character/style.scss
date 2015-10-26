@@ -16,18 +16,18 @@ gelato-component[data-name='prompt-vocab-character'] {
   .value {
     color: $grey3;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 300;
     margin-bottom: 5px;
-    .child-character {
-      margin-top: 15px;
-    }
+    .child-character { margin-top: 15px; }
     .child-reading {
       color: $grey3;
+      font-weight: 400;
       margin-left: 15px;
     }
     .child-writing {
       color: $grey5;
       font-size: 24px;
+      font-weight: 400;
     }
   }
 
