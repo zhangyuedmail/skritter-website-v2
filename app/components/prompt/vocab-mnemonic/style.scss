@@ -5,11 +5,13 @@ gelato-component[data-name='prompt-vocab-mnemonic'] {
   button { border-radius: 4px; }
 
   label {
+    color: $grey3;
     font-size: 14px;
     font-weight: 700;
   }
 
   .value {
+    color: $grey3;
     font-size: 14px;
     font-weight: 300;
     textarea { width: 100%; }

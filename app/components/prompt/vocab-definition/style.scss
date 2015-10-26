@@ -3,6 +3,7 @@
 gelato-component[data-name='prompt-vocab-definition'] {
 
   label {
+    color: $grey3;
     font-size: 14px;
     font-weight: 700;
   }
@@ -13,6 +14,7 @@ gelato-component[data-name='prompt-vocab-definition'] {
   }
 
   .value {
+    color: $grey3;
     font-size: 14px;
     font-weight: 300;
     textarea { width: 100%; }
