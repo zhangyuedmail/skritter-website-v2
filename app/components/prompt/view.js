@@ -551,6 +551,12 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method handleKeypressActionAudio
+     */
+    handleKeypressActionAudio: function() {
+        this.reviews.vocab.play();
+    },
+    /**
      * @method handleKeypressActionErase
      */
     handleKeypressActionErase: function() {
@@ -608,6 +614,17 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.review.set('score', value);
             this.next();
+        }
+    },
+    /**
+     * @method handleKeypressGradingToggle
+     */
+    handleKeypressGradingToggle: function() {
+        if (this.review.isComplete()) {
+            var score = this.review.get('score') === 1 ? 3 : 1;
+            this.toolbarGrading.select(score);
+            this.review.set('score', score);
+            this.canvas.injectGradingColor();
         }
     },
     /**
@@ -838,6 +855,26 @@ module.exports = GelatoComponent.extend({
     registerKeypress: function() {
         this.keypressAction.register_many([
             {
+                'keys': 'apostrophe',
+                'on_keydown': _.bind(this.handleKeypressActionAudio, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'up',
+                'on_keydown': _.bind(this.handleKeypressActionShow, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'a',
+                'on_keydown': _.bind(this.handleKeypressActionAudio, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'l',
+                'on_keydown': _.bind(this.handleKeypressActionShow, this),
+                'prevent_repeat': true
+            },
+            {
                 'keys': 's',
                 'on_keydown': _.bind(this.handleKeypressActionShow, this),
                 'prevent_repeat': true
@@ -854,6 +891,21 @@ module.exports = GelatoComponent.extend({
             }
         ]);
         this.keypressGrading.register_many([
+            {
+                'keys': 'up',
+                'on_keydown': _.bind(this.handleKeypressGradingToggle, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'm',
+                'on_keydown': _.bind(this.handleKeypressGradingToggle, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'v',
+                'on_keydown': _.bind(this.handleKeypressGradingToggle, this),
+                'prevent_repeat': true
+            },
             {
                 'keys': '1',
                 'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 1),
@@ -932,7 +984,17 @@ module.exports = GelatoComponent.extend({
                 'prevent_repeat': true
             },
             {
+                'keys': '6',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 1),
+                'prevent_repeat': true
+            },
+            {
                 'keys': '2',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 2),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '7',
                 'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 2),
                 'prevent_repeat': true
             },
@@ -942,12 +1004,27 @@ module.exports = GelatoComponent.extend({
                 'prevent_repeat': true
             },
             {
+                'keys': '8',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 3),
+                'prevent_repeat': true
+            },
+            {
                 'keys': '4',
                 'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 4),
                 'prevent_repeat': true
             },
             {
+                'keys': '9',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 4),
+                'prevent_repeat': true
+            },
+            {
                 'keys': '5',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 5),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '0',
                 'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 5),
                 'prevent_repeat': true
             }
