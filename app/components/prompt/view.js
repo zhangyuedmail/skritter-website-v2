@@ -865,6 +865,11 @@ module.exports = GelatoComponent.extend({
                 'prevent_repeat': true
             },
             {
+                'keys': '.',
+                'on_keydown': _.bind(this.handleKeypressActionErase, this),
+                'prevent_repeat': true
+            },
+            {
                 'keys': 'a',
                 'on_keydown': _.bind(this.handleKeypressActionAudio, this),
                 'prevent_repeat': true
@@ -892,7 +897,7 @@ module.exports = GelatoComponent.extend({
         ]);
         this.keypressGrading.register_many([
             {
-                'keys': 'up',
+                'keys': 'down',
                 'on_keydown': _.bind(this.handleKeypressGradingToggle, this),
                 'prevent_repeat': true
             },
