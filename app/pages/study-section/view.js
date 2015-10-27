@@ -77,7 +77,7 @@ module.exports = GelatoPage.extend({
     handlePromptNext: function(reviews) {
         this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
         this.items.addReviews(reviews.getItemReviews());
-        this.items.reviews.save();
+        this.items.reviews.post();
         this.counter++;
         this.next();
     },

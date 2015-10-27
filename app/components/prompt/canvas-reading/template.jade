@@ -12,7 +12,6 @@ gelato-component(data-name='prompt-canvas-reading')
     if reviews.isComplete()
       - var writing = reviews.vocab.get('writing');
       - var reading = reviews.vocab.get('reading');
-      - console.log(wanakana)
       if app.fn.isKana(writing)
         .answer!= kana.toRomaji(reading)
       else
