@@ -13,6 +13,7 @@ var PromptVocabSentence = require('components/prompt/vocab-sentence/view');
 var PromptVocabStyle = require('components/prompt/vocab-style/view');
 var PromptVocabWriting = require('components/prompt/vocab-writing/view');
 
+//TODO: merge into template container
 var ConfirmBanDialog = require('dialogs/confirm-ban/view');
 var VocabDialog = require('dialogs/vocab/view');
 
@@ -104,7 +105,6 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPrompt: function() {
-        this.reset();
         this.review = this.reviews.current();
         switch (this.part) {
             case 'defn':
@@ -1057,7 +1057,11 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     reset: function() {
-        this.canvas.reset();
+        this.editing = false;
+        this.part = null;
+        this.review = null;
+        this.reviews = null;
+        this.render();
         return this;
     },
     /**

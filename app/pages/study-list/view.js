@@ -27,7 +27,17 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
         this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
         this.listenTo(this.toolbar, 'save:study-settings', this.handleToolbarSaveStudySettings);
-        this.load();
+        this.items.comparator = function(item) {
+            return -item.getReadiness();
+        };
+        this.loadMore(
+            _.bind(function() {
+                this.next();
+            }, this),
+            _.bind(function() {
+                this.next();
+            }, this)
+        );
     },
     /**
      * @property events
@@ -140,23 +150,25 @@ module.exports = GelatoPage.extend({
      * @param {Object} settings
      */
     handleToolbarSaveStudySettings: function(settings) {
-        this.prompt.remove();
-        this.prompt = this.createComponent('components/prompt');
-        this.prompt.setElement('#prompt-container').render();
+        this.items.reset();
+        this.prompt.reset();
         this.app.user.set(settings, {merge: true}).cache();
-        this.items = this.createCollection('collections/items');
-        this.items.fetchNext(
-            {listId: this.listId},
+        this.loadMore(
+            _.bind(function() {
+                this.next();
+            }, this),
             _.bind(function() {
                 this.next();
             }, this)
         );
     },
     /**
-     * @method load
+     * @method loadMore
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
      */
-    load: function() {
-        async.waterfall([
+    loadMore: function(callbackSuccess, callbackError) {
+        async.series([
             _.bind(function(callback) {
                 this.vocablist.fetch({
                     error: function(items, error) {
@@ -168,6 +180,7 @@ module.exports = GelatoPage.extend({
                 })
             }, this),
             _.bind(function(callback) {
+                this.items.cursor = null;
                 this.items.fetchNext(
                     {listId: this.listId},
                     function() {
@@ -177,42 +190,90 @@ module.exports = GelatoPage.extend({
                         callback();
                     }
                 );
+            }, this),
+            _.bind(function(callback) {
+                if (this.items.cursor) {
+                    this.items.fetchNext(
+                        {
+                            cursor: this.items.cursor,
+                            listId: this.listId
+                        },
+                        function() {
+                            callback();
+                        },
+                        function() {
+                            callback();
+                        }
+                    );
+                } else {
+                    callback();
+                }
+            }, this),
+            _.bind(function(callback) {
+                async.each(
+                    this.items.models,
+                    function(item, callback) {
+                        if (item.isKosher()) {
+                            callback();
+                        } else {
+                            item.set('next', moment());
+                            item.save(
+                                {'next': moment().add('2', 'weeks').unix()},
+                                {
+                                    error: function(error) {
+                                        callback(error)
+                                    },
+                                    success: function() {
+                                        callback();
+                                    }
+                                }
+                            )
+                        }
+                    },
+                    function(error) {
+                        callback(error);
+                    }
+                );
             }, this)
-        ], _.bind(function(error, items) {
+        ], function(error) {
             if (error) {
-                console.error('ITEM LOAD ERROR:', error, items);
+                callbackError(error);
             } else {
-                this.toolbar.render();
-                this.items.fetchNext({
-                    cursor: this.items.cursor,
-                    listId: this.listId
-                });
-                this.next();
+                callbackSuccess();
             }
-        }, this));
+        });
+    },
+    /**
+     * @method getNextItem
+     * @returns {Item}
+     */
+    getNextItem: function() {
+        return this.items.sort().at(0);
     },
     /**
      * @method next
      */
     next: function() {
-        var nextItem = this.items.getNext();
-        if (this.prompt) {
-            if (nextItem) {
-                this.toolbar.timer.reset();
-                this.prompt.set(nextItem.getPromptReviews());
-            } else {
-                console.error('ITEM LOAD ERROR:', 'no items');
+        var item = this.getNextItem();
+        if (item) {
+            this.toolbar.render();
+            this.toolbar.timer.reset();
+            this.prompt.set(item.getPromptReviews());
+            this.counter++;
+            if (this.counter % 10 === 0) {
+                console.log('LOADING MORE ITEMS:', 10);
+                this.items.fetchNext();
             }
-        }
-        if (!this.sectionId && this.counter % 10 === 0) {
-            console.log('LOADING MORE ITEMS:', 10);
-            this.items.fetchNext({listId: this.listId});
+        } else {
+            console.error('ITEM LOAD ERROR:', 'no items');
         }
     },
     /**
      * @method previous
      */
-    previous: function() {},
+    previous: function() {
+        //TODO: allow going back a prompt
+    },
     /**
      * @method remove
      * @returns {Study}

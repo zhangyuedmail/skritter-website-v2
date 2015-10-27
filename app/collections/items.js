@@ -26,14 +26,6 @@ module.exports = SkritterCollection.extend({
      */
     model: Item,
     /**
-     * @method comparator
-     * @param {Item} item
-     * @return {Number}
-     */
-    comparator: function(item) {
-        return -item.getReadiness();
-    },
-    /**
      * @method parse
      * @param {Object} response
      * @returns {Object}
@@ -291,21 +283,5 @@ module.exports = SkritterCollection.extend({
                 }
             }
         });
-    },
-    /**
-     * @method getNext
-     * @returns {Items}
-     */
-    getNext: function() {
-        return this.sort().at(0);
-    },
-    /**
-     * @method logNext
-     */
-    logNext: function() {
-        for (var i = 0, length = this.sort().length; i < length; i++) {
-            var item = this.at(i);
-            console.log(item.id, item.getReadiness());
-        }
     }
 });

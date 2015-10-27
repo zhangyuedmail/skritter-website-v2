@@ -213,6 +213,22 @@ module.exports = SkritterModel.extend({
         return this.get('lang') === 'ja';
     },
     /**
+     * @method isKosher
+     * @returns {Boolean}
+     */
+    isKosher: function() {
+        var vocab = this.getVocab();
+        if (!vocab) {
+            return false;
+        }
+        if (this.isPartRune()) {
+            if (!vocab.getStrokes().length) {
+                return false;
+            }
+        }
+        return true;
+    },
+    /**
      * @method isLeech
      * @returns {Boolean}
      */
@@ -225,6 +241,34 @@ module.exports = SkritterModel.extend({
      */
     isNew: function() {
         return !this.get('reviews');
+    },
+    /**
+     * @method isPartDefn
+     * @returns {Boolean}
+     */
+    isPartDefn: function() {
+        return this.get('part') === 'defn';
+    },
+    /**
+     * @method isPartRdng
+     * @returns {Boolean}
+     */
+    isPartRdng: function() {
+        return this.get('part') === 'rdng';
+    },
+    /**
+     * @method isPartRune
+     * @returns {Boolean}
+     */
+    isPartRune: function() {
+        return this.get('part') === 'rune';
+    },
+    /**
+     * @method isPartTone
+     * @returns {Boolean}
+     */
+    isPartTone: function() {
+        return this.get('part') === 'tone';
     },
     /**
      * @method unban
