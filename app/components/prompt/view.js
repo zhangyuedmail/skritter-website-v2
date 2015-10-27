@@ -785,6 +785,7 @@ module.exports = GelatoComponent.extend({
     handleToolbarVocabEdit: function() {
         if (this.editing) {
             this.editing = false;
+            this.registerKeypress();
             this.vocabDefinition.editable = false;
             this.vocabMnemonic.editable = false;
             this.reviews.vocab.save({
@@ -793,6 +794,7 @@ module.exports = GelatoComponent.extend({
             });
         } else {
             this.editing = true;
+            this.unregisterKeypress();
             this.vocabDefinition.editable = true;
             this.vocabMnemonic.editable = true;
 
