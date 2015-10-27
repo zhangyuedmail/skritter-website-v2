@@ -1,4 +1,4 @@
-gelato-component(data-name='prompt-vocab-character')
+gelato-component(data-name='prompt-vocab-contained')
   - var prompt = view.prompt;
   - var reviews = view.prompt.reviews;
 
@@ -17,7 +17,7 @@ gelato-component(data-name='prompt-vocab-character')
       hr
 
       div.value
-        if view.reveal || review.isComplete()
+        if review.get('showContained') || review.isComplete()
 
           for vocab in vocabs
             - var definition = vocab.getDefinition();
@@ -41,4 +41,4 @@ gelato-component(data-name='prompt-vocab-character')
 
         else
 
-          button#show-character.btn.btn-default show
+          button#show-contained.btn.btn-default show

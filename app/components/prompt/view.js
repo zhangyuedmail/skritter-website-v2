@@ -5,7 +5,7 @@ var PromptCanvas = require('components/prompt/canvas/view');
 var PromptToolbarAction = require('components/prompt/toolbar-action/view');
 var PromptToolbarGrading = require('components/prompt/toolbar-grading/view');
 var PromptToolbarVocab = require('components/prompt/toolbar-vocab/view');
-var PromptVocabCharacter = require('components/prompt/vocab-character/view');
+var PromptVocabContained = require('components/prompt/vocab-contained/view');
 var PromptVocabDefinition = require('components/prompt/vocab-definition/view');
 var PromptVocabMnemonic = require('components/prompt/vocab-mnemonic/view');
 var PromptVocabReading = require('components/prompt/vocab-reading/view');
@@ -36,7 +36,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction = new PromptToolbarAction({prompt: this});
         this.toolbarGrading = new PromptToolbarGrading({prompt: this});
         this.toolbarVocab = new PromptToolbarVocab({prompt: this});
-        this.vocabCharacter = new PromptVocabCharacter({prompt: this});
+        this.vocabContained = new PromptVocabContained({prompt: this});
         this.vocabDefinition = new PromptVocabDefinition({prompt: this});
         this.vocabMnemonic = new PromptVocabMnemonic({prompt: this});
         this.vocabReading = new PromptVocabReading({prompt: this});
@@ -70,6 +70,7 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.toolbarVocab, 'click:edit', this.handleToolbarVocabEdit);
         this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
         this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
+        this.listenTo(this.vocabContained, 'click:show', this.handleVocabContainedShow);
         this.listenTo(this.vocabReading, 'click:show', this.handleVocabReadingShow);
         this.on('resize', this.resize);
     },
@@ -88,7 +89,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.setElement('#toolbar-action-container');
         this.toolbarGrading.setElement('#toolbar-grading-container');
         this.toolbarVocab.setElement('#toolbar-vocab-container');
-        this.vocabCharacter.setElement('#vocab-character-container');
+        this.vocabContained.setElement('#vocab-contained-container');
         this.vocabDefinition.setElement('#vocab-definition-container');
         this.vocabMnemonic.setElement('#vocab-mnemonic-container');
         this.vocabReading.setElement('#vocab-reading-container');
@@ -159,7 +160,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.render();
         this.toolbarGrading.render();
         this.toolbarVocab.render();
-        this.vocabCharacter.render();
+        this.vocabContained.render();
         this.vocabDefinition.render();
         this.vocabMnemonic.render();
         this.vocabReading.render();
@@ -185,7 +186,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.hide();
-            this.vocabCharacter.render();
+            this.vocabContained.render();
             this.vocabDefinition.render();
             this.vocabReading.render();
             this.review.start();
@@ -211,7 +212,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.toolbarGrading.show();
-            this.vocabCharacter.render();
+            this.vocabContained.render();
             this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
@@ -240,7 +241,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.hide();
-            this.vocabCharacter.render();
+            this.vocabContained.render();
             this.vocabReading.render();
             this.review.start();
             this.trigger('review:start', this.reviews);
@@ -265,7 +266,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.toolbarGrading.show();
-            this.vocabCharacter.render();
+            this.vocabContained.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             if (app.user.isAudioEnabled()) {
@@ -294,7 +295,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = true;
             this.toolbarAction.render();
             this.toolbarGrading.hide();
-            this.vocabCharacter.render();
+            this.vocabContained.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
@@ -328,7 +329,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
-            this.vocabCharacter.render();
+            this.vocabContained.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabSentence.render();
@@ -370,7 +371,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.hide();
-            this.vocabCharacter.render();
+            this.vocabContained.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
@@ -400,7 +401,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.toolbarGrading.show();
-            this.vocabCharacter.render();
+            this.vocabContained.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -818,6 +819,13 @@ module.exports = GelatoComponent.extend({
         });
     },
     /**
+     * @method handleVocabContainedShow
+     */
+    handleVocabContainedShow: function() {
+        this.review.set('showContained', true);
+        this.vocabContained.render();
+    },
+    /**
      * @method handleVocabReadingShow
      * @param {Number} position
      */
@@ -1048,7 +1056,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
         this.toolbarVocab.remove();
-        this.vocabCharacter.remove();
+        this.vocabContained.remove();
         this.vocabDefinition.remove();
         this.vocabMnemonic.remove();
         this.vocabReading.remove();
