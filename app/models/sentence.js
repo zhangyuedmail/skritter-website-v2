@@ -32,7 +32,7 @@ module.exports = GelatoModel.extend({
         if (mask !== undefined) {
             var pieces = mask.split('');
             for (var i = 0, length = pieces.length; i < length; i++) {
-                writing = writing.replace(pieces[0], '_');
+                writing = writing.replace(new RegExp(pieces[i], 'g'), '_');
             }
         }
         return writing.replace(/\s+/g, '');
