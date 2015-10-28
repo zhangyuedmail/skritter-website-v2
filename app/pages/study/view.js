@@ -150,6 +150,7 @@ module.exports = GelatoPage.extend({
         this.items.reset();
         this.prompt.reset();
         this.app.user.set(settings, {merge: true}).cache();
+        this.app.user.save();
         this.loadMore(
             _.bind(function() {
                 this.next();
