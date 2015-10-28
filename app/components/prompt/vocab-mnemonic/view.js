@@ -13,14 +13,13 @@ module.exports = GelatoComponent.extend({
     initialize: function(options) {
         this.editable = false;
         this.prompt = options.prompt;
-        this.reveal = false;
     },
     /**
      * @property events
      * @type Object
      */
     events: {
-        'vclick #show-mnemonic': 'handleClickShowMnemonic'
+        'vclick #show-mnemonic': 'handleClickShow'
     },
     /**
      * @property template
@@ -43,12 +42,11 @@ module.exports = GelatoComponent.extend({
         return {text: this.$('textarea').val()}
     },
     /**
-     * @method handleClickShowMnemonic
+     * @method handleClickShow
      * @param {Event} event
      */
-    handleClickShowMnemonic: function(event) {
+    handleClickShow: function(event) {
         event.preventDefault();
-        this.reveal = true;
-        this.render();
+        this.trigger('click:show')
     }
 });

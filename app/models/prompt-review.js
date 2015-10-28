@@ -34,6 +34,7 @@ module.exports = GelatoModel.extend({
             score: 3,
             showContained: false,
             showDefinition: false,
+            showMnemonic: false,
             showReading: false,
             submitTime: 0,
             thinkingStop: 0,

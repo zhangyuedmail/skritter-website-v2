@@ -71,6 +71,7 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
         this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
         this.listenTo(this.vocabContained, 'click:show', this.handleVocabContainedShow);
+        this.listenTo(this.vocabMnemonic, 'click:show', this.handleVocabMnemonicShow);
         this.listenTo(this.vocabReading, 'click:show', this.handleVocabReadingShow);
         this.on('resize', this.resize);
     },
@@ -828,6 +829,13 @@ module.exports = GelatoComponent.extend({
         this.vocabContained.render();
     },
     /**
+     * @method handleVocabMnemonicShow
+     */
+    handleVocabMnemonicShow: function() {
+        this.review.set('showMnemonic', true);
+        this.vocabMnemonic.render();
+    },
+    /**
      * @method handleVocabReadingShow
      * @param {Number} position
      */
@@ -1081,9 +1089,11 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method resize
+     * @returns {Prompt}
      */
     resize: function() {
         //TODO: redraw and resize
+        return this;
     },
     /**
      * @method set

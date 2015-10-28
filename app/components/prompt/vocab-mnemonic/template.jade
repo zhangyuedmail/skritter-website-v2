@@ -4,11 +4,12 @@ gelato-component(data-name='prompt-vocab-mnemonic')
 
   if reviews
     - var mnemonic = reviews.vocab.getMnemonic();
+    - var review = reviews.current();
 
     label Mnemonic
 
     .value
-      if !mnemonic || view.reveal || reviews.isComplete()
+      if !mnemonic || review.get('showMnemonic') || reviews.isComplete()
 
         if view.editable
           textarea= mnemonic ? mnemonic.text : ''
