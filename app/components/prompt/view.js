@@ -562,11 +562,6 @@ module.exports = GelatoComponent.extend({
                 this.review.character.reset();
                 this.renderPrompt();
                 break;
-            case 'tone':
-                this.review.set({complete: false, teach: false});
-                this.review.character.reset();
-                this.renderPrompt();
-                break;
         }
     },
     /**
