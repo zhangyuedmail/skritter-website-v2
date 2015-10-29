@@ -368,7 +368,7 @@ module.exports = GelatoComponent.extend({
             this.keypressTone.listen();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
-            this.toolbarAction.buttonShow = true;
+            this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             //this.toolbarGrading.hide();
