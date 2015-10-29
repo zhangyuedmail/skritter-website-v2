@@ -367,7 +367,7 @@ module.exports = GelatoComponent.extend({
             this.keypressGrading.stop_listening();
             this.keypressTone.listen();
             this.toolbarAction.buttonCorrect = true;
-            this.toolbarAction.buttonErase = true;
+            this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = true;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
@@ -396,7 +396,7 @@ module.exports = GelatoComponent.extend({
             this.keypressGrading.listen();
             this.keypressTone.stop_listening();
             this.toolbarAction.buttonCorrect = true;
-            this.toolbarAction.buttonErase = true;
+            this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
@@ -531,11 +531,6 @@ module.exports = GelatoComponent.extend({
     handleCanvasSwipeUp: function() {
         switch (this.part) {
             case 'rune':
-                this.review.set({complete: false, teach: false});
-                this.review.character.reset();
-                this.renderPrompt();
-                break;
-            case 'tone':
                 this.review.set({complete: false, teach: false});
                 this.review.character.reset();
                 this.renderPrompt();
@@ -705,11 +700,6 @@ module.exports = GelatoComponent.extend({
     handleToolbarActionErase: function() {
         switch (this.part) {
             case 'rune':
-                this.review.set({complete: false, teach: false});
-                this.review.character.reset();
-                this.renderPrompt();
-                break;
-            case 'tone':
                 this.review.set({complete: false, teach: false});
                 this.review.character.reset();
                 this.renderPrompt();
