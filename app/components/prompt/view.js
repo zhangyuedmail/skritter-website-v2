@@ -371,7 +371,6 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
-            //this.toolbarGrading.hide();
             this.vocabContained.render();
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -646,10 +645,24 @@ module.exports = GelatoComponent.extend({
     handleKeypressNavigateReveal: function() {
         switch (this.part) {
             case 'rune':
-                this.handleKeypressNavigateNext();
+                if (this.review.isComplete()) {
+                    this.handleKeypressNavigateNext();
+                } else {
+                    this.canvas.completeCharacter();
+                    this.canvas.injectGradingColor();
+                    this.review.set('complete', true);
+                    this.renderPromptComplete();
+                }
                 break;
             case 'tone':
-                this.handleKeypressNavigateNext();
+                if (this.review.isComplete()) {
+                    this.handleKeypressNavigateNext();
+                } else {
+                    this.canvas.completeCharacter();
+                    this.canvas.injectGradingColor();
+                    this.review.set('complete', true);
+                    this.renderPromptComplete();
+                }
                 break;
             default:
                 if (this.review.isComplete()) {

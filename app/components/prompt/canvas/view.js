@@ -524,7 +524,26 @@ module.exports = GelatoComponent.extend({
     },
 
 
-
+    /**
+     * @method completeCharacter
+     * @returns {PromptCanvas}
+     */
+    completeCharacter: function() {
+        var review = this.prompt.review;
+        var character = this.prompt.review.character;
+        var strokes = [];
+        if (this.prompt.part === 'tone') {
+            strokes = [character.getTone(review.getTones()[0])];
+        } else {
+            strokes = character.targets[0].models;
+        }
+        character.reset(strokes);
+        this.drawShape(
+            'character',
+            character.getUserShape()
+        );
+        return this;
+    },
     /**
      * @method fadeCharacterHint
      * @returns {PromptCanvas}
