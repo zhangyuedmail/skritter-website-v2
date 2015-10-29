@@ -5,12 +5,17 @@ gelato-component(data-name="prompt-toolbar-vocab")
   if reviews
 
     i#button-vocab-audio.icon.icon-study-word-volume
-    i#button-vocab-star.icon.icon-study-word-star(class=(reviews.vocab.isStarred() ? 'starred' : ''))
-    i#button-vocab-edit.icon.icon-study-word-edit
-    if reviews.item
-      i#button-vocab-ban.icon.icon-study-ban(class=(reviews.item.isBanned() ? 'banned' : ''))
+
+    if reviews.vocab.isStarred()
+      i#button-vocab-star.icon.icon-study-word-star-yellow
     else
-      i#button-vocab-ban.icon.icon-study-ban(class=(reviews.vocab.isBanned() ? 'banned' : ''))
+      i#button-vocab-star.icon.icon-study-word-star
+
+    i#button-vocab-edit.icon.icon-study-word-edit
+
+    if reviews.item
+      i#button-vocab-ban.icon.icon-study-ban
+
     i#button-vocab-info.icon.icon-study-info
 
     if reviews.item && reviews.item.get('last')
