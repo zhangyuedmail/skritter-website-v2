@@ -371,7 +371,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = true;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
-            this.toolbarGrading.hide();
+            //this.toolbarGrading.hide();
             this.vocabContained.render();
             this.vocabReading.render();
             this.vocabWriting.render();
