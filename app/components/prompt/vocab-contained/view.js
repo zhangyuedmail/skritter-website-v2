@@ -18,6 +18,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
+        'vclick .child-decomp': 'handleClickChildDecomp',
         'vclick #show-contained': 'handleClickShow'
     },
     /**
@@ -32,6 +33,12 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
         return this;
+    },
+    handleClickChildDecomp: function(event) {
+        event.preventDefault();
+        console.log(event);
+        var $popup = $(event.currentTarget).find('.child-decomp-popup');
+        $popup.removeClass('hidden');
     },
     /**
      * @method handleClickShow
