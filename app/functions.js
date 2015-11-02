@@ -203,8 +203,7 @@ function hasKana(text) {
         for (var i = 0, length = chars.length; i < length; i++) {
             var charCode = text.charCodeAt(i);
             if ((charCode >= 12353 && charCode <= 12436) ||
-                (charCode >= 12449 && charCode <= 12540) ||
-                charCode === 65374) {
+                (charCode >= 12449 && charCode <= 12540)) {
                 return true;
             }
         }
@@ -223,8 +222,7 @@ function isKana(text) {
         for (var i = 0, length = chars.length; i < length; i++) {
             var charCode = text.charCodeAt(i);
             if (!(charCode >= 12353 && charCode <= 12436) &&
-                !(charCode >= 12449 && charCode <= 12540) &&
-                charCode !== 65374) {
+                !(charCode >= 12449 && charCode <= 12540)) {
                 return false;
             }
         }
