@@ -40,8 +40,8 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyToolbar}
      */
     remove: function() {
-      this.timer.remove();
-      return this;
+        this.timer.remove();
+        return this;
     },
     /**
      * @method render
