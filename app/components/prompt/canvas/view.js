@@ -241,12 +241,18 @@ module.exports = GelatoComponent.extend({
                 point.y = self.stage.mouseY;
             }
             var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
-            marker.graphics.moveTo(midPoint.x, midPoint.y).curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
-            oldPoint = point;
-            oldMidPoint = midPoint;
-            points.push(point);
-            self.triggerInputMove(point);
-            self.stage.update();
+            if (app.fn.getDistance(oldPoint, point) > 3.0) {
+                marker.graphics
+                    .setStrokeStyle(self.size * self.brushScale, 'round', 'round')
+                    .beginStroke(self.strokeColor)
+                    .moveTo(midPoint.x, midPoint.y)
+                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y)
+                    .endStroke();
+                oldPoint = point;
+                oldMidPoint = midPoint;
+                points.push(point);
+                self.stage.update();
+            }
         }
         function up(event) {
             marker.graphics.endStroke();

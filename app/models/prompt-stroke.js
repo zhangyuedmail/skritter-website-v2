@@ -103,9 +103,9 @@ module.exports = GelatoModel.extend({
             shape.rotation = data.rot;
         } else {
             var ms = shape.getMatrix();
-            ms.scale(data.scaleX, data.scaleY);
-            ms.translate(-data.w / 2, -data.h / 2);
-            ms.rotate(data.rot * createjs.Matrix2D.DEG_TO_RAD);
+            ms.appendMatrix(new createjs.Matrix2D().rotate(data.rot));
+            ms.appendMatrix(new createjs.Matrix2D().translate(-data.w / 2, -data.h / 2));
+            ms.appendMatrix(new createjs.Matrix2D().scale(data.scaleX, data.scaleY));
             var t = ms.decompose();
             shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
             var finalBounds = shape.getTransformedBounds();
