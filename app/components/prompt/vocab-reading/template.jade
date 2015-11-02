@@ -9,17 +9,15 @@ gelato-component(data-name='prompt-vocab-reading')
     case prompt.part
 
       when 'rune'
+        - console.log(readings)
         for reading in readings
           if (reading.type === 'character')
             - var review = reviews.at(index)
             div.reading(data-position=index)
-              if reviews.vocab.isChinese()
-                if review.isReadingHidden()
-                  button.show-reading.btn.btn-sm.btn-default show
-                else
-                  span= app.fn.pinyin.toTone(reading.value)
+              if review.isReadingHidden()
+                button.show-reading.btn.btn-sm.btn-default show
               else
-                span= reading.value
+                span= reviews.vocab.isChinese()? app.fn.pinyin.toTone(reading.value) : reading.value
             - index++
           else
             div.filler
