@@ -13,6 +13,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.navbar = this.createComponent('navbars/default');
         this.listenTo(app.user, 'state', this.renderSectionContent);
+        this.sourceLanguages = require('data/source-languages');
         this.sidebar = new SettingsSidebar();
         app.user.fetch();
     },
@@ -98,6 +99,7 @@ module.exports = GelatoPage.extend({
         app.user.set({
             autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
             showHeisig: this.$('#field-heisig').is(':checked'),
+            sourceLang: this.$('#field-source-language').val(),
             targetLang: this.$('#field-target-language').val()
         });
         if (app.isChinese()) {

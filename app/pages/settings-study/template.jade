@@ -22,7 +22,10 @@ gelato-page(data-name='settings-study')
                 label.col-sm-3.control-label(for="field-source-language") Source language
                 .col-sm-9
                   select#field-source-language.form-control
-                    option English
+                    for lang in view.sourceLanguages
+                      - var langCode = lang[0][0];
+                      - var langString = lang[0][1];
+                      option(value=langCode, selected=(app.user.get('sourceLang') === langCode))= langString
               if (app.getLanguage() === 'zh')
                 .form-group
                   label.col-sm-3.control-label(for="field-styles") Character styles
