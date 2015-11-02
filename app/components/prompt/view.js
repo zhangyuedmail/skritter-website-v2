@@ -371,6 +371,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.render();
             this.vocabContained.render();
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -399,6 +400,7 @@ module.exports = GelatoComponent.extend({
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.render();
             this.toolbarGrading.select(this.review.get('score'));
             this.toolbarGrading.show();
             this.vocabContained.render();
