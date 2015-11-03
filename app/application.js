@@ -204,7 +204,7 @@ module.exports = GelatoApplication.extend({
         var parent = document.getElementsByTagName('script')[0];
         var script = document.createElement('script');
         var HSCW = {config: {}};
-        var HS = {beacon: {}};
+        var HS = {beacon: {readyQueue: [], user: this.user}};
         HSCW.config = {
             contact: {
                 enabled: true,
@@ -215,13 +215,25 @@ module.exports = GelatoApplication.extend({
                 baseUrl: 'https://skritter.helpscoutdocs.com/'
             }
         };
+        HS.beacon.ready = function(callback) {
+            this.readyQueue.push(callback);
+        };
         HS.beacon.userConfig = {
             color: '#32a8d9',
             icon: 'question',
             modal: false
         };
-        script.async = true;
+        HS.beacon.ready(function(beacon) {
+            if (this.user.isLoggedIn()) {
+                this.identify({
+                    email: this.user.get('email'),
+                    name: this.user.get('name')
+                });
+            }
+        });
+        script.async = false;
         script.src = 'https://djtflbt20bdde.cloudfront.net/';
+        script.type = 'text/javascript';
         parent.parentNode.insertBefore(script, parent);
         window.HSCW = HSCW;
         window.HS = HS;
