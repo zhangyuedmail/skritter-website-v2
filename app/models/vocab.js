@@ -86,7 +86,15 @@ module.exports = SkritterModel.extend({
         var containedVocabs = [];
         var containedVocabIds = this.get('containedVocabIds') || [];
         for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-            containedVocabs.push(this.collection.get(containedVocabIds[i]));
+            var containedVocab = this.collection.get(containedVocabIds[i]);
+            if (this.isJapanese()) {
+                if (!app.user.get('studyKana') && containedVocab.isKana()) {
+                    continue;
+                }
+                containedVocabs.push(containedVocab);
+            } else {
+                containedVocabs.push(containedVocab);
+            }
         }
         return containedVocabs;
     },
@@ -246,7 +254,14 @@ module.exports = SkritterModel.extend({
         for (var i = 0, length = characters.length; i < length; i++) {
             var stroke = this.collection.strokes.get(characters[i]);
             if (stroke) {
-                strokes.push(stroke);
+                if (this.isJapanese()) {
+                    if (!app.user.get('studyKana') && stroke.isKana()) {
+                        continue;
+                    }
+                    strokes.push(stroke);
+                } else {
+                    strokes.push(stroke);
+                }
             }
         }
         return strokes;

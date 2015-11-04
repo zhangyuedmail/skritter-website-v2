@@ -71,24 +71,8 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getContainedVocabs: function() {
-        var containedVocabs = [];
         var vocab = this.getVocab();
-        if (vocab) {
-            var containedVocabIds = vocab.get('containedVocabIds') || [];
-            for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                var containedVocab = this.collection.vocabs.get(containedVocabIds[i]);
-                if (this.isJapanese()) {
-                    if (app.user.get('studyKana')) {
-                        containedVocabs.push(containedVocab);
-                    } else if (!vocab.isKana()) {
-                        containedVocabs.push(containedVocab);
-                    }
-                } else {
-                    containedVocabs.push(containedVocab);
-                }
-            }
-        }
-        return containedVocabs;
+        return vocab ? vocab.getContained() : [];
     },
     /**
      * @method getPromptReviews

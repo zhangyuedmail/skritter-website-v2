@@ -51,5 +51,12 @@ module.exports = GelatoModel.extend({
         character.targets = targets;
         character.writing = rune;
         return character;
+    },
+    /**
+     * @method isKana
+     * @returns {Boolean}
+     */
+    isKana: function() {
+        return app.fn.isKana(this.get('rune'));
     }
 });
