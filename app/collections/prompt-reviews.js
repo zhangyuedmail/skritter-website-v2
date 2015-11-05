@@ -146,6 +146,13 @@ module.exports = GelatoCollection.extend({
         return this.part === 'tone' ? 15000 : 30000;
     },
     /**
+     * @method isChinese
+     * @returns {Boolean}
+     */
+    isChinese: function() {
+        return this.vocab.isChinese();
+    },
+    /**
      * @method isComplete
      * @returns {Boolean}
      */
@@ -158,6 +165,13 @@ module.exports = GelatoCollection.extend({
      */
     isFirst: function() {
         return this.position === 0;
+    },
+    /**
+     * @method isJapanese
+     * @returns {Boolean}
+     */
+    isJapanese: function() {
+        return this.vocab.isJapanese();
     },
     /**
      * @method isLast

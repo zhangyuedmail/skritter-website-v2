@@ -101,6 +101,13 @@ module.exports = GelatoModel.extend({
         return this.collection.vocab.getTones()[this.getPosition()];
     },
     /**
+     * @method isChinese
+     * @returns {Boolean}
+     */
+    isChinese: function() {
+        return this.vocab.isChinese();
+    },
+    /**
      * @method isComplete
      * @returns {Boolean}
      */
@@ -116,6 +123,13 @@ module.exports = GelatoModel.extend({
             return false;
         }
         return app.user.get('hideDefinition') && !this.isComplete();
+    },
+    /**
+     * @method isJapanese
+     * @returns {Boolean}
+     */
+    isJapanese: function() {
+        return this.vocab.isJapanese();
     },
     /**
      * @method isReadingHidden
