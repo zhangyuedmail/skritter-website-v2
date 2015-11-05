@@ -13,10 +13,16 @@ gelato-component(data-name='prompt-vocab-reading')
           if (reading.type === 'character')
             - var review = reviews.at(index)
             div.reading(data-position=index)
-              if review.isReadingHidden()
-                button.show-reading.btn.btn-sm.btn-default show
+              if reviews.isChinese()
+                if review.isReadingHidden()
+                  button.show-reading.btn.btn-sm.btn-default show
+                else
+                  span= app.fn.pinyin.toTone(reading.value)
               else
-                span= reviews.vocab.isChinese()? app.fn.pinyin.toTone(reading.value) : reading.value
+                if app.user.get('hideReading') && !reviews.isComplete()
+                  button.show-reading.btn.btn-sm.btn-default show
+                else
+                  span= reading.value
             - index++
           else
             div.filler
