@@ -302,7 +302,9 @@ module.exports = GelatoComponent.extend({
             this.canvas.enableInput();
             this.review.start();
             this.trigger('review:start', this.reviews);
-            if (app.user.isAudioEnabled() && this.reviews.isFirst()) {
+            if (app.user.isAudioEnabled() &&
+                !app.user.get('hideReading') &&
+                this.reviews.isFirst()) {
                 this.reviews.vocab.play();
             }
             if (this.reviews.isTeachable()) {
@@ -335,6 +337,11 @@ module.exports = GelatoComponent.extend({
             this.vocabReading.render();
             this.vocabSentence.render();
             this.vocabWriting.render();
+            if (app.user.isAudioEnabled() &&
+                app.user.get('hideReading') &&
+                this.reviews.isLast()) {
+                this.reviews.vocab.play();
+            }
             if (this.reviews.isTeachable()) {
                 this.review.set('score', 1);
                 this.toolbarGrading.deselect();
