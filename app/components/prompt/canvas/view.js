@@ -214,12 +214,13 @@ module.exports = GelatoComponent.extend({
      */
     enableInput: function() {
         var self = this;
-        var oldPoint, oldMidPoint, points, marker;
+        var oldPoint, oldMidPoint, points, marker, clonedMarker;
         this.disableInput().$('#input-canvas').on('vmousedown.Input pointerdown.Input', down);
         function down(event) {
             points = [];
             marker = new createjs.Shape();
-            marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round').beginStroke(self.strokeColor);
+            marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round');
+            marker.stroke = marker.graphics.beginStroke(self.strokeColor).command;
             if (event.offsetX && event.offsetY) {
                 points.push(new createjs.Point(event.offsetX, event.offsetY));
             } else {
@@ -244,12 +245,10 @@ module.exports = GelatoComponent.extend({
             if (app.fn.getDistance(oldPoint, point) > 3.0) {
                 marker.graphics
                     .setStrokeStyle(self.size * self.brushScale, 'round', 'round')
-                    .beginStroke(self.strokeColor)
                     .moveTo(midPoint.x, midPoint.y)
-                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y)
-                    .endStroke();
-                oldPoint = point;
-                oldMidPoint = midPoint;
+                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+                oldPoint = point.clone();
+                oldMidPoint = midPoint.clone();
                 points.push(point);
                 self.stage.update();
             }
@@ -263,7 +262,9 @@ module.exports = GelatoComponent.extend({
             } else {
                 points.push(new createjs.Point(self.stage.mouseX, self.stage.mouseY));
             }
-            self.triggerInputUp(points, marker.clone(true));
+            clonedMarker = marker.clone(true);
+            clonedMarker.stroke = marker.stroke;
+            self.triggerInputUp(points, clonedMarker);
             self.getLayer('input').removeAllChildren();
         }
         return this;
@@ -330,9 +331,13 @@ module.exports = GelatoComponent.extend({
                     inject(object.children[i]);
                 }
             } else if (object.graphics) {
-                object.graphics._dirty = true;
-                object.graphics._fill = customFill;
-                object.graphics._stroke = customStroke;
+                if (object.stroke) {
+                    object.stroke.style = color;
+                } else {
+                    object.graphics._dirty = true;
+                    object.graphics._fill = customFill;
+                    object.graphics._stroke = customStroke;
+                }
             }
         })(object);
         return this;
