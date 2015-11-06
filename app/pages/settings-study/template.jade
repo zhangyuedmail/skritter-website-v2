@@ -57,6 +57,10 @@ gelato-page(data-name='settings-study')
                   label.col-sm-3.control-label(for="field-study-kana") Study kana
                   .col-sm-9
                     input#field-study-kana(type="checkbox", checked=user.get('studyKana'))
+                .form-group
+                  label.col-sm-3.control-label(for="field-study-rare-writings") Study uncommon kanji
+                  .col-sm-9
+                    input#field-study-kana(type="checkbox", checked=user.get('studyRareWritings'))
               .form-group
                 label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
                 .col-sm-9
