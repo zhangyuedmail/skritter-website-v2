@@ -10,6 +10,9 @@ exports.config =
         'js/libraries.js': /^(bower_components|vendor)/
       order:
         before: [
+          'bower_components/jquery/dist/jquery.js',
+          'bower_components/lodash/lodash.js',
+          'bower_components/backbone/backbone.js',
           'bower_components/async/dist/async.js',
           'bower_components/bootstrap/dist/js/bootstrap.js',
           'bower_components/moment/moment.js',
