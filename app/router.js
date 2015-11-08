@@ -36,13 +36,13 @@ module.exports = Router.extend({
         'signup': 'navigateSignup',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'vocab(/:vocabId)': 'navigateVocab',
-        'vocablists': 'navigateVocablistQueue',
-        'vocablists/browse': 'navigateVocablistBrowse',
+        'vocablists': 'navigateVocablistsQueue',
+        'vocablists/browse': 'navigateVocablistsBrowse',
         'vocablists/chinesepod': 'navigateChinesepod',
-        'vocablists/queue': 'navigateVocablistQueue',
-        'vocablists/published': 'navigateVocablistPublished',
-        'vocablists/my-lists': 'navigateVocablistMyLists',
-        'vocablists/create': 'navigateCreateVocablist',
+        'vocablists/create': 'navigateVocablistsCreate',
+        'vocablists/my-lists': 'navigateVocablistsMine',
+        'vocablists/published': 'navigateVocablistsPublished',
+        'vocablists/queue': 'navigateVocablistsQueue',
         'vocablists/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
         'vocablists/view/(:vocablistId)': 'navigateVocablist',
         'words': 'navigateWordsAll',
@@ -252,36 +252,6 @@ module.exports = Router.extend({
         }
     },
     /**
-     * @method navigateVocablistBrowse
-     */
-    navigateVocablistBrowse: function() {
-        if (app.user.isLoggedIn()) {
-            this.go('pages/vocablist-browse');
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateVocablistQueue
-     */
-    navigateVocablistQueue: function() {
-        if (app.user.isLoggedIn()) {
-            this.go('pages/vocablist-queue');
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateVocablistMyLists
-     */
-    navigateVocablistMyLists: function() {
-        if (app.user.isLoggedIn()) {
-            this.go('pages/vocablist-mine');
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
      * @method navigateVocablist
      */
     navigateVocablist: function(vocablistId) {
@@ -296,20 +266,57 @@ module.exports = Router.extend({
      */
     navigateVocablistSection: function(vocablistId, sectionId) {
         if (app.user.isLoggedIn()) {
-            this.go('pages/vocablist-section', {
-                vocablistId: vocablistId,
-                sectionId: sectionId
-            });
+            this.go('pages/vocablist-section', {vocablistId: vocablistId, sectionId: sectionId});
         } else {
             this.navigateLogin();
         }
     },
     /**
-     * @method navigateVocablistPublished
+     * @method navigateVocablistsBrowse
      */
-    navigateVocablistPublished: function() {
+    navigateVocablistsBrowse: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages/vocablist-published');
+            this.go('views/vocablists/browse');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateVocablistsCreate
+     */
+    navigateVocablistsCreate: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('views/vocablists/create');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateVocablistsMine
+     */
+    navigateVocablistsMine: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('views/vocablists/mine');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateVocablistsPublished
+     */
+    navigateVocablistsPublished: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('views/vocablists/published');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateVocablistsQueue
+     */
+    navigateVocablistsQueue: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('views/vocablists/queue');
         } else {
             this.navigateLogin();
         }
