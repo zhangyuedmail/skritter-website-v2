@@ -1,17 +1,19 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
+var Vocablists = require('collections/vocablists');
+var Vocablist = require('models/vocablist');
 
 /**
  * @class DashboardLists
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
         this.vocablist = null;
-        this.vocablists = this.createCollection('collections/vocablists');
+        this.vocablists = new Vocablists();
         this.listenTo(this.vocablists, 'state', this.render);
         this.vocablists.fetch({
             data: {
@@ -51,7 +53,7 @@ module.exports = GelatoComponent.extend({
         event.preventDefault();
         var $row = $(event.target).closest('.row');
         var attributes = {id: $row.data('list-id')};
-        this.vocablist = this.createModel('models/vocablist', attributes);
+        this.vocablist = new Vocablist(attributes);
         this.listenToOnce(this.vocablist, 'state:standby', this.render);
         this.vocablist.fetch();
     },

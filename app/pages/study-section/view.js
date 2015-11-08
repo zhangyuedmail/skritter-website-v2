@@ -1,10 +1,15 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
+var Prompt = require('components/prompt/view');
+var StudyToolbar = require('components/study-toolbar/view');
+var Vocablist = require('models/vocablist');
+var Items = require('collections/items');
 
 /**
  * @class StudySection
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @param {Object} options
@@ -13,11 +18,11 @@ module.exports = GelatoPage.extend({
     initialize: function(options) {
         this.listId = options.listId;
         this.sectionId = options.sectionId;
-        this.items = this.createCollection('collections/items');
-        this.navbar = this.createComponent('navbars/default');
-        this.prompt = this.createComponent('components/prompt');
-        this.toolbar = this.createComponent('components/study-toolbar', {page: this});
-        this.vocablist = this.createModel('models/vocablist', {id: options.listId});
+        this.items = new Items();
+        this.navbar = new DefaultNavbar();
+        this.prompt = new Prompt();
+        this.toolbar = new StudyToolbar(null, {page: this});
+        this.vocablist = new Vocablist({id: options.listId});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
@@ -265,6 +270,6 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.prompt.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     }
 });

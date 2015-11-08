@@ -1,16 +1,16 @@
-var GelatoDialog = require('gelato/bootstrap/dialog');
+var BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class GoalSettingsDialog
- * @extends {GelatoDialog}
+ * @extends {BootstrapDialog}
  */
-module.exports = GelatoDialog.extend({
+module.exports = BootstrapDialog.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        GelatoDialog.prototype.initialize.call(this);
+        BootstrapDialog.prototype.initialize.call(this);
     },
     /**
      * @property template

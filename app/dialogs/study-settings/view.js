@@ -1,10 +1,10 @@
-var GelatoDialog = require('gelato/bootstrap/dialog');
+var BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
  * @class StudySettingsDialog
- * @extends {GelatoDialog}
+ * @extends {BootstrapDialog}
  */
-module.exports = GelatoDialog.extend({
+module.exports = BootstrapDialog.extend({
     /**
      * @property events
      * @type {Object}

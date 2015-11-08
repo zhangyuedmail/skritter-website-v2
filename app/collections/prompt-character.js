@@ -1,11 +1,11 @@
-var GelatoCollection = require('gelato/collection');
+var Collection = require('base/collection');
 var PromptStroke = require('models/prompt-stroke');
 
 /**
  * @class PromptCharacter
- * @extends {GelatoCollection}
+ * @extends {Collection}
  */
-module.exports = GelatoCollection.extend({
+module.exports = Collection.extend({
     /**
      * @method initialize
      * @constructor

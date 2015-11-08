@@ -1,12 +1,12 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 var Vocabs = require('collections/vocabs');
 var DictionaryLookup = require('components/dictionary-lookup/view');
 
 /**
  * @class VocabViewer
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @constructor
@@ -64,6 +64,6 @@ module.exports = GelatoComponent.extend({
      */
     remove: function() {
         this.lookup.remove();
-        return GelatoComponent.prototype.remove.call(this);
+        return Component.prototype.remove.call(this);
     }
 });

@@ -1,11 +1,11 @@
-var GelatoNavbar = require('gelato/bootstrap/navbar');
+var BootstrapNavbar = require('base/bootstrap-navbar');
 var ConfirmLogoutDialog = require('dialogs/confirm-logout/view');
 
 /**
  * @class DefaultNavbar
- * @extends {GelatoNavbar}
+ * @extends {BootstrapNavbar}
  */
-module.exports = GelatoNavbar.extend({
+module.exports = BootstrapNavbar.extend({
     /**
      * @property events
      * @type {Object}

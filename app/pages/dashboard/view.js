@@ -1,22 +1,27 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
+var DashboardMonth = require('components/dashboard-month/view');
+var DashboardTotal = require('components/dashboard-total/view');
+var DashboardQueue = require('components/dashboard-queue/view');
+var DashboardGoal = require('components/dashboard-status/view');
 
 /**
  * @class Dashboard
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.navbar = this.createComponent('navbars/default');
-        this.dashboardMonth = this.createComponent('components/dashboard-month');
-        this.dashboardTotal = this.createComponent('components/dashboard-total');
-        this.dashboardQueue = this.createComponent('components/dashboard-lists');
+        this.navbar = new DefaultNavbar();
+        this.dashboardMonth = new DashboardMonth();
+        this.dashboardTotal = new DashboardTotal();
+        this.dashboardQueue = new DashboardQueue();
 
         //TODO: change to dashboard goal component
-        this.dashboardGoal = this.createComponent('components/dashboard-status');
+        this.dashboardGoal = new DashboardGoal();
     },
     /**
      * @property title
@@ -50,21 +55,10 @@ module.exports = GelatoPage.extend({
      * @property events
      * @type {Object}
      */
-    events: {
-        'vclick #button-goal-settings': 'handleClickGoalSettings'
-    },
-    /**
-     * @method handleClickGoalSettings
-     * @param {Object} event
-     */
-    handleClickGoalSettings: function(event) {
-        event.preventDefault();
-        this.dialog = new GoalSettingsDialog();
-        this.dialog.open();
-    },
+    events: {},
     /**
      * @method remove
-     * @returns {GelatoPage}
+     * @returns {Page}
      */
     remove: function() {
         this.dashboardGoal.remove();
@@ -72,6 +66,6 @@ module.exports = GelatoPage.extend({
         this.dashboardTotal.remove();
         this.dashboardQueue.remove();
         this.navbar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     }
 });

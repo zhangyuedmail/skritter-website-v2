@@ -1,4 +1,4 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 var ProgressStats = require('collections/progress-stats');
 var StudyToolbarTimer = require('components/study-toolbar/timer/view');
 var ListSettingsDialog = require('dialogs/list-settings/view');
@@ -6,9 +6,9 @@ var StudySettingsDialog = require('dialogs/study-settings/view');
 
 /**
  * @class StudyToolbar
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @constructor

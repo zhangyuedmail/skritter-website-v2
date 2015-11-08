@@ -1,4 +1,5 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words-sidebar/view');
 var ProgressDialog = require('dialogs/progress/view');
@@ -6,15 +7,15 @@ var VocabActionMixin = require('mixins/vocab-action');
 
 /**
  * @class StarredWords
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.sidebar = new WordsSidebar();
         this.starredVocabs = new Vocabs();
         this.limit = 20;
@@ -41,7 +42,7 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.sidebar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method render
@@ -80,7 +81,7 @@ module.exports = GelatoPage.extend({
             this.listenToOnce(this.starredVocabs, 'sync', this.fetchAllStarredVocabsThenRemoveThem);
         }
         else {
-            // TODO: Make GelatoDialog able to hide immediately so that
+            // TODO: Make BootstrapDialog able to hide immediately so that
             // this process of hiding one then showing another doesn't have
             // to be convoluted.
             if (this.getAllVocabsDialog) {
@@ -120,7 +121,7 @@ module.exports = GelatoPage.extend({
     },
     /**
      * @method handleClickStarLink
-     * @param {Event} e
+     * @param {Event} event
      */
     handleClickStarLink: function(event) {
         var vocabID = $(event.target).closest('tr').data('vocab-id');

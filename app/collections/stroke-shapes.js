@@ -1,12 +1,12 @@
-var GelatoCollection = require('gelato/collection');
+var Collection = require('base/collection');
 var StrokeShape = require('models/stroke-shape');
 var ShapeData = require('data/shape-data');
 
 /**
  * @class StrokeShapes
- * @extends {GelatoCollection}
+ * @extends {Collection}
  */
-module.exports = GelatoCollection.extend({
+module.exports = Collection.extend({
     /**
      * @method initialize
      * @constructor

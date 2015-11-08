@@ -1,4 +1,5 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words-sidebar/view');
 var ProgressDialog = require('dialogs/progress/view');
@@ -6,15 +7,15 @@ var VocabActionMixin = require('mixins/vocab-action');
 
 /**
  * @class BannedWords
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.sidebar = new WordsSidebar();
         this.bannedVocabs = new Vocabs();
         this.limit = 20;
@@ -41,7 +42,7 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.sidebar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method render

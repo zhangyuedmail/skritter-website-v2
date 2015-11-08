@@ -1,13 +1,13 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 var Vocablists = require('collections/vocablists');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var VocablistRemoveDialog = require('dialogs/vocablist-remove/view');
 
 /**
  * @class VocablistReviewTable
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @constructor

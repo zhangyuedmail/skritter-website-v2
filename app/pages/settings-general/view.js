@@ -1,12 +1,13 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var ChangePasswordDialog = require('dialogs/change-password/view');
 var SettingsSidebar = require('components/settings-sidebar/view');
 
 /**
  * @class SettingsGeneral
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
@@ -14,7 +15,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.countries = require('data/country-codes');
         this.timezones = require('data/country-timezones');
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.sidebar = new SettingsSidebar();
         this.listenTo(app.user, 'state', this.renderSectionContent);
         app.user.fetch();
@@ -99,7 +100,7 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.sidebar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method renderSectionContent

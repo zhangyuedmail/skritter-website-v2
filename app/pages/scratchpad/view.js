@@ -1,18 +1,19 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
 var Prompt = require('components/prompt/view');
 
 /**
  * @class Scratchpad
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.prompt = new Prompt();
         this.vocabs = new Vocabs();
     },
@@ -101,6 +102,6 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.prompt.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     }
 });

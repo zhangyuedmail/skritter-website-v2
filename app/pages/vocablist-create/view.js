@@ -1,17 +1,18 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var Vocablist = require('models/vocablist');
 
 /**
  * @class NewVocablistPage
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function(options) {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.vocablist = new Vocablist();
         this.errorMessage = '';
     },
@@ -51,7 +52,7 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.navbar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method handleSubmitNewListForm

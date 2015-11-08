@@ -1,4 +1,5 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
 var ProgressDialog = require('dialogs/progress/view');
 var VocabActionMixin = require('mixins/vocab-action');
@@ -9,9 +10,9 @@ var rowTemplate = require('./row-template');
 
 /**
  * @class VocablistView
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @property bodyClass
      * @type {String}
@@ -22,7 +23,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.vocablist = new Vocablist({id: options.vocablistId});
         this.vocablist.fetch();
         this.section = new VocablistSection({vocablistId: options.vocablistId, id:options.sectionId});
@@ -127,7 +128,7 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.navbar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * Widens the click area to the table cell element.

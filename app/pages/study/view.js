@@ -1,20 +1,24 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
+var Prompt = require('components/prompt/view');
+var StudyToolbar = require('components/study-toolbar/view');
+var Items = require('collections/items');
 
 /**
  * @class Study
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
         this.counter = 1;
-        this.items = this.createCollection('collections/items');
-        this.navbar = this.createComponent('navbars/default');
-        this.prompt = this.createComponent('components/prompt');
-        this.toolbar = this.createComponent('components/study-toolbar', {page: this});
+        this.items = new Items();
+        this.navbar = new DefaultNavbar();
+        this.prompt = new Prompt();
+        this.toolbar = new StudyToolbar({page: this});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
@@ -266,6 +270,6 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.prompt.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     }
 });
