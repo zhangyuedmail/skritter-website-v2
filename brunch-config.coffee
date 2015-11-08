@@ -40,6 +40,4 @@ exports.config =
   keyword:
     filePattern: /\.(js|css|html)$/
     map:
-      "application-description": project.description
-      "application-name": project.name
       "application-version": project.version

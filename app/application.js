@@ -77,7 +77,6 @@ module.exports = Application.extend({
         date: '{!date!}',
         language: undefined,
         lastReviewCheck: moment().unix(),
-        name: '{!application-name!}',
         timestamp: '{!timestamp!}',
         version: '{!application-version!}'
     },
