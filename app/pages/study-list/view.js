@@ -21,7 +21,7 @@ module.exports = Page.extend({
         this.items = new Items();
         this.navbar = new DefaultNavbar();
         this.prompt = new Prompt();
-        this.toolbar = new StudyToolbar(null, {page: this});
+        this.toolbar = new StudyToolbar({page: this});
         this.vocablist = new Vocablist({id: options.listId});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
