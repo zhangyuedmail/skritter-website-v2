@@ -93,7 +93,7 @@ module.exports = Application.extend({
      * @returns {String}
      */
     getLanguage: function() {
-        return this.get('language') === 'undefined' ? this.user.get('targetLang') : this.get('language');
+        return this.get('language') || this.user.get('targetLang');
     },
     /**
      * @method getStripeKey
