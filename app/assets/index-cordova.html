@@ -2,15 +2,16 @@
 <html class="no-js" lang="">
 <head>
     <meta charset="utf-8"/>
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>Skritter</title>
     <meta name="description" content="Learn to write Chinese and Japanese characters."/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu:300,400' rel='stylesheet' type='text/css'>
-    <link href="/favicon.png" rel="apple-touch-icon">
-    <link href="/styles/libraries.css" rel="stylesheet">
-    <link href="/styles/application.css" rel="stylesheet">
+    <link href="favicon.png" rel="apple-touch-icon">
+    <link href="styles/libraries.css" rel="stylesheet">
+    <link href="styles/application.css" rel="stylesheet">
     <style>
         #application-loading {
             background-color: #262b30;
@@ -60,7 +61,6 @@
             }
         }
     </style>
-
 </head>
 <body>
 <div id="application-loading">
@@ -78,8 +78,9 @@
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 </script>
-<script src="/js/libraries.js"></script>
-<script src="/js/application.js"></script>
+<script src="cordova.js"></script>
+<script src="js/libraries.js"></script>
+<script src="js/application.js"></script>
 <script>require('initialize');</script>
 </body>
 </html>
