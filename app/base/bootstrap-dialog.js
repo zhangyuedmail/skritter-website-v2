@@ -4,7 +4,7 @@ var View = require('./view');
  * @class BootstrapDialog
  * @extends {View}
  */
-module.exports = GelatoView.extend({
+module.exports = View.extend({
     /**
      * @property el
      * @type {String}

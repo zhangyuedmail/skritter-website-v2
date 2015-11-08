@@ -1,22 +1,18 @@
-var GelatoApplication = require('gelato/application');
+var Application = require('base/application');
 var User = require('models/user');
 var Functions = require('functions');
 var Router = require('router');
 
 /**
- * @class Application
- * @extends {GelatoApplication}
+ * @class DefaultApplication
+ * @extends {Application}
  */
-module.exports = GelatoApplication.extend({
+module.exports = Application.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-
-        //TODO: depreciate usage of global app object
-        window.app = this;
-
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
             excludedUserAgents: ['PhantomJS'],
@@ -24,8 +20,8 @@ module.exports = GelatoApplication.extend({
         }).attach();
         Raygun.setVersion(this.get('version'));
         this.fn = Functions;
-        this.router = this.createRouter('router');
-        this.user = this.createModel('models/user', {id: this.getSetting('user') || 'application'});
+        this.router = new Router();
+        this.user = new User({id: this.getSetting('user') || 'application'});
 
         if (window.createjs) {
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
@@ -79,7 +75,7 @@ module.exports = GelatoApplication.extend({
         apiVersion: 0,
         canvasSize: 450,
         date: '{!date!}',
-        language: '{!application-language!}',
+        language: undefined,
         lastReviewCheck: moment().unix(),
         name: '{!application-name!}',
         timestamp: '{!timestamp!}',

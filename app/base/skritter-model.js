@@ -1,10 +1,10 @@
-var GelatoModel = require('gelato/model');
+var Model = require('./model');
 
 /**
  * @class SkritterModel
- * @extends {GelatoModel}
+ * @extends {Model}
  */
-module.exports = GelatoModel.extend({
+module.exports = Model.extend({
     /**
      * @method headers
      * @returns {Object}
@@ -15,7 +15,7 @@ module.exports = GelatoModel.extend({
     /**
      * @method sync
      * @param {String} method
-     * @param {GelatoModel} model
+     * @param {Model} model
      * @param {Object} options
      */
     sync: function(method, model, options) {
@@ -23,6 +23,6 @@ module.exports = GelatoModel.extend({
         if (!options.url) {
             options.url = app.getApiUrl() + _.result(this, 'url');
         }
-        GelatoModel.prototype.sync.call(this, method, model, options);
+        Model.prototype.sync.call(this, method, model, options);
     }
 });

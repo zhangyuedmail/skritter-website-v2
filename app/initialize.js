@@ -3,7 +3,8 @@ var Application = require('./application');
 module.exports = (function() {
 
     function start() {
-        new Application().start();
+        window.app = new Application();
+        window.app.start();
     }
 
     if (location.protocol === 'file:') {

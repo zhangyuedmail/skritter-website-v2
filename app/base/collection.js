@@ -9,16 +9,6 @@ module.exports = Backbone.Collection.extend({
      */
     state: 'standby',
     /**
-     * @method createModel
-     * @param {String} path
-     * @param {Object} [attributes]
-     * @param {Object} [options]
-     * @returns {Model}
-     */
-    createModel: function(path, attributes, options) {
-        return new (require(path))(attributes, options, this.app);
-    },
-    /**
      * @method fetch
      * @param {Object} [options]
      */

@@ -1,7 +1,7 @@
 module.exports = {
-    _: _,
-    app: app,
-    user: app.user,
-    kana: wanakana,
-    moment: moment
+    _: window._,
+    app: window.app,
+    user: window.app.user,
+    kana: window.wanakana,
+    moment: window.moment
 };

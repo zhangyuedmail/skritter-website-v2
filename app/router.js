@@ -1,10 +1,10 @@
-var GelatoRouter = require('gelato/router');
+var Router = require('./base/router');
 
 /**
- * @class Router
- * @extends {GelatoRouter}
+ * @class DefaultRouter
+ * @extends {Router}
  */
-module.exports = GelatoRouter.extend({
+module.exports = Router.extend({
     /**
      * @method initialize
      * @constructor
