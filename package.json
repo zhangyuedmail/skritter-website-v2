@@ -4,7 +4,6 @@
   "author": "Inkren, Inc",
   "version": "0.0.1",
   "license": "MIT",
-  "framework": "gelato",
   "repository": {
     "type": "git",
     "url": "https://www.github.com/skritter/skritter-html5.git"
@@ -12,6 +11,10 @@
   "cordova": {
     "id": "com.inkren.skritter",
     "name": "Skritter"
+  },
+  "engines": {
+    "node": "<5.0",
+    "npm": "<3.0"
   },
   "scripts": {
     "web-build": "node_modules/.bin/brunch build --production",
