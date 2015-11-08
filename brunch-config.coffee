@@ -10,7 +10,6 @@ exports.config =
         'js/libraries.js': /^(bower_components|vendor)/
       order:
         before: [
-          'vendor/gelato/js/gelato.js',
           'bower_components/async/dist/async.js',
           'bower_components/bootstrap/dist/js/bootstrap.js',
           'bower_components/moment/moment.js',
@@ -32,10 +31,6 @@ exports.config =
       joinTo:
         'styles/application.css': /^(app)/
         'styles/libraries.css': /^(bower_components|vendor)/
-      order:
-        before: [
-          'vendor/gelato/styles/gelato.css',
-        ]
     templates:
       joinTo:
         'js/application.js': /^(app)/
@@ -43,6 +38,5 @@ exports.config =
     filePattern: /\.(js|css|html)$/
     map:
       "application-description": project.description
-      "application-language": project.language
       "application-name": project.name
       "application-version": project.version

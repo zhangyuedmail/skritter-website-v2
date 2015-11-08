@@ -13,7 +13,14 @@
     "id": "com.inkren.skritter",
     "name": "Skritter"
   },
+  "scripts": {
+    "web-build": "node_modules/.bin/brunch build --production",
+    "web-watch": "node_modules/.bin/brunch watch --server"
+  },
   "devDependencies": {
+    "bower": "1.6.5",
+    "brunch": "1.8.5",
+    "cordova": "5.4.0",
     "auto-reload-brunch": "1.8.1",
     "clean-css-brunch": "1.7.2",
     "css-brunch": "1.7.0",
