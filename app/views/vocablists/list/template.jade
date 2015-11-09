@@ -1,0 +1,80 @@
+gelato-page(data-name='vocablists-list')
+  - var vocablist = view.vocablist;
+
+  #navbar-container
+
+  section.container
+    .content-block
+      .row
+
+        .col-md-3.sidebar
+          #sidebar-container
+
+        .col-md-9.content
+          if vocablist.state === 'fetching'
+
+            p.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
+
+          else
+
+            .content-details
+              .list-name= vocablist.get('name')
+              .list-stats
+                span.spr Made by:
+                if vocablist.get('sort') === 'official'
+                  span Skritter
+                else if vocablist.get('sort') === 'chinesepod-lesson'
+                  span ChinesePod
+                else if vocablist.get('creator') === app.user.id
+                  span= app.user.get('name') || app.user.id
+                else
+                  if creator && creator.state === 'standby'
+                    span= creator.get('name') || creator.id
+                  else
+                    span(data-user-id=vocablist.get('creator')) Unknown
+                span.spl.spr |
+
+                if vocablist.get('published')
+                  span.spr Published:
+                  span= moment(vocablist.get('published') * 1000).format('LL')
+                  span.spl.spr |
+
+                if vocablist.get('published') && vocablist.get('peopleStudying')
+                  span.spr Studied by:
+                  span= vocablist.get('peopleStudying')
+                  span.spl.spr |
+
+                span.spr Words:
+                span= vocablist.getWordCount()
+              .list-description= vocablist.get('description')
+
+              hr
+
+              if vocablist.get('sections').length > 1
+                .list-sections-header Sections
+
+            #editor-container
+
+            if vocablist.isEditable()
+
+              #input-row.row
+                if vocablist.get('sections').length > 1
+                  .col-xs-8
+                    input#add-input(type='text')
+                  .col-xs-4.text-left
+                    button#add-section.btn.btn-sm.btn-primary Add section
+                else if vocablist.get('sections').length === 1
+                  .col-xs-8
+                    input#add-input(type='text')
+                  .col-xs-4.text-left
+                    button#add-word.btn.btn-sm.btn-primary Add word
+                    | &nbsp;&nbsp;&nbsp;
+                    button#add-section.btn.btn-sm.btn-primary Add section
+                else
+                  .col-xs-8
+                    input#add-input(type='text')
+                  .col-xs-4.text-left
+                    button#add-word.btn.btn-sm.btn-primary Add word
+                    | &nbsp;&nbsp;&nbsp;
+                    button#add-section.btn.btn-sm.btn-primary Add section

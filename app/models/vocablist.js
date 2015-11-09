@@ -47,25 +47,6 @@ module.exports = SkritterModel.extend({
         ]);
     },
     /**
-     * @method editable
-     * @returns {Boolean}
-     */
-    editable: function() {
-        if (app.user.get('isAdmin')) {
-            return true;
-        }
-
-        return _.all([
-            !this.get('disabled'),
-            this.get('sort') === 'custom',
-            _.any([
-                this.get('user') === app.user.id,
-                _.contains(this.get('editors'), app.user.id),
-                this.get('public')
-            ])
-        ]);
-    },
-    /**
      * @method getImageUrl
      * @returns {String}
      */
@@ -166,6 +147,21 @@ module.exports = SkritterModel.extend({
      */
     isChinese: function() {
         return this.get('lang') === 'zh';
+    },
+    /**
+     * @method isEditable
+     * @returns {Boolean}
+     */
+    isEditable: function() {
+        return app.user.get('isAdmin') ? true : _.all([
+            !this.get('disabled'),
+            this.get('sort') === 'custom',
+            _.any([
+                this.get('user') === app.user.id,
+                _.contains(this.get('editors'), app.user.id),
+                this.get('public')
+            ])
+        ]);
     },
     /**
      * @method isJapanese

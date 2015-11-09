@@ -1,0 +1,33 @@
+gelato-page(data-name='vocablists-list-section')
+  - var vocablist = view.vocablist;
+  - var vocablistSection = view.vocablistSection;
+
+  #navbar-container
+
+  section.container
+    .content-block
+      .row
+
+        .col-xs-12
+
+          if vocablist.state === 'fetching'
+
+            p.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
+
+          else
+
+            .content-details
+              .section-name= vocablist.get('name')
+
+              hr
+
+            #editor-container
+
+            if vocablist.isEditable()
+
+              #input-row.row
+                .col-xs-8
+                  input#add-input(type='text')
+                .col-xs-4
+                  button#add-word.btn.btn-sm.btn-primary Add word

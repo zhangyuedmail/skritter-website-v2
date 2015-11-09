@@ -43,8 +43,7 @@ module.exports = Router.extend({
         'vocablists/my-lists': 'navigateVocablistsMine',
         'vocablists/published': 'navigateVocablistsPublished',
         'vocablists/queue': 'navigateVocablistsQueue',
-        'vocablists/view/(:vocablistId)/(:sectionId)': 'navigateVocablistSection',
-        'vocablists/view/(:vocablistId)': 'navigateVocablist',
+        'vocablists/view/(:vocablistId)(/:sectionId)': 'navigateVocablist',
         'words': 'navigateWordsAll',
         'words/all': 'navigateWordsAll',
         'words/banned': 'navigateWordsBanned',
@@ -253,20 +252,16 @@ module.exports = Router.extend({
     },
     /**
      * @method navigateVocablist
+     * @param {String} listId
+     * @param {String} [sectionId]
      */
-    navigateVocablist: function(vocablistId) {
+    navigateVocablist: function(listId, sectionId) {
         if (app.user.isLoggedIn()) {
-            this.go('pages/vocablist', {vocablistId: vocablistId});
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateVocablistSection
-     */
-    navigateVocablistSection: function(vocablistId, sectionId) {
-        if (app.user.isLoggedIn()) {
-            this.go('pages/vocablist-section', {vocablistId: vocablistId, sectionId: sectionId});
+            if (sectionId) {
+                this.go('views/vocablists/list/section', {vocablistId: listId, sectionId: sectionId});
+            } else {
+                this.go('views/vocablists/list', {vocablistId: listId});
+            }
         } else {
             this.navigateLogin();
         }
