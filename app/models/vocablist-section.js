@@ -49,6 +49,9 @@ module.exports = SkritterModel.extend({
                         callback(error);
                     },
                     success: function(model) {
+                        model.set('vocabId', row.vocabId);
+                        model.set('tradVocabId', row.tradVocabId);
+                        model.set('studyWriting', row.studyWriting);
                         vocabs.push(model);
                         callback();
                     }
@@ -62,10 +65,22 @@ module.exports = SkritterModel.extend({
                     }
                 } else {
                     if (typeof options.success === 'function') {
-                        options.success();
+                        options.success(vocabs);
                     }
                 }
             }, this)
         );
+    },
+    /**
+     * @method updateRows
+     */
+    updateRows: function() {
+        this.set('rows', this.get('vocabs').map(function(vocab) {
+            return {
+                vocabId: vocab.get('vocabId'),
+                tradVocabId: vocab.get('tradVocabId'),
+                studyWriting: vocab.get('studyWriting')
+            };
+        }));
     }
 });

@@ -1,0 +1,27 @@
+gelato-component(data-name='vocablists-list-editor')
+  - var vocablist = view.vocablist;
+
+  mixin sectionRow(section, index)
+    .row(class=index % 2 ? 'even' : 'odd')
+      .col-xs-6
+        a(href="/vocablists/view/" + vocablist.id + "/" + section.id)
+          span= section.name
+      .col-xs-3
+        if section.rows.length > 1
+          span= section.rows.length + ' words'
+        else if section.rows.length === 1
+          span= section.rows.length + ' word'
+        else
+          a(href="/vocablists/view/" + view.vocablist.id + "/" + section.id) (click to add words)
+      .col-xs-3
+        if section.completed
+          span.spr Completed
+          span= moment(section.completed).format('L')
+        else if _.contains(vocablist.get('sectionsSkipping'), section.id)
+          | Skipping
+        else if section.id && section.id === view.vocablist.get('currentSection')
+          | Adding
+
+  if vocablist.state === 'standby'
+    for section, index in vocablist.get('sections')
+      +sectionRow(section, index)

@@ -1,0 +1,51 @@
+gelato-component(data-name='vocablists-list-editor-rows')
+  - var vocablist = view.vocablist;
+  - var vocablistSection = view.vocablistSection;
+
+  mixin wordRow(vocab, index)
+    .row(class=index % 2 ? 'even' : 'odd', data-vocab-id=vocab.get('tradVocabId'))
+      if vocab.state === 'fetching'
+        .col-xs-12.loading-row
+          i.fa.fa-refresh.fa-spin
+          | &nbsp;&nbsp;
+          span= 'searching for ' + vocab.get('q')
+      else
+        if vocab.id
+          .col-xs-2.vocab-writing()
+            if (vocablist.isEditable())
+              i.fa.fa-ellipsis-v.ellipse-icon
+              | &nbsp;&nbsp;&nbsp;&nbsp;
+            span(class=vocab.getFontClass())= vocab.get('writing')
+          .col-xs-2.vocab-writing
+            span(class=vocab.getFontClass())= vocab.getWritingDifference(vocab.get('tradVocabId'))
+          .col-xs-2.vocab-reading= vocab.getReading()
+          .col-xs-3.vocab-definition!= vocab.getDefinition()
+          .col-xs-3.vocab-options.text-right
+            if vocab.has('parsedRows') && vocab.get('parsedRows').length > 1
+              button.show-results.btn.btn-sm.btn-info All Results
+              | &nbsp;&nbsp;
+            i#remove-word.fa.fa-trash
+          if vocab.has('parsedRows')
+            .result-rows.hidden
+              for row, index in vocab.get('parsedRows')
+                .result-row(data-row-index=index)
+                  .vocab-writing(class=vocab.getFontClass())
+                    span= row.vocabs[0].get('writing')
+                    if row.vocabs[0].get('writing') !== row.vocabs[1].get('writing')
+                      | &nbsp;
+                      span= '(' + row.vocabs[1].get('writing') + ')'
+                  .vocab-reading= row.vocabs[1].getReading()
+                  .vocab-definition!= row.vocabs[1].getDefinition()
+
+        else
+          .col-xs-8= vocab.get('q') + ' not found.'
+          .col-xs-4.text-right
+            button.btn.btn-sm.btn-warning Add Entry
+            | &nbsp;&nbsp;
+            i#remove-word.fa.fa-trash
+
+  if vocablistSection.state === 'standby'
+    if vocablistSection.has('vocabs')
+      #vocablist-section-rows
+        for vocab, index in vocablistSection.get('vocabs')
+          +wordRow(vocab, index)

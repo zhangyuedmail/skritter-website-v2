@@ -12,22 +12,30 @@ gelato-page(data-name='vocablists-list-section')
 
           if vocablist.state === 'fetching'
 
-            p.text-center
+            .loading-section.text-center
               i.fa.fa-3x.fa-spinner.fa-pulse
 
           else
 
             .content-details
-              .section-name= vocablist.get('name')
-
-              hr
+              .row
+                .col-xs-12
+                  .list-name
+                    a(href='/vocablists/view/' + vocablist.id)
+                      i.fa.fa-angle-left
+                      | &nbsp;
+                      span= vocablist.get('name')
+                  .section-name= vocablistSection.get('name')
 
             #editor-container
 
             if vocablist.isEditable()
-
               #input-row.row
-                .col-xs-8
-                  input#add-input(type='text')
-                .col-xs-4
-                  button#add-word.btn.btn-sm.btn-primary Add word
+                .col-xs-12
+                  input#add-input(type='text', placeholder='Type a word and hit enter')
+
+            .row
+              .col-xs-12.text-right
+                //button#discard-changes.btn.btn-fixed.btn-danger Discard
+                //| &nbsp;&nbsp;&nbsp;
+                button#save-changes.btn.btn-fixed.btn-success Save

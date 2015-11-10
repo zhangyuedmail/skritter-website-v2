@@ -1,13 +1,13 @@
 var Page = require('base/page');
 
 var DefaultNavbar = require('navbars/default/view');
-var Editor = require('../editor/view');
+var EditorRows = require('../editor-rows/view');
 var Vocablist = require('models/vocablist');
 var VocablistSection = require('models/vocablist-section');
 var User = require('models/user');
 
 /**
- * @class VocablistsListPage
+ * @class VocablistsListSectionPage
  * @extends {Page}
  */
 module.exports = Page.extend({
@@ -18,7 +18,7 @@ module.exports = Page.extend({
     initialize: function(options) {
         this.vocablist = new Vocablist({id: options.vocablistId});
         this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId, id: options.sectionId});
-        this.editor = new Editor({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
+        this.editor = new EditorRows({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
         this.navbar = new DefaultNavbar();
         async.series([
             _.bind(function(callback) {
@@ -66,8 +66,8 @@ module.exports = Page.extend({
      */
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
-        'vclick #add-section': 'handleClickAddSection',
-        'vclick #add-word': 'handleClickAddWord'
+        'vclick #discard-changes': 'handleClickDiscardChanges',
+        'vclick #save-changes': 'handleClickSaveChanges'
     },
     /**
      * @property title
@@ -86,7 +86,7 @@ module.exports = Page.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {VocablistsListPage}
+     * @returns {VocablistsListSectionPage}
      */
     render: function() {
         this.renderTemplate();
@@ -98,26 +98,21 @@ module.exports = Page.extend({
         return this;
     },
     /**
-     * @method handleClickAddSection
+     * @method handleClickDiscardChanges
      * @param {Event} event
      */
-    handleClickAddSection: function(event) {
+    handleClickDiscardChanges: function(event) {
         event.preventDefault();
-        var $input = $(event.target);
-        this.editor.addSection($input.val());
-        $input.val('');
-        $input.focus();
+        this.editor.render();
     },
     /**
-     * @method handleClickAddWord
+     * @method handleClickSaveChanges
      * @param {Event} event
      */
-    handleClickAddWord: function(event) {
+    handleClickSaveChanges: function(event) {
         event.preventDefault();
-        var $input = $(event.target);
-        this.editor.addWord($input.val());
-        $input.val('');
-        $input.focus();
+        this.vocablistSection.updateRows();
+        this.vocablistSection.save();
     },
     /**
      * @method handleKeydownAddInput
@@ -139,7 +134,7 @@ module.exports = Page.extend({
     },
     /**
      * @method remove
-     * @returns {VocablistsListPage}
+     * @returns {VocablistsListSectionPage}
      */
     remove: function() {
         this.editor.remove();
