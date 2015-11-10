@@ -315,13 +315,16 @@ module.exports = SkritterModel.extend({
     },
     /**
      * @method getWritingDifference
-     * @param {String} otherVocab
+     * @param {String} vocabId
      * @returns {String}
      */
-    getWritingDifference: function(otherVocab) {
-        return _.zipWith(this.getWriting(), otherVocab.getWriting(), function(thisChar, otherChar) {
-            return thisChar === otherChar ? '-' : otherChar;
-        }).join('');
+    getWritingDifference: function(vocabId) {
+        return _.zipWith(
+            this.get('writing'),
+            app.fn.mapper.fromBase(vocabId),
+            function(thisChar, otherChar) {
+                return thisChar === otherChar ? '-' : otherChar;
+            }).join('');
     },
     /**
      * @method isBanned
