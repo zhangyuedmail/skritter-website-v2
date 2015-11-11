@@ -47,8 +47,7 @@ module.exports = Component.extend({
      * @param {Event} event
      */
     handleChangeImageUploadInput: function(event) {
-        event.preventDefault();
-        var file = e.target.files[0];
+        var file = event.target.files[0];
         var data = new FormData().append('image', file);
         this.$('#list-img-wrapper .fa-spinner').removeClass('hide');
         this.$('#list-img').remove();
