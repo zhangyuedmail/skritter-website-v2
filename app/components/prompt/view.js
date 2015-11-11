@@ -71,6 +71,7 @@ module.exports = Component.extend({
         this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
         this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
         this.listenTo(this.vocabContained, 'click:show', this.handleVocabContainedShow);
+        this.listenTo(this.vocabDefinition, 'click:show', this.handleVocabDefinitionShow);
         this.listenTo(this.vocabMnemonic, 'click:show', this.handleVocabMnemonicShow);
         this.listenTo(this.vocabReading, 'click:show', this.handleVocabReadingShow);
         this.on('resize', this.resize);
@@ -243,6 +244,7 @@ module.exports = Component.extend({
             this.toolbarAction.render();
             this.toolbarGrading.hide();
             this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabReading.render();
             this.review.start();
             this.trigger('review:start', this.reviews);
@@ -268,6 +270,7 @@ module.exports = Component.extend({
             this.toolbarGrading.select(this.review.get('score'));
             this.toolbarGrading.show();
             this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             if (app.user.isAudioEnabled()) {
@@ -297,6 +300,7 @@ module.exports = Component.extend({
             this.toolbarAction.render();
             this.toolbarGrading.hide();
             this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
@@ -333,6 +337,7 @@ module.exports = Component.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabSentence.render();
@@ -379,7 +384,8 @@ module.exports = Component.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.render();
-            this.vocabContained.render();
+            this.vocabContained.render()
+            this.vocabDefinition.render();;
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
@@ -411,6 +417,7 @@ module.exports = Component.extend({
             this.toolbarGrading.select(this.review.get('score'));
             this.toolbarGrading.show();
             this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabWriting.render();
@@ -834,6 +841,13 @@ module.exports = Component.extend({
     handleVocabContainedShow: function() {
         this.review.set('showContained', true);
         this.vocabContained.render();
+    },
+    /**
+     * @method handleVocabDefinitionShow
+     */
+    handleVocabDefinitionShow: function() {
+        this.review.set('showDefinition', true);
+        this.vocabDefinition.render();
     },
     /**
      * @method handleVocabMnemonicShow

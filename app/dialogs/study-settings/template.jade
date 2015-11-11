@@ -33,6 +33,11 @@ bootstrap-dialog(data-name='study-settings')
                 label.checkbox-inline
                   input(type="checkbox", checked=user.get('hideReading'))
             .form-group
+              label.col-sm-3.control-label(for="field-hide-definition") Hide definition
+              .col-sm-9#field-hide-definition
+                label.checkbox-inline
+                  input(type="checkbox", checked=user.get('hideDefinition'))
+            .form-group
               label.col-sm-3.control-label(for="field-squigs") Raw squigs
               .col-sm-9#field-squigs
                 label.checkbox-inline

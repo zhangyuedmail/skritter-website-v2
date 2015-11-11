@@ -14,6 +14,13 @@ module.exports = Component.extend({
         this.prompt = options.prompt;
     },
     /**
+     * @property events
+     * @type Object
+     */
+    events: {
+        'vclick #show-definition': 'handleClickShow'
+    },
+    /**
      * @property template
      * @type {Function}
      */
@@ -32,5 +39,13 @@ module.exports = Component.extend({
      */
     getValue: function() {
         return this.$('textarea').val();
+    },
+    /**
+     * @method handleClickShow
+     * @param {Event} event
+     */
+    handleClickShow: function(event) {
+        event.preventDefault();
+        this.trigger('click:show');
     }
 });

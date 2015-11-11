@@ -47,6 +47,6 @@ module.exports = Component.extend({
      */
     handleClickShow: function(event) {
         event.preventDefault();
-        this.trigger('click:show')
+        this.trigger('click:show');
     }
 });
