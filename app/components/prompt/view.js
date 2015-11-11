@@ -846,7 +846,9 @@ module.exports = Component.extend({
      * @method handleVocabDefinitionShow
      */
     handleVocabDefinitionShow: function() {
-        this.review.set('showDefinition', true);
+        this.reviews.forEach(function(review) {
+            review.set('showDefinition', true);
+        });
         this.vocabDefinition.render();
     },
     /**
@@ -861,7 +863,13 @@ module.exports = Component.extend({
      * @param {Number} position
      */
     handleVocabReadingShow: function(position) {
-        this.reviews.at(position).set('showReading', true);
+        if (this.reviews.isChinese()) {
+            this.reviews.at(position).set('showReading', true);
+        } else {
+            this.reviews.forEach(function(review) {
+                review.set('showReading', true);
+            });
+        }
         this.vocabReading.render();
     },
     /**

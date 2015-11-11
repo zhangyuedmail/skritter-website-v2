@@ -122,7 +122,11 @@ module.exports = Model.extend({
         if (this.get('showDefinition')) {
             return false;
         }
-        return app.user.get('hideDefinition') && !this.isComplete();
+        if (this.isJapanese()) {
+            return app.user.get('hideDefinition') && !this.collection.isComplete();
+        } else {
+            return app.user.get('hideDefinition') && !this.isComplete();
+        }
     },
     /**
      * @method isJapanese
@@ -139,7 +143,11 @@ module.exports = Model.extend({
         if (this.get('showReading')) {
             return false;
         }
-        return app.user.get('hideReading') && !this.isComplete();
+        if (this.isJapanese()) {
+            return app.user.get('hideReading') && !this.collection.isComplete();
+        } else {
+            return app.user.get('hideReading') && !this.isComplete();
+        }
     },
     /**
      * @method start

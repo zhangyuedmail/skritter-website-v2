@@ -157,7 +157,7 @@ module.exports = Collection.extend({
      * @returns {Boolean}
      */
     isComplete: function() {
-        return !_.includes(this.pluck('complete'), false);
+        return _.includes(this.pluck('complete'), false) === false;
     },
     /**
      * @method isFirst
