@@ -59,10 +59,10 @@ module.exports = Page.extend({
         this.vocablist.set({
             name: this.$('#name').val(),
             description: this.$('#description').val(),
+            sections: [{name: 'Section 1', rows: []}],
             singleSect: false,
             lang: app.getLanguage()
         });
-        this.vocablist.save();
         this.listenToOnce(this.vocablist, 'sync', function() {
             app.router.navigate("/vocablists/view/" + this.vocablist.id, {trigger: true});
         });
@@ -70,6 +70,7 @@ module.exports = Page.extend({
             this.errorMessage = jqxhr.responseJSON.message;
             this.stopListening(this.vocablist);
         });
+        this.vocablist.save();
     },
     /**
      * @method remove
