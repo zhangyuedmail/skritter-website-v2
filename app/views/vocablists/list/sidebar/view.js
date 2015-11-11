@@ -23,6 +23,7 @@ module.exports = Component.extend({
      */
     events: {
         'change #image-upload-input': 'handleChangeImageUploadInput',
+        'vclick #add-to-queue': 'handleClickAddToQueue',
         'vclick #copy-link': 'handleClickCopyLink',
         'vclick #delete-link': 'handleClickDeleteLink',
         'vclick #publish-link': 'handleClickPublishLink',
@@ -64,6 +65,17 @@ module.exports = Component.extend({
                 document.location.reload();
             }
         });
+    },
+    /**
+     * @method handleClickAddToQueue
+     * @param {Event} event
+     */
+    handleClickAddToQueue: function(event) {
+        event.preventDefault();
+        if (this.vocablist.get('studyingMode') === 'not studying') {
+            this.vocablist.save({'studyingMode': 'adding'}, {patch: true});
+            this.render();
+        }
     },
     /**
      * @method handleClickCopyLink

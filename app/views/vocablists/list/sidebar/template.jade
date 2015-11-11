@@ -52,7 +52,7 @@ gelato-component(data-name='vocablists-list-sidebar')
             button.btn.btn-fixed.btn-success(disabled=true) Saving changes
   
           else if vocablist.get('studyingMode') === 'not studying'
-            button#add-to-queue-btn.btn.btn-fixed.btn-success Add to queue
+            button#add-to-queue.btn.btn-fixed.btn-success Add to queue
   
           else
             a.btn.btn-fixed.btn-primary(href="/study/" + vocablist.id) Study now
