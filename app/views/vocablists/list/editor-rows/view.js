@@ -72,7 +72,7 @@ module.exports = Component.extend({
                         results.push({vocabs: [group[0], group[0]]});
                     } else {
                         for (var b = 1, lengthB = group.length; b < lengthB; b++) {
-                            results.push({vocabs: [group[0], group[i]]});
+                            results.push({vocabs: [group[0], group[b]]});
                         }
                     }
                 }
