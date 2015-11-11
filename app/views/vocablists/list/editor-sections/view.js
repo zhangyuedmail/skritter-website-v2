@@ -22,7 +22,10 @@ module.exports = Component.extend({
      * @property events
      * @type {Object}
      */
-    events: {},
+    events: {
+        'vclick #remove-section': 'handleClickRemoveSection',
+        'vclick #restore-section': 'handleClickRestoreSection'
+    },
     /**
      * @property template
      * @type {Function}
@@ -63,6 +66,26 @@ module.exports = Component.extend({
                 this.render();
             }, this)
         });
+        this.render();
+    },
+    /**
+     * @method handleClickRemoveSection
+     * @param {Event} event
+     */
+    handleClickRemoveSection: function(event) {
+        event.preventDefault();
+        var $row = $(event.target).closest('.row');
+        this.vocablist.get('sections')[$row.data('index')].deleted = true;
+        this.render();
+    },
+    /**
+     * @method handleClickRestoreSection
+     * @param {Event} event
+     */
+    handleClickRestoreSection: function(event) {
+        event.preventDefault();
+        var $row = $(event.target).closest('.row');
+        this.vocablist.get('sections')[$row.data('index')].deleted = false;
         this.render();
     }
 });

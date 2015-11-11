@@ -26,7 +26,7 @@ gelato-page(data-name='vocablists-list-section')
                       i.fa.fa-angle-left
                       | &nbsp;
                       span= vocablist.get('name')
-                  .section-name= vocablistSection.get('name')
+                  .section-name= vocablistSection.get('name') || '(empty)'
 
             #editor-container
 
@@ -35,8 +35,8 @@ gelato-page(data-name='vocablists-list-section')
                 .col-xs-12
                   input#add-input(type='text', placeholder='Type a word and hit enter')
 
-            .row
-              .col-xs-12.text-right
-                button#discard-changes.btn.btn-fixed.btn-info Undo
-                | &nbsp;&nbsp;&nbsp;
-                button#save-changes.btn.btn-fixed.btn-success Save
+              .row
+                .col-xs-12.text-right
+                  button#discard-changes.btn.btn-fixed.btn-info Undo
+                  | &nbsp;&nbsp;&nbsp;
+                  button#save-changes.btn.btn-fixed.btn-success Save

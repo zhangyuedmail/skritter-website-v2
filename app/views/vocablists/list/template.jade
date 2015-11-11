@@ -1,4 +1,5 @@
 gelato-page(data-name='vocablists-list')
+  - var editor = view.editor;
   - var vocablist = view.vocablist;
 
   #navbar-container
@@ -68,3 +69,11 @@ gelato-page(data-name='vocablists-list')
                 .list-sections-header Sections
 
             #editor-container
+
+            if vocablist.isEditable() && view.editing
+              #input-row.row
+                .col-xs-12
+                  button#add-section.btn.btn-success
+                    i.fa.fa-plus
+                    | &nbsp;&nbsp;
+                    | Add section

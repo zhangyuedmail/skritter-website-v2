@@ -12,8 +12,15 @@ gelato-page[data-name='vocablists-list'] {
   }
 
   #input-row {
-    input { width: 100%; }
-    margin: 40px 10px;
+    input {
+      background-color: $white;
+      border: none;
+      font-size: 18px;
+      outline: none;
+      padding: 10px 5px;
+      width: 50%;
+    }
+    margin: 15px 0;
   }
 
   .content {

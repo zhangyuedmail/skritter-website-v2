@@ -64,8 +64,8 @@ module.exports = Page.extend({
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
         'vclick #add-section': 'handleClickAddSection',
-        'vclick #add-word': 'handleClickAddWord',
-        'vclick #edit-list': 'handleClickEditList'
+        'vclick #edit-list': 'handleClickEditList',
+        'vclick #save-sections': 'handleClickSaveSections'
     },
     /**
      * @property title
@@ -102,21 +102,9 @@ module.exports = Page.extend({
      */
     handleClickAddSection: function(event) {
         event.preventDefault();
-        var $input = $(event.target);
-        this.editor.addSection($input.val());
-        $input.val('');
-        $input.focus();
-    },
-    /**
-     * @method handleClickAddWord
-     * @param {Event} event
-     */
-    handleClickAddWord: function(event) {
-        event.preventDefault();
-        var $input = $(event.target);
-        this.editor.addWord($input.val());
-        $input.val('');
-        $input.focus();
+        this.vocablist.get('sections').push({rows: []});
+        this.editor.render();
+        this.render();
     },
     /**
      * @method handleClickEditList
@@ -137,13 +125,23 @@ module.exports = Page.extend({
             this.vocablist.set({
                 description: this.$('.list-description').val(),
                 name: this.$('.list-name').val()
-            }).save();
+            }).save(null, {patch: true});
         } else {
             this.editing = true;
             this.editor.editing = true;
         }
         this.editor.render();
         this.render();
+    },
+    /**
+     * @method handleClickSaveSections
+     * @param {Event} event
+     */
+    handleClickSaveSections: function(event) {
+        event.preventDefault();
+        this.editor.editing = false;
+        this.editor.render();
+        this.vocablist.save();
     },
     /**
      * @method handleKeydownAddInput
