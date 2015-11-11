@@ -19,7 +19,16 @@ gelato-page(data-name='vocablists-list')
           else
 
             .content-details
-              .list-name= vocablist.get('name')
+
+              .row
+                .col-xs-6
+                  if view.editing
+                    input.list-name(value=vocablist.get('name'))
+                  else
+                    .list-name= vocablist.get('name')
+                .col-xs-6.text-right
+                  i#edit-list.fa.fa-pencil
+
               .list-stats
                 span.spr Made by:
                 if vocablist.get('sort') === 'official'
@@ -47,7 +56,11 @@ gelato-page(data-name='vocablists-list')
 
                 span.spr Words:
                 span= vocablist.getWordCount()
-              .list-description= vocablist.get('description')
+
+              if view.editing
+                textarea.list-description= vocablist.get('description')
+              else
+                .list-description= vocablist.get('description')
 
               hr
 
@@ -55,26 +68,3 @@ gelato-page(data-name='vocablists-list')
                 .list-sections-header Sections
 
             #editor-container
-
-            if vocablist.isEditable()
-
-              #input-row.row
-                if vocablist.get('sections').length > 1
-                  .col-xs-8
-                    input#add-input(type='text')
-                  .col-xs-4.text-left
-                    button#add-section.btn.btn-sm.btn-primary Add section
-                else if vocablist.get('sections').length === 1
-                  .col-xs-8
-                    input#add-input(type='text')
-                  .col-xs-4.text-left
-                    button#add-word.btn.btn-sm.btn-primary Add word
-                    | &nbsp;&nbsp;&nbsp;
-                    button#add-section.btn.btn-sm.btn-primary Add section
-                else
-                  .col-xs-8
-                    input#add-input(type='text')
-                  .col-xs-4.text-left
-                    button#add-word.btn.btn-sm.btn-primary Add word
-                    | &nbsp;&nbsp;&nbsp;
-                    button#add-section.btn.btn-sm.btn-primary Add section

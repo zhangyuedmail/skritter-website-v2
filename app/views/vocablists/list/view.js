@@ -1,7 +1,7 @@
 var Page = require('base/page');
 
 var DefaultNavbar = require('navbars/default/view');
-var Editor = require('./editor/view');
+var EditorSections = require('./editor-sections/view');
 var Sidebar = require('./sidebar/view');
 var Vocablist = require('models/vocablist');
 var VocablistSection = require('models/vocablist-section');
@@ -21,9 +21,10 @@ module.exports = Page.extend({
      * @constructor
      */
     initialize: function(options) {
+        this.editing = false;
         this.vocablist = new Vocablist({id: options.vocablistId});
         this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId});
-        this.editor = new Editor({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
+        this.editor = new EditorSections({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
         this.navbar = new DefaultNavbar();
         this.sidebar = new Sidebar({vocablist: this.vocablist});
         async.series([
@@ -53,18 +54,7 @@ module.exports = Page.extend({
                 }
             }, this),
             _.bind(function(callback) {
-                if (this.vocablistSection.has('rows')) {
-                    this.vocablistSection.fetchVocabs({
-                        error: function(error) {
-                            callback(error);
-                        },
-                        success: function() {
-                            callback();
-                        }
-                    });
-                } else {
-                    callback();
-                }
+                callback();
             }, this)
         ], _.bind(function(error) {
             this.listenTo(this.vocablist, 'state:standby', this.handleVocablistState);
@@ -78,7 +68,8 @@ module.exports = Page.extend({
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
         'vclick #add-section': 'handleClickAddSection',
-        'vclick #add-word': 'handleClickAddWord'
+        'vclick #add-word': 'handleClickAddWord',
+        'vclick #edit-list': 'handleClickEditList'
     },
     /**
      * @property title
@@ -130,6 +121,33 @@ module.exports = Page.extend({
         this.editor.addWord($input.val());
         $input.val('');
         $input.focus();
+    },
+    /**
+     * @method handleClickEditList
+     * @param {Event} event
+     */
+    handleClickEditList: function(event) {
+        event.preventDefault();
+        if (this.editing) {
+            this.editing = false;
+            this.editor.editing = false;
+            this.editor.$('#vocablist-sections')
+                .children('.row')
+                .each((function(index, element) {
+                    var name = $(element).find('#section-name').val();
+                    var section = this.vocablist.get('sections')[index];
+                    section.name = name;
+                }).bind(this));
+            this.vocablist.set({
+                description: this.$('.list-description').val(),
+                name: this.$('.list-name').val()
+            }).save();
+        } else {
+            this.editing = true;
+            this.editor.editing = true;
+        }
+        this.editor.render();
+        this.render();
     },
     /**
      * @method handleKeydownAddInput

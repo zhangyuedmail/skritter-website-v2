@@ -3,7 +3,7 @@ var Component = require('base/component');
 var Vocab = require('models/vocab');
 
 /**
- * @class VocablistsListEditor
+ * @class VocablistsListEditorSections
  * @extends {Component}
  */
 module.exports = Component.extend({
@@ -13,7 +13,7 @@ module.exports = Component.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.vocablistSection = options.vocablistSection;
+        this.editing = false;
         this.vocablist = options.vocablist;
         this.listenTo(this.vocablist, 'change:sections', this.render);
         this.listenTo(this.vocablistSection, 'change:vocabs', this.render);
@@ -30,7 +30,7 @@ module.exports = Component.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {VocablistsListEditor}
+     * @returns {VocablistsListEditorSections}
      */
     render: function() {
         this.renderTemplate();

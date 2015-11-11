@@ -158,10 +158,12 @@ module.exports = Component.extend({
     handleUpdateSort: function(event) {
         var rows = this.rows;
         var sortedRows = [];
-        this.$('#vocablist-section-rows').children('.row').map(function(index, element) {
-            var row = _.find(rows, {id: $(element).data('row-id')});
-            sortedRows.push(row);
-        });
+        this.$('#vocablist-section-rows')
+            .children('.row')
+            .map(function(index, element) {
+                var row = _.find(rows, {id: $(element).data('row-id')});
+                sortedRows.push(row);
+            });
         this.rows = sortedRows;
         this.render();
     },

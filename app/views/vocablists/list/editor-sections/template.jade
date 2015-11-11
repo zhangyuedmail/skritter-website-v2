@@ -2,10 +2,15 @@ gelato-component(data-name='vocablists-list-editor')
   - var vocablist = view.vocablist;
 
   mixin sectionRow(section, index)
-    .row(class=index % 2 ? 'even' : 'odd')
+    .row(class=index % 2 ? 'even' : 'odd', data-index=index)
+
       .col-xs-6
-        a(href="/vocablists/view/" + vocablist.id + "/" + section.id)
-          span= section.name
+        if view.editing
+          input#section-name(value=section.name)
+        else
+          a(href="/vocablists/view/" + vocablist.id + "/" + section.id)
+            span= section.name || '(no name)'
+
       .col-xs-3
         if section.rows.length > 1
           span= section.rows.length + ' words'
@@ -23,5 +28,6 @@ gelato-component(data-name='vocablists-list-editor')
           | Adding
 
   if vocablist.state === 'standby'
-    for section, index in vocablist.get('sections')
-      +sectionRow(section, index)
+    #vocablist-sections
+      for section, index in vocablist.get('sections')
+        +sectionRow(section, index)

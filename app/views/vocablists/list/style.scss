@@ -4,6 +4,13 @@ gelato-page[data-name='vocablists-list'] {
 
   padding-top: 75px;
 
+  #edit-list {
+    color: $green5;
+    cursor: pointer;
+    font-size: 28px;
+    margin-top: 20px;
+  }
+
   #input-row {
     input { width: 100%; }
     margin: 40px 10px;
@@ -22,6 +29,11 @@ gelato-page[data-name='vocablists-list'] {
   .content-details {
     padding-left:25px;
     padding-right:25px;
+    input { width: 100%; }
+    textarea {
+      min-height: 200px;
+      width: 100%;
+    }
   }
 
   .list-sections-header {
