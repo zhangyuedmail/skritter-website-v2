@@ -7,10 +7,6 @@ var Vocablist = require('models/vocablist');
 var VocablistSection = require('models/vocablist-section');
 var User = require('models/user');
 
-var ConfirmDialog = require('dialogs/confirm/view');
-var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
-var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
-
 /**
  * @class VocablistsListPage
  * @extends {Page}

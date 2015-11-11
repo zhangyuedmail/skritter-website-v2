@@ -9,7 +9,7 @@ gelato-component(data-name='vocablists-list-editor')
           input#section-name(value=section.name)
         else
           a(href="/vocablists/view/" + vocablist.id + "/" + section.id)
-            span= section.name || '(no name)'
+            span= section.name || '(empty)'
 
       .col-xs-3
         if section.rows.length > 1
