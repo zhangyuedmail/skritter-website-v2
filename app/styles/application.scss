@@ -6,6 +6,8 @@ html, body {
   width: 100%;
 }
 
+bootstrap-dialog .modal { z-index: 9000; }
+
 gelato-application {
   display: block;
   height: 100%;
