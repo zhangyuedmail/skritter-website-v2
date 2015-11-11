@@ -139,7 +139,7 @@ module.exports = Model.extend({
         if (this.get('showReading')) {
             return false;
         }
-        return (app.user.get('hideReading') && !this.isComplete());
+        return app.user.get('hideReading') && !this.isComplete();
     },
     /**
      * @method start
