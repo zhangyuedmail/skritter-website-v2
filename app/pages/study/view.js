@@ -201,24 +201,27 @@ module.exports = Page.extend({
             _.bind(function(callback) {
                 async.each(
                     this.items.models,
-                    function(item, callback) {
+                    _.bind(function(item, callback) {
                         if (item.isKosher()) {
                             callback();
                         } else {
-                            item.set('next', moment());
-                            item.save(
-                                {'next': moment().add('2', 'weeks').unix()},
-                                {
-                                    error: function(error) {
-                                        callback(error)
-                                    },
-                                    success: function() {
-                                        callback();
-                                    }
+                            item.set('next', moment(item.get('next') * 1000).add('2', 'weeks').unix());
+                            $.ajax({
+                                url: app.getApiUrl() + 'items/' + item.id,
+                                headers: app.user.session.getHeaders(),
+                                context: this,
+                                type: 'PUT',
+                                data: JSON.stringify(item.toJSON()),
+                                error: function(error) {
+                                    callback(error);
+                                },
+                                success: function() {
+                                    this.items.remove(item);
+                                    callback();
                                 }
-                            )
+                            });
                         }
-                    },
+                    }, this),
                     function(error) {
                         callback(error);
                     }
