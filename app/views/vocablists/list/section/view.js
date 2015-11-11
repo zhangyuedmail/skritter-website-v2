@@ -42,18 +42,14 @@ module.exports = Page.extend({
                 });
             }, this),
             _.bind(function(callback) {
-                if (this.vocablistSection.has('rows')) {
-                    this.vocablistSection.fetchVocabs({
-                        error: function(error) {
-                            callback(error);
-                        },
-                        success: function() {
-                            callback();
-                        }
-                    });
-                } else {
-                    callback();
-                }
+                this.editor.loadRows({
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback();
+                    }
+                });
             }, this)
         ], _.bind(function(error) {
             this.listenTo(this.vocablist, 'state:standby', this.handleVocablistState);
@@ -103,7 +99,7 @@ module.exports = Page.extend({
      */
     handleClickDiscardChanges: function(event) {
         event.preventDefault();
-        this.editor.render();
+        this.editor.discardChanges();
     },
     /**
      * @method handleClickSaveChanges
@@ -111,7 +107,7 @@ module.exports = Page.extend({
      */
     handleClickSaveChanges: function(event) {
         event.preventDefault();
-        this.vocablistSection.updateRows();
+        this.vocablistSection.set('rows', this.editor.rows);
         this.vocablistSection.save();
     },
     /**
@@ -121,7 +117,7 @@ module.exports = Page.extend({
     handleKeydownAddInput: function(event) {
         if (event.keyCode === 13) {
             var $input = $(event.target);
-            this.editor.addWord($(event.target).val());
+            this.editor.addRow($(event.target).val());
             $input.val('');
             $input.focus();
         }

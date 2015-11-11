@@ -1,4 +1,5 @@
 gelato-page(data-name='vocablists-list-section')
+  - var editor = view.editor;
   - var vocablist = view.vocablist;
   - var vocablistSection = view.vocablistSection;
 
@@ -36,6 +37,6 @@ gelato-page(data-name='vocablists-list-section')
 
             .row
               .col-xs-12.text-right
-                //button#discard-changes.btn.btn-fixed.btn-danger Discard
-                //| &nbsp;&nbsp;&nbsp;
+                button#discard-changes.btn.btn-fixed.btn-info Undo
+                | &nbsp;&nbsp;&nbsp;
                 button#save-changes.btn.btn-fixed.btn-success Save

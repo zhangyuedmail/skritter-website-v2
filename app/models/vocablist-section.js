@@ -32,55 +32,5 @@ module.exports = SkritterModel.extend({
      */
     urlRoot: function() {
         return 'vocablists/' + this.vocablistId + '/sections';
-    },
-    /**
-     * @method fetchVocabs
-     * @param {Object} [options]
-     */
-    fetchVocabs: function(options) {
-        var vocabs = [];
-        options = options || {};
-        async.eachSeries(
-            this.get('rows'),
-            _.bind(function(row, callback) {
-                new Vocab({id: row.vocabId}).fetch({
-                    data: options.data,
-                    error: function(error) {
-                        callback(error);
-                    },
-                    success: function(model) {
-                        model.set('vocabId', row.vocabId);
-                        model.set('tradVocabId', row.tradVocabId);
-                        model.set('studyWriting', row.studyWriting);
-                        vocabs.push(model);
-                        callback();
-                    }
-                });
-            }, this),
-            _.bind(function(error) {
-                this.set('vocabs', vocabs);
-                if (error) {
-                    if (typeof options.error === 'function') {
-                        options.error(error);
-                    }
-                } else {
-                    if (typeof options.success === 'function') {
-                        options.success(vocabs);
-                    }
-                }
-            }, this)
-        );
-    },
-    /**
-     * @method updateRows
-     */
-    updateRows: function() {
-        this.set('rows', this.get('vocabs').map(function(vocab) {
-            return {
-                vocabId: vocab.get('vocabId'),
-                tradVocabId: vocab.get('tradVocabId'),
-                studyWriting: vocab.get('studyWriting')
-            };
-        }));
     }
 });

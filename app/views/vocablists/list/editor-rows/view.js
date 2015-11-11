@@ -14,6 +14,9 @@ module.exports = Component.extend({
      * @constructor
      */
     initialize: function(options) {
+        this.changed = false;
+        this.rows = [];
+        this.saved = [];
         this.vocablist = options.vocablist;
         this.vocablistSection = options.vocablistSection;
         this.listenTo(this.vocablist, 'change:sections', this.render);
@@ -24,9 +27,10 @@ module.exports = Component.extend({
      * @type {Object}
      */
     events: {
-        'vclick #remove-word': 'handleClickRemoveWord',
+        'vclick .remove-row': 'handleClickRemoveRow',
         'vclick .result-row': 'handleClickResultRow',
-        'vclick .show-results': 'handleClickShowResults'
+        'vclick .show-results': 'handleClickShowResults',
+        'vclick .study-writing': 'handleClickStudyWriting'
     },
     /**
      * @property template
@@ -42,59 +46,68 @@ module.exports = Component.extend({
         this.$('#vocablist-section-rows').sortable({update: _.bind(this.handleUpdateSort, this)});
     },
     /**
-     * @method addWord
+     * @method addRow
      * @param {String} query
      */
-    addWord: function(query) {
-        var vocab = new Vocab({q: query});
-        this.vocablistSection.get('vocabs').push(vocab);
-        vocab.fetch({
+    addRow: function(query) {
+        var queryVocabs = new Vocabs();
+        var row = {query: query, state: 'loading'};
+        this.rows.push(row);
+        queryVocabs.fetch({
             data: {q: query},
             error: function(a, b) {},
-            success: _.bind(function(model) {
-                var vocabs = model.get('Vocabs').map(function(vocab) {
-                    return new Vocab(vocab);
-                });
-                var groups = _.groupBy(vocabs, function(vocab) {
+            success: _.bind(function(collection) {
+                var results = [];
+                var groups = collection.groupBy(function(vocab) {
                     return vocab.getBase();
                 });
-                var rows = [];
+                console.log(groups);
                 for (var writing in groups) {
                     var group = groups[writing];
-                    if (group.length === 1) {
-                        rows.push({vocabs: [group[0], group[0]]});
+                    if (group[0].isJapanese()) {
+                        for (var a = 0, lengthA = group.length; a < lengthA; a++) {
+                            results.push({vocabs: [group[a], group[a]]});
+                        }
+                    } else if (group.length === 1) {
+                        results.push({vocabs: [group[0], group[0]]});
                     } else {
-                        for (var i = 1, length = group.length; i < length; i++) {
-                            rows.push({vocabs: [group[0], group[i]]});
+                        for (var b = 1, lengthB = group.length; b < lengthB; b++) {
+                            results.push({vocabs: [group[0], group[i]]});
                         }
                     }
                 }
-                if (rows.length) {
-                    model.set('activeRow', rows[0]);
-                    model.set('parsedGroups', groups);
-                    model.set('parsedRows', rows);
-                    model.set('parsedVocabs', vocabs);
-                    model.set('vocabId', rows[0].vocabs[0].id);
-                    model.set('tradVocabId', rows[0].vocabs[1].id);
-                    model.set('studyWriting', true);
-                    model.set(rows[0].vocabs[0].toJSON(), {merge: true});
-                    model.unset('Vocabs');
-                    console.log(model);
+                if (results.length) {
+                    row.lang = results[0].vocabs[0].get('lang');
+                    row.results = results;
+                    row.vocabs = results[0].vocabs;
+                    row.vocabId = results[0].vocabs[0].id;
+                    row.tradVocabId = results[0].vocabs[1].id;
+                    row.studyWriting = true;
+                    row.id = row.vocabId + '-' + row.tradVocabId;
+                    row.state = 'loaded';
+                } else {
+                    row.state = 'not-found';
                 }
                 this.render();
             }, this)
         });
-
         this.render();
     },
     /**
-     * @method handleClickRemoveWord
+     * @method discardChanges
+     */
+    discardChanges: function() {
+        this.rows = _.clone(this.saved);
+        this.render();
+    },
+    /**
+     * @method handleClickRemoveRow
      * @param {Event} event
      */
-    handleClickRemoveWord: function(event) {
+    handleClickRemoveRow: function(event) {
         event.preventDefault();
         var $row = $(event.target).closest('.row');
-        this.removeWord($row.data('vocab-id'));
+        this.removeRow($row.data('index'));
         this.render();
     },
     /**
@@ -104,16 +117,13 @@ module.exports = Component.extend({
     handleClickResultRow: function(event) {
         event.preventDefault();
         var $row = $(event.target).closest('.row');
-        var $resultRow = $(event.target).closest('.result-row');
-        var vocab = _.find(this.vocablistSection.get('vocabs'), {id: $row.data('vocab-id')});
-        var activeRow = vocab.get('parsedRows')[parseInt($resultRow.data('row-index'), 10)];
-        vocab.set('activeRow', activeRow);
-        vocab.set('vocabId', activeRow.vocabs[0].id);
-        vocab.set('tradVocabId', activeRow.vocabs[1].id);
-        vocab.set('studyWriting', true);
-        vocab.set(activeRow.vocabs[0].toJSON(), {merge: true});
+        var $result = $(event.target).closest('.result-row');
+        var row = this.rows[parseInt($row.data('index'), 10)];
+        var result = row.results[parseInt($result.data('index'), 10)];
+        row.vocabs = result.vocabs;
+        row.vocabId = result.vocabs[0].id;
+        row.tradVocabId = result.vocabs[1].id;
         this.render();
-
     },
     /**
      * @method handleClickShowResults
@@ -130,27 +140,106 @@ module.exports = Component.extend({
         }
     },
     /**
+     * @method handleClickStudyWriting
+     * @param {Event} event
+     */
+    handleClickStudyWriting: function(event) {
+        event.preventDefault();
+        var $row = $(event.target).closest('.row');
+        var $toggle = $row.find('.study-writing');
+        var row = this.rows[parseInt($row.data('index'), 10)];
+        row.studyWriting = $toggle.hasClass('active') ? false : true;
+        this.render();
+    },
+    /**
      * @method handleUpdateSort
      * @param {Event} event
      */
     handleUpdateSort: function(event) {
-        var sortedVocabs = [];
-        var vocabs = this.vocablistSection.get('vocabs');
+        var rows = this.rows;
+        var sortedRows = [];
         this.$('#vocablist-section-rows').children('.row').map(function(index, element) {
-            var vocab = _.find(vocabs, function(vocab) {
-                return vocab.get('tradVocabId') === $(element).data('vocab-id');
-            });
-            sortedVocabs.push(vocab);
+            var row = _.find(rows, {id: $(element).data('row-id')});
+            sortedRows.push(row);
         });
-        this.vocablistSection.set('vocabs', sortedVocabs);
+        this.rows = sortedRows;
+        this.render();
     },
     /**
-     * @method removeWord
-     * @param vocabId
+     * @method loadRows
+     * @param {Object} [options]
      */
-    removeWord: function(vocabId) {
-        _.remove(this.vocablistSection.get('vocabs'), function(vocab) {
-            return vocab.get('tradVocabId') === vocabId;
-        });
+    loadRows: function(options) {
+        var rows = [];
+        async.eachSeries(
+            this.vocablistSection.get('rows'),
+            _.bind(function(row, callback) {
+                row.vocabs = new Array(2);
+                row.state = 'loading';
+                async.series([
+                    function(callback) {
+                        new Vocab({id: row.vocabId}).fetch({
+                            data: {},
+                            error: function(error) {
+                                callback(error);
+                            },
+                            success: function(model) {
+                                row.lang = model.get('lang');
+                                row.vocabs[0] = model;
+                                callback();
+                            }
+                        });
+                    },
+                    function(callback) {
+                        if (!row.vocabs[0].isJapanese() && row.tradVocabId !== row.vocabId) {
+                            new Vocab({id: row.tradVocabId}).fetch({
+                                data: {},
+                                error: function(error) {
+                                    callback(error);
+                                },
+                                success: function(model) {
+                                    row.vocabs[1] = model;
+                                    callback();
+                                }
+                            });
+                        } else {
+                            row.vocabs[1] = row.vocabs[0];
+                            callback();
+                        }
+                    }
+                ], function(error) {
+                    if (error) {
+                        row.state = 'error';
+                        callback(error);
+                    } else {
+                        row.id = row.vocabId + '-' + row.tradVocabId;
+                        row.state = 'loaded';
+                        rows.push(row);
+                        callback();
+                    }
+                });
+            }, this),
+            _.bind(function(error) {
+                this.rows = _.clone(rows);
+                this.saved = _.clone(rows);
+                if (error) {
+                    if (options && typeof options.error === 'function') {
+                        options.error(error);
+                    }
+                } else {
+                    if (options && typeof options.success === 'function') {
+                        options.success(rows);
+                    }
+                }
+            }, this)
+        );
+    },
+    /**
+     * @method removeRow
+     * @param {Number} index
+     * @returns {Object}
+     */
+    removeRow: function(index) {
+        return this.rows.splice(index, 1);
     }
 });
