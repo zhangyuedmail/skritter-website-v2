@@ -4,6 +4,13 @@ gelato-page[data-name='vocablists-list-section'] {
 
   padding-top: 75px;
 
+  #edit-section {
+    color: $green5;
+    cursor: pointer;
+    font-size: 28px;
+    margin-top: 20px;
+  }
+
   #input-row {
     input {
       background-color: $white1;
@@ -44,7 +51,7 @@ gelato-page[data-name='vocablists-list-section'] {
     margin-top: 25px;
   }
 
-  .section-name {
+  #section-name {
     font-size: 24px;
     font-weight: 400;
   }

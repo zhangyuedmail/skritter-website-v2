@@ -16,6 +16,7 @@ module.exports = Page.extend({
      * @constructor
      */
     initialize: function(options) {
+        this.editing = false;
         this.vocablist = new Vocablist({id: options.vocablistId});
         this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId, id: options.sectionId});
         this.editor = new EditorRows({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
@@ -63,6 +64,7 @@ module.exports = Page.extend({
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
         'vclick #discard-changes': 'handleClickDiscardChanges',
+        'vclick #edit-section': 'handleClickEditSection',
         'vclick #save-changes': 'handleClickSaveChanges'
     },
     /**
@@ -100,6 +102,21 @@ module.exports = Page.extend({
     handleClickDiscardChanges: function(event) {
         event.preventDefault();
         this.editor.discardChanges();
+    },
+    /**
+     * @method handleClickEditSection
+     * @param {Event} event
+     */
+    handleClickEditSection: function(event) {
+        event.preventDefault();
+        if (this.editing) {
+            this.editing = false;
+            this.vocablistSection.set('name', this.$('#section-name').val());
+            this.vocablistSection.save();
+        } else {
+            this.editing = true;
+        }
+        this.render();
     },
     /**
      * @method handleClickSaveChanges

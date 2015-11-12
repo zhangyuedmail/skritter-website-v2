@@ -61,7 +61,6 @@ module.exports = Component.extend({
                 var groups = collection.groupBy(function(vocab) {
                     return vocab.getBase();
                 });
-                console.log(groups);
                 for (var writing in groups) {
                     var group = groups[writing];
                     if (group[0].isJapanese()) {

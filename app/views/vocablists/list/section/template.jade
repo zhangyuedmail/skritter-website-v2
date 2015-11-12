@@ -20,13 +20,18 @@ gelato-page(data-name='vocablists-list-section')
 
             .content-details
               .row
-                .col-xs-12
+                .col-xs-6
                   .list-name
                     a(href='/vocablists/view/' + vocablist.id)
                       i.fa.fa-angle-left
                       | &nbsp;
                       span= vocablist.get('name')
-                  .section-name= vocablistSection.get('name') || '(empty)'
+                  if view.editing
+                    input#section-name(value=vocablistSection.get('name'))
+                  else
+                    #section-name= vocablistSection.get('name') || '(empty)'
+                .col-xs-6.text-right
+                  i#edit-section.fa.fa-pencil
 
             #editor-container
 
