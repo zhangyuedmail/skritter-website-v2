@@ -229,9 +229,13 @@ module.exports = Page.extend({
             }, this)
         ], function(error) {
             if (error) {
-                callbackError(error);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             } else {
-                callbackSuccess();
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
             }
         });
     },
@@ -253,8 +257,8 @@ module.exports = Page.extend({
             this.prompt.set(item.getPromptReviews());
             this.counter++;
             if (this.counter % 10 === 0) {
-                console.log('LOADING MORE ITEMS:', 10);
-                this.items.fetchNext();
+                //console.log('LOADING MORE ITEMS:', 10);
+                //this.loadMore();
             }
         } else {
             console.error('ITEM LOAD ERROR:', 'no items');

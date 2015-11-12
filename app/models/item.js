@@ -204,12 +204,9 @@ module.exports = SkritterModel.extend({
         var vocab = this.getVocab();
         if (!vocab) {
             return false;
-        } else if (this.isPartRune()) {
+        }
+        if (this.isPartRune()) {
             if (!vocab.getStrokes().length) {
-                return false;
-            }
-            if (!app.user.get('studyKana') &&
-                app.fn.isKana(vocab.get('writing'))) {
                 return false;
             }
         }
