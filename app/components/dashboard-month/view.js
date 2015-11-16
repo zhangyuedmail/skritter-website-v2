@@ -11,7 +11,7 @@ module.exports = Component.extend({
      * @constructor
      */
     initialize: function() {
-        this.heatmap = new Heatmap();
+        this.heatmap = new CalHeatMap();
         this.stats = new ProgressStats();
         this.listenTo(this.stats, 'state:standby', this.updateHeatmap);
         this.listenTo(this.stats, 'state:standby', this.updateStreak);

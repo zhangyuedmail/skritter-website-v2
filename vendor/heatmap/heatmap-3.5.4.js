@@ -1,12 +1,15 @@
-/*! heatmap v3.5.3 (Thu Jul 23 2015 01:27:26)
+/*! cal-heatmap v3.5.4 (Mon Aug 24 2015 10:02:24)
  *  ---------------------------------------------
  *  Cal-Heatmap is a javascript module to create calendar heatmap to visualize time series data
- *  https://github.com/kamisama/heatmap
+ *  https://github.com/wa0x6e/cal-heatmap
  *  Licensed under the MIT license
  *  Copyright 2014 Wan Qi Chen
  */
 
-var Heatmap = function() {
+//TODO: figure out why this breaks loading process
+//var d3 = typeof require === "function" ? require("d3") : window.d3;
+
+var CalHeatMap = function() {
 	"use strict";
 
 	var self = this;
@@ -18,7 +21,7 @@ var Heatmap = function() {
 		// selector string of the container to append the graph to
 		// Accept any string value accepted by document.querySelector or CSS3
 		// or an Element object
-		itemSelector: "#heatmap",
+		itemSelector: "#cal-heatmap",
 
 		// Whether to paint the calendar on init()
 		// Used by testsuite to reduce testing time
@@ -233,7 +236,7 @@ var Heatmap = function() {
 
 		previousSelector: false,
 
-		itemNamespace: "heatmap",
+		itemNamespace: "cal-heatmap",
 
 		tooltip: false,
 
@@ -598,7 +601,7 @@ var Heatmap = function() {
 			self._domains.set(d, self.getSubDomain(d).map(function(d) { return {t: self._domainType[self.options.subDomain].extractUnit(d), v: null}; }));
 		});
 
-		self.root = d3.select(self.options.itemSelector).append("svg").attr("class", "heatmap-container");
+		self.root = d3.select(self.options.itemSelector).append("svg").attr("class", "cal-heatmap-container");
 
 		self.tooltip = d3.select(self.options.itemSelector)
 			.attr("style", function() {
@@ -1086,7 +1089,7 @@ var Heatmap = function() {
 	};
 };
 
-Heatmap.prototype = {
+CalHeatMap.prototype = {
 
 	/**
 	 * Validate and merge user settings with default settings
@@ -1130,8 +1133,8 @@ Heatmap.prototype = {
 		}
 
 		if (typeof options.itemNamespace !== "string" || options.itemNamespace === "") {
-			console.log("itemNamespace can not be empty, falling back to heatmap");
-			options.itemNamespace = "heatmap";
+			console.log("itemNamespace can not be empty, falling back to cal-heatmap");
+			options.itemNamespace = "cal-heatmap";
 		}
 
 		// Don't touch these settings
@@ -2916,7 +2919,7 @@ Heatmap.prototype = {
 		"use strict";
 
 		var styles = {
-			".heatmap-container": {},
+			".cal-heatmap-container": {},
 			".graph": {},
 			".graph-rect": {},
 			"rect.highlight": {},
@@ -3460,10 +3463,10 @@ if (typeof define === "function" && define.amd) {
 	define(["d3"], function() {
 		"use strict";
 
-		return Heatmap;
+		return CalHeatMap;
 	});
 } else if (typeof module === "object" && module.exports) {
-	module.exports = Heatmap;
+	module.exports = CalHeatMap;
 } else {
-	window.Heatmap = Heatmap;
+	window.CalHeatMap = CalHeatMap;
 }
