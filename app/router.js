@@ -110,7 +110,7 @@ module.exports = Router.extend({
     navigateAccountSettingsGeneral: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/settings/general');
-            this.go('pages/settings-general');
+            this.go('views/account/settings/general');
         } else {
             this.navigateLogin();
         }
@@ -120,7 +120,8 @@ module.exports = Router.extend({
      */
     navigateAccountSettingsStudy: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages/settings-study');
+            this.navigate('account/settings/study');
+            this.go('views/account/settings/study');
         } else {
             this.navigateLogin();
         }

@@ -1,6 +1,6 @@
-@import "../../styles/variables";
+@import "../../../../styles/variables";
 
-gelato-page[data-name='settings-study'] {
+gelato-page[data-name='account-settings-general'] {
 
   padding-top: 75px;
 
@@ -16,7 +16,6 @@ gelato-page[data-name='settings-study'] {
     input {
       border-radius: 0;
       height: 50px;
-      &[type="checkbox"] { height: auto; }
       &[type="email"],
       &[type="text"] {
         max-width: 300px;
@@ -44,5 +43,10 @@ gelato-page[data-name='settings-study'] {
       margin-bottom: 30px;
     }
     #button-save { margin-top: 30px; }
+    #field-avatar {
+      height: 100px;
+      width: 100px;
+    }
   }
+
 }

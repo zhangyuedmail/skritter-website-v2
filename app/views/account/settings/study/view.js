@@ -1,9 +1,10 @@
 var Page = require('base/page');
+
+var AccountSidebar = require('../../sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
-var SettingsSidebar = require('components/settings-sidebar/view');
 
 /**
- * @class SettingsStudy
+ * @class AccountSettingsStudy
  * @extends {Page}
  */
 module.exports = Page.extend({
@@ -13,9 +14,9 @@ module.exports = Page.extend({
      */
     initialize: function() {
         this.navbar = new DefaultNavbar();
-        this.listenTo(app.user, 'state', this.renderSectionContent);
+        this.sidebar = new AccountSidebar();
         this.sourceLanguages = require('data/source-languages');
-        this.sidebar = new SettingsSidebar();
+        this.listenTo(app.user, 'state', this.render);
         app.user.fetch();
     },
     /**
@@ -43,33 +44,13 @@ module.exports = Page.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {SettingsStudy}
+     * @returns {AccountSettingsStudy}
      */
     render: function() {
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
-        this.sidebar.setElement('#settings-sidebar-container').render();
+        this.sidebar.setElement('#sidebar-container').render();
         return this;
-    },
-    /**
-     * @method renderSectionContent
-     * @returns {SettingsStudy}
-     */
-    renderSectionContent: function() {
-        var context = require('globals');
-        context.view = this;
-        var rendering = $(this.template(context));
-        this.$('#section-content').replaceWith(rendering.find('#section-content'));
-        return this;
-    },
-    /**
-     * @method remove
-     * @returns {SettingsStudy}
-     */
-    remove: function() {
-        this.navbar.remove();
-        this.sidebar.remove();
-        return Page.prototype.remove.call(this);
     },
     /**
      * @method getSelectedParts
@@ -117,5 +98,14 @@ module.exports = Page.extend({
             });
         }
         app.user.save();
+    },
+    /**
+     * @method remove
+     * @returns {AccountSettingsStudy}
+     */
+    remove: function() {
+        this.navbar.remove();
+        this.sidebar.remove();
+        return Page.prototype.remove.call(this);
     }
 });

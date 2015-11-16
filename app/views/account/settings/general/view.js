@@ -1,10 +1,12 @@
 var Page = require('base/page');
+
+var AccountSidebar = require('../../sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
+
 var ChangePasswordDialog = require('dialogs/change-password/view');
-var SettingsSidebar = require('components/settings-sidebar/view');
 
 /**
- * @class SettingsGeneral
+ * @class AccountSettingsGeneral
  * @extends {Page}
  */
 module.exports = Page.extend({
@@ -16,8 +18,8 @@ module.exports = Page.extend({
         this.countries = require('data/country-codes');
         this.timezones = require('data/country-timezones');
         this.navbar = new DefaultNavbar();
-        this.sidebar = new SettingsSidebar();
-        this.listenTo(app.user, 'state', this.renderSectionContent);
+        this.sidebar = new AccountSidebar();
+        this.listenTo(app.user, 'state', this.render);
         app.user.fetch();
     },
     /**
@@ -48,12 +50,12 @@ module.exports = Page.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {SettingsGeneral}
+     * @returns {AccountSettingsGeneral}
      */
     render: function() {
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
-        this.sidebar.setElement('#settings-sidebar-container').render();
+        this.sidebar.setElement('#sidebar-container').render();
         return this;
     },
     /**
@@ -119,20 +121,11 @@ module.exports = Page.extend({
     },
     /**
      * @method remove
-     * @returns {SettingsGeneral}
+     * @returns {AccountSettingsGeneral}
      */
     remove: function() {
         this.navbar.remove();
         this.sidebar.remove();
         return Page.prototype.remove.call(this);
-    },
-    /**
-     * @method renderSectionContent
-     */
-    renderSectionContent: function() {
-        var context = require('globals');
-        context.view = this;
-        var rendering = $(this.template(context));
-        this.$('#section-content').replaceWith(rendering.find('#section-content'));
     }
 });
