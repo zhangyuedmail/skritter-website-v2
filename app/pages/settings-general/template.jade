@@ -17,6 +17,10 @@ gelato-page(data-name='settings-general')
                 label.col-sm-3.control-label(for="field-avatar") Avatar
                 .col-sm-9
                   img#field-avatar(src="data:image/png;base64, " + user.get('avatar'), alt="")
+                  input#avatar-upload-input.hide(type="file", accept="image/*")
+                  br
+                  br
+                  button#change-avatar.btn.btn-sm.btn-primary Change avatar
               .form-group
                 label.col-sm-3.control-label(for="field-id") User ID
                 .col-sm-9

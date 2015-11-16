@@ -38,7 +38,6 @@ module.exports = Page.extend({
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
         this.footer.setElement('#footer-container').render();
-        console.log(this.getHeight(), app.getHeight());
         if (this.getHeight() < app.getHeight()) {
             this.$('#footer-container').css(
                 'margin-top',

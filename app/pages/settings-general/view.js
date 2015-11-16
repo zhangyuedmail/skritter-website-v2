@@ -25,9 +25,11 @@ module.exports = Page.extend({
      * @type {Object}
      */
     events: {
+        'change #avatar-upload-input': 'handleChangeAvatarUploadInput',
         'change #field-country': 'handleSelectCountry',
         'vclick #button-save': 'handleClickButtonSave',
-        'vclick #button-change-password': 'handleClickButtonChangePassword'
+        'vclick #button-change-password': 'handleClickButtonChangePassword',
+        'vclick #change-avatar': 'handleClickChangeAvatar'
     },
     /**
      * @property title
@@ -62,6 +64,19 @@ module.exports = Page.extend({
         return this.$('#field-country :selected').val() || app.user.get('country');
     },
     /**
+     * @method handleChangeAvatarUploadInput
+     * @param {Event} event
+     */
+    handleChangeAvatarUploadInput: function(event) {
+        var file = event.target.files[0];
+        var data = new FormData().append('image', file);
+        var reader  = new FileReader();
+        reader.onload = function(event) {
+            $('#field-avatar').attr('src', event.target.result);
+        };
+        reader.readAsDataURL(file);
+    },
+    /**
      * @method handleClickButtonChangePassword
      * @param {Event} event
      */
@@ -77,6 +92,7 @@ module.exports = Page.extend({
     handleClickButtonSave: function(event) {
         event.preventDefault();
         app.user.set({
+            avatar: this.$('#field-avatar').get(0).src.replace('data:image/png;base64,', ''),
             aboutMe: this.$('#field-about').val(),
             country: this.$('#field-country').find(':selected').val(),
             email: this.$('#field-email').val(),
@@ -84,6 +100,14 @@ module.exports = Page.extend({
             private: this.$('#field-private').is(':checked'),
             timezone: this.$('#field-timezone :selected').val()
         }).save();
+    },
+    /**
+     * @method handleClickChangeAvatar
+     * @param {Event} event
+     */
+    handleClickChangeAvatar: function(event) {
+        event.preventDefault();
+        this.$('#avatar-upload-input').trigger('click');
     },
     /**
      * @method handleSelectCountry
