@@ -1,10 +1,10 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 
 /**
  * @class PromptToolbarGrading
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @param {Object} options
@@ -32,31 +32,17 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick .btn': 'handleClickButton',
-        'vmousedown .btn': 'handleMousedownButton'
+        'vmousedown button': 'handleMousedownButton',
+        'vmouseup button': 'handleMouseupButton'
     },
     /**
      * @method deselect
      * @returns {PromptToolbarGrading}
      */
     deselect: function() {
-        this.$('.btn-group .btn').removeClass('selected');
+        this.value = null;
+        this.render();
         return this;
-    },
-    /**
-     * @method handleClickButton
-     * @param {Event} event
-     */
-    handleClickButton: function(event) {
-        event.preventDefault();
-        var target = $(event.currentTarget);
-        var value = this.value;
-        this.select(parseInt(target.data('value'), 10));
-        if (this.value === value) {
-            this.trigger('select', this.value);
-        } else {
-            this.trigger('change', this.value);
-        }
     },
     /**
      * @method handleMousedownButton
@@ -64,9 +50,18 @@ module.exports = GelatoComponent.extend({
      */
     handleMousedownButton: function(event) {
         event.preventDefault();
-        var target = $(event.currentTarget);
-        this.trigger('mousedown', parseInt(target.data('value'), 10));
-        target.addClass('selected');
+        var $target = $(event.currentTarget);
+        var value = parseInt($target.data('value'), 10);
+        this.trigger('mousedown', value);
+        this.select(value);
+    },
+    /**
+     * @method handleMousedownButton
+     * @param {Event} event
+     */
+    handleMouseupButton: function(event) {
+        event.preventDefault();
+        this.trigger('mouseup', this.value);
     },
     /**
      * @method select
@@ -74,13 +69,8 @@ module.exports = GelatoComponent.extend({
      * @returns {PromptToolbarGrading}
      */
     select: function(value) {
-        this.deselect();
-        if (value) {
-            this.$('.btn-group .btn[data-value="' + value + '"]').addClass('selected');
-            this.value = value;
-        } else {
-            this.value = null;
-        }
+        this.value = value || null;
+        this.render();
         return this;
     }
 });

@@ -32,13 +32,14 @@ module.exports = SkritterCollection.extend({
      */
     url: 'reviews',
     /**
-     * @method save
+     * @method post
      */
-    save: function() {
+    post: function() {
         if (this.state === 'standby') {
-            this.state = 'saving';
+            var reviews = this.toJSON();
+            this.state = 'posting';
             async.eachSeries(
-                this.toJSON(),
+                reviews,
                 _.bind(function(review, callback) {
                     $.ajax({
                         url: app.getApiUrl() + 'reviews?spaceItems=false',
@@ -46,8 +47,7 @@ module.exports = SkritterCollection.extend({
                         context: this,
                         type: 'POST',
                         data: JSON.stringify(review.data),
-                        error: function() {
-                            //TODO: better handle conflicts
+                        error: function(error) {
                             callback(error);
                         },
                         success: function() {
@@ -62,7 +62,7 @@ module.exports = SkritterCollection.extend({
                     if (error) {
                         console.log('REVIEW ERROR:', error);
                     } else {
-                        this.reset();
+                        console.log('REVIEWS POSTED:', reviews.length);
                     }
                 }, this)
             );

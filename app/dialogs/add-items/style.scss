@@ -1,0 +1,13 @@
+@import "../../styles/variables";
+
+bootstrap-dialog[data-name="add-items"] {
+
+  .modal-content {
+    background-color: $white1;
+    padding-bottom: 20px;
+  }
+
+  .modal-dialog { width: 500px; }
+
+  .row { margin-top: 15px; }
+}

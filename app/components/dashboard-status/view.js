@@ -1,10 +1,10 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 
 /**
  * @class DashboardStatus
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @constructor

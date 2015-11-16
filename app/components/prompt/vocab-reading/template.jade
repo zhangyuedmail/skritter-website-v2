@@ -13,13 +13,10 @@ gelato-component(data-name='prompt-vocab-reading')
           if (reading.type === 'character')
             - var review = reviews.at(index)
             div.reading(data-position=index)
-              if reviews.vocab.isChinese()
-                if review.isReadingHidden()
-                  button.show-reading.btn.btn-sm.btn-default show
-                else
-                  span= app.fn.pinyin.toTone(reading.value)
+              if review.isReadingHidden()
+                button.show-reading.btn.btn-sm.btn-default show
               else
-                span= reading.value
+                span= reviews.isChinese() ? app.fn.pinyin.toTone(reading.value) : reading.value
             - index++
           else
             div.filler
@@ -53,10 +50,7 @@ gelato-component(data-name='prompt-vocab-reading')
           if (reading.type === 'character')
             - var review = reviews.at(index)
             div.reading(class=reviews.isComplete() ? '' : 'invisible', data-position=index)
-              if reviews.vocab.isChinese()
-                span= app.fn.pinyin.toTone(reading.value)
-              else
-                span= reading.value
+              span= reviews.isChinese() ? app.fn.pinyin.toTone(reading.value) : reading.value
             - index++
           else
             div.filler

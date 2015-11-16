@@ -1,5 +1,7 @@
 var SkritterModel = require('base/skritter-model');
 
+var Vocab = require('models/vocab');
+
 /**
  * @class Vocablist
  * @extends {SkritterModel}
@@ -11,16 +13,45 @@ module.exports = SkritterModel.extend({
      */
     idAttribute: 'id',
     /**
-     * @property urlRoot
-     * @type {String}
-     */
-    urlRoot: 'vocablists',
-    /**
      * @method parse
      * @returns {Object}
      */
     parse: function(response) {
         return response.VocabList || response;
+    },
+    /**
+     * @property urlRoot
+     * @type {String}
+     */
+    urlRoot: 'vocablists',
+    /**
+     * @method deletable
+     * @returns {Boolean}
+     */
+    deletable: function() {
+        return _.all([
+            !this.get('disabled'),
+            !this.get('published'),
+            this.get('sort') === 'custom',
+            this.get('user') === app.user.id
+        ]);
+    },
+    /**
+     * @method copyable
+     * @returns {Boolean}
+     */
+    copyable: function() {
+        return _.all([
+            !this.get('disabled'),
+            this.get('sort') !== 'chinesepod-lesson'
+        ]);
+    },
+    /**
+     * @method getImageUrl
+     * @returns {String}
+     */
+    getImageUrl: function() {
+        return app.getApiUrl() + 'vocablists/' + this.id + '/image';
     },
     /**
      * @method getPopularity
@@ -33,7 +64,7 @@ module.exports = SkritterModel.extend({
         } else if (peopleStudying > 2000) {
             return 1;
         } else {
-           return Math.pow(peopleStudying / 2000, 0.3)
+            return Math.pow(peopleStudying / 2000, 0.3)
         }
     },
     /**
@@ -118,6 +149,21 @@ module.exports = SkritterModel.extend({
         return this.get('lang') === 'zh';
     },
     /**
+     * @method isEditable
+     * @returns {Boolean}
+     */
+    isEditable: function() {
+        return app.user.get('isAdmin') ? true : _.all([
+            !this.get('disabled'),
+            this.get('sort') === 'custom',
+            _.any([
+                this.get('user') === app.user.id,
+                _.contains(this.get('editors'), app.user.id),
+                this.get('public')
+            ])
+        ]);
+    },
+    /**
      * @method isJapanese
      * @returns {Boolean}
      */
@@ -136,53 +182,5 @@ module.exports = SkritterModel.extend({
             this.get('user') === app.user.id,
             (this.get('sections') || []).length
         ]);
-    },
-    /**
-     * @method deletable
-     * @returns {Boolean}
-     */
-    deletable: function() {
-        return _.all([
-            !this.get('disabled'),
-            !this.get('published'),
-            this.get('sort') === 'custom',
-            this.get('user') === app.user.id
-        ]);
-    },
-    /**
-     * @method copyable
-     * @returns {Boolean}
-     */
-    copyable: function() {
-        return _.all([
-            !this.get('disabled'),
-            this.get('sort') !== 'chinesepod-lesson'
-        ]);
-    },
-    /**
-     * @method editable
-     * @returns {Boolean}
-     */
-    editable: function() {
-        if (app.user.get('isAdmin')) {
-            return true;
-        }
-
-        return _.all([
-            !this.get('disabled'),
-            this.get('sort') === 'custom',
-            _.any([
-                this.get('user') === app.user.id,
-                _.contains(this.get('editors'), app.user.id),
-                this.get('public')
-            ])
-        ]);
-    },
-    /**
-     * @method getImageUrl
-     * @returns {String}
-     */
-    getImageUrl: function() {
-        return app.getApiUrl() + 'vocablists/' + this.id + '/image';
     }
 });

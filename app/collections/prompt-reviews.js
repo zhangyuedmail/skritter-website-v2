@@ -1,12 +1,12 @@
-var GelatoCollection = require('gelato/collection');
+var Collection = require('base/collection');
 var PromptReview = require('models/prompt-review');
 var Review = require('models/review');
 
 /**
  * @class PromptReviews
- * @extends {GelatoCollection}
+ * @extends {Collection}
  */
-module.exports = GelatoCollection.extend({
+module.exports = Collection.extend({
     /**
      * @property group
      * @type {String}
@@ -146,11 +146,18 @@ module.exports = GelatoCollection.extend({
         return this.part === 'tone' ? 15000 : 30000;
     },
     /**
+     * @method isChinese
+     * @returns {Boolean}
+     */
+    isChinese: function() {
+        return this.vocab.isChinese();
+    },
+    /**
      * @method isComplete
      * @returns {Boolean}
      */
     isComplete: function() {
-        return !_.includes(this.pluck('complete'), false);
+        return _.includes(this.pluck('complete'), false) === false;
     },
     /**
      * @method isFirst
@@ -160,18 +167,25 @@ module.exports = GelatoCollection.extend({
         return this.position === 0;
     },
     /**
+     * @method isJapanese
+     * @returns {Boolean}
+     */
+    isJapanese: function() {
+        return this.vocab.isJapanese();
+    },
+    /**
      * @method isLast
      * @returns {Boolean}
      */
     isLast: function() {
-        return this.position >= this.length;
+        return this.position >= this.length - 1;
     },
     /**
      * @method isTeachable
      * @returns {Boolean}
      */
     isTeachable: function() {
-        if (app.user.get('teachingMode')) {
+        if (this.item && app.user.get('teachingMode')) {
             return this.item.isNew() || this.item.isLeech();
         }
         return false;

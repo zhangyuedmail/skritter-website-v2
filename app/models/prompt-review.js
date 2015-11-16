@@ -1,10 +1,10 @@
-var GelatoModel = require('gelato/model');
+var Model = require('base/model');
 
 /**
  * @class PromptReview
- * @extends {GelatoModel}
+ * @extends {Model}
  */
-module.exports = GelatoModel.extend({
+module.exports = Model.extend({
     /**
      * @property character
      * @type {PromptCharacter}
@@ -32,7 +32,9 @@ module.exports = GelatoModel.extend({
             reviewingStart: 0,
             reviewingStop: 0,
             score: 3,
+            showContained: false,
             showDefinition: false,
+            showMnemonic: false,
             showReading: false,
             submitTime: 0,
             thinkingStop: 0,
@@ -99,6 +101,13 @@ module.exports = GelatoModel.extend({
         return this.collection.vocab.getTones()[this.getPosition()];
     },
     /**
+     * @method isChinese
+     * @returns {Boolean}
+     */
+    isChinese: function() {
+        return this.vocab.isChinese();
+    },
+    /**
      * @method isComplete
      * @returns {Boolean}
      */
@@ -113,7 +122,18 @@ module.exports = GelatoModel.extend({
         if (this.get('showDefinition')) {
             return false;
         }
-        return app.user.get('hideDefinition') && !this.isComplete();
+        if (this.isJapanese()) {
+            return app.user.get('hideDefinition') && !this.collection.isComplete();
+        } else {
+            return app.user.get('hideDefinition') && !this.isComplete();
+        }
+    },
+    /**
+     * @method isJapanese
+     * @returns {Boolean}
+     */
+    isJapanese: function() {
+        return this.vocab.isJapanese();
     },
     /**
      * @method isReadingHidden
@@ -123,7 +143,11 @@ module.exports = GelatoModel.extend({
         if (this.get('showReading')) {
             return false;
         }
-        return (app.user.get('hideReading') && !this.isComplete());
+        if (this.isJapanese()) {
+            return app.user.get('hideReading') && !this.collection.isComplete();
+        } else {
+            return app.user.get('hideReading') && !this.isComplete();
+        }
     },
     /**
      * @method start

@@ -122,6 +122,11 @@
   height: 23px;
   width: 23px;
 }
+.icon-study-char-decomp {
+  background-image: url('#{$dir-assets}/vectors/study-char-decomp.svg');
+  height: 23px;
+  width: 23px;
+}
 .icon-study-correct {
   background-image: url('#{$dir-assets}/vectors/study-correct.svg');
   height: 44px;
@@ -174,6 +179,11 @@
 }
 .icon-study-word-star {
   background-image: url('#{$dir-assets}/vectors/study-word-star.svg');
+  height: 24px;
+  width: 24px;
+}
+.icon-study-word-star-filled {
+  background-image: url('#{$dir-assets}/vectors/study-word-star-orange.svg');
   height: 24px;
   width: 24px;
 }

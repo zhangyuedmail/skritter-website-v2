@@ -47,7 +47,8 @@
         var params = targetStroke.getParams();
         for (var a = 0, lengthA = params.length; a < lengthA; a++) {
             var param = params[a];
-            if (param.get('strokeId') === 387) {
+            var strokeId = param.get('strokeId');
+            if (strokeId === 387) {
                 continue;
             }
             var result = userStroke.clone();
@@ -55,7 +56,9 @@
             var total = 0;
             scores.angle = this.checkAngle(userStroke, param);
             scores.corners = this.checkCorners(userStroke, param);
-            scores.distance = this.checkDistance(userStroke, param);
+            if ([383, 384, 385, 386].indexOf(strokeId) === -1) {
+                scores.distance = this.checkDistance(userStroke, param);
+            }
             for (var check in scores) {
                 var score = scores[check];
                 if (score > -1) {

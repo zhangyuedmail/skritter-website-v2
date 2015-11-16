@@ -18,7 +18,7 @@ gelato-component(data-name='prompt-vocab-writing')
           if (character.type === 'character')
             - var review = reviews.at(index)
             - var classes = []
-            if (!review.get('complete'))
+            if (reviews.position <= index && !review.get('complete'))
               - classes.push('masked')
             if (reviews.position === index)
               - classes.push('active')

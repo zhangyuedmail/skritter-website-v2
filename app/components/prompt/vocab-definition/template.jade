@@ -4,6 +4,7 @@ gelato-component(data-name='prompt-vocab-definition')
 
   if reviews
     - var definition = reviews.vocab.getDefinition()
+    - var review = reviews.current();
 
     label Definition
 
@@ -25,6 +26,9 @@ gelato-component(data-name='prompt-vocab-definition')
             textarea= definition
           else
             if definition
-              span!= definition
+              if review.isDefinitionHidden()
+                button#show-definition.btn.btn-sm.btn-default show
+              else
+                span!= definition
             else
               em Click the 'edit' icon to add a definition

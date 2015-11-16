@@ -1,0 +1,59 @@
+gelato-component(data-name='prompt-vocab-contained')
+  - var prompt = view.prompt;
+  - var reviews = view.prompt.reviews;
+
+  if reviews
+    - var contained = reviews.vocab.getContained();
+    - var review = reviews.current();
+    - var vocabs = contained;
+
+    if !vocabs.length
+      - vocabs = [reviews.vocab];
+
+    if _.includes(['rune', 'tone'], prompt.part)
+      - vocabs = [vocabs[reviews.position]];
+
+    if vocabs.length
+
+      hr
+
+      div.value
+        if review.get('showContained') || review.isComplete()
+
+          for vocab in vocabs
+            - var decomp = vocab.getDecomp();
+            - var definition = vocab.getDefinition();
+            - var mnemonic = vocab.getMnemonic();
+
+            .child-character
+
+              if contained.length > 1
+                .child-vocab-row
+                  span.child-writing(class=app.isChinese() ? 'text-chinese' : 'text-japanese')= vocab.get('writing')
+                  | &nbsp;
+                  span.child-reading= app.isChinese() ? app.fn.pinyin.toTone(vocab.get('reading')) : vocab.get('reading')
+
+              if decomp && !decomp.get('atomic')
+                .child-vocab-row
+                  label Decomposition
+                  for child in decomp.get('Children')
+                    .child-decomp
+                      span.decomp-writing(class=app.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
+                      | &nbsp;
+                      span.decomp-reading= app.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                      | &nbsp;
+                      span.decomp-definition= child.definitions.en
+
+              if contained.length > 1 && definition
+                .child-vocab-row
+                  label Definition
+                  .child-definition!= definition
+
+              if contained.length > 1 && mnemonic
+                .child-vocab-row
+                  label Mnemonic
+                  .child-mnemonic!= vocab.getMnemonic().text
+
+        else
+
+          button#show-contained.btn.btn-default show

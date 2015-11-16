@@ -1,11 +1,11 @@
-var GelatoCollection = require('gelato/collection');
+var Collection = require('base/collection');
 var PromptStroke = require('models/prompt-stroke');
 
 /**
  * @class PromptCharacter
- * @extends {GelatoCollection}
+ * @extends {Collection}
  */
-module.exports = GelatoCollection.extend({
+module.exports = Collection.extend({
     /**
      * @method initialize
      * @constructor
@@ -130,6 +130,21 @@ module.exports = GelatoCollection.extend({
         for (var i = 0, length = this.length; i < length; i++) {
             if (!excludeStrokes) {
                 container.addChild(this.at(i).getTargetShape());
+            }
+        }
+        container.name = 'character';
+        return container;
+    },
+    /**
+     * @method getUserSquig
+     * @param {Number} [excludeStrokes]
+     * @returns {createjs.Container}
+     */
+    getUserSquig: function(excludeStrokes) {
+        var container = new createjs.Container();
+        for (var i = 0, length = this.length; i < length; i++) {
+            if (!excludeStrokes) {
+                container.addChild(this.at(i).getUserSquig());
             }
         }
         container.name = 'character';

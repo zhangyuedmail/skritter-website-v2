@@ -1,0 +1,47 @@
+gelato-page(data-name='vocablists-list-section')
+  - var editor = view.editor;
+  - var vocablist = view.vocablist;
+  - var vocablistSection = view.vocablistSection;
+
+  #navbar-container
+
+  section.container
+    .content-block
+      .row
+
+        .col-xs-12
+
+          if vocablist.state === 'fetching'
+
+            .loading-section.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
+
+          else
+
+            .content-details
+              .row
+                .col-xs-6
+                  .list-name
+                    a(href='/vocablists/view/' + vocablist.id)
+                      i.fa.fa-angle-left
+                      | &nbsp;
+                      span= vocablist.get('name')
+                  if view.editing
+                    input#section-name(value=vocablistSection.get('name'))
+                  else
+                    #section-name= vocablistSection.get('name') || '(empty)'
+                .col-xs-6.text-right
+                  i#edit-section.fa.fa-pencil
+
+            #editor-container
+
+            if vocablist.isEditable()
+              #input-row.row
+                .col-xs-12
+                  input#add-input(type='text', placeholder='Type a word and hit enter')
+
+              .row
+                .col-xs-12.text-right
+                  button#discard-changes.btn.btn-fixed.btn-info Undo
+                  | &nbsp;&nbsp;&nbsp;
+                  button#save-changes.btn.btn-fixed.btn-success Save

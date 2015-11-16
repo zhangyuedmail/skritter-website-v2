@@ -1,4 +1,5 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var VocablistSidebar = require('components/vocablist-sidebar/view');
 var ChinesePodSession = require('models/chinesepod-session');
 var ChinesePodLabels = require('collections/chinesepod-labels');
@@ -6,15 +7,15 @@ var ChinesePodLessons = require('collections/chinesepod-lessons');
 
 /**
  * @class ChinesePodPage
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.sidebar = new VocablistSidebar();
         this.chinesepodSession = new ChinesePodSession();
         this.chinesepodLabels = new ChinesePodLabels();
@@ -74,7 +75,7 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.sidebar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method handleChinesepodSessionLoaded
@@ -129,7 +130,7 @@ module.exports = GelatoPage.extend({
     }, 500),
     /**
      * @method handleChinesePodError
-     * @param {GelatoCollection} collection
+     * @param {Collection} collection
      * @param {jqXHR} jqxhr
      */
     handleChinesePodError: function(collection, jqxhr) {

@@ -1,18 +1,20 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var SettingsSidebar = require('components/settings-sidebar/view');
 
 /**
  * @class SettingsStudy
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.listenTo(app.user, 'state', this.renderSectionContent);
+        this.sourceLanguages = require('data/source-languages');
         this.sidebar = new SettingsSidebar();
         app.user.fetch();
     },
@@ -67,7 +69,7 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.sidebar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method getSelectedParts
@@ -98,6 +100,7 @@ module.exports = GelatoPage.extend({
         app.user.set({
             autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
             showHeisig: this.$('#field-heisig').is(':checked'),
+            sourceLang: this.$('#field-source-language').val(),
             targetLang: this.$('#field-target-language').val()
         });
         if (app.isChinese()) {
@@ -109,7 +112,8 @@ module.exports = GelatoPage.extend({
         } else if (app.isJapanese()) {
             app.user.set({
                 japaneseStudyParts: this.getSelectedParts(),
-                studyKana: this.$('#field-study-kana').is(':checked')
+                studyKana: this.$('#field-study-kana').is(':checked'),
+                studyRareWritings: this.$('#field-study-rare-writings').is(':checked')
             });
         }
         app.user.save();

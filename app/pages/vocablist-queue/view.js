@@ -1,4 +1,5 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var VocablistAddTable = require('components/vocablist-add-table/view');
 var VocablistReviewTable = require('components/vocablist-review-table/view');
 var VocablistSidebar = require('components/vocablist-sidebar/view');
@@ -6,9 +7,9 @@ var Vocablists = require('collections/vocablists');
 
 /**
  * @class VocablistQueue
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
@@ -17,7 +18,7 @@ module.exports = GelatoPage.extend({
         this.vocablists = new Vocablists();
         this.addingTable = new VocablistAddTable({vocablists: this.vocablists});
         this.reviewingTable = new VocablistReviewTable({vocablists: this.vocablists});
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.sidebar = new VocablistSidebar();
         this.listenTo(this.vocablists, 'state:standby', function() {
             if (this.vocablists.cursor) {
@@ -78,6 +79,6 @@ module.exports = GelatoPage.extend({
         this.reviewingTable.remove();
         this.navbar.remove();
         this.sidebar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     }
 });

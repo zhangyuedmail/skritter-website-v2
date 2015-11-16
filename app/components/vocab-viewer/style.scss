@@ -44,8 +44,14 @@ gelato-component[data-name='vocab-viewer'] {
     }
     #vocab-difficulty {
       font-size: 16px;
+      margin-bottom: 10px;
       text-transform: capitalize;
       text-align: center;
+    }
+    #vocab-difficulty-text {
+      color: $grey3;
+      font-size: 14px;
+      font-weight: 300;
     }
     #vocab-reading {
       font-size: 12px;

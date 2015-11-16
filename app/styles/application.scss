@@ -1,0 +1,18 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+
+bootstrap-dialog .modal { z-index: 9000; }
+
+gelato-application {
+  display: block;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}

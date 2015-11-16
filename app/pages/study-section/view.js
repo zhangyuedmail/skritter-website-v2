@@ -1,10 +1,15 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
+var Prompt = require('components/prompt/view');
+var StudyToolbar = require('components/study-toolbar/view');
+var Vocablist = require('models/vocablist');
+var Items = require('collections/items');
 
 /**
  * @class StudySection
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @param {Object} options
@@ -13,11 +18,11 @@ module.exports = GelatoPage.extend({
     initialize: function(options) {
         this.listId = options.listId;
         this.sectionId = options.sectionId;
-        this.items = this.createCollection('collections/items');
-        this.navbar = this.createComponent('navbars/default');
-        this.prompt = this.createComponent('components/prompt');
-        this.toolbar = this.createComponent('components/study-toolbar', {page: this});
-        this.vocablist = this.createModel('models/vocablist', {id: options.listId});
+        this.items = new Items();
+        this.navbar = new DefaultNavbar();
+        this.prompt = new Prompt();
+        this.toolbar = new StudyToolbar({page: this});
+        this.vocablist = new Vocablist({id: options.listId});
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
@@ -27,7 +32,17 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
         this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
         this.listenTo(this.toolbar, 'save:study-settings', this.handleToolbarSaveStudySettings);
-        this.load();
+        this.items.comparator = function(item) {
+            return -item.getReadiness();
+        };
+        this.loadMore(
+            _.bind(function() {
+                this.next();
+            }, this),
+            _.bind(function() {
+                this.next();
+            }, this)
+        );
     },
     /**
      * @property events
@@ -67,7 +82,7 @@ module.exports = GelatoPage.extend({
     handlePromptNext: function(reviews) {
         this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
         this.items.addReviews(reviews.getItemReviews());
-        this.items.reviews.save();
+        this.items.reviews.post();
         this.counter++;
         this.next();
     },
@@ -142,23 +157,26 @@ module.exports = GelatoPage.extend({
      * @param {Object} settings
      */
     handleToolbarSaveStudySettings: function(settings) {
-        this.prompt.remove();
-        this.prompt = this.createComponent('components/prompt');
-        this.prompt.setElement('#prompt-container').render();
-        this.app.user.set(settings, {merge: true}).cache();
-        this.items = this.createCollection('collections/items');
-        this.items.fetchNext(
-            {listId: this.listId},
+        this.items.reset();
+        this.prompt.reset();
+        app.user.set(settings, {merge: true}).cache();
+        app.user.save();
+        this.loadMore(
+            _.bind(function() {
+                this.next();
+            }, this),
             _.bind(function() {
                 this.next();
             }, this)
         );
     },
     /**
-     * @method load
+     * @method loadMore
+     * @param {Function} [callbackSuccess]
+     * @param {Function} [callbackError]
      */
-    load: function() {
-        async.waterfall([
+    loadMore: function(callbackSuccess, callbackError) {
+        async.series([
             _.bind(function(callback) {
                 this.vocablist.fetch({
                     error: function(items, error) {
@@ -179,38 +197,79 @@ module.exports = GelatoPage.extend({
                         callback(error);
                     }
                 );
+            }, this),
+            _.bind(function(callback) {
+                async.each(
+                    this.items.models,
+                    _.bind(function(item, callback) {
+                        if (item.isKosher()) {
+                            callback();
+                        } else {
+                            item.set('next', moment(item.get('next') * 1000).add('2', 'weeks').unix());
+                            $.ajax({
+                                url: app.getApiUrl() + 'items/' + item.id,
+                                headers: app.user.session.getHeaders(),
+                                context: this,
+                                type: 'PUT',
+                                data: JSON.stringify(item.toJSON()),
+                                error: function(error) {
+                                    callback(error);
+                                },
+                                success: function() {
+                                    this.items.remove(item);
+                                    callback();
+                                }
+                            });
+                        }
+                    }, this),
+                    function(error) {
+                        callback(error);
+                    }
+                );
             }, this)
-        ], _.bind(function(error, items) {
+        ], function(error) {
             if (error) {
-                console.error('ITEM LOAD ERROR:', error, items);
+                if (typeof callbackError === 'function') {
+                    callbackError(error);
+                }
             } else {
-                this.toolbar.render();
-                this.next();
+                if (typeof callbackSuccess === 'function') {
+                    callbackSuccess();
+                }
             }
-        }, this));
+        });
+    },
+    /**
+     * @method getNextItem
+     * @returns {Item}
+     */
+    getNextItem: function() {
+        return this.items.sort().at(0);
     },
     /**
      * @method next
      */
     next: function() {
-        var nextItem = this.items.getNext();
-        console.log(nextItem);
-        if (this.prompt) {
-            if (nextItem) {
-                this.toolbar.timer.reset();
-                this.prompt.set(nextItem.getPromptReviews());
-                if (nextItem.get('part') === 'rune' && nextItem.isNew()) {
-                    this.prompt.canvas.startTeaching();
-                }
-            } else {
-                console.error('ITEM LOAD ERROR:', 'no items');
+        var item = this.getNextItem();
+        if (item) {
+            this.toolbar.render();
+            this.toolbar.timer.reset();
+            this.prompt.set(item.getPromptReviews());
+            this.counter++;
+            if (this.counter % 10 === 0) {
+                //console.log('LOADING MORE ITEMS:', 10);
+                //this.loadMore();
             }
+        } else {
+            console.error('ITEM LOAD ERROR:', 'no items');
         }
     },
     /**
      * @method previous
      */
-    previous: function() {},
+    previous: function() {
+        //TODO: allow going back a prompt
+    },
     /**
      * @method remove
      * @returns {StudySection}
@@ -218,6 +277,6 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.prompt.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     }
 });

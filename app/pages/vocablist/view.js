@@ -1,4 +1,5 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var VocablistSettings = require('dialogs/vocablist-settings/view');
 var ConfirmDialog = require('dialogs/confirm/view');
 var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
@@ -7,15 +8,15 @@ var Vocablist = require('models/vocablist');
 
 /**
  * @class VocablistView
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function(options) {
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.updating = false;
         this.vocablist = new Vocablist({id: options.vocablistId});
         this.listenTo(this.vocablist, 'sync', function() {
@@ -107,7 +108,7 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.navbar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method handleClickAddToQueueButton

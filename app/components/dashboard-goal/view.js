@@ -1,10 +1,10 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 
 /**
  * @class DashboardGoal
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @constructor
@@ -88,7 +88,7 @@ module.exports = GelatoComponent.extend({
      */
     remove: function() {
         this.doughnut.destroy();
-        return GelatoComponent.prototype.remove.call(this);
+        return Component.prototype.remove.call(this);
     },
     /**
      * @method resize

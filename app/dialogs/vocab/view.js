@@ -1,11 +1,11 @@
-var GelatoDialog = require('gelato/bootstrap/dialog');
+var BootstrapDialog = require('base/bootstrap-dialog');
 var VocabViewer = require('components/vocab-viewer/view');
 
 /**
  * @class VocabDialog
- * @extends {GelatoDialog}
+ * @extends {BootstrapDialog}
  */
-module.exports = GelatoDialog.extend({
+module.exports = BootstrapDialog.extend({
     /**
      * @method initialize
      * @constructor
@@ -18,6 +18,14 @@ module.exports = GelatoDialog.extend({
      * @type {Function}
      */
     template: require('./template'),
+    /**
+     * @method remove
+     * @returns {VocabDialog}
+     */
+    remove: function() {
+        this.viewer.remove();
+        return BootstrapDialog.prototype.remove.call(this);
+    },
     /**
      * @method render
      * @returns {VocabDialog}
@@ -56,13 +64,5 @@ module.exports = GelatoDialog.extend({
         this.$('#loading-spinner').show();
         this.listenToOnce(this.viewer, 'load', this.handleLoadVocab);
         this.viewer.load(vocabId);
-    },
-    /**
-     * @method remove
-     * @returns {VocabDialog}
-     */
-    remove: function() {
-        this.viewer.remove();
-        return GelatoDialog.prototype.remove.call(this);
     }
 });

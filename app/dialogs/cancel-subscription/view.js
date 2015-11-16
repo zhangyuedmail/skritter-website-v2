@@ -1,12 +1,12 @@
-var GelatoDialog = require('gelato/bootstrap/dialog');
+var BootstrapDialog = require('base/bootstrap-dialog');
 var CancellationReasons = require('collections/cancellation-reasons');
 var Cancellation = require('models/cancellation');
 
 /**
  * @class CancelSubscriptionDialog
- * @extends {GelatoDialog}
+ * @extends {BootstrapDialog}
  */
-module.exports = GelatoDialog.extend({
+module.exports = BootstrapDialog.extend({
     /**
      * @property events
      * @type {Object}

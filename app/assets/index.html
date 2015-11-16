@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu:300,400' rel='stylesheet' type='text/css'>
+    <link href="/favicon.png" rel="apple-touch-icon">
+    <link href="/styles/libraries.css" rel="stylesheet">
+    <link href="/styles/application.css" rel="stylesheet">
     <style>
         #application-loading {
             background-color: #262b30;
@@ -57,12 +60,7 @@
             }
         }
     </style>
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    </script>
+
 </head>
 <body>
 <div id="application-loading">
@@ -72,46 +70,16 @@
         <div class="bounce3"></div>
     </div>
 </div>
+<gelato-application></gelato-application>
+<bootstrap-dialogs></bootstrap-dialogs>
 <script>
-    //google analytics
-    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-        e.src='https://www.google-analytics.com/analytics.js';
-        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-    //application loader
-    (function () {
-        function insertElement(type, target) {
-            var element = null;
-            var prefix = document.location.protocol === 'file:' ? '' : '/';
-            switch (type) {
-                case 'apple-touch-icon':
-                    element = document.createElement('link');
-                    element.href = prefix + target;
-                    element.rel = 'apple-touch-icon';
-                    break;
-                case 'link':
-                    element = document.createElement('link');
-                    element.href = prefix + target;
-                    element.rel = 'stylesheet';
-                    break;
-                case 'script':
-                    element = document.createElement('script');
-                    element.src = prefix + target;
-                    break;
-            }
-            document.head.appendChild(element);
-            return element;
-        }
-        insertElement('apple-touch-icon', 'favicon.png');
-        insertElement('link', 'styles/libraries.css');
-        insertElement('link', 'styles/application.css');
-        insertElement('script', 'js/libraries.js').onload = function() {
-            insertElement('script', 'js/application.js').onload = function() {
-                require("initialize");
-            };
-        };
-    })();
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 </script>
+<script src="/js/libraries.js"></script>
+<script src="/js/application.js"></script>
+<script>require('initialize');</script>
 </body>
 </html>

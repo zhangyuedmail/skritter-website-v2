@@ -1,10 +1,10 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 
 /**
  * @class PromptVocabDefinition
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @param {Object} options
@@ -12,6 +12,13 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function(options) {
         this.prompt = options.prompt;
+    },
+    /**
+     * @property events
+     * @type Object
+     */
+    events: {
+        'vclick #show-definition': 'handleClickShow'
     },
     /**
      * @property template
@@ -32,5 +39,13 @@ module.exports = GelatoComponent.extend({
      */
     getValue: function() {
         return this.$('textarea').val();
+    },
+    /**
+     * @method handleClickShow
+     * @param {Event} event
+     */
+    handleClickShow: function(event) {
+        event.preventDefault();
+        this.trigger('click:show');
     }
 });

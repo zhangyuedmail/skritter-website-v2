@@ -1,4 +1,5 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var MarketingFooter = require('components/marketing-footer/view');
 var StripeLoader = require('utils/stripe-loader');
 var User = require('models/user');
@@ -12,9 +13,9 @@ var Session = require('models/session');
 
 /**
  * @class Signup
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
@@ -22,7 +23,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         StripeLoader.load();
         this.footer = new MarketingFooter();
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.user = null;
         this.password = null;
         this.session = new Session();
@@ -68,7 +69,7 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.footer.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method createUser

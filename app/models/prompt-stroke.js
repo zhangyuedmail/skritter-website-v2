@@ -1,10 +1,10 @@
-var GelatoModel = require('gelato/model');
+var Model = require('base/model');
 
 /**
  * @class PromptStroke
- * @extends {GelatoModel}
+ * @extends {Model}
  */
-module.exports = GelatoModel.extend({
+module.exports = Model.extend({
     /**
      * @method initialize
      * @constructor
@@ -103,9 +103,9 @@ module.exports = GelatoModel.extend({
             shape.rotation = data.rot;
         } else {
             var ms = shape.getMatrix();
-            ms.scale(data.scaleX, data.scaleY);
-            ms.translate(-data.w / 2, -data.h / 2);
-            ms.rotate(data.rot * createjs.Matrix2D.DEG_TO_RAD);
+            ms.appendMatrix(new createjs.Matrix2D().rotate(data.rot));
+            ms.appendMatrix(new createjs.Matrix2D().translate(-data.w / 2, -data.h / 2));
+            ms.appendMatrix(new createjs.Matrix2D().scale(data.scaleX, data.scaleY));
             var t = ms.decompose();
             shape.setTransform(t.x, t.y, t.scaleX, t.scaleY, t.rotation, t.skewX, t.skewY);
             var finalBounds = shape.getTransformedBounds();
@@ -138,6 +138,13 @@ module.exports = GelatoModel.extend({
         //shape.scaleY = rect.height / bounds.height;
         shape.name = 'stroke';
         return shape;
+    },
+    /**
+     * @method getUserSquig
+     * @returns {createjs.Shape}
+     */
+    getUserSquig: function() {
+        return this.get('squig');
     },
     /**
      * @method inflatedData

@@ -1,12 +1,12 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 var PromptCanvasDefinition = require('components/prompt/canvas-definition/view');
 var PromptCanvasReading = require('components/prompt/canvas-reading/view');
 
 /**
  * @class PromptCanvas
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @param {Object} options
@@ -18,9 +18,9 @@ module.exports = GelatoComponent.extend({
         this.defaultFadeSpeed = 1000;
         this.defaultTraceFill = '#38240c';
         this.grid = true;
-        this.gridColor = '#d8dadc';
+        this.gridColor = '#b2b5b9';
         this.gridDashLength = 5;
-        this.gridLineWidth = 0.75;
+        this.gridLineWidth = 0.50;
         this.mouseDownEvent = null;
         this.mouseLastDownEvent = null;
         this.mouseLastUpEvent = null;
@@ -50,6 +50,7 @@ module.exports = GelatoComponent.extend({
         this.stage = this.createStage();
         this.createLayer('grid');
         this.createLayer('character-hint');
+        this.createLayer('character-reveal');
         this.createLayer('character-teach');
         this.createLayer('character');
         this.createLayer('input-background2');
@@ -213,12 +214,13 @@ module.exports = GelatoComponent.extend({
      */
     enableInput: function() {
         var self = this;
-        var oldPoint, oldMidPoint, points, marker;
+        var oldPoint, oldMidPoint, points, marker, clonedMarker;
         this.disableInput().$('#input-canvas').on('vmousedown.Input pointerdown.Input', down);
         function down(event) {
             points = [];
             marker = new createjs.Shape();
-            marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round').beginStroke(self.strokeColor);
+            marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round');
+            marker.stroke = marker.graphics.beginStroke(self.strokeColor).command;
             if (event.offsetX && event.offsetY) {
                 points.push(new createjs.Point(event.offsetX, event.offsetY));
             } else {
@@ -240,12 +242,16 @@ module.exports = GelatoComponent.extend({
                 point.y = self.stage.mouseY;
             }
             var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
-            marker.graphics.moveTo(midPoint.x, midPoint.y).curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
-            oldPoint = point;
-            oldMidPoint = midPoint;
-            points.push(point);
-            self.triggerInputMove(point);
-            self.stage.update();
+            if (app.fn.getDistance(oldPoint, point) > 3.0) {
+                marker.graphics
+                    .setStrokeStyle(self.size * self.brushScale, 'round', 'round')
+                    .moveTo(midPoint.x, midPoint.y)
+                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+                oldPoint = point.clone();
+                oldMidPoint = midPoint.clone();
+                points.push(point);
+                self.stage.update();
+            }
         }
         function up(event) {
             marker.graphics.endStroke();
@@ -256,7 +262,9 @@ module.exports = GelatoComponent.extend({
             } else {
                 points.push(new createjs.Point(self.stage.mouseX, self.stage.mouseY));
             }
-            self.triggerInputUp(points, marker.clone(true));
+            clonedMarker = marker.clone(true);
+            clonedMarker.stroke = marker.stroke;
+            self.triggerInputUp(points, clonedMarker);
             self.getLayer('input').removeAllChildren();
         }
         return this;
@@ -323,9 +331,13 @@ module.exports = GelatoComponent.extend({
                     inject(object.children[i]);
                 }
             } else if (object.graphics) {
-                object.graphics._dirty = true;
-                object.graphics._fill = customFill;
-                object.graphics._stroke = customStroke;
+                if (object.stroke) {
+                    object.stroke.style = color;
+                } else {
+                    object.graphics._dirty = true;
+                    object.graphics._fill = customFill;
+                    object.graphics._stroke = customStroke;
+                }
             }
         })(object);
         return this;
@@ -345,6 +357,7 @@ module.exports = GelatoComponent.extend({
      */
     reset: function() {
         this.getLayer('character-hint').removeAllChildren();
+        this.getLayer('character-reveal').removeAllChildren();
         this.getLayer('character-teach').removeAllChildren();
         this.getLayer('character').removeAllChildren();
         this.getLayer('input-background2').removeAllChildren();
@@ -363,8 +376,8 @@ module.exports = GelatoComponent.extend({
         this.reset().size = size;
         this.stage.canvas.height = size;
         this.stage.canvas.width = size;
-        this.$view.height(size);
-        this.$view.width(size);
+        this.$('gelato-component').height(size);
+        this.$('gelato-component').width(size);
         this.$('#canvas-navigation').css('top', (size / 2) - 35);
         switch (this.prompt.part) {
             case 'rune':
@@ -433,7 +446,7 @@ module.exports = GelatoComponent.extend({
             var lineLastPositionEnd = {x: this.mouseLastUpEvent.pageX, y: this.mouseLastUpEvent.pageY};
             var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
             var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
-            if (lineLastDistance < 50 && lineLastDuration > 50 && lineLastDuration < 200) {
+            if (lineLastDistance < 5 && lineLastDuration > 50 && lineLastDuration < 200) {
                 this.trigger('doubleclick', event);
                 return;
             }
@@ -446,6 +459,11 @@ module.exports = GelatoComponent.extend({
             if (lineDuration > 1000) {
                 this.trigger('clickhold', event);
                 return;
+            }
+        }
+        if (this.mouseUpEvent) {
+            if (lineDistance < 5 && lineDuration < 1000) {
+                this.trigger('tap', event);
             }
         }
         this.trigger('click', event);
@@ -517,7 +535,26 @@ module.exports = GelatoComponent.extend({
     },
 
 
-
+    /**
+     * @method completeCharacter
+     * @returns {PromptCanvas}
+     */
+    completeCharacter: function() {
+        var review = this.prompt.review;
+        var character = this.prompt.review.character;
+        var strokes = [];
+        if (this.prompt.part === 'tone') {
+            strokes = [character.getTone(review.getTones()[0])];
+        } else {
+            strokes = character.targets[0].models;
+        }
+        character.reset(strokes);
+        this.drawShape(
+            'character',
+            character.getUserShape()
+        );
+        return this;
+    },
     /**
      * @method fadeCharacterHint
      * @returns {PromptCanvas}
@@ -550,6 +587,14 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method hideCharacterReveal
+     * @returns {PromptCanvas}
+     */
+    hideCharacterReveal: function() {
+        this.clearLayer('character-reveal');
+        return this;
+    },
+    /**
      * @method hideCharacterHint
      * @returns {PromptCanvas}
      */
@@ -571,31 +616,33 @@ module.exports = GelatoComponent.extend({
      * @param {createjs.Shape} shape
      */
     recognizeRune: function(points, shape) {
-        var review = this.prompt.reviews.current();
-        var character = review.character;
-        var stroke = character.recognize(points, shape);
-        if (stroke) {
-            var targetShape = stroke.getTargetShape();
-            var userShape = stroke.getUserShape();
-            if (app.user.get('squigs')) {
-                this.drawShape(
-                    'character',
-                    shape
-                );
+        if (app.fn.getLength(points) >= 5) {
+            var review = this.prompt.reviews.current();
+            var character = review.character;
+            var stroke = character.recognize(points, shape);
+            if (stroke) {
+                var targetShape = stroke.getTargetShape();
+                var userShape = stroke.getUserShape();
+                if (app.user.get('squigs')) {
+                    this.drawShape(
+                        'character',
+                        shape
+                    );
+                } else {
+                    stroke.set('tweening', true);
+                    this.tweenShape(
+                        'character',
+                        userShape,
+                        targetShape
+                    );
+                }
+                this.trigger('attempt:success');
             } else {
-                stroke.set('tweening', true);
-                this.tweenShape(
-                    'character',
-                    userShape,
-                    targetShape
-                );
+                this.trigger('attempt:fail');
             }
-            this.trigger('attempt:success');
-        } else {
-            this.trigger('attempt:fail');
-        }
-        if (character.isComplete()) {
-            this.trigger('complete');
+            if (character.isComplete()) {
+                this.trigger('complete');
+            }
         }
     },
     /**
@@ -641,7 +688,11 @@ module.exports = GelatoComponent.extend({
      */
     redrawCharacter: function() {
         this.clearLayer('character');
-        this.drawShape('character', this.prompt.review.character.getUserShape());
+        if (app.user.get('squigs')) {
+            this.drawShape('character', this.prompt.review.character.getUserSquig());
+        } else {
+            this.drawShape('character', this.prompt.review.character.getUserShape());
+        }
         return this;
     },
     /**
@@ -671,13 +722,41 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * @method review
+     * @returns {PromptCanvas}
+     */
+    showCharacterReveal: function() {
+        var review = this.prompt.review;
+        var shape = review.character.getTargetShape();
+        this.hideCharacterReveal();
+        switch (this.prompt.reviews.part) {
+            case 'rune':
+                this.drawShape(
+                    'character-reveal',
+                    shape,
+                    {color: '#e8ded2'}
+                );
+                break;
+            case 'tone':
+                this.drawCharacter(
+                    'character-reveal',
+                    review.vocab.get('writing'),
+                    {color: '#e8ded2', font: review.vocab.getFontName()}
+                );
+                break;
+        }
+        return this;
+    },
+    /**
      * @method showStrokeHint
      * @returns {PromptCanvas}
      */
     showStrokeHint: function() {
         var review = this.prompt.reviews.current();
-        var shape = review.character.getExpectedStroke().getTargetShape();
-        this.fadeShape('stroke-hint', shape);
+        if (!review.isComplete()) {
+            var shape = review.character.getExpectedStroke().getTargetShape();
+            this.fadeShape('stroke-hint', shape);
+        }
         return this;
     },
     /**

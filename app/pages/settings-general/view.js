@@ -1,12 +1,13 @@
-var GelatoPage = require('gelato/page');
+var Page = require('base/page');
+var DefaultNavbar = require('navbars/default/view');
 var ChangePasswordDialog = require('dialogs/change-password/view');
 var SettingsSidebar = require('components/settings-sidebar/view');
 
 /**
  * @class SettingsGeneral
- * @extends {GelatoPage}
+ * @extends {Page}
  */
-module.exports = GelatoPage.extend({
+module.exports = Page.extend({
     /**
      * @method initialize
      * @constructor
@@ -14,7 +15,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.countries = require('data/country-codes');
         this.timezones = require('data/country-timezones');
-        this.navbar = this.createComponent('navbars/default');
+        this.navbar = new DefaultNavbar();
         this.sidebar = new SettingsSidebar();
         this.listenTo(app.user, 'state', this.renderSectionContent);
         app.user.fetch();
@@ -24,9 +25,11 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
+        'change #avatar-upload-input': 'handleChangeAvatarUploadInput',
         'change #field-country': 'handleSelectCountry',
         'vclick #button-save': 'handleClickButtonSave',
-        'vclick #button-change-password': 'handleClickButtonChangePassword'
+        'vclick #button-change-password': 'handleClickButtonChangePassword',
+        'vclick #change-avatar': 'handleClickChangeAvatar'
     },
     /**
      * @property title
@@ -61,6 +64,19 @@ module.exports = GelatoPage.extend({
         return this.$('#field-country :selected').val() || app.user.get('country');
     },
     /**
+     * @method handleChangeAvatarUploadInput
+     * @param {Event} event
+     */
+    handleChangeAvatarUploadInput: function(event) {
+        var file = event.target.files[0];
+        var data = new FormData().append('image', file);
+        var reader  = new FileReader();
+        reader.onload = function(event) {
+            $('#field-avatar').attr('src', event.target.result);
+        };
+        reader.readAsDataURL(file);
+    },
+    /**
      * @method handleClickButtonChangePassword
      * @param {Event} event
      */
@@ -76,6 +92,7 @@ module.exports = GelatoPage.extend({
     handleClickButtonSave: function(event) {
         event.preventDefault();
         app.user.set({
+            avatar: this.$('#field-avatar').get(0).src.replace('data:image/png;base64,', ''),
             aboutMe: this.$('#field-about').val(),
             country: this.$('#field-country').find(':selected').val(),
             email: this.$('#field-email').val(),
@@ -83,6 +100,14 @@ module.exports = GelatoPage.extend({
             private: this.$('#field-private').is(':checked'),
             timezone: this.$('#field-timezone :selected').val()
         }).save();
+    },
+    /**
+     * @method handleClickChangeAvatar
+     * @param {Event} event
+     */
+    handleClickChangeAvatar: function(event) {
+        event.preventDefault();
+        this.$('#avatar-upload-input').trigger('click');
     },
     /**
      * @method handleSelectCountry
@@ -99,7 +124,7 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.sidebar.remove();
-        return GelatoPage.prototype.remove.call(this);
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method renderSectionContent

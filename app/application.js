@@ -1,22 +1,18 @@
-var GelatoApplication = require('gelato/application');
+var Application = require('base/application');
 var User = require('models/user');
 var Functions = require('functions');
 var Router = require('router');
 
 /**
- * @class Application
- * @extends {GelatoApplication}
+ * @class DefaultApplication
+ * @extends {Application}
  */
-module.exports = GelatoApplication.extend({
+module.exports = Application.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-
-        //TODO: depreciate usage of global app object
-        window.app = this;
-
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
             excludedUserAgents: ['PhantomJS'],
@@ -24,8 +20,8 @@ module.exports = GelatoApplication.extend({
         }).attach();
         Raygun.setVersion(this.get('version'));
         this.fn = Functions;
-        this.router = this.createRouter('router');
-        this.user = this.createModel('models/user', {id: this.getSetting('user') || 'application'});
+        this.router = new Router();
+        this.user = new User({id: this.getSetting('user') || 'application'});
 
         if (window.createjs) {
             createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
@@ -79,9 +75,8 @@ module.exports = GelatoApplication.extend({
         apiVersion: 0,
         canvasSize: 450,
         date: '{!date!}',
-        language: '{!application-language!}',
+        language: undefined,
         lastReviewCheck: moment().unix(),
-        name: '{!application-name!}',
         timestamp: '{!timestamp!}',
         version: '{!application-version!}'
     },
@@ -97,7 +92,7 @@ module.exports = GelatoApplication.extend({
      * @returns {String}
      */
     getLanguage: function() {
-        return this.get('language') === 'undefined' ? this.user.get('targetLang') : this.get('language');
+        return this.get('language') || this.user.get('targetLang');
     },
     /**
      * @method getStripeKey
@@ -204,7 +199,7 @@ module.exports = GelatoApplication.extend({
         var parent = document.getElementsByTagName('script')[0];
         var script = document.createElement('script');
         var HSCW = {config: {}};
-        var HS = {beacon: {}};
+        var HS = {beacon: {readyQueue: [], user: this.user}};
         HSCW.config = {
             contact: {
                 enabled: true,
@@ -215,13 +210,25 @@ module.exports = GelatoApplication.extend({
                 baseUrl: 'https://skritter.helpscoutdocs.com/'
             }
         };
+        HS.beacon.ready = function(callback) {
+            this.readyQueue.push(callback);
+        };
         HS.beacon.userConfig = {
             color: '#32a8d9',
             icon: 'question',
             modal: false
         };
-        script.async = true;
+        HS.beacon.ready(function(beacon) {
+            if (this.user.isLoggedIn()) {
+                this.identify({
+                    email: this.user.get('email'),
+                    name: this.user.get('name')
+                });
+            }
+        });
+        script.async = false;
         script.src = 'https://djtflbt20bdde.cloudfront.net/';
+        script.type = 'text/javascript';
         parent.parentNode.insertBefore(script, parent);
         window.HSCW = HSCW;
         window.HS = HS;

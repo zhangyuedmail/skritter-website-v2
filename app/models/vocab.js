@@ -1,4 +1,5 @@
 var SkritterModel = require('base/skritter-model');
+var NeutralTones = require('data/neutral-tones');
 var PromptReviews = require('collections/prompt-reviews');
 var PromptReview = require('models/prompt-review');
 
@@ -31,6 +32,20 @@ module.exports = SkritterModel.extend({
      */
     parse: function(response) {
         return response.Vocab || response;
+    },
+    /**
+     * @method banAll
+     */
+    banAll: function() {
+        this.set('bannedParts', []);
+    },
+    /**
+     * @method banPart
+     * @param {String} part
+     */
+    banPart: function(part) {
+        this.get('bannedParts').push(part);
+        this.set('bannedParts', _.uniq(this.get('bannedParts')));
     },
     /**
      * @method fetchMissing
@@ -72,7 +87,15 @@ module.exports = SkritterModel.extend({
         var containedVocabs = [];
         var containedVocabIds = this.get('containedVocabIds') || [];
         for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-            containedVocabs.push(this.collection.get(containedVocabIds[i]));
+            var containedVocab = this.collection.get(containedVocabIds[i]);
+            if (this.isJapanese()) {
+                if (!app.user.get('studyKana') && containedVocab.isKana()) {
+                    continue;
+                }
+                containedVocabs.push(containedVocab);
+            } else {
+                containedVocabs.push(containedVocab);
+            }
         }
         return containedVocabs;
     },
@@ -232,7 +255,14 @@ module.exports = SkritterModel.extend({
         for (var i = 0, length = characters.length; i < length; i++) {
             var stroke = this.collection.strokes.get(characters[i]);
             if (stroke) {
-                strokes.push(stroke);
+                if (this.isJapanese()) {
+                    if (!app.user.get('studyKana') && stroke.isKana()) {
+                        continue;
+                    }
+                    strokes.push(stroke);
+                } else {
+                    strokes.push(stroke);
+                }
             }
         }
         return strokes;
@@ -242,16 +272,26 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getTones: function() {
-        var tones = [];
-        var readings = this.get('reading').split(', ');
-        for (var a = 0, lengthA = readings.length; a < lengthA; a++) {
-            var reading = readings[a].match(/[1-5]+/g);
-            for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
-                var tone = parseInt(reading[b], 10);
-                tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
+        if (this.isChinese()) {
+            var tones = [];
+            var contained = this.get('containedVocabIds') ? this.getContained() : [this];
+            var readings = this.get('reading').split(', ');
+            for (var a = 0, lengthA = readings.length; a < lengthA; a++) {
+                var reading = readings[a].match(/[1-5]+/g);
+                for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                    var tone = parseInt(reading[b], 10);
+                    var containedWriting = contained[b].get('writing');
+                    var wordWriting = this.get('writing');
+                    tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
+                    //TODO: make tests to verify neutral tone wimps
+                    if (NeutralTones.isWimp(containedWriting, wordWriting, b)) {
+                        tones[b] = tones[b].concat(contained[b].getTones()[0]);
+                    }
+                }
             }
+            return tones;
         }
-        return this.isChinese() ? tones : [];
+        return [];
     },
     /**
      * @method getVariation
@@ -274,7 +314,10 @@ module.exports = SkritterModel.extend({
     getWritingObjects: function() {
         return this.getCharacters().map(function(value) {
             if (app.isJapanese()) {
-                if (app.fn.isKana(value) && !app.user.get('studyKana')) {
+                if (['～'].indexOf(value) > -1) {
+                    return {type: 'filler', value: value};
+                }
+                if (!app.user.get('studyKana') && app.fn.isKana(value)) {
                     return {type: 'filler', value: value};
                 }
             }
@@ -283,13 +326,16 @@ module.exports = SkritterModel.extend({
     },
     /**
      * @method getWritingDifference
-     * @param {String} otherVocab
+     * @param {String} vocabId
      * @returns {String}
      */
-    getWritingDifference: function(otherVocab) {
-        return _.zipWith(this.getWriting(), otherVocab.getWriting(), function(thisChar, otherChar) {
-            return thisChar === otherChar ? '-' : otherChar;
-        }).join('');
+    getWritingDifference: function(vocabId) {
+        return _.zipWith(
+            this.get('writing'),
+            app.fn.mapper.fromBase(vocabId),
+            function(thisChar, otherChar) {
+                return thisChar === otherChar ? '-' : otherChar;
+            }).join('');
     },
     /**
      * @method isBanned
@@ -337,22 +383,6 @@ module.exports = SkritterModel.extend({
         return this.audio;
     },
     /**
-     * @method toggleBanned
-     * @returns {Boolean}
-     */
-    toggleBanned: function() {
-        if (this.isBanned()) {
-            this.set('bannedParts', []);
-            return false;
-        }
-        if (this.isChinese()) {
-            this.set('bannedParts', app.user.get('allChineseParts'));
-        } else {
-            this.set('bannedParts', app.user.get('allJapaneseParts'));
-        }
-        return true;
-    },
-    /**
      * @method toggleStarred
      * @returns {Boolean}
      */
@@ -363,5 +393,22 @@ module.exports = SkritterModel.extend({
         }
         this.set('starred', true);
         return true;
+    },
+    /**
+     * @method unbanAll
+     */
+    unbanAll: function() {
+        if (this.isChinese()) {
+            this.set('bannedParts', app.user.get('allChineseParts'));
+        } else {
+            this.set('bannedParts', app.user.get('allJapaneseParts'));
+        }
+    },
+    /**
+     * @method unbanPart
+     * @param {String} part
+     */
+    unbanPart: function(part) {
+        this.set('bannedParts', _.remove(this.get('bannedParts'), part));
     }
 });

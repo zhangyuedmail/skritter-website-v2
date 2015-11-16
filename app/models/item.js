@@ -31,6 +31,12 @@ module.exports = SkritterModel.extend({
      */
     urlRoot: 'items',
     /**
+     * @method ban
+     */
+    ban: function() {
+        this.getVocab().banPart(this.get('part'));
+    },
+    /**
      * @method getBase
      * @returns {String}
      */
@@ -65,24 +71,8 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getContainedVocabs: function() {
-        var containedVocabs = [];
         var vocab = this.getVocab();
-        if (vocab) {
-            var containedVocabIds = vocab.get('containedVocabIds') || [];
-            for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-                var containedVocab = this.collection.vocabs.get(containedVocabIds[i]);
-                if (this.isJapanese()) {
-                    if (app.user.get('studyKana')) {
-                        containedVocabs.push(containedVocab);
-                    } else if (!vocab.isKana()) {
-                        containedVocabs.push(containedVocab);
-                    }
-                } else {
-                    containedVocabs.push(containedVocab);
-                }
-            }
-        }
-        return containedVocabs;
+        return vocab ? vocab.getContained() : [];
     },
     /**
      * @method getPromptReviews
@@ -186,6 +176,13 @@ module.exports = SkritterModel.extend({
         return vocabs;
     },
     /**
+     * @method isBanned
+     * @returns {Boolean}
+     */
+    isBanned: function() {
+        return _.includes(this.getVocab().get('bannedParts'), this.get('part'));
+    },
+    /**
      * @method isChinese
      * @returns {Boolean}
      */
@@ -200,6 +197,22 @@ module.exports = SkritterModel.extend({
         return this.get('lang') === 'ja';
     },
     /**
+     * @method isKosher
+     * @returns {Boolean}
+     */
+    isKosher: function() {
+        var vocab = this.getVocab();
+        if (!vocab) {
+            return false;
+        }
+        if (this.isPartRune()) {
+            if (!vocab.getStrokes().length) {
+                return false;
+            }
+        }
+        return true;
+    },
+    /**
      * @method isLeech
      * @returns {Boolean}
      */
@@ -212,5 +225,39 @@ module.exports = SkritterModel.extend({
      */
     isNew: function() {
         return !this.get('reviews');
+    },
+    /**
+     * @method isPartDefn
+     * @returns {Boolean}
+     */
+    isPartDefn: function() {
+        return this.get('part') === 'defn';
+    },
+    /**
+     * @method isPartRdng
+     * @returns {Boolean}
+     */
+    isPartRdng: function() {
+        return this.get('part') === 'rdng';
+    },
+    /**
+     * @method isPartRune
+     * @returns {Boolean}
+     */
+    isPartRune: function() {
+        return this.get('part') === 'rune';
+    },
+    /**
+     * @method isPartTone
+     * @returns {Boolean}
+     */
+    isPartTone: function() {
+        return this.get('part') === 'tone';
+    },
+    /**
+     * @method unban
+     */
+    unban: function() {
+        this.getVocab().unbanPart(this.get('part'));
     }
 });

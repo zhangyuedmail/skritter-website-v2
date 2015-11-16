@@ -1,0 +1,33 @@
+gelato-page(data-name='vocablists-create')
+
+  #navbar-container
+
+  section.container
+    .content-block
+
+      a.back-link(href="/vocablists/browse")
+        span.glyphicon.glyphicon-chevron-left
+        span cancel and go back
+
+      .title Create a new list
+
+      hr
+
+      form#new-list-form.form
+        .form-group
+          label.header(for="#name") Name
+          input#name.form-control(name='name', value='')
+
+        .form-group
+          label.header(for="#description") Description (optional)
+          textarea#description.form-control(name='description')
+
+        #submit-area
+          if view.errorMessage
+            .alert.alert-danger= view.errorMessage
+
+          button#create-list-btn.btn.btn-success.btn-fixed(type="submit")
+            if view.vocablist.state === 'saving'
+              i.fa.fa-1x.fa-spinner.fa-pulse
+            else
+              | Create list

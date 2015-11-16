@@ -1,12 +1,12 @@
-var GelatoModel = require('gelato/model');
+var Model = require('base/model');
 var PromptCharacter = require('collections/prompt-character');
 var PromptStroke = require('models/prompt-stroke');
 
 /**
  * @class Stroke
- * @extends {GelatoModel}
+ * @extends {Model}
  */
-module.exports = GelatoModel.extend({
+module.exports = Model.extend({
     /**
      * @property idAttribute
      * @type {String}
@@ -51,5 +51,12 @@ module.exports = GelatoModel.extend({
         character.targets = targets;
         character.writing = rune;
         return character;
+    },
+    /**
+     * @method isKana
+     * @returns {Boolean}
+     */
+    isKana: function() {
+        return app.fn.isKana(this.get('rune'));
     }
 });

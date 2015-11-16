@@ -1,5 +1,7 @@
 var SkritterModel = require('base/skritter-model');
 
+var Vocab = require('models/vocab');
+
 /**
  * @class VocablistSection
  * @extends {SkritterModel}
@@ -18,20 +20,17 @@ module.exports = SkritterModel.extend({
      */
     idAttribute: 'id',
     /**
-     * @method urlRoot
-     * @returns {String}
-     */
-    urlRoot: function() {
-        if (!this.vocablistId) {
-            throw new Error('Was not given vocablistId, cannot construct API URL');
-        }
-        return 'vocablists/'+this.vocablistId+'/sections'
-    },
-    /**
      * @method parse
      * @returns {Object}
      */
     parse: function(response) {
         return response.VocabListSection || response;
+    },
+    /**
+     * @method urlRoot
+     * @returns {String}
+     */
+    urlRoot: function() {
+        return 'vocablists/' + this.vocablistId + '/sections';
     }
 });

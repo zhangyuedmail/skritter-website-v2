@@ -1,10 +1,10 @@
-var GelatoModel = require('gelato/model');
+var Model = require('base/model');
 
 /**
  * @class Param
- * @extends {GelatoModel}
+ * @extends {Model}
  */
-module.exports = GelatoModel.extend({
+module.exports = Model.extend({
     /**
      * @property idAttribute
      * @type {String}

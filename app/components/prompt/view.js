@@ -1,12 +1,11 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 
 var Prompt = require('components/prompt/view');
 var PromptCanvas = require('components/prompt/canvas/view');
 var PromptToolbarAction = require('components/prompt/toolbar-action/view');
 var PromptToolbarGrading = require('components/prompt/toolbar-grading/view');
 var PromptToolbarVocab = require('components/prompt/toolbar-vocab/view');
-var PromptVocabCharacters = require('components/prompt/vocab-characters/view');
-var PromptVocabDecomp = require('components/prompt/vocab-decomp/view');
+var PromptVocabContained = require('components/prompt/vocab-contained/view');
 var PromptVocabDefinition = require('components/prompt/vocab-definition/view');
 var PromptVocabMnemonic = require('components/prompt/vocab-mnemonic/view');
 var PromptVocabReading = require('components/prompt/vocab-reading/view');
@@ -14,14 +13,15 @@ var PromptVocabSentence = require('components/prompt/vocab-sentence/view');
 var PromptVocabStyle = require('components/prompt/vocab-style/view');
 var PromptVocabWriting = require('components/prompt/vocab-writing/view');
 
+//TODO: merge into template container
 var ConfirmBanDialog = require('dialogs/confirm-ban/view');
 var VocabDialog = require('dialogs/vocab/view');
 
 /**
  * @class Prompt
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @constructor
@@ -36,14 +36,19 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction = new PromptToolbarAction({prompt: this});
         this.toolbarGrading = new PromptToolbarGrading({prompt: this});
         this.toolbarVocab = new PromptToolbarVocab({prompt: this});
-        this.vocabCharacters = new PromptVocabCharacters({prompt: this});
-        this.vocabDecomp = new PromptVocabDecomp({prompt: this});
+        this.vocabContained = new PromptVocabContained({prompt: this});
         this.vocabDefinition = new PromptVocabDefinition({prompt: this});
         this.vocabMnemonic = new PromptVocabMnemonic({prompt: this});
         this.vocabReading = new PromptVocabReading({prompt: this});
         this.vocabSentence = new PromptVocabSentence({prompt: this});
         this.vocabStyle = new PromptVocabStyle({prompt: this});
         this.vocabWriting = new PromptVocabWriting({prompt: this});
+        //keypress
+        this.keypressAction = new keypress.Listener();
+        this.keypressGrading = new keypress.Listener();
+        this.keypressNavigate = new keypress.Listener();
+        this.keypressTone = new keypress.Listener();
+        this.registerKeypress();
         //listeners
         this.listenTo(this.canvas, 'attempt:fail', this.handleCanvasAttemptFail);
         this.listenTo(this.canvas, 'attempt:success', this.handleCanvasAttemptSuccess);
@@ -52,19 +57,24 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.canvas, 'input:up', this.handleCanvasInputUp);
         this.listenTo(this.canvas, 'navigate:next', this.handleCanvasNavigateNext);
         this.listenTo(this.canvas, 'navigate:previous', this.handleCanvasNavigatePrevious);
+        this.listenTo(this.canvas, 'swipeup', this.handleCanvasSwipeUp);
+        this.listenTo(this.canvas, 'tap', this.handleCanvasTap);
         this.listenTo(this.toolbarAction, 'click:correct', this.handleToolbarActionCorrect);
         this.listenTo(this.toolbarAction, 'click:erase', this.handleToolbarActionErase);
         this.listenTo(this.toolbarAction, 'click:show', this.handleToolbarActionShow);
         this.listenTo(this.toolbarAction, 'click:teach', this.handleToolbarActionTeach);
-        this.listenTo(this.toolbarGrading, 'change', this.handleToolbarGradingChange);
+        this.listenTo(this.toolbarGrading, 'mouseup', this.handleToolbarGradingMouseup);
         this.listenTo(this.toolbarGrading, 'mousedown', this.handleToolbarGradingMousedown);
-        this.listenTo(this.toolbarGrading, 'select', this.handleToolbarGradingSelect);
         this.listenTo(this.toolbarVocab, 'click:audio', this.handleToolbarVocabAudio);
         this.listenTo(this.toolbarVocab, 'click:ban', this.handleToolbarVocabBan);
         this.listenTo(this.toolbarVocab, 'click:edit', this.handleToolbarVocabEdit);
         this.listenTo(this.toolbarVocab, 'click:info', this.handleToolbarVocabInfo);
         this.listenTo(this.toolbarVocab, 'click:star', this.handleToolbarVocabStar);
+        this.listenTo(this.vocabContained, 'click:show', this.handleVocabContainedShow);
+        this.listenTo(this.vocabDefinition, 'click:show', this.handleVocabDefinitionShow);
+        this.listenTo(this.vocabMnemonic, 'click:show', this.handleVocabMnemonicShow);
         this.listenTo(this.vocabReading, 'click:show', this.handleVocabReadingShow);
+        this.on('resize', this.resize);
     },
     /**
      * @property template
@@ -81,8 +91,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.setElement('#toolbar-action-container');
         this.toolbarGrading.setElement('#toolbar-grading-container');
         this.toolbarVocab.setElement('#toolbar-vocab-container');
-        this.vocabCharacters.setElement('#vocab-characters-container');
-        this.vocabDecomp.setElement('#vocab-decomp-container');
+        this.vocabContained.setElement('#vocab-contained-container');
         this.vocabDefinition.setElement('#vocab-definition-container');
         this.vocabMnemonic.setElement('#vocab-mnemonic-container');
         this.vocabReading.setElement('#vocab-reading-container');
@@ -99,7 +108,6 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     renderPrompt: function() {
-        this.reset();
         this.review = this.reviews.current();
         switch (this.part) {
             case 'defn':
@@ -154,8 +162,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.render();
         this.toolbarGrading.render();
         this.toolbarVocab.render();
-        this.vocabCharacters.render();
-        this.vocabDecomp.render();
+        this.vocabContained.render();
         this.vocabDefinition.render();
         this.vocabMnemonic.render();
         this.vocabReading.render();
@@ -173,11 +180,15 @@ module.exports = GelatoComponent.extend({
             this.renderPromptComplete();
         } else {
             this.canvas.definition.render();
+            this.keypressGrading.stop_listening();
+            this.keypressTone.stop_listening();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.hide();
+            this.vocabContained.render();
             this.vocabDefinition.render();
             this.vocabReading.render();
             this.review.start();
@@ -194,14 +205,16 @@ module.exports = GelatoComponent.extend({
             this.trigger('review:stop', this.reviews);
             this.review.stop();
             this.canvas.definition.render();
+            this.keypressGrading.listen();
+            this.keypressTone.stop_listening();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
-            this.vocabCharacters.render();
-            this.vocabDecomp.render();
+            this.toolbarGrading.show();
+            this.vocabContained.render();
             this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
@@ -222,11 +235,16 @@ module.exports = GelatoComponent.extend({
             this.renderPromptComplete();
         } else {
             this.canvas.reading.render();
+            this.keypressGrading.stop_listening();
+            this.keypressTone.stop_listening();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.hide();
+            this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabReading.render();
             this.review.start();
             this.trigger('review:start', this.reviews);
@@ -242,14 +260,17 @@ module.exports = GelatoComponent.extend({
             this.trigger('review:stop', this.reviews);
             this.review.stop();
             this.canvas.reading.render();
+            this.keypressGrading.listen();
+            this.keypressTone.stop_listening();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.select(this.review.get('score'));
-            this.vocabCharacters.render();
-            this.vocabDecomp.render();
+            this.toolbarGrading.show();
+            this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             if (app.user.isAudioEnabled()) {
@@ -270,17 +291,24 @@ module.exports = GelatoComponent.extend({
         if (this.review.isComplete()) {
             this.renderPromptComplete();
         } else {
+            this.keypressGrading.stop_listening();
+            this.keypressTone.stop_listening();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = true;
             this.toolbarAction.buttonShow = true;
             this.toolbarAction.buttonTeach = true;
             this.toolbarAction.render();
+            this.toolbarGrading.hide();
+            this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
             this.review.start();
             this.trigger('review:start', this.reviews);
-            if (app.user.isAudioEnabled() && this.reviews.isFirst()) {
+            if (app.user.isAudioEnabled() &&
+                !app.user.get('hideReading') &&
+                this.reviews.isFirst()) {
                 this.reviews.vocab.play();
             }
             if (this.reviews.isTeachable()) {
@@ -302,23 +330,35 @@ module.exports = GelatoComponent.extend({
             this.review.set('teach', false);
             this.canvas.disableInput();
             this.canvas.stopTeaching();
+            this.keypressTone.stop_listening();
             this.toolbarAction.buttonCorrect = true;
             this.toolbarAction.buttonErase = true;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
-            this.vocabCharacters.render();
-            this.vocabDecomp.render();
+            this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabSentence.render();
             this.vocabWriting.render();
+            if (app.user.isAudioEnabled() &&
+                app.user.get('hideReading') &&
+                this.reviews.isLast()) {
+                this.reviews.vocab.play();
+            }
             if (this.reviews.isTeachable()) {
                 this.review.set('score', 1);
                 this.toolbarGrading.deselect();
+                this.toolbarGrading.hide();
             } else {
+                this.keypressGrading.listen();
                 this.toolbarGrading.select(this.review.get('score'));
+                this.toolbarGrading.show();
                 this.canvas.injectGradingColor();
+            }
+            if (app.user.get('squigs')) {
+                this.canvas.showCharacterReveal();
             }
         } else {
             this.renderPromptPartRune();
@@ -332,15 +372,20 @@ module.exports = GelatoComponent.extend({
     renderPromptPartTone: function() {
         this.canvas.reset();
         this.canvas.redrawCharacter();
+        this.canvas.showCharacterReveal();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
         } else {
-            this.canvas.showCharacterHint();
+            this.keypressGrading.stop_listening();
+            this.keypressTone.listen();
             this.toolbarAction.buttonCorrect = true;
-            this.toolbarAction.buttonErase = true;
-            this.toolbarAction.buttonShow = true;
+            this.toolbarAction.buttonErase = false;
+            this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.render();
+            this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();
@@ -360,20 +405,23 @@ module.exports = GelatoComponent.extend({
             this.review.set('teach', false);
             this.canvas.disableInput();
             this.canvas.injectGradingColor();
-            this.canvas.showCharacterHint();
             this.canvas.stopTeaching();
+            this.keypressGrading.listen();
+            this.keypressTone.stop_listening();
             this.toolbarAction.buttonCorrect = true;
-            this.toolbarAction.buttonErase = true;
+            this.toolbarAction.buttonErase = false;
             this.toolbarAction.buttonShow = false;
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
+            this.toolbarGrading.render();
             this.toolbarGrading.select(this.review.get('score'));
-            this.vocabCharacters.render();
-            this.vocabDecomp.render();
+            this.toolbarGrading.show();
+            this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabMnemonic.render();
             this.vocabReading.render();
             this.vocabWriting.render();
-            if (app.user.isAudioEnabled()) {
+            if (app.user.isAudioEnabled() && this.reviews.isLast()) {
                 this.reviews.vocab.play();
             }
         } else {
@@ -493,6 +541,173 @@ module.exports = GelatoComponent.extend({
         this.previous();
     },
     /**
+     * @method handleCanvasSwipeUp
+     */
+    handleCanvasSwipeUp: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.set({complete: false, teach: false});
+                this.review.character.reset();
+                this.renderPrompt();
+                break;
+        }
+    },
+    /**
+     * @method handleCanvasTap
+     */
+    handleCanvasTap: function() {
+        switch (this.part) {
+            case 'rune':
+                this.canvas.showStrokeHint();
+                break;
+        }
+    },
+    /**
+     * @method handleKeypressActionAudio
+     */
+    handleKeypressActionAudio: function() {
+        this.reviews.vocab.play();
+    },
+    /**
+     * @method handleKeypressActionErase
+     */
+    handleKeypressActionErase: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.set({complete: false, teach: false});
+                this.review.character.reset();
+                this.renderPrompt();
+                break;
+        }
+    },
+    /**
+     * @method handleKeypressActionShow
+     */
+    handleKeypressActionShow: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.set('score', 1);
+                this.canvas.showCharacterHint();
+                break;
+        }
+    },
+    /**
+     * @method handleKeypressActionTeach
+     */
+    handleKeypressActionTeach: function() {
+        switch (this.part) {
+            case 'rune':
+                this.review.set({score: 1, teach: true});
+                this.canvas.startTeaching();
+                break;
+        }
+    },
+    /**
+     * @method handleKeypressGradingKeydown
+     * @param {Number} value
+     */
+    handleKeypressGradingKeydown: function(value) {
+        if (this.review.isComplete()) {
+            this.toolbarGrading.select(value);
+            this.review.set('score', value);
+            this.canvas.injectGradingColor();
+        }
+    },
+    /**
+     * @method handleKeypressGradingKeyup
+     * @param {Number} value
+     */
+    handleKeypressGradingKeyup: function(value) {
+        if (this.review.isComplete()) {
+            this.review.set('score', value);
+            this.next();
+        }
+    },
+    /**
+     * @method handleKeypressGradingToggle
+     */
+    handleKeypressGradingToggle: function() {
+        if (this.review.isComplete()) {
+            var score = this.review.get('score') === 1 ? 3 : 1;
+            this.toolbarGrading.select(score);
+            this.review.set('score', score);
+            this.canvas.injectGradingColor();
+        }
+    },
+    /**
+     * @method handleKeypressActionErase
+     */
+    handleKeypressNavigateNext: function() {
+        this.trigger('review:stop', this.reviews);
+        this.review.stop();
+        this.next();
+    },
+    /**
+     * @method handleKeypressNavigatePrevious
+     */
+    handleKeypressNavigatePrevious: function() {
+        this.trigger('review:stop', this.reviews);
+        this.review.stop();
+        this.previous();
+    },
+    /**
+     * @method handleKeypressNavigateReveal
+     */
+    handleKeypressNavigateReveal: function() {
+        switch (this.part) {
+            case 'rune':
+                if (this.review.isComplete()) {
+                    this.handleKeypressNavigateNext();
+                } else {
+                    this.canvas.completeCharacter();
+                    this.canvas.injectGradingColor();
+                    this.review.set('complete', true);
+                    this.renderPromptComplete();
+                }
+                break;
+            case 'tone':
+                if (this.review.isComplete()) {
+                    this.handleKeypressNavigateNext();
+                } else {
+                    this.canvas.completeCharacter();
+                    this.canvas.injectGradingColor();
+                    this.review.set('complete', true);
+                    this.renderPromptComplete();
+                }
+                break;
+            default:
+                if (this.review.isComplete()) {
+                    this.next();
+                } else {
+                    this.review.set('complete', true);
+                    this.renderPromptComplete();
+                }
+        }
+    },
+    /**
+     * @method handleKeypressToneKeydown
+     * @param {Number} value
+     */
+    handleKeypressToneKeydown: function(value) {
+        var character = this.review.character;
+        var possibleTones = this.review.getTones();
+        var expectedTone = character.getTone(possibleTones[0]);
+        if (possibleTones.indexOf(value) > -1) {
+            character.reset();
+            character.add(character.getTone(value));
+            this.canvas.drawShape('character', character.getTone(value).getTargetShape());
+            this.canvas.trigger('attempt:success');
+        } else {
+            character.reset();
+            character.add(expectedTone);
+            this.canvas.drawShape('character', expectedTone.getTargetShape());
+            this.canvas.trigger('attempt:fail');
+        }
+        if (character.isComplete()) {
+            this.canvas.trigger('complete');
+        }
+    },
+    /**
      * @method handleToolbarActionCorrect
      */
     handleToolbarActionCorrect: function() {
@@ -509,11 +724,6 @@ module.exports = GelatoComponent.extend({
     handleToolbarActionErase: function() {
         switch (this.part) {
             case 'rune':
-                this.review.set({complete: false, teach: false});
-                this.review.character.reset();
-                this.renderPrompt();
-                break;
-            case 'tone':
                 this.review.set({complete: false, teach: false});
                 this.review.character.reset();
                 this.renderPrompt();
@@ -543,13 +753,6 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
-     * @method handleToolbarGradingChange
-     * @param {Number} value
-     */
-    handleToolbarGradingChange: function(value) {
-        this.review.set('score', value);
-    },
-    /**
      * @method handleToolbarGradingMousedown
      * @param {Number} value
      */
@@ -560,12 +763,12 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
-     * @method handleToolbarGradingSelect
+     * @method handleToolbarGradingMouseup
      * @param {Number} value
      */
-    handleToolbarGradingSelect: function(value) {
-        this.review.set('score', value);
+    handleToolbarGradingMouseup: function(value) {
         if (this.review.isComplete()) {
+            this.review.set('score', value);
             this.next();
         }
     },
@@ -581,7 +784,7 @@ module.exports = GelatoComponent.extend({
     handleToolbarVocabBan: function() {
         var dialog = new ConfirmBanDialog();
         dialog.on('ban', _.bind(function() {
-            this.reviews.vocab.toggleBanned();
+            this.reviews.item.ban();
             this.reviews.vocab.save(null, {
                 complete: _.bind(function() {
                     this.trigger('skip', this.reviews);
@@ -597,6 +800,7 @@ module.exports = GelatoComponent.extend({
     handleToolbarVocabEdit: function() {
         if (this.editing) {
             this.editing = false;
+            this.registerKeypress();
             this.vocabDefinition.editable = false;
             this.vocabMnemonic.editable = false;
             this.reviews.vocab.save({
@@ -605,6 +809,7 @@ module.exports = GelatoComponent.extend({
             });
         } else {
             this.editing = true;
+            this.unregisterKeypress();
             this.vocabDefinition.editable = true;
             this.vocabMnemonic.editable = true;
 
@@ -631,34 +836,251 @@ module.exports = GelatoComponent.extend({
         });
     },
     /**
+     * @method handleVocabContainedShow
+     */
+    handleVocabContainedShow: function() {
+        this.review.set('showContained', true);
+        this.vocabContained.render();
+    },
+    /**
+     * @method handleVocabDefinitionShow
+     */
+    handleVocabDefinitionShow: function() {
+        this.reviews.forEach(function(review) {
+            review.set('showDefinition', true);
+        });
+        this.vocabDefinition.render();
+    },
+    /**
+     * @method handleVocabMnemonicShow
+     */
+    handleVocabMnemonicShow: function() {
+        this.review.set('showMnemonic', true);
+        this.vocabMnemonic.render();
+    },
+    /**
      * @method handleVocabReadingShow
      * @param {Number} position
      */
     handleVocabReadingShow: function(position) {
-        this.reviews.at(position).set('showReading', true);
+        if (this.reviews.isChinese()) {
+            this.reviews.at(position).set('showReading', true);
+        } else {
+            this.reviews.forEach(function(review) {
+                review.set('showReading', true);
+            });
+        }
         this.vocabReading.render();
     },
     /**
      * @method next
      */
     next: function() {
-        if (this.reviews.next()) {
+        if (this.reviews.isLast()) {
+            this.trigger('next', this.reviews);
+        } else {
+            this.reviews.next();
             this.trigger('review:next', this.reviews);
             this.renderPrompt()
-        } else {
-            this.trigger('next', this.reviews);
         }
     },
     /**
      * @method previous
      */
     previous: function() {
-        if (this.reviews.previous()) {
-            this.trigger('review:previous', this.reviews);
-            this.renderPrompt()
-        } else {
+        if (this.reviews.isFirst()) {
             this.trigger('previous', this.reviews);
+        } else {
+            this.reviews.previous();
+            this.trigger('review:previous', this.reviews);
+            this.renderPrompt();
         }
+    },
+    /**
+     * @method registerKeypress
+     */
+    registerKeypress: function() {
+        this.keypressAction.register_many([
+            {
+                'keys': 'apostrophe',
+                'on_keydown': _.bind(this.handleKeypressActionAudio, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'up',
+                'on_keydown': _.bind(this.handleKeypressActionShow, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '.',
+                'on_keydown': _.bind(this.handleKeypressActionErase, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'a',
+                'on_keydown': _.bind(this.handleKeypressActionAudio, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'l',
+                'on_keydown': _.bind(this.handleKeypressActionShow, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 's',
+                'on_keydown': _.bind(this.handleKeypressActionShow, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 't',
+                'on_keydown': _.bind(this.handleKeypressActionTeach, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'x',
+                'on_keydown': _.bind(this.handleKeypressActionErase, this),
+                'prevent_repeat': true
+            }
+        ]);
+        this.keypressGrading.register_many([
+            {
+                'keys': 'down',
+                'on_keydown': _.bind(this.handleKeypressGradingToggle, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'm',
+                'on_keydown': _.bind(this.handleKeypressGradingToggle, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'v',
+                'on_keydown': _.bind(this.handleKeypressGradingToggle, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '1',
+                'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 1),
+                'on_keyup': _.bind(this.handleKeypressGradingKeyup, this, 1),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '6',
+                'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 1),
+                'on_keyup': _.bind(this.handleKeypressGradingKeyup, this, 1),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '2',
+                'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 2),
+                'on_keyup': _.bind(this.handleKeypressGradingKeyup, this, 2),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '7',
+                'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 2),
+                'on_keyup': _.bind(this.handleKeypressGradingKeyup, this, 2),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '3',
+                'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 3),
+                'on_keyup': _.bind(this.handleKeypressGradingKeyup, this, 3),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '8',
+                'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 3),
+                'on_keyup': _.bind(this.handleKeypressGradingKeyup, this, 3),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '4',
+                'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 4),
+                'on_keyup': _.bind(this.handleKeypressGradingKeyup, this, 4),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '9',
+                'on_keydown': _.bind(this.handleKeypressGradingKeydown, this, 4),
+                'on_keyup': _.bind(this.handleKeypressGradingKeyup, this, 4),
+                'prevent_repeat': true
+            }
+        ]);
+        this.keypressNavigate.register_many([
+            {
+                'keys': 'enter',
+                'on_keydown': _.bind(this.handleKeypressNavigateReveal, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'left',
+                'on_keydown': _.bind(this.handleKeypressNavigatePrevious, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'right',
+                'on_keydown': _.bind(this.handleKeypressNavigateNext, this),
+                'prevent_repeat': true
+            },
+            {
+                'keys': 'space',
+                'on_keydown': _.bind(this.handleKeypressNavigateReveal, this),
+                'prevent_repeat': true
+            }
+        ]);
+        this.keypressTone.register_many([
+            {
+                'keys': '1',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 1),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '6',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 1),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '2',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 2),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '7',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 2),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '3',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 3),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '8',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 3),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '4',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 4),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '9',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 4),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '5',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 5),
+                'prevent_repeat': true
+            },
+            {
+                'keys': '0',
+                'on_keydown': _.bind(this.handleKeypressToneKeydown, this, 5),
+                'prevent_repeat': true
+            }
+        ]);
     },
     /**
      * @method remove
@@ -666,25 +1088,40 @@ module.exports = GelatoComponent.extend({
      */
     remove: function() {
         this.canvas.remove();
+        this.keypressAction.destroy();
+        this.keypressGrading.destroy();
+        this.keypressNavigate.destroy();
+        this.keypressTone.destroy();
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
         this.toolbarVocab.remove();
-        this.vocabCharacters.remove();
-        this.vocabDecomp.remove();
+        this.vocabContained.remove();
         this.vocabDefinition.remove();
         this.vocabMnemonic.remove();
         this.vocabReading.remove();
         this.vocabSentence.remove();
         this.vocabStyle.remove();
         this.vocabWriting.remove();
-        return GelatoComponent.prototype.remove.call(this);
+        return Component.prototype.remove.call(this);
     },
     /**
      * @method reset
      * @returns {Prompt}
      */
     reset: function() {
-        this.canvas.reset();
+        this.editing = false;
+        this.part = null;
+        this.review = null;
+        this.reviews = null;
+        this.render();
+        return this;
+    },
+    /**
+     * @method resize
+     * @returns {Prompt}
+     */
+    resize: function() {
+        //TODO: redraw and resize
         return this;
     },
     /**
@@ -700,5 +1137,14 @@ module.exports = GelatoComponent.extend({
         this.renderPromptLoad();
         this.renderPrompt();
         return this;
+    },
+    /**
+     * @method unregisterKeypress
+     */
+    unregisterKeypress: function() {
+        this.keypressAction.reset();
+        this.keypressGrading.reset();
+        this.keypressNavigate.reset();
+        this.keypressTone.reset();
     }
 });

@@ -23,6 +23,7 @@ module.exports = SkritterModel.extend({
         allJapaneseParts: ['defn', 'rdng', 'rune'],
         filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
         filteredJapaneseParts: ['defn', 'rdng', 'rune'],
+        hideDefinition: false,
         gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
         goals: {ja: {items: 20}, zh: {items: 20}},
         teachingMode: true

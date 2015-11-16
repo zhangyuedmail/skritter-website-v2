@@ -1,10 +1,10 @@
-var GelatoComponent = require('gelato/component');
+var Component = require('base/component');
 
 /**
  * @class PromptCanvasDefinition
- * @extends {GelatoComponent}
+ * @extends {Component}
  */
-module.exports = GelatoComponent.extend({
+module.exports = Component.extend({
     /**
      * @method initialize
      * @param {Object} options
@@ -35,10 +35,12 @@ module.exports = GelatoComponent.extend({
     resizeText: function() {
         var vocab = this.prompt.review.vocab;
         var writingLength = vocab.get('writing').length;
-        if (writingLength > 2) {
-            this.$('.writing').css('font-size', 75);
-        } else if (writingLength > 4) {
+        if (writingLength > 6) {
+            this.$('.writing').css('font-size', 40);
+        } else if (writingLength > 3) {
             this.$('.writing').css('font-size', 50);
+        } else {
+            this.$('.writing').css('font-size', 75);
         }
     }
 });
