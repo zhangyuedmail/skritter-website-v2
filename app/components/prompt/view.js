@@ -384,8 +384,8 @@ module.exports = Component.extend({
             this.toolbarAction.buttonTeach = false;
             this.toolbarAction.render();
             this.toolbarGrading.render();
-            this.vocabContained.render()
-            this.vocabDefinition.render();;
+            this.vocabContained.render();
+            this.vocabDefinition.render();
             this.vocabReading.render();
             this.vocabWriting.render();
             this.canvas.enableInput();

@@ -1,4 +1,5 @@
 var SkritterModel = require('base/skritter-model');
+var NeutralTones = require('data/neutral-tones');
 var PromptReviews = require('collections/prompt-reviews');
 var PromptReview = require('models/prompt-review');
 
@@ -271,16 +272,26 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getTones: function() {
-        var tones = [];
-        var readings = this.get('reading').split(', ');
-        for (var a = 0, lengthA = readings.length; a < lengthA; a++) {
-            var reading = readings[a].match(/[1-5]+/g);
-            for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
-                var tone = parseInt(reading[b], 10);
-                tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
+        if (this.isChinese()) {
+            var tones = [];
+            var contained = this.get('containedVocabIds') ? this.getContained() : [this];
+            var readings = this.get('reading').split(', ');
+            for (var a = 0, lengthA = readings.length; a < lengthA; a++) {
+                var reading = readings[a].match(/[1-5]+/g);
+                for (var b = 0, lengthB = reading.length; b < lengthB; b++) {
+                    var tone = parseInt(reading[b], 10);
+                    var containedWriting = contained[b].get('writing');
+                    var wordWriting = this.get('writing');
+                    tones[b] = Array.isArray(tones[b]) ? tones[b].concat(tone) : [tone];
+                    //TODO: make tests to verify neutral tone wimps
+                    if (NeutralTones.isWimp(containedWriting, wordWriting, b)) {
+                        tones[b] = tones[b].concat(contained[b].getTones()[0]);
+                    }
+                }
             }
+            return tones;
         }
-        return this.isChinese() ? tones : [];
+        return [];
     },
     /**
      * @method getVariation
