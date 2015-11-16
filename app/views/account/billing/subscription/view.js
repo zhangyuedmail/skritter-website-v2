@@ -1,14 +1,16 @@
 var Page = require('base/page');
-var DefaultNavbar = require('navbars/default/view');
-var SettingsSidebar = require('components/settings-sidebar/view');
-var Subscription = require('models/subscription');
+
+var AccountSidebar = require('../../sidebar/view');
 var Coupon = require('models/coupon');
-var VacationDialog = require('dialogs/vacation/view');
+var DefaultNavbar = require('navbars/default/view');
+var Subscription = require('models/subscription');
 var StripeLoader = require('utils/stripe-loader');
+
 var CancelSubscriptionDialog = require('dialogs/cancel-subscription/view');
+var VacationDialog = require('dialogs/vacation/view');
 
 /**
- * @class BillingSubscription
+ * @class AccountBillingSubscription
  * @extends {Page}
  */
 module.exports = Page.extend({
@@ -20,14 +22,14 @@ module.exports = Page.extend({
         StripeLoader.load();
         this.coupon = new Coupon({ code: '' });
         this.navbar = new DefaultNavbar();
-        this.sidebar = new SettingsSidebar();
+        this.sidebar = new AccountSidebar();
         this.subscription = new Subscription({ id: app.user.id });
-        this.listenTo(this.subscription, 'state', this.renderMainContent);
+        this.listenTo(this.subscription, 'state', this.render);
         this.listenTo(this.coupon, 'sync', function(model, response) {
             this.subscription.set(response.Subscription);
             this.coupon.unset('code');
         });
-        this.listenTo(this.coupon, 'state', this.renderMainContent);
+        this.listenTo(this.coupon, 'state', this.render);
         this.subscription.fetch();
     },
     /**
@@ -40,6 +42,7 @@ module.exports = Page.extend({
      * @type {Object}
      */
     events: {
+        'change input[name="payment-method"]': 'handleChangePaymentMethod',
         'vclick #redeem-code-btn': 'handleClickRedeemCodeButton',
         'vclick #go-on-vacation-link': 'handleClickGoOnVacationLink',
         'vclick #cancel-vacation-link': 'handleClickCancelVacationLink',
@@ -48,25 +51,30 @@ module.exports = Page.extend({
         'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
         'vclick .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
         'vclick #unsubscribe-btn': 'handleClickUnsubscribeButton',
-        'change input[name="payment-method"]': 'handleChangePaymentMethod',
         'vclick #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
     },
     /**
-     * @method remove
+     * @property paypalPlans
+     * @type {Array}
      */
-    remove: function() {
-        this.navbar.remove();
-        this.sidebar.remove();
-        return Page.prototype.remove.call(this);
-    },
+    paypalPlans: [
+        {
+            key: 'Month Plan',
+            fullName: 'Month Plan : $14.99 USD - monthly'
+        },
+        {
+            key: 'Year Plan',
+            fullName: 'Year Plan : $99.99 USD - yearly'
+        }
+    ],
     /**
      * @method render
-     * @returns {VocablistBrowse}
+     * @returns {AccountBillingSubscription}
      */
     render: function() {
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
-        this.sidebar.setElement('#settings-sidebar-container').render();
+        this.sidebar.setElement('#sidebar-container').render();
         return this;
     },
     /**
@@ -78,7 +86,7 @@ module.exports = Page.extend({
      * @property title
      * @type {String}
      */
-    title: 'Subscription - Skritter',
+    title: 'Billing Subscription - Account - Skritter',
     /**
      * @method handleChangePaymentMethod
      */
@@ -416,26 +424,13 @@ module.exports = Page.extend({
         dialog.render().open();
     },
     /**
-     * @property paypalPlans
+     * @method remove
+     * @returns {AccountBillingSubscription}
      */
-    paypalPlans: [
-        {
-            key: 'Month Plan',
-            fullName: 'Month Plan : $14.99 USD - monthly'
-        },
-        {
-            key: 'Year Plan',
-            fullName: 'Year Plan : $99.99 USD - yearly'
-        }
-    ],
-    /**
-     * @method renderSectionContent
-     */
-    renderMainContent: function() {
-        var context = require('globals');
-        context.view = this;
-        var rendering = $(this.template(context));
-        this.$('.main-content').replaceWith(rendering.find('.main-content'));
+    remove: function() {
+        this.navbar.remove();
+        this.sidebar.remove();
+        return Page.prototype.remove.call(this);
     },
     /**
      * @method setSubscribeStripeButtonDisabled

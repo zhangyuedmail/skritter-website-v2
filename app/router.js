@@ -88,7 +88,7 @@ module.exports = Router.extend({
     navigateAccountBillingHistory: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/billing/history');
-            this.go('pages/billing-history');
+            this.go('views/account/billing/history');
         } else {
             this.navigateLogin();
         }
@@ -98,8 +98,8 @@ module.exports = Router.extend({
      */
     navigateAccountBillingSubscription: function() {
         if (app.user.isLoggedIn()) {
-            this.navigate('account/billing-subscription');
-            this.go('pages/billing-subscription');
+            this.navigate('account/billing/subscription');
+            this.go('views/account/billing/subscription');
         } else {
             this.navigateLogin();
         }

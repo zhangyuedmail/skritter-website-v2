@@ -1,10 +1,11 @@
 var Page = require('base/page');
+
+var AccountSidebar = require('components/settings-sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
-var SettingsSidebar = require('components/settings-sidebar/view');
 var Payments = require('collections/payments');
 
 /**
- * @class BillingHistory
+ * @class AccountBillingHistory
  * @extends {Page}
  */
 module.exports = Page.extend({
@@ -13,14 +14,14 @@ module.exports = Page.extend({
      * @constructor
      */
     initialize: function() {
+        this.limit = 20;
         this.navbar = new DefaultNavbar();
-        this.sidebar = new SettingsSidebar();
         this.payments = new Payments();
+        this.sidebar = new AccountSidebar();
         this.payments.comparator = function(payment) {
             return -payment.get('created');
         };
-        this.listenTo(this.payments, 'sync', this.renderTable);
-        this.limit = 20;
+        this.listenTo(this.payments, 'sync', this.render);
         this.fetchPayments();
     },
     /**
@@ -36,24 +37,6 @@ module.exports = Page.extend({
         'vclick #load-more-btn': 'handleClickLoadMoreButton'
     },
     /**
-     * @method remove
-     */
-    remove: function() {
-        this.navbar.remove();
-        this.sidebar.remove();
-        return Page.prototype.remove.call(this);
-    },
-    /**
-     * @method render
-     * @returns {VocablistBrowse}
-     */
-    render: function() {
-        this.renderTemplate();
-        this.navbar.setElement('#navbar-container').render();
-        this.sidebar.setElement('#settings-sidebar-container').render();
-        return this;
-    },
-    /**
      * @property template
      * @type {Function}
      */
@@ -62,7 +45,17 @@ module.exports = Page.extend({
      * @property title
      * @type {String}
      */
-    title: 'Billing History - Skritter',
+    title: 'Billing History - Account - Skritter',
+    /**
+     * @method render
+     * @returns {AccountBillingHistory}
+     */
+    render: function() {
+        this.renderTemplate();
+        this.navbar.setElement('#navbar-container').render();
+        this.sidebar.setElement('#sidebar-container').render();
+        return this;
+    },
     /**
      * @method fetchPayments
      * @param {string} cursor
@@ -84,12 +77,12 @@ module.exports = Page.extend({
         this.renderTable();
     },
     /**
-     * @method renderTable
+     * @method remove
+     * @returns {AccountBillingHistory}
      */
-    renderTable: function() {
-        var context = require('globals');
-        context.view = this;
-        var rendering = $(this.template(context));
-        this.$('.table-oversized-wrapper').replaceWith(rendering.find('.table-oversized-wrapper'));
+    remove: function() {
+        this.navbar.remove();
+        this.sidebar.remove();
+        return Page.prototype.remove.call(this);
     }
 });
