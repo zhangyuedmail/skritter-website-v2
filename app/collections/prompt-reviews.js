@@ -185,7 +185,7 @@ module.exports = Collection.extend({
      * @returns {Boolean}
      */
     isTeachable: function() {
-        if (app.user.get('teachingMode')) {
+        if (this.item && app.user.get('teachingMode')) {
             return this.item.isNew() || this.item.isLeech();
         }
         return false;
