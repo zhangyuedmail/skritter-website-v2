@@ -1,7 +1,12 @@
 {
   "name": "skritter-html5",
+  "title": "Skritter",
   "description": "Learn to write Chinese and Japanese characters.",
-  "author": "Inkren, Inc",
+  "author": {
+    "name": "Inkren, Inc",
+    "email": "team@skritter.com",
+    "url": "https://html5.skritter.com"
+  },
   "version": "2.0.0",
   "license": "MIT",
   "repository": {
@@ -12,22 +17,19 @@
     "id": "com.inkren.skritter",
     "name": "Skritter"
   },
-  "engines": {
-    "node": "<5.0",
-    "npm": "<3.0"
-  },
   "scripts": {
+    "start": "node_modules/.bin/brunch watch --server",
     "web-build": "node_modules/.bin/brunch build --production",
     "web-watch": "node_modules/.bin/brunch watch --server"
   },
   "devDependencies": {
     "bower": "1.6.5",
-    "brunch": "1.8.5",
+    "brunch": "2.0.0",
     "cordova": "5.4.0",
     "auto-reload-brunch": "1.8.1",
-    "clean-css-brunch": "1.7.2",
+    "clean-css-brunch": "1.8.0",
     "css-brunch": "1.7.0",
-    "jade-brunch": "1.8.1",
+    "jade-brunch": "1.8.2",
     "javascript-brunch": "1.8.0",
     "keyword-brunch": "1.7.8",
     "sass-brunch": "1.9.1",
