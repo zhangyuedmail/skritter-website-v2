@@ -1,12 +1,12 @@
-var Collection = require('base/collection');
+var GelatoCollection = require('gelato/collection');
 var PromptReview = require('models/prompt-review');
 var Review = require('models/review');
 
 /**
  * @class PromptReviews
- * @extends {Collection}
+ * @extends {GelatoCollection}
  */
-module.exports = Collection.extend({
+module.exports = GelatoCollection.extend({
     /**
      * @property group
      * @type {String}

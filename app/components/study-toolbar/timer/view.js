@@ -1,4 +1,4 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 
 function Stopwatch() {
     var startAt = 0;
@@ -20,9 +20,9 @@ function Stopwatch() {
 
 /**
  * @class StudyToolbarTimer
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @constructor
@@ -46,7 +46,7 @@ module.exports = Component.extend({
      */
     remove: function() {
         this.interval = clearInterval(this.interval);
-        return Component.prototype.remove.call(this);
+        return GelatoComponent.prototype.remove.call(this);
     },
     /**
      * @method render

@@ -1,13 +1,13 @@
-var Application = require('base/application');
+var GelatoApplication = require('gelato/application');
 var User = require('models/user');
 var Functions = require('functions');
 var Router = require('router');
 
 /**
- * @class DefaultApplication
- * @extends {Application}
+ * @class Application
+ * @extends {GelatoApplication}
  */
-module.exports = Application.extend({
+module.exports = GelatoApplication.extend({
     /**
      * @method initialize
      * @constructor
@@ -75,11 +75,13 @@ module.exports = Application.extend({
         apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
         apiRoot: 'https://beta.skritter',
         apiVersion: 0,
+        description: '{!application-description!}',
         canvasSize: 450,
         date: '{!date!}',
         language: undefined,
         lastReviewCheck: moment().unix(),
         timestamp: '{!timestamp!}',
+        title: '{!application-title!}',
         version: '{!application-version!}'
     },
     /**

@@ -1,10 +1,10 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 
 /**
  * @class MarketingFloor
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @property template
      * @type {Function}

@@ -1,4 +1,4 @@
-var Router = require('./base/router');
+var Router = require('gelato/router');
 
 /**
  * @class DefaultRouter

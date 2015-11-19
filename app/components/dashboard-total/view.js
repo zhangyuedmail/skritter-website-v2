@@ -1,11 +1,11 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 var ProgressStats = require('collections/progress-stats');
 
 /**
  * @class LearnedWords
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @constructor

@@ -1,10 +1,10 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 
 /**
- * @class AccountSideBar
- * @extends {Component}
+ * @class AccountSidebar
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @property template
      * @type {Function}
@@ -12,7 +12,7 @@ module.exports = Component.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {AccountSideBar}
+     * @returns {AccountSidebar}
      */
     render: function() {
         this.renderTemplate();

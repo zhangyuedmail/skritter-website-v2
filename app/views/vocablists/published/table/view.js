@@ -1,11 +1,11 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 var Vocablists = require('collections/vocablists');
 
 /**
  * @class VocablistPublishedTable
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @property events
      * @typeof {Object}

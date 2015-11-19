@@ -1,12 +1,12 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 
 var Vocab = require('models/vocab');
 
 /**
  * @class VocablistsListEditor
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @param {Object} options

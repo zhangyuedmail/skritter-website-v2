@@ -1,12 +1,12 @@
-var Page = require('base/page');
+var GelatoPage = require('gelato/page');
 var DefaultNavbar = require('navbars/default/view');
 var MarketingFooter = require('components/marketing-footer/view');
 
 /**
  * @class Login
- * @extends {Page}
+ * @extends {GelatoPage}
  */
-module.exports = Page.extend({
+module.exports = GelatoPage.extend({
     /**
      * @method initialize
      * @constructor
@@ -118,6 +118,6 @@ module.exports = Page.extend({
      * @returns {Login}
      */
     remove: function() {
-        return Page.prototype.remove.call(this);
+        return GelatoPage.prototype.remove.call(this);
     }
 });

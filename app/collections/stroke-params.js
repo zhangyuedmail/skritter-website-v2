@@ -1,12 +1,12 @@
-var Collection = require('base/collection');
+var GelatoCollection = require('gelato/collection');
 var StrokeParam = require('models/stroke-param');
 var ParamData = require('data/param-data');
 
 /**
  * @class StrokeParams
- * @extends {Collection}
+ * @extends {GelatoCollection}
  */
-module.exports = Collection.extend({
+module.exports = GelatoCollection.extend({
     /**
      * @method initialize
      * @constructor

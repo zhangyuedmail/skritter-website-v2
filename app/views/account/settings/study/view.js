@@ -1,13 +1,13 @@
-var Page = require('base/page');
+var GelatoPage = require('gelato/page');
 
 var AccountSidebar = require('../../sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class AccountSettingsStudy
- * @extends {Page}
+ * @extends {GelatoPage}
  */
-module.exports = Page.extend({
+module.exports = GelatoPage.extend({
     /**
      * @method initialize
      * @constructor
@@ -106,6 +106,6 @@ module.exports = Page.extend({
     remove: function() {
         this.navbar.remove();
         this.sidebar.remove();
-        return Page.prototype.remove.call(this);
+        return GelatoPage.prototype.remove.call(this);
     }
 });

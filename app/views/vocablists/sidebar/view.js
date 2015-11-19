@@ -1,10 +1,10 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 
 /**
  * @class VocablistSideBar
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @constructor

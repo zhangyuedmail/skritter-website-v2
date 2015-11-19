@@ -1,4 +1,4 @@
-var Page = require('base/page');
+var GelatoPage = require('gelato/page');
 
 var DefaultNavbar = require('navbars/default/view');
 var Table = require('./table/view');
@@ -6,9 +6,9 @@ var Sidebar = require('../sidebar/view');
 
 /**
  * @class VocablistPublished
- * @extends {Page}
+ * @extends {GelatoPage}
  */
-module.exports = Page.extend({
+module.exports = GelatoPage.extend({
     /**
      * @method initialize
      * @constructor
@@ -57,6 +57,6 @@ module.exports = Page.extend({
         this.navbar.remove();
         this.sidebar.remove();
         this.table.remove();
-        return Page.prototype.remove.call(this);
+        return GelatoPage.prototype.remove.call(this);
     }
 });

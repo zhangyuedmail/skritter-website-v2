@@ -1,12 +1,12 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 var PromptCanvasDefinition = require('components/prompt/canvas-definition/view');
 var PromptCanvasReading = require('components/prompt/canvas-reading/view');
 
 /**
  * @class PromptCanvas
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @param {Object} options

@@ -1,4 +1,4 @@
-var Page = require('base/page');
+var GelatoPage = require('gelato/page');
 var DefaultNavbar = require('navbars/default/view');
 var DashboardMonth = require('components/dashboard-month/view');
 var DashboardTotal = require('components/dashboard-total/view');
@@ -7,9 +7,9 @@ var DashboardGoal = require('components/dashboard-status/view');
 
 /**
  * @class Dashboard
- * @extends {Page}
+ * @extends {GelatoPage}
  */
-module.exports = Page.extend({
+module.exports = GelatoPage.extend({
     /**
      * @method initialize
      * @constructor
@@ -66,6 +66,6 @@ module.exports = Page.extend({
         this.dashboardTotal.remove();
         this.dashboardQueue.remove();
         this.navbar.remove();
-        return Page.prototype.remove.call(this);
+        return GelatoPage.prototype.remove.call(this);
     }
 });

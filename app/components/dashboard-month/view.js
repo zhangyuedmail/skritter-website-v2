@@ -1,11 +1,11 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 var ProgressStats = require('collections/progress-stats');
 
 /**
  * @class DashboardMonth
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @constructor
@@ -52,7 +52,7 @@ module.exports = Component.extend({
      */
     remove: function() {
         this.heatmap.destroy();
-        return Component.prototype.remove.call(this);
+        return GelatoComponent.prototype.remove.call(this);
     },
     /**
      * @method updateHeatmap
