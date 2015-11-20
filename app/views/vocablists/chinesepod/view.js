@@ -34,11 +34,6 @@ module.exports = GelatoPage.extend({
         this.chinesepodSession.fetch();
     },
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property events
      * @type {Object}
      */

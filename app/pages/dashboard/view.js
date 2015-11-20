@@ -29,11 +29,6 @@ module.exports = GelatoPage.extend({
      */
     title: 'Dashboard - Skritter',
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property template
      * @type {Function}
      */
@@ -58,7 +53,7 @@ module.exports = GelatoPage.extend({
     events: {},
     /**
      * @method remove
-     * @returns {Page}
+     * @returns {Dashboard}
      */
     remove: function() {
         this.dashboardGoal.remove();

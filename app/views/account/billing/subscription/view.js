@@ -33,11 +33,6 @@ module.exports = GelatoPage.extend({
         this.subscription.fetch();
     },
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property events
      * @type {Object}
      */

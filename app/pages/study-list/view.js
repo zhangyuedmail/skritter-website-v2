@@ -60,11 +60,6 @@ module.exports = GelatoPage.extend({
      */
     title: 'Study - Skritter',
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @method render
      * @returns {StudyList}
      */

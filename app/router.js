@@ -38,7 +38,7 @@ module.exports = Router.extend({
         'vocab(/:vocabId)': 'navigateVocab',
         'vocablists': 'navigateVocablistsQueue',
         'vocablists/browse': 'navigateVocablistsBrowse',
-        'vocablists/chinesepod': 'navigateChinesepod',
+        'vocablists/chinesepod': 'navigateVocablistsChinesepod',
         'vocablists/create': 'navigateVocablistsCreate',
         'vocablists/my-lists': 'navigateVocablistsMine',
         'vocablists/published': 'navigateVocablistsPublished',
@@ -122,16 +122,6 @@ module.exports = Router.extend({
         if (app.user.isLoggedIn()) {
             this.navigate('account/settings/study');
             this.go('views/account/settings/study');
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateChinesepod
-     */
-    navigateChinesepod: function() {
-        if (app.user.isLoggedIn()) {
-            this.go('pages/chinesepod');
         } else {
             this.navigateLogin();
         }
@@ -273,6 +263,16 @@ module.exports = Router.extend({
     navigateVocablistsBrowse: function() {
         if (app.user.isLoggedIn()) {
             this.go('views/vocablists/browse');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateVocablistsChinesepod
+     */
+    navigateVocablistsChinesepod: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('views/vocablists/chinesepod');
         } else {
             this.navigateLogin();
         }

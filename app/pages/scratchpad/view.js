@@ -18,11 +18,6 @@ module.exports = GelatoPage.extend({
         this.vocabs = new Vocabs();
     },
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property title
      * @type {String}
      */

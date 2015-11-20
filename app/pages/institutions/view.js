@@ -16,11 +16,6 @@ module.exports = GelatoPage.extend({
         this.navbar = new DefaultNavbar();
     },
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: '',
-    /**
      * @property events
      * @type {Object}
      */

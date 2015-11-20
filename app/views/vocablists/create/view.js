@@ -30,11 +30,6 @@ module.exports = GelatoPage.extend({
      */
     title: 'Create Vocablist - Skritter',
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property template
      * @type {Function}
      */

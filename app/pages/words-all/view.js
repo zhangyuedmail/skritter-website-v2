@@ -30,11 +30,6 @@ module.exports = GelatoPage.extend({
         this.fetchItems();
     },
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property events
      * @type {Object}
      */

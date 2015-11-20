@@ -1,6 +1,6 @@
 var GelatoPage = require('gelato/page');
 
-var AccountSidebar = require('components/settings-sidebar/view');
+var AccountSidebar = require('../../sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
 var Payments = require('collections/payments');
 
@@ -24,11 +24,6 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.payments, 'sync', this.render);
         this.fetchPayments();
     },
-    /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
     /**
      * @property events
      * @type {Object}

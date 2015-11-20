@@ -112,7 +112,7 @@ gelato-page[data-name='institutions'] {
   }
 
   #section-request {
-    background-image: url("#{$dir-assets}/textures/bg-characters.png") repeat;
+    background: $background-marketing;
     form {
       color: #838f98;
       max-width: 600px;

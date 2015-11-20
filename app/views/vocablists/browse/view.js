@@ -39,11 +39,6 @@ module.exports = GelatoPage.extend({
      */
     title: 'Browse - Skritter',
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @method render
      * @returns {VocablistBrowse}
      */

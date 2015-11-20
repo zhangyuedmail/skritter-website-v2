@@ -22,11 +22,6 @@ module.exports = GelatoPage.extend({
         this.fetchMnemonics();
     },
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property events
      * @type {Object}
      */

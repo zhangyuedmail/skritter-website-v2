@@ -23,11 +23,6 @@ module.exports = GelatoPage.extend({
         this.fetchBannedVocabs();
     },
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property events
      * @type {Object}
      */

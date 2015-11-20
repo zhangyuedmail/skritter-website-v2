@@ -1,6 +1,10 @@
 /*** DIRECTORIES ***/
 $dir-assets: '../media';
 
+/*** BACKGROUNDS ***/
+$background-marketing: url("#{$dir-assets}/textures/bg-characters.png") repeat;
+$background-primary: url("#{$dir-assets}/textures/bg-retina-wood.png") repeat;
+
 /*** TEXTURES ***/
 $texture-characters: url('#{$dir-assets}/textures/bg-characters.png');
 $texture-dark: url('#{$dir-assets}/textures/bg-dark-wood.png');
