@@ -16,11 +16,6 @@ module.exports = GelatoPage.extend({
         this.navbar = new DefaultNavbar();
     },
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background2',
-    /**
      * @property title
      * @type {String}
      */
@@ -41,7 +36,7 @@ module.exports = GelatoPage.extend({
         if (this.getHeight() < app.getHeight()) {
             this.$('#footer-container').css(
                 'margin-top',
-                app.getHeight() - this.getHeight() - 51
+                app.getHeight() - this.getHeight() + 8
             );
         }
         return this;
