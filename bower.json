@@ -9,7 +9,7 @@
     "createjs-tween": "CreateJS/TweenJS#0.6.1",
     "d3": "3.5.9",
     "fontawesome": "4.4.0",
-    "gelato": "jernung/gelato#master",
+    "gelato": "jernung/gelato",
     "moment": "2.10.6",
     "moment-timezone": "0.4.1",
     "raygun4js": "2.0.3"
