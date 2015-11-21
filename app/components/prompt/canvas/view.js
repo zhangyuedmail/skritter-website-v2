@@ -376,8 +376,8 @@ module.exports = GelatoComponent.extend({
         this.reset().size = size;
         this.stage.canvas.height = size;
         this.stage.canvas.width = size;
-        this.$('gelato-component').height(size);
-        this.$('gelato-component').width(size);
+        this.$view.height(size);
+        this.$view.width(size);
         this.$('#canvas-navigation').css('top', (size / 2) - 35);
         switch (this.prompt.part) {
             case 'rune':
