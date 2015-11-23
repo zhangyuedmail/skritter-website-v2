@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "bower": "1.6.5",
-    "brunch": "2.0.0",
+    "brunch": "2.0.1",
     "cordova": "5.4.0",
     "auto-reload-brunch": "1.8.1",
     "clean-css-brunch": "1.8.0",

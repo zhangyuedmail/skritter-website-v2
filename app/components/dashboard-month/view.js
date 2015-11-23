@@ -65,7 +65,7 @@ module.exports = GelatoComponent.extend({
      */
     updateStreak: function() {
         if (this.stats.length) {
-            this.$('#streak .value').text(this.stats.getStreak());
+            this.$('#streak .value').text(this.stats.getMonthlyStreak());
         }
     }
 });
