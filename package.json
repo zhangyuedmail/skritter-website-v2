@@ -24,14 +24,15 @@
   },
   "devDependencies": {
     "bower": "1.6.5",
-    "brunch": "2.0.1",
+    "brunch": "1.8.5",
     "cordova": "5.4.0",
+    "moment": "2.10.6",
+    "shelljs": "0.5.3",
     "auto-reload-brunch": "1.8.1",
     "clean-css-brunch": "1.8.0",
     "css-brunch": "1.7.0",
     "jade-brunch": "1.8.2",
     "javascript-brunch": "1.8.0",
-    "keyword-brunch": "1.7.8",
     "sass-brunch": "1.9.1",
     "uglify-js-brunch": "1.7.8"
   }

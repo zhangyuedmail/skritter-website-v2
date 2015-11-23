@@ -1,4 +1,6 @@
 var application = require('./package.json');
+var moment = require('moment');
+var shelljs = require('shelljs');
 
 exports.config = {
     files: {
@@ -54,5 +56,16 @@ exports.config = {
     paths: {
         'public': 'public',
         'watched': ['app', 'vendor']
+    },
+    onCompile: function(files) {
+        var timestamp = moment().unix();
+        files.map(function(file) {
+            return file.path;
+        }).forEach(function(path) {
+            shelljs.sed('-i', '{!application-description!}', application.description, path);
+            shelljs.sed('-i', '{!application-title!}', application.title, path);
+            shelljs.sed('-i', '{!application-version!}', application.version, path);
+            shelljs.sed('-i', '{!build-timestamp!}', timestamp, path);
+        });
     }
 };
