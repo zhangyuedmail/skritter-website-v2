@@ -51,14 +51,8 @@ exports.config = {
             "application-version": application.version
         }
     },
-    overrides: {
-        production: {
-            sourceMaps: true
-        }
-    },
     paths: {
         'public': 'public',
         'watched': ['app', 'vendor']
-    },
-    sourceMaps: false
+    }
 };
