@@ -313,7 +313,7 @@ module.exports = SkritterModel.extend({
      */
     getWritingObjects: function() {
         return this.getCharacters().map(function(value) {
-            if (app.isJapanese()) {
+            if (this.isJapanese()) {
                 if (['～'].indexOf(value) > -1) {
                     return {type: 'filler', value: value};
                 }
@@ -322,7 +322,7 @@ module.exports = SkritterModel.extend({
                 }
             }
             return {type: 'character', value: value};
-        });
+        }.bind(this));
     },
     /**
      * @method getWritingDifference

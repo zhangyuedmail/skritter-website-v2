@@ -6,7 +6,7 @@ gelato-component(data-name='prompt-vocab-writing')
     - var writings = reviews.vocab.getWritingObjects()
     - var index = 0
 
-    if app.isChinese()
+    if reviews.isChinese()
       .text-chinese
     else
       .text-japanese
@@ -22,10 +22,6 @@ gelato-component(data-name='prompt-vocab-writing')
               - classes.push('masked')
             if (reviews.position === index)
               - classes.push('active')
-            if (app.isChinese())
-              - classes.push('text-chinese')
-            else
-              - classes.push('text-japanese')
             div.character(class=classes.join(' '), data-position=index)
               span= character.value
             - index++
@@ -38,10 +34,6 @@ gelato-component(data-name='prompt-vocab-writing')
           if (character.type === 'character')
             - var review = reviews.at(index)
             - var classes = []
-            if (app.isChinese())
-              - classes.push('text-chinese')
-            else
-              - classes.push('text-japanese')
             div.character(class=classes.join(' '), data-position=index)
               span= character.value
             - index++

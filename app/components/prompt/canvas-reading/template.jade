@@ -6,7 +6,7 @@ gelato-component(data-name='prompt-canvas-reading')
 
     .question(class=reviews.isComplete() ? 'invisible' : '') What's the reading?
 
-    if (app.isChinese())
+    if (reviews.isChinese())
       .writing.text-chinese= reviews.vocab.get('writing')
     else
       .writing.text-japanese= reviews.vocab.get('writing')
@@ -17,4 +17,4 @@ gelato-component(data-name='prompt-canvas-reading')
       if app.fn.isKana(writing)
         .answer!= kana.toRomaji(reading)
       else
-        .answer!= app.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+        .answer!= reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading

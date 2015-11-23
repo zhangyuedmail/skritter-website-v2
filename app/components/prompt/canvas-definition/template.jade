@@ -4,7 +4,7 @@ gelato-component(data-name='prompt-canvas-definition')
 
   if prompt.part === 'defn' && reviews
 
-    if (app.isChinese())
+    if (reviews.isChinese())
       .writing.text-chinese= reviews.vocab.get('writing')
     else
       .writing.text-japanese= reviews.vocab.get('writing')
