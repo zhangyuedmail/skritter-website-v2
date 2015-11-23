@@ -65,7 +65,7 @@ module.exports = GelatoPage.extend({
     handleChangeTargetLanguage: function(event) {
         event.preventDefault();
         app.user.set('targetLang', this.$('#field-target-language').val());
-        this.renderSectionContent();
+        this.render();
     },
     /**
      * @method handleClickButtonSave
