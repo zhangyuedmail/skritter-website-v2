@@ -86,7 +86,7 @@ module.exports = GelatoPage.extend({
         this.editor.setElement('#editor-container').render();
         this.navbar.setElement('#navbar-container').render();
         if (this.vocablist.has('name')) {
-            this.setTitle(this.vocablist.get('name') + ' - Vocablist - Skritter');
+            document.title = this.vocablist.get('name') + ' - Vocablist - Skritter';
         }
         return this;
     },

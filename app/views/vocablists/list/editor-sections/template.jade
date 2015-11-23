@@ -1,4 +1,4 @@
-gelato-component(data-name='vocablists-list-editor')
+gelato-component(data-name='vocablists-list-section-editor')
   - var vocablist = view.vocablist;
 
   mixin sectionRow(section, index)
@@ -37,6 +37,10 @@ gelato-component(data-name='vocablists-list-editor')
             i#remove-section.fa.fa-remove
 
   if vocablist.state === 'standby'
+    .row
+      .col-xs-6.row-header Name
+      .col-xs-3.row-header Details
+      .col-xs-3.row-header
     #vocablist-sections
       for section, index in vocablist.get('sections')
         +sectionRow(section, index)

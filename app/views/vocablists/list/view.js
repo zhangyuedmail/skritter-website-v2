@@ -87,7 +87,7 @@ module.exports = GelatoPage.extend({
         this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#sidebar-container').render();
         if (this.vocablist.has('name')) {
-            this.setTitle(this.vocablist.get('name') + ' - Vocablist - Skritter');
+            document.title = this.vocablist.get('name') + ' - Vocablist - Skritter';
         }
         return this;
     },

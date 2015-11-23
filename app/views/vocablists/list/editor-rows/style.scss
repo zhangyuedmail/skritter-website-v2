@@ -6,6 +6,7 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
     color: $grey5;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 300;
     padding: 10px 25px;
     border-top: 1px solid $white5;
     &.odd { background-color: $white2; }
@@ -18,6 +19,10 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
       font-size: 18px;
       padding-bottom: 5px;
       padding-top: 5px;
+    }
+    .row-header {
+      font-weight: 400;
+      &.writing { padding-left: 35px; }
     }
     .study-writing {
       background-color: $grey1;
