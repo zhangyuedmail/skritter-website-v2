@@ -79,7 +79,7 @@ module.exports = GelatoApplication.extend({
         canvasSize: 450,
         language: undefined,
         lastReviewCheck: moment().unix(),
-        timestamp: '{!build-timestamp!}',
+        timestamp: '{!timestamp!}',
         title: '{!application-title!}',
         version: '{!application-version!}'
     },

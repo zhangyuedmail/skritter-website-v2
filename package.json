@@ -18,21 +18,22 @@
     "name": "Skritter"
   },
   "scripts": {
-    "start": "node_modules/.bin/brunch watch --server",
-    "web-build": "node_modules/.bin/brunch build --production",
-    "web-watch": "node_modules/.bin/brunch watch --server"
+    "start": "./node_modules/.bin/brunch watch --server",
+    "web-build": "./node_modules/.bin/brunch build --production",
+    "web-watch": "./node_modules/.bin/brunch watch --server"
   },
-  "devDependencies": {
+  "dependencies": {
     "bower": "1.6.5",
     "brunch": "1.8.5",
-    "cordova": "5.4.0",
-    "moment": "2.10.6",
-    "shelljs": "0.5.3",
+    "cordova": "5.4.0"
+  },
+  "devDependencies": {
     "auto-reload-brunch": "1.8.1",
     "clean-css-brunch": "1.8.0",
     "css-brunch": "1.7.0",
     "jade-brunch": "1.8.2",
     "javascript-brunch": "1.8.0",
+    "replace-brunch": "0.1.0",
     "sass-brunch": "1.9.1",
     "uglify-js-brunch": "1.7.8"
   }

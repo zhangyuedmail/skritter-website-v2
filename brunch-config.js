@@ -1,6 +1,4 @@
 var application = require('./package.json');
-var moment = require('moment');
-var shelljs = require('shelljs');
 
 exports.config = {
     files: {
@@ -45,27 +43,23 @@ exports.config = {
             }
         }
     },
-    keyword: {
-        filePattern: /\.(js|css|html)$/,
-        map: {
-            "application-description": application.description,
-            "application-title": application.title,
-            "application-version": application.version
-        }
-    },
     paths: {
         'public': 'public',
         'watched': ['app', 'vendor']
     },
-    onCompile: function(files) {
-        var timestamp = moment().unix();
-        files.map(function(file) {
-            return file.path;
-        }).forEach(function(path) {
-            shelljs.sed('-i', '{!application-description!}', application.description, path);
-            shelljs.sed('-i', '{!application-title!}', application.title, path);
-            shelljs.sed('-i', '{!application-version!}', application.version, path);
-            shelljs.sed('-i', '{!build-timestamp!}', timestamp, path);
-        });
+    plugins: {
+        replace: {
+            mappings: {
+                'application-description': application.description,
+                'application-title': application.title,
+                'application-version': application.version
+            },
+            paths: [
+                'public/js/application.js',
+                'public/js/libraries.js',
+                'public/styles/application.css',
+                'public/styles/libraries.css'
+            ]
+        }
     }
 };
