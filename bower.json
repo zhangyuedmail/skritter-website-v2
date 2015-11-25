@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "async": "1.5.0",
-    "bootstrap": "3.3.5",
+    "bootstrap": "3.3.6",
     "chai": "3.4.1",
     "createjs-easel": "CreateJS/EaselJS#0.8.1",
     "createjs-tween": "CreateJS/TweenJS#0.6.1",
