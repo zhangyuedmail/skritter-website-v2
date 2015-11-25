@@ -1,11 +1,11 @@
-var Collection = require('base/collection');
+var GelatoCollection = require('gelato/collection');
 var Item = require('models/item');
 
 /**
  * @class ContainedItems
- * @extends {Collection}
+ * @extends {GelatoCollection}
  */
-module.exports = Collection.extend({
+module.exports = GelatoCollection.extend({
     /**
      * @property model
      * @type {Item}

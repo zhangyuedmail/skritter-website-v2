@@ -1,4 +1,4 @@
-var Router = require('./base/router');
+var Router = require('gelato/router');
 
 /**
  * @class DefaultRouter
@@ -38,7 +38,7 @@ module.exports = Router.extend({
         'vocab(/:vocabId)': 'navigateVocab',
         'vocablists': 'navigateVocablistsQueue',
         'vocablists/browse': 'navigateVocablistsBrowse',
-        'vocablists/chinesepod': 'navigateChinesepod',
+        'vocablists/chinesepod': 'navigateVocablistsChinesepod',
         'vocablists/create': 'navigateVocablistsCreate',
         'vocablists/my-lists': 'navigateVocablistsMine',
         'vocablists/published': 'navigateVocablistsPublished',
@@ -88,7 +88,7 @@ module.exports = Router.extend({
     navigateAccountBillingHistory: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/billing/history');
-            this.go('pages/billing-history');
+            this.go('views/account/billing/history');
         } else {
             this.navigateLogin();
         }
@@ -98,8 +98,8 @@ module.exports = Router.extend({
      */
     navigateAccountBillingSubscription: function() {
         if (app.user.isLoggedIn()) {
-            this.navigate('account/billing-subscription');
-            this.go('pages/billing-subscription');
+            this.navigate('account/billing/subscription');
+            this.go('views/account/billing/subscription');
         } else {
             this.navigateLogin();
         }
@@ -110,7 +110,7 @@ module.exports = Router.extend({
     navigateAccountSettingsGeneral: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/settings/general');
-            this.go('pages/settings-general');
+            this.go('views/account/settings/general');
         } else {
             this.navigateLogin();
         }
@@ -120,17 +120,8 @@ module.exports = Router.extend({
      */
     navigateAccountSettingsStudy: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages/settings-study');
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateChinesepod
-     */
-    navigateChinesepod: function() {
-        if (app.user.isLoggedIn()) {
-            this.go('pages/chinesepod');
+            this.navigate('account/settings/study');
+            this.go('views/account/settings/study');
         } else {
             this.navigateLogin();
         }
@@ -272,6 +263,16 @@ module.exports = Router.extend({
     navigateVocablistsBrowse: function() {
         if (app.user.isLoggedIn()) {
             this.go('views/vocablists/browse');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateVocablistsChinesepod
+     */
+    navigateVocablistsChinesepod: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('views/vocablists/chinesepod');
         } else {
             this.navigateLogin();
         }

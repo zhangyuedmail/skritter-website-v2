@@ -29,18 +29,18 @@ gelato-component(data-name='prompt-vocab-contained')
 
               if contained.length > 1
                 .child-vocab-row
-                  span.child-writing(class=app.isChinese() ? 'text-chinese' : 'text-japanese')= vocab.get('writing')
+                  span.child-writing(class=reviews.isChinese() ? 'text-chinese' : 'text-japanese')= vocab.get('writing')
                   | &nbsp;
-                  span.child-reading= app.isChinese() ? app.fn.pinyin.toTone(vocab.get('reading')) : vocab.get('reading')
+                  span.child-reading= reviews.isChinese() ? app.fn.pinyin.toTone(vocab.get('reading')) : vocab.get('reading')
 
               if decomp && !decomp.get('atomic')
                 .child-vocab-row
                   label Decomposition
                   for child in decomp.get('Children')
                     .child-decomp
-                      span.decomp-writing(class=app.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
+                      span.decomp-writing(class=reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
                       | &nbsp;
-                      span.decomp-reading= app.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                      span.decomp-reading= reviews.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
                       | &nbsp;
                       span.decomp-definition= child.definitions.en
 

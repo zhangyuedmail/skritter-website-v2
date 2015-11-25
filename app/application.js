@@ -1,13 +1,13 @@
-var Application = require('base/application');
+var GelatoApplication = require('gelato/application');
 var User = require('models/user');
 var Functions = require('functions');
 var Router = require('router');
 
 /**
- * @class DefaultApplication
- * @extends {Application}
+ * @class Application
+ * @extends {GelatoApplication}
  */
-module.exports = Application.extend({
+module.exports = GelatoApplication.extend({
     /**
      * @method initialize
      * @constructor
@@ -16,7 +16,9 @@ module.exports = Application.extend({
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
             excludedUserAgents: ['PhantomJS'],
-            ignore3rdPartyErrors: true
+            ignore3rdPartyErrors: true,
+            ignoreAjaxAbort: false,
+            ignoreAjaxError: false
         }).attach();
         Raygun.setVersion(this.get('version'));
         this.fn = Functions;
@@ -73,11 +75,12 @@ module.exports = Application.extend({
         apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
         apiRoot: 'https://beta.skritter',
         apiVersion: 0,
+        description: '{!application-description!}',
         canvasSize: 450,
-        date: '{!date!}',
         language: undefined,
         lastReviewCheck: moment().unix(),
         timestamp: '{!timestamp!}',
+        title: '{!application-title!}',
         version: '{!application-version!}'
     },
     /**
@@ -105,6 +108,14 @@ module.exports = Application.extend({
         } else {
             return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc';
         }
+    },
+    /**
+     * @method getVersion
+     * @returns {String}
+     */
+    getVersion: function() {
+        var semantics = this.get('version').split('.');
+        return [semantics[0], semantics[1], this.get('timestamp')].join('.');
     },
     /**
      * @method handleError

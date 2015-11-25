@@ -1,11 +1,11 @@
-var Collection = require('base/collection');
+var GelatoCollection = require('gelato/collection');
 var Sentence = require('models/sentence');
 
 /**
  * @class Sentences
- * @extends {Collection}
+ * @extends {GelatoCollection}
  */
-module.exports = Collection.extend({
+module.exports = GelatoCollection.extend({
     /**
      * @property model
      * @type {Sentence}

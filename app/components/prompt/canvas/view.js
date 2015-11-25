@@ -1,12 +1,12 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 var PromptCanvasDefinition = require('components/prompt/canvas-definition/view');
 var PromptCanvasReading = require('components/prompt/canvas-reading/view');
 
 /**
  * @class PromptCanvas
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @param {Object} options
@@ -376,8 +376,8 @@ module.exports = Component.extend({
         this.reset().size = size;
         this.stage.canvas.height = size;
         this.stage.canvas.width = size;
-        this.$('gelato-component').height(size);
-        this.$('gelato-component').width(size);
+        this.$view.height(size);
+        this.$view.width(size);
         this.$('#canvas-navigation').css('top', (size / 2) - 35);
         switch (this.prompt.part) {
             case 'rune':

@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@import "../../styles/_variables";
 
 gelato-component[data-name='dashboard-month'] {
 
@@ -6,10 +6,10 @@ gelato-component[data-name='dashboard-month'] {
     margin-bottom: -100px;
     margin-top: 50px;
     rect { shape-rendering: auto; }
+    .cal-heatmap-container { margin: 25px auto; }
     .graph-label,
     .graph-legend { display: none; }
     .graph-rect { cursor: pointer; }
-    .heatmap-container { margin: 25px auto; }
     .q1 {
       background-color: #ededed;
       fill: #ededed

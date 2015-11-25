@@ -1,4 +1,4 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 
 var ConfirmDialog = require('dialogs/confirm/view');
 var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
@@ -6,9 +6,9 @@ var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view'
 
 /**
  * @class VocablistsListSidebar
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @param {Object} options

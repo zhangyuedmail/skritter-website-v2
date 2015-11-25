@@ -29,9 +29,9 @@ module.exports = SkritterCollection.extend({
      */
     comparator: function(statA, statB) {
         if (statA.id > statB.id) {
-            return -1;
-        } else if (statB.id > statA.id) {
             return 1;
+        } else if (statB.id > statA.id) {
+            return -1;
         } else {
             return 0;
         }
@@ -204,15 +204,7 @@ module.exports = SkritterCollection.extend({
         for (var i = 0, length = this.length; i < length; i++) {
             var stat = this.at(i);
             var date = moment(stat.get('date')).unix();
-            data[date] = 0;
-            data[date] += stat.get('char').defn.studied.day;
-            data[date] += stat.get('char').rdng.studied.day;
-            data[date] += stat.get('char').rune.studied.day;
-            data[date] += stat.get('char').tone.studied.day;
-            data[date] += stat.get('word').defn.studied.day;
-            data[date] += stat.get('word').rdng.studied.day;
-            data[date] += stat.get('word').rune.studied.day;
-            data[date] += stat.get('word').tone.studied.day;
+            data[date] = stat.getStudiedCount();
         }
         return data;
     },
@@ -223,36 +215,15 @@ module.exports = SkritterCollection.extend({
     getMonthlyStreak: function() {
         var bestStreak = 0;
         var currentStreak = 0;
-        var timeStudied = this.pluck('timeStudied');
-        for (var i = 0, length = timeStudied.length; i < length; i++) {
-            if (timeStudied[i].day !== 0) {
+        for (var i = 0, length = this.length; i < length; i++) {
+            var stat = this.at(i);
+            if (stat.hasBeenStudied()) {
                 currentStreak++;
             }
             if (currentStreak > bestStreak) {
                 bestStreak = currentStreak;
             }
-            if (timeStudied[i].day === 0) {
-                currentStreak = 0;
-            }
-        }
-        return bestStreak;
-    },
-    /**
-     * @method getStreak
-     * @returns {Number}
-     */
-    getStreak: function() {
-        var bestStreak = 0;
-        var currentStreak = 0;
-        var timeStudied = this.pluck('timeStudied');
-        for (var i = 0, length = timeStudied.length; i < length; i++) {
-            if (timeStudied[i].day !== 0) {
-                currentStreak++;
-            }
-            if (currentStreak > bestStreak) {
-                bestStreak = currentStreak;
-            }
-            if (timeStudied[i].day === 0) {
+            if (!stat.hasBeenStudied()) {
                 currentStreak = 0;
             }
         }

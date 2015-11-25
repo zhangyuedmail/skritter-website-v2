@@ -1,10 +1,10 @@
-var Model = require('base/model');
+var GelatoModel = require('gelato/model');
 
 /**
  * @class PromptStroke
- * @extends {Model}
+ * @extends {GelatoModel}
  */
-module.exports = Model.extend({
+module.exports = GelatoModel.extend({
     /**
      * @method initialize
      * @constructor

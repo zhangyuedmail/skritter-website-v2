@@ -1,11 +1,11 @@
-var Page = require('base/page');
+var GelatoPage = require('gelato/page');
 var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class NotFound
- * @extends {Page}
+ * @extends {GelatoPage}
  */
-module.exports = Page.extend({
+module.exports = GelatoPage.extend({
     /**
      * @method initialize
      * @constructor

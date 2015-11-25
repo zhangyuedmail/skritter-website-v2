@@ -1,4 +1,4 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 
 var Prompt = require('components/prompt/view');
 var PromptCanvas = require('components/prompt/canvas/view');
@@ -19,9 +19,9 @@ var VocabDialog = require('dialogs/vocab/view');
 
 /**
  * @class Prompt
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @constructor
@@ -1102,7 +1102,7 @@ module.exports = Component.extend({
         this.vocabSentence.remove();
         this.vocabStyle.remove();
         this.vocabWriting.remove();
-        return Component.prototype.remove.call(this);
+        return GelatoComponent.prototype.remove.call(this);
     },
     /**
      * @method reset

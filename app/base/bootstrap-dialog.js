@@ -1,10 +1,10 @@
-var View = require('./view');
+var GelatoView = require('gelato/view');
 
 /**
  * @class BootstrapDialog
- * @extends {View}
+ * @extends {GelatoView}
  */
-module.exports = View.extend({
+module.exports = GelatoView.extend({
     /**
      * @property el
      * @type {String}
@@ -21,7 +21,7 @@ module.exports = View.extend({
      * @returns {BootstrapDialog}
      */
     renderTemplate: function(context) {
-        View.prototype.renderTemplate.call(this, context);
+        GelatoView.prototype.renderTemplate.call(this, context);
         this.element = this.$('[role="dialog"]');
         this.element.on('hide.bs.modal', _.bind(this.handleElementHide, this));
         this.element.on('hidden.bs.modal', _.bind(this.handleElementHidden, this));

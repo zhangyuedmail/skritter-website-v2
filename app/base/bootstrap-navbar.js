@@ -1,10 +1,10 @@
-var View = require('./view');
+var GelatoView = require('gelato/view');
 
 /**
  * @class BootstrapNavbar
- * @extends {View}
+ * @extends {GelatoView}
  */
-module.exports = View.extend({
+module.exports = GelatoView.extend({
     /**
      * @property el
      * @type {String}
@@ -16,7 +16,7 @@ module.exports = View.extend({
      * @returns {BootstrapNavbar}
      */
     renderTemplate: function(context) {
-        View.prototype.renderTemplate.call(this, context);
+        GelatoView.prototype.renderTemplate.call(this, context);
         return this;
     }
 });

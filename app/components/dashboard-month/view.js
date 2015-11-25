@@ -1,17 +1,17 @@
-var Component = require('base/component');
+var GelatoComponent = require('gelato/component');
 var ProgressStats = require('collections/progress-stats');
 
 /**
  * @class DashboardMonth
- * @extends {Component}
+ * @extends {GelatoComponent}
  */
-module.exports = Component.extend({
+module.exports = GelatoComponent.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.heatmap = new Heatmap();
+        this.heatmap = new CalHeatMap();
         this.stats = new ProgressStats();
         this.listenTo(this.stats, 'state:standby', this.updateHeatmap);
         this.listenTo(this.stats, 'state:standby', this.updateStreak);
@@ -52,7 +52,7 @@ module.exports = Component.extend({
      */
     remove: function() {
         this.heatmap.destroy();
-        return Component.prototype.remove.call(this);
+        return GelatoComponent.prototype.remove.call(this);
     },
     /**
      * @method updateHeatmap
@@ -65,7 +65,7 @@ module.exports = Component.extend({
      */
     updateStreak: function() {
         if (this.stats.length) {
-            this.$('#streak .value').text(this.stats.getStreak());
+            this.$('#streak .value').text(this.stats.getMonthlyStreak());
         }
     }
 });

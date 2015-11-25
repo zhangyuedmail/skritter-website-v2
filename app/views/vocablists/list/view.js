@@ -1,4 +1,4 @@
-var Page = require('base/page');
+var GelatoPage = require('gelato/page');
 
 var DefaultNavbar = require('navbars/default/view');
 var EditorSections = require('./editor-sections/view');
@@ -9,9 +9,9 @@ var User = require('models/user');
 
 /**
  * @class VocablistsListPage
- * @extends {Page}
+ * @extends {GelatoPage}
  */
-module.exports = Page.extend({
+module.exports = GelatoPage.extend({
     /**
      * @method initialize
      * @constructor
@@ -73,11 +73,6 @@ module.exports = Page.extend({
      */
     title: 'Vocablist - Skritter',
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property template
      * @type {Function}
      */
@@ -92,7 +87,7 @@ module.exports = Page.extend({
         this.navbar.setElement('#navbar-container').render();
         this.sidebar.setElement('#sidebar-container').render();
         if (this.vocablist.has('name')) {
-            this.setTitle(this.vocablist.get('name') + ' - Vocablist - Skritter');
+            document.title = this.vocablist.get('name') + ' - Vocablist - Skritter';
         }
         return this;
     },
@@ -170,6 +165,6 @@ module.exports = Page.extend({
         this.editor.remove();
         this.navbar.remove();
         this.sidebar.remove();
-        return Page.prototype.remove.call(this);
+        return GelatoPage.prototype.remove.call(this);
     }
 });

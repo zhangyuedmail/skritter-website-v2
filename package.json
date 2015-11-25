@@ -1,8 +1,13 @@
 {
   "name": "skritter-html5",
+  "title": "Skritter",
   "description": "Learn to write Chinese and Japanese characters.",
-  "author": "Inkren, Inc",
-  "version": "0.0.1",
+  "author": {
+    "name": "Inkren, Inc",
+    "email": "team@skritter.com",
+    "url": "https://html5.skritter.com"
+  },
+  "version": "2.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,24 +17,23 @@
     "id": "com.inkren.skritter",
     "name": "Skritter"
   },
-  "engines": {
-    "node": "<5.0",
-    "npm": "<3.0"
-  },
   "scripts": {
-    "web-build": "node_modules/.bin/brunch build --production",
-    "web-watch": "node_modules/.bin/brunch watch --server"
+    "start": "./node_modules/.bin/brunch watch --server",
+    "web-build": "./node_modules/.bin/brunch build --production",
+    "web-watch": "./node_modules/.bin/brunch watch --server"
   },
-  "devDependencies": {
+  "dependencies": {
     "bower": "1.6.5",
     "brunch": "1.8.5",
-    "cordova": "5.4.0",
+    "cordova": "5.4.0"
+  },
+  "devDependencies": {
     "auto-reload-brunch": "1.8.1",
-    "clean-css-brunch": "1.7.2",
+    "clean-css-brunch": "1.8.0",
     "css-brunch": "1.7.0",
-    "jade-brunch": "1.8.1",
+    "jade-brunch": "1.8.2",
     "javascript-brunch": "1.8.0",
-    "keyword-brunch": "1.7.8",
+    "replace-brunch": "0.1.0",
     "sass-brunch": "1.9.1",
     "uglify-js-brunch": "1.7.8"
   }

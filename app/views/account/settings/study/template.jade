@@ -1,0 +1,81 @@
+gelato-page(data-name='account-settings-study')
+
+  #navbar-container
+
+  section.container
+    .content-block
+      .row
+        .col-md-3
+          #sidebar-container
+          
+        .col-md-9
+          #section-content
+            .title Study Settings
+            form.form-horizontal
+              .form-group
+                label.col-sm-3.control-label(for="field-target-language") Target language
+                .col-sm-9
+                  select#field-target-language.form-control
+                    option(value="zh", selected=(app.getLanguage() === 'zh')) Chinese
+                    option(value="ja", selected=(app.getLanguage() === 'ja')) Japanese
+              .form-group
+                label.col-sm-3.control-label(for="field-source-language") Source language
+                .col-sm-9
+                  select#field-source-language.form-control
+                    for lang in view.sourceLanguages
+                      - var langCode = lang[0][0];
+                      - var langString = lang[0][1];
+                      option(value=langCode, selected=(app.user.get('sourceLang') === langCode))= langString
+              if (app.getLanguage() === 'zh')
+                .form-group
+                  label.col-sm-3.control-label(for="field-styles") Character styles
+                  .col-sm-9#field-styles
+                    label.checkbox-inline
+                      input(type="checkbox", name="styles", value="simp", checked=user.get('addSimplified'))
+                      | Simplified
+                    label.checkbox-inline
+                      input(type="checkbox", name="styles", value="trad", checked=user.get('addTraditional'))
+                      | Traditional
+              .form-group
+                label.col-sm-3.control-label(for="field-parts") Parts studying
+                .col-sm-9#field-parts
+                  label.checkbox-inline
+                    input(type="checkbox", name="parts", value="rune", checked=user.hasStudyPart('rune'))
+                    | Writing
+                  if (app.getLanguage() === 'zh')
+                    label.checkbox-inline
+                      input(type="checkbox", name="parts", value="tone", checked=user.hasStudyPart('tone'))
+                      | Tone
+                  label.checkbox-inline
+                    input(type="checkbox", name="parts", value="rdng", checked=user.hasStudyPart('rdng'))
+                    | Reading
+                  label.checkbox-inline
+                    input(type="checkbox", name="parts", value="defn", checked=user.hasStudyPart('defn'))
+                    | Definition
+              if (app.getLanguage() === 'ja')
+                .form-group
+                  label.col-sm-3.control-label(for="field-study-kana") Study kana
+                  .col-sm-9
+                    input#field-study-kana(type="checkbox", checked=user.get('studyKana'))
+                .form-group
+                  label.col-sm-3.control-label(for="field-study-rare-writings") Study uncommon kanji
+                  .col-sm-9
+                    input#field-study-kana(type="checkbox", checked=user.get('studyRareWritings'))
+              .form-group
+                label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
+                .col-sm-9
+                  input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
+              .form-group
+                label.col-sm-3.control-label(for="field-add-contained") Also add characters when adding words
+                .col-sm-9
+                  input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
+
+              hr
+
+              .form-group
+                .col-sm-12
+                  if user.state === 'standby'
+                    button#button-save.btn.btn-fixed.btn-success(type="submit") Save
+                  else
+                    button#button-save.btn.btn-fixed.btn-success(type="submit", disabled="disabled")
+                      i.fa.fa-2x.fa-spinner.fa-pulse

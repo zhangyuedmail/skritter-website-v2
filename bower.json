@@ -1,28 +1,25 @@
 {
   "name": "skritter-html5",
-  "main": "public/js/app.js",
+  "description": "Learn to write Chinese and Japanese characters.",
+  "private": true,
   "dependencies": {
     "async": "1.5.0",
-    "backbone": "1.2.3",
     "bootstrap": "3.3.5",
-    "d3": "3.5.8",
+    "createjs-easel": "CreateJS/EaselJS#0.8.1",
+    "createjs-tween": "CreateJS/TweenJS#0.6.1",
+    "d3": "3.5.9",
     "fontawesome": "4.4.0",
-    "jquery": "2.1.4",
-    "lodash": "3.10.1",
+    "gelato": "jernung/gelato",
     "moment": "2.10.6",
     "moment-timezone": "0.4.1",
     "raygun4js": "2.0.3"
   },
   "overrides": {
-    "async": {
-      "main": "lib/async.js"
-    },
     "backbone": {
       "dependencies": {
-        "lodash": "*",
-        "jquery": "*"
-      },
-      "main": "backbone.js"
+        "jquery": "*",
+        "lodash": "*"
+      }
     },
     "bootstrap": {
       "dependencies": {
@@ -33,26 +30,8 @@
         "dist/js/bootstrap.js"
       ]
     },
-    "d3": {
-      "main": "d3.js"
-    },
-    "jquery": {
-      "main": "dist/jquery.js"
-    },
     "fontawesome": {
       "main": "css/font-awesome.css"
-    },
-    "lodash": {
-      "main": "lodash.js"
-    },
-    "moment": {
-      "main": "moment.js"
-    },
-    "moment-timezone": {
-      "main": "builds/moment-timezone-with-data-2010-2020.js"
-    },
-    "raygun4js": {
-      "main": "dist/raygun.js"
     }
   }
 }

@@ -1,4 +1,4 @@
-var Page = require('base/page');
+var GelatoPage = require('gelato/page');
 
 var AddingTable = require('./adding-table/view');
 var DefaultNavbar = require('navbars/default/view');
@@ -8,9 +8,9 @@ var Vocablists = require('collections/vocablists');
 
 /**
  * @class VocablistsQueue
- * @extends {Page}
+ * @extends {GelatoPage}
  */
-module.exports = Page.extend({
+module.exports = GelatoPage.extend({
     /**
      * @method initialize
      * @constructor
@@ -50,11 +50,6 @@ module.exports = Page.extend({
      */
     title: 'Queue - Skritter',
     /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background1',
-    /**
      * @property template
      * @type {Function}
      */
@@ -80,6 +75,6 @@ module.exports = Page.extend({
         this.navbar.remove();
         this.reviewingTable.remove();
         this.sidebar.remove();
-        return Page.prototype.remove.call(this);
+        return GelatoPage.prototype.remove.call(this);
     }
 });
