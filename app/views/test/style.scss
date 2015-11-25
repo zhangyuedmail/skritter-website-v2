@@ -2,7 +2,24 @@
 
 gelato-page[data-name='test'] {
 
-  background: $background-marketing;
   padding-top: 75px;
+
+  #mocha {
+    margin: 50px 0 0 0;
+    position: relative;
+    .progress {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      height: inherit;
+      margin-bottom: inherit;
+      overflow: hidden;
+      background-color: transparent;
+      border-radius: inherit;
+    }
+    #mocha-stats {
+      position: absolute;
+      top: -50px;
+    }
+  }
 
 }
