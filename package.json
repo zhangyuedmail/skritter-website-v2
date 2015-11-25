@@ -18,12 +18,14 @@
     "name": "Skritter"
   },
   "scripts": {
+    "install": "./node_modules/.bin/bower install",
+    "postversion": "./node_modules/.bin/bower update",
     "start": "./node_modules/.bin/brunch watch --server",
     "test": "./node_modules/.bin/brunch build && ./node_modules/.bin/mocha-phantomjs ./test/index.html",
     "web-build": "./node_modules/.bin/brunch build --production",
     "web-watch": "./node_modules/.bin/brunch watch --server"
   },
-  "devDependencies": {
+  "dependencies": {
     "bower": "1.6.5",
     "brunch": "1.8.5",
     "chai": "3.4.1",
