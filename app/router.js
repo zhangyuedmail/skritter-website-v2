@@ -235,7 +235,6 @@ module.exports = Router.extend({
      * @method navigateTest
      */
     navigateTest: function() {
-        this.navigate('test');
         this.go('views/test');
     },
     /**
