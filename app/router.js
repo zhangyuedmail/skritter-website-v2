@@ -35,6 +35,7 @@ module.exports = Router.extend({
         'scratchpad/:vocabId(/:part)': 'navigateScratchpad',
         'signup': 'navigateSignup',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
+        'test': 'navigateTest',
         'vocab(/:vocabId)': 'navigateVocab',
         'vocablists': 'navigateVocablistsQueue',
         'vocablists/browse': 'navigateVocablistsBrowse',
@@ -229,6 +230,13 @@ module.exports = Router.extend({
         } else {
             this.navigateLogin();
         }
+    },
+    /**
+     * @method navigateTest
+     */
+    navigateTest: function() {
+        this.navigate('test');
+        this.go('views/test');
     },
     /**
      * @method navigateVocab
