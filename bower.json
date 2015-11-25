@@ -5,11 +5,13 @@
   "dependencies": {
     "async": "1.5.0",
     "bootstrap": "3.3.5",
+    "chai": "3.4.1",
     "createjs-easel": "CreateJS/EaselJS#0.8.1",
     "createjs-tween": "CreateJS/TweenJS#0.6.1",
     "d3": "3.5.9",
     "fontawesome": "4.4.0",
     "gelato": "jernung/gelato",
+    "mocha": "2.3.4",
     "moment": "2.10.6",
     "moment-timezone": "0.4.1",
     "raygun4js": "2.0.3"
