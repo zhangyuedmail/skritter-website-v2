@@ -11,4 +11,12 @@ gelato-page(data-name='vocablists-published')
 
         .col-md-9.main-content
           .title Published Lists
-          #vocablist-container
+          #search-input.row
+            .col-md-12
+              .input-group.input-group-lg
+                span.input-group-addon
+                  i.fa.fa-search
+                input#list-search-input.form-control(type="text", placeholder="Type to search by title")
+          .row
+            .col-xs-12
+              #vocablist-container

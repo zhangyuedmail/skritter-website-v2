@@ -5,6 +5,10 @@ gelato-page[data-name='vocablists-published'] {
   background: $background-primary;
   padding-top: 75px;
 
+  #search-input {
+    margin-bottom: 25px;
+  }
+
   #vocablist-container {
     margin-left: -25px;
     margin-right: -25px;
