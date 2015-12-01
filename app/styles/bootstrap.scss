@@ -19,6 +19,8 @@
 }
 .btn-success {
   background-color: $green5;
+  transition: 0.2s all;
+  &:hover { background-color: $green7; }
   &:hover { background-color: $green6; }
 }
 
