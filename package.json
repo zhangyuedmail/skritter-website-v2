@@ -26,19 +26,19 @@
     "web-watch": "./node_modules/.bin/brunch watch --server"
   },
   "dependencies": {
-    "bower": "1.6.6",
-    "brunch": "1.8.5",
-    "chai": "3.4.1",
-    "cordova": "5.4.1",
-    "mocha": "2.3.4",
-    "mocha-phantomjs": "4.0.1",
-    "auto-reload-brunch": "1.8.1",
-    "clean-css-brunch": "1.8.0",
-    "css-brunch": "1.7.0",
-    "jade-brunch": "1.8.2",
-    "javascript-brunch": "1.8.0",
-    "replace-brunch": "0.1.0",
-    "sass-brunch": "1.9.1",
-    "uglify-js-brunch": "1.7.8"
+    "bower": "~1.6.0",
+    "brunch": "~1.8.0",
+    "chai": "~3.4.0",
+    "cordova": "~5.4.0",
+    "mocha": "~2.3.0",
+    "mocha-phantomjs": "~4.0.0",
+    "auto-reload-brunch": "~1.8.0",
+    "clean-css-brunch": "~1.8.0",
+    "css-brunch": "~1.7.0",
+    "jade-brunch": "~1.8.0",
+    "javascript-brunch": "~1.8.0",
+    "replace-brunch": "jernung/replace-brunch#v0.1.0",
+    "sass-brunch": "~1.9.0",
+    "uglify-js-brunch": "~1.7.0"
   }
 }

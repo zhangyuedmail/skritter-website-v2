@@ -1,9 +1,6 @@
 var application = require('./package.json');
 
 exports.config = {
-    conventions: {
-        vendor: /^(bower_components|node_modules|vendor)/
-    },
     files: {
         javascripts: {
             joinTo: {
@@ -12,7 +9,6 @@ exports.config = {
                 'js/test.js': /^test[\\/]/
             },
             order: {
-                after: ['test/mocha/mocha-2.3.4.js'],
                 before: [
                     'bower_components/jquery/dist/jquery.js',
                     'bower_components/lodash/lodash.js',
@@ -27,7 +23,8 @@ exports.config = {
                     'bower_components/mocha/mocha.js',
                     'bower_components/moment/moment.js',
                     'bower_components/moment-timezone/moment-timezone.js',
-                    'vendor/jquery/jquery.mobile-1.4.5.js', 'vendor/jquery/jquery.ui-1.11.4.js',
+                    'vendor/jquery/jquery.mobile-1.4.5.js',
+                    'vendor/jquery/jquery.ui-1.11.4.js',
                     'vendor/bootstrap/bootstrap.datetimepicker-4.15.37.js',
                     'vendor/bootstrap/bootstrap.notify-3.1.5.js',
                     'vendor/bootstrap/bootstrap.switch-3.3.2.js',

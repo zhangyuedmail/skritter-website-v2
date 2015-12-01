@@ -3,18 +3,18 @@
   "description": "Learn to write Chinese and Japanese characters.",
   "private": true,
   "dependencies": {
-    "async": "1.5.0",
-    "bootstrap": "3.3.6",
-    "chai": "3.4.1",
+    "async": "~1.5.0",
+    "bootstrap": "~3.3.0",
+    "chai": "~3.4.0",
     "createjs-easel": "CreateJS/EaselJS#0.8.1",
     "createjs-tween": "CreateJS/TweenJS#0.6.1",
-    "d3": "3.5.9",
-    "fontawesome": "4.5.0",
-    "gelato": "0.1.0",
-    "mocha": "2.3.4",
-    "moment": "2.10.6",
-    "moment-timezone": "0.4.1",
-    "raygun4js": "2.0.3"
+    "d3": "~3.5.0",
+    "fontawesome": "~4.5.0",
+    "gelato": "jernung/gelato#v0.1.0",
+    "mocha": "~2.3.0",
+    "moment": "~2.10.0",
+    "moment-timezone": "~0.4.0",
+    "raygun4js": "~2.0.0"
   },
   "overrides": {
     "backbone": {
