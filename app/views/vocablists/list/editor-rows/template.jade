@@ -12,10 +12,11 @@ gelato-component(data-name='vocablists-list-editor-rows')
             - var vocab1 = row.vocabs[0];
             - var vocab2 = row.vocabs[1];
 
-            .col-xs-2.vocab-writing
-              if (vocablist.isEditable())
+            .col-xs-1
+              if view.editing && vocablist.isEditable()
                 i.fa.fa-ellipsis-v.ellipse-icon
-                | &nbsp;&nbsp;&nbsp;&nbsp;
+
+            .col-xs-2.vocab-writing
               span(class=vocab1.getFontClass())= vocab1.get('writing')
 
             .col-xs-2.vocab-writing
@@ -28,11 +29,12 @@ gelato-component(data-name='vocablists-list-editor-rows')
 
             .col-xs-3.vocab-definition!= vocab1.getDefinition()
 
-            .col-xs-3.vocab-options.text-right
+            .col-xs-2.vocab-options.text-right
               if row.results && row.results.length > 1
                 button.show-results.btn.btn-sm.btn-info All Results
                 | &nbsp;&nbsp;
-              i.remove-row.fa.fa-trash
+              if view.editing && vocablist.isEditable()
+                i.remove-row.fa.fa-trash
 
             if row.results
               .result-rows.hidden
@@ -53,25 +55,28 @@ gelato-component(data-name='vocablists-list-editor-rows')
                     .vocab-definition!= vocab1.getDefinition()
 
         when 'not-found'
-          .col-xs-8= row.query + ' not found.'
+          .col-xs-1
+          .col-xs-7= row.query + ' not found.'
           .col-xs-4.text-right
             button.btn.btn-sm.btn-warning Add Entry
             | &nbsp;&nbsp;&nbsp;
             i.remove-row.fa.fa-trash
 
         default
-          .col-xs-12.loading-row
+          .col-xs-1
+          .col-xs-11.loading-row
             i.fa.fa-refresh.fa-spin
             | &nbsp;&nbsp;
             span= 'searching for ' + row.query
 
   if vocablistSection.state === 'standby'
     .row
+      .col-xs-1.row-header
       .col-xs-2.row-header.writing Writing
       .col-xs-2.row-header
       .col-xs-2.row-header.reading Reading
       .col-xs-3.row-header.definition Definition
-      .col-xs-3.row-header
+      .col-xs-2.row-header
     #vocablist-section-rows
       for row, index in rows
         +wordRow(row, index)

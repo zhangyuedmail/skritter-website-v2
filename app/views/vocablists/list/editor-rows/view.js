@@ -15,12 +15,12 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function(options) {
         this.changed = false;
+        this.editing = false;
         this.rows = [];
         this.saved = [];
         this.vocablist = options.vocablist;
         this.vocablistSection = options.vocablistSection;
-        this.listenTo(this.vocablist, 'change:sections', this.render);
-        this.listenTo(this.vocablistSection, 'change:vocabs', this.render);
+        this.listenTo(this.vocablistSection, 'state', this.render);
     },
     /**
      * @property events
@@ -62,16 +62,18 @@ module.exports = GelatoComponent.extend({
                     return vocab.getBase();
                 });
                 for (var writing in groups) {
-                    var group = groups[writing];
-                    if (group[0].isJapanese()) {
-                        for (var a = 0, lengthA = group.length; a < lengthA; a++) {
-                            results.push({vocabs: [group[a], group[a]]});
-                        }
-                    } else if (group.length === 1) {
-                        results.push({vocabs: [group[0], group[0]]});
-                    } else {
-                        for (var b = 1, lengthB = group.length; b < lengthB; b++) {
-                            results.push({vocabs: [group[0], group[b]]});
+                    if (groups.hasOwnProperty(writing)) {
+                        var group = groups[writing];
+                        if (group[0].isJapanese()) {
+                            for (var a = 0, lengthA = group.length; a < lengthA; a++) {
+                                results.push({vocabs: [group[a], group[a]]});
+                            }
+                        } else if (group.length === 1) {
+                            results.push({vocabs: [group[0], group[0]]});
+                        } else {
+                            for (var b = 1, lengthB = group.length; b < lengthB; b++) {
+                                results.push({vocabs: [group[0], group[b]]});
+                            }
                         }
                     }
                 }

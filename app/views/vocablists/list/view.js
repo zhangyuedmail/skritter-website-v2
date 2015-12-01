@@ -64,8 +64,9 @@ module.exports = GelatoPage.extend({
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
         'vclick #add-section': 'handleClickAddSection',
+        'vclick #discard-changes': 'handleClickDiscardChanges',
         'vclick #edit-list': 'handleClickEditList',
-        'vclick #save-sections': 'handleClickSaveSections'
+        'vclick #save-changes': 'handleClickSaveChanges'
     },
     /**
      * @property title
@@ -99,6 +100,15 @@ module.exports = GelatoPage.extend({
         event.preventDefault();
         this.vocablist.get('sections').push({rows: []});
         this.editor.render();
+    },
+    /**
+     * @method handleClickDiscardChanges
+     * @param {Event} event
+     */
+    handleClickDiscardChanges: function(event) {
+        event.preventDefault();
+        this.editing = false;
+        this.editor.editing = false;
         this.render();
     },
     /**
@@ -107,36 +117,30 @@ module.exports = GelatoPage.extend({
      */
     handleClickEditList: function(event) {
         event.preventDefault();
-        if (this.editing) {
-            this.editing = false;
-            this.editor.editing = false;
-            this.editor.$('#vocablist-sections')
-                .children('.row')
-                .each((function(index, element) {
-                    var name = $(element).find('#section-name').val();
-                    var section = this.vocablist.get('sections')[index];
-                    section.name = name;
-                }).bind(this));
-            this.vocablist.set({
-                description: this.$('.list-description').val(),
-                name: this.$('.list-name').val()
-            }).save(null, {patch: true});
-        } else {
-            this.editing = true;
-            this.editor.editing = true;
-        }
-        this.editor.render();
+        this.editing = true;
+        this.editor.editing = true;
         this.render();
     },
     /**
-     * @method handleClickSaveSections
+     * @method handleClickSaveChanges
      * @param {Event} event
      */
-    handleClickSaveSections: function(event) {
+    handleClickSaveChanges: function(event) {
         event.preventDefault();
+        this.editing = false;
         this.editor.editing = false;
-        this.editor.render();
-        this.vocablist.save();
+        this.editor.$('#vocablist-sections')
+            .children('.row')
+            .each((function(index, element) {
+                var name = $(element).find('#section-name').val();
+                var section = this.vocablist.get('sections')[index];
+                section.name = name;
+            }).bind(this));
+        this.vocablist.set({
+            description: this.$('.list-description').val(),
+            name: this.$('.list-name').val()
+        }).save(null, {patch: true});
+        this.render();
     },
     /**
      * @method handleKeydownAddInput

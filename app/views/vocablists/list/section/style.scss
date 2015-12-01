@@ -5,11 +5,9 @@ gelato-page[data-name='vocablists-list-section'] {
   background: $background-primary;
   padding-top: 75px;
 
-  #edit-section {
-    color: $green5;
-    cursor: pointer;
-    font-size: 28px;
-    margin-top: 20px;
+  #editing-buttons {
+    margin-top: 35px;
+    button { margin-right: 15px; }
   }
 
   #input-row {

@@ -26,22 +26,24 @@ gelato-page(data-name='vocablists-list-section')
                       i.fa.fa-angle-left
                       | &nbsp;
                       span= vocablist.get('name')
-                  if view.editing
+                  if editor.editing
                     input#section-name(value=vocablistSection.get('name'))
                   else
                     #section-name= vocablistSection.get('name') || '(empty)'
                 .col-xs-6.text-right
-                  i#edit-section.fa.fa-pencil
+                  #editing-buttons
+                    if editor.editing
+                      button#save-changes.btn.btn-success
+                        i.fa.fa-save &nbsp;Save&nbsp;
+                      button#discard-changes.btn.btn-danger
+                        i.fa.fa-close &nbsp;Discard&nbsp;
+                    else
+                      button#edit-section.btn.btn-success
+                        i.fa.fa-pencil &nbsp;Edit&nbsp;
 
             #editor-container
 
-            if vocablist.isEditable()
+            if editor.editing && vocablist.isEditable()
               #input-row.row
                 .col-xs-12
                   input#add-input(type='text', placeholder='Type a word and hit enter')
-
-              .row
-                .col-xs-12.text-right
-                  button#discard-changes.btn.btn-fixed.btn-info Undo
-                  | &nbsp;&nbsp;&nbsp;
-                  button#save-changes.btn.btn-fixed.btn-success Save
