@@ -173,56 +173,34 @@ module.exports = GelatoComponent.extend({
      * @param {Object} [options]
      */
     loadRows: function(options) {
-        var rows = [];
-        async.eachSeries(
-            this.vocablistSection.get('rows'),
-            _.bind(function(row, callback) {
-                row.vocabs = new Array(2);
-                row.state = 'loading';
-                async.series([
-                    function(callback) {
-                        new Vocab({id: row.vocabId}).fetch({
-                            data: {},
-                            error: function(error) {
-                                callback(error);
-                            },
-                            success: function(model) {
-                                row.lang = model.get('lang');
-                                row.vocabs[0] = model;
-                                callback();
-                            }
-                        });
+        var rows = this.vocablistSection.get('rows');
+        var uniqueVocabIds = this.vocablistSection.getUniqueVocabIds();
+        var vocabs = new Vocabs();
+        async.each(
+            _.chunk(uniqueVocabIds, 50),
+            _.bind(function(chunk, callback) {
+                vocabs.fetch({
+                    data: {
+                        ids: chunk.join('|')
                     },
-                    function(callback) {
-                        if (!row.vocabs[0].isJapanese() && row.tradVocabId !== row.vocabId) {
-                            new Vocab({id: row.tradVocabId}).fetch({
-                                data: {},
-                                error: function(error) {
-                                    callback(error);
-                                },
-                                success: function(model) {
-                                    row.vocabs[1] = model;
-                                    callback();
-                                }
-                            });
-                        } else {
-                            row.vocabs[1] = row.vocabs[0];
-                            callback();
-                        }
-                    }
-                ], function(error) {
-                    if (error) {
-                        row.state = 'error';
+                    remove: false,
+                    error: function(error) {
                         callback(error);
-                    } else {
-                        row.id = row.vocabId + '-' + row.tradVocabId;
-                        row.state = 'loaded';
-                        rows.push(row);
-                        callback();
+                    },
+                    success: function(vocabs) {
+                        callback()
                     }
                 });
             }, this),
             _.bind(function(error) {
+                rows.forEach(function(row) {
+                    var vocab1 = vocabs.get(row.vocabId);
+                    var vocab2 = vocabs.get(row.tradVocabId) || vocab1;
+                    row.id = row.vocabId + '-' + row.tradVocabId;
+                    row.lang = vocab1.get('lang');
+                    row.state = 'loaded';
+                    row.vocabs = [vocab1, vocab2];
+                });
                 this.rows = _.clone(rows);
                 this.saved = _.clone(rows);
                 if (error) {
