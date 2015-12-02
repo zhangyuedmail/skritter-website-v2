@@ -9,6 +9,7 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
     font-weight: 300;
     padding: 10px 25px;
     border-top: 1px solid $white5;
+    &.banned { color: $grade1 !important; }
     &.odd { background-color: $white2; }
     &.even { background-color: $white1; }
     .ellipse-icon {

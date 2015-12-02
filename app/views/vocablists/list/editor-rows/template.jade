@@ -4,13 +4,22 @@ gelato-component(data-name='vocablists-list-editor-rows')
   - var vocablistSection = view.vocablistSection;
 
   mixin wordRow(row, index)
-    .row(class=index % 2 ? 'even' : 'odd', data-index=index, data-row-id=row.id)
+    - var classes = [];
+    - var vocab1 = row.vocabs[0];
+    - var vocab2 = row.vocabs[1];
+
+    if vocab1.isBanned() || vocab2.isBanned()
+      - classes.push('banned');
+
+    if index % 2
+      - classes.push('even');
+    else
+      - classes.push('odd');
+
+    .row(class=classes.join(' '), data-index=index, data-row-id=row.id)
       case row.state
 
         when 'loaded'
-          if row.vocabs.length
-            - var vocab1 = row.vocabs[0];
-            - var vocab2 = row.vocabs[1];
 
             .col-xs-1
               if view.editing && vocablist.isEditable()
