@@ -14,7 +14,7 @@
     "mocha": "~2.3.0",
     "moment": "~2.10.0",
     "moment-timezone": "~0.4.0",
-    "raygun4js": "~2.0.0"
+    "raygun4js": "~2.1.0"
   },
   "overrides": {
     "backbone": {
