@@ -1,4 +1,4 @@
-@import "variables";
+@import "_variables";
 
 
 /*** BUTTONS ***/
@@ -36,9 +36,12 @@
 
 
 /*** INPUT ***/
+input, select, textarea {
+  border-radius: 0 !important;
+}
 select {
-  border: 0;
-  outline: 1px solid #cccccc;
+  border: 0 !important;
+  outline: 1px solid #cccccc !important;
 }
 
 
