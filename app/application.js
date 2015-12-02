@@ -226,7 +226,7 @@ module.exports = GelatoApplication.extend({
         HS.beacon.userConfig = {
             color: '#32a8d9',
             icon: 'question',
-            modal: false
+            modal: true
         };
         HS.beacon.ready(function(beacon) {
             if (this.user.isLoggedIn()) {
