@@ -32,14 +32,15 @@ gelato-page(data-name='vocablists-list-section')
                     #section-name= vocablistSection.get('name') || '(empty)'
                 .col-xs-6.text-right
                   #editing-buttons
-                    if editor.editing
-                      button#save-changes.btn.btn-success
-                        i.fa.fa-save &nbsp;Save&nbsp;
-                      button#discard-changes.btn.btn-danger
-                        i.fa.fa-close &nbsp;Discard&nbsp;
-                    else
-                      button#edit-section.btn.btn-success
-                        i.fa.fa-pencil &nbsp;Edit&nbsp;
+                    if vocablist.isEditable()
+                      if editor.editing
+                        button#save-changes.btn.btn-success
+                          i.fa.fa-save &nbsp;Save&nbsp;
+                        button#discard-changes.btn.btn-danger
+                          i.fa.fa-close &nbsp;Discard&nbsp;
+                      else
+                        button#edit-section.btn.btn-success
+                          i.fa.fa-pencil &nbsp;Edit&nbsp;
 
             #editor-container
 
