@@ -2,7 +2,17 @@ gelato-component(data-name='vocablists-list-section-editor')
   - var vocablist = view.vocablist;
 
   mixin sectionRow(section, index)
-    .row(class=index % 2 ? 'even' : 'odd', data-index=index, data-section-id=section.id)
+    - var classes = [];
+
+    if index % 2
+      - classes.push('event');
+    else
+      - classes.push('odd');
+
+    if index === vocablist.get('sections').length - 1
+      - classes.push('last-section');
+
+    .row(class=classes.join(' '), data-index=index, data-section-id=section.id)
       if section.deleted
         .col-xs-6
           span= '(deleted)'

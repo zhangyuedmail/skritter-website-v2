@@ -98,8 +98,7 @@ module.exports = GelatoPage.extend({
      */
     handleClickAddSection: function(event) {
         event.preventDefault();
-        this.vocablist.get('sections').push({rows: []});
-        this.editor.render();
+        this.editor.addSection();
     },
     /**
      * @method handleClickDiscardChanges

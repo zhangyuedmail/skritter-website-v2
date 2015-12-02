@@ -23,8 +23,9 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
+        'vclick #restore-section': 'handleClickRestoreSection',
         'vclick #remove-section': 'handleClickRemoveSection',
-        'vclick #restore-section': 'handleClickRestoreSection'
+        'keyup .last-section': 'handleKeyupLastSection'
     },
     /**
      * @property template
@@ -37,36 +38,15 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
+        return this;
     },
     /**
      * @method addSection
-     * @param {String} name
+     * @param {String} [name]
      */
     addSection: function(name) {
         this.vocablist.get('sections').push({name: name, rows: []});
-        this.render();
-    },
-    /**
-     * @method addWord
-     * @param {String} query
-     */
-    addWord: function(query) {
-        var vocab = new Vocab({q: query});
-        this.vocablistSection.get('vocabs').push(vocab);
-        vocab.fetch({
-            data: {q: query},
-            error: function(a, b) {},
-            success: _.bind(function(model) {
-                var vocabs = model.get('Vocabs');
-                if (vocabs.length) {
-                    model.set('vocabId', vocabs[0].vocabId);
-                    model.set('tradVocabId', vocabs[0].tradVocabId);
-                    model.set(vocabs[0], {merge: true});
-                }
-                this.render();
-            }, this)
-        });
-        this.render();
+        this.render().$('.last-section').find('input').focus();
     },
     /**
      * @method handleClickRemoveSection
@@ -87,5 +67,15 @@ module.exports = GelatoComponent.extend({
         var $row = $(event.target).closest('.row');
         this.vocablist.get('sections')[$row.data('index')].deleted = false;
         this.render();
+    },
+    /**
+     * @method handleKeyupLastSection
+     * @param {Event} event
+     */
+    handleKeyupLastSection: function(event) {
+        event.preventDefault();
+        if (event.which === 13 || event.keyCode === 13) {
+            this.addSection();
+        }
     }
 });
