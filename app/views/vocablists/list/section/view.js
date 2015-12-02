@@ -131,6 +131,10 @@ module.exports = GelatoPage.extend({
         this.vocablistSection.set('name', this.$('#section-name').val());
         this.vocablistSection.set('rows', this.editor.rows);
         this.vocablistSection.save();
+        //remove all results button
+        this.editor.rows.forEach(function(row) {
+            delete row.results;
+        });
         this.render();
     },
     /**
