@@ -9,7 +9,10 @@ gelato-component[data-name='dashboard-month'] {
     .cal-heatmap-container { margin: 25px auto; }
     .graph-label,
     .graph-legend { display: none; }
-    .graph-rect { cursor: pointer; }
+    .graph-rect {
+      cursor: inherit;
+      &:hover { stroke: none; }
+    }
     .q1 {
       background-color: #ededed;
       fill: #ededed
@@ -30,6 +33,7 @@ gelato-component[data-name='dashboard-month'] {
       background-color: #3b6427;
       fill: #3b6427
     }
+    .subdomain-text { fill: $grey3; }
   }
 
   #streak {
