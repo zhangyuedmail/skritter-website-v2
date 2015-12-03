@@ -7,6 +7,8 @@
   border-radius: 50px;
   font-family: $font-ubuntu;
   font-weight: 300;
+  outline: none !important;
+  transition: 0.2s all;
 }
 .btn-fixed {
   height: 50px;
@@ -19,7 +21,6 @@
 }
 .btn-success {
   background-color: $green5;
-  transition: 0.2s all;
   &:hover { background-color: $green7; }
   &:hover { background-color: $green6; }
 }
