@@ -87,7 +87,6 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     render: function() {
-        console.log('rendering prompt');
         this.renderTemplate();
         this.canvas.setElement('#canvas-container');
         this.toolbarAction.setElement('#toolbar-action-container');
