@@ -29,6 +29,7 @@ module.exports = GelatoComponent.extend({
     initialize: function() {
         //properties
         this.editing = false;
+        this.loaded = false;
         this.part = null;
         this.reviews = null;
         //components
@@ -86,6 +87,7 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     render: function() {
+        console.log('rendering prompt');
         this.renderTemplate();
         this.canvas.setElement('#canvas-container');
         this.toolbarAction.setElement('#toolbar-action-container');
@@ -1133,7 +1135,10 @@ module.exports = GelatoComponent.extend({
         console.info('PROMPT:', reviews.part, reviews.vocab.id, reviews);
         this.part = reviews.part;
         this.reviews = reviews;
-        this.render();
+        if (!this.loaded) {
+            this.loaded = true;
+            this.render();
+        }
         this.renderPromptLoad();
         this.renderPrompt();
         return this;
