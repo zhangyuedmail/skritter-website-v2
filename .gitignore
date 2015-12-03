@@ -2,7 +2,12 @@
 /.idea
 /.sass-cache
 /bower_components
-/cordova
+/cordova/chinese/platforms
+/cordova/chinese/plugins
+/cordova/chinese/www
+/cordova/japanese/platforms
+/cordova/japanese/plugins
+/cordova/japanese/www
 /nbproject
 /node_modules
 /public
