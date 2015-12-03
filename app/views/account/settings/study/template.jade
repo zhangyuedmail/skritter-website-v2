@@ -39,36 +39,48 @@ gelato-page(data-name='account-settings-study')
               .form-group
                 label.col-sm-3.control-label(for="field-parts") Parts studying
                 .col-sm-9#field-parts
-                  label.checkbox-inline
-                    input(type="checkbox", name="parts", value="rune", checked=user.hasStudyPart('rune'))
-                    | Writing
+                  .checkbox-inline
+                    label
+                      input(type="checkbox", name="parts", value="rune", checked=user.hasStudyPart('rune'))
+                      | Writing
                   if (app.getLanguage() === 'zh')
-                    label.checkbox-inline
-                      input(type="checkbox", name="parts", value="tone", checked=user.hasStudyPart('tone'))
-                      | Tone
-                  label.checkbox-inline
-                    input(type="checkbox", name="parts", value="rdng", checked=user.hasStudyPart('rdng'))
-                    | Reading
-                  label.checkbox-inline
-                    input(type="checkbox", name="parts", value="defn", checked=user.hasStudyPart('defn'))
-                    | Definition
+                    .checkbox-inline
+                      label
+                        input(type="checkbox", name="parts", value="tone", checked=user.hasStudyPart('tone'))
+                        | Tone
+                  .checkbox-inline
+                    label
+                      input(type="checkbox", name="parts", value="rdng", checked=user.hasStudyPart('rdng'))
+                      | Reading
+                  .checkbox-inline
+                    label
+                      input(type="checkbox", name="parts", value="defn", checked=user.hasStudyPart('defn'))
+                      | Definition
               if (app.getLanguage() === 'ja')
                 .form-group
                   label.col-sm-3.control-label(for="field-study-kana") Study kana
                   .col-sm-9
-                    input#field-study-kana(type="checkbox", checked=user.get('studyKana'))
+                    .checkbox
+                      label
+                        input#field-study-kana(type="checkbox", checked=user.get('studyKana'))
                 .form-group
                   label.col-sm-3.control-label(for="field-study-rare-writings") Study uncommon kanji
                   .col-sm-9
-                    input#field-study-kana(type="checkbox", checked=user.get('studyRareWritings'))
+                    .checkbox
+                      label
+                        input#field-study-kana(type="checkbox", checked=user.get('studyRareWritings'))
               .form-group
                 label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords
                 .col-sm-9
-                  input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
+                  .checkbox
+                    label
+                      input#field-heisig(type="checkbox", checked=user.get('showHeisig'))
               .form-group
                 label.col-sm-3.control-label(for="field-add-contained") Also add characters when adding words
                 .col-sm-9
-                  input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
+                  .checkbox
+                    label
+                      input#field-add-contained(type="checkbox", checked=user.get('autoAddComponentCharacters'))
 
               hr
 
