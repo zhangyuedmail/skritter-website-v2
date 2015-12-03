@@ -288,6 +288,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartRune: function() {
         this.canvas.reset();
+        this.canvas.enableGrid();
         this.canvas.redrawCharacter();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
@@ -372,6 +373,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartTone: function() {
         this.canvas.reset();
+        this.canvas.disableGrid();
         this.canvas.redrawCharacter();
         this.canvas.showCharacterReveal();
         if (this.review.isComplete()) {
@@ -1135,10 +1137,7 @@ module.exports = GelatoComponent.extend({
         console.info('PROMPT:', reviews.part, reviews.vocab.id, reviews);
         this.part = reviews.part;
         this.reviews = reviews;
-        if (!this.loaded) {
-            this.loaded = true;
-            this.render();
-        }
+        this.render();
         this.renderPromptLoad();
         this.renderPrompt();
         return this;
