@@ -1111,6 +1111,7 @@ module.exports = GelatoComponent.extend({
      */
     reset: function() {
         this.editing = false;
+        this.loaded = false;
         this.part = null;
         this.review = null;
         this.reviews = null;
