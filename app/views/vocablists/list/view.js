@@ -128,17 +128,9 @@ module.exports = GelatoPage.extend({
         event.preventDefault();
         this.editing = false;
         this.editor.editing = false;
-        this.editor.$('#vocablist-sections')
-            .children('.row')
-            .each((function(index, element) {
-                var name = $(element).find('#section-name').val();
-                var section = this.vocablist.get('sections')[index];
-                section.name = name;
-            }).bind(this));
-        this.vocablist.set({
-            description: this.$('.list-description').val(),
-            name: this.$('.list-name').val()
-        }).save(null, {patch: true});
+        this.updateVocablist();
+        this.editor.updateVocablist();
+        this.vocablist.save(null, {patch: true});
         this.render();
     },
     /**
@@ -169,5 +161,14 @@ module.exports = GelatoPage.extend({
         this.navbar.remove();
         this.sidebar.remove();
         return GelatoPage.prototype.remove.call(this);
+    },
+    /**
+     * @method updateVocablist
+     */
+    updateVocablist: function() {
+        this.vocablist.set({
+            description: this.$('.list-description').val(),
+            name: this.$('.list-name').val()
+        });
     }
 });

@@ -75,7 +75,20 @@ module.exports = GelatoComponent.extend({
     handleKeyupLastSection: function(event) {
         event.preventDefault();
         if (event.which === 13 || event.keyCode === 13) {
+            this.updateVocablist();
             this.addSection();
         }
+    },
+    /**
+     * @method updateVocablist
+     */
+    updateVocablist: function() {
+        this.$('#vocablist-sections')
+            .children('.row')
+            .each((function(index, element) {
+                var name = $(element).find('#section-name').val();
+                var section = this.vocablist.get('sections')[index];
+                section.name = name;
+            }).bind(this));
     }
 });
