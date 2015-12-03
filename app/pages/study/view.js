@@ -14,7 +14,7 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.counter = 1;
+        this.counter = 0;
         this.items = new Items();
         this.navbar = new DefaultNavbar();
         this.prompt = new Prompt();
@@ -74,7 +74,6 @@ module.exports = GelatoPage.extend({
         this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
         this.items.addReviews(reviews.getItemReviews());
         this.items.reviews.post();
-        this.counter++;
         this.next();
     },
     /**
