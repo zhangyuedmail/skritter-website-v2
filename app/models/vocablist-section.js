@@ -32,5 +32,14 @@ module.exports = SkritterModel.extend({
      */
     urlRoot: function() {
         return 'vocablists/' + this.vocablistId + '/sections';
+    },
+    /**
+     * @method getUniqueVocabIds
+     * @returns {Array}
+     */
+    getUniqueVocabIds: function() {
+        var vocabIds = _.pluck(this.get('rows'), 'vocabId');
+        var tradVocabIds = _.pluck(this.get('rows'), 'tradVocabId');
+        return _.uniq(vocabIds.concat(tradVocabIds));
     }
 });

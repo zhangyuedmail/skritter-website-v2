@@ -14,44 +14,53 @@ bootstrap-dialog(data-name='study-settings')
             .form-group
               label.col-sm-3.control-label(for="field-parts") Filter parts
               .col-sm-9#field-parts
-                label.checkbox-inline
-                  input(type="checkbox", name="parts", value="rune", checked=user.hasFilteredPart('rune'))
-                  | Writing
+                .checkbox-inline
+                  label
+                    input(type="checkbox", name="parts", value="rune", checked=user.hasFilteredPart('rune'))
+                    | Writing
                 if (app.getLanguage() === 'zh')
-                  label.checkbox-inline
-                    input(type="checkbox", name="parts", value="tone", checked=user.hasFilteredPart('tone'))
-                    | Tone
-                label.checkbox-inline
-                  input(type="checkbox", name="parts", value="rdng", checked=user.hasFilteredPart('rdng'))
-                  | Reading
-                label.checkbox-inline
-                  input(type="checkbox", name="parts", value="defn", checked=user.hasFilteredPart('defn'))
-                  | Definition
+                  .checkbox-inline
+                    label
+                      input(type="checkbox", name="parts", value="tone", checked=user.hasFilteredPart('tone'))
+                      | Tone
+                .checkbox-inline
+                  label
+                    input(type="checkbox", name="parts", value="rdng", checked=user.hasFilteredPart('rdng'))
+                    | Reading
+                .checkbox-inline
+                  label
+                    input(type="checkbox", name="parts", value="defn", checked=user.hasFilteredPart('defn'))
+                    | Definition
             .form-group
               label.col-sm-3.control-label(for="field-hide-reading") Hide reading
               .col-sm-9#field-hide-reading
-                label.checkbox-inline
-                  input(type="checkbox", checked=user.get('hideReading'))
+                .checkbox
+                  label
+                    input(type="checkbox", checked=user.get('hideReading'))
             .form-group
               label.col-sm-3.control-label(for="field-hide-definition") Hide definition
               .col-sm-9#field-hide-definition
-                label.checkbox-inline
-                  input(type="checkbox", checked=user.get('hideDefinition'))
+                .checkbox
+                  label
+                    input(type="checkbox", checked=user.get('hideDefinition'))
             .form-group
               label.col-sm-3.control-label(for="field-squigs") Raw squigs
               .col-sm-9#field-squigs
-                label.checkbox-inline
-                  input(type="checkbox", checked=user.get('squigs'))
+                .checkbox
+                  label
+                    input(type="checkbox", checked=user.get('squigs'))
             .form-group
               label.col-sm-3.control-label(for="field-teaching-mode") Teaching mode
               .col-sm-9#field-teaching-mode
-                label.checkbox-inline
-                  input(type="checkbox", checked=user.get('teachingMode'))
+                .checkbox
+                  label
+                    input(type="checkbox", checked=user.get('teachingMode'))
             .form-group
               label.col-sm-3.control-label(for="field-audio") Audio
               .col-sm-9#field-audio
-                label.checkbox-inline
-                  input(type="checkbox", checked=user.isAudioEnabled())
+                .checkbox
+                  label
+                    input(type="checkbox", checked=user.isAudioEnabled())
 
           .text-right
             button#button-save.btn.btn-fixed.btn-primary(type='button') Save

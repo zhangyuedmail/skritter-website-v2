@@ -35,7 +35,6 @@ module.exports = GelatoPage.extend({
      * @returns {AccountSettingsGeneral}
      */
     render: function() {
-        console.log('rendering');
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
         $.ajax({
@@ -51,7 +50,7 @@ module.exports = GelatoPage.extend({
      */
     load: function() {
         mocha.setup('bdd');
-        require('test/specs/application');
+        require('test/index');
         mocha.checkLeaks();
         mocha.globals(['gaplugins']);
         mocha.run();

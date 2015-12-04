@@ -101,11 +101,10 @@ module.exports = GelatoApplication.extend({
      * @returns {String}
      */
     getStripeKey: function() {
-        return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc'; // TESTING
-        if (this.isTesting()) {
-            return 'pk_test_24FOCKPSEtJHVpcA3oErEw2I';
-        } else {
+        if (this.isProduction()) {
             return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc';
+        } else {
+            return 'pk_test_24FOCKPSEtJHVpcA3oErEw2I';
         }
     },
     /**
@@ -149,14 +148,6 @@ module.exports = GelatoApplication.extend({
         $('#application-loading').fadeOut(speed);
     },
     /**
-     * @method isAndroid
-     * @returns {Boolean}
-     */
-    isAndroid: function() {
-        // TODO: properly check if application is mobile
-        return false;
-    },
-    /**
      * @method isChinese
      * @returns {Boolean}
      */
@@ -169,38 +160,6 @@ module.exports = GelatoApplication.extend({
      */
     isJapanese: function() {
         return this.getLanguage() === 'ja';
-    },
-    /**
-     * @method isIOS
-     * @returns {Boolean}
-     */
-    isIOS: function() {
-        // TODO: properly check if application is mobile
-        return false;
-    },
-    /**
-     * @method isMobile
-     * @returns {Boolean}
-     */
-    isMobile: function() {
-        // TODO: properly check if application is mobile
-        return false;
-    },
-    /**
-     * @method isTesting
-     * @returns {String}
-     */
-    isTesting: function() {
-        // TODO: Get this to return the right thing
-        return _.contains(document.location.origin, 'localhost');
-    },
-    /**
-     * @method isWebsite
-     * @returns {String}
-     */
-    isWebsite: function() {
-        // TODO: Get this to return the right thing
-        return true;
     },
     /**
      * @method loadHelpscout
@@ -226,7 +185,7 @@ module.exports = GelatoApplication.extend({
         HS.beacon.userConfig = {
             color: '#32a8d9',
             icon: 'question',
-            modal: false
+            modal: true
         };
         HS.beacon.ready(function(beacon) {
             if (this.user.isLoggedIn()) {

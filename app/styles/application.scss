@@ -6,7 +6,9 @@ html, body {
   width: 100%;
 }
 
-bootstrap-dialog .modal { z-index: 9000; }
+bootstrap-dialog {
+  .modal { z-index: 9000; }
+}
 
 gelato-application {
   display: block;
@@ -16,3 +18,5 @@ gelato-application {
   position: relative;
   width: 100%;
 }
+
+.modal-backdrop { z-index: 8000; }

@@ -23,10 +23,10 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.vocablists, 'state', this.render);
         this.vocablists.fetch({
             data: {
-                limit: 20,
-                sort: 'published',
                 include_user_names: 'true',
-                lang: app.getLanguage()
+                lang: app.getLanguage(),
+                limit: 20,
+                sort: 'published'
             }
         });
     },
@@ -70,13 +70,42 @@ module.exports = GelatoComponent.extend({
         this.vocablists.fetch({
             data: {
                 cursor: this.vocablists.cursor,
-                limit: 20,
-                sort: 'published',
                 include_user_names: 'true',
-                lang: app.getLanguage()
+                lang: app.getLanguage(),
+                limit: 20,
+                sort: 'published'
             },
             remove: false
         });
+        this.render();
+    },
+    /**
+     * @method searchFor
+     * @param {String} value
+     */
+    searchFor: function(value) {
+        if (value) {
+            this.vocablists.fetch({
+                data: {
+                    include_user_names: 'true',
+                    lang: app.getLanguage(),
+                    sort: 'search',
+                    q: value
+                },
+                remove: true
+            });
+        } else {
+            this.vocablists.fetch({
+                data: {
+                    include_user_names: 'true',
+                    lang: app.getLanguage(),
+                    limit: 20,
+                    sort: 'published'
+                },
+                remove: true
+            });
+        }
+        this.vocablists.reset();
         this.render();
     }
 });

@@ -28,7 +28,16 @@ gelato-page(data-name='vocablists-list')
                   else
                     .list-name= vocablist.get('name')
                 .col-xs-6.text-right
-                  i#edit-list.fa.fa-pencil
+                  if vocablist.isEditable()
+                    #editing-buttons
+                      if editor.editing
+                        button#save-changes.btn.btn-success
+                          i.fa.fa-save &nbsp;Save&nbsp;
+                        button#discard-changes.btn.btn-danger
+                          i.fa.fa-close &nbsp;Discard&nbsp;
+                      else
+                        button#edit-list.btn.btn-success
+                          i.fa.fa-pencil &nbsp;Edit&nbsp;
 
               .list-stats
                 span.spr Made by:
@@ -70,10 +79,11 @@ gelato-page(data-name='vocablists-list')
 
             #editor-container
 
-            if vocablist.isEditable() && view.editing
-              #input-row.row
-                .col-xs-12
-                  button#add-section.btn.btn-success
-                    i.fa.fa-plus
-                    | &nbsp;&nbsp;
-                    | Add section
+            if !vocablist.get('singleSect')
+              if vocablist.isEditable() && view.editing
+                #input-row.row
+                  .col-xs-12
+                    button#add-section.btn.btn-success
+                      i.fa.fa-plus
+                      | &nbsp;&nbsp;
+                      | Add section

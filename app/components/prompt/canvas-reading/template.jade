@@ -4,7 +4,11 @@ gelato-component(data-name='prompt-canvas-reading')
 
   if prompt.part === 'rdng' && reviews
 
-    .question(class=reviews.isComplete() ? 'invisible' : '') What's the reading?
+    .question(class=reviews.isComplete() ? 'invisible' : '')
+      if reviews.isChinese()
+        | What's the pinyin?
+      else
+        | What's the pronunciation?
 
     if (reviews.isChinese())
       .writing.text-chinese= reviews.vocab.get('writing')

@@ -52,6 +52,9 @@ gelato-page[data-name='features'] {
 
   #section-top {
     margin-bottom: 50px;
+    .hero-image {
+      width: 75%;
+    }
     .title {
       color: #363b40;
       font-family: $font-slab;

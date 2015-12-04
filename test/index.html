@@ -16,13 +16,12 @@
 <script src="../public/js/libraries.js"></script>
 <script src="../public/js/application.js"></script>
 <script>
-    //require('initialize');
     initMochaPhantomJS();
     mocha.setup('bdd')
 </script>
 <script src="../public/js/test.js"></script>
 <script>
-    require('test/specs/application');
+    require('test/index');
     mocha.checkLeaks();
     mocha.run();
 </script>

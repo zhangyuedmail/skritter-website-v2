@@ -42,6 +42,18 @@ module.exports = GelatoPage.extend({
                     }
                 });
             }, this),
+            /**
+            _.bind(function(callback) {
+                this.vocablistSection.save({name: 'Section 3'}, {
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback();
+                    }
+                });
+            }, this),
+             **/
             _.bind(function(callback) {
                 this.editor.loadRows({
                     error: function(error) {
@@ -96,7 +108,9 @@ module.exports = GelatoPage.extend({
      */
     handleClickDiscardChanges: function(event) {
         event.preventDefault();
+        this.editor.editing = false;
         this.editor.discardChanges();
+        this.render();
     },
     /**
      * @method handleClickEditSection
@@ -104,13 +118,7 @@ module.exports = GelatoPage.extend({
      */
     handleClickEditSection: function(event) {
         event.preventDefault();
-        if (this.editing) {
-            this.editing = false;
-            this.vocablistSection.set('name', this.$('#section-name').val());
-            this.vocablistSection.save();
-        } else {
-            this.editing = true;
-        }
+        this.editor.editing = !this.editor.editing;
         this.render();
     },
     /**
@@ -119,8 +127,15 @@ module.exports = GelatoPage.extend({
      */
     handleClickSaveChanges: function(event) {
         event.preventDefault();
+        this.editor.editing = false;
+        this.vocablistSection.set('name', this.$('#section-name').val());
         this.vocablistSection.set('rows', this.editor.rows);
         this.vocablistSection.save();
+        //remove all results button
+        this.editor.rows.forEach(function(row) {
+            delete row.results;
+        });
+        this.render();
     },
     /**
      * @method handleKeydownAddInput

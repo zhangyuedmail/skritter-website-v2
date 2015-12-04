@@ -17,6 +17,7 @@ gelato-page[data-name='account-settings-general'] {
     input {
       border-radius: 0;
       height: 50px;
+      &[type="checkbox"] { height: auto; }
       &[type="email"],
       &[type="text"] {
         max-width: 300px;

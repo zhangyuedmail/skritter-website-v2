@@ -1,4 +1,4 @@
-@import "variables";
+@import "_variables";
 
 
 /*** BUTTONS ***/
@@ -7,19 +7,38 @@
   border-radius: 50px;
   font-family: $font-ubuntu;
   font-weight: 300;
+  outline: none !important;
+  transition: 0.2s all;
 }
 .btn-fixed {
   height: 50px;
   padding: 15px 0;
   width: 150px;
 }
+.btn-danger {
+  background-color: $gradeRed5;
+  &:active { background-color: $gradeRed7; }
+  &:hover { background-color: $gradeRed6; }
+}
 .btn-default {
   background-color: $white5;
+  &:active { background-color: $white7; }
   &:hover { background-color: $white6; }
+}
+.btn-info {
+  background-color: $gradeBlue5;
+  &:active { background-color: $gradeBlue7; }
+  &:hover { background-color: $gradeBlue6; }
 }
 .btn-success {
   background-color: $green5;
+  &:active { background-color: $green7; }
   &:hover { background-color: $green6; }
+}
+.btn-warning {
+  background-color: $gradeYellow5;
+  &:active { background-color: $gradeYellow7; }
+  &:hover { background-color: $gradeYellow6; }
 }
 
 
@@ -34,9 +53,12 @@
 
 
 /*** INPUT ***/
+input, select, textarea {
+  border-radius: 0 !important;
+}
 select {
-  border: 0;
-  outline: 1px solid #cccccc;
+  border: 0 !important;
+  outline: 1px solid #cccccc !important;
 }
 
 

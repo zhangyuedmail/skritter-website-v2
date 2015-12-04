@@ -5,6 +5,7 @@ gelato-component[data-name='account-sidebar'] {
   color: $white1;
   margin: 45px auto 0 auto;
   width: 180px;
+
   button {
     height: 50px;
     padding: 0 20px;
@@ -29,7 +30,8 @@ gelato-component[data-name='account-sidebar'] {
       }
 
       &.active {
-        color: $grey9;
+        color: $green5;
+        font-weight: 400;
       }
 
       .glyphicon {

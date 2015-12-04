@@ -29,6 +29,7 @@ module.exports = GelatoComponent.extend({
     initialize: function() {
         //properties
         this.editing = false;
+        this.loaded = false;
         this.part = null;
         this.reviews = null;
         //components
@@ -287,6 +288,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartRune: function() {
         this.canvas.reset();
+        this.canvas.enableGrid();
         this.canvas.redrawCharacter();
         if (this.review.isComplete()) {
             this.renderPromptComplete();
@@ -371,6 +373,7 @@ module.exports = GelatoComponent.extend({
      */
     renderPromptPartTone: function() {
         this.canvas.reset();
+        this.canvas.disableGrid();
         this.canvas.redrawCharacter();
         this.canvas.showCharacterReveal();
         if (this.review.isComplete()) {
@@ -1110,6 +1113,7 @@ module.exports = GelatoComponent.extend({
      */
     reset: function() {
         this.editing = false;
+        this.loaded = false;
         this.part = null;
         this.review = null;
         this.reviews = null;

@@ -4,6 +4,7 @@ gelato-component[data-name="prompt-toolbar-vocab"] {
 
   position: absolute;
   right: 30px;
+  z-index: 1000;
 
   i {
     cursor: pointer;

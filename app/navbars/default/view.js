@@ -11,6 +11,7 @@ module.exports = BootstrapNavbar.extend({
      * @type {Object}
      */
     events: {
+        'vclick #button-beacon': 'handleClickButtonBeacon',
         'vclick #button-logout': 'handleClickButtonLogout',
         'vclick .item-dropdown': 'handleClickDropdown'
     },
@@ -27,6 +28,16 @@ module.exports = BootstrapNavbar.extend({
         this.renderTemplate();
         this.$('[data-toggle="tooltip"]').tooltip();
         return this;
+    },
+    /**
+     * @method handleClickButtonBeacon
+     * @param {Event} event
+     */
+    handleClickButtonBeacon: function(event) {
+        event.preventDefault();
+        if (window.HS) {
+            HS.beacon.open();
+        }
     },
     /**
      * @method handleClickButtonLogout

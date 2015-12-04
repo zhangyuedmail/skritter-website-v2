@@ -36,7 +36,7 @@ gelato-page(data-name='account-settings-general')
               .form-group
                 label.col-sm-3.control-label(for="field-change-password") Password
                 .col-sm-9
-                  a#button-change-password(href="") Change password
+                  a#field-change-password(href="") Change password
               .form-group
                 label.col-sm-3.control-label(for="field-about") About me
                 .col-sm-9
@@ -44,10 +44,9 @@ gelato-page(data-name='account-settings-general')
               .form-group
                 label.col-sm-3.control-label(for="field-private") Private account
                 .col-sm-9
-                  if user.get('private')
-                    input#field-private(type="checkbox", checked="checked")
-                  else
-                    input#field-private(type="checkbox")
+                  .checkbox
+                    label
+                      input#field-private(type="checkbox", checked=user.get('private'))
 
               hr
 
