@@ -41,8 +41,7 @@ module.exports = GelatoPage.extend({
         if (app.user.isLoggedIn()) {
             this.$('#field-email').val(app.user.get('email'));
         }
-        this.footer.setElement('#footer-container');
-        this.footer.render();
+        this.footer.setElement('#footer-container').render();
         this.navbar.setElement('#navbar-container').render();
         return this;
     },
