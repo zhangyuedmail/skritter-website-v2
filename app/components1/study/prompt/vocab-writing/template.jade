@@ -1,0 +1,41 @@
+gelato-component(data-name='study-prompt-vocab-writing')
+  - var prompt = view.prompt;
+
+  if prompt.reviews
+    - var writings = prompt.reviews.vocab.getWritingObjects()
+    - var index = 0
+
+    if prompt.reviews.isChinese()
+      .text-chinese
+    else
+      .text-japanese
+
+    case prompt.reviews.part
+
+      when 'rune'
+        for character in writings
+          if (character.type === 'character')
+            - var review = prompt.reviews.at(index)
+            - var classes = []
+            if (prompt.reviews.position <= index && !review.get('complete'))
+              - classes.push('masked')
+            if (prompt.reviews.position === index)
+              - classes.push('active')
+            div.character(class=classes.join(' '), data-position=index)
+              span= character.value
+            - index++
+          else
+            div.filler
+              span= character.value
+
+      default
+        for character in writings
+          if (character.type === 'character')
+            - var review = prompt.reviews.at(index)
+            - var classes = []
+            div.character(class=classes.join(' '), data-position=index)
+              span= character.value
+            - index++
+          else
+            div.filler
+              span= character.value
