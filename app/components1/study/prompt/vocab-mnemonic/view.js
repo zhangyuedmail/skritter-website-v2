@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptVocabDefinition
+ * @class StudyPromptVocabMnemonic
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -19,7 +19,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #show-definition': 'handleClickShowDefinition'
+        'vclick #show-mnemonic': 'handleClickShowMnemonic'
     },
     /**
      * @property template
@@ -28,7 +28,7 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {StudyPromptVocabDefinition}
+     * @returns {StudyPromptVocabMnemonic}
      */
     render: function() {
         this.renderTemplate();
@@ -39,17 +39,15 @@ module.exports = GelatoComponent.extend({
      * @returns {Object}
      */
     getValue: function() {
-        return this.$('textarea').val();
+        return {text: this.$('textarea').val()}
     },
     /**
-     * @method handleClickShowDefinition
+     * @method handleClickShowMnemonic
      * @param {Event} event
      */
-    handleClickShowDefinition: function(event) {
+    handleClickShowMnemonic: function(event) {
         event.preventDefault();
-        this.prompt.reviews.forEach(function(review) {
-            review.set('showDefinition', true);
-        });
+        this.prompt.review.set('showMnemonic', true);
         this.render();
     }
 });

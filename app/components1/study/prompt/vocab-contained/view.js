@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptVocabDefinition
+ * @class StudyPromptVocabContained
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -11,7 +11,6 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.editing = false;
         this.prompt = options.prompt;
     },
     /**
@@ -19,7 +18,8 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #show-definition': 'handleClickShowDefinition'
+        'vclick .child-decomp': 'handleClickChildDecomp',
+        'vclick #show-contained': 'handleClickShowContained'
     },
     /**
      * @property template
@@ -28,28 +28,25 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {StudyPromptVocabDefinition}
+     * @returns {StudyPromptVocabContained}
      */
     render: function() {
         this.renderTemplate();
         return this;
     },
-    /**
-     * @method getValue
-     * @returns {Object}
-     */
-    getValue: function() {
-        return this.$('textarea').val();
+    handleClickChildDecomp: function(event) {
+        event.preventDefault();
+        console.log(event);
+        var $popup = $(event.currentTarget).find('.child-decomp-popup');
+        $popup.removeClass('hidden');
     },
     /**
-     * @method handleClickShowDefinition
+     * @method handleClickShowContained
      * @param {Event} event
      */
-    handleClickShowDefinition: function(event) {
+    handleClickShowContained: function(event) {
         event.preventDefault();
-        this.prompt.reviews.forEach(function(review) {
-            review.set('showDefinition', true);
-        });
+        this.prompt.review.set('showContained', true);
         this.render();
     }
 });

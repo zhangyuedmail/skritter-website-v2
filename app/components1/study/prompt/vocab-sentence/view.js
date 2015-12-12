@@ -1,7 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * @class StudyPromptVocabDefinition
+ * @class StudyPromptVocabSentence
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -11,7 +11,6 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function(options) {
-        this.editing = false;
         this.prompt = options.prompt;
     },
     /**
@@ -19,7 +18,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #show-definition': 'handleClickShowDefinition'
+        'vclick .value': 'handleClickValue'
     },
     /**
      * @property template
@@ -28,28 +27,25 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {StudyPromptVocabDefinition}
+     * @returns {StudyPromptVocabSentence}
      */
     render: function() {
         this.renderTemplate();
         return this;
     },
     /**
-     * @method getValue
-     * @returns {Object}
-     */
-    getValue: function() {
-        return this.$('textarea').val();
-    },
-    /**
-     * @method handleClickShowDefinition
+     * @method handleClickValue
      * @param {Event} event
      */
-    handleClickShowDefinition: function(event) {
+    handleClickValue: function(event) {
         event.preventDefault();
-        this.prompt.reviews.forEach(function(review) {
-            review.set('showDefinition', true);
-        });
-        this.render();
+        if (this.$('.hint').hasClass('open')) {
+            this.$('.hint').removeClass('open');
+            this.$('.hint').hide('slide', {direction: 'up'}, '500');
+        } else {
+            this.$('.hint').addClass('open');
+            this.$('.hint').show('slide', {direction: 'up'}, '500');
+        }
+
     }
 });

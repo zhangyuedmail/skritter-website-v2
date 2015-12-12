@@ -14,6 +14,26 @@ module.exports = GelatoComponent.extend({
         this.prompt = options.prompt;
     },
     /**
+     * @property buttonCorrect
+     * @type {Boolean}
+     */
+    buttonCorrect: true,
+    /**
+     * @property buttonErase
+     * @type {Boolean}
+     */
+    buttonErase: true,
+    /**
+     * @property buttonShow
+     * @type {Boolean}
+     */
+    buttonShow: true,
+    /**
+     * @property buttonTeach
+     * @type {Boolean}
+     */
+    buttonTeach: true,
+    /**
      * @property template
      * @type {Function}
      */

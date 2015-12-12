@@ -1,0 +1,32 @@
+@import "../../../../styles/_variables";
+
+gelato-component[data-name='study-prompt-vocab-sentence'] {
+
+
+  label {
+    color: $grey3;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .hint {
+    display: none;
+    font-family: $font-ubuntu;
+    .hint-definition {
+      font-size: 14px;
+      font-weight: 300;
+    }
+    .hint-reading {
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+
+  .value {
+    color: $grey3;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+}

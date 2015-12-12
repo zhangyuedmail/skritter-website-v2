@@ -1,0 +1,53 @@
+gelato-component(data-name='study-prompt-vocab-contained')
+  - var prompt = view.prompt;
+
+  if prompt.reviews
+    - var contained = prompt.reviews.vocab.getContained();
+
+    if !contained.length
+      - contained = [prompt.reviews.vocab];
+
+    if contained.length
+
+      hr
+
+      div.value
+        if prompt.review.get('showContained') || prompt.review.isComplete()
+
+          for vocab in contained
+            - var decomp = vocab.getDecomp();
+            - var definition = vocab.getDefinition();
+            - var mnemonic = vocab.getMnemonic();
+
+            .child-character
+
+              if contained.length > 1
+                .child-vocab-row
+                  span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= vocab.get('writing')
+                  | &nbsp;
+                  span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(vocab.get('reading')) : vocab.get('reading')
+
+              if decomp && !decomp.get('atomic')
+                .child-vocab-row
+                  label Decomposition
+                  for child in decomp.get('Children')
+                    .child-decomp
+                      span.decomp-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
+                      | &nbsp;
+                      span.decomp-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                      | &nbsp;
+                      span.decomp-definition= child.definitions.en
+
+              if contained.length > 1 && definition
+                .child-vocab-row
+                  label Definition
+                  .child-definition!= definition
+
+              if contained.length > 1 && mnemonic
+                .child-vocab-row
+                  label Mnemonic
+                  .child-mnemonic!= vocab.getMnemonic().text
+
+        else
+
+          button#show-contained.btn.btn-default show
