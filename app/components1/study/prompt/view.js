@@ -5,10 +5,15 @@ var PartDefn = require('components1/study/prompt/part-defn/view');
 var PartRdng = require('components1/study/prompt/part-rdng/view');
 var PartRune = require('components1/study/prompt/part-rune/view');
 var PartTone = require('components1/study/prompt/part-tone/view');
+var Shortcuts = require('components1/study/prompt/shortcuts');
 var ToolbarAction = require('components1/study/prompt/toolbar-action/view');
 var ToolbarGrading = require('components1/study/prompt/toolbar-grading/view');
+var ToolbarVocab = require('components1/study/prompt/toolbar-vocab/view');
+var VocabContained = require('components1/study/prompt/vocab-contained/view');
 var VocabDefinition = require('components1/study/prompt/vocab-definition/view');
+var VocabMnemonic = require('components1/study/prompt/vocab-mnemonic/view');
 var VocabReading = require('components1/study/prompt/vocab-reading/view');
+var VocabSentence = require('components1/study/prompt/vocab-sentence/view');
 var VocabStyle = require('components1/study/prompt/vocab-style/view');
 var VocabWriting = require('components1/study/prompt/vocab-writing/view');
 
@@ -22,19 +27,25 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
+        //properties
         this.$inputContainer = null;
         this.$panelLeft = null;
         this.$panelRight = null;
         this.review = null;
+        this.reviews = null;
+        //components
         this.canvas = new Canvas({prompt: this});
+        this.shortcuts = new Shortcuts({prompt: this});
         this.toolbarAction = new ToolbarAction({prompt: this});
         this.toolbarGrading = new ToolbarGrading({prompt: this});
+        this.toolbarVocab = new ToolbarVocab({prompt: this});
+        this.vocabContained = new VocabContained({prompt: this});
         this.vocabDefinition = new VocabDefinition({prompt: this});
+        this.vocabMnemonic = new VocabMnemonic({prompt: this});
         this.vocabReading = new VocabReading({prompt: this});
+        this.vocabSentence = new VocabSentence({prompt: this});
         this.vocabStyle = new VocabStyle({prompt: this});
         this.vocabWriting = new VocabWriting({prompt: this});
-        this.review = null;
-        this.reviews = null;
         this.on('resize', this.resize);
     },
     /**
@@ -54,18 +65,23 @@ module.exports = GelatoComponent.extend({
         this.canvas.setElement('#canvas-container').render();
         this.toolbarAction.setElement('#toolbar-action-container').render();
         this.toolbarGrading.setElement('#toolbar-grading-container').render();
+        this.toolbarVocab.setElement('#toolbar-vocab-container').render();
+        this.vocabContained.setElement('#vocab-contained-container').render();
         this.vocabDefinition.setElement('#vocab-definition-container').render();
+        this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
         this.vocabReading.setElement('#vocab-reading-container').render();
+        this.vocabSentence.setElement('#vocab-sentence-container').render();
         this.vocabStyle.setElement('#vocab-style-container').render();
         this.vocabWriting.setElement('#vocab-writing-container').render();
+        this.shortcuts.registerAll();
         this.resize();
         return this;
     },
     /**
-     * @method renderPrompt
+     * @method renderPart
      * @returns {StudyPrompt}
      */
-    renderPrompt: function() {
+    renderPart: function() {
         if (this.part) {
             this.part.remove();
         }
@@ -98,15 +114,44 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method next
+     */
+    next: function() {
+        if (this.reviews.isLast()) {
+            this.trigger('next', this.reviews);
+        } else {
+            this.reviews.next();
+            this.trigger('reviews:next', this.reviews);
+            this.renderPart();
+        }
+    },
+    /**
+     * @method previous
+     */
+    previous: function() {
+        if (this.reviews.isFirst()) {
+            this.trigger('previous', this.reviews);
+        } else {
+            this.reviews.previous();
+            this.trigger('reviews:previous', this.reviews);
+            this.renderPart();
+        }
+    },
+    /**
      * @method remove
      * @returns {StudyPrompt}
      */
     remove: function() {
         this.canvas.remove();
+        this.shortcuts.unregisterAll();
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
+        this.toolbarVocab.remove();
+        this.vocabContained.remove();
         this.vocabDefinition.remove();
+        this.vocabMnemonic.remove();
         this.vocabReading.remove();
+        this.vocabSentence.remove();
         this.vocabStyle.remove();
         this.vocabWriting.remove();
         return GelatoComponent.prototype.remove.call(this);
@@ -136,7 +181,7 @@ module.exports = GelatoComponent.extend({
     set: function(reviews) {
         console.info('PROMPT:', reviews);
         this.reviews = reviews;
-        this.renderPrompt();
+        this.renderPart();
         return this;
     }
 });

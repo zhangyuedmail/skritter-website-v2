@@ -17,7 +17,7 @@ gelato-component[data-name='study-prompt'] {
     height: 100%;
     left: 0;
     overflow: hidden;
-    padding: 30px;
+    padding: 62px 30px;
     position: absolute;
     top: 0;
     width: 50%;
@@ -27,7 +27,7 @@ gelato-component[data-name='study-prompt'] {
       overflow-y: hidden;
       width: 100%;
       #input-container {
-        background-color: $white3;
+        background-color: $white1;
         cursor: pointer;
         position: relative;
         z-index: 5000;
@@ -47,6 +47,17 @@ gelato-component[data-name='study-prompt'] {
           width: 100%;
           z-index: 5001;
         }
+        #toolbar-grading-container {
+          bottom: 0;
+          left: 0;
+          position: absolute;
+          width: 100%;
+          z-index: 5003;
+        }
+      }
+      #toolbar-action-container {
+        margin-bottom: 25px;
+        margin-top: 25px;
       }
     }
   }
@@ -67,6 +78,15 @@ gelato-component[data-name='study-prompt'] {
       overflow-y: auto;
       padding: 0 45px;
       width: 100%;
+      #vocab-definition-container {
+        margin-top: 30px;
+      }
+      #vocab-mnemonic-container {
+        margin-top: 30px;
+      }
+      #vocab-sentence-container {
+        margin-top: 30px;
+      }
       &::-webkit-scrollbar {
         background-color: transparent;
         width: 12px;
