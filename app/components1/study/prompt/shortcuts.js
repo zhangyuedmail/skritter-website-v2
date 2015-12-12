@@ -11,7 +11,7 @@ function StudyPromptShortcuts(options) {
     this.tone = new keypress.Listener();
 }
 /**
- * @method _handleGradingKeyup
+ * @method _handleActionAudio
  * @private
  */
 StudyPromptShortcuts.prototype._handleActionAudio = function() {
@@ -19,7 +19,7 @@ StudyPromptShortcuts.prototype._handleActionAudio = function() {
 };
 
 /**
- * @method _handleGradingKeyup
+ * @method _handleActionErase
  * @private
  */
 StudyPromptShortcuts.prototype._handleActionErase = function() {
@@ -33,7 +33,7 @@ StudyPromptShortcuts.prototype._handleActionErase = function() {
 };
 
 /**
- * @method _handleGradingKeyup
+ * @method _handleActionShow
  * @private
  */
 StudyPromptShortcuts.prototype._handleActionShow = function() {
@@ -97,7 +97,7 @@ StudyPromptShortcuts.prototype._handleGradingKeyup = function(value) {
 };
 
 /**
- * @method _handleGradingKeyup
+ * @method _handleGradingToggle
  * @private
  */
 StudyPromptShortcuts.prototype._handleGradingToggle = function() {
@@ -112,7 +112,7 @@ StudyPromptShortcuts.prototype._handleGradingToggle = function() {
 };
 
 /**
- * @method _handleGradingKeyup
+ * @method _handleNavigateNext
  * @private
  */
 StudyPromptShortcuts.prototype._handleNavigateNext = function() {
@@ -121,7 +121,7 @@ StudyPromptShortcuts.prototype._handleNavigateNext = function() {
 };
 
 /**
- * @method _handleGradingKeyup
+ * @method _handleNavigatePrevious
  * @private
  */
 StudyPromptShortcuts.prototype._handleNavigatePrevious = function() {
@@ -130,7 +130,7 @@ StudyPromptShortcuts.prototype._handleNavigatePrevious = function() {
 };
 
 /**
- * @method _handleGradingKeyup
+ * @method _handleNavigateReveal
  * @private
  */
 StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
@@ -166,26 +166,34 @@ StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
 };
 
 /**
- * @method _handleGradingKeyup
+ * @method _handleToneKeydown
+ * @param {Number} value
  * @private
  */
-StudyPromptShortcuts.prototype._handleToneKeydown = function() {
-    var character = this.review.character;
-    var possibleTones = this.review.getTones();
-    var expectedTone = character.getTone(possibleTones[0]);
+StudyPromptShortcuts.prototype._handleToneKeydown = function(value) {
+    var possibleTones = this.prompt.review.getTones();
+    var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
     if (possibleTones.indexOf(value) > -1) {
-        character.reset();
-        character.add(character.getTone(value));
-        this.canvas.drawShape('character', character.getTone(value).getTargetShape());
-        this.canvas.trigger('attempt:success');
+        this.prompt.review.character.reset();
+        this.prompt.review.character.add(this.prompt.review.character.getTone(value));
+        this.prompt.canvas.drawShape(
+            'character',
+            this.prompt.review.character.getTone(value).getTargetShape(),
+            {color: this.prompt.review.getGradingColor()}
+        );
     } else {
-        character.reset();
-        character.add(expectedTone);
-        this.canvas.drawShape('character', expectedTone.getTargetShape());
-        this.canvas.trigger('attempt:fail');
+        this.prompt.review.character.reset();
+        this.prompt.review.character.add(expectedTone);
+        this.prompt.canvas.drawShape(
+            'character',
+            expectedTone.getTargetShape(),
+            {color: this.prompt.review.getGradingColor()}
+        );
     }
-    if (character.isComplete()) {
-        this.canvas.trigger('complete');
+    if (this.prompt.review.character.isComplete()) {
+        this.prompt.part.renderComplete();
+    } else {
+        this.prompt.part.renderIncomplete();
     }
 };
 
