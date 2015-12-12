@@ -16,12 +16,13 @@ module.exports = GelatoComponent.extend({
         this.defaultFadeSpeed = 1000;
         this.defaultTraceFill = '#38240c';
         this.grid = false;
-        this.gridColor = '#b2b5b9';
-        this.gridDashLength = 5;
-        this.gridLineWidth = 0.50;
+        this.gridColor = '#d8dadc';
+        this.gridDashLength = 6;
+        this.gridLineWidth = 0.8;
         this.mouseDownEvent = null;
         this.mouseLastDownEvent = null;
         this.mouseLastUpEvent = null;
+        this.mouseTapTimeout = null;
         this.mouseUpEvent = null;
         this.prompt = options.prompt;
         this.size = 450;
@@ -432,7 +433,8 @@ module.exports = GelatoComponent.extend({
             var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
             var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
             if (lineLastDistance < 5 && lineLastDuration > 50 && lineLastDuration < 200) {
-                this.trigger('doubleclick', event);
+                clearTimeout(this.mouseTapTimeout);
+                this.trigger('doubletap', event);
                 return;
             }
         }
@@ -448,7 +450,9 @@ module.exports = GelatoComponent.extend({
         }
         if (this.mouseUpEvent) {
             if (lineDistance < 5 && lineDuration < 1000) {
-                this.trigger('tap', event);
+                this.mouseTapTimeout = setTimeout((function() {
+                    this.trigger('tap', event);
+                }).bind(this), 200);
             }
         }
         this.trigger('click', event);
