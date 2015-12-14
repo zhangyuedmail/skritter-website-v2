@@ -178,6 +178,7 @@ module.exports = SkritterModel.extend({
             } else {
                 this.cache();
                 this.session.cache();
+                app.removeSetting('session');
                 app.setSetting('user', this.id);
                 callbackSuccess(user);
             }
