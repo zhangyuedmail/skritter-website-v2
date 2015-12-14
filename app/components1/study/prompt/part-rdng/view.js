@@ -1,0 +1,110 @@
+var GelatoComponent = require('gelato/component');
+
+/**
+ * @class StudyPromptPartRdng
+ * @extends {GelatoComponent}
+ */
+module.exports = GelatoComponent.extend({
+    /**
+     * @method initialize
+     * @param {Object} options
+     * @constructor
+     */
+    initialize: function(options) {
+        this.prompt = options.prompt;
+        this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
+    },
+    /**
+     * @property el
+     * @type {String}
+     */
+    el: '#review-container',
+    /**
+     * @property events
+     * @type Object
+     */
+    events: {},
+    /**
+     * @property template
+     * @type {Function}
+     */
+    template: require('./template'),
+    /**
+     * @method render
+     * @returns {StudyPromptPartRdng}
+     */
+    render: function() {
+        this.renderTemplate();
+        return this;
+    },
+    /**
+     * @method render
+     * @returns {StudyPromptPartDefn}
+     */
+    render: function() {
+        this.renderTemplate();
+        this.prompt.review = this.prompt.reviews.current();
+        this.prompt.canvas.reset();
+        this.prompt.shortcuts.tone.stop_listening();
+        this.prompt.toolbarAction.buttonCorrect = true;
+        this.prompt.toolbarAction.buttonErase = false;
+        this.prompt.toolbarAction.buttonShow = false;
+        this.prompt.toolbarAction.buttonTeach = false;
+        if (this.prompt.review.isComplete()) {
+            this.renderComplete();
+        } else {
+            this.renderIncomplete();
+        }
+        return this;
+    },
+    /**
+     * @method renderComplete
+     * @returns {StudyPromptPartRune}
+     */
+    renderComplete: function() {
+        this.prompt.review.set('complete', true);
+        this.prompt.shortcuts.grading.listen();
+        this.prompt.toolbarAction.render();
+        this.prompt.toolbarGrading.render();
+        this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
+        this.prompt.toolbarVocab.render();
+        this.prompt.vocabContained.render();
+        this.prompt.vocabDefinition.render();
+        this.prompt.vocabMnemonic.render();
+        this.prompt.vocabReading.render();
+        this.prompt.vocabSentence.render();
+        this.prompt.vocabStyle.render();
+        this.prompt.vocabWriting.render();
+        return this;
+    },
+    /**
+     * @method renderIncomplete
+     * @returns {StudyPromptPartRune}
+     */
+    renderIncomplete: function() {
+        this.prompt.review.set('complete', false);
+        this.prompt.shortcuts.grading.stop_listening();
+        this.prompt.toolbarAction.render();
+        this.prompt.toolbarGrading.render();
+        this.prompt.toolbarVocab.render();
+        this.prompt.vocabContained.render();
+        this.prompt.vocabDefinition.render();
+        this.prompt.vocabMnemonic.render();
+        this.prompt.vocabReading.render();
+        this.prompt.vocabSentence.render();
+        this.prompt.vocabStyle.render();
+        this.prompt.vocabWriting.render();
+        return this;
+    },
+    /**
+     * @method handlePromptCanvasClick
+     */
+    handlePromptCanvasClick: function() {
+        if (this.prompt.review.isComplete()) {
+            this.prompt.next();
+        } else {
+            this.prompt.review.set('complete', true);
+            this.render();
+        }
+    }
+});

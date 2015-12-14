@@ -204,7 +204,7 @@ module.exports = Router.extend({
      * @param {String} [part]
      */
     navigateScratchpad: function(vocabId, part) {
-        this.go('pages/scratchpad').load(vocabId, part);
+        this.go('pages1/scratchpad', {part: part, vocabId: vocabId});
     },
     /**
      * @method navigateSignup
@@ -225,7 +225,7 @@ module.exports = Router.extend({
             } else if (listId) {
                 this.go('pages/study-list', {listId: listId});
             } else {
-                this.go('pages/study');
+                this.go('pages1/study');
             }
         } else {
             this.navigateLogin();

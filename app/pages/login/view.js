@@ -33,12 +33,6 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
         this.footer.setElement('#footer-container').render();
-        if (this.getHeight() < app.getHeight()) {
-            this.$('#footer-container').css(
-                'margin-top',
-                app.getHeight() - this.getHeight() + 8
-            );
-        }
         return this;
     },
     /**

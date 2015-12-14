@@ -1,0 +1,25 @@
+gelato-component(data-name='study-prompt-vocab-sentence')
+  - var prompt = view.prompt;
+
+  if prompt.reviews
+    - var sentence = prompt.reviews.vocab.getSentence();
+
+    if sentence
+      - var sentenceDefinition = sentence.getDefinition();
+      - var sentenceReading = sentence.get('reading');
+
+      label Example sentence
+
+      .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
+
+        if prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
+          = sentence.getWriting(prompt.reviews.vocab.get('writing'))
+        else
+          = sentence.getWriting()
+
+        .hint
+          if prompt.reviews.isChinese()
+            .hint-reading= app.fn.pinyin.toTone(sentenceReading, true)
+          else
+            .hint-reading= sentenceReading
+          .hint-definition= sentenceDefinition
