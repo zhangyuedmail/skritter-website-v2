@@ -34,6 +34,11 @@ module.exports = GelatoComponent.extend({
      */
     buttonTeach: true,
     /**
+     * @property events
+     * @type Object
+     */
+    events: {},
+    /**
      * @property template
      * @type {Function}
      */
@@ -47,8 +52,14 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @property events
-     * @type Object
+     * @method disableAll
+     * @returns {StudyPromptToolbarAction}
      */
-    events: {}
+    disableAll: function() {
+        this.buttonCorrect = false;
+        this.buttonErase = false;
+        this.buttonShow = false;
+        this.buttonTeach = false;
+        return this;
+    }
 });

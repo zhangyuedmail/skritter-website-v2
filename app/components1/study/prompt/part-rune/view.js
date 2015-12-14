@@ -48,6 +48,10 @@ module.exports = GelatoComponent.extend({
         this.prompt.canvas.grid = true;
         this.prompt.canvas.reset();
         this.prompt.shortcuts.tone.stop_listening();
+        this.prompt.toolbarAction.buttonCorrect = true;
+        this.prompt.toolbarAction.buttonErase = true;
+        this.prompt.toolbarAction.buttonShow = true;
+        this.prompt.toolbarAction.buttonTeach = true;
         if (app.user.get('squigs')) {
             this.prompt.canvas.drawShape(
                 'character',

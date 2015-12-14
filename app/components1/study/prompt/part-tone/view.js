@@ -56,6 +56,10 @@ module.exports = GelatoComponent.extend({
             this.prompt.review.character.getUserShape(),
             {color: this.prompt.review.getGradingColor()}
         );
+        this.prompt.toolbarAction.buttonCorrect = true;
+        this.prompt.toolbarAction.buttonErase = false;
+        this.prompt.toolbarAction.buttonShow = false;
+        this.prompt.toolbarAction.buttonTeach = false;
         if (this.prompt.review.isComplete()) {
             this.renderComplete();
         } else {

@@ -63,7 +63,7 @@ module.exports = GelatoComponent.extend({
             this.prompt.editing = false;
             this.prompt.vocabDefinition.editing = false;
             this.prompt.vocabMnemonic.editing = false;
-            this.prompt.registerKeypress();
+            this.prompt.shortcuts.registerAll();
             this.prompt.reviews.vocab.save({
                 customDefinition: this.prompt.vocabDefinition.getValue(),
                 mnemonic: this.prompt.vocabMnemonic.getValue()
@@ -72,7 +72,7 @@ module.exports = GelatoComponent.extend({
             this.prompt.editing = true;
             this.prompt.vocabDefinition.editing = true;
             this.prompt.vocabMnemonic.editing = true;
-            this.prompt.unregisterKeypress();
+            this.prompt.shortcuts.unregisterAll();
         }
         this.prompt.vocabDefinition.render();
         this.prompt.vocabMnemonic.render();
