@@ -3,7 +3,7 @@
 gelato-component[data-name="study-prompt-toolbar-grading"] {
 
   .btn-default {
-    background-color: transparent;
+    background: transparent;
     border: none;
     box-shadow: none;
     color: $grey2;
@@ -28,15 +28,16 @@ gelato-component[data-name="study-prompt-toolbar-grading"] {
       outline: 0;
     }
     &.selected {
-      &.grade1 { color: $grade1; }
-      &.grade2 { color: $grade2; }
-      &.grade3 { color: $grade3; }
-      &.grade4 { color: $grade4; }
+      color: $grey9;
+      //&.grade1 { color: $grade1; }
+      //&.grade2 { color: $grade2; }
+      //&.grade3 { color: $grade3; }
+      //&.grade4 { color: $grade4; }
     }
   }
 
   .btn-group {
-    background-color: $white3;
+    background: linear-gradient(0deg, rgba(251, 250, 252, 1), rgba(251, 250, 252, 0));
     padding-bottom: 5px;
   }
 
