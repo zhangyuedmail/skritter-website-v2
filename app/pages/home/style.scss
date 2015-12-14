@@ -21,17 +21,20 @@ gelato-page[data-name='home'] {
   }
 
   #hero-slider {
+    position: relative;
     img { width: 100%; }
     .carousel-header {
-      color: #ebeaf0;
-      font-family: $font-slab;
-      font-size: 48px;
-      font-weight: 400;
-      margin-top: 50px;
+      color: $white1;
+      font-size: 36px;
+      left: 10%;
       position: absolute;
-      text-align: center;
-      width: 100%;
-      z-index: 1000;
+      top: 40%;
+      z-index: 9999;
+      button {
+        margin-top: 75px;
+        padding: 15px 30px;
+      }
+
     }
   }
 
