@@ -133,17 +133,38 @@ module.exports = GelatoComponent.extend({
         var character = this.prompt.review.character;
         var failedConsecutive = this.prompt.review.get('failedConsecutive') + 1;
         var failedTotal = this.prompt.review.get('failedTotal') + 1;
+        var maxStrokes = this.prompt.review.character.getMaxPosition();
         this.prompt.review.set('failedConsecutive', failedConsecutive);
         this.prompt.review.set('failedTotal', failedTotal);
-        if (character.getMaxPosition() > 4) {
+        if (maxStrokes > 11) {
             if (this.prompt.review.get('failedTotal') > 3) {
                 this.prompt.review.set('score', 1);
-            } else if (this.prompt.review.get('failedTotal') > 2) {
+            } else if (this.prompt.review.get('failedTotal') > 1) {
                 this.prompt.review.set('score', 2);
+            } else {
+                this.prompt.review.set('score', 3);
+            }
+        } else if (maxStrokes > 6) {
+            if (this.prompt.review.get('failedTotal') > 2) {
+                this.prompt.review.set('score', 1);
+            } else if (this.prompt.review.get('failedTotal') > 1) {
+                this.prompt.review.set('score', 2);
+            } else {
+                this.prompt.review.set('score', 3);
+            }
+        } else if (maxStrokes > 2) {
+            if (this.prompt.review.get('failedTotal') > 2) {
+                this.prompt.review.set('score', 1);
+            } else if (this.prompt.review.get('failedTotal') > 0) {
+                this.prompt.review.set('score', 2);
+            } else {
+                this.prompt.review.set('score', 3);
             }
         } else {
-            if (this.prompt.review.get('failedTotal') > 1) {
+            if (this.prompt.review.get('failedTotal') > 0) {
                 this.prompt.review.set('score', 1);
+            } else {
+                this.prompt.review.set('score', 3);
             }
         }
         if (failedConsecutive > 2) {
