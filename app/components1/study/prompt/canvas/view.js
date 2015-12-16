@@ -347,6 +347,7 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPromptCanvas}
      */
     reset: function() {
+        clearTimeout(this.mouseTapTimeout);
         this.getLayer('character-grid').removeAllChildren();
         this.getLayer('character-hint').removeAllChildren();
         this.getLayer('character-reveal').removeAllChildren();

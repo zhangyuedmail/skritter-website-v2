@@ -219,7 +219,6 @@ module.exports = GelatoComponent.extend({
                 this.prompt.review.character.getTargetShape(),
                 {color: '#e8ded2'}
             );
-
         }
     },
     /**
