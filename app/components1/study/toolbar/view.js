@@ -1,6 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 var ProgressStats = require('collections/progress-stats');
+var StudySettings = require('dialogs/study-settings/view');
 var Timer = require('components1/study/toolbar/timer/view');
 
 /**
@@ -55,11 +56,22 @@ module.exports = GelatoComponent.extend({
      */
     handleClickStudySettings: function(event) {
         event.preventDefault();
-        this.trigger('click:study-settings');
-        var dialog = new StudySettingsDialog();
+        var dialog = new StudySettings();
         dialog.on('save', _.bind(function(settings) {
-            this.trigger('save:study-settings', settings);
-            dialog.close();
+            this.page.items.reset();
+            this.page.prompt.reset();
+            app.user.set(settings, {merge: true}).cache();
+            app.user.save();
+            this.page.loadMore(
+                _.bind(function() {
+                    this.page.next();
+                    dialog.close();
+                }, this),
+                _.bind(function() {
+                    this.page.next();
+                    dialog.close();
+                }, this)
+            );
         }, this));
         dialog.open();
     },

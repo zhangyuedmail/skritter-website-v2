@@ -106,24 +106,6 @@ module.exports = GelatoPage.extend({
         );
     },
     /**
-     * @method handleToolbarSaveStudySettings
-     * @param {Object} settings
-     */
-    handleToolbarSaveStudySettings: function(settings) {
-        this.items.reset();
-        this.prompt.reset();
-        app.user.set(settings, {merge: true}).cache();
-        app.user.save();
-        this.loadMore(
-            _.bind(function() {
-                this.next();
-            }, this),
-            _.bind(function() {
-                this.next();
-            }, this)
-        );
-    },
-    /**
      * @method loadMore
      * @param {Function} [callbackSuccess]
      * @param {Function} [callbackError]
