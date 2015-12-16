@@ -1,7 +1,6 @@
 var GelatoPage = require('gelato/page');
 var Vocabs = require('collections/vocabs');
 var Prompt = require('components1/study/prompt/view');
-var Toolbar = require('components1/study/toolbar/view');
 var Navbar = require('navbars/default/view');
 
 /**
@@ -18,7 +17,6 @@ module.exports = GelatoPage.extend({
         this.navbar = new Navbar();
         this.part = options.part;
         this.prompt = new Prompt();
-        this.toolbar = new Toolbar();
         this.vocabs = new Vocabs();
         this.vocabId = options.vocabId;
         this.load();
@@ -46,7 +44,6 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
         this.prompt.setElement('#study-prompt-container').render();
-        this.toolbar.setElement('#study-toolbar-container').render();
         return this;
     },
     /**
@@ -108,7 +105,6 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.prompt.remove();
-        this.toolbar.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });
