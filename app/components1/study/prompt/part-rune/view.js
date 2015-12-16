@@ -122,7 +122,7 @@ module.exports = GelatoComponent.extend({
         this.prompt.vocabStyle.render();
         this.prompt.vocabWriting.render();
         if (this.prompt.review.get('teach')) {
-            this.teach();
+            this.teachCharacter();
         }
         return this;
     },
@@ -314,6 +314,11 @@ module.exports = GelatoComponent.extend({
                 this.prompt.review.set('score', 1);
                 this.prompt.review.set('teach', true);
                 this.prompt.canvas.clearLayer('character-teach');
+                this.prompt.canvas.drawShape(
+                    'character-teach',
+                    this.prompt.review.character.getTargetShape(),
+                    {color: '#e8ded2'}
+                );
                 this.prompt.canvas.drawShape(
                     'character-teach',
                     stroke.getTargetShape(),
