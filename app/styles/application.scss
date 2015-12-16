@@ -26,5 +26,7 @@ gelato-application {
 }
 
 #hs-beacon {
-  z-index: 9999;
+  iframe {
+    z-index: 9999 !important;
+  }
 }
