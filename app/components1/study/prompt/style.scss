@@ -60,6 +60,12 @@ gelato-component[data-name='study-prompt'] {
         margin-top: 25px;
       }
     }
+    .ribbon {
+      left: 0;
+      position: absolute;
+      top: 0;
+      z-index: 6000;
+    }
   }
 
   #panel-right {

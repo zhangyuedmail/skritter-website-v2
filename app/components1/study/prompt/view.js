@@ -85,6 +85,11 @@ module.exports = GelatoComponent.extend({
         if (this.part) {
             this.part.remove();
         }
+        if (this.reviews.isNew()) {
+            this.$('#new-ribbon').removeClass('hidden');
+        } else {
+            this.$('#new-ribbon').addClass('hidden');
+        }
         switch (this.reviews.part) {
             case 'defn':
                 this.part = new PartDefn({prompt: this}).render();

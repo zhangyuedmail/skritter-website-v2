@@ -174,6 +174,13 @@ module.exports = GelatoCollection.extend({
         return this.vocab.isJapanese();
     },
     /**
+     * @method isNew
+     * @returns {Boolean}
+     */
+    isNew: function() {
+        return this.item ? this.item.isNew() : false;
+    },
+    /**
      * @method isLast
      * @returns {Boolean}
      */
