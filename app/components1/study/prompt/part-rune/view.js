@@ -75,6 +75,7 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPromptPartRune}
      */
     renderComplete: function() {
+        this.prompt.review.stop();
         this.prompt.review.set('complete', true);
         this.prompt.canvas.disableInput();
         this.prompt.canvas.injectLayerColor(
@@ -100,6 +101,7 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPromptPartRune}
      */
     renderIncomplete: function() {
+        this.prompt.review.start();
         this.prompt.review.set('complete', false);
         this.prompt.canvas.enableInput();
         this.prompt.shortcuts.grading.stop_listening();
