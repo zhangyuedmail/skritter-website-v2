@@ -1,2 +1,6 @@
 gelato-component(data-name='study-toolbar-timer')
-  | 0:00
+
+  if view.time
+    span= app.fn.convertTimeToClock(view.time)
+  else
+    span 00:00
