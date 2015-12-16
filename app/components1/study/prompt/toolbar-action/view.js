@@ -37,7 +37,12 @@ module.exports = GelatoComponent.extend({
      * @property events
      * @type Object
      */
-    events: {},
+    events: {
+        'vclick #toolbar-correct': 'handleClickToolbarCorrect',
+        'vclick #toolbar-erase': 'handleClickToolbarErase',
+        'vclick #toolbar-show': 'handleClickToolbarShow',
+        'vclick #toolbar-stroke-order': 'handleClickToolbarStrokeOrder'
+    },
     /**
      * @property template
      * @type {Function}
@@ -52,14 +57,35 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @method disableAll
-     * @returns {StudyPromptToolbarAction}
+     * @method handleClickToolbarCorrect
+     * @param {Event} event
      */
-    disableAll: function() {
-        this.buttonCorrect = false;
-        this.buttonErase = false;
-        this.buttonShow = false;
-        this.buttonTeach = false;
-        return this;
+    handleClickToolbarCorrect: function(event) {
+        event.preventDefault();
+        this.trigger('click:correct');
+    },
+    /**
+     * @method handleClickToolbarErase
+     * @param {Event} event
+     */
+    handleClickToolbarErase: function(event) {
+        event.preventDefault();
+        this.trigger('click:erase');
+    },
+    /**
+     * @method handleClickToolbarShow
+     * @param {Event} event
+     */
+    handleClickToolbarShow: function(event) {
+        event.preventDefault();
+        this.trigger('click:show');
+    },
+    /**
+     * @method handleClickToolbarStrokeOrder
+     * @param {Event} event
+     */
+    handleClickToolbarStrokeOrder: function(event) {
+        event.preventDefault();
+        this.trigger('click:teach');
     }
 });

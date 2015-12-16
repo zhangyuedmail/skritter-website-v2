@@ -14,6 +14,7 @@ module.exports = GelatoComponent.extend({
         this.prompt = options.prompt;
         this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
         this.listenTo(this.prompt.canvas, 'input:up', this.handlePromptCanvasInputUp);
+        this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
         this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
         this.on('attempt:fail', this.handleAttemptFail);
         this.on('attempt:success', this.handleAttemptSuccess);
@@ -185,6 +186,14 @@ module.exports = GelatoComponent.extend({
         } else {
             this.renderIncomplete();
         }
+    },
+    /**
+     * @method handlePromptToolbarActionCorrect
+     */
+    handlePromptToolbarActionCorrect: function() {
+        this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
+        this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
+        this.prompt.toolbarAction.render();
     },
     /**
      * @method handlePromptToolbarGradingMousedown

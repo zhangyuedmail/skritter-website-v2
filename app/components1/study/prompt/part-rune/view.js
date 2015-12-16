@@ -17,6 +17,10 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.prompt.canvas, 'swipeup', this.handlePromptCanvasSwipeUp);
         this.listenTo(this.prompt.canvas, 'tap', this.handlePromptCanvasTap);
         this.listenTo(this.prompt.canvas, 'input:up', this.handlePromptCanvasInputUp);
+        this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
+        this.listenTo(this.prompt.toolbarAction, 'click:erase', this.handlePromptToolbarActionErase);
+        this.listenTo(this.prompt.toolbarAction, 'click:show', this.handlePromptToolbarActionShow);
+        this.listenTo(this.prompt.toolbarAction, 'click:teach', this.handlePromptToolbarActionTeach);
         this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
         this.on('attempt:fail', this.handleAttemptFail);
         this.on('attempt:success', this.handleAttemptSuccess);
@@ -77,6 +81,8 @@ module.exports = GelatoComponent.extend({
     renderComplete: function() {
         this.prompt.review.stop();
         this.prompt.review.set('complete', true);
+        this.prompt.review.set('teach', false);
+        this.prompt.canvas.clearLayer('character-teach');
         this.prompt.canvas.disableInput();
         this.prompt.canvas.injectLayerColor(
             'character',
@@ -115,6 +121,9 @@ module.exports = GelatoComponent.extend({
         this.prompt.vocabSentence.render();
         this.prompt.vocabStyle.render();
         this.prompt.vocabWriting.render();
+        if (this.prompt.review.get('teach')) {
+            this.teach();
+        }
         return this;
     },
     /**
@@ -232,6 +241,38 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method handlePromptToolbarActionCorrect
+     */
+    handlePromptToolbarActionCorrect: function() {
+        this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
+        this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
+        if (this.prompt.review.isComplete()) {
+            this.prompt.canvas.injectLayerColor(
+                'character',
+                this.prompt.review.getGradingColor()
+            );
+        }
+        this.prompt.toolbarAction.render();
+    },
+    /**
+     * @method handlePromptToolbarActionErase
+     */
+    handlePromptToolbarActionErase: function() {
+        this.eraseCharacter();
+    },
+    /**
+     * @method handlePromptToolbarActionShow
+     */
+    handlePromptToolbarActionShow: function() {
+        this.showCharacter();
+    },
+    /**
+     * @method handlePromptToolbarActionTeach
+     */
+    handlePromptToolbarActionTeach: function() {
+        this.teachCharacter();
+    },
+    /**
      * @method handlePromptToolbarGradingMousedown
      * @param {Number} value
      */
@@ -242,6 +283,47 @@ module.exports = GelatoComponent.extend({
                 'character',
                 this.prompt.review.getGradingColor()
             );
+        }
+    },
+    /**
+     * @method eraseCharacter
+     */
+    eraseCharacter: function() {
+        this.prompt.review.set({complete: false, teach: false});
+        this.prompt.review.character.reset();
+        this.render();
+    },
+    /**
+     * @method showCharacter
+     */
+    showCharacter: function() {
+        this.prompt.canvas.clearLayer('character-hint');
+        this.prompt.canvas.drawShape(
+            'character-hint',
+            this.prompt.review.character.getTargetShape(),
+            {color: '#e8ded2'}
+        );
+    },
+    /**
+     * @method teachCharacter
+     */
+    teachCharacter: function() {
+        if (!this.prompt.review.isComplete()) {
+            var stroke = this.prompt.review.character.getExpectedStroke();
+            if (stroke) {
+                this.prompt.review.set('score', 1);
+                this.prompt.review.set('teach', true);
+                this.prompt.canvas.clearLayer('character-teach');
+                this.prompt.canvas.drawShape(
+                    'character-teach',
+                    stroke.getTargetShape(),
+                    {color: '#e8ded2'}
+                );
+                this.prompt.canvas.tracePath(
+                    'character-teach',
+                    stroke.getParamPath()
+                );
+            }
         }
     }
 });
