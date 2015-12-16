@@ -171,9 +171,11 @@ StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
  * @private
  */
 StudyPromptShortcuts.prototype._handleToneKeydown = function(value) {
+    console.log(value);
     var possibleTones = this.prompt.review.getTones();
     var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
     if (possibleTones.indexOf(value) > -1) {
+        this.prompt.review.set('score', 3);
         this.prompt.review.character.reset();
         this.prompt.review.character.add(this.prompt.review.character.getTone(value));
         this.prompt.canvas.drawShape(
@@ -182,6 +184,7 @@ StudyPromptShortcuts.prototype._handleToneKeydown = function(value) {
             {color: this.prompt.review.getGradingColor()}
         );
     } else {
+        this.prompt.review.set('score', 1);
         this.prompt.review.character.reset();
         this.prompt.review.character.add(expectedTone);
         this.prompt.canvas.drawShape(
