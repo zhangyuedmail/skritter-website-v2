@@ -45,6 +45,7 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
         this.prompt.review = this.prompt.reviews.current();
+        this.prompt.canvas.grid = false;
         this.prompt.canvas.reset();
         this.prompt.shortcuts.tone.stop_listening();
         this.prompt.toolbarAction.buttonCorrect = true;
