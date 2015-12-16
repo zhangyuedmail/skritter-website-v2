@@ -22,11 +22,15 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.$('[data-toggle="tooltip"]').tooltip();
-        $.each(this.$('.options a'), function(i, el) {
-            if ($(el).attr('href') === document.location.pathname) {
-                $(el).addClass('active');
-            }
-        });
+        if (document.location.pathname === '/vocablists') {
+            this.$('.options > a:first-child').addClass('active');
+        } else {
+            this.$('.options > a').each(function(index, element) {
+                var $element = $(element);
+                if ($element.attr('href') === document.location.pathname) {
+                    $element.addClass('active');
+                }
+            });
+        }
     }
 });
