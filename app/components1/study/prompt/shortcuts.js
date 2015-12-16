@@ -171,7 +171,6 @@ StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
  * @private
  */
 StudyPromptShortcuts.prototype._handleToneKeydown = function(value) {
-    console.log(value);
     var possibleTones = this.prompt.review.getTones();
     var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
     if (possibleTones.indexOf(value) > -1) {

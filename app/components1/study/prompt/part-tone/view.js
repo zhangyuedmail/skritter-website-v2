@@ -16,8 +16,6 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.prompt.canvas, 'input:up', this.handlePromptCanvasInputUp);
         this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
         this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
-        this.on('attempt:fail', this.handleAttemptFail);
-        this.on('attempt:success', this.handleAttemptSuccess);
         this.on('resize', this.render);
     },
     /**
@@ -116,25 +114,11 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @method handleAttemptFail
-     */
-    handleAttemptFail: function() {
-        this.prompt.review.set('score', 1);
-    },
-    /**
-     * @method handleAttemptSuccess
-     */
-    handleAttemptSuccess: function() {
-        this.prompt.review.set('score', 3);
-    },
-    /**
      * @method handlePromptCanvasClick
      */
     handlePromptCanvasClick: function() {
         if (this.prompt.review.isComplete()) {
             this.prompt.next();
-        } else {
-            this.prompt.canvas.fadeLayer('character-hint');
         }
     },
     /**
@@ -150,35 +134,36 @@ module.exports = GelatoComponent.extend({
             var targetShape = stroke.getTargetShape();
             var userShape = stroke.getUserShape();
             if (possibleTones.indexOf(stroke.get('tone')) > -1) {
+                this.prompt.review.set('score', 3);
                 this.prompt.canvas.tweenShape(
                     'character',
                     userShape,
                     targetShape
                 );
-                this.trigger('attempt:success');
             } else {
+                this.prompt.review.set('score', 1);
                 this.prompt.review.character.reset();
                 this.prompt.review.character.add(expectedTone);
                 this.prompt.canvas.drawShape(
                     'character',
                     expectedTone.getTargetShape()
                 );
-                this.trigger('attempt:fail');
+
             }
         } else {
             this.prompt.review.character.add(expectedTone);
             if (possibleTones.indexOf(5) > -1) {
+                this.prompt.review.set('score', 3);
                 this.prompt.canvas.drawShape(
                     'character',
                     this.prompt.review.character.getTargetShape()
                 );
-                this.trigger('attempt:success');
             } else {
+                this.prompt.review.set('score', 1);
                 this.prompt.canvas.drawShape(
                     'character',
                     expectedTone.getTargetShape()
                 );
-                this.trigger('attempt:fail');
             }
         }
         if (this.prompt.review.character.isComplete()) {
