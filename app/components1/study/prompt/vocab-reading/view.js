@@ -40,6 +40,8 @@ module.exports = GelatoComponent.extend({
     handleClickShowReading: function(event) {
         event.preventDefault();
         var $reading = $(event.target).parent('.reading');
-        this.trigger('click:show', $reading.data('position'));
+        var position = parseInt($reading.data('position'), 10);
+        this.prompt.reviews.at(position).set('showReading', true);
+        this.render();
     }
 });
