@@ -112,7 +112,7 @@ module.exports = SkritterModel.extend({
             review.vocab = vocabs[i];
             reviews.add(review);
         }
-        reviews.group = now + '_' + vocabs[0].id;
+        reviews.group = now + '_' + vocab.id;
         reviews.item = this;
         reviews.part = part;
         reviews.vocab = vocab;
