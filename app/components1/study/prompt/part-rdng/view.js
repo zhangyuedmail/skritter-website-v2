@@ -83,6 +83,7 @@ module.exports = GelatoComponent.extend({
         if (app.user.isAudioEnabled()) {
             this.prompt.reviews.vocab.play();
         }
+        this.renderTemplate();
         return this;
     },
     /**
@@ -103,6 +104,7 @@ module.exports = GelatoComponent.extend({
         this.prompt.vocabSentence.render();
         this.prompt.vocabStyle.render();
         this.prompt.vocabWriting.render();
+        this.renderTemplate();
         return this;
     },
     /**

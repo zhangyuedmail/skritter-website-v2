@@ -38,7 +38,6 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPromptPartTone}
      */
     render: function() {
-        this.renderTemplate();
         this.prompt.review = this.prompt.reviews.current();
         this.prompt.canvas.grid = false;
         this.prompt.canvas.reset();
@@ -95,6 +94,7 @@ module.exports = GelatoComponent.extend({
             this.prompt.reviews.isLast()) {
             this.prompt.reviews.vocab.play();
         }
+        this.renderTemplate();
         return this;
     },
     /**
@@ -117,6 +117,7 @@ module.exports = GelatoComponent.extend({
         this.prompt.vocabSentence.render();
         this.prompt.vocabStyle.render();
         this.prompt.vocabWriting.render();
+        this.renderTemplate();
         return this;
     },
     /**

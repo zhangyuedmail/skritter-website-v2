@@ -47,7 +47,6 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPromptPartRune}
      */
     render: function() {
-        this.renderTemplate();
         this.prompt.review = this.prompt.reviews.current();
         this.prompt.canvas.grid = true;
         this.prompt.canvas.reset();
@@ -106,6 +105,7 @@ module.exports = GelatoComponent.extend({
             this.prompt.reviews.isLast()) {
             this.prompt.reviews.vocab.play();
         }
+        this.renderTemplate();
         return this;
     },
     /**
@@ -137,6 +137,7 @@ module.exports = GelatoComponent.extend({
         if (this.prompt.review.get('teach')) {
             this.teachCharacter();
         }
+        this.renderTemplate();
         return this;
     },
     /**

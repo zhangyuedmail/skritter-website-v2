@@ -6,4 +6,13 @@ gelato-component[data-name="study-prompt-part-tone"] {
   position: absolute;
   width: 100%;
 
+  .tone-message {
+    color: $grey2;
+    font-family: $font-slab;
+    font-size: 36px;
+    font-weight: 300;
+    margin-top: -30px;
+    text-align: center;
+  }
+
 }
