@@ -78,6 +78,7 @@ module.exports = GelatoComponent.extend({
             'character',
             this.prompt.review.getGradingColor()
         );
+        this.prompt.navigation.render();
         this.prompt.shortcuts.grading.listen();
         this.prompt.shortcuts.tone.stop_listening();
         this.prompt.toolbarAction.render();
@@ -100,6 +101,7 @@ module.exports = GelatoComponent.extend({
         this.prompt.review.start();
         this.prompt.review.set('complete', false);
         this.prompt.canvas.enableInput();
+        this.prompt.navigation.render();
         this.prompt.shortcuts.grading.stop_listening();
         this.prompt.shortcuts.tone.listen();
         this.prompt.toolbarAction.render();

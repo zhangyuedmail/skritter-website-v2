@@ -1,6 +1,7 @@
 var GelatoComponent = require('gelato/component');
 
 var Canvas = require('components1/study/prompt/canvas/view');
+var Navigation = require('components1/study/prompt/navigation/view');
 var PartDefn = require('components1/study/prompt/part-defn/view');
 var PartRdng = require('components1/study/prompt/part-rdng/view');
 var PartRune = require('components1/study/prompt/part-rune/view');
@@ -35,6 +36,7 @@ module.exports = GelatoComponent.extend({
         this.reviews = null;
         //components
         this.canvas = new Canvas({prompt: this});
+        this.navigation = new Navigation({prompt: this});
         this.shortcuts = new Shortcuts({prompt: this});
         this.toolbarAction = new ToolbarAction({prompt: this});
         this.toolbarGrading = new ToolbarGrading({prompt: this});
@@ -63,6 +65,7 @@ module.exports = GelatoComponent.extend({
         this.$panelLeft = this.$('#panel-left');
         this.$panelRight = this.$('#panel-right');
         this.canvas.setElement('#canvas-container').render();
+        this.navigation.setElement('#navigation-container').render();
         this.toolbarAction.setElement('#toolbar-action-container').render();
         this.toolbarGrading.setElement('#toolbar-grading-container').render();
         this.toolbarVocab.setElement('#toolbar-vocab-container').render();
@@ -122,6 +125,7 @@ module.exports = GelatoComponent.extend({
      * @method next
      */
     next: function() {
+        this.review.stop();
         if (this.reviews.isLast()) {
             this.trigger('next', this.reviews);
         } else {
@@ -134,6 +138,7 @@ module.exports = GelatoComponent.extend({
      * @method previous
      */
     previous: function() {
+        this.review.stop();
         if (this.reviews.isFirst()) {
             this.trigger('previous', this.reviews);
         } else {
@@ -148,6 +153,7 @@ module.exports = GelatoComponent.extend({
      */
     remove: function() {
         this.canvas.remove();
+        this.navigation.remove();
         this.shortcuts.unregisterAll();
         this.toolbarAction.remove();
         this.toolbarGrading.remove();

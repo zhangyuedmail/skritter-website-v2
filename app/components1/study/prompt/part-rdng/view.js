@@ -47,6 +47,7 @@ module.exports = GelatoComponent.extend({
         this.prompt.review = this.prompt.reviews.current();
         this.prompt.canvas.grid = false;
         this.prompt.canvas.reset();
+        this.prompt.navigation.render();
         this.prompt.shortcuts.tone.stop_listening();
         this.prompt.toolbarAction.buttonCorrect = true;
         this.prompt.toolbarAction.buttonErase = false;
@@ -66,6 +67,7 @@ module.exports = GelatoComponent.extend({
     renderComplete: function() {
         this.prompt.review.stop();
         this.prompt.review.set('complete', true);
+        this.prompt.navigation.render();
         this.prompt.shortcuts.grading.listen();
         this.prompt.toolbarAction.render();
         this.prompt.toolbarGrading.render();

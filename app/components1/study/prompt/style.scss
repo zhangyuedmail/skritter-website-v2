@@ -24,7 +24,7 @@ gelato-component[data-name='study-prompt'] {
     .content {
       margin: 0 auto;
       max-width: 450px;
-      overflow-y: hidden;
+      position: relative;
       width: 100%;
       #input-container {
         background-color: $white1;
