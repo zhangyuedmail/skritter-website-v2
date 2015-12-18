@@ -120,7 +120,6 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPromptPartRune}
      */
     renderIncomplete: function() {
-        console.log('render me');
         this.prompt.review.start();
         this.prompt.review.set('complete', false);
         this.prompt.canvas.enableInput();

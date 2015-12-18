@@ -314,7 +314,7 @@ module.exports = SkritterModel.extend({
     getWritingObjects: function() {
         return this.getCharacters().map(function(value) {
             if (this.isJapanese()) {
-                if (['～'].indexOf(value) > -1) {
+                if (['～', 'ー'].indexOf(value) > -1) {
                     return {type: 'filler', value: value};
                 }
                 if (!app.user.get('studyKana') && app.fn.isKana(value)) {
