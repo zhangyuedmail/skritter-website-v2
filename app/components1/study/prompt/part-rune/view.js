@@ -324,6 +324,7 @@ module.exports = GelatoComponent.extend({
      * @method showCharacter
      */
     showCharacter: function() {
+        this.prompt.review.set('score', 1);
         this.prompt.canvas.clearLayer('character-hint');
         this.prompt.canvas.drawShape(
             'character-hint',

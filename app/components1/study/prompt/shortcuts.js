@@ -40,6 +40,7 @@ StudyPromptShortcuts.prototype._handleActionShow = function() {
     this.prompt.canvas.clearLayer('character-hint');
     switch (this.prompt.reviews.part) {
         case 'rune':
+            this.prompt.review.set('score', 1);
             this.prompt.canvas.drawShape(
                 'character-hint',
                 this.prompt.review.character.getTargetShape(),
@@ -47,6 +48,7 @@ StudyPromptShortcuts.prototype._handleActionShow = function() {
             );
             break;
         case 'tone':
+            this.prompt.review.set('score', 1);
             this.prompt.canvas.drawCharacter(
                 'character-hint',
                 this.prompt.review.vocab.get('writing'),
