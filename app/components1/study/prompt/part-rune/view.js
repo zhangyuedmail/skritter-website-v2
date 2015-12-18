@@ -105,6 +105,13 @@ module.exports = GelatoComponent.extend({
             this.prompt.reviews.isLast()) {
             this.prompt.reviews.vocab.play();
         }
+        if (app.user.get('squigs')) {
+            this.prompt.canvas.drawShape(
+                'character-reveal',
+                this.prompt.review.character.getTargetShape(),
+                {color: '#e8ded2'}
+            );
+        }
         this.renderTemplate();
         return this;
     },
