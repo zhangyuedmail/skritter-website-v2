@@ -1,11 +1,9 @@
 gelato-component(data-name="prompt-toolbar-action")
-  - var prompt = view.prompt
-  - var review = view.prompt.review
+  - var prompt = view.prompt;
 
-  if review
+  if prompt.review
 
     .btn-group.btn-group-justified.cursor.text-center(role="group")
-
       .btn-group(role="group")
         button#toolbar-stroke-order.btn.btn-default(type="button")
           i.icon.icon-study-stroke-order(class=(view.buttonTeach ? '' : 'disabled'))
@@ -17,7 +15,7 @@ gelato-component(data-name="prompt-toolbar-action")
           i.icon.icon-study-show(class=(view.buttonShow ? '' : 'disabled'))
       .btn-group(role="group")
         button#toolbar-correct.btn.btn-default(type="button")
-          if (review.get('score') > 1)
+          if (prompt.review.get('score') > 1)
             i.icon.icon-study-correct(class=(view.buttonCorrect ? '' : 'disabled'))
           else
             i.icon.icon-study-incorrect(class=(view.buttonCorrect ? '' : 'disabled'))

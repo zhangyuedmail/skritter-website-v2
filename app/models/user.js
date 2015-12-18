@@ -142,7 +142,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     isLoggedIn: function() {
-        return this.session.get('user_id');
+        return this.session.has('user_id');
     },
     /**
      * @method login
@@ -178,6 +178,7 @@ module.exports = SkritterModel.extend({
             } else {
                 this.cache();
                 this.session.cache();
+                app.removeSetting('session');
                 app.setSetting('user', this.id);
                 callbackSuccess(user);
             }
