@@ -71,6 +71,9 @@ module.exports = GelatoComponent.extend({
         this.prompt.vocabSentence.render();
         this.prompt.vocabStyle.render();
         this.prompt.vocabWriting.render();
+        if (app.user.isAudioEnabled()) {
+            this.prompt.reviews.vocab.play();
+        }
         return this;
     },
     /**

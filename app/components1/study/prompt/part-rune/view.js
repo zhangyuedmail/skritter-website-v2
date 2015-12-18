@@ -101,6 +101,11 @@ module.exports = GelatoComponent.extend({
         this.prompt.vocabSentence.render();
         this.prompt.vocabStyle.render();
         this.prompt.vocabWriting.render();
+        if (app.user.isAudioEnabled() &&
+            app.user.get('hideReading') &&
+            this.prompt.reviews.isLast()) {
+            this.prompt.reviews.vocab.play();
+        }
         return this;
     },
     /**
@@ -108,6 +113,7 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPromptPartRune}
      */
     renderIncomplete: function() {
+        console.log('render me');
         this.prompt.review.start();
         this.prompt.review.set('complete', false);
         this.prompt.canvas.enableInput();
@@ -123,6 +129,11 @@ module.exports = GelatoComponent.extend({
         this.prompt.vocabSentence.render();
         this.prompt.vocabStyle.render();
         this.prompt.vocabWriting.render();
+        if (app.user.isAudioEnabled() &&
+            !app.user.get('hideReading') &&
+            this.prompt.reviews.isFirst()) {
+            this.prompt.reviews.vocab.play();
+        }
         if (this.prompt.review.get('teach')) {
             this.teachCharacter();
         }
@@ -216,8 +227,6 @@ module.exports = GelatoComponent.extend({
             }
             if (this.prompt.review.character.isComplete()) {
                 this.renderComplete();
-            } else {
-                this.renderIncomplete();
             }
         }
     },
