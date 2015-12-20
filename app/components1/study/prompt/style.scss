@@ -48,7 +48,7 @@ gelato-component[data-name='study-prompt'] {
           z-index: 5001;
         }
         #toolbar-grading-container {
-          bottom: 0;
+          bottom: -40px;
           left: 0;
           position: absolute;
           width: 100%;
@@ -57,7 +57,7 @@ gelato-component[data-name='study-prompt'] {
       }
       #toolbar-action-container {
         margin-bottom: 25px;
-        margin-top: 25px;
+        margin-top: 40px;
       }
     }
     .ribbon {
