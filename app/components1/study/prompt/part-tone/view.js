@@ -42,7 +42,7 @@ module.exports = GelatoComponent.extend({
         this.prompt.canvas.grid = false;
         this.prompt.canvas.reset();
         this.prompt.canvas.drawCharacter(
-            'character-hint',
+            'character-background',
             this.prompt.review.vocab.get('writing'),
             {
                 color: '#e8ded2',

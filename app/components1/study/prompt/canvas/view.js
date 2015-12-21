@@ -42,6 +42,7 @@ module.exports = GelatoComponent.extend({
         this.renderTemplate();
         this.stage = this.createStage();
         this.createLayer('character-grid');
+        this.createLayer('character-background');
         this.createLayer('character-hint');
         this.createLayer('character-reveal');
         this.createLayer('character-teach');
@@ -349,6 +350,7 @@ module.exports = GelatoComponent.extend({
     reset: function() {
         clearTimeout(this.mouseTapTimeout);
         this.getLayer('character-grid').removeAllChildren();
+        this.getLayer('character-background').removeAllChildren();
         this.getLayer('character-hint').removeAllChildren();
         this.getLayer('character-reveal').removeAllChildren();
         this.getLayer('character-teach').removeAllChildren();
