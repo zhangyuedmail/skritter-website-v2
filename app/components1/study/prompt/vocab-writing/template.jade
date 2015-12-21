@@ -14,13 +14,17 @@ gelato-component(data-name='study-prompt-vocab-writing')
 
       when 'rune'
         for character in writings
-          if (character.type === 'character')
+          if character.type === 'character'
             - var review = prompt.reviews.at(index)
             - var classes = []
-            if (prompt.reviews.position <= index && !review.get('complete'))
-              - classes.push('masked')
-            if (prompt.reviews.position === index)
-              - classes.push('active')
+            if prompt.reviews.position <= index && !review.get('complete')
+              - classes.push('masked');
+            if prompt.reviews.position === index
+              - classes.push('active');
+            if prompt.reviews.isChinese()
+              - classes.push('text-chinese');
+            else
+              - classes.push('text-japanese');
             div.character(class=classes.join(' '), data-position=index)
               span= character.value
             - index++
@@ -30,9 +34,13 @@ gelato-component(data-name='study-prompt-vocab-writing')
 
       default
         for character in writings
-          if (character.type === 'character')
+          if character.type === 'character'
             - var review = prompt.reviews.at(index)
             - var classes = []
+            if prompt.reviews.isChinese()
+              - classes.push('text-chinese');
+            else
+              - classes.push('text-japanese');
             div.character(class=classes.join(' '), data-position=index)
               span= character.value
             - index++
