@@ -5,11 +5,6 @@ gelato-component(data-name='study-prompt-vocab-writing')
     - var writings = prompt.reviews.vocab.getWritingObjects()
     - var index = 0
 
-    if prompt.reviews.isChinese()
-      .text-chinese
-    else
-      .text-japanese
-
     case prompt.reviews.part
 
       when 'rune'
