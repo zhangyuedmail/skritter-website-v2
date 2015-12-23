@@ -70,8 +70,10 @@ module.exports = GelatoComponent.extend({
      */
     clearLayer: function(name) {
         var layer = this.getLayer(name);
+        createjs.Tween.removeTweens(layer);
         layer.removeAllChildren();
         layer.uncache();
+        layer.alpha = 1;
         this.stage.update();
         return this;
     },
@@ -272,13 +274,15 @@ module.exports = GelatoComponent.extend({
         options = options || {};
         options.easing = options.easing || this.defaultFadeEasing;
         options.milliseconds = options.milliseconds || this.defaultFadeSpeed;
-        createjs.Tween.get(layer).to({alpha: 0}, options.milliseconds, options.easing).call(function() {
-            layer.removeAllChildren();
-            layer.alpha = 1;
-            if (typeof callback === 'function') {
-                callback();
-            }
-        });
+        createjs.Tween
+            .get(layer).to({alpha: 0}, options.milliseconds, options.easing)
+            .call(function() {
+                layer.removeAllChildren();
+                layer.alpha = 1;
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
     },
     /**
      * @method fadeShape
@@ -293,13 +297,15 @@ module.exports = GelatoComponent.extend({
         options.easing = options.easing || this.defaultFadeEasing;
         options.milliseconds = options.milliseconds || this.defaultFadeSpeed;
         layer.addChild(shape);
-        createjs.Tween.get(shape).to({alpha: 0}, options.milliseconds, options.easing).call(function() {
-            layer.removeChild(shape);
-            shape.alpha = 1;
-            if (typeof callback === 'function') {
-                callback();
-            }
-        });
+        createjs.Tween
+            .get(shape).to({alpha: 0}, options.milliseconds, options.easing)
+            .call(function() {
+                layer.removeChild(shape);
+                shape.alpha = 1;
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
     },
     /**
      * @method getLayer
