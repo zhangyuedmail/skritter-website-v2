@@ -319,6 +319,16 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method completeCharacter
+     */
+    completeCharacter: function() {
+        this.prompt.canvas.clearLayer('character');
+        this.prompt.review.set('complete', true);
+        this.prompt.review.character.reset();
+        this.prompt.review.character.add(this.prompt.review.character.targets[0].models);
+        this.render();
+    },
+    /**
      * @method eraseCharacter
      */
     eraseCharacter: function() {

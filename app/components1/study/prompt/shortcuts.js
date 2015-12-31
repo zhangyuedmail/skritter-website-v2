@@ -141,20 +141,14 @@ StudyPromptShortcuts.prototype._handleNavigateReveal = function() {
             if (this.prompt.review.isComplete()) {
                 this._handleNavigateNext();
             } else {
-                this.prompt.canvas.completeCharacter();
-                this.prompt.canvas.injectGradingColor();
-                this.prompt.review.set('complete', true);
-                this.prompt.renderPart();
+                this.prompt.part.completeCharacter();
             }
             break;
         case 'tone':
             if (this.prompt.review.isComplete()) {
                 this._handleNavigateNext();
             } else {
-                this.prompt.canvas.completeCharacter();
-                this.prompt.canvas.injectGradingColor();
-                this.prompt.review.set('complete', true);
-                this.prompt.renderPart();
+                this.prompt.part.completeTone();
             }
             break;
         default:

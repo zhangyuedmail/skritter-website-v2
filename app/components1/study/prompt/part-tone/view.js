@@ -197,5 +197,17 @@ module.exports = GelatoComponent.extend({
                 this.prompt.review.getGradingColor()
             );
         }
+    },
+    /**
+     * @method completeTone
+     */
+    completeTone: function() {
+        var possibleTones = this.prompt.review.getTones();
+        var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
+        this.prompt.canvas.clearLayer('character');
+        this.prompt.review.set('complete', true);
+        this.prompt.review.character.reset();
+        this.prompt.review.character.add(expectedTone);
+        this.render();
     }
 });
