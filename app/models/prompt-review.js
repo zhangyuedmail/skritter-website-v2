@@ -143,6 +143,9 @@ module.exports = GelatoModel.extend({
         if (this.get('showReading')) {
             return false;
         }
+        if (this.collection.part === 'defn' && !this.isComplete()) {
+            return true;
+        }
         if (this.isJapanese()) {
             return app.user.get('hideReading') && !this.collection.isComplete();
         } else {
