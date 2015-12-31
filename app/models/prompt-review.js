@@ -122,6 +122,9 @@ module.exports = GelatoModel.extend({
         if (this.get('showDefinition')) {
             return false;
         }
+        if (this.collection.part === 'rdng' && !this.isComplete()) {
+            return true;
+        }
         if (this.isJapanese()) {
             return app.user.get('hideDefinition') && !this.collection.isComplete();
         } else {
