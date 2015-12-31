@@ -3,11 +3,12 @@ gelato-component(data-name="study-prompt-part-defn")
 
   if prompt.reviews.part === 'defn' && prompt.reviews
 
-    .question(class=prompt.reviews.isComplete() ? 'invisible' : '')
-      span What's the definition?
-
     .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
       span= prompt.reviews.vocab.get('writing')
 
-    .answer(class=prompt.reviews.isComplete() ? '' : 'invisible')
-      span!= prompt.reviews.vocab.getDefinition()
+    if prompt.reviews.isComplete()
+      .answer
+        span!= prompt.reviews.vocab.getDefinition()
+    else
+      .question
+        span What's the definition?
