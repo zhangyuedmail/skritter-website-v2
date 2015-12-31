@@ -27,6 +27,8 @@ module.exports = GelatoPage.extend({
             return -item.getReadiness();
         };
 
+        app.showLoading(0);
+
         this.loadMore(
             _.bind(function() {
                 this.next();
@@ -148,6 +150,7 @@ module.exports = GelatoPage.extend({
                     callbackError(error);
                 }
             } else {
+                app.hideLoading();
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }

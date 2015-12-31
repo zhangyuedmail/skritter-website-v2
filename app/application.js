@@ -217,7 +217,7 @@ module.exports = GelatoApplication.extend({
      * @param {Number} [speed]
      */
     showLoading: function(speed) {
-        $('#application-loading').fadeIn(speed);
+        $('#application-loading').finish().fadeIn();
     },
     /**
      * @method start
@@ -261,8 +261,8 @@ module.exports = GelatoApplication.extend({
      * @method startRouter
      */
     startRouter: function() {
-        this.router.start();
         this.loadHelpscout();
         this.hideLoading();
+        this.router.start();
     }
 });
