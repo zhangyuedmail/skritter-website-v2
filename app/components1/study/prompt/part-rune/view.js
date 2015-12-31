@@ -80,13 +80,16 @@ module.exports = GelatoComponent.extend({
     renderComplete: function() {
         this.prompt.review.stop();
         this.prompt.review.set('complete', true);
-        this.prompt.review.set('teach', false);
         this.prompt.canvas.clearLayer('character-teach');
         this.prompt.canvas.disableInput();
-        this.prompt.canvas.injectLayerColor(
-            'character',
-            this.prompt.review.getGradingColor()
-        );
+        if (!this.prompt.review.get('showTeaching')) {
+            this.prompt.canvas.injectLayerColor(
+                'character',
+                this.prompt.review.getGradingColor()
+            );
+        } else {
+            this.prompt.review.set('score', 1);
+        }
         this.prompt.navigation.render();
         this.prompt.shortcuts.grading.listen();
         this.prompt.toolbarAction.render();
@@ -140,7 +143,10 @@ module.exports = GelatoComponent.extend({
             this.prompt.reviews.isFirst()) {
             this.prompt.reviews.vocab.play();
         }
-        if (this.prompt.review.get('teach')) {
+        if (app.user.get('teachingMode') && this.prompt.reviews.isNew()) {
+            this.prompt.review.set('showTeaching', true);
+        }
+        if (this.prompt.review.get('showTeaching')) {
             this.teachCharacter();
         }
         this.renderTemplate();
@@ -332,7 +338,7 @@ module.exports = GelatoComponent.extend({
      * @method eraseCharacter
      */
     eraseCharacter: function() {
-        this.prompt.review.set({complete: false, teach: false});
+        this.prompt.review.set({complete: false, showTeaching: false});
         this.prompt.review.character.reset();
         this.render();
     },
@@ -356,7 +362,7 @@ module.exports = GelatoComponent.extend({
             var stroke = this.prompt.review.character.getExpectedStroke();
             if (stroke) {
                 this.prompt.review.set('score', 1);
-                this.prompt.review.set('teach', true);
+                this.prompt.review.set('showTeaching', true);
                 this.prompt.canvas.clearLayer('character-teach');
                 this.prompt.canvas.drawShape(
                     'character-teach',
