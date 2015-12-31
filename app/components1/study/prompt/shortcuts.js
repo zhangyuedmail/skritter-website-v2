@@ -65,7 +65,7 @@ StudyPromptShortcuts.prototype._handleActionShow = function() {
 StudyPromptShortcuts.prototype._handleActionTeach = function() {
     switch (this.prompt.reviews.part) {
         case 'rune':
-            //TODO: start teaching mode
+            this.prompt.part.teachCharacter();
             break;
     }
 };
