@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "bower": "~1.7.0",
-    "brunch": "~2.0.0",
+    "brunch": "~2.1.0",
     "chai": "~3.4.0",
     "cordova": "~5.4.0",
     "lodash": "~3.10.0",
