@@ -51,6 +51,11 @@ gelato-page[data-name='home'] {
     .header { margin-bottom: 90px; }
     .media { margin-bottom: 60px; }
     .icon { width: 75px; }
+    .badge-link {
+      cursor: pointer;
+      opacity: 1.0;
+      &:hover { opacity: 0.7; }
+    }
     .media-body {
       color: #404851;
       font-family: $font-ubuntu;
