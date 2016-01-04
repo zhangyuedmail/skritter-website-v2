@@ -161,7 +161,7 @@ module.exports = Router.extend({
     navigateDashboard: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('dashboard');
-            this.go('pages/dashboard');
+            this.go('pages1/dashboard');
         } else {
             this.navigateLogin();
         }

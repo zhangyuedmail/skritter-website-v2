@@ -1,4 +1,5 @@
 gelato-component(data-name='dashboard-queue')
+
   if view.vocablists.state === 'fetching'
     p.text-center
       i.fa.fa-3x.fa-spinner.fa-pulse
@@ -10,8 +11,12 @@ gelato-component(data-name='dashboard-queue')
           a(href="/vocablists/view/"+list.id)= list.get('name')
         .col-md-6
           .progress
-            .progress-bar(style="width:"+(list.getProgress().percent)+'%')
+            .progress-bar(style="width:" + (list.getProgress().percent)+'%')
         .col-md-2.text-center
-          a(href='study/' + list.id) Study
+          a(href='/study' + list.id) Study
   else
     em None
+    //.row
+      .col-xs-12.text-center
+        h3 Select a list to get started.
+        a(href='/vocablists/browse').btn.btn-fixed.btn-primary Browse Lists

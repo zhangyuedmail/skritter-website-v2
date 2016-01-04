@@ -11,7 +11,6 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function() {
-        //this.listenTo(app.user.data.stats, 'fetch', this.updateLearned);
         this.vocablists = new Vocablists();
         this.listenTo(this.vocablists, 'state', this.render);
         this.vocablists.fetch({

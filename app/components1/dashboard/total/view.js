@@ -2,7 +2,7 @@ var GelatoComponent = require('gelato/component');
 var ProgressStats = require('collections/progress-stats');
 
 /**
- * @class LearnedWords
+ * @class DashboardTotal
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
@@ -22,7 +22,7 @@ module.exports = GelatoComponent.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {Component}
+     * @returns {GelatoComponent}
      */
     render: function() {
         this.renderTemplate();

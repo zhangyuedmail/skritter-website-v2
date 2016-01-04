@@ -217,7 +217,7 @@ module.exports = GelatoApplication.extend({
      * @param {Number} [speed]
      */
     showLoading: function(speed) {
-        $('#application-loading').finish().fadeIn();
+        $('#application-loading').finish().fadeIn(speed);
     },
     /**
      * @method start
