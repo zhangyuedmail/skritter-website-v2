@@ -21,6 +21,7 @@ module.exports = Router.extend({
         'account': 'navigateAccount',
         'account/billing/history': 'navigateAccountBillingHistory',
         'account/billing/subscription': 'navigateAccountBillingSubscription',
+        'account/configure': 'navigateAccountConfigure',
         'account/settings/general': 'navigateAccountSettingsGeneral',
         'account/settings-general': 'navigateAccountSettingsGeneral', //LEGACY
         'account/settings/study': 'navigateAccountSettingsStudy',
@@ -101,6 +102,17 @@ module.exports = Router.extend({
         if (app.user.isLoggedIn()) {
             this.navigate('account/billing/subscription');
             this.go('views/account/billing/subscription');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateAccountConfigure
+     */
+    navigateAccountConfigure: function() {
+        if (app.user.isLoggedIn()) {
+            this.navigate('account/configure');
+            this.go('pages1/account/configure');
         } else {
             this.navigateLogin();
         }

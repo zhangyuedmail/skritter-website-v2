@@ -1,0 +1,13 @@
+@import "../../../styles/_variables";
+
+gelato-page[data-name='account-configure'] {
+
+  background: $background-primary;
+  padding-top: 75px;
+
+  form {
+    margin: 0 auto;
+    max-width: 800px;
+  }
+
+}
