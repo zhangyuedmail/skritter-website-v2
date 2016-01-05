@@ -14,9 +14,11 @@ gelato-component(data-name='dashboard-queue')
             .progress-bar(style="width:" + (list.getProgress().percent)+'%')
         .col-md-2.text-center
           a(href='/study' + list.id) Study
+    .text-center
+      br
+      a(href='/vocablists/queue').btn.btn-success Manage
   else
-    em None
-    //.row
+    .row
       .col-xs-12.text-center
-        h3 Select a list to get started.
-        a(href='/vocablists/browse').btn.btn-fixed.btn-primary Browse Lists
+        p.lead Select a list to get started.
+        a(href='/vocablists/browse').btn.btn-fixed.btn-success Browse Lists

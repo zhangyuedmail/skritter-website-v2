@@ -16,7 +16,7 @@ module.exports = GelatoComponent.extend({
         this.vocablists.fetch({
             data: {
                 limit: 10,
-                sort: 'adding',
+                sort: 'studying',
                 include_percent_done: 'true',
                 lang: app.getLanguage()
             }
