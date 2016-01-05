@@ -50,7 +50,7 @@
     "css-brunch": "~1.7.0",
     "jade-brunch": "~1.8.0",
     "javascript-brunch": "~1.8.0",
-    "replace-brunch": "jernung/replace-brunch#v0.1.0",
+    "replace-brunch": "~1.0.0",
     "sass-brunch": "~1.9.0",
     "uglify-js-brunch": "~1.7.0"
   }
