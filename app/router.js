@@ -34,7 +34,7 @@ module.exports = Router.extend({
         'legal': 'navigateLegal',
         'login': 'navigateLogin',
         'scratchpad/:vocabId(/:part)': 'navigateScratchpad',
-        'signup': 'navigateSignup',
+        'signup(/:plan)': 'navigateSignup',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'test': 'navigateTest',
         'vocab(/:vocabId)': 'navigateVocab',
@@ -178,7 +178,7 @@ module.exports = Router.extend({
      */
     navigateHome: function() {
         this.navigate('home');
-        this.go('pages/home');
+        this.go('pages1/home');
     },
     /**
      * @method navigateInstitutions
@@ -220,10 +220,15 @@ module.exports = Router.extend({
     },
     /**
      * @method navigateSignup
+     * @param {String} [plan]
      */
-    navigateSignup: function() {
-        this.navigate('signup');
-        this.go('pages/signup');
+    navigateSignup: function(plan) {
+        if (!app.user.isLoggedIn()) {
+            this.navigate('signup');
+            this.go('pages1/signup', {plan: plan});
+        } else {
+            this.navigateDashboard();
+        }
     },
     /**
      * @method navigateStudy

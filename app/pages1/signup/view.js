@@ -18,12 +18,14 @@ var Session = require('models/session');
 module.exports = GelatoPage.extend({
     /**
      * @method initialize
+     * @param {Object} options
      * @constructor
      */
-    initialize: function() {
+    initialize: function(options) {
         StripeLoader.load();
         this.footer = new MarketingFooter();
         this.navbar = new DefaultNavbar();
+        this.plan = options.plan;
         this.user = null;
         this.password = null;
         this.session = new Session();
