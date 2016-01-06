@@ -15,7 +15,7 @@ module.exports = GelatoComponent.extend({
         this._filterString = '';
         this._filterType = [];
         this._layout = 'list';
-        this._sortType = 'title';
+        this._sortType = 'popularity';
         this.vocablists = new Vocablists();
         this.listenTo(this.vocablists, 'state', this.render);
         var data = {
