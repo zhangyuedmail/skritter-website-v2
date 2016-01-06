@@ -1,4 +1,5 @@
 var GelatoComponent = require('gelato/component');
+var VocabDialog = require('dialogs/vocab/view');
 
 /**
  * @class StudyPromptToolbarVocab
@@ -83,7 +84,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabInfo: function(event) {
         event.preventDefault();
-        //TODO: additional information dialog
+        new VocabDialog().open().load(this.prompt.reviews.vocab.id);
     },
     /**
      * @method handleClickButtonVocabStar
