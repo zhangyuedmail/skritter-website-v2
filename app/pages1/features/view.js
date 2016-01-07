@@ -3,7 +3,7 @@ var DefaultNavbar = require('navbars/default/view');
 var MarketingFooter = require('components1/marketing/footer/view');
 
 /**
- * @class Home
+ * @class Features
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
@@ -16,10 +16,15 @@ module.exports = GelatoPage.extend({
         this.navbar = new DefaultNavbar();
     },
     /**
+     * @property events
+     * @type Object
+     */
+    events: {},
+    /**
      * @property title
      * @type {String}
      */
-    title: 'Home - Skritter',
+    title: 'Features - Skritter',
     /**
      * @property template
      * @type {Function}
@@ -27,7 +32,7 @@ module.exports = GelatoPage.extend({
     template: require('./template'),
     /**
      * @method render
-     * @returns {Home}
+     * @returns {Contact}
      */
     render: function() {
         this.renderTemplate();
@@ -37,11 +42,11 @@ module.exports = GelatoPage.extend({
     },
     /**
      * @method remove
-     * @returns {Home}
+     * @returns {Contact}
      */
     remove: function() {
-        this.footer.remove();
         this.navbar.remove();
+        this.footer.remove();
         return GelatoPage.prototype.remove.call(this);
     }
 });
