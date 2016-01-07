@@ -223,46 +223,54 @@ module.exports = GelatoApplication.extend({
      * @method start
      */
     start: function() {
+
+        //load cached user data if it exists
         this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
         this.user.on('state', this.user.cache);
         this.user.session.on('state', this.user.session.cache);
+
+        //set raygun tracking for logged in user
         if (this.user.isLoggedIn()) {
             Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
             Raygun.withTags(this.user.getRaygunTags());
         } else {
             Raygun.setUser('guest', true);
         }
-        if (this.user.session.isExpired()) {
-            if (this.user.id === 'application') {
-                this.user.session.authenticate('client_credentials', null, null,
-                    _.bind(function() {
-                        this.startRouter();
-                    }, this),
-                    _.bind(function() {
-                        this.startRouter();
-                    }, this)
-                );
-            } else {
-                this.user.session.refresh(
-                    _.bind(function() {
-                        this.startRouter();
-                    }, this),
-                    _.bind(function() {
-                        this.startRouter();
-                    }, this)
-                );
-            }
-        } else {
-            this.startRouter();
-        }
-    },
-    /**
-     * @method startRouter
-     */
-    startRouter: function() {
-        this.loadHelpscout();
-        this.hideLoading();
-        this.router.start();
+
+        //use async for cleaner loading code
+        async.series([
+            _.bind(function(callback) {
+                //check for user authentication type
+                if (this.user.id === 'application') {
+                    this.user.session.authenticate('client_credentials', null, null,
+                        function() {
+                            callback();
+                        },
+                        function() {
+                            callback();
+                        }
+                    );
+                } else {
+                    this.user.session.refresh(
+                        function() {
+                            callback();
+                        },
+                        function() {
+                            callback();
+                        }
+                    );
+                }
+            }, this),
+            _.bind(function(callback) {
+                //TODO: use for future loading calls
+                callback();
+            }, this)
+        ], _.bind(function() {
+            this.hideLoading();
+            this.loadHelpscout();
+            this.router.start();
+        }, this));
+
     }
 });
