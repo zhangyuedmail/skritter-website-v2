@@ -1,9 +1,9 @@
 var GelatoPage = require('gelato/page');
 
-var AddingTable = require('./adding-table/view');
+var AddingTable = require('components1/vocablists/adding-table/view');
 var DefaultNavbar = require('navbars/default/view');
-var ReviewingTable = require('./reviewing-table/view');
-var Sidebar = require('../sidebar/view');
+var ReviewingTable = require('components1/vocablists/reviewing-table/view');
+var Sidebar = require('components1/vocablists/sidebar/view');
 var Vocablists = require('collections/vocablists');
 
 /**

@@ -21,11 +21,11 @@ module.exports = Router.extend({
         'account': 'navigateAccount',
         'account/billing/history': 'navigateAccountBillingHistory',
         'account/billing/subscription': 'navigateAccountBillingSubscription',
-        'account/configure': 'navigateAccountConfigure',
         'account/settings/general': 'navigateAccountSettingsGeneral',
         'account/settings-general': 'navigateAccountSettingsGeneral', //LEGACY
         'account/settings/study': 'navigateAccountSettingsStudy',
         'account/settings-study': 'navigateAccountSettingsStudy', //LEGACY
+        'account/setup': 'navigateAccountSetup',
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
         'features': 'navigateFeatures',
@@ -90,7 +90,7 @@ module.exports = Router.extend({
     navigateAccountBillingHistory: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/billing/history');
-            this.go('views/account/billing/history');
+            this.go('pages1/account/billing/history');
         } else {
             this.navigateLogin();
         }
@@ -101,18 +101,7 @@ module.exports = Router.extend({
     navigateAccountBillingSubscription: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/billing/subscription');
-            this.go('views/account/billing/subscription');
-        } else {
-            this.navigateLogin();
-        }
-    },
-    /**
-     * @method navigateAccountConfigure
-     */
-    navigateAccountConfigure: function() {
-        if (app.user.isLoggedIn()) {
-            this.navigate('account/configure');
-            this.go('pages1/account/configure');
+            this.go('pages1/account/billing/subscription');
         } else {
             this.navigateLogin();
         }
@@ -123,7 +112,7 @@ module.exports = Router.extend({
     navigateAccountSettingsGeneral: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/settings/general');
-            this.go('views/account/settings/general');
+            this.go('pages1/account/settings/general');
         } else {
             this.navigateLogin();
         }
@@ -134,7 +123,18 @@ module.exports = Router.extend({
     navigateAccountSettingsStudy: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/settings/study');
-            this.go('views/account/settings/study');
+            this.go('pages1/account/settings/study');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateAccountSetup
+     */
+    navigateAccountSetup: function() {
+        if (app.user.isLoggedIn()) {
+            this.navigate('account/setup');
+            this.go('pages1/account/setup');
         } else {
             this.navigateLogin();
         }
@@ -252,7 +252,7 @@ module.exports = Router.extend({
      * @method navigateTest
      */
     navigateTest: function() {
-        this.go('views/test');
+        this.go('pages1/test');
     },
     /**
      * @method navigateVocab
@@ -273,9 +273,9 @@ module.exports = Router.extend({
     navigateVocablist: function(listId, sectionId) {
         if (app.user.isLoggedIn()) {
             if (sectionId) {
-                this.go('views/vocablists/list/section', {vocablistId: listId, sectionId: sectionId});
+                this.go('pages1/vocablists/list-section', {vocablistId: listId, sectionId: sectionId});
             } else {
-                this.go('views/vocablists/list', {vocablistId: listId});
+                this.go('pages1/vocablists/list', {vocablistId: listId});
             }
         } else {
             this.navigateLogin();
@@ -286,7 +286,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsBrowse: function() {
         if (app.user.isLoggedIn()) {
-            this.go('views/vocablists/browse');
+            this.go('pages1/vocablists/browse');
         } else {
             this.navigateLogin();
         }
@@ -296,7 +296,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsChinesepod: function() {
         if (app.user.isLoggedIn()) {
-            this.go('views/vocablists/chinesepod');
+            this.go('pages1/vocablists/chinesepod');
         } else {
             this.navigateLogin();
         }
@@ -306,7 +306,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsCreate: function() {
         if (app.user.isLoggedIn()) {
-            this.go('views/vocablists/create');
+            this.go('pages1/vocablists/create');
         } else {
             this.navigateLogin();
         }
@@ -316,7 +316,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsMine: function() {
         if (app.user.isLoggedIn()) {
-            this.go('views/vocablists/mine');
+            this.go('pages1/vocablists/mine');
         } else {
             this.navigateLogin();
         }
@@ -326,7 +326,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsPublished: function() {
         if (app.user.isLoggedIn()) {
-            this.go('views/vocablists/published');
+            this.go('pages1/vocablists/published');
         } else {
             this.navigateLogin();
         }
@@ -336,7 +336,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsQueue: function() {
         if (app.user.isLoggedIn()) {
-            this.go('views/vocablists/queue');
+            this.go('pages1/vocablists/queue');
         } else {
             this.navigateLogin();
         }

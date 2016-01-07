@@ -1,11 +1,11 @@
 var GelatoPage = require('gelato/page');
 
 var DefaultNavbar = require('navbars/default/view');
-var Table = require('./table/view');
-var Sidebar = require('../sidebar/view');
+var Table = require('components1/vocablists/mine-table/view');
+var Sidebar = require('components1/vocablists/sidebar/view');
 
 /**
- * @class VocablistPublished
+ * @class VocablistMine
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
@@ -22,9 +22,7 @@ module.exports = GelatoPage.extend({
      * @property events
      * @type {Object}
      */
-    events: {
-        'keyup #list-search-input': 'handleKeypressListSearchInput'
-    },
+    events: {},
     /**
      * @property template
      * @type {Function}
@@ -34,7 +32,7 @@ module.exports = GelatoPage.extend({
      * @property title
      * @type {String}
      */
-    title: 'Published Lists - Skritter',
+    title: 'My Lists - Skritter',
     /**
      * @method render
      * @returns {VocablistBrowse}
@@ -45,15 +43,6 @@ module.exports = GelatoPage.extend({
         this.sidebar.setElement('#vocablist-sidebar-container').render();
         this.table.setElement('#vocablist-container').render();
         return this;
-    },
-    /**
-     * @method handleKeypressListSearchInput
-     * @param {Event} event
-     */
-    handleKeypressListSearchInput: function(event) {
-        if (event.which === 13 || event.keyCode === 13) {
-            this.table.searchFor($(event.target).val());
-        }
     },
     /**
      * @method remove

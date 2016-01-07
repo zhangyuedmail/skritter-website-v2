@@ -1,6 +1,6 @@
 var GelatoPage = require('gelato/page');
 
-var AccountSidebar = require('../../sidebar/view');
+var AccountSidebar = require('components1/account/sidebar/view');
 var Coupon = require('models/coupon');
 var DefaultNavbar = require('navbars/default/view');
 var Subscription = require('models/subscription');

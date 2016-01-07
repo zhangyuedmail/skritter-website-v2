@@ -1,7 +1,7 @@
 var GelatoPage = require('gelato/page');
 
 var DefaultNavbar = require('navbars/default/view');
-var EditorRows = require('../editor-rows/view');
+var EditorRows = require('components1/vocablists/row-editor/view');
 var Vocablist = require('models/vocablist');
 var VocablistSection = require('models/vocablist-section');
 var User = require('models/user');
