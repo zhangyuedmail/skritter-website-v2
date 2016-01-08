@@ -78,6 +78,7 @@ module.exports = GelatoApplication.extend({
         description: '{!application-description!}',
         canvasSize: 450,
         language: undefined,
+        lastItemChanged: 0,
         timestamp: '{!timestamp!}',
         title: '{!application-title!}',
         version: '{!application-version!}'
@@ -139,13 +140,6 @@ module.exports = GelatoApplication.extend({
             }
         );
         return false;
-    },
-    /**
-     * @method hideLoading
-     * @param {Number} [speed]
-     */
-    hideLoading: function(speed) {
-        $('#application-loading').fadeOut(speed);
     },
     /**
      * @method isChinese
@@ -213,13 +207,6 @@ module.exports = GelatoApplication.extend({
         }
     },
     /**
-     * @method showLoading
-     * @param {Number} [speed]
-     */
-    showLoading: function(speed) {
-        $('#application-loading').finish().fadeIn(speed);
-    },
-    /**
      * @method start
      */
     start: function() {
@@ -240,10 +227,10 @@ module.exports = GelatoApplication.extend({
 
         //use async for cleaner loading code
         async.series([
-            _.bind(function(callback) {
+            function(callback) {
                 //check for user authentication type
-                if (this.user.id === 'application') {
-                    this.user.session.authenticate('client_credentials', null, null,
+                if (app.user.id === 'application') {
+                    app.user.session.authenticate('client_credentials', null, null,
                         function() {
                             callback();
                         },
@@ -252,7 +239,7 @@ module.exports = GelatoApplication.extend({
                         }
                     );
                 } else {
-                    this.user.session.refresh(
+                    app.user.session.refresh(
                         function() {
                             callback();
                         },
@@ -261,13 +248,101 @@ module.exports = GelatoApplication.extend({
                         }
                     );
                 }
-            }, this),
-            _.bind(function(callback) {
-                //TODO: use for future loading calls
-                callback();
-            }, this)
+            },
+            //load dexie with items store
+            function(callback) {
+                if (app.user.isLoggedIn()) {
+                    app.db = new Dexie(app.user.id + '-database');
+                    app.db.version(1).stores({
+                        items: [
+                            'id',
+                            '*changed',
+                            'created',
+                            'interval',
+                            '*last',
+                            '*next',
+                            'part',
+                            'previousInterval',
+                            'previousSuccess',
+                            'reviews',
+                            'successes',
+                            'style',
+                            'timeStudied',
+                            'vocabIds'
+                        ].join(',')
+                    });
+                    app.db.on('ready', callback);
+                    app.db.open();
+                } else {
+                    app.db = null;
+                    callback();
+                }
+            },
+            //set time for last item changed
+            function(callback) {
+                if (app.user.isLoggedIn()) {
+                    app.db.items
+                        .orderBy('changed')
+                        .last()
+                        .then(function(item) {
+                            app.set('lastItemChanged', item ? item.changed : 0);
+                            callback();
+                        });
+                } else {
+                    callback();
+                }
+            },
+            //fetch and store changed items
+            function(callback) {
+                if (app.user.isLoggedIn()) {
+                    var cursor = undefined;
+                    var index = 0;
+                    async.whilst(
+                        function() {
+                            index++;
+                            return cursor !== null;
+                        },
+                        function(callback) {
+                            ScreenLoader.post('Fetching item batch #' + index);
+                            $.ajax({
+                                method: 'GET',
+                                url: 'https://api-dot-write-way.appspot.com/v1/items',
+                                data: {
+                                    cursor: cursor,
+                                    offset: app.get('lastItemChanged') + 1,
+                                    order: 'changed',
+                                    limit: 2500,
+                                    token: app.user.session.get('access_token')
+                                },
+                                error: function(error) {
+                                    callback(error);
+                                },
+                                success: function(result) {
+                                    cursor = result.cursor;
+                                    app.db.transaction(
+                                        'rw',
+                                        app.db.items,
+                                        function() {
+                                            result.Items.forEach(function(item) {
+                                                app.db.items.put(item);
+                                            });
+                                        }
+                                    ).then(function() {
+                                        setTimeout(callback, 500);
+                                    });
+                                }
+                            });
+                        },
+                        callback
+                    );
+
+                } else {
+                    callback();
+                }
+            }
         ], _.bind(function() {
-            this.hideLoading();
+            ScreenLoader.post("Let's get started!");
+            ScreenLoader.hide();
             this.loadHelpscout();
             this.router.start();
         }, this));
