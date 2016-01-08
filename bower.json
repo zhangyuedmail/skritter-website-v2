@@ -9,6 +9,7 @@
     "createjs-easel": "CreateJS/EaselJS#0.8.2",
     "createjs-tween": "CreateJS/TweenJS#0.6.2",
     "d3": "~3.5.0",
+    "dexie": "~1.2.0",
     "fontawesome": "~4.5.0",
     "gelato": "jernung/gelato#v0.1.2",
     "mocha": "~2.3.0",

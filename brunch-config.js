@@ -20,6 +20,7 @@ exports.config = {
                     'bower_components/chai/chai.js',
                     'bower_components/createjs-easel/easeljs-0.8.1.combined.js',
                     'bower_components/createjs-tween/tweenjs-0.6.1.combined.js',
+                    'bower_components/dexie/dist/latest/Dexie.js',
                     'bower_components/mocha/mocha.js',
                     'bower_components/moment/moment.js',
                     'bower_components/moment-timezone/moment-timezone.js',
