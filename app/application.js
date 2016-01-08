@@ -119,8 +119,8 @@ module.exports = GelatoApplication.extend({
     /**
      * @method handleError
      * @param {String} message
-     * @param {String} url
-     * @param {Number} line
+     * @param {String} [url]
+     * @param {Number} [line]
      * @returns {Boolean}
      */
     handleError: function(message, url, line) {
@@ -224,6 +224,14 @@ module.exports = GelatoApplication.extend({
         } else {
             Raygun.setUser('guest', true);
         }
+
+        //console log all dexie errors
+        Dexie.Promise.on('error', function(error) {
+            console.error(error);
+            if (app.isDevelopment()) {
+                app.handleError(error);
+            }
+        });
 
         //use async for cleaner loading code
         async.series([
