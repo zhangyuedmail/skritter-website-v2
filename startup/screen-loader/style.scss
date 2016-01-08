@@ -1,0 +1,58 @@
+screen-loader {
+
+  background-color: #262b30;
+  color: #fbfafc;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+
+  &.fade-in {
+    opacity: 1;
+    transition: visibility 0.5s, opacity 0.5s linear;
+    visibility: visible;
+  }
+
+  &.fade-out {
+    opacity: 0;
+    transition: visibility 0.5s, opacity 0.5s linear;
+    visibility: hidden;
+  }
+
+  .message {
+    color: #ebeaf0;
+    font-family: "Roboto Slab", sans-serif;
+    font-size: 1.5em;
+    font-weight: 300;
+    &.fade-out {
+      opacity: 0;
+      transition: visibility 1s, opacity 1s linear;
+      visibility: hidden;
+    }
+  }
+
+  .message-container {
+    height: 200px;
+    position: relative;
+    text-align: center;
+    top: 40%;
+    transform: translateY(-40%);
+    width: 100%;
+  }
+
+  .title {
+    font-family: "Ubuntu", sans-serif;
+    font-size: 3em;
+    font-weight: 400;
+  }
+
+  .title-container {
+    position: relative;
+    text-align: center;
+    top: 35%;
+    transform: translateY(-35%);
+    width: 100%;
+  }
+
+}

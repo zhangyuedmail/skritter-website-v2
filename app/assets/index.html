@@ -9,67 +9,11 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu:300,400' rel='stylesheet' type='text/css'>
     <link href="/favicon.png" rel="apple-touch-icon">
+    <link href="/styles/startup.css" rel="stylesheet">
     <link href="/styles/libraries.css" rel="stylesheet">
     <link href="/styles/application.css" rel="stylesheet">
-    <style>
-        #application-loading {
-            background-color: #262b30;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 9999;
-        }
-        #application-loading .spinner {
-            left: 45%;
-            margin: 0 auto;
-            position: absolute;
-            text-align: center;
-            top: 45%;
-            width: 70px;
-        }
-        #application-loading .spinner > div {
-            width: 18px;
-            height: 18px;
-            background-color: #e3e3e3;
-            border-radius: 100%;
-            display: inline-block;
-            -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-        }
-        #application-loading .spinner .bounce1 {
-            -webkit-animation-delay: -0.32s;
-            animation-delay: -0.32s;
-        }
-        #application-loading .spinner .bounce2 {
-            -webkit-animation-delay: -0.16s;
-            animation-delay: -0.16s;
-        }
-        @-webkit-keyframes sk-bouncedelay {
-            0%, 80%, 100% { -webkit-transform: scale(0) }
-            40% { -webkit-transform: scale(1.0) }
-        }
-        @keyframes sk-bouncedelay {
-            0%, 80%, 100% {
-                -webkit-transform: scale(0);
-                transform: scale(0);
-            }
-            40% {
-                -webkit-transform: scale(1.0);
-                transform: scale(1.0);
-            }
-        }
-    </style>
-
 </head>
 <body>
-<div id="application-loading">
-    <div class="spinner">
-        <div class="bounce1"></div>
-        <div class="bounce2"></div>
-        <div class="bounce3"></div>
-    </div>
-</div>
 <gelato-application></gelato-application>
 <bootstrap-dialogs></bootstrap-dialogs>
 <script>
@@ -77,6 +21,10 @@
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+</script>
+<script src="/js/startup.js"></script>
+<script>
+    window.ScreenLoader = new (require('startup/screen-loader/module'))();
 </script>
 <script src="/js/libraries.js"></script>
 <script src="/js/application.js"></script>

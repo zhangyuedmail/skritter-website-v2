@@ -6,6 +6,7 @@ exports.config = {
             joinTo: {
                 'js/application.js': /^app[\\/]/,
                 'js/libraries.js': /^(bower_components|vendor)[\\/]/,
+                'js/startup.js': /^startup[\\/]/,
                 'js/test.js': /^test[\\/]/
             },
             order: {
@@ -40,18 +41,20 @@ exports.config = {
             joinTo: {
                 'styles/application.css': /^app[\\/]/,
                 'styles/libraries.css': /^(bower_components|vendor)[\\/]/,
+                'styles/startup.css': /^startup[\\/]/,
                 'styles/test.css': /^test[\\/]/
             }
         },
         templates: {
             joinTo: {
-                'js/application.js': /^app[\\/]/
+                'js/application.js': /^app[\\/]/,
+                'js/startup.js': /^startup[\\/]/
             }
         }
     },
     paths: {
         'public': 'public',
-        'watched': ['app', 'test', 'vendor']
+        'watched': ['app', 'startup', 'test', 'vendor']
     },
     plugins: {
         replace: {
@@ -63,8 +66,10 @@ exports.config = {
             paths: [
                 'public/js/application.js',
                 'public/js/libraries.js',
+                'public/js/startup.js',
                 'public/styles/application.css',
-                'public/styles/libraries.css'
+                'public/styles/libraries.css',
+                'public/styles/startup.css'
             ]
         }
     }
