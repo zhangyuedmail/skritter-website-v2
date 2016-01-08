@@ -90,7 +90,7 @@ module.exports = Router.extend({
     navigateAccountBillingHistory: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/billing/history');
-            this.go('pages1/account/billing/history');
+            this.go('pages/account/billing/history');
         } else {
             this.navigateLogin();
         }
@@ -101,7 +101,7 @@ module.exports = Router.extend({
     navigateAccountBillingSubscription: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/billing/subscription');
-            this.go('pages1/account/billing/subscription');
+            this.go('pages/account/billing/subscription');
         } else {
             this.navigateLogin();
         }
@@ -112,7 +112,7 @@ module.exports = Router.extend({
     navigateAccountSettingsGeneral: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/settings/general');
-            this.go('pages1/account/settings/general');
+            this.go('pages/account/settings/general');
         } else {
             this.navigateLogin();
         }
@@ -123,7 +123,7 @@ module.exports = Router.extend({
     navigateAccountSettingsStudy: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/settings/study');
-            this.go('pages1/account/settings/study');
+            this.go('pages/account/settings/study');
         } else {
             this.navigateLogin();
         }
@@ -134,7 +134,7 @@ module.exports = Router.extend({
     navigateAccountSetup: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('account/setup');
-            this.go('pages1/account/setup');
+            this.go('pages/account/setup');
         } else {
             this.navigateLogin();
         }
@@ -153,7 +153,7 @@ module.exports = Router.extend({
      * @method navigateContact
      */
     navigateContact: function() {
-        this.go('pages1/contact');
+        this.go('pages/contact');
     },
     /**
      * @method navigateDashboard
@@ -161,7 +161,7 @@ module.exports = Router.extend({
     navigateDashboard: function() {
         if (app.user.isLoggedIn()) {
             this.navigate('dashboard');
-            this.go('pages1/dashboard');
+            this.go('pages/dashboard');
         } else {
             this.navigateLogin();
         }
@@ -171,26 +171,26 @@ module.exports = Router.extend({
      */
     navigateFeatures: function() {
         this.navigate('features');
-        this.go('pages1/features');
+        this.go('pages/features');
     },
     /**
      * @method navigateHome
      */
     navigateHome: function() {
         this.navigate('home');
-        this.go('pages1/home');
+        this.go('pages/home');
     },
     /**
      * @method navigateInstitutions
      */
     navigateInstitutions: function() {
-        this.go('pages1/institutions');
+        this.go('pages/institutions');
     },
     /**
      * @method navigateLegal
      */
     navigateLegal: function() {
-        this.go('pages1/legal');
+        this.go('pages/legal');
     },
     /**
      * @method navigateLogin
@@ -200,7 +200,7 @@ module.exports = Router.extend({
             this.navigateHome();
         } else {
             this.navigate('login');
-            this.go('pages1/login');
+            this.go('pages/login');
         }
     },
     /**
@@ -208,7 +208,7 @@ module.exports = Router.extend({
      */
     navigateNotFound: function() {
         this.navigate('not-found');
-        this.go('pages1/not-found');
+        this.go('pages/not-found');
     },
     /**
      * @method navigateScratchpad
@@ -216,7 +216,7 @@ module.exports = Router.extend({
      * @param {String} [part]
      */
     navigateScratchpad: function(vocabId, part) {
-        this.go('pages1/scratchpad', {part: part, vocabId: vocabId});
+        this.go('pages/scratchpad', {part: part, vocabId: vocabId});
     },
     /**
      * @method navigateSignup
@@ -225,7 +225,7 @@ module.exports = Router.extend({
     navigateSignup: function(plan) {
         if (!app.user.isLoggedIn()) {
             this.navigate('signup');
-            this.go('pages1/signup', {plan: plan});
+            this.go('pages/signup', {plan: plan});
         } else {
             this.navigateDashboard();
         }
@@ -242,7 +242,7 @@ module.exports = Router.extend({
             } else if (listId) {
                 this.go('pages/study-list', {listId: listId});
             } else {
-                this.go('pages1/study');
+                this.go('pages/study');
             }
         } else {
             this.navigateLogin();
@@ -252,7 +252,7 @@ module.exports = Router.extend({
      * @method navigateTest
      */
     navigateTest: function() {
-        this.go('pages1/test');
+        this.go('pages/test');
     },
     /**
      * @method navigateVocab
@@ -273,9 +273,9 @@ module.exports = Router.extend({
     navigateVocablist: function(listId, sectionId) {
         if (app.user.isLoggedIn()) {
             if (sectionId) {
-                this.go('pages1/vocablists/list-section', {vocablistId: listId, sectionId: sectionId});
+                this.go('pages/vocablists/list-section', {vocablistId: listId, sectionId: sectionId});
             } else {
-                this.go('pages1/vocablists/list', {vocablistId: listId});
+                this.go('pages/vocablists/list', {vocablistId: listId});
             }
         } else {
             this.navigateLogin();
@@ -286,7 +286,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsBrowse: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/vocablists/browse');
+            this.go('pages/vocablists/browse');
         } else {
             this.navigateLogin();
         }
@@ -296,7 +296,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsChinesepod: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/vocablists/chinesepod');
+            this.go('pages/vocablists/chinesepod');
         } else {
             this.navigateLogin();
         }
@@ -306,7 +306,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsCreate: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/vocablists/create');
+            this.go('pages/vocablists/create');
         } else {
             this.navigateLogin();
         }
@@ -316,7 +316,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsMine: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/vocablists/mine');
+            this.go('pages/vocablists/mine');
         } else {
             this.navigateLogin();
         }
@@ -326,7 +326,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsPublished: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/vocablists/published');
+            this.go('pages/vocablists/published');
         } else {
             this.navigateLogin();
         }
@@ -336,7 +336,7 @@ module.exports = Router.extend({
      */
     navigateVocablistsQueue: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/vocablists/queue');
+            this.go('pages/vocablists/queue');
         } else {
             this.navigateLogin();
         }
@@ -346,7 +346,7 @@ module.exports = Router.extend({
      */
     navigateWordsAll: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/words/all');
+            this.go('pages/words/all');
         } else {
             this.navigateLogin();
         }
@@ -356,7 +356,7 @@ module.exports = Router.extend({
      */
     navigateWordsBanned: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/words/banned');
+            this.go('pages/words/banned');
         } else {
             this.navigateLogin();
         }
@@ -366,7 +366,7 @@ module.exports = Router.extend({
      */
     navigateWordsMnemonics: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/words/mnemonics');
+            this.go('pages/words/mnemonics');
         } else {
             this.navigateLogin();
         }
@@ -376,7 +376,7 @@ module.exports = Router.extend({
      */
     navigateWordsStarred: function() {
         if (app.user.isLoggedIn()) {
-            this.go('pages1/words/starred');
+            this.go('pages/words/starred');
         } else {
             this.navigateLogin();
         }
