@@ -188,9 +188,16 @@ module.exports = SkritterModel.extend({
      * @method logout
      */
     logout: function() {
-        app.removeLocalStorage(this.id + '-session');
-        app.removeLocalStorage(this.id + '-user');
-        app.removeSetting('user');
-        app.reload();
+        app.db.delete()
+            .then(function() {
+                app.removeLocalStorage(this.id + '-session');
+                app.removeLocalStorage(this.id + '-user');
+                app.removeSetting('user');
+                app.reload();
+            })
+            .catch(function(error) {
+                console.error(error);
+                app.reload();
+            });
     }
 });
