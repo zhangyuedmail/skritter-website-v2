@@ -123,6 +123,13 @@ module.exports = GelatoComponent.extend({
         }
     },
     /**
+     * @method isLoaded
+     * @returns {Boolean}
+     */
+    isLoaded: function() {
+        return this.reviews ? true : false;
+    },
+    /**
      * @method next
      */
     next: function() {
