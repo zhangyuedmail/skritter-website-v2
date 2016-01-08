@@ -145,7 +145,7 @@ module.exports = SkritterCollection.extend({
             return item.getBase();
         });
         //creates an array items to queue
-        for (var i = 0, length = this.length; i < length; i++) {
+        for (var i = 0, length = this.sort().length; i < length; i++) {
             var item = this.at(i);
             var itemBase = item.getBase();
             if (items.length < 10) {
