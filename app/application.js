@@ -271,8 +271,13 @@ module.exports = GelatoApplication.extend({
                             'vocabIds'
                         ].join(',')
                     });
-                    app.db.on('ready', callback);
-                    app.db.open();
+                    app.db.open()
+                        .then(function() {
+                            callback();
+                        })
+                        .catch(function() {
+                            app.db.delete().then(app.reload);
+                        });
                 } else {
                     app.db = null;
                     callback();
@@ -305,6 +310,9 @@ module.exports = GelatoApplication.extend({
                             return cursor !== null;
                         },
                         function(callback) {
+                            if (index > 4) {
+                                ScreenLoader.notice('(loading can awhile on larger accounts)');
+                            }
                             ScreenLoader.post('Fetching item batch #' + index);
                             $.ajax({
                                 method: 'GET',

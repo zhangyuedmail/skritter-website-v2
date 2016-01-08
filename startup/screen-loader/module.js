@@ -14,11 +14,12 @@ function ScreenLoader() {
  * @returns {ScreenLoader}
  */
 ScreenLoader.prototype.clear = function() {
-    var messageContainer = this.element.querySelector('.message-container');
+    var messageContainer = this.element.querySelector('.screen-message-container');
     for (var i = 0, length = this.messages.length; i < length; i++) {
         messageContainer.removeChild(this.messages[i]);
         this.messages.shift();
     }
+    this.element.querySelector('.screen-notice').innerHTML = '';
     return this;
 };
 
@@ -35,15 +36,25 @@ ScreenLoader.prototype.hide = function() {
 };
 
 /**
+ * @method notice
+ * @param {String} value
+ * @returns {ScreenLoader}
+ */
+ScreenLoader.prototype.notice = function(value) {
+    this.element.querySelector('.screen-notice').innerHTML = value;
+    return this;
+};
+
+/**
  * @method post
  * @param {String} value
  * @returns {ScreenLoader}
  */
 ScreenLoader.prototype.post = function(value) {
-    var messageContainer = this.element.querySelector('.message-container');
+    var messageContainer = this.element.querySelector('.screen-message-container');
     if (value) {
         var newMessage = document.createElement('div');
-        newMessage.className = 'message';
+        newMessage.className = 'screen-message';
         newMessage.innerHTML = value;
         if (this.messages.length) {
             var oldMessage = this.messages.shift();

@@ -20,7 +20,7 @@ screen-loader {
     visibility: hidden;
   }
 
-  .message {
+  .screen-message {
     color: #ebeaf0;
     font-family: "Roboto Slab", sans-serif;
     font-size: 1.5em;
@@ -32,22 +32,28 @@ screen-loader {
     }
   }
 
-  .message-container {
+  .screen-message-container {
     height: 200px;
     position: relative;
     text-align: center;
-    top: 40%;
-    transform: translateY(-40%);
+    top: 45%;
+    transform: translateY(-45%);
     width: 100%;
   }
 
-  .title {
+  .screen-notice {
+    font-family: "Ubuntu", sans-serif;
+    font-size: 1em;
+    font-weight: 300;
+  }
+
+  .screen-title {
     font-family: "Ubuntu", sans-serif;
     font-size: 3em;
     font-weight: 400;
   }
 
-  .title-container {
+  .screen-title-container {
     position: relative;
     text-align: center;
     top: 35%;
