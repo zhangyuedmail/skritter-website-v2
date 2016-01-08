@@ -297,6 +297,8 @@ module.exports = GelatoApplication.extend({
                 if (app.user.isLoggedIn()) {
                     var cursor = undefined;
                     var index = 0;
+                    var limit = 2500;
+                    var retries = 0;
                     async.whilst(
                         function() {
                             index++;
@@ -311,14 +313,19 @@ module.exports = GelatoApplication.extend({
                                     cursor: cursor,
                                     offset: app.get('lastItemChanged') + 1,
                                     order: 'changed',
-                                    limit: 2500,
+                                    limit: limit,
                                     token: app.user.session.get('access_token')
                                 },
                                 error: function(error) {
-                                    callback(error);
+                                    if (retries > 2) {
+                                        callback(error);
+                                    } else {
+                                        retries++;
+                                        limit = 500;
+                                        setTimeout(callback, 1000);
+                                    }
                                 },
                                 success: function(result) {
-                                    cursor = result.cursor;
                                     app.db.transaction(
                                         'rw',
                                         app.db.items,
@@ -328,14 +335,22 @@ module.exports = GelatoApplication.extend({
                                             });
                                         }
                                     ).then(function() {
-                                        setTimeout(callback, 500);
+                                        cursor = result.cursor;
+                                        setTimeout(callback, 100);
+                                    }).catch(function(error) {
+                                        if (retries > 2) {
+                                            callback(error);
+                                        } else {
+                                            retries++;
+                                            limit = 500;
+                                            setTimeout(callback, 1000);
+                                        }
                                     });
                                 }
                             });
                         },
                         callback
                     );
-
                 } else {
                     callback();
                 }
