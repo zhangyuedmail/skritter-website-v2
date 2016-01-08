@@ -89,7 +89,8 @@ module.exports = GelatoPage.extend({
         var username = this.$('#login-username').val();
         this.$('#login-message').empty();
         this.$('#login-form').prop('disabled', true);
-        app.showLoading();
+        ScreenLoader.show();
+        ScreenLoader.post('Authenticating user credentials');
         app.user.login(username, password,
             _.bind(function() {
                 app.router.navigate('dashboard', {trigger: false});
@@ -98,7 +99,7 @@ module.exports = GelatoPage.extend({
             _.bind(function(error) {
                 self.$('#login-message').text(error.responseJSON.message);
                 self.$('#login-form').prop('disabled', false);
-                app.hideLoading();
+                ScreenLoader.hide();
             }, this)
         );
     },

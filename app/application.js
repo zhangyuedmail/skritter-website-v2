@@ -342,9 +342,11 @@ module.exports = GelatoApplication.extend({
             }
         ], _.bind(function() {
             ScreenLoader.post("Let's get started!");
-            ScreenLoader.hide();
-            this.loadHelpscout();
-            this.router.start();
+            setTimeout(function() {
+                ScreenLoader.hide();
+                app.loadHelpscout();
+                app.router.start();
+            }, 500);
         }, this));
 
     }
