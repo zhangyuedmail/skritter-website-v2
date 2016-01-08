@@ -311,7 +311,7 @@ module.exports = GelatoApplication.extend({
                         },
                         function(callback) {
                             if (index > 4) {
-                                ScreenLoader.notice('(loading can awhile on larger accounts)');
+                                ScreenLoader.notice('(loading can take awhile on larger accounts)');
                             }
                             ScreenLoader.post('Fetching item batch #' + index);
                             $.ajax({
@@ -363,14 +363,14 @@ module.exports = GelatoApplication.extend({
                     callback();
                 }
             }
-        ], _.bind(function() {
+        ], function() {
             ScreenLoader.post("Let's get started!");
             setTimeout(function() {
                 ScreenLoader.hide();
                 app.loadHelpscout();
                 app.router.start();
             }, 500);
-        }, this));
+        });
 
     }
 });
