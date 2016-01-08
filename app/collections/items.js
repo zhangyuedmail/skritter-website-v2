@@ -16,6 +16,7 @@ module.exports = SkritterCollection.extend({
     initialize: function() {
         this.cursor = null;
         this.sorted = null;
+        this.queue = [];
         this.contained = new ContainedItems();
         this.reviews = new Reviews();
         this.vocabs = new Vocabs();
@@ -25,28 +26,6 @@ module.exports = SkritterCollection.extend({
      * @type {Item}
      */
     model: Item,
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns {Object}
-     */
-    parse: function(response) {
-        this.cursor = response.cursor;
-        this.contained.add(response.ContainedItems);
-        this.vocabs.add(response.Vocabs);
-        this.vocabs.decomps.add(response.Decomps);
-        this.vocabs.sentences.add(response.Sentences);
-        this.vocabs.strokes.add(response.Strokes);
-        return response.Items;
-    },
-    /**
-     * @method sort
-     * @returns {Items}
-     */
-    sort: function() {
-        this.sorted = moment().unix();
-        return SkritterCollection.prototype.sort.call(this);
-    },
     /**
      * @property url
      * @type {String}
@@ -147,141 +126,125 @@ module.exports = SkritterCollection.extend({
         this.reviews.add(reviews);
     },
     /**
-     * @method createItems
-     * @param {Array} items
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
+     * @method comparator
+     * @param {Item} item
+     * @returns {Number}
      */
-    createItems: function(items, callbackSuccess, callbackError) {
-        async.waterfall([
-            _.bind(function(callback) {
-                this.fetch({
-                    data: JSON.stringify(items),
-                    remove: false,
-                    sort: false,
-                    type: 'POST',
-                    url: app.getApiUrl() + 'items',
-                    error: function(error) {
-                        callback(error);
-                    },
-                    success: function(items, result) {
-                        console.log(result);
-                        callback(null, result);
-                    }
-                });
-            }, this),
-            _.bind(function(result, callback) {
-                this.fetch({
-                    data: {
-                        ids: _.pluck(result.Items, 'id').join('|'),
-                        include_contained: true,
-                        include_decomps: true,
-                        include_sentences: true,
-                        include_strokes: true,
-                        include_vocabs: true
-                    },
-                    remove: false,
-                    sort: false,
-                    error: function(error) {
-                        callback(error);
-                    },
-                    success: function() {
-                        callback(null, result);
-                    }
-                });
-            }, this)
-        ], function(error, result) {
-            if (error) {
-                console.error('ITEM ADD ERROR:', error);
-                callbackError(error);
-            } else {
-                callbackSuccess(result);
-            }
+    comparator: function(item) {
+        return -item.getReadiness();
+    },
+    /**
+     * @method populateQueue
+     */
+    populateQueue: function() {
+        var self = this;
+        var items = [];
+        //store base histories for better spacing
+        var localHistory = [];
+        var queueHistory = this.queue.map(function(item) {
+            return item.getBase();
         });
-    },
-    /**
-     * @method fetchByVocabIds
-     * @param {Array} vocabIds
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
-     * @param {Function} [callbackStatus]
-     */
-    fetchByVocabIds: function(vocabIds, callbackSuccess, callbackError, callbackStatus) {
-        var chunks = _.chunk(vocabIds, 5);
-        var index = 0;
-        async.eachSeries(
-            chunks,
-            _.bind(function(chunk, callback) {
-                this.fetch({
-                    data: {
-                        include_contained: true,
-                        include_decomps: true,
-                        include_sentences: true,
-                        include_strokes: true,
-                        include_vocabs: true,
-                        vocab_ids: chunk.join('|')
-                    },
-                    merge: false,
-                    remove: false,
-                    error: function(items, error) {
-                        callback(error);
-                    },
-                    success: function(items, result) {
-                        index++;
-                        if (typeof callbackStatus === 'function') {
-                            callbackStatus(index / chunks.length);
-                        }
-                        callback();
-                    }
-                });
-            }, this),
-            function(error) {
-                if (error) {
-                    if (typeof callbackError === 'function') {
-                        callbackError(error);
-                    }
-                } else {
-                    if (typeof callbackSuccess === 'function') {
-                        callbackSuccess();
-                    }
+        //creates an array items to queue
+        for (var i = 0, length = this.length; i < length; i++) {
+            var item = this.at(i);
+            var itemBase = item.getBase();
+            if (items.length < 10) {
+                if (localHistory.indexOf(itemBase) === -1 &&
+                    queueHistory.indexOf(itemBase) === -1) {
+                    localHistory.push(itemBase);
+                    items.push(item);
                 }
+            } else {
+                break;
             }
-        );
-    },
-    /**
-     * @method fetchNext
-     * @param {Object} [options]
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
-     */
-    fetchNext: function(options, callbackSuccess, callbackError) {
-        options = options || {};
+        }
+        //fetch resource data for queue items
         this.fetch({
             data: {
-                cursor: options.cursor,
+                ids: _.pluck(items, 'id').join('|'),
                 include_contained: true,
                 include_decomps: true,
                 include_sentences: true,
                 include_strokes: true,
-                include_vocabs: true,
-                limit: options.limit || 10,
-                parts: app.user.getFilteredParts().join(','),
-                sort: 'next',
-                styles: app.user.getStudyStyles().join(','),
-                vocab_list: options.listId
+                include_vocabs: true
             },
-            merge: false,
+            merge: true,
             remove: false,
             error: function(items, error) {
-                if (typeof callbackError === 'function') {
-                    callbackError(error, items);
+                self.trigger('queue:error', error, items);
+                if (typeof callback === 'function') {
+                    callback(error, self);
                 }
             },
-            success: function(items) {
-                if (typeof callbackSuccess === 'function') {
-                    callbackSuccess(items);
+            success: function(items, result) {
+                var now = moment().unix();
+                var sortedItems = _.sortBy(result.Items, function(item) {
+                    var readiness = 0;
+                    if (!item.last) {
+                        readiness = 9999;
+                    } else {
+                        readiness = (now - item.last) / (item.next - item.last);
+                    }
+                    return -readiness;
+                });
+                for (var i = 0, length = sortedItems.length; i < length; i++) {
+                    self.queue.push(self.get(sortedItems[i].id));
+                }
+                self.trigger('queue:populate', self);
+                if (typeof callback === 'function') {
+                    callback(null, items);
                 }
             }
         });
+    },
+    /**
+     * @method loadQueue
+     */
+    loadQueue: function() {
+        var self = this;
+        var parts = app.user.getStudyParts();
+        var styles = app.user.getStudyStyles();
+        app.db.items
+            .toArray()
+            .then(function(items) {
+                items = items.filter(function(item) {
+                    if (!item.vocabIds.length) {
+                        return false;
+                    } else if (parts.indexOf(item.part) === -1) {
+                        return false;
+                    } else if (styles.indexOf(item.style) === -1) {
+                        return false;
+                    }
+                    return true;
+                });
+                self.set(items.splice(0, 1000));
+                self.trigger('queue:load', self);
+                self.populateQueue();
+            })
+            .catch(function(error) {
+                self.trigger('queue:error', error);
+            });
+    },
+    /**
+     * @method parse
+     * @param {Object} response
+     * @returns {Object}
+     */
+    parse: function(response) {
+        this.cursor = response.cursor;
+        this.contained.add(response.ContainedItems, {merge: true});
+        this.vocabs.add(response.Vocabs, {merge: true});
+        this.vocabs.decomps.add(response.Decomps, {merge: true});
+        this.vocabs.sentences.add(response.Sentences, {merge: true});
+        this.vocabs.strokes.add(response.Strokes, {merge: true});
+        return response.Items;
+    },
+    /**
+     * @method sort
+     * @returns {Items}
+     */
+    sort: function() {
+        this.sorted = moment().unix();
+        return SkritterCollection.prototype.sort.call(this);
     }
 });

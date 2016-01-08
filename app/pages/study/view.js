@@ -1,8 +1,8 @@
 var GelatoPage = require('gelato/page');
 
-var Items = require('collections/items');
 var Prompt = require('components1/study/prompt/view');
 var Toolbar = require('components1/study/toolbar/view');
+var Items = require('collections/items');
 var Navbar = require('navbars/default/view');
 
 /**
@@ -15,28 +15,16 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
+        ScreenLoader.show();
+        this.items = new Items();
         this.navbar = new Navbar();
-        this.toolbar = new Toolbar({page: this});
-
         this.prompt = new Prompt();
+        this.toolbar = new Toolbar({page: this});
+        this.listenTo(this.items, 'queue:load', this.handleItemsQueueLoad);
+        this.listenTo(this.items, 'queue:populate', this.handleItemsQueuePopulate);
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-
-        this.items = new Items();
-        this.items.comparator = function(item) {
-            return -item.getReadiness();
-        };
-
-        app.showLoading(0);
-
-        this.loadMore(
-            _.bind(function() {
-                this.next();
-            }, this),
-            _.bind(function() {
-                this.next();
-            }, this)
-        );
+        this.items.loadQueue();
     },
     /**
      * @property events
@@ -65,6 +53,23 @@ module.exports = GelatoPage.extend({
         return this;
     },
     /**
+     * @method handleItemsQueueLoad
+     */
+    handleItemsQueueLoad: function() {
+        ScreenLoader.post('Preparing for study mode');
+    },
+    /**
+     * @method handleItemsQueuePopulate
+     */
+    handleItemsQueuePopulate: function() {
+        if (this.prompt.isLoaded()) {
+            console.info('QUEUE:', 'Added more items to queue.');
+        } else {
+            ScreenLoader.hide();
+            this.next();
+        }
+    },
+    /**
      * @method handlePromptNext
      * @param {PromptReviews} reviews
      */
@@ -82,101 +87,16 @@ module.exports = GelatoPage.extend({
         this.previous();
     },
     /**
-     * @method loadMore
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
-     */
-    loadMore: function(callbackSuccess, callbackError) {
-        async.series([
-            _.bind(function(callback) {
-                this.items.cursor = null;
-                this.items.fetchNext(
-                    null,
-                    function() {
-                        callback();
-                    },
-                    function() {
-                        callback();
-                    }
-                );
-            }, this),
-            _.bind(function(callback) {
-                if (this.items.cursor) {
-                    this.items.fetchNext(
-                        {cursor: this.items.cursor},
-                        function() {
-                            callback();
-                        },
-                        function() {
-                            callback();
-                        }
-                    );
-                } else {
-                    callback();
-                }
-            }, this),
-            _.bind(function(callback) {
-                async.each(
-                    this.items.models,
-                    _.bind(function(item, callback) {
-                        if (item.isKosher()) {
-                            callback();
-                        } else {
-                            item.set('next', moment(item.get('next') * 1000).add('2', 'weeks').unix());
-                            $.ajax({
-                                url: app.getApiUrl() + 'items/' + item.id,
-                                headers: app.user.session.getHeaders(),
-                                context: this,
-                                type: 'PUT',
-                                data: JSON.stringify(item.toJSON()),
-                                error: function(error) {
-                                    callback(error);
-                                },
-                                success: function() {
-                                    this.items.remove(item);
-                                    callback();
-                                }
-                            });
-                        }
-                    }, this),
-                    function(error) {
-                        callback(error);
-                    }
-                );
-            }, this)
-        ], function(error) {
-            if (error) {
-                if (typeof callbackError === 'function') {
-                    callbackError(error);
-                }
-            } else {
-                app.hideLoading();
-                if (typeof callbackSuccess === 'function') {
-                    callbackSuccess();
-                }
-            }
-        });
-    },
-    /**
-     * @method getNextItem
-     * @returns {Item}
-     */
-    getNextItem: function() {
-        return this.items.sort().at(0);
-    },
-    /**
      * @method next
      */
     next: function() {
-        var item = this.getNextItem();
+        var item = this.items.queue.shift();
         if (item) {
             this.toolbar.render();
             this.toolbar.timer.reset();
             this.prompt.set(item.getPromptReviews());
-            this.counter++;
-            if (this.counter % 10 === 0) {
-                console.log('LOADING MORE ITEMS:', 10);
-                this.loadMore();
+            if (this.items.queue.length < 5) {
+                this.items.populateQueue();
             }
         } else {
             console.error('ITEM LOAD ERROR:', 'no items');

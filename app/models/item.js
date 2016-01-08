@@ -128,7 +128,7 @@ module.exports = SkritterModel.extend({
         var itemNext = this.get('next');
         var actualAgo = now - itemLast;
         var scheduledAgo = itemNext - itemLast;
-        return itemLast ? actualAgo / scheduledAgo : Number.POSITIVE_INFINITY;
+        return itemLast ? actualAgo / scheduledAgo : 9999;
     },
     /**
      * @method getVariation
