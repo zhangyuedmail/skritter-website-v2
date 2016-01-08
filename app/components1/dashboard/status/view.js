@@ -30,23 +30,37 @@ module.exports = GelatoComponent.extend({
      * @method updateDueCount
      */
     updateDueCount: function() {
-        $.ajax({
-            context: this,
-            headers: app.user.session.getHeaders(),
-            type: 'GET',
-            url: app.getApiUrl() + 'items/due',
-            error: function(error) {
-                console.error('DUE COUNT ERROR:', error);
-            },
-            success: function(result) {
-                this.dueCount = 0;
-                for (var part in result.due) {
-                    for (var style in result.due[part]) {
-                        this.dueCount += result.due[part][style];
+        var self = this;
+        var count = 0;
+        var now = moment().unix();
+        var parts = app.user.getStudyParts();
+        var styles = app.user.getStudyStyles();
+        app.db.items
+            .where('next')
+            .belowOrEqual(now)
+            .toArray()
+            .then(function(items) {
+                items.forEach(function(item) {
+                    if (!item.vocabIds.length) {
+                        return;
                     }
-                }
-                this.render();
-            }
-        });
+                    if (parts.indexOf(item.part) === -1) {
+                        return;
+                    }
+                    if (styles.indexOf(item.style) === -1) {
+                        return;
+                    }
+                    if (!item.last) {
+                        count++;
+                        return;
+                    }
+                    var readiness = (now - item.last) / (item.next - item.last);
+                    if (readiness >= 1.0) {
+                        count++;
+                    }
+                });
+                self.dueCount = count;
+                self.render();
+            });
     }
 });
