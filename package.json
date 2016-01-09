@@ -30,8 +30,8 @@
     "ios-run-chinese": "node ./bin/cordova-run-ios --lang='zh'",
     "ios-run-japanese": "node ./bin/cordova-run-ios --lang='ja'",
     "postversion": "./node_modules/.bin/bower update",
-    "start": "./node_modules/.bin/brunch watch --server",
-    "test": "./node_modules/.bin/brunch build && ./node_modules/.bin/mocha-phantomjs ./test/index.html",
+    "start": "node ./bin/start",
+    "test": "node ./bin/test",
     "web-build": "./node_modules/.bin/brunch build --production",
     "web-watch": "./node_modules/.bin/brunch watch --server"
   },
