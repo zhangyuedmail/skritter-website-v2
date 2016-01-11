@@ -14,14 +14,12 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function(options) {
+        ScreenLoader.show();
         this.navbar = new Navbar();
         this.part = options.part;
         this.prompt = new Prompt();
         this.vocabs = new Vocabs();
         this.vocabId = options.vocabId;
-
-        app.showLoading(0);
-
         this.load();
     },
     /**
@@ -96,9 +94,9 @@ module.exports = GelatoPage.extend({
                 //TODO: display error message to user
                 console.error('SCRATCHPAD LOAD ERROR:', error);
             } else {
-                app.hideLoading();
                 this.reviews = vocab.getPromptReviews(this.part || 'rune');
                 this.prompt.set(this.reviews);
+                ScreenLoader.hide();
             }
         }, this));
     },
