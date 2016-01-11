@@ -114,7 +114,15 @@ module.exports = SkritterModel.extend({
         }
         reviews.group = now + '_' + vocab.id;
         reviews.item = this;
+        reviews.originals = _
+            .chain([this].concat(containedItems))
+            .map(function(item) {
+                return item.toJSON();
+            })
+            .uniq('id')
+            .value();
         reviews.part = part;
+        reviews.timestamp = now;
         reviews.vocab = vocab;
         return reviews;
     },

@@ -23,6 +23,11 @@ module.exports = GelatoCollection.extend({
      */
     model: PromptReview,
     /**
+     * @property originals
+     * @type {Array}
+     */
+    originals: [],
+    /**
      * @property part
      * @type {String}
      */
@@ -136,7 +141,13 @@ module.exports = GelatoCollection.extend({
         if (this.length > 1) {
             reviews = reviews.concat(this.getChildItemReviews());
         }
-        return {id: this.group, data: reviews};
+        return {
+            id: this.group,
+            data: reviews,
+            originals: this.originals,
+            prompt: this,
+            timestamp: this.timestamp
+        };
     },
     /**
      * @method getLimit

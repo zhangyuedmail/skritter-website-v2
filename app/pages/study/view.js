@@ -19,6 +19,7 @@ module.exports = GelatoPage.extend({
         this.navbar = new Navbar();
         this.prompt = new Prompt();
         this.queue = [];
+        this.reviews = null;
         this.schedule = new Items();
         this.scheduleState = 'standby';
         this.toolbar = new Toolbar({page: this});
@@ -80,7 +81,7 @@ module.exports = GelatoPage.extend({
         this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
         this.schedule.addReviews(reviews.getItemReviews());
         if (this.schedule.reviews.length > 4) {
-            this.schedule.reviews.post();
+            this.schedule.reviews.post(1);
         }
         this.next();
     },
@@ -89,7 +90,10 @@ module.exports = GelatoPage.extend({
      * @param {PromptReviews} reviews
      */
     handlePromptPrevious: function(reviews) {
-        this.previous();
+        if (!this.queue[0].group) {
+            this.queue.unshift(reviews);
+            this.previous();
+        }
     },
     /**
      * @method loadSchedule
@@ -124,9 +128,10 @@ module.exports = GelatoPage.extend({
     next: function() {
         var item = this.queue.shift();
         if (item) {
+            this.index = 0;
             this.toolbar.render();
             this.toolbar.timer.reset();
-            this.prompt.set(item.getPromptReviews());
+            this.prompt.set(item.group ? item : item.getPromptReviews());
             if (this.scheduleState === 'standby' && this.queue.length < 5) {
                 this.scheduleState = 'populating';
                 this.populateQueue();
@@ -199,7 +204,14 @@ module.exports = GelatoPage.extend({
      * @method previous
      */
     previous: function() {
-        //TODO: allow going back a prompt
+        if (this.schedule.reviews.length) {
+            var reviews = this.schedule.reviews.sort().at(0);
+            if (reviews.has('prompt')) {
+                this.toolbar.render();
+                this.toolbar.timer.reset();
+                this.prompt.set(reviews.get('prompt'));
+            }
+        }
     },
     /**
      * @method remove

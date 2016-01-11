@@ -19,7 +19,7 @@ module.exports = SkritterCollection.extend({
      * @return {String}
      */
     comparator: function(review) {
-        return review.id;
+        return -review.get('timestamp');
     },
     /**
      * @property model

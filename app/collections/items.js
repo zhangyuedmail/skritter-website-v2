@@ -85,14 +85,17 @@ module.exports = SkritterCollection.extend({
      * @param {Array} reviews
      */
     addReviews: function(reviews) {
+        var originals = _.clone(reviews.originals, true);
         for (var i = 0, length = reviews.data.length; i < length; i++) {
             var review = reviews.data[i];
             var item = this.get(review.itemId);
-            review.actualInterval = item.get('last') ? review.submitTime - item.get('last') : 0;
-            review.currentInterval = item.get('interval') || 0;
-            review.newInterval = app.fn.interval.quantify(item, review.score);
-            review.previousInterval = item.get('previousInterval') || 0;
-            review.previousSuccess = item.get('previousSuccess') || false;
+            var original = _.find(originals, {id: review.itemId});
+            console.log(review.itemId, originals, original);
+            review.actualInterval = original.last ? review.submitTime - original.last : 0;
+            review.currentInterval = original.interval || 0;
+            review.newInterval = app.fn.interval.quantify(original, review.score);
+            review.previousInterval = original.previousInterval || 0;
+            review.previousSuccess = original.previousSuccess || false;
             if (i === 0) {
                 if (item.consecutiveWrong >= 2) {
                     item.consecutiveWrong = 0;
@@ -115,12 +118,12 @@ module.exports = SkritterCollection.extend({
                 next: review.submitTime + review.newInterval,
                 previousInterval: review.currentInterval,
                 previousSuccess: review.score > 1,
-                reviews: item.get('reviews') + 1,
-                successes: review.score > 1 ? item.get('successes') + 1 : item.get('successes'),
-                timeStudied: item.get('timeStudied') + review.reviewTime
+                reviews: original.reviews + 1,
+                successes: review.score > 1 ? original.successes + 1 : original.successes,
+                timeStudied: original.timeStudied + review.reviewTime
             });
         }
-        this.reviews.add(reviews);
+        this.reviews.add(reviews, {merge: true});
     },
     /**
      * @method comparator
