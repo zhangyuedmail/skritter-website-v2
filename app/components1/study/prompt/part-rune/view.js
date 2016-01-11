@@ -240,6 +240,10 @@ module.exports = GelatoComponent.extend({
             }
             if (this.prompt.review.character.isComplete()) {
                 this.renderComplete();
+            } else {
+                if (this.prompt.review.get('showTeaching')) {
+                    this.teachCharacter();
+                }
             }
         }
     },
