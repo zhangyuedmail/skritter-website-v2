@@ -34,25 +34,32 @@ module.exports = SkritterCollection.extend({
     /**
      * @method post
      */
-    post: function() {
+    post: function(startFrom) {
         if (this.state === 'standby') {
-            var reviews = this.toJSON();
             this.state = 'posting';
+            this.sort();
+            var reviews = this.toJSON().slice(startFrom || 0);
+            var chunks = _.chunk(reviews, 200);
             async.eachSeries(
-                reviews,
-                _.bind(function(review, callback) {
+                chunks,
+                _.bind(function(chunk, callback) {
+                    var data = chunk.map(function(review) {
+                        return review.data;
+                    });
                     $.ajax({
                         url: app.getApiUrl() + 'reviews?spaceItems=false',
                         headers: app.user.session.getHeaders(),
                         context: this,
                         type: 'POST',
-                        data: JSON.stringify(review.data),
+                        data: JSON.stringify(_.flatten(data)),
                         error: function(error) {
                             callback(error);
                         },
                         success: function() {
-                            this.timeOffset += review.data[0].reviewTime;
-                            this.remove(review);
+                            for (var i = 0, length = data.length; i < length; i ++) {
+                                this.timeOffset += data[i][0].reviewTime;
+                            }
+                            this.remove(chunk);
                             callback();
                         }
                     });
