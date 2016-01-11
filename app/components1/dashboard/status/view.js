@@ -33,8 +33,8 @@ module.exports = GelatoComponent.extend({
         var self = this;
         var count = 0;
         var now = moment().unix();
-        var parts = app.user.getStudyParts();
-        var styles = app.user.getStudyStyles();
+        var parts = app.user.getFilteredParts();
+        var styles = app.user.getFilteredStyles();
         app.db.items
             .where('next')
             .belowOrEqual(now)

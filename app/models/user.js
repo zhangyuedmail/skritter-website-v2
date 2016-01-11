@@ -70,7 +70,23 @@ module.exports = SkritterModel.extend({
         } else {
             filteredParts = this.get('filteredJapaneseParts');
         }
-        return _.intersection(filteredParts, this.getStudyParts());
+        return _.intersection(filteredParts, this.getAllStudyParts());
+    },
+    /**
+     * @method getFilteredStyles
+     * @returns {Array}
+     */
+    getFilteredStyles: function() {
+        var styles = ['both'];
+        if (app.isChinese()) {
+            if (this.get('reviewSimplified')) {
+                styles.push('simp');
+            }
+            if (this.get('reviewTraditional')) {
+                styles.push('trad');
+            }
+        }
+        return styles;
     },
     /**
      * @method getRaygunTags
@@ -92,27 +108,18 @@ module.exports = SkritterModel.extend({
         return tags;
     },
     /**
-     * @method getStudyParts
+     * @method getAllStudyParts
      * @returns {Array}
      */
-    getStudyParts: function() {
+    getAllStudyParts: function() {
         return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
     },
     /**
-     * @method getStudyStyles
+     * @method getAllStudyStyles
      * @returns {Array}
      */
-    getStudyStyles: function() {
-        var styles = ['both'];
-        if (app.isChinese()) {
-            if (this.get('reviewSimplified')) {
-                styles.push('simp');
-            }
-            if (this.get('reviewTraditional')) {
-                styles.push('trad');
-            }
-        }
-        return styles;
+    getAllStudyStyles: function() {
+        return app.isChinese() ? ['both', 'simp', 'trad'] : ['none'];
     },
     /**
      * @method hasFilteredPart
@@ -128,7 +135,15 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     hasStudyPart: function(part) {
-        return _.includes(this.getStudyParts(), part);
+        return _.includes(this.getAllStudyParts(), part);
+    },
+    /**
+     * @method hasStudyStyle
+     * @param {String} style
+     * @returns {Boolean}
+     */
+    hasStudyStyle: function(style) {
+        return _.includes(this.getAllStudyStyles(), style);
     },
     /**
      * @method isAudioEnabled

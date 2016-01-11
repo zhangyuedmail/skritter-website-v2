@@ -96,8 +96,8 @@ module.exports = GelatoPage.extend({
      */
     loadSchedule: function() {
         var self = this;
-        var parts = app.user.getStudyParts();
-        var styles = app.user.getStudyStyles();
+        var parts = app.user.getFilteredParts();
+        var styles = app.user.getFilteredStyles();
         app.db.items
             .toArray()
             .then(function(items) {
@@ -209,6 +209,7 @@ module.exports = GelatoPage.extend({
         this.navbar.remove();
         this.prompt.remove();
         this.toolbar.remove();
+        this.schedule.reviews.post();
         return GelatoPage.prototype.remove.call(this);
     }
 });
