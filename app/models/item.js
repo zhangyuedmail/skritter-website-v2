@@ -57,10 +57,10 @@ module.exports = SkritterModel.extend({
                 var splitId = vocabId.split('-');
                 var fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
                 var intendedId = [app.user.id, vocabId, part].join('-');
-                if (this.collection.contained.get(intendedId)) {
-                    containedItems.push(this.collection.contained.get(intendedId));
+                if (this.collection.get(intendedId)) {
+                    containedItems.push(this.collection.get(intendedId));
                 } else {
-                    containedItems.push(this.collection.contained.get(fallbackId));
+                    containedItems.push(this.collection.get(fallbackId));
                 }
             }
         }
@@ -123,12 +123,15 @@ module.exports = SkritterModel.extend({
      * @returns {Number}
      */
     getReadiness: function() {
-        var now = this.collection.sorted || moment().unix();
-        var itemLast = this.get('last');
-        var itemNext = this.get('next');
-        var actualAgo = now - itemLast;
-        var scheduledAgo = itemNext - itemLast;
-        return itemLast ? actualAgo / scheduledAgo : 9999;
+        if (this.get('vocabIds').length) {
+            var now = this.collection.sorted || moment().unix();
+            var itemLast = this.get('last');
+            var itemNext = this.get('next');
+            var actualAgo = now - itemLast;
+            var scheduledAgo = itemNext - itemLast;
+            return itemLast ? actualAgo / scheduledAgo : 9999;
+        }
+        return Number.NEGATIVE_INFINITY;
     },
     /**
      * @method getVariation
