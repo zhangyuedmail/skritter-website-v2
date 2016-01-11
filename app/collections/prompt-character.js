@@ -33,8 +33,7 @@ module.exports = GelatoCollection.extend({
      * @returns {PromptStroke}
      */
     getExpectedStroke: function() {
-        var target = this.getExpectedTargets()[0];
-        return this.length ? target.at(this.getPosition()) : target.at(0);
+        return this.getExpectedTargets()[0].at(this.length);
     },
     /**
      * @method getExpectedTargets
