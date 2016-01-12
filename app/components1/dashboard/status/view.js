@@ -32,6 +32,7 @@ module.exports = GelatoComponent.extend({
     updateDueCount: function() {
         var self = this;
         var count = 0;
+        var lang = app.getLanguage();
         var now = moment().unix();
         var parts = app.user.getFilteredParts();
         var styles = app.user.getFilteredStyles();
@@ -43,11 +44,11 @@ module.exports = GelatoComponent.extend({
                 items.forEach(function(item) {
                     if (!item.vocabIds.length) {
                         return;
-                    }
-                    if (parts.indexOf(item.part) === -1) {
+                    } else if (item.lang !== lang) {
+                        return
+                    } else if (parts.indexOf(item.part) === -1) {
                         return;
-                    }
-                    if (styles.indexOf(item.style) === -1) {
+                    } else if (styles.indexOf(item.style) === -1) {
                         return;
                     }
                     if (!item.last) {

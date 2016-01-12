@@ -58,10 +58,8 @@ module.exports = GelatoPage.extend({
     },
     /**
      * @method handleOnBeforeUnload
-     * @param {Event} event
-     * @returns {String}
      */
-    handleOnBeforeUnload: function(event) {
+    handleOnBeforeUnload: function() {
         this.schedule.reviews.post({async: false});
     },
     /**
