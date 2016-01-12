@@ -41,20 +41,20 @@ gelato-page(data-name='account-settings-study')
                 .col-sm-9#field-parts
                   .checkbox-inline
                     label
-                      input(type="checkbox", name="parts", value="rune", checked=user.hasStudyPart('rune'))
+                      input(type="checkbox", name="parts", value="rune", checked=user.isAddingPart('rune'))
                       | Writing
                   if (app.getLanguage() === 'zh')
                     .checkbox-inline
                       label
-                        input(type="checkbox", name="parts", value="tone", checked=user.hasStudyPart('tone'))
+                        input(type="checkbox", name="parts", value="tone", checked=user.isAddingPart('tone'))
                         | Tone
                   .checkbox-inline
                     label
-                      input(type="checkbox", name="parts", value="rdng", checked=user.hasStudyPart('rdng'))
+                      input(type="checkbox", name="parts", value="rdng", checked=user.isAddingPart('rdng'))
                       | Reading
                   .checkbox-inline
                     label
-                      input(type="checkbox", name="parts", value="defn", checked=user.hasStudyPart('defn'))
+                      input(type="checkbox", name="parts", value="defn", checked=user.isAddingPart('defn'))
                       | Definition
               if (app.getLanguage() === 'ja')
                 .form-group

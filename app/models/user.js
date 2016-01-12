@@ -53,11 +53,18 @@ module.exports = SkritterModel.extend({
         app.setLocalStorage(this.id + '-user', this.toJSON());
     },
     /**
-     * @method getAllParts
+     * @method getAllStudyParts
      * @returns {Array}
      */
-    getAllParts: function() {
+    getAllStudyParts: function() {
         return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
+    },
+    /**
+     * @method getAllStudyStyles
+     * @returns {Array}
+     */
+    getAllStudyStyles: function() {
+        return app.isChinese() ? ['both', 'simp', 'trad'] : ['none'];
     },
     /**
      * @method getFilterParts
@@ -89,6 +96,13 @@ module.exports = SkritterModel.extend({
         return styles;
     },
     /**
+     * @method getStudyParts
+     * @returns {Array}
+     */
+    getStudyParts: function() {
+        return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+    },
+    /**
      * @method getRaygunTags
      * @returns {Array}
      */
@@ -108,42 +122,12 @@ module.exports = SkritterModel.extend({
         return tags;
     },
     /**
-     * @method getAllStudyParts
-     * @returns {Array}
-     */
-    getAllStudyParts: function() {
-        return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
-    },
-    /**
-     * @method getAllStudyStyles
-     * @returns {Array}
-     */
-    getAllStudyStyles: function() {
-        return app.isChinese() ? ['both', 'simp', 'trad'] : ['none'];
-    },
-    /**
-     * @method hasFilteredPart
+     * @method isAddingPart
      * @param {String} part
      * @returns {Boolean}
      */
-    hasFilteredPart: function(part) {
-        return _.includes(this.getFilteredParts(), part);
-    },
-    /**
-     * @method hasStudyPart
-     * @param {String} part
-     * @returns {Boolean}
-     */
-    hasStudyPart: function(part) {
-        return _.includes(this.getAllStudyParts(), part);
-    },
-    /**
-     * @method hasStudyStyle
-     * @param {String} style
-     * @returns {Boolean}
-     */
-    hasStudyStyle: function(style) {
-        return _.includes(this.getAllStudyStyles(), style);
+    isAddingPart: function(part) {
+        return _.includes(this.getStudyParts(), part);
     },
     /**
      * @method isAudioEnabled
@@ -158,6 +142,14 @@ module.exports = SkritterModel.extend({
      */
     isLoggedIn: function() {
         return this.session.has('user_id');
+    },
+    /**
+     * @method isReviewingPart
+     * @param {String} part
+     * @returns {Boolean}
+     */
+    isReviewingPart: function(part) {
+        return _.includes(this.getFilteredParts(), part);
     },
     /**
      * @method login

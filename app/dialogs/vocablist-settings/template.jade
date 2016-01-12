@@ -32,7 +32,7 @@ bootstrap-dialog(data-name='vocablist-settings')
                 label.col-sm-3.control-label Parts Studying
                 .col-sm-9
                   - var vlparts = view.vocablist.get('partsStudying');
-                  - var uparts = app.user.getAllParts();
+                  - var uparts = app.user.getAllStudyParts();
                   .checkbox(class=_.contains(uparts, 'rune') ? '' : 'disabled')
                     label
                       input(type="checkbox" name="partsStudying" value='rune' checked=_.contains(vlparts, 'rune'), disabled=!_.contains(uparts, 'rune'))
