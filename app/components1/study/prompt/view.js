@@ -162,6 +162,9 @@ module.exports = GelatoComponent.extend({
     remove: function() {
         this.canvas.remove();
         this.navigation.remove();
+        if (this.part) {
+            this.part.remove();
+        }
         this.shortcuts.unregisterAll();
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
@@ -180,7 +183,6 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPrompt}
      */
     reset: function() {
-        this.part = null;
         this.review = null;
         this.reviews = null;
         this.remove();
