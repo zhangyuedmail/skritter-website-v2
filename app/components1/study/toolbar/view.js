@@ -76,24 +76,31 @@ module.exports = GelatoComponent.extend({
      */
     handleClickStudySettings: function(event) {
         event.preventDefault();
+        var self = this;
         var dialog = new StudySettings();
-        dialog.on('save', _.bind(function(settings) {
-            this.page.items.reset();
-            this.page.prompt.reset();
-            app.user.set(settings, {merge: true}).cache();
-            app.user.save();
-            this.page.loadMore(
-                _.bind(function() {
-                    this.page.next();
-                    dialog.close();
-                }, this),
-                _.bind(function() {
-                    this.page.next();
-                    dialog.close();
-                }, this)
-            );
-        }, this));
         dialog.open();
+        dialog.on('save', function(settings) {
+            ScreenLoader.show();
+            ScreenLoader.post('Saving study settings');
+            app.user.set(settings, {merge: true});
+            app.user.cache();
+            app.user.save(
+                null,
+                {
+                    error: function() {
+                        //TODO: show some kind of error message
+                        ScreenLoader.hide();
+                        dialog.close();
+                    },
+                    success: function() {
+                        self.page.schedule.reset();
+                        self.page.prompt.reset();
+                        self.page.loadSchedule();
+                        dialog.close();
+                    }
+                }
+            );
+        });
     },
     /**
      * @function remove

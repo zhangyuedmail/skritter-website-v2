@@ -180,6 +180,11 @@ module.exports = GelatoComponent.extend({
      * @returns {StudyPrompt}
      */
     reset: function() {
+        this.part = null;
+        this.review = null;
+        this.reviews = null;
+        this.remove();
+        this.render();
         return this;
     },
     /**
