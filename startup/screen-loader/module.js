@@ -6,6 +6,7 @@ function ScreenLoader() {
     this.element = null;
     this.messages = [];
     this.template = require('./template');
+    this.timeout = null;
     this.render();
 }
 
@@ -29,7 +30,7 @@ ScreenLoader.prototype.clear = function() {
  */
 ScreenLoader.prototype.hide = function() {
     this.element.className = 'fade-out';
-    setTimeout((function() {
+    this.timeout = setTimeout((function() {
         this.clear();
     }).bind(this), 500);
     return this;
@@ -88,7 +89,7 @@ ScreenLoader.prototype.render = function() {
  * @returns {ScreenLoader}
  */
 ScreenLoader.prototype.show = function() {
-    this.clear();
+    clearTimeout(this.timeout);
     this.element.className = 'fade-in';
     return this;
 };
