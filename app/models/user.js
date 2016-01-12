@@ -112,7 +112,7 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getAllStudyParts: function() {
-        return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
+        return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
     },
     /**
      * @method getAllStudyStyles
