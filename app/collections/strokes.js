@@ -34,6 +34,17 @@ module.exports = GelatoCollection.extend({
      * @returns {PromptCharacter}
      */
     getPromptTones: function() {
+        console.log(this);
         return this.get('tones').getPromptCharacter();
+    },
+    /**
+     * @method reset
+     * @returns {Stroke}
+     */
+    reset: function() {
+        GelatoCollection.prototype.reset.call(this);
+        this.add(KanaStrokes.getData());
+        this.add(ToneStrokes.getData());
+        return this;
     }
 });
