@@ -129,14 +129,16 @@ module.exports = GelatoModel.extend({
      * @returns {createjs.Shape}
      */
     getUserShape: function() {
-        var shape = this.getTargetShape();
+        //TODO: improve stroke position and size
+        //var size = this.getSize();
+        //shape.scaleX = rect.width / bounds.width;
+        //shape.scaleY = rect.height / bounds.height;
         //var bounds = shape.getBounds();
+        var shape = this.getTargetShape();
         var rect = this.getUserRectangle();
         shape.x = rect.x;
         shape.y = rect.y;
-        //shape.scaleX = rect.width / bounds.width;
-        //shape.scaleY = rect.height / bounds.height;
-        shape.name = 'stroke';
+        shape.name = 'stroke-' + this.get('strokeId');
         return shape;
     },
     /**
