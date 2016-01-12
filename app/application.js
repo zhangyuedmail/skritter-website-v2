@@ -327,9 +327,10 @@ module.exports = GelatoApplication.extend({
                                 url: 'https://api-dot-write-way.appspot.com/v1/items',
                                 data: {
                                     cursor: cursor,
+                                    lang: app.getLanguage(),
+                                    limit: limit,
                                     offset: app.get('lastItemChanged') + 1,
                                     order: 'changed',
-                                    limit: limit,
                                     token: app.user.session.get('access_token')
                                 },
                                 error: function(error) {
@@ -372,7 +373,6 @@ module.exports = GelatoApplication.extend({
                 }
             }
         ], function() {
-            ScreenLoader.post("Let's get started!");
             setTimeout(function() {
                 ScreenLoader.hide();
                 app.loadHelpscout();
