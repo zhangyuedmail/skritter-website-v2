@@ -42,7 +42,7 @@ module.exports = SkritterCollection.extend({
         options = _.defaults(
             options || {},
             {
-                async: false,
+                async: true,
                 skip: 0
             }
         );
