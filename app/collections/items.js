@@ -147,6 +147,14 @@ module.exports = SkritterCollection.extend({
         return response.Items.concat(response.ContainedItems || []);
     },
     /**
+     * @method reset
+     * @returns {Items}
+     */
+    reset: function() {
+        this.vocabs.reset();
+        return SkritterCollection.prototype.reset.call(this);
+    },
+    /**
      * @method sort
      * @returns {Items}
      */

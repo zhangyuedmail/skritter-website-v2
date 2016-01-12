@@ -45,5 +45,15 @@ module.exports = SkritterCollection.extend({
         this.sentences.add(response.Sentences);
         this.strokes.add(response.Strokes);
         return response.Vocabs.concat(response.ContainingVocabs || []);
+    },
+    /**
+     * @method reset
+     * @returns {Items}
+     */
+    reset: function() {
+        this.decomps.reset();
+        this.sentences.reset();
+        this.strokes.reset();
+        return SkritterCollection.prototype.reset.call(this);
     }
 });
