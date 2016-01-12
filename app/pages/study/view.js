@@ -59,7 +59,7 @@ module.exports = GelatoPage.extend({
      * @method handleScheduledLoad
      */
     handleScheduledLoad: function() {
-        ScreenLoader.post('Preparing for study mode');
+        ScreenLoader.post('Preparing for study');
         this.populateQueue();
     },
     /**
@@ -100,6 +100,7 @@ module.exports = GelatoPage.extend({
      */
     loadSchedule: function() {
         var self = this;
+        var lang = app.getLanguage();
         var parts = app.user.getFilteredParts();
         var styles = app.user.getFilteredStyles();
         app.db.items
@@ -108,6 +109,8 @@ module.exports = GelatoPage.extend({
                 items = items.filter(function(item) {
                     if (!item.vocabIds.length) {
                         return false;
+                    } else if (item.lang !== lang) {
+                        return false
                     } else if (parts.indexOf(item.part) === -1) {
                         return false;
                     } else if (styles.indexOf(item.style) === -1) {
@@ -115,7 +118,8 @@ module.exports = GelatoPage.extend({
                     }
                     return true;
                 });
-                self.schedule.set(items.splice(0, 1000));
+                self.queue = [];
+                self.schedule.set(items.splice(0, 2000));
                 self.schedule.trigger('load', self.schedule);
             })
             .catch(function(error) {
