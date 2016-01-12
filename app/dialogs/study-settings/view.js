@@ -79,6 +79,6 @@ module.exports = BootstrapDialog.extend({
         event.preventDefault();
         this.trigger('save', this.getSettings());
         this.$(':input').attr('disabled', true);
-        this.$('#button-save').html('<i class="fa fa-2x fa-spinner fa-pulse">');
+        //this.$('#button-save').html('<i class="fa fa-2x fa-spinner fa-pulse">');
     }
 });
