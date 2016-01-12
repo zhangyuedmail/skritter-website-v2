@@ -36,12 +36,20 @@ module.exports = SkritterCollection.extend({
     url: 'reviews',
     /**
      * @method post
+     * @param {Object} [options]
      */
-    post: function(startFrom) {
+    post: function(options) {
+        options = _.defaults(
+            options || {},
+            {
+                async: false,
+                skip: 0
+            }
+        );
         if (this.state === 'standby') {
             this.state = 'posting';
             this.sort();
-            var reviews = this.toJSON().slice(startFrom || 0);
+            var reviews = this.toJSON().slice(options.skip);
             var chunks = _.chunk(reviews, 200);
             async.eachSeries(
                 chunks,
@@ -51,6 +59,7 @@ module.exports = SkritterCollection.extend({
                     });
                     $.ajax({
                         url: app.getApiUrl() + 'reviews?spaceItems=false',
+                        async: options.async,
                         headers: app.user.session.getHeaders(),
                         context: this,
                         type: 'POST',

@@ -83,6 +83,7 @@ module.exports = SkritterCollection.extend({
     /**
      * @method addReviews
      * @param {Array} reviews
+     * @returns {Review}
      */
     addReviews: function(reviews) {
         var originals = _.clone(reviews.originals, true);
@@ -123,7 +124,7 @@ module.exports = SkritterCollection.extend({
                 timeStudied: original.timeStudied + review.reviewTime
             });
         }
-        this.reviews.add(reviews, {merge: true});
+        return this.reviews.add(reviews, {merge: true});
     },
     /**
      * @method comparator

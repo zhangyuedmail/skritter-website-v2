@@ -11,7 +11,11 @@ module.exports = SkritterModel.extend({
      */
     defaults: function() {
         return {
-          data: []
+            data: [],
+            originals: [],
+            prompt: null,
+            timeAdded: false,
+            timestamp: null
         };
     },
     /**
