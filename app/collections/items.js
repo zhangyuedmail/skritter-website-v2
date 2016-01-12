@@ -15,8 +15,8 @@ module.exports = SkritterCollection.extend({
     initialize: function() {
         this.cursor = null;
         this.sorted = null;
-        this.reviews = new Reviews();
-        this.vocabs = new Vocabs();
+        this.reviews = new Reviews(null, {items: this});
+        this.vocabs = new Vocabs(null, {items: this});
     },
     /**
      * @property model

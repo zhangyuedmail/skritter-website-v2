@@ -8,9 +8,12 @@ var Review = require('models/review');
 module.exports = SkritterCollection.extend({
     /**
      * @method initialize
+     * @param {Object} [options]
      * @constructor
      */
-    initialize: function() {
+    initialize: function(options) {
+        options = options || {};
+        this.items = options.items;
         this.timeOffset = 0;
     },
     /**
