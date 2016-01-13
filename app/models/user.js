@@ -71,13 +71,8 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getFilteredParts: function() {
-        var filteredParts = [];
-        if (app.isChinese()) {
-            filteredParts =  this.get('filteredChineseParts');
-        } else {
-            filteredParts = this.get('filteredJapaneseParts');
-        }
-        return _.intersection(filteredParts, this.getAllStudyParts());
+        var filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
+        return _.intersection(this.getStudyParts(), filteredParts);
     },
     /**
      * @method getFilteredStyles
