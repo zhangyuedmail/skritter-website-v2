@@ -197,6 +197,12 @@ module.exports = GelatoApplication.extend({
         window.HS = HS;
     },
     /**
+     * @method reset
+     */
+    reset: function() {
+        app.db.items.clear().finally(app.reload);
+    },
+    /**
      * @method sendRaygunTest
      */
     sendRaygunTest: function() {
