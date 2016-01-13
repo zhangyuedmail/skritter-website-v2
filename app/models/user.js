@@ -190,10 +190,11 @@ module.exports = SkritterModel.extend({
      * @method logout
      */
     logout: function() {
+        var self = this;
         app.db.delete()
             .then(function() {
-                app.removeLocalStorage(this.id + '-session');
-                app.removeLocalStorage(this.id + '-user');
+                app.removeLocalStorage(self.id + '-session');
+                app.removeLocalStorage(self.id + '-user');
                 app.removeSetting('user');
                 app.reload();
             })
