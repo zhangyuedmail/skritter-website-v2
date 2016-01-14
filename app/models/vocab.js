@@ -1,7 +1,7 @@
 var SkritterModel = require('base/skritter-model');
 var NeutralTones = require('data/neutral-tones');
-var PromptReviews = require('collections/prompt-reviews');
-var PromptReview = require('models/prompt-review');
+var PromptItems = require('collections/prompt-items');
+var PromptItem = require('models/prompt-item');
 
 /**
  * @class Vocab
@@ -160,12 +160,12 @@ module.exports = SkritterModel.extend({
         return characters;
     },
     /**
-     * @method getPromptReviews
+     * @method getPromptItems
      * @param {String} part
-     * @returns {PromptReviews}
+     * @returns {PromptItems}
      */
-    getPromptReviews: function(part) {
-        var reviews = new PromptReviews();
+    getPromptItems: function(part) {
+        var promptItems = new PromptItems();
         var containedVocabs = this.getContained();
         var characters = [];
         var now = Date.now();
@@ -184,16 +184,15 @@ module.exports = SkritterModel.extend({
                 vocabs = [vocab];
         }
         for (var i = 0, length = vocabs.length; i < length; i++) {
-            var review = new PromptReview();
-            review.set('id', [now, i, vocabs[i].id].join('_'));
-            review.character = characters[i];
-            review.vocab = vocabs[i];
-            reviews.add(review);
+            var promptItem = new PromptItem();
+            promptItem.character = characters[i];
+            promptItem.vocab = vocabs[i];
+            promptItems.add(promptItem);
         }
-        reviews.group = now + '_' + this.id;
-        reviews.part = part;
-        reviews.vocab = vocab;
-        return reviews;
+        promptItems.group = now + '_' + this.id;
+        promptItems.part = part;
+        promptItems.vocab = vocab;
+        return promptItems;
     },
     /**
      * @method getPromptTones

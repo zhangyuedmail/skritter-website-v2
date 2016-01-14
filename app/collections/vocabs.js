@@ -6,6 +6,7 @@ var Vocab = require('models/vocab');
 
 /**
  * @class Vocabs
+ * @param {Array|Object} [models]
  * @param {Object} [options]
  * @extends {SkritterCollection}
  */
@@ -14,7 +15,7 @@ module.exports = SkritterCollection.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function(options) {
+    initialize: function(models, options) {
         options = options || {};
         this.cursor = null;
         this.cursorContaining = null;

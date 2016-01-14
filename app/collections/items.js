@@ -81,52 +81,6 @@ module.exports = SkritterCollection.extend({
         });
     },
     /**
-     * @method addReviews
-     * @param {Array} reviews
-     * @returns {Review}
-     */
-    addReviews: function(reviews) {
-        var originals = _.clone(reviews.originals, true);
-        for (var i = 0, length = reviews.data.length; i < length; i++) {
-            var review = reviews.data[i];
-            var item = this.get(review.itemId);
-            var original = _.find(originals, {id: review.itemId});
-            console.log(review.itemId, originals, original);
-            review.actualInterval = original.last ? review.submitTime - original.last : 0;
-            review.currentInterval = original.interval || 0;
-            review.newInterval = app.fn.interval.quantify(original, review.score);
-            review.previousInterval = original.previousInterval || 0;
-            review.previousSuccess = original.previousSuccess || false;
-            if (i === 0) {
-                if (item.consecutiveWrong >= 2) {
-                    item.consecutiveWrong = 0;
-                } else {
-                    item.consecutiveWrong = review.score > 1 ? 0 : item.consecutiveWrong + 1;
-                }
-            }
-            if (app.isDevelopment()) {
-                console.log(
-                    item.id,
-                    'scheduled for',
-                    moment.duration(review.newInterval, 'seconds').as('days'),
-                    'days'
-                );
-            }
-            item.set({
-                changed: review.submitTime,
-                last: review.submitTime,
-                interval: review.newInterval,
-                next: review.submitTime + review.newInterval,
-                previousInterval: review.currentInterval,
-                previousSuccess: review.score > 1,
-                reviews: original.reviews + 1,
-                successes: review.score > 1 ? original.successes + 1 : original.successes,
-                timeStudied: original.timeStudied + review.reviewTime
-            });
-        }
-        return this.reviews.add(reviews, {merge: true});
-    },
-    /**
      * @method comparator
      * @param {Item} item
      * @returns {Number}

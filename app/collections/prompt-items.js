@@ -1,9 +1,9 @@
 var GelatoCollection = require('gelato/collection');
-var PromptReview = require('models/prompt-review');
+var PromptItem = require('models/prompt-item');
 var Review = require('models/review');
 
 /**
- * @class PromptReviews
+ * @class PromptItems
  * @extends {GelatoCollection}
  */
 module.exports = GelatoCollection.extend({
@@ -19,9 +19,9 @@ module.exports = GelatoCollection.extend({
     item: null,
     /**
      * @property model
-     * @type {PromptReview}
+     * @type {PromptItem}
      */
-    model: PromptReview,
+    model: PromptItem,
     /**
      * @property originals
      * @type {Array}
@@ -44,16 +44,16 @@ module.exports = GelatoCollection.extend({
     vocab: null,
     /**
      * @method current
-     * @returns {PromptReview}
+     * @returns {PromptItem}
      */
     current: function() {
         return this.at(this.position);
     },
     /**
-     * @method getBaseItemReview
+     * @method getBaseReviewData
      * @returns {Object}
      */
-    getBaseItemReview: function() {
+    getBaseReviewData: function() {
         return {
             bearTime: true,
             id: this.at(0).id,
@@ -61,6 +61,7 @@ module.exports = GelatoCollection.extend({
             reviewTime: this.getBaseReviewingTime(),
             score: this.getBaseScore(),
             submitTime: this.getBaseSubmitTime(),
+            submitTimeSeconds: this.getBaseSubmitTimeSeconds(),
             thinkingTime: this.getBaseThinkingTime(),
             wordGroup: this.group
         };
@@ -71,6 +72,13 @@ module.exports = GelatoCollection.extend({
      */
     getBaseSubmitTime: function() {
         return this.at(0).get('submitTime');
+    },
+    /**
+     * @method getBaseSubmitTimeSeconds
+     * @returns {Number}
+     */
+    getBaseSubmitTimeSeconds: function() {
+        return this.at(0).get('submitTimeSeconds');
     },
     /**
      * @method getBaseReviewingTime
@@ -122,31 +130,30 @@ module.exports = GelatoCollection.extend({
         return thinkingTime;
     },
     /**
-     * @method getChildItemReviews
+     * @method getChildReviewData
      * @returns {Array}
      */
-    getChildItemReviews: function() {
+    getChildReviewData: function() {
         return this.filter(function(review) {
             return !review.get('kana');
         }).map(function(model) {
-            return model.getItemReview();
+            return model.getReviewData();
         });
     },
     /**
-     * @method getItemReviews
+     * @method getReview
      * @returns {Object}
      */
-    getItemReviews: function() {
-        var reviews = [this.getBaseItemReview()];
+    getReview: function() {
+        var reviews = [this.getBaseReviewData()];
         if (this.length > 1) {
-            reviews = reviews.concat(this.getChildItemReviews());
+            reviews = reviews.concat(this.getChildReviewData());
         }
         return {
-            id: this.group,
+            created: this.created,
             data: reviews,
-            originals: this.originals,
-            prompt: this,
-            timestamp: this.timestamp
+            group: this.group,
+            promptItems: this
         };
     },
     /**
@@ -210,7 +217,7 @@ module.exports = GelatoCollection.extend({
     },
     /**
      * @method next
-     * @returns {PromptReview}
+     * @returns {PromptItem}
      */
     next: function() {
         if (!this.isLast()) {
@@ -220,7 +227,7 @@ module.exports = GelatoCollection.extend({
     },
     /**
      * @method previous
-     * @returns {PromptReview}
+     * @returns {PromptItem}
      */
     previous: function() {
         if (!this.isFirst()) {

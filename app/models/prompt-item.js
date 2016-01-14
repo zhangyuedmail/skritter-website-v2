@@ -1,7 +1,7 @@
 var GelatoModel = require('gelato/model');
 
 /**
- * @class PromptReview
+ * @class PromptItem
  * @extends {GelatoModel}
  */
 module.exports = GelatoModel.extend({
@@ -49,10 +49,17 @@ module.exports = GelatoModel.extend({
         return app.user.get('gradingColors')[this.get('score')];
     },
     /**
-     * @method getItemReview
+     * @method getPosition
+     * @returns {Number}
+     */
+    getPosition: function() {
+        return this.collection.indexOf(this);
+    },
+    /**
+     * @method getReviewData
      * @returns {Object}
      */
-    getItemReview: function() {
+    getReviewData: function() {
         return {
             bearTime: false,
             id: this.id,
@@ -60,16 +67,10 @@ module.exports = GelatoModel.extend({
             reviewTime: this.getReviewingTime(),
             score: this.get('score'),
             submitTime: this.get('submitTime'),
+            submitTimeSeconds: this.get('submitTimeSeconds'),
             thinkingTime: this.getThinkingTime(),
             wordGroup: this.collection.group
         };
-    },
-    /**
-     * @method getPosition
-     * @returns {Number}
-     */
-    getPosition: function() {
-        return this.collection.indexOf(this);
     },
     /**
      * @method getReviewingTime
@@ -157,20 +158,21 @@ module.exports = GelatoModel.extend({
     },
     /**
      * @method start
-     * @returns {PromptReview}
+     * @returns {PromptItem}
      */
     start: function() {
         if (this.get('reviewingStart') === 0) {
             this.set({
-                reviewingStart: new Date().getTime(),
-                submitTime: moment().unix()
+                reviewingStart: Date.now(),
+                submitTime: Date.now(),
+                submitTimeSeconds: moment().unix()
             });
         }
         return this;
     },
     /**
      * @method stop
-     * @returns {PromptReview}
+     * @returns {PromptItem}
      */
     stop: function() {
         var timestamp = new Date().getTime();
@@ -181,22 +183,22 @@ module.exports = GelatoModel.extend({
     /**
      * @method stopReviewing
      * @param {Number} [timestamp]
-     * @returns {PromptReview}
+     * @returns {PromptItem}
      */
     stopReviewing: function(timestamp) {
         if (this.get('reviewingStop') === 0) {
-            this.set('reviewingStop', timestamp || new Date().getTime());
+            this.set('reviewingStop', timestamp || Date.now());
         }
         return this;
     },
     /**
      * @method stopThinking
      * @param {Number} [timestamp]
-     * @returns {PromptReview}
+     * @returns {PromptItem}
      */
     stopThinking: function(timestamp) {
         if (this.get('thinkingStop') === 0) {
-            this.set('thinkingStop', timestamp || new Date().getTime());
+            this.set('thinkingStop', timestamp || Date.now());
         }
         return this;
     }
