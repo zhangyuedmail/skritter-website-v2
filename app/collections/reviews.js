@@ -111,22 +111,28 @@ module.exports = SkritterCollection.extend({
         options = _.defaults(options || {}, {async: true, skip: 0});
         if (this.state === 'standby') {
             this.state = 'posting';
-            var reviews = this.slice(0, -options.skip);
+            var reviews = this.slice(0, -options.skip || this.length);
             async.eachSeries(
-                reviews,
-                function(review, callback) {
+                _.chunk(reviews, 20),
+                function(chunk, callback) {
+                    data = _
+                        .chain(chunk)
+                        .map(function(review) {
+                            return review.get('data');
+                        })
+                        .flatten()
+                        .value();
                     $.ajax({
                         url: app.getApiUrl() + 'reviews?spaceItems=false',
                         async: options.async,
                         headers: app.user.session.getHeaders(),
                         type: 'POST',
-                        data: JSON.stringify(review.get('data')),
+                        data: JSON.stringify(data),
                         error: function(error) {
                             callback(error);
                         },
                         success: function() {
-                            self.timeOffset += review.get('data')[0].reviewTime;
-                            self.remove(review);
+                            self.remove(chunk);
                             callback();
                         }
                     });
