@@ -19,7 +19,6 @@ module.exports = GelatoPage.extend({
         this.navbar = new Navbar();
         this.prompt = new Prompt();
         this.queue = [];
-        this.reviews = null;
         this.schedule = new Items();
         this.scheduleState = 'standby';
         this.toolbar = new Toolbar({page: this});
@@ -27,7 +26,7 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-        window.onbeforeunload = this.handleOnBeforeUnload.bind(this);
+        //window.onbeforeunload = this.handleOnBeforeUnload.bind(this);
         this.loadSchedule();
     },
     /**
@@ -64,26 +63,26 @@ module.exports = GelatoPage.extend({
     },
     /**
      * @method handlePromptNext
-     * @param {PromptReviews} reviews
+     * @param {PromptItems} promptItems
      */
-    handlePromptNext: function(reviews) {
-        var review = this.schedule.addReviews(reviews.getItemReviews());
-        if (!review.get('timeAdded')) {
-            this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
-            review.set('timeAdded', true);
+    handlePromptNext: function(promptItems) {
+        var review = promptItems.getReview();
+        if (!this.schedule.reviews.get(review)) {
+            this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
         }
         if (this.schedule.reviews.length > 4) {
             this.schedule.reviews.post({skip: 1});
         }
+        this.schedule.reviews.add(review, {merge: true});
         this.next();
     },
     /**
      * @method handlePromptPrevious
-     * @param {PromptReviews} reviews
+     * @param {PromptItems} promptItems
      */
-    handlePromptPrevious: function(reviews) {
+    handlePromptPrevious: function(promptItems) {
         if (!this.queue[0].group) {
-            this.queue.unshift(reviews);
+            this.queue.unshift(promptItems);
             this.previous();
         }
     },
@@ -143,7 +142,7 @@ module.exports = GelatoPage.extend({
         var item = this.queue.shift();
         if (item) {
             this.toolbar.render();
-            this.prompt.set(item.group ? item : item.getPromptReviews());
+            this.prompt.set(item.group ? item : item.getPromptItems());
             if (this.scheduleState === 'standby' && this.queue.length < 5) {
                 this.scheduleState = 'populating';
                 this.populateQueue();
@@ -217,10 +216,10 @@ module.exports = GelatoPage.extend({
      */
     previous: function() {
         if (this.schedule.reviews.length) {
-            var reviews = this.schedule.reviews.sort().at(0);
-            if (reviews.has('prompt')) {
+            var review = this.schedule.reviews.last();
+            if (review.has('promptItems')) {
                 this.toolbar.render();
-                this.prompt.set(reviews.get('prompt'));
+                this.prompt.set(review.get('promptItems'));
             }
         }
     },

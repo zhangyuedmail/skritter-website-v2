@@ -94,7 +94,7 @@ module.exports = GelatoPage.extend({
                 //TODO: display error message to user
                 console.error('SCRATCHPAD LOAD ERROR:', error);
             } else {
-                this.reviews = vocab.getPromptReviews(this.part || 'rune');
+                this.reviews = vocab.getPromptItems(this.part || 'rune');
                 this.prompt.set(this.reviews);
                 ScreenLoader.hide();
             }
