@@ -38,10 +38,12 @@ module.exports = SkritterCollection.extend({
         options = _.defaults(options || {}, {merge: true});
         for (var a = 0, lengthA = models.length; a < lengthA; a++) {
             var model = models[a];
+            model.data = _.uniq(model.data, 'itemId');
             for (var b = 0, lengthB = model.data.length; b < lengthB; b++) {
                 var modelData = model.data[b];
                 var item = this.items.get(modelData.itemId);
-                modelData.actualInterval = item.get('last') ? modelData.submitTime - item.get('last') : 0;
+                var submitTimeSeconds = Math.round(modelData.submitTime);
+                modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
                 modelData.currentInterval = item.get('interval') || 0;
                 modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                 modelData.previousInterval = item.get('previousInterval') || 0;
@@ -55,10 +57,10 @@ module.exports = SkritterCollection.extend({
                     );
                 }
                 item.set({
-                    changed: modelData.submitTime,
-                    last: modelData.submitTime,
+                    changed: submitTimeSeconds,
+                    last: submitTimeSeconds,
                     interval: modelData.newInterval,
-                    next: modelData.submitTime + modelData.newInterval,
+                    next: submitTimeSeconds + modelData.newInterval,
                     previousInterval: modelData.currentInterval,
                     previousSuccess: modelData.score > 1
                 });
@@ -129,10 +131,7 @@ module.exports = SkritterCollection.extend({
                         type: 'POST',
                         data: JSON.stringify(data),
                         error: function(error) {
-                            data.forEach(function(datum) {
-                                console.log(datum);
-                            });
-                            callback(error);
+                            callback(error.responseJSON || error);
                         },
                         success: function() {
                             self.remove(chunk);
@@ -143,7 +142,7 @@ module.exports = SkritterCollection.extend({
                 function(error) {
                     self.state = 'standby';
                     if (error) {
-                        console.log('REVIEW ERROR:', error);
+                        console.error('REVIEW ERROR:', error);
                     } else {
                         console.log('REVIEWS POSTED:', reviews.length);
                     }

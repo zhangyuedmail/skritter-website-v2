@@ -161,9 +161,10 @@ module.exports = GelatoModel.extend({
      */
     start: function() {
         if (this.get('reviewingStart') === 0) {
+            var now = Date.now();
             this.set({
-                reviewingStart: Date.now(),
-                submitTime: moment().unix()
+                reviewingStart: now,
+                submitTime: now / 1000
             });
         }
         return this;
