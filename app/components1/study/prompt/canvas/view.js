@@ -28,6 +28,24 @@ module.exports = GelatoComponent.extend({
         this.size = 450;
         this.stage = null;
         this.strokeColor = '#4b4b4b';
+
+        createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
+            this.moveTo(x1 , y1);
+            var dX = x2 - x1;
+            var dY = y2 - y1;
+            var dashes = Math.floor(Math.sqrt(dX * dX + dY * dY) / dashLength);
+            var dashX = dX / dashes;
+            var dashY = dY / dashes;
+            var i = 0;
+            while (i++ < dashes ) {
+                x1 += dashX;
+                y1 += dashY;
+                this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x1, y1);
+            }
+            this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x2, y2);
+            return this;
+        };
+
     },
     /**
      * @property template

@@ -13,6 +13,7 @@ module.exports = GelatoApplication.extend({
      * @constructor
      */
     initialize: function() {
+
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
             excludedUserAgents: ['PhantomJS'],
@@ -20,29 +21,12 @@ module.exports = GelatoApplication.extend({
             ignoreAjaxAbort: false,
             ignoreAjaxError: false
         }).attach();
+
         Raygun.setVersion(this.get('version'));
+
         this.fn = Functions;
         this.router = new Router();
         this.user = new User({id: this.getSetting('user') || 'application'});
-
-        if (window.createjs) {
-            createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
-                this.moveTo(x1 , y1);
-                var dX = x2 - x1;
-                var dY = y2 - y1;
-                var dashes = Math.floor(Math.sqrt(dX * dX + dY * dY) / dashLength);
-                var dashX = dX / dashes;
-                var dashY = dY / dashes;
-                var i = 0;
-                while (i++ < dashes ) {
-                    x1 += dashX;
-                    y1 += dashY;
-                    this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x1, y1);
-                }
-                this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x2, y2);
-                return this;
-            };
-        }
 
         if (window.ga && this.isProduction()) {
             ga('create', 'UA-4642573-1', 'auto');
@@ -51,19 +35,6 @@ module.exports = GelatoApplication.extend({
 
         if (this.isDevelopment()) {
             window.onerror = this.handleError;
-        }
-
-        //TODO: depreciate this code after some time
-        if (localStorage.getItem('guest-authentication')) {
-            var user = localStorage.getItem('application-user');
-            if (user) {
-                localStorage.removeItem(user + '-authentication');
-                localStorage.removeItem(user + '-settings');
-                localStorage.removeItem(user + '-ja-data');
-                localStorage.removeItem(user + '-zh-data');
-            }
-            localStorage.removeItem('guest-authentication');
-            app.reload();
         }
 
     },
@@ -107,14 +78,6 @@ module.exports = GelatoApplication.extend({
         } else {
             return 'pk_test_24FOCKPSEtJHVpcA3oErEw2I';
         }
-    },
-    /**
-     * @method getVersion
-     * @returns {String}
-     */
-    getVersion: function() {
-        var semantics = this.get('version').split('.');
-        return [semantics[0], semantics[1], this.get('timestamp')].join('.');
     },
     /**
      * @method handleError
@@ -202,16 +165,6 @@ module.exports = GelatoApplication.extend({
     reset: function() {
         app.user.setLastItemUpdate(0).cache();
         app.db.items.clear().finally(app.reload);
-    },
-    /**
-     * @method sendRaygunTest
-     */
-    sendRaygunTest: function() {
-        try {
-            throw new Error('TEST ERROR');
-        } catch(error) {
-            Raygun.send(error);
-        }
     },
     /**
      * @method start
