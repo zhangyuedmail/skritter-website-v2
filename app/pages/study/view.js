@@ -72,10 +72,10 @@ module.exports = GelatoPage.extend({
             if (!this.schedule.reviews.get(review)) {
                 this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
             }
+            this.schedule.reviews.add(review, {merge: true});
             if (this.schedule.reviews.length > 4) {
                 this.schedule.reviews.post({skip: 1});
             }
-            this.schedule.reviews.add(review, {merge: true});
             this.item = null;
         }
         this.next();

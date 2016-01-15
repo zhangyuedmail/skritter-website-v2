@@ -31,9 +31,10 @@ module.exports = SkritterCollection.extend({
      * @method add
      * @param {Object} models
      * @param {Object} [options]
-     * @return {Array|Review}
+     * @param {Function} [callback]
      */
-    add: function(models, options) {
+    add: function(models, options, callback) {
+        var updatedItems = [];
         models = _.isArray(models) ? models : [models];
         options = _.defaults(options || {}, {merge: true});
         for (var a = 0, lengthA = models.length; a < lengthA; a++) {
@@ -71,8 +72,25 @@ module.exports = SkritterCollection.extend({
                         timeStudied: item.get('timeStudied') + modelData.reviewTime
                     });
                 }
+                updatedItems.push(item);
             }
         }
+        async.each(
+            updatedItems,
+            function(item, callback) {
+                app.db.items
+                    .put(item.toJSON())
+                    .then(function() {
+                        callback();
+                    })
+                    .catch(callback);
+            },
+            function(error) {
+                if (typeof callback === 'function') {
+                    callback(error);
+                }
+            }
+        );
         return SkritterCollection.prototype.add.call(this, models, options);
     },
     /**
@@ -131,7 +149,9 @@ module.exports = SkritterCollection.extend({
                         type: 'POST',
                         data: JSON.stringify(data),
                         error: function(error) {
-                            callback(error.responseJSON || error);
+                            self.reroll(_.pluck(error.responseJSON.errors, 'Item'), function() {
+                                callback(error.responseJSON || error);
+                            });
                         },
                         success: function() {
                             self.remove(chunk);
@@ -149,5 +169,56 @@ module.exports = SkritterCollection.extend({
                 }
             );
         }
+    },
+    /**
+     * @method reroll
+     * @param {Array|Object} items
+     * @param {Function} [callback]
+     */
+    reroll: function(items, callback) {
+        var updatedItems = [];
+        var itemIds = _.isArray(items) ? _.pluck(items, 'id') : [items.id];
+        this.items.add(items, {merge: true});
+        for (var a = 0, lengthA = this.length; a < lengthA; a++) {
+            var review = this.at(a);
+            var reviewData = review.get('data');
+            for (var b = 0, lengthB = reviewData.length; b < lengthB; b++) {
+                var modelData = reviewData[b];
+                if (itemIds.indexOf(modelData.itemId) > -1) {
+                    var item = this.items.get(modelData.itemId);
+                    var submitTimeSeconds = Math.round(modelData.submitTime);
+                    modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
+                    modelData.currentInterval = item.get('interval') || 0;
+                    modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
+                    modelData.previousInterval = item.get('previousInterval') || 0;
+                    modelData.previousSuccess = item.get('previousSuccess') || false;
+                    item.set({
+                        changed: submitTimeSeconds,
+                        last: submitTimeSeconds,
+                        interval: modelData.newInterval,
+                        next: submitTimeSeconds + modelData.newInterval,
+                        previousInterval: modelData.currentInterval,
+                        previousSuccess: modelData.score > 1
+                    });
+                    updatedItems.push(item);
+                }
+            }
+        }
+        async.each(
+            updatedItems,
+            function(item, callback) {
+                app.db.items
+                    .put(item.toJSON())
+                    .then(function() {
+                        callback();
+                    })
+                    .catch(callback);
+            },
+            function(error) {
+                if (typeof callback === 'function') {
+                    callback(error);
+                }
+            }
+        );
     }
 });
