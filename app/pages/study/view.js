@@ -27,7 +27,10 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-        //window.onbeforeunload = this.handleOnBeforeUnload.bind(this);
+
+        //TODO: will not work in the future on all browsers
+        window.onbeforeunload = this.handleOnBeforeUnload.bind(this);
+
         this.loadSchedule();
     },
     /**
