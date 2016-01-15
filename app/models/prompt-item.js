@@ -67,7 +67,6 @@ module.exports = GelatoModel.extend({
             reviewTime: this.getReviewingTime(),
             score: this.get('score'),
             submitTime: this.get('submitTime'),
-            submitTimeSeconds: this.get('submitTimeSeconds'),
             thinkingTime: this.getThinkingTime(),
             wordGroup: this.collection.group
         };
@@ -164,8 +163,7 @@ module.exports = GelatoModel.extend({
         if (this.get('reviewingStart') === 0) {
             this.set({
                 reviewingStart: Date.now(),
-                submitTime: Date.now(),
-                submitTimeSeconds: moment().unix()
+                submitTime: moment().unix()
             });
         }
         return this;

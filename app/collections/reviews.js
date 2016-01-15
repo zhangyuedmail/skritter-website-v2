@@ -41,7 +41,7 @@ module.exports = SkritterCollection.extend({
             for (var b = 0, lengthB = model.data.length; b < lengthB; b++) {
                 var modelData = model.data[b];
                 var item = this.items.get(modelData.itemId);
-                modelData.actualInterval = item.get('last') ? modelData.submitTimeSeconds - item.get('last') : 0;
+                modelData.actualInterval = item.get('last') ? modelData.submitTime - item.get('last') : 0;
                 modelData.currentInterval = item.get('interval') || 0;
                 modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                 modelData.previousInterval = item.get('previousInterval') || 0;
@@ -55,10 +55,10 @@ module.exports = SkritterCollection.extend({
                     );
                 }
                 item.set({
-                    changed: modelData.submitTimeSeconds,
-                    last: modelData.submitTimeSeconds,
+                    changed: modelData.submitTime,
+                    last: modelData.submitTime,
                     interval: modelData.newInterval,
-                    next: modelData.submitTimeSeconds + modelData.newInterval,
+                    next: modelData.submitTime + modelData.newInterval,
                     previousInterval: modelData.currentInterval,
                     previousSuccess: modelData.score > 1
                 });
@@ -129,6 +129,9 @@ module.exports = SkritterCollection.extend({
                         type: 'POST',
                         data: JSON.stringify(data),
                         error: function(error) {
+                            data.forEach(function(datum) {
+                                console.log(datum);
+                            });
                             callback(error);
                         },
                         success: function() {

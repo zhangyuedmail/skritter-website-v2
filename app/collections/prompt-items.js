@@ -61,7 +61,6 @@ module.exports = GelatoCollection.extend({
             reviewTime: this.getBaseReviewingTime(),
             score: this.getBaseScore(),
             submitTime: this.getBaseSubmitTime(),
-            submitTimeSeconds: this.getBaseSubmitTimeSeconds(),
             thinkingTime: this.getBaseThinkingTime(),
             wordGroup: this.group
         };
@@ -72,13 +71,6 @@ module.exports = GelatoCollection.extend({
      */
     getBaseSubmitTime: function() {
         return this.at(0).get('submitTime');
-    },
-    /**
-     * @method getBaseSubmitTimeSeconds
-     * @returns {Number}
-     */
-    getBaseSubmitTimeSeconds: function() {
-        return this.at(0).get('submitTimeSeconds');
     },
     /**
      * @method getBaseReviewingTime
