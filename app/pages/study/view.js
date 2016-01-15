@@ -16,6 +16,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         ScreenLoader.show();
+        this.item = null;
         this.navbar = new Navbar();
         this.prompt = new Prompt();
         this.queue = [];
@@ -66,14 +67,17 @@ module.exports = GelatoPage.extend({
      * @param {PromptItems} promptItems
      */
     handlePromptNext: function(promptItems) {
-        var review = promptItems.getReview();
-        if (!this.schedule.reviews.get(review)) {
-            this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+        if (this.item) {
+            var review = promptItems.getReview();
+            if (!this.schedule.reviews.get(review)) {
+                this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
+            }
+            if (this.schedule.reviews.length > 4) {
+                this.schedule.reviews.post({skip: 1});
+            }
+            this.schedule.reviews.add(review, {merge: true});
+            this.item = null;
         }
-        if (this.schedule.reviews.length > 4) {
-            this.schedule.reviews.post({skip: 1});
-        }
-        this.schedule.reviews.add(review, {merge: true});
         this.next();
     },
     /**
@@ -147,8 +151,23 @@ module.exports = GelatoPage.extend({
                 this.scheduleState = 'populating';
                 this.populateQueue();
             }
+            this.item = item;
         } else {
-            console.error('ITEM LOAD ERROR:', 'no items');
+            $.notify(
+                {
+                    title: 'Loading',
+                    message: 'Waiting for next items to finish loading.'
+                },
+                {
+                    type: 'pastel-warning',
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 5000,
+                    icon_type: 'class'
+                }
+            );
         }
     },
     /**
@@ -157,6 +176,7 @@ module.exports = GelatoPage.extend({
     populateQueue: function() {
         var self = this;
         var items = [];
+        this.$('#loading-indicator').removeClass('hidden');
         //store base histories for better spacing
         var localHistory = [];
         var queueHistory = this.queue.map(function(item) {
@@ -191,6 +211,7 @@ module.exports = GelatoPage.extend({
             error: function(error) {
                 self.schedule.trigger('error', error);
                 self.scheduleState ='standby';
+                self.$('#loading-indicator').addClass('hidden');
             },
             success: function(items, result) {
                 var now = moment().unix();
@@ -208,6 +229,7 @@ module.exports = GelatoPage.extend({
                 }
                 self.schedule.trigger('populate', self.queue);
                 self.scheduleState ='standby';
+                self.$('#loading-indicator').addClass('hidden');
             }
         });
     },
