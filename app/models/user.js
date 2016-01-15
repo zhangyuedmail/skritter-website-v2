@@ -26,6 +26,8 @@ module.exports = SkritterModel.extend({
         hideDefinition: false,
         gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
         goals: {ja: {items: 20}, zh: {items: 20}},
+        lastChineseItemUpdate: 0,
+        lastJapaneseItemUpdate: 0,
         teachingMode: true
     },
     /**
@@ -89,6 +91,13 @@ module.exports = SkritterModel.extend({
             }
         }
         return styles;
+    },
+    /**
+     * @method getLastItemUpdate
+     * @returns {Number}
+     */
+    getLastItemUpdate: function() {
+        return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate')
     },
     /**
      * @method getStudyParts
@@ -202,5 +211,96 @@ module.exports = SkritterModel.extend({
                 console.error(error);
                 app.reload();
             });
+    },
+    /**
+     * @method setLastItemUpdate
+     * @param {Number} value
+     * @returns {User}
+     */
+    setLastItemUpdate: function(value) {
+        if (app.isChinese()) {
+            this.set('lastChineseItemUpdate', value);
+        } else {
+            this.set('lastJapaneseItemUpdate', value);
+        }
+        return this;
+    },
+    /**
+     * @method updateItems
+     * @param {Function} callback
+     */
+    updateItems: function(callback) {
+        var self = this;
+        var cursor = undefined;
+        var index = 0;
+        var limit = 2500;
+        var now = moment().unix();
+        var retries = 0;
+
+        if (!this.isLoggedIn()) {
+            callback();
+            return;
+        }
+
+        async.whilst(
+            function() {
+                index++;
+                return cursor !== null;
+            },
+            function(callback) {
+                if (index > 4) {
+                    ScreenLoader.notice('(loading can take awhile on larger accounts)');
+                }
+                ScreenLoader.post('Fetching item batch #' + index);
+                $.ajax({
+                    method: 'GET',
+                    url: 'https://api-dot-write-way.appspot.com/v1/items',
+                    data: {
+                        cursor: cursor,
+                        lang: app.getLanguage(),
+                        limit: limit,
+                        offset: self.getLastItemUpdate(),
+                        order: 'changed',
+                        token: self.session.get('access_token')
+                    },
+                    error: function(error) {
+                        if (retries > 2) {
+                            callback(error);
+                        } else {
+                            retries++;
+                            limit = 500;
+                            setTimeout(callback, 1000);
+                        }
+                    },
+                    success: function(result) {
+                        app.db.transaction(
+                            'rw',
+                            app.db.items,
+                            function() {
+                                result.Items.forEach(function(item) {
+                                    app.db.items.put(item);
+                                });
+                            }
+                        ).then(function() {
+                            cursor = result.cursor;
+                            setTimeout(callback, 100);
+                        }).catch(function(error) {
+                            if (retries > 2) {
+                                callback(error);
+                            } else {
+                                retries++;
+                                limit = 500;
+                                setTimeout(callback, 1000);
+                            }
+                        });
+                    }
+                });
+            },
+            function(error) {
+                self.setLastItemUpdate(now);
+                self.cache();
+                callback(error);
+            }
+        );
     }
 });

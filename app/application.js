@@ -200,6 +200,7 @@ module.exports = GelatoApplication.extend({
      * @method reset
      */
     reset: function() {
+        app.user.setLastItemUpdate(0).cache();
         app.db.items.clear().finally(app.reload);
     },
     /**
@@ -297,86 +298,9 @@ module.exports = GelatoApplication.extend({
                     callback();
                 }
             },
-            //set time for last item changed
-            function(callback) {
-                if (app.user.isLoggedIn()) {
-                    app.db.items
-                        .orderBy('changed')
-                        .last()
-                        .then(function(item) {
-                            app.set('lastItemChanged', item ? item.changed : 0);
-                            callback();
-                        });
-                } else {
-                    callback();
-                }
-            },
             //fetch and store changed items
             function(callback) {
-                if (app.user.isLoggedIn()) {
-                    var cursor = undefined;
-                    var index = 0;
-                    var limit = 2500;
-                    var retries = 0;
-                    async.whilst(
-                        function() {
-                            index++;
-                            return cursor !== null;
-                        },
-                        function(callback) {
-                            if (index > 4) {
-                                ScreenLoader.notice('(loading can take awhile on larger accounts)');
-                            }
-                            ScreenLoader.post('Fetching item batch #' + index);
-                            $.ajax({
-                                method: 'GET',
-                                url: 'https://api-dot-write-way.appspot.com/v1/items',
-                                data: {
-                                    cursor: cursor,
-                                    lang: app.getLanguage(),
-                                    limit: limit,
-                                    offset: app.get('lastItemChanged') + 1,
-                                    order: 'changed',
-                                    token: app.user.session.get('access_token')
-                                },
-                                error: function(error) {
-                                    if (retries > 2) {
-                                        callback(error);
-                                    } else {
-                                        retries++;
-                                        limit = 500;
-                                        setTimeout(callback, 1000);
-                                    }
-                                },
-                                success: function(result) {
-                                    app.db.transaction(
-                                        'rw',
-                                        app.db.items,
-                                        function() {
-                                            result.Items.forEach(function(item) {
-                                                app.db.items.put(item);
-                                            });
-                                        }
-                                    ).then(function() {
-                                        cursor = result.cursor;
-                                        setTimeout(callback, 100);
-                                    }).catch(function(error) {
-                                        if (retries > 2) {
-                                            callback(error);
-                                        } else {
-                                            retries++;
-                                            limit = 500;
-                                            setTimeout(callback, 1000);
-                                        }
-                                    });
-                                }
-                            });
-                        },
-                        callback
-                    );
-                } else {
-                    callback();
-                }
+                app.user.updateItems(callback);
             }
         ], function() {
             setTimeout(function() {
