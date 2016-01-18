@@ -31,10 +31,9 @@ module.exports = SkritterCollection.extend({
     /**
      * @method addItems
      * @param {Object} [options]
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
+     * @param {Function} callback
      */
-    addItems: function(options, callbackSuccess, callbackError) {
+    addItems: function(options, callback) {
         async.waterfall([
             _.bind(function(callback) {
                 this.fetch({
@@ -55,11 +54,7 @@ module.exports = SkritterCollection.extend({
                 this.fetch({
                     data: {
                         ids: _.pluck(result.Items, 'id').join('|'),
-                        include_contained: true,
-                        include_decomps: true,
-                        include_sentences: true,
-                        include_strokes: true,
-                        include_vocabs: true
+                        include_contained: true
                     },
                     remove: false,
                     sort: false,
@@ -74,9 +69,9 @@ module.exports = SkritterCollection.extend({
         ], function(error, result) {
             if (error) {
                 console.error('ITEM ADD ERROR:', error);
-                callbackError(error)
+                callback(error)
             } else {
-                callbackSuccess(result);
+                callback(null, result);
             }
         });
     },

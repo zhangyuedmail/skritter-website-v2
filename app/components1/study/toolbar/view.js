@@ -48,9 +48,9 @@ module.exports = GelatoComponent.extend({
      */
     handleClickAddItem: function(event) {
         event.preventDefault();
-        this.page.items.addItems(
+        this.page.schedule.addItems(
             null,
-            function(result) {
+            function(error, result) {
                 var added = result.numVocabsAdded;
                 $.notify(
                     {
