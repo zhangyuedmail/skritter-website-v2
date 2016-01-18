@@ -143,7 +143,7 @@ module.exports = GelatoCollection.extend({
      */
     getChildReviewData: function() {
         return this.filter(function(review) {
-            return !review.get('kana');
+            return !review.get('filler') && !review.get('kana');
         }).map(function(model) {
             return model.getReviewData();
         });
