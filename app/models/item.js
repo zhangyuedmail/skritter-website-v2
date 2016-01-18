@@ -104,11 +104,24 @@ module.exports = SkritterModel.extend({
                 vocabs = [vocab];
         }
         for (var i = 0, length = vocabs.length; i < length; i++) {
+            var childItem = items[i];
+            var childVocab = vocabs[i];
             var promptItem = new PromptItem();
             promptItem.character = characters[i];
-            promptItem.item = items[i];
-            promptItem.vocab = vocabs[i];
-            promptItem.set('kana', vocabs[i].isKana());
+            promptItem.item = childItem;
+            promptItem.vocab = childVocab;
+            if (childVocab.isChinese()) {
+                promptItem.set('filler', false);
+                promptItem.set('kana', false);
+            }
+            if (childVocab.isJapanese()) {
+                promptItem.set('kana', vocabs[i].isKana());
+                if (['～', 'ー'].indexOf(childVocab.get('writing')) > -1) {
+                    promptItem.set('filler', true);
+                } else {
+                    promptItem.set('filler', false);
+                }
+            }
             promptItems.add(promptItem);
         }
         promptItems.created = now;

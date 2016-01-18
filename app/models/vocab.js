@@ -155,7 +155,12 @@ module.exports = SkritterModel.extend({
         var characters = [];
         var strokes = this.getStrokes();
         for (var i = 0, length = strokes.length; i < length; i++) {
-            characters.push(strokes[i].getPromptCharacter());
+            var stroke = strokes[i];
+            if (stroke) {
+                characters.push(strokes[i].getPromptCharacter());
+            } else {
+                characters.push(null);
+            }
         }
         return characters;
     },
@@ -184,9 +189,20 @@ module.exports = SkritterModel.extend({
                 vocabs = [vocab];
         }
         for (var i = 0, length = vocabs.length; i < length; i++) {
+            var childVocab = vocabs[i];
             var promptItem = new PromptItem();
             promptItem.character = characters[i];
-            promptItem.vocab = vocabs[i];
+            promptItem.vocab = childVocab;
+            if (childVocab.isChinese()) {
+                promptItem.set('filler', false);
+            }
+            if (childVocab.isJapanese()) {
+                if (['～', 'ー'].indexOf(childVocab.get('writing')) > -1) {
+                    promptItem.set('filler', true);
+                } else {
+                    promptItem.set('filler', false);
+                }
+            }
             promptItems.add(promptItem);
         }
         promptItems.group = now + '_' + this.id;
@@ -262,6 +278,8 @@ module.exports = SkritterModel.extend({
                 } else {
                     strokes.push(stroke);
                 }
+            } else {
+                strokes.push(null);
             }
         }
         return strokes;

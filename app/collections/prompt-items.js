@@ -47,7 +47,23 @@ module.exports = GelatoCollection.extend({
      * @returns {PromptItem}
      */
     current: function() {
-        return this.at(this.position);
+        return this.getActive()[this.position];
+    },
+    /**
+     * @method getActive
+     * @returns {Array}
+     */
+    getActive: function() {
+        return this.filter(function(item) {
+            return !item.get('filler');
+        });
+    },
+    /**
+     * @method getActiveLength
+     * @returns {Number}
+     */
+    getActiveLength: function() {
+        return this.getActive().length;
     },
     /**
      * @method getBaseReviewData
@@ -195,7 +211,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Boolean}
      */
     isLast: function() {
-        return this.position >= this.length - 1;
+        return this.position >= this.getActiveLength() - 1;
     },
     /**
      * @method isTeachable
