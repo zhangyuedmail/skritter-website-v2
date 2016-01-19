@@ -11,6 +11,11 @@ module.exports = GelatoModel.extend({
      */
     character: null,
     /**
+     * @property interval
+     * @type {Number}
+     */
+    interval: 0,
+    /**
      * @property item
      * @type {Item}
      */
@@ -62,9 +67,10 @@ module.exports = GelatoModel.extend({
      */
     getReviewData: function() {
         return {
-            bearTime: false,
             id: this.id,
             itemId: this.item ? this.item.id : this.vocab.id,
+            bearTime: false,
+            currentInterval: this.interval,
             reviewTime: this.getReviewingTime(),
             score: this.get('score'),
             submitTime: this.get('submitTime'),

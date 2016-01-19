@@ -13,6 +13,11 @@ module.exports = GelatoCollection.extend({
      */
     group: null,
     /**
+     * @property interval
+     * @type {Number}
+     */
+    interval: 0,
+    /**
      * @property item
      * @type {Item}
      */
@@ -71,9 +76,10 @@ module.exports = GelatoCollection.extend({
      */
     getBaseReviewData: function() {
         return {
-            bearTime: true,
             id: this.at(0).id,
             itemId: this.item ? this.item.id : this.vocab.id,
+            bearTime: true,
+            currentInterval: this.interval,
             reviewTime: this.getBaseReviewingTime(),
             score: this.getBaseScore(),
             submitTime: this.getBaseSubmitTime(),

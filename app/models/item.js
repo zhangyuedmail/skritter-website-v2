@@ -18,14 +18,6 @@ module.exports = SkritterModel.extend({
      */
     idAttribute: 'id',
     /**
-     * @method parse
-     * @param {Object} response
-     * @returns {Object}
-     */
-    parse: function(response) {
-        return response.Item || response;
-    },
-    /**
      * @property urlRoot
      * @type {String}
      */
@@ -108,6 +100,7 @@ module.exports = SkritterModel.extend({
             var childVocab = vocabs[i];
             var promptItem = new PromptItem();
             promptItem.character = characters[i];
+            promptItem.interval = childItem.get('interval');
             promptItem.item = childItem;
             promptItem.vocab = childVocab;
             promptItem.set('filler', childVocab.isFiller());
@@ -116,6 +109,7 @@ module.exports = SkritterModel.extend({
         }
         promptItems.created = now;
         promptItems.group = now + '_' + this.id;
+        promptItems.interval = this.get('interval');
         promptItems.item = this;
         promptItems.part = part;
         promptItems.vocab = vocab;
@@ -259,6 +253,14 @@ module.exports = SkritterModel.extend({
      */
     isPartTone: function() {
         return this.get('part') === 'tone';
+    },
+    /**
+     * @method parse
+     * @param {Object} response
+     * @returns {Object}
+     */
+    parse: function(response) {
+        return response.Item || response;
     },
     /**
      * @method unban

@@ -45,7 +45,6 @@ module.exports = SkritterCollection.extend({
                 var item = this.items.get(modelData.itemId);
                 var submitTimeSeconds = Math.round(modelData.submitTime);
                 modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
-                modelData.currentInterval = item.get('interval') || 0;
                 modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                 modelData.previousInterval = item.get('previousInterval') || 0;
                 modelData.previousSuccess = item.get('previousSuccess') || false;
@@ -57,21 +56,21 @@ module.exports = SkritterCollection.extend({
                         'days'
                     );
                 }
-                item.set({
-                    changed: submitTimeSeconds,
-                    last: submitTimeSeconds,
-                    interval: modelData.newInterval,
-                    next: submitTimeSeconds + modelData.newInterval,
-                    previousInterval: modelData.currentInterval,
-                    previousSuccess: modelData.score > 1
-                });
                 if (!this.get(model.id)) {
                     item.set({
+                        changed: submitTimeSeconds,
+                        last: submitTimeSeconds,
+                        previousInterval: modelData.currentInterval,
                         reviews: item.get('reviews') + 1,
                         successes: modelData.score > 1 ? item.get('successes') + 1 : item.get('successes'),
                         timeStudied: item.get('timeStudied') + modelData.reviewTime
                     });
                 }
+                item.set({
+                    interval: modelData.newInterval,
+                    next: submitTimeSeconds + modelData.newInterval,
+                    previousSuccess: modelData.score > 1
+                });
                 updatedItems.push(item);
             }
         }
@@ -188,7 +187,6 @@ module.exports = SkritterCollection.extend({
                     var item = this.items.get(modelData.itemId);
                     var submitTimeSeconds = Math.round(modelData.submitTime);
                     modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
-                    modelData.currentInterval = item.get('interval') || 0;
                     modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                     modelData.previousInterval = item.get('previousInterval') || 0;
                     modelData.previousSuccess = item.get('previousSuccess') || false;
