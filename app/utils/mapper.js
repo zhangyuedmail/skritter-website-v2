@@ -2668,14 +2668,26 @@ function fromBase(base) {
 /**
  * @method toBase
  * @param {String} word
+ * @param {Object} [options]
  * @returns {String}
  */
-function toBase(word) {
+function toBase(word, options) {
     var mappedRunes = [];
     var multiple = false;
     var runes = word.split('');
     var style = 'simp';
     var variation = 0;
+    //set default option values
+    _.defaults(
+        options || {},
+        {
+            lang: 'zh'
+        }
+    );
+    //return base variations for japanese
+    if (options.lang === 'ja') {
+        return ['ja', word, '0'].join('-');
+    }
     //cycle through each rune in a word
     for (var i in runes) {
         //get the mapped information for the rune
@@ -2721,7 +2733,7 @@ function toBase(word) {
             }
         }
     }
-    return 'zh-' + mappedRunes.join('') + '-' + variation;
+    return ['zh', mappedRunes.join(''), variation].join('-');
 }
 
 module.exports = {
