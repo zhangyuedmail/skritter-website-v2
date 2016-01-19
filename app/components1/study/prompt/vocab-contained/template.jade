@@ -2,30 +2,32 @@ gelato-component(data-name='study-prompt-vocab-contained')
   - var prompt = view.prompt;
 
   if prompt.reviews
-    - var contained = prompt.reviews.vocab.getContained();
+    - var vocabs = prompt.reviews.vocab.getContained(true);
 
-    if !contained.length
+    if !vocabs.length
       - contained = [prompt.reviews.vocab];
 
-    if contained.length
+    if vocabs.length
 
       hr
 
       div.value
         if prompt.review.get('showContained') || prompt.review.isComplete()
 
-          for vocab in contained
+          for vocab in vocabs
             - var decomp = vocab.getDecomp();
             - var definition = vocab.getDefinition();
             - var mnemonic = vocab.getMnemonic();
+            - var reading = vocab.get('reading');
+            - var writing = vocab.get('writing');
 
             .child-character
 
-              if contained.length > 1
+              if vocabs.length > 1
                 .child-vocab-row
-                  span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= vocab.get('writing')
+                  span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
                   | &nbsp;
-                  span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(vocab.get('reading')) : vocab.get('reading')
+                  span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
 
               if decomp && !decomp.get('atomic')
                 .child-vocab-row
@@ -38,16 +40,16 @@ gelato-component(data-name='study-prompt-vocab-contained')
                       | &nbsp;
                       span.decomp-definition= child.definitions.en
 
-              if contained.length > 1 && definition
+              if vocabs.length > 1 && definition
                 .child-vocab-row
                   label Definition
                   .child-definition!= definition
 
-              if contained.length > 1 && mnemonic
+              if vocabs.length > 1 && mnemonic
                 .child-vocab-row
                   label Mnemonic
                   .child-mnemonic!= vocab.getMnemonic().text
 
         else
 
-          button#show-contained.btn.btn-default show
+          button#show-vocabs.btn.btn-default show
