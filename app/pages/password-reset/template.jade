@@ -1,0 +1,27 @@
+gelato-page(data-name='password-reset')
+
+  #navbar-container
+
+  section.container
+    .content-block
+      form#password-reset-form
+        #password-reset-message
+          if view.errorMessage
+            .text-danger= view.errorMessage
+          if view.successMessage
+            .text-success= view.successMessage
+          if view.choices.length
+            .text-warning= 'Multiple accounts found using the same email address.'
+        .form-group
+          if view.choices.length
+            label(for="password-reset-input") Select a username
+            select#password-reset-input.form-control
+              for choice in view.choices
+                option(value=choice.id)= choice.name
+          else
+            label(for="password-reset-input") Email address
+            input#password-reset-input.form-control(type="text", placeholder="")
+        button#button-reset.btn.btn-fixed.btn-primary(type="button") Reset
+      a#back-to-login(href="/login") Back to login
+
+   #footer-container

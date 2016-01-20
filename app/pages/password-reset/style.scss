@@ -1,6 +1,6 @@
 @import "../../styles/_variables";
 
-gelato-page[data-name='login'] {
+gelato-page[data-name='password-reset'] {
 
   background: $background-marketing;
   padding-top: 50px;
@@ -16,8 +16,12 @@ gelato-page[data-name='login'] {
     width: 100%;
   }
 
-  #login-form {
+  #password-reset-message {
     margin-bottom: 15px;
   }
+
+  #password-reset-form {
+     margin-bottom: 15px;
+   }
 
 }

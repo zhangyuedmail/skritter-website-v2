@@ -33,6 +33,7 @@ module.exports = Router.extend({
         'institutions': 'navigateInstitutions',
         'legal': 'navigateLegal',
         'login': 'navigateLogin',
+        'password-reset': 'navigatePasswordReset',
         'scratchpad/:vocabId(/:part)': 'navigateScratchpad',
         'signup(/:plan)': 'navigateSignup',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
@@ -209,6 +210,17 @@ module.exports = Router.extend({
     navigateNotFound: function() {
         this.navigate('not-found');
         this.go('pages/not-found');
+    },
+    /**
+     * @method navigatePasswordReset
+     */
+    navigatePasswordReset: function() {
+        if (app.user.isLoggedIn()) {
+            this.navigateHome();
+        } else {
+            this.navigate('password-reset');
+            this.go('pages/password-reset');
+        }
     },
     /**
      * @method navigateScratchpad
