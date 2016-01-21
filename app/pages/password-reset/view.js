@@ -70,6 +70,7 @@ module.exports = GelatoPage.extend({
         var self = this;
         var input = this.$('#password-reset-input').val();
         this.$('#password-reset-form').prop('disabled', true);
+        this.errorMessage = null;
         ScreenLoader.show();
         ScreenLoader.post('Recovering user credentials');
         $.ajax({
@@ -80,10 +81,10 @@ module.exports = GelatoPage.extend({
             error: function(error) {
                 var response = error.responseJSON;
                 if (response.choices) {
-                    console.log(response.choices);
                     self.choices = _.sortBy(response.choices, 'name');
                 } else {
                     self.errorMessage = response.message;
+                    self.choices = [];
                 }
                 self.$('#password-reset-form').prop('disabled', false);
                 self.render();
@@ -91,7 +92,6 @@ module.exports = GelatoPage.extend({
             },
             success: function() {
                 self.choices = [];
-                self.errorMessage = null;
                 self.successMessage = 'A temporary password has been emailed to you.';
                 self.render();
                 ScreenLoader.hide();
