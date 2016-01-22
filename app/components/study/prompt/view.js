@@ -1,22 +1,22 @@
 var GelatoComponent = require('gelato/component');
 
-var Canvas = require('components1/study/prompt/canvas/view');
-var Navigation = require('components1/study/prompt/navigation/view');
-var PartDefn = require('components1/study/prompt/part-defn/view');
-var PartRdng = require('components1/study/prompt/part-rdng/view');
-var PartRune = require('components1/study/prompt/part-rune/view');
-var PartTone = require('components1/study/prompt/part-tone/view');
-var Shortcuts = require('components1/study/prompt/shortcuts');
-var ToolbarAction = require('components1/study/prompt/toolbar-action/view');
-var ToolbarGrading = require('components1/study/prompt/toolbar-grading/view');
-var ToolbarVocab = require('components1/study/prompt/toolbar-vocab/view');
-var VocabContained = require('components1/study/prompt/vocab-contained/view');
-var VocabDefinition = require('components1/study/prompt/vocab-definition/view');
-var VocabMnemonic = require('components1/study/prompt/vocab-mnemonic/view');
-var VocabReading = require('components1/study/prompt/vocab-reading/view');
-var VocabSentence = require('components1/study/prompt/vocab-sentence/view');
-var VocabStyle = require('components1/study/prompt/vocab-style/view');
-var VocabWriting = require('components1/study/prompt/vocab-writing/view');
+var Canvas = require('components/study/prompt/canvas/view');
+var Navigation = require('components/study/prompt/navigation/view');
+var PartDefn = require('components/study/prompt/part-defn/view');
+var PartRdng = require('components/study/prompt/part-rdng/view');
+var PartRune = require('components/study/prompt/part-rune/view');
+var PartTone = require('components/study/prompt/part-tone/view');
+var Shortcuts = require('components/study/prompt/shortcuts');
+var ToolbarAction = require('components/study/prompt/toolbar-action/view');
+var ToolbarGrading = require('components/study/prompt/toolbar-grading/view');
+var ToolbarVocab = require('components/study/prompt/toolbar-vocab/view');
+var VocabContained = require('components/study/prompt/vocab-contained/view');
+var VocabDefinition = require('components/study/prompt/vocab-definition/view');
+var VocabMnemonic = require('components/study/prompt/vocab-mnemonic/view');
+var VocabReading = require('components/study/prompt/vocab-reading/view');
+var VocabSentence = require('components/study/prompt/vocab-sentence/view');
+var VocabStyle = require('components/study/prompt/vocab-style/view');
+var VocabWriting = require('components/study/prompt/vocab-writing/view');
 
 /**
  * @class StudyPrompt

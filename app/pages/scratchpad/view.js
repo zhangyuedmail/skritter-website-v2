@@ -1,6 +1,6 @@
 var GelatoPage = require('gelato/page');
 var Vocabs = require('collections/vocabs');
-var Prompt = require('components1/study/prompt/view');
+var Prompt = require('components/study/prompt/view');
 var Navbar = require('navbars/default/view');
 
 /**

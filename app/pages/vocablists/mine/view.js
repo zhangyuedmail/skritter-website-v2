@@ -1,8 +1,8 @@
 var GelatoPage = require('gelato/page');
 
 var DefaultNavbar = require('navbars/default/view');
-var Table = require('components1/vocablists/mine-table/view');
-var Sidebar = require('components1/vocablists/sidebar/view');
+var Table = require('components/vocablists/mine-table/view');
+var Sidebar = require('components/vocablists/sidebar/view');
 
 /**
  * @class VocablistMine

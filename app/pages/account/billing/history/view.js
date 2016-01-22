@@ -1,6 +1,6 @@
 var GelatoPage = require('gelato/page');
 
-var AccountSidebar = require('components1/account/sidebar/view');
+var AccountSidebar = require('components/account/sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
 var Payments = require('collections/payments');
 

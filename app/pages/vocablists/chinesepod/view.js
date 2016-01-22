@@ -4,7 +4,7 @@ var DefaultNavbar = require('navbars/default/view');
 var ChinesePodSession = require('models/chinesepod-session');
 var ChinesePodLabels = require('collections/chinesepod-labels');
 var ChinesePodLessons = require('collections/chinesepod-lessons');
-var VocablistSidebar = require('components1/vocablists/sidebar/view');
+var VocablistSidebar = require('components/vocablists/sidebar/view');
 
 /**
  * @class VocablistsChinesepodPage

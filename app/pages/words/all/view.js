@@ -2,7 +2,7 @@ var GelatoPage = require('gelato/page');
 var DefaultNavbar = require('navbars/default/view');
 var Items = require('collections/items');
 var Vocabs = require('collections/vocabs');
-var WordsSidebar = require('components1/words/sidebar/view');
+var WordsSidebar = require('components/words/sidebar/view');
 var VocabDialog = require('dialogs/vocab/view');
 var VocabActionMixin = require('mixins/vocab-action');
 

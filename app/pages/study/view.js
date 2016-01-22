@@ -1,7 +1,7 @@
 var GelatoPage = require('gelato/page');
 
-var Prompt = require('components1/study/prompt/view');
-var Toolbar = require('components1/study/toolbar/view');
+var Prompt = require('components/study/prompt/view');
+var Toolbar = require('components/study/toolbar/view');
 var Items = require('collections/items');
 var Navbar = require('navbars/default/view');
 
