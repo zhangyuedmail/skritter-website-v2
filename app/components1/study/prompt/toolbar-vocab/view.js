@@ -1,5 +1,5 @@
 var GelatoComponent = require('gelato/component');
-var VocabDialog = require('dialogs/vocab/view');
+var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 
 /**
  * @class StudyPromptToolbarVocab
@@ -12,6 +12,7 @@ module.exports = GelatoComponent.extend({
      * @constructor
      */
     initialize: function(options) {
+        this.dialog = null;
         this.prompt = options.prompt;
     },
     /**
@@ -84,7 +85,9 @@ module.exports = GelatoComponent.extend({
      */
     handleClickButtonVocabInfo: function(event) {
         event.preventDefault();
-        new VocabDialog().open().load(this.prompt.reviews.vocab.id);
+        this.dialog = new VocabViewerDialog();
+        this.dialog.load(this.prompt.reviews.vocab.id);
+        this.dialog.open();
     },
     /**
      * @method handleClickButtonVocabStar
@@ -94,8 +97,8 @@ module.exports = GelatoComponent.extend({
         event.preventDefault();
         this.prompt.reviews.vocab.toggleStarred();
         this.prompt.reviews.vocab.save(null, {
-            error: _.bind(this.render, this),
-            success: _.bind(this.render, this)
+            error: this.render.bind(this),
+            success: this.render.bind(this)
         });
     }
 });

@@ -1,9 +1,13 @@
 @import "../../styles/_variables";
 
-gelato-component[data-name='vocab-viewer'] {
+gelato-dialog[data-name='vocab-viewer'] {
 
   background-color: $white1;
   border-radius: 25px;
+
+  .modal-body {
+    padding: 0;
+  }
 
   #content-section {
     padding: 20px;

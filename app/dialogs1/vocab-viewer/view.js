@@ -1,19 +1,19 @@
-var GelatoComponent = require('gelato/component');
+var GelatoDialog = require('base/gelato-dialog');
+
 var Vocabs = require('collections/vocabs');
-var DictionaryLookup = require('components/dictionary-lookup/view');
+var Content = require('dialogs1/vocab-viewer/content/view');
 
 /**
  * @class VocabViewer
- * @extends {GelatoComponent}
+ * @extends {GelatoDialog}
  */
-module.exports = GelatoComponent.extend({
+module.exports = GelatoDialog.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
-        this.lookup = new DictionaryLookup();
-        this.vocab = null;
+        this.content = new Content({dialog: this});
         this.vocabs = new Vocabs();
     },
     /**
@@ -27,10 +27,7 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.lookup.setElement('#vocab-lookup-container').render();
-        if (this.vocab) {
-            this.lookup.set(this.vocab.get('dictionaryLinks'));
-        }
+        this.content.setElement('#content-container').render();
         return this;
     },
     /**
@@ -50,10 +47,11 @@ module.exports = GelatoComponent.extend({
                 include_top_mnemonics: true,
                 ids: vocabId
             },
+            error: function(error) {
+                console.error(error);
+            },
             success: function(vocabs) {
-                self.vocab = vocabs.at(0);
-                self.trigger('load', self.vocab);
-                self.render();
+                self.content.set(vocabs);
             }
         });
         return this;
@@ -63,7 +61,8 @@ module.exports = GelatoComponent.extend({
      * @returns {VocabViewer}
      */
     remove: function() {
-        this.lookup.remove();
-        return GelatoComponent.prototype.remove.call(this);
+        this.content.remove();
+        this.vocabs.reset();
+        return GelatoDialog.prototype.remove.call(this);
     }
 });

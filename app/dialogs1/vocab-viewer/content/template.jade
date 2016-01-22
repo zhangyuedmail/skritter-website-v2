@@ -1,10 +1,10 @@
-gelato-component(data-name='vocab-viewer')
-  - var vocab = view.vocab
+gelato-component(data-name='vocab-viewer-content')
 
-  if vocab
-    - var definition = vocab.getDefinition()
-    - var mnemonic = vocab.getMnemonic()
-    - var sentence = vocab.getSentence()
+  if view.vocabs && view.vocabs.length
+    - var vocab = view.vocabs.at(0);
+    - var definition = vocab.getDefinition();
+    - var mnemonic = vocab.getMnemonic();
+    - var sentence = vocab.getSentence();
 
     #header-section
       .block.separator
@@ -37,5 +37,5 @@ gelato-component(data-name='vocab-viewer')
         .block
           .header Dictionary
           .value
-            #vocab-lookup-container
+            #lookup-container
       #panel-right
