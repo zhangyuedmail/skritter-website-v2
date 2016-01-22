@@ -7,6 +7,5 @@ var shell = require('shelljs');
 var argv = minimist(process.argv.slice(2));
 var path = process.cwd().toString();
 
-shell.exec('./node_modules/.bin/bower update');
 shell.exec('./node_modules/.bin/brunch watch --server');
 process.exit(0);
