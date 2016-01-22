@@ -164,7 +164,7 @@ gelato-page(data-name='account-billing-subscription')
                 // show nothing
 
               
-              else if app.isWebsite() && _.contains([false, 'stripe'], subscribed)
+              else if app.isWebsite() && _.includes([false, 'stripe'], subscribed)
                 // - ON WEBSITE, NOT SUBSCRIBED OR SUBSCRIBED TO STRIPE
                 if subscribed === 'stripe'
                   .title Edit subscription

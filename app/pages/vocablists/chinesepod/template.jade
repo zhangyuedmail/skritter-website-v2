@@ -68,7 +68,7 @@ gelato-page(data-name='vocablists-chinesepod')
                 table.table.table-striped
                   - var models = collectionViewing.models;
                   if view.searchString
-                    - models = collectionViewing.filter(function(m) { return _.contains(m.get('name').toLowerCase(), view.searchString); });
+                    - models = collectionViewing.filter(function(m) { return _.includes(m.get('name').toLowerCase(), view.searchString); });
 
                   for model in models
                     tr

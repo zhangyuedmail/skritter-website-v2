@@ -38,7 +38,7 @@ gelato-component(data-name='vocablists-list-section-editor')
           if section.completed
             span.spr Completed
             span= moment(section.completed).format('L')
-          else if _.contains(vocablist.get('sectionsSkipping'), section.id)
+          else if _.includes(vocablist.get('sectionsSkipping'), section.id)
             | Skipping
           else if section.id && section.id === view.vocablist.get('currentSection')
             | Adding

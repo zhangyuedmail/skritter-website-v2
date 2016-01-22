@@ -158,7 +158,7 @@ module.exports = SkritterModel.extend({
             this.get('sort') === 'custom',
             _.any([
                 this.get('user') === app.user.id,
-                _.contains(this.get('editors'), app.user.id),
+                _.includes(this.get('editors'), app.user.id),
                 this.get('public')
             ])
         ]);

@@ -33,22 +33,22 @@ bootstrap-dialog(data-name='vocablist-settings')
                 .col-sm-9
                   - var vlparts = view.vocablist.get('partsStudying');
                   - var uparts = app.user.getAllStudyParts();
-                  .checkbox(class=_.contains(uparts, 'rune') ? '' : 'disabled')
+                  .checkbox(class=_.includes(uparts, 'rune') ? '' : 'disabled')
                     label
-                      input(type="checkbox" name="partsStudying" value='rune' checked=_.contains(vlparts, 'rune'), disabled=!_.contains(uparts, 'rune'))
+                      input(type="checkbox" name="partsStudying" value='rune' checked=_.includes(vlparts, 'rune'), disabled=!_.includes(uparts, 'rune'))
                       span Writing
-                  .checkbox(class=_.contains(uparts, 'rdng') ? '' : 'disabled')
+                  .checkbox(class=_.includes(uparts, 'rdng') ? '' : 'disabled')
                     label
-                      input(type="checkbox" name="partsStudying" value='rdng' checked=_.contains(vlparts, 'rdng'), disabled=!_.contains(uparts, 'rdng'))
+                      input(type="checkbox" name="partsStudying" value='rdng' checked=_.includes(vlparts, 'rdng'), disabled=!_.includes(uparts, 'rdng'))
                       span Reading
-                  .checkbox(class=_.contains(uparts, 'defn') ? '' : 'disabled')
+                  .checkbox(class=_.includes(uparts, 'defn') ? '' : 'disabled')
                     label
-                      input(type="checkbox" name="partsStudying" value='defn' checked=_.contains(vlparts, 'defn'), disabled=!_.contains(uparts, 'defn'))
+                      input(type="checkbox" name="partsStudying" value='defn' checked=_.includes(vlparts, 'defn'), disabled=!_.includes(uparts, 'defn'))
                       span Definition
                   if app.user.get('targetLang') === 'zh'
-                    .checkbox(class=_.contains(uparts, 'tone') ? '' : 'disabled')
+                    .checkbox(class=_.includes(uparts, 'tone') ? '' : 'disabled')
                       label
-                        input(type="checkbox" name="partsStudying" value='tone' checked=_.contains(vlparts, 'tone'), disabled=!_.contains(uparts, 'tone'))
+                        input(type="checkbox" name="partsStudying" value='tone' checked=_.includes(vlparts, 'tone'), disabled=!_.includes(uparts, 'tone'))
                         span Tone
 
               hr
@@ -97,7 +97,7 @@ bootstrap-dialog(data-name='vocablist-settings')
                       for section, i in sections
                         .checkbox
                           label
-                            input(type="checkbox" name="sectionsSkipping" value=section.id checked=!_.contains(sectionsSkipping, section.id) disabled=!i)
+                            input(type="checkbox" name="sectionsSkipping" value=section.id checked=!_.includes(sectionsSkipping, section.id) disabled=!i)
                             span= section.name
 
                 .form-group

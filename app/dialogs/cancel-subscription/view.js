@@ -59,7 +59,7 @@ module.exports = BootstrapDialog.extend({
      */
     handleClickSubmitButton: function() {
         var service = this.subscription.get('subscribed');
-        if (!_.contains(['stripe', 'gplay'], service)) {
+        if (!_.includes(['stripe', 'gplay'], service)) {
             return false;
         }
 

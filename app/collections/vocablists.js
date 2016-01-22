@@ -45,7 +45,7 @@ module.exports = SkritterCollection.extend({
      */
     getReviewing: function() {
         return this.filter(function(vocablist) {
-            return _.contains(['reviewing', 'finished'], vocablist.get('studyingMode'))
+            return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'))
         });
     }
 });

@@ -127,10 +127,10 @@ module.exports = GelatoComponent.extend({
             if (this._filterString !== '') {
                 var name = vocablist.get('name').toLowerCase();
                 var shortName = vocablist.get('shortName').toLowerCase();
-                if (_.contains(name, this._filterString)) {
+                if (_.includes(name, this._filterString)) {
                     return true;
                 }
-                if (_.contains(shortName, this._filterString)) {
+                if (_.includes(shortName, this._filterString)) {
                     return true;
                 }
                 return false
