@@ -25,15 +25,15 @@ exports.config = {
                     'bower_components/mocha/mocha.js',
                     'bower_components/moment/moment.js',
                     'bower_components/moment-timezone/moment-timezone.js',
-                    'vendor/jquery/jquery.mobile-1.4.5.js',
-                    'vendor/jquery/jquery.ui-1.11.4.js',
-                    'vendor/bootstrap/bootstrap.datetimepicker-4.15.37.js',
-                    'vendor/bootstrap/bootstrap.notify-3.1.5.js',
-                    'vendor/bootstrap/bootstrap.switch-3.3.2.js',
-                    'vendor/heatmap/heatmap-3.5.4.js',
-                    'vendor/highcharts/highcharts-4.1.9.js',
-                    'vendor/keypress/keypress-2.1.3.js',
-                    'vendor/wanakana/wanakana-1.3.7.js'
+                    'vendor/jquery.mobile-1.4.5.js',
+                    'vendor/jquery.ui-1.11.4.js',
+                    'vendor/bootstrap.datetimepicker-4.15.37.js',
+                    'vendor/bootstrap.notify-3.1.5.js',
+                    'vendor/bootstrap.switch-3.3.2.js',
+                    'vendor/heatmap-3.5.4.js',
+                    'vendor/highcharts-4.2.1.js',
+                    'vendor/keypress-2.1.3.js',
+                    'vendor/wanakana-1.3.7.js'
                 ]
             }
         },
