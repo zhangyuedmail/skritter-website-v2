@@ -53,7 +53,7 @@ module.exports = SkritterCollection.extend({
             _.bind(function(result, callback) {
                 this.fetch({
                     data: {
-                        ids: _.pluck(result.Items, 'id').join('|'),
+                        ids: _.map(result.Items, 'id').join('|'),
                         include_contained: true
                     },
                     remove: false,

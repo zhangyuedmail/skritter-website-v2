@@ -39,7 +39,7 @@ module.exports = SkritterCollection.extend({
         options = _.defaults(options || {}, {merge: true});
         for (var a = 0, lengthA = models.length; a < lengthA; a++) {
             var model = models[a];
-            model.data = _.uniq(model.data, 'itemId');
+            model.data = _.uniqBy(model.data, 'itemId');
             for (var b = 0, lengthB = model.data.length; b < lengthB; b++) {
                 var modelData = model.data[b];
                 var item = this.items.get(modelData.itemId);
@@ -134,7 +134,8 @@ module.exports = SkritterCollection.extend({
             async.eachSeries(
                 _.chunk(reviews, 20),
                 function(chunk, callback) {
-                    data = _
+                    console.log('CHUNK:', chunk);
+                    var data = _
                         .chain(chunk)
                         .map(function(review) {
                             return review.get('data');
@@ -148,9 +149,12 @@ module.exports = SkritterCollection.extend({
                         type: 'POST',
                         data: JSON.stringify(data),
                         error: function(error) {
-                            self.reroll(_.pluck(error.responseJSON.errors, 'Item'), function() {
-                                callback(error.responseJSON || error);
-                            });
+                            var items = _
+                                .chain(error.responseJSON.errors)
+                                .map('Item')
+                                .without(undefined)
+                                .value();
+                            self.reroll(items);
                         },
                         success: function() {
                             self.remove(chunk);
@@ -176,7 +180,7 @@ module.exports = SkritterCollection.extend({
      */
     reroll: function(items, callback) {
         var updatedItems = [];
-        var itemIds = _.isArray(items) ? _.pluck(items, 'id') : [items.id];
+        var itemIds = _.isArray(items) ? _.map(items, 'id') : [items.id];
         this.items.add(items, {merge: true});
         for (var a = 0, lengthA = this.length; a < lengthA; a++) {
             var review = this.at(a);

@@ -98,7 +98,7 @@ module.exports = GelatoPage.extend({
         this.searchVocabItems = new Items();
         this.searchVocabItems.fetch({
             data: {
-                vocab_ids: _.pluck(vocabs, 'id').join('|')
+                vocab_ids: _.map(vocabs, 'id').join('|')
             }
         });
         this.searchVocabItems.vocabs = vocabs;
@@ -123,7 +123,7 @@ module.exports = GelatoPage.extend({
                 return items.get(vocabItemKey);
             });
             vocabItems = _.filter(vocabItems); // return
-            vocab.nextItem = _.first(_.sortBy(vocabItems, function(item) {
+            vocab.nextItem = _.head(_.sortBy(vocabItems, function(item) {
                 return item.get('next') || 10000000000000000;
             }));
             vocab.lastItem = _.last(_.sortBy(vocabItems, function(item) {

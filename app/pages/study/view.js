@@ -202,7 +202,7 @@ module.exports = GelatoPage.extend({
         //fetch resource data for queue items
         this.schedule.fetch({
             data: {
-                ids: _.pluck(items, 'id').join('|'),
+                ids: _.map(items, 'id').join('|'),
                 include_contained: true,
                 include_decomps: true,
                 include_sentences: true,

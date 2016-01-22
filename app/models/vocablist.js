@@ -124,8 +124,8 @@ module.exports = SkritterModel.extend({
         var vocabIds = [];
         var section = this.getSectionById(sectionId);
         if (section) {
-            vocabIds = vocabIds.concat(_.pluck(section.rows, 'vocabId'));
-            vocabIds = vocabIds.concat(_.pluck(section.rows, 'tradVocabId'));
+            vocabIds = vocabIds.concat(_.map(section.rows, 'vocabId'));
+            vocabIds = vocabIds.concat(_.map(section.rows, 'tradVocabId'));
         }
         return vocabIds;
     },
@@ -135,7 +135,7 @@ module.exports = SkritterModel.extend({
      */
     getWordCount: function() {
         var count = 0;
-        var rows = _.pluck(this.get('sections'), 'rows');
+        var rows = _.map(this.get('sections'), 'rows');
         for (var i = 0, length = rows.length; i < length; i++) {
             count += rows[i].length;
         }
