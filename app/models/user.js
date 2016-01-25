@@ -11,7 +11,7 @@ module.exports = SkritterModel.extend({
      * @constructor
      */
     initialize: function() {
-        this.session.user = this;
+        this.session = new Session(null, {user: this});
     },
     /**
      * @property defaults
@@ -30,19 +30,6 @@ module.exports = SkritterModel.extend({
         lastJapaneseItemUpdate: 0,
         teachingMode: true
     },
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns Array
-     */
-    parse: function(response) {
-        return response.User;
-    },
-    /**
-     * @property session
-     * @type {Session}
-     */
-    session: new Session(),
     /**
      * @property urlRoot
      * @type {String}
@@ -159,22 +146,22 @@ module.exports = SkritterModel.extend({
      * @method login
      * @param {String} username
      * @param {String} password
-     * @param {Function} callbackSuccess
-     * @param {Function} callbackError
+     * @param {Function} callback
      */
-    login: function(username, password, callbackSuccess, callbackError) {
+    login: function(username, password, callback) {
+        var self = this;
         async.waterfall([
-            _.bind(function(callback) {
-                this.session.authenticate('password', username, password,
+            function(callback) {
+                self.session.authenticate('password', username, password,
                     function(result) {
                         callback(null, result);
                     }, function(error) {
                         callback(error);
                     });
-            }, this),
-            _.bind(function(result, callback) {
-                this.set('id', result.id);
-                this.fetch({
+            },
+            function(result, callback) {
+                self.set('id', result.id);
+                self.fetch({
                     error: function(error) {
                         callback(error);
                     },
@@ -182,18 +169,18 @@ module.exports = SkritterModel.extend({
                         callback(null, user);
                     }
                 })
-            }, this)
-        ], _.bind(function(error, user) {
-            if (error) {
-                callbackError(error);
-            } else {
-                this.cache();
-                this.session.cache();
-                app.removeSetting('session');
-                app.setSetting('user', this.id);
-                callbackSuccess(user);
             }
-        }, this));
+        ], function(error, user) {
+            if (error) {
+                callback(error);
+            } else {
+                self.cache();
+                self.session.cache();
+                app.removeSetting('session');
+                app.setSetting('user', self.id);
+                callback(null, user);
+            }
+        });
     },
     /**
      * @method logout
@@ -211,6 +198,14 @@ module.exports = SkritterModel.extend({
                 console.error(error);
                 app.reload();
             });
+    },
+    /**
+     * @method parse
+     * @param {Object} response
+     * @returns Array
+     */
+    parse: function(response) {
+        return response.User;
     },
     /**
      * @method setLastItemUpdate
@@ -236,12 +231,10 @@ module.exports = SkritterModel.extend({
         var limit = 2500;
         var now = moment().unix();
         var retries = 0;
-
         if (!this.isLoggedIn()) {
             callback();
             return;
         }
-
         async.whilst(
             function() {
                 index++;
