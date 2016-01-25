@@ -12,12 +12,21 @@ gelato-component[data-name='marketing-footer'] {
       font-family: $font-ubuntu;
       font-size: 14px;
       font-weight: 300;
+      &:hover {
+        color: $white1;
+      }
     }
     i {
       color: #8c9196;
       cursor: pointer;
       font-size: 24px;
       font-weight: 300;
+      &:hover {
+        color: $white1;
+      }
+    }
+    .icon-link {
+      display: inline-block;
     }
   }
 
