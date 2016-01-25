@@ -93,7 +93,8 @@ module.exports = GelatoPage.extend({
                     console.error(error);
                 },
                 success: function() {
-                    app.router.navigate('dashboard', {replace: true, trigger: true});
+                    app.router.navigate('dashboard');
+                    app.reload();
                 }
             }
         );
