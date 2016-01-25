@@ -15,7 +15,6 @@ module.exports = SkritterCollection.extend({
     initialize: function(models, options) {
         options = options || {};
         this.items = options.items;
-        this.timeOffset = 0;
     },
     /**
      * @property model
@@ -27,71 +26,6 @@ module.exports = SkritterCollection.extend({
      * @type {String}
      */
     url: 'reviews',
-    /**
-     * @method add
-     * @param {Object} models
-     * @param {Object} [options]
-     * @param {Function} [callback]
-     */
-    add: function(models, options, callback) {
-        var updatedItems = [];
-        models = _.isArray(models) ? models : [models];
-        options = _.defaults(options || {}, {merge: true});
-        for (var a = 0, lengthA = models.length; a < lengthA; a++) {
-            var model = models[a];
-            model.data = _.uniqBy(model.data, 'itemId');
-            for (var b = 0, lengthB = model.data.length; b < lengthB; b++) {
-                var modelData = model.data[b];
-                var item = this.items.get(modelData.itemId);
-                var submitTimeSeconds = Math.round(modelData.submitTime);
-                modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
-                modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
-                modelData.previousInterval = item.get('previousInterval') || 0;
-                modelData.previousSuccess = item.get('previousSuccess') || false;
-                if (app.isDevelopment()) {
-                    console.log(
-                        item.id,
-                        'scheduled for',
-                        moment.duration(modelData.newInterval, 'seconds').as('days'),
-                        'days'
-                    );
-                }
-                if (!this.get(model.id)) {
-                    item.set({
-                        changed: submitTimeSeconds,
-                        last: submitTimeSeconds,
-                        previousInterval: modelData.currentInterval,
-                        reviews: item.get('reviews') + 1,
-                        successes: modelData.score > 1 ? item.get('successes') + 1 : item.get('successes'),
-                        timeStudied: item.get('timeStudied') + modelData.reviewTime
-                    });
-                }
-                item.set({
-                    interval: modelData.newInterval,
-                    next: submitTimeSeconds + modelData.newInterval,
-                    previousSuccess: modelData.score > 1
-                });
-                updatedItems.push(item);
-            }
-        }
-        async.each(
-            updatedItems,
-            function(item, callback) {
-                app.db.items
-                    .put(item.toJSON())
-                    .then(function() {
-                        callback();
-                    })
-                    .catch(callback);
-            },
-            function(error) {
-                if (typeof callback === 'function') {
-                    callback(error);
-                }
-            }
-        );
-        return SkritterCollection.prototype.add.call(this, models, options);
-    },
     /**
      * @method comparator
      * @param {Review} review
@@ -134,7 +68,6 @@ module.exports = SkritterCollection.extend({
             async.eachSeries(
                 _.chunk(reviews, 20),
                 function(chunk, callback) {
-                    console.log('CHUNK:', chunk);
                     var data = _
                         .chain(chunk)
                         .map(function(review) {
@@ -158,7 +91,7 @@ module.exports = SkritterCollection.extend({
                         },
                         success: function() {
                             self.remove(chunk);
-                            callback();
+                            self.removeReviewCache(chunk, callback);
                         }
                     });
                 },
@@ -174,12 +107,86 @@ module.exports = SkritterCollection.extend({
         }
     },
     /**
+     * @method put
+     * @param {Object} models
+     * @param {Object} [options]
+     * @param {Function} callback
+     */
+    put: function(models, options, callback) {
+        var updatedItems = [];
+        var updateReviews = [];
+        models = _.isArray(models) ? models : [models];
+        options = _.defaults(options || {}, {merge: true});
+        for (var a = 0, lengthA = models.length; a < lengthA; a++) {
+            var model = models[a];
+            model.data = _.uniqBy(model.data, 'itemId');
+            for (var b = 0, lengthB = model.data.length; b < lengthB; b++) {
+                var modelData = model.data[b];
+                var item = this.items.get(modelData.itemId);
+                var submitTimeSeconds = Math.round(modelData.submitTime);
+                modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
+                modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
+                modelData.previousInterval = item.get('previousInterval') || 0;
+                modelData.previousSuccess = item.get('previousSuccess') || false;
+                if (app.isDevelopment()) {
+                    console.log(
+                        item.id,
+                        'scheduled for',
+                        moment.duration(modelData.newInterval, 'seconds').as('days'),
+                        'days'
+                    );
+                }
+                if (!this.get(model.id)) {
+                    item.set({
+                        changed: submitTimeSeconds,
+                        last: submitTimeSeconds,
+                        previousInterval: modelData.currentInterval,
+                        reviews: item.get('reviews') + 1,
+                        successes: modelData.score > 1 ? item.get('successes') + 1 : item.get('successes'),
+                        timeStudied: item.get('timeStudied') + modelData.reviewTime
+                    });
+                }
+                item.set({
+                    interval: modelData.newInterval,
+                    next: submitTimeSeconds + modelData.newInterval,
+                    previousSuccess: modelData.score > 1
+                });
+                updatedItems.push(item);
+            }
+            updateReviews.push(this.add(model, options));
+        }
+        async.parallel([
+            async.apply(this.updateItemCache, updatedItems),
+            async.apply(this.updateReviewCache, updateReviews)
+        ], callback);
+    },
+    /**
+     * @method removeReviewCache
+     * @param {Array} reviews
+     * @param {Function} callback
+     */
+    removeReviewCache: function(reviews, callback) {
+        async.each(
+            reviews || [],
+            function(review, callback) {
+                app.db.reviews
+                    .delete(review.id)
+                    .then(function() {
+                        callback();
+                    })
+                    .catch(callback);
+            },
+            callback
+        );
+    },
+    /**
      * @method reroll
      * @param {Array|Object} items
      * @param {Function} [callback]
      */
     reroll: function(items, callback) {
         var updatedItems = [];
+        var updatedReviews = [];
         var itemIds = _.isArray(items) ? _.map(items, 'id') : [items.id];
         this.items.add(items, {merge: true});
         for (var a = 0, lengthA = this.length; a < lengthA; a++) {
@@ -205,9 +212,21 @@ module.exports = SkritterCollection.extend({
                     updatedItems.push(item);
                 }
             }
+            updatedReviews.push(review);
         }
+        async.parallel([
+            async.apply(this.updateItemCache, updatedItems),
+            async.apply(this.updateReviewCache, updateReviews)
+        ], callback);
+    },
+    /**
+     * @method updateItemCache
+     * @param {Array} items
+     * @param {Function} callback
+     */
+    updateItemCache: function(items, callback) {
         async.each(
-            updatedItems,
+            items || [],
             function(item, callback) {
                 app.db.items
                     .put(item.toJSON())
@@ -216,11 +235,30 @@ module.exports = SkritterCollection.extend({
                     })
                     .catch(callback);
             },
-            function(error) {
-                if (typeof callback === 'function') {
-                    callback(error);
-                }
-            }
+            callback
+        );
+    },
+    /**
+     * @method updateReviewCache
+     * @param {Array} reviews
+     * @param {Function} callback
+     */
+    updateReviewCache: function(reviews, callback) {
+        async.each(
+            reviews || [],
+            function(review, callback) {
+                app.db.reviews
+                    .put({
+                        group: review.get('group'),
+                        created: review.get('created'),
+                        data: review.get('data')
+                    })
+                    .then(function() {
+                        callback();
+                    })
+                    .catch(callback);
+            },
+            callback
         );
     }
 });

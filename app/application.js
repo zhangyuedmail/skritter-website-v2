@@ -221,7 +221,7 @@ module.exports = GelatoApplication.extend({
             function(callback) {
                 if (app.user.isLoggedIn()) {
                     app.db = new Dexie(app.user.id + '-database');
-                    app.db.version(1).stores({
+                    app.db.version(2).stores({
                         items: [
                             'id',
                             '*changed',
@@ -237,6 +237,11 @@ module.exports = GelatoApplication.extend({
                             'style',
                             'timeStudied',
                             'vocabIds'
+                        ].join(','),
+                        reviews: [
+                            'group',
+                            '*created',
+                            'reviews'
                         ].join(',')
                     });
                     app.db.open()

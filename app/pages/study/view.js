@@ -60,18 +60,22 @@ module.exports = GelatoPage.extend({
      * @param {PromptItems} promptItems
      */
     handlePromptNext: function(promptItems) {
+        var self = this;
         if (this.item) {
             var review = promptItems.getReview();
             if (!this.schedule.reviews.get(review)) {
                 this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
             }
-            this.schedule.reviews.add(review, {merge: true});
-            this.item = null;
+            this.schedule.reviews.put(review, null, function() {
+                if (self.schedule.reviews.length > 4) {
+                    self.schedule.reviews.post({skip: 1});
+                }
+                self.item = null;
+                self.next();
+            });
+        } else {
+            this.next();
         }
-        if (this.schedule.reviews.length > 4) {
-            this.schedule.reviews.post({skip: 1});
-        }
-        this.next();
     },
     /**
      * @method handlePromptPrevious
@@ -87,8 +91,18 @@ module.exports = GelatoPage.extend({
      * @method handleScheduledLoad
      */
     handleScheduledLoad: function() {
+        var self = this;
         ScreenLoader.post('Preparing for study');
-        this.populateQueue();
+        app.db.reviews
+            .toArray()
+            .then(function(reviews) {
+                self.schedule.reviews.add(reviews);
+                self.populateQueue();
+            })
+            .catch(function(error) {
+                console.error('SCHEDULE LOAD ERROR:', error);
+                self.populateQueue();
+            });
     },
     /**
      * @method handleSchedulePopulate
@@ -145,22 +159,6 @@ module.exports = GelatoPage.extend({
                 this.populateQueue();
             }
             this.item = item;
-        } else {
-            $.notify(
-                {
-                    title: 'Loading',
-                    message: 'Waiting for next items to finish loading.'
-                },
-                {
-                    type: 'pastel-warning',
-                    animate: {
-                        enter: 'animated fadeInDown',
-                        exit: 'animated fadeOutUp'
-                    },
-                    delay: 5000,
-                    icon_type: 'class'
-                }
-            );
         }
     },
     /**
