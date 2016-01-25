@@ -301,12 +301,11 @@ module.exports = GelatoPage.extend({
                 });
             }
         ], function(error) {
+            ScreenLoader.hide();
             if (error) {
-                ScreenLoader.hide();
                 console.error(error);
             } else {
-                app.router.navigate('dashboard');
-                app.reload();
+                app.router.navigate('account/setup', {trigger: true});
             }
         });
     }
