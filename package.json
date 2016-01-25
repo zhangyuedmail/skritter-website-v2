@@ -34,7 +34,7 @@
     "web-watch": "./node_modules/.bin/brunch watch --server"
   },
   "dependencies": {
-    "brunch": "~2.1.0",
+    "brunch": "~2.2.0",
     "chai": "~3.4.0",
     "cordova": "~5.4.0",
     "lodash": "~4.0.0",
