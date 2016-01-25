@@ -27,10 +27,6 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-
-        //TODO: will not work in the future on all browsers
-        window.onbeforeunload = this.handleOnBeforeUnload.bind(this);
-
         this.loadSchedule();
     },
     /**
@@ -58,12 +54,6 @@ module.exports = GelatoPage.extend({
         this.prompt.setElement('#study-prompt-container').render();
         this.toolbar.setElement('#study-toolbar-container').render();
         return this;
-    },
-    /**
-     * @method handleOnBeforeUnload
-     */
-    handleOnBeforeUnload: function() {
-        this.schedule.reviews.post({async: false});
     },
     /**
      * @method handlePromptNext
