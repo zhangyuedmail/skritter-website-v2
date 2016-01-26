@@ -74,9 +74,9 @@ module.exports = GelatoApplication.extend({
      */
     getStripeKey: function() {
         if (this.isProduction()) {
-            return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc';
+            return 'pk_live_pWk0Lg3fgazBwkmSrzxOJ0fc';
         } else {
-            return 'pk_test_24FOCKPSEtJHVpcA3oErEw2I';
+            return 'pk_test_5RIYZGe8XgeYfU9pgvkxK01r';
         }
     },
     /**
