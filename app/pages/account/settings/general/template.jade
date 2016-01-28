@@ -1,5 +1,7 @@
 gelato-page(data-name='account-settings-general')
 
+  #dialog-container
+
   #navbar-container
 
   section.container
@@ -36,7 +38,7 @@ gelato-page(data-name='account-settings-general')
               .form-group
                 label.col-sm-3.control-label(for="field-change-password") Password
                 .col-sm-9
-                  a#field-change-password(href="") Change password
+                  a#field-change-password(href="#") Change password
               .form-group
                 label.col-sm-3.control-label(for="field-about") About me
                 .col-sm-9
@@ -76,3 +78,5 @@ gelato-page(data-name='account-settings-general')
                   else
                     button#button-save.btn.btn-fixed.btn-success(type="submit", disabled="disabled")
                       i.fa.fa-2x.fa-spinner.fa-pulse
+
+              a#reset-all-data.text-danger Reset All Data

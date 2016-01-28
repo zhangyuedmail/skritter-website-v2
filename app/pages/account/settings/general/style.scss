@@ -5,7 +5,9 @@ gelato-page[data-name='account-settings-general'] {
   background: $background-primary;
   padding-top: 75px;
 
-  .content-block { background-color: #f2f2f6; }
+  .content-block {
+    background-color: #f2f2f6;
+  }
 
   #section-content {
     background-color: $white1;
@@ -17,7 +19,9 @@ gelato-page[data-name='account-settings-general'] {
     input {
       border-radius: 0;
       height: 50px;
-      &[type="checkbox"] { height: auto; }
+      &[type="checkbox"] {
+        height: auto;
+      }
       &[type="email"],
       &[type="text"] {
         max-width: 300px;
@@ -44,10 +48,16 @@ gelato-page[data-name='account-settings-general'] {
       font-weight: 400;
       margin-bottom: 30px;
     }
-    #button-save { margin-top: 30px; }
+    #button-save {
+      margin-top: 30px;
+    }
     #field-avatar {
       height: 100px;
       width: 100px;
+    }
+    #reset-all-data {
+      position: absolute;
+      right: 50px;
     }
   }
 

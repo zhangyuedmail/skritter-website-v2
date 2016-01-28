@@ -1,0 +1,26 @@
+gelato-dialog(data-name='change-password')
+
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+
+        .modal-header
+          .pull-left
+            .modal-title Are you sure?
+          .pull-right
+            a(href='#', data-dismiss='modal')
+              i.fa.fa-times-circle-o
+
+        .modal-body
+          #error-message.text-danger
+          form
+            .form-group
+              label(for="field-password1") New password
+              input#field-password1.form-control(type="password", placeholder="")
+            .form-group
+              label(for="field-password2") Re-type password
+              input#field-password2.form-control(type="password", placeholder="")
+
+        .modal-footer
+          button#button-change.btn.btn-success Change
+          button#button-cancel.btn.btn-default Cancel

@@ -3,7 +3,8 @@ var GelatoPage = require('gelato/page');
 var AccountSidebar = require('components/account/sidebar/view');
 var DefaultNavbar = require('navbars/default/view');
 
-var ChangePasswordDialog = require('dialogs/change-password/view');
+var ChangePasswordDialog = require('dialogs1/change-password/view');
+var ResetAllDataDialog = require('dialogs1/reset-all-data/view');
 
 /**
  * @class AccountSettingsGeneral
@@ -16,6 +17,7 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         this.countries = require('data/country-codes');
+        this.dialog = null;
         this.timezones = require('data/country-timezones');
         this.navbar = new DefaultNavbar();
         this.sidebar = new AccountSidebar();
@@ -30,8 +32,9 @@ module.exports = GelatoPage.extend({
         'change #avatar-upload-input': 'handleChangeAvatarUploadInput',
         'change #field-country': 'handleSelectCountry',
         'vclick #button-save': 'handleClickButtonSave',
-        'vclick #button-change-password': 'handleClickButtonChangePassword',
-        'vclick #change-avatar': 'handleClickChangeAvatar'
+        'vclick #field-change-password': 'handleClickChangePassword',
+        'vclick #change-avatar': 'handleClickChangeAvatar',
+        'vclick #reset-all-data': 'handleClickResetAllData'
     },
     /**
      * @property title
@@ -73,15 +76,7 @@ module.exports = GelatoPage.extend({
         };
         reader.readAsDataURL(file);
     },
-    /**
-     * @method handleClickButtonChangePassword
-     * @param {Event} event
-     */
-    handleClickButtonChangePassword: function(event) {
-        event.preventDefault();
-        this.dialog = new ChangePasswordDialog();
-        this.dialog.open();
-    },
+
     /**
      * @method handleClickButtonSave
      * @param {Event} event
@@ -105,6 +100,26 @@ module.exports = GelatoPage.extend({
     handleClickChangeAvatar: function(event) {
         event.preventDefault();
         this.$('#avatar-upload-input').trigger('click');
+    },
+    /**
+     * @method handleClickChangePassword
+     * @param {Event} event
+     */
+    handleClickChangePassword: function(event) {
+        event.preventDefault();
+        this.dialog = new ChangePasswordDialog();
+        this.dialog.render();
+        this.dialog.open();
+    },
+    /**
+     * @method handleClickResetAllData
+     * @param {Event} event
+     */
+    handleClickResetAllData: function(event) {
+        event.preventDefault();
+        this.dialog = new ResetAllDataDialog();
+        this.dialog.render();
+        this.dialog.open();
     },
     /**
      * @method handleSelectCountry
