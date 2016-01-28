@@ -29,7 +29,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     deletable: function() {
-        return _.all([
+        return _.every([
             !this.get('disabled'),
             !this.get('published'),
             this.get('sort') === 'custom',
@@ -41,7 +41,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     copyable: function() {
-        return _.all([
+        return _.every([
             !this.get('disabled'),
             this.get('sort') !== 'chinesepod-lesson'
         ]);
@@ -153,10 +153,10 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     isEditable: function() {
-        return app.user.get('isAdmin') ? true : _.all([
+        return app.user.get('isAdmin') ? true : _.every([
             !this.get('disabled'),
             this.get('sort') === 'custom',
-            _.any([
+            _.some([
                 this.get('user') === app.user.id,
                 _.includes(this.get('editors'), app.user.id),
                 this.get('public')
@@ -175,7 +175,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     publishable: function() {
-        return _.all([
+        return _.every([
             !this.get('disabled'),
             !this.get('published'),
             this.get('sort') === 'custom',
