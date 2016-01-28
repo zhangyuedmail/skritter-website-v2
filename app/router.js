@@ -28,6 +28,7 @@ module.exports = Router.extend({
         'account/setup': 'navigateAccountSetup',
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
+        'demo(/:lang)': 'navigateDemo',
         'features': 'navigateFeatures',
         'home': 'navigateHome',
         'institutions': 'navigateInstitutions',
@@ -165,6 +166,18 @@ module.exports = Router.extend({
             this.go('pages/dashboard');
         } else {
             this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateDemo
+     * @param {String} [lang]
+     */
+    navigateDemo: function(lang) {
+        if (app.user.isLoggedIn()) {
+            this.navigate('dashboard');
+            this.go('pages/dashboard');
+        } else {
+            this.go('pages/demo', {lang: lang});
         }
     },
     /**
