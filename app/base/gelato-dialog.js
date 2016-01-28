@@ -9,7 +9,7 @@ var GelatoDialog = GelatoView.extend({
      * @property el
      * @type {String}
      */
-    el: 'gelato-dialogs',
+    el: '#dialog-container',
     /**
      * @property element
      * @type {jQuery}
