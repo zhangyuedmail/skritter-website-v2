@@ -59,6 +59,8 @@ module.exports = GelatoApplication.extend({
      * @returns {String}
      */
     getApiUrl: function() {
+        //TODO: enable for localhost database testing
+        //return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
         return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
     },
     /**
