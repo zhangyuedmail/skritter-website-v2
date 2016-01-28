@@ -35,11 +35,11 @@
   },
   "dependencies": {
     "brunch": "~2.2.0",
-    "chai": "~3.4.0",
+    "chai": "~3.5.0",
     "cordova": "~5.4.0",
     "lodash": "~4.0.0",
     "minimist": "~1.2.0",
-    "mocha": "~2.3.0",
+    "mocha": "~2.4.0",
     "mocha-phantomjs": "~4.0.0",
     "shelljs": "~0.5.0",
     "sinon": "~1.17.0",
