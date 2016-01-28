@@ -133,7 +133,7 @@ module.exports = GelatoPage.extend({
                 stripe: false,
                 anet: false,
                 paypal: false
-            })
+            });
             if (subscribed === 'ios') {
                 this.subscription.set({
                     subscribed: 'ios',
@@ -251,13 +251,14 @@ module.exports = GelatoPage.extend({
         }
         $(event.target).closest('.list-group').find('button').removeClass('active');
         $(event.target).closest('button').addClass('active');
-        this.renderMainContent();
+        this.render();
     },
     /**
      * @method handleClickSubscribePaypalButton
      */
     handleClickSubscribePaypalButton: function() {
-        $('#paypal-subscribe-form select').val($('#paypal-plan-select').val());
+        var plan = $('#paypal-plan-select').val();
+        $('#paypal-subscribe-form select').val(plan);
         $('#paypal-subscribe-form').submit();
     },
     /**
@@ -304,7 +305,7 @@ module.exports = GelatoPage.extend({
                 context: this,
                 success: function(response) {
                     this.subscription.set(response.Subscription);
-                    this.renderMainContent();
+                    this.render();
                 }
             })
         }

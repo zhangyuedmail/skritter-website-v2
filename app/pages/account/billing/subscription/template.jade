@@ -233,7 +233,7 @@ gelato-page(data-name='account-billing-subscription')
                 .form-group.form-group-lg.credit-card-form-group
                   label.control-label.col-sm-3 Card number
                   .col-sm-6
-                    input#card-number-input.form-control
+                    input#card-number-input.form-control(value="4242424242424242")
                     if subscribed === 'stripe'
                       .help-block
                         - var cn = view.subscription.get('stripe').cardNumber;

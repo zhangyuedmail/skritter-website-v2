@@ -62,15 +62,11 @@ module.exports = BootstrapDialog.extend({
         if (!_.includes(['stripe', 'gplay'], service)) {
             return false;
         }
-
-        var requests = [];
         $.when(
             this.requestUnsubscribe(),
             this.requestUpdateReceiveNewsletter(),
             this.requestSaveCancelReason()
-        ).done(function() {
-            document.location.reload();
-        })
+        ).done(app.reload);
     },
     /**
      * @method renderSectionContent
