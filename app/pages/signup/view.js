@@ -252,9 +252,9 @@ module.exports = GelatoPage.extend({
                 Stripe.setPublishableKey(app.getStripeKey());
                 Stripe.card.createToken(
                     {
-                        number: formData.card.number,
                         exp_month: formData.card.expires_month,
-                        exp_year: formData.card.expires_year
+                        exp_year: formData.card.expires_year,
+                        number: formData.card.number
                     },
                     function(status, response) {
                         if (response.error) {

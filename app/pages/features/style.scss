@@ -2,10 +2,12 @@
 
 gelato-page[data-name='features'] {
 
+  //background: $background-marketing;
   padding-top: 75px;
 
   #section-additional-features {
-    margin-bottom: 50px;
+    background-color: $white;
+    padding-bottom: 50px;
     .block { padding-bottom: 60px; }
     .media-heading {
       color: #8c9196;
@@ -22,11 +24,13 @@ gelato-page[data-name='features'] {
   }
 
   #section-call-to-action {
-    margin-bottom: 50px;
+    background-color: $white;
+    padding-bottom: 50px;
   }
 
   #section-main-features {
-    margin-bottom: 50px;
+    background-color: $white;
+    padding-bottom: 50px;
     .block { padding-bottom: 60px; }
     .media-heading {
       color: #8c9196;
