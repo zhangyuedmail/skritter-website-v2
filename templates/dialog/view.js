@@ -4,7 +4,7 @@ var GelatoDialog = require('base/gelato-dialog');
  * @class Dialog
  * @extends {GelatoDialog}
  */
-module.exports = GelatoDialog.extend({
+var Dialog = GelatoDialog.extend({
     /**
      * @method initialize
      * @param {Object} options
@@ -48,3 +48,5 @@ module.exports = GelatoDialog.extend({
         this.close()
     }
 });
+
+module.exports = Dialog;

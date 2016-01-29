@@ -2,10 +2,10 @@ var GelatoPage = require('gelato/page');
 
 
 /**
- * @class Pages
+ * @class Page
  * @extends {GelatoPage}
  */
-module.exports = GelatoPage.extend({
+var Page = GelatoPage.extend({
     /**
      * @method initialize
      * @constructor
@@ -37,3 +37,5 @@ module.exports = GelatoPage.extend({
         return GelatoPage.prototype.remove.call(this);
     }
 });
+
+module.exports = Page;
