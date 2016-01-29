@@ -46,6 +46,7 @@ module.exports = GelatoApplication.extend({
         apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
         apiRoot: 'https://beta.skritter',
         apiVersion: 0,
+        demoLang: 'zh',
         description: '{!application-description!}',
         canvasSize: 450,
         language: undefined,

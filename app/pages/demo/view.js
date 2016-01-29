@@ -65,7 +65,6 @@ module.exports = GelatoPage.extend({
         async.waterfall([
             function(callback) {
                 self.dialog = new DemoLanguageSelectDialog();
-                //self.dialog.render();
                 self.dialog.open();
                 self.dialog.once('select', callback);
             },
@@ -83,6 +82,7 @@ module.exports = GelatoPage.extend({
                         callback(error);
                     },
                     success: function(vocabs) {
+                        app.set('demoLang', lang);
                         self.vocab = vocabs.at(0);
                         callback(null, self.vocab);
                     }
