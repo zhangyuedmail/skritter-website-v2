@@ -9943,7 +9943,7 @@ return jQuery;
 
 /**
  * @license
- * lodash 4.0.0 (Custom Build) <https://lodash.com/>
+ * lodash 4.1.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash -o ./dist/lodash.js`
  * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -9956,7 +9956,7 @@ return jQuery;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.0.0';
+  var VERSION = '4.1.0';
 
   /** Used to compose bitmasks for wrapper metadata. */
   var BIND_FLAG = 1,
@@ -10106,7 +10106,8 @@ return jQuery;
 
   /** Used to compose unicode character classes. */
   var rsAstralRange = '\\ud800-\\udfff',
-      rsComboRange = '\\u0300-\\u036f\\ufe20-\\ufe23',
+      rsComboMarksRange = '\\u0300-\\u036f\\ufe20-\\ufe23',
+      rsComboSymbolsRange = '\\u20d0-\\u20f0',
       rsDingbatRange = '\\u2700-\\u27bf',
       rsLowerRange = 'a-z\\xdf-\\xf6\\xf8-\\xff',
       rsMathOpRange = '\\xac\\xb1\\xd7\\xf7',
@@ -10120,12 +10121,13 @@ return jQuery;
   /** Used to compose unicode capture groups. */
   var rsAstral = '[' + rsAstralRange + ']',
       rsBreak = '[' + rsBreakRange + ']',
-      rsCombo = '[' + rsComboRange + ']',
+      rsCombo = '[' + rsComboMarksRange + rsComboSymbolsRange + ']',
       rsDigits = '\\d+',
       rsDingbat = '[' + rsDingbatRange + ']',
       rsLower = '[' + rsLowerRange + ']',
       rsMisc = '[^' + rsAstralRange + rsBreakRange + rsDigits + rsDingbatRange + rsLowerRange + rsUpperRange + ']',
-      rsModifier = '(?:\\ud83c[\\udffb-\\udfff])',
+      rsFitz = '\\ud83c[\\udffb-\\udfff]',
+      rsModifier = '(?:' + rsCombo + '|' + rsFitz + ')',
       rsNonAstral = '[^' + rsAstralRange + ']',
       rsRegional = '(?:\\ud83c[\\udde6-\\uddff]){2}',
       rsSurrPair = '[\\ud800-\\udbff][\\udc00-\\udfff]',
@@ -10142,14 +10144,17 @@ return jQuery;
       rsEmoji = '(?:' + [rsDingbat, rsRegional, rsSurrPair].join('|') + ')' + rsSeq,
       rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
 
-  /** Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks). */
+  /**
+   * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
+   * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
+   */
   var reComboMark = RegExp(rsCombo, 'g');
 
   /** Used to match [string symbols](https://mathiasbynens.be/notes/javascript-unicode). */
-  var reComplexSymbol = RegExp(rsSymbol + rsSeq, 'g');
+  var reComplexSymbol = RegExp(rsFitz + '(?=' + rsFitz + ')|' + rsSymbol + rsSeq, 'g');
 
   /** Used to detect strings with [zero-width joiners or code points from the astral planes](http://eev.ee/blog/2015/09/12/dark-corners-of-unicode/). */
-  var reHasComplexSymbol = RegExp('[' + rsZWJ + rsAstralRange + rsComboRange + rsVarRange + ']');
+  var reHasComplexSymbol = RegExp('[' + rsZWJ + rsAstralRange  + rsComboMarksRange + rsComboSymbolsRange + rsVarRange + ']');
 
   /** Used to match non-compound words composed of alphanumeric characters. */
   var reBasicWord = /[a-zA-Z0-9]+/g;
@@ -10159,7 +10164,8 @@ return jQuery;
     rsUpper + '?' + rsLower + '+(?=' + [rsBreak, rsUpper, '$'].join('|') + ')',
     rsUpperMisc + '+(?=' + [rsBreak, rsUpper + rsLowerMisc, '$'].join('|') + ')',
     rsUpper + '?' + rsLowerMisc + '+',
-    rsDigits + '(?:' + rsLowerMisc + '+)?',
+    rsUpper + '+',
+    rsDigits,
     rsEmoji
   ].join('|'), 'g');
 
@@ -10346,6 +10352,27 @@ return jQuery;
       case 3: return func.call(thisArg, args[0], args[1], args[2]);
     }
     return func.apply(thisArg, args);
+  }
+
+  /**
+   * A specialized version of `baseAggregator` for arrays.
+   *
+   * @private
+   * @param {Array} array The array to iterate over.
+   * @param {Function} setter The function to set `accumulator` values.
+   * @param {Function} iteratee The iteratee to transform keys.
+   * @param {Object} accumulator The initial aggregated object.
+   * @returns {Function} Returns `accumulator`.
+   */
+  function arrayAggregator(array, setter, iteratee, accumulator) {
+    var index = -1,
+        length = array.length;
+
+    while (++index < length) {
+      var value = array[index];
+      setter(accumulator, value, iteratee(value), array);
+    }
+    return accumulator;
   }
 
   /**
@@ -10540,14 +10567,14 @@ return jQuery;
    * @param {Array} array The array to iterate over.
    * @param {Function} iteratee The function invoked per iteration.
    * @param {*} [accumulator] The initial value.
-   * @param {boolean} [initFromArray] Specify using the first element of `array` as the initial value.
+   * @param {boolean} [initAccum] Specify using the first element of `array` as the initial value.
    * @returns {*} Returns the accumulated value.
    */
-  function arrayReduce(array, iteratee, accumulator, initFromArray) {
+  function arrayReduce(array, iteratee, accumulator, initAccum) {
     var index = -1,
         length = array.length;
 
-    if (initFromArray && length) {
+    if (initAccum && length) {
       accumulator = array[++index];
     }
     while (++index < length) {
@@ -10564,12 +10591,12 @@ return jQuery;
    * @param {Array} array The array to iterate over.
    * @param {Function} iteratee The function invoked per iteration.
    * @param {*} [accumulator] The initial value.
-   * @param {boolean} [initFromArray] Specify using the last element of `array` as the initial value.
+   * @param {boolean} [initAccum] Specify using the last element of `array` as the initial value.
    * @returns {*} Returns the accumulated value.
    */
-  function arrayReduceRight(array, iteratee, accumulator, initFromArray) {
+  function arrayReduceRight(array, iteratee, accumulator, initAccum) {
     var length = array.length;
-    if (initFromArray && length) {
+    if (initAccum && length) {
       accumulator = array[--length];
     }
     while (length--) {
@@ -10631,7 +10658,7 @@ return jQuery;
   /**
    * The base implementation of methods like `_.find` and `_.findKey`, without
    * support for iteratee shorthands, which iterates over `collection` using
-   * the provided `eachFunc`.
+   * `eachFunc`.
    *
    * @private
    * @param {Array|Object} collection The collection to search.
@@ -10699,21 +10726,20 @@ return jQuery;
 
   /**
    * The base implementation of `_.reduce` and `_.reduceRight`, without support
-   * for iteratee shorthands, which iterates over `collection` using the provided
-   * `eachFunc`.
+   * for iteratee shorthands, which iterates over `collection` using `eachFunc`.
    *
    * @private
    * @param {Array|Object} collection The collection to iterate over.
    * @param {Function} iteratee The function invoked per iteration.
    * @param {*} accumulator The initial value.
-   * @param {boolean} initFromCollection Specify using the first or last element of `collection` as the initial value.
+   * @param {boolean} initAccum Specify using the first or last element of `collection` as the initial value.
    * @param {Function} eachFunc The function to iterate over `collection`.
    * @returns {*} Returns the accumulated value.
    */
-  function baseReduce(collection, iteratee, accumulator, initFromCollection, eachFunc) {
+  function baseReduce(collection, iteratee, accumulator, initAccum, eachFunc) {
     eachFunc(collection, function(value, index, collection) {
-      accumulator = initFromCollection
-        ? (initFromCollection = false, value)
+      accumulator = initAccum
+        ? (initAccum = false, value)
         : iteratee(accumulator, value, index, collection);
     });
     return accumulator;
@@ -10758,7 +10784,7 @@ return jQuery;
         result = result === undefined ? current : (result + current);
       }
     }
-    return result;
+    return length ? result : 0;
   }
 
   /**
@@ -11107,6 +11133,7 @@ return jQuery;
   /**
    * Gets the number of symbols in `string`.
    *
+   * @private
    * @param {string} string The string to inspect.
    * @returns {number} Returns the string size.
    */
@@ -11222,14 +11249,14 @@ return jQuery;
     );
 
     /** Built-in value references. */
-    var _Symbol = context.Symbol,
-        Reflect = context.Reflect,
+    var Reflect = context.Reflect,
+        Symbol = context.Symbol,
         Uint8Array = context.Uint8Array,
         clearTimeout = context.clearTimeout,
         enumerate = Reflect ? Reflect.enumerate : undefined,
         getPrototypeOf = Object.getPrototypeOf,
         getOwnPropertySymbols = Object.getOwnPropertySymbols,
-        iteratorSymbol = typeof (iteratorSymbol = _Symbol && _Symbol.iterator) == 'symbol' ? iteratorSymbol : undefined,
+        iteratorSymbol = typeof (iteratorSymbol = Symbol && Symbol.iterator) == 'symbol' ? iteratorSymbol : undefined,
         propertyIsEnumerable = objectProto.propertyIsEnumerable,
         setTimeout = context.setTimeout,
         splice = arrayProto.splice;
@@ -11260,9 +11287,9 @@ return jQuery;
         setCtorString = Set ? funcToString.call(Set) : '';
 
     /** Used to convert symbols to primitives and strings. */
-    var symbolProto = _Symbol ? _Symbol.prototype : undefined,
-        symbolValueOf = _Symbol ? symbolProto.valueOf : undefined,
-        symbolToString = _Symbol ? symbolProto.toString : undefined;
+    var symbolProto = Symbol ? Symbol.prototype : undefined,
+        symbolValueOf = Symbol ? symbolProto.valueOf : undefined,
+        symbolToString = Symbol ? symbolProto.toString : undefined;
 
     /** Used to lookup unminified function names. */
     var realNames = {};
@@ -11310,47 +11337,48 @@ return jQuery;
      * The chainable wrapper methods are:
      * `after`, `ary`, `assign`, `assignIn`, `assignInWith`, `assignWith`,
      * `at`, `before`, `bind`, `bindAll`, `bindKey`, `chain`, `chunk`, `commit`,
-     * `compact`, `concat`, `conforms`,  `constant`, `countBy`, `create`, `curry`,
+     * `compact`, `concat`, `conforms`, `constant`, `countBy`, `create`, `curry`,
      * `debounce`, `defaults`, `defaultsDeep`, `defer`, `delay`, `difference`,
-     * `differenceBy`, `differenceWith`,  `drop`, `dropRight`, `dropRightWhile`,
+     * `differenceBy`, `differenceWith`, `drop`, `dropRight`, `dropRightWhile`,
      * `dropWhile`, `fill`, `filter`, `flatten`, `flattenDeep`, `flip`, `flow`,
-     * `flowRight`, `forEach`, `forEachRight`, `forIn`, `forInRight`, `forOwn`,
-     * `forOwnRight`, `fromPairs`, `functions`, `functionsIn`, `groupBy`, `initial`,
-     * `intersection`, `intersectionBy`, `intersectionWith`, invert`, `invokeMap`,
-     * `iteratee`, `keyBy`, `keys`, `keysIn`, `map`, `mapKeys`, `mapValues`,
-     * `matches`, `matchesProperty`, `memoize`, `merge`, `mergeWith`, `method`,
-     * `methodOf`, `mixin`, `negate`, `nthArg`, `omit`, `omitBy`, `once`, `orderBy`,
-     * `over`, `overArgs`, `overEvery`, `overSome`, `partial`, `partialRight`,
-     * `partition`, `pick`, `pickBy`, `plant`, `property`, `propertyOf`, `pull`,
-     * `pullAll`, `pullAllBy`, `pullAt`, `push`, `range`, `rangeRight`, `rearg`,
-     * `reject`, `remove`, `rest`, `reverse`, `sampleSize`, `set`, `setWith`,
-     * `shuffle`, `slice`, `sort`, `sortBy`, `splice`, `spread`, `tail`, `take`,
-     * `takeRight`, `takeRightWhile`, `takeWhile`, `tap`, `throttle`, `thru`,
-     * `toArray`, `toPairs`, `toPairsIn`, `toPath`, `toPlainObject`, `transform`,
-     * `unary`, `union`, `unionBy`, `unionWith`, `uniq`, `uniqBy`, `uniqWith`,
-     * `unset`, `unshift`, `unzip`, `unzipWith`, `values`, `valuesIn`, `without`,
-     * `wrap`, `xor`, `xorBy`, `xorWith`, `zip`, `zipObject`, and `zipWith`
+     * `flowRight`, `fromPairs`, `functions`, `functionsIn`, `groupBy`, `initial`,
+     * `intersection`, `intersectionBy`, `intersectionWith`, `invert`, `invertBy`,
+     * `invokeMap`, `iteratee`, `keyBy`, `keys`, `keysIn`, `map`, `mapKeys`,
+     * `mapValues`, `matches`, `matchesProperty`, `memoize`, `merge`, `mergeWith`,
+     * `method`, `methodOf`, `mixin`, `negate`, `nthArg`, `omit`, `omitBy`, `once`,
+     * `orderBy`, `over`, `overArgs`, `overEvery`, `overSome`, `partial`,
+     * `partialRight`, `partition`, `pick`, `pickBy`, `plant`, `property`,
+     * `propertyOf`, `pull`, `pullAll`, `pullAllBy`, `pullAt`, `push`, `range`,
+     * `rangeRight`, `rearg`, `reject`, `remove`, `rest`, `reverse`, `sampleSize`,
+     * `set`, `setWith`, `shuffle`, `slice`, `sort`, `sortBy`, `splice`, `spread`,
+     * `tail`, `take`, `takeRight`, `takeRightWhile`, `takeWhile`, `tap`, `throttle`,
+     * `thru`, `toArray`, `toPairs`, `toPairsIn`, `toPath`, `toPlainObject`,
+     * `transform`, `unary`, `union`, `unionBy`, `unionWith`, `uniq`, `uniqBy`,
+     * `uniqWith`, `unset`, `unshift`, `unzip`, `unzipWith`, `values`, `valuesIn`,
+     * `without`, `wrap`, `xor`, `xorBy`, `xorWith`, `zip`, `zipObject`,
+     * `zipObjectDeep`, and `zipWith`
      *
      * The wrapper methods that are **not** chainable by default are:
      * `add`, `attempt`, `camelCase`, `capitalize`, `ceil`, `clamp`, `clone`,
      * `cloneDeep`, `cloneDeepWith`, `cloneWith`, `deburr`, `endsWith`, `eq`,
      * `escape`, `escapeRegExp`, `every`, `find`, `findIndex`, `findKey`,
-     * `findLast`, `findLastIndex`, `findLastKey`, `floor`, `get`, `gt`, `gte`,
-     * `has`, `hasIn`, `head`, `identity`, `includes`, `indexOf`, `inRange`,
-     * `invoke`, `isArguments`, `isArray`, `isArrayLike`, `isArrayLikeObject`,
-     * `isBoolean`, `isDate`, `isElement`, `isEmpty`, `isEqual`, `isEqualWith`,
-     * `isError`, `isFinite`, `isFunction`, `isInteger`, `isLength`, `isMatch`,
-     * `isMatchWith`, `isNaN`, `isNative`, `isNil`, `isNull`, `isNumber`,
-     * `isObject`, `isObjectLike`, `isPlainObject`, `isRegExp`, `isSafeInteger`,
-     * `isString`, `isUndefined`, `isTypedArray`, `join`, `kebabCase`, `last`,
-     * `lastIndexOf`, `lowerCase`, `lowerFirst`, `lt`, `lte`, `max`, `maxBy`,
-     * `mean`, `min`, `minBy`, `noConflict`, `noop`, `now`, `pad`, `padEnd`,
-     * `padStart`, `parseInt`, `pop`, `random`, `reduce`, `reduceRight`, `repeat`,
-     * `result`, `round`, `runInContext`, `sample`, `shift`, `size`, `snakeCase`,
-     * `some`, `sortedIndex`, `sortedIndexBy`, `sortedLastIndex`, `sortedLastIndexBy`,
-     * `startCase`, `startsWith`, `subtract`, `sum`, sumBy`, `template`, `times`,
-     * `toLower`, `toInteger`, `toLength`, `toNumber`, `toSafeInteger`, toString`,
-     * `toUpper`, `trim`, `trimEnd`, `trimStart`, `truncate`, `unescape`, `uniqueId`,
+     * `findLast`, `findLastIndex`, `findLastKey`, `floor`, `forEach`, `forEachRight`,
+     * `forIn`, `forInRight`, `forOwn`, `forOwnRight`, `get`, `gt`, `gte`, `has`,
+     * `hasIn`, `head`, `identity`, `includes`, `indexOf`, `inRange`, `invoke`,
+     * `isArguments`, `isArray`, `isArrayLike`, `isArrayLikeObject`, `isBoolean`,
+     * `isDate`, `isElement`, `isEmpty`, `isEqual`, `isEqualWith`, `isError`,
+     * `isFinite`, `isFunction`, `isInteger`, `isLength`, `isMatch`, `isMatchWith`,
+     * `isNaN`, `isNative`, `isNil`, `isNull`, `isNumber`, `isObject`, `isObjectLike`,
+     * `isPlainObject`, `isRegExp`, `isSafeInteger`, `isString`, `isUndefined`,
+     * `isTypedArray`, `join`, `kebabCase`, `last`, `lastIndexOf`, `lowerCase`,
+     * `lowerFirst`, `lt`, `lte`, `max`, `maxBy`, `mean`, `min`, `minBy`,
+     * `noConflict`, `noop`, `now`, `pad`, `padEnd`, `padStart`, `parseInt`,
+     * `pop`, `random`, `reduce`, `reduceRight`, `repeat`, `result`, `round`,
+     * `runInContext`, `sample`, `shift`, `size`, `snakeCase`, `some`, `sortedIndex`,
+     * `sortedIndexBy`, `sortedLastIndex`, `sortedLastIndexBy`, `startCase`,
+     * `startsWith`, `subtract`, `sum`, `sumBy`, `template`, `times`, `toLower`,
+     * `toInteger`, `toLength`, `toNumber`, `toSafeInteger`, `toString`, `toUpper`,
+     * `trim`, `trimEnd`, `trimStart`, `truncate`, `unescape`, `uniqueId`,
      * `upperCase`, `upperFirst`, `value`, and `words`
      *
      * @name _
@@ -12061,6 +12089,24 @@ return jQuery;
     }
 
     /**
+     * Aggregates elements of `collection` on `accumulator` with keys transformed
+     * by `iteratee` and values set by `setter`.
+     *
+     * @private
+     * @param {Array|Object} collection The collection to iterate over.
+     * @param {Function} setter The function to set `accumulator` values.
+     * @param {Function} iteratee The iteratee to transform keys.
+     * @param {Object} accumulator The initial aggregated object.
+     * @returns {Function} Returns `accumulator`.
+     */
+    function baseAggregator(collection, setter, iteratee, accumulator) {
+      baseEach(collection, function(value, key, collection) {
+        setter(accumulator, value, iteratee(value), collection);
+      });
+      return accumulator;
+    }
+
+    /**
      * The base implementation of `_.assign` without support for multiple sources
      * or `customizer` functions.
      *
@@ -12607,9 +12653,26 @@ return jQuery;
     }
 
     /**
+     * The base implementation of `_.invert` and `_.invertBy` which inverts
+     * `object` with values transformed by `iteratee` and set by `setter`.
+     *
+     * @private
+     * @param {Object} object The object to iterate over.
+     * @param {Function} setter The function to set `accumulator` values.
+     * @param {Function} iteratee The iteratee to transform values.
+     * @param {Object} accumulator The initial inverted object.
+     * @returns {Function} Returns `accumulator`.
+     */
+    function baseInverter(object, setter, iteratee, accumulator) {
+      baseForOwn(object, function(value, key, object) {
+        setter(accumulator, iteratee(value), key, object);
+      });
+      return accumulator;
+    }
+
+    /**
      * The base implementation of `_.invoke` without support for individual
      * method arguments.
-     *
      *
      * @private
      * @param {Object} object The object to query.
@@ -12753,7 +12816,10 @@ return jQuery;
           var stack = new Stack,
               result = customizer ? customizer(objValue, srcValue, key, object, source, stack) : undefined;
 
-          if (!(result === undefined ? baseIsEqual(srcValue, objValue, customizer, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG, stack) : result)) {
+          if (!(result === undefined
+                ? baseIsEqual(srcValue, objValue, customizer, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG, stack)
+                : result
+              )) {
             return false;
           }
         }
@@ -12889,10 +12955,11 @@ return jQuery;
      * @private
      * @param {Object} object The destination object.
      * @param {Object} source The source object.
+     * @param {number} srcIndex The index of `source`.
      * @param {Function} [customizer] The function to customize merged values.
      * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
      */
-    function baseMerge(object, source, customizer, stack) {
+    function baseMerge(object, source, srcIndex, customizer, stack) {
       if (object === source) {
         return;
       }
@@ -12904,7 +12971,7 @@ return jQuery;
         }
         if (isObject(srcValue)) {
           stack || (stack = new Stack);
-          baseMergeDeep(object, source, key, baseMerge, customizer, stack);
+          baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
         }
         else {
           var newValue = customizer ? customizer(object[key], srcValue, (key + ''), object, source, stack) : undefined;
@@ -12925,14 +12992,15 @@ return jQuery;
      * @param {Object} object The destination object.
      * @param {Object} source The source object.
      * @param {string} key The key of the value to merge.
+     * @param {number} srcIndex The index of `source`.
      * @param {Function} mergeFunc The function to merge values.
      * @param {Function} [customizer] The function to customize assigned values.
      * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
      */
-    function baseMergeDeep(object, source, key, mergeFunc, customizer, stack) {
+    function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
       var objValue = object[key],
           srcValue = source[key],
-          stacked = stack.get(srcValue) || stack.get(objValue);
+          stacked = stack.get(srcValue);
 
       if (stacked) {
         assignMergeValue(object, key, stacked);
@@ -12944,24 +13012,38 @@ return jQuery;
       if (isCommon) {
         newValue = srcValue;
         if (isArray(srcValue) || isTypedArray(srcValue)) {
-          newValue = isArray(objValue)
-            ? objValue
-            : ((isArrayLikeObject(objValue)) ? copyArray(objValue) : baseClone(srcValue));
+          if (isArray(objValue)) {
+            newValue = srcIndex ? copyArray(objValue) : objValue;
+          }
+          else if (isArrayLikeObject(objValue)) {
+            newValue = copyArray(objValue);
+          }
+          else {
+            isCommon = false;
+            newValue = baseClone(srcValue);
+          }
         }
         else if (isPlainObject(srcValue) || isArguments(srcValue)) {
-          newValue = isArguments(objValue)
-            ? toPlainObject(objValue)
-            : (isObject(objValue) ? objValue : baseClone(srcValue));
+          if (isArguments(objValue)) {
+            newValue = toPlainObject(objValue);
+          }
+          else if (!isObject(objValue) || (srcIndex && isFunction(objValue))) {
+            isCommon = false;
+            newValue = baseClone(srcValue);
+          }
+          else {
+            newValue = srcIndex ? baseClone(objValue) : objValue;
+          }
         }
         else {
-          isCommon = isFunction(srcValue);
+          isCommon = false;
         }
       }
       stack.set(srcValue, newValue);
 
       if (isCommon) {
         // Recursively merge objects and arrays (susceptible to call stack limits).
-        mergeFunc(newValue, srcValue, customizer, stack);
+        mergeFunc(newValue, srcValue, srcIndex, customizer, stack);
       }
       assignMergeValue(object, key, newValue);
     }
@@ -13025,7 +13107,7 @@ return jQuery;
     function basePickBy(object, predicate) {
       var result = {};
       baseForIn(object, function(value, key) {
-        if (predicate(value)) {
+        if (predicate(value, key)) {
           result[key] = value;
         }
       });
@@ -13548,6 +13630,27 @@ return jQuery;
     }
 
     /**
+     * This base implementation of `_.zipObject` which assigns values using `assignFunc`.
+     *
+     * @private
+     * @param {Array} props The property names.
+     * @param {Array} values The property values.
+     * @param {Function} assignFunc The function to assign values.
+     * @returns {Object} Returns the new object.
+     */
+    function baseZipObject(props, values, assignFunc) {
+      var index = -1,
+          length = props.length,
+          valsLength = values.length,
+          result = {};
+
+      while (++index < length) {
+        assignFunc(result, props[index], index < valsLength ? values[index] : undefined);
+      }
+      return result;
+    }
+
+    /**
      * Creates a clone of `buffer`.
      *
      * @private
@@ -13610,7 +13713,7 @@ return jQuery;
      * @returns {Object} Returns the cloned symbol object.
      */
     function cloneSymbol(symbol) {
-      return _Symbol ? Object(symbolValueOf.call(symbol)) : {};
+      return Symbol ? Object(symbolValueOf.call(symbol)) : {};
     }
 
     /**
@@ -13764,29 +13867,16 @@ return jQuery;
      * Creates a function like `_.groupBy`.
      *
      * @private
-     * @param {Function} setter The function to set keys and values of the accumulator object.
-     * @param {Function} [initializer] The function to initialize the accumulator object.
+     * @param {Function} setter The function to set accumulator values.
+     * @param {Function} [initializer] The accumulator object initializer.
      * @returns {Function} Returns the new aggregator function.
      */
     function createAggregator(setter, initializer) {
       return function(collection, iteratee) {
-        var result = initializer ? initializer() : {};
-        iteratee = getIteratee(iteratee);
+        var func = isArray(collection) ? arrayAggregator : baseAggregator,
+            accumulator = initializer ? initializer() : {};
 
-        if (isArray(collection)) {
-          var index = -1,
-              length = collection.length;
-
-          while (++index < length) {
-            var value = collection[index];
-            setter(result, value, iteratee(value), collection);
-          }
-        } else {
-          baseEach(collection, function(value, key, collection) {
-            setter(result, value, iteratee(value), collection);
-          });
-        }
-        return result;
+        return func(collection, setter, getIteratee(iteratee), accumulator);
       };
     }
 
@@ -13813,7 +13903,7 @@ return jQuery;
         while (++index < length) {
           var source = sources[index];
           if (source) {
-            assigner(object, source, customizer);
+            assigner(object, source, index, customizer);
           }
         }
         return object;
@@ -14117,6 +14207,20 @@ return jQuery;
         return fn.apply(thisBinding, args);
       }
       return wrapper;
+    }
+
+    /**
+     * Creates a function like `_.invertBy`.
+     *
+     * @private
+     * @param {Function} setter The function to set accumulator values.
+     * @param {Function} toIteratee The function to resolve iteratees.
+     * @returns {Function} Returns the new inverter function.
+     */
+    function createInverter(setter, toIteratee) {
+      return function(object, iteratee) {
+        return baseInverter(object, setter, toIteratee(iteratee), {});
+      };
     }
 
     /**
@@ -14498,7 +14602,7 @@ return jQuery;
             equalFunc(convert(object), convert(other), customizer, bitmask | UNORDERED_COMPARE_FLAG);
 
         case symbolTag:
-          return !!_Symbol && (symbolValueOf.call(object) == symbolValueOf.call(other));
+          return !!Symbol && (symbolValueOf.call(object) == symbolValueOf.call(other));
       }
       return false;
     }
@@ -14518,7 +14622,6 @@ return jQuery;
      */
     function equalObjects(object, other, equalFunc, customizer, bitmask, stack) {
       var isPartial = bitmask & PARTIAL_COMPARE_FLAG,
-          isUnordered = bitmask & UNORDERED_COMPARE_FLAG,
           objProps = keys(object),
           objLength = objProps.length,
           othProps = keys(other),
@@ -14530,8 +14633,7 @@ return jQuery;
       var index = objLength;
       while (index--) {
         var key = objProps[index];
-        if (!(isPartial ? key in other : baseHas(other, key)) ||
-            !(isUnordered || key == othProps[index])) {
+        if (!(isPartial ? key in other : baseHas(other, key))) {
           return false;
         }
       }
@@ -14601,7 +14703,7 @@ return jQuery;
     function getFuncName(func) {
       var result = (func.name + ''),
           array = realNames[result],
-          length = array ? array.length : 0;
+          length = hasOwnProperty.call(realNames, result) ? array.length : 0;
 
       while (length--) {
         var data = array[length],
@@ -14763,8 +14865,11 @@ return jQuery;
           result = hasFunc(object, path);
         }
       }
-      return result || (isLength(object && object.length) && isIndex(path, object.length) &&
-        (isArray(object) || isString(object) || isArguments(object)));
+      var length = object ? object.length : undefined;
+      return result || (
+        !!length && isLength(length) && isIndex(path, length) &&
+        (isArray(object) || isString(object) || isArguments(object))
+      );
     }
 
     /**
@@ -14794,6 +14899,9 @@ return jQuery;
      * @returns {Object} Returns the initialized clone.
      */
     function initCloneObject(object) {
+      if (isPrototype(object)) {
+        return {};
+      }
       var Ctor = object.constructor;
       return baseCreate(isFunction(Ctor) ? Ctor.prototype : undefined);
     }
@@ -14853,9 +14961,11 @@ return jQuery;
      */
     function indexKeys(object) {
       var length = object ? object.length : undefined;
-      return (isLength(length) && (isArray(object) || isString(object) || isArguments(object)))
-        ? baseTimes(length, String)
-        : null;
+      if (isLength(length) &&
+          (isArray(object) || isString(object) || isArguments(object))) {
+        return baseTimes(length, String);
+      }
+      return null;
     }
 
     /**
@@ -15042,9 +15152,9 @@ return jQuery;
     function mergeDefaults(objValue, srcValue, key, object, source, stack) {
       if (isObject(objValue) && isObject(srcValue)) {
         stack.set(srcValue, objValue);
-        baseMerge(objValue, srcValue, mergeDefaults, stack);
+        baseMerge(objValue, srcValue, undefined, mergeDefaults, stack);
       }
-      return objValue === undefined ? baseClone(srcValue) : objValue;
+      return objValue;
     }
 
     /**
@@ -15258,8 +15368,11 @@ return jQuery;
      * // => [1]
      */
     var concat = rest(function(array, values) {
+      if (!isArray(array)) {
+        array = array == null ? [] : [Object(array)];
+      }
       values = baseFlatten(values);
-      return arrayConcat(isArray(array) ? array : [Object(array)], values);
+      return arrayConcat(array, values);
     });
 
     /**
@@ -15691,7 +15804,7 @@ return jQuery;
 
       while (++index < length) {
         var pair = pairs[index];
-        baseSet(result, pair[0], pair[1]);
+        result[pair[0]] = pair[1];
       }
       return result;
     }
@@ -15780,6 +15893,7 @@ return jQuery;
      * @param {...Array} [arrays] The arrays to inspect.
      * @returns {Array} Returns the new array of shared values.
      * @example
+     *
      * _.intersection([2, 1], [4, 2], [1, 2]);
      * // => [2]
      */
@@ -15972,7 +16086,7 @@ return jQuery;
      *
      * var array = [1, 2, 3, 1, 2, 3];
      *
-     * _.pull(array, [2, 3]);
+     * _.pullAll(array, [2, 3]);
      * console.log(array);
      * // => [1, 1]
      */
@@ -16096,6 +16210,7 @@ return jQuery;
      * **Note:** This method mutates `array` and is based on
      * [`Array#reverse`](https://mdn.io/Array/reverse).
      *
+     * @static
      * @memberOf _
      * @category Array
      * @returns {Array} Returns `array`.
@@ -16826,19 +16941,29 @@ return jQuery;
      * @returns {Object} Returns the new object.
      * @example
      *
-     * _.zipObject(['fred', 'barney'], [30, 40]);
-     * // => { 'fred': 30, 'barney': 40 }
+     * _.zipObject(['a', 'b'], [1, 2]);
+     * // => { 'a': 1, 'b': 2 }
      */
     function zipObject(props, values) {
-      var index = -1,
-          length = props ? props.length : 0,
-          valsLength = values ? values.length : 0,
-          result = {};
+      return baseZipObject(props || [], values || [], assignValue);
+    }
 
-      while (++index < length) {
-        baseSet(result, props[index], index < valsLength ? values[index] : undefined);
-      }
-      return result;
+    /**
+     * This method is like `_.zipObject` except that it supports property paths.
+     *
+     * @static
+     * @memberOf _
+     * @category Array
+     * @param {Array} [props=[]] The property names.
+     * @param {Array} [values=[]] The property values.
+     * @returns {Object} Returns the new object.
+     * @example
+     *
+     * _.zipObjectDeep(['a.b[0].c', 'a.b[1].d'], [1, 2]);
+     * // => { 'a': { 'b': [{ 'c': 1 }, { 'd': 2 }] } }
+     */
+    function zipObjectDeep(props, values) {
+      return baseZipObject(props || [], values || [], baseSet);
     }
 
     /**
@@ -17054,7 +17179,7 @@ return jQuery;
     /**
      * This method is the wrapper version of `_.flatMap`.
      *
-     * @static
+     * @name flatMap
      * @memberOf _
      * @category Seq
      * @param {Function|Object|string} [iteratee=_.identity] The function invoked per iteration.
@@ -17205,7 +17330,7 @@ return jQuery;
      *
      * @name value
      * @memberOf _
-     * @alias run, toJSON, valueOf
+     * @alias toJSON, valueOf
      * @category Seq
      * @returns {*} Returns the resolved unwrapped value.
      * @example
@@ -17229,7 +17354,7 @@ return jQuery;
      * @memberOf _
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
      *
@@ -17453,14 +17578,14 @@ return jQuery;
     /**
      * Creates an object composed of keys generated from the results of running
      * each element of `collection` through `iteratee`. The corresponding value
-     * of each key is an array of the elements responsible for generating the key.
+     * of each key is an array of elements responsible for generating the key.
      * The iteratee is invoked with one argument: (value).
      *
      * @static
      * @memberOf _
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
      *
@@ -17565,22 +17690,22 @@ return jQuery;
      * @memberOf _
      * @category Collection
      * @param {Array|Object} collection The collection to iterate over.
-     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee to transform keys.
      * @returns {Object} Returns the composed aggregate object.
      * @example
      *
-     * var keyData = [
+     * var array = [
      *   { 'dir': 'left', 'code': 97 },
      *   { 'dir': 'right', 'code': 100 }
      * ];
      *
-     * _.keyBy(keyData, 'dir');
-     * // => { 'left': { 'dir': 'left', 'code': 97 }, 'right': { 'dir': 'right', 'code': 100 } }
-     *
-     * _.keyBy(keyData, function(o) {
+     * _.keyBy(array, function(o) {
      *   return String.fromCharCode(o.code);
      * });
      * // => { 'a': { 'dir': 'left', 'code': 97 }, 'd': { 'dir': 'right', 'code': 100 } }
+     *
+     * _.keyBy(array, 'dir');
+     * // => { 'left': { 'dir': 'left', 'code': 97 }, 'right': { 'dir': 'right', 'code': 100 } }
      */
     var keyBy = createAggregator(function(result, value, key) {
       result[key] = value;
@@ -17612,11 +17737,11 @@ return jQuery;
      *   return n * n;
      * }
      *
-     * _.map([1, 2], square);
-     * // => [3, 6]
+     * _.map([4, 8], square);
+     * // => [16, 64]
      *
-     * _.map({ 'a': 1, 'b': 2 }, square);
-     * // => [3, 6] (iteration order is not guaranteed)
+     * _.map({ 'a': 4, 'b': 8 }, square);
+     * // => [16, 64] (iteration order is not guaranteed)
      *
      * var users = [
      *   { 'user': 'barney' },
@@ -17675,9 +17800,9 @@ return jQuery;
 
     /**
      * Creates an array of elements split into two groups, the first of which
-     * contains elements `predicate` returns truthy for, while the second of which
-     * contains elements `predicate` returns falsey for. The predicate is invoked
-     * with three arguments: (value, index|key, collection).
+     * contains elements `predicate` returns truthy for, the second of which
+     * contains elements `predicate` returns falsey for. The predicate is
+     * invoked with one argument: (value).
      *
      * @static
      * @memberOf _
@@ -17738,7 +17863,7 @@ return jQuery;
      *
      * _.reduce([1, 2], function(sum, n) {
      *   return sum + n;
-     * });
+     * }, 0);
      * // => 3
      *
      * _.reduce({ 'a': 1, 'b': 2, 'c': 1 }, function(result, value, key) {
@@ -17749,9 +17874,9 @@ return jQuery;
      */
     function reduce(collection, iteratee, accumulator) {
       var func = isArray(collection) ? arrayReduce : baseReduce,
-          initFromCollection = arguments.length < 3;
+          initAccum = arguments.length < 3;
 
-      return func(collection, getIteratee(iteratee, 4), accumulator, initFromCollection, baseEach);
+      return func(collection, getIteratee(iteratee, 4), accumulator, initAccum, baseEach);
     }
 
     /**
@@ -17776,9 +17901,9 @@ return jQuery;
      */
     function reduceRight(collection, iteratee, accumulator) {
       var func = isArray(collection) ? arrayReduceRight : baseReduce,
-          initFromCollection = arguments.length < 3;
+          initAccum = arguments.length < 3;
 
-      return func(collection, getIteratee(iteratee, 4), accumulator, initFromCollection, baseEachRight);
+      return func(collection, getIteratee(iteratee, 4), accumulator, initAccum, baseEachRight);
     }
 
     /**
@@ -17842,7 +17967,8 @@ return jQuery;
     }
 
     /**
-     * Gets `n` random elements from `collection`.
+     * Gets `n` random elements at unique keys from `collection` up to the
+     * size of `collection`.
      *
      * @static
      * @memberOf _
@@ -17852,8 +17978,11 @@ return jQuery;
      * @returns {Array} Returns the random elements.
      * @example
      *
-     * _.sampleSize([1, 2, 3, 4], 2);
+     * _.sampleSize([1, 2, 3], 2);
      * // => [3, 1]
+     *
+     * _.sampleSize([1, 2, 3], 4);
+     * // => [2, 3, 1]
      */
     function sampleSize(collection, n) {
       var index = -1,
@@ -19017,7 +19146,7 @@ return jQuery;
      * This method is like `_.clone` except that it accepts `customizer` which
      * is invoked to produce the cloned value. If `customizer` returns `undefined`
      * cloning is handled by the method instead. The `customizer` is invoked with
-     * up to five arguments; (value [, index|key, object, stack]).
+     * up to four arguments; (value [, index|key, object, stack]).
      *
      * @static
      * @memberOf _
@@ -19033,7 +19162,7 @@ return jQuery;
      *   }
      * }
      *
-     * var el = _.clone(document.body, customizer);
+     * var el = _.cloneWith(document.body, customizer);
      *
      * console.log(el === document.body);
      * // => false
@@ -19083,7 +19212,7 @@ return jQuery;
      *   }
      * }
      *
-     * var el = _.cloneDeep(document.body, customizer);
+     * var el = _.cloneDeepWith(document.body, customizer);
      *
      * console.log(el === document.body);
      * // => false
@@ -19372,9 +19501,16 @@ return jQuery;
      * // => false
      */
     function isEmpty(value) {
-      return (!isObjectLike(value) || isFunction(value.splice))
-        ? !size(value)
-        : !keys(value).length;
+      if (isArrayLike(value) &&
+          (isArray(value) || isString(value) || isFunction(value.splice) || isArguments(value))) {
+        return !value.length;
+      }
+      for (var key in value) {
+        if (hasOwnProperty.call(value, key)) {
+          return false;
+        }
+      }
+      return true;
     }
 
     /**
@@ -19411,7 +19547,7 @@ return jQuery;
     /**
      * This method is like `_.isEqual` except that it accepts `customizer` which is
      * invoked to compare values. If `customizer` returns `undefined` comparisons are
-     * handled by the method instead. The `customizer` is invoked with up to seven arguments:
+     * handled by the method instead. The `customizer` is invoked with up to six arguments:
      * (objValue, othValue [, index|key, object, other, stack]).
      *
      * @static
@@ -19599,8 +19735,6 @@ return jQuery;
      * // => false
      */
     function isObject(value) {
-      // Avoid a V8 JIT bug in Chrome 19-20.
-      // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
       var type = typeof value;
       return !!value && (type == 'object' || type == 'function');
     }
@@ -19661,7 +19795,7 @@ return jQuery;
     /**
      * This method is like `_.isMatch` except that it accepts `customizer` which
      * is invoked to compare values. If `customizer` returns `undefined` comparisons
-     * are handled by the method instead. The `customizer` is invoked with three
+     * are handled by the method instead. The `customizer` is invoked with five
      * arguments: (objValue, srcValue, index|key, object, source).
      *
      * @static
@@ -20132,7 +20266,7 @@ return jQuery;
      * @memberOf _
      * @category Lang
      * @param {*} value The value to convert.
-     * @return {number} Returns the converted integer.
+     * @returns {number} Returns the converted integer.
      * @example
      *
      * _.toLength(3);
@@ -20271,7 +20405,7 @@ return jQuery;
         return '';
       }
       if (isSymbol(value)) {
-        return _Symbol ? symbolToString.call(value) : '';
+        return Symbol ? symbolToString.call(value) : '';
       }
       var result = (value + '');
       return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
@@ -20373,7 +20507,7 @@ return jQuery;
      * defaults({ 'a': 1 }, { 'b': 2 }, { 'a': 3 });
      * // => { 'a': 1, 'b': 2 }
      */
-    var assignInWith = createAssigner(function(object, source, customizer) {
+    var assignInWith = createAssigner(function(object, source, srcIndex, customizer) {
       copyObjectWith(source, keysIn(source), object, customizer);
     });
 
@@ -20403,7 +20537,7 @@ return jQuery;
      * defaults({ 'a': 1 }, { 'b': 2 }, { 'a': 3 });
      * // => { 'a': 1, 'b': 2 }
      */
-    var assignWith = createAssigner(function(object, source, customizer) {
+    var assignWith = createAssigner(function(object, source, srcIndex, customizer) {
       copyObjectWith(source, keys(source), object, customizer);
     });
 
@@ -20846,14 +20980,12 @@ return jQuery;
     /**
      * Creates an object composed of the inverted keys and values of `object`.
      * If `object` contains duplicate values, subsequent values overwrite property
-     * assignments of previous values unless `multiVal` is `true`.
+     * assignments of previous values.
      *
      * @static
      * @memberOf _
      * @category Object
      * @param {Object} object The object to invert.
-     * @param {boolean} [multiVal] Allow multiple values per key.
-     * @param- {Object} [guard] Enables use as an iteratee for functions like `_.map`.
      * @returns {Object} Returns the new inverted object.
      * @example
      *
@@ -20861,27 +20993,43 @@ return jQuery;
      *
      * _.invert(object);
      * // => { '1': 'c', '2': 'b' }
-     *
-     * // with `multiVal`
-     * _.invert(object, true);
-     * // => { '1': ['a', 'c'], '2': ['b'] }
      */
-    function invert(object, multiVal, guard) {
-      return arrayReduce(keys(object), function(result, key) {
-        var value = object[key];
-        if (multiVal && !guard) {
-          if (hasOwnProperty.call(result, value)) {
-            result[value].push(key);
-          } else {
-            result[value] = [key];
-          }
-        }
-        else {
-          result[value] = key;
-        }
-        return result;
-      }, {});
-    }
+    var invert = createInverter(function(result, value, key) {
+      result[value] = key;
+    }, constant(identity));
+
+    /**
+     * This method is like `_.invert` except that the inverted object is generated
+     * from the results of running each element of `object` through `iteratee`.
+     * The corresponding inverted value of each inverted key is an array of keys
+     * responsible for generating the inverted value. The iteratee is invoked
+     * with one argument: (value).
+     *
+     * @static
+     * @memberOf _
+     * @category Object
+     * @param {Object} object The object to invert.
+     * @param {Function|Object|string} [iteratee=_.identity] The iteratee invoked per element.
+     * @returns {Object} Returns the new inverted object.
+     * @example
+     *
+     * var object = { 'a': 1, 'b': 2, 'c': 1 };
+     *
+     * _.invertBy(object);
+     * // => { '1': ['a', 'c'], '2': ['b'] }
+     *
+     * _.invertBy(object, function(value) {
+     *   return 'group' + value;
+     * });
+     * // => { 'group1': ['a', 'c'], 'group2': ['b'] }
+     */
+    var invertBy = createInverter(function(result, value, key) {
+      if (hasOwnProperty.call(result, value)) {
+        result[value].push(key);
+      } else {
+        result[value] = [key];
+      }
+    }, getIteratee);
 
     /**
      * Invokes the method at `path` of `object`.
@@ -21083,8 +21231,8 @@ return jQuery;
      * _.merge(users, ages);
      * // => { 'data': [{ 'user': 'barney', 'age': 36 }, { 'user': 'fred', 'age': 40 }] }
      */
-    var merge = createAssigner(function(object, source) {
-      baseMerge(object, source);
+    var merge = createAssigner(function(object, source, srcIndex) {
+      baseMerge(object, source, srcIndex);
     });
 
     /**
@@ -21122,8 +21270,8 @@ return jQuery;
      * _.mergeWith(object, other, customizer);
      * // => { 'fruits': ['apple', 'banana'], 'vegetables': ['beet', 'carrot'] }
      */
-    var mergeWith = createAssigner(function(object, source, customizer) {
-      baseMerge(object, source, customizer);
+    var mergeWith = createAssigner(function(object, source, srcIndex, customizer) {
+      baseMerge(object, source, srcIndex, customizer);
     });
 
     /**
@@ -21171,9 +21319,9 @@ return jQuery;
      * // => { 'b': '2' }
      */
     function omitBy(object, predicate) {
-      predicate = getIteratee(predicate);
-      return basePickBy(object, function(value) {
-        return !predicate(value);
+      predicate = getIteratee(predicate, 2);
+      return basePickBy(object, function(value, key) {
+        return !predicate(value, key);
       });
     }
 
@@ -21216,7 +21364,7 @@ return jQuery;
      * // => { 'a': 1, 'c': 3 }
      */
     function pickBy(object, predicate) {
-      return object == null ? {} : basePickBy(object, getIteratee(predicate));
+      return object == null ? {} : basePickBy(object, getIteratee(predicate, 2));
     }
 
     /**
@@ -21382,12 +21530,12 @@ return jQuery;
      * _.transform([2, 3, 4], function(result, n) {
      *   result.push(n *= n);
      *   return n % 2 == 0;
-     * });
+     * }, []);
      * // => [4, 9]
      *
      * _.transform({ 'a': 1, 'b': 2, 'c': 1 }, function(result, value, key) {
      *   (result[value] || (result[value] = [])).push(key);
-     * });
+     * }, {});
      * // => { '1': ['a', 'c'], '2': ['b'] }
      */
     function transform(object, iteratee, accumulator) {
@@ -21983,7 +22131,7 @@ return jQuery;
      * `undefined` or `0`, a `radix` of `10` is used unless `value` is a hexadecimal,
      * in which case a `radix` of `16` is used.
      *
-     * **Note:** This method aligns with the [ES5 implementation](https://es5.github.io/#E)
+     * **Note:** This method aligns with the [ES5 implementation](https://es5.github.io/#x15.1.2.2)
      * of `parseInt`.
      *
      * @static
@@ -22775,7 +22923,7 @@ return jQuery;
      *   [_.matches({ 'a': 1 }),           _.constant('matches A')],
      *   [_.conforms({ 'b': _.isNumber }), _.constant('matches B')],
      *   [_.constant(true),                _.constant('no match')]
-     * ])
+     * ]);
      *
      * func({ 'a': 1, 'b': 2 });
      * // => 'matches A'
@@ -23146,7 +23294,9 @@ return jQuery;
      * var lodash = _.noConflict();
      */
     function noConflict() {
-      root._ = oldDash;
+      if (root._ === this) {
+        root._ = oldDash;
+      }
       return this;
     }
 
@@ -23311,8 +23461,7 @@ return jQuery;
      * Creates an array of numbers (positive and/or negative) progressing from
      * `start` up to, but not including, `end`. A step of `-1` is used if a negative
      * `start` is specified without an `end` or `step`. If `end` is not specified
-     * it's set to `start` with `start` then set to `0`.  If `end` is less than
-     * `start` a zero-length range is created unless a negative `step` is specified.
+     * it's set to `start` with `start` then set to `0`.
      *
      * **Note:** JavaScript follows the IEEE-754 standard for resolving
      * floating-point values which can produce unexpected results.
@@ -23580,7 +23729,7 @@ return jQuery;
      *
      * var objects = [{ 'n': 1 }, { 'n': 2 }];
      *
-     * _.maxBy(objects, function(o) { return o.a; });
+     * _.maxBy(objects, function(o) { return o.n; });
      * // => { 'n': 2 }
      *
      * // using the `_.property` iteratee shorthand
@@ -23648,7 +23797,7 @@ return jQuery;
      *
      * var objects = [{ 'n': 1 }, { 'n': 2 }];
      *
-     * _.minBy(objects, function(o) { return o.a; });
+     * _.minBy(objects, function(o) { return o.n; });
      * // => { 'n': 1 }
      *
      * // using the `_.property` iteratee shorthand
@@ -23724,7 +23873,7 @@ return jQuery;
     function sum(array) {
       return (array && array.length)
         ? baseSum(array, identity)
-        : undefined;
+        : 0;
     }
 
     /**
@@ -23752,7 +23901,7 @@ return jQuery;
     function sumBy(array, iteratee) {
       return (array && array.length)
         ? baseSum(array, getIteratee(iteratee))
-        : undefined;
+        : 0;
     }
 
     /*------------------------------------------------------------------------*/
@@ -23841,6 +23990,7 @@ return jQuery;
     lodash.intersectionBy = intersectionBy;
     lodash.intersectionWith = intersectionWith;
     lodash.invert = invert;
+    lodash.invertBy = invertBy;
     lodash.invokeMap = invokeMap;
     lodash.iteratee = iteratee;
     lodash.keyBy = keyBy;
@@ -23929,11 +24079,10 @@ return jQuery;
     lodash.xorWith = xorWith;
     lodash.zip = zip;
     lodash.zipObject = zipObject;
+    lodash.zipObjectDeep = zipObjectDeep;
     lodash.zipWith = zipWith;
 
     // Add aliases.
-    lodash.each = forEach;
-    lodash.eachRight = forEachRight;
     lodash.extend = assignIn;
     lodash.extendWith = assignInWith;
 
@@ -24076,6 +24225,8 @@ return jQuery;
     lodash.upperFirst = upperFirst;
 
     // Add aliases.
+    lodash.each = forEach;
+    lodash.eachRight = forEachRight;
     lodash.first = head;
 
     mixin(lodash, (function() {
@@ -26248,8 +26399,8 @@ var GelatoApplication = Backbone.Model.extend({
      * @type {Object}
      */
     gelato: {
-        timestamp: '1453485364',
-        version: '0.2.0'
+        timestamp: '1454103099',
+        version: '0.2.1'
     },
     /**
      * @method getHeight
@@ -26499,6 +26650,96 @@ module.exports = GelatoComponent;
 
 });
 
+require.register("gelato/dialog", function(exports, require, module) {
+var GelatoView = require('./view');
+
+/**
+ * @class GelatoDialog
+ * @extends {GelatoView}
+ */
+var GelatoDialog = GelatoView.extend({
+    /**
+     * @property el
+     * @type {String}
+     */
+    el: '#dialog-container',
+    /**
+     * @property element
+     * @type {jQuery}
+     */
+    element: null,
+    /**
+     * @method renderTemplate
+     * @param {Object} [context]
+     * @returns {GelatoDialog}
+     */
+    renderTemplate: function(context) {
+        GelatoView.prototype.renderTemplate.call(this, context);
+        this.element = this.$('[role="dialog"]');
+        this.element.on('hide.bs.modal', this.handleElementHide.bind(this));
+        this.element.on('hidden.bs.modal', this.handleElementHidden.bind(this));
+        this.element.on('show.bs.modal', this.handleElementShow.bind(this));
+        this.element.on('shown.bs.modal', this.handleElementShown.bind(this));
+        return this;
+    },
+    /**
+     * @method close
+     * @returns {GelatoDialog}
+     */
+    close: function() {
+        this.element.modal('hide');
+        return this;
+    },
+    /**
+     * @method handleElementHide
+     */
+    handleElementHide: function() {
+        this.trigger('hide');
+    },
+    /**
+     * @method handleElementHidden
+     */
+    handleElementHidden: function() {
+        this.trigger('hidden');
+        this.remove();
+    },
+    /**
+     * @method handleElementShow
+     */
+    handleElementShow: function() {
+        this.trigger('show');
+    },
+    /**
+     * @method handleElementShown
+     */
+    handleElementShown: function() {
+        this.trigger('shown');
+    },
+    /**
+     * @method open
+     * @param {Object} [options]
+     * @returns {GelatoDialog}
+     */
+    open: function(options) {
+        options = _.defaults(
+            options || {},
+            {
+                backdrop: 'static',
+                keyboard: false,
+                show: true,
+                remote: false
+            }
+        );
+        this.render();
+        this.element.modal(options);
+        return this;
+    }
+});
+
+module.exports = GelatoDialog;
+
+});
+
 require.register("gelato/model", function(exports, require, module) {
 /**
  * @class GelatoModel
@@ -26714,11 +26955,23 @@ var GelatoView = Backbone.View.extend({
     },
     /**
      * @method hide
-     * @returns {GelatoPage}
+     * @returns {GelatoView}
      */
     hide: function() {
         this.$view.hide(arguments.length ? arguments : 0);
         return this;
+    },
+    /**
+     * @method parseTemplate
+     * @param {Function} template
+     * @param {Object} [context]
+     * @returns {Object}
+     */
+    parseTemplate: function(template, context) {
+        if (typeof template === 'function') {
+            return template(this.getContext(context));
+        }
+        return template;
     },
     /**
      * @method remove
@@ -26746,11 +26999,7 @@ var GelatoView = Backbone.View.extend({
      * @returns {GelatoView}
      */
     renderTemplate: function(context) {
-        if (typeof this.template === 'function') {
-            this.$view = Backbone.$(this.template(this.getContext(context)));
-        } else {
-            this.$view = Backbone.$(this.template);
-        }
+        this.$view = Backbone.$(this.parseTemplate(this.template, context));
         this.$el.html(this.$view);
         this.$('a[href]').on('click vclick', this.handleClickHref);
         Backbone.$(window).on('resize.View', (function(event) {
