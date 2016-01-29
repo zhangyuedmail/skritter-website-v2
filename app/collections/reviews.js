@@ -114,7 +114,7 @@ module.exports = SkritterCollection.extend({
      */
     put: function(models, options, callback) {
         var updatedItems = [];
-        var updateReviews = [];
+        var updatedReviews = [];
         models = _.isArray(models) ? models : [models];
         options = _.defaults(options || {}, {merge: true});
         for (var a = 0, lengthA = models.length; a < lengthA; a++) {
@@ -153,11 +153,11 @@ module.exports = SkritterCollection.extend({
                 });
                 updatedItems.push(item);
             }
-            updateReviews.push(this.add(model, options));
+            updatedReviews.push(this.add(model, options));
         }
         async.parallel([
             async.apply(this.updateItemCache, updatedItems),
-            async.apply(this.updateReviewCache, updateReviews)
+            async.apply(this.updateReviewCache, updatedReviews)
         ], callback);
     },
     /**
@@ -216,7 +216,7 @@ module.exports = SkritterCollection.extend({
         }
         async.parallel([
             async.apply(this.updateItemCache, updatedItems),
-            async.apply(this.updateReviewCache, updateReviews)
+            async.apply(this.updateReviewCache, updatedReviews)
         ], callback);
     },
     /**

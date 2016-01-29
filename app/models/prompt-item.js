@@ -70,7 +70,7 @@ module.exports = GelatoModel.extend({
             id: this.id,
             itemId: this.item ? this.item.id : this.vocab.id,
             bearTime: false,
-            currentInterval: this.interval,
+            currentInterval: this.interval || 0,
             reviewTime: this.getReviewingTime(),
             score: this.get('score'),
             submitTime: this.get('submitTime'),

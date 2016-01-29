@@ -79,7 +79,7 @@ module.exports = GelatoCollection.extend({
             id: this.at(0).id,
             itemId: this.item ? this.item.id : this.vocab.id,
             bearTime: true,
-            currentInterval: this.interval,
+            currentInterval: this.interval || 0,
             reviewTime: this.getBaseReviewingTime(),
             score: this.getBaseScore(),
             submitTime: this.getBaseSubmitTime(),
