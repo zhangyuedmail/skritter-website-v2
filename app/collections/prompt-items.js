@@ -248,5 +248,13 @@ module.exports = GelatoCollection.extend({
             this.position--;
         }
         return this.current();
+    },
+    /**
+     * @method teachAll
+     */
+    teachAll: function() {
+        this.forEach(function(review) {
+            review.set('showTeaching', true);
+        });
     }
 });

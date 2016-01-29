@@ -28,7 +28,7 @@ module.exports = Router.extend({
         'account/setup': 'navigateAccountSetup',
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
-        'demo(/:lang)': 'navigateDemo',
+        'demo': 'navigateDemo',
         'features': 'navigateFeatures',
         'home': 'navigateHome',
         'institutions': 'navigateInstitutions',
@@ -177,7 +177,7 @@ module.exports = Router.extend({
             this.navigate('dashboard');
             this.go('pages/dashboard');
         } else {
-            this.go('pages/demo', {lang: lang});
+            this.go('pages/demo');
         }
     },
     /**

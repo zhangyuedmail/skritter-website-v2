@@ -24,7 +24,6 @@ module.exports = GelatoComponent.extend({
         this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
         this.on('attempt:fail', this.handleAttemptFail);
         this.on('attempt:success', this.handleAttemptSuccess);
-        this.on('character:complete', this.render);
         this.on('resize', this.render);
     },
     /**
@@ -115,6 +114,7 @@ module.exports = GelatoComponent.extend({
                 {color: '#e8ded2'}
             );
         }
+        this.prompt.trigger('character:complete');
         this.renderTemplate();
         return this;
     },
@@ -159,7 +159,7 @@ module.exports = GelatoComponent.extend({
         var character = this.prompt.review.character;
         var failedConsecutive = this.prompt.review.get('failedConsecutive') + 1;
         var failedTotal = this.prompt.review.get('failedTotal') + 1;
-        var maxStrokes = this.prompt.review.character.getMaxPosition();
+        var maxStrokes = character.getMaxPosition();
         this.prompt.review.set('failedConsecutive', failedConsecutive);
         this.prompt.review.set('failedTotal', failedTotal);
         if (maxStrokes > 11) {
@@ -188,7 +188,7 @@ module.exports = GelatoComponent.extend({
             }
         }
         if (failedConsecutive > 2) {
-            var expectedStroke = this.prompt.review.character.getExpectedStroke();
+            var expectedStroke = character.getExpectedStroke();
             if (expectedStroke) {
                 this.prompt.canvas.fadeShape('stroke-hint', expectedStroke.getTargetShape());
             }

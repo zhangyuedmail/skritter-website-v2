@@ -94,6 +94,7 @@ module.exports = GelatoComponent.extend({
             this.prompt.reviews.isLast()) {
             this.prompt.reviews.vocab.play();
         }
+        this.prompt.trigger('tone:complete');
         this.renderTemplate();
         return this;
     },

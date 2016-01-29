@@ -1,9 +1,11 @@
 var GelatoPage = require('gelato/page');
 
-//var MarketingFooter = require('components/marketing/footer/view');
+var MarketingFooter = require('components/marketing/footer/view');
 var Vocabs = require('collections/vocabs');
 var Prompt = require('components/study/prompt/view');
 var DefaultNavbar = require('navbars/default/view');
+
+var DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
 
 /**
  * @class Demo
@@ -16,15 +18,15 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function(options) {
-        ScreenLoader.show();
-        //this.footer = new MarketingFooter();
-        this.lang = options.lang || 'zh';
+        this.dialog = null;
+        this.footer = new MarketingFooter();
+        this.lang = 'zh';
         this.navbar = new DefaultNavbar();
         this.notify = null;
         this.prompt = new Prompt();
+        this.promptItems = null;
         this.vocab = null;
         this.vocabs = new Vocabs();
-        this.loadDemo();
     },
     /**
      * @property events
@@ -49,22 +51,33 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        //this.footer.setElement('#footer-container').render();
+        this.footer.setElement('#footer-container').render();
         this.navbar.setElement('#navbar-container').render();
         this.prompt.setElement('#demo-prompt-container').render();
+        this.loadDemo();
         return this;
     },
+    /**
+     * @method loadDemo
+     */
     loadDemo: function() {
         var self = this;
         async.waterfall([
             function(callback) {
+                self.dialog = new DemoLanguageSelectDialog();
+                //self.dialog.render();
+                self.dialog.open();
+                self.dialog.once('select', callback);
+            },
+            function(lang, callback) {
+                ScreenLoader.show();
                 ScreenLoader.post('Loading demo word');
                 self.vocabs.fetch({
                     data: {
                         include_decomps: true,
                         include_sentences: true,
                         include_strokes: true,
-                        ids: self.lang === 'zh' ? 'zh-你好-0' : 'ja-元気-0'
+                        ids: lang === 'zh' ? 'zh-你好-0' : 'ja-元気-0'
                     },
                     error: function(vocabs, error) {
                         callback(error);
@@ -97,10 +110,10 @@ module.exports = GelatoPage.extend({
                 }
             }
         ], function(error, vocab) {
-            self.prompt.set(vocab.getPromptItems('rune'));
-            self.prompt.part.teachCharacter();
-            self.step1();
             ScreenLoader.hide();
+            self.promptItems = vocab.getPromptItems('rune');
+            self.promptItems.teachAll();
+            self.step1();
         });
     },
     /**
@@ -114,6 +127,10 @@ module.exports = GelatoPage.extend({
             },
             {
                 allow_dismiss: false,
+                animate: {
+                    enter: '',
+                    exit: 'animated zoomOut'
+                },
                 delay: 0,
                 element: this.$('gelato-component[data-name="study-prompt"]'),
                 placement: {
@@ -122,8 +139,11 @@ module.exports = GelatoPage.extend({
                 }
             }
         );
+        this.prompt.set(this.promptItems);
+        this.prompt.shortcuts.unregisterAll();
+        this.prompt.$('#navigation-container').hide();
         this.prompt.$('#toolbar-action-container').hide();
-        this.prompt.once('next', this.step2.bind(this));
+        this.prompt.once('character:complete', this.step2.bind(this));
         this.prompt.canvas.once('input:up', function() {
             $.notifyClose();
         });
@@ -139,6 +159,10 @@ module.exports = GelatoPage.extend({
             },
             {
                 allow_dismiss: false,
+                animate: {
+                    enter: '',
+                    exit: 'animated zoomOut'
+                },
                 delay: 0,
                 element: this.$('gelato-component[data-name="study-prompt"]'),
                 placement: {
@@ -148,12 +172,79 @@ module.exports = GelatoPage.extend({
             }
         );
         this.prompt.part.eraseCharacter();
+        this.prompt.review.set('score', 3);
         this.prompt.$('#toolbar-action-container').show();
         this.prompt.$('#toolbar-grading-container').hide();
-        this.prompt.once('next', this.step2.bind(this));
+        this.prompt.once('reviews:next', this.step3.bind(this));
         this.prompt.canvas.once('input:up', function() {
             $.notifyClose();
         });
+    },
+    /**
+     * @method step3
+     */
+    step3: function() {
+        $.notify(
+            {
+                message: require('./notify-step3'),
+                type: 'pastel-info'
+            },
+            {
+                allow_dismiss: false,
+                animate: {
+                    enter: '',
+                    exit: 'animated zoomOut'
+                },
+                delay: 0,
+                element: this.$('gelato-component[data-name="study-prompt"]'),
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            }
+        );
+        this.prompt.$('#toolbar-action-container').hide();
+        this.prompt.once('character:complete', this.step4.bind(this));
+        this.prompt.canvas.once('input:up', function() {
+            $.notifyClose();
+        });
+    },
+    /**
+     * @method step4
+     */
+    step4: function() {
+        $.notify(
+            {
+                message: require('./notify-step4'),
+                type: 'pastel-info'
+            },
+            {
+                allow_dismiss: false,
+                animate: {
+                    enter: '',
+                    exit: 'animated zoomOut'
+                },
+                delay: 0,
+                element: this.$('gelato-component[data-name="study-prompt"]'),
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            }
+        );
+        this.prompt.part.eraseCharacter();
+        this.prompt.review.set('score', 3);
+        this.prompt.$('#toolbar-action-container').show();
+        this.prompt.once('character:complete', this.step5.bind(this));
+        this.prompt.canvas.once('input:up', function() {
+            $.notifyClose();
+        });
+    },
+    /**
+     * @method step5
+     */
+    step5: function() {
+        app.router.navigate('signup', {trigger: true});
     },
     /**
      * @method remove
@@ -161,7 +252,7 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.navbar.remove();
-        //this.footer.remove();
+        this.footer.remove();
         this.prompt.remove();
         return GelatoPage.prototype.remove.call(this);
     }
