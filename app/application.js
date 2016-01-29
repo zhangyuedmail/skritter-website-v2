@@ -166,7 +166,16 @@ module.exports = GelatoApplication.extend({
      */
     reset: function() {
         app.user.setLastItemUpdate(0).cache();
-        app.db.items.clear().finally(app.reload);
+        async.parallel([
+            function(callback) {
+                app.db.items.clear().finally(callback);
+            },
+            function(callback) {
+                app.db.reviews.clear().finally(callback);
+            }
+        ], function() {
+           app.reload();
+        });
     },
     /**
      * @method start
