@@ -1,10 +1,10 @@
 var GelatoPage = require('gelato/page');
 
-var MarketingFooter = require('components/marketing/footer/view');
 var Vocabs = require('collections/vocabs');
 var Prompt = require('components/study/prompt/view');
 var DefaultNavbar = require('navbars/default/view');
 
+var DemoCallToActionDialog = require('dialogs1/demo-call-to-action/view');
 var DemoLanguageSelectDialog = require('dialogs1/demo-language-select/view');
 
 /**
@@ -19,7 +19,6 @@ module.exports = GelatoPage.extend({
      */
     initialize: function(options) {
         this.dialog = null;
-        this.footer = new MarketingFooter();
         this.lang = 'zh';
         this.navbar = new DefaultNavbar();
         this.notify = null;
@@ -51,9 +50,8 @@ module.exports = GelatoPage.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.footer.setElement('#footer-container').render();
         this.navbar.setElement('#navbar-container').render();
-        this.prompt.setElement('#demo-prompt-container').render();
+        this.prompt.setElement('#demo-prompt-container').render().hide();
         this.loadDemo();
         return this;
     },
@@ -111,6 +109,7 @@ module.exports = GelatoPage.extend({
             }
         ], function(error, vocab) {
             ScreenLoader.hide();
+            self.prompt.show();
             self.promptItems = vocab.getPromptItems('rune');
             self.promptItems.teachAll();
             self.step1();
@@ -120,131 +119,50 @@ module.exports = GelatoPage.extend({
      * @method step1
      */
     step1: function() {
-        $.notify(
-            {
-                message: require('./notify-step1'),
-                type: 'pastel-info'
-            },
-            {
-                allow_dismiss: false,
-                animate: {
-                    enter: '',
-                    exit: 'animated zoomOut'
-                },
-                delay: 0,
-                element: this.$('gelato-component[data-name="study-prompt"]'),
-                placement: {
-                    from: 'top',
-                    align: 'left'
-                }
-            }
-        );
+        this.prompt.tutorial.show();
+        this.prompt.tutorial.setMessage(require('./notify-step1')());
         this.prompt.set(this.promptItems);
         this.prompt.shortcuts.unregisterAll();
         this.prompt.$('#navigation-container').hide();
         this.prompt.$('#toolbar-action-container').hide();
+        this.prompt.$('#toolbar-vocab-container').hide();
         this.prompt.once('character:complete', this.step2.bind(this));
-        this.prompt.canvas.once('input:up', function() {
-            $.notifyClose();
-        });
     },
     /**
      * @method step2
      */
     step2: function() {
-        $.notify(
-            {
-                message: require('./notify-step2'),
-                type: 'pastel-info'
-            },
-            {
-                allow_dismiss: false,
-                animate: {
-                    enter: '',
-                    exit: 'animated zoomOut'
-                },
-                delay: 0,
-                element: this.$('gelato-component[data-name="study-prompt"]'),
-                placement: {
-                    from: 'top',
-                    align: 'left'
-                }
-            }
-        );
+        this.prompt.tutorial.setMessage(require('./notify-step2')());
         this.prompt.part.eraseCharacter();
         this.prompt.review.set('score', 3);
         this.prompt.$('#toolbar-action-container').show();
         this.prompt.$('#toolbar-grading-container').hide();
         this.prompt.once('reviews:next', this.step3.bind(this));
-        this.prompt.canvas.once('input:up', function() {
-            $.notifyClose();
-        });
     },
     /**
      * @method step3
      */
     step3: function() {
-        $.notify(
-            {
-                message: require('./notify-step3'),
-                type: 'pastel-info'
-            },
-            {
-                allow_dismiss: false,
-                animate: {
-                    enter: '',
-                    exit: 'animated zoomOut'
-                },
-                delay: 0,
-                element: this.$('gelato-component[data-name="study-prompt"]'),
-                placement: {
-                    from: 'top',
-                    align: 'left'
-                }
-            }
-        );
+        this.prompt.tutorial.setMessage(require('./notify-step3')());
         this.prompt.$('#toolbar-action-container').hide();
         this.prompt.once('character:complete', this.step4.bind(this));
-        this.prompt.canvas.once('input:up', function() {
-            $.notifyClose();
-        });
     },
     /**
      * @method step4
      */
     step4: function() {
-        $.notify(
-            {
-                message: require('./notify-step4'),
-                type: 'pastel-info'
-            },
-            {
-                allow_dismiss: false,
-                animate: {
-                    enter: '',
-                    exit: 'animated zoomOut'
-                },
-                delay: 0,
-                element: this.$('gelato-component[data-name="study-prompt"]'),
-                placement: {
-                    from: 'top',
-                    align: 'left'
-                }
-            }
-        );
+        this.prompt.tutorial.setMessage(require('./notify-step4')());
         this.prompt.part.eraseCharacter();
         this.prompt.review.set('score', 3);
         this.prompt.$('#toolbar-action-container').show();
         this.prompt.once('character:complete', this.step5.bind(this));
-        this.prompt.canvas.once('input:up', function() {
-            $.notifyClose();
-        });
     },
     /**
      * @method step5
      */
     step5: function() {
-        app.router.navigate('signup', {trigger: true});
+        this.dialog = new DemoCallToActionDialog();
+        this.dialog.open();
     },
     /**
      * @method remove
@@ -252,7 +170,6 @@ module.exports = GelatoPage.extend({
      */
     remove: function() {
         this.navbar.remove();
-        this.footer.remove();
         this.prompt.remove();
         return GelatoPage.prototype.remove.call(this);
     }

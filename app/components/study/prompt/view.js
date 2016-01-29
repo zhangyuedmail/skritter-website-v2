@@ -10,6 +10,7 @@ var Shortcuts = require('components/study/prompt/shortcuts');
 var ToolbarAction = require('components/study/prompt/toolbar-action/view');
 var ToolbarGrading = require('components/study/prompt/toolbar-grading/view');
 var ToolbarVocab = require('components/study/prompt/toolbar-vocab/view');
+var Tutorial = require('components/study/prompt/tutorial/view');
 var VocabContained = require('components/study/prompt/vocab-contained/view');
 var VocabDefinition = require('components/study/prompt/vocab-definition/view');
 var VocabMnemonic = require('components/study/prompt/vocab-mnemonic/view');
@@ -42,6 +43,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction = new ToolbarAction({prompt: this});
         this.toolbarGrading = new ToolbarGrading({prompt: this});
         this.toolbarVocab = new ToolbarVocab({prompt: this});
+        this.tutorial = new Tutorial({prompt: this});
         this.vocabContained = new VocabContained({prompt: this});
         this.vocabDefinition = new VocabDefinition({prompt: this});
         this.vocabMnemonic = new VocabMnemonic({prompt: this});
@@ -70,6 +72,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.setElement('#toolbar-action-container').render();
         this.toolbarGrading.setElement('#toolbar-grading-container').render();
         this.toolbarVocab.setElement('#toolbar-vocab-container').render();
+        this.tutorial.setElement('#tutorial-container').render().hide();
         this.vocabContained.setElement('#vocab-contained-container').render();
         this.vocabDefinition.setElement('#vocab-definition-container').render();
         this.vocabMnemonic.setElement('#vocab-mnemonic-container').render();
@@ -169,6 +172,7 @@ module.exports = GelatoComponent.extend({
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
         this.toolbarVocab.remove();
+        this.tutorial.remove();
         this.vocabContained.remove();
         this.vocabDefinition.remove();
         this.vocabMnemonic.remove();
