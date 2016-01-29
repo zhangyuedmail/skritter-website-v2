@@ -120,7 +120,7 @@ module.exports = GelatoPage.extend({
      */
     step1: function() {
         this.prompt.tutorial.show();
-        this.prompt.tutorial.setMessage(require('./notify-step1')());
+        this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step1')));
         this.prompt.set(this.promptItems);
         this.prompt.shortcuts.unregisterAll();
         this.prompt.$('#navigation-container').hide();
@@ -132,7 +132,7 @@ module.exports = GelatoPage.extend({
      * @method step2
      */
     step2: function() {
-        this.prompt.tutorial.setMessage(require('./notify-step2')());
+        this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
         this.prompt.part.eraseCharacter();
         this.prompt.review.set('score', 3);
         this.prompt.$('#toolbar-action-container').show();
@@ -143,7 +143,7 @@ module.exports = GelatoPage.extend({
      * @method step3
      */
     step3: function() {
-        this.prompt.tutorial.setMessage(require('./notify-step3')());
+        this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step3')));
         this.prompt.$('#toolbar-action-container').hide();
         this.prompt.once('character:complete', this.step4.bind(this));
     },
@@ -151,7 +151,7 @@ module.exports = GelatoPage.extend({
      * @method step4
      */
     step4: function() {
-        this.prompt.tutorial.setMessage(require('./notify-step4')());
+        this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step4')));
         this.prompt.part.eraseCharacter();
         this.prompt.review.set('score', 3);
         this.prompt.$('#toolbar-action-container').show();
