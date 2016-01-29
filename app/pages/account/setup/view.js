@@ -2,7 +2,7 @@ var GelatoPage = require('gelato/page');
 var Navbar = require('navbars/default/view');
 
 /**
- * @class AccountConfigure
+ * @class AccountSetup
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
@@ -32,7 +32,7 @@ module.exports = GelatoPage.extend({
         addSimplified: true,
         addTraditional: false,
         country: 'US',
-        targetLang: 'zh',
+        targetLang: app.get('demoLang'),
         timezone: 'America/New_York'
     },
     /**
@@ -77,20 +77,15 @@ module.exports = GelatoPage.extend({
      * @param {Event} event
      */
     handleClickButtonContinue: function(event) {
+        var self = this;
         event.preventDefault();
-        this.state = 'saving';
-        this.settings = {
-            addSimplified: this.$('#field-styles [value="simplified"]').is(':checked'),
-            addTraditional: this.$('#field-styles [value="traditional"]').is(':checked'),
-            country: this.$('#field-country :selected').val(),
-            targetLang: this.$('#field-language').val(),
-            timezone: this.$('#field-timezone :selected').val()
-        };
+        ScreenLoader.show();
+        ScreenLoader.post('Saving user settings');
         app.user.save(
-            this.settings,
+            this.getSettings(),
             {
                 error: function(error) {
-                    console.error(error);
+                    self.$('#error-message').text(error.responseJSON.message);
                 },
                 success: function() {
                     app.router.navigate('dashboard');
@@ -99,6 +94,22 @@ module.exports = GelatoPage.extend({
             }
         );
         this.render();
+    },
+    /**
+     * @method getSettings
+     * @returns {Object}
+     */
+    getSettings: function() {
+        var settings = {};
+        var targetLang = this.$('#field-language').val();
+        if (targetLang === 'zh') {
+            settings.addSimplified = this.$('#field-styles [value="simplified"]').is(':checked');
+            settings.addTraditional = this.$('#field-styles [value="traditional"]').is(':checked');
+        }
+        settings.country = this.$('#field-country :selected').val();
+        settings.targetLang = targetLang;
+        settings.timezone = this.$('#field-timezone :selected').val();
+        return settings;
     },
     /**
      * @method remove

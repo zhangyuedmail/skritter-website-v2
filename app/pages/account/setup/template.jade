@@ -1,4 +1,4 @@
-gelato-page(data-name='account-configure')
+gelato-page(data-name='account-setup')
 
   #navbar-container
 
@@ -7,9 +7,10 @@ gelato-page(data-name='account-configure')
     .content-block
 
       form.form-horizontal
-
-        h3 Let's setup your account!
-        p Select your basic account settings below to get started.
+        .text-center
+          #error-message.danger
+          h3 Let's setup your account!
+          p Select your basic account settings below to get started.
 
         .form-group
           label.col-sm-3.control-label(for="field-language") Language
@@ -50,7 +51,7 @@ gelato-page(data-name='account-configure')
                   option(value=timezone)= timezone
 
         .form-group
-          .col-sm-12.text-right
+          .col-sm-12.text-center
             if view.state === 'saving'
               button.btn.btn-fixed.btn-primary(type="submit", disabled=true)
                 i.fa.fa-2x.fa-spinner.fa-pulse
