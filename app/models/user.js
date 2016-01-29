@@ -28,7 +28,8 @@ module.exports = SkritterModel.extend({
         goals: {ja: {items: 20}, zh: {items: 20}},
         lastChineseItemUpdate: 0,
         lastJapaneseItemUpdate: 0,
-        teachingMode: true
+        teachingMode: true,
+        volume: 100
     },
     /**
      * @property urlRoot
