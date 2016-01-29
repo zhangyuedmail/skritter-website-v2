@@ -68,7 +68,7 @@ var GelatoDialog = GelatoView.extend({
      * @returns {GelatoDialog}
      */
     open: function(options) {
-        _.defaults(
+        options = _.defaults(
             options || {},
             {
                 backdrop: 'static',

@@ -2678,7 +2678,7 @@ function toBase(word, options) {
     var style = 'simp';
     var variation = 0;
     //set default option values
-    _.defaults(
+    options = _.defaults(
         options || {},
         {
             lang: 'zh'
