@@ -34,9 +34,10 @@ module.exports = SkritterCollection.extend({
      * @param {Function} callback
      */
     addItems: function(options, callback) {
+        var self = this;
         async.waterfall([
-            _.bind(function(callback) {
-                this.fetch({
+            function(callback) {
+                self.fetch({
                     data: JSON.stringify(options),
                     remove: false,
                     sort: false,
@@ -49,9 +50,9 @@ module.exports = SkritterCollection.extend({
                         callback(null, result);
                     }
                 });
-            }, this),
-            _.bind(function(result, callback) {
-                this.fetch({
+            },
+            function(result, callback) {
+                self.fetch({
                     data: {
                         ids: _.map(result.Items, 'id').join('|'),
                         include_contained: true
@@ -65,7 +66,7 @@ module.exports = SkritterCollection.extend({
                         callback(null, result);
                     }
                 });
-            }, this)
+            }
         ], function(error, result) {
             if (error) {
                 console.error('ITEM ADD ERROR:', error);
