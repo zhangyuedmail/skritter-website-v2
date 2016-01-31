@@ -64,6 +64,8 @@ module.exports = SkritterCollection.extend({
         options = _.defaults(options || {}, {async: true, skip: 0});
         if (this.state === 'standby') {
             this.state = 'posting';
+            this.trigger('state', this.state, this);
+            this.trigger('state:' + this.state, this);
             var reviews = this.slice(0, -options.skip || this.length);
             async.eachSeries(
                 _.chunk(reviews, 20),
@@ -97,6 +99,8 @@ module.exports = SkritterCollection.extend({
                 },
                 function(error) {
                     self.state = 'standby';
+                    self.trigger('state', self.state, self);
+                    self.trigger('state:' + self.state, self);
                     if (error) {
                         console.error('REVIEW ERROR:', error);
                     } else {
