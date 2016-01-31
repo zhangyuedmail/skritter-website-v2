@@ -14,7 +14,7 @@ gelato-page(data-name='home')
           .carousel-header
             div Chinese & Japanese
             div characters, made fun
-            a.btn.btn-lg.btn-danger(href='/signup') Start your 7-day free trial
+            a.btn.btn-lg.btn-danger(href='/demo') Start your 7-day free trial
       //.item
         img(src="/media/images/home_hero2.png", alt="")
     //a.left.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="prev")
@@ -55,6 +55,13 @@ gelato-page(data-name='home')
             .media-body
               .media-heading Efficient reviewing
               | Learn new characters in less than a minute, and remember 95% of what you learn.
+      .row
+        .col-xs-6.text-right
+          a(href="https://itunes.apple.com/us/artist/inkren-llc/id402280587", target="_blank")
+            img#link-apple-store.badge-link(src="/media/images/badge-apple.png")
+        .col-xs-6.text-left
+          a(href="https://play.google.com/store/apps/developer?id=Skritter", target="_blank")
+            img#link-google-store.badge-link(src="/media/images/badge-google.png")
 
   section#section-testimonials.dark
     .container
@@ -95,7 +102,7 @@ gelato-page(data-name='home')
             .discount
             .price $14.99
             .monthly per month
-            a.subscribe.btn.btn-fixed.btn-default(href='/signup') Subscribe
+            a.subscribe.btn.btn-fixed.btn-default(href='/signup/one_month') Subscribe
             .trial Includes 7-day free trial
         .col-md-3
           .plan.border-right
@@ -103,7 +110,7 @@ gelato-page(data-name='home')
             .discount
             .price $59.99
             .monthly $10.00 / month
-            a.subscribe.btn.btn-fixed.btn-default(href='/signup') Subscribe
+            a.subscribe.btn.btn-fixed.btn-default(href='/signup/six_months') Subscribe
             .trial Includes 7-day free trial
         .col-md-3
           .plan.border-right
@@ -112,7 +119,7 @@ gelato-page(data-name='home')
             .discount
             .price $99.99
             .monthly $8.33 / month
-            a.subscribe.btn.btn-fixed.btn-success(href='/signup') Subscribe
+            a.subscribe.btn.btn-fixed.btn-success(href='/signup/twelve_months') Subscribe
             .trial Includes 7-day free trial
         .col-md-3
           .plan
@@ -121,7 +128,7 @@ gelato-page(data-name='home')
             .discount
             .price $179.99
             .monthly $7.50 / month
-            a.subscribe.btn.btn-fixed.btn-default(href='/signup') Subscribe
+            a.subscribe.btn.btn-fixed.btn-default(href='/signup/twenty_four_months') Subscribe
             .trial Includes 7-day free trial
       .institutions
         | Buying for a school? Check out our

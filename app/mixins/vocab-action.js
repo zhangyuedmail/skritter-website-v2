@@ -27,7 +27,7 @@ module.exports = {
      * @param {Vocabs} vocabs
      */
     beginVocabAction: function(action, vocabs) {
-        if (!_.contains(availableVocabActions, action)) {
+        if (!_.includes(availableVocabActions, action)) {
             throw new Error('Invalid action, must be one of: '
              + availableVocabActions.join(', '));
         }

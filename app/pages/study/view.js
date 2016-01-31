@@ -1,8 +1,9 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
-var Prompt = require('components/prompt/view');
-var StudyToolbar = require('components/study-toolbar/view');
+
+var Prompt = require('components/study/prompt/view');
+var Toolbar = require('components/study/toolbar/view');
 var Items = require('collections/items');
+var Navbar = require('navbars/default/view');
 
 /**
  * @class Study
@@ -14,31 +15,19 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
-        this.counter = 0;
-        this.items = new Items();
-        this.navbar = new DefaultNavbar();
+        ScreenLoader.show();
+        this.item = null;
+        this.navbar = new Navbar();
         this.prompt = new Prompt();
-        this.toolbar = new StudyToolbar({page: this});
+        this.queue = [];
+        this.schedule = new Items();
+        this.scheduleState = 'standby';
+        this.toolbar = new Toolbar({page: this});
+        this.listenTo(this.schedule, 'populate', this.handleSchedulePopulate);
+        this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
-        this.listenTo(this.prompt, 'review:next', this.handlePromptReviewNext);
-        this.listenTo(this.prompt, 'review:previous', this.handlePromptReviewPrevious);
-        this.listenTo(this.prompt, 'review:start', this.handlePromptReviewStart);
-        this.listenTo(this.prompt, 'review:stop', this.handlePromptReviewStop);
-        this.listenTo(this.prompt, 'skip', this.handlePromptSkip);
-        this.listenTo(this.toolbar, 'click:add-item', this.handleToolbarAddItem);
-        this.listenTo(this.toolbar, 'save:study-settings', this.handleToolbarSaveStudySettings);
-        this.items.comparator = function(item) {
-            return -item.getReadiness();
-        };
-        this.loadMore(
-            _.bind(function() {
-                this.next();
-            }, this),
-            _.bind(function() {
-                this.next();
-            }, this)
-        );
+        this.loadSchedule();
     },
     /**
      * @property events
@@ -62,207 +51,190 @@ module.exports = GelatoPage.extend({
     render: function() {
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
-        this.prompt.setElement('#prompt-container').render();
-        this.toolbar.setElement('#toolbar-container').render();
+        this.prompt.setElement('#study-prompt-container').render();
+        this.toolbar.setElement('#study-toolbar-container').render();
         return this;
     },
     /**
      * @method handlePromptNext
-     * @param {PromptReviews} reviews
+     * @param {PromptItems} promptItems
      */
-    handlePromptNext: function(reviews) {
-        this.toolbar.timer.addLocalOffset(reviews.getBaseReviewingTime());
-        this.items.addReviews(reviews.getItemReviews());
-        this.items.reviews.post();
-        this.next();
-    },
-    /**
-     * @method handlePromptPrevious
-     * @param {PromptReviews} reviews
-     */
-    handlePromptPrevious: function(reviews) {
-        this.previous();
-    },
-    /**
-     * @method handlePromptReviewNext
-     * @param {PromptReviews} reviews
-     */
-    handlePromptReviewNext: function(reviews) {},
-    /**
-     * @method handlePromptPrevious
-     * @param {PromptReviews} reviews
-     */
-    handlePromptReviewPrevious: function(reviews) {},
-    /**
-     * @method handlePromptPrevious
-     * @param {PromptReviews} reviews
-     */
-    handlePromptReviewStart: function(reviews) {
-        //this.toolbar.timer.start();
-    },
-    /**
-     * @method handlePromptPrevious
-     * @param {PromptReviews} reviews
-     */
-    handlePromptReviewStop: function(reviews) {
-        //this.toolbar.timer.stop();
-    },
-    /**
-     * @method handlePromptSkip
-     * @param {PromptReviews} reviews
-     */
-    handlePromptSkip: function(reviews) {
-        this.next();
-    },
-    /**
-     * @method handleToolbarAddItem
-     */
-    handleToolbarAddItem: function() {
-        this.items.addItems(
-            null,
-            function(result) {
-                var added = result.numVocabsAdded;
-                $.notify(
-                    {
-                        title: 'Update',
-                        message: added + (added > 1 ? ' words have ' : ' word has ')  + 'been added.'
-                    },
-                    {
-                        type: 'pastel-info',
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        },
-                        delay: 5000,
-                        icon_type: 'class'
-                    }
-                );
+    handlePromptNext: function(promptItems) {
+        var self = this;
+        if (this.item) {
+            var review = promptItems.getReview();
+            if (!this.schedule.reviews.get(review)) {
+                this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
             }
-        );
+            this.schedule.reviews.put(review, null, function() {
+                if (self.schedule.reviews.length > 4) {
+                    self.schedule.reviews.post({skip: 1});
+                }
+                self.item = null;
+                self.next();
+            });
+        } else {
+            this.next();
+        }
     },
     /**
-     * @method handleToolbarSaveStudySettings
-     * @param {Object} settings
+     * @method handlePromptPrevious
+     * @param {PromptItems} promptItems
      */
-    handleToolbarSaveStudySettings: function(settings) {
-        this.items.reset();
-        this.prompt.reset();
-        app.user.set(settings, {merge: true}).cache();
-        app.user.save();
-        this.loadMore(
-            _.bind(function() {
-                this.next();
-            }, this),
-            _.bind(function() {
-                this.next();
-            }, this)
-        );
+    handlePromptPrevious: function(promptItems) {
+        if (!this.queue[0].group) {
+            this.queue.unshift(promptItems);
+            this.previous();
+        }
     },
     /**
-     * @method loadMore
-     * @param {Function} [callbackSuccess]
-     * @param {Function} [callbackError]
+     * @method handleScheduledLoad
      */
-    loadMore: function(callbackSuccess, callbackError) {
-        async.series([
-            _.bind(function(callback) {
-                this.items.cursor = null;
-                this.items.fetchNext(
-                    null,
-                    function() {
-                        callback();
-                    },
-                    function() {
-                        callback();
+    handleScheduledLoad: function() {
+        var self = this;
+        ScreenLoader.post('Preparing for study');
+        app.db.reviews
+            .toArray()
+            .then(function(reviews) {
+                self.schedule.reviews.add(reviews);
+                self.populateQueue();
+            })
+            .catch(function(error) {
+                console.error('SCHEDULE LOAD ERROR:', error);
+                self.populateQueue();
+            });
+    },
+    /**
+     * @method handleSchedulePopulate
+     */
+    handleSchedulePopulate: function() {
+        if (this.prompt.isLoaded()) {
+            console.info('QUEUE:', 'Added more items to queue.');
+        } else {
+            ScreenLoader.hide();
+            this.next();
+        }
+    },
+    /**
+     * @method loadSchedule
+     */
+    loadSchedule: function() {
+        var self = this;
+        var lang = app.getLanguage();
+        var parts = app.user.getFilteredParts();
+        var styles = app.user.getFilteredStyles();
+        app.db.items
+            .toArray()
+            .then(function(items) {
+                items = items.filter(function(item) {
+                    if (!item.vocabIds.length) {
+                        return false;
+                    } else if (item.lang !== lang) {
+                        return false
+                    } else if (parts.indexOf(item.part) === -1) {
+                        return false;
+                    } else if (styles.indexOf(item.style) === -1) {
+                        return false;
                     }
-                );
-            }, this),
-            _.bind(function(callback) {
-                if (this.items.cursor) {
-                    this.items.fetchNext(
-                        {cursor: this.items.cursor},
-                        function() {
-                            callback();
-                        },
-                        function() {
-                            callback();
-                        }
-                    );
-                } else {
-                    callback();
-                }
-            }, this),
-            _.bind(function(callback) {
-                async.each(
-                    this.items.models,
-                    _.bind(function(item, callback) {
-                        if (item.isKosher()) {
-                            callback();
-                        } else {
-                            item.set('next', moment(item.get('next') * 1000).add('2', 'weeks').unix());
-                            $.ajax({
-                                url: app.getApiUrl() + 'items/' + item.id,
-                                headers: app.user.session.getHeaders(),
-                                context: this,
-                                type: 'PUT',
-                                data: JSON.stringify(item.toJSON()),
-                                error: function(error) {
-                                    callback(error);
-                                },
-                                success: function() {
-                                    this.items.remove(item);
-                                    callback();
-                                }
-                            });
-                        }
-                    }, this),
-                    function(error) {
-                        callback(error);
-                    }
-                );
-            }, this)
-        ], function(error) {
-            if (error) {
-                if (typeof callbackError === 'function') {
-                    callbackError(error);
-                }
-            } else {
-                if (typeof callbackSuccess === 'function') {
-                    callbackSuccess();
-                }
-            }
-        });
-    },
-    /**
-     * @method getNextItem
-     * @returns {Item}
-     */
-    getNextItem: function() {
-        return this.items.sort().at(0);
+                    return true;
+                });
+                self.queue = [];
+                self.schedule.set(items.splice(0, 2000));
+                self.schedule.trigger('load', self.schedule);
+            })
+            .catch(function(error) {
+                self.schedule.trigger('error', error);
+            });
     },
     /**
      * @method next
      */
     next: function() {
-        var item = this.getNextItem();
+        var item = this.queue.shift();
         if (item) {
             this.toolbar.render();
-            this.toolbar.timer.reset();
-            this.prompt.set(item.getPromptReviews());
-            this.counter++;
-            if (this.counter % 10 === 0) {
-                console.log('LOADING MORE ITEMS:', 10);
-                this.loadMore();
+            this.prompt.set(item.group ? item : item.getPromptItems());
+            if (this.scheduleState === 'standby' && this.queue.length < 5) {
+                this.scheduleState = 'populating';
+                this.populateQueue();
             }
-        } else {
-            console.error('ITEM LOAD ERROR:', 'no items');
+            this.item = item;
         }
+    },
+    /**
+     * @method populateQueue
+     */
+    populateQueue: function() {
+        var self = this;
+        var items = [];
+        this.$('#loading-indicator').removeClass('hidden');
+        //store base histories for better spacing
+        var localHistory = [];
+        var queueHistory = this.queue.map(function(item) {
+            return item.getBase();
+        });
+        //creates an array items to queue
+        for (var i = 0, length = this.schedule.sort().length; i < length; i++) {
+            var item = this.schedule.at(i);
+            var itemBase = item.getBase();
+            if (items.length < 10 && item.get('vocabIds').length) {
+                if (localHistory.indexOf(itemBase) === -1 &&
+                    queueHistory.indexOf(itemBase) === -1) {
+                    localHistory.push(itemBase);
+                    items.push(item);
+                }
+            } else {
+                break;
+            }
+        }
+        //fetch resource data for queue items
+        this.schedule.fetch({
+            data: {
+                ids: _.map(items, 'id').join('|'),
+                include_contained: true,
+                include_decomps: true,
+                include_sentences: true,
+                include_strokes: true,
+                include_vocabs: true
+            },
+            merge: false,
+            remove: false,
+            error: function(error) {
+                self.schedule.trigger('error', error);
+                self.scheduleState ='standby';
+                self.$('#loading-indicator').addClass('hidden');
+            },
+            success: function(items, result) {
+                var now = moment().unix();
+                var sortedItems = _.sortBy(result.Items, function(item) {
+                    var readiness = 0;
+                    if (!item.last) {
+                        readiness = 9999;
+                    } else {
+                        readiness = (now - item.last) / (item.next - item.last);
+                    }
+                    return -readiness;
+                });
+                for (var i = 0, length = sortedItems.length; i < length; i++) {
+                    self.queue.push(self.schedule.get(sortedItems[i].id));
+                }
+                self.schedule.trigger('populate', self.queue);
+                self.scheduleState ='standby';
+                self.$('#loading-indicator').addClass('hidden');
+            }
+        });
     },
     /**
      * @method previous
      */
     previous: function() {
-        //TODO: allow going back a prompt
+        if (this.schedule.reviews.length) {
+            var review = this.schedule.reviews.last();
+            if (review.has('promptItems')) {
+                this.toolbar.render();
+                this.prompt.set(review.get('promptItems'));
+            }
+        }
     },
     /**
      * @method remove
@@ -271,6 +243,8 @@ module.exports = GelatoPage.extend({
     remove: function() {
         this.navbar.remove();
         this.prompt.remove();
+        this.toolbar.remove();
+        this.schedule.reviews.post();
         return GelatoPage.prototype.remove.call(this);
     }
 });

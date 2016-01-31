@@ -1,19 +1,31 @@
 var SkritterModel = require('base/skritter-model');
 var NeutralTones = require('data/neutral-tones');
-var PromptReviews = require('collections/prompt-reviews');
-var PromptReview = require('models/prompt-review');
+var PromptItems = require('collections/prompt-items');
+var PromptItem = require('models/prompt-item');
 
 /**
  * @class Vocab
  * @extends {SkritterModel}
  */
-module.exports = SkritterModel.extend({
+var Vocab = SkritterModel.extend({
     /**
      * @method initialize
      * @constructor
      */
     initialize: function() {
         this.audio = this.has('audio') ? new Audio(this.get('audio').replace('http://', 'https://')) : null;
+    },
+    /**
+     * @method defaults
+     * @returns {Object}
+     */
+    defaults: function() {
+        return {
+            definitions: {},
+            filler: false,
+            kana: false,
+            vocabIds: []
+        };
     },
     /**
      * @property idAttribute
@@ -25,14 +37,6 @@ module.exports = SkritterModel.extend({
      * @type {String}
      */
     urlRoot: 'vocabs',
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns {Object}
-     */
-    parse: function(response) {
-        return response.Vocab || response;
-    },
     /**
      * @method banAll
      */
@@ -83,19 +87,28 @@ module.exports = SkritterModel.extend({
      * @method getContained
      * @returns {Array}
      */
-    getContained: function() {
+    getContained: function(excludeFillers) {
         var containedVocabs = [];
-        var containedVocabIds = this.get('containedVocabIds') || [];
-        for (var i = 0, length = containedVocabIds.length; i < length; i++) {
-            var containedVocab = this.collection.get(containedVocabIds[i]);
-            if (this.isJapanese()) {
-                if (!app.user.get('studyKana') && containedVocab.isKana()) {
-                    continue;
-                }
-                containedVocabs.push(containedVocab);
-            } else {
-                containedVocabs.push(containedVocab);
+        var characters = this.getCharacters();
+        var lang = this.get('lang');
+        for (var i = 0, length = characters.length; i < length; i++) {
+            var base = app.fn.mapper.toBase(characters[i], {lang: lang});
+            var containedVocab = this.collection.get(base);
+            if (!containedVocab) {
+                containedVocab = new Vocab({
+                    id: base,
+                    filler: true,
+                    lang: lang,
+                    writing: characters[i]
+                });
+                this.collection.add(containedVocab);
             }
+            containedVocabs.push(containedVocab);
+        }
+        if (excludeFillers) {
+            return containedVocabs.filter(function(vocab) {
+                return !vocab.get('filler');
+            });
         }
         return containedVocabs;
     },
@@ -155,17 +168,22 @@ module.exports = SkritterModel.extend({
         var characters = [];
         var strokes = this.getStrokes();
         for (var i = 0, length = strokes.length; i < length; i++) {
-            characters.push(strokes[i].getPromptCharacter());
+            var stroke = strokes[i];
+            if (stroke) {
+                characters.push(strokes[i].getPromptCharacter());
+            } else {
+                characters.push(null);
+            }
         }
         return characters;
     },
     /**
-     * @method getPromptReviews
+     * @method getPromptItems
      * @param {String} part
-     * @returns {PromptReviews}
+     * @returns {PromptItems}
      */
-    getPromptReviews: function(part) {
-        var reviews = new PromptReviews();
+    getPromptItems: function(part) {
+        var promptItems = new PromptItems();
         var containedVocabs = this.getContained();
         var characters = [];
         var now = Date.now();
@@ -184,16 +202,18 @@ module.exports = SkritterModel.extend({
                 vocabs = [vocab];
         }
         for (var i = 0, length = vocabs.length; i < length; i++) {
-            var review = new PromptReview();
-            review.set('id', [now, i, vocabs[i].id].join('_'));
-            review.character = characters[i];
-            review.vocab = vocabs[i];
-            reviews.add(review);
+            var childVocab = vocabs[i];
+            var promptItem = new PromptItem();
+            promptItem.character = characters[i];
+            promptItem.vocab = childVocab;
+            promptItem.set('filler', childVocab.isFiller());
+            promptItem.set('kana', childVocab.isKana());
+            promptItems.add(promptItem);
         }
-        reviews.group = now + '_' + this.id;
-        reviews.part = part;
-        reviews.vocab = vocab;
-        return reviews;
+        promptItems.group = now + '_' + this.id;
+        promptItems.part = part;
+        promptItems.vocab = vocab;
+        return promptItems;
     },
     /**
      * @method getPromptTones
@@ -263,6 +283,8 @@ module.exports = SkritterModel.extend({
                 } else {
                     strokes.push(stroke);
                 }
+            } else {
+                strokes.push(null);
             }
         }
         return strokes;
@@ -308,23 +330,6 @@ module.exports = SkritterModel.extend({
         return this.get('writing');
     },
     /**
-     * @method getWritingObjects
-     * @returns {Array}
-     */
-    getWritingObjects: function() {
-        return this.getCharacters().map(function(value) {
-            if (this.isJapanese()) {
-                if (['～', 'ー'].indexOf(value) > -1) {
-                    return {type: 'filler', value: value};
-                }
-                if (!app.user.get('studyKana') && app.fn.isKana(value)) {
-                    return {type: 'filler', value: value};
-                }
-            }
-            return {type: 'character', value: value};
-        }.bind(this));
-    },
-    /**
      * @method getWritingDifference
      * @param {String} vocabId
      * @returns {String}
@@ -352,6 +357,13 @@ module.exports = SkritterModel.extend({
         return this.get('lang') === 'zh';
     },
     /**
+     * @method isFiller
+     * @returns {Boolean}
+     */
+    isFiller: function() {
+        return ['～', 'ー'].indexOf(this.get('writing')) > -1;
+    },
+    /**
      * @method isJapanese
      * @returns {Boolean}
      */
@@ -371,6 +383,14 @@ module.exports = SkritterModel.extend({
      */
     isStarred: function() {
         return this.get('starred');
+    },
+    /**
+     * @method parse
+     * @param {Object} response
+     * @returns {Object}
+     */
+    parse: function(response) {
+        return response.Vocab || response;
     },
     /**
      * @method play
@@ -412,3 +432,5 @@ module.exports = SkritterModel.extend({
         this.set('bannedParts', _.remove(this.get('bannedParts'), part));
     }
 });
+
+module.exports = Vocab;

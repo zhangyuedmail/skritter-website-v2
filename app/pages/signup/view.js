@@ -1,15 +1,8 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
-var MarketingFooter = require('components/marketing-footer/view');
-var StripeLoader = require('utils/stripe-loader');
-var User = require('models/user');
-var Session = require('models/session');
 
-// TODO:
-// * lookup username on username field change
-// * check password match on confirm password field change
-// * allow signup with coupon
-// * allow signup with school validation
+var MarketingFooter = require('components/marketing/footer/view');
+var User = require('models/user');
+var DefaultNavbar = require('navbars/default/view');
 
 /**
  * @class Signup
@@ -18,166 +11,26 @@ var Session = require('models/session');
 module.exports = GelatoPage.extend({
     /**
      * @method initialize
+     * @param {Object} options
      * @constructor
      */
-    initialize: function() {
-        StripeLoader.load();
+    initialize: function(options) {
         this.footer = new MarketingFooter();
         this.navbar = new DefaultNavbar();
-        this.user = null;
-        this.password = null;
-        this.session = new Session();
-        this.session.authenticate('client_credentials', null, null, _.noop, _.noop);
+        this.plan = options.plan;
+        this.user = new User();
     },
-    /**
-     * @property bodyClass
-     * @type {String}
-     */
-    bodyClass: 'background2',
     /**
      * @property events
      * @type Object
      */
     events: {
-        'submit form': 'handleSubmitForm',
-        'change input[name="payment-method"]': 'handleChangePaymentMethod'
+        'change #signup-payment-method': 'handleChangeSignupPaymentMethod',
+        'vclick #signup-submit': 'handleClickSignupSubmit'
     },
     /**
-     * @property title
-     * @type {String}
-     */
-    title: 'Signup - Skritter',
-    /**
-     * @property template
-     * @type {Function}
-     */
-    template: require('./template'),
-    /**
-     * @method render
-     * @returns {Signup}
-     */
-    render: function() {
-        this.renderTemplate();
-        this.footer.setElement('#footer-container').render();
-        this.navbar.setElement('#navbar-container').render();
-        return this;
-    },
-    /**
-     * @method remove
-     * @returns {Signup}
-     */
-    remove: function() {
-        this.navbar.remove();
-        this.footer.remove();
-        return GelatoPage.prototype.remove.call(this);
-    },
-    /**
-     * @method createUser
-     * @param {object} attrs
-     */
-    createUser: function(attrs) {
-        attrs = attrs || {};
-        this.username = this.$('#signup-username').val();
-        this.password = this.$('#signup-password1').val();
-        _.extend(attrs, {
-            'name': this.username,
-            'password': this.password,
-            'email': this.$('#signup-email').val(),
-            'plan': this.$('#signup-plan').val()
-        });
-        var user = new User(attrs);
-        user.headers = this.session.getHeaders();
-        user.save();
-        this.listenToOnce(user, 'sync', this.createUserSync);
-        this.listenToOnce(user, 'error', this.createUserError);
-    },
-    /**
-     * @method createUserError
-     */
-    createUserError: function(user, jqxhr) {
-        this.setSignupSubmitButtonDisabled(false);
-        this.setSignupErrorAlertMessage(jqxhr.responseJSON.message);
-    },
-    /**
-     * @method createUserSync
-     */
-    createUserSync: function() {
-        app.user.login(this.username, this.password, function() {
-            app.router.navigate('dashboard', {trigger: false});
-            app.reload();
-        }, _.bind(function(error) {
-            this.setSignupSubmitButtonDisabled(false);
-            this.setSignupErrorAlertMessage(error.responseJSON.message);
-        }, this));
-    },
-    /**
-     * @method handleChangePaymentMethod
-     */
-    handleChangePaymentMethod: function() {
-        var value = $('input[name="payment-method"]:checked').val();
-        this.$('.form-group.credit').toggleClass('hide', value !== 'credit');
-        this.$('.form-group.coupon').toggleClass('hide', value !== 'coupon');
-    },
-    /**
-     * @method handleSubmitForm
-     * @param {Event} event
-     */
-    handleSubmitForm: function(event) {
-        event.preventDefault();
-        this.$('.form-group').removeClass('has-error');
-        var inputs = this.$('input:visible');
-        var allFilledIn = _.all(inputs, function(el) { return $(el).val(); });
-        if (!allFilledIn) {
-            this.setSignupErrorAlertMessage('Please fill in all fields.');
-            _.forEach(inputs, function(el) {
-                if (!$(el).val()) {
-                    $(el).closest('.form-group').addClass('has-error');
-                }
-            })
-            return;
-        }
-        if (this.$('#signup-password1').val() !== this.$('#signup-password2').val()) {
-            this.setSignupErrorAlertMessage('Passwords do not match.');
-            this.$('#signup-password1, #signup-password2')
-              .closest('.form-group')
-              .addClass('has-error');
-            return;
-        }
-
-        var value = this.$('input[name="payment-method"]:checked').val();
-        if (value === 'credit') {
-            var cardData = {
-                number: this.$('#signup-card-number').val(),
-                exp_month: this.$('#card-month-select').val(),
-                exp_year: this.$('#card-year-select').val()
-            };
-            var handler = _.bind(this.handleSubmitFormStripeResponse, this);
-            Stripe.setPublishableKey(app.getStripeKey());
-            Stripe.card.createToken(cardData, handler);
-        }
-        if (value === 'coupon') {
-            var coupon = $('#signup-coupon').val();
-            this.createUser({ couponCode: coupon });
-        }
-        this.setSignupSubmitButtonDisabled(true);
-        this.$('#signup-error-alert').addClass('hide');
-    },
-    /**
-     * @method handleSubmitFormResponse
-     */
-    handleSubmitFormStripeResponse: function(status, response) {
-        if (response.error) {
-            this.setSignupErrorAlertMessage(response.error.message);
-            this.$('.credit').closest('.form-group').addClass('has-error');
-            this.setSignupSubmitButtonDisabled(false);
-        }
-        else {
-            var token = response.id;
-            this.createUser({ token: token });
-        }
-    },
-    /**
-     * property products
+     * @property products
+     * @type {Array}
      */
     products: [
         {
@@ -210,19 +63,250 @@ module.exports = GelatoPage.extend({
         }
     ],
     /**
-     * @method setSignupSubmitButtonDisabled
+     * @property template
+     * @type {Function}
      */
-    setSignupSubmitButtonDisabled: function(disabled) {
-        var button = this.$('#signup-submit');
-        button.attr('disabled', disabled);
-        button.find('span').toggleClass('hide', disabled);
-        button.find('i').toggleClass('hide', !disabled);
+    template: require('./template'),
+    /**
+     * @property title
+     * @type {String}
+     */
+    title: 'Signup - Skritter',
+    /**
+     * @method render
+     * @returns {Signup}
+     */
+    render: function() {
+        this.renderTemplate();
+        this.footer.setElement('#footer-container').render();
+        this.navbar.setElement('#navbar-container').render();
+        return this;
     },
     /**
-     * @method setSignupErrorAlertMessage
-     * @param {String} message
+     * @method createUser
+     * @param {Object} formData
+     * @param {Function} callback
      */
-    setSignupErrorAlertMessage: function(message) {
-        this.$('#signup-error-alert').text(message).removeClass('hide');
+    createUser: function(formData, callback) {
+        this.user.set({
+            email: formData.email,
+            name: formData.username,
+            password: formData.password1
+        });
+        if (formData.method === 'credit') {
+            this.user.set({
+                plan: formData.plan,
+                token: formData.token
+            });
+        } else {
+            this.user.set('couponCode', formData.coupon);
+        }
+        this.user.save(
+            null,
+            {
+                error: function(error) {
+                    callback(error);
+                },
+                success: function() {
+                    callback();
+                }
+            }
+        )
+    },
+    /**
+     * @method getFormData
+     * @returns {Object}
+     */
+    getFormData: function() {
+        return {
+            card: {
+                expires_month: this.$('#card-month-select').val(),
+                expires_year: this.$('#card-year-select').val(),
+                number: this.$('#signup-card-number').val()
+            },
+            coupon: this.$('#signup-coupon-code').val(),
+            email: this.$('#signup-email').val(),
+            method: this.$('#signup-payment-method :checked').val(),
+            password1: this.$('#signup-password1').val(),
+            password2: this.$('#signup-password2').val(),
+            plan: this.$('#signup-plan').val(),
+            username: this.$('#signup-username').val()
+        };
+    },
+    /**
+     * @method handleChangeSignupPaymentMethod
+     * @param {Event} event
+     */
+    handleChangeSignupPaymentMethod: function(event) {
+        event.preventDefault();
+        var formData= this.getFormData();
+        if (formData.method === 'credit') {
+            this.$('#signup-input-coupon').addClass('hidden');
+            this.$('#signup-input-credit').removeClass('hidden');
+            this.$('#signup-input-credit-expire').removeClass('hidden');
+            this.$('#signup-plan').closest('.form-group').removeClass('hidden');
+        } else {
+            this.$('#signup-input-coupon').removeClass('hidden');
+            this.$('#signup-input-credit').addClass('hidden');
+            this.$('#signup-input-credit-expire').addClass('hidden');
+            this.$('#signup-plan').closest('.form-group').addClass('hidden');
+        }
+    },
+    /**
+     * @method handleClickSignupSubmit
+     * @param {Event} event
+     */
+    handleClickSignupSubmit: function(event) {
+        event.preventDefault();
+        var formData = this.getFormData();
+        if (formData.password1 === '') {
+            return;
+        }
+        if (formData.password1 !== formData.password2) {
+            return;
+        }
+        if (formData.method === 'credit') {
+            this.subscribeCredit(formData);
+        } else {
+            this.subscribeCoupon(formData);
+        }
+    },
+    /**
+     * @method remove
+     * @returns {Signup}
+     */
+    remove: function() {
+        this.navbar.remove();
+        this.footer.remove();
+        return GelatoPage.prototype.remove.call(this);
+    },
+    /**
+     * @method subscribeCoupon
+     * @param {Object} formData
+     */
+    subscribeCoupon: function(formData) {
+        var self = this;
+        async.series([
+            function(callback) {
+                ScreenLoader.show();
+                ScreenLoader.post('Creating a new user');
+                self.createUser(formData, callback);
+            },
+            function(callback) {
+                ScreenLoader.post('Logging in new user');
+                app.user.login(
+                    formData.username,
+                    formData.password1,
+                    function(error) {
+                        if (error) {
+                            callback(error);
+                        } else {
+                            callback();
+                        }
+                    }
+                )
+            },
+            function(callback) {
+                ScreenLoader.post('Sending welcome email');
+                $.ajax({
+                    method: 'GET',
+                    url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
+                    data: {
+                        token: app.user.session.get('access_token')
+                    },
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback()
+                    }
+                });
+            }
+        ], function(error) {
+            if (error) {
+                ScreenLoader.hide();
+                console.error(error);
+            } else {
+                app.router.navigate('dashboard');
+                app.reload();
+            }
+        });
+    },
+    /**
+     * @method subscribeCredit
+     * @param {Object} formData
+     */
+    subscribeCredit: function(formData) {
+        var self = this;
+        async.series([
+            function(callback) {
+                ScreenLoader.show();
+                if (window.Stripe) {
+                    callback();
+                } else {
+                    ScreenLoader.post('Creating a stripe token');
+                    $.getScript('https://js.stripe.com/v2/', callback);
+                }
+            },
+            function(callback) {
+                Stripe.setPublishableKey(app.getStripeKey());
+                Stripe.card.createToken(
+                    {
+                        exp_month: formData.card.expires_month,
+                        exp_year: formData.card.expires_year,
+                        number: formData.card.number
+                    },
+                    function(status, response) {
+                        if (response.error) {
+                            callback(response.error.message);
+                        } else {
+                            formData.token = response.id;
+                            callback();
+                        }
+                    }
+                );
+            },
+            function(callback) {
+                ScreenLoader.post('Creating a new user');
+                self.createUser(formData, callback);
+            },
+            function(callback) {
+                ScreenLoader.post('Logging in new user');
+                app.user.login(
+                    formData.username,
+                    formData.password1,
+                    function(error) {
+                        if (error) {
+                            callback(error);
+                        } else {
+                            callback();
+                        }
+                    }
+                )
+            },
+            function(callback) {
+                ScreenLoader.post('Sending welcome email');
+                $.ajax({
+                    method: 'GET',
+                    url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
+                    data: {
+                        token: app.user.session.get('access_token')
+                    },
+                    error: function(error) {
+                        callback(error);
+                    },
+                    success: function() {
+                        callback()
+                    }
+                });
+            }
+        ], function(error) {
+            ScreenLoader.hide();
+            if (error) {
+                console.error(error);
+            } else {
+                app.router.navigate('account/setup', {trigger: true});
+            }
+        });
     }
 });

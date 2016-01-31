@@ -7,57 +7,62 @@ gelato-page(data-name='signup')
 
   section#section-main.content-block
     .row
-      
+
       #section-form.col-md-7
         form.form-horizontal
           .header.first Create your account
           .form-group
             label.col-sm-5.control-label(for='signup-username') Username
             .col-sm-7
-              input#signup-username.form-control(type='text', placeholder='')
+              input#signup-username.form-control(type='text')
           .form-group
             label.col-sm-5.control-label(for='signup-email') Email
             .col-sm-7
-              input#signup-email.form-control(
-                type='email', placeholder='asdf@asdf.com')
+              input#signup-email.form-control(type='email')
           .form-group
             label.col-sm-5.control-label(for='signup-password1') Password
             .col-sm-7
-              input#signup-password1.form-control(
-                type='password', placeholder='')
+              input#signup-password1.form-control(type='password')
           .form-group
             label.col-sm-5.control-label(for='signup-password2')
               | Confirm password
             .col-sm-7
-              input#signup-password2.form-control(
-                type='password', placeholder='')
+              input#signup-password2.form-control(type='password')
           .header Choose plan
           .form-group
             label.col-sm-5.control-label(for='signup-plan') Plan
             .col-sm-7
               select#signup-plan.form-control(name='signup-plan')
                 for product in view.products
-                  option(value=product.key)= product.fullName
+                  if (view.plan === product.key)
+                    option(value=product.key, selected=true)= product.fullName
+                  else
+                    option(value=product.key)= product.fullName
           .form-group
             label.col-sm-5.control-label(for='signup-payment-method')
               | Payment method
             #signup-payment-method.col-sm-7
               label#credit-radio.radio-inline
                 input#method-credit(
-                  type='radio', name='payment-method', value='credit', checked=true)
+                type='radio', name='payment-method', value='credit', checked=true)
                 | Credit card
               label#paypal-radio.radio-inline
                 input#method-coupon(
-                  type='radio', name='payment-method', value='coupon')
+                type='radio', name='payment-method', value='coupon')
                 | Coupon
-          .form-group.credit
+          #signup-input-credit.form-group.credit
             label.col-sm-5.control-label(for='signup-card-number') Card number
             .col-sm-7
               input#signup-card-number.form-control(
-                type='text', placeholder='1234 1234 1234 1234')
+              type='text', placeholder='1234 1234 1234 1234')
               #accepted-payments
                 img(src='/media/images/signup/credit_cards.png', alt='')
-          .form-group.credit
+          #signup-input-coupon.form-group.coupon.hidden
+            label.col-sm-5.control-label(for='signup-card-number') Coupon code
+            .col-sm-7
+              input#signup-coupon-code.form-control(
+              type='text', placeholder='code123')
+          #signup-input-credit-expire.form-group.credit
             label.col-sm-5.control-label(for='card-year-select')
               | Expiration date
             .col-sm-4
@@ -83,7 +88,7 @@ gelato-page(data-name='signup')
             label.col-sm-5.control-label(for='signup-coupon') Coupon
             .col-sm-7
               input#signup-coupon.form-control(type='text', placeholder='')
-          
+
           .text-center
             button#signup-submit.btn.btn-success(type='submit')
               span Sign up
@@ -96,15 +101,15 @@ gelato-page(data-name='signup')
               span.spl#trial-expire-date= expiration
               | .
             span.spl You can cancel your subscription in your account page 
-             | at any time. We will notify you by email one day before you 
-             | are billed.
+              | at any time. We will notify you by email one day before you
+              | are billed.
 
       #section-information.col-md-5
         .media
           .media-left
             a(href='#')
               img.media-object.img-circle(
-                src='/media/images/signup/pasden.png', alt='')
+              src='/media/images/signup/pasden.png', alt='')
           .media-body
             .testimonial-subtext
               | Skritter is the big innovation in online Chinese writing practice.
@@ -113,7 +118,7 @@ gelato-page(data-name='signup')
           .media-left
             a(href='#')
               img.media-object.img-circle(
-                src='/media/images/signup/chloe.jpg', alt='')
+              src='/media/images/signup/chloe.jpg', alt='')
           .media-body
             .testimonial-subtext
               | Skritter makes it fun and easy to practice writing Chinese!
@@ -122,7 +127,7 @@ gelato-page(data-name='signup')
           .media-left
             a(href='#')
               img.media-object.img-circle(
-                src='/media/images/signup/tortue.png', alt='')
+              src='/media/images/signup/tortue.png', alt='')
           .media-body
             .testimonial-subtext
               | I learned more during the past 5 months than the past 3 years.

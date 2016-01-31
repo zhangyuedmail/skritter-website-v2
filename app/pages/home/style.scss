@@ -12,7 +12,7 @@ gelato-page[data-name='home'] {
     }
     &.dark {
       background-color: #262b30;
-      color: #404851;
+      color: $grey2;
     }
     &.light {
       background-color: #fbfafc;
@@ -26,7 +26,6 @@ gelato-page[data-name='home'] {
     .carousel-header {
       color: $white1;
       font-size: 36px;
-      left: 10%;
       position: absolute;
       top: 40%;
       z-index: 9999;
@@ -51,6 +50,11 @@ gelato-page[data-name='home'] {
     .header { margin-bottom: 90px; }
     .media { margin-bottom: 60px; }
     .icon { width: 75px; }
+    .badge-link {
+      cursor: pointer;
+      opacity: 1.0;
+      &:hover { opacity: 0.7; }
+    }
     .media-body {
       color: #404851;
       font-family: $font-ubuntu;

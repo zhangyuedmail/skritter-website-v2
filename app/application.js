@@ -13,6 +13,7 @@ module.exports = GelatoApplication.extend({
      * @constructor
      */
     initialize: function() {
+
         Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
             excludedHostnames: ['localhost'],
             excludedUserAgents: ['PhantomJS'],
@@ -20,29 +21,12 @@ module.exports = GelatoApplication.extend({
             ignoreAjaxAbort: false,
             ignoreAjaxError: false
         }).attach();
+
         Raygun.setVersion(this.get('version'));
+
         this.fn = Functions;
         this.router = new Router();
         this.user = new User({id: this.getSetting('user') || 'application'});
-
-        if (window.createjs) {
-            createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
-                this.moveTo(x1 , y1);
-                var dX = x2 - x1;
-                var dY = y2 - y1;
-                var dashes = Math.floor(Math.sqrt(dX * dX + dY * dY) / dashLength);
-                var dashX = dX / dashes;
-                var dashY = dY / dashes;
-                var i = 0;
-                while (i++ < dashes ) {
-                    x1 += dashX;
-                    y1 += dashY;
-                    this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x1, y1);
-                }
-                this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x2, y2);
-                return this;
-            };
-        }
 
         if (window.ga && this.isProduction()) {
             ga('create', 'UA-4642573-1', 'auto');
@@ -51,19 +35,6 @@ module.exports = GelatoApplication.extend({
 
         if (this.isDevelopment()) {
             window.onerror = this.handleError;
-        }
-
-        //TODO: depreciate this code after some time
-        if (localStorage.getItem('guest-authentication')) {
-            var user = localStorage.getItem('application-user');
-            if (user) {
-                localStorage.removeItem(user + '-authentication');
-                localStorage.removeItem(user + '-settings');
-                localStorage.removeItem(user + '-ja-data');
-                localStorage.removeItem(user + '-zh-data');
-            }
-            localStorage.removeItem('guest-authentication');
-            app.reload();
         }
 
     },
@@ -75,9 +46,11 @@ module.exports = GelatoApplication.extend({
         apiDomain: location.hostname.indexOf('.cn') > -1 ? '.cn' : '.com',
         apiRoot: 'https://beta.skritter',
         apiVersion: 0,
+        demoLang: 'zh',
         description: '{!application-description!}',
         canvasSize: 450,
         language: undefined,
+        lastItemChanged: 0,
         timestamp: '{!timestamp!}',
         title: '{!application-title!}',
         version: '{!application-version!}'
@@ -87,6 +60,7 @@ module.exports = GelatoApplication.extend({
      * @returns {String}
      */
     getApiUrl: function() {
+        //return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
         return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
     },
     /**
@@ -102,24 +76,16 @@ module.exports = GelatoApplication.extend({
      */
     getStripeKey: function() {
         if (this.isProduction()) {
-            return 'pk_live_xFAB9UJNUmEzr6yZfbVLZptc';
+            return 'pk_live_pWk0Lg3fgazBwkmSrzxOJ0fc';
         } else {
-            return 'pk_test_24FOCKPSEtJHVpcA3oErEw2I';
+            return 'pk_test_5RIYZGe8XgeYfU9pgvkxK01r';
         }
-    },
-    /**
-     * @method getVersion
-     * @returns {String}
-     */
-    getVersion: function() {
-        var semantics = this.get('version').split('.');
-        return [semantics[0], semantics[1], this.get('timestamp')].join('.');
     },
     /**
      * @method handleError
      * @param {String} message
-     * @param {String} url
-     * @param {Number} line
+     * @param {String} [url]
+     * @param {Number} [line]
      * @returns {Boolean}
      */
     handleError: function(message, url, line) {
@@ -139,13 +105,6 @@ module.exports = GelatoApplication.extend({
             }
         );
         return false;
-    },
-    /**
-     * @method hideLoading
-     * @param {Number} [speed]
-     */
-    hideLoading: function(speed) {
-        $('#application-loading').fadeOut(speed);
     },
     /**
      * @method isChinese
@@ -203,66 +162,122 @@ module.exports = GelatoApplication.extend({
         window.HS = HS;
     },
     /**
-     * @method sendRaygunTest
+     * @method reset
      */
-    sendRaygunTest: function() {
-        try {
-            throw new Error('TEST ERROR');
-        } catch(error) {
-            Raygun.send(error);
-        }
-    },
-    /**
-     * @method showLoading
-     * @param {Number} [speed]
-     */
-    showLoading: function(speed) {
-        $('#application-loading').fadeIn(speed);
+    reset: function() {
+        app.user.setLastItemUpdate(0).cache();
+        async.parallel([
+            function(callback) {
+                app.db.items.clear().finally(callback);
+            },
+            function(callback) {
+                app.db.reviews.clear().finally(callback);
+            }
+        ], function() {
+           app.reload();
+        });
     },
     /**
      * @method start
      */
     start: function() {
+
+        //load cached user data if it exists
         this.user.set(this.getLocalStorage(this.user.id + '-user'));
         this.user.session.set(this.getLocalStorage(this.user.id + '-session'));
         this.user.on('state', this.user.cache);
         this.user.session.on('state', this.user.session.cache);
+
+        //set raygun tracking for logged in user
         if (this.user.isLoggedIn()) {
             Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
             Raygun.withTags(this.user.getRaygunTags());
         } else {
             Raygun.setUser('guest', true);
         }
-        if (this.user.session.isExpired()) {
-            if (this.user.id === 'application') {
-                this.user.session.authenticate('client_credentials', null, null,
-                    _.bind(function() {
-                        this.startRouter();
-                    }, this),
-                    _.bind(function() {
-                        this.startRouter();
-                    }, this)
-                );
-            } else {
-                this.user.session.refresh(
-                    _.bind(function() {
-                        this.startRouter();
-                    }, this),
-                    _.bind(function() {
-                        this.startRouter();
-                    }, this)
-                );
+
+        //console log all dexie errors
+        Dexie.Promise.on('error', function(error) {
+            console.error(error);
+            if (app.isDevelopment()) {
+                app.handleError(error);
             }
-        } else {
-            this.startRouter();
-        }
-    },
-    /**
-     * @method startRouter
-     */
-    startRouter: function() {
-        this.router.start();
-        this.loadHelpscout();
-        this.hideLoading();
+        });
+
+        //use async for cleaner loading code
+        async.series([
+            function(callback) {
+                //check for user authentication type
+                if (app.user.id === 'application') {
+                    app.user.session.authenticate('client_credentials', null, null,
+                        function() {
+                            callback();
+                        },
+                        function() {
+                            callback();
+                        }
+                    );
+                } else {
+                    app.user.session.refresh(
+                        function() {
+                            callback();
+                        },
+                        function() {
+                            callback();
+                        }
+                    );
+                }
+            },
+            //load dexie with items store
+            function(callback) {
+                if (app.user.isLoggedIn()) {
+                    app.db = new Dexie(app.user.id + '-database');
+                    app.db.version(2).stores({
+                        items: [
+                            'id',
+                            '*changed',
+                            'created',
+                            'interval',
+                            '*last',
+                            '*next',
+                            'part',
+                            'previousInterval',
+                            'previousSuccess',
+                            'reviews',
+                            'successes',
+                            'style',
+                            'timeStudied',
+                            'vocabIds'
+                        ].join(','),
+                        reviews: [
+                            'group',
+                            '*created',
+                            'reviews'
+                        ].join(',')
+                    });
+                    app.db.open()
+                        .then(function() {
+                            callback();
+                        })
+                        .catch(function() {
+                            app.db.delete().then(app.reload);
+                        });
+                } else {
+                    app.db = null;
+                    callback();
+                }
+            },
+            //fetch and store changed items
+            function(callback) {
+                app.user.updateItems(callback);
+            }
+        ], function() {
+            setTimeout(function() {
+                ScreenLoader.hide();
+                app.loadHelpscout();
+                app.router.start();
+            }, 500);
+        });
+
     }
 });

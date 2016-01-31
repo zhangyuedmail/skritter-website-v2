@@ -72,7 +72,25 @@ a {
 
 
 /*** MODALS ***/
-.modal-content { border-radius: 25px; }
+.modal-content {
+  border-radius: 25px;
+}
+.modal-footer {
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border-top: none;
+}
+.modal-header {
+  background-color: $white3;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  i {
+    font-size: 24px;
+  }
+}
+.modal-title {
+  font-size: 18px;
+}
 
 
 /*** NOTIFY ***/
@@ -101,4 +119,9 @@ a {
 
 
 /*** TEXT ***/
+.text-danger {
+  color: $gradeRed5;
+  &:active { color: $gradeRed7 !important; }
+  &:hover { color: $gradeRed6 !important; }
+}
 .text-gold { color: $gold !important; }

@@ -2257,7 +2257,18 @@ function removeToneMarks(text) {
  * @return {String}
  */
 function removeToneNumbers(text) {
-    return text.replace(/[0-9]/g, '');
+    text = text.replace(/[0-9]/g, '');
+    switch (text) {
+        case 'lv':
+            return 'lü';
+        case 'lve':
+            return 'lüe';
+        case 'lvan':
+            return 'lüan';
+        case 'lvn':
+            return 'lün';
+    }
+    return text;
 }
 
 module.exports = {

@@ -5,52 +5,54 @@ exports.config = {
         javascripts: {
             joinTo: {
                 'js/application.js': /^app[\\/]/,
-                'js/libraries.js': /^(bower_components|vendor)[\\/]/,
+                'js/libraries.js': /^vendor[\\/]/,
+                'js/startup.js': /^startup[\\/]/,
                 'js/test.js': /^test[\\/]/
             },
             order: {
                 before: [
-                    'bower_components/jquery/dist/jquery.js',
-                    'bower_components/lodash/lodash.js',
-                    'bower_components/backbone/backbone.js',
-                    'bower_components/gelato/gelato.js',
-                    'bower_components/bootstrap/dist/js/bootstrap.js',
-                    'bower_components/d3/d3.js',
-                    'bower_components/async/dist/async.js',
-                    'bower_components/chai/chai.js',
-                    'bower_components/createjs-easel/easeljs-0.8.1.combined.js',
-                    'bower_components/createjs-tween/tweenjs-0.6.1.combined.js',
-                    'bower_components/mocha/mocha.js',
-                    'bower_components/moment/moment.js',
-                    'bower_components/moment-timezone/moment-timezone.js',
-                    'vendor/jquery/jquery.mobile-1.4.5.js',
-                    'vendor/jquery/jquery.ui-1.11.4.js',
-                    'vendor/bootstrap/bootstrap.datetimepicker-4.15.37.js',
-                    'vendor/bootstrap/bootstrap.notify-3.1.5.js',
-                    'vendor/bootstrap/bootstrap.switch-3.3.2.js',
-                    'vendor/heatmap/heatmap-3.5.4.js',
-                    'vendor/highcharts/highcharts-4.1.9.js',
-                    'vendor/keypress/keypress-2.1.3.js',
-                    'vendor/wanakana/wanakana-1.3.7.js'
+                    'vendor/gelato-0.2.1.js',
+                    'vendor/bootstrap-3.3.6.js',
+                    'vendor/async-1.5.2.js',
+                    'vendor/bootstrap.datetimepicker-4.15.37.js',
+                    'vendor/bootstrap.notify-3.1.5.js',
+                    'vendor/bootstrap.switch-3.3.2.js',
+                    'vendor/chai-3.5.0.js',
+                    'vendor/createjs.easel-0.8.2.js',
+                    'vendor/createjs.tween-0.6.2.js',
+                    'vendor/d3-3.5.13.js',
+                    'vendor/dexie-1.2.0.js',
+                    'vendor/heatmap-3.5.4.js',
+                    'vendor/highcharts-4.2.1.js',
+                    'vendor/jquery.mobile-1.4.5.js',
+                    'vendor/jquery.ui-1.11.4.js',
+                    'vendor/keypress-2.1.3.js',
+                    'vendor/mocha-2.4.5.js',
+                    'vendor/moment-2.11.1.js',
+                    'vendor/moment.timezone-0.5.0.js',
+                    'vendor/sinon-1.17.3.js',
+                    'vendor/wanakana-1.3.7.js'
                 ]
             }
         },
         stylesheets: {
             joinTo: {
                 'styles/application.css': /^app[\\/]/,
-                'styles/libraries.css': /^(bower_components|vendor)[\\/]/,
+                'styles/libraries.css': /^vendor[\\/]/,
+                'styles/startup.css': /^startup[\\/]/,
                 'styles/test.css': /^test[\\/]/
             }
         },
         templates: {
             joinTo: {
-                'js/application.js': /^app[\\/]/
+                'js/application.js': /^app[\\/]/,
+                'js/startup.js': /^startup[\\/]/
             }
         }
     },
     paths: {
         'public': 'public',
-        'watched': ['app', 'test', 'vendor']
+        'watched': ['app', 'startup', 'test', 'vendor']
     },
     plugins: {
         replace: {
@@ -62,8 +64,10 @@ exports.config = {
             paths: [
                 'public/js/application.js',
                 'public/js/libraries.js',
+                'public/js/startup.js',
                 'public/styles/application.css',
-                'public/styles/libraries.css'
+                'public/styles/libraries.css',
+                'public/styles/startup.css'
             ]
         }
     }

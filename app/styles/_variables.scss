@@ -13,8 +13,8 @@ $texture-expired: url('#{$dir-assets}/textures/bg-expired.png');
 $texture-footer: url('#{$dir-assets}/textures/bg-footer.png');
 
 /*** FONTS ***/
-$font-slab: "Roboto Slab", "Arial Unicode MS", "Arial";
-$font-ubuntu: "Ubuntu", "Arial Unicode MS", "Arial";
+$font-slab: "Roboto Slab", "Arial Unicode MS", "Arial", sans-serif;
+$font-ubuntu: "Ubuntu", "Arial Unicode MS", "Arial", sans-serif;
 
 /*** COLOR ***/
 $black: #000000;

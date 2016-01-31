@@ -6,7 +6,8 @@ html, body {
   width: 100%;
 }
 
-bootstrap-dialog {
+bootstrap-dialog,
+gelato-dialog {
   .modal {
     z-index: 9000;
   }

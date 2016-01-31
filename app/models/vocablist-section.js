@@ -38,8 +38,8 @@ module.exports = SkritterModel.extend({
      * @returns {Array}
      */
     getUniqueVocabIds: function() {
-        var vocabIds = _.pluck(this.get('rows'), 'vocabId');
-        var tradVocabIds = _.pluck(this.get('rows'), 'tradVocabId');
+        var vocabIds = _.map(this.get('rows'), 'vocabId');
+        var tradVocabIds = _.map(this.get('rows'), 'tradVocabId');
         return _.uniq(vocabIds.concat(tradVocabIds));
     }
 });

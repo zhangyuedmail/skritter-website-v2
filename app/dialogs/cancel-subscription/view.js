@@ -59,18 +59,14 @@ module.exports = BootstrapDialog.extend({
      */
     handleClickSubmitButton: function() {
         var service = this.subscription.get('subscribed');
-        if (!_.contains(['stripe', 'gplay'], service)) {
+        if (!_.includes(['stripe', 'gplay'], service)) {
             return false;
         }
-
-        var requests = [];
         $.when(
             this.requestUnsubscribe(),
             this.requestUpdateReceiveNewsletter(),
             this.requestSaveCancelReason()
-        ).done(function() {
-            document.location.reload();
-        })
+        ).done(app.reload);
     },
     /**
      * @method renderSectionContent

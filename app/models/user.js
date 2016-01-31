@@ -11,7 +11,7 @@ module.exports = SkritterModel.extend({
      * @constructor
      */
     initialize: function() {
-        this.session.user = this;
+        this.session = new Session(null, {user: this});
     },
     /**
      * @property defaults
@@ -26,21 +26,11 @@ module.exports = SkritterModel.extend({
         hideDefinition: false,
         gradingColors: {1: '#e74c3c', 2: '#ebbd3e', 3: '#87a64b', 4: '#4d88e3'},
         goals: {ja: {items: 20}, zh: {items: 20}},
-        teachingMode: true
+        lastChineseItemUpdate: 0,
+        lastJapaneseItemUpdate: 0,
+        teachingMode: true,
+        volume: 100
     },
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns Array
-     */
-    parse: function(response) {
-        return response.User;
-    },
-    /**
-     * @property session
-     * @type {Session}
-     */
-    session: new Session(),
     /**
      * @property urlRoot
      * @type {String}
@@ -53,24 +43,56 @@ module.exports = SkritterModel.extend({
         app.setLocalStorage(this.id + '-user', this.toJSON());
     },
     /**
-     * @method getAllParts
+     * @method getAllStudyParts
      * @returns {Array}
      */
-    getAllParts: function() {
+    getAllStudyParts: function() {
         return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
+    },
+    /**
+     * @method getAllStudyStyles
+     * @returns {Array}
+     */
+    getAllStudyStyles: function() {
+        return app.isChinese() ? ['both', 'simp', 'trad'] : ['none'];
     },
     /**
      * @method getFilterParts
      * @returns {Array}
      */
     getFilteredParts: function() {
-        var filteredParts = [];
+        var filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
+        return _.intersection(this.getStudyParts(), filteredParts);
+    },
+    /**
+     * @method getFilteredStyles
+     * @returns {Array}
+     */
+    getFilteredStyles: function() {
+        var styles = ['both'];
         if (app.isChinese()) {
-            filteredParts =  this.get('filteredChineseParts');
-        } else {
-            filteredParts = this.get('filteredJapaneseParts');
+            if (this.get('reviewSimplified')) {
+                styles.push('simp');
+            }
+            if (this.get('reviewTraditional')) {
+                styles.push('trad');
+            }
         }
-        return _.intersection(filteredParts, this.getStudyParts());
+        return styles;
+    },
+    /**
+     * @method getLastItemUpdate
+     * @returns {Number}
+     */
+    getLastItemUpdate: function() {
+        return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate')
+    },
+    /**
+     * @method getStudyParts
+     * @returns {Array}
+     */
+    getStudyParts: function() {
+        return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
     },
     /**
      * @method getRaygunTags
@@ -92,42 +114,11 @@ module.exports = SkritterModel.extend({
         return tags;
     },
     /**
-     * @method getStudyParts
-     * @returns {Array}
-     */
-    getStudyParts: function() {
-        return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
-    },
-    /**
-     * @method getStudyStyles
-     * @returns {Array}
-     */
-    getStudyStyles: function() {
-        var styles = ['both'];
-        if (app.isChinese()) {
-            if (this.get('reviewSimplified')) {
-                styles.push('simp');
-            }
-            if (this.get('reviewTraditional')) {
-                styles.push('trad');
-            }
-        }
-        return styles;
-    },
-    /**
-     * @method hasFilteredPart
+     * @method isAddingPart
      * @param {String} part
      * @returns {Boolean}
      */
-    hasFilteredPart: function(part) {
-        return _.includes(this.getFilteredParts(), part);
-    },
-    /**
-     * @method hasStudyPart
-     * @param {String} part
-     * @returns {Boolean}
-     */
-    hasStudyPart: function(part) {
+    isAddingPart: function(part) {
         return _.includes(this.getStudyParts(), part);
     },
     /**
@@ -145,25 +136,33 @@ module.exports = SkritterModel.extend({
         return this.session.has('user_id');
     },
     /**
+     * @method isReviewingPart
+     * @param {String} part
+     * @returns {Boolean}
+     */
+    isReviewingPart: function(part) {
+        return _.includes(this.getFilteredParts(), part);
+    },
+    /**
      * @method login
      * @param {String} username
      * @param {String} password
-     * @param {Function} callbackSuccess
-     * @param {Function} callbackError
+     * @param {Function} callback
      */
-    login: function(username, password, callbackSuccess, callbackError) {
+    login: function(username, password, callback) {
+        var self = this;
         async.waterfall([
-            _.bind(function(callback) {
-                this.session.authenticate('password', username, password,
+            function(callback) {
+                self.session.authenticate('password', username, password,
                     function(result) {
                         callback(null, result);
                     }, function(error) {
                         callback(error);
                     });
-            }, this),
-            _.bind(function(result, callback) {
-                this.set('id', result.id);
-                this.fetch({
+            },
+            function(result, callback) {
+                self.set('id', result.id);
+                self.fetch({
                     error: function(error) {
                         callback(error);
                     },
@@ -171,26 +170,131 @@ module.exports = SkritterModel.extend({
                         callback(null, user);
                     }
                 })
-            }, this)
-        ], _.bind(function(error, user) {
-            if (error) {
-                callbackError(error);
-            } else {
-                this.cache();
-                this.session.cache();
-                app.removeSetting('session');
-                app.setSetting('user', this.id);
-                callbackSuccess(user);
             }
-        }, this));
+        ], function(error, user) {
+            if (error) {
+                callback(error);
+            } else {
+                self.cache();
+                self.session.cache();
+                app.removeSetting('session');
+                app.setSetting('user', self.id);
+                callback(null, user);
+            }
+        });
     },
     /**
      * @method logout
      */
     logout: function() {
-        app.removeLocalStorage(this.id + '-session');
-        app.removeLocalStorage(this.id + '-user');
-        app.removeSetting('user');
-        app.reload();
+        var self = this;
+        app.db.delete()
+            .then(function() {
+                app.removeLocalStorage(self.id + '-session');
+                app.removeLocalStorage(self.id + '-user');
+                app.removeSetting('user');
+                app.reload();
+            })
+            .catch(function(error) {
+                console.error(error);
+                app.reload();
+            });
+    },
+    /**
+     * @method parse
+     * @param {Object} response
+     * @returns Array
+     */
+    parse: function(response) {
+        return response.User;
+    },
+    /**
+     * @method setLastItemUpdate
+     * @param {Number} value
+     * @returns {User}
+     */
+    setLastItemUpdate: function(value) {
+        if (app.isChinese()) {
+            this.set('lastChineseItemUpdate', value);
+        } else {
+            this.set('lastJapaneseItemUpdate', value);
+        }
+        return this;
+    },
+    /**
+     * @method updateItems
+     * @param {Function} callback
+     */
+    updateItems: function(callback) {
+        var self = this;
+        var cursor = undefined;
+        var index = 0;
+        var limit = 2500;
+        var now = moment().unix();
+        var retries = 0;
+        if (!this.isLoggedIn()) {
+            callback();
+            return;
+        }
+        async.whilst(
+            function() {
+                index++;
+                return cursor !== null;
+            },
+            function(callback) {
+                if (index > 4) {
+                    ScreenLoader.notice('(loading can take awhile on larger accounts)');
+                }
+                ScreenLoader.post('Fetching item batch #' + index);
+                $.ajax({
+                    method: 'GET',
+                    url: 'https://api-dot-write-way.appspot.com/v1/items',
+                    data: {
+                        cursor: cursor,
+                        lang: app.getLanguage(),
+                        limit: limit,
+                        offset: self.getLastItemUpdate(),
+                        order: 'changed',
+                        token: self.session.get('access_token')
+                    },
+                    error: function(error) {
+                        if (retries > 2) {
+                            callback(error);
+                        } else {
+                            retries++;
+                            limit = 500;
+                            setTimeout(callback, 1000);
+                        }
+                    },
+                    success: function(result) {
+                        app.db.transaction(
+                            'rw',
+                            app.db.items,
+                            function() {
+                                result.Items.forEach(function(item) {
+                                    app.db.items.put(item);
+                                });
+                            }
+                        ).then(function() {
+                            cursor = result.cursor;
+                            setTimeout(callback, 100);
+                        }).catch(function(error) {
+                            if (retries > 2) {
+                                callback(error);
+                            } else {
+                                retries++;
+                                limit = 500;
+                                setTimeout(callback, 1000);
+                            }
+                        });
+                    }
+                });
+            },
+            function(error) {
+                self.setLastItemUpdate(now);
+                self.cache();
+                callback(error);
+            }
+        );
     }
 });

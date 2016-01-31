@@ -1,0 +1,14 @@
+gelato-component(data-name="study-prompt-part-defn")
+  - var prompt = view.prompt;
+
+  if prompt.reviews.part === 'defn' && prompt.reviews
+
+    .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
+      span= prompt.reviews.vocab.get('writing')
+
+    if prompt.reviews.isComplete()
+      .answer
+        span!= prompt.reviews.vocab.getDefinition()
+    else
+      .question
+        span What's the definition?

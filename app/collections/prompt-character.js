@@ -33,8 +33,7 @@ module.exports = GelatoCollection.extend({
      * @returns {PromptStroke}
      */
     getExpectedStroke: function() {
-        var target = this.getExpectedTargets()[0];
-        return this.length ? target.at(this.getPosition()) : target.at(0);
+        return this.getExpectedTargets()[0].at(this.length);
     },
     /**
      * @method getExpectedTargets
@@ -47,7 +46,7 @@ module.exports = GelatoCollection.extend({
             var target = this.targets[a];
             scores[a] = 0;
             for (var b = 0, lengthB = this.length; b < lengthB; b++) {
-                scores[a] += target.findWhere({id: this.at(b).id}) ? 1 : 0;
+                scores[a] += target.find({id: this.at(b).id}) ? 1 : 0;
             }
         }
         var best = scores[scores.indexOf(Math.max.apply(Math, scores))];
@@ -162,7 +161,7 @@ module.exports = GelatoCollection.extend({
      * @returns {Boolean}
      */
     isTweening: function() {
-        return this.pluck('tweening').indexOf(true) > -1;
+        return this.map('tweening').indexOf(true) > -1;
     },
     /**
      * @method recognize

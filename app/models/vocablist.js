@@ -29,7 +29,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     deletable: function() {
-        return _.all([
+        return _.every([
             !this.get('disabled'),
             !this.get('published'),
             this.get('sort') === 'custom',
@@ -41,7 +41,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     copyable: function() {
-        return _.all([
+        return _.every([
             !this.get('disabled'),
             this.get('sort') !== 'chinesepod-lesson'
         ]);
@@ -124,8 +124,8 @@ module.exports = SkritterModel.extend({
         var vocabIds = [];
         var section = this.getSectionById(sectionId);
         if (section) {
-            vocabIds = vocabIds.concat(_.pluck(section.rows, 'vocabId'));
-            vocabIds = vocabIds.concat(_.pluck(section.rows, 'tradVocabId'));
+            vocabIds = vocabIds.concat(_.map(section.rows, 'vocabId'));
+            vocabIds = vocabIds.concat(_.map(section.rows, 'tradVocabId'));
         }
         return vocabIds;
     },
@@ -135,7 +135,7 @@ module.exports = SkritterModel.extend({
      */
     getWordCount: function() {
         var count = 0;
-        var rows = _.pluck(this.get('sections'), 'rows');
+        var rows = _.map(this.get('sections'), 'rows');
         for (var i = 0, length = rows.length; i < length; i++) {
             count += rows[i].length;
         }
@@ -153,12 +153,12 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     isEditable: function() {
-        return app.user.get('isAdmin') ? true : _.all([
+        return app.user.get('isAdmin') ? true : _.every([
             !this.get('disabled'),
             this.get('sort') === 'custom',
-            _.any([
+            _.some([
                 this.get('user') === app.user.id,
-                _.contains(this.get('editors'), app.user.id),
+                _.includes(this.get('editors'), app.user.id),
                 this.get('public')
             ])
         ]);
@@ -175,7 +175,7 @@ module.exports = SkritterModel.extend({
      * @returns {Boolean}
      */
     publishable: function() {
-        return _.all([
+        return _.every([
             !this.get('disabled'),
             !this.get('published'),
             this.get('sort') === 'custom',

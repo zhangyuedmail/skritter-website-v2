@@ -1,6 +1,6 @@
 var SkritterModel = require('base/skritter-model');
-var PromptReviews = require('collections/prompt-reviews');
-var PromptReview = require('models/prompt-review');
+var PromptItems = require('collections/prompt-items');
+var PromptItem = require('models/prompt-item');
 
 /**
  * @class Item
@@ -17,14 +17,6 @@ module.exports = SkritterModel.extend({
      * @type {String}
      */
     idAttribute: 'id',
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns {Object}
-     */
-    parse: function(response) {
-        return response.Item || response;
-    },
     /**
      * @property urlRoot
      * @type {String}
@@ -57,10 +49,10 @@ module.exports = SkritterModel.extend({
                 var splitId = vocabId.split('-');
                 var fallbackId = [app.user.id, splitId[0], splitId[1], 0, part].join('-');
                 var intendedId = [app.user.id, vocabId, part].join('-');
-                if (this.collection.contained.get(intendedId)) {
-                    containedItems.push(this.collection.contained.get(intendedId));
+                if (this.collection.get(intendedId)) {
+                    containedItems.push(this.collection.get(intendedId));
                 } else {
-                    containedItems.push(this.collection.contained.get(fallbackId));
+                    containedItems.push(this.collection.get(fallbackId));
                 }
             }
         }
@@ -75,11 +67,11 @@ module.exports = SkritterModel.extend({
         return vocab ? vocab.getContained() : [];
     },
     /**
-     * @method getPromptReviews
-     * @returns {PromptReviews}
+     * @method getPromptItems
+     * @returns {PromptItems}
      */
-    getPromptReviews: function() {
-        var reviews = new PromptReviews();
+    getPromptItems: function() {
+        var promptItems = new PromptItems();
         var containedItems = this.getContainedItems();
         var containedVocabs = this.getContainedVocabs();
         var now = Date.now();
@@ -104,31 +96,39 @@ module.exports = SkritterModel.extend({
                 vocabs = [vocab];
         }
         for (var i = 0, length = vocabs.length; i < length; i++) {
-            var review = new PromptReview();
-            review.set('id', [now, i, vocabs[i].id].join('_'));
-            review.set('kana', vocabs[i].isKana());
-            review.character = characters[i];
-            review.item = items[i];
-            review.vocab = vocabs[i];
-            reviews.add(review);
+            var childItem = items[i];
+            var childVocab = vocabs[i];
+            var promptItem = new PromptItem();
+            promptItem.character = characters[i];
+            promptItem.interval = childItem.get('interval');
+            promptItem.item = childItem;
+            promptItem.vocab = childVocab;
+            promptItem.set('filler', childVocab.isFiller());
+            promptItem.set('kana', childVocab.isKana());
+            promptItems.add(promptItem);
         }
-        reviews.group = now + '_' + vocab.id;
-        reviews.item = this;
-        reviews.part = part;
-        reviews.vocab = vocab;
-        return reviews;
+        promptItems.created = now;
+        promptItems.group = now + '_' + this.id;
+        promptItems.interval = this.get('interval');
+        promptItems.item = this;
+        promptItems.part = part;
+        promptItems.vocab = vocab;
+        return promptItems;
     },
     /**
      * @method getReadiness
      * @returns {Number}
      */
     getReadiness: function() {
-        var now = this.collection.sorted || moment().unix();
-        var itemLast = this.get('last');
-        var itemNext = this.get('next');
-        var actualAgo = now - itemLast;
-        var scheduledAgo = itemNext - itemLast;
-        return itemLast ? actualAgo / scheduledAgo : Number.POSITIVE_INFINITY;
+        if (this.get('vocabIds').length) {
+            var now = this.collection.sorted || moment().unix();
+            var itemLast = this.get('last');
+            var itemNext = this.get('next');
+            var actualAgo = now - itemLast;
+            var scheduledAgo = itemNext - itemLast;
+            return itemLast ? actualAgo / scheduledAgo : 9999;
+        }
+        return Number.NEGATIVE_INFINITY;
     },
     /**
      * @method getVariation
@@ -253,6 +253,14 @@ module.exports = SkritterModel.extend({
      */
     isPartTone: function() {
         return this.get('part') === 'tone';
+    },
+    /**
+     * @method parse
+     * @param {Object} response
+     * @returns {Object}
+     */
+    parse: function(response) {
+        return response.Item || response;
     },
     /**
      * @method unban

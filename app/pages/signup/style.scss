@@ -2,6 +2,7 @@
 
 gelato-page[data-name='signup'] {
 
+  background: $background-marketing;
   padding-top: 50px;
 
   #section-header {
@@ -20,7 +21,9 @@ gelato-page[data-name='signup'] {
     margin-right: auto;
     max-width: 992px;
     padding: 0 15px;
-    #accepted-payments img { margin-top: 15px; }
+    #accepted-payments img {
+      margin-top: 15px;
+    }
     #section-form {
       background-color: #ffffff;
       border-bottom-left-radius: 25px;
@@ -96,7 +99,9 @@ gelato-page[data-name='signup'] {
       border-bottom-right-radius: 25px;
       border-top-right-radius: 25px;
       padding: 30px;
-      hr { border-color: $grey1; }
+      hr {
+        border-color: $grey1;
+      }
       .testimonial-name {
         color: #404851;
         font-family: $font-ubuntu;
@@ -119,8 +124,12 @@ gelato-page[data-name='signup'] {
         font-weight: 400;
         margin-bottom: 30px;
       }
-      .media { margin-bottom: 35px; }
-      #authorize-badge { margin-top: 15px; }
+      .media {
+        margin-bottom: 35px;
+      }
+      #authorize-badge {
+        margin-top: 15px;
+      }
       #trial-highlight {
         ul > li {
           color: $grey5;
@@ -167,7 +176,9 @@ gelato-page[data-name='signup'] {
       background-color: #ffffff;
       padding: 30px;
     }
-    .policy-row { margin-bottom: 15px; }
+    .policy-row {
+      margin-bottom: 15px;
+    }
   }
 
   #signup-error-alert {

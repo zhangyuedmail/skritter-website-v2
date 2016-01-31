@@ -30,7 +30,7 @@ module.exports = GelatoModel.extend({
                 var stroke = new PromptStroke();
                 var strokeData = targetVariation[b];
                 var strokeId = strokeData[0];
-                var strokeParams = this.collection.params.where({strokeId: strokeId});
+                var strokeParams = this.collection.params.filter({strokeId: strokeId});
                 var strokeContains = strokeParams[0].get('contains');
                 var strokeShape = this.collection.shapes.get(strokeId);
                 stroke.set({

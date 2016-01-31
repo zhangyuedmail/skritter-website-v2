@@ -1,7 +1,7 @@
 var GelatoPage = require('gelato/page');
-var DefaultNavbar = require('navbars/default/view');
 var Vocabs = require('collections/vocabs');
-var Prompt = require('components/prompt/view');
+var Prompt = require('components/study/prompt/view');
+var Navbar = require('navbars/default/view');
 
 /**
  * @class Scratchpad
@@ -10,23 +10,33 @@ var Prompt = require('components/prompt/view');
 module.exports = GelatoPage.extend({
     /**
      * @method initialize
+     * @param {Object} options
      * @constructor
      */
-    initialize: function() {
-        this.navbar = new DefaultNavbar();
+    initialize: function(options) {
+        ScreenLoader.show();
+        this.navbar = new Navbar();
+        this.part = options.part;
         this.prompt = new Prompt();
         this.vocabs = new Vocabs();
+        this.vocabId = options.vocabId;
+        this.load();
     },
     /**
-     * @property title
-     * @type {String}
+     * @property events
+     * @type Object
      */
-    title: 'Scratchpad - Skritter',
+    events: {},
     /**
      * @property template
      * @type {Function}
      */
     template: require('./template'),
+    /**
+     * @property title
+     * @type {String}
+     */
+    title: 'Scratchpad - Skritter',
     /**
      * @method render
      * @returns {Scratchpad}
@@ -34,23 +44,21 @@ module.exports = GelatoPage.extend({
     render: function() {
         this.renderTemplate();
         this.navbar.setElement('#navbar-container').render();
-        this.prompt.setElement('#prompt-container').render();
+        this.prompt.setElement('#study-prompt-container').render();
         return this;
     },
     /**
      * @method load
-     * @param {String} vocabId
-     * @param {String} [part]
      */
-    load: function(vocabId, part) {
+    load: function() {
         async.waterfall([
-            (function(callback) {
+            _.bind(function(callback) {
                 this.vocabs.fetch({
                     data: {
                         include_decomps: true,
                         include_sentences: true,
                         include_strokes: true,
-                        ids: vocabId
+                        ids: this.vocabId
                     },
                     error: function(vocabs, error) {
                         callback(error);
@@ -59,8 +67,8 @@ module.exports = GelatoPage.extend({
                         callback(null, vocabs.at(0));
                     }
                 });
-            }).bind(this),
-            (function(vocab, callback) {
+            }, this),
+            _.bind(function(vocab, callback) {
                 if (vocab.has('containedVocabIds')) {
                     this.vocabs.fetch({
                         data: {
@@ -80,19 +88,21 @@ module.exports = GelatoPage.extend({
                 } else {
                     callback(null, vocab);
                 }
-            }).bind(this)
-        ], (function(error, vocab) {
+            }, this)
+        ],_.bind(function(error, vocab) {
             if (error) {
                 //TODO: display error message to user
                 console.error('SCRATCHPAD LOAD ERROR:', error);
             } else {
-                this.prompt.set(vocab.getPromptReviews(part || 'rune'));
+                this.reviews = vocab.getPromptItems(this.part || 'rune');
+                this.prompt.set(this.reviews);
+                ScreenLoader.hide();
             }
-        }).bind(this));
+        }, this));
     },
     /**
      * @method remove
-     * @returns {Scratchpad}
+     * @returns {Study}
      */
     remove: function() {
         this.navbar.remove();

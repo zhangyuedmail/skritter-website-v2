@@ -10,4 +10,14 @@ gelato-page[data-name='login'] {
     max-width: 400px;
   }
 
+  #footer-container {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  #login-form {
+    margin-bottom: 15px;
+  }
+
 }

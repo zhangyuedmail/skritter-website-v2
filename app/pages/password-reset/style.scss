@@ -1,0 +1,27 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='password-reset'] {
+
+  background: $background-marketing;
+  padding-top: 50px;
+
+  .content-block {
+    margin: 100px auto;
+    max-width: 400px;
+  }
+
+  #footer-container {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  #password-reset-message {
+    margin-bottom: 15px;
+  }
+
+  #password-reset-form {
+     margin-bottom: 15px;
+   }
+
+}

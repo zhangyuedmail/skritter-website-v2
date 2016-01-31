@@ -6,6 +6,16 @@ var SkritterModel = require('base/skritter-model');
  */
 module.exports = SkritterModel.extend({
     /**
+     * @method initialize
+     * @param {Object} [attributes]
+     * @param {Object} [options]
+     * @constructor
+     */
+    initialize: function(attributes, options) {
+        options = options || {};
+        this.user = options.user;
+    },
+    /**
      * @property idAttribute
      * @type {String}
      */
@@ -23,11 +33,6 @@ module.exports = SkritterModel.extend({
      * @type {String}
      */
     url: 'oauth2/token',
-    /**
-     * @property user
-     * @type {User}
-     */
-    user: null,
     /**
      * @method authenticate
      * @param {String} type

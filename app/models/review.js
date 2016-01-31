@@ -11,12 +11,14 @@ module.exports = SkritterModel.extend({
      */
     defaults: function() {
         return {
-          data: []
+            created: null,
+            data: [],
+            promptItems: null
         };
     },
     /**
      * @property idAttribute
      * @type String
      */
-    idAttribute: 'id'
+    idAttribute: 'group'
 });
