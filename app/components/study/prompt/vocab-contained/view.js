@@ -18,7 +18,6 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick .child-decomp': 'handleClickChildDecomp',
         'vclick #show-contained': 'handleClickShowContained'
     },
     /**
@@ -34,18 +33,13 @@ module.exports = GelatoComponent.extend({
         this.renderTemplate();
         return this;
     },
-    handleClickChildDecomp: function(event) {
-        event.preventDefault();
-        console.log(event);
-        var $popup = $(event.currentTarget).find('.child-decomp-popup');
-        $popup.removeClass('hidden');
-    },
     /**
      * @method handleClickShowContained
      * @param {Event} event
      */
     handleClickShowContained: function(event) {
         event.preventDefault();
+        console.log('clicked');
         this.prompt.review.set('showContained', true);
         this.render();
     }

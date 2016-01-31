@@ -3,6 +3,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
 
   if prompt.reviews
     - var vocabs = prompt.reviews.vocab.getContained(true);
+    - console.log(vocabs);
 
     if !vocabs.length
       - contained = [prompt.reviews.vocab];
@@ -52,4 +53,4 @@ gelato-component(data-name='study-prompt-vocab-contained')
 
         else
 
-          button#show-vocabs.btn.btn-default show
+          button#show-contained.btn.btn-default show
