@@ -13,16 +13,13 @@ module.exports = GelatoComponent.extend({
     initialize: function(options) {
         this.prompt = options.prompt;
         this.reviews = null;
-        this.showLeft = true;
-        this.showRight = true;
     },
     /**
      * @property events
      * @type Object
      */
     events: {
-        'vclick #navigate-next': 'handleClickNavigateNext',
-        'vclick #navigate-previous': 'handleClickNavigatePrevious'
+        'vclick #save-reviews': 'handleClickSaveReviews'
     },
     /**
      * @property template
@@ -38,20 +35,12 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
-     * @method handleClickNavigateNext
+     * @method handleClickSaveReviews
      * @param {Event} event
      */
-    handleClickNavigateNext: function(event) {
+    handleClickSaveReviews: function(event) {
         event.preventDefault();
-        this.prompt.next();
-    },
-    /**
-     * @method handleClickNavigatePrevious
-     * @param {Event} event
-     */
-    handleClickNavigatePrevious: function(event) {
-        event.preventDefault();
-        this.prompt.previous();
+        this.reviews.post();
     },
     /**
      * @method setReviews

@@ -6,6 +6,7 @@ var PartDefn = require('components/study/prompt/part-defn/view');
 var PartRdng = require('components/study/prompt/part-rdng/view');
 var PartRune = require('components/study/prompt/part-rune/view');
 var PartTone = require('components/study/prompt/part-tone/view');
+var ReviewStatus = require('components/study/prompt/review-status/view');
 var Shortcuts = require('components/study/prompt/shortcuts');
 var ToolbarAction = require('components/study/prompt/toolbar-action/view');
 var ToolbarGrading = require('components/study/prompt/toolbar-grading/view');
@@ -36,9 +37,11 @@ module.exports = GelatoComponent.extend({
         this.part = null;
         this.review = null;
         this.reviews = null;
+        this.schedule = null;
         //components
         this.canvas = new Canvas({prompt: this});
         this.navigation = new Navigation({prompt: this});
+        this.reviewStatus = new ReviewStatus({prompt: this});
         this.shortcuts = new Shortcuts({prompt: this});
         this.toolbarAction = new ToolbarAction({prompt: this});
         this.toolbarGrading = new ToolbarGrading({prompt: this});
@@ -69,6 +72,7 @@ module.exports = GelatoComponent.extend({
         this.$panelRight = this.$('#panel-right');
         this.canvas.setElement('#canvas-container').render();
         this.navigation.setElement('#navigation-container').render();
+        this.reviewStatus.setElement('#review-status-container').render();
         this.toolbarAction.setElement('#toolbar-action-container').render();
         this.toolbarGrading.setElement('#toolbar-grading-container').render();
         this.toolbarVocab.setElement('#toolbar-vocab-container').render();
@@ -168,6 +172,7 @@ module.exports = GelatoComponent.extend({
         if (this.part) {
             this.part.remove();
         }
+        this.reviewStatus.remove();
         this.shortcuts.unregisterAll();
         this.toolbarAction.remove();
         this.toolbarGrading.remove();
@@ -212,6 +217,18 @@ module.exports = GelatoComponent.extend({
         console.info('PROMPT:', reviews);
         this.reviews = reviews;
         this.renderPart();
+        this.navigation.render();
+        this.reviewStatus.render();
+        return this;
+    },
+    /**
+     * @method setSchedule
+     * @param {Items} schedule
+     * @returns {Prompt}
+     */
+    setSchedule: function(schedule) {
+        this.navigation.setReviews(schedule.reviews);
+        this.reviewStatus.setReviews(schedule.reviews);
         return this;
     }
 });

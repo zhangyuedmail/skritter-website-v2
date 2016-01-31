@@ -27,6 +27,7 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+        window.onbeforeunload = this.handleWindowOnBeforeUnload.bind(this);
         this.loadSchedule();
     },
     /**
@@ -56,6 +57,15 @@ module.exports = GelatoPage.extend({
         return this;
     },
     /**
+     * @method handleWindowOnBeforeUnload
+     */
+    handleWindowOnBeforeUnload: function() {
+        if (!this.schedule.reviews.length) {
+            return;
+        }
+        return 'You have ' + this.schedule.reviews.length + ' unsaved reviews!';
+    },
+    /**
      * @method handlePromptNext
      * @param {PromptItems} promptItems
      */
@@ -68,7 +78,8 @@ module.exports = GelatoPage.extend({
             }
             this.schedule.reviews.put(review, null, function() {
                 if (self.schedule.reviews.length > 4) {
-                    self.schedule.reviews.post({skip: 1});
+                    //TODO: uncomment this crap
+                    //self.schedule.reviews.post({skip: 1});
                 }
                 self.item = null;
                 self.next();
@@ -97,6 +108,7 @@ module.exports = GelatoPage.extend({
             .toArray()
             .then(function(reviews) {
                 self.schedule.reviews.add(reviews);
+                self.prompt.setReviews(self.schedule.reviews);
                 self.populateQueue();
             })
             .catch(function(error) {
@@ -202,7 +214,6 @@ module.exports = GelatoPage.extend({
             error: function(error) {
                 self.schedule.trigger('error', error);
                 self.scheduleState ='standby';
-                self.$('#loading-indicator').addClass('hidden');
             },
             success: function(items, result) {
                 var now = moment().unix();
@@ -220,7 +231,6 @@ module.exports = GelatoPage.extend({
                 }
                 self.schedule.trigger('populate', self.queue);
                 self.scheduleState ='standby';
-                self.$('#loading-indicator').addClass('hidden');
             }
         });
     },
