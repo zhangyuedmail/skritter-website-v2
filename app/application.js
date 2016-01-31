@@ -33,6 +33,10 @@ module.exports = GelatoApplication.extend({
             ga('set', 'forceSSL', true);
         }
 
+        if (window.mixpanel && this.isWebsite()) {
+            mixpanel.init(this.getMixpanelKey());
+        }
+
         if (this.isDevelopment()) {
             window.onerror = this.handleError;
         }
@@ -69,6 +73,17 @@ module.exports = GelatoApplication.extend({
      */
     getLanguage: function() {
         return this.get('language') || this.user.get('targetLang');
+    },
+    /**
+     * @method getMixpanelKey
+     * @returns {String}
+     */
+    getMixpanelKey: function() {
+        if (this.isProduction()) {
+            return '8ee755b0ebe4f1141cda5dd09186cdca';
+        } else {
+            return '456c03002118e80555d7136131bf10a3';
+        }
     },
     /**
      * @method getStripeKey
