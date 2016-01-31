@@ -35,7 +35,7 @@ module.exports = Router.extend({
         'legal': 'navigateLegal',
         'login': 'navigateLogin',
         'password-reset': 'navigatePasswordReset',
-        'scratchpad/:vocabId(/:part)': 'navigateScratchpad',
+        'scratchpad/:writing(/:part)': 'navigateScratchpad',
         'signup(/:plan)': 'navigateSignup',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'test': 'navigateTest',
@@ -237,11 +237,11 @@ module.exports = Router.extend({
     },
     /**
      * @method navigateScratchpad
-     * @param {String} vocabId
+     * @param {String} writing
      * @param {String} [part]
      */
-    navigateScratchpad: function(vocabId, part) {
-        this.go('pages/scratchpad', {part: part, vocabId: vocabId});
+    navigateScratchpad: function(writing, part) {
+        this.go('pages/scratchpad', {part: part, writing: writing});
     },
     /**
      * @method navigateSignup

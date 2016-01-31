@@ -19,7 +19,8 @@ module.exports = GelatoPage.extend({
         this.part = options.part;
         this.prompt = new Prompt();
         this.vocabs = new Vocabs();
-        this.vocabId = options.vocabId;
+        this.vocabId = app.fn.mapper.toBase(options.writing);
+        this.writing = options.writing;
         this.load();
     },
     /**
