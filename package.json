@@ -18,20 +18,9 @@
     "name": "Skritter"
   },
   "scripts": {
-    "android-build-chinese": "node ./bin/cordova-build-android --lang='zh'",
-    "android-build-japanese": "node ./bin/cordova-build-android --lang='ja'",
-    "android-install": "node ./bin/cordova-install-android",
-    "android-run-chinese": "node ./bin/cordova-run-android --lang='zh'",
-    "android-run-japanese": "node ./bin/cordova-run-android --lang='ja'",
-    "ios-build-chinese": "node ./bin/cordova-build-android --lang='zh'",
-    "ios-build-japanese": "node ./bin/cordova-build-android --lang='ja'",
-    "ios-install": "node ./bin/cordova-install-ios",
-    "ios-run-chinese": "node ./bin/cordova-run-ios --lang='zh'",
-    "ios-run-japanese": "node ./bin/cordova-run-ios --lang='ja'",
+    "build": "node ./bin/build",
     "start": "node ./bin/start",
-    "test": "node ./bin/test",
-    "web-build": "./node_modules/.bin/brunch build --production",
-    "web-watch": "./node_modules/.bin/brunch watch --server"
+    "test": "node ./bin/test"
   },
   "dependencies": {
     "brunch": "~2.2.0",
