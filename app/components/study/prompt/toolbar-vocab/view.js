@@ -76,10 +76,12 @@ module.exports = GelatoComponent.extend({
             this.prompt.vocabDefinition.editing = false;
             this.prompt.vocabMnemonic.editing = false;
             this.prompt.shortcuts.registerAll();
-            this.prompt.reviews.vocab.save({
+            this.prompt.review.set('showMnemonic', true);
+            this.prompt.reviews.vocab.set({
                 customDefinition: this.prompt.vocabDefinition.getValue(),
                 mnemonic: this.prompt.vocabMnemonic.getValue()
             });
+            this.prompt.reviews.vocab.save();
         } else {
             this.prompt.editing = true;
             this.prompt.vocabDefinition.editing = true;

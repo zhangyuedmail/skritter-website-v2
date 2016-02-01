@@ -39,7 +39,6 @@ module.exports = GelatoComponent.extend({
      */
     handleClickShowContained: function(event) {
         event.preventDefault();
-        console.log('clicked');
         this.prompt.review.set('showContained', true);
         this.render();
     }
