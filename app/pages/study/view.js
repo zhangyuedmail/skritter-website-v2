@@ -71,15 +71,14 @@ module.exports = GelatoPage.extend({
      */
     handlePromptNext: function(promptItems) {
         var self = this;
-        if (this.item) {
+        if (this.item && promptItems) {
             var review = promptItems.getReview();
             if (!this.schedule.reviews.get(review)) {
                 this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
             }
             this.schedule.reviews.put(review, null, function() {
                 if (self.schedule.reviews.length > 4) {
-                    //TODO: uncomment this crap
-                    //self.schedule.reviews.post({skip: 1});
+                    self.schedule.reviews.post({skip: 1});
                 }
                 self.item = null;
                 self.next();
@@ -108,7 +107,7 @@ module.exports = GelatoPage.extend({
             .toArray()
             .then(function(reviews) {
                 self.schedule.reviews.add(reviews);
-                self.prompt.setReviews(self.schedule.reviews);
+                self.prompt.setSchedule(self.schedule);
                 self.populateQueue();
             })
             .catch(function(error) {

@@ -1,6 +1,5 @@
 var GelatoCollection = require('gelato/collection');
 var PromptItem = require('models/prompt-item');
-var Review = require('models/review');
 
 /**
  * @class PromptItems

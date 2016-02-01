@@ -1,0 +1,19 @@
+gelato-dialog(data-name='confirm-item-ban')
+
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+
+        .modal-header
+          .pull-left
+            .modal-title= 'Ban ' + view.vocab.get('writing') + ' from your studied?'
+          .pull-right
+            a(href='#', data-dismiss='modal')
+              i.fa.fa-times-circle-o
+
+        .modal-body
+          p You can always unban items later from the banned words section of the words tab.
+
+        .modal-footer
+          button#button-confirm.btn.btn-danger Ban
+          button#button-cancel.btn.btn-default Cancel

@@ -138,11 +138,12 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method next
+     * @param {Boolean} [skip]
      */
-    next: function() {
+    next: function(skip) {
         this.review.stop();
-        if (this.reviews.isLast()) {
-            this.trigger('next', this.reviews);
+        if (skip || this.reviews.isLast()) {
+            this.trigger('next', skip ? null : this.reviews);
         } else {
             this.reviews.next();
             this.trigger('reviews:next', this.reviews);

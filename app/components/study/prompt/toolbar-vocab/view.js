@@ -1,4 +1,6 @@
 var GelatoComponent = require('gelato/component');
+
+var ConfirmItemBanDialog = require('dialogs1/confirm-item-ban/view');
 var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 
 /**
@@ -52,8 +54,16 @@ module.exports = GelatoComponent.extend({
      * @param {Event} event
      */
     handleClickButtonVocabBan: function(event) {
+        var self = this;
         event.preventDefault();
-        //TODO: ban specific items
+        this.dialog = new ConfirmItemBanDialog({
+            item: this.prompt.reviews.item,
+            vocab: this.prompt.reviews.vocab
+        });
+        this.dialog.once('confirm', function() {
+            self.prompt.next(true);
+        });
+        this.dialog.open();
     },
     /**
      * @method handleClickButtonVocabEdit
@@ -96,9 +106,7 @@ module.exports = GelatoComponent.extend({
     handleClickButtonVocabStar: function(event) {
         event.preventDefault();
         this.prompt.reviews.vocab.toggleStarred();
-        this.prompt.reviews.vocab.save(null, {
-            error: this.render.bind(this),
-            success: this.render.bind(this)
-        });
+        this.prompt.reviews.vocab.save();
+        this.render();
     }
 });
