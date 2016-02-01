@@ -89,15 +89,16 @@ module.exports = GelatoPage.extend({
      * @method handleClickDeleteMnemonicsButton
      */
     handleClickDeleteMnemonicsButton: function() {
+        var self = this;
         var vocabs = new Vocabs();
         _.forEach(this.$('input:checked'), function(el) {
             var vocabID = $(el).closest('tr').data('vocab-id');
             if (!vocabID) {
                 return;
             }
-            vocabs.add(this.mnemonicVocabs.get(vocabID));
-            this.mnemonicVocabs.remove(vocabID);
-        }, this);
+            vocabs.add(self.mnemonicVocabs.get(vocabID));
+            self.mnemonicVocabs.remove(vocabID);
+        });
         this.beginVocabAction('delete-mnemonic', vocabs);
         this.renderTable();
         this.$('#delete-mnemonics-btn').prop('disabled', true);
