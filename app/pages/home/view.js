@@ -16,15 +16,15 @@ module.exports = GelatoPage.extend({
         this.navbar = new DefaultNavbar();
     },
     /**
-     * @property title
-     * @type {String}
-     */
-    title: 'Home - Skritter',
-    /**
      * @property template
      * @type {Function}
      */
     template: require('./template'),
+    /**
+     * @property title
+     * @type {String}
+     */
+    title: 'Skritter - Learn to Write Chinese and Japanese Characters',
     /**
      * @method render
      * @returns {Home}
