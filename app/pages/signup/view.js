@@ -19,6 +19,7 @@ module.exports = GelatoPage.extend({
         this.navbar = new DefaultNavbar();
         this.plan = options.plan;
         this.user = new User();
+        //MIXPANEL: mixpanel.track('Viewed signup page');
     },
     /**
      * @property events
@@ -80,6 +81,13 @@ module.exports = GelatoPage.extend({
         this.renderTemplate();
         this.footer.setElement('#footer-container').render();
         this.navbar.setElement('#navbar-container').render();
+        if (app.isDevelopment()) {
+            this.$('#signup-username').val('tester1');
+            this.$('#signup-email').val('josh@skritter.com');
+            this.$('#signup-password1').val('skrit123');
+            this.$('#signup-password2').val('skrit123');
+            this.$('#signup-card-number').val('4242424242424242');
+        }
         return this;
     },
     /**
@@ -88,6 +96,7 @@ module.exports = GelatoPage.extend({
      * @param {Function} callback
      */
     createUser: function(formData, callback) {
+        var self = this;
         this.user.set({
             email: formData.email,
             name: formData.username,
@@ -101,17 +110,67 @@ module.exports = GelatoPage.extend({
         } else {
             this.user.set('couponCode', formData.coupon);
         }
-        this.user.save(
-            null,
-            {
-                error: function(error) {
-                    callback(error);
-                },
-                success: function() {
+        if (app.isDevelopment()) {
+            this.user.unset('avatar');
+        }
+        async.series([
+            function(callback) {
+                self.user.save(
+                    null,
+                    {
+                        error: function(user, error) {
+                            callback(error);
+                        },
+                        success: function(user) {
+                            //MIXPANEL: mixpanel.alias(user.id.toString());
+                            /*MIXPANEL: mixpanel.track(
+                                'Signup',
+                                {
+                                    method: formData.method,
+                                    plan: formData.plan
+                                }
+                            );*/
+                            callback();
+                        }
+                    }
+                )
+            },
+            function(callback) {
+                if (app.isProduction()) {
+                    ScreenLoader.post('Sending welcome email');
+                    $.ajax({
+                        method: 'GET',
+                        url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
+                        data: {
+                            token: app.user.session.get('access_token')
+                        },
+                        error: function(error) {
+                            callback(error);
+                        },
+                        success: function() {
+                            callback()
+                        }
+                    });
+                } else {
                     callback();
                 }
+            },
+            function(callback) {
+                ScreenLoader.post('Logging in new user');
+                app.user.login(
+                    formData.username,
+                    formData.password1,
+                    function(error) {
+                        if (error) {
+                            callback(error);
+                        } else {
+                            callback();
+                        }
+                    }
+                )
             }
-        )
+        ], callback);
+
     },
     /**
      * @method getFormData
@@ -191,36 +250,6 @@ module.exports = GelatoPage.extend({
                 ScreenLoader.show();
                 ScreenLoader.post('Creating a new user');
                 self.createUser(formData, callback);
-            },
-            function(callback) {
-                ScreenLoader.post('Logging in new user');
-                app.user.login(
-                    formData.username,
-                    formData.password1,
-                    function(error) {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            callback();
-                        }
-                    }
-                )
-            },
-            function(callback) {
-                ScreenLoader.post('Sending welcome email');
-                $.ajax({
-                    method: 'GET',
-                    url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
-                    data: {
-                        token: app.user.session.get('access_token')
-                    },
-                    error: function(error) {
-                        callback(error);
-                    },
-                    success: function() {
-                        callback()
-                    }
-                });
             }
         ], function(error) {
             if (error) {
@@ -269,36 +298,6 @@ module.exports = GelatoPage.extend({
             function(callback) {
                 ScreenLoader.post('Creating a new user');
                 self.createUser(formData, callback);
-            },
-            function(callback) {
-                ScreenLoader.post('Logging in new user');
-                app.user.login(
-                    formData.username,
-                    formData.password1,
-                    function(error) {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            callback();
-                        }
-                    }
-                )
-            },
-            function(callback) {
-                ScreenLoader.post('Sending welcome email');
-                $.ajax({
-                    method: 'GET',
-                    url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
-                    data: {
-                        token: app.user.session.get('access_token')
-                    },
-                    error: function(error) {
-                        callback(error);
-                    },
-                    success: function() {
-                        callback()
-                    }
-                });
             }
         ], function(error) {
             ScreenLoader.hide();

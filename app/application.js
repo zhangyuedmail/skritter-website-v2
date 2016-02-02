@@ -34,7 +34,7 @@ module.exports = GelatoApplication.extend({
         }
 
         if (window.mixpanel && this.isWebsite()) {
-            mixpanel.init(this.getMixpanelKey());
+            //MIXPANEL: mixpanel.init(this.getMixpanelKey());
         }
 
         if (this.isDevelopment()) {
@@ -64,8 +64,8 @@ module.exports = GelatoApplication.extend({
      * @returns {String}
      */
     getApiUrl: function() {
-        //return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
-        return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
+        return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
+        //return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
     },
     /**
      * @method getLanguage
@@ -207,6 +207,7 @@ module.exports = GelatoApplication.extend({
         if (this.user.isLoggedIn()) {
             Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
             Raygun.withTags(this.user.getRaygunTags());
+            //MIXPANEL: mixpanel.identify(this.user.id);
         } else {
             Raygun.setUser('guest', true);
         }
