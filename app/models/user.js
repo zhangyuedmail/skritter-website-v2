@@ -19,6 +19,7 @@ module.exports = SkritterModel.extend({
      */
     defaults: {
         addItemOffset: 0,
+        avatar: require('data/default-avatar'),
         allChineseParts: ['defn', 'rdng', 'rune', 'tone'],
         allJapaneseParts: ['defn', 'rdng', 'rune'],
         filteredChineseParts: ['defn', 'rdng', 'rune', 'tone'],
@@ -29,7 +30,7 @@ module.exports = SkritterModel.extend({
         lastChineseItemUpdate: 0,
         lastJapaneseItemUpdate: 0,
         teachingMode: true,
-        volume: 100
+        volume: 1
     },
     /**
      * @property urlRoot
