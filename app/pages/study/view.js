@@ -254,6 +254,7 @@ module.exports = GelatoPage.extend({
         this.prompt.remove();
         this.toolbar.remove();
         this.schedule.reviews.post();
+        window.onbeforeunload = null;
         return GelatoPage.prototype.remove.call(this);
     }
 });
