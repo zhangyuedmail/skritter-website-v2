@@ -275,8 +275,13 @@ module.exports = GelatoApplication.extend({
                         .then(function() {
                             callback();
                         })
-                        .catch(function() {
-                            app.db.delete().then(app.reload);
+                        .catch(function(error) {
+                            //specially handle error code 8 for safari
+                            if (error && error.code === 8) {
+                                callback();
+                            } else {
+                                app.db.delete().then(app.reload);
+                            }
                         });
                 } else {
                     app.db = null;
