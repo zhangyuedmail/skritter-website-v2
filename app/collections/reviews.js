@@ -204,7 +204,6 @@ module.exports = SkritterCollection.extend({
                     var submitTimeSeconds = Math.round(modelData.submitTime);
                     if (submitTimeSeconds < item.get('changed')) {
                         var now = Date.now() / 1000;
-                        console.log('REROLL:', 'updating submit time');
                         submitTimeSeconds = Math.round(now);
                         modelData.submitTime = now;
                     }
