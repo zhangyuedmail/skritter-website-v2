@@ -90,6 +90,7 @@ module.exports = SkritterCollection.extend({
                                 .without(undefined)
                                 .value();
                             self.reroll(items);
+                            callback(error);
                         },
                         success: function() {
                             self.remove(chunk);
@@ -201,10 +202,25 @@ module.exports = SkritterCollection.extend({
                 if (itemIds.indexOf(modelData.itemId) > -1) {
                     var item = this.items.get(modelData.itemId);
                     var submitTimeSeconds = Math.round(modelData.submitTime);
+                    if (submitTimeSeconds < item.get('changed')) {
+                        var now = Date.now() / 1000;
+                        console.log('REROLL:', 'updating submit time');
+                        submitTimeSeconds = Math.round(now);
+                        modelData.submitTime = now;
+                    }
                     modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
+                    modelData.currentInterval = item.get('interval');
                     modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                     modelData.previousInterval = item.get('previousInterval') || 0;
                     modelData.previousSuccess = item.get('previousSuccess') || false;
+                    if (app.isDevelopment()) {
+                        console.log(
+                            item.id,
+                            'scheduled for',
+                            moment.duration(modelData.newInterval, 'seconds').as('days'),
+                            'days'
+                        );
+                    }
                     item.set({
                         changed: submitTimeSeconds,
                         last: submitTimeSeconds,
