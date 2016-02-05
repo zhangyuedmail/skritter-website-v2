@@ -133,6 +133,10 @@ module.exports = SkritterCollection.extend({
                 modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                 modelData.previousInterval = item.get('previousInterval') || 0;
                 modelData.previousSuccess = item.get('previousSuccess') || false;
+                if (!_.isInteger(modelData.score)) {
+                    modelData = 3;
+                    modelData.newInterval = 86400;
+                }
                 if (app.isDevelopment()) {
                     console.log(
                         item.id,
@@ -212,6 +216,10 @@ module.exports = SkritterCollection.extend({
                     modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                     modelData.previousInterval = item.get('previousInterval') || 0;
                     modelData.previousSuccess = item.get('previousSuccess') || false;
+                    if (!_.isInteger(modelData.score)) {
+                        modelData = 3;
+                        modelData.newInterval = 86400;
+                    }
                     if (app.isDevelopment()) {
                         console.log(
                             item.id,
