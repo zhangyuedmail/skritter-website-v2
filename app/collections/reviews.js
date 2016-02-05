@@ -89,7 +89,11 @@ module.exports = SkritterCollection.extend({
                                 .map('Item')
                                 .without(undefined)
                                 .value();
-                            self.reroll(items);
+                            if (items.length) {
+                                self.reroll(items);
+                            } else {
+                                self.repair();
+                            }
                             callback(error);
                         },
                         success: function() {
@@ -187,6 +191,21 @@ module.exports = SkritterCollection.extend({
             },
             callback
         );
+    },
+    /**
+     * @method repair
+     */
+    repair: function() {
+        for (var a = 0, lengthA = this.length; a < lengthA; a++) {
+            var review = this.at(a);
+            var reviewData = review.get('data');
+            for (var b = 0, lengthB = reviewData.length; b < lengthB; b++) {
+                var modelData = reviewData[b];
+                if (!_.isInteger(modelData.score)) {
+                    modelData.score = 3;
+                }
+            }
+        }
     },
     /**
      * @method reroll
