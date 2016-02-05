@@ -45,7 +45,7 @@ module.exports = GelatoPage.extend({
      */
     handleClickLinkAppleStore: function(event) {
         event.preventDefault();
-        //MIXPANEL: mixpanel.track('Clicked ios app button');
+        mixpanel.track('Clicked ios app button');
         window.open('https://itunes.apple.com/us/artist/inkren-llc/id402280587', '_blank');
     },
     /**
@@ -54,7 +54,7 @@ module.exports = GelatoPage.extend({
      */
     handleClickLinkGoogleStore: function(event) {
         event.preventDefault();
-        //MIXPANEL: mixpanel.track('Clicked android app button');
+        mixpanel.track('Clicked android app button');
         window.open('https://play.google.com/store/apps/developer?id=Skritter', '_blank');
     },
     /**

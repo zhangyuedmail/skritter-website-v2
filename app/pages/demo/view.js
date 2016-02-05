@@ -69,7 +69,7 @@ module.exports = GelatoPage.extend({
             function(lang, callback) {
                 ScreenLoader.show();
                 ScreenLoader.post('Loading demo word');
-                //MIXPANEL: mixpanel.track('Started demo', {lang: lang});
+                mixpanel.track('Started demo', {lang: lang});
                 self.vocabs.fetch({
                     data: {
                         include_decomps: true,
@@ -133,7 +133,7 @@ module.exports = GelatoPage.extend({
      * @method step2
      */
     step2: function() {
-        //MIXPANEL: mixpanel.track('Completed tracing demo character #1');
+        mixpanel.track('Completed tracing demo character #1');
         this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
         this.prompt.part.eraseCharacter();
         this.prompt.review.set('score', 3);
@@ -145,7 +145,7 @@ module.exports = GelatoPage.extend({
      * @method step3
      */
     step3: function() {
-        //MIXPANEL: mixpanel.track('Completed writing demo character #1');
+        mixpanel.track('Completed writing demo character #1');
         this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step3')));
         this.prompt.$('#toolbar-action-container').hide();
         this.prompt.once('character:complete', this.step4.bind(this));
@@ -154,7 +154,7 @@ module.exports = GelatoPage.extend({
      * @method step4
      */
     step4: function() {
-        //MIXPANEL: mixpanel.track('Completed tracing demo character #2');
+        mixpanel.track('Completed tracing demo character #2');
         this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step4')));
         this.prompt.part.eraseCharacter();
         this.prompt.review.set('score', 3);
@@ -165,7 +165,7 @@ module.exports = GelatoPage.extend({
      * @method step5
      */
     step5: function() {
-        //MIXPANEL: mixpanel.track('Completed writing demo character #2');
+        mixpanel.track('Completed writing demo character #2');
         this.dialog = new DemoCallToActionDialog();
         this.dialog.open();
     },

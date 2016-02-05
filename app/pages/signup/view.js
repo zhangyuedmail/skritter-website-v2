@@ -19,7 +19,7 @@ module.exports = GelatoPage.extend({
         this.navbar = new DefaultNavbar();
         this.plan = options.plan;
         this.user = new User();
-        //MIXPANEL: mixpanel.track('Viewed signup page');
+        mixpanel.track('Viewed signup page');
     },
     /**
      * @property events
@@ -115,6 +115,7 @@ module.exports = GelatoPage.extend({
         }
         async.series([
             function(callback) {
+                ScreenLoader.post('Creating new user');
                 self.user.save(
                     null,
                     {
@@ -122,14 +123,29 @@ module.exports = GelatoPage.extend({
                             callback(error);
                         },
                         success: function(user) {
-                            //MIXPANEL: mixpanel.alias(user.id.toString());
-                            /*MIXPANEL: mixpanel.track(
+                            mixpanel.alias(user.id);
+                            mixpanel.track(
                                 'Signup',
                                 {
                                     method: formData.method,
                                     plan: formData.plan
+                                },
+                                function() {
+                                    callback();
                                 }
-                            );*/
+                            );
+                        }
+                    }
+                )
+            },
+            function(callback) {
+                app.user.login(
+                    formData.username,
+                    formData.password1,
+                    function(error) {
+                        if (error) {
+                            callback(error);
+                        } else {
                             callback();
                         }
                     }
@@ -142,6 +158,7 @@ module.exports = GelatoPage.extend({
                         method: 'GET',
                         url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
                         data: {
+                            client: 'website',
                             token: app.user.session.get('access_token')
                         },
                         error: function(error) {
@@ -154,20 +171,6 @@ module.exports = GelatoPage.extend({
                 } else {
                     callback();
                 }
-            },
-            function(callback) {
-                ScreenLoader.post('Logging in new user');
-                app.user.login(
-                    formData.username,
-                    formData.password1,
-                    function(error) {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            callback();
-                        }
-                    }
-                )
             }
         ], callback);
 

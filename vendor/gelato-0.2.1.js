@@ -26412,7 +26412,7 @@ var GelatoApplication = Backbone.Model.extend({
      * @type {Object}
      */
     gelato: {
-        timestamp: '1454515241',
+        timestamp: '1454682041',
         version: '0.2.1'
     },
     /**
@@ -26502,9 +26502,10 @@ var GelatoApplication = Backbone.Model.extend({
     },
     /**
      * @method reload
+     * @param {Boolean} [forcedReload]
      */
-    reload: function() {
-        location.reload(true);
+    reload: function(forcedReload) {
+        location.reload(forcedReload);
     },
     /**
      * @method getLocalStorage
@@ -26675,7 +26676,7 @@ var GelatoDialog = GelatoView.extend({
      * @property el
      * @type {String}
      */
-    el: '#dialog-container',
+    el: 'gelato-dialogs',
     /**
      * @property element
      * @type {jQuery}
@@ -26890,12 +26891,20 @@ var GelatoRouter = Backbone.Router.extend({
     },
     /**
      * @method start
+     * @param {Object} [options]
      * @returns {Boolean}
      */
-    start: function() {
+    start: function(options) {
+        options = _.defaults(
+            options || {},
+            {
+                pushState: app.isWebsite(),
+                root: '/'
+            }
+        );
         return Backbone.history.start({
-            pushState: app.isWebsite(),
-            root: '/'
+            pushState: options.pushState,
+            root: options.root
         });
     }
 });

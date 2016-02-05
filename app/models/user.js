@@ -30,6 +30,7 @@ module.exports = SkritterModel.extend({
         lastChineseItemUpdate: 0,
         lastJapaneseItemUpdate: 0,
         teachingMode: true,
+        timezone: 'America/New_York',
         volume: 1
     },
     /**
@@ -180,6 +181,7 @@ module.exports = SkritterModel.extend({
                 self.session.cache();
                 app.removeSetting('session');
                 app.setSetting('user', self.id);
+                mixpanel.identify(self.id);
                 callback(null, user);
             }
         });

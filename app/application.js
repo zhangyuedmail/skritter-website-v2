@@ -34,7 +34,7 @@ module.exports = GelatoApplication.extend({
         }
 
         if (window.mixpanel && this.isWebsite()) {
-            //MIXPANEL: mixpanel.init(this.getMixpanelKey());
+            mixpanel.init(this.getMixpanelKey());
         }
 
         if (this.isDevelopment()) {
@@ -189,7 +189,7 @@ module.exports = GelatoApplication.extend({
                 app.db.reviews.clear().finally(callback);
             }
         ], function() {
-           app.reload();
+            app.reload();
         });
     },
     /**
@@ -207,7 +207,7 @@ module.exports = GelatoApplication.extend({
         if (this.user.isLoggedIn()) {
             Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
             Raygun.withTags(this.user.getRaygunTags());
-            //MIXPANEL: mixpanel.identify(this.user.id);
+            mixpanel.identify(this.user.id);
         } else {
             Raygun.setUser('guest', true);
         }
