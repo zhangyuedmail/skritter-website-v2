@@ -84,6 +84,13 @@ module.exports = SkritterCollection.extend({
                         type: 'POST',
                         data: JSON.stringify(data),
                         error: function(error) {
+                            Raygun.send(
+                                new Error('Review Error: Unable to post chunk'),
+                                {
+                                    data: data,
+                                    error: error.responseJSON
+                                }
+                            );
                             var items = _
                                 .chain(error.responseJSON.errors)
                                 .map('Item')
@@ -98,7 +105,9 @@ module.exports = SkritterCollection.extend({
                         },
                         success: function() {
                             self.remove(chunk);
-                            self.removeReviewCache(chunk, callback);
+                            self.removeReviewCache(chunk, function() {
+                                setTimeout(callback, 1000);
+                            });
                         }
                     });
                 },
