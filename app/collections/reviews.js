@@ -77,6 +77,14 @@ module.exports = SkritterCollection.extend({
                         })
                         .flatten()
                         .value();
+                    //TODO: figure out why duplicates exist
+                    data = _.uniqBy(data, function(review) {
+                        return [
+                            review.itemId,
+                            review.currentInterval,
+                            review.newInterval
+                        ].join('');
+                    });
                     $.ajax({
                         url: app.getApiUrl() + 'reviews?spaceItems=false',
                         async: options.async,
@@ -84,24 +92,36 @@ module.exports = SkritterCollection.extend({
                         type: 'POST',
                         data: JSON.stringify(data),
                         error: function(error) {
-                            Raygun.send(
-                                new Error('Review Error: Unable to post chunk'),
-                                {
-                                    data: data,
-                                    error: error.responseJSON
-                                }
-                            );
                             var items = _
                                 .chain(error.responseJSON.errors)
                                 .map('Item')
                                 .without(undefined)
                                 .value();
                             if (items.length) {
-                                self.reroll(items);
+                                Raygun.send(
+                                    new Error('Review Error: Items returned with errors'),
+                                    {
+                                        data: data,
+                                        error: error.responseJSON
+                                    }
+                                );
+                                self.reroll(items, function() {
+                                    callback(error);
+                                });
                             } else {
-                                self.repair();
+                                Raygun.send(
+                                    new Error('Review Error: Unable to post chunk'),
+                                    {
+                                        data: data,
+                                        error: error.responseJSON
+                                    }
+                                );
+                                self.remove(chunk);
+                                self.removeReviewCache(chunk, function() {
+                                    callback(error);
+                                });
                             }
-                            callback(error);
+
                         },
                         success: function() {
                             self.remove(chunk);
@@ -200,21 +220,6 @@ module.exports = SkritterCollection.extend({
             },
             callback
         );
-    },
-    /**
-     * @method repair
-     */
-    repair: function() {
-        for (var a = 0, lengthA = this.length; a < lengthA; a++) {
-            var review = this.at(a);
-            var reviewData = review.get('data');
-            for (var b = 0, lengthB = reviewData.length; b < lengthB; b++) {
-                var modelData = reviewData[b];
-                if (!_.isInteger(modelData.score)) {
-                    modelData.score = 3;
-                }
-            }
-        }
     },
     /**
      * @method reroll
