@@ -2,13 +2,16 @@ gelato-component(data-name="study-prompt-part-defn")
   - var prompt = view.prompt;
 
   if prompt.reviews.part === 'defn' && prompt.reviews
+    - var vocab = prompt.reviews.vocab;
 
     .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
-      span= prompt.reviews.vocab.get('writing')
+      span= vocab.get('writing')
 
     if prompt.reviews.isComplete()
       .answer
-        span!= prompt.reviews.vocab.getDefinition()
+        if app.user.get('showHeisig') && vocab.has('heisigDefinition')
+          em!= vocab.get('heisigDefinition') + ' - '
+        span!= vocab.getDefinition()
     else
       .question
         span What's the definition?
