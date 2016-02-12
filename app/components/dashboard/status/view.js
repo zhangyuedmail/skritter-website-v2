@@ -36,7 +36,7 @@ module.exports = GelatoComponent.extend({
         var now = moment().unix();
         var parts = app.user.getFilteredParts();
         var styles = app.user.getFilteredStyles();
-        app.db.items
+        app.user.db.items
             .where('next')
             .belowOrEqual(now)
             .toArray()

@@ -29,6 +29,7 @@ module.exports = SkritterModel.extend({
         goals: {ja: {items: 20}, zh: {items: 20}},
         lastChineseItemUpdate: 0,
         lastJapaneseItemUpdate: 0,
+        studyKana: false,
         teachingMode: true,
         timezone: 'America/New_York',
         volume: 1
@@ -146,6 +147,30 @@ module.exports = SkritterModel.extend({
         return _.includes(this.getFilteredParts(), part);
     },
     /**
+     * @method load
+     * @param {Function} callback
+     * @returns {User}
+     */
+    load: function(callback) {
+        var self = this;
+        if (!this.isLoggedIn()) {
+            callback();
+            return this;
+        }
+        async.series(
+            [
+                function(callback) {
+                    self.openDatabase(callback);
+                },
+                function(callback) {
+                    self.updateItems(callback);
+                }
+            ],
+            callback
+        );
+        return this;
+    },
+    /**
      * @method login
      * @param {String} username
      * @param {String} password
@@ -191,7 +216,7 @@ module.exports = SkritterModel.extend({
      */
     logout: function() {
         var self = this;
-        app.db.delete()
+        app.user.db.delete()
             .then(function() {
                 app.removeLocalStorage(self.id + '-session');
                 app.removeLocalStorage(self.id + '-user');
@@ -202,6 +227,55 @@ module.exports = SkritterModel.extend({
                 console.error(error);
                 app.reload();
             });
+    },
+    /**
+     * @method openDatabase
+     * @param {Function} callback
+     * @returns {User}
+     */
+    openDatabase: function(callback) {
+        var self = this;
+        if (!this.isLoggedIn()) {
+            callback();
+            return this;
+        }
+        this.db = new Dexie(this.id + '-database');
+        this.db.version(2).stores({
+            items: [
+                'id',
+                '*changed',
+                'created',
+                'interval',
+                '*last',
+                '*next',
+                'part',
+                'previousInterval',
+                'previousSuccess',
+                'reviews',
+                'successes',
+                'style',
+                'timeStudied',
+                'vocabIds'
+            ].join(','),
+            reviews: [
+                'group',
+                '*created',
+                'reviews'
+            ].join(',')
+        });
+        this.db.open()
+            .then(function() {
+                callback();
+            })
+            .catch(function(error) {
+                //specially handle error code 8 for safari
+                if (error && error.code === 8) {
+                    callback();
+                } else {
+                    self.db.delete().then(app.reload);
+                }
+            });
+        return this;
     },
     /**
      * @method parse
@@ -227,6 +301,7 @@ module.exports = SkritterModel.extend({
     /**
      * @method updateItems
      * @param {Function} callback
+     * @returns {User}
      */
     updateItems: function(callback) {
         var self = this;
@@ -237,7 +312,7 @@ module.exports = SkritterModel.extend({
         var retries = 0;
         if (!this.isLoggedIn()) {
             callback();
-            return;
+            return this;
         }
         async.whilst(
             function() {
@@ -270,12 +345,12 @@ module.exports = SkritterModel.extend({
                         }
                     },
                     success: function(result) {
-                        app.db.transaction(
+                        self.db.transaction(
                             'rw',
-                            app.db.items,
+                            self.db.items,
                             function() {
                                 result.Items.forEach(function(item) {
-                                    app.db.items.put(item);
+                                    self.db.items.put(item);
                                 });
                             }
                         ).then(function() {
@@ -299,5 +374,6 @@ module.exports = SkritterModel.extend({
                 callback(error);
             }
         );
+        return this;
     }
 });

@@ -183,10 +183,10 @@ module.exports = GelatoApplication.extend({
         app.user.setLastItemUpdate(0).cache();
         async.parallel([
             function(callback) {
-                app.db.items.clear().finally(callback);
+                app.user.db.items.clear().finally(callback);
             },
             function(callback) {
-                app.db.reviews.clear().finally(callback);
+                app.user.db.reviews.clear().finally(callback);
             }
         ], function() {
             app.reload();
@@ -244,53 +244,13 @@ module.exports = GelatoApplication.extend({
                     );
                 }
             },
-            //load dexie with items store
+            //load user when logged in
             function(callback) {
                 if (app.user.isLoggedIn()) {
-                    app.db = new Dexie(app.user.id + '-database');
-                    app.db.version(2).stores({
-                        items: [
-                            'id',
-                            '*changed',
-                            'created',
-                            'interval',
-                            '*last',
-                            '*next',
-                            'part',
-                            'previousInterval',
-                            'previousSuccess',
-                            'reviews',
-                            'successes',
-                            'style',
-                            'timeStudied',
-                            'vocabIds'
-                        ].join(','),
-                        reviews: [
-                            'group',
-                            '*created',
-                            'reviews'
-                        ].join(',')
-                    });
-                    app.db.open()
-                        .then(function() {
-                            callback();
-                        })
-                        .catch(function(error) {
-                            //specially handle error code 8 for safari
-                            if (error && error.code === 8) {
-                                callback();
-                            } else {
-                                app.db.delete().then(app.reload);
-                            }
-                        });
+                    app.user.load(callback);
                 } else {
-                    app.db = null;
                     callback();
                 }
-            },
-            //fetch and store changed items
-            function(callback) {
-                app.user.updateItems(callback);
             }
         ], function() {
             setTimeout(function() {

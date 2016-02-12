@@ -211,7 +211,7 @@ module.exports = SkritterCollection.extend({
         async.each(
             reviews || [],
             function(review, callback) {
-                app.db.reviews
+                app.user.db.reviews
                     .delete(review.id)
                     .then(function() {
                         callback();
@@ -288,7 +288,7 @@ module.exports = SkritterCollection.extend({
         async.each(
             items || [],
             function(item, callback) {
-                app.db.items
+                app.user.db.items
                     .put(item.toJSON())
                     .then(function() {
                         callback();
@@ -307,7 +307,7 @@ module.exports = SkritterCollection.extend({
         async.each(
             reviews || [],
             function(review, callback) {
-                app.db.reviews
+                app.user.db.reviews
                     .put({
                         group: review.get('group'),
                         created: review.get('created'),
