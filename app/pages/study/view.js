@@ -103,7 +103,7 @@ module.exports = GelatoPage.extend({
     handleScheduledLoad: function() {
         var self = this;
         ScreenLoader.post('Preparing for study');
-        app.db.reviews
+        app.user.db.reviews
             .toArray()
             .then(function(reviews) {
                 self.schedule.reviews.add(reviews);
@@ -134,7 +134,7 @@ module.exports = GelatoPage.extend({
         var lang = app.getLanguage();
         var parts = app.user.getFilteredParts();
         var styles = app.user.getFilteredStyles();
-        app.db.items
+        app.user.db.items
             .toArray()
             .then(function(items) {
                 items = items.filter(function(item) {
@@ -204,6 +204,7 @@ module.exports = GelatoPage.extend({
                 ids: _.map(items, 'id').join('|'),
                 include_contained: true,
                 include_decomps: true,
+                include_heisigs: true,
                 include_sentences: true,
                 include_strokes: true,
                 include_vocabs: true
