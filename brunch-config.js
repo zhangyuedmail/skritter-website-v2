@@ -23,7 +23,7 @@ exports.config = {
                     'vendor/d3-3.5.15.js',
                     'vendor/dexie-1.2.0.js',
                     'vendor/heatmap-3.5.4.js',
-                    'vendor/highcharts-4.2.1.js',
+                    'vendor/highcharts-4.2.3.js',
                     'vendor/jquery.mobile-1.4.5.js',
                     'vendor/jquery.ui-1.11.4.js',
                     'vendor/keypress-2.1.3.js',
@@ -50,6 +50,9 @@ exports.config = {
                 'js/startup.js': /^startup[\\/]/
             }
         }
+    },
+    npm: {
+        enabled: false
     },
     paths: {
         'public': 'public',
