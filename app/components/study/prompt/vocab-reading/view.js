@@ -41,7 +41,9 @@ module.exports = GelatoComponent.extend({
         event.preventDefault();
         var $reading = $(event.target).parent('.reading');
         var position = parseInt($reading.data('position'), 10);
-        this.prompt.reviews.at(position).set('showReading', true);
+        var reviews = this.prompt.review.getPromptWritingArray();
+        reviews[position].set('showReading', true);
+        console.log(position, reviews);
         this.render();
     }
 });

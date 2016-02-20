@@ -34,9 +34,9 @@ module.exports = GelatoComponent.extend({
         this.$inputContainer = null;
         this.$panelLeft = null;
         this.$panelRight = null;
+        this.active = null;
         this.part = null;
         this.review = null;
-        this.reviews = null;
         this.schedule = null;
         //components
         this.canvas = new Canvas({prompt: this});
@@ -96,12 +96,13 @@ module.exports = GelatoComponent.extend({
         if (this.part) {
             this.part.remove();
         }
-        if (this.reviews.isNew()) {
+        if (this.review.isNew()) {
             this.$('#new-ribbon').removeClass('hidden');
         } else {
             this.$('#new-ribbon').addClass('hidden');
         }
-        switch (this.reviews.part) {
+        this.active = this.review.getPromptData();
+        switch (this.review.get('part')) {
             case 'defn':
                 this.part = new PartDefn({prompt: this}).render();
                 break;
@@ -211,15 +212,15 @@ module.exports = GelatoComponent.extend({
     },
     /**
      * @method set
-     * @param {PromptReviews} reviews
+     * @param {Review} review
      * @returns {StudyPrompt}
      */
-    set: function(reviews) {
-        console.info('PROMPT:', reviews);
-        this.reviews = reviews;
+    set: function(review) {
+        console.info('PROMPT:', review);
+        this.review = review;
         this.renderPart();
-        this.navigation.render();
-        this.reviewStatus.render();
+        //this.navigation.render();
+        //this.reviewStatus.render();
         return this;
     },
     /**
@@ -228,8 +229,8 @@ module.exports = GelatoComponent.extend({
      * @returns {Prompt}
      */
     setSchedule: function(schedule) {
-        this.navigation.setReviews(schedule.reviews);
-        this.reviewStatus.setReviews(schedule.reviews);
+        //this.navigation.setReviews(schedule.reviews);
+        //this.reviewStatus.setReviews(schedule.reviews);
         return this;
     }
 });

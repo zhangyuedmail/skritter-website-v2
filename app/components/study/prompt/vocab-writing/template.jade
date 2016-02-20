@@ -1,38 +1,38 @@
 gelato-component(data-name='study-prompt-vocab-writing')
   - var prompt = view.prompt;
 
-  if prompt.reviews
-    - var reviews = prompt.reviews
-    - var classes = []
-    - var index = 0
+  if prompt.review
+    - var review = prompt.review;
+    - var classes = [];
+    - var index = 0;
 
-    if reviews.isChinese()
+    if review.isChinese()
       - classes.push('text-chinese');
-    if reviews.isJapanese()
+    if review.isJapanese()
       - classes.push('text-japanese');
 
-    case reviews.part
+    case review.get('part')
 
       when 'rune'
-        for review in reviews.models
-          if review.get('filler')
+        for data in review.getPromptWritingArray()
+          if data.get('filler')
             div.filler
-              span= review.vocab.get('writing')
+              span= data.vocab.get('writing')
           else
-            if reviews.position <= index && !review.get('complete')
+            if review.get('position') <= index && !data.get('complete')
               - classes.push('masked');
-            if reviews.position === index
+            if review.get('position') === index
               - classes.push('active');
             div.character(class=classes.join(' '), data-position=index)
-              span= review.vocab.get('writing')
-            - index++
+              span= data.vocab.get('writing')
+            - index++;
 
       default
-        for review in reviews.models
-          if review.get('filler')
+        for data in review.getPromptWritingArray()
+          if data.get('filler')
             div.filler
-              span= review.vocab.get('writing')
+              span= data.vocab.get('writing')
           else
             div.character(class=classes.join(' '), data-position=index)
-              span= review.vocab.get('writing')
+              span= data.vocab.get('writing')
             - index++

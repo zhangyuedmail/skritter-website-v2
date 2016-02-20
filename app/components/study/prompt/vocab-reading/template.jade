@@ -1,56 +1,26 @@
 gelato-component(data-name='style-prompt-vocab-reading')
   - var prompt = view.prompt;
 
-  if prompt.reviews
-    - var readings = prompt.reviews.vocab.getReadingObjects();
+  if prompt.review
+    - var review = prompt.review;
+    - var classes = [];
     - var index = 0;
 
-    case prompt.reviews.part
+
+    case review.get('part')
 
       when 'rune'
-        for reading in readings
-          if (reading.type === 'character')
-            - var review = prompt.reviews.at(index)
+        if review.isChinese()
+          for data in review.getPromptWritingArray()
             div.reading(data-position=index)
-              if review.isReadingHidden()
+              if data.isReadingHidden()
                 button.show-reading.btn.btn-sm.btn-default show
               else
-                span= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading.value) : reading.value
-            - index++
-          else
-            div.filler
-              span= reading.value
-
-      when 'tone'
-        for reading in readings
-          if (reading.type === 'character')
-            - var review = prompt.reviews.at(index)
-            - var classes = []
-            if (prompt.reviews.position === index)
-              - classes.push('active')
-            div.reading(class=classes.join(' '), data-position=index)
-              if prompt.reviews.vocab.isChinese()
-                if review.isReadingHidden()
-                  button.show-reading.btn.btn-sm.btn-default show
+                if review.isChinese()
+                  span= app.fn.pinyin.toTone(data.get('reading'))
                 else
-                  if review.isComplete()
-                    span= app.fn.pinyin.toTone(reading.value)
-                  else
-                    span= app.fn.pinyin.removeToneNumbers(reading.value)
-              else
-                span= reading.value
-            - index++
-          else
-            div.filler
-              span= reading.value
-
-      default
-        - var review = prompt.reviews.at(0);
-        - var reading = prompt.reviews.vocab.get('reading');
-        div.reading(data-position=0)
-          if prompt.reviews.part === 'defn' && review.isReadingHidden()
-            button.show-reading.btn.btn-sm.btn-default show
-          else if prompt.reviews.part === 'rdng' && !review.isComplete()
-            //hide reading
-          else
-            span= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+                  span= data.get('reading')
+            - index++;
+        else
+          div.reading(data-position=0)
+            span= review.vocab.get('reading')

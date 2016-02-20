@@ -1,11 +1,12 @@
 gelato-component(data-name='study-prompt-vocab-style')
   - var prompt = view.prompt;
 
-  if prompt.reviews
+  if prompt.review
+    - var review = prompt.review;
 
     div.value
 
-      case prompt.reviews.vocab.get('style')
+      case review.vocab.get('style')
 
         when 'simp'
           | simplified

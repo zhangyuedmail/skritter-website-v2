@@ -1,17 +1,20 @@
 gelato-component(data-name='study-prompt-vocab-mnemonic')
   - var prompt = view.prompt;
 
-  if prompt.reviews
-    - var mnemonic = prompt.reviews.vocab.getMnemonic();
+  if prompt.review
+    - var review = prompt.review;
+    - var active = prompt.active;
+    - var mnemonic = prompt.review.vocab.getMnemonic();
 
     label Mnemonic
 
     .value
+
       if view.editing
         textarea= mnemonic ? mnemonic.text : ''
       else if !mnemonic || mnemonic.text === ''
         em Click the 'edit' icon to add a mnemonic
-      else if prompt.review.get('showMnemonic') || prompt.reviews.isComplete()
+      else if active.get('showMnemonic') || active.get('complete')
         span!= app.fn.textToHTML(mnemonic.text)
       else
         button#show-mnemonic.btn.btn-default show

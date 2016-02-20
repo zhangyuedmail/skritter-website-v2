@@ -39,7 +39,7 @@ module.exports = GelatoComponent.extend({
      */
     handleClickShowContained: function(event) {
         event.preventDefault();
-        this.prompt.review.set('showContained', true);
+        this.prompt.active.set('showContained', true);
         this.render();
     }
 });

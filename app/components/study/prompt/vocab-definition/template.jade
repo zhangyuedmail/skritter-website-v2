@@ -1,16 +1,18 @@
 gelato-component(data-name='study-prompt-vocab-definition')
   - var prompt = view.prompt;
 
-  if prompt.reviews
-    - var vocab = prompt.reviews.vocab;
-    - var definition = prompt.reviews.vocab.getDefinition();
+  if prompt.review
+    - var review = prompt.review;
+    - var active = prompt.review.getPromptData();
+    - var definition = prompt.review.vocab.getDefinition();
+    - var vocab = prompt.review.vocab;
 
     label Definition
 
-    case prompt.reviews.part
+    case review.get('part')
 
       when 'defn'
-        .value(class=(prompt.reviews.isComplete() ? 'visible' : 'invisible'))
+        .value(class=(review.isComplete() ? 'visible' : 'invisible'))
           if view.editing
             textarea= definition
           else
@@ -27,7 +29,7 @@ gelato-component(data-name='study-prompt-vocab-definition')
             textarea= definition
           else
             if definition
-              if prompt.review.isDefinitionHidden()
+              if active.isDefinitionHidden()
                 button#show-definition.btn.btn-sm.btn-default show
               else
                 if app.user.get('showHeisig') && vocab.has('heisigDefinition')
