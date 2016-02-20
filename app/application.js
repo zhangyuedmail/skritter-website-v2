@@ -14,13 +14,16 @@ module.exports = GelatoApplication.extend({
      */
     initialize: function() {
 
-        Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
-            excludedHostnames: ['localhost'],
-            excludedUserAgents: ['PhantomJS'],
-            ignore3rdPartyErrors: true,
-            ignoreAjaxAbort: false,
-            ignoreAjaxError: false
-        }).attach();
+        Raygun.init(
+            'VF3L4HPYRvk1x0F5x3hGVg==',
+            {
+                excludedHostnames: ['localhost'],
+                excludedUserAgents: ['PhantomJS'],
+                ignore3rdPartyErrors: true,
+                ignoreAjaxAbort: false,
+                ignoreAjaxError: false
+            }
+        ).attach();
 
         Raygun.setVersion(this.get('version'));
 
@@ -181,16 +184,21 @@ module.exports = GelatoApplication.extend({
      */
     reset: function() {
         app.user.setLastItemUpdate(0).cache();
-        async.parallel([
-            function(callback) {
-                app.user.db.items.clear().finally(callback);
-            },
-            function(callback) {
-                app.user.db.reviews.clear().finally(callback);
+        async.parallel(
+            [
+                function(callback) {
+                    app.user.items.reset();
+                    app.user.db.items.clear().finally(callback);
+                },
+                function(callback) {
+                    app.user.reviews.reset();
+                    app.user.db.reviews.clear().finally(callback);
+                }
+            ],
+            function() {
+                app.reload();
             }
-        ], function() {
-            app.reload();
-        });
+        );
     },
     /**
      * @method start
@@ -225,7 +233,10 @@ module.exports = GelatoApplication.extend({
             function(callback) {
                 //check for user authentication type
                 if (app.user.id === 'application') {
-                    app.user.session.authenticate('client_credentials', null, null,
+                    app.user.session.authenticate(
+                        'client_credentials',
+                        null,
+                        null,
                         function() {
                             callback();
                         },
@@ -244,13 +255,9 @@ module.exports = GelatoApplication.extend({
                     );
                 }
             },
-            //load user when logged in
+            //load primary user based on state
             function(callback) {
-                if (app.user.isLoggedIn()) {
-                    app.user.load(callback);
-                } else {
-                    callback();
-                }
+                app.user.load(callback);
             }
         ], function() {
             setTimeout(function() {
