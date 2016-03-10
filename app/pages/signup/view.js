@@ -340,6 +340,7 @@ module.exports = GelatoPage.extend({
                 self.createUser(formData, callback);
             }
         ], function(error) {
+            ScreenLoader.hide();
             if (error) {
                 self._handleSubmittedProcessError(error);
             } else {
@@ -356,7 +357,6 @@ module.exports = GelatoPage.extend({
      * @private
      */
     _handleSubmittedProcessError: function(error) {
-         ScreenLoader.hide();
 
         // For when the error is a jQuery XHR object, we just want the plain error object
         if (_.isFunction(error.error)) {
