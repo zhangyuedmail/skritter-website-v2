@@ -101,41 +101,6 @@ module.exports = GelatoPage.extend({
     },
 
     /**
-     * Validates submitted user form data to check if it conforms to submission
-     * rules. Displays an error message to the user if any part of the data is
-     * invalid.
-     * @param {Object} formData dictionary of values to check
-     * @return {Boolean} whether the data can be submitted
-     */
-    _validateUserData: function(formData) {
-        var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-
-        if (_.isEmpty(formData.username)) {
-            this.displayErrorMessage('Invalid username entered.');
-            return false;
-        }
-
-        if (_.isEmpty(formData.email) || !formData.email.match(emailRegex)) {
-            this.displayErrorMessage('Invalid email address entered.');
-            return false;
-        }
-
-        // TODO: find serverside validation setting for password length
-        if (formData.password1 !== formData.password2 ||
-            _.isEmpty(formData.password1)) {
-            this.displayErrorMessage('Invalid password entered or passwords don\'t match');
-            return false;
-        }
-
-        if (formData.password1.length < 6) {
-            this.displayErrorMessage('Password length must be 6 characters or longer.');
-            return false;
-        }
-
-        return true;
-    },
-
-    /**
      * Creates a new user from pre-validated form data. Performs the necessary
      * requests to create payment and user data.
      * @param {Object} formData dictionary of user form data
@@ -220,7 +185,14 @@ module.exports = GelatoPage.extend({
                 }
             }
         ], callback);
+    },
 
+    /**
+     * Displays an error messsage about the form data to the user
+     * @param {String} message the error to show to the user
+     */
+    displayErrorMessage: function(message) {
+        this.$('#signup-error-alert').text(message).removeClass('hide');
     },
 
     /**
@@ -368,7 +340,11 @@ module.exports = GelatoPage.extend({
                 self.createUser(formData, callback);
             }
         ], function(error) {
-            self._handleSubmittedProcessError(error);
+            if (error) {
+                self._handleSubmittedProcessError(error);
+            } else {
+                self._handleSubmittedProcessSuccess();
+            }
         });
     },
 
@@ -376,7 +352,8 @@ module.exports = GelatoPage.extend({
      * Responds to an error during the data submission process of user creation
      * and updates the UI accordingly.
      * @param {Object} error the error object to handle
-     * @todo Unhack this
+     * @todo Unhack
+     * @private
      */
     _handleSubmittedProcessError: function(error) {
          ScreenLoader.hide();
@@ -386,32 +363,63 @@ module.exports = GelatoPage.extend({
             error = error.responseJSON;
         }
 
-        if (error) {
-            console.error(error.message);
+        console.error(error.message);
 
-            // stripe errors
-            if (error.code === 'invalid_expiry_month' ||
-                error.code === 'invalid_expiry_year' ||
-                error.code === 'incorrect_number') {
-                this.displayErrorMessage(error.message);
-            }
+        // stripe errors
+        if (error.code === 'invalid_expiry_month' ||
+            error.code === 'invalid_expiry_year' ||
+            error.code === 'incorrect_number') {
+            this.displayErrorMessage(error.message);
+        }
 
-            // user API errors
-            if (error.statusCode === 400) {
-                if (error.message === "Another user is already using that display name.") {
-                    this.displayErrorMessage("Another person has taken the username " + this.user.get('name') + ". Please choose another one.");
-                }
+        // user API errors
+        if (error.statusCode === 400) {
+            if (error.message === "Another user is already using that display name.") {
+                this.displayErrorMessage("Another person has taken the username " + this.user.get('name') + ". Please choose another one.");
             }
-        } else {
-            app.router.navigate('account/setup', {trigger: true});
         }
     },
 
     /**
-     * Displays an error messsage about the form data to the user
-     * @param {String} message the error to show to the user
+     * Responds to a successful account registration process
+     * @private
      */
-    displayErrorMessage: function(message) {
-        this.$('#signup-error-alert').text(message).removeClass('hide');
+    _handleSubmittedProcessSuccess: function() {
+        app.router.navigate('account/setup', {trigger: true});
+    },
+
+    /**
+     * Validates submitted user form data to check if it conforms to submission
+     * rules. Displays an error message to the user if any part of the data is
+     * invalid.
+     * @param {Object} formData dictionary of values to check
+     * @return {Boolean} whether the data can be submitted
+     */
+    _validateUserData: function(formData) {
+        var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+        if (_.isEmpty(formData.username)) {
+            this.displayErrorMessage('Invalid username entered.');
+            return false;
+        }
+
+        if (_.isEmpty(formData.email) || !formData.email.match(emailRegex)) {
+            this.displayErrorMessage('Invalid email address entered.');
+            return false;
+        }
+
+        // TODO: find serverside validation setting for password length
+        if (formData.password1 !== formData.password2 ||
+            _.isEmpty(formData.password1)) {
+            this.displayErrorMessage('Invalid password entered or passwords don\'t match');
+            return false;
+        }
+
+        if (formData.password1.length < 6) {
+            this.displayErrorMessage('Password length must be 6 characters or longer.');
+            return false;
+        }
+
+        return true;
     }
 });
