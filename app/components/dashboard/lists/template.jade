@@ -27,7 +27,8 @@ gelato-component(data-name='dashboard-lists')
           .col-md-1.text-center
             a.button-sections(href="#") Sections
           .col-md-1.text-center
-            a(href="study/" + list.id) Study
+            //TODO: replace when single list study implemented
+            a(href='http://www.skritter.com/study/list?list=' + list.id) Study
 
   if vocablists.state === 'fetching'
     p.text-center

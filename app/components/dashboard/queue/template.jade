@@ -13,7 +13,8 @@ gelato-component(data-name='dashboard-queue')
           .progress
             .progress-bar(style="width:" + (list.getProgress().percent)+'%')
         .col-md-2.text-center
-          a(href='/study' + list.id) Study
+          //TODO: replace when single list study implemented
+          a(href='http://www.skritter.com/study/list?list=' + list.id, target='_blank') Study
     .text-center
       br
       a(href='/vocablists/queue').btn.btn-success Manage
