@@ -37,6 +37,7 @@ module.exports = Router.extend({
         'password-reset': 'navigatePasswordReset',
         'scratchpad/:writing(/:part)': 'navigateScratchpad',
         'signup(/:plan)': 'navigateSignup',
+        'stats': 'navigateStats',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'test': 'navigateTest',
         'vocab(/:vocabId)': 'navigateVocab',
@@ -256,6 +257,13 @@ module.exports = Router.extend({
         }
     },
     /**
+     * @method navigateStats
+     */
+    navigateStats: function() {
+        //TODO: replace when progress stats supported
+        location.replace('http://www.skritter.com/progress');
+    },
+    /**
      * @method navigateStudy
      * @param {String} [listId]
      * @param {String} [sectionId]
@@ -265,7 +273,9 @@ module.exports = Router.extend({
             if (sectionId) {
                 this.go('pages/study-section', {listId: listId, sectionId: sectionId});
             } else if (listId) {
-                this.go('pages/study-list', {listId: listId});
+                //TODO: replace when single list study supported
+                location.replace('http://www.skritter.com/study/list?list=' + listId);
+                //this.go('pages/study-list', {listId: listId});
             } else {
                 this.go('pages/study');
             }

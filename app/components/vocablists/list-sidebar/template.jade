@@ -56,8 +56,7 @@ gelato-component(data-name='vocablists-list-sidebar')
             button#add-to-queue.btn.btn-fixed.btn-success Add to queue
   
           else
-            //TODO: replace when single list study implemented
-            a.btn.btn-fixed.btn-primary(href='http://www.skritter.com/study/list?list=' + vocablist.id, target='_blank') Study now
+            a.btn.btn-fixed.btn-primary(href='/study/' + vocablist.id) Study now
   
         p.status-p
           span.spr Status:
