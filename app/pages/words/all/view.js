@@ -3,7 +3,7 @@ var DefaultNavbar = require('navbars/default/view');
 var Items = require('collections/items');
 var Vocabs = require('collections/vocabs');
 var WordsSidebar = require('components/words/sidebar/view');
-var VocabDialog = require('dialogs/vocab/view');
+var VocabViewerDialog = require('dialogs1/vocab-viewer/view');
 var VocabActionMixin = require('mixins/vocab-action');
 
 /**
@@ -140,6 +140,7 @@ module.exports = GelatoPage.extend({
      * @method handleChangeActionSelect
      */
     handleChangeActionSelect: function(e) {
+        var self = this;
         var action = $(e.target).val();
         if (!action) {
             return;
@@ -151,9 +152,8 @@ module.exports = GelatoPage.extend({
             if (!vocabID) {
                 return;
             }
-            vocabs.add(
-              this.items.vocabs.get(vocabID) || this.searchVocabs.get(vocabID));
-        }, this);
+            vocabs.add(self.items.vocabs.get(vocabID) || self.searchVocabs.get(vocabID));
+        });
 
         this.$('input[type="checkbox"]').attr('checked', false);
         this.beginVocabAction(action, vocabs);
@@ -234,7 +234,7 @@ module.exports = GelatoPage.extend({
         var row = $(event.target).parent('tr');
         var vocabId = row.data('vocab-id');
         if (vocabId) {
-            var dialog = new VocabDialog();
+            var dialog = new VocabViewerDialog();
             dialog.open().load(vocabId);
         }
     },

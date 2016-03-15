@@ -14,6 +14,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.footer = new MarketingFooter();
         this.navbar = new DefaultNavbar();
+        mixpanel.track('Viewed login page');
     },
     /**
      * @property title
@@ -43,6 +44,16 @@ module.exports = GelatoPage.extend({
         'keyup #login-password': 'handleKeyUpLoginPassword',
         'vclick #button-login': 'handleClickLoginButton',
         'vclick #button-skeleton': 'handleClickSkeleton'
+    },
+    /**
+     * @method getFormData
+     * @returns {Object}
+     */
+    getFormData: function() {
+        return {
+            password: this.$('#login-password').val(),
+            username: this.$('#login-username').val()
+        }
     },
     /**
      * @method handleClickLoginButton
@@ -85,22 +96,25 @@ module.exports = GelatoPage.extend({
      * @method login
      */
     login: function() {
-        var password = this.$('#login-password').val();
-        var username = this.$('#login-username').val();
+        var self = this;
+        var formData = this.getFormData();
         this.$('#login-message').empty();
         this.$('#login-form').prop('disabled', true);
         ScreenLoader.show();
         ScreenLoader.post('Authenticating user credentials');
-        app.user.login(username, password,
-            _.bind(function() {
-                app.router.navigate('dashboard', {trigger: false});
-                app.reload();
-            }, this),
-            _.bind(function(error) {
-                self.$('#login-message').text(error.responseJSON.message);
-                self.$('#login-form').prop('disabled', false);
-                ScreenLoader.hide();
-            }, this)
+        app.user.login(
+            formData.username.trim(),
+            formData.password.trim(),
+            function(error) {
+                if (error) {
+                    self.$('#login-message').text(error.responseJSON.message);
+                    self.$('#login-form').prop('disabled', false);
+                    ScreenLoader.hide();
+                } else {
+                    app.router.navigate('dashboard', {trigger: false});
+                    app.reload();
+                }
+            }
         );
     },
     /**

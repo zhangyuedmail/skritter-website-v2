@@ -12,6 +12,9 @@ module.exports = GelatoComponent.extend({
      */
     initialize: function(options) {
         this.prompt = options.prompt;
+        this.reviews = null;
+        this.showLeft = true;
+        this.showRight = true;
     },
     /**
      * @property events
@@ -49,5 +52,16 @@ module.exports = GelatoComponent.extend({
     handleClickNavigatePrevious: function(event) {
         event.preventDefault();
         this.prompt.previous();
+    },
+    /**
+     * @method setReviews
+     * @param {Reviews} reviews
+     */
+    setReviews: function(reviews) {
+        this.stopListening();
+        this.listenTo(reviews, 'add', this.render);
+        this.listenTo(reviews, 'state', this.render);
+        this.reviews = reviews;
+        return this.render();
     }
 });

@@ -15,16 +15,20 @@ module.exports = GelatoPage.extend({
         this.footer = new MarketingFooter();
         this.navbar = new DefaultNavbar();
     },
-    /**
-     * @property title
-     * @type {String}
-     */
-    title: 'Home - Skritter',
+    events: {
+        'vclick #link-apple-store': 'handleClickLinkAppleStore',
+        'vclick #link-google-store': 'handleClickLinkGoogleStore'
+    },
     /**
      * @property template
      * @type {Function}
      */
     template: require('./template'),
+    /**
+     * @property title
+     * @type {String}
+     */
+    title: 'Skritter - Learn to Write Chinese and Japanese Characters',
     /**
      * @method render
      * @returns {Home}
@@ -34,6 +38,24 @@ module.exports = GelatoPage.extend({
         this.footer.setElement('#footer-container').render();
         this.navbar.setElement('#navbar-container').render();
         return this;
+    },
+    /**
+     * @method handleClickLinkAppleStore
+     * @param {Event} event
+     */
+    handleClickLinkAppleStore: function(event) {
+        event.preventDefault();
+        mixpanel.track('Clicked ios app button');
+        window.open('https://itunes.apple.com/us/artist/inkren-llc/id402280587', '_blank');
+    },
+    /**
+     * @method handleClickLinkGoogleStore
+     * @param {Event} event
+     */
+    handleClickLinkGoogleStore: function(event) {
+        event.preventDefault();
+        mixpanel.track('Clicked android app button');
+        window.open('https://play.google.com/store/apps/developer?id=Skritter', '_blank');
     },
     /**
      * @method remove

@@ -20,16 +20,17 @@ exports.config = {
                     'vendor/chai-3.5.0.js',
                     'vendor/createjs.easel-0.8.2.js',
                     'vendor/createjs.tween-0.6.2.js',
-                    'vendor/d3-3.5.13.js',
+                    'vendor/d3-3.5.15.js',
                     'vendor/dexie-1.2.0.js',
                     'vendor/heatmap-3.5.4.js',
-                    'vendor/highcharts-4.2.1.js',
+                    'vendor/highcharts-4.2.3.js',
                     'vendor/jquery.mobile-1.4.5.js',
                     'vendor/jquery.ui-1.11.4.js',
                     'vendor/keypress-2.1.3.js',
                     'vendor/mocha-2.4.5.js',
-                    'vendor/moment-2.11.1.js',
+                    'vendor/moment-2.11.2.js',
                     'vendor/moment.timezone-0.5.0.js',
+                    'vendor/raygun-2.2.3.js',
                     'vendor/sinon-1.17.3.js',
                     'vendor/wanakana-1.3.7.js'
                 ]
@@ -49,6 +50,9 @@ exports.config = {
                 'js/startup.js': /^startup[\\/]/
             }
         }
+    },
+    npm: {
+        enabled: false
     },
     paths: {
         'public': 'public',

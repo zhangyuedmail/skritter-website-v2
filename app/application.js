@@ -14,13 +14,16 @@ module.exports = GelatoApplication.extend({
      */
     initialize: function() {
 
-        Raygun.init('VF3L4HPYRvk1x0F5x3hGVg==', {
-            excludedHostnames: ['localhost'],
-            excludedUserAgents: ['PhantomJS'],
-            ignore3rdPartyErrors: true,
-            ignoreAjaxAbort: false,
-            ignoreAjaxError: false
-        }).attach();
+        Raygun.init(
+            'VF3L4HPYRvk1x0F5x3hGVg==',
+            {
+                excludedHostnames: ['localhost'],
+                excludedUserAgents: ['PhantomJS'],
+                ignore3rdPartyErrors: true,
+                ignoreAjaxAbort: false,
+                ignoreAjaxError: false
+            }
+        ).attach();
 
         Raygun.setVersion(this.get('version'));
 
@@ -31,6 +34,10 @@ module.exports = GelatoApplication.extend({
         if (window.ga && this.isProduction()) {
             ga('create', 'UA-4642573-1', 'auto');
             ga('set', 'forceSSL', true);
+        }
+
+        if (window.mixpanel && this.isWebsite()) {
+            mixpanel.init(this.getMixpanelKey());
         }
 
         if (this.isDevelopment()) {
@@ -69,6 +76,17 @@ module.exports = GelatoApplication.extend({
      */
     getLanguage: function() {
         return this.get('language') || this.user.get('targetLang');
+    },
+    /**
+     * @method getMixpanelKey
+     * @returns {String}
+     */
+    getMixpanelKey: function() {
+        if (this.isProduction()) {
+            return '8ee755b0ebe4f1141cda5dd09186cdca';
+        } else {
+            return '456c03002118e80555d7136131bf10a3';
+        }
     },
     /**
      * @method getStripeKey
@@ -166,16 +184,21 @@ module.exports = GelatoApplication.extend({
      */
     reset: function() {
         app.user.setLastItemUpdate(0).cache();
-        async.parallel([
-            function(callback) {
-                app.db.items.clear().finally(callback);
-            },
-            function(callback) {
-                app.db.reviews.clear().finally(callback);
+        async.parallel(
+            [
+                function(callback) {
+                    app.user.items.reset();
+                    app.user.db.items.clear().finally(callback);
+                },
+                function(callback) {
+                    app.user.reviews.reset();
+                    app.user.db.reviews.clear().finally(callback);
+                }
+            ],
+            function() {
+                app.reload();
             }
-        ], function() {
-           app.reload();
-        });
+        );
     },
     /**
      * @method start
@@ -192,6 +215,7 @@ module.exports = GelatoApplication.extend({
         if (this.user.isLoggedIn()) {
             Raygun.setUser(this.user.get('name'), false, this.user.get('email'));
             Raygun.withTags(this.user.getRaygunTags());
+            mixpanel.identify(this.user.id);
         } else {
             Raygun.setUser('guest', true);
         }
@@ -209,7 +233,10 @@ module.exports = GelatoApplication.extend({
             function(callback) {
                 //check for user authentication type
                 if (app.user.id === 'application') {
-                    app.user.session.authenticate('client_credentials', null, null,
+                    app.user.session.authenticate(
+                        'client_credentials',
+                        null,
+                        null,
                         function() {
                             callback();
                         },
@@ -228,48 +255,9 @@ module.exports = GelatoApplication.extend({
                     );
                 }
             },
-            //load dexie with items store
+            //load primary user based on state
             function(callback) {
-                if (app.user.isLoggedIn()) {
-                    app.db = new Dexie(app.user.id + '-database');
-                    app.db.version(2).stores({
-                        items: [
-                            'id',
-                            '*changed',
-                            'created',
-                            'interval',
-                            '*last',
-                            '*next',
-                            'part',
-                            'previousInterval',
-                            'previousSuccess',
-                            'reviews',
-                            'successes',
-                            'style',
-                            'timeStudied',
-                            'vocabIds'
-                        ].join(','),
-                        reviews: [
-                            'group',
-                            '*created',
-                            'reviews'
-                        ].join(',')
-                    });
-                    app.db.open()
-                        .then(function() {
-                            callback();
-                        })
-                        .catch(function() {
-                            app.db.delete().then(app.reload);
-                        });
-                } else {
-                    app.db = null;
-                    callback();
-                }
-            },
-            //fetch and store changed items
-            function(callback) {
-                app.user.updateItems(callback);
+                app.user.load(callback);
             }
         ], function() {
             setTimeout(function() {

@@ -64,6 +64,8 @@ module.exports = SkritterCollection.extend({
         options = _.defaults(options || {}, {async: true, skip: 0});
         if (this.state === 'standby') {
             this.state = 'posting';
+            this.trigger('state', this.state, this);
+            this.trigger('state:' + this.state, this);
             var reviews = this.slice(0, -options.skip || this.length);
             async.eachSeries(
                 _.chunk(reviews, 20),
@@ -75,6 +77,14 @@ module.exports = SkritterCollection.extend({
                         })
                         .flatten()
                         .value();
+                    //TODO: figure out why duplicates exist
+                    data = _.uniqBy(data, function(review) {
+                        return [
+                            review.itemId,
+                            review.currentInterval,
+                            review.newInterval
+                        ].join('');
+                    });
                     $.ajax({
                         url: app.getApiUrl() + 'reviews?spaceItems=false',
                         async: options.async,
@@ -87,16 +97,44 @@ module.exports = SkritterCollection.extend({
                                 .map('Item')
                                 .without(undefined)
                                 .value();
-                            self.reroll(items);
+                            if (items.length) {
+                                Raygun.send(
+                                    new Error('Review Error: Items returned with errors'),
+                                    {
+                                        data: data,
+                                        error: error.responseJSON
+                                    }
+                                );
+                                self.reroll(items, function() {
+                                    callback(error);
+                                });
+                            } else {
+                                Raygun.send(
+                                    new Error('Review Error: Unable to post chunk'),
+                                    {
+                                        data: data,
+                                        error: error.responseJSON
+                                    }
+                                );
+                                self.remove(chunk);
+                                self.removeReviewCache(chunk, function() {
+                                    callback(error);
+                                });
+                            }
+
                         },
                         success: function() {
                             self.remove(chunk);
-                            self.removeReviewCache(chunk, callback);
+                            self.removeReviewCache(chunk, function() {
+                                setTimeout(callback, 1000);
+                            });
                         }
                     });
                 },
                 function(error) {
                     self.state = 'standby';
+                    self.trigger('state', self.state, self);
+                    self.trigger('state:' + self.state, self);
                     if (error) {
                         console.error('REVIEW ERROR:', error);
                     } else {
@@ -128,6 +166,10 @@ module.exports = SkritterCollection.extend({
                 modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                 modelData.previousInterval = item.get('previousInterval') || 0;
                 modelData.previousSuccess = item.get('previousSuccess') || false;
+                if (!_.isInteger(modelData.score)) {
+                    modelData = 3;
+                    modelData.newInterval = 86400;
+                }
                 if (app.isDevelopment()) {
                     console.log(
                         item.id,
@@ -169,7 +211,7 @@ module.exports = SkritterCollection.extend({
         async.each(
             reviews || [],
             function(review, callback) {
-                app.db.reviews
+                app.user.db.reviews
                     .delete(review.id)
                     .then(function() {
                         callback();
@@ -197,10 +239,28 @@ module.exports = SkritterCollection.extend({
                 if (itemIds.indexOf(modelData.itemId) > -1) {
                     var item = this.items.get(modelData.itemId);
                     var submitTimeSeconds = Math.round(modelData.submitTime);
+                    if (submitTimeSeconds < item.get('changed')) {
+                        var now = Date.now() / 1000;
+                        submitTimeSeconds = Math.round(now);
+                        modelData.submitTime = now;
+                    }
                     modelData.actualInterval = item.get('last') ? submitTimeSeconds - item.get('last') : 0;
+                    modelData.currentInterval = item.get('interval');
                     modelData.newInterval = app.fn.interval.quantify(item.toJSON(), modelData.score);
                     modelData.previousInterval = item.get('previousInterval') || 0;
                     modelData.previousSuccess = item.get('previousSuccess') || false;
+                    if (!_.isInteger(modelData.score)) {
+                        modelData = 3;
+                        modelData.newInterval = 86400;
+                    }
+                    if (app.isDevelopment()) {
+                        console.log(
+                            item.id,
+                            'scheduled for',
+                            moment.duration(modelData.newInterval, 'seconds').as('days'),
+                            'days'
+                        );
+                    }
                     item.set({
                         changed: submitTimeSeconds,
                         last: submitTimeSeconds,
@@ -228,7 +288,7 @@ module.exports = SkritterCollection.extend({
         async.each(
             items || [],
             function(item, callback) {
-                app.db.items
+                app.user.db.items
                     .put(item.toJSON())
                     .then(function() {
                         callback();
@@ -247,7 +307,7 @@ module.exports = SkritterCollection.extend({
         async.each(
             reviews || [],
             function(review, callback) {
-                app.db.reviews
+                app.user.db.reviews
                     .put({
                         group: review.get('group'),
                         created: review.get('created'),

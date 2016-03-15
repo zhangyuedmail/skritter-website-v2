@@ -14,6 +14,7 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.footer = new MarketingFooter();
         this.navbar = new DefaultNavbar();
+        mixpanel.track('Viewed features page');
     },
     /**
      * @property events

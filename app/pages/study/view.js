@@ -27,6 +27,7 @@ module.exports = GelatoPage.extend({
         this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
+        window.onbeforeunload = this.handleWindowOnBeforeUnload.bind(this);
         this.loadSchedule();
     },
     /**
@@ -56,12 +57,21 @@ module.exports = GelatoPage.extend({
         return this;
     },
     /**
+     * @method handleWindowOnBeforeUnload
+     */
+    handleWindowOnBeforeUnload: function() {
+        if (!this.schedule.reviews.length) {
+            return;
+        }
+        return 'You have ' + this.schedule.reviews.length + ' unsaved reviews!';
+    },
+    /**
      * @method handlePromptNext
      * @param {PromptItems} promptItems
      */
     handlePromptNext: function(promptItems) {
         var self = this;
-        if (this.item) {
+        if (this.item && promptItems) {
             var review = promptItems.getReview();
             if (!this.schedule.reviews.get(review)) {
                 this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
@@ -93,10 +103,11 @@ module.exports = GelatoPage.extend({
     handleScheduledLoad: function() {
         var self = this;
         ScreenLoader.post('Preparing for study');
-        app.db.reviews
+        app.user.db.reviews
             .toArray()
             .then(function(reviews) {
                 self.schedule.reviews.add(reviews);
+                self.prompt.setSchedule(self.schedule);
                 self.populateQueue();
             })
             .catch(function(error) {
@@ -123,7 +134,7 @@ module.exports = GelatoPage.extend({
         var lang = app.getLanguage();
         var parts = app.user.getFilteredParts();
         var styles = app.user.getFilteredStyles();
-        app.db.items
+        app.user.db.items
             .toArray()
             .then(function(items) {
                 items = items.filter(function(item) {
@@ -193,6 +204,7 @@ module.exports = GelatoPage.extend({
                 ids: _.map(items, 'id').join('|'),
                 include_contained: true,
                 include_decomps: true,
+                include_heisigs: true,
                 include_sentences: true,
                 include_strokes: true,
                 include_vocabs: true
@@ -202,7 +214,6 @@ module.exports = GelatoPage.extend({
             error: function(error) {
                 self.schedule.trigger('error', error);
                 self.scheduleState ='standby';
-                self.$('#loading-indicator').addClass('hidden');
             },
             success: function(items, result) {
                 var now = moment().unix();
@@ -220,7 +231,6 @@ module.exports = GelatoPage.extend({
                 }
                 self.schedule.trigger('populate', self.queue);
                 self.scheduleState ='standby';
-                self.$('#loading-indicator').addClass('hidden');
             }
         });
     },
@@ -245,6 +255,7 @@ module.exports = GelatoPage.extend({
         this.prompt.remove();
         this.toolbar.remove();
         this.schedule.reviews.post();
+        window.onbeforeunload = null;
         return GelatoPage.prototype.remove.call(this);
     }
 });

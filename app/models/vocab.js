@@ -418,11 +418,7 @@ var Vocab = SkritterModel.extend({
      * @method unbanAll
      */
     unbanAll: function() {
-        if (this.isChinese()) {
-            this.set('bannedParts', app.user.get('allChineseParts'));
-        } else {
-            this.set('bannedParts', app.user.get('allJapaneseParts'));
-        }
+        this.set('bannedParts', []);
     },
     /**
      * @method unbanPart

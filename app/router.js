@@ -35,8 +35,9 @@ module.exports = Router.extend({
         'legal': 'navigateLegal',
         'login': 'navigateLogin',
         'password-reset': 'navigatePasswordReset',
-        'scratchpad/:vocabId(/:part)': 'navigateScratchpad',
+        'scratchpad/:writing(/:part)': 'navigateScratchpad',
         'signup(/:plan)': 'navigateSignup',
+        'stats': 'navigateStats',
         'study(/:listId)(/:sectionId)': 'navigateStudy',
         'test': 'navigateTest',
         'vocab(/:vocabId)': 'navigateVocab',
@@ -237,11 +238,11 @@ module.exports = Router.extend({
     },
     /**
      * @method navigateScratchpad
-     * @param {String} vocabId
+     * @param {String} writing
      * @param {String} [part]
      */
-    navigateScratchpad: function(vocabId, part) {
-        this.go('pages/scratchpad', {part: part, vocabId: vocabId});
+    navigateScratchpad: function(writing, part) {
+        this.go('pages/scratchpad', {part: part, writing: writing});
     },
     /**
      * @method navigateSignup
@@ -256,6 +257,13 @@ module.exports = Router.extend({
         }
     },
     /**
+     * @method navigateStats
+     */
+    navigateStats: function() {
+        //TODO: replace when progress stats supported
+        location.replace('http://www.skritter.com/progress');
+    },
+    /**
      * @method navigateStudy
      * @param {String} [listId]
      * @param {String} [sectionId]
@@ -265,7 +273,9 @@ module.exports = Router.extend({
             if (sectionId) {
                 this.go('pages/study-section', {listId: listId, sectionId: sectionId});
             } else if (listId) {
-                this.go('pages/study-list', {listId: listId});
+                //TODO: replace when single list study supported
+                location.replace('http://www.skritter.com/study/list?list=' + listId);
+                //this.go('pages/study-list', {listId: listId});
             } else {
                 this.go('pages/study');
             }

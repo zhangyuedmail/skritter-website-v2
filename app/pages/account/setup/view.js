@@ -84,8 +84,9 @@ module.exports = GelatoPage.extend({
         app.user.save(
             this.getSettings(),
             {
-                error: function(error) {
+                error: function(user, error) {
                     self.$('#error-message').text(error.responseJSON.message);
+                    ScreenLoader.hide();
                 },
                 success: function() {
                     app.router.navigate('dashboard');
@@ -105,6 +106,8 @@ module.exports = GelatoPage.extend({
         if (targetLang === 'zh') {
             settings.addSimplified = this.$('#field-styles [value="simplified"]').is(':checked');
             settings.addTraditional = this.$('#field-styles [value="traditional"]').is(':checked');
+            settings.reviewSimplified = true;
+            settings.reviewTraditional = true;
         }
         settings.country = this.$('#field-country :selected').val();
         settings.targetLang = targetLang;

@@ -23,8 +23,13 @@ bootstrap-navbar(data-name='default')
               a(href="/vocablists") Lists
             li
               a(href="/words") Words
+            li
+              //TODO: replace when progress stats supported
+              a(href="/stats") Stats
 
           ul.nav.navbar-nav.navbar-right
+            li
+              a(href="http://www.skritter.com/home") Back to skritter.com
             li.dropdown
               a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                 span= user.get('name')
@@ -38,8 +43,6 @@ bootstrap-navbar(data-name='default')
                 li
                   a(href="https://discourse.skritter.com/", target="_blank") Forum
                 li.divider(role="separator")
-                li
-                  a(href="http://www.skritter.com") Back to skritter.com
                 li
                   a#button-logout(href="#") Logout
             li
@@ -55,6 +58,8 @@ bootstrap-navbar(data-name='default')
               a(href="/signup") Signup
 
           ul.nav.navbar-nav.navbar-right
+            li
+              a(href="http://www.skritter.com/home") Back to skritter.com
             if user.isLoggedIn()
               li
                 a(href="/dashboard") Dashboard

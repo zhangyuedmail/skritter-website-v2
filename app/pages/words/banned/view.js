@@ -27,8 +27,8 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #load-more-btn': 'handleClickLoadMoreButton',
         'change input[type="checkbox"]': 'handleChangeCheckbox',
+        'vclick #load-more-btn': 'handleClickLoadMoreButton',
         'vclick #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
     },
     /**
@@ -96,15 +96,16 @@ module.exports = GelatoPage.extend({
      * @method handleClickUnbanVocabsButton
      */
     handleClickUnbanVocabsButton: function() {
+        var self = this;
         var vocabs = new Vocabs();
         _.forEach(this.$('input:checked'), function(el) {
             var vocabID = $(el).closest('tr').data('vocab-id');
             if (!vocabID) {
                 return;
             }
-            vocabs.add(this.bannedVocabs.get(vocabID));
-            this.bannedVocabs.remove(vocabID);
-        }, this);
+            vocabs.add(self.bannedVocabs.get(vocabID));
+            self.bannedVocabs.remove(vocabID);
+        });
         this.beginVocabAction('unban', vocabs);
         this.renderTable();
         this.$('#unban-vocabs-btn').prop('disabled', true);
