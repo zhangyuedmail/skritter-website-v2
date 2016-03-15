@@ -1,20 +1,18 @@
 gelato-component(data-name='study-prompt-vocab-contained')
   - var prompt = view.prompt;
 
-  if prompt.review
-    - var review = prompt.review;
-    - var active = prompt.active;
-    - var vocabs = prompt.review.vocab.getContained(true);
+  if prompt.reviews
+    - var vocabs = prompt.reviews.vocab.getContained(true);
 
     if !vocabs.length
-      - contained = [prompt.review.vocab];
+      - contained = [prompt.reviews.vocab];
 
     if vocabs.length
 
       hr
 
       div.value
-        if active.get('showContained') || active.get('complete')
+        if prompt.review.get('showContained') || prompt.review.isComplete()
 
           for vocab in vocabs
             - var decomp = vocab.getDecomp();
@@ -28,18 +26,18 @@ gelato-component(data-name='study-prompt-vocab-contained')
 
               if vocabs.length > 1
                 .child-vocab-row
-                  span.child-writing(class=review.isChinese() ? 'text-chinese' : 'text-japanese')= writing
+                  span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
                   | &nbsp;
-                  span.child-reading= review.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+                  span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
 
               if decomp && !decomp.get('atomic')
                 .child-vocab-row
                   label Decomposition
                   for child in decomp.get('Children')
                     .child-decomp
-                      span.decomp-writing(class=review.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
+                      span.decomp-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
                       | &nbsp;
-                      span.decomp-reading= review.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                      span.decomp-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
                       | &nbsp;
                       if app.user.get('showHeisig') && child.heisigDefinition
                         em!= child.heisigDefinition + ' - '

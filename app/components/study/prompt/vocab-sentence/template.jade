@@ -1,10 +1,8 @@
 gelato-component(data-name='study-prompt-vocab-sentence')
   - var prompt = view.prompt;
 
-  if prompt.review
-    - var review = prompt.review;
-    - var sentence = prompt.review.vocab.getSentence();
-    - var vocab = prompt.review.vocab;
+  if prompt.reviews
+    - var sentence = prompt.reviews.vocab.getSentence();
 
     if sentence
       - var sentenceDefinition = sentence.getDefinition();
@@ -12,15 +10,15 @@ gelato-component(data-name='study-prompt-vocab-sentence')
 
       label Example sentence
 
-      .value(class=review.isChinese() ? 'text-chinese' : 'text-japanese')
+      .value(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
 
-        if review.get('part') === 'rune' && !review.isComplete()
-          span= sentence.getWriting(vocab.get('writing'))
+        if prompt.reviews.part === 'rune' && !prompt.reviews.isComplete()
+          = sentence.getWriting(prompt.reviews.vocab.get('writing'))
         else
-          span= sentence.getWriting()
+          = sentence.getWriting()
 
         .hint
-          if review.isChinese()
+          if prompt.reviews.isChinese()
             .hint-reading= app.fn.pinyin.toTone(sentenceReading, true)
           else
             .hint-reading= sentenceReading
