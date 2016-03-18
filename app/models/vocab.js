@@ -336,9 +336,10 @@ var Vocab = SkritterModel.extend({
      */
     getWritingDifference: function(vocabId) {
         return _.zipWith(
-            this.get('writing'),
-            app.fn.mapper.fromBase(vocabId),
+            this.get('writing').split(),
+            app.fn.mapper.fromBase(vocabId).split(),
             function(thisChar, otherChar) {
+                console.log(thisChar, otherChar);
                 return thisChar === otherChar ? '-' : otherChar;
             }).join('');
     },
