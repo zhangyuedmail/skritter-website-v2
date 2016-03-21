@@ -133,6 +133,7 @@ module.exports = GelatoPage.extend({
         var self = this;
         var lang = app.getLanguage();
         var parts = app.user.getFilteredParts();
+        var studyKana = app.user.get('studyKana');
         var styles = app.user.getFilteredStyles();
         app.user.db.items
             .toArray()
@@ -146,6 +147,13 @@ module.exports = GelatoPage.extend({
                         return false;
                     } else if (styles.indexOf(item.style) === -1) {
                         return false;
+                    }
+                    if (item.lang === 'ja') {
+                        var writing = item.id.split('-')[2];
+                        // Skip all kana items when no kanji exists
+                        if (!studyKana && app.fn.isKana(writing)) {
+                            return false;
+                        }
                     }
                     return true;
                 });
