@@ -113,7 +113,7 @@ module.exports = GelatoPage.extend({
             email: formData.email,
             name: formData.username,
             password: formData.password1,
-            recaptcha: formdata.recaptcha
+            recaptcha: formData.recaptcha
         });
         if (formData.method === 'credit') {
             this.user.set({
