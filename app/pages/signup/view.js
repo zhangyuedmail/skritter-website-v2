@@ -112,7 +112,8 @@ module.exports = GelatoPage.extend({
         this.user.set({
             email: formData.email,
             name: formData.username,
-            password: formData.password1
+            password: formData.password1,
+            recaptcha: formdata.recaptcha
         });
         if (formData.method === 'credit') {
             this.user.set({
@@ -212,7 +213,8 @@ module.exports = GelatoPage.extend({
             password1: _.trim(this.$('#signup-password1').val()),
             password2: _.trim(this.$('#signup-password2').val()),
             plan: this.$('#signup-plan').val(),
-            username: _.trim(this.$('#signup-username').val())
+            username: _.trim(this.$('#signup-username').val()),
+            recaptcha: grecaptcha.getResponse()
         };
     },
 
@@ -417,6 +419,11 @@ module.exports = GelatoPage.extend({
 
         if (formData.password1.length < 6) {
             this.displayErrorMessage('Password length must be 6 characters or longer.');
+            return false;
+        }
+
+        if (!formData.recaptcha) {
+            this.displayErrorMessage('The reCAPTCHA must be correctly answered.');
             return false;
         }
 

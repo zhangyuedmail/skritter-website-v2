@@ -94,6 +94,12 @@ gelato-page[data-name='signup'] {
           font-weight: 400;
         }
       }
+      .captcha-wrapper {
+        margin-top: 45px;
+      }
+      .g-recaptcha {
+        display: inline-block;
+      }
     }
     #section-information {
       border-bottom-right-radius: 25px;

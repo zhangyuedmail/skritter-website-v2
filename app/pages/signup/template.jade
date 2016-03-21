@@ -90,7 +90,9 @@ gelato-page(data-name='signup')
             label.col-sm-5.control-label(for='signup-coupon') Coupon
             .col-sm-7
               input#signup-coupon.form-control(type='text', placeholder='')
-
+          .form-group.text-center.captcha-wrapper
+            script(src='https://www.google.com/recaptcha/api.js')
+            .g-recaptcha(data-sitekey="6LeuZRsTAAAAAGt-TNhO8Hcv7BcHrKLoEs82LixC")
           .text-center
             button#signup-submit.btn.btn-success(type='submit')
               span Sign up
