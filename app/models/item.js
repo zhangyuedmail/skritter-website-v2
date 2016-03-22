@@ -103,7 +103,11 @@ module.exports = SkritterModel.extend({
             promptItem.interval = childItem.get('interval');
             promptItem.item = childItem;
             promptItem.vocab = childVocab;
-            promptItem.set('filler', childVocab.isFiller());
+            if (characters[i]) {
+                promptItem.set('filler', childVocab.isFiller());
+            } else {
+                promptItem.set('filler', true);
+            }
             promptItem.set('kana', childVocab.isKana());
             promptItems.add(promptItem);
         }
