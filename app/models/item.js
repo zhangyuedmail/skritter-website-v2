@@ -23,6 +23,15 @@ module.exports = SkritterModel.extend({
      */
     urlRoot: 'items',
     /**
+     * @property defaults
+     * @type {Object}
+     */
+    defaults: function() {
+        return {
+            vocabIds: []
+        };
+    },
+    /**
      * @method ban
      */
     ban: function() {
@@ -51,8 +60,16 @@ module.exports = SkritterModel.extend({
                 var intendedId = [app.user.id, vocabId, part].join('-');
                 if (this.collection.get(intendedId)) {
                     containedItems.push(this.collection.get(intendedId));
-                } else {
+                } else if (this.collection.get(fallbackId)) {
                     containedItems.push(this.collection.get(fallbackId));
+                } else {
+                    containedItems.push(this.collection.add(
+                        {
+                            id: fallbackId,
+                            writing: splitId[1]
+                        },
+                        {merge: true}
+                    ));
                 }
             }
         }
