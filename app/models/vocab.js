@@ -362,7 +362,12 @@ var Vocab = SkritterModel.extend({
      * @returns {Boolean}
      */
     isFiller: function() {
-        return ['～', 'ー'].indexOf(this.get('writing')) > -1;
+        if (app.isJapanese()) {
+            if (!app.user.get('studyKana') && this.isKana()) {
+                return true;
+            }
+        }
+        return _.includes(['~', 'ー', '～', '一'], this.get('writing'));
     },
     /**
      * @method isJapanese
