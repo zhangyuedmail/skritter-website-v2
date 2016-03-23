@@ -1,0 +1,96 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='about'] {
+
+  background: $background-marketing;
+  padding-top: 50px;
+
+  .author {
+    font-size: 20px;
+    color: #B2B5B9;
+    margin-top: 13px;
+  }
+
+  header {
+    font-family: "Ubuntu", "Arial Unicode MS", "Arial", sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 40px 0px 20px 0px;
+  }
+
+  .story-header {
+    margin: 0px 0px 15px;
+  }
+
+  .row {
+    margin: 0px;
+  }
+
+  .story-wrapper, .team-wrapper {
+    padding: 15px;
+  }
+
+  .story-wrapper {
+    background: #FFF;
+    border-radius: 15px 0px 0px 15px;
+    padding: 20px 40px;
+
+    p {
+      color: #8c9196;
+      font-size: 16px;
+    }
+
+    img {
+      margin: auto;
+      display: block;
+    }
+  }
+
+  .content-block {
+    padding: 0px;
+    margin-bottom: 60px;
+  }
+
+  .team-wrapper {
+    padding: 18px 30px 30px 30px;
+  }
+
+  .team-header {
+    margin-top: 0px;
+    margin-bottom: 30px;
+  }
+
+  .employee-name {
+    font-size: 16px;
+    color: #404851
+  }
+
+  .employee-subtext {
+    font-size: 16px;
+    color: $grey3;
+  }
+
+  .divider {
+    width: 90%;
+    margin: 30px auto;
+    height: 1px;
+    background: #bebdbe;
+  }
+
+  .cofounders-header {
+    margin: 0px 0px 20px 0px;
+  }
+
+  .media {
+    margin-bottom: 20px;
+  }
+
+  #about-title {
+    color: #666c73;
+    font-family: $font-slab;
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 60px;
+    margin-top: 30px;
+  }
+}

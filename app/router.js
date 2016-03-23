@@ -18,6 +18,7 @@ module.exports = Router.extend({
      */
     routes: {
         '': 'defaultRoute',
+        'about': 'navigateAbout',
         'account': 'navigateAccount',
         'account/billing/history': 'navigateAccountBillingHistory',
         'account/billing/subscription': 'navigateAccountBillingSubscription',
@@ -77,6 +78,15 @@ module.exports = Router.extend({
             });
         }
     },
+
+    /**
+     * Navigates to the About Us page
+     */
+    navigateAbout: function() {
+        this.navigate('about');
+        this.go('pages/about');
+    },
+
     /**
      * @method navigateAccount
      */
