@@ -339,7 +339,6 @@ var Vocab = SkritterModel.extend({
             this.get('writing').split(),
             app.fn.mapper.fromBase(vocabId).split(),
             function(thisChar, otherChar) {
-                console.log(thisChar, otherChar);
                 return thisChar === otherChar ? '-' : otherChar;
             }).join('');
     },
@@ -414,6 +413,7 @@ var Vocab = SkritterModel.extend({
      */
     post: function(callback) {
         $.ajax({
+            context: this,
             url: app.getApiUrl() + 'vocabs',
             type: 'POST',
             headers: app.user.session.getHeaders(),
@@ -427,8 +427,8 @@ var Vocab = SkritterModel.extend({
             error: function(error) {
                 typeof callback === 'function' && callback(error);
             },
-            success: function() {
-                typeof callback === 'function' && callback();
+            success: function(result) {
+                typeof callback === 'function' && callback(null, this.set(result.Vocab, {merge: true}));
             }
         });
     },
