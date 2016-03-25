@@ -409,6 +409,30 @@ var Vocab = SkritterModel.extend({
         return this.audio;
     },
     /**
+     * @method post
+     * @param {Function} callback
+     */
+    post: function(callback) {
+        $.ajax({
+            url: app.getApiUrl() + 'vocabs',
+            type: 'POST',
+            headers: app.user.session.getHeaders(),
+            data: {
+                id: this.id,
+                definitions: JSON.stringify(this.get('definitions')),
+                lang: app.getLanguage(),
+                reading: this.get('reading'),
+                writing: this.get('writing')
+            },
+            error: function(error) {
+                typeof callback === 'function' && callback(error);
+            },
+            success: function() {
+                typeof callback === 'function' && callback();
+            }
+        });
+    },
+    /**
      * @method toggleStarred
      * @returns {Boolean}
      */
