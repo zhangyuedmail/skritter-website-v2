@@ -18,11 +18,12 @@ gelato-dialog(data-name='vocab-creator')
           #error-message.text-danger
           form
             .form-group
-              label(for='word-reading-input') Reading
+              h5= app.isChinese() ? 'Pinyin' : 'Kana'
               input#word-reading-input(type='text')
             .form-group
-              label(for='word-definition-input') Definition
-              input#word-definition-input(type='text')
+              h5 Definition
+              textarea#word-definition-input
+              //input#word-definition-input(type='text')
         .modal-footer
           button#button-add-word.btn.btn-success Add Word
           button#button-cancel.btn.btn-default Cancel
