@@ -75,10 +75,10 @@ module.exports = SkritterModel.extend({
         var added = 0;
         var passed = false;
         var total = 0;
-        var sections = this.get('sections');
+        var sections = this.get('sections') || [];
         if (this.get('studyingMode') === 'finished') {
             return { percent: 100 };
-        } else if (sections) {
+        } else if (sections.length) {
             var currentIndex = this.get('currentIndex') || 0;
             var currentSection = this.get('currentSection') || sections[0].id;
             var sectionsSkipping = this.get('sectionsSkipping');

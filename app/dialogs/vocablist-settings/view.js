@@ -1,11 +1,14 @@
 var BootstrapDialog = require('base/bootstrap-dialog');
 
 /**
+ * Displays study settings that a user can customize for a VocabList.
  * @class VocablistSettingsDialog
  * @extends {BootstrapDialog}
  */
 module.exports = BootstrapDialog.extend({
     /**
+     * Initializes a new settings list. Fetches the vocablist and rerenders
+     * the content of the view after it's been fetched.
      * @method initialize
      * @param {Object} options
      */
@@ -42,7 +45,7 @@ module.exports = BootstrapDialog.extend({
      * @method renderContent
      */
     renderContent: function() {
-        var rendering = $(this.template(require('globals')));
+        var rendering = $(this.template(this.getContext()));
         this.$('.modal-content').replaceWith(rendering.find('.modal-content'));
     },
     /**
