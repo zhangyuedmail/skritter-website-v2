@@ -2,6 +2,7 @@ var GelatoComponent = require('gelato/component');
 
 var Vocab = require('models/vocab');
 var Vocabs = require('collections/vocabs');
+var VocabCreatorDialog = require('dialogs1/vocab-creator/view');
 
 /**
  * @class VocablistsListEditorRows
@@ -27,6 +28,7 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
+        'vclick .add-entry': 'handleClickAddEntry',
         'vclick .remove-row': 'handleClickRemoveRow',
         'vclick .result-row': 'handleClickResultRow',
         'vclick .show-results': 'handleClickShowResults',
@@ -87,6 +89,7 @@ module.exports = GelatoComponent.extend({
                     row.id = row.vocabId + '-' + row.tradVocabId;
                     row.state = 'loaded';
                 } else {
+                    row.id = query;
                     row.state = 'not-found';
                 }
                 this.render();
@@ -100,6 +103,25 @@ module.exports = GelatoComponent.extend({
     discardChanges: function() {
         this.rows = _.clone(this.saved);
         this.render();
+    },
+    /**
+     * @method handleClickAddEntry
+     * @param {Event} event
+     */
+    handleClickAddEntry: function(event) {
+        var self = this;
+        event.preventDefault();
+        var $row = $(event.target).closest('.row');
+        var index = $row.data('index');
+        this.dialog = new VocabCreatorDialog();
+        this.dialog.open({writing: $row.data('row-id')});
+        this.dialog.on(
+            'vocab',
+            function(vocab) {
+                self.removeRow(index);
+                self.addRow(vocab.get('writing'));
+            }
+        );
     },
     /**
      * @method handleClickRemoveRow
