@@ -1,0 +1,29 @@
+gelato-dialog(data-name='vocab-creator')
+
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+
+        .modal-header
+          .pull-left
+            .modal-title
+              span.spr Add
+              span.word-writing= view.writing
+              span.spl to the dictionary
+          .pull-right
+            a(href='#', data-dismiss='modal')
+              i.fa.fa-times-circle-o
+
+        .modal-body
+          #error-message.text-danger
+          form
+            .form-group
+              h5= app.isChinese() ? 'Pinyin' : 'Kana'
+              input#word-reading-input(type='text')
+            .form-group
+              h5 Definition
+              textarea#word-definition-input
+              //input#word-definition-input(type='text')
+        .modal-footer
+          button#button-add-word.btn.btn-success Add Word
+          button#button-cancel.btn.btn-default Cancel

@@ -42,18 +42,6 @@ module.exports = GelatoPage.extend({
                     }
                 });
             }, this),
-            /**
-            _.bind(function(callback) {
-                this.vocablistSection.save({name: 'Section 3'}, {
-                    error: function(error) {
-                        callback(error);
-                    },
-                    success: function() {
-                        callback();
-                    }
-                });
-            }, this),
-             **/
             _.bind(function(callback) {
                 this.editor.loadRows({
                     error: function(error) {
