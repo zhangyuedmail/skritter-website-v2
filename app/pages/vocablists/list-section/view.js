@@ -63,6 +63,7 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
+        'vclick #back-link': 'handleClickBackLink',
         'vclick #discard-changes': 'handleClickDiscardChanges',
         'vclick #edit-section': 'handleClickEditSection',
         'vclick #save-changes': 'handleClickSaveChanges'
@@ -89,6 +90,29 @@ module.exports = GelatoPage.extend({
             document.title = this.vocablist.get('name') + ' - Vocablist - Skritter';
         }
         return this;
+    },
+    /**
+     * @method handleClickBackLink
+     * @param {Event} event
+     */
+    handleClickBackLink: function(event) {
+        var self = this;
+        if (this.editor.editing) {
+            event.preventDefault();
+            this.dialog = new ConfirmGenericDialog({
+                body: 'You have some unsaved changes that will be lost if you continue.',
+                buttonConfirm: 'Continue',
+                title: 'Unsaved changes detected'
+            });
+            this.dialog.once(
+                'confirm',
+                function() {
+                    app.router.navigate('vocablists/view/' + self.vocablist.id, {trigger: true});
+                    self.dialog.close();
+                }
+            );
+            this.dialog.open();
+        }
     },
     /**
      * @method handleClickDiscardChanges

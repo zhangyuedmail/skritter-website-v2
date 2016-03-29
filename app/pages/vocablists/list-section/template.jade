@@ -22,7 +22,7 @@ gelato-page(data-name='vocablists-list-section')
               .row
                 .col-xs-6
                   .list-name
-                    a(href='/vocablists/view/' + vocablist.id)
+                    a#back-link(href='/vocablists/view/' + vocablist.id)
                       i.fa.fa-angle-left
                       | &nbsp;
                       span= vocablist.get('name')
