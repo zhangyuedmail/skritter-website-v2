@@ -87,6 +87,9 @@ module.exports = GelatoComponent.extend({
                     row.tradVocabId = results[0].vocabs[1].id;
                     row.studyWriting = true;
                     row.id = row.vocabId + '-' + row.tradVocabId;
+                    if (app.getLanguage() === 'ja') {
+                        row.id = row.vocabId;
+                    }
                     row.state = 'loaded';
                 } else {
                     row.id = query;
@@ -210,7 +213,7 @@ module.exports = GelatoComponent.extend({
                         callback(error);
                     },
                     success: function(vocabs) {
-                        callback()
+                        callback();
                     }
                 });
             }, this),
@@ -218,7 +221,12 @@ module.exports = GelatoComponent.extend({
                 rows.forEach(function(row) {
                     var vocab1 = vocabs.get(row.vocabId);
                     var vocab2 = vocabs.get(row.tradVocabId) || vocab1;
+
                     row.id = row.vocabId + '-' + row.tradVocabId;
+
+                    if (app.getLanguage() === 'ja') {
+                        row.id = row.vocabId;
+                    }
                     row.lang = vocab1.get('lang');
                     row.state = 'loaded';
                     row.vocabs = [vocab1, vocab2];
