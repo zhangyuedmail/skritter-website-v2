@@ -155,6 +155,7 @@ module.exports = GelatoPage.extend({
         if (event.keyCode === 13) {
             var $input = $(event.target);
             this.editor.addRow($(event.target).val());
+            window.scrollTo(0, document.body.scrollHeight);
             $input.val('');
             $input.focus();
         }
