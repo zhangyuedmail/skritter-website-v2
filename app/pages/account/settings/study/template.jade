@@ -68,6 +68,12 @@ gelato-page(data-name='account-settings-study')
                   .col-sm-9
                     .checkbox
                       label
+                        input#field-study-all-list-writings(type="checkbox", checked=user.get('studyAllListWritings'))
+                .form-group
+                  label.col-sm-3.control-label(for="field-study-all-list-writings") Study all kanji in lists
+                  .col-sm-9
+                    .checkbox
+                      label
                         input#field-study-rare-writings(type="checkbox", checked=user.get('studyRareWritings'))
               .form-group
                 label.col-sm-3.control-label(for="field-heisig") Include Heisig keywords

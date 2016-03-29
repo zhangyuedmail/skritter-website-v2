@@ -89,7 +89,8 @@ module.exports = GelatoPage.extend({
             app.user.set({
                 japaneseStudyParts: this.getSelectedParts(),
                 studyKana: this.$('#field-study-kana').is(':checked'),
-                studyRareWritings: this.$('#field-study-rare-writings').is(':checked')
+                studyRareWritings: this.$('#field-study-rare-writings').is(':checked'),
+                studyAllListWritings: this.$('#field-study-all-list-writings').is(':checked')
             });
         }
         app.user.save();
