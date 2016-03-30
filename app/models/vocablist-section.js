@@ -39,7 +39,12 @@ module.exports = SkritterModel.extend({
      */
     getUniqueVocabIds: function() {
         var vocabIds = _.map(this.get('rows'), 'vocabId');
-        var tradVocabIds = _.map(this.get('rows'), 'tradVocabId');
+        var tradVocabIds = [];
+
+        if (app.getLanguage() === 'zh') {
+            tradVocabIds = _.map(this.get('rows'), 'tradVocabId');
+        }
+
         return _.uniq(vocabIds.concat(tradVocabIds));
     }
 });

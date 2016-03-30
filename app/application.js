@@ -187,11 +187,9 @@ module.exports = GelatoApplication.extend({
         async.parallel(
             [
                 function(callback) {
-                    app.user.items.reset();
                     app.user.db.items.clear().finally(callback);
                 },
                 function(callback) {
-                    app.user.reviews.reset();
                     app.user.db.reviews.clear().finally(callback);
                 }
             ],

@@ -4,7 +4,7 @@ var DefaultNavbar = require('navbars/default/view');
 var EditorRows = require('components/vocablists/row-editor/view');
 var Vocablist = require('models/vocablist');
 var VocablistSection = require('models/vocablist-section');
-var User = require('models/user');
+var ConfirmGenericDialog = require('dialogs1/confirm-generic/view');
 
 /**
  * @class VocablistsListSectionPage
@@ -42,18 +42,6 @@ module.exports = GelatoPage.extend({
                     }
                 });
             }, this),
-            /**
-            _.bind(function(callback) {
-                this.vocablistSection.save({name: 'Section 3'}, {
-                    error: function(error) {
-                        callback(error);
-                    },
-                    success: function() {
-                        callback();
-                    }
-                });
-            }, this),
-             **/
             _.bind(function(callback) {
                 this.editor.loadRows({
                     error: function(error) {
@@ -75,6 +63,7 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
+        'vclick #back-link': 'handleClickBackLink',
         'vclick #discard-changes': 'handleClickDiscardChanges',
         'vclick #edit-section': 'handleClickEditSection',
         'vclick #save-changes': 'handleClickSaveChanges'
@@ -103,14 +92,56 @@ module.exports = GelatoPage.extend({
         return this;
     },
     /**
+     * @method handleClickBackLink
+     * @param {Event} event
+     */
+    handleClickBackLink: function(event) {
+        var self = this;
+        if (this.editor.editing) {
+            event.preventDefault();
+            this.dialog = new ConfirmGenericDialog({
+                body: 'You have some unsaved changes that will be lost if you continue.',
+                buttonConfirm: 'Continue',
+                title: 'Unsaved changes detected'
+            });
+            this.dialog.once(
+                'confirm',
+                function() {
+                    app.router.navigate('vocablists/view/' + self.vocablist.id, {trigger: true});
+                    self.dialog.close();
+                }
+            );
+            this.dialog.open();
+        }
+    },
+    /**
      * @method handleClickDiscardChanges
      * @param {Event} event
      */
     handleClickDiscardChanges: function(event) {
+        var self = this;
         event.preventDefault();
-        this.editor.editing = false;
-        this.editor.discardChanges();
-        this.render();
+        this.dialog = new ConfirmGenericDialog({
+            body: 'This will discard all unsaved changes this current list section.',
+            buttonConfirm: 'Discard',
+            title: 'Discard all changes?'
+        });
+        this.dialog.once(
+            'confirm',
+            function() {
+                self.editor.editing = false;
+                self.editor.discardChanges();
+                self.dialog.close();
+
+            }
+        );
+        this.dialog.once(
+            'hidden',
+            function() {
+                self.render();
+            }
+        );
+        this.dialog.open();
     },
     /**
      * @method handleClickEditSection
@@ -132,9 +163,12 @@ module.exports = GelatoPage.extend({
         this.vocablistSection.set('rows', this.editor.rows);
         this.vocablistSection.save();
         //remove all results button
-        this.editor.rows.forEach(function(row) {
-            delete row.results;
-        });
+        _.forEach(
+            this.editor.rows,
+            function(row) {
+                delete row.results;
+            }
+        );
         this.render();
     },
     /**
@@ -145,6 +179,7 @@ module.exports = GelatoPage.extend({
         if (event.keyCode === 13) {
             var $input = $(event.target);
             this.editor.addRow($(event.target).val());
+            window.scrollTo(0, document.body.scrollHeight);
             $input.val('');
             $input.focus();
         }

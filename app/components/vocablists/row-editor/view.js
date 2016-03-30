@@ -2,6 +2,7 @@ var GelatoComponent = require('gelato/component');
 
 var Vocab = require('models/vocab');
 var Vocabs = require('collections/vocabs');
+var VocabCreatorDialog = require('dialogs1/vocab-creator/view');
 
 /**
  * @class VocablistsListEditorRows
@@ -27,6 +28,7 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
+        'vclick .add-entry': 'handleClickAddEntry',
         'vclick .remove-row': 'handleClickRemoveRow',
         'vclick .result-row': 'handleClickResultRow',
         'vclick .show-results': 'handleClickShowResults',
@@ -85,8 +87,12 @@ module.exports = GelatoComponent.extend({
                     row.tradVocabId = results[0].vocabs[1].id;
                     row.studyWriting = true;
                     row.id = row.vocabId + '-' + row.tradVocabId;
+                    if (app.getLanguage() === 'ja') {
+                        row.id = row.vocabId;
+                    }
                     row.state = 'loaded';
                 } else {
+                    row.id = query;
                     row.state = 'not-found';
                 }
                 this.render();
@@ -100,6 +106,25 @@ module.exports = GelatoComponent.extend({
     discardChanges: function() {
         this.rows = _.clone(this.saved);
         this.render();
+    },
+    /**
+     * @method handleClickAddEntry
+     * @param {Event} event
+     */
+    handleClickAddEntry: function(event) {
+        var self = this;
+        event.preventDefault();
+        var $row = $(event.target).closest('.row');
+        var index = $row.data('index');
+        this.dialog = new VocabCreatorDialog();
+        this.dialog.open({writing: $row.data('row-id')});
+        this.dialog.on(
+            'vocab',
+            function(vocab) {
+                self.removeRow(index);
+                self.addRow(vocab.get('writing'));
+            }
+        );
     },
     /**
      * @method handleClickRemoveRow
@@ -188,7 +213,7 @@ module.exports = GelatoComponent.extend({
                         callback(error);
                     },
                     success: function(vocabs) {
-                        callback()
+                        callback();
                     }
                 });
             }, this),
@@ -196,7 +221,12 @@ module.exports = GelatoComponent.extend({
                 rows.forEach(function(row) {
                     var vocab1 = vocabs.get(row.vocabId);
                     var vocab2 = vocabs.get(row.tradVocabId) || vocab1;
+
                     row.id = row.vocabId + '-' + row.tradVocabId;
+
+                    if (app.getLanguage() === 'ja') {
+                        row.id = row.vocabId;
+                    }
                     row.lang = vocab1.get('lang');
                     row.state = 'loaded';
                     row.vocabs = [vocab1, vocab2];

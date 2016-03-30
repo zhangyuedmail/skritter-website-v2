@@ -5,12 +5,15 @@ var Table = require('components/vocablists/published-table/view');
 var Sidebar = require('components/vocablists/sidebar/view');
 
 /**
+ * Page that allows a user to search for user-published lists of words and
+ * add them to their list.
  * @class VocablistPublished
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
+
     /**
-     * @method initialize
+     * Initializes the view. Instantiates subviews.
      * @constructor
      */
     initialize: function() {
@@ -18,25 +21,31 @@ module.exports = GelatoPage.extend({
         this.sidebar = new Sidebar();
         this.table = new Table();
     },
+
     /**
-     * @property events
-     * @type {Object}
+     * Dictionary of events this view should listen to
+     * @type {Object<String, String>}
      */
     events: {
-        'keyup #list-search-input': 'handleKeypressListSearchInput'
+        'keyup #list-search-input': 'handleKeypressListSearchInput',
+        'vclick #clear-search': 'handleClickClearSearch'
     },
+
     /**
-     * @property template
+     * Template to render
      * @type {Function}
      */
     template: require('./template'),
+
     /**
-     * @property title
+     * HTML Title of the page
      * @type {String}
+     * @default
      */
     title: 'Published Lists - Skritter',
+
     /**
-     * @method render
+     * Renders the view
      * @returns {VocablistBrowse}
      */
     render: function() {
@@ -46,17 +55,30 @@ module.exports = GelatoPage.extend({
         this.table.setElement('#vocablist-container').render();
         return this;
     },
+
+    handleClickClearSearch: function(e) {
+        this.$('#clear-search').addClass('hidden');
+        this.$('#query-results-text').addClass('invisible');
+        this.$('#list-search-input').val('');
+        this.table.searchFor('');
+    },
+
     /**
-     * @method handleKeypressListSearchInput
-     * @param {Event} event
+     * Checks to see if the key pressed was "enter". If it was, gets
+     * the search value and performs a search.
+     * @param {jQuery.Event} event the keyup event
      */
     handleKeypressListSearchInput: function(event) {
         if (event.which === 13 || event.keyCode === 13) {
-            this.table.searchFor($(event.target).val());
+            var needle = ($(event.target).val() || '').trim().toLowerCase().split(' ');
+            this.table.searchFor(needle[0]);
+            this.$('#clear-search').removeClass('hidden');
+            this.updateQueryResultsText(needle);
         }
     },
+
     /**
-     * @method remove
+     * Destructor that cleans up subviews and events for this view
      * @returns {VocablistBrowse}
      */
     remove: function() {
@@ -64,5 +86,17 @@ module.exports = GelatoPage.extend({
         this.sidebar.remove();
         this.table.remove();
         return GelatoPage.prototype.remove.call(this);
+    },
+
+    updateQueryResultsText: function(needle) {
+
+        var multiWordSearch = (needle.length > 1),
+            s = "Showing results for <i>" + needle[0] + "</i>.";
+
+        if (multiWordSearch) {
+            s += " Search currently only supports one-word queries, sorry!";
+        }
+
+        this.$('#query-results-text').html(s).removeClass('invisible');
     }
 });

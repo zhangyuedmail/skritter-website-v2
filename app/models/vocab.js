@@ -339,7 +339,6 @@ var Vocab = SkritterModel.extend({
             this.get('writing').split(),
             app.fn.mapper.fromBase(vocabId).split(),
             function(thisChar, otherChar) {
-                console.log(thisChar, otherChar);
                 return thisChar === otherChar ? '-' : otherChar;
             }).join('');
     },
@@ -362,7 +361,12 @@ var Vocab = SkritterModel.extend({
      * @returns {Boolean}
      */
     isFiller: function() {
-        return ['～', 'ー'].indexOf(this.get('writing')) > -1;
+        if (app.isJapanese()) {
+            if (!app.user.get('studyKana') && this.isKana()) {
+                return true;
+            }
+        }
+        return _.includes(['~', 'ー', '～', '一'], this.get('writing'));
     },
     /**
      * @method isJapanese
@@ -402,6 +406,31 @@ var Vocab = SkritterModel.extend({
             this.audio.play();
         }
         return this.audio;
+    },
+    /**
+     * @method post
+     * @param {Function} callback
+     */
+    post: function(callback) {
+        $.ajax({
+            context: this,
+            url: app.getApiUrl() + 'vocabs',
+            type: 'POST',
+            headers: app.user.session.getHeaders(),
+            data: {
+                id: this.id,
+                definitions: JSON.stringify(this.get('definitions')),
+                lang: app.getLanguage(),
+                reading: this.get('reading'),
+                writing: this.get('writing')
+            },
+            error: function(error) {
+                typeof callback === 'function' && callback(error);
+            },
+            success: function(result) {
+                typeof callback === 'function' && callback(null, this.set(result.Vocab, {merge: true}));
+            }
+        });
     },
     /**
      * @method toggleStarred

@@ -58,9 +58,12 @@ module.exports = GelatoCollection.extend({
      * @returns {Array}
      */
     getActive: function() {
-        return this.filter(function(item) {
-            return !item.get('filler');
-        });
+        return _.filter(
+            this.models,
+            function(item) {
+                return !item.get('filler');
+            }
+        );
     },
     /**
      * @method getActiveLength
