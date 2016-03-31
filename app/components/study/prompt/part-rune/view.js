@@ -260,12 +260,14 @@ module.exports = GelatoComponent.extend({
      */
     handlePromptDoubleTap: function() {
         var expectedShape = this.prompt.review.character.getTargetShape();
-        if (expectedShape) {this.prompt.canvas.clearLayer('character-hint');
+        if (expectedShape) {
+            this.prompt.canvas.clearLayer('character-hint');
             this.prompt.canvas.drawShape(
                 'character-hint',
                 this.prompt.review.character.getTargetShape(),
                 {color: '#e8ded2'}
             );
+            this.prompt.review.set('score', 1);
         }
     },
     /**
@@ -276,6 +278,7 @@ module.exports = GelatoComponent.extend({
         if (expectedStroke) {
             this.prompt.canvas.clearLayer('stroke-hint');
             this.prompt.canvas.fadeShape('stroke-hint', expectedStroke.getTargetShape());
+            this.handleAttemptFail();
         }
     },
     /**
