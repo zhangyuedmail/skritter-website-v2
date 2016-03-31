@@ -227,7 +227,7 @@ module.exports = GelatoCollection.extend({
      */
     isTeachable: function() {
         if (this.item && app.user.get('teachingMode')) {
-            return this.item.isNew() || this.item.isLeech();
+            return this.item.isNew();
         }
         return false;
     },
