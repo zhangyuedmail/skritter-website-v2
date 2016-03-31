@@ -56,7 +56,10 @@ module.exports = GelatoComponent.extend({
         var row = {query: query, state: 'loading'};
         this.rows.push(row);
         queryVocabs.fetch({
-            data: {q: query},
+            data: {
+                q: query,
+                lang: this.vocablist.get('lang')
+            },
             error: function(a, b) {},
             success: _.bind(function(collection) {
                 var results = [];
