@@ -2629,16 +2629,6 @@ var map = {
 };
 
 /**
- * @method writingToBase
- * @param {Array} writings
- * @returns {Array}
- */
-function writingToBase(writings) {
-    return writings.map(function(writing) {
-        return toBase(writing);
-    });
-}
-/**
  * @method fromBase
  * @param {String} base
  * @returns {String}
@@ -2736,8 +2726,42 @@ function toBase(word, options) {
     return ['zh', mappedRunes.join(''), variation].join('-');
 }
 
+/**
+ * @method toSimplified
+ * @param {String} word
+ * @returns {String}
+ */
+function toSimplified(word) {
+    var result = [];
+    _.forEach(
+        word.split(''),
+        function(character) {
+            var key = _.findKey(
+                map,
+                function(value) {
+                    return _.includes(value, character);
+                }
+            );
+            result.push(key || character);
+        }
+    );
+    return result.join('');
+}
+
+/**
+ * @method toTraditional
+ * @param {String} wordString
+ * @returns {Array}
+ */
+function toTraditional(wordString) {
+    //TODO: make this return array of all traditional word variations
+    var words = [''];
+    return words;
+}
+
 module.exports = {
     fromBase: fromBase,
     toBase: toBase,
-    writingToBase: writingToBase
+    toSimplified: toSimplified,
+    toTraditional: toTraditional
 };
