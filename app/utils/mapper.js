@@ -2749,19 +2749,54 @@ function toSimplified(word) {
 }
 
 /**
+ * Takes a list of simplified Chinese characters and gives a list of
+ * possible traditional Chinese permutations.
  * @method toTraditional
  * @param {String} wordString
  * @returns {Array}
  */
 function toTraditional(wordString) {
-    //TODO: make this return array of all traditional word variations
     var words = [''];
+    wordString.split('').forEach(function(c) {
+        var trads = simpCharToTrad(c, true);
+        var tradWords = [];
+        words.forEach(function(w) {
+            trads.forEach(function(t) {
+                tradWords.push(w + t);
+            });
+        });
+        words = tradWords;
+    });
+
     return words;
+}
+
+/**
+ * Converts a single simplified Chinese character to its corresponding
+ * traditional variant(s).
+ * @param {string} character a single simplified Chinese character
+ * @param {boolean} [multiples] whether to return a list of multiple traditional
+ *                              characters if a simplified character corresponds
+ *                              to more than one traditional character
+ * @returns {string|string[]} the traditional version(s) of the simplified character
+ */
+function simpCharToTrad(character, multiples) {
+    var tradList = map[character];
+    if (!tradList) {
+         return (multiples) ? [character] : character;
+    }
+
+    if (multiples) {
+        return tradList.split('');
+    }
+
+    return tradList[0];
 }
 
 module.exports = {
     fromBase: fromBase,
     toBase: toBase,
     toSimplified: toSimplified,
-    toTraditional: toTraditional
+    toTraditional: toTraditional,
+    simpCharToTrad: simpCharToTrad
 };
