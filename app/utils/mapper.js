@@ -2757,7 +2757,8 @@ function toSimplified(word) {
  */
 function toTraditional(wordString) {
     var words = [''];
-    wordString.split('').forEach(function(c) {
+    var simplifiedString = toSimplified(wordString);
+    simplifiedString.split('').forEach(function(c) {
         var trads = simpCharToTrad(c, true);
         var tradWords = [];
         words.forEach(function(w) {
