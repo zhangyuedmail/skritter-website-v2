@@ -11,8 +11,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
      * @param {Object} options
      */
     initialize: function(options) {
-        this.vocabId = null;
-        this.writing = null;
+        this.row = null;
     },
     /**
      * @property events
@@ -62,10 +61,12 @@ var VocabCreatorDialog = GelatoDialog.extend({
         }
         new Vocab({
             definitions: {
-                en: this.$('#word-definition-input').val()
+                en: formData.definitions
             },
-            reading: this.$('#word-reading-input').val(),
-            writing: this.writing
+            lang: formData.lang,
+            reading: formData.reading,
+            writing: formData.writing,
+            writingTraditional: formData.writingTraditional
         }).post(function(error, vocab) {
             if (error) {
                 //TODO: display errors from server
@@ -81,19 +82,27 @@ var VocabCreatorDialog = GelatoDialog.extend({
      * @returns {Object}
      */
     getFormData: function() {
-        return {
-            definitions:  this.$('#word-definition-input').val(),
-            reading: this.$('#word-reading-input').val(),
-            writing: this.writing
+        var formData = {
+            definitions:  this.$('#word-definition-input textarea').val(),
+            lang: this.row.lang,
+            reading: this.$('#word-reading-input input').val(),
+            writing: this.row.writing
         };
+        if (this.row.lang === 'zh') {
+            if (this.row.writingTrads.length) {
+                formData.writingTraditional = this.$('#word-writing-trad-input :selected').text();
+            } else {
+                formData.writingTraditional = this.row.writingTrads[0];
+            }
+        }
+        return formData;
     },
     /**
      * @method open
      * @param {Object} options
      */
     open: function(options) {
-        this.vocabId = app.fn.mapper.toBase(options.writing);
-        this.writing = options.writing;
+        this.row = options.row;
         return GelatoDialog.prototype.open.call(this, options);
     }
 });
