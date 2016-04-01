@@ -422,6 +422,7 @@ var Vocab = SkritterModel.extend({
                 definitions: JSON.stringify(this.get('definitions')),
                 lang: app.getLanguage(),
                 reading: this.get('reading'),
+                traditionalWriting: this.get('writingTraditional'),
                 writing: this.get('writing')
             },
             error: function(error) {
