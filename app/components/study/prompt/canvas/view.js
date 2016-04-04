@@ -29,6 +29,11 @@ module.exports = GelatoComponent.extend({
         this.stage = null;
         this.strokeColor = '#4b4b4b';
 
+        this.downListener = null;
+        this.moveListener = null;
+        this.leaveListener = null;
+        this.upListener = null;
+
         createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
             this.moveTo(x1 , y1);
             var dX = x2 - x1;
@@ -136,6 +141,9 @@ module.exports = GelatoComponent.extend({
      */
     disableInput: function() {
         this.$('#input-canvas').off('.Input');
+        this.stage.removeEventListener("stagemousemove", this.moveListener);
+        this.stage.removeEventListener("stagemouseup", this.upListener);
+        this.stage.removeEventListener("mouseleave", this.leaveListener);
         return this;
     },
     /**
@@ -221,66 +229,72 @@ module.exports = GelatoComponent.extend({
         return this;
     },
     /**
+     * Enables touch and mouse input on the canvas and handles the events.
+     * Draws a line to follow the input.
      * @method enableInput
      * @returns {StudyPromptCanvas}
+     * @TODO refactor these inner functions and local vars into instance fns
+     * and variables--this function does too much!
      */
     enableInput: function() {
         var self = this;
-        var oldPoint, oldMidPoint, points, marker, clonedMarker;
-        this.disableInput().$('#input-canvas').on('vmousedown.Input pointerdown.Input', down);
-        function down(event) {
+        var oldPoint, oldMidPoint, points, marker;
+
+        this.disableInput();
+        this.stage.removeEventListener("stagemousedown", this.downListener);
+        this.downListener = self.stage.addEventListener("stagemousedown", onInputDown);
+
+        function onInputDown(e) {
             points = [];
             marker = new createjs.Shape();
             marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round');
             marker.stroke = marker.graphics.beginStroke(self.strokeColor).command;
-            if (event.offsetX && event.offsetY) {
-                points.push(new createjs.Point(event.offsetX, event.offsetY));
-            } else {
-                points.push(new createjs.Point(self.stage.mouseX, self.stage.mouseY));
-            }
+
+            points.push(new createjs.Point(e.stageX, e.stageY));
             oldPoint = oldMidPoint = points[0];
             self.triggerInputDown(oldPoint);
             self.getLayer('input').addChild(marker);
-            self.$el.on('vmouseout.Input vmouseup.Input pointerup.Input', up);
-            self.$el.on('vmousemove.Input pointermove.Input', move);
+
+            self.moveListener = self.stage.addEventListener("stagemousemove", onInputMove);
+            self.upListener = self.stage.addEventListener("stagemouseup", onInputUp);
+            self.leaveListener = self.stage.addEventListener("mouseleave", onInputLeave);
         }
-        function move(event) {
-            var point = new createjs.Point();
-            if (event.offsetX && event.offsetY) {
-                point.x = event.offsetX;
-                point.y = event.offsetY;
-            } else {
-                point.x = self.stage.mouseX;
-                point.y = self.stage.mouseY;
-            }
+
+        function onInputMove(e) {
+            var point = new createjs.Point(e.stageX, e.stageY);
             var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
+
             if (app.fn.getDistance(oldPoint, point) > 3.0) {
-                marker.graphics
-                    .setStrokeStyle(self.size * self.brushScale, 'round', 'round')
-                    .moveTo(midPoint.x, midPoint.y)
-                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
-                oldPoint = point.clone();
-                oldMidPoint = midPoint.clone();
-                points.push(point);
-                self.stage.update();
+                 marker.graphics
+                     .setStrokeStyle(self.size * self.brushScale, 'round', 'round')
+                     .moveTo(midPoint.x, midPoint.y)
+                     .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+                 oldPoint = point.clone();
+                 oldMidPoint = midPoint.clone();
+                 points.push(point);
+                 self.stage.update();
             }
         }
-        function up(event) {
+
+        function onInputLeave(e) {
+            onInputUp();
+        }
+
+        function onInputUp(e) {
+            self.disableInput();
+
             marker.graphics.endStroke();
-            self.$el.off('vmousemove.Input pointermove.Input', move);
-            self.$el.off('vmouseout.Input vmouseup.Input pointerup.Input', up);
-            if (event.offsetX && event.offsetY) {
-                points.push(new createjs.Point(event.offsetX, event.offsetY));
-            } else {
-                points.push(new createjs.Point(self.stage.mouseX, self.stage.mouseY));
-            }
-            clonedMarker = marker.clone(true);
+            points.push(new createjs.Point(e.stageX, e.stageY));
+
+            var clonedMarker = marker.clone(true);
             clonedMarker.stroke = marker.stroke;
             self.triggerInputUp(points, clonedMarker);
             self.getLayer('input').removeAllChildren();
         }
+
         return this;
     },
+
     /**
      * @method fadeLayer
      * @param {String} layerName
