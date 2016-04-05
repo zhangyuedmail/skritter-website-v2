@@ -11,9 +11,45 @@ gelato-component(data-name='stats-timeline')
     .content
       #time-studied-bar-graph-container
         .bar-graph-placeholder
-      .items-leaned-days-studied-wrapper.row
-        .col-md-6 left
-        .col-md-6 right
-      .rwdt-graphs-wrapper.row
-        .col-md-12 wat
+      .items-leaned-days-studied-wrapper
+        .row
+          .col-md-6.middle-graph-wrapper-l
+            .items-learned-placeholder items learned
+          .col-md-6.middle-graph-wrapper-r
+            .days-studied-placeholder days studied
+      .rwdt-graphs-wrapper
+        .row
+          .col-md-1 &nbsp;
+          .col-md-11
+            .row
+              .col-md-3.rwdt-label Writing
+              .col-md-3.rwdt-label Definition
+              .col-md-3.rwdt-label Reading
+              .col-md-3.rwdt-label Tone
+        .row
+          .col-md-1
+            .vertical-label Characters
+          .col-md-11
+            .row
+              .col-md-3
+                .graph Writing graph
+              .col-md-3
+                .graph Definition graph
+              .col-md-3
+                .graph Reading graph
+              .col-md-3
+                .graph Tone graph
+        .row
+          .col-md-1
+            .vertical-label Words
+          .col-md-11
+            .row
+              .col-md-3
+                .graph Writing graph
+              .col-md-3
+                .graph Definition graph
+              .col-md-3
+                .graph Reading graph
+              .col-md-3
+                .graph Tone graph
 

@@ -1,18 +1,17 @@
 var GelatoComponent = require('gelato/component');
 
 /**
- * A component that is a composite of graphs which show user study statistics
- * over a certain range of time.
- * @class StatsTimelineComponent
+ * @class StatsAllTimeComponent
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
     /**
+     *
      * @method initialize
      * @constructor
      */
     initialize: function(options) {
-        this.listenTo(this.collection, 'state:standby', this.updateGraphs);
+        this.listenTo(this.collection, 'state:standby', this.update);
     },
     /**
      * @property template
@@ -26,8 +25,8 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
     },
-
-    updateGraphs: function() {
-
+    
+    update: function() {
+        
     }
 });

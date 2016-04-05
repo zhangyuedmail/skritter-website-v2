@@ -1,0 +1,11 @@
+@import "../../../styles/_variables";
+
+gelato-component[data-name='stats-all-time'] {
+  .circle {
+    border-radius: 50%;
+    background: #AAA;
+    height: 170px;
+    text-align: center;
+    color: #FFF;
+  }
+}
