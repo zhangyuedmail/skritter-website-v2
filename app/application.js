@@ -58,6 +58,8 @@ module.exports = GelatoApplication.extend({
         canvasSize: 450,
         language: undefined,
         lastItemChanged: 0,
+        nodeApiRoot: 'https://api-dot-write-way.appspot.com',
+        //nodeApiRoot: 'http://localhost:8080',
         timestamp: '{!timestamp!}',
         title: '{!application-title!}',
         version: '{!application-version!}'

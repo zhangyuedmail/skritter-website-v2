@@ -326,7 +326,7 @@ module.exports = SkritterModel.extend({
                 ScreenLoader.post('Fetching item batch #' + index);
                 $.ajax({
                     method: 'GET',
-                    url: 'https://api-dot-write-way.appspot.com/v1/items',
+                    url: app.get('nodeApiRoot') + '/v1/items',
                     data: {
                         cursor: cursor,
                         lang: app.getLanguage(),
