@@ -4,8 +4,6 @@ var ItemsLearnedGraphComponent = require('components/stats/items-learned/view');
 var TimeStudiedCircleComponent = require('components/stats/time-studied-circle/view');
 var StudyPartLinegraphComponent = require('components/stats/study-part-linegraph/view');
 /**
- * A component that is a composite of graphs which show user study statistics
- * over a certain range of time.
  * @class StatsTimelineComponent
  * @extends {GelatoComponent}
  */
