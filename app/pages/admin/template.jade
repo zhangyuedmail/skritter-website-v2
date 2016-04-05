@@ -9,7 +9,7 @@ gelato-page(data-name='admin')
       .col-xs-12
         .content-block
 
-          p.lead New Subscriptions
+          p.lead Subscriptions
 
           table.table.table-striped
             thead
@@ -24,10 +24,10 @@ gelato-page(data-name='admin')
               for entry, date in payments
                 tr
                   td= date
-                  td= entry.newApple
-                  td= entry.newGoogle
-                  td= entry.newPaypal
-                  td= entry.newStripe
-                  td= entry.total
+                  td= entry.newApple + '/' + entry.returningApple
+                  td= entry.newGoogle + '/' + entry.returningGoogle
+                  td= entry.newPaypal + '/' + entry.returningPaypal
+                  td= entry.newStripe + '/' + entry.returningStripe
+                  td= entry.newTotal + '/' + entry.returningTotal
 
   #footer-container

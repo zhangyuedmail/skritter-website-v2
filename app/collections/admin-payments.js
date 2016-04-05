@@ -47,17 +47,22 @@ var AdminPayments = GelatoCollection.extend({
             groups,
             function(payments, key) {
                  var date = {
+                     newTotal: 0,
                      newApple: 0,
                      newGoogle: 0,
                      newPaypal: 0,
                      newStripe: 0,
-                     total: 0
+                     returningTotal: 0,
+                     returningApple: 0,
+                     returningGoogle: 0,
+                     returningPaypal: 0,
+                     returningStripe: 0
                  };
                 _.forEach(
                     payments,
                     function(payment) {
                         if (payment.isInitialPayment()) {
-                            date.total++;
+                            date.newTotal++;
                             switch (payment.get('method')) {
                                 case 'apple':
                                     date.newApple++;
@@ -70,6 +75,22 @@ var AdminPayments = GelatoCollection.extend({
                                     break;
                                 case 'stripe':
                                     date.newStripe++;
+                                    break;
+                            }
+                        } else {
+                            date.returningTotal++;
+                            switch (payment.get('method')) {
+                                case 'apple':
+                                    date.returningApple++;
+                                    break;
+                                case 'google':
+                                    date.returningGoogle++;
+                                    break;
+                                case 'paypal':
+                                    date.returningPaypal++;
+                                    break;
+                                case 'stripe':
+                                    date.returningStripe++;
                                     break;
                             }
                         }
