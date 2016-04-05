@@ -1,5 +1,47 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='stats-timeline'] {
+  .heading-block {
+    background-color: $white3;
+    border-radius: 25px 25px 0px 0px;
+    padding: 15px;
+    font-size: 24px;
+    color: $grey5;
+  }
 
+  .content-block {
+    background: none;
+    padding: 0px;
+  }
+
+  .content {
+    padding-bottom: 35px;
+    background: #FFF;
+    border-radius: 0px 0px 25px 25px;
+  }
+
+  .time-placeholder, .units-label {
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .time-placeholder {
+    text-align: center;
+    font-size: 38px;
+    color: $grade3;
+  }
+
+  .bar-graph-placeholder {
+    height: 222px;
+    background: $grey5;
+  }
+
+  .items-leaned-days-studied-wrapper {
+    height: 205px;
+  }
+
+  .date-range-wrapper {
+    text-align: right;
+    display: inline-block;
+  }
 }
