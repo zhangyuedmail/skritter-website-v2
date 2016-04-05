@@ -2,6 +2,8 @@ var GelatoPage = require('gelato/page');
 var DefaultNavbar = require('navbars/default/view');
 var StatsSummaryComponent = require('components/stats/summary/view');
 var StatsTimelineComponent = require('components/stats/timeline/view');
+var ProgressStats = require('collections/progress-stats');
+
 /**
  * @class Stats
  * @extends {GelatoPage}
@@ -12,10 +14,19 @@ module.exports = GelatoPage.extend({
      * @constructor
      */
     initialize: function() {
+        this.statsCollection = new ProgressStats();
+
+        // TODO: better this
+        this.statsCollection.fetchMonth();
+
         this._views = {};
         this._views['navbar'] = new DefaultNavbar();
-        this._views['summary'] = new StatsSummaryComponent();
-        this._views['timeline'] = new StatsTimelineComponent();
+        this._views['summary'] = new StatsSummaryComponent({
+            collection: this.statsCollection
+        });
+        this._views['timeline'] = new StatsTimelineComponent({
+            collection: this.statsCollection
+        });
 
         this.activeSection = 'summary';
     },
@@ -85,7 +96,7 @@ module.exports = GelatoPage.extend({
         if (newSection === this.activeSection) {
             return;
         }
-        
+
         this.$('#' + this.activeSection + '-selector').removeClass('active');
         this.$('#' + newSection + '-selector').addClass('active');
         this.activeSection = newSection;
