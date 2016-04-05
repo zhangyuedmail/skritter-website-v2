@@ -16,10 +16,10 @@ var AdminPayment = GelatoModel.extend({
      */
     idAttribute: 'id',
     /**
-     * @method isFirstPayment
+     * @method getAllPayments
      * @returns {Array}
      */
-    getActualPayments: function() {
+    getAllPayments: function() {
         return _.filter(
             this.get('children'),
             function(payment) {
@@ -28,18 +28,11 @@ var AdminPayment = GelatoModel.extend({
         );
     },
     /**
-     * @method hasPaid
+     * @method isInitialPayment
      * @returns {Boolean}
      */
-    hasPaid: function() {
-        return this.getActualPayments().length > 0;
-    },
-    /**
-     * @method isFirstPayment
-     * @returns {Boolean}
-     */
-    isFirstPayment: function() {
-        return this.getActualPayments().length === 1;
+    isInitialPayment: function() {
+        return this.getAllPayments().length === 1;
     }
 });
 
