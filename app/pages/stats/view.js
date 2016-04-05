@@ -2,8 +2,6 @@ var GelatoPage = require('gelato/page');
 var DefaultNavbar = require('navbars/default/view');
 var StatsSummaryComponent = require('components/stats/summary/view');
 var StatsTimelineComponent = require('components/stats/timeline/view');
-var ProgressStats = require('collections/progress-stats');
-
 /**
  * @class Stats
  * @extends {GelatoPage}
