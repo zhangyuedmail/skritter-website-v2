@@ -1,5 +1,7 @@
 gelato-page(data-name='admin')
 
+  - var payments = view.payments.getTotalByDate();
+
   #navbar-container
 
   section.container
@@ -7,19 +9,25 @@ gelato-page(data-name='admin')
       .col-xs-12
         .content-block
 
-          p.lead Payments
+          p.lead New Subscriptions
 
           table.table.table-striped
             thead
               tr
                 th Date
+                th Apple
+                th Google
+                th Paypal
+                th Stripe
                 th Total
-                th New
             tbody
-              for entry, date in view.payments.getTotalByDate()
+              for entry, date in payments
                 tr
                   td= date
+                  td= entry.newApple
+                  td= entry.newGoogle
+                  td= entry.newPaypal
+                  td= entry.newStripe
                   td= entry.total
-                  td= entry.first
 
   #footer-container
