@@ -58,7 +58,6 @@ var AdminPayments = GelatoCollection.extend({
                     function(payment) {
                         if (payment.isInitialPayment()) {
                             date.total++;
-
                             switch (payment.get('method')) {
                                 case 'apple':
                                     date.newApple++;
@@ -73,8 +72,6 @@ var AdminPayments = GelatoCollection.extend({
                                     date.newStripe++;
                                     break;
                             }
-                        } else {
-                            console.log(payment.get('method'), payment);
                         }
                     }
                 );

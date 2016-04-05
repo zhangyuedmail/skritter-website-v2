@@ -23,7 +23,7 @@ var AdminPayment = GelatoModel.extend({
         return _.filter(
             this.get('children'),
             function(payment) {
-                return payment.service !== 'Coupon';
+                return payment.charged && payment.service !== 'Coupon';
             }
         );
     },
