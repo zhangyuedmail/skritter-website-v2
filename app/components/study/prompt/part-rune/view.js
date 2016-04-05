@@ -143,10 +143,12 @@ module.exports = GelatoComponent.extend({
             this.prompt.reviews.isFirst()) {
             this.prompt.reviews.vocab.play();
         }
-        if (app.user.get('teachingMode') && this.prompt.reviews.isNew()) {
-            this.prompt.review.set('showTeaching', true);
+        if (this.prompt.reviews.isTeachable()) {
+            this.teachCharacter();
         }
-        if (this.prompt.review.get('showTeaching')) {
+        if (this.prompt.review.item.isLeech()) {
+            this.prompt.$('#leech-ribbon').removeClass('hidden');
+            this.prompt.review.item.consecutiveWrong = 0;
             this.teachCharacter();
         }
         this.renderTemplate();
@@ -200,6 +202,11 @@ module.exports = GelatoComponent.extend({
      */
     handlePromptCanvasClick: function() {
         if (this.prompt.review.isComplete()) {
+            if (this.prompt.review.get('score') === 1) {
+                this.prompt.review.item.consecutiveWrong++;
+            } else {
+                this.prompt.review.item.consecutiveWrong = 0;
+            }
             this.prompt.next();
         } else {
             this.prompt.canvas.fadeLayer('character-hint');
@@ -260,12 +267,14 @@ module.exports = GelatoComponent.extend({
      */
     handlePromptDoubleTap: function() {
         var expectedShape = this.prompt.review.character.getTargetShape();
-        if (expectedShape) {this.prompt.canvas.clearLayer('character-hint');
+        if (expectedShape) {
+            this.prompt.canvas.clearLayer('character-hint');
             this.prompt.canvas.drawShape(
                 'character-hint',
                 this.prompt.review.character.getTargetShape(),
                 {color: '#e8ded2'}
             );
+            this.prompt.review.set('score', 1);
         }
     },
     /**
@@ -276,6 +285,7 @@ module.exports = GelatoComponent.extend({
         if (expectedStroke) {
             this.prompt.canvas.clearLayer('stroke-hint');
             this.prompt.canvas.fadeShape('stroke-hint', expectedStroke.getTargetShape());
+            this.handleAttemptFail();
         }
     },
     /**

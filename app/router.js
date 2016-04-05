@@ -57,6 +57,7 @@ module.exports = Router.extend({
         'words/starred': 'navigateWordsStarred',
         '*route': 'navigateNotFound'
     },
+
     /**
      * @method defaultRoute
      */
@@ -66,6 +67,23 @@ module.exports = Router.extend({
         } else {
             this.navigateHome();
         }
+    },
+    /**
+     * TODO: remove this after application level dialogs implemented
+     *
+     * @method go
+     * @param {String} path
+     * @param {Object} [options]
+     * @returns {GelatoPage}
+     */
+    go: function(path, options) {
+        // close and remove page level dialogs
+        if (this.page &&  this.page.dialog) {
+            this.page.dialog.close();
+        }
+        // hack to remove bootstrap model backdrop
+        $('.modal-backdrop').remove();
+        return Router.prototype.go.call(this, path, options);
     },
     /**
      * @method handleRoute

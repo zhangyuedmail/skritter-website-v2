@@ -13,6 +13,7 @@ module.exports = BootstrapNavbar.extend({
     events: {
         'vclick #button-beacon': 'handleClickButtonBeacon',
         'vclick #button-logout': 'handleClickButtonLogout',
+        'vclick #switch-targetLang': 'handleClickSwitchTargetLang',
         'vclick .item-dropdown': 'handleClickDropdown'
     },
     /**
@@ -57,6 +58,7 @@ module.exports = BootstrapNavbar.extend({
      */
     handleClickDropdown: function(event) {
         event.preventDefault();
+
         var $dropdown = this.$('.item-dropdown');
         if ($dropdown.find('.dropdown').hasClass('hidden')) {
             $dropdown.addClass('open');
@@ -65,5 +67,40 @@ module.exports = BootstrapNavbar.extend({
             $dropdown.removeClass('open');
             $dropdown.find('.dropdown').addClass('hidden');
         }
+    },
+
+    /**
+     * Given a language code following the format used for User.targetLang,
+     * returns a localized displayable version of that code for use in templates.
+     * E.g. 'zh' -> 'Chinese'
+     * @param {string} [langCode] the language code you want to display
+     * @return {string} a user-friendly version of the language code
+     */
+    getDisplayLanguageName: function(langCode) {
+        langCode = langCode || app.user.get('targetLang');
+        
+        return langCode === 'zh' ? 'Chinese' : 'Japanese';
+    },
+    
+    handleClickSwitchTargetLang: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var toSwitchCode = app.user.get('targetLang') === 'zh' ? 'ja' : 'zh';
+        app.user.save({
+            targetLang: toSwitchCode
+        }, {
+            error: function() {
+                //TODO: show some kind of error message
+                ScreenLoader.hide();
+            },
+            success: function() {
+                window.location.reload(false);
+            }
+        });
+
+        var loadingMessage = toSwitchCode === 'zh' ? 'Switching to Chinese' : 'Switching to Japanese';
+        ScreenLoader.show();
+        ScreenLoader.post(loadingMessage);
     }
 });

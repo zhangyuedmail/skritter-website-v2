@@ -37,6 +37,29 @@ bootstrap-navbar[data-name='default'] {
       &:hover { background-color: $grey7; }
       &:focus { background-color: $grey7; }
     }
+
+    .flag {
+      height: 22px;
+      width: auto;
+    }
+
+    .language-select-menu {
+      background: ($grey1 + #111);
+
+      .currently-studying {
+        background: $grey1;
+        font-size: 16px;
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        text-align: center;
+      }
+
+      .flag {
+        margin-right: 10px;
+        vertical-align: sub;
+      }
+    }
   }
 
   #button-beacon {
@@ -44,5 +67,4 @@ bootstrap-navbar[data-name='default'] {
     padding-bottom: 12px;
     padding-top: 16px;
   }
-
 }

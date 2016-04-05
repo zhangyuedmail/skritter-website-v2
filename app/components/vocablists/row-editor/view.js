@@ -52,11 +52,15 @@ module.exports = GelatoComponent.extend({
      * @param {String} query
      */
     addRow: function(query) {
+        var self = this;
         var queryVocabs = new Vocabs();
         var row = {query: query, state: 'loading'};
         this.rows.push(row);
         queryVocabs.fetch({
-            data: {q: query},
+            data: {
+                q: query,
+                lang: this.vocablist.get('lang')
+            },
             error: function(a, b) {},
             success: _.bind(function(collection) {
                 var results = [];
@@ -87,12 +91,19 @@ module.exports = GelatoComponent.extend({
                     row.tradVocabId = results[0].vocabs[1].id;
                     row.studyWriting = true;
                     row.id = row.vocabId + '-' + row.tradVocabId;
-                    if (app.getLanguage() === 'ja') {
+                    if (self.vocablist.isJapanese()) {
                         row.id = row.vocabId;
                     }
                     row.state = 'loaded';
                 } else {
                     row.id = query;
+                    if (self.vocablist.isChinese()) {
+                        row.lang = app.getLanguage() || 'zh';
+                        row.writing = app.fn.mapper.toSimplified(query);
+                        row.writingTrads = app.fn.mapper.toTraditional(query);
+                    } else {
+                        row.writing = query;
+                    }
                     row.state = 'not-found';
                 }
                 this.render();
@@ -116,8 +127,9 @@ module.exports = GelatoComponent.extend({
         event.preventDefault();
         var $row = $(event.target).closest('.row');
         var index = $row.data('index');
+        var row = this.rows[parseInt(index, 10)];
         this.dialog = new VocabCreatorDialog();
-        this.dialog.open({writing: $row.data('row-id')});
+        this.dialog.open({row: row});
         this.dialog.on(
             'vocab',
             function(vocab) {
