@@ -36,8 +36,37 @@ gelato-component[data-name='stats-timeline'] {
     background: $grey5;
   }
 
-  .items-leaned-days-studied-wrapper {
+  .items-learned-placeholder, .days-studied-placeholder {
     height: 205px;
+    background: $grey6;
+    color: #FFF;
+  }
+
+  .middle-graph-wrapper-l {
+    padding-right: 0px;
+  }
+
+  .middle-graph-wrapper-r {
+    padding-left: 0px;
+  }
+
+  .days-studied-placeholder {
+    background: $grey7;
+    padding-left: 0px;
+  }
+
+  .rwdt-label {
+    font-size: 24px;
+  }
+  .vertical-label {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    height: 150px;
+  }
+
+  .graph {
+    background: #CCC;
+    height: 150px;
   }
 
   .date-range-wrapper {
