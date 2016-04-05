@@ -288,6 +288,11 @@ module.exports = Router.extend({
      * @method navigateStats
      */
     navigateStats: function() {
+        if (app.user.isLoggedIn()) {
+            this.go('pages/stats');
+        } else {
+            this.navigateLogin();
+        }
       if (app.user.isLoggedIn()) {
         this.go('pages/stats');
       } else {
