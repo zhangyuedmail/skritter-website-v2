@@ -1,0 +1,23 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='stats'] {
+  background: $background-primary;
+  padding-top: 75px;
+
+  .stats-section-selector {
+    display: inline-block;
+    font-size: 18px;
+    margin-right: 60px;
+    cursor: pointer;
+    color: $wood3;
+
+    &:hover {
+      color: $wood4;
+    }
+
+    &.active {
+      color: $wood5;
+      cursor: default;
+    }
+  }
+}

@@ -288,8 +288,11 @@ module.exports = Router.extend({
      * @method navigateStats
      */
     navigateStats: function() {
-        //TODO: replace when progress stats supported
-        location.replace('http://www.skritter.com/progress');
+        if (app.user.isLoggedIn()) {
+            this.go('pages/stats');
+        } else {
+            this.navigateLogin();
+        }
     },
     /**
      * @method navigateStudy
