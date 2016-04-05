@@ -1,0 +1,25 @@
+gelato-page(data-name='admin')
+
+  #navbar-container
+
+  section.container
+    .row
+      .col-xs-12
+        .content-block
+
+          p.lead Payments
+
+          table.table.table-striped
+            thead
+              tr
+                th Date
+                th Total
+                th New
+            tbody
+              for entry, date in view.payments.getTotalByDate()
+                tr
+                  td= date
+                  td= entry.total
+                  td= entry.first
+
+  #footer-container

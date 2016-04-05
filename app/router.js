@@ -27,6 +27,7 @@ module.exports = Router.extend({
         'account/settings/study': 'navigateAccountSettingsStudy',
         'account/settings-study': 'navigateAccountSettingsStudy', //LEGACY
         'account/setup': 'navigateAccountSetup',
+        'admin': 'navigateAdmin',
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
         'demo': 'navigateDemo',
@@ -96,7 +97,6 @@ module.exports = Router.extend({
             });
         }
     },
-
     /**
      * Navigates to the About Us page
      */
@@ -104,7 +104,6 @@ module.exports = Router.extend({
         this.navigate('about');
         this.go('pages/about');
     },
-
     /**
      * @method navigateAccount
      */
@@ -166,6 +165,17 @@ module.exports = Router.extend({
         if (app.user.isLoggedIn()) {
             this.navigate('account/setup');
             this.go('pages/account/setup');
+        } else {
+            this.navigateLogin();
+        }
+    },
+    /**
+     * @method navigateAdmin
+     */
+    navigateAdmin: function() {
+        if (app.user.isLoggedIn()) {
+            this.navigate('admin');
+            this.go('pages/admin');
         } else {
             this.navigateLogin();
         }
