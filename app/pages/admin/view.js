@@ -19,8 +19,9 @@ var Admin = GelatoPage.extend({
         this.listenTo(this.payments, 'sync', this.render);
         this.payments.fetch({
             data: {
+                dateEnd: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 dateStart: moment().subtract(7, 'days').format('YYYY-MM-DD'),
-                limit: 5000
+                limit: 1000
             }
         });
     },
