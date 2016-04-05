@@ -29,7 +29,7 @@ var AdminPayments = GelatoCollection.extend({
      * @type {String}
      */
     url: function() {
-        return 'http://localhost:8080/v1/admin/payments?token=' + app.user.session.get('access_token');
+        return app.get('nodeApiRoot') + '/v1/admin/payments?token=' + app.user.session.get('access_token');
     },
     /**
      * @method getTotalByDate
@@ -46,15 +46,35 @@ var AdminPayments = GelatoCollection.extend({
         _.forEach(
             groups,
             function(payments, key) {
-                 var date = {total: 0, first: 0};
+                 var date = {
+                     newApple: 0,
+                     newGoogle: 0,
+                     newPaypal: 0,
+                     newStripe: 0,
+                     total: 0
+                 };
                 _.forEach(
                     payments,
                     function(payment) {
-                        if (payment.hasPaid()) {
+                        if (payment.isInitialPayment()) {
                             date.total++;
-                        }
-                        if (payment.isFirstPayment()) {
-                            date.first++;
+
+                            switch (payment.get('method')) {
+                                case 'apple':
+                                    date.newApple++;
+                                    break;
+                                case 'google':
+                                    date.newGoogle++;
+                                    break;
+                                case 'paypal':
+                                    date.newPaypal++;
+                                    break;
+                                case 'stripe':
+                                    date.newStripe++;
+                                    break;
+                            }
+                        } else {
+                            console.log(payment.get('method'), payment);
                         }
                     }
                 );
