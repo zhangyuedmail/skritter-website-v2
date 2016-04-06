@@ -60,7 +60,7 @@ bootstrap-navbar(data-name='default')
                   | You are studying #{view.getDisplayLanguageName(user.get('targetLang'))}.
                 li.divider(role="separator")
                 li
-                  a(href="#" id="switch-targetLang")
+                  a(href="#", id="switch-targetLang")
                     img(src="/media/images/flags/flag-#{otherLang}.png" alt="" class="flag")
                     | Study #{view.getDisplayLanguageName(otherLang)}
             li
