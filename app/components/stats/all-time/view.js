@@ -27,6 +27,14 @@ module.exports = GelatoComponent.extend({
     },
     
     update: function() {
-        
+        if (this.collection.length) {
+            var totalCharactersLearned = this.collection.getAllTimeCharactersLearned();
+            var totalWordsLearned = this.collection.getAllTimeWordsLearned();
+            var totalItemsLearned = totalCharactersLearned + totalWordsLearned;
+            
+            this.$('#characters-learned').text(totalCharactersLearned);
+            this.$('#words-learned').text(totalWordsLearned);
+            this.$('#items-learned').text(totalItemsLearned);
+        }
     }
 });
