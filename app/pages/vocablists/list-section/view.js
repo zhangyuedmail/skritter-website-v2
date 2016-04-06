@@ -159,6 +159,7 @@ module.exports = GelatoPage.extend({
     handleClickSaveChanges: function(event) {
         event.preventDefault();
         this.editor.editing = false;
+        this.editor.rows = this.editor.getRows();
         this.vocablistSection.set('name', this.$('#section-name').val());
         this.vocablistSection.set('rows', this.editor.rows);
         this.vocablistSection.save();

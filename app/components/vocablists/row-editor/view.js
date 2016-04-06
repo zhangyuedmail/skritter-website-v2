@@ -119,6 +119,20 @@ module.exports = GelatoComponent.extend({
         this.render();
     },
     /**
+     * Returns a filtered list of verified rows with vocabIds.
+     *
+     * @method getRows
+     * @returns {Array}
+     */
+    getRows: function() {
+        return _.filter(
+            this.rows,
+            function(row) {
+                return _.isString(row.vocabId);
+            }
+        );
+    },
+    /**
      * @method handleClickAddEntry
      * @param {Event} event
      */
