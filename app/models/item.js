@@ -120,6 +120,9 @@ module.exports = SkritterModel.extend({
             promptItem.interval = childItem.get('interval');
             promptItem.item = childItem;
             promptItem.vocab = childVocab;
+            if (i === 0 && vocabs.length > 1) {
+                promptItem.set('submitTime', Date.now() / 1000);
+            }
             if (_.includes(['rune', 'tone'], part)) {
                 promptItem.set('filler', characters[i] ? childVocab.isFiller() : true);
             } else {
