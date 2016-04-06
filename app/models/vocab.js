@@ -167,6 +167,7 @@ var Vocab = SkritterModel.extend({
     getPromptCharacters: function() {
         var characters = [];
         var strokes = this.getStrokes();
+        console.log(strokes);
         for (var i = 0, length = strokes.length; i < length; i++) {
             var stroke = strokes[i];
             if (stroke) {
@@ -277,9 +278,10 @@ var Vocab = SkritterModel.extend({
             if (stroke) {
                 if (this.isJapanese()) {
                     if (!app.user.get('studyKana') && stroke.isKana()) {
-                        continue;
+                        strokes.push(null);
+                    } else {
+                        strokes.push(stroke);
                     }
-                    strokes.push(stroke);
                 } else {
                     strokes.push(stroke);
                 }
