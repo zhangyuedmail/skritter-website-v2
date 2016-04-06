@@ -4,7 +4,10 @@ gelato-component[data-name='stats-all-time'] {
   .circle {
     border-radius: 50%;
     background: #AAA;
-    height: 170px;
+    height: 150px;
+    width: 150px;
+    margin: auto;
+    display: block;
     text-align: center;
     color: #FFF;
   }
