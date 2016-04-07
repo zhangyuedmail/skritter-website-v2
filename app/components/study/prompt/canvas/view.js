@@ -141,9 +141,10 @@ module.exports = GelatoComponent.extend({
      */
     disableInput: function() {
         this.$('#input-canvas').off('.Input');
-        this.stage.removeEventListener("stagemousemove", this.moveListener);
-        this.stage.removeEventListener("stagemouseup", this.upListener);
-        this.stage.removeEventListener("mouseleave", this.leaveListener);
+        this.stage.removeEventListener('stagemousedown', this.downListener);
+        this.stage.removeEventListener('stagemousemove', this.moveListener);
+        this.stage.removeEventListener('stagemouseup', this.upListener);
+        this.stage.removeEventListener('mouseleave', this.leaveListener);
         return this;
     },
     /**
@@ -241,8 +242,7 @@ module.exports = GelatoComponent.extend({
         var oldPoint, oldMidPoint, points, marker;
 
         this.disableInput();
-        this.stage.removeEventListener("stagemousedown", this.downListener);
-        this.downListener = self.stage.addEventListener("stagemousedown", onInputDown);
+        this.downListener = self.stage.addEventListener('stagemousedown', onInputDown);
 
         function onInputDown(e) {
             points = [];
@@ -255,9 +255,9 @@ module.exports = GelatoComponent.extend({
             self.triggerInputDown(oldPoint);
             self.getLayer('input').addChild(marker);
 
-            self.moveListener = self.stage.addEventListener("stagemousemove", onInputMove);
-            self.upListener = self.stage.addEventListener("stagemouseup", onInputUp);
-            self.leaveListener = self.stage.addEventListener("mouseleave", onInputLeave);
+            self.moveListener = self.stage.addEventListener('stagemousemove', onInputMove);
+            self.upListener = self.stage.addEventListener('stagemouseup', onInputUp);
+            self.leaveListener = self.stage.addEventListener('mouseleave', onInputLeave);
         }
 
         function onInputMove(e) {
@@ -281,7 +281,9 @@ module.exports = GelatoComponent.extend({
         }
 
         function onInputUp(e) {
-            self.disableInput();
+            self.stage.addEventListener('stagemousemove', onInputMove);
+            self.stage.addEventListener('stagemouseup', onInputUp);
+            self.stage.addEventListener('mouseleave', onInputLeave);
 
             marker.graphics.endStroke();
             points.push(new createjs.Point(e.stageX, e.stageY));
