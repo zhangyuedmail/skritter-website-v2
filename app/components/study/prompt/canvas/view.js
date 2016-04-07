@@ -277,13 +277,13 @@ module.exports = GelatoComponent.extend({
         }
 
         function onInputLeave(e) {
-            onInputUp();
+            onInputUp(e);
         }
 
         function onInputUp(e) {
-            self.stage.addEventListener('stagemousemove', onInputMove);
-            self.stage.addEventListener('stagemouseup', onInputUp);
-            self.stage.addEventListener('mouseleave', onInputLeave);
+            self.stage.removeEventListener('stagemousemove', onInputMove);
+            self.stage.removeEventListener('stagemouseup', onInputUp);
+            self.stage.removeEventListener('mouseleave', onInputLeave);
 
             marker.graphics.endStroke();
             points.push(new createjs.Point(e.stageX, e.stageY));
