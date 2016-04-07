@@ -253,6 +253,8 @@ module.exports = GelatoComponent.extend({
                     if (app.getLanguage() === 'ja') {
                         row.id = row.vocabId;
                     }
+
+                    row.banned = vocab1.isBanned() || vocab2.isBanned();
                     row.lang = vocab1.get('lang');
                     row.state = 'loaded';
                     row.vocabs = [vocab1, vocab2];
