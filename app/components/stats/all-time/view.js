@@ -24,6 +24,62 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
+        this.renderChart();
+
+        return this;
+    },
+
+    renderChart: function() {
+        this.$('#items-learned').highcharts({
+            chart: {
+                backgroundColor: null,
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+                spacing: [0, 0, 0, 0]
+            },
+            colors: ['#87a64b', '#c5da4b'],
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: false,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                title: null,
+                colorByPoint: true,
+                data: [{
+                    name: 'Words',
+                    y: 0
+                }, {
+                    name: 'Characters',
+                    y: 0
+                }],
+                states: {
+                    hover: {
+                        enabled: false,
+                        halo: {
+                            size: 0
+                        }
+                    }
+                }
+            }],
+            title: {
+                text: null
+            },
+            tooltip: {
+                enabled: false
+            }
+
+        });
     },
     
     update: function() {
@@ -31,10 +87,14 @@ module.exports = GelatoComponent.extend({
             var totalCharactersLearned = this.collection.getAllTimeCharactersLearned();
             var totalWordsLearned = this.collection.getAllTimeWordsLearned();
             var totalItemsLearned = totalCharactersLearned + totalWordsLearned;
-            
+
+            var chartData = this.$('#items-learned').highcharts().series[0].points;
+            chartData[0].update(totalWordsLearned);
+            chartData[1].update(totalCharactersLearned);
+
             this.$('#characters-learned').text(totalCharactersLearned);
             this.$('#words-learned').text(totalWordsLearned);
-            this.$('#items-learned').text(totalItemsLearned);
+            this.$('#num-items-learned').text(totalItemsLearned);
         }
     }
 });
