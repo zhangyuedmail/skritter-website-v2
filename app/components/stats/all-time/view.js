@@ -24,62 +24,6 @@ module.exports = GelatoComponent.extend({
      */
     render: function() {
         this.renderTemplate();
-        this.renderChart();
-
-        return this;
-    },
-
-    renderChart: function() {
-        this.$('#items-learned').highcharts({
-            chart: {
-                backgroundColor: null,
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie',
-                spacing: [0, 0, 0, 0]
-            },
-            colors: ['#87a64b', '#c5da4b'],
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: false,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    borderWidth: 0
-                }
-            },
-            series: [{
-                title: null,
-                colorByPoint: true,
-                data: [{
-                    name: 'Words',
-                    y: 0
-                }, {
-                    name: 'Characters',
-                    y: 0
-                }],
-                states: {
-                    hover: {
-                        enabled: false,
-                        halo: {
-                            size: 0
-                        }
-                    }
-                }
-            }],
-            title: {
-                text: null
-            },
-            tooltip: {
-                enabled: false
-            }
-
-        });
     },
     
     update: function() {
