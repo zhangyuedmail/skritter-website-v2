@@ -11,7 +11,7 @@ exports.config = {
             },
             order: {
                 before: [
-                    'vendor/gelato-0.2.1.js',
+                    'vendor/gelato-0.2.2.js',
                     'vendor/bootstrap-3.3.6.js',
                     'vendor/async-1.5.2.js',
                     'vendor/bootstrap.datetimepicker-4.15.37.js',
