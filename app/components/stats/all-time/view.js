@@ -95,6 +95,10 @@ module.exports = GelatoComponent.extend({
             this.$('#characters-learned').text(totalCharactersLearned);
             this.$('#words-learned').text(totalWordsLearned);
             this.$('#num-items-learned').text(totalItemsLearned);
+
+            var totalTimeData = this.collection.getAllTimeTimeStudied() ;
+            this.$('#total-time-studied-num').text(totalTimeData.amount);
+            this.$('#units-total-label').text(totalTimeData.units);
         }
     }
 });
