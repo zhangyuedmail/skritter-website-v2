@@ -1,6 +1,11 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='stats-all-time'] {
+  .chart-overlay-wrapper {
+    position: absolute;
+    top: 25px;
+    width: 100%;
+  }
   .chart-overlay {
     border-radius: 50%;
     background: $white1;
@@ -10,9 +15,8 @@ gelato-component[data-name='stats-all-time'] {
     display: block;
     text-align: center;
     color: $grey3;
-    position: absolute;
-    top: 25px;
-    left: 61px;
+
+
     border-top: 1px solid #DDD;
     border-bottom: 1px solid #FFF;
   }
@@ -56,20 +60,26 @@ gelato-component[data-name='stats-all-time'] {
     color: $grey3;
   }
 
+  .data-section {
+    position: relative;
+  }
+
   .colored-square {
     height: 16px;
     width: 16px;
     display: inline-block;
+    position: absolute;
+    top: 21px;
   }
 
   .chars-learned-bg {
     background: $lime5;
-    float: right;
+    right: 0px;
   }
 
   .words-learned-bg {
     background: $green5;
-    float: left;
+    left: 0px;
   }
 
   .center {

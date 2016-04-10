@@ -13,14 +13,17 @@ gelato-component(data-name='stats-all-time')
     .col-md-6
       .circle
         #items-learned
-        .chart-overlay
-          #num-items-learned.num-items-learned ...
-          .cicle-label items learned
+        .chart-overlay-wrapper
+          .chart-overlay
+            #num-items-learned.num-items-learned ...
+            .cicle-label items learned
     .col-md-3.center
       .words.data-section
         #words-learned.num-hero.words-learned ...
         .units-label words
         .colored-square.words-learned-bg
       .days-studied.data-section
-        .num-subhero 5000:99:99
-        .units-label days studied
+        #total-time-studied-num.num-subhero ...
+        .units-label
+          span#units-total-label
+          span &nbsp; studied
