@@ -6,21 +6,19 @@ var ProgressStat = require('models/progress-stat');
  * @extends {SkritterCollection}
  */
 module.exports = SkritterCollection.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {},
+
     /**
      * @property model
      * @type {ProgressStat}
      */
     model: ProgressStat,
+
     /**
      * @property url
      * @type {String}
      */
     url: 'progstats',
+
     /**
      * @method comparator
      * @param {ProgressStats} statA
@@ -29,13 +27,14 @@ module.exports = SkritterCollection.extend({
      */
     comparator: function(statA, statB) {
         if (statA.id > statB.id) {
-            return 1;
-        } else if (statB.id > statA.id) {
             return -1;
+        } else if (statB.id > statA.id) {
+            return 1;
         } else {
             return 0;
         }
     },
+
     /**
      * @method parse
      * @param {Object} response
@@ -44,6 +43,7 @@ module.exports = SkritterCollection.extend({
     parse: function(response) {
         return response.ProgressStats;
     },
+
     /**
      * @method fetchMonth
      * @param {Function} [callbackSuccess]
@@ -110,6 +110,7 @@ module.exports = SkritterCollection.extend({
             }
         }, this));
     },
+
     /**
      * @method fetchToday
      * @param {Function} [callbackSuccess]
@@ -132,6 +133,7 @@ module.exports = SkritterCollection.extend({
             }, this)
         });
     },
+
     /**
      * @method getAllTimeCharactersLearned
      * @returns {Number}
@@ -139,6 +141,7 @@ module.exports = SkritterCollection.extend({
     getAllTimeCharactersLearned: function() {
         return this.length ? this.at(0).get('char').rune.learned.all : 0;
     },
+
     /**
      * @method getAllTimeWordsLearned
      * @returns {Number}
@@ -146,6 +149,35 @@ module.exports = SkritterCollection.extend({
     getAllTimeWordsLearned: function() {
         return this.length ? this.at(0).get('word').rune.learned.all : 0;
     },
+
+    /**
+     * Gets the total amount of time a user has spent studying for the lifetime of their account.
+     * @returns {object} the amount of time studied as a string with a units property 
+     *                   specifiying the largest denomination of the amount property.
+     */
+    getAllTimeTimeStudied: function() {
+        if (!this.length) {
+            return {amount: '0', units: 'seconds'};
+        }
+
+        var timeStudied = this.at(0).get('timeStudied');
+        var allStudied = Math.floor(timeStudied.all);
+        var seconds = Math.floor(allStudied) % 60;
+        var minutes = Math.floor(allStudied / 60) % 60;
+        var hours = Math.floor(allStudied / 3600);
+
+        var largestUnit = hours ? 'hours' :
+                          minutes ? 'minutes' :
+                          'seconds';
+        var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
+                     minutes ? minutes + ':' + seconds :
+                     seconds;
+        return {
+            amount: amount,
+            units: largestUnit
+        };
+    },
+
     /**
      * @method getDailyItemsReviewed
      * @returns {Number}
@@ -166,6 +198,7 @@ module.exports = SkritterCollection.extend({
         }
         return total;
     },
+
     /**
      * @method getDailyTimeStudied
      * @returns {Number}
@@ -175,6 +208,7 @@ module.exports = SkritterCollection.extend({
         var stat = this.get(today);
         return stat ? stat.get('timeStudied').day : 0;
     },
+
     /**
      * @method getGoalItemPercent
      * @returns {Number}
@@ -185,6 +219,7 @@ module.exports = SkritterCollection.extend({
         var percentItems = Math.round(totalItems / goal.value * 100);
         return percentItems > 100 ? 100 : parseFloat(percentItems.toFixed(2));
     },
+
     /**
      * @method getGoalTimePercent
      * @returns {Number}
@@ -195,6 +230,7 @@ module.exports = SkritterCollection.extend({
         var percentTime = Math.round(totalTime / goal.value * 100);
         return percentTime > 100 ? 100 : parseFloat(percentTime.toFixed(2));
     },
+
     /**
      * @method getMonthlyHeatmapData
      * @returns {Object}
@@ -208,6 +244,7 @@ module.exports = SkritterCollection.extend({
         }
         return data;
     },
+
     /**
      * @method getMonthlyStreak
      * @returns {Number}
