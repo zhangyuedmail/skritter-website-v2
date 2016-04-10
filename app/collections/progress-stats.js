@@ -207,6 +207,35 @@ module.exports = SkritterCollection.extend({
         return totalNum;
     },
 
+
+    /**
+     * Gets the total amount of time a user has spent studying for the lifetime of their account.
+     * @returns {object} the amount of time studied as a string with a units property 
+     *                   specifiying the largest denomination of the amount property.
+     */
+    getAllTimeTimeStudied: function() {
+        if (!this.length) {
+            return {amount: '0', units: 'seconds'};
+        }
+
+        var timeStudied = this.at(0).get('timeStudied');
+        var allStudied = Math.floor(timeStudied.all);
+        var seconds = Math.floor(allStudied) % 60;
+        var minutes = Math.floor(allStudied / 60) % 60;
+        var hours = Math.floor(allStudied / 3600);
+
+        var largestUnit = hours ? 'hours' :
+                          minutes ? 'minutes' :
+                          'seconds';
+        var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
+                     minutes ? minutes + ':' + seconds :
+                     seconds;
+        return {
+            amount: amount,
+            units: largestUnit
+        };
+    },
+
     /**
      * @method getDailyItemsReviewed
      * @returns {Number}
