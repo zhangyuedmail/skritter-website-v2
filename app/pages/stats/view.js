@@ -83,6 +83,10 @@ module.exports = GelatoPage.extend({
 
         this._views[toHideSection].hide();
         this._views[toShowSection].show();
+
+        if (_.isFunction(this._views[toShowSection].onTabVisible)) {
+            this._views[toShowSection].onTabVisible();
+        }
     },
     
     /**
