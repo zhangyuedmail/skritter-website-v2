@@ -83,22 +83,22 @@ module.exports = GelatoComponent.extend({
     },
     
     update: function() {
-        if (this.collection.length) {
-            var totalCharactersLearned = this.collection.getAllTimeCharactersLearned();
-            var totalWordsLearned = this.collection.getAllTimeWordsLearned();
-            var totalItemsLearned = totalCharactersLearned + totalWordsLearned;
+        var totalCharactersLearned = this.collection.getAllTimeCharactersLearned();
+        var totalWordsLearned = this.collection.getAllTimeWordsLearned();
+        var totalItemsLearned = totalCharactersLearned + totalWordsLearned;
 
-            var chartData = this.$('#items-learned').highcharts().series[0].points;
-            chartData[0].update(totalWordsLearned);
-            chartData[1].update(totalCharactersLearned);
+        var chartData = this.$('#items-learned').highcharts().series[0].points;
+        chartData[0].update(totalWordsLearned);
+        chartData[1].update(totalCharactersLearned);
 
-            this.$('#characters-learned').text(totalCharactersLearned);
-            this.$('#words-learned').text(totalWordsLearned);
-            this.$('#num-items-learned').text(totalItemsLearned);
+        this.$('#characters-learned').text(totalCharactersLearned);
+        this.$('#words-learned').text(totalWordsLearned);
+        this.$('#num-items-learned').text(totalItemsLearned);
 
-            var totalTimeData = this.collection.getAllTimeTimeStudied() ;
-            this.$('#total-time-studied-num').text(totalTimeData.amount);
-            this.$('#units-total-label').text(totalTimeData.units);
-        }
+        var totalTimeData = this.collection.getAllTimeTimeStudied() ;
+        this.$('#total-time-studied-num').text(totalTimeData.amount);
+        this.$('#units-total-label').text(totalTimeData.units);
+
+        this.$('#total-reviews-num').text(this.collection.getCountAllTimeReviews());
     }
 });
