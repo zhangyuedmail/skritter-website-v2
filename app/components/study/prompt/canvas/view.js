@@ -83,8 +83,8 @@ module.exports = GelatoComponent.extend({
     events: {
         'pointerdown.Canvas': 'triggerCanvasMouseDown',
         'pointerup.Canvas': 'triggerCanvasMouseUp',
-        'vmousedown.Canvas': 'triggerCanvasMouseDown',
-        'vmouseup.Canvas': 'triggerCanvasMouseUp'
+        'mousedown.Canvas': 'triggerCanvasMouseDown',
+        'mouseup.Canvas': 'triggerCanvasMouseUp'
     },
     /**
      * @method clearLayer
