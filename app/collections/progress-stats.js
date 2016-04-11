@@ -292,6 +292,35 @@ module.exports = SkritterCollection.extend({
     },
 
     /**
+     * Gets the total number of reviews a user has studied over their lifetime
+     * @returns {Number} the total number of reviews a user has studied over their lifetime
+     */
+    getCountAllTimeReviews: function() {
+        if (!this.length) {
+            return 0;
+        }
+
+        var stat = this.at(0);
+        var wordStats = stat.get('word');
+        var charStats = stat.get('char');
+
+        // .char, .word ... .defn .rdng .rune .tone ... .studied .all
+        // gets the total number of reviews for both word and character reviews
+        var totalNum = [wordStats, charStats].reduce(function(total, reviewCat) {
+
+            // for a given stat, loops through the parts (defn, rdng, etc.)
+            // and sums the numbers of .studied.all for each part.
+            var partsTotal = Object.keys(reviewCat).reduce(function(pTotal, studyPart) {
+                return pTotal + reviewCat[studyPart].studied.all;
+            }, 0);
+
+            return total + partsTotal;
+        }, 0);
+
+        return totalNum;
+    },
+
+    /**
      * @method getDailyItemsReviewed
      * @returns {Number}
      */
