@@ -49,7 +49,10 @@ module.exports = GelatoComponent.extend({
     handleClickAddItem: function(event) {
         event.preventDefault();
         this.page.schedule.addItems(
-            null,
+            {
+                lang: app.getLanguage(),
+                lists: this.page.vocablist ? this.page.vocablist.id : null
+            },
             function(error, result) {
                 var added = result.numVocabsAdded;
                 $.notify(
