@@ -2,11 +2,13 @@
 
 bootstrap-dialog[data-name="confirm-logout"] {
 
-  .modal-content {
-    background-color: $white5;
-    padding-bottom: 20px;
-  }
+	.modal-content {
+		background-color: $white5;
+		padding-bottom: 20px;
+	}
 
-  .modal-dialog { width: 300px; }
+	.modal-dialog {
+		width: 300px;
+	}
 
 }

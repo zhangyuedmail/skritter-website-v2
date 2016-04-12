@@ -6,9 +6,9 @@ var Sentence = require('models/sentence');
  * @extends {GelatoCollection}
  */
 module.exports = GelatoCollection.extend({
-    /**
-     * @property model
-     * @type {Sentence}
-     */
-    model: Sentence
+	/**
+	 * @property model
+	 * @type {Sentence}
+	 */
+	model: Sentence
 });

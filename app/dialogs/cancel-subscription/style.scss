@@ -1,11 +1,11 @@
 @import "../../styles/_variables";
 
 bootstrap-dialog[data-name="cancel-subscription"] {
-  .modal-header {
-    background-color: $white4;
-    border-radius: 25px 25px 0 0;
-  }
-  .modal-dialog {
-    width: 425px;
-  }
+	.modal-header {
+		background-color: $white4;
+		border-radius: 25px 25px 0 0;
+	}
+	.modal-dialog {
+		width: 425px;
+	}
 }

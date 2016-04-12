@@ -2,18 +2,22 @@
 
 gelato-component[data-name='vocablists-list-section-editor'] {
 
-  .row {
-    color: #8c9196;
-    font-size: 16px;
-    font-weight: 300;
-    padding: 10px 25px;
-    border-top: 1px solid $white5;
-    &.odd { background-color: $white3; }
-    &.even { background-color: $white1; }
-  }
+	.row {
+		color: #8c9196;
+		font-size: 16px;
+		font-weight: 300;
+		padding: 10px 25px;
+		border-top: 1px solid $white5;
+		&.odd {
+			background-color: $white3;
+		}
+		&.even {
+			background-color: $white1;
+		}
+	}
 
-  .row-header {
-    font-weight: 400;
-  }
+	.row-header {
+		font-weight: 400;
+	}
 
 }

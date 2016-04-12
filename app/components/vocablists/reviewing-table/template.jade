@@ -1,29 +1,29 @@
 gelato-component(data-name='vocablists-review-table')
-  for list, i in view.vocablists.getReviewing()
-    .row(data-list-id=list.id)
-      .col-md-3
-        a(href="/vocablists/view/"+list.id)= list.get('name')
-      .col-md-3
-        .progress
-          .progress-bar(style="width:"+(list.getProgress().percent)+'%')
+	for list, i in view.vocablists.getReviewing()
+		.row(data-list-id=list.id)
+			.col-md-3
+				a(href="/vocablists/view/" + list.id)= list.get('name')
+			.col-md-3
+				.progress
+					.progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
-      .col-md-2
-        a.action-link(href="/study/"+list.id) Study List
+			.col-md-2
+				a.action-link(href="/study/" + list.id) Study List
 
-      .col-md-2
-        if list.get('studyingMode') === 'reviewing'
-          a.action-link.restart-adding-link Restart Adding
-        if list.get('studyingMode') === 'finished'
-          span Finished
+			.col-md-2
+				if list.get('studyingMode') === 'reviewing'
+					a.action-link.restart-adding-link Restart Adding
+				if list.get('studyingMode') === 'finished'
+					span Finished
 
-      .col-md-1
-        span.glyphicon.glyphicon-cog.list-settings-span
+			.col-md-1
+				span.glyphicon.glyphicon-cog.list-settings-span
 
-      .col-md-1
-        span.glyphicon.glyphicon-remove.remove-list-span
+			.col-md-1
+				span.glyphicon.glyphicon-remove.remove-list-span
 
-  if view.vocablists.state === 'fetching'
-    p.text-center
-      i.fa.fa-3x.fa-spinner.fa-pulse
-  else if !view.vocablists.length
-    em None
+	if view.vocablists.state === 'fetching'
+		p.text-center
+			i.fa.fa-3x.fa-spinner.fa-pulse
+	else if !view.vocablists.length
+		em None

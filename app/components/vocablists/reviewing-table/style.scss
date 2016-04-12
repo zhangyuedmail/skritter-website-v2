@@ -2,23 +2,23 @@
 
 gelato-component[data-name='vocablists-queue-reviewing-table'] {
 
-  .col-md-3 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+	.col-md-3 {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 
-  a.action-link {
-    color: $green5;
-    cursor: pointer;
-  }
+	a.action-link {
+		color: $green5;
+		cursor: pointer;
+	}
 
-  .glyphicon {
-    color: $grey3;
-    cursor: pointer;
-    &:hover {
-      color: $grey5;
-    }
-  }
+	.glyphicon {
+		color: $grey3;
+		cursor: pointer;
+		&:hover {
+			color: $grey5;
+		}
+	}
 
 }

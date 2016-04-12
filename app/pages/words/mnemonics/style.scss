@@ -2,44 +2,44 @@
 
 gelato-page[data-name='words-mnemonics'] {
 
-  background: $background-primary;
-  padding-top: 75px;
+	background: $background-primary;
+	padding-top: 75px;
 
-  img {
-    max-width: 100%;
-  }
+	img {
+		max-width: 100%;
+	}
 
-  .table-oversized-wrapper {
-    margin-top: 30px;
-  }
+	.table-oversized-wrapper {
+		margin-top: 30px;
+	}
 
-  .checkbox-td {
-    width: 10%;
-  }
+	.checkbox-td {
+		width: 10%;
+	}
 
-  .word-td {
-    width: 70%;
-  }
+	.word-td {
+		width: 70%;
+	}
 
-  .writing-td {
-    width: 10%;
-  }
+	.writing-td {
+		width: 10%;
+	}
 
-  .reading-td {
-    width: 10%;
-  }
+	.reading-td {
+		width: 10%;
+	}
 
-  .mnemonic-td {
-    width: 50%;
-  }
+	.mnemonic-td {
+		width: 50%;
+	}
 
-  .edited-td {
-    width: 20%;
-  }
+	.edited-td {
+		width: 20%;
+	}
 
-  #load-more-btn {
-    margin: 0 auto;
-    max-width: 300px;
-  }
+	#load-more-btn {
+		margin: 0 auto;
+		max-width: 300px;
+	}
 
 }

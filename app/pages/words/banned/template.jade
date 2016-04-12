@@ -1,47 +1,47 @@
 gelato-page(data-name='words-banned')
-  - var now = new Date().getTime();
+	- var now = new Date().getTime();
 
-  #navbar-container
+	#navbar-container
 
-  section.container
-    .content-block
-      .row
+	section.container
+		.content-block
+			.row
 
-        .col-md-3.sidebar
-          #words-sidebar-container
+				.col-md-3.sidebar
+					#words-sidebar-container
 
-        .col-md-9.main-content
-          .title Banned Words
-          p Words that you have banned.
-          #table-options
-            .row
-              .col-md-12
-                button#unban-vocabs-btn.btn.btn-fixed.btn-danger(disabled=true)
-                  | Unban vocabs
+				.col-md-9.main-content
+					.title Banned Words
+					p Words that you have banned.
+					#table-options
+						.row
+							.col-md-12
+								button#unban-vocabs-btn.btn.btn-fixed.btn-danger(disabled=true)
+									| Unban vocabs
 
-          .table-oversized-wrapper
-            table.table.table-striped
-              tr
-                td.checkbox-td
-                  input#all-checkbox(type="checkbox")
-                td.word-td(colspan=3) Word
-                td.date-changed-td Changed
-                
-              for vocab in view.bannedVocabs.models
-                tr(data-vocab-id=vocab.id)
-                  td.checkbox-td
-                    input(type="checkbox")
-                  td.writing-td= vocab.getWriting()
-                  td.reading-td= vocab.getReading()
-                  td.definition-td!= vocab.getDefinition()
-                  td.date-changed-td
-                    | #{moment(vocab.get('changed')*1000).format('LL')}
+					.table-oversized-wrapper
+						table.table.table-striped
+							tr
+								td.checkbox-td
+									input#all-checkbox(type="checkbox")
+								td.word-td(colspan=3) Word
+								td.date-changed-td Changed
 
-            if view.bannedVocabs.state === 'fetching'
-              p.text-center
-                i.fa.fa-3x.fa-spinner.fa-pulse
-                
-            else if view.bannedVocabs.cursor
-              button#load-more-btn.btn.btn-primary.btn-block Load More
-                
-                            
+							for vocab in view.bannedVocabs.models
+								tr(data-vocab-id=vocab.id)
+									td.checkbox-td
+										input(type="checkbox")
+									td.writing-td= vocab.getWriting()
+									td.reading-td= vocab.getReading()
+									td.definition-td!= vocab.getDefinition()
+									td.date-changed-td
+										| #{moment(vocab.get('changed') * 1000).format('LL')}
+
+						if view.bannedVocabs.state === 'fetching'
+							p.text-center
+								i.fa.fa-3x.fa-spinner.fa-pulse
+
+						else if view.bannedVocabs.cursor
+							button#load-more-btn.btn.btn-primary.btn-block Load More
+
+

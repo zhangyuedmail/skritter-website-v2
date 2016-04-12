@@ -2,35 +2,37 @@
 
 gelato-page[data-name='dashboard'] {
 
-  background: $background-primary;
-  padding-top: 75px;
+	background: $background-primary;
+	padding-top: 75px;
 
-  #first-row .content-block {
-    height: 300px;
-  }
+	#first-row .content-block {
+		height: 300px;
+	}
 
-  .content-block {
-    padding-top: 30px;
-    .options {
-      i { cursor: pointer; }
-      color: $grey2;
-      position: absolute;
-      right: 20px;
-      top: 20px;
-    }
-    .title {
-      font-family: $font-slab;
-      font-size: 12px;
-      font-weight: 400;
-      left: 20px;
-      position: absolute;
-      text-transform: uppercase;
-      top: 10px;
-    }
-  }
+	.content-block {
+		padding-top: 30px;
+		.options {
+			i {
+				cursor: pointer;
+			}
+			color: $grey2;
+			position: absolute;
+			right: 20px;
+			top: 20px;
+		}
+		.title {
+			font-family: $font-slab;
+			font-size: 12px;
+			font-weight: 400;
+			left: 20px;
+			position: absolute;
+			text-transform: uppercase;
+			top: 10px;
+		}
+	}
 
-  #vocablist-table-container {
-    margin-top: 15px;
-  }
+	#vocablist-table-container {
+		margin-top: 15px;
+	}
 
 }

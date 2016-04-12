@@ -1,100 +1,100 @@
 gelato-page(data-name='words-all')
-  - var now = new Date().getTime();
+	- var now = new Date().getTime();
 
-  #navbar-container
+	#navbar-container
 
-  section.container
-    .content-block
-      .row
+	section.container
+		.content-block
+			.row
 
-        .col-md-3.sidebar
-          #words-sidebar-container
+				.col-md-3.sidebar
+					#words-sidebar-container
 
-        .col-md-9.main-content
-          .title All Words
-          #table-options
-            .row
-              .col-md-8
-                .input-group.input-group-lg
-                  span.input-group-addon
-                    i.fa.fa-search
-                  input#word-search-input.form-control(type="text", placeholder="Type to search our dictionary")
-              .col-md-4
-                select#action-select.form-control.input-lg(disabled=true)
-                  option(value="") Select words...
-                  option(value="ban") Ban from words
-                  option(value="unban") Unban from words
+				.col-md-9.main-content
+					.title All Words
+					#table-options
+						.row
+							.col-md-8
+								.input-group.input-group-lg
+									span.input-group-addon
+										i.fa.fa-search
+									input#word-search-input.form-control(type="text", placeholder="Type to search our dictionary")
+							.col-md-4
+								select#action-select.form-control.input-lg(disabled=true)
+									option(value="") Select words...
+									option(value="ban") Ban from words
+									option(value="unban") Unban from words
 
-          .table-oversized-wrapper
-            table.table.table-striped
-              tr
-                td.checkbox-td
-                  input#all-checkbox(type="checkbox")
-                td.word-td(colspan=3) Word
-                if view.searchString
-                  td.last-td Prev
-                  td.next-td Next
-                else
-                  td.last-td(class=view.sort === 'last' ? 'active' : '')
-                    a#previous-sort-link
-                      | Prev
-                      span.glyphicon.glyphicon-chevron-down
-                      
-                  td.next-td(class=view.sort === 'next' ? 'active' : '')
-                    a#next-sort-link
-                      | Next
-                      span.glyphicon.glyphicon-chevron-down
-                
-              mixin itemRow(lastItem, nextItem, vocab)
-                tr(data-vocab-id=vocab.id)
-                  td.checkbox-td
-                    input(type="checkbox")
-                  td.writing-td= vocab.getWriting()
-                  td.reading-td= vocab.getReading()
-                  td.definition-td!= vocab.getDefinition()
-                  
-                  if lastItem && lastItem.get('last')
-                    - var last = moment(lastItem.get('last')*1000);
-                    td.last-td(title=last.format('LLLL'))
-                      | #{last.fromNow()}
-                  else
-                    td.last-td
-                      if vocab.get('itemState') === 'queued'
-                        i.fa.fa-1x.fa-spinner.fa-pulse
-                      else
-                        | -
-                    
-                  if nextItem
-                    - var next = moment(nextItem.get('next')*1000);
-                    td.next-td(title=next.format('LLLL'))
-                      if nextItem.get('next')*1000 > now
-                        | #{next.fromNow()}
-                      else
-                        | Ready
-                  else
-                    td.next-td
-                      if vocab.get('itemState') === 'queued'
-                        i.fa.fa-1x.fa-spinner.fa-pulse
-                      else
-                        | -
-                
-              if view.searchString
-                for vocab in view.searchVocabs.models
-                  +itemRow(vocab.lastItem, vocab.nextItem, vocab)
-                if view.searchVocabs.state === 'fetching'
-                
-                  
-              else
-                for item in view.items.models
-                  for vocabID in item.get('vocabIds')
-                    - var vocab = view.vocabMap[vocabID];
-                    +itemRow(item, item, vocab)
+					.table-oversized-wrapper
+						table.table.table-striped
+							tr
+								td.checkbox-td
+									input#all-checkbox(type="checkbox")
+								td.word-td(colspan=3) Word
+								if view.searchString
+									td.last-td Prev
+									td.next-td Next
+								else
+									td.last-td(class=view.sort === 'last' ? 'active' : '')
+										a#previous-sort-link
+											| Prev
+											span.glyphicon.glyphicon-chevron-down
 
-            if view.items.state === 'fetching' || view.searchVocabs.state === 'fetching'
-              p.text-center
-                i.fa.fa-3x.fa-spinner.fa-pulse
-                
-            else if view.items.cursor || view.searchVocabs.cursor　|| view.searchVocabs.containingCursor
-              button#load-more-btn.btn.btn-primary.btn-block Load More
-                
-                            
+									td.next-td(class=view.sort === 'next' ? 'active' : '')
+										a#next-sort-link
+											| Next
+											span.glyphicon.glyphicon-chevron-down
+
+							mixin itemRow(lastItem, nextItem, vocab)
+								tr(data-vocab-id=vocab.id)
+									td.checkbox-td
+										input(type="checkbox")
+									td.writing-td= vocab.getWriting()
+									td.reading-td= vocab.getReading()
+									td.definition-td!= vocab.getDefinition()
+
+									if lastItem && lastItem.get('last')
+										- var last = moment(lastItem.get('last')*1000);
+										td.last-td(title=last.format('LLLL'))
+											| #{last.fromNow()}
+									else
+										td.last-td
+											if vocab.get('itemState') === 'queued'
+												i.fa.fa-1x.fa-spinner.fa-pulse
+											else
+												| -
+
+									if nextItem
+										- var next = moment(nextItem.get('next')*1000);
+										td.next-td(title=next.format('LLLL'))
+											if nextItem.get('next') * 1000 > now
+												| #{next.fromNow()}
+											else
+												| Ready
+									else
+										td.next-td
+											if vocab.get('itemState') === 'queued'
+												i.fa.fa-1x.fa-spinner.fa-pulse
+											else
+												| -
+
+							if view.searchString
+								for vocab in view.searchVocabs.models
+									+itemRow(vocab.lastItem, vocab.nextItem, vocab)
+								if view.searchVocabs.state === 'fetching'
+
+
+							else
+								for item in view.items.models
+									for vocabID in item.get('vocabIds')
+										- var vocab = view.vocabMap[vocabID];
+										+itemRow(item, item, vocab)
+
+						if view.items.state === 'fetching' || view.searchVocabs.state === 'fetching'
+							p.text-center
+								i.fa.fa-3x.fa-spinner.fa-pulse
+
+						else if view.items.cursor || view.searchVocabs.cursor || view.searchVocabs.containingCursor
+							button#load-more-btn.btn.btn-primary.btn-block Load More
+
+

@@ -2,32 +2,36 @@
 
 gelato-component[data-name='study-toolbar'] {
 
-  font-family: $font-slab;
-  font-size: 24px;
-  font-weight: 300;
-  height: 35px;
-  margin: 20px auto;
-  max-width: 1280px;
-  padding-left: 30px;
-  padding-right: 30px;
+	font-family: $font-slab;
+	font-size: 24px;
+	font-weight: 300;
+	height: 35px;
+	margin: 20px auto;
+	max-width: 1280px;
+	padding-left: 30px;
+	padding-right: 30px;
 
-  i {
-    cursor: pointer;
-    font-size: 28px;
-  }
+	i {
+		cursor: pointer;
+		font-size: 28px;
+	}
 
-  .text-left i { margin-right: 10%; }
+	.text-left i {
+		margin-right: 10%;
+	}
 
-  .text-right i { margin-left: 10%; }
+	.text-right i {
+		margin-left: 10%;
+	}
 
-  .vocablist-name {
-    font-size: 14px;
-    font-weight: 700;
-    padding-top: 10px;
-  }
+	.vocablist-name {
+		font-size: 14px;
+		font-weight: 700;
+		padding-top: 10px;
+	}
 
-  .vocablist-section {
-    font-size: 14px;
-  }
+	.vocablist-section {
+		font-size: 14px;
+	}
 
 }

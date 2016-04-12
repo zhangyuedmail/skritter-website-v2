@@ -1,44 +1,44 @@
 gelato-component(data-name='vocab-viewer-content')
 
-  if view.vocabs && view.vocabs.length
-    - var vocab = view.vocabs.at(0);
-    - var definition = vocab.getDefinition();
-    - var mnemonic = vocab.getMnemonic();
-    - var sentence = vocab.getSentence();
+	if view.vocabs && view.vocabs.length
+		- var vocab = view.vocabs.at(0);
+		- var definition = vocab.getDefinition();
+		- var mnemonic = vocab.getMnemonic();
+		- var sentence = vocab.getSentence();
 
-    #header-section
-      .block.separator
-        #vocab-writing= vocab.get('writing')
-        #vocab-reading= vocab.getReading()
-      .block
-        #vocab-difficulty= vocab.get('toughnessString')
-        #vocab-difficulty-text LEVEL
-      .pull-right
-        a(href='#', data-dismiss='modal')
-          i.fa.fa-times-circle-o
+		#header-section
+			.block.separator
+				#vocab-writing= vocab.get('writing')
+				#vocab-reading= vocab.getReading()
+			.block
+				#vocab-difficulty= vocab.get('toughnessString')
+				#vocab-difficulty-text LEVEL
+			.pull-right
+				a(href='#', data-dismiss='modal')
+					i.fa.fa-times-circle-o
 
-    #content-section
-      #panel-left
-        .block
-          .header Definition
-          .value
-            #vocab-definition
-              if definition
-                span!= definition
-        .block
-          .header Sentence
-          .value
-            #vocab-sentence
-              if sentence
-                span!= sentence.getWriting()
-        .block
-          .header Mnemonic
-          .value
-            #vocab-mnemonic
-              if mnemonic
-                span!= app.fn.textToHTML(mnemonic.text)
-        .block
-          .header Dictionary
-          .value
-            #lookup-container
-      #panel-right
+		#content-section
+			#panel-left
+				.block
+					.header Definition
+					.value
+						#vocab-definition
+							if definition
+								span!= definition
+				.block
+					.header Sentence
+					.value
+						#vocab-sentence
+							if sentence
+								span!= sentence.getWriting()
+				.block
+					.header Mnemonic
+					.value
+						#vocab-mnemonic
+							if mnemonic
+								span!= app.fn.textToHTML(mnemonic.text)
+				.block
+					.header Dictionary
+					.value
+						#lookup-container
+			#panel-right

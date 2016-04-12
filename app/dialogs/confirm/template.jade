@@ -1,18 +1,18 @@
 bootstrap-dialog(data-name='confirm')
-  .modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog
-      .modal-content
-        .modal-header
-          a.glyphicon.glyphicon-remove-circle.pull-right(data-dismiss='modal')
-          .modal-title= view.title || "Are you sure?"
+	.modal.fade(tabindex='-1', role='dialog')
+		.modal-dialog
+			.modal-content
+				.modal-header
+					a.glyphicon.glyphicon-remove-circle.pull-right(data-dismiss='modal')
+					.modal-title= view.title || "Are you sure?"
 
-        if view.body
-          .modal-body= view.body
+				if view.body
+					.modal-body= view.body
 
-        .modal-footer.text-center
+				.modal-footer.text-center
 
-          p#spinner-p.hide.text-center
-            i.fa.fa-3x.fa-spinner.fa-pulse
+					p#spinner-p.hide.text-center
+						i.fa.fa-3x.fa-spinner.fa-pulse
 
-          #buttons
-            button#button-confirm.btn.btn-lg.btn-danger= view.okText || "Confirm"
+					#buttons
+						button#button-confirm.btn.btn-lg.btn-danger= view.okText || "Confirm"

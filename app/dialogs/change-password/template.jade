@@ -1,17 +1,17 @@
 bootstrap-dialog(data-name='change-password')
 
-  .modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog
-      .modal-content
-        .modal-body
-          form
-            #error-message.text-danger
-            .form-group
-              label(for="field-password1") New password
-              input#field-password1.form-control(type="password", placeholder="")
-            .form-group
-              label(for="field-password2") Re-type password
-              input#field-password2.form-control(type="password", placeholder="")
-            button#button-close.btn.btn-default(type="button") Close
-            | &nbsp;&nbsp;&nbsp;
-            button#button-change.btn.btn-primary(type="button") Change password
+	.modal.fade(tabindex='-1', role='dialog')
+		.modal-dialog
+			.modal-content
+				.modal-body
+					form
+						#error-message.text-danger
+						.form-group
+							label(for="field-password1") New password
+							input#field-password1.form-control(type="password", placeholder="")
+						.form-group
+							label(for="field-password2") Re-type password
+							input#field-password2.form-control(type="password", placeholder="")
+						button#button-close.btn.btn-default(type="button") Close
+						| &nbsp;&nbsp;&nbsp;
+						button#button-change.btn.btn-primary(type="button") Change password

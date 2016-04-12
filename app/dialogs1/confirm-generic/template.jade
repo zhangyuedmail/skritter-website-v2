@@ -1,18 +1,18 @@
 gelato-dialog(data-name='confirm-generic')
 
-  .modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog
-      .modal-content
+	.modal.fade(tabindex='-1', role='dialog')
+		.modal-dialog
+			.modal-content
 
-        .modal-header
-          .pull-left
-            .modal-title!= view.dialogTitle
-          .pull-right
-            a(href='#', data-dismiss='modal')
-              i.fa.fa-times-circle-o
+				.modal-header
+					.pull-left
+						.modal-title!= view.dialogTitle
+					.pull-right
+						a(href='#', data-dismiss='modal')
+							i.fa.fa-times-circle-o
 
-        .modal-body!= view.dialogBody
+				.modal-body!= view.dialogBody
 
-        .modal-footer
-          button#button-confirm.btn.btn-danger!= view.dialogButtonConfirm
-          button#button-cancel.btn.btn-default!= view.dialogButtonCancel
+				.modal-footer
+					button#button-confirm.btn.btn-danger!= view.dialogButtonConfirm
+					button#button-cancel.btn.btn-default!= view.dialogButtonCancel

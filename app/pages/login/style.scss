@@ -2,32 +2,32 @@
 
 gelato-page[data-name='login'] {
 
-  background: $background-marketing;
-  padding-top: 50px;
+	background: $background-marketing;
+	padding-top: 50px;
 
-  .content-block {
-    margin: 100px auto;
-    max-width: 400px;
-  }
+	.content-block {
+		margin: 100px auto;
+		max-width: 400px;
+	}
 
-  #footer-container {
-    bottom: 0;
-    position: absolute;
-    width: 100%;
-  }
+	#footer-container {
+		bottom: 0;
+		position: absolute;
+		width: 100%;
+	}
 
-  #login-form {
-    margin-bottom: 15px;
-  }
+	#login-form {
+		margin-bottom: 15px;
+	}
 
-  @media (max-width: 500px) {
-    .content-block {
-      margin: 50px auto;
-      max-width: 400px;
-    }
-    #footer-container {
-      position: relative;
-    }
-  }
+	@media (max-width: 500px) {
+		.content-block {
+			margin: 50px auto;
+			max-width: 400px;
+		}
+		#footer-container {
+			position: relative;
+		}
+	}
 
 }

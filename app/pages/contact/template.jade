@@ -1,35 +1,35 @@
 gelato-page(data-name='contact')
 
-  #navbar-container
+	#navbar-container
 
-  .container
+	.container
 
-    #contact-title.text-center Contact Us
+		#contact-title.text-center Contact Us
 
-    #contact-block.content-block
-      .text-center
-        #contact-message
-      form.form-horizontal
-        .form-group
-          label.col-sm-2.control-label(for='contact-email') Email
-          .col-sm-10
-            input#field-email.form-control(type='email')
-        .form-group
-          label.col-sm-2.control-label(for='contact-topic-select') Topic
-          .col-sm-10
-            select#field-topic.form-control
-              option(value='Feedback') Feedback
-              option(value='How To') Question
-              option(value='Bug') Bug report
-              option(value='Suggestion') Feature suggestion
-              option(value='Payment Issue') Payment issue
-        .form-group
-          label.col-sm-2.control-label(for='contact-message') Message
-          textarea#field-message.col-sm-10(rows='5')
-        p#friendly-text
-          | Good to hear from you! We do respond to everything. Want to get Skritter for your school?&nbsp;
-          a(href='/institutions') Click Here
-        .text-center
-          button#contact-submit.btn.btn-fixed.btn-success(type='submit') Submit
+		#contact-block.content-block
+			.text-center
+				#contact-message
+			form.form-horizontal
+				.form-group
+					label.col-sm-2.control-label(for='contact-email') Email
+					.col-sm-10
+						input#field-email.form-control(type='email')
+				.form-group
+					label.col-sm-2.control-label(for='contact-topic-select') Topic
+					.col-sm-10
+						select#field-topic.form-control
+							option(value='Feedback') Feedback
+							option(value='How To') Question
+							option(value='Bug') Bug report
+							option(value='Suggestion') Feature suggestion
+							option(value='Payment Issue') Payment issue
+				.form-group
+					label.col-sm-2.control-label(for='contact-message') Message
+					textarea#field-message.col-sm-10(rows='5')
+				p#friendly-text
+					| Good to hear from you! We do respond to everything. Want to get Skritter for your school?&nbsp;
+					a(href='/institutions') Click Here
+				.text-center
+					button#contact-submit.btn.btn-fixed.btn-success(type='submit') Submit
 
-  #footer-container
+	#footer-container

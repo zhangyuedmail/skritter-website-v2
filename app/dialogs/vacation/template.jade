@@ -1,31 +1,31 @@
 bootstrap-dialog(data-name='vacation')
-  .modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog
-      .modal-content
-        .modal-header
-          a.glyphicon.glyphicon-remove-circle.pull-right(data-dismiss='modal')
-          .modal-title Go on vacation
+	.modal.fade(tabindex='-1', role='dialog')
+		.modal-dialog
+			.modal-content
+				.modal-header
+					a.glyphicon.glyphicon-remove-circle.pull-right(data-dismiss='modal')
+					.modal-title Go on vacation
 
-        .modal-body
-          .form-horizontal
-            .form-group.form-group-lg
-              label.control-label.col-sm-3 Duration
-              .col-sm-9
-                select.form-control
-                  option(data-number=1 data-unit='weeks') One week
-                  option(data-number=2 data-unit='weeks') Two weeks
-                  option(data-number=3 data-unit='weeks') Three weeks
-                  option(data-number=1 data-unit='months') One month
-                  option(data-number=2 data-unit='months') Two months
-                  option(data-number=3 data-unit='months') Three months
-                  
-                .help-block
-                  | Goes into effect in 2 days. You can turn it off
-                  | if you return early, and you will not be billed while
-                  | you're on vacation.
+				.modal-body
+					.form-horizontal
+						.form-group.form-group-lg
+							label.control-label.col-sm-3 Duration
+							.col-sm-9
+								select.form-control
+									option(data-number=1 data-unit='weeks') One week
+									option(data-number=2 data-unit='weeks') Two weeks
+									option(data-number=3 data-unit='weeks') Three weeks
+									option(data-number=1 data-unit='months') One month
+									option(data-number=2 data-unit='months') Two months
+									option(data-number=3 data-unit='months') Three months
 
-          .text-center
+								.help-block
+									| Goes into effect in 2 days. You can turn it off
+									| if you return early, and you will not be billed while
+									| you're on vacation.
 
-            i.fa.fa-3x.fa-spinner.fa-pulse.hide
+					.text-center
 
-            button#button-confirm.btn.btn-lg.btn-danger Submit
+						i.fa.fa-3x.fa-spinner.fa-pulse.hide
+
+						button#button-confirm.btn.btn-lg.btn-danger Submit

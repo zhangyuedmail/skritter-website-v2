@@ -2,60 +2,60 @@
 
 gelato-component[data-name='vocablists-mine-table'] {
 
-  color: #404851;
-  font-family: $font-ubuntu;
-  font-size: 16px;
-  font-weight: 300;
+	color: #404851;
+	font-family: $font-ubuntu;
+	font-size: 16px;
+	font-weight: 300;
 
-  #header-row {
-    background: #f2f2f6;
-    .glyphicon {
-      margin-left: 10px;
-      font-size: 10px;
-    }
+	#header-row {
+		background: #f2f2f6;
+		.glyphicon {
+			margin-left: 10px;
+			font-size: 10px;
+		}
 
-    .table-sort.chosen {
-      font-weight: bold;
-    }
-    .table-sort {
-      cursor: pointer;
-      color: $grey9;
-    }
-  }
+		.table-sort.chosen {
+			font-weight: bold;
+		}
+		.table-sort {
+			cursor: pointer;
+			color: $grey9;
+		}
+	}
 
-  .row {
-    clear: both;
-    .col-md-5 {
-      padding-left: 40px;
-      padding-right: 60px;
-    }
-    .col-md-2, .col-md-3 {
-      white-space: nowrap;
-      .progress {
-        margin-bottom: 0;
-      }
-      .progress-bar {
-        background-color: $grey1;
-      }
-    }
-    .col-md-2, .col-md-3, .col-md-5 {
-      padding-top: 14px;
-      padding-bottom: 14px;
-    }
-    &.odd-row {
-      background-color: $white1;
-    }
-    &.even-row {
-      background-color: $white2;
-    }
+	.row {
+		clear: both;
+		.col-md-5 {
+			padding-left: 40px;
+			padding-right: 60px;
+		}
+		.col-md-2, .col-md-3 {
+			white-space: nowrap;
+			.progress {
+				margin-bottom: 0;
+			}
+			.progress-bar {
+				background-color: $grey1;
+			}
+		}
+		.col-md-2, .col-md-3, .col-md-5 {
+			padding-top: 14px;
+			padding-bottom: 14px;
+		}
+		&.odd-row {
+			background-color: $white1;
+		}
+		&.even-row {
+			background-color: $white2;
+		}
 
-    .add-to-queue-link .glyphicon {
-      margin-right: 5px;
-    }
-  }
+		.add-to-queue-link .glyphicon {
+			margin-right: 5px;
+		}
+	}
 
-  .add-to-queue-link {
-    cursor: pointer;
-  }
+	.add-to-queue-link {
+		cursor: pointer;
+	}
 
 }

@@ -1,10 +1,10 @@
 bootstrap-dialog(data-name='loading')
-  .modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog
-      .modal-content
-        .modal-body.text-center
-          i.fa.fa-5x.fa-spinner.fa-pulse
-          h3= view.title || 'Working'
-          if view.showBar
-            .progress
-              .progress-bar
+	.modal.fade(tabindex='-1', role='dialog')
+		.modal-dialog
+			.modal-content
+				.modal-body.text-center
+					i.fa.fa-5x.fa-spinner.fa-pulse
+					h3= view.title || 'Working'
+					if view.showBar
+						.progress
+							.progress-bar

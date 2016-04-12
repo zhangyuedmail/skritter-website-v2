@@ -1,34 +1,34 @@
 bootstrap-dialog(data-name='vocablist-sections-edit')
-  .modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog
-      .modal-content
-        .modal-header
-          h4.modal-title
-            | Edit Sections for
-            br
-            em  "#{view.vocablist.get('name')}"
-        .modal-body
+	.modal.fade(tabindex='-1', role='dialog')
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h4.modal-title
+						| Edit Sections for
+						br
+						em  "#{view.vocablist.get('name')}"
+				.modal-body
 
-          button#add-section-btn.btn.btn-primary.pull-right.btn-sm
-            span.glyphicon.glyphicon-plus
-            span.spl Add Section
+					button#add-section-btn.btn.btn-primary.pull-right.btn-sm
+						span.glyphicon.glyphicon-plus
+						span.spl Add Section
 
-          .clearfix
+					.clearfix
 
-          .list-group
-            for section in view.vocablist.get('sections')
-              .list-group-item(data-section-id=section.id)
-                span.glyphicon.glyphicon-option-vertical
-                input.input-sm.form-control(value=section.name)
-                span Words: #{section.rows.length}
-                a.pull-right.glyphicon.glyphicon-remove.text-danger
+					.list-group
+						for section in view.vocablist.get('sections')
+							.list-group-item(data-section-id=section.id)
+								span.glyphicon.glyphicon-option-vertical
+								input.input-sm.form-control(value=section.name)
+								span Words: #{section.rows.length}
+								a.pull-right.glyphicon.glyphicon-remove.text-danger
 
-          #new-section-template.list-group-item.hide
-            span.glyphicon.glyphicon-option-vertical
-            input.input-sm.form-control
-            span New section
-            a.pull-right.glyphicon.glyphicon-remove.text-danger
+					#new-section-template.list-group-item.hide
+						span.glyphicon.glyphicon-option-vertical
+						input.input-sm.form-control
+						span New section
+						a.pull-right.glyphicon.glyphicon-remove.text-danger
 
-        .modal-footer
-          button#cancel-btn.btn.btn-default(type="button") Cancel
-          button#confirm-btn.btn.btn-danger(type="button") Save Changes
+				.modal-footer
+					button#cancel-btn.btn.btn-default(type="button") Cancel
+					button#confirm-btn.btn.btn-danger(type="button") Save Changes

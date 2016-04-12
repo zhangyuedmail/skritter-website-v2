@@ -2,28 +2,28 @@
 
 gelato-page[data-name='vocablists-chinesepod'] {
 
-  background: $background-primary;
-  padding-top: 75px;
+	background: $background-primary;
+	padding-top: 75px;
 
-  #login-form {
-    margin-top: 30px;
-  }
+	#login-form {
+		margin-top: 30px;
+	}
 
-  #search-form {
-    margin-top: 15px;
-    margin-bottom: 20px;
-  }
+	#search-form {
+		margin-top: 15px;
+		margin-bottom: 20px;
+	}
 
-  .form-inline {
-    margin-bottom: 20px;
+	.form-inline {
+		margin-bottom: 20px;
 
-    label {
-      margin-right: 20px;
-    }
-  }
+		label {
+			margin-right: 20px;
+		}
+	}
 
-  table a {
-    color: $grey3;
-  }
+	table a {
+		color: $grey3;
+	}
 
 }

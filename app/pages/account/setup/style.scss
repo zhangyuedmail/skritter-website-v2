@@ -2,17 +2,17 @@
 
 gelato-page[data-name='account-setup'] {
 
-  background: $background-primary;
-  padding-top: 75px;
+	background: $background-primary;
+	padding-top: 75px;
 
-  form {
-    margin: 0 auto;
-    max-width: 600px;
-  }
+	form {
+		margin: 0 auto;
+		max-width: 600px;
+	}
 
-  input,
-  select {
-    max-width: 400px;
-  }
+	input,
+	select {
+		max-width: 400px;
+	}
 
 }

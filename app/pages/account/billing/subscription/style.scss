@@ -2,34 +2,34 @@
 
 gelato-page[data-name='account-billing-subscription'] {
 
-  background: $background-primary;
-  padding-top: 75px;
+	background: $background-primary;
+	padding-top: 75px;
 
-  label.control-label {
-    text-align: left;
-  }
+	label.control-label {
+		text-align: left;
+	}
 
-  p.form-control-static {
-    padding-left: 0;
-  }
+	p.form-control-static {
+		padding-left: 0;
+	}
 
-  #cancel-vacation-wrapper {
-    margin-left: 20px;
-  }
+	#cancel-vacation-wrapper {
+		margin-left: 20px;
+	}
 
-  .alert p {
-    margin: 10px 0;
-  }
+	.alert p {
+		margin: 10px 0;
+	}
 
-  .spoof-button-area {
-    margin: 0 auto 0 auto;
-    width: 180px;
-    .list-group-item {
-      padding: 5px 10px;
-    }
-  }
+	.spoof-button-area {
+		margin: 0 auto 0 auto;
+		width: 180px;
+		.list-group-item {
+			padding: 5px 10px;
+		}
+	}
 
-  #policies {
-    margin: 40px 0;
-  }
+	#policies {
+		margin: 40px 0;
+	}
 }

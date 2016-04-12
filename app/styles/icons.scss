@@ -1,206 +1,252 @@
 @import "variables";
 
 .icon {
-  background-repeat: no-repeat;
-  display: inline-block;
-  height: 50px;
-  width: 50px;
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 50px;
+	width: 50px;
 }
 
 /*** MARKETING ***/
 .icon-marketing-android {
-  background-image: url('#{$dir-assets}/vectors/marketing-android.svg');
-  height: 44px;
-  width: 28px;
+	background-image: url('#{$dir-assets}/vectors/marketing-android.svg');
+	height: 44px;
+	width: 28px;
 }
+
 .icon-marketing-best-value {
-  background-image: url('#{$dir-assets}/vectors/marketing-best-value.svg');
-  height: 91px;
-  width: 91px;
+	background-image: url('#{$dir-assets}/vectors/marketing-best-value.svg');
+	height: 91px;
+	width: 91px;
 }
+
 .icon-marketing-book {
-  background-image: url('#{$dir-assets}/vectors/marketing-book.svg');
-  height: 48px;
-  width: 36px;
+	background-image: url('#{$dir-assets}/vectors/marketing-book.svg');
+	height: 48px;
+	width: 36px;
 }
+
 .icon-marketing-calendar {
-  background-image: url('#{$dir-assets}/vectors/marketing-calendar.svg');
+	background-image: url('#{$dir-assets}/vectors/marketing-calendar.svg');
 }
+
 .icon-marketing-chinese-pod {
-  background-image: url('#{$dir-assets}/vectors/marketing-chinese-pod.svg');
-  height: 60px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-chinese-pod.svg');
+	height: 60px;
+	width: 50px;
 }
+
 .icon-marketing-decomps {
-  background-image: url('#{$dir-assets}/vectors/marketing-decomps.svg');
-  height: 60px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-decomps.svg');
+	height: 60px;
+	width: 50px;
 }
+
 .icon-marketing-flashcards {
-  background-image: url('#{$dir-assets}/vectors/marketing-flashcards.svg');
-  height: 48px;
-  width: 48px;
+	background-image: url('#{$dir-assets}/vectors/marketing-flashcards.svg');
+	height: 48px;
+	width: 48px;
 }
+
 .icon-marketing-handwriting-recognition {
-  background-image: url('#{$dir-assets}/vectors/marketing-handwriting-recognition.svg');
-  height: 60px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-handwriting-recognition.svg');
+	height: 60px;
+	width: 50px;
 }
+
 .icon-marketing-iphone {
-  background-image: url('#{$dir-assets}/vectors/marketing-iphone.svg');
-  height: 44px;
-  width: 26px;
+	background-image: url('#{$dir-assets}/vectors/marketing-iphone.svg');
+	height: 44px;
+	width: 26px;
 }
+
 .icon-marketing-laptop {
-  background-image: url('#{$dir-assets}/vectors/marketing-laptop.svg');
-  height: 32px;
-  width: 48px;
+	background-image: url('#{$dir-assets}/vectors/marketing-laptop.svg');
+	height: 32px;
+	width: 48px;
 }
+
 .icon-marketing-lists {
-  background-image: url('#{$dir-assets}/vectors/marketing-lists.svg');
+	background-image: url('#{$dir-assets}/vectors/marketing-lists.svg');
 }
+
 .icon-marketing-most-popular {
-  background-image: url('#{$dir-assets}/vectors/marketing-most-popular.svg');
-  height: 91px;
-  width: 91px;
+	background-image: url('#{$dir-assets}/vectors/marketing-most-popular.svg');
+	height: 91px;
+	width: 91px;
 }
+
 .icon-marketing-plane {
-  background-image: url('#{$dir-assets}/vectors/marketing-plane.svg');
-  height: 41px;
-  width: 49px;
+	background-image: url('#{$dir-assets}/vectors/marketing-plane.svg');
+	height: 41px;
+	width: 49px;
 }
+
 .icon-marketing-progress {
-  background-image: url('#{$dir-assets}/vectors/marketing-progress.svg');
+	background-image: url('#{$dir-assets}/vectors/marketing-progress.svg');
 }
+
 .icon-marketing-personal-progress-stats {
-  background-image: url('#{$dir-assets}/vectors/marketing-personal-progress-stats.svg');
-  height: 60px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-personal-progress-stats.svg');
+	height: 60px;
+	width: 50px;
 }
+
 .icon-marketing-review {
-  background-image: url('#{$dir-assets}/vectors/marketing-review.svg');
-  height: 46px;
-  width: 48px;
+	background-image: url('#{$dir-assets}/vectors/marketing-review.svg');
+	height: 46px;
+	width: 48px;
 }
+
 .icon-marketing-spaced-repetition-system {
-  background-image: url('#{$dir-assets}/vectors/marketing-spaced-repetition-system.svg');
-  height: 60px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-spaced-repetition-system.svg');
+	height: 60px;
+	width: 50px;
 }
+
 .icon-marketing-stroke-order {
-  background-image: url('#{$dir-assets}/vectors/marketing-stroke-order.svg');
-  height: 60px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-stroke-order.svg');
+	height: 60px;
+	width: 50px;
 }
+
 .icon-marketing-textbooks {
-  background-image: url('#{$dir-assets}/vectors/marketing-textbooks.svg');
-  height: 60px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-textbooks.svg');
+	height: 60px;
+	width: 50px;
 }
+
 .icon-marketing-tone-practice {
-  background-image: url('#{$dir-assets}/vectors/marketing-tone-practice.svg');
-  height: 60px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-tone-practice.svg');
+	height: 60px;
+	width: 50px;
 }
+
 .icon-marketing-users {
-  background-image: url('#{$dir-assets}/vectors/marketing-users.svg');
+	background-image: url('#{$dir-assets}/vectors/marketing-users.svg');
 }
+
 .icon-marketing-view-features {
-  background-image: url('#{$dir-assets}/vectors/marketing-view-features.svg');
-  height: 20px;
-  width: 20px;
+	background-image: url('#{$dir-assets}/vectors/marketing-view-features.svg');
+	height: 20px;
+	width: 20px;
 }
+
 .icon-marketing-writing-style-corrections {
-  background-image: url('#{$dir-assets}/vectors/marketing-writing-style-corrections.svg');
-  height: 50px;
-  width: 50px;
+	background-image: url('#{$dir-assets}/vectors/marketing-writing-style-corrections.svg');
+	height: 50px;
+	width: 50px;
 }
 
 /*** STUDY ***/
 .icon-study-ban {
-  background-image: url('#{$dir-assets}/vectors/study-ban.svg');
-  height: 23px;
-  width: 23px;
+	background-image: url('#{$dir-assets}/vectors/study-ban.svg');
+	height: 23px;
+	width: 23px;
 }
+
 .icon-study-char-decomp {
-  background-image: url('#{$dir-assets}/vectors/study-char-decomp.svg');
-  height: 23px;
-  width: 23px;
+	background-image: url('#{$dir-assets}/vectors/study-char-decomp.svg');
+	height: 23px;
+	width: 23px;
 }
+
 .icon-study-correct {
-  background-image: url('#{$dir-assets}/vectors/study-correct.svg');
-  height: 44px;
-  width: 59px;
-  &.disabled { background-image: url('#{$dir-assets}/vectors/study-correct-disabled.svg'); }
+	background-image: url('#{$dir-assets}/vectors/study-correct.svg');
+	height: 44px;
+	width: 59px;
+	&.disabled {
+		background-image: url('#{$dir-assets}/vectors/study-correct-disabled.svg');
+	}
 }
+
 .icon-study-erase {
-  background-image: url('#{$dir-assets}/vectors/study-erase.svg');
-  height: 48px;
-  width: 44px;
-  &.disabled { background-image: url('#{$dir-assets}/vectors/study-erase-disabled.svg'); }
+	background-image: url('#{$dir-assets}/vectors/study-erase.svg');
+	height: 48px;
+	width: 44px;
+	&.disabled {
+		background-image: url('#{$dir-assets}/vectors/study-erase-disabled.svg');
+	}
 }
+
 .icon-study-incorrect {
-  background-image: url('#{$dir-assets}/vectors/study-incorrect.svg');
-  height: 44px;
-  width: 59px;
-  &.disabled { background-image: url('#{$dir-assets}/vectors/study-incorrect-disabled.svg'); }
+	background-image: url('#{$dir-assets}/vectors/study-incorrect.svg');
+	height: 44px;
+	width: 59px;
+	&.disabled {
+		background-image: url('#{$dir-assets}/vectors/study-incorrect-disabled.svg');
+	}
 }
+
 .icon-study-info {
-  background-image: url('#{$dir-assets}/vectors/study-info.svg');
-  height: 23px;
-  width: 23px;
+	background-image: url('#{$dir-assets}/vectors/study-info.svg');
+	height: 23px;
+	width: 23px;
 }
+
 .icon-study-leech {
-  background-image: url('#{$dir-assets}/vectors/study-leech.svg');
-  height: 114px;
-  width: 114px;
+	background-image: url('#{$dir-assets}/vectors/study-leech.svg');
+	height: 114px;
+	width: 114px;
 }
+
 .icon-study-new-character {
-  background-image: url('#{$dir-assets}/vectors/study-new-character.svg');
-  height: 114px;
-  width: 114px;
+	background-image: url('#{$dir-assets}/vectors/study-new-character.svg');
+	height: 114px;
+	width: 114px;
 }
+
 .icon-study-show {
-  background-image: url('#{$dir-assets}/vectors/study-show.svg');
-  height: 34px;
-  width: 58px;
-  &.disabled { background-image: url('#{$dir-assets}/vectors/study-show-disabled.svg'); }
+	background-image: url('#{$dir-assets}/vectors/study-show.svg');
+	height: 34px;
+	width: 58px;
+	&.disabled {
+		background-image: url('#{$dir-assets}/vectors/study-show-disabled.svg');
+	}
 }
+
 .icon-study-stroke-order {
-  background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
-  height: 50px;
-  width: 52px;
-  &.disabled { background-image: url('#{$dir-assets}/vectors/study-stroke-order-disabled.svg'); }
+	background-image: url('#{$dir-assets}/vectors/study-stroke-order.svg');
+	height: 50px;
+	width: 52px;
+	&.disabled {
+		background-image: url('#{$dir-assets}/vectors/study-stroke-order-disabled.svg');
+	}
 }
+
 .icon-study-word-edit {
-  background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
-  height: 23px;
-  width: 19px;
+	background-image: url('#{$dir-assets}/vectors/study-word-edit.svg');
+	height: 23px;
+	width: 19px;
 }
+
 .icon-study-word-star {
-  background-image: url('#{$dir-assets}/vectors/study-word-star.svg');
-  height: 24px;
-  width: 24px;
+	background-image: url('#{$dir-assets}/vectors/study-word-star.svg');
+	height: 24px;
+	width: 24px;
 }
+
 .icon-study-word-star-filled {
-  background-image: url('#{$dir-assets}/vectors/study-word-star-orange.svg');
-  height: 24px;
-  width: 24px;
+	background-image: url('#{$dir-assets}/vectors/study-word-star-orange.svg');
+	height: 24px;
+	width: 24px;
 }
+
 .icon-study-word-volume {
-  background-image: url('#{$dir-assets}/vectors/study-word-volume.svg');
-  height: 24px;
-  width: 24px;
+	background-image: url('#{$dir-assets}/vectors/study-word-volume.svg');
+	height: 24px;
+	width: 24px;
 }
 
 /*** STUDY: LIGHT ***/
 .icon-light-add-word {
-  background-image: url('#{$dir-assets}/vectors/study-light-add-word.svg');
-  height: 31px;
-  width: 31px;
+	background-image: url('#{$dir-assets}/vectors/study-light-add-word.svg');
+	height: 31px;
+	width: 31px;
 }
+
 .icon-light-collapse-nav {
-  background-image: url('#{$dir-assets}/vectors/study-light-collapse-nav.svg');
-  height: 31px;
-  width: 31px;
+	background-image: url('#{$dir-assets}/vectors/study-light-collapse-nav.svg');
+	height: 31px;
+	width: 31px;
 }

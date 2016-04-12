@@ -2,30 +2,30 @@
 
 gelato-page[data-name='account-billing-history'] {
 
-  background: $background-primary;
-  padding-top: 75px;
+	background: $background-primary;
+	padding-top: 75px;
 
-  .table-oversized-wrapper {
-    margin-top: 30px;
-  }
+	.table-oversized-wrapper {
+		margin-top: 30px;
+	}
 
-  .date-td {
-    width: 25%;
-  }
+	.date-td {
+		width: 25%;
+	}
 
-  .service-td {
-    width: 15%;
-  }
+	.service-td {
+		width: 15%;
+	}
 
-  .length-td {
-    width: 20%;
-  }
+	.length-td {
+		width: 20%;
+	}
 
-  .state-td {
-    width: 20%;
-  }
+	.state-td {
+		width: 20%;
+	}
 
-  .charged-td {
-    width: 20%;
-  }
+	.charged-td {
+		width: 20%;
+	}
 }

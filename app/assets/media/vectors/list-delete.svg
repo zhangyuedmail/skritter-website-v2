@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="10px" height="11px" viewBox="0 0 10 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
-    <title>list-delete</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="list-delete" sketch:type="MSArtboardGroup" fill="#9CA0A4">
-            <path d="M9.04875,10.04875 C8.57975,10.51775 7.81975,10.51775 7.35175,10.04875 L4.70075,7.01875 L2.04975,10.04775 C1.58075,10.51675 0.82075,10.51675 0.35275,10.04775 C-0.11625,9.57875 -0.11625,8.81875 0.35275,8.35075 L3.11075,5.20075 L0.35175,2.04875 C-0.11725,1.57975 -0.11725,0.82075 0.35175,0.35175 C0.82075,-0.11725 1.57975,-0.11725 2.04875,0.35175 L4.70075,3.38275 L7.35175,0.35175 C7.82075,-0.11725 8.57975,-0.11725 9.04875,0.35175 C9.51775,0.82075 9.51775,1.58075 9.04875,2.04875 L6.29075,5.20075 L9.04875,8.35075 C9.51775,8.81975 9.51775,9.57975 9.04875,10.04875 L9.04875,10.04875 Z" id="Shape" sketch:type="MSShapeGroup"></path>
-        </g>
-    </g>
+<svg width="10px" height="11px" viewBox="0 0 10 11" version="1.1" xmlns="http://www.w3.org/2000/svg"
+		 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+	<!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+	<title>list-delete</title>
+	<desc>Created with Sketch.</desc>
+	<defs></defs>
+	<g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+		<g id="list-delete" sketch:type="MSArtboardGroup" fill="#9CA0A4">
+			<path
+				d="M9.04875,10.04875 C8.57975,10.51775 7.81975,10.51775 7.35175,10.04875 L4.70075,7.01875 L2.04975,10.04775 C1.58075,10.51675 0.82075,10.51675 0.35275,10.04775 C-0.11625,9.57875 -0.11625,8.81875 0.35275,8.35075 L3.11075,5.20075 L0.35175,2.04875 C-0.11725,1.57975 -0.11725,0.82075 0.35175,0.35175 C0.82075,-0.11725 1.57975,-0.11725 2.04875,0.35175 L4.70075,3.38275 L7.35175,0.35175 C7.82075,-0.11725 8.57975,-0.11725 9.04875,0.35175 C9.51775,0.82075 9.51775,1.58075 9.04875,2.04875 L6.29075,5.20075 L9.04875,8.35075 C9.51775,8.81975 9.51775,9.57975 9.04875,10.04875 L9.04875,10.04875 Z"
+				id="Shape" sketch:type="MSShapeGroup"></path>
+		</g>
+	</g>
 </svg>

@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <!-- Generator: Sketch 3.3 (11970) - http://www.bohemiancoding.com/sketch -->
-    <title>marketing-flashcards</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
-            <feOffset dx="1" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="0" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
-            <feOffset dx="1" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
-            <feGaussianBlur stdDeviation="0" in="shadowOffsetInner1" result="shadowBlurInner1"></feGaussianBlur>
-            <feComposite in="shadowBlurInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.035 0" in="shadowInnerInner1" type="matrix" result="shadowMatrixInner1"></feColorMatrix>
-            <feMerge>
-                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-                <feMergeNode in="shadowMatrixInner1"></feMergeNode>
-            </feMerge>
-        </filter>
-    </defs>
-    <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="marketing-flashcards" sketch:type="MSArtboardGroup" filter="url(#filter-1)" fill="#87A64B">
-            <path d="M46.5538669,17.7947815 L28.6887482,13.004226 L25.5616324,1.33744744 C25.3000394,0.363015823 24.2536676,-0.203402556 23.2264953,0.0678062443 L1.44468208,5.90479564 C0.417509748,6.17840452 -0.201673572,7.19603754 0.0599193813,8.17046916 L7.81171056,37.0938077 C8.07330351,38.0682393 9.11727539,38.6370577 10.1420478,38.3586487 L18.8130142,36.0377734 L17.632246,40.4491165 C17.3706531,41.4235482 17.9898364,42.4411812 19.0170087,42.71239 L38.4804844,47.9301593 C39.5076567,48.2061682 40.5492287,47.6397499 40.8132215,46.6605181 L47.9410295,20.0580549 C48.2002226,19.0836233 47.5810392,18.0659903 46.5538669,17.7947815 L46.5538669,17.7947815 Z M3.91901542,8.71288676 L22.7105092,3.68232353 L29.6655218,29.646366 L10.8740281,34.6769292 L3.91901542,8.71288676 L3.91901542,8.71288676 Z M37.6261074,44.3108419 L21.2729479,39.8394968 L22.5593133,35.0345409 L31.9214611,32.5216593 C32.9486334,32.2504505 33.5726166,31.2328175 33.3086237,30.2583859 L29.6895212,16.7531477 L43.9619367,20.6676747 L37.6261074,44.3108419 L37.6261074,44.3108419 Z" id="documents" sketch:type="MSShapeGroup"></path>
-        </g>
-    </g>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg"
+		 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+	<!-- Generator: Sketch 3.3 (11970) - http://www.bohemiancoding.com/sketch -->
+	<title>marketing-flashcards</title>
+	<desc>Created with Sketch.</desc>
+	<defs>
+		<filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
+			<feOffset dx="1" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+			<feGaussianBlur stdDeviation="0" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+			<feColorMatrix values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix"
+										 result="shadowMatrixOuter1"></feColorMatrix>
+			<feOffset dx="1" dy="1" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+			<feGaussianBlur stdDeviation="0" in="shadowOffsetInner1" result="shadowBlurInner1"></feGaussianBlur>
+			<feComposite in="shadowBlurInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"
+									 result="shadowInnerInner1"></feComposite>
+			<feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.035 0" in="shadowInnerInner1" type="matrix"
+										 result="shadowMatrixInner1"></feColorMatrix>
+			<feMerge>
+				<feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+				<feMergeNode in="SourceGraphic"></feMergeNode>
+				<feMergeNode in="shadowMatrixInner1"></feMergeNode>
+			</feMerge>
+		</filter>
+	</defs>
+	<g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+		<g id="marketing-flashcards" sketch:type="MSArtboardGroup" filter="url(#filter-1)" fill="#87A64B">
+			<path
+				d="M46.5538669,17.7947815 L28.6887482,13.004226 L25.5616324,1.33744744 C25.3000394,0.363015823 24.2536676,-0.203402556 23.2264953,0.0678062443 L1.44468208,5.90479564 C0.417509748,6.17840452 -0.201673572,7.19603754 0.0599193813,8.17046916 L7.81171056,37.0938077 C8.07330351,38.0682393 9.11727539,38.6370577 10.1420478,38.3586487 L18.8130142,36.0377734 L17.632246,40.4491165 C17.3706531,41.4235482 17.9898364,42.4411812 19.0170087,42.71239 L38.4804844,47.9301593 C39.5076567,48.2061682 40.5492287,47.6397499 40.8132215,46.6605181 L47.9410295,20.0580549 C48.2002226,19.0836233 47.5810392,18.0659903 46.5538669,17.7947815 L46.5538669,17.7947815 Z M3.91901542,8.71288676 L22.7105092,3.68232353 L29.6655218,29.646366 L10.8740281,34.6769292 L3.91901542,8.71288676 L3.91901542,8.71288676 Z M37.6261074,44.3108419 L21.2729479,39.8394968 L22.5593133,35.0345409 L31.9214611,32.5216593 C32.9486334,32.2504505 33.5726166,31.2328175 33.3086237,30.2583859 L29.6895212,16.7531477 L43.9619367,20.6676747 L37.6261074,44.3108419 L37.6261074,44.3108419 Z"
+				id="documents" sketch:type="MSShapeGroup"></path>
+		</g>
+	</g>
 </svg>

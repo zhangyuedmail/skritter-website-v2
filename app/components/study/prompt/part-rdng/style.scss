@@ -2,32 +2,34 @@
 
 gelato-component[data-name="study-prompt-part-rdng"] {
 
-  height: 100%;
-  position: absolute;
-  text-align: center;
-  width: 100%;
+	height: 100%;
+	position: absolute;
+	text-align: center;
+	width: 100%;
 
-  img { display: none; }
+	img {
+		display: none;
+	}
 
-  .answer {
-    color: #404851;
-    font-family: $font-ubuntu;
-    font-size: 18px;
-    font-weight: 300;
-    padding-top: 10%;
-  }
+	.answer {
+		color: #404851;
+		font-family: $font-ubuntu;
+		font-size: 18px;
+		font-weight: 300;
+		padding-top: 10%;
+	}
 
-  .question {
-    color: #b2b3b4;
-    font-family: $font-slab;
-    font-size: 28px;
-    font-weight: 300;
-  }
+	.question {
+		color: #b2b3b4;
+		font-family: $font-slab;
+		font-size: 28px;
+		font-weight: 300;
+	}
 
-  .writing {
-    color: #333950;
-    font-size: 64px;
-    padding-top: 10%;
-  }
+	.writing {
+		color: #333950;
+		font-size: 64px;
+		padding-top: 10%;
+	}
 
 }

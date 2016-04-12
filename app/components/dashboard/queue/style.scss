@@ -2,23 +2,23 @@
 
 gelato-component[data-name='dashboard-queue'] {
 
-  font-family: $font-ubuntu;
-  font-weight: 300;
-  margin: 30px 10px 0 10px;
+	font-family: $font-ubuntu;
+	font-weight: 300;
+	margin: 30px 10px 0 10px;
 
-  .col-md-2,
-  .col-md-4 {
-    margin-bottom: 10px;
-  }
+	.col-md-2,
+	.col-md-4 {
+		margin-bottom: 10px;
+	}
 
-  .col-md-2 a {
-    color: $green5;
-  }
+	.col-md-2 a {
+		color: $green5;
+	}
 
-  @media (max-width: 992px) {
-    .progress {
-      height: 10px;
-    }
-  }
+	@media (max-width: 992px) {
+		.progress {
+			height: 10px;
+		}
+	}
 
 }

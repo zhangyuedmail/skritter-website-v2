@@ -1,64 +1,64 @@
 screen-loader {
 
-  background-color: #262b30;
-  color: #fbfafc;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 9999;
+	background-color: #262b30;
+	color: #fbfafc;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 9999;
 
-  &.fade-in {
-    opacity: 1;
-    transition: visibility 0.5s, opacity 0.5s linear;
-    visibility: visible;
-  }
+	&.fade-in {
+		opacity: 1;
+		transition: visibility 0.5s, opacity 0.5s linear;
+		visibility: visible;
+	}
 
-  &.fade-out {
-    opacity: 0;
-    transition: visibility 0.5s, opacity 0.5s linear;
-    visibility: hidden;
-  }
+	&.fade-out {
+		opacity: 0;
+		transition: visibility 0.5s, opacity 0.5s linear;
+		visibility: hidden;
+	}
 
-  .screen-message {
-    color: #ebeaf0;
-    font-family: "Roboto Slab", sans-serif;
-    font-size: 1.5em;
-    font-weight: 300;
-    &.fade-out {
-      opacity: 0;
-      transition: visibility 1s, opacity 1s linear;
-      visibility: hidden;
-    }
-  }
+	.screen-message {
+		color: #ebeaf0;
+		font-family: "Roboto Slab", sans-serif;
+		font-size: 1.5em;
+		font-weight: 300;
+		&.fade-out {
+			opacity: 0;
+			transition: visibility 1s, opacity 1s linear;
+			visibility: hidden;
+		}
+	}
 
-  .screen-message-container {
-    height: 200px;
-    position: relative;
-    text-align: center;
-    top: 45%;
-    transform: translateY(-45%);
-    width: 100%;
-  }
+	.screen-message-container {
+		height: 200px;
+		position: relative;
+		text-align: center;
+		top: 45%;
+		transform: translateY(-45%);
+		width: 100%;
+	}
 
-  .screen-notice {
-    font-family: "Ubuntu", sans-serif;
-    font-size: 1em;
-    font-weight: 300;
-  }
+	.screen-notice {
+		font-family: "Ubuntu", sans-serif;
+		font-size: 1em;
+		font-weight: 300;
+	}
 
-  .screen-title {
-    font-family: "Ubuntu", sans-serif;
-    font-size: 3em;
-    font-weight: 400;
-  }
+	.screen-title {
+		font-family: "Ubuntu", sans-serif;
+		font-size: 3em;
+		font-weight: 400;
+	}
 
-  .screen-title-container {
-    position: relative;
-    text-align: center;
-    top: 35%;
-    transform: translateY(-35%);
-    width: 100%;
-  }
+	.screen-title-container {
+		position: relative;
+		text-align: center;
+		top: 35%;
+		transform: translateY(-35%);
+		width: 100%;
+	}
 
 }
