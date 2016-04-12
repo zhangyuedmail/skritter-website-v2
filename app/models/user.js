@@ -240,29 +240,34 @@ module.exports = SkritterModel.extend({
             return this;
         }
         this.db = new Dexie(this.id + '-database');
-        this.db.version(2).stores({
-            items: [
-                'id',
-                '*changed',
-                'created',
-                'interval',
-                '*last',
-                '*next',
-                'part',
-                'previousInterval',
-                'previousSuccess',
-                'reviews',
-                'successes',
-                'style',
-                'timeStudied',
-                'vocabIds'
-            ].join(','),
-            reviews: [
-                'group',
-                '*created',
-                'reviews'
-            ].join(',')
-        });
+        this.db.version(3).stores(
+            {
+                items: [
+                    'id',
+                    '*changed',
+                    'created',
+                    'interval',
+                    '*lang',
+                    '*last',
+                    '*next',
+                    'part',
+                    'previousInterval',
+                    'previousSuccess',
+                    'reviews',
+                    'sectionIds',
+                    'successes',
+                    'style',
+                    'timeStudied',
+                    'vocabListIds',
+                    'vocabIds'
+                ].join(','),
+                reviews: [
+                    'group',
+                    '*created',
+                    'reviews'
+                ].join(',')
+            }
+        );
         this.db.open()
             .then(function() {
                 callback();

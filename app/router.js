@@ -299,11 +299,11 @@ module.exports = Router.extend({
     navigateStudy: function(listId, sectionId) {
         if (app.user.isLoggedIn()) {
             if (sectionId) {
-                this.go('pages/study-section', {listId: listId, sectionId: sectionId});
+                //TODO: replace when single list section study ready for action
+                //this.go('pages/study-section', {listId: listId, sectionId: sectionId});
+                this.go('pages/study');
             } else if (listId) {
-                //TODO: replace when single list study supported
-                location.replace('http://www.skritter.com/study/list?list=' + listId);
-                //this.go('pages/study-list', {listId: listId});
+                this.go('pages/study-list', {listId: listId});
             } else {
                 this.go('pages/study');
             }
