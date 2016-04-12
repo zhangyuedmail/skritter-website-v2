@@ -15,8 +15,8 @@ module.exports = GelatoDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-select-chinese': 'handleClickButtonSelectChinese',
-        'vclick #button-select-japanese': 'handleClickButtonSelectJapanese'
+        'click #button-select-chinese': 'handleClickButtonSelectChinese',
+        'click #button-select-japanese': 'handleClickButtonSelectJapanese'
     },
     /**
      * @property template

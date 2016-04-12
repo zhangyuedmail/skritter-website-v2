@@ -38,15 +38,15 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'change input[name="payment-method"]': 'handleChangePaymentMethod',
-        'vclick #redeem-code-btn': 'handleClickRedeemCodeButton',
-        'vclick #go-on-vacation-link': 'handleClickGoOnVacationLink',
-        'vclick #cancel-vacation-link': 'handleClickCancelVacationLink',
-        'vclick #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton',
-        'vclick #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
-        'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
-        'vclick .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
-        'vclick #unsubscribe-btn': 'handleClickUnsubscribeButton',
-        'vclick #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
+        'click #redeem-code-btn': 'handleClickRedeemCodeButton',
+        'click #go-on-vacation-link': 'handleClickGoOnVacationLink',
+        'click #cancel-vacation-link': 'handleClickCancelVacationLink',
+        'click #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton',
+        'click #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
+        'click #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
+        'click .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
+        'click #unsubscribe-btn': 'handleClickUnsubscribeButton',
+        'click #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
     },
     /**
      * @property paypalPlans

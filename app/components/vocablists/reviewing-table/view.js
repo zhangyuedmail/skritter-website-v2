@@ -21,9 +21,9 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
-        'vclick .restart-adding-link': 'handleClickRestartAddingLink',
-        'vclick .list-settings-span': 'handleClickListSettingsSpan',
-        'vclick .remove-list-span': 'handleClickRemoveListSpan'
+        'click .restart-adding-link': 'handleClickRestartAddingLink',
+        'click .list-settings-span': 'handleClickListSettingsSpan',
+        'click .remove-list-span': 'handleClickRemoveListSpan'
     },
     /**
      * @property template

@@ -11,10 +11,10 @@ module.exports = BootstrapNavbar.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-beacon': 'handleClickButtonBeacon',
-        'vclick #button-logout': 'handleClickButtonLogout',
-        'vclick #switch-targetLang': 'handleClickSwitchTargetLang',
-        'vclick .item-dropdown': 'handleClickDropdown'
+        'click #button-beacon': 'handleClickButtonBeacon',
+        'click #button-logout': 'handleClickButtonLogout',
+        'click #switch-targetLang': 'handleClickSwitchTargetLang',
+        'click .item-dropdown': 'handleClickDropdown'
     },
     /**
      * @property template

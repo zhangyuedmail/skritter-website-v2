@@ -18,8 +18,8 @@ var VocabCreatorDialog = GelatoDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-add-word': 'handleClickButtonAddWord',
-        'vclick #button-cancel': 'handleClickButtonCancel'
+        'click #button-add-word': 'handleClickButtonAddWord',
+        'click #button-cancel': 'handleClickButtonCancel'
     },
     /**
      * @property template

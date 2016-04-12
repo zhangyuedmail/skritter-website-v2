@@ -28,8 +28,8 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'change input[type="checkbox"]': 'handleChangeCheckbox',
-        'vclick #load-more-btn': 'handleClickLoadMoreButton',
-        'vclick #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
+        'click #load-more-btn': 'handleClickLoadMoreButton',
+        'click #unban-vocabs-btn': 'handleClickUnbanVocabsButton'
     },
     /**
      * @method remove

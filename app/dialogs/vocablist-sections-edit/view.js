@@ -38,10 +38,10 @@ module.exports = BootstrapDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #confirm-btn': 'handleClickConfirmButton',
-        'vclick #cancel-btn': 'handleClickCancelButton',
-        'vclick .glyphicon-remove': 'handleClickRemoveLink',
-        'vclick #add-section-btn': 'handleClickAddSectionButton'
+        'click #confirm-btn': 'handleClickConfirmButton',
+        'click #cancel-btn': 'handleClickCancelButton',
+        'click .glyphicon-remove': 'handleClickRemoveLink',
+        'click #add-section-btn': 'handleClickAddSectionButton'
     },
     /**
      * @method handleClickCloseButton

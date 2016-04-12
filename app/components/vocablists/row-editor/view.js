@@ -28,11 +28,11 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
-        'vclick .add-entry': 'handleClickAddEntry',
-        'vclick .remove-row': 'handleClickRemoveRow',
-        'vclick .result-row': 'handleClickResultRow',
-        'vclick .show-results': 'handleClickShowResults',
-        'vclick .study-writing': 'handleClickStudyWriting'
+        'click .add-entry': 'handleClickAddEntry',
+        'click .remove-row': 'handleClickRemoveRow',
+        'click .result-row': 'handleClickResultRow',
+        'click .show-results': 'handleClickShowResults',
+        'click .study-writing': 'handleClickStudyWriting'
     },
     /**
      * @property template

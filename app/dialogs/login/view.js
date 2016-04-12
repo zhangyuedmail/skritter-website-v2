@@ -23,7 +23,7 @@ module.exports = BootstrapDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-login': 'handleClickLogin'
+        'click #button-login': 'handleClickLogin'
     },
     /**
      * @method handleClickLogin
