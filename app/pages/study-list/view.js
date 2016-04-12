@@ -3,6 +3,7 @@ var GelatoPage = require('gelato/page');
 var Prompt = require('components/study/prompt/view');
 var Toolbar = require('components/study/toolbar/view');
 var Items = require('collections/items');
+var Vocablist = require('models/vocablist');
 var Navbar = require('navbars/default/view');
 
 /**
@@ -18,19 +19,18 @@ module.exports = GelatoPage.extend({
     initialize: function(options) {
         ScreenLoader.show();
         this.item = null;
-        this.listId = options.listId;
         this.navbar = new Navbar();
         this.prompt = new Prompt();
         this.queue = [];
         this.schedule = new Items();
         this.scheduleState = 'standby';
         this.toolbar = new Toolbar({page: this});
+        this.vocablist = new Vocablist({id: options.listId});
         this.listenTo(this.schedule, 'populate', this.handleSchedulePopulate);
         this.listenTo(this.schedule, 'load', this.handleScheduledLoad);
         this.listenTo(this.prompt, 'next', this.handlePromptNext);
         this.listenTo(this.prompt, 'previous', this.handlePromptPrevious);
         window.onbeforeunload = this.handleWindowOnBeforeUnload.bind(this);
-        this.loadSchedule();
     },
     /**
      * @property events
@@ -56,6 +56,7 @@ module.exports = GelatoPage.extend({
         this.navbar.setElement('#navbar-container').render();
         this.prompt.setElement('#study-prompt-container').render();
         this.toolbar.setElement('#study-toolbar-container').render();
+        this.loadSchedule();
         return this;
     },
     /**
@@ -137,37 +138,62 @@ module.exports = GelatoPage.extend({
         var parts = app.user.getFilteredParts();
         var studyKana = app.user.get('studyKana');
         var styles = app.user.getFilteredStyles();
-        app.user.db.items
-            .toArray()
-            .then(function(items) {
-                items = items.filter(function(item) {
-                    if (!item.vocabIds.length) {
-                        return false;
-                    } else if (item.lang !== lang) {
-                        return false
-                    } else if (item.vocabListIds && item.vocabListIds.indexOf(self.listId) === -1) {
-                        return false;
-                    } else if (parts.indexOf(item.part) === -1) {
-                        return false;
-                    } else if (styles.indexOf(item.style) === -1) {
-                        return false;
-                    }
-                    if (item.lang === 'ja') {
-                        var writing = item.id.split('-')[2];
-                        // Skip all kana items when no kanji exists
-                        if (!studyKana && app.fn.isKana(writing)) {
-                            return false;
+        async.series(
+            [
+                function(callback) {
+                    self.vocablist.fetch({
+                        error: function(error) {
+                            callback(error);
+                        },
+                        success: function() {
+                            document.title = self.vocablist.get('name') + ' - Study - Skritter';
+                            callback();
                         }
-                    }
-                    return true;
-                });
-                self.queue = [];
-                self.schedule.set(items.splice(0, 2000));
-                self.schedule.trigger('load', self.schedule);
-            })
-            .catch(function(error) {
-                self.schedule.trigger('error', error);
-            });
+                    });
+                },
+                function(callback) {
+                    app.user.db.items
+                        .toArray()
+                        .then(function(items) {
+                            items = items.filter(function(item) {
+                                if (!item.vocabIds.length) {
+                                    return false;
+                                } else if (item.lang !== lang) {
+                                    return false
+                                } else if (item.vocabListIds.indexOf(self.vocablist.id) === -1) {
+                                    return false;
+                                } else if (parts.indexOf(item.part) === -1) {
+                                    return false;
+                                } else if (styles.indexOf(item.style) === -1) {
+                                    return false;
+                                }
+                                if (item.lang === 'ja') {
+                                    var writing = item.id.split('-')[2];
+                                    // Skip all kana items when no kanji exists
+                                    if (!studyKana && app.fn.isKana(writing)) {
+                                        return false;
+                                    }
+                                }
+                                return true;
+                            });
+                            self.queue = [];
+                            self.schedule.set(items.splice(0, 2000));
+                            callback();
+                        })
+                        .catch(function(error) {
+                           callback(error); 
+                        });
+                }
+            ],
+            function(error) {
+                if (error) {
+                    self.schedule.trigger('error', error);
+                } else {
+                    self.schedule.trigger('load', self.schedule);
+                }
+            }
+        );
+        
     },
     /**
      * @method next

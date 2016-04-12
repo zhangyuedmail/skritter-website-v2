@@ -35,14 +35,14 @@ module.exports = SkritterCollection.extend({
      */
     addItems: function(options, callback) {
         var self = this;
+        options = options || {};
         async.waterfall([
             function(callback) {
                 self.fetch({
-                    data: JSON.stringify(options),
                     remove: false,
                     sort: false,
                     type: 'POST',
-                    url: app.getApiUrl() + 'items/add',
+                    url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
                     error: function(error) {
                         callback(error);
                     },
