@@ -19,6 +19,7 @@
   },
   "scripts": {
     "build": "node ./bin/build",
+    "prune": "node ./bin/prune",
     "start": "node ./bin/start",
     "test": "node ./bin/test"
   },
