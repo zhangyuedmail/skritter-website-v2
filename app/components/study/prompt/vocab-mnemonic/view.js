@@ -19,7 +19,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #show-mnemonic': 'handleClickShowMnemonic'
+        'click #show-mnemonic': 'handleClickShowMnemonic'
     },
     /**
      * @property template

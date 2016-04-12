@@ -23,7 +23,7 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keyup #input-field': 'handleKeyUpInputField',
-        'vclick #button-reset': 'handleClickButtonReset'
+        'click #button-reset': 'handleClickButtonReset'
     },
     /**
      * @property template

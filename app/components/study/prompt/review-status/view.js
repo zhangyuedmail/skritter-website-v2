@@ -19,7 +19,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #save-reviews': 'handleClickSaveReviews'
+        'click #save-reviews': 'handleClickSaveReviews'
     },
     /**
      * @property template

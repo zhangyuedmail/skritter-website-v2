@@ -23,12 +23,12 @@ module.exports = GelatoComponent.extend({
      */
     events: {
         'change #image-upload-input': 'handleChangeImageUploadInput',
-        'vclick #add-to-queue': 'handleClickAddToQueue',
-        'vclick #copy-link': 'handleClickCopyLink',
-        'vclick #delete-link': 'handleClickDeleteLink',
-        'vclick #publish-link': 'handleClickPublishLink',
-        'vclick #study-settings-link': 'handleClickStudySettingsLink',
-        'vclick #image-upload-link': 'handleClickImageUploadLink'
+        'click #add-to-queue': 'handleClickAddToQueue',
+        'click #copy-link': 'handleClickCopyLink',
+        'click #delete-link': 'handleClickDeleteLink',
+        'click #publish-link': 'handleClickPublishLink',
+        'click #study-settings-link': 'handleClickStudySettingsLink',
+        'click #image-upload-link': 'handleClickImageUploadLink'
     },
     /**
      * @property template

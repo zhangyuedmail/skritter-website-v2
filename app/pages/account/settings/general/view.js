@@ -31,10 +31,10 @@ module.exports = GelatoPage.extend({
     events: {
         'change #avatar-upload-input': 'handleChangeAvatarUploadInput',
         'change #field-country': 'handleSelectCountry',
-        'vclick #button-save': 'handleClickButtonSave',
-        'vclick #field-change-password': 'handleClickChangePassword',
-        'vclick #change-avatar': 'handleClickChangeAvatar',
-        'vclick #reset-all-data': 'handleClickResetAllData'
+        'click #button-save': 'handleClickButtonSave',
+        'click #field-change-password': 'handleClickChangePassword',
+        'click #change-avatar': 'handleClickChangeAvatar',
+        'click #reset-all-data': 'handleClickResetAllData'
     },
     /**
      * @property title

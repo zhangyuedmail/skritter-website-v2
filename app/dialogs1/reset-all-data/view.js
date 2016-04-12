@@ -15,8 +15,8 @@ var ResetAllDataDialog = GelatoDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-cancel': 'handleClickButtonCancel',
-        'vclick #button-confirm': 'handleClickButtonConfirm'
+        'click #button-cancel': 'handleClickButtonCancel',
+        'click #button-confirm': 'handleClickButtonConfirm'
     },
     /**
      * @property template

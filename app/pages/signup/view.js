@@ -31,7 +31,7 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'change #signup-payment-method': 'handleChangeSignupPaymentMethod',
-        'vclick #signup-submit': 'handleClickSignupSubmit'
+        'click #signup-submit': 'handleClickSignupSubmit'
     },
 
     /**

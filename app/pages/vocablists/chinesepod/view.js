@@ -39,10 +39,10 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'submit #login-form': 'handleSubmitLoginForm',
-        'vclick #logout-chinesepod-link': 'handleClickLogoutChineseLink',
+        'click #logout-chinesepod-link': 'handleClickLogoutChineseLink',
         'keyup #search-input': 'handleChangeSearchInput',
         'change input[name="view-option"]': 'handleChangeViewOption',
-        'vclick .lookup-link': 'handleClickLookupLink'
+        'click .lookup-link': 'handleClickLookupLink'
     },
     /**
      * @property title

@@ -11,8 +11,8 @@ module.exports = GelatoComponent.extend({
      * @typeof {Object}
      */
     events: {
-        'vclick .add-to-queue-link': 'handleClickAddToQueueLink',
-        'vclick #load-more-btn': 'handleClickLoadMoreButton'
+        'click .add-to-queue-link': 'handleClickAddToQueueLink',
+        'click #load-more-btn': 'handleClickLoadMoreButton'
     },
     /**
      * @method initialize
