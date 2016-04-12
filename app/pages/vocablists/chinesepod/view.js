@@ -26,12 +26,12 @@ module.exports = GelatoPage.extend({
         this.password = '';
         this.errorMessage = '';
         this.searchString = '';
+        this.chinesepodSession.fetch();
         this.listenToOnce(this.chinesepodSession, 'state', this.handleChinesepodSessionLoaded);
         this.listenTo(this.chinesepodLabels, 'state', this.render);
         this.listenTo(this.chinesepodLessons, 'state', this.render);
         this.listenTo(this.chinesepodLabels, 'error', this.handleChinesePodError);
         this.listenTo(this.chinesepodLessons, 'error', this.handleChinesePodError);
-        this.chinesepodSession.fetch();
     },
     /**
      * @property events
