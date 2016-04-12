@@ -162,7 +162,7 @@ module.exports = GelatoPage.extend({
             url: url,
             headers: headers,
             success: function (response) {
-                document.location.href = '/vocablist/view/' + response.vocabListID;
+                document.location.href = '/vocablists/view/' + response.vocabListID;
             }
         });
     }
