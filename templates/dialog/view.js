@@ -9,7 +9,8 @@ var Dialog = GelatoDialog.extend({
      * @method initialize
      * @param {Object} options
      */
-    initialize: function(options) {},
+    initialize: function(options) {
+    },
     /**
      * @property events
      * @type {Object}

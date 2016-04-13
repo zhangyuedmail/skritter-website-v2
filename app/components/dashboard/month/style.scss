@@ -5,13 +5,21 @@ gelato-component[data-name='dashboard-month'] {
   #heatmap {
     margin-bottom: -100px;
     margin-top: 50px;
-    rect { shape-rendering: auto; }
-    .cal-heatmap-container { margin: 25px auto; }
+    rect {
+      shape-rendering: auto;
+    }
+    .cal-heatmap-container {
+      margin: 25px auto;
+    }
     .graph-label,
-    .graph-legend { display: none; }
+    .graph-legend {
+      display: none;
+    }
     .graph-rect {
       cursor: inherit;
-      &:hover { stroke: none; }
+      &:hover {
+        stroke: none;
+      }
     }
     .q1 {
       background-color: #ededed;
@@ -33,11 +41,15 @@ gelato-component[data-name='dashboard-month'] {
       background-color: #3b6427;
       fill: #3b6427
     }
-    .subdomain-text { fill: $grey7; }
+    .subdomain-text {
+      fill: $grey7;
+    }
   }
 
   #streak {
-    > div { display: inline-block; }
+    > div {
+      display: inline-block;
+    }
     margin-top: 30px;
     text-align: center;
     .text {

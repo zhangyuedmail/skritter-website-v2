@@ -63,10 +63,10 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
-        'vclick #add-section': 'handleClickAddSection',
-        'vclick #discard-changes': 'handleClickDiscardChanges',
-        'vclick #edit-list': 'handleClickEditList',
-        'vclick #save-changes': 'handleClickSaveChanges'
+        'click #add-section': 'handleClickAddSection',
+        'click #discard-changes': 'handleClickDiscardChanges',
+        'click #edit-list': 'handleClickEditList',
+        'click #save-changes': 'handleClickSaveChanges'
     },
     /**
      * @property title

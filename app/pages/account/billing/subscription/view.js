@@ -20,10 +20,10 @@ module.exports = GelatoPage.extend({
      */
     initialize: function() {
         StripeLoader.load();
-        this.coupon = new Coupon({ code: '' });
+        this.coupon = new Coupon({code: ''});
         this.navbar = new DefaultNavbar();
         this.sidebar = new AccountSidebar();
-        this.subscription = new Subscription({ id: app.user.id });
+        this.subscription = new Subscription({id: app.user.id});
         this.listenTo(this.subscription, 'state', this.render);
         this.listenTo(this.coupon, 'sync', function(model, response) {
             this.subscription.set(response.Subscription);
@@ -38,15 +38,15 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'change input[name="payment-method"]': 'handleChangePaymentMethod',
-        'vclick #redeem-code-btn': 'handleClickRedeemCodeButton',
-        'vclick #go-on-vacation-link': 'handleClickGoOnVacationLink',
-        'vclick #cancel-vacation-link': 'handleClickCancelVacationLink',
-        'vclick #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton',
-        'vclick #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
-        'vclick #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
-        'vclick .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
-        'vclick #unsubscribe-btn': 'handleClickUnsubscribeButton',
-        'vclick #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
+        'click #redeem-code-btn': 'handleClickRedeemCodeButton',
+        'click #go-on-vacation-link': 'handleClickGoOnVacationLink',
+        'click #cancel-vacation-link': 'handleClickCancelVacationLink',
+        'click #unsubscribe-itunes-btn': 'handleClickUnsubscribeITunesButton',
+        'click #subscribe-stripe-btn': 'handleClickSubscribeStripeButton',
+        'click #update-stripe-subscription-btn': 'handleClickUpdateStripeSubscriptionButton',
+        'click .spoof-button-area button': 'handleClickSpoofButtonAreaButton',
+        'click #unsubscribe-btn': 'handleClickUnsubscribeButton',
+        'click #subscribe-paypal-btn': 'handleClickSubscribePaypalButton'
     },
     /**
      * @property paypalPlans
@@ -87,14 +87,14 @@ module.exports = GelatoPage.extend({
      */
     handleChangePaymentMethod: function() {
         var method = this.$('input[name="payment-method"]:checked').val();
-        this.$('.credit-card-form-group').toggleClass('hide', method!=='stripe');
-        this.$('.paypal-form-group').toggleClass('hide', method!=='paypal');
+        this.$('.credit-card-form-group').toggleClass('hide', method !== 'stripe');
+        this.$('.paypal-form-group').toggleClass('hide', method !== 'paypal');
     },
     /**
      * @method handleClickCancelVacationLink
      */
     handleClickCancelVacationLink: function() {
-        this.subscription.save({ vacation: false }, {
+        this.subscription.save({vacation: false}, {
             parse: true,
             method: 'PUT'
         });
@@ -187,51 +187,75 @@ module.exports = GelatoPage.extend({
         }
         if (client) {
             if (client === 'site') {
-                app.isWebsite = function() { return true; }
-                app.isMobile = function() { return false; }
-                app.isAndroid = function() { return false; }
-                app.isIOS = function() { return false; }
+                app.isWebsite = function() {
+                    return true;
+                }
+                app.isMobile = function() {
+                    return false;
+                }
+                app.isAndroid = function() {
+                    return false;
+                }
+                app.isIOS = function() {
+                    return false;
+                }
             }
             if (client === 'ios') {
-                app.isWebsite = function() { return false; }
-                app.isMobile = function() { return true; }
-                app.isAndroid = function() { return false; }
-                app.isIOS = function() { return true; }
+                app.isWebsite = function() {
+                    return false;
+                }
+                app.isMobile = function() {
+                    return true;
+                }
+                app.isAndroid = function() {
+                    return false;
+                }
+                app.isIOS = function() {
+                    return true;
+                }
             }
             if (client === 'android') {
-                app.isWebsite = function() { return false; }
-                app.isMobile = function() { return true; }
-                app.isAndroid = function() { return true; }
-                app.isIOS = function() { return false; }
+                app.isWebsite = function() {
+                    return false;
+                }
+                app.isMobile = function() {
+                    return true;
+                }
+                app.isAndroid = function() {
+                    return true;
+                }
+                app.isIOS = function() {
+                    return false;
+                }
             }
         }
         if (discount) {
             if (discount === 'on') {
                 this.subscription.set({
                     discount: {
-                      price: 4.99,
-                      expires: "2020-01-01"
+                        price: 4.99,
+                        expires: "2020-01-01"
                     },
                     availablePlans: [{
-                  		"name": "1 month",
-                  		"price": "4.99",
-                  		"months": 1,
-                  		"discount": true,
-                  		"key": "one_month",
-                  		"fullName": "$4.99/month (discount)"
-                  	}]
+                        "name": "1 month",
+                        "price": "4.99",
+                        "months": 1,
+                        "discount": true,
+                        "key": "one_month",
+                        "fullName": "$4.99/month (discount)"
+                    }]
                 });
             }
             if (discount === 'off') {
                 this.subscription.set({
                     discount: false,
                     availablePlans: [{
-                      "name": "1 month",
-                      "price": "14.99",
-                      "months": 1,
-                      "discount": true,
-                      "key": "one_month",
-                      "fullName": "$14.99/month"
+                        "name": "1 month",
+                        "price": "14.99",
+                        "months": 1,
+                        "discount": true,
+                        "key": "one_month",
+                        "fullName": "$14.99/month"
                     }]
                 });
             }
@@ -246,7 +270,7 @@ module.exports = GelatoPage.extend({
                 });
             }
             if (vacation === 'off') {
-                this.subscription.set({ vacation: false });
+                this.subscription.set({vacation: false});
             }
         }
         $(event.target).closest('.list-group').find('button').removeClass('active');
@@ -283,15 +307,15 @@ module.exports = GelatoPage.extend({
         if (response.error) {
             this.setSubscribeStripeButtonDisabled(false);
             this.$('#card-error-alert')
-              .text(response.error.message)
-              .removeClass('hide');
+                .text(response.error.message)
+                .removeClass('hide');
         }
         else {
             var token = response.id;
             var url = (
-                app.getApiUrl() +
-                this.subscription.url() +
-                '/stripe/subscribe');
+            app.getApiUrl() +
+            this.subscription.url() +
+            '/stripe/subscribe');
             var headers = app.user.session.getHeaders();
             var data = {
                 token: token,
@@ -360,9 +384,9 @@ module.exports = GelatoPage.extend({
         }
         else {
             var url = (
-                app.getApiUrl() + this.subscription.url() + '/stripe');
+            app.getApiUrl() + this.subscription.url() + '/stripe');
             var headers = app.user.session.getHeaders();
-            var data = { plan: this.$('#plan-select').val() };
+            var data = {plan: this.$('#plan-select').val()};
             $.ajax({
                 url: url,
                 headers: headers,
@@ -386,13 +410,13 @@ module.exports = GelatoPage.extend({
         if (response.error) {
             this.setSubscribeStripeButtonDisabled(false);
             this.$('#card-error-alert')
-              .text(response.error.message)
-              .removeClass('hide');
+                .text(response.error.message)
+                .removeClass('hide');
         }
         else {
             var token = response.id;
             var url = (
-                app.getApiUrl() + this.subscription.url() + '/stripe');
+            app.getApiUrl() + this.subscription.url() + '/stripe');
             var headers = app.user.session.getHeaders();
             var data = {
                 token: token,

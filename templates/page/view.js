@@ -10,7 +10,8 @@ var Page = GelatoPage.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+    },
     /**
      * @property title
      * @type {String}

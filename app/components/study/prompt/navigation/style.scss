@@ -12,9 +12,15 @@ gelato-component[data-name="study-prompt-navigation"] {
     cursor: pointer;
     opacity: 0.2;
     position: absolute;
-    &:hover { opacity: 0.6; }
-    &#navigate-next { right: -50px; }
-    &#navigate-previous { left: -50px; }
+    &:hover {
+      opacity: 0.6;
+    }
+    &#navigate-next {
+      right: -50px;
+    }
+    &#navigate-previous {
+      left: -50px;
+    }
   }
 
 }

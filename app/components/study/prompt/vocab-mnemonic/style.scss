@@ -2,7 +2,9 @@
 
 gelato-component[data-name='study-prompt-vocab-mnemonic'] {
 
-  button { border-radius: 4px; }
+  button {
+    border-radius: 4px;
+  }
 
   label {
     color: $grey3;
@@ -14,7 +16,9 @@ gelato-component[data-name='study-prompt-vocab-mnemonic'] {
     color: $grey3;
     font-size: 14px;
     font-weight: 300;
-    textarea { width: 100%; }
+    textarea {
+      width: 100%;
+    }
   }
 
 }

@@ -10,8 +10,8 @@ module.exports = BootstrapDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick .button-add': 'handleClickButtonAdd',
-        'vclick #button-cancel': 'handleClickButtonCancel'
+        'click .button-add': 'handleClickButtonAdd',
+        'click #button-cancel': 'handleClickButtonCancel'
     },
     /**
      * @property template

@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #show-contained': 'handleClickShowContained'
+        'click #show-contained': 'handleClickShowContained'
     },
     /**
      * @property template

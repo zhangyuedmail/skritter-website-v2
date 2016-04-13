@@ -22,11 +22,11 @@ module.exports = GelatoComponent.extend({
             sort: 'official',
             lang: app.getLanguage()
         };
-        this.vocablists.fetch({ data: data });
+        this.vocablists.fetch({data: data});
         this.listenTo(this.vocablists, 'sync', function() {
             if (this.vocablists.cursor) {
                 data.cursor = this.vocablists.cursor;
-                this.vocablists.fetch({ data: data, remove: false })
+                this.vocablists.fetch({data: data, remove: false})
             }
         });
     },
@@ -35,9 +35,9 @@ module.exports = GelatoComponent.extend({
      * @typeof {Object}
      */
     events: {
-        'vclick #title-sort': 'handleClickTitleSort',
-        'vclick #popularity-sort': 'handleClickPopularitySort',
-        'vclick .add-to-queue-link': 'handleClickAddToQueueLink'
+        'click #title-sort': 'handleClickTitleSort',
+        'click #popularity-sort': 'handleClickPopularitySort',
+        'click .add-to-queue-link': 'handleClickAddToQueueLink'
     },
     /**
      * @property template

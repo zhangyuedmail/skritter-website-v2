@@ -16,20 +16,20 @@ bootstrap-dialog(data-name='study-settings')
               .col-sm-9#field-parts
                 .checkbox-inline
                   label
-                    input(type="checkbox", name="parts", value="rune", checked=user.isAddingPart('rune')&&user.isReviewingPart('rune'), disabled=!user.isAddingPart('rune'))
+                    input(type="checkbox", name="parts", value="rune", checked=user.isAddingPart('rune') && user.isReviewingPart('rune'), disabled=!user.isAddingPart('rune'))
                     | Writing
                 if (app.getLanguage() === 'zh')
                   .checkbox-inline
                     label
-                      input(type="checkbox", name="parts", value="tone", checked=user.isAddingPart('tone')&&user.isReviewingPart('tone'), disabled=!user.isAddingPart('tone'))
+                      input(type="checkbox", name="parts", value="tone", checked=user.isAddingPart('tone') && user.isReviewingPart('tone'), disabled=!user.isAddingPart('tone'))
                       | Tone
                 .checkbox-inline
                   label
-                    input(type="checkbox", name="parts", value="rdng", checked=user.isAddingPart('rdng')&&user.isReviewingPart('rdng'), disabled=!user.isAddingPart('rdng'))
+                    input(type="checkbox", name="parts", value="rdng", checked=user.isAddingPart('rdng') && user.isReviewingPart('rdng'), disabled=!user.isAddingPart('rdng'))
                     | Reading
                 .checkbox-inline
                   label
-                    input(type="checkbox", name="parts", value="defn", checked=user.isAddingPart('defn')&&user.isReviewingPart('defn'), disabled=!user.isAddingPart('defn'))
+                    input(type="checkbox", name="parts", value="defn", checked=user.isAddingPart('defn') && user.isReviewingPart('defn'), disabled=!user.isAddingPart('defn'))
                     | Definition
             .form-group
               label.col-sm-3.control-label(for="field-hide-reading") Hide reading

@@ -9,7 +9,7 @@ gelato-page(data-name='about')
       .author — John Pasden, ChinesePod
     #about-block.content-block
       .row
-        .col-md-8.story-wrapper
+        .col-md-12.story-wrapper
           header.story-header The story behind Skritter
           .subtext
             p.
@@ -36,7 +36,7 @@ gelato-page(data-name='about')
               p.
                 Actually, we've been asked that question quite a lot, so we've
                 made this handy little graphic to explain it visually:
-              img(src="media/images/about/name_breakdown.png" alt="")
+              img.breakdown(src="media/images/about/name_breakdown.png" alt="")
             header.header Our Learning Philosophy
             .subtext
               p.
@@ -57,50 +57,78 @@ gelato-page(data-name='about')
                 we try new features as soon they're just usable, and we listen
                 and respond personally to customer comments and problems.
                 We love what we do, and we are fortunate enough to be doing what we love.
-        .col-md-4.team-wrapper
+      .row
+        .team-wrapper
           header.team-header The Team
-          .media
-            .media-left
-              img.media-object.img-circle(src="media/images/about/icon-jake.jpg" alt="Jake Gill")
-            .media-body
-              .employee-name Jake Gill
-              .employee-subtext Director of Skritter and master's student for Teaching Chinese.
-          .media
-            .media-left
-              img.media-object.img-circle(src="media/images/about/icon-josh.jpg" alt="Josh McFarland")
-            .media-body
-              .employee-name Josh McFarland
-              .employee-subtext Lead developer and creator of the Android app.
-          .media
-            .media-left
-              img.media-object.img-circle(src="media/images/about/icon-jeremy.jpg" alt="Jeremy Arns")
-            .media-body
-              .employee-name Jeremy Arns
-              .employee-subtext Budding developer and our Japanese guru.
-          .media
-            .media-left
-              img.media-object.img-circle(src="media/images/about/icon-olle.jpg" alt="Olle Linge")
-            .media-body
-              .employee-name Olle Linge
-              .employee-subtext Educator from Sweden, master blogger, and master's student for Teaching Chinese.
+          .row.picture-row
+            .col-md-4
+              .picture-wrapper
+                img.media-object.img-circle.profile-picture(src="media/images/about/jake.jpg" alt="Jake Gill")
+              .employee-description-wrapper
+                .employee-name
+                  | Jake Gill
+                  span.zh-ja-name 高健
+                .employee-subtext Director of Skritter and master's student for Teaching Chinese.
+            .col-md-4
+              .picture-wrapper
+                img.media-object.img-circle.profile-picture(src="media/images/about/josh.jpg" alt="Josh McFarland")
+              .employee-description-wrapper
+                .employee-name
+                  | Josh McFarland
+                  span.zh-ja-name 乔希
+                .employee-subtext Lead developer and creator of the Android app.
+            .col-md-4
+              .picture-wrapper
+                img.media-object.img-circle.profile-picture(src="media/images/about/michael.jpg" alt="Michael Prokopchuk")
+              .employee-description-wrapper
+                .employee-name
+                  | Michael Prokopchuk
+                  span.zh-ja-name 柏麥可
+                .employee-subtext Developer, pixel pusher, and language enthusiast.
+          .row.picture-row
+            .col-md-2
+            .col-md-4
+              .picture-wrapper
+                img.media-object.img-circle.profile-picture(src="media/images/about/jeremy.jpg" alt="Jeremy Arns")
+              .employee-description-wrapper
+                .employee-name
+                  | Jeremy Arns
+                  span.zh-ja-name ジェレミー
+                .employee-subtext Japanese expert, community liaison, and a budding developer.
+            .col-md-4
+              .picture-wrapper
+                img.media-object.img-circle.profile-picture(src="media/images/about/olle.jpg" alt="Olle Linge")
+              .employee-description-wrapper
+                .employee-name
+                  | Olle Linge
+                  span.zh-ja-name 凌雲龍
+                .employee-subtext Educator from Sweden, master blogger, and master's student for Teaching Chinese.
+            .col-md-2
           .divider
           header.header.cofounders-header Co-Founders
-          .media
-            .media-left
-              img.media-object.img-circle(src="media/images/about/icon-nick.jpg" alt="Nick Winter")
-            .media-body
-              .employee-name Nick Winter
-              .employee-subtext Co-founder and adviser of Skritter.
-          .media
-            .media-left
-              img.media-object.img-circle(src="media/images/about/icon-scott.jpg" alt="Scott Erickson")
-            .media-body
-              .employee-name Scott Erickson
-              .employee-subtext Co-founder and adviser of Skritter.
-          .media
-            .media-left
-              img.media-object.img-circle(src="media/images/about/icon-george.jpg" alt="George Saines")
-            .media-body
-              .employee-name George Saines
-              .employee-subtext Co-founder and adviser of Skritter.
+          .row.picture-row
+            .col-md-4
+              .picture-wrapper
+                img.media-object.img-circle.profile-picture(src="media/images/about/nick.jpg" alt="Nick Winter")
+              .employee-description-wrapper
+                .employee-name
+                  | Nick Winter
+                  span.zh-ja-name 文克林
+                .employee-subtext Co-founder and adviser of Skritter.
+            .col-md-4
+              .picture-wrapper
+                img.media-object.img-circle.profile-picture(src="media/images/about/scott.jpg" alt="Scott Erickson")
+              .employee-description-wrapper
+                .employee-name
+                  | Scott Erickson
+                  span.zh-ja-name スコット
+                .employee-subtext Co-founder and adviser of Skritter.
+            .col-md-4
+              .picture-wrapper
+                img.media-object.img-circle.profile-picture(src="media/images/about/george.jpg" alt="George Saines")
+              .employee-description-wrapper
+                .employee-name
+                  | George
+                  span.zh-ja-name 乔治
+                .employee-subtext Co-founder and adviser of Skritter.
   #footer-container

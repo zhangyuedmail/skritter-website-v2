@@ -11,10 +11,10 @@ module.exports = BootstrapNavbar.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-beacon': 'handleClickButtonBeacon',
-        'vclick #button-logout': 'handleClickButtonLogout',
-        'vclick #switch-targetLang': 'handleClickSwitchTargetLang',
-        'vclick .item-dropdown': 'handleClickDropdown'
+        'click #button-beacon': 'handleClickButtonBeacon',
+        'click #button-logout': 'handleClickButtonLogout',
+        'click #switch-targetLang': 'handleClickSwitchTargetLang',
+        'click .item-dropdown': 'handleClickDropdown'
     },
     /**
      * @property template
@@ -30,6 +30,30 @@ module.exports = BootstrapNavbar.extend({
         this.$('[data-toggle="tooltip"]').tooltip();
         return this;
     },
+
+    /**
+     * Given a language code, returns the hanzi/kanji
+     * representation of the language's name
+     * @param {string} langCode the code of the language to get the characters for
+     * @returns {string} the hanzi/kanji for the language name
+     */
+    getDisplayLanguageCharacters: function(langCode) {
+         return langCode === 'zh' ? '中文' : '日本語';
+    },
+
+    /**
+     * Given a language code following the format used for User.targetLang,
+     * returns a localized displayable version of that code for use in templates.
+     * E.g. 'zh' -> 'Chinese'
+     * @param {string} [langCode] the language code you want to display
+     * @return {string} a user-friendly version of the language code
+     */
+    getDisplayLanguageName: function(langCode) {
+        langCode = langCode || app.user.get('targetLang');
+
+        return langCode === 'zh' ? 'Chinese' : 'Japanese';
+    },
+
     /**
      * @method handleClickButtonBeacon
      * @param {Event} event
@@ -40,6 +64,7 @@ module.exports = BootstrapNavbar.extend({
             HS.beacon.open();
         }
     },
+
     /**
      * @method handleClickButtonLogout
      * @param {Event} event
@@ -52,6 +77,7 @@ module.exports = BootstrapNavbar.extend({
         });
         dialog.open();
     },
+
     /**
      * @method handleClickDropdown
      * @param {Event} event
@@ -69,19 +95,6 @@ module.exports = BootstrapNavbar.extend({
         }
     },
 
-    /**
-     * Given a language code following the format used for User.targetLang,
-     * returns a localized displayable version of that code for use in templates.
-     * E.g. 'zh' -> 'Chinese'
-     * @param {string} [langCode] the language code you want to display
-     * @return {string} a user-friendly version of the language code
-     */
-    getDisplayLanguageName: function(langCode) {
-        langCode = langCode || app.user.get('targetLang');
-        
-        return langCode === 'zh' ? 'Chinese' : 'Japanese';
-    },
-    
     handleClickSwitchTargetLang: function(e) {
         e.preventDefault();
         e.stopPropagation();

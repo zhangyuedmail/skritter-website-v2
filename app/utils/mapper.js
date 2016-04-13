@@ -2786,7 +2786,7 @@ function simpCharToTrad(character, multiples) {
     var tradList = map[character];
 
     if (!tradList) {
-         return (multiples) ? [character] : character;
+        return (multiples) ? [character] : character;
     }
 
     if (multiples) {

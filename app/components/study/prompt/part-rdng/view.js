@@ -117,7 +117,7 @@ module.exports = GelatoComponent.extend({
             this.prompt.review.set('complete', true);
             this.render();
         }
-    },/**
+    }, /**
      * @method handlePromptToolbarActionCorrect
      */
     handlePromptToolbarActionCorrect: function() {

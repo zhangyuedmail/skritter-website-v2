@@ -28,11 +28,11 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
-        'vclick .add-entry': 'handleClickAddEntry',
-        'vclick .remove-row': 'handleClickRemoveRow',
-        'vclick .result-row': 'handleClickResultRow',
-        'vclick .show-results': 'handleClickShowResults',
-        'vclick .study-writing': 'handleClickStudyWriting'
+        'click .add-entry': 'handleClickAddEntry',
+        'click .remove-row': 'handleClickRemoveRow',
+        'click .result-row': 'handleClickResultRow',
+        'click .show-results': 'handleClickShowResults',
+        'click .study-writing': 'handleClickStudyWriting'
     },
     /**
      * @property template
@@ -61,7 +61,8 @@ module.exports = GelatoComponent.extend({
                 q: query,
                 lang: this.vocablist.get('lang')
             },
-            error: function(a, b) {},
+            error: function(a, b) {
+            },
             success: _.bind(function(collection) {
                 var results = [];
                 var groups = collection.groupBy(function(vocab) {
@@ -117,6 +118,20 @@ module.exports = GelatoComponent.extend({
     discardChanges: function() {
         this.rows = _.clone(this.saved);
         this.render();
+    },
+    /**
+     * Returns a filtered list of verified rows with vocabIds.
+     *
+     * @method getRows
+     * @returns {Array}
+     */
+    getRows: function() {
+        return _.filter(
+            this.rows,
+            function(row) {
+                return _.isString(row.vocabId);
+            }
+        );
     },
     /**
      * @method handleClickAddEntry
@@ -239,6 +254,8 @@ module.exports = GelatoComponent.extend({
                     if (app.getLanguage() === 'ja') {
                         row.id = row.vocabId;
                     }
+
+                    row.banned = vocab1.isBanned() || vocab2.isBanned();
                     row.lang = vocab1.get('lang');
                     row.state = 'loaded';
                     row.vocabs = [vocab1, vocab2];

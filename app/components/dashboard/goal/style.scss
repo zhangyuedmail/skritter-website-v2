@@ -6,7 +6,9 @@ gelato-component[data-name='dashboard-goal'] {
 
   .highcharts-container {
     margin-left: auto;
-    .highcharts-title { font-family: $font-slab; }
+    .highcharts-title {
+      font-family: $font-slab;
+    }
   }
 
   #doughnut-column {
@@ -30,6 +32,5 @@ gelato-component[data-name='dashboard-goal'] {
       font-weight: 300;
     }
   }
-
 
 }

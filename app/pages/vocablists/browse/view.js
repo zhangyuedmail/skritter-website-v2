@@ -25,8 +25,8 @@ module.exports = GelatoPage.extend({
     events: {
         'change input[type="checkbox"]': 'handleChangeCheckbox',
         'keyup #list-search-input': 'handleKeypressListSearchInput',
-        'vclick #list-option': 'handleClickListOption',
-        'vclick #grid-option': 'handleClickGridOption'
+        'click #list-option': 'handleClickListOption',
+        'click #grid-option': 'handleClickGridOption'
     },
     /**
      * @property template
@@ -54,12 +54,12 @@ module.exports = GelatoPage.extend({
      */
     handleChangeCheckbox: function() {
         /** TODO: support checkbox filters
-        var checkedBoxes = $('input[type="checkbox"]:checked');
-        var filterTypes = checkedBoxes.map(function(i, el) {
+         var checkedBoxes = $('input[type="checkbox"]:checked');
+         var filterTypes = checkedBoxes.map(function(i, el) {
             return $(el).attr('name');
         });
-        this.table.setFilterTypes(filterTypes);
-        this.table.render();
+         this.table.setFilterTypes(filterTypes);
+         this.table.render();
          **/
     },
     /**

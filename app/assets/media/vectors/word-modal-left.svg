@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
     <title>word-modal-left</title>
     <desc>Created with Sketch.</desc>
@@ -7,7 +8,9 @@
     <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
         <g id="word-modal-left" sketch:type="MSArtboardGroup" fill="#87A64B">
             <g id="chevron-with-circle-left" sketch:type="MSLayerGroup">
-                <path d="M11.302,6.776 C11.106,6.579 10.787,6.579 10.592,6.776 L7.785,9.641 C7.589,9.84 7.589,10.161 7.785,10.358 L10.592,13.222 C10.787,13.421 11.106,13.42 11.302,13.222 C11.498,13.025 11.498,12.704 11.302,12.505 L9,10 L11.302,7.494 C11.498,7.296 11.498,6.976 11.302,6.776 L11.302,6.776 Z M10,0.4 C4.698,0.4 0.4,4.698 0.4,10 C0.4,15.303 4.698,19.6 10,19.6 C15.302,19.6 19.6,15.303 19.6,10 C19.6,4.698 15.302,0.4 10,0.4 L10,0.4 Z M10,18.354 C5.385,18.354 1.646,14.614 1.646,10 C1.646,5.386 5.385,1.646 10,1.646 C14.613,1.646 18.354,5.386 18.354,10 C18.354,14.614 14.613,18.354 10,18.354 L10,18.354 Z" id="Shape" sketch:type="MSShapeGroup"></path>
+                <path
+                        d="M11.302,6.776 C11.106,6.579 10.787,6.579 10.592,6.776 L7.785,9.641 C7.589,9.84 7.589,10.161 7.785,10.358 L10.592,13.222 C10.787,13.421 11.106,13.42 11.302,13.222 C11.498,13.025 11.498,12.704 11.302,12.505 L9,10 L11.302,7.494 C11.498,7.296 11.498,6.976 11.302,6.776 L11.302,6.776 Z M10,0.4 C4.698,0.4 0.4,4.698 0.4,10 C0.4,15.303 4.698,19.6 10,19.6 C15.302,19.6 19.6,15.303 19.6,10 C19.6,4.698 15.302,0.4 10,0.4 L10,0.4 Z M10,18.354 C5.385,18.354 1.646,14.614 1.646,10 C1.646,5.386 5.385,1.646 10,1.646 C14.613,1.646 18.354,5.386 18.354,10 C18.354,14.614 14.613,18.354 10,18.354 L10,18.354 Z"
+                        id="Shape" sketch:type="MSShapeGroup"></path>
             </g>
         </g>
     </g>

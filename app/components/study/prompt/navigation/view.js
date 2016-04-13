@@ -21,8 +21,8 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #navigate-next': 'handleClickNavigateNext',
-        'vclick #navigate-previous': 'handleClickNavigatePrevious'
+        'click #navigate-next': 'handleClickNavigateNext',
+        'click #navigate-previous': 'handleClickNavigatePrevious'
     },
     /**
      * @property template

@@ -7,8 +7,12 @@ gelato-page[data-name='institutions'] {
   section {
     padding-bottom: 50px;
     padding-top: 50px;
-    &.dark { background-color: #262b30; }
-    &.light { background-color: white; }
+    &.dark {
+      background-color: #262b30;
+    }
+    &.light {
+      background-color: white;
+    }
   }
 
   #section-description {
@@ -37,7 +41,9 @@ gelato-page[data-name='institutions'] {
   }
 
   #section-features {
-    .image { margin-bottom: 35px; }
+    .image {
+      margin-bottom: 35px;
+    }
     .subtext {
       color: #8c9196;
       font-family: $font-slab;
@@ -134,8 +140,12 @@ gelato-page[data-name='institutions'] {
       margin-bottom: 36px;
       margin-top: 75px;
     }
-    #institution-message { resize: none; }
-    #institution-request-type { margin-top: 45px; }
+    #institution-message {
+      resize: none;
+    }
+    #institution-request-type {
+      margin-top: 45px;
+    }
   }
 
 }

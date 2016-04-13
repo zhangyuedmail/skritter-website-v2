@@ -18,8 +18,8 @@ var VocabCreatorDialog = GelatoDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-add-word': 'handleClickButtonAddWord',
-        'vclick #button-cancel': 'handleClickButtonCancel'
+        'click #button-add-word': 'handleClickButtonAddWord',
+        'click #button-cancel': 'handleClickButtonCancel'
     },
     /**
      * @property template
@@ -83,7 +83,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
      */
     getFormData: function() {
         var formData = {
-            definitions:  this.$('#word-definition-input textarea').val(),
+            definitions: this.$('#word-definition-input textarea').val(),
             lang: this.row.lang,
             reading: this.$('#word-reading-input input').val(),
             writing: this.row.writing

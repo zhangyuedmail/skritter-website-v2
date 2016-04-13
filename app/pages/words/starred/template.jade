@@ -26,7 +26,7 @@ gelato-page(data-name='words-starred')
                 td.star-td
                 td.word-td(colspan=3) Word
                 td.date-starred-td Date starred
-                
+
               for vocab in view.starredVocabs.models
                 tr(data-vocab-id=vocab.id)
                   td.star-td
@@ -38,11 +38,11 @@ gelato-page(data-name='words-starred')
                   td.reading-td= vocab.getReading()
                   td.definition-td!= vocab.getDefinition()
                   td.date-starred-td
-                    | #{moment(vocab.get('starred')*1000).format('LL')}
+                    | #{moment(vocab.get('starred') * 1000).format('LL')}
 
             if view.starredVocabs.state === 'fetching'
               p.text-center
                 i.fa.fa-3x.fa-spinner.fa-pulse
-                
+
             else if view.starredVocabs.cursor
               button#load-more-btn.btn.btn-primary.btn-block Load More

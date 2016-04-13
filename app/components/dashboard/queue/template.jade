@@ -8,10 +8,10 @@ gelato-component(data-name='dashboard-queue')
     for list, i in view.vocablists.models
       .row(data-list-id=list.id)
         .col-md-4
-          a(href="/vocablists/view/"+list.id)= list.get('name')
+          a(href="/vocablists/view/" + list.id)= list.get('name')
         .col-md-6
           .progress
-            .progress-bar(style="width:" + (list.getProgress().percent)+'%')
+            .progress-bar(style="width:" + (list.getProgress().percent) + '%')
         .col-md-2.text-center
           a(href='/study/' + list.id) Study
     .text-center

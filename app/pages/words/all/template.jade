@@ -39,12 +39,12 @@ gelato-page(data-name='words-all')
                     a#previous-sort-link
                       | Prev
                       span.glyphicon.glyphicon-chevron-down
-                      
+
                   td.next-td(class=view.sort === 'next' ? 'active' : '')
                     a#next-sort-link
                       | Next
                       span.glyphicon.glyphicon-chevron-down
-                
+
               mixin itemRow(lastItem, nextItem, vocab)
                 tr(data-vocab-id=vocab.id)
                   td.checkbox-td
@@ -52,7 +52,7 @@ gelato-page(data-name='words-all')
                   td.writing-td= vocab.getWriting()
                   td.reading-td= vocab.getReading()
                   td.definition-td!= vocab.getDefinition()
-                  
+
                   if lastItem && lastItem.get('last')
                     - var last = moment(lastItem.get('last')*1000);
                     td.last-td(title=last.format('LLLL'))
@@ -63,11 +63,11 @@ gelato-page(data-name='words-all')
                         i.fa.fa-1x.fa-spinner.fa-pulse
                       else
                         | -
-                    
+
                   if nextItem
                     - var next = moment(nextItem.get('next')*1000);
                     td.next-td(title=next.format('LLLL'))
-                      if nextItem.get('next')*1000 > now
+                      if nextItem.get('next') * 1000 > now
                         | #{next.fromNow()}
                       else
                         | Ready
@@ -77,13 +77,13 @@ gelato-page(data-name='words-all')
                         i.fa.fa-1x.fa-spinner.fa-pulse
                       else
                         | -
-                
+
               if view.searchString
                 for vocab in view.searchVocabs.models
                   +itemRow(vocab.lastItem, vocab.nextItem, vocab)
                 if view.searchVocabs.state === 'fetching'
-                
-                  
+
+
               else
                 for item in view.items.models
                   for vocabID in item.get('vocabIds')
@@ -93,8 +93,8 @@ gelato-page(data-name='words-all')
             if view.items.state === 'fetching' || view.searchVocabs.state === 'fetching'
               p.text-center
                 i.fa.fa-3x.fa-spinner.fa-pulse
-                
-            else if view.items.cursor || view.searchVocabs.cursor　|| view.searchVocabs.containingCursor
+
+            else if view.items.cursor || view.searchVocabs.cursor || view.searchVocabs.containingCursor
               button#load-more-btn.btn.btn-primary.btn-block Load More
-                
-                            
+
+

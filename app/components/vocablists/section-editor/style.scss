@@ -8,8 +8,12 @@ gelato-component[data-name='vocablists-list-section-editor'] {
     font-weight: 300;
     padding: 10px 25px;
     border-top: 1px solid $white5;
-    &.odd { background-color: $white3; }
-    &.even { background-color: $white1; }
+    &.odd {
+      background-color: $white3;
+    }
+    &.even {
+      background-color: $white1;
+    }
   }
 
   .row-header {

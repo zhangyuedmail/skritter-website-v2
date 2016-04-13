@@ -9,9 +9,15 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
     font-weight: 300;
     padding: 10px 25px;
     border-top: 1px solid $white5;
-    &.banned { color: $grade1 !important; }
-    &.odd { background-color: $white2; }
-    &.even { background-color: $white1; }
+    &.banned {
+      color: $grade1 !important;
+    }
+    &.odd {
+      background-color: $white2;
+    }
+    &.even {
+      background-color: $white1;
+    }
     .ellipse-icon {
       //color: $grey3;
       font-size: 18px;
@@ -30,12 +36,22 @@ gelato-component[data-name='vocablists-list-editor-rows'] {
       color: $grey3;
       font-size: 14px;
       padding: 2px 5px;
-      &.active { background-color: $green3; }
+      &.active {
+        background-color: $green3;
+      }
     }
-    .vocab-definition { margin-top: 6px; }
-    .vocab-options { margin-top: 6px; }
-    .vocab-reading { margin-top: 6px; }
-    .vocab-writing { font-size: 18px; }
+    .vocab-definition {
+      margin-top: 6px;
+    }
+    .vocab-options {
+      margin-top: 6px;
+    }
+    .vocab-reading {
+      margin-top: 6px;
+    }
+    .vocab-writing {
+      font-size: 18px;
+    }
   }
 
   .result-rows {

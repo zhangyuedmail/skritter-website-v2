@@ -23,8 +23,8 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
-        'vclick #restore-section': 'handleClickRestoreSection',
-        'vclick #remove-section': 'handleClickRemoveSection',
+        'click #restore-section': 'handleClickRestoreSection',
+        'click #remove-section': 'handleClickRemoveSection',
         'keyup .last-section': 'handleKeyupLastSection'
     },
     /**

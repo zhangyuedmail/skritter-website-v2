@@ -138,8 +138,7 @@ module.exports = GelatoComponent.extend({
         this.prompt.vocabSentence.render();
         this.prompt.vocabStyle.render();
         this.prompt.vocabWriting.render();
-        if (app.user.isAudioEnabled() &&
-            !app.user.get('hideReading') &&
+        if (app.user.isAudioEnabled() && !app.user.get('hideReading') &&
             this.prompt.reviews.isFirst()) {
             this.prompt.reviews.vocab.play();
         }
@@ -281,7 +280,7 @@ module.exports = GelatoComponent.extend({
      * @method handlePromptCanvasTap
      */
     handlePromptCanvasTap: function() {
-        var expectedStroke = this.prompt.review.character.getExpectedStroke() ;
+        var expectedStroke = this.prompt.review.character.getExpectedStroke();
         if (expectedStroke) {
             this.prompt.canvas.clearLayer('stroke-hint');
             this.prompt.canvas.fadeShape('stroke-hint', expectedStroke.getTargetShape());

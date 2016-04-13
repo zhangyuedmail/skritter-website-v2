@@ -7,7 +7,9 @@ gelato-page[data-name='vocablists-list'] {
 
   #editing-buttons {
     margin-top: 10px;
-    button { margin-right: 15px; }
+    button {
+      margin-right: 15px;
+    }
   }
 
   #input-row {
@@ -33,9 +35,11 @@ gelato-page[data-name='vocablists-list'] {
   }
 
   .content-details {
-    padding-left:25px;
-    padding-right:25px;
-    input { width: 100%; }
+    padding-left: 25px;
+    padding-right: 25px;
+    input {
+      width: 100%;
+    }
     textarea {
       min-height: 200px;
       width: 100%;

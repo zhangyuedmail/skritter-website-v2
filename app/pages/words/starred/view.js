@@ -27,9 +27,9 @@ module.exports = GelatoPage.extend({
      * @type {Object}
      */
     events: {
-        'vclick #load-more-btn': 'handleClickLoadMoreButton',
-        'vclick #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
-        'vclick .star-td a': 'handleClickStarLink'
+        'click #load-more-btn': 'handleClickLoadMoreButton',
+        'click #remove-all-stars-link': 'fetchAllStarredVocabsThenRemoveThem',
+        'click .star-td a': 'handleClickStarLink'
     },
     /**
      * @method remove
@@ -123,11 +123,11 @@ module.exports = GelatoPage.extend({
         var vocab = this.starredVocabs.get(vocabID);
         vocab.toggleStarred();
         $(event.target)
-          .toggleClass('glyphicon-star')
-          .toggleClass('glyphicon-star-empty');
+            .toggleClass('glyphicon-star')
+            .toggleClass('glyphicon-star-empty');
         vocab.save(
-          { id: vocab.id, starred: vocab.get('starred') },
-          { method: 'PUT', patch: true }
+            {id: vocab.id, starred: vocab.get('starred')},
+            {method: 'PUT', patch: true}
         );
     },
     /**

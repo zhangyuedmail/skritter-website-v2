@@ -42,8 +42,8 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keyup #login-password': 'handleKeyUpLoginPassword',
-        'vclick #button-login': 'handleClickLoginButton',
-        'vclick #button-skeleton': 'handleClickSkeleton'
+        'click #button-login': 'handleClickLoginButton',
+        'click #button-skeleton': 'handleClickSkeleton'
     },
     /**
      * @method getFormData

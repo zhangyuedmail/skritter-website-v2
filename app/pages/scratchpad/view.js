@@ -90,7 +90,7 @@ module.exports = GelatoPage.extend({
                     callback(null, vocab);
                 }
             }, this)
-        ],_.bind(function(error, vocab) {
+        ], _.bind(function(error, vocab) {
             if (error) {
                 //TODO: display error message to user
                 console.error('SCRATCHPAD LOAD ERROR:', error);

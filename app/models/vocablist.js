@@ -77,7 +77,7 @@ module.exports = SkritterModel.extend({
         var total = 0;
         var sections = this.get('sections') || [];
         if (this.get('studyingMode') === 'finished') {
-            return { percent: 100 };
+            return {percent: 100};
         } else if (sections.length) {
             var currentIndex = this.get('currentIndex') || 0;
             var currentSection = this.get('currentSection') || sections[0].id;
@@ -102,9 +102,9 @@ module.exports = SkritterModel.extend({
                 percent: total ? Math.round(100 * added / total) : 0
             };
         } else if (this.get('percentDone')) {
-            return { percent: this.get('percentDone')};
+            return {percent: this.get('percentDone')};
         } else {
-            return { percent: 0 };
+            return {percent: 0};
         }
     },
     /**

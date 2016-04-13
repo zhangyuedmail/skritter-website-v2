@@ -8,7 +8,9 @@ gelato-page[data-name='features'] {
   #section-additional-features {
     background-color: $white;
     padding-bottom: 50px;
-    .block { padding-bottom: 60px; }
+    .block {
+      padding-bottom: 60px;
+    }
     .media-heading {
       color: #8c9196;
       font-family: $font-slab;
@@ -31,7 +33,9 @@ gelato-page[data-name='features'] {
   #section-main-features {
     background-color: $white;
     padding-bottom: 50px;
-    .block { padding-bottom: 60px; }
+    .block {
+      padding-bottom: 60px;
+    }
     .media-heading {
       color: #8c9196;
       font-family: $font-slab;

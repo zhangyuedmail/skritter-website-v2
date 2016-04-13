@@ -9,14 +9,15 @@ module.exports = GelatoDialog.extend({
      * @method initialize
      * @param {Object} options
      */
-    initialize: function(options) {},
+    initialize: function(options) {
+    },
     /**
      * @property events
      * @type {Object}
      */
     events: {
-        'vclick #button-cancel': 'handleClickButtonCancel',
-        'vclick #button-change': 'handleClickButtonChange'
+        'click #button-cancel': 'handleClickButtonCancel',
+        'click #button-change': 'handleClickButtonChange'
     },
     /**
      * @property template

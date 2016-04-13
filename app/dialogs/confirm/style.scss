@@ -6,7 +6,9 @@ bootstrap-dialog[data-name="confirm"] {
     background-color: $white5;
   }
 
-  .modal-dialog { width: 300px; }
+  .modal-dialog {
+    width: 300px;
+  }
 
   .modal-footer {
     text-align: center;

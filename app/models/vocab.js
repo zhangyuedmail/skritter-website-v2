@@ -277,9 +277,10 @@ var Vocab = SkritterModel.extend({
             if (stroke) {
                 if (this.isJapanese()) {
                     if (!app.user.get('studyKana') && stroke.isKana()) {
-                        continue;
+                        strokes.push(null);
+                    } else {
+                        strokes.push(stroke);
                     }
-                    strokes.push(stroke);
                 } else {
                     strokes.push(stroke);
                 }
@@ -366,7 +367,7 @@ var Vocab = SkritterModel.extend({
                 return true;
             }
         }
-        return _.includes(['~', '-', '～', 'ー'], this.get('writing'));
+        return _.includes(['~', '-', '～', 'ー', '.', '。', ',', '，', '、', '・'], this.get('writing'));
     },
     /**
      * @method isJapanese

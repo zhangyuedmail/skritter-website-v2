@@ -7,7 +7,9 @@ gelato-component[data-name='vocablists-browse-table'] {
   font-size: 16px;
   font-weight: 300;
 
-  .add-to-queue-link { cursor: pointer; }
+  .add-to-queue-link {
+    cursor: pointer;
+  }
 
   .row {
     clear: both;
@@ -55,7 +57,7 @@ gelato-component[data-name='vocablists-browse-table'] {
         top: 0;
         left: 0;
         right: 0;
-        background: rgba(25,28,32, 0.85);
+        background: rgba(25, 28, 32, 0.85);
         z-index: 2;
         a {
           color: $white2;
@@ -87,7 +89,7 @@ gelato-component[data-name='vocablists-browse-table'] {
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(25,28,32,0.85);
+        background: rgba(25, 28, 32, 0.85);
         opacity: 0;
         z-index: 1;
       }

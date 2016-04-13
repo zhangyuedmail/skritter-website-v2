@@ -22,7 +22,7 @@ module.exports = GelatoPage.extend({
     events: {
         'change #field-country': 'handleChangeFieldCountry',
         'change #field-language': 'handleChangeFieldLanguage',
-        'vclick #button-continue': 'handleClickButtonContinue'
+        'click #button-continue': 'handleClickButtonContinue'
     },
     /**
      * @property settings

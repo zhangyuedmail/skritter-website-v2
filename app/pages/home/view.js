@@ -16,8 +16,8 @@ module.exports = GelatoPage.extend({
         this.navbar = new DefaultNavbar();
     },
     events: {
-        'vclick #link-apple-store': 'handleClickLinkAppleStore',
-        'vclick #link-google-store': 'handleClickLinkGoogleStore'
+        'click #link-apple-store': 'handleClickLinkAppleStore',
+        'click #link-google-store': 'handleClickLinkGoogleStore'
     },
     /**
      * @property template

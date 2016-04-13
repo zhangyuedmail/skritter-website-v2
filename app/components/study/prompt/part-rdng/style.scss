@@ -7,7 +7,9 @@ gelato-component[data-name="study-prompt-part-rdng"] {
   text-align: center;
   width: 100%;
 
-  img { display: none; }
+  img {
+    display: none;
+  }
 
   .answer {
     color: #404851;

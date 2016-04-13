@@ -1,6 +1,6 @@
 var GelatoModel = require('gelato/model');
 
-var ReviewData = GelatoModel.extend( /** @lends ReviewData.prototype */ {
+var ReviewData = GelatoModel.extend(/** @lends ReviewData.prototype */ {
     /**
      * @class ReviewData
      * @param {Object} [attributes]

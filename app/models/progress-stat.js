@@ -9,7 +9,8 @@ module.exports = GelatoModel.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+    },
     /**
      * @property idAttribute
      * @type {String}

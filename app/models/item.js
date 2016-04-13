@@ -52,7 +52,7 @@ module.exports = SkritterModel.extend({
         var containedItems = [];
         var part = this.get('part');
         if (['rune', 'tone'].indexOf(part) > -1) {
-            var containedVocabs =  this.getContainedVocabs();
+            var containedVocabs = this.getContainedVocabs();
             for (var i = 0, length = containedVocabs.length; i < length; i++) {
                 var vocabId = containedVocabs[i].id;
                 var splitId = vocabId.split('-');
@@ -73,7 +73,7 @@ module.exports = SkritterModel.extend({
                 }
             }
         }
-        return  containedItems;
+        return containedItems;
     },
     /**
      * @method getContainedVocabs
@@ -120,6 +120,9 @@ module.exports = SkritterModel.extend({
             promptItem.interval = childItem.get('interval');
             promptItem.item = childItem;
             promptItem.vocab = childVocab;
+            if (i === 0 && vocabs.length > 1) {
+                promptItem.set('submitTime', Date.now() / 1000);
+            }
             if (_.includes(['rune', 'tone'], part)) {
                 promptItem.set('filler', characters[i] ? childVocab.isFiller() : true);
             } else {

@@ -85,7 +85,7 @@ gelato-page(data-name='signup')
               select#card-year-select.form-control
                 - var year = moment().year();
                 for i in _.range(10)
-                  option(value=year+i)= year+i
+                  option(value=year + i)= year + i
           .form-group.coupon.hide
             label.col-sm-5.control-label(for='signup-coupon') Coupon
             .col-sm-7
@@ -104,7 +104,7 @@ gelato-page(data-name='signup')
               - var expiration = moment().add(7, 'days').format('LL')
               span.spl#trial-expire-date= expiration
               | .
-            span.spl You can cancel your subscription in your account page 
+            span.spl You can cancel your subscription in your account page
               | at any time. We will notify you by email one day before you
               | are billed.
 

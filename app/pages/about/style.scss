@@ -7,7 +7,7 @@ gelato-page[data-name='about'] {
 
   .author {
     font-size: 20px;
-    color: #B2B5B9;
+    color: $grey2;
     margin-top: 13px;
   }
 
@@ -32,17 +32,21 @@ gelato-page[data-name='about'] {
 
   .story-wrapper {
     background: #FFF;
-    border-radius: 15px 0px 0px 15px;
+    border-radius: 15px 15px 0px 0px;
     padding: 20px 40px;
 
     p {
-      color: #8c9196;
+      color: $grey3;
       font-size: 16px;
     }
 
     img {
       margin: auto;
       display: block;
+    }
+
+    .breakdown {
+      margin-top: 30px;
     }
   }
 
@@ -62,17 +66,25 @@ gelato-page[data-name='about'] {
 
   .employee-name {
     font-size: 16px;
-    color: #404851
+    color: $grey5;
+    text-align: center;
+    margin-top: 15px;
   }
 
   .employee-subtext {
     font-size: 16px;
     color: $grey3;
+    padding: 0px 20px;
+    text-align: center;
+  }
+
+  .picture-row {
+    padding-bottom: 45px;
   }
 
   .divider {
     width: 90%;
-    margin: 30px auto;
+    margin: 0px auto 30px;
     height: 1px;
     background: #bebdbe;
   }
@@ -86,11 +98,23 @@ gelato-page[data-name='about'] {
   }
 
   #about-title {
-    color: #666c73;
+    color: $grey4;
     font-family: $font-slab;
     font-size: 36px;
     font-weight: 400;
     margin-bottom: 60px;
     margin-top: 30px;
+  }
+
+  .profile-picture {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+  }
+
+  .zh-ja-name {
+    margin-left: 15px;
+    position: absolute;
+    color: $grey2;
   }
 }

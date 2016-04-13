@@ -19,13 +19,14 @@
   },
   "scripts": {
     "build": "node ./bin/build",
+    "prune": "node ./bin/prune",
     "start": "node ./bin/start",
     "test": "node ./bin/test"
   },
   "dependencies": {
     "brunch": "~2.6.0",
     "chai": "~3.5.0",
-    "lodash": "~4.8.0",
+    "lodash": "~4.10.0",
     "minimist": "~1.2.0",
     "mocha": "~2.4.0",
     "mocha-phantomjs": "~4.0.0",

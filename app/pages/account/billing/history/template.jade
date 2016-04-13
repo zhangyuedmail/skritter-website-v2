@@ -8,7 +8,7 @@ gelato-page(data-name='account-billing-history')
       .row
         .col-md-3.sidebar
           #sidebar-container
-          
+
         .col-md-9.main-content
           .title Billing History
 
@@ -20,13 +20,13 @@ gelato-page(data-name='account-billing-history')
                 td.length-td Length purchased
                 td.state-td State
                 td.charged-td Amount charged
-                
+
               for payment in view.payments.models
                 tr
-                  td.date-td= moment(payment.get('created')*1000).format('LL')
+                  td.date-td= moment(payment.get('created') * 1000).format('LL')
                   td.service-td
                     if user.get('isAdmin') && payment.get('stripeID')
-                      a(href="https://dashboard.stripe.com/payments/"+payment.get('stripeID'))
+                      a(href="https://dashboard.stripe.com/payments/" + payment.get('stripeID'))
                         | Stripe
                     else
                       | #{payment.get('service')}
@@ -39,5 +39,5 @@ gelato-page(data-name='account-billing-history')
                 i.fa.fa-3x.fa-spinner.fa-pulse
             else if view.payments.cursor
               button#load-more-btn.btn.btn-primary.btn-block Load More
-                
-                            
+
+

@@ -48,10 +48,10 @@ bootstrap-navbar(data-name='default')
                 li
                   a#button-logout(href="#") Logout
             li.dropdown.target-lang-dropdown
-              a.dropdown-toggle(href="#" data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
+              a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                 - var lang = user.get('targetLang');
                 - var otherLang = lang === 'zh' ? 'ja' : 'zh';
-                img(src="media/images/flags/flag-#{lang}.png" alt="" class="flag" id="currently-studying-flag")
+                span.lang-icon #{view.getDisplayLanguageCharacters(lang)}
                 | &nbsp;&nbsp;&nbsp;
                 span.caret
               ul.dropdown-menu.language-select-menu
@@ -60,8 +60,8 @@ bootstrap-navbar(data-name='default')
                   | You are studying #{view.getDisplayLanguageName(user.get('targetLang'))}.
                 li.divider(role="separator")
                 li
-                  a(href="#" id="switch-targetLang")
-                    img(src="media/images/flags/flag-#{otherLang}.png" alt="" class="flag")
+                  a(href="#", id="switch-targetLang")
+                    span.lang-icon.other-lang-icon #{view.getDisplayLanguageCharacters(otherLang)}
                     | Study #{view.getDisplayLanguageName(otherLang)}
             li
               a#button-beacon(href="#")

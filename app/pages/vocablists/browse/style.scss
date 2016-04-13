@@ -16,7 +16,9 @@ gelato-page[data-name='vocablists-browse'] {
         border-bottom-left-radius: 25px;
         border-top-left-radius: 25px;
       }
-      .input-group-addon { background-color: transparent; }
+      .input-group-addon {
+        background-color: transparent;
+      }
     }
 
     .glyphicon.layout-selector {

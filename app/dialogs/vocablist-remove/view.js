@@ -33,8 +33,8 @@ module.exports = BootstrapDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #confirm-btn': 'handleClickConfirmButton',
-        'vclick #cancel-btn': 'handleClickCancelButton'
+        'click #confirm-btn': 'handleClickConfirmButton',
+        'click #cancel-btn': 'handleClickCancelButton'
     },
     /**
      * @method handleClickCloseButton
@@ -47,7 +47,7 @@ module.exports = BootstrapDialog.extend({
      * @method handleClickSaveButton
      * @param {Event} e
      */
-    handleClickConfirmButton: function (e) {
+    handleClickConfirmButton: function(e) {
         this.vocablist.save({'studyingMode': 'not studying'}, {patch: true, method: 'PUT'});
         this.close();
     }

@@ -19,12 +19,12 @@ bootstrap-dialog(data-name='vocablist-settings')
                 .col-sm-9
                   .radio
                     label
-                      input(type="radio" checked=view.vocablist.get('studyingMode')==='adding' value='adding' name="studyingMode")
+                      input(type="radio" checked=view.vocablist.get('studyingMode') === 'adding' value='adding' name="studyingMode")
                       span Add
                       .help-block Add more words while you practice
                   .radio
                     label
-                      input(type="radio" checked=view.vocablist.get('studyingMode')!=='adding' value='reviewing' name="studyingMode")
+                      input(type="radio" checked=view.vocablist.get('studyingMode') !== 'adding' value='reviewing' name="studyingMode")
                       span Review
                       .help-block Just study words that have already been added
 

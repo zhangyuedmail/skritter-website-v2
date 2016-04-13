@@ -6,16 +6,23 @@ gelato-component[data-name='dashboard-lists'] {
   font-weight: 300;
   margin: 30px 10px 0 10px;
 
-  img { width: 100%; }
+  img {
+    width: 100%;
+  }
 
   #sections-table {
     font-size: 16px;
     .section-name {
       font-size: 16px;
       padding-top: 10px;
-    };
-    .row { margin-top: 10px; }
-    .row a { color: $green5; }
+    }
+  ;
+    .row {
+      margin-top: 10px;
+    }
+    .row a {
+      color: $green5;
+    }
   }
 
   #vocablists-table {
@@ -24,8 +31,12 @@ gelato-component[data-name='dashboard-lists'] {
       font-size: 16px;
       padding-top: 10px;
     }
-    .row { margin-top: 10px; }
-    .row a { color: $green5; }
+    .row {
+      margin-top: 10px;
+    }
+    .row a {
+      color: $green5;
+    }
   }
 
 }

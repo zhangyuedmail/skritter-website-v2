@@ -12,9 +12,9 @@ module.exports = BootstrapDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #go-on-vacation-link': 'handleClickGoOnVacationLink',
-        'vclick #continue-cancel-btn': 'handleClickContinueCancelButton',
-        'vclick #submit-btn': 'handleClickSubmitButton'
+        'click #go-on-vacation-link': 'handleClickGoOnVacationLink',
+        'click #continue-cancel-btn': 'handleClickContinueCancelButton',
+        'click #submit-btn': 'handleClickSubmitButton'
     },
     /**
      * @method initialize
@@ -102,8 +102,8 @@ module.exports = BootstrapDialog.extend({
             return;
         }
         var attrs = {
-          id: app.user.id,
-          allowEmailsFromSkritter: receiveNewsletters
+            id: app.user.id,
+            allowEmailsFromSkritter: receiveNewsletters
         };
         var options = {
             patch: true,

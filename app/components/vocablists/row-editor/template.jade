@@ -6,7 +6,15 @@ gelato-component(data-name='vocablists-list-editor-rows')
   mixin wordRow(row, index)
     - var classes = [];
 
-    .row(class=index % 2 ? 'even' : 'odd', data-index=index, data-row-id=row.id)
+    if row.banned
+      - classes.push('banned');
+
+    if index % 2
+      - classes.push('even');
+    else
+      - classes.push('odd');
+
+    .row(class=classes.join(' '), data-index=index, data-row-id=row.id)
       case row.state
 
         when 'loaded'
@@ -35,6 +43,8 @@ gelato-component(data-name='vocablists-list-editor-rows')
               if row.results && row.results.length > 1
                 button.show-results.btn.btn-sm.btn-info All Results
                 | &nbsp;&nbsp;
+              if !view.editing && row.banned
+                i.unban-row.fa.fa-ban
               if view.editing && vocablist.isEditable()
                 i.remove-row.fa.fa-trash
 

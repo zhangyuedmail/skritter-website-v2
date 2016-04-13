@@ -1,10 +1,16 @@
 @import "_variables";
 
-body { font-family: $font-ubuntu; }
+body {
+  font-family: $font-ubuntu;
+}
 
-.background1 { background: url("#{$dir-assets}/textures/bg-retina-wood.png") repeat; }
+.background1 {
+  background: url("#{$dir-assets}/textures/bg-retina-wood.png") repeat;
+}
 
-.background2 { background: url("#{$dir-assets}/textures/bg-characters.png") repeat; }
+.background2 {
+  background: url("#{$dir-assets}/textures/bg-characters.png") repeat;
+}
 
 .background3 {
   background: url("#{$dir-assets}/backgrounds/landscape4.jpg") no-repeat center center fixed;
@@ -32,10 +38,18 @@ body { font-family: $font-ubuntu; }
   user-select: none;
 }
 
-.text-chinese { font-family: "KaiTi", "SimSun", "Microsoft YaHei", "Arial Unicode MS", serif; }
+.text-chinese {
+  font-family: "KaiTi", "SimSun", "Microsoft YaHei", "Arial Unicode MS", serif;
+}
 
-.text-japanese { font-family: "DFKaiSho-Md", "Meiryo", "MS Gothic", "Arial Unicode MS", serif; }
+.text-japanese {
+  font-family: "DFKaiSho-Md", "Meiryo", "MS Gothic", "Arial Unicode MS", serif;
+}
 
-.spr:after { content: " " }
+.spr:after {
+  content: " "
+}
 
-.spl:before { content: " " }
+.spl:before {
+  content: " "
+}

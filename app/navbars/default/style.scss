@@ -2,12 +2,14 @@
 
 bootstrap-navbar[data-name='default'] {
 
-  img { height: 30px; }
+  img {
+    height: 30px;
+  }
 
   nav {
     background-color: #262b30;
     border-color: #262b30;
-    box-shadow: 0 1px 10px rgba(38,43,48,.15);
+    box-shadow: 0 1px 10px rgba(38, 43, 48, .15);
   }
 
   .navbar-header {
@@ -17,7 +19,9 @@ bootstrap-navbar[data-name='default'] {
       font-size: 24px;
       font-weight: 700;
       text-decoration: none;
-      &:hover { color: $white5; }
+      &:hover {
+        color: $white5;
+      }
     }
   }
 
@@ -28,23 +32,35 @@ bootstrap-navbar[data-name='default'] {
       font-size: 18px;
       font-weight: 400;
       text-decoration: none;
-      &:hover { color: $white5; }
+      &:hover {
+        color: $white5;
+      }
     }
     .dropdown {
-      li > a { color: $grey7; }
+      li > a {
+        color: $grey7;
+      }
     }
     .open > a {
-      &:hover { background-color: $grey7; }
-      &:focus { background-color: $grey7; }
+      &:hover {
+        background-color: $grey7;
+      }
+      &:focus {
+        background-color: $grey7;
+      }
     }
 
-    .flag {
-      height: 22px;
-      width: auto;
+    .lang-icon {
+      font-size: smaller;
+    }
+
+    .other-lang-icon {
+      min-width: 70px;
+      display: inline-block;
     }
 
     .language-select-menu {
-      background: ($grey1 + #111);
+      background: $white;
 
       .currently-studying {
         background: $grey1;
@@ -53,11 +69,6 @@ bootstrap-navbar[data-name='default'] {
         padding: 3px 20px;
         clear: both;
         text-align: center;
-      }
-
-      .flag {
-        margin-right: 10px;
-        vertical-align: sub;
       }
     }
   }

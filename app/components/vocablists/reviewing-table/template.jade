@@ -2,13 +2,13 @@ gelato-component(data-name='vocablists-review-table')
   for list, i in view.vocablists.getReviewing()
     .row(data-list-id=list.id)
       .col-md-3
-        a(href="/vocablists/view/"+list.id)= list.get('name')
+        a(href="/vocablists/view/" + list.id)= list.get('name')
       .col-md-3
         .progress
-          .progress-bar(style="width:"+(list.getProgress().percent)+'%')
+          .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
       .col-md-2
-        a.action-link(href="/study/"+list.id) Study List
+        a.action-link(href="/study/" + list.id) Study List
 
       .col-md-2
         if list.get('studyingMode') === 'reviewing'

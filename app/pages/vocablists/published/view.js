@@ -28,7 +28,7 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keyup #list-search-input': 'handleKeypressListSearchInput',
-        'vclick #clear-search': 'handleClickClearSearch'
+        'click #clear-search': 'handleClickClearSearch'
     },
 
     /**

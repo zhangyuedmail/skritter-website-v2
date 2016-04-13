@@ -63,10 +63,10 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'keydown #add-input': 'handleKeydownAddInput',
-        'vclick #back-link': 'handleClickBackLink',
-        'vclick #discard-changes': 'handleClickDiscardChanges',
-        'vclick #edit-section': 'handleClickEditSection',
-        'vclick #save-changes': 'handleClickSaveChanges'
+        'click #back-link': 'handleClickBackLink',
+        'click #discard-changes': 'handleClickDiscardChanges',
+        'click #edit-section': 'handleClickEditSection',
+        'click #save-changes': 'handleClickSaveChanges'
     },
     /**
      * @property title
@@ -159,6 +159,7 @@ module.exports = GelatoPage.extend({
     handleClickSaveChanges: function(event) {
         event.preventDefault();
         this.editor.editing = false;
+        this.editor.rows = this.editor.getRows();
         this.vocablistSection.set('name', this.$('#section-name').val());
         this.vocablistSection.set('rows', this.editor.rows);
         this.vocablistSection.save();

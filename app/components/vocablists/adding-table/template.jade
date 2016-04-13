@@ -2,10 +2,10 @@ gelato-component(data-name='vocablists-add-table')
   for list, i in view.vocablists.getAdding()
     .row(data-list-id=list.id)
       .col-md-3
-        a(href="/vocablists/view/"+list.id)= list.get('name')
+        a(href="/vocablists/view/" + list.id)= list.get('name')
       .col-md-3
         .progress
-          .progress-bar(style="width:"+(list.getProgress().percent)+'%')
+          .progress-bar(style="width:" + (list.getProgress().percent) + '%')
 
       .col-md-2
         a(href="/study/" + list.id).action-link Study List

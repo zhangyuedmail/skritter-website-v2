@@ -35,11 +35,11 @@ module.exports = GelatoComponent.extend({
      * @type Object
      */
     events: {
-        'vclick #button-vocab-audio': 'handleClickButtonVocabAudio',
-        'vclick #button-vocab-ban': 'handleClickButtonVocabBan',
-        'vclick #button-vocab-edit': 'handleClickButtonVocabEdit',
-        'vclick #button-vocab-info': 'handleClickButtonVocabInfo',
-        'vclick #button-vocab-star': 'handleClickButtonVocabStar'
+        'click #button-vocab-audio': 'handleClickButtonVocabAudio',
+        'click #button-vocab-ban': 'handleClickButtonVocabBan',
+        'click #button-vocab-edit': 'handleClickButtonVocabEdit',
+        'click #button-vocab-info': 'handleClickButtonVocabInfo',
+        'click #button-vocab-star': 'handleClickButtonVocabStar'
     },
     /**
      * @method handleClickButtonVocabAudio

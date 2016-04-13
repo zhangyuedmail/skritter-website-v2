@@ -23,8 +23,8 @@ module.exports = BootstrapDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-change': 'handleClickButtonChange',
-        'vclick #button-close': 'handleClickButtonClose'
+        'click #button-change': 'handleClickButtonChange',
+        'click #button-close': 'handleClickButtonClose'
     },
     /**
      * @method handleClickButtonClose

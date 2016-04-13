@@ -26,9 +26,13 @@ gelato-component[data-name='study-prompt-vocab-contained'] {
       margin-top: 15px;
     }
     .child-decomp {
-      .decomp-definition {}
-      .decomp-reading { font-style: italic; }
-      .decomp-writing {}
+      .decomp-definition {
+      }
+      .decomp-reading {
+        font-style: italic;
+      }
+      .decomp-writing {
+      }
     }
     .child-reading {
       color: $grey3;

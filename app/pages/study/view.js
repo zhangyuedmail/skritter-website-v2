@@ -221,7 +221,7 @@ module.exports = GelatoPage.extend({
             remove: false,
             error: function(error) {
                 self.schedule.trigger('error', error);
-                self.scheduleState ='standby';
+                self.scheduleState = 'standby';
             },
             success: function(items, result) {
                 var now = moment().unix();
@@ -238,7 +238,7 @@ module.exports = GelatoPage.extend({
                     self.queue.push(self.schedule.get(sortedItems[i].id));
                 }
                 self.schedule.trigger('populate', self.queue);
-                self.scheduleState ='standby';
+                self.scheduleState = 'standby';
             }
         });
     },

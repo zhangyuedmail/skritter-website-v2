@@ -2,8 +2,12 @@
 
 bootstrap-dialog[data-name="loading"] {
 
-  .modal-content { background-color: $white5; }
+  .modal-content {
+    background-color: $white5;
+  }
 
-  .modal-dialog { width: 300px; }
+  .modal-dialog {
+    width: 300px;
+  }
 
 }

@@ -29,7 +29,7 @@ module.exports = BootstrapDialog.extend({
 
         // jquery-ui doesn't hook into this.$, so use global $ instead
         $(this.el).find('.list-group').sortable({
-            handle:'.glyphicon-option-vertical'
+            handle: '.glyphicon-option-vertical'
         });
         return this;
     },
@@ -38,10 +38,10 @@ module.exports = BootstrapDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #confirm-btn': 'handleClickConfirmButton',
-        'vclick #cancel-btn': 'handleClickCancelButton',
-        'vclick .glyphicon-remove': 'handleClickRemoveLink',
-        'vclick #add-section-btn': 'handleClickAddSectionButton'
+        'click #confirm-btn': 'handleClickConfirmButton',
+        'click #cancel-btn': 'handleClickCancelButton',
+        'click .glyphicon-remove': 'handleClickRemoveLink',
+        'click #add-section-btn': 'handleClickAddSectionButton'
     },
     /**
      * @method handleClickCloseButton
@@ -56,7 +56,7 @@ module.exports = BootstrapDialog.extend({
      */
     handleClickConfirmButton: function() {
         var sections = [];
-        $.each(this.$('.list-group-item'), function (i, el)  {
+        $.each(this.$('.list-group-item'), function(i, el) {
             var id = ($(el).data('section-id') || '').toString();
 
             var section = {
@@ -77,7 +77,7 @@ module.exports = BootstrapDialog.extend({
      * @method handleClickRemoveLink
      * @param {Event} e
      */
-    handleClickRemoveLink: function (e) {
+    handleClickRemoveLink: function(e) {
         $(e.target).closest('.list-group-item').addClass('hide');
     },
     /**

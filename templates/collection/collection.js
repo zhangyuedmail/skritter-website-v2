@@ -12,7 +12,8 @@ var Collection = GelatoCollection.extend({
      * @param {Object} [options]
      * @constructor
      */
-    initialize: function(models, options) {},
+    initialize: function(models, options) {
+    },
     /**
      * @property model
      * @type {Model}

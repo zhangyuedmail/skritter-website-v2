@@ -26,12 +26,12 @@ module.exports = GelatoPage.extend({
         this.password = '';
         this.errorMessage = '';
         this.searchString = '';
+        this.chinesepodSession.fetch();
         this.listenToOnce(this.chinesepodSession, 'state', this.handleChinesepodSessionLoaded);
         this.listenTo(this.chinesepodLabels, 'state', this.render);
         this.listenTo(this.chinesepodLessons, 'state', this.render);
         this.listenTo(this.chinesepodLabels, 'error', this.handleChinesePodError);
         this.listenTo(this.chinesepodLessons, 'error', this.handleChinesePodError);
-        this.chinesepodSession.fetch();
     },
     /**
      * @property events
@@ -39,10 +39,10 @@ module.exports = GelatoPage.extend({
      */
     events: {
         'submit #login-form': 'handleSubmitLoginForm',
-        'vclick #logout-chinesepod-link': 'handleClickLogoutChineseLink',
+        'click #logout-chinesepod-link': 'handleClickLogoutChineseLink',
         'keyup #search-input': 'handleChangeSearchInput',
         'change input[name="view-option"]': 'handleChangeViewOption',
-        'vclick .lookup-link': 'handleClickLookupLink'
+        'click .lookup-link': 'handleClickLookupLink'
     },
     /**
      * @property title
@@ -161,8 +161,8 @@ module.exports = GelatoPage.extend({
         $.ajax({
             url: url,
             headers: headers,
-            success: function (response) {
-                document.location.href = '/vocablist/view/' + response.vocabListID;
+            success: function(response) {
+                document.location.href = '/vocablists/view/' + response.vocabListID;
             }
         });
     }

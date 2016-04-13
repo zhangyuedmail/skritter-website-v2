@@ -10,7 +10,8 @@ module.exports = SkritterCollection.extend({
      * @method initialize
      * @constructor
      */
-    initialize: function() {},
+    initialize: function() {
+    },
     /**
      * @property model
      * @type {ProgressStat}

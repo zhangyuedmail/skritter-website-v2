@@ -12,7 +12,9 @@ gelato-page[data-name='dashboard'] {
   .content-block {
     padding-top: 30px;
     .options {
-      i { cursor: pointer; }
+      i {
+        cursor: pointer;
+      }
       color: $grey2;
       position: absolute;
       right: 20px;

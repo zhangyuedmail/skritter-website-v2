@@ -32,6 +32,6 @@ module.exports = BootstrapDialog.extend({
      * @param {Number} percent
      */
     setProgress: function(percent) {
-        this.$('.progress-bar').css('width', percent+'%')
+        this.$('.progress-bar').css('width', percent + '%')
     }
 });

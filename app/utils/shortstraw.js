@@ -240,7 +240,7 @@ Shortstraw.prototype.resamplePoints = function(points, s) {
             distance += d2;
         }
     }
-    resampled.push(points[points.length -1]);
+    resampled.push(points[points.length - 1]);
     return resampled;
 };
 

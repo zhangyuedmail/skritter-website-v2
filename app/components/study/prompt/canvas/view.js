@@ -35,14 +35,14 @@ module.exports = GelatoComponent.extend({
         this.upListener = null;
 
         createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
-            this.moveTo(x1 , y1);
+            this.moveTo(x1, y1);
             var dX = x2 - x1;
             var dY = y2 - y1;
             var dashes = Math.floor(Math.sqrt(dX * dX + dY * dY) / dashLength);
             var dashX = dX / dashes;
             var dashY = dY / dashes;
             var i = 0;
-            while (i++ < dashes ) {
+            while (i++ < dashes) {
                 x1 += dashX;
                 y1 += dashY;
                 this[i % 2 === 0 ? 'moveTo' : 'lineTo'](x1, y1);
@@ -52,6 +52,11 @@ module.exports = GelatoComponent.extend({
         };
 
     },
+    /**
+     * @property events
+     * @type Object
+     */
+    events: {},
     /**
      * @property template
      * @type {Function}
@@ -74,17 +79,9 @@ module.exports = GelatoComponent.extend({
         this.createLayer('input-background1');
         this.createLayer('stroke-hint');
         this.createLayer('input');
+        this.disableCanvas();
+        this.enableCanvas();
         return this;
-    },
-    /**
-     * @property events
-     * @type Object
-     */
-    events: {
-        'pointerdown.Canvas': 'triggerCanvasMouseDown',
-        'pointerup.Canvas': 'triggerCanvasMouseUp',
-        'vmousedown.Canvas': 'triggerCanvasMouseDown',
-        'vmouseup.Canvas': 'triggerCanvasMouseUp'
     },
     /**
      * @method clearLayer
@@ -127,6 +124,15 @@ module.exports = GelatoComponent.extend({
         return stage;
     },
     /**
+     * @method disableCanvas
+     * @returns {Canvas}
+     */
+    disableCanvas: function() {
+        this.stage.removeEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
+        this.stage.removeEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
+        return this;
+    },
+    /**
      * @method disableGrid
      * @returns {StudyPromptCanvas}
      */
@@ -141,9 +147,10 @@ module.exports = GelatoComponent.extend({
      */
     disableInput: function() {
         this.$('#input-canvas').off('.Input');
-        this.stage.removeEventListener("stagemousemove", this.moveListener);
-        this.stage.removeEventListener("stagemouseup", this.upListener);
-        this.stage.removeEventListener("mouseleave", this.leaveListener);
+        this.stage.removeEventListener('stagemousedown', this.downListener);
+        this.stage.removeEventListener('stagemousemove', this.moveListener);
+        this.stage.removeEventListener('stagemouseup', this.upListener);
+        this.stage.removeEventListener('mouseleave', this.leaveListener);
         return this;
     },
     /**
@@ -220,6 +227,15 @@ module.exports = GelatoComponent.extend({
         return shape;
     },
     /**
+     * @method enableCanvas
+     * @returns {Canvas}
+     */
+    enableCanvas: function() {
+        this.stage.addEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
+        this.stage.addEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
+        return this;
+    },
+    /**
      * @method disableGrid
      * @returns {StudyPromptCanvas}
      */
@@ -241,50 +257,51 @@ module.exports = GelatoComponent.extend({
         var oldPoint, oldMidPoint, points, marker;
 
         this.disableInput();
-        this.stage.removeEventListener("stagemousedown", this.downListener);
-        this.downListener = self.stage.addEventListener("stagemousedown", onInputDown);
+        this.downListener = self.stage.addEventListener('stagemousedown', onInputDown);
 
-        function onInputDown(e) {
+        function onInputDown(event) {
             points = [];
             marker = new createjs.Shape();
             marker.graphics.setStrokeStyle(self.size * self.brushScale, 'round', 'round');
             marker.stroke = marker.graphics.beginStroke(self.strokeColor).command;
 
-            points.push(new createjs.Point(e.stageX, e.stageY));
+            points.push(new createjs.Point(event.stageX, event.stageY));
             oldPoint = oldMidPoint = points[0];
             self.triggerInputDown(oldPoint);
             self.getLayer('input').addChild(marker);
 
-            self.moveListener = self.stage.addEventListener("stagemousemove", onInputMove);
-            self.upListener = self.stage.addEventListener("stagemouseup", onInputUp);
-            self.leaveListener = self.stage.addEventListener("mouseleave", onInputLeave);
+            self.moveListener = self.stage.addEventListener('stagemousemove', onInputMove);
+            self.upListener = self.stage.addEventListener('stagemouseup', onInputUp);
+            self.leaveListener = self.stage.addEventListener('mouseleave', onInputLeave);
         }
 
-        function onInputMove(e) {
-            var point = new createjs.Point(e.stageX, e.stageY);
+        function onInputMove(event) {
+            var point = new createjs.Point(event.stageX, event.stageY);
             var midPoint = new createjs.Point(oldPoint.x + point.x >> 1, oldPoint.y + point.y >> 1);
 
             if (app.fn.getDistance(oldPoint, point) > 3.0) {
-                 marker.graphics
-                     .setStrokeStyle(self.size * self.brushScale, 'round', 'round')
-                     .moveTo(midPoint.x, midPoint.y)
-                     .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
-                 oldPoint = point.clone();
-                 oldMidPoint = midPoint.clone();
-                 points.push(point);
-                 self.stage.update();
+                marker.graphics
+                    .setStrokeStyle(self.size * self.brushScale, 'round', 'round')
+                    .moveTo(midPoint.x, midPoint.y)
+                    .curveTo(oldPoint.x, oldPoint.y, oldMidPoint.x, oldMidPoint.y);
+                oldPoint = point.clone();
+                oldMidPoint = midPoint.clone();
+                points.push(point);
+                self.stage.update();
             }
         }
 
-        function onInputLeave(e) {
-            onInputUp();
+        function onInputLeave(event) {
+            onInputUp(event);
         }
 
-        function onInputUp(e) {
-            self.disableInput();
+        function onInputUp(event) {
+            self.stage.removeEventListener('stagemousemove', onInputMove);
+            self.stage.removeEventListener('stagemouseup', onInputUp);
+            self.stage.removeEventListener('mouseleave', onInputLeave);
 
             marker.graphics.endStroke();
-            points.push(new createjs.Point(e.stageX, e.stageY));
+            points.push(new createjs.Point(event.stageX, event.stageY));
 
             var clonedMarker = marker.clone(true);
             clonedMarker.stroke = marker.stroke;
@@ -382,6 +399,13 @@ module.exports = GelatoComponent.extend({
         return this.injectColor(this.getLayer(layerName), color);
     },
     /**
+     * @method remove
+     * @returns {StudyPrompt}
+     */
+    remove: function() {
+        return GelatoComponent.prototype.remove.call(this);
+    },
+    /**
      * @method reset
      * @returns {StudyPromptCanvas}
      */
@@ -463,14 +487,14 @@ module.exports = GelatoComponent.extend({
         this.mouseLastDownEvent = this.mouseDownEvent;
         this.mouseLastUpEvent = this.mouseUpEvent;
         this.mouseUpEvent = event;
-        var linePositionStart = {x: this.mouseDownEvent.pageX, y: this.mouseDownEvent.pageY};
-        var linePositionEnd = {x: this.mouseUpEvent.pageX, y: this.mouseUpEvent.pageY};
+        var linePositionStart = {x: this.mouseDownEvent.stageX, y: this.mouseDownEvent.stageY};
+        var linePositionEnd = {x: this.mouseUpEvent.stageX, y: this.mouseUpEvent.stageY};
         var lineAngle = app.fn.getAngle(linePositionStart, linePositionEnd);
         var lineDistance = app.fn.getDistance(linePositionStart, linePositionEnd);
         var lineDuration = this.mouseUpEvent.timeStamp - this.mouseDownEvent.timeStamp;
         if (this.mouseLastUpEvent) {
-            var lineLastPositionStart = {x: this.mouseLastDownEvent.pageX, y: this.mouseLastDownEvent.pageY};
-            var lineLastPositionEnd = {x: this.mouseLastUpEvent.pageX, y: this.mouseLastUpEvent.pageY};
+            var lineLastPositionStart = {x: this.mouseLastDownEvent.stageX, y: this.mouseLastDownEvent.stageY};
+            var lineLastPositionEnd = {x: this.mouseLastUpEvent.stageX, y: this.mouseLastUpEvent.stageY};
             var lineLastDistance = app.fn.getDistance(lineLastPositionStart, lineLastPositionEnd);
             var lineLastDuration = this.mouseUpEvent.timeStamp - this.mouseLastUpEvent.timeStamp;
             if (lineLastDistance < 5 && lineLastDuration > 50 && lineLastDuration < 200) {
@@ -480,7 +504,7 @@ module.exports = GelatoComponent.extend({
             }
         }
         if (this.mouseDownEvent) {
-            if (lineDistance > this.size / 2 && lineAngle < - 70 && lineAngle > -110) {
+            if (lineDistance > this.size / 2 && lineAngle < -70 && lineAngle > -110) {
                 this.trigger('swipeup', event);
                 return;
             }

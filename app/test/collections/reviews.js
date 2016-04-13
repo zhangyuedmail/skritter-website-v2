@@ -1,7 +1,7 @@
 var GelatoCollection = require('gelato/collection');
 var Review = require('test/models/review');
 
-var Reviews = GelatoCollection.extend( /** @lends Reviews.prototype */ {
+var Reviews = GelatoCollection.extend(/** @lends Reviews.prototype */ {
     /**
      * @class Reviews
      * @param {Array|Object} [models]

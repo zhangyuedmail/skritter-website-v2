@@ -1,10 +1,10 @@
 var ProgressDialog = require('dialogs/progress/view');
 
 var availableVocabActions = [
-  'ban',
-  'unban',
-  'delete-mnemonic',
-  'remove-star'
+    'ban',
+    'unban',
+    'delete-mnemonic',
+    'remove-star'
 ];
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
     beginVocabAction: function(action, vocabs) {
         if (!_.includes(availableVocabActions, action)) {
             throw new Error('Invalid action, must be one of: '
-             + availableVocabActions.join(', '));
+                + availableVocabActions.join(', '));
         }
         if (!vocabs.size()) {
             return;
@@ -52,10 +52,10 @@ module.exports = {
      * @returns {Object|null} Vocab attrs to be saved, if any
      */
     deleteVocabMnemonicAction: function(vocab) {
-      if (!vocab.getMnemonicText()) {
-          return null;
-      }
-      return { mnemonic: { text: '' } };
+        if (!vocab.getMnemonicText()) {
+            return null;
+        }
+        return {mnemonic: {text: ''}};
     },
     /**
      * @method removeStarVocabAction
@@ -66,7 +66,7 @@ module.exports = {
         if (!vocab.get('starred')) {
             return null;
         }
-        return { starred: false };
+        return {starred: false};
     },
     /**
      * @method runVocabAction
@@ -93,7 +93,7 @@ module.exports = {
             return this.finishVocabAction();
         }
         vocabAttrs.id = vocab.id;
-        vocab.save(vocabAttrs, { patch: true, 'method': 'PUT' });
+        vocab.save(vocabAttrs, {patch: true, 'method': 'PUT'});
         this.listenToOnce(vocab, 'sync', function() {
             this.action.dialog.setProgress(100 * (this.action.total - this.action.queue.size()) / this.action.total);
             this.runVocabAction();

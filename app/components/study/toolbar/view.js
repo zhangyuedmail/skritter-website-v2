@@ -25,8 +25,8 @@ module.exports = GelatoComponent.extend({
      * @type {Object}
      */
     events: {
-        'vclick #button-add-item': 'handleClickAddItem',
-        'vclick #button-study-settings': 'handleClickStudySettings'
+        'click #button-add-item': 'handleClickAddItem',
+        'click #button-study-settings': 'handleClickStudySettings'
     },
     /**
      * @property template
@@ -49,13 +49,16 @@ module.exports = GelatoComponent.extend({
     handleClickAddItem: function(event) {
         event.preventDefault();
         this.page.schedule.addItems(
-            null,
+            {
+                lang: app.getLanguage(),
+                lists: this.page.vocablist ? this.page.vocablist.id : null
+            },
             function(error, result) {
                 var added = result.numVocabsAdded;
                 $.notify(
                     {
                         title: 'Update',
-                        message: added + (added > 1 ? ' words have ' : ' word has ')  + 'been added.'
+                        message: added + (added > 1 ? ' words have ' : ' word has ') + 'been added.'
                     },
                     {
                         type: 'pastel-info',

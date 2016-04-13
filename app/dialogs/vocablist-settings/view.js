@@ -53,8 +53,8 @@ module.exports = BootstrapDialog.extend({
      * @type {Object}
      */
     events: {
-        'vclick #close-btn': 'handleClickCloseButton',
-        'vclick #save-btn': 'handleClickSaveButton'
+        'click #close-btn': 'handleClickCloseButton',
+        'click #save-btn': 'handleClickSaveButton'
     },
     /**
      * @method handleClickCloseButton
@@ -66,8 +66,10 @@ module.exports = BootstrapDialog.extend({
     /**
      * @method handleClickSaveButton
      */
-    handleClickSaveButton: function () {
-        var getVals = function(el) { return $(el).val(); };
+    handleClickSaveButton: function() {
+        var getVals = function(el) {
+            return $(el).val();
+        };
 
         var attributes = {
             studyingMode: this.$el.find('input[name="studyingMode"]:checked').val(),
@@ -87,7 +89,7 @@ module.exports = BootstrapDialog.extend({
 
         var skipSectionsInputs = this.$el.find('input[name="sectionsSkipping"]');
         if (skipSectionsInputs.length) {
-            var skippingInputs =  skipSectionsInputs.filter(':not(:checked)');
+            var skippingInputs = skipSectionsInputs.filter(':not(:checked)');
             attributes.sectionsSkipping = $.map(skippingInputs, getVals);
         }
 

@@ -2,7 +2,9 @@
 
 bootstrap-dialog[data-name="goal-settings"] {
 
-  form { margin-left: 25px; }
+  form {
+    margin-left: 25px;
+  }
   label {
     color: #7d8288;
     font-family: $font-ubuntu;
@@ -16,7 +18,9 @@ bootstrap-dialog[data-name="goal-settings"] {
     font-weight: 300;
   }
 
-  .modal-content { background-color: $white1; }
+  .modal-content {
+    background-color: $white1;
+  }
 
   .row {
     padding: 10px 0;
