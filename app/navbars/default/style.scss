@@ -50,13 +50,17 @@ bootstrap-navbar[data-name='default'] {
       }
     }
 
-    .flag {
-      height: 22px;
-      width: auto;
+    .lang-icon {
+      font-size: smaller;
+    }
+
+    .other-lang-icon {
+      min-width: 70px;
+      display: inline-block;
     }
 
     .language-select-menu {
-      background: ($grey1 + #111);
+      background: $white;
 
       .currently-studying {
         background: $grey1;
@@ -65,11 +69,6 @@ bootstrap-navbar[data-name='default'] {
         padding: 3px 20px;
         clear: both;
         text-align: center;
-      }
-
-      .flag {
-        margin-right: 10px;
-        vertical-align: sub;
       }
     }
   }

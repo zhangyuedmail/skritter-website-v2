@@ -51,7 +51,7 @@ bootstrap-navbar(data-name='default')
               a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                 - var lang = user.get('targetLang');
                 - var otherLang = lang === 'zh' ? 'ja' : 'zh';
-                img(src="/media/images/flags/flag-#{lang}.png", alt="", class="flag", id="currently-studying-flag")
+                span.lang-icon #{view.getDisplayLanguageCharacters(lang)}
                 | &nbsp;&nbsp;&nbsp;
                 span.caret
               ul.dropdown-menu.language-select-menu
@@ -61,7 +61,7 @@ bootstrap-navbar(data-name='default')
                 li.divider(role="separator")
                 li
                   a(href="#", id="switch-targetLang")
-                    img(src="/media/images/flags/flag-#{otherLang}.png", alt="", class="flag")
+                    span.lang-icon.other-lang-icon #{view.getDisplayLanguageCharacters(otherLang)}
                     | Study #{view.getDisplayLanguageName(otherLang)}
             li
               a#button-beacon(href="#")
