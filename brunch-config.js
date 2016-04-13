@@ -4,10 +4,10 @@ exports.config = {
   files: {
     javascripts: {
       joinTo: {
-        'js/application.js': /^app[\\/]/,
-        'js/libraries.js': /^vendor[\\/]/,
-        'js/startup.js': /^startup[\\/]/,
-        'js/test.js': /^test[\\/]/
+        'js/application.js': /^app/,
+        'js/libraries.js': /^vendor/,
+        'js/startup.js': /^startup/,
+        'js/test.js': /^test/
       },
       order: {
         before: [
