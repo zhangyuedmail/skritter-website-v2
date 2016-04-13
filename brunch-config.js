@@ -50,7 +50,9 @@ exports.config = {
       }
     }
   },
-  npm: false,
+  npm: {
+    enabled: false
+  },
   paths: {
     'public': 'public',
     'watched': ['app', 'startup', 'test', 'vendor']
