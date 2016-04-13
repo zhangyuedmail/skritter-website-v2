@@ -11,7 +11,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.footer = new MarketingFooter();
 		this.navbar = new DefaultNavbar();
 	},
@@ -33,7 +33,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Home}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.footer.setElement('#footer-container').render();
 		this.navbar.setElement('#navbar-container').render();
@@ -43,7 +43,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickLinkAppleStore
 	 * @param {Event} event
 	 */
-	handleClickLinkAppleStore: function (event) {
+	handleClickLinkAppleStore: function(event) {
 		event.preventDefault();
 		mixpanel.track('Clicked ios app button');
 		window.open('https://itunes.apple.com/us/artist/inkren-llc/id402280587', '_blank');
@@ -52,7 +52,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickLinkGoogleStore
 	 * @param {Event} event
 	 */
-	handleClickLinkGoogleStore: function (event) {
+	handleClickLinkGoogleStore: function(event) {
 		event.preventDefault();
 		mixpanel.track('Clicked android app button');
 		window.open('https://play.google.com/store/apps/developer?id=Skritter', '_blank');
@@ -61,7 +61,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Home}
 	 */
-	remove: function () {
+	remove: function() {
 		this.footer.remove();
 		this.navbar.remove();
 		return GelatoPage.prototype.remove.call(this);

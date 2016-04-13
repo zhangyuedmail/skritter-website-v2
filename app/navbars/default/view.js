@@ -25,7 +25,7 @@ module.exports = BootstrapNavbar.extend({
 	 * @method render
 	 * @returns {DefaultNavbar}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.$('[data-toggle="tooltip"]').tooltip();
 		return this;
@@ -34,7 +34,7 @@ module.exports = BootstrapNavbar.extend({
 	 * @method handleClickButtonBeacon
 	 * @param {Event} event
 	 */
-	handleClickButtonBeacon: function (event) {
+	handleClickButtonBeacon: function(event) {
 		event.preventDefault();
 		if (window.HS) {
 			HS.beacon.open();
@@ -44,10 +44,10 @@ module.exports = BootstrapNavbar.extend({
 	 * @method handleClickButtonLogout
 	 * @param {Event} event
 	 */
-	handleClickButtonLogout: function (event) {
+	handleClickButtonLogout: function(event) {
 		event.preventDefault();
 		var dialog = new ConfirmLogoutDialog();
-		dialog.on('logout', function () {
+		dialog.on('logout', function() {
 			app.user.logout();
 		});
 		dialog.open();
@@ -56,7 +56,7 @@ module.exports = BootstrapNavbar.extend({
 	 * @method handleClickDropdown
 	 * @param {Event} event
 	 */
-	handleClickDropdown: function (event) {
+	handleClickDropdown: function(event) {
 		event.preventDefault();
 
 		var $dropdown = this.$('.item-dropdown');
@@ -76,13 +76,13 @@ module.exports = BootstrapNavbar.extend({
 	 * @param {string} [langCode] the language code you want to display
 	 * @return {string} a user-friendly version of the language code
 	 */
-	getDisplayLanguageName: function (langCode) {
+	getDisplayLanguageName: function(langCode) {
 		langCode = langCode || app.user.get('targetLang');
 
 		return langCode === 'zh' ? 'Chinese' : 'Japanese';
 	},
 
-	handleClickSwitchTargetLang: function (e) {
+	handleClickSwitchTargetLang: function(e) {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -90,11 +90,11 @@ module.exports = BootstrapNavbar.extend({
 		app.user.save({
 			targetLang: toSwitchCode
 		}, {
-			error: function () {
+			error: function() {
 				//TODO: show some kind of error message
 				ScreenLoader.hide();
 			},
-			success: function () {
+			success: function() {
 				window.location.reload(false);
 			}
 		});

@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 		this.reviews = null;
 		this.showLeft = true;
@@ -33,7 +33,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptNavigation}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -41,7 +41,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickNavigateNext
 	 * @param {Event} event
 	 */
-	handleClickNavigateNext: function (event) {
+	handleClickNavigateNext: function(event) {
 		event.preventDefault();
 		this.prompt.next();
 	},
@@ -49,7 +49,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickNavigatePrevious
 	 * @param {Event} event
 	 */
-	handleClickNavigatePrevious: function (event) {
+	handleClickNavigatePrevious: function(event) {
 		event.preventDefault();
 		this.prompt.previous();
 	},
@@ -57,7 +57,7 @@ module.exports = GelatoComponent.extend({
 	 * @method setReviews
 	 * @param {Reviews} reviews
 	 */
-	setReviews: function (reviews) {
+	setReviews: function(reviews) {
 		this.stopListening();
 		this.listenTo(reviews, 'add', this.render);
 		this.listenTo(reviews, 'state', this.render);

@@ -16,7 +16,7 @@ module.exports = SkritterModel.extend({
 	 * @method parse
 	 * @returns {Object}
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.VocabList || response;
 	},
 	/**
@@ -28,7 +28,7 @@ module.exports = SkritterModel.extend({
 	 * @method deletable
 	 * @returns {Boolean}
 	 */
-	deletable: function () {
+	deletable: function() {
 		return _.every([
 			!this.get('disabled'),
 			!this.get('published'),
@@ -40,7 +40,7 @@ module.exports = SkritterModel.extend({
 	 * @method copyable
 	 * @returns {Boolean}
 	 */
-	copyable: function () {
+	copyable: function() {
 		return _.every([
 			!this.get('disabled'),
 			this.get('sort') !== 'chinesepod-lesson'
@@ -50,14 +50,14 @@ module.exports = SkritterModel.extend({
 	 * @method getImageUrl
 	 * @returns {String}
 	 */
-	getImageUrl: function () {
+	getImageUrl: function() {
 		return app.getApiUrl() + 'vocablists/' + this.id + '/image';
 	},
 	/**
 	 * @method getPopularity
 	 * @returns {Number}
 	 */
-	getPopularity: function () {
+	getPopularity: function() {
 		var peopleStudying = this.get('peopleStudying');
 		if (peopleStudying === 0) {
 			return 0;
@@ -71,7 +71,7 @@ module.exports = SkritterModel.extend({
 	 * @method getProgress
 	 * @returns {Object}
 	 */
-	getProgress: function () {
+	getProgress: function() {
 		var added = 0;
 		var passed = false;
 		var total = 0;
@@ -112,7 +112,7 @@ module.exports = SkritterModel.extend({
 	 * @param {String} sectionId
 	 * @returns {Object}
 	 */
-	getSectionById: function (sectionId) {
+	getSectionById: function(sectionId) {
 		return _.find(this.get('sections'), {id: sectionId});
 	},
 	/**
@@ -120,7 +120,7 @@ module.exports = SkritterModel.extend({
 	 * @param {String} sectionId
 	 * @returns {Array}
 	 */
-	getSectionVocabIds: function (sectionId) {
+	getSectionVocabIds: function(sectionId) {
 		var vocabIds = [];
 		var section = this.getSectionById(sectionId);
 		if (section) {
@@ -133,7 +133,7 @@ module.exports = SkritterModel.extend({
 	 * @method getWordCount
 	 * @returns {Number}
 	 */
-	getWordCount: function () {
+	getWordCount: function() {
 		var count = 0;
 		var rows = _.map(this.get('sections'), 'rows');
 		for (var i = 0, length = rows.length; i < length; i++) {
@@ -145,14 +145,14 @@ module.exports = SkritterModel.extend({
 	 * @method isChinese
 	 * @returns {Boolean}
 	 */
-	isChinese: function () {
+	isChinese: function() {
 		return this.get('lang') === 'zh';
 	},
 	/**
 	 * @method isEditable
 	 * @returns {Boolean}
 	 */
-	isEditable: function () {
+	isEditable: function() {
 		return app.user.get('isAdmin') ? true : _.every([
 			!this.get('disabled'),
 			this.get('sort') === 'custom',
@@ -167,14 +167,14 @@ module.exports = SkritterModel.extend({
 	 * @method isJapanese
 	 * @returns {Boolean}
 	 */
-	isJapanese: function () {
+	isJapanese: function() {
 		return this.get('lang') === 'ja';
 	},
 	/**
 	 * @method publishable
 	 * @returns {Boolean}
 	 */
-	publishable: function () {
+	publishable: function() {
 		return _.every([
 			!this.get('disabled'),
 			!this.get('published'),

@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 		this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
 		this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
@@ -34,7 +34,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptPartDefn}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.prompt.review = this.prompt.reviews.current();
 		this.prompt.canvas.grid = false;
@@ -55,7 +55,7 @@ module.exports = GelatoComponent.extend({
 	 * @method renderComplete
 	 * @returns {StudyPromptPartRune}
 	 */
-	renderComplete: function () {
+	renderComplete: function() {
 		this.prompt.review.stop();
 		this.prompt.review.set('complete', true);
 		this.prompt.navigation.render();
@@ -81,7 +81,7 @@ module.exports = GelatoComponent.extend({
 	 * @method renderIncomplete
 	 * @returns {StudyPromptPartRune}
 	 */
-	renderIncomplete: function () {
+	renderIncomplete: function() {
 		this.prompt.review.start();
 		this.prompt.review.set('complete', false);
 		this.prompt.shortcuts.grading.stop_listening();
@@ -101,7 +101,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptCanvasClick
 	 */
-	handlePromptCanvasClick: function () {
+	handlePromptCanvasClick: function() {
 		if (this.prompt.review.isComplete()) {
 			this.prompt.next();
 		} else {
@@ -112,7 +112,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptToolbarActionCorrect
 	 */
-	handlePromptToolbarActionCorrect: function () {
+	handlePromptToolbarActionCorrect: function() {
 		this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
 		this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
 		this.prompt.toolbarAction.render();

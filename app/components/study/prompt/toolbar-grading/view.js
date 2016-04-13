@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 	},
 	/**
@@ -35,7 +35,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptToolbarGrading}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -43,7 +43,7 @@ module.exports = GelatoComponent.extend({
 	 * @method deselect
 	 * @returns {StudyPromptToolbarGrading}
 	 */
-	deselect: function () {
+	deselect: function() {
 		this.value = null;
 		return this.render();
 	},
@@ -51,7 +51,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleMousedownButton
 	 * @param {Event} event
 	 */
-	handleMousedownButton: function (event) {
+	handleMousedownButton: function(event) {
 		event.preventDefault();
 		this.select($(event.currentTarget).data('value'));
 		this.trigger('mousedown', this.value);
@@ -60,7 +60,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleMousedownButton
 	 * @param {Event} event
 	 */
-	handleMouseupButton: function (event) {
+	handleMouseupButton: function(event) {
 		event.preventDefault();
 		this.select($(event.currentTarget).data('value'));
 		this.trigger('mouseup', this.value);
@@ -70,7 +70,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Number} value
 	 * @returns {StudyPromptToolbarGrading}
 	 */
-	select: function (value) {
+	select: function(value) {
 		this.value = parseInt(value, 10);
 		return this.render();
 	}

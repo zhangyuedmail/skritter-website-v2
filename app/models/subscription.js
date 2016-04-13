@@ -18,13 +18,13 @@ module.exports = SkritterModel.extend({
 	 * @method parse
 	 * @returns {Object}
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.Subscription || response;
 	},
 	/**
 	 * @method getStatus
 	 */
-	getStatus: function () {
+	getStatus: function() {
 		var subscribed = this.get('subscribed');
 		if (subscribed === 'gplay') {
 			return 'Subscribed through Google Play';

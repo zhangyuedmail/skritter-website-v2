@@ -20,7 +20,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method initialize
 	 * @param {Object} options
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.choseVacation = false;
 		this.subscription = options.subscription;
 		this.reasons = new CancellationReasons();
@@ -36,28 +36,28 @@ module.exports = BootstrapDialog.extend({
 	 * @method render
 	 * @returns {ListSettingsDialog}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
 	/**
 	 * @method handleClickContinueCancelButton
 	 */
-	handleClickContinueCancelButton: function () {
+	handleClickContinueCancelButton: function() {
 		this.$('#page-1').addClass('hide');
 		this.$('#page-2').removeClass('hide');
 	},
 	/**
 	 * @method handleClickGoOnVacationLink
 	 */
-	handleClickGoOnVacationLink: function () {
+	handleClickGoOnVacationLink: function() {
 		this.choseVacation = true;
 		this.close();
 	},
 	/**
 	 * @method handleClickSubmitButton
 	 */
-	handleClickSubmitButton: function () {
+	handleClickSubmitButton: function() {
 		var service = this.subscription.get('subscribed');
 		if (!_.includes(['stripe', 'gplay'], service)) {
 			return false;
@@ -71,7 +71,7 @@ module.exports = BootstrapDialog.extend({
 	/**
 	 * @method renderSectionContent
 	 */
-	renderReasonsForm: function () {
+	renderReasonsForm: function() {
 		var context = require('globals');
 		context.view = this;
 		var rendering = $(this.template(context));
@@ -81,7 +81,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method requestUnsubscribe
 	 * @return {jqxhr}
 	 */
-	requestUnsubscribe: function () {
+	requestUnsubscribe: function() {
 		var service = this.subscription.get('subscribed');
 		var url = app.getApiUrl() + this.subscription.url() + '/' + service + '/cancel';
 		var headers = app.user.session.getHeaders();
@@ -95,7 +95,7 @@ module.exports = BootstrapDialog.extend({
 	/**
 	 * @method requestUpdateReceiveNewsletter
 	 */
-	requestUpdateReceiveNewsletter: function () {
+	requestUpdateReceiveNewsletter: function() {
 		var input = this.$('input[name="receive-newsletters"]');
 		var receiveNewsletters = input.is(':checked');
 		if (receiveNewsletters === app.user.get('allowEmailsFromSkritter')) {
@@ -114,7 +114,7 @@ module.exports = BootstrapDialog.extend({
 	/**
 	 * @method requestSaveCancelReason
 	 */
-	requestSaveCancelReason: function () {
+	requestSaveCancelReason: function() {
 		var cancellation = new Cancellation({
 			'reason': $('input[name="reason"]:checked').val(),
 			'message': $('#notes-textarea').val()

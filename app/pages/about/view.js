@@ -11,7 +11,7 @@ module.exports = GelatoPage.extend({
 	 * Initializes a new About Us Page
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.footer = new MarketingFooter();
 		this.navbar = new DefaultNavbar();
 	},
@@ -32,7 +32,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {About}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		if (app.user.isLoggedIn()) {
 			this.$('#field-email').val(app.user.get('email'));
@@ -47,7 +47,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {About}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.footer.remove();
 

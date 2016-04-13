@@ -10,7 +10,7 @@ module.exports = SkritterCollection.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.cursor = null;
 	},
 	/**
@@ -28,23 +28,23 @@ module.exports = SkritterCollection.extend({
 	 * @param {Object} response
 	 * @returns Array
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		this.cursor = response.cursor;
 		return response.VocabLists;
 	},
 	/**
 	 * @method getAdding
 	 */
-	getAdding: function () {
-		return this.filter(function (vocablist) {
+	getAdding: function() {
+		return this.filter(function(vocablist) {
 			return vocablist.get('studyingMode') === 'adding';
 		});
 	},
 	/**
 	 * @method getAdding
 	 */
-	getReviewing: function () {
-		return this.filter(function (vocablist) {
+	getReviewing: function() {
+		return this.filter(function(vocablist) {
 			return _.includes(['reviewing', 'finished'], vocablist.get('studyingMode'))
 		});
 	}

@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.brushScale = 0.04;
 		this.defaultFadeEasing = createjs.Ease.sineOut;
 		this.defaultFadeSpeed = 1000;
@@ -34,7 +34,7 @@ module.exports = GelatoComponent.extend({
 		this.leaveListener = null;
 		this.upListener = null;
 
-		createjs.Graphics.prototype.dashedLineTo = function (x1, y1, x2, y2, dashLength) {
+		createjs.Graphics.prototype.dashedLineTo = function(x1, y1, x2, y2, dashLength) {
 			this.moveTo(x1, y1);
 			var dX = x2 - x1;
 			var dY = y2 - y1;
@@ -66,7 +66,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptCanvas}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.stage = this.createStage();
 		this.createLayer('character-grid');
@@ -88,7 +88,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {String} name
 	 * @returns {StudyPromptCanvas}
 	 */
-	clearLayer: function (name) {
+	clearLayer: function(name) {
 		var layer = this.getLayer(name);
 		createjs.Tween.removeTweens(layer);
 		layer.removeAllChildren();
@@ -102,7 +102,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {String} name
 	 * @returns {createjs.Container}
 	 */
-	createLayer: function (name) {
+	createLayer: function(name) {
 		var layer = new createjs.Container();
 		layer.name = 'layer-' + name;
 		this.stage.addChild(layer);
@@ -112,7 +112,7 @@ module.exports = GelatoComponent.extend({
 	 * @method createStage
 	 * @returns {createjs.Stage}
 	 */
-	createStage: function () {
+	createStage: function() {
 		var canvas = this.$('#input-canvas').get(0);
 		var stage = new createjs.Stage(canvas);
 		createjs.Ticker.removeEventListener('tick', stage);
@@ -127,7 +127,7 @@ module.exports = GelatoComponent.extend({
 	 * @method disableCanvas
 	 * @returns {Canvas}
 	 */
-	disableCanvas: function () {
+	disableCanvas: function() {
 		this.stage.removeEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
 		this.stage.removeEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
 		return this;
@@ -136,7 +136,7 @@ module.exports = GelatoComponent.extend({
 	 * @method disableGrid
 	 * @returns {StudyPromptCanvas}
 	 */
-	disableGrid: function () {
+	disableGrid: function() {
 		this.clearLayer('character-grid');
 		this.grid = false;
 		return this;
@@ -145,7 +145,7 @@ module.exports = GelatoComponent.extend({
 	 * @method disableInput
 	 * @returns {StudyPromptCanvas}
 	 */
-	disableInput: function () {
+	disableInput: function() {
 		this.$('#input-canvas').off('.Input');
 		this.stage.removeEventListener('stagemousedown', this.downListener);
 		this.stage.removeEventListener('stagemousemove', this.moveListener);
@@ -162,7 +162,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @returns {createjs.Shape}
 	 */
-	drawCircle: function (layerName, x, y, radius, options) {
+	drawCircle: function(layerName, x, y, radius, options) {
 		var circle = new createjs.Shape();
 		options = options ? options : {};
 		circle.graphics.beginFill(options.fill || '#000000');
@@ -178,7 +178,7 @@ module.exports = GelatoComponent.extend({
 	 * @method drawGrid
 	 * @returns {StudyPromptCanvas}
 	 */
-	drawGrid: function () {
+	drawGrid: function() {
 		var grid = new createjs.Shape();
 		this.clearLayer('character-grid');
 		grid.graphics.beginStroke(this.gridColor).setStrokeStyle(this.gridLineWidth, 'round', 'round');
@@ -199,7 +199,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} [options]
 	 * @returns {createjs.Text}
 	 */
-	drawCharacter: function (layerName, character, options) {
+	drawCharacter: function(layerName, character, options) {
 		options = options || {};
 		options.color = options.color || '#000000';
 		options.font = options.font || 'Arial';
@@ -217,7 +217,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} [options]
 	 * @returns {createjs.Shape}
 	 */
-	drawShape: function (layerName, shape, options) {
+	drawShape: function(layerName, shape, options) {
 		options = options || {};
 		if (options.color) {
 			this.injectColor(shape, options.color);
@@ -230,7 +230,7 @@ module.exports = GelatoComponent.extend({
 	 * @method enableCanvas
 	 * @returns {Canvas}
 	 */
-	enableCanvas: function () {
+	enableCanvas: function() {
 		this.stage.addEventListener('stagemousedown', _.bind(this.triggerCanvasMouseDown, this));
 		this.stage.addEventListener('stagemouseup', _.bind(this.triggerCanvasMouseUp, this));
 		return this;
@@ -239,7 +239,7 @@ module.exports = GelatoComponent.extend({
 	 * @method disableGrid
 	 * @returns {StudyPromptCanvas}
 	 */
-	enableGrid: function () {
+	enableGrid: function() {
 		this.drawGrid();
 		this.grid = true;
 		return this;
@@ -252,7 +252,7 @@ module.exports = GelatoComponent.extend({
 	 * @TODO refactor these inner functions and local vars into instance fns
 	 * and variables--this function does too much!
 	 */
-	enableInput: function () {
+	enableInput: function() {
 		var self = this;
 		var oldPoint, oldMidPoint, points, marker;
 
@@ -318,14 +318,14 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} [options]
 	 * @param {Function} [callback]
 	 */
-	fadeLayer: function (layerName, options, callback) {
+	fadeLayer: function(layerName, options, callback) {
 		var layer = this.getLayer(layerName);
 		options = options || {};
 		options.easing = options.easing || this.defaultFadeEasing;
 		options.milliseconds = options.milliseconds || this.defaultFadeSpeed;
 		createjs.Tween
 			.get(layer).to({alpha: 0}, options.milliseconds, options.easing)
-			.call(function () {
+			.call(function() {
 				layer.removeAllChildren();
 				layer.alpha = 1;
 				if (typeof callback === 'function') {
@@ -340,7 +340,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} [options]
 	 * @param {Function} [callback]
 	 */
-	fadeShape: function (layerName, shape, options, callback) {
+	fadeShape: function(layerName, shape, options, callback) {
 		var layer = this.getLayer(layerName);
 		options = options || {};
 		options.easing = options.easing || this.defaultFadeEasing;
@@ -348,7 +348,7 @@ module.exports = GelatoComponent.extend({
 		layer.addChild(shape);
 		createjs.Tween
 			.get(shape).to({alpha: 0}, options.milliseconds, options.easing)
-			.call(function () {
+			.call(function() {
 				layer.removeChild(shape);
 				shape.alpha = 1;
 				if (typeof callback === 'function') {
@@ -361,7 +361,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {String} name
 	 * @returns {createjs.Container}
 	 */
-	getLayer: function (name) {
+	getLayer: function(name) {
 		return this.stage.getChildByName('layer-' + name);
 	},
 	/**
@@ -369,7 +369,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {createjs.Container|createjs.Shape} object
 	 * @param {String} color
 	 */
-	injectColor: function (object, color) {
+	injectColor: function(object, color) {
 		var customFill = new createjs.Graphics.Fill(color);
 		var customStroke = new createjs.Graphics.Stroke(color);
 		(function inject(object) {
@@ -395,21 +395,21 @@ module.exports = GelatoComponent.extend({
 	 * @param {String} color
 	 * @returns {StudyPromptCanvas}
 	 */
-	injectLayerColor: function (layerName, color) {
+	injectLayerColor: function(layerName, color) {
 		return this.injectColor(this.getLayer(layerName), color);
 	},
 	/**
 	 * @method remove
 	 * @returns {StudyPrompt}
 	 */
-	remove: function () {
+	remove: function() {
 		return GelatoComponent.prototype.remove.call(this);
 	},
 	/**
 	 * @method reset
 	 * @returns {StudyPromptCanvas}
 	 */
-	reset: function () {
+	reset: function() {
 		clearTimeout(this.mouseTapTimeout);
 		this.getLayer('character-grid').removeAllChildren();
 		this.getLayer('character-background').removeAllChildren();
@@ -428,7 +428,7 @@ module.exports = GelatoComponent.extend({
 	 * @method resize
 	 * @returns {StudyPromptCanvas}
 	 */
-	resize: function () {
+	resize: function() {
 		var size = this.prompt.getInputSize();
 		this.$el.height(size);
 		this.$el.width(size);
@@ -449,7 +449,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Array} path
 	 * @param {Object} [options]
 	 */
-	tracePath: function (layerName, path, options) {
+	tracePath: function(layerName, path, options) {
 		options = options || {};
 		options.fill = options.fill || this.defaultTraceFill;
 		var size = this.size;
@@ -472,7 +472,7 @@ module.exports = GelatoComponent.extend({
 	 * @method triggerCanvasMouseDown
 	 * @param {Object} event
 	 */
-	triggerCanvasMouseDown: function (event) {
+	triggerCanvasMouseDown: function(event) {
 		event.preventDefault();
 		this.trigger('mousedown', event);
 		this.mouseDownEvent = event;
@@ -481,7 +481,7 @@ module.exports = GelatoComponent.extend({
 	 * @method triggerCanvasMouseUp
 	 * @param {Object} event
 	 */
-	triggerCanvasMouseUp: function (event) {
+	triggerCanvasMouseUp: function(event) {
 		event.preventDefault();
 		this.trigger('mouseup', event);
 		this.mouseLastDownEvent = this.mouseDownEvent;
@@ -515,7 +515,7 @@ module.exports = GelatoComponent.extend({
 		}
 		if (this.mouseUpEvent) {
 			if (lineDistance < 5 && lineDuration < 1000) {
-				this.mouseTapTimeout = setTimeout((function () {
+				this.mouseTapTimeout = setTimeout((function() {
 					this.trigger('tap', event);
 				}).bind(this), 200);
 			}
@@ -526,14 +526,14 @@ module.exports = GelatoComponent.extend({
 	 * @method triggerInputDown
 	 * @param {createjs.Point} point
 	 */
-	triggerInputDown: function (point) {
+	triggerInputDown: function(point) {
 		this.trigger('input:down', point);
 	},
 	/**
 	 * @method triggerInputMove
 	 * @param {createjs.Point} point
 	 */
-	triggerInputMove: function (point) {
+	triggerInputMove: function(point) {
 		this.trigger('input:move', point);
 	},
 	/**
@@ -541,14 +541,14 @@ module.exports = GelatoComponent.extend({
 	 * @param {Array} points
 	 * @param {createjs.Shape} shape
 	 */
-	triggerInputUp: function (points, shape) {
+	triggerInputUp: function(points, shape) {
 		this.trigger('input:up', points, shape);
 	},
 	/**
 	 * @method triggerNavigateNext
 	 * @param {Event} event
 	 */
-	triggerNavigateNext: function (event) {
+	triggerNavigateNext: function(event) {
 		event.preventDefault();
 		this.trigger('navigate:next');
 	},
@@ -556,7 +556,7 @@ module.exports = GelatoComponent.extend({
 	 * @method triggerNavigatePrevious
 	 * @param {Event} event
 	 */
-	triggerNavigatePrevious: function (event) {
+	triggerNavigatePrevious: function(event) {
 		event.preventDefault();
 		this.trigger('navigate:previous');
 	},
@@ -569,7 +569,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Function} [callback]
 	 * @returns {StudyPromptCanvas}
 	 */
-	tweenShape: function (layerName, fromShape, toShape, options, callback) {
+	tweenShape: function(layerName, fromShape, toShape, options, callback) {
 		this.getLayer(layerName).addChild(fromShape);
 		options = options === undefined ? {} : options;
 		options = options || {};
@@ -580,7 +580,7 @@ module.exports = GelatoComponent.extend({
 			y: toShape.y,
 			scaleX: toShape.scaleX,
 			scaleY: toShape.scaleY
-		}, options.speed, options.easing).call(function () {
+		}, options.speed, options.easing).call(function() {
 			if (typeof callback === 'function') {
 				callback();
 			}

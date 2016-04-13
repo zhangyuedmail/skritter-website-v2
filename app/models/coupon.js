@@ -9,7 +9,7 @@ module.exports = SkritterModel.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.wasUsed = false;
 		this.error = '';
 	},
@@ -26,14 +26,14 @@ module.exports = SkritterModel.extend({
 	 * @method parse
 	 * @returns {Object}
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.Coupon || response;
 	},
 	/**
 	 * @method use
 	 * @returns {jqXHR|null}
 	 */
-	use: function () {
+	use: function() {
 		this.error = '';
 		if (!this.get('code')) {
 			this.error = 'No code provided';
@@ -51,14 +51,14 @@ module.exports = SkritterModel.extend({
 	 * @param {Coupon}
 	 * @param {jqXHR}
 	 */
-	useError: function (model, jqxhr) {
+	useError: function(model, jqxhr) {
 		this.error = jqxhr.responseJSON.message;
 		this.stopListening(this, 'sync', this.useSync);
 	},
 	/**
 	 * @method useSync
 	 */
-	useSync: function (model, response) {
+	useSync: function(model, response) {
 		this.subscriptionAttributes = response.Subscription;
 		this.wasUsed = true;
 		this.stopListening(this, 'error', this.useError);

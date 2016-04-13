@@ -9,7 +9,7 @@ module.exports = SkritterModel.extend({
 	 * @method defaults
 	 * @returns {Object}
 	 */
-	defaults: function () {
+	defaults: function() {
 		return {
 			created: null,
 			data: [],

@@ -4538,7 +4538,7 @@ var data = {
 };
 
 module.exports = {
-	getData: function () {
+	getData: function() {
 		var params = [];
 		for (var id in data) {
 			params = params.concat(data[id]);

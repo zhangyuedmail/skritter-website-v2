@@ -12,7 +12,7 @@ module.exports = GelatoApplication.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 
 		Raygun.init(
 			'VF3L4HPYRvk1x0F5x3hGVg==',
@@ -66,7 +66,7 @@ module.exports = GelatoApplication.extend({
 	 * @method getApiUrl
 	 * @returns {String}
 	 */
-	getApiUrl: function () {
+	getApiUrl: function() {
 		//return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
 		return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
 	},
@@ -74,14 +74,14 @@ module.exports = GelatoApplication.extend({
 	 * @method getLanguage
 	 * @returns {String}
 	 */
-	getLanguage: function () {
+	getLanguage: function() {
 		return this.get('language') || this.user.get('targetLang');
 	},
 	/**
 	 * @method getMixpanelKey
 	 * @returns {String}
 	 */
-	getMixpanelKey: function () {
+	getMixpanelKey: function() {
 		if (this.isProduction()) {
 			return '8ee755b0ebe4f1141cda5dd09186cdca';
 		} else {
@@ -92,7 +92,7 @@ module.exports = GelatoApplication.extend({
 	 * @method getStripeKey
 	 * @returns {String}
 	 */
-	getStripeKey: function () {
+	getStripeKey: function() {
 		if (this.isProduction()) {
 			return 'pk_live_pWk0Lg3fgazBwkmSrzxOJ0fc';
 		} else {
@@ -106,7 +106,7 @@ module.exports = GelatoApplication.extend({
 	 * @param {Number} [line]
 	 * @returns {Boolean}
 	 */
-	handleError: function (message, url, line) {
+	handleError: function(message, url, line) {
 		$.notify(
 			{
 				title: 'Application Error',
@@ -128,20 +128,20 @@ module.exports = GelatoApplication.extend({
 	 * @method isChinese
 	 * @returns {Boolean}
 	 */
-	isChinese: function () {
+	isChinese: function() {
 		return this.getLanguage() === 'zh';
 	},
 	/**
 	 * @method isJapanese
 	 * @returns {Boolean}
 	 */
-	isJapanese: function () {
+	isJapanese: function() {
 		return this.getLanguage() === 'ja';
 	},
 	/**
 	 * @method loadHelpscout
 	 */
-	loadHelpscout: function () {
+	loadHelpscout: function() {
 		var parent = document.getElementsByTagName('script')[0];
 		var script = document.createElement('script');
 		var HSCW = {config: {}};
@@ -156,7 +156,7 @@ module.exports = GelatoApplication.extend({
 				baseUrl: 'https://skritter.helpscoutdocs.com/'
 			}
 		};
-		HS.beacon.ready = function (callback) {
+		HS.beacon.ready = function(callback) {
 			this.readyQueue.push(callback);
 		};
 		HS.beacon.userConfig = {
@@ -164,7 +164,7 @@ module.exports = GelatoApplication.extend({
 			icon: 'question',
 			modal: true
 		};
-		HS.beacon.ready(function (beacon) {
+		HS.beacon.ready(function(beacon) {
 			if (this.user.isLoggedIn()) {
 				this.identify({
 					email: this.user.get('email'),
@@ -182,18 +182,18 @@ module.exports = GelatoApplication.extend({
 	/**
 	 * @method reset
 	 */
-	reset: function () {
+	reset: function() {
 		app.user.setLastItemUpdate(0).cache();
 		async.parallel(
 			[
-				function (callback) {
+				function(callback) {
 					app.user.db.items.clear().finally(callback);
 				},
-				function (callback) {
+				function(callback) {
 					app.user.db.reviews.clear().finally(callback);
 				}
 			],
-			function () {
+			function() {
 				app.reload();
 			}
 		);
@@ -201,7 +201,7 @@ module.exports = GelatoApplication.extend({
 	/**
 	 * @method start
 	 */
-	start: function () {
+	start: function() {
 
 		//load cached user data if it exists
 		this.user.set(this.getLocalStorage(this.user.id + '-user'));
@@ -220,37 +220,37 @@ module.exports = GelatoApplication.extend({
 
 		//use async for cleaner loading code
 		async.series([
-			function (callback) {
+			function(callback) {
 				//check for user authentication type
 				if (app.user.id === 'application') {
 					app.user.session.authenticate(
 						'client_credentials',
 						null,
 						null,
-						function () {
+						function() {
 							callback();
 						},
-						function () {
+						function() {
 							callback();
 						}
 					);
 				} else {
 					app.user.session.refresh(
-						function () {
+						function() {
 							callback();
 						},
-						function () {
+						function() {
 							callback();
 						}
 					);
 				}
 			},
 			//load primary user based on state
-			function (callback) {
+			function(callback) {
 				app.user.load(callback);
 			}
-		], function () {
-			setTimeout(function () {
+		], function() {
+			setTimeout(function() {
 				ScreenLoader.hide();
 				app.loadHelpscout();
 				app.router.start();

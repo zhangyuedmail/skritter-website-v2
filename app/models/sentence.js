@@ -15,7 +15,7 @@ module.exports = GelatoModel.extend({
 	 * @param {Boolean} [ignoreFormat]
 	 * @returns {String}
 	 */
-	getDefinition: function (ignoreFormat) {
+	getDefinition: function(ignoreFormat) {
 		var definition = this.get('definitions')[app.user.get('sourceLang')];
 		if (!definition) {
 			definition = this.get('definitions').en;
@@ -27,7 +27,7 @@ module.exports = GelatoModel.extend({
 	 * @param {String} mask
 	 * @returns {String}
 	 */
-	getWriting: function (mask) {
+	getWriting: function(mask) {
 		var writing = this.get('writing');
 		if (mask !== undefined) {
 			var pieces = mask.split('');

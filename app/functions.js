@@ -56,7 +56,7 @@ function addAllObjectAttributes(array, attribute) {
  * @returns {Array}
  */
 function arrayToJSON(array) {
-	return array.map(function (data) {
+	return array.map(function(data) {
 		return data.toJSON();
 	});
 }
@@ -67,7 +67,7 @@ function arrayToJSON(array) {
  * @returns {Array}
  */
 function arrayToInt(array) {
-	return array.map(function (value) {
+	return array.map(function(value) {
 		return parseInt(value, 10);
 	});
 }
@@ -237,10 +237,10 @@ function isKana(text) {
  */
 function imageExists(src, callbackSuccess, callbackError) {
 	var image = new Image();
-	image.onload = function () {
+	image.onload = function() {
 		callbackSuccess(image);
 	};
-	image.onerror = function () {
+	image.onerror = function() {
 		if (typeof callbackError === 'function') {
 			callbackError();
 		}

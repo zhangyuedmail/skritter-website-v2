@@ -11,7 +11,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.vocablists = options.vocablists;
 		this.listenTo(this.vocablists, 'state', this.render);
 	},
@@ -33,7 +33,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {VocablistTable}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -41,7 +41,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickStopAddingLink
 	 * @param {Event} event
 	 */
-	handleClickStopAddingLink: function (event) {
+	handleClickStopAddingLink: function(event) {
 		event.preventDefault();
 		var listID = $(event.target).closest('.row').data('list-id');
 		var list = this.vocablists.get(listID.toString());
@@ -52,7 +52,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickListSettingsSpan
 	 * @param {Event} event
 	 */
-	handleClickListSettingsSpan: function (event) {
+	handleClickListSettingsSpan: function(event) {
 		event.preventDefault();
 		var listID = $(event.target).closest('.row').data('list-id');
 		var list = this.vocablists.get(listID.toString());
@@ -63,7 +63,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickRemoveListSpan
 	 * @param {Event} event
 	 */
-	handleClickRemoveListSpan: function (event) {
+	handleClickRemoveListSpan: function(event) {
 		event.preventDefault();
 		var listID = $(event.target).closest('.row').data('list-id');
 		var list = this.vocablists.get(listID.toString());

@@ -14,7 +14,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.navbar = new DefaultNavbar();
 		this.sidebar = new WordsSidebar();
 		this.bannedVocabs = new Vocabs();
@@ -34,7 +34,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method remove
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.sidebar.remove();
 		return GelatoPage.prototype.remove.call(this);
@@ -43,7 +43,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {VocablistBrowse}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.sidebar.setElement('#words-sidebar-container').render();
@@ -63,7 +63,7 @@ module.exports = GelatoPage.extend({
 	 * @method fetchItems
 	 * @param {string} [cursor]
 	 */
-	fetchBannedVocabs: function (cursor) {
+	fetchBannedVocabs: function(cursor) {
 		this.bannedVocabs.fetch({
 			data: {
 				sort: 'banned',
@@ -78,7 +78,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleChangeCheckbox
 	 * @param {Event} event
 	 */
-	handleChangeCheckbox: function (event) {
+	handleChangeCheckbox: function(event) {
 		var checkbox = $(event.target);
 		if (checkbox.attr('id') === 'all-checkbox') {
 			this.$('input[type="checkbox"]').prop('checked', checkbox.prop('checked'));
@@ -89,16 +89,16 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickLoadMoreButton
 	 */
-	handleClickLoadMoreButton: function () {
+	handleClickLoadMoreButton: function() {
 		this.fetchBannedVocabs(this.bannedVocabs.cursor);
 	},
 	/**
 	 * @method handleClickUnbanVocabsButton
 	 */
-	handleClickUnbanVocabsButton: function () {
+	handleClickUnbanVocabsButton: function() {
 		var self = this;
 		var vocabs = new Vocabs();
-		_.forEach(this.$('input:checked'), function (el) {
+		_.forEach(this.$('input:checked'), function(el) {
 			var vocabID = $(el).closest('tr').data('vocab-id');
 			if (!vocabID) {
 				return;
@@ -113,7 +113,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method renderTable
 	 */
-	renderTable: function () {
+	renderTable: function() {
 		var context = require('globals');
 		context.view = this;
 		var rendering = $(this.template(context));

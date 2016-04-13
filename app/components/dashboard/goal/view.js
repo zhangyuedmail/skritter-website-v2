@@ -9,7 +9,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.doughnut = null;
 		this.on('resize', this.resize);
 	},
@@ -22,7 +22,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {DashboardGoal}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.doughnut = new Highcharts.Chart({
 			chart: {
@@ -79,27 +79,27 @@ module.exports = GelatoComponent.extend({
 	 * @method getSize
 	 * @returns {Number}
 	 */
-	getSize: function () {
+	getSize: function() {
 		return this.$el.width() > 200 ? 200 : this.$el.width();
 	},
 	/**
 	 * @method remove
 	 * @returns {DashboardGoal}
 	 */
-	remove: function () {
+	remove: function() {
 		this.doughnut.destroy();
 		return GelatoComponent.prototype.remove.call(this);
 	},
 	/**
 	 * @method resize
 	 */
-	resize: function () {
+	resize: function() {
 		this.doughnut.setSize(this.getSize(), this.getSize(), true);
 	},
 	/**
 	 * @method updateDoughnut
 	 */
-	updateDoughnut: function () {
+	updateDoughnut: function() {
 		var goal = app.user.getGoal();
 		var percent = 0;
 		switch (goal.type) {
@@ -132,7 +132,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method updateItems
 	 */
-	updateItems: function () {
+	updateItems: function() {
 		if (app.user.data.items.length) {
 			this.$('#items-added .value').text(app.user.data.items.getAddedCount());
 		}

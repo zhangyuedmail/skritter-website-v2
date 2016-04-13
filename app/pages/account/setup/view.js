@@ -10,7 +10,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.countries = require('data/country-codes');
 		this.navbar = new Navbar();
 		this.timezones = require('data/country-timezones');
@@ -49,7 +49,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Scratchpad}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		return this;
@@ -58,7 +58,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleChangeFieldCountry
 	 * @param {Event} event
 	 */
-	handleChangeFieldCountry: function (event) {
+	handleChangeFieldCountry: function(event) {
 		event.preventDefault();
 		this.settings.country = this.$('#field-country :selected').val() || 'US';
 		this.render();
@@ -67,7 +67,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleChangeFieldLanguage
 	 * @param {Event} event
 	 */
-	handleChangeFieldLanguage: function (event) {
+	handleChangeFieldLanguage: function(event) {
 		event.preventDefault();
 		this.settings.targetLang = this.$('#field-language').val() || 'zh';
 		this.render();
@@ -76,7 +76,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickButtonContinue
 	 * @param {Event} event
 	 */
-	handleClickButtonContinue: function (event) {
+	handleClickButtonContinue: function(event) {
 		var self = this;
 		event.preventDefault();
 		ScreenLoader.show();
@@ -84,11 +84,11 @@ module.exports = GelatoPage.extend({
 		app.user.save(
 			this.getSettings(),
 			{
-				error: function (user, error) {
+				error: function(user, error) {
 					self.$('#error-message').text(error.responseJSON.message);
 					ScreenLoader.hide();
 				},
-				success: function () {
+				success: function() {
 					app.router.navigate('dashboard');
 					app.reload();
 				}
@@ -100,7 +100,7 @@ module.exports = GelatoPage.extend({
 	 * @method getSettings
 	 * @returns {Object}
 	 */
-	getSettings: function () {
+	getSettings: function() {
 		var settings = {};
 		var targetLang = this.$('#field-language').val();
 		if (targetLang === 'zh') {
@@ -118,7 +118,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Study}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		return GelatoPage.prototype.remove.call(this);
 	}

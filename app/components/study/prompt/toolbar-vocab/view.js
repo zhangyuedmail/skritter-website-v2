@@ -13,7 +13,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.dialog = null;
 		this.prompt = options.prompt;
 	},
@@ -26,7 +26,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptToolbarVocab}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -45,7 +45,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickButtonVocabAudio
 	 * @param {Event} event
 	 */
-	handleClickButtonVocabAudio: function (event) {
+	handleClickButtonVocabAudio: function(event) {
 		event.preventDefault();
 		this.prompt.reviews.vocab.play();
 	},
@@ -53,14 +53,14 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickButtonVocabBan
 	 * @param {Event} event
 	 */
-	handleClickButtonVocabBan: function (event) {
+	handleClickButtonVocabBan: function(event) {
 		var self = this;
 		event.preventDefault();
 		this.dialog = new ConfirmItemBanDialog({
 			item: this.prompt.reviews.item,
 			vocab: this.prompt.reviews.vocab
 		});
-		this.dialog.once('confirm', function () {
+		this.dialog.once('confirm', function() {
 			self.prompt.next(true);
 		});
 		this.dialog.open();
@@ -69,7 +69,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickButtonVocabEdit
 	 * @param {Event} event
 	 */
-	handleClickButtonVocabEdit: function (event) {
+	handleClickButtonVocabEdit: function(event) {
 		event.preventDefault();
 		if (this.prompt.editing) {
 			this.prompt.editing = false;
@@ -95,7 +95,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickButtonVocabInfo
 	 * @param {Event} event
 	 */
-	handleClickButtonVocabInfo: function (event) {
+	handleClickButtonVocabInfo: function(event) {
 		event.preventDefault();
 		this.dialog = new VocabViewerDialog();
 		this.dialog.load(this.prompt.reviews.vocab.id);
@@ -105,7 +105,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickButtonVocabStar
 	 * @param {Event} event
 	 */
-	handleClickButtonVocabStar: function (event) {
+	handleClickButtonVocabStar: function(event) {
 		event.preventDefault();
 		this.prompt.reviews.vocab.toggleStarred();
 		this.prompt.reviews.vocab.save();

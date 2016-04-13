@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 		this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
 		this.listenTo(this.prompt.canvas, 'input:up', this.handlePromptCanvasInputUp);
@@ -37,7 +37,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptPartTone}
 	 */
-	render: function () {
+	render: function() {
 		this.prompt.review = this.prompt.reviews.current();
 		this.prompt.canvas.grid = false;
 		this.prompt.canvas.reset();
@@ -69,7 +69,7 @@ module.exports = GelatoComponent.extend({
 	 * @method renderComplete
 	 * @returns {StudyPromptPartTone}
 	 */
-	renderComplete: function () {
+	renderComplete: function() {
 		this.prompt.review.stop();
 		this.prompt.review.set('complete', true);
 		this.prompt.canvas.disableInput();
@@ -102,7 +102,7 @@ module.exports = GelatoComponent.extend({
 	 * @method renderIncomplete
 	 * @returns {StudyPromptPartTone}
 	 */
-	renderIncomplete: function () {
+	renderIncomplete: function() {
 		this.prompt.review.start();
 		this.prompt.review.set('complete', false);
 		this.prompt.canvas.enableInput();
@@ -124,7 +124,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptCanvasClick
 	 */
-	handlePromptCanvasClick: function () {
+	handlePromptCanvasClick: function() {
 		if (this.prompt.review.isComplete()) {
 			this.prompt.next();
 		}
@@ -134,7 +134,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Array} points
 	 * @param {createjs.Shape} shape
 	 */
-	handlePromptCanvasInputUp: function (points, shape) {
+	handlePromptCanvasInputUp: function(points, shape) {
 		var possibleTones = this.prompt.review.getTones();
 		var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
 		var stroke = this.prompt.review.character.recognize(points, shape);
@@ -181,7 +181,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptToolbarActionCorrect
 	 */
-	handlePromptToolbarActionCorrect: function () {
+	handlePromptToolbarActionCorrect: function() {
 		this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
 		this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
 		this.prompt.toolbarAction.render();
@@ -190,7 +190,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handlePromptToolbarGradingMousedown
 	 * @param {Number} value
 	 */
-	handlePromptToolbarGradingMousedown: function (value) {
+	handlePromptToolbarGradingMousedown: function(value) {
 		if (this.prompt.review.isComplete()) {
 			this.prompt.review.set('score', value);
 			this.prompt.canvas.injectLayerColor(
@@ -202,7 +202,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method completeTone
 	 */
-	completeTone: function () {
+	completeTone: function() {
 		var possibleTones = this.prompt.review.getTones();
 		var expectedTone = this.prompt.review.character.getTone(possibleTones[0]);
 		this.prompt.canvas.clearLayer('character');

@@ -9,7 +9,7 @@ module.exports = GelatoModel.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 	},
 	/**
 	 * @property idAttribute
@@ -20,7 +20,7 @@ module.exports = GelatoModel.extend({
 	 * @method getStudiedCount
 	 * @returns {Number}
 	 */
-	getStudiedCount: function () {
+	getStudiedCount: function() {
 		var count = 0;
 		count += this.get('char').defn.studied.day;
 		count += this.get('char').rdng.studied.day;
@@ -36,7 +36,7 @@ module.exports = GelatoModel.extend({
 	 * @method hasBeenStudied
 	 * @returns {Boolean}
 	 */
-	hasBeenStudied: function () {
+	hasBeenStudied: function() {
 		return this.getStudiedCount() > 0;
 	}
 });

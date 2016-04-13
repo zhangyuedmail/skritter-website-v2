@@ -9,7 +9,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		BootstrapDialog.prototype.initialize.call(this);
 	},
 	/**
@@ -21,7 +21,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method render
 	 * @returns {GoalSettingsDialog}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.updateSettings();
 		return this;
@@ -38,7 +38,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method handleClickClose
 	 * @param {Event} event
 	 */
-	handleClickClose: function (event) {
+	handleClickClose: function(event) {
 		event.preventDefault();
 		this.close();
 	},
@@ -46,7 +46,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method handleClickSave
 	 * @param {Event} event
 	 */
-	handleClickSave: function (event) {
+	handleClickSave: function(event) {
 		event.preventDefault();
 		var type = this.$('input[name="goal-type"]:checked').val();
 		var value = this.$('#goal-value').val();
@@ -56,7 +56,7 @@ module.exports = BootstrapDialog.extend({
 	/**
 	 * @method updateSettings
 	 */
-	updateSettings: function () {
+	updateSettings: function() {
 		var goal = app.user.getGoal();
 		this.$('input[value="' + goal.type + '"]').prop('checked', true);
 		this.$('#goal-value').val(goal.value);

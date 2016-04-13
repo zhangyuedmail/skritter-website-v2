@@ -10,7 +10,7 @@ module.exports = SkritterCollection.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 	},
 	/**
 	 * @property model
@@ -28,7 +28,7 @@ module.exports = SkritterCollection.extend({
 	 * @param {ProgressStats} statB
 	 * @returns {Number}
 	 */
-	comparator: function (statA, statB) {
+	comparator: function(statA, statB) {
 		if (statA.id > statB.id) {
 			return 1;
 		} else if (statB.id > statA.id) {
@@ -42,7 +42,7 @@ module.exports = SkritterCollection.extend({
 	 * @param {Object} response
 	 * @returns Array
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.ProgressStats;
 	},
 	/**
@@ -50,56 +50,56 @@ module.exports = SkritterCollection.extend({
 	 * @param {Function} [callbackSuccess]
 	 * @param {Function} [callbackError]
 	 */
-	fetchMonth: function (callbackSuccess, callbackError) {
+	fetchMonth: function(callbackSuccess, callbackError) {
 		var momentMonthStart = moment().subtract(4, 'hours').startOf('month');
 		var momentMonthEnd = moment().subtract(4, 'hours').endOf('month');
 		async.series([
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				this.fetch({
 					data: {
 						start: moment(momentMonthEnd).subtract('11', 'days').format('YYYY-MM-DD'),
 						end: moment(momentMonthEnd).format('YYYY-MM-DD')
 					},
 					remove: false,
-					success: function () {
+					success: function() {
 						callback();
 					},
-					error: function (model, error) {
+					error: function(model, error) {
 						callback(error, model);
 					}
 				});
 			}, this),
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				this.fetch({
 					data: {
 						start: moment(momentMonthEnd).subtract('23', 'days').format('YYYY-MM-DD'),
 						end: moment(momentMonthEnd).subtract('12', 'days').format('YYYY-MM-DD')
 					},
 					remove: false,
-					success: function () {
+					success: function() {
 						callback();
 					},
-					error: function (model, error) {
+					error: function(model, error) {
 						callback(error, model);
 					}
 				});
 			}, this),
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				this.fetch({
 					data: {
 						start: moment(momentMonthStart).format('YYYY-MM-DD'),
 						end: moment(momentMonthEnd).subtract('24', 'days').format('YYYY-MM-DD')
 					},
 					remove: false,
-					success: function () {
+					success: function() {
 						callback();
 					},
-					error: function (model, error) {
+					error: function(model, error) {
 						callback(error, model);
 					}
 				});
 			}, this)
-		], _.bind(function (error) {
+		], _.bind(function(error) {
 			if (error) {
 				if (typeof callbackError === 'function') {
 					callbackError(error);
@@ -116,17 +116,17 @@ module.exports = SkritterCollection.extend({
 	 * @param {Function} [callbackSuccess]
 	 * @param {Function} [callbackError]
 	 */
-	fetchToday: function (callbackSuccess, callbackError) {
+	fetchToday: function(callbackSuccess, callbackError) {
 		this.fetch({
 			data: {
 				start: moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD')
 			},
-			success: _.bind(function (model) {
+			success: _.bind(function(model) {
 				if (typeof callbackSuccess === 'function') {
 					callbackSuccess(model);
 				}
 			}, this),
-			error: _.bind(function (model, error) {
+			error: _.bind(function(model, error) {
 				if (typeof callbackError === 'function') {
 					callbackError(error, model);
 				}
@@ -137,21 +137,21 @@ module.exports = SkritterCollection.extend({
 	 * @method getAllTimeCharactersLearned
 	 * @returns {Number}
 	 */
-	getAllTimeCharactersLearned: function () {
+	getAllTimeCharactersLearned: function() {
 		return this.length ? this.at(0).get('char').rune.learned.all : 0;
 	},
 	/**
 	 * @method getAllTimeWordsLearned
 	 * @returns {Number}
 	 */
-	getAllTimeWordsLearned: function () {
+	getAllTimeWordsLearned: function() {
 		return this.length ? this.at(0).get('word').rune.learned.all : 0;
 	},
 	/**
 	 * @method getDailyItemsReviewed
 	 * @returns {Number}
 	 */
-	getDailyItemsReviewed: function () {
+	getDailyItemsReviewed: function() {
 		var total = 0;
 		var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
 		var stat = this.get(today);
@@ -171,7 +171,7 @@ module.exports = SkritterCollection.extend({
 	 * @method getDailyTimeStudied
 	 * @returns {Number}
 	 */
-	getDailyTimeStudied: function () {
+	getDailyTimeStudied: function() {
 		var today = moment().tz(app.user.get('timezone')).subtract(4, 'hours').format('YYYY-MM-DD');
 		var stat = this.get(today);
 		return stat ? stat.get('timeStudied').day : 0;
@@ -180,7 +180,7 @@ module.exports = SkritterCollection.extend({
 	 * @method getGoalItemPercent
 	 * @returns {Number}
 	 */
-	getGoalItemPercent: function () {
+	getGoalItemPercent: function() {
 		var goal = app.user.getGoal();
 		var totalItems = app.user.data.stats.getDailyItemsReviewed();
 		var percentItems = Math.round(totalItems / goal.value * 100);
@@ -190,7 +190,7 @@ module.exports = SkritterCollection.extend({
 	 * @method getGoalTimePercent
 	 * @returns {Number}
 	 */
-	getGoalTimePercent: function () {
+	getGoalTimePercent: function() {
 		var goal = app.user.getGoal();
 		var totalTime = app.user.data.stats.getDailyTimeStudied() / 60;
 		var percentTime = Math.round(totalTime / goal.value * 100);
@@ -200,7 +200,7 @@ module.exports = SkritterCollection.extend({
 	 * @method getMonthlyHeatmapData
 	 * @returns {Object}
 	 */
-	getMonthlyHeatmapData: function () {
+	getMonthlyHeatmapData: function() {
 		var data = {};
 		for (var i = 0, length = this.length; i < length; i++) {
 			var stat = this.at(i);
@@ -213,7 +213,7 @@ module.exports = SkritterCollection.extend({
 	 * @method getMonthlyStreak
 	 * @returns {Number}
 	 */
-	getMonthlyStreak: function () {
+	getMonthlyStreak: function() {
 		var bestStreak = 0;
 		var currentStreak = 0;
 		for (var i = 0, length = this.length; i < length; i++) {

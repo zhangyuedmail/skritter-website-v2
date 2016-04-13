@@ -14,7 +14,7 @@ function ScreenLoader() {
  * @method clear
  * @returns {ScreenLoader}
  */
-ScreenLoader.prototype.clear = function () {
+ScreenLoader.prototype.clear = function() {
 	var messageContainer = this.element.querySelector('.screen-message-container');
 	for (var i = 0, length = this.messages.length; i < length; i++) {
 		messageContainer.removeChild(this.messages[i]);
@@ -28,9 +28,9 @@ ScreenLoader.prototype.clear = function () {
  * @method hide
  * @returns {ScreenLoader}
  */
-ScreenLoader.prototype.hide = function () {
+ScreenLoader.prototype.hide = function() {
 	this.element.className = 'fade-out';
-	this.timeout = setTimeout((function () {
+	this.timeout = setTimeout((function() {
 		this.clear();
 	}).bind(this), 500);
 	return this;
@@ -41,7 +41,7 @@ ScreenLoader.prototype.hide = function () {
  * @param {String} value
  * @returns {ScreenLoader}
  */
-ScreenLoader.prototype.notice = function (value) {
+ScreenLoader.prototype.notice = function(value) {
 	this.element.querySelector('.screen-notice').innerHTML = value;
 	return this;
 };
@@ -51,7 +51,7 @@ ScreenLoader.prototype.notice = function (value) {
  * @param {String} value
  * @returns {ScreenLoader}
  */
-ScreenLoader.prototype.post = function (value) {
+ScreenLoader.prototype.post = function(value) {
 	var messageContainer = this.element.querySelector('.screen-message-container');
 	if (value) {
 		var newMessage = document.createElement('div');
@@ -61,7 +61,7 @@ ScreenLoader.prototype.post = function (value) {
 			var oldMessage = this.messages.shift();
 			oldMessage.className += ' fade-out';
 			messageContainer.insertBefore(newMessage, oldMessage);
-			setTimeout(function () {
+			setTimeout(function() {
 				messageContainer.removeChild(oldMessage);
 			}, 1000);
 		} else {
@@ -76,7 +76,7 @@ ScreenLoader.prototype.post = function (value) {
  * @method render
  * @returns {ScreenLoader}
  */
-ScreenLoader.prototype.render = function () {
+ScreenLoader.prototype.render = function() {
 	var element = document.createElement('screen-loader');
 	element.innerHTML = this.template();
 	document.body.appendChild(element);
@@ -88,7 +88,7 @@ ScreenLoader.prototype.render = function () {
  * @method show
  * @returns {ScreenLoader}
  */
-ScreenLoader.prototype.show = function () {
+ScreenLoader.prototype.show = function() {
 	clearTimeout(this.timeout);
 	this.element.className = 'fade-in';
 	return this;

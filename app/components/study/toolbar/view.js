@@ -13,7 +13,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.page = options.page;
 		this.stats = new ProgressStats();
 		this.timer = new Timer();
@@ -37,7 +37,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyToolbar}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.timer.setElement('#timer-container').render();
 		return this;
@@ -46,14 +46,14 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickAddItem
 	 * @param {Event} event
 	 */
-	handleClickAddItem: function (event) {
+	handleClickAddItem: function(event) {
 		event.preventDefault();
 		this.page.schedule.addItems(
 			{
 				lang: app.getLanguage(),
 				lists: this.page.vocablist ? this.page.vocablist.id : null
 			},
-			function (error, result) {
+			function(error, result) {
 				var added = result.numVocabsAdded;
 				$.notify(
 					{
@@ -77,12 +77,12 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickStudySettings
 	 * @param {Event} event
 	 */
-	handleClickStudySettings: function (event) {
+	handleClickStudySettings: function(event) {
 		event.preventDefault();
 		var self = this;
 		var dialog = new StudySettings();
 		dialog.open();
-		dialog.on('save', function (settings) {
+		dialog.on('save', function(settings) {
 			ScreenLoader.show();
 			ScreenLoader.post('Saving study settings');
 			app.user.set(settings, {merge: true});
@@ -90,12 +90,12 @@ module.exports = GelatoComponent.extend({
 			app.user.save(
 				null,
 				{
-					error: function () {
+					error: function() {
 						//TODO: show some kind of error message
 						ScreenLoader.hide();
 						dialog.close();
 					},
-					success: function () {
+					success: function() {
 						self.page.schedule.reset();
 						self.page.prompt.reset();
 						self.page.loadSchedule();
@@ -109,14 +109,14 @@ module.exports = GelatoComponent.extend({
 	 * @function remove
 	 * @returns {StudyToolbar}
 	 */
-	remove: function () {
+	remove: function() {
 		this.timer.remove();
 		return this;
 	},
 	/**
 	 * @method updateTimerOffset
 	 */
-	updateTimerOffset: function (stats) {
+	updateTimerOffset: function(stats) {
 		this.timer.setServerOffset(stats.getDailyTimeStudied());
 	}
 });

@@ -8,14 +8,14 @@ var Reviews = GelatoCollection.extend(/** @lends Reviews.prototype */ {
 	 * @param {Object} [options]
 	 * @augments {GelatoCollection}
 	 */
-	initialize: function (models, options) {
+	initialize: function(models, options) {
 		this.items = options.items;
 	},
 	/**
 	 * @param {Review} review
 	 * @return {String}
 	 */
-	comparator: function (review) {
+	comparator: function(review) {
 		return review.get('created');
 	},
 	/**

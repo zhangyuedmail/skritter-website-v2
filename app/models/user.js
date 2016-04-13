@@ -10,7 +10,7 @@ module.exports = SkritterModel.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.session = new Session(null, {user: this});
 	},
 	/**
@@ -42,28 +42,28 @@ module.exports = SkritterModel.extend({
 	/**
 	 * @method cache
 	 */
-	cache: function () {
+	cache: function() {
 		app.setLocalStorage(this.id + '-user', this.toJSON());
 	},
 	/**
 	 * @method getAllStudyParts
 	 * @returns {Array}
 	 */
-	getAllStudyParts: function () {
+	getAllStudyParts: function() {
 		return app.isChinese() ? this.get('allChineseParts') : this.get('allJapaneseParts');
 	},
 	/**
 	 * @method getAllStudyStyles
 	 * @returns {Array}
 	 */
-	getAllStudyStyles: function () {
+	getAllStudyStyles: function() {
 		return app.isChinese() ? ['both', 'simp', 'trad'] : ['none'];
 	},
 	/**
 	 * @method getFilterParts
 	 * @returns {Array}
 	 */
-	getFilteredParts: function () {
+	getFilteredParts: function() {
 		var filteredParts = app.isChinese() ? this.get('filteredChineseParts') : this.get('filteredJapaneseParts');
 		return _.intersection(this.getStudyParts(), filteredParts);
 	},
@@ -71,7 +71,7 @@ module.exports = SkritterModel.extend({
 	 * @method getFilteredStyles
 	 * @returns {Array}
 	 */
-	getFilteredStyles: function () {
+	getFilteredStyles: function() {
 		var styles = ['both'];
 		if (app.isChinese()) {
 			if (this.get('reviewSimplified')) {
@@ -87,21 +87,21 @@ module.exports = SkritterModel.extend({
 	 * @method getLastItemUpdate
 	 * @returns {Number}
 	 */
-	getLastItemUpdate: function () {
+	getLastItemUpdate: function() {
 		return app.isChinese() ? this.get('lastChineseItemUpdate') : this.get('lastJapaneseItemUpdate')
 	},
 	/**
 	 * @method getStudyParts
 	 * @returns {Array}
 	 */
-	getStudyParts: function () {
+	getStudyParts: function() {
 		return app.isChinese() ? this.get('chineseStudyParts') : this.get('japaneseStudyParts');
 	},
 	/**
 	 * @method getRaygunTags
 	 * @returns {Array}
 	 */
-	getRaygunTags: function () {
+	getRaygunTags: function() {
 		var tags = [];
 		if (app.isChinese()) {
 			tags.push('chinese');
@@ -121,21 +121,21 @@ module.exports = SkritterModel.extend({
 	 * @param {String} part
 	 * @returns {Boolean}
 	 */
-	isAddingPart: function (part) {
+	isAddingPart: function(part) {
 		return _.includes(this.getStudyParts(), part);
 	},
 	/**
 	 * @method isAudioEnabled
 	 * @returns {Boolean}
 	 */
-	isAudioEnabled: function () {
+	isAudioEnabled: function() {
 		return this.get('volume') > 0;
 	},
 	/**
 	 * @method isLoggedIn
 	 * @returns {Boolean}
 	 */
-	isLoggedIn: function () {
+	isLoggedIn: function() {
 		return this.session.has('user_id');
 	},
 	/**
@@ -143,7 +143,7 @@ module.exports = SkritterModel.extend({
 	 * @param {String} part
 	 * @returns {Boolean}
 	 */
-	isReviewingPart: function (part) {
+	isReviewingPart: function(part) {
 		return _.includes(this.getFilteredParts(), part);
 	},
 	/**
@@ -151,7 +151,7 @@ module.exports = SkritterModel.extend({
 	 * @param {Function} callback
 	 * @returns {User}
 	 */
-	load: function (callback) {
+	load: function(callback) {
 		var self = this;
 		if (!this.isLoggedIn()) {
 			callback();
@@ -159,10 +159,10 @@ module.exports = SkritterModel.extend({
 		}
 		async.series(
 			[
-				function (callback) {
+				function(callback) {
 					self.openDatabase(callback);
 				},
-				function (callback) {
+				function(callback) {
 					self.updateItems(callback);
 				}
 			],
@@ -176,29 +176,29 @@ module.exports = SkritterModel.extend({
 	 * @param {String} password
 	 * @param {Function} callback
 	 */
-	login: function (username, password, callback) {
+	login: function(username, password, callback) {
 		var self = this;
 		async.waterfall([
-			function (callback) {
+			function(callback) {
 				self.session.authenticate('password', username, password,
-					function (result) {
+					function(result) {
 						callback(null, result);
-					}, function (error) {
+					}, function(error) {
 						callback(error);
 					});
 			},
-			function (result, callback) {
+			function(result, callback) {
 				self.set('id', result.id);
 				self.fetch({
-					error: function (error) {
+					error: function(error) {
 						callback(error);
 					},
-					success: function (user) {
+					success: function(user) {
 						callback(null, user);
 					}
 				})
 			}
-		], function (error, user) {
+		], function(error, user) {
 			if (error) {
 				callback(error);
 			} else {
@@ -214,16 +214,16 @@ module.exports = SkritterModel.extend({
 	/**
 	 * @method logout
 	 */
-	logout: function () {
+	logout: function() {
 		var self = this;
 		app.user.db.delete()
-			.then(function () {
+			.then(function() {
 				app.removeLocalStorage(self.id + '-session');
 				app.removeLocalStorage(self.id + '-user');
 				app.removeSetting('user');
 				app.reload();
 			})
-			.catch(function (error) {
+			.catch(function(error) {
 				console.error(error);
 				app.reload();
 			});
@@ -233,7 +233,7 @@ module.exports = SkritterModel.extend({
 	 * @param {Function} callback
 	 * @returns {User}
 	 */
-	openDatabase: function (callback) {
+	openDatabase: function(callback) {
 		var self = this;
 		if (!this.isLoggedIn()) {
 			callback();
@@ -269,10 +269,10 @@ module.exports = SkritterModel.extend({
 			}
 		);
 		this.db.open()
-			.then(function () {
+			.then(function() {
 				callback();
 			})
-			.catch(function (error) {
+			.catch(function(error) {
 				//specially handle error code 8 for safari
 				if (error && error.code === 8) {
 					callback();
@@ -287,7 +287,7 @@ module.exports = SkritterModel.extend({
 	 * @param {Object} response
 	 * @returns Array
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.User;
 	},
 	/**
@@ -295,7 +295,7 @@ module.exports = SkritterModel.extend({
 	 * @param {Number} value
 	 * @returns {User}
 	 */
-	setLastItemUpdate: function (value) {
+	setLastItemUpdate: function(value) {
 		if (app.isChinese()) {
 			this.set('lastChineseItemUpdate', value);
 		} else {
@@ -308,7 +308,7 @@ module.exports = SkritterModel.extend({
 	 * @param {Function} callback
 	 * @returns {User}
 	 */
-	updateItems: function (callback) {
+	updateItems: function(callback) {
 		var self = this;
 		var cursor = undefined;
 		var index = 0;
@@ -320,11 +320,11 @@ module.exports = SkritterModel.extend({
 			return this;
 		}
 		async.whilst(
-			function () {
+			function() {
 				index++;
 				return cursor !== null;
 			},
-			function (callback) {
+			function(callback) {
 				if (index > 4) {
 					ScreenLoader.notice('(loading can take awhile on larger accounts)');
 				}
@@ -340,7 +340,7 @@ module.exports = SkritterModel.extend({
 						order: 'changed',
 						token: self.session.get('access_token')
 					},
-					error: function (error) {
+					error: function(error) {
 						if (retries > 2) {
 							callback(error);
 						} else {
@@ -349,19 +349,19 @@ module.exports = SkritterModel.extend({
 							setTimeout(callback, 1000);
 						}
 					},
-					success: function (result) {
+					success: function(result) {
 						self.db.transaction(
 							'rw',
 							self.db.items,
-							function () {
-								result.Items.forEach(function (item) {
+							function() {
+								result.Items.forEach(function(item) {
 									self.db.items.put(item);
 								});
 							}
-						).then(function () {
+						).then(function() {
 							cursor = result.cursor;
 							setTimeout(callback, 100);
-						}).catch(function (error) {
+						}).catch(function(error) {
 							if (retries > 2) {
 								callback(error);
 							} else {
@@ -373,7 +373,7 @@ module.exports = SkritterModel.extend({
 					}
 				});
 			},
-			function (error) {
+			function(error) {
 				self.setLastItemUpdate(now);
 				self.cache();
 				callback(error);

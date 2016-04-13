@@ -14,7 +14,7 @@ module.exports = SkritterCollection.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 	},
 	/**
 	 * @property model
@@ -26,7 +26,7 @@ module.exports = SkritterCollection.extend({
 	 * @param {Object} response
 	 * @returns Array
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.CancellationReasons;
 	},
 	/**

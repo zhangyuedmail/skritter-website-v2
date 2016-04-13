@@ -15,7 +15,7 @@ module.exports = GelatoView.extend({
 	 * @param {Object} [context]
 	 * @returns {BootstrapNavbar}
 	 */
-	renderTemplate: function (context) {
+	renderTemplate: function(context) {
 		GelatoView.prototype.renderTemplate.call(this, context);
 		return this;
 	}

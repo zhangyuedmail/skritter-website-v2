@@ -13,7 +13,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.navbar = new DefaultNavbar();
 		this.sidebar = new Sidebar();
 		this.table = new Table();
@@ -37,7 +37,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {VocablistBrowse}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.sidebar.setElement('#vocablist-sidebar-container').render();
@@ -48,7 +48,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {VocablistBrowse}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.sidebar.remove();
 		this.table.remove();

@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 		this.reviews = null;
 	},
@@ -30,7 +30,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptNavigation}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -38,7 +38,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickSaveReviews
 	 * @param {Event} event
 	 */
-	handleClickSaveReviews: function (event) {
+	handleClickSaveReviews: function(event) {
 		event.preventDefault();
 		this.reviews.post();
 	},
@@ -46,7 +46,7 @@ module.exports = GelatoComponent.extend({
 	 * @method setReviews
 	 * @param {Reviews} reviews
 	 */
-	setReviews: function (reviews) {
+	setReviews: function(reviews) {
 		this.stopListening();
 		this.listenTo(reviews, 'add', this.render);
 		this.listenTo(reviews, 'state', this.render);

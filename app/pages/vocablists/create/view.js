@@ -12,7 +12,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.navbar = new DefaultNavbar();
 		this.vocablist = new Vocablist();
 		this.errorMessage = '';
@@ -38,7 +38,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {NewVocablistPage}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		return this;
@@ -48,7 +48,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleSubmitNewListForm
 	 * @param {Event} event
 	 */
-	handleSubmitNewListForm: function (event) {
+	handleSubmitNewListForm: function(event) {
 		event.preventDefault();
 		this.errorMessage = '';
 		this.vocablist.set({
@@ -58,10 +58,10 @@ module.exports = GelatoPage.extend({
 			singleSect: false,
 			lang: app.getLanguage()
 		});
-		this.listenToOnce(this.vocablist, 'sync', function () {
+		this.listenToOnce(this.vocablist, 'sync', function() {
 			app.router.navigate("/vocablists/view/" + this.vocablist.id, {trigger: true});
 		});
-		this.listenToOnce(this.vocablist, 'error', function (model, jqxhr) {
+		this.listenToOnce(this.vocablist, 'error', function(model, jqxhr) {
 			this.errorMessage = jqxhr.responseJSON.message;
 			this.stopListening(this.vocablist);
 		});
@@ -70,7 +70,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method remove
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		return GelatoPage.prototype.remove.call(this);
 	}

@@ -11,7 +11,7 @@ module.exports = SkritterModel.extend({
 	 * @property initialize
 	 * @param {Object} options
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.vocablistId = _.result(options, 'vocablistId');
 	},
 	/**
@@ -23,21 +23,21 @@ module.exports = SkritterModel.extend({
 	 * @method parse
 	 * @returns {Object}
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.VocabListSection || response;
 	},
 	/**
 	 * @method urlRoot
 	 * @returns {String}
 	 */
-	urlRoot: function () {
+	urlRoot: function() {
 		return 'vocablists/' + this.vocablistId + '/sections';
 	},
 	/**
 	 * @method getUniqueVocabIds
 	 * @returns {Array}
 	 */
-	getUniqueVocabIds: function () {
+	getUniqueVocabIds: function() {
 		var vocabIds = _.map(this.get('rows'), 'vocabId');
 		var tradVocabIds = [];
 

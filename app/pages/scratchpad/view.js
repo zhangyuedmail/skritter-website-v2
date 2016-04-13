@@ -13,7 +13,7 @@ module.exports = GelatoPage.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		ScreenLoader.show();
 		this.navbar = new Navbar();
 		this.part = options.part;
@@ -42,7 +42,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Scratchpad}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.prompt.setElement('#study-prompt-container').render();
@@ -51,9 +51,9 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method load
 	 */
-	load: function () {
+	load: function() {
 		async.waterfall([
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				this.vocabs.fetch({
 					data: {
 						include_decomps: true,
@@ -61,15 +61,15 @@ module.exports = GelatoPage.extend({
 						include_strokes: true,
 						ids: this.vocabId
 					},
-					error: function (vocabs, error) {
+					error: function(vocabs, error) {
 						callback(error);
 					},
-					success: function (vocabs) {
+					success: function(vocabs) {
 						callback(null, vocabs.at(0));
 					}
 				});
 			}, this),
-			_.bind(function (vocab, callback) {
+			_.bind(function(vocab, callback) {
 				if (vocab.has('containedVocabIds')) {
 					this.vocabs.fetch({
 						data: {
@@ -78,11 +78,11 @@ module.exports = GelatoPage.extend({
 							include_strokes: true,
 							ids: vocab.get('containedVocabIds').join('|')
 						},
-						error: function (error) {
+						error: function(error) {
 							callback(error);
 						},
 						remove: false,
-						success: function () {
+						success: function() {
 							callback(null, vocab);
 						}
 					});
@@ -90,7 +90,7 @@ module.exports = GelatoPage.extend({
 					callback(null, vocab);
 				}
 			}, this)
-		], _.bind(function (error, vocab) {
+		], _.bind(function(error, vocab) {
 			if (error) {
 				//TODO: display error message to user
 				console.error('SCRATCHPAD LOAD ERROR:', error);
@@ -105,7 +105,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Study}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.prompt.remove();
 		return GelatoPage.prototype.remove.call(this);

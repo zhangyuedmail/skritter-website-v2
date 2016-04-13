@@ -29,7 +29,7 @@ module.exports = GelatoModel.extend({
 	 * @method defaults
 	 * @returns {Object}
 	 */
-	defaults: function () {
+	defaults: function() {
 		return {
 			complete: false,
 			failedConsecutive: 0,
@@ -51,21 +51,21 @@ module.exports = GelatoModel.extend({
 	 * @method getGradingColor
 	 * @returns {String}
 	 */
-	getGradingColor: function () {
+	getGradingColor: function() {
 		return app.user.get('gradingColors')[this.get('score')];
 	},
 	/**
 	 * @method getPosition
 	 * @returns {Number}
 	 */
-	getPosition: function () {
+	getPosition: function() {
 		return this.collection.indexOf(this);
 	},
 	/**
 	 * @method getReviewData
 	 * @returns {Object}
 	 */
-	getReviewData: function () {
+	getReviewData: function() {
 		return {
 			id: this.id,
 			itemId: this.item ? this.item.id : this.vocab.id,
@@ -82,7 +82,7 @@ module.exports = GelatoModel.extend({
 	 * @method getReviewingTime
 	 * @returns {Number}
 	 */
-	getReviewingTime: function () {
+	getReviewingTime: function() {
 		var reviewingTime = (this.get('reviewingStop') - this.get('reviewingStart')) / 1000;
 		if (this.collection.part === 'tone') {
 			return reviewingTime > 15 ? 15 : reviewingTime;
@@ -93,7 +93,7 @@ module.exports = GelatoModel.extend({
 	 * @method getThinkingTime
 	 * @returns {Number}
 	 */
-	getThinkingTime: function () {
+	getThinkingTime: function() {
 		var thinkingTime = (this.get('thinkingStop') - this.get('reviewingStart')) / 1000;
 		if (this.collection.part === 'tone') {
 			return thinkingTime > 10 ? 10 : thinkingTime;
@@ -104,28 +104,28 @@ module.exports = GelatoModel.extend({
 	 * @method getTones
 	 * @returns {Array}
 	 */
-	getTones: function () {
+	getTones: function() {
 		return this.collection.vocab.getTones()[this.getPosition()];
 	},
 	/**
 	 * @method isChinese
 	 * @returns {Boolean}
 	 */
-	isChinese: function () {
+	isChinese: function() {
 		return this.vocab.isChinese();
 	},
 	/**
 	 * @method isComplete
 	 * @returns {Boolean}
 	 */
-	isComplete: function () {
+	isComplete: function() {
 		return this.get('complete');
 	},
 	/**
 	 * @method isDefinitionHidden
 	 * @returns {Boolean}
 	 */
-	isDefinitionHidden: function () {
+	isDefinitionHidden: function() {
 		if (this.get('showDefinition')) {
 			return false;
 		}
@@ -142,14 +142,14 @@ module.exports = GelatoModel.extend({
 	 * @method isJapanese
 	 * @returns {Boolean}
 	 */
-	isJapanese: function () {
+	isJapanese: function() {
 		return this.vocab.isJapanese();
 	},
 	/**
 	 * @method isReadingHidden
 	 * @returns {Boolean}
 	 */
-	isReadingHidden: function () {
+	isReadingHidden: function() {
 		if (this.get('showReading')) {
 			return false;
 		}
@@ -166,7 +166,7 @@ module.exports = GelatoModel.extend({
 	 * @method start
 	 * @returns {PromptItem}
 	 */
-	start: function () {
+	start: function() {
 		if (this.get('reviewingStart') === 0) {
 			var now = Date.now();
 			this.set({
@@ -180,7 +180,7 @@ module.exports = GelatoModel.extend({
 	 * @method stop
 	 * @returns {PromptItem}
 	 */
-	stop: function () {
+	stop: function() {
 		var timestamp = new Date().getTime();
 		this.stopReviewing(timestamp);
 		this.stopThinking(timestamp);
@@ -191,7 +191,7 @@ module.exports = GelatoModel.extend({
 	 * @param {Number} [timestamp]
 	 * @returns {PromptItem}
 	 */
-	stopReviewing: function (timestamp) {
+	stopReviewing: function(timestamp) {
 		if (this.get('reviewingStop') === 0) {
 			this.set('reviewingStop', timestamp || Date.now());
 		}
@@ -202,7 +202,7 @@ module.exports = GelatoModel.extend({
 	 * @param {Number} [timestamp]
 	 * @returns {PromptItem}
 	 */
-	stopThinking: function (timestamp) {
+	stopThinking: function(timestamp) {
 		if (this.get('thinkingStop') === 0) {
 			this.set('thinkingStop', timestamp || Date.now());
 		}

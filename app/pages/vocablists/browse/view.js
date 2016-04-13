@@ -13,7 +13,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.navbar = new DefaultNavbar();
 		this.sidebar = new Sidebar();
 		this.table = new Table();
@@ -42,7 +42,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {VocablistBrowse}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.sidebar.setElement('#vocablist-sidebar-container').render();
@@ -52,7 +52,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleChangeCheckbox
 	 */
-	handleChangeCheckbox: function () {
+	handleChangeCheckbox: function() {
 		/** TODO: support checkbox filters
 		 var checkedBoxes = $('input[type="checkbox"]:checked');
 		 var filterTypes = checkedBoxes.map(function(i, el) {
@@ -66,7 +66,7 @@ module.exports = GelatoPage.extend({
 	 * @method onClickListOption
 	 * @param {Event} event
 	 */
-	handleClickListOption: function (event) {
+	handleClickListOption: function(event) {
 		event.preventDefault();
 		this.table.setLayout('list');
 		this.$('#list-option').addClass('chosen');
@@ -76,7 +76,7 @@ module.exports = GelatoPage.extend({
 	 * @method onClickGridOption
 	 * @param {Event} event
 	 */
-	handleClickGridOption: function (event) {
+	handleClickGridOption: function(event) {
 		event.preventDefault();
 		this.table.setLayout('grid');
 		this.$('#list-option').removeClass('chosen');
@@ -86,14 +86,14 @@ module.exports = GelatoPage.extend({
 	 * @method handleKeypressListSearchInput
 	 * @param {Event} event
 	 */
-	handleKeypressListSearchInput: function (event) {
+	handleKeypressListSearchInput: function(event) {
 		this.table.setFilterString(event.target.value);
 	},
 	/**
 	 * @method remove
 	 * @returns {VocablistBrowse}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.sidebar.remove();
 		this.table.remove();

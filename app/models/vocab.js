@@ -12,14 +12,14 @@ var Vocab = SkritterModel.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.audio = this.has('audio') ? new Audio(this.get('audio').replace('http://', 'https://')) : null;
 	},
 	/**
 	 * @method defaults
 	 * @returns {Object}
 	 */
-	defaults: function () {
+	defaults: function() {
 		return {
 			definitions: {},
 			filler: false,
@@ -40,14 +40,14 @@ var Vocab = SkritterModel.extend({
 	/**
 	 * @method banAll
 	 */
-	banAll: function () {
+	banAll: function() {
 		this.set('bannedParts', []);
 	},
 	/**
 	 * @method banPart
 	 * @param {String} part
 	 */
-	banPart: function (part) {
+	banPart: function(part) {
 		this.get('bannedParts').push(part);
 		this.set('bannedParts', _.uniq(this.get('bannedParts')));
 	},
@@ -55,16 +55,16 @@ var Vocab = SkritterModel.extend({
 	 * @method fetchMissing
 	 * @param {Function} [callback]
 	 */
-	fetchMissing: function (callback) {
+	fetchMissing: function(callback) {
 		$.ajax({
 			context: this,
 			headers: app.user.session.getHeaders(),
 			type: 'POST',
 			url: app.getApiUrl() + 'items/addmissing?vocabId=' + this.id,
-			error: function (error) {
+			error: function(error) {
 				typeof callback === 'function' && callback(error);
 			},
-			success: function () {
+			success: function() {
 				typeof callback === 'function' && callback();
 			}
 		});
@@ -73,21 +73,21 @@ var Vocab = SkritterModel.extend({
 	 * @method getBase
 	 * @returns {String}
 	 */
-	getBase: function () {
+	getBase: function() {
 		return this.id.split('-')[1];
 	},
 	/**
 	 * @method getCharacters
 	 * @returns {Array}
 	 */
-	getCharacters: function () {
+	getCharacters: function() {
 		return this.get('writing').split('');
 	},
 	/**
 	 * @method getContained
 	 * @returns {Array}
 	 */
-	getContained: function (excludeFillers) {
+	getContained: function(excludeFillers) {
 		var containedVocabs = [];
 		var characters = this.getCharacters();
 		var lang = this.get('lang');
@@ -106,7 +106,7 @@ var Vocab = SkritterModel.extend({
 			containedVocabs.push(containedVocab);
 		}
 		if (excludeFillers) {
-			return containedVocabs.filter(function (vocab) {
+			return containedVocabs.filter(function(vocab) {
 				return !vocab.get('filler');
 			});
 		}
@@ -116,7 +116,7 @@ var Vocab = SkritterModel.extend({
 	 * @method getDecomp
 	 * @returns {Decomp}
 	 */
-	getDecomp: function () {
+	getDecomp: function() {
 		return this.collection.decomps.get(this.get('writing'));
 	},
 	/**
@@ -124,7 +124,7 @@ var Vocab = SkritterModel.extend({
 	 * @param {Boolean} [ignoreFormat]
 	 * @returns {String}
 	 */
-	getDefinition: function (ignoreFormat) {
+	getDefinition: function(ignoreFormat) {
 		var customDefinition = this.get('customDefinition');
 		var definition = this.get('definitions')[app.user.get('sourceLang')];
 		if (customDefinition && customDefinition !== '') {
@@ -138,21 +138,21 @@ var Vocab = SkritterModel.extend({
 	 * @method getFontClass
 	 * @returns {String}
 	 */
-	getFontClass: function () {
+	getFontClass: function() {
 		return this.isChinese() ? 'text-chinese' : 'text-japanese';
 	},
 	/**
 	 * @method getFontName
 	 * @returns {String}
 	 */
-	getFontName: function () {
+	getFontName: function() {
 		return this.isChinese() ? 'KaiTi' : 'DFKaiSho-Md';
 	},
 	/**
 	 * @method getMnemonic
 	 * @returns {Object}
 	 */
-	getMnemonic: function () {
+	getMnemonic: function() {
 		if (this.get('mnemonic')) {
 			return this.get('mnemonic');
 		} else if (this.get('topMnemonic')) {
@@ -164,7 +164,7 @@ var Vocab = SkritterModel.extend({
 	 * @method getPromptCharacters
 	 * @returns {Array}
 	 */
-	getPromptCharacters: function () {
+	getPromptCharacters: function() {
 		var characters = [];
 		var strokes = this.getStrokes();
 		for (var i = 0, length = strokes.length; i < length; i++) {
@@ -182,7 +182,7 @@ var Vocab = SkritterModel.extend({
 	 * @param {String} part
 	 * @returns {PromptItems}
 	 */
-	getPromptItems: function (part) {
+	getPromptItems: function(part) {
 		var promptItems = new PromptItems();
 		var containedVocabs = this.getContained();
 		var characters = [];
@@ -219,7 +219,7 @@ var Vocab = SkritterModel.extend({
 	 * @method getPromptTones
 	 * @returns {Array}
 	 */
-	getPromptTones: function () {
+	getPromptTones: function() {
 		var tones = [];
 		var strokes = this.getCharacters();
 		for (var i = 0, length = strokes.length; i < length; i++) {
@@ -231,7 +231,7 @@ var Vocab = SkritterModel.extend({
 	 * @method getReading
 	 * @returns {String}
 	 */
-	getReading: function () {
+	getReading: function() {
 		//TODO: depreciate this for direct usage in templates
 		return this.isChinese() ? app.fn.pinyin.toTone(this.get('reading')) : this.get('reading');
 	},
@@ -239,7 +239,7 @@ var Vocab = SkritterModel.extend({
 	 * @method getReadingObjects
 	 * @returns {Array}
 	 */
-	getReadingObjects: function () {
+	getReadingObjects: function() {
 		var readings = [];
 		var reading = this.get('reading');
 		if (this.isChinese()) {
@@ -251,7 +251,7 @@ var Vocab = SkritterModel.extend({
 		} else {
 			readings = [reading];
 		}
-		return readings.map(function (value) {
+		return readings.map(function(value) {
 			if ([' ', ' ... ', '\''].indexOf(value) > -1) {
 				return {type: 'filler', value: value};
 			}
@@ -262,14 +262,14 @@ var Vocab = SkritterModel.extend({
 	 * @method getSentence
 	 * @returns {Sentence}
 	 */
-	getSentence: function () {
+	getSentence: function() {
 		return this.collection.sentences.get(this.get('sentenceId'));
 	},
 	/**
 	 * @method getStrokes
 	 * @returns {Array}
 	 */
-	getStrokes: function () {
+	getStrokes: function() {
 		var strokes = [];
 		var characters = this.getCharacters();
 		for (var i = 0, length = characters.length; i < length; i++) {
@@ -294,7 +294,7 @@ var Vocab = SkritterModel.extend({
 	 * @method getTones
 	 * @returns {Array}
 	 */
-	getTones: function () {
+	getTones: function() {
 		if (this.isChinese()) {
 			var tones = [];
 			var contained = this.get('containedVocabIds') ? this.getContained() : [this];
@@ -320,14 +320,14 @@ var Vocab = SkritterModel.extend({
 	 * @method getVariation
 	 * @returns {Number}
 	 */
-	getVariation: function () {
+	getVariation: function() {
 		return parseInt(this.id.split('-')[2], 10);
 	},
 	/**
 	 * @method getWriting
 	 * @returns {String}
 	 */
-	getWriting: function () {
+	getWriting: function() {
 		return this.get('writing');
 	},
 	/**
@@ -335,11 +335,11 @@ var Vocab = SkritterModel.extend({
 	 * @param {String} vocabId
 	 * @returns {String}
 	 */
-	getWritingDifference: function (vocabId) {
+	getWritingDifference: function(vocabId) {
 		return _.zipWith(
 			this.get('writing').split(),
 			app.fn.mapper.fromBase(vocabId).split(),
-			function (thisChar, otherChar) {
+			function(thisChar, otherChar) {
 				return thisChar === otherChar ? '-' : otherChar;
 			}).join('');
 	},
@@ -347,21 +347,21 @@ var Vocab = SkritterModel.extend({
 	 * @method isBanned
 	 * @returns {Boolean}
 	 */
-	isBanned: function () {
+	isBanned: function() {
 		return this.get('bannedParts').length ? true : false;
 	},
 	/**
 	 * @method isChinese
 	 * @returns {Boolean}
 	 */
-	isChinese: function () {
+	isChinese: function() {
 		return this.get('lang') === 'zh';
 	},
 	/**
 	 * @method isFiller
 	 * @returns {Boolean}
 	 */
-	isFiller: function () {
+	isFiller: function() {
 		if (app.isJapanese()) {
 			if (!app.user.get('studyKana') && this.isKana()) {
 				return true;
@@ -373,21 +373,21 @@ var Vocab = SkritterModel.extend({
 	 * @method isJapanese
 	 * @returns {Boolean}
 	 */
-	isJapanese: function () {
+	isJapanese: function() {
 		return this.get('lang') === 'ja';
 	},
 	/**
 	 * @method isKana
 	 * @returns {Boolean}
 	 */
-	isKana: function () {
+	isKana: function() {
 		return app.fn.isKana(this.get('writing'));
 	},
 	/**
 	 * @method isStarred
 	 * @returns {Boolean}
 	 */
-	isStarred: function () {
+	isStarred: function() {
 		return this.get('starred');
 	},
 	/**
@@ -395,14 +395,14 @@ var Vocab = SkritterModel.extend({
 	 * @param {Object} response
 	 * @returns {Object}
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.Vocab || response;
 	},
 	/**
 	 * @method play
 	 * @returns {Audio}
 	 */
-	play: function () {
+	play: function() {
 		if (this.audio && this.audio.paused) {
 			this.audio.play();
 		}
@@ -412,7 +412,7 @@ var Vocab = SkritterModel.extend({
 	 * @method post
 	 * @param {Function} callback
 	 */
-	post: function (callback) {
+	post: function(callback) {
 		$.ajax({
 			context: this,
 			url: app.getApiUrl() + 'vocabs',
@@ -426,10 +426,10 @@ var Vocab = SkritterModel.extend({
 				traditionalWriting: this.get('writingTraditional'),
 				writing: this.get('writing')
 			},
-			error: function (error) {
+			error: function(error) {
 				typeof callback === 'function' && callback(error);
 			},
-			success: function (result) {
+			success: function(result) {
 				typeof callback === 'function' && callback(null, this.set(result.Vocab, {merge: true}));
 			}
 		});
@@ -438,7 +438,7 @@ var Vocab = SkritterModel.extend({
 	 * @method toggleStarred
 	 * @returns {Boolean}
 	 */
-	toggleStarred: function () {
+	toggleStarred: function() {
 		if (this.get('starred')) {
 			this.set('starred', false);
 			return false;
@@ -449,14 +449,14 @@ var Vocab = SkritterModel.extend({
 	/**
 	 * @method unbanAll
 	 */
-	unbanAll: function () {
+	unbanAll: function() {
 		this.set('bannedParts', []);
 	},
 	/**
 	 * @method unbanPart
 	 * @param {String} part
 	 */
-	unbanPart: function (part) {
+	unbanPart: function(part) {
 		this.set('bannedParts', _.remove(this.get('bannedParts'), part));
 	}
 });

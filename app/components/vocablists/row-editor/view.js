@@ -14,7 +14,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.changed = false;
 		this.editing = false;
 		this.rows = [];
@@ -43,7 +43,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {VocablistsListEditorRows}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.$('#vocablist-section-rows').sortable({update: _.bind(this.handleUpdateSort, this)});
 	},
@@ -51,7 +51,7 @@ module.exports = GelatoComponent.extend({
 	 * @method addRow
 	 * @param {String} query
 	 */
-	addRow: function (query) {
+	addRow: function(query) {
 		var self = this;
 		var queryVocabs = new Vocabs();
 		var row = {query: query, state: 'loading'};
@@ -61,11 +61,11 @@ module.exports = GelatoComponent.extend({
 				q: query,
 				lang: this.vocablist.get('lang')
 			},
-			error: function (a, b) {
+			error: function(a, b) {
 			},
-			success: _.bind(function (collection) {
+			success: _.bind(function(collection) {
 				var results = [];
-				var groups = collection.groupBy(function (vocab) {
+				var groups = collection.groupBy(function(vocab) {
 					return vocab.getBase();
 				});
 				for (var writing in groups) {
@@ -115,7 +115,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method discardChanges
 	 */
-	discardChanges: function () {
+	discardChanges: function() {
 		this.rows = _.clone(this.saved);
 		this.render();
 	},
@@ -125,10 +125,10 @@ module.exports = GelatoComponent.extend({
 	 * @method getRows
 	 * @returns {Array}
 	 */
-	getRows: function () {
+	getRows: function() {
 		return _.filter(
 			this.rows,
-			function (row) {
+			function(row) {
 				return _.isString(row.vocabId);
 			}
 		);
@@ -137,7 +137,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickAddEntry
 	 * @param {Event} event
 	 */
-	handleClickAddEntry: function (event) {
+	handleClickAddEntry: function(event) {
 		var self = this;
 		event.preventDefault();
 		var $row = $(event.target).closest('.row');
@@ -147,7 +147,7 @@ module.exports = GelatoComponent.extend({
 		this.dialog.open({row: row});
 		this.dialog.on(
 			'vocab',
-			function (vocab) {
+			function(vocab) {
 				self.removeRow(index);
 				self.addRow(vocab.get('writing'));
 			}
@@ -157,7 +157,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickRemoveRow
 	 * @param {Event} event
 	 */
-	handleClickRemoveRow: function (event) {
+	handleClickRemoveRow: function(event) {
 		event.preventDefault();
 		var $row = $(event.target).closest('.row');
 		this.removeRow($row.data('index'));
@@ -167,7 +167,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickResultRow
 	 * @param {Event} event
 	 */
-	handleClickResultRow: function (event) {
+	handleClickResultRow: function(event) {
 		event.preventDefault();
 		var $row = $(event.target).closest('.row');
 		var $result = $(event.target).closest('.result-row');
@@ -182,7 +182,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickShowResults
 	 * @param {Event} event
 	 */
-	handleClickShowResults: function (event) {
+	handleClickShowResults: function(event) {
 		event.preventDefault();
 		var $row = $(event.target).closest('.row');
 		var $resultRows = $row.children('.result-rows');
@@ -196,7 +196,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickStudyWriting
 	 * @param {Event} event
 	 */
-	handleClickStudyWriting: function (event) {
+	handleClickStudyWriting: function(event) {
 		event.preventDefault();
 		var $row = $(event.target).closest('.row');
 		var $toggle = $row.find('.study-writing');
@@ -208,12 +208,12 @@ module.exports = GelatoComponent.extend({
 	 * @method handleUpdateSort
 	 * @param {Event} event
 	 */
-	handleUpdateSort: function (event) {
+	handleUpdateSort: function(event) {
 		var rows = this.rows;
 		var sortedRows = [];
 		this.$('#vocablist-section-rows')
 			.children('.row')
-			.map(function (index, element) {
+			.map(function(index, element) {
 				var row = _.find(rows, {id: $(element).data('row-id')});
 				sortedRows.push(row);
 			});
@@ -224,28 +224,28 @@ module.exports = GelatoComponent.extend({
 	 * @method loadRows
 	 * @param {Object} [options]
 	 */
-	loadRows: function (options) {
+	loadRows: function(options) {
 		var rows = this.vocablistSection.get('rows');
 		var uniqueVocabIds = this.vocablistSection.getUniqueVocabIds();
 		var vocabs = new Vocabs();
 		async.each(
 			_.chunk(uniqueVocabIds, 50),
-			_.bind(function (chunk, callback) {
+			_.bind(function(chunk, callback) {
 				vocabs.fetch({
 					data: {
 						ids: chunk.join('|')
 					},
 					remove: false,
-					error: function (error) {
+					error: function(error) {
 						callback(error);
 					},
-					success: function (vocabs) {
+					success: function(vocabs) {
 						callback();
 					}
 				});
 			}, this),
-			_.bind(function (error) {
-				rows.forEach(function (row) {
+			_.bind(function(error) {
+				rows.forEach(function(row) {
 					var vocab1 = vocabs.get(row.vocabId);
 					var vocab2 = vocabs.get(row.tradVocabId) || vocab1;
 
@@ -279,7 +279,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Number} index
 	 * @returns {Object}
 	 */
-	removeRow: function (index) {
+	removeRow: function(index) {
 		return this.rows.splice(index, 1);
 	}
 });

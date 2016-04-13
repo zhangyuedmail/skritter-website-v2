@@ -12,7 +12,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.editing = false;
 		this.vocablist = options.vocablist;
 		this.listenTo(this.vocablist, 'change:sections', this.render);
@@ -36,7 +36,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {VocablistsListEditorSections}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -44,7 +44,7 @@ module.exports = GelatoComponent.extend({
 	 * @method addSection
 	 * @param {String} [name]
 	 */
-	addSection: function (name) {
+	addSection: function(name) {
 		this.vocablist.get('sections').push({name: name, rows: []});
 		this.render().$('.last-section').find('input').focus();
 	},
@@ -52,7 +52,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickRemoveSection
 	 * @param {Event} event
 	 */
-	handleClickRemoveSection: function (event) {
+	handleClickRemoveSection: function(event) {
 		event.preventDefault();
 		var $row = $(event.target).closest('.row');
 		this.vocablist.get('sections')[$row.data('index')].deleted = true;
@@ -62,7 +62,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickRestoreSection
 	 * @param {Event} event
 	 */
-	handleClickRestoreSection: function (event) {
+	handleClickRestoreSection: function(event) {
 		event.preventDefault();
 		var $row = $(event.target).closest('.row');
 		this.vocablist.get('sections')[$row.data('index')].deleted = false;
@@ -72,7 +72,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleKeyupLastSection
 	 * @param {Event} event
 	 */
-	handleKeyupLastSection: function (event) {
+	handleKeyupLastSection: function(event) {
 		event.preventDefault();
 		if (event.which === 13 || event.keyCode === 13) {
 			if (!this.vocablist.get('singleSect')) {
@@ -84,10 +84,10 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method updateVocablist
 	 */
-	updateVocablist: function () {
+	updateVocablist: function() {
 		this.$('#vocablist-sections')
 			.children('.row')
-			.each((function (index, element) {
+			.each((function(index, element) {
 				var name = $(element).find('#section-name').val();
 				var section = this.vocablist.get('sections')[index];
 				section.name = name;

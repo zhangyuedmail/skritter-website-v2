@@ -12,7 +12,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} [options]
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.lookup = new VocabViewerLookup();
 		this.vocabs = null;
 	},
@@ -30,7 +30,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {VocabViewerContent}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.lookup.setElement('#lookup-container').render();
 		return this;
@@ -40,7 +40,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Vocabs} vocabs
 	 * @returns {VocabViewerContent}
 	 */
-	set: function (vocabs) {
+	set: function(vocabs) {
 		this.vocabs = vocabs;
 		this.lookup.set(vocabs);
 		return this.render();

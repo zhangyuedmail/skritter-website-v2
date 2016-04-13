@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.heatmap = new CalHeatMap();
 		this.stats = new ProgressStats();
 		this.listenTo(this.stats, 'state:standby', this.updateHeatmap);
@@ -26,7 +26,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {DashboardMonth}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.heatmap.init({
 			cellSize: 22,
@@ -50,20 +50,20 @@ module.exports = GelatoComponent.extend({
 	 * @method remove
 	 * @returns {DashboardMonth}
 	 */
-	remove: function () {
+	remove: function() {
 		this.heatmap.destroy();
 		return GelatoComponent.prototype.remove.call(this);
 	},
 	/**
 	 * @method updateHeatmap
 	 */
-	updateHeatmap: function () {
+	updateHeatmap: function() {
 		this.heatmap.update(this.stats.getMonthlyHeatmapData());
 	},
 	/**
 	 * @method updateStreak
 	 */
-	updateStreak: function () {
+	updateStreak: function() {
 		if (this.stats.length) {
 			this.$('#streak .value').text(this.stats.getMonthlyStreak());
 		}

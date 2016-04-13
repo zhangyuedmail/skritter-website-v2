@@ -17,7 +17,7 @@ function Recognizer() {
  * @param {PromptCharacter} character
  * @param {Number} size
  */
-Recognizer.prototype.recognize = function (stroke, character, size) {
+Recognizer.prototype.recognize = function(stroke, character, size) {
 	this.size = size;
 	var results = this.getResults(stroke, character);
 	results = _.filter(results, 'total');
@@ -27,7 +27,7 @@ Recognizer.prototype.recognize = function (stroke, character, size) {
 	}
 };
 
-Recognizer.prototype.getResults = function (stroke, character) {
+Recognizer.prototype.getResults = function(stroke, character) {
 	var results = [];
 	var targets = character.getExpectedTargets();
 	for (var a = 0, lengthA = targets.length; a < lengthA; a++) {
@@ -42,7 +42,7 @@ Recognizer.prototype.getResults = function (stroke, character) {
 	return results;
 };
 
-Recognizer.prototype.runChecks = function (userStroke, targetStroke) {
+Recognizer.prototype.runChecks = function(userStroke, targetStroke) {
 	var results = [];
 	var params = targetStroke.getParams();
 	for (var a = 0, lengthA = params.length; a < lengthA; a++) {
@@ -96,7 +96,7 @@ Recognizer.prototype.runChecks = function (userStroke, targetStroke) {
  * @param {Number} value
  * @returns {Number}
  */
-Recognizer.prototype.scaleThreshold = function (value) {
+Recognizer.prototype.scaleThreshold = function(value) {
 	return value * (this.canvasSize / this.baseSize);
 };
 
@@ -106,7 +106,7 @@ Recognizer.prototype.scaleThreshold = function (value) {
  * @param {Param} targetParam
  * @returns {Number}
  */
-Recognizer.prototype.checkAngle = function (userStroke, targetParam) {
+Recognizer.prototype.checkAngle = function(userStroke, targetParam) {
 	var angleThreshold = targetParam.get('angleThreshold') || this.baseAngleThreshold;
 	var targetAngle = targetParam.getFirstAngle();
 	var userAngle = userStroke.getFirstAngle();
@@ -123,7 +123,7 @@ Recognizer.prototype.checkAngle = function (userStroke, targetParam) {
  * @param {Param} targetParam
  * @returns {Number}
  */
-Recognizer.prototype.checkCorners = function (userStroke, targetParam) {
+Recognizer.prototype.checkCorners = function(userStroke, targetParam) {
 	var cornerThreshold = targetParam.get('cornerThreshold') || this.baseCornerThreshold;
 	var targetCorners = targetParam.get('corners');
 	var userCorners = userStroke.get('corners');
@@ -140,7 +140,7 @@ Recognizer.prototype.checkCorners = function (userStroke, targetParam) {
  * @param {Param} targetParam
  * @returns {Number}
  */
-Recognizer.prototype.checkDistance = function (userStroke, targetParam) {
+Recognizer.prototype.checkDistance = function(userStroke, targetParam) {
 	var targetCenter = targetParam.getRectangle().center;
 	var userCenter = userStroke.getUserRectangle().center;
 	var score = app.fn.getDistance(userCenter, targetCenter);

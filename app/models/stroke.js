@@ -16,7 +16,7 @@ module.exports = GelatoModel.extend({
 	 * @method getPromptCharacter
 	 * @returns {PromptCharacter}
 	 */
-	getPromptCharacter: function () {
+	getPromptCharacter: function() {
 		var character = new PromptCharacter();
 		var variations = this.clone().get('strokes');
 		var rune = this.get('rune');
@@ -56,7 +56,7 @@ module.exports = GelatoModel.extend({
 	 * @method isKana
 	 * @returns {Boolean}
 	 */
-	isKana: function () {
+	isKana: function() {
 		return app.fn.isKana(this.get('rune'));
 	}
 });

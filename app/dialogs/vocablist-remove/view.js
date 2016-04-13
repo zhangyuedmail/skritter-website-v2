@@ -9,7 +9,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method initialize
 	 * @param {Object} options
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.vocablist = options.vocablist;
 		if (!this.vocablist) {
 			throw new Error('VocablistRemoveDialog requires a vocablist passed in!')
@@ -24,7 +24,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method render
 	 * @returns {VocablistRemoveDialog}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -40,14 +40,14 @@ module.exports = BootstrapDialog.extend({
 	 * @method handleClickCloseButton
 	 * @param {Event} e
 	 */
-	handleClickCancelButton: function (e) {
+	handleClickCancelButton: function(e) {
 		this.close();
 	},
 	/**
 	 * @method handleClickSaveButton
 	 * @param {Event} e
 	 */
-	handleClickConfirmButton: function (e) {
+	handleClickConfirmButton: function(e) {
 		this.vocablist.save({'studyingMode': 'not studying'}, {patch: true, method: 'PUT'});
 		this.close();
 	}

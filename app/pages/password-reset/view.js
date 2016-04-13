@@ -11,7 +11,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.footer = new MarketingFooter();
 		this.navbar = new DefaultNavbar();
 		this.choices = [];
@@ -39,7 +39,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Login}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.footer.setElement('#footer-container').render();
@@ -49,7 +49,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickButtonReset
 	 * @param {Event} event
 	 */
-	handleClickButtonReset: function (event) {
+	handleClickButtonReset: function(event) {
 		event.preventDefault();
 		this.resetPassword();
 	},
@@ -57,7 +57,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleKeyUpInputField
 	 * @param {Event} event
 	 */
-	handleKeyUpInputField: function (event) {
+	handleKeyUpInputField: function(event) {
 		event.preventDefault();
 		if (event.which === 13 || event.keyCode === 13) {
 			this.resetPassword();
@@ -66,7 +66,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method resetPassword
 	 */
-	resetPassword: function () {
+	resetPassword: function() {
 		var self = this;
 		var input = this.$('#password-reset-input').val();
 		this.$('#password-reset-form').prop('disabled', true);
@@ -78,7 +78,7 @@ module.exports = GelatoPage.extend({
 			type: 'POST',
 			headers: app.user.session.getHeaders(),
 			data: JSON.stringify({input: input}),
-			error: function (error) {
+			error: function(error) {
 				var response = error.responseJSON;
 				if (response.choices) {
 					self.choices = _.sortBy(response.choices, 'name');
@@ -90,7 +90,7 @@ module.exports = GelatoPage.extend({
 				self.render();
 				ScreenLoader.hide();
 			},
-			success: function () {
+			success: function() {
 				self.choices = [];
 				self.successMessage = 'A temporary password has been emailed to you.';
 				self.render();
@@ -102,7 +102,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Login}
 	 */
-	remove: function () {
+	remove: function() {
 		return GelatoPage.prototype.remove.call(this);
 	}
 });

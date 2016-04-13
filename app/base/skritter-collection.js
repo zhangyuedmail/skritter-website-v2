@@ -9,7 +9,7 @@ module.exports = GelatoCollection.extend({
 	 * @method headers
 	 * @returns {Object}
 	 */
-	headers: function () {
+	headers: function() {
 		return app.user.session.getHeaders();
 	},
 	/**
@@ -18,7 +18,7 @@ module.exports = GelatoCollection.extend({
 	 * @param {Model} model
 	 * @param {Object} options
 	 */
-	sync: function (method, model, options) {
+	sync: function(method, model, options) {
 		options.headers = _.result(this, 'headers');
 		if (!options.url) {
 			options.url = app.getApiUrl() + _.result(this, 'url');

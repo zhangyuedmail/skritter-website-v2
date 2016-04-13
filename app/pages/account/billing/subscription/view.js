@@ -18,14 +18,14 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		StripeLoader.load();
 		this.coupon = new Coupon({code: ''});
 		this.navbar = new DefaultNavbar();
 		this.sidebar = new AccountSidebar();
 		this.subscription = new Subscription({id: app.user.id});
 		this.listenTo(this.subscription, 'state', this.render);
-		this.listenTo(this.coupon, 'sync', function (model, response) {
+		this.listenTo(this.coupon, 'sync', function(model, response) {
 			this.subscription.set(response.Subscription);
 			this.coupon.unset('code');
 		});
@@ -66,7 +66,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {AccountBillingSubscription}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.sidebar.setElement('#sidebar-container').render();
@@ -85,7 +85,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleChangePaymentMethod
 	 */
-	handleChangePaymentMethod: function () {
+	handleChangePaymentMethod: function() {
 		var method = this.$('input[name="payment-method"]:checked').val();
 		this.$('.credit-card-form-group').toggleClass('hide', method !== 'stripe');
 		this.$('.paypal-form-group').toggleClass('hide', method !== 'paypal');
@@ -93,7 +93,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickCancelVacationLink
 	 */
-	handleClickCancelVacationLink: function () {
+	handleClickCancelVacationLink: function() {
 		this.subscription.save({vacation: false}, {
 			parse: true,
 			method: 'PUT'
@@ -104,13 +104,13 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickGoOnVacationLink
 	 */
-	handleClickGoOnVacationLink: function () {
+	handleClickGoOnVacationLink: function() {
 		this.openVacationDialog();
 	},
 	/**
 	 * @method handleClickRedeemCodeButton
 	 */
-	handleClickRedeemCodeButton: function () {
+	handleClickRedeemCodeButton: function() {
 		this.coupon.set('code', this.$('#code-input').val());
 		this.coupon.use();
 		this.renderMainContent();
@@ -119,7 +119,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickSpoofButtonAreaButton
 	 * @param {Event} event
 	 */
-	handleClickSpoofButtonAreaButton: function (event) {
+	handleClickSpoofButtonAreaButton: function(event) {
 		var subscribed = $(event.target).data('subscribed');
 		var client = $(event.target).data('client');
 		var discount = $(event.target).data('discount');
@@ -187,44 +187,44 @@ module.exports = GelatoPage.extend({
 		}
 		if (client) {
 			if (client === 'site') {
-				app.isWebsite = function () {
+				app.isWebsite = function() {
 					return true;
 				}
-				app.isMobile = function () {
+				app.isMobile = function() {
 					return false;
 				}
-				app.isAndroid = function () {
+				app.isAndroid = function() {
 					return false;
 				}
-				app.isIOS = function () {
+				app.isIOS = function() {
 					return false;
 				}
 			}
 			if (client === 'ios') {
-				app.isWebsite = function () {
+				app.isWebsite = function() {
 					return false;
 				}
-				app.isMobile = function () {
+				app.isMobile = function() {
 					return true;
 				}
-				app.isAndroid = function () {
+				app.isAndroid = function() {
 					return false;
 				}
-				app.isIOS = function () {
+				app.isIOS = function() {
 					return true;
 				}
 			}
 			if (client === 'android') {
-				app.isWebsite = function () {
+				app.isWebsite = function() {
 					return false;
 				}
-				app.isMobile = function () {
+				app.isMobile = function() {
 					return true;
 				}
-				app.isAndroid = function () {
+				app.isAndroid = function() {
 					return true;
 				}
-				app.isIOS = function () {
+				app.isIOS = function() {
 					return false;
 				}
 			}
@@ -280,7 +280,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickSubscribePaypalButton
 	 */
-	handleClickSubscribePaypalButton: function () {
+	handleClickSubscribePaypalButton: function() {
 		var plan = $('#paypal-plan-select').val();
 		$('#paypal-subscribe-form select').val(plan);
 		$('#paypal-subscribe-form').submit();
@@ -288,7 +288,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickSubscribeStripeButton
 	 */
-	handleClickSubscribeStripeButton: function () {
+	handleClickSubscribeStripeButton: function() {
 		var cardData = {
 			number: this.$('#card-number-input').val(),
 			exp_month: this.$('#card-month-select').val(),
@@ -303,7 +303,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method this.handleClickSubscribeStripeButtonResponse
 	 */
-	handleClickSubscribeStripeButtonResponse: function (status, response) {
+	handleClickSubscribeStripeButtonResponse: function(status, response) {
 		if (response.error) {
 			this.setSubscribeStripeButtonDisabled(false);
 			this.$('#card-error-alert')
@@ -327,7 +327,7 @@ module.exports = GelatoPage.extend({
 				method: 'POST',
 				data: data,
 				context: this,
-				success: function (response) {
+				success: function(response) {
 					this.subscription.set(response.Subscription);
 					this.render();
 				}
@@ -337,12 +337,12 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickUnsubscribeButton
 	 */
-	handleClickUnsubscribeButton: function () {
+	handleClickUnsubscribeButton: function() {
 		var dialog = new CancelSubscriptionDialog({
 			subscription: this.subscription
 		});
 		dialog.render().open();
-		this.listenToOnce(dialog, 'hidden', function () {
+		this.listenToOnce(dialog, 'hidden', function() {
 			if (dialog.choseVacation) {
 				var open = _.bind(this.openVacationDialog, this);
 				_.delay(open, 200);
@@ -352,7 +352,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickUnsubscribeITunesButton
 	 */
-	handleClickUnsubscribeITunesButton: function () {
+	handleClickUnsubscribeITunesButton: function() {
 		var url = app.getApiUrl() + this.subscription.url() + '/ios/cancel';
 		var headers = app.user.session.getHeaders();
 		this.$('#unsubscribe-itunes-btn *').toggleClass('hide');
@@ -361,7 +361,7 @@ module.exports = GelatoPage.extend({
 			headers: headers,
 			method: 'POST',
 			context: this,
-			success: function (response) {
+			success: function(response) {
 				this.subscription.set(response.Subscription);
 				this.renderMainContent();
 			}
@@ -370,7 +370,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickUpdateStripeSubscriptionButton
 	 */
-	handleClickUpdateStripeSubscriptionButton: function () {
+	handleClickUpdateStripeSubscriptionButton: function() {
 		var cardData = {
 			number: this.$('#card-number-input').val(),
 			exp_month: this.$('#card-month-select').val(),
@@ -394,7 +394,7 @@ module.exports = GelatoPage.extend({
 				contentType: "application/json",
 				data: JSON.stringify(data),
 				context: this,
-				success: function (response) {
+				success: function(response) {
 					this.subscription.set(response.Subscription);
 					this.renderMainContent();
 				}
@@ -406,7 +406,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method this.handleClickSubscribeStripeButtonResponse
 	 */
-	handleClickUpdateStripeSubscriptionButtonResponse: function (status, response) {
+	handleClickUpdateStripeSubscriptionButtonResponse: function(status, response) {
 		if (response.error) {
 			this.setSubscribeStripeButtonDisabled(false);
 			this.$('#card-error-alert')
@@ -429,7 +429,7 @@ module.exports = GelatoPage.extend({
 				contentType: "application/json",
 				data: JSON.stringify(data),
 				context: this,
-				success: function (response) {
+				success: function(response) {
 					this.subscription.set(response.Subscription);
 					this.renderMainContent();
 				}
@@ -439,7 +439,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method openVacationDialog
 	 */
-	openVacationDialog: function () {
+	openVacationDialog: function() {
 		var dialog = new VacationDialog({subscription: this.subscription});
 		dialog.render().open();
 	},
@@ -447,7 +447,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {AccountBillingSubscription}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.sidebar.remove();
 		return GelatoPage.prototype.remove.call(this);
@@ -456,7 +456,7 @@ module.exports = GelatoPage.extend({
 	 * @method setSubscribeStripeButtonDisabled
 	 * @param {Boolean} disabled
 	 */
-	setSubscribeStripeButtonDisabled: function (disabled) {
+	setSubscribeStripeButtonDisabled: function(disabled) {
 		var button = this.$('#update-stripe-subscription-btn, #subscribe-stripe-btn');
 		button.attr('disabled', disabled);
 		button.find('span').toggleClass('hide', disabled);

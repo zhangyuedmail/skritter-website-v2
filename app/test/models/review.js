@@ -8,12 +8,12 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 	 * @param {Object} [options]
 	 * @augments {GelatoModel}
 	 */
-	initialize: function (attributes, options) {
+	initialize: function(attributes, options) {
 	},
 	/**
 	 * @returns {Function|Object}
 	 */
-	defaults: function () {
+	defaults: function() {
 		return {
 			created: null,
 			data: [],
@@ -31,7 +31,7 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 	 * Get post data for the server.
 	 * @returns {Array}
 	 */
-	getPostData: function () {
+	getPostData: function() {
 		//TODO: generate post data for server
 		return [];
 	},
@@ -39,14 +39,14 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 	 * Get prompt data at the current position.
 	 * @returns {Object}
 	 */
-	getPromptData: function () {
+	getPromptData: function() {
 		return this.getPromptDataArray()[this.get('position')];
 	},
 	/**
 	 * Get an array of studiable prompt data.
 	 * @return {Array}
 	 */
-	getPromptDataArray: function () {
+	getPromptDataArray: function() {
 		switch (this.get('part')) {
 			case 'defn':
 				return this.get('data').slice(0, 1);
@@ -55,14 +55,14 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 			case 'rune':
 				return _.filter(
 					this.get('data'),
-					function (data) {
+					function(data) {
 						return !data.get('filler') && !data.get('root');
 					}
 				);
 			case 'tone':
 				return _.filter(
 					this.get('data'),
-					function (data) {
+					function(data) {
 						return !data.get('filler') && !data.get('root');
 					}
 				);
@@ -72,14 +72,14 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 	 * Get the numeric length of the prompt data.
 	 * @return {Number}
 	 */
-	getPromptDataLength: function () {
+	getPromptDataLength: function() {
 		return this.getPromptData().length;
 	},
 	/**
 	 * Get an array of data for displaying the reading.
 	 * @return {Array}
 	 */
-	getPromptReadingArray: function () {
+	getPromptReadingArray: function() {
 		var readings = [];
 		var reading = this.vocab.get('reading');
 		if (this.isChinese()) {
@@ -93,7 +93,7 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 		}
 		return _.map(
 			readings,
-			function (value) {
+			function(value) {
 				if (_.includes([' ', ' ... ', '\''], value)) {
 					return {type: 'filler', value: value};
 				}
@@ -105,10 +105,10 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 	 * Get an array of data for displaying the writing.
 	 * @return {Array}
 	 */
-	getPromptWritingArray: function () {
+	getPromptWritingArray: function() {
 		return _.filter(
 			this.get('data'),
-			function (data) {
+			function(data) {
 				return !data.get('root');
 			}
 		);
@@ -117,42 +117,42 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 	 * Is it Chinese?
 	 * @returns {Boolean}
 	 */
-	isChinese: function () {
+	isChinese: function() {
 		return this.get('lang') === 'zh';
 	},
 	/**
 	 * Is it complete?
 	 * @returns {Boolean}
 	 */
-	isComplete: function () {
+	isComplete: function() {
 		return this.get('complete');
 	},
 	/**
 	 * Is it Japanese?
 	 * @returns {Boolean}
 	 */
-	isJapanese: function () {
+	isJapanese: function() {
 		return this.get('lang') === 'ja';
 	},
 	/**
 	 * Is it the first piece of prompt data?
 	 * @returns {Boolean}
 	 */
-	isFirst: function () {
+	isFirst: function() {
 		return this.get('position') === 0;
 	},
 	/**
 	 * Is it the last piece of prompt data?
 	 * @returns {Boolean}
 	 */
-	isLast: function () {
+	isLast: function() {
 		return this.get('position') >= this.getPromptDataLength() - 1;
 	},
 	/**
 	 * Load required data for studying the review data.
 	 * @returns {Review}
 	 */
-	load: function () {
+	load: function() {
 		var data = this.get('data');
 		for (var a = 0, lengthA = data.length; a < lengthA; a++) {
 			var dataReview = new ReviewData(data[a], {review: this});
@@ -186,7 +186,7 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 	 * Go to the next piece of prompt data if it exists.
 	 * @returns {Object}
 	 */
-	next: function () {
+	next: function() {
 		if (this.isLast()) {
 			return null;
 		}
@@ -197,7 +197,7 @@ var Review = GelatoModel.extend(/** @lends Review.prototype */ {
 	 * Go to the previous piece of prompt data if it exists.
 	 * @returns {Object}
 	 */
-	previous: function () {
+	previous: function() {
 		if (this.isFirst()) {
 			return null;
 		}

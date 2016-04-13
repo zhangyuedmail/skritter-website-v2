@@ -14,7 +14,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.vocablist = options.vocablist;
 	},
 	/**
@@ -39,14 +39,14 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {VocablistsListSidebar}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 	},
 	/**
 	 * @method handleChangeImageUploadInput
 	 * @param {Event} event
 	 */
-	handleChangeImageUploadInput: function (event) {
+	handleChangeImageUploadInput: function(event) {
 		var file = event.target.files[0];
 		var data = new FormData().append('image', file);
 		this.$('#list-img-wrapper .fa-spinner').removeClass('hide');
@@ -60,7 +60,7 @@ module.exports = GelatoComponent.extend({
 			data: data,
 			processData: false,
 			contentType: false,
-			success: function () {
+			success: function() {
 				document.location.reload();
 			}
 		});
@@ -69,7 +69,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickAddToQueue
 	 * @param {Event} event
 	 */
-	handleClickAddToQueue: function (event) {
+	handleClickAddToQueue: function(event) {
 		event.preventDefault();
 		if (this.vocablist.get('studyingMode') === 'not studying') {
 			this.vocablist.save({'studyingMode': 'adding'}, {patch: true});
@@ -80,7 +80,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickCopyLink
 	 * @param {Event} event
 	 */
-	handleClickCopyLink: function (event) {
+	handleClickCopyLink: function(event) {
 		event.preventDefault();
 		var confirmDialog = new ConfirmDialog({
 			title: 'Confirm Copy',
@@ -88,13 +88,13 @@ module.exports = GelatoComponent.extend({
 			okText: 'Yes - Copy!',
 			onConfirm: 'show-spinner'
 		});
-		this.listenTo(confirmDialog, 'confirm', function () {
+		this.listenTo(confirmDialog, 'confirm', function() {
 			var copyUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/copy';
 			$.ajax({
 				url: copyUrl,
 				method: 'POST',
 				headers: app.user.headers(),
-				success: function (response) {
+				success: function(response) {
 					app.router.navigate('/vocablist/view/' + response.VocabList.id, {trigger: true});
 				}
 			});
@@ -105,7 +105,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickDeleteLink
 	 * @param {Event} event
 	 */
-	handleClickDeleteLink: function (event) {
+	handleClickDeleteLink: function(event) {
 		event.preventDefault();
 		var confirmDialog = new ConfirmDialog({
 			title: 'Confirm Delete',
@@ -113,9 +113,9 @@ module.exports = GelatoComponent.extend({
 			okText: 'Yes - Delete!',
 			onConfirm: 'show-spinner'
 		});
-		this.listenTo(confirmDialog, 'confirm', function () {
+		this.listenTo(confirmDialog, 'confirm', function() {
 			this.vocablist.save({disabled: true, studyingMode: 'not studying'}, {patch: true});
-			this.listenToOnce(this.vocablist, 'state', function () {
+			this.listenToOnce(this.vocablist, 'state', function() {
 				app.router.navigate('/vocablists/my-lists', {trigger: true});
 			});
 		});
@@ -125,7 +125,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickImageUploadLink
 	 * @param {Event} event
 	 */
-	handleClickImageUploadLink: function (event) {
+	handleClickImageUploadLink: function(event) {
 		event.preventDefault();
 		this.$('#image-upload-input').trigger('click');
 	},
@@ -133,20 +133,20 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickPublishLink
 	 * @param {Event} event
 	 */
-	handleClickPublishLink: function (event) {
+	handleClickPublishLink: function(event) {
 		var confirmDialog = new ConfirmDialog({
 			title: 'Confirm Publish',
 			body: 'Are you sure you want to publish this list? You cannot undo this.',
 			okText: 'Yes - Publish!',
 			onConfirm: 'show-spinner'
 		});
-		this.listenTo(confirmDialog, 'confirm', function () {
+		this.listenTo(confirmDialog, 'confirm', function() {
 			var publishUrl = app.getApiUrl() + _.result(this.vocablist, 'url') + '/publish';
 			$.ajax({
 				url: publishUrl,
 				method: 'POST',
 				headers: app.user.headers(),
-				success: function () {
+				success: function() {
 					document.location.reload()
 				}
 			});
@@ -157,7 +157,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickStudySettingsLink
 	 * @param {Event} event
 	 */
-	handleClickStudySettingsLink: function (event) {
+	handleClickStudySettingsLink: function(event) {
 		event.preventDefault();
 		this.dialog = new VocablistSettingsDialog({vocablist: this.vocablist});
 		this.dialog.render().open();

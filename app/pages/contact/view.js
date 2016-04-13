@@ -11,7 +11,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.footer = new MarketingFooter();
 		this.navbar = new DefaultNavbar();
 	},
@@ -36,7 +36,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Contact}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		if (app.user.isLoggedIn()) {
 			this.$('#field-email').val(app.user.get('email'));
@@ -49,7 +49,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickContactSubmit
 	 * @param {Event} event
 	 */
-	handleClickContactSubmit: function (event) {
+	handleClickContactSubmit: function(event) {
 		event.preventDefault();
 		var email = this.$('#field-email').val();
 		var message = this.$('#field-message').val();
@@ -77,12 +77,12 @@ module.exports = GelatoPage.extend({
 				message: message,
 				subject: subject
 			})
-		}).done(function () {
+		}).done(function() {
 			this.$('#contact-message').removeClass();
 			this.$('#contact-message').addClass('text-success');
 			this.$('#contact-message').text('Your feedback has been successfully submitted.');
 			this.$('form').hide(500);
-		}).error(function (error) {
+		}).error(function(error) {
 			this.$('#contact-message').removeClass();
 			this.$('#contact-message').addClass('text-danger');
 			this.$('#contact-message').text(JSON.stringify(error));
@@ -93,7 +93,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Contact}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.footer.remove();
 		return GelatoPage.prototype.remove.call(this);

@@ -15,7 +15,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.navbar = new DefaultNavbar();
 		this.sidebar = new WordsSidebar();
 		this.items = new Items();
@@ -45,7 +45,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method remove
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.sidebar.remove();
 		return GelatoPage.prototype.remove.call(this);
@@ -54,7 +54,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {VocablistBrowse}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.sidebar.setElement('#words-sidebar-container').render();
@@ -74,7 +74,7 @@ module.exports = GelatoPage.extend({
 	 * @method fetchItems
 	 * @param {string} [cursor]
 	 */
-	fetchItems: function (cursor) {
+	fetchItems: function(cursor) {
 		this.items.fetch({
 			data: {
 				sort: this.sort,
@@ -89,7 +89,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method fetchItemsForSearchVocabs
 	 */
-	fetchItemsForSearchVocabs: function () {
+	fetchItemsForSearchVocabs: function() {
 		var vocabs = this.vocabsToFetchItemsFor.slice(0, 5);
 		if (!vocabs.length) {
 			return;
@@ -107,13 +107,13 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method fetchItemsForSearchVocabsSync
 	 */
-	fetchItemsForSearchVocabsSync: function (items, response) {
+	fetchItemsForSearchVocabsSync: function(items, response) {
 		var vocabs = items.vocabs;
-		_.forEach(vocabs, function (vocab) {
+		_.forEach(vocabs, function(vocab) {
 			// having gotten items for each vocab, assign each vocab
 			// its last-studied and next-to-study item
 			var vocabItemKeys = response.vocabItemMap[vocab.id];
-			var vocabItems = _.map(vocabItemKeys, function (vocabItemKey) {
+			var vocabItems = _.map(vocabItemKeys, function(vocabItemKey) {
 				var item = items.get(vocabItemKey);
 				// TODO: Also filter out items which whose parts
 				// or style are not being studied.
@@ -123,10 +123,10 @@ module.exports = GelatoPage.extend({
 				return items.get(vocabItemKey);
 			});
 			vocabItems = _.filter(vocabItems); // return
-			vocab.nextItem = _.head(_.sortBy(vocabItems, function (item) {
+			vocab.nextItem = _.head(_.sortBy(vocabItems, function(item) {
 				return item.get('next') || 10000000000000000;
 			}));
-			vocab.lastItem = _.last(_.sortBy(vocabItems, function (item) {
+			vocab.lastItem = _.last(_.sortBy(vocabItems, function(item) {
 				return item.get('last') || 0;
 			}));
 			vocab.set('itemState', 'fetched');
@@ -139,7 +139,7 @@ module.exports = GelatoPage.extend({
 	 * Initializes the action object runAction uses to serially process words
 	 * @method handleChangeActionSelect
 	 */
-	handleChangeActionSelect: function (e) {
+	handleChangeActionSelect: function(e) {
 		var self = this;
 		var action = $(e.target).val();
 		if (!action) {
@@ -147,7 +147,7 @@ module.exports = GelatoPage.extend({
 		}
 		$(e.target).val('');
 		var vocabs = new Vocabs();
-		_.forEach(this.$('input:checked'), function (el) {
+		_.forEach(this.$('input:checked'), function(el) {
 			var vocabID = $(el).closest('tr').data('vocab-id');
 			if (!vocabID) {
 				return;
@@ -162,7 +162,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleChangeCheckbox
 	 * @param {Event} event
 	 */
-	handleChangeCheckbox: function (event) {
+	handleChangeCheckbox: function(event) {
 		var checkbox = $(event.target);
 		if (checkbox.attr('id') === 'all-checkbox') {
 			this.$('input[type="checkbox"]').prop('checked', checkbox.prop('checked'));
@@ -173,7 +173,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleChangeWordSearchInput
 	 */
-	handleChangeWordSearchInput: function () {
+	handleChangeWordSearchInput: function() {
 		this.initAllCollections();
 		this.searchString = this.$('#word-search-input').val();
 		if (this.searchString) {
@@ -192,7 +192,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickLoadMoreButton
 	 */
-	handleClickLoadMoreButton: function () {
+	handleClickLoadMoreButton: function() {
 		if (this.searchString) {
 			this.searchVocabs.fetch({
 				data: {
@@ -212,7 +212,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickNextSortLink
 	 */
-	handleClickNextSortLink: function () {
+	handleClickNextSortLink: function() {
 		this.sort = 'next';
 		this.initAllCollections();
 		this.fetchItems();
@@ -220,7 +220,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickPreviousSortLink
 	 */
-	handleClickPreviousSortLink: function () {
+	handleClickPreviousSortLink: function() {
 		this.sort = 'last';
 		this.initAllCollections();
 		this.fetchItems();
@@ -229,7 +229,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickWritingTd
 	 * @param {Event} event
 	 */
-	handleClickWritingTd: function (event) {
+	handleClickWritingTd: function(event) {
 		event.preventDefault();
 		var row = $(event.target).parent('tr');
 		var vocabId = row.data('vocab-id');
@@ -241,7 +241,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method initAllCollections
 	 */
-	initAllCollections: function () {
+	initAllCollections: function() {
 		this.stopListening(this.items);
 		this.stopListening(this.items.vocabs);
 		this.stopListening(this.vocabs);
@@ -255,12 +255,12 @@ module.exports = GelatoPage.extend({
 		this.searchVocabItems = new Items();
 		this.vocabMap = {};
 
-		this.listenTo(this.items.vocabs, 'add', function (vocab) {
+		this.listenTo(this.items.vocabs, 'add', function(vocab) {
 			this.vocabMap[vocab.id] = vocab;
 		});
 		this.listenTo(this.items, 'state', this.renderTable);
 		this.listenTo(this.searchVocabs, 'state', this.renderTable);
-		this.listenTo(this.searchVocabs, 'add', function (vocab) {
+		this.listenTo(this.searchVocabs, 'add', function(vocab) {
 			this.vocabsToFetchItemsFor.add(vocab);
 			vocab.set('itemState', 'queued')
 		});
@@ -269,7 +269,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method renderTable
 	 */
-	renderTable: function () {
+	renderTable: function() {
 		var context = require('globals');
 		context.view = this;
 		var rendering = $(this.template(context));

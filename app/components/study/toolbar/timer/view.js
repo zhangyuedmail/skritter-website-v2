@@ -7,17 +7,17 @@ var GelatoComponent = require('gelato/component');
 function Stopwatch() {
 	var startAt = 0;
 	var lapTime = 0;
-	this.start = function () {
+	this.start = function() {
 		startAt = startAt ? startAt : new Date().getTime();
 	};
-	this.stop = function () {
+	this.stop = function() {
 		lapTime = startAt ? lapTime + new Date().getTime() - startAt : lapTime;
 		startAt = 0;
 	};
-	this.reset = function () {
+	this.reset = function() {
 		lapTime = startAt = 0;
 	};
-	this.time = function () {
+	this.time = function() {
 		return lapTime + (startAt ? new Date().getTime() - startAt : 0);
 	};
 }
@@ -31,7 +31,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.interval = undefined;
 		this.localOffset = 0;
 		this.seconds = 0;
@@ -48,7 +48,7 @@ module.exports = GelatoComponent.extend({
 	 * @method remove
 	 * @returns {StudyToolbarTimer}
 	 */
-	remove: function () {
+	remove: function() {
 		this.interval = clearInterval(this.interval);
 		return GelatoComponent.prototype.remove.call(this);
 	},
@@ -56,7 +56,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyToolbarTimer}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -64,7 +64,7 @@ module.exports = GelatoComponent.extend({
 	 * @method addLocalOffset
 	 * @param {Number} value
 	 */
-	addLocalOffset: function (value) {
+	addLocalOffset: function(value) {
 		this.localOffset += value;
 		this.update();
 	},
@@ -72,7 +72,7 @@ module.exports = GelatoComponent.extend({
 	 * @method addServerOffset
 	 * @param {Number} value
 	 */
-	addServerOffset: function (value) {
+	addServerOffset: function(value) {
 		this.serverOffset += value;
 		this.update();
 	},
@@ -80,27 +80,27 @@ module.exports = GelatoComponent.extend({
 	 * @method getOffset
 	 * @returns {Number}
 	 */
-	getOffset: function () {
+	getOffset: function() {
 		return (this.localOffset + this.serverOffset) * 1000;
 	},
 	/**
 	 * @method isStarted
 	 * @returns {Boolean}
 	 */
-	isStarted: function () {
+	isStarted: function() {
 		return this.interval ? true : false;
 	},
 	/**
 	 * @method isStopped
 	 * @returns {Boolean}
 	 */
-	isStopped: function () {
+	isStopped: function() {
 		return this.interval ? false : true;
 	},
 	/**
 	 * @method reset
 	 */
-	reset: function () {
+	reset: function() {
 		this.stopwatch.reset();
 		this.lapOffset = 0;
 	},
@@ -108,7 +108,7 @@ module.exports = GelatoComponent.extend({
 	 * @method setLocalOffset
 	 * @param {Number} value
 	 */
-	setLocalOffset: function (value) {
+	setLocalOffset: function(value) {
 		this.localOffset = value;
 		this.update();
 	},
@@ -116,14 +116,14 @@ module.exports = GelatoComponent.extend({
 	 * @method setServerOffset
 	 * @param {Number} value
 	 */
-	setServerOffset: function (value) {
+	setServerOffset: function(value) {
 		this.serverOffset = value;
 		this.update();
 	},
 	/**
 	 * @method start
 	 */
-	start: function () {
+	start: function() {
 		if (this.isStopped()) {
 			this.stopwatch.start();
 			this.interval = setInterval(this.update.bind(this), 100);
@@ -132,7 +132,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method stop
 	 */
-	stop: function () {
+	stop: function() {
 		if (this.isStarted()) {
 			this.stopwatch.stop();
 			this.interval = clearInterval(this.interval);
@@ -141,7 +141,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method update
 	 */
-	update: function () {
+	update: function() {
 		var time = this.stopwatch.time() + this.getOffset();
 		var seconds = time / 1000 >> 0;
 		if (seconds !== this.seconds) {

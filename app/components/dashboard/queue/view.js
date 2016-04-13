@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.vocablists = new Vocablists();
 		this.listenTo(this.vocablists, 'state', this.render);
 		this.vocablists.fetch({
@@ -31,7 +31,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {DashboardQueue}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	}

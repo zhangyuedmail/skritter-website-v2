@@ -13,12 +13,12 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.limit = 20;
 		this.navbar = new DefaultNavbar();
 		this.payments = new Payments();
 		this.sidebar = new AccountSidebar();
-		this.payments.comparator = function (payment) {
+		this.payments.comparator = function(payment) {
 			return -payment.get('created');
 		};
 		this.listenTo(this.payments, 'sync', this.render);
@@ -45,7 +45,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {AccountBillingHistory}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.sidebar.setElement('#sidebar-container').render();
@@ -55,7 +55,7 @@ module.exports = GelatoPage.extend({
 	 * @method fetchPayments
 	 * @param {string} cursor
 	 */
-	fetchPayments: function (cursor) {
+	fetchPayments: function(cursor) {
 		this.payments.fetch({
 			data: {
 				cursor: cursor || '',
@@ -67,7 +67,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleClickLoadMoreButton
 	 */
-	handleClickLoadMoreButton: function () {
+	handleClickLoadMoreButton: function() {
 		this.fetchPayments(this.payments.cursor);
 		this.renderTable();
 	},
@@ -75,7 +75,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {AccountBillingHistory}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.sidebar.remove();
 		return GelatoPage.prototype.remove.call(this);

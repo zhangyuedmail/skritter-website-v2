@@ -11,7 +11,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.footer = new MarketingFooter();
 		this.navbar = new DefaultNavbar();
 		mixpanel.track('Viewed institutions page');
@@ -39,7 +39,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Institutions}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.footer.setElement('#footer-container').render();
 		this.navbar.setElement('#navbar-container').render();
@@ -50,7 +50,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickRequestPurchase
 	 * @param {Event} event
 	 */
-	handleClickRequestPurchase: function (event) {
+	handleClickRequestPurchase: function(event) {
 		event.preventDefault();
 		var section = this.$('#section-request');
 		var students = $(event.currentTarget).data('students');
@@ -62,7 +62,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickRequestSubmit
 	 * @param {Event} event
 	 */
-	handleClickRequestSubmit: function (event) {
+	handleClickRequestSubmit: function(event) {
 		event.preventDefault();
 		var email = this.$('#institution-contact-email').val();
 		var language = this.$('#institution-language option:selected').text();
@@ -95,12 +95,12 @@ module.exports = GelatoPage.extend({
 					'Start Date': when
 				}
 			})
-		}).done(function () {
+		}).done(function() {
 			this.$('#request-message').removeClass('text-danger');
 			this.$('#request-message').addClass('text-success');
 			this.$('#request-message').text('Your request has been successfully sent.');
 			this.$('form').hide(500);
-		}).error(function (error) {
+		}).error(function(error) {
 			this.$('#request-message').removeClass('text-success');
 			this.$('#request-message').addClass('text-danger');
 			this.$('#request-message').text(JSON.stringify(error));
@@ -111,7 +111,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickRequestTrial
 	 * @param {Event} event
 	 */
-	handleClickRequestTrial: function (event) {
+	handleClickRequestTrial: function(event) {
 		event.preventDefault();
 		var section = this.$('#section-request');
 		$('html, body').animate({scrollTop: section.offset().top}, 1000);
@@ -121,7 +121,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Institutions}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.footer.remove();
 		return GelatoPage.prototype.remove.call(this);

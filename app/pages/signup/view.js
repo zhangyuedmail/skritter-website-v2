@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.footer = new MarketingFooter();
 		this.navbar = new DefaultNavbar();
 		this.plan = options.plan;
@@ -85,7 +85,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Signup}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.footer.setElement('#footer-container').render();
 		this.navbar.setElement('#navbar-container').render();
@@ -106,7 +106,7 @@ module.exports = GelatoPage.extend({
 	 * @param {Object} formData dictionary of user form data
 	 * @param {Function} callback called when all requests relating to user creation have completed
 	 */
-	createUser: function (formData, callback) {
+	createUser: function(formData, callback) {
 		var self = this;
 
 		this.user.set({
@@ -127,15 +127,15 @@ module.exports = GelatoPage.extend({
 			this.user.unset('avatar');
 		}
 		async.series([
-			function (callback) {
+			function(callback) {
 				ScreenLoader.post('Creating new user');
 				self.user.save(
 					null,
 					{
-						error: function (user, error) {
+						error: function(user, error) {
 							callback(error);
 						},
-						success: function (user) {
+						success: function(user) {
 							mixpanel.alias(user.id);
 							mixpanel.track(
 								'Signup',
@@ -143,7 +143,7 @@ module.exports = GelatoPage.extend({
 									method: formData.method,
 									plan: formData.plan
 								},
-								function () {
+								function() {
 									callback();
 								}
 							);
@@ -151,11 +151,11 @@ module.exports = GelatoPage.extend({
 					}
 				)
 			},
-			function (callback) {
+			function(callback) {
 				app.user.login(
 					formData.username,
 					formData.password1,
-					function (error) {
+					function(error) {
 						if (error) {
 							callback(error);
 						} else {
@@ -164,7 +164,7 @@ module.exports = GelatoPage.extend({
 					}
 				)
 			},
-			function (callback) {
+			function(callback) {
 				if (app.isProduction()) {
 					ScreenLoader.post('Sending welcome email');
 					$.ajax({
@@ -174,10 +174,10 @@ module.exports = GelatoPage.extend({
 							client: 'website',
 							token: app.user.session.get('access_token')
 						},
-						error: function (error) {
+						error: function(error) {
 							callback(error);
 						},
-						success: function () {
+						success: function() {
 							callback()
 						}
 					});
@@ -192,7 +192,7 @@ module.exports = GelatoPage.extend({
 	 * Displays an error messsage about the form data to the user
 	 * @param {String} message the error to show to the user
 	 */
-	displayErrorMessage: function (message) {
+	displayErrorMessage: function(message) {
 		this.$('#signup-error-alert').text(message).removeClass('hide');
 	},
 
@@ -200,7 +200,7 @@ module.exports = GelatoPage.extend({
 	 * @method getFormData
 	 * @returns {Object}
 	 */
-	getFormData: function () {
+	getFormData: function() {
 		return {
 			card: {
 				expires_month: this.$('#card-month-select').val(),
@@ -222,7 +222,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleChangeSignupPaymentMethod
 	 * @param {Event} event
 	 */
-	handleChangeSignupPaymentMethod: function (event) {
+	handleChangeSignupPaymentMethod: function(event) {
 		event.preventDefault();
 		var formData = this.getFormData();
 		if (formData.method === 'credit') {
@@ -242,7 +242,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickSignupSubmit
 	 * @param {Event} event
 	 */
-	handleClickSignupSubmit: function (event) {
+	handleClickSignupSubmit: function(event) {
 		event.preventDefault();
 		var formData = this.getFormData();
 		if (formData.password1 === '') {
@@ -262,7 +262,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Signup}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.footer.remove();
 		return GelatoPage.prototype.remove.call(this);
@@ -272,7 +272,7 @@ module.exports = GelatoPage.extend({
 	 * @method subscribeCoupon
 	 * @param {Object} formData
 	 */
-	subscribeCoupon: function (formData) {
+	subscribeCoupon: function(formData) {
 		var self = this;
 
 		if (!this._validateUserData(formData)) {
@@ -281,12 +281,12 @@ module.exports = GelatoPage.extend({
 		}
 
 		async.series([
-			function (callback) {
+			function(callback) {
 				ScreenLoader.show();
 				ScreenLoader.post('Creating a new user');
 				self.createUser(formData, callback);
 			}
-		], function (error) {
+		], function(error) {
 			if (error) {
 				ScreenLoader.hide();
 				console.error(error);
@@ -301,7 +301,7 @@ module.exports = GelatoPage.extend({
 	 * @method subscribeCredit
 	 * @param {Object} formData
 	 */
-	subscribeCredit: function (formData) {
+	subscribeCredit: function(formData) {
 		var self = this;
 
 		if (!this._validateUserData(formData)) {
@@ -310,7 +310,7 @@ module.exports = GelatoPage.extend({
 		}
 
 		async.series([
-			function (callback) {
+			function(callback) {
 				ScreenLoader.show();
 				if (window.Stripe) {
 					callback();
@@ -319,7 +319,7 @@ module.exports = GelatoPage.extend({
 					$.getScript('https://js.stripe.com/v2/', callback);
 				}
 			},
-			function (callback) {
+			function(callback) {
 				Stripe.setPublishableKey(app.getStripeKey());
 				Stripe.card.createToken(
 					{
@@ -327,7 +327,7 @@ module.exports = GelatoPage.extend({
 						exp_year: formData.card.expires_year,
 						number: formData.card.number
 					},
-					function (status, response) {
+					function(status, response) {
 						if (response.error) {
 							callback(response.error);
 						} else {
@@ -337,11 +337,11 @@ module.exports = GelatoPage.extend({
 					}
 				);
 			},
-			function (callback) {
+			function(callback) {
 				ScreenLoader.post('Creating a new user');
 				self.createUser(formData, callback);
 			}
-		], function (error) {
+		], function(error) {
 			ScreenLoader.hide();
 			if (error) {
 				self._handleSubmittedProcessError(error);
@@ -358,7 +358,7 @@ module.exports = GelatoPage.extend({
 	 * @todo Unhack
 	 * @private
 	 */
-	_handleSubmittedProcessError: function (error) {
+	_handleSubmittedProcessError: function(error) {
 
 		// For when the error is a jQuery XHR object, we just want the plain error object
 		if (_.isFunction(error.error)) {
@@ -386,7 +386,7 @@ module.exports = GelatoPage.extend({
 	 * Responds to a successful account registration process
 	 * @private
 	 */
-	_handleSubmittedProcessSuccess: function () {
+	_handleSubmittedProcessSuccess: function() {
 		app.router.navigate('account/setup', {trigger: true});
 	},
 
@@ -397,7 +397,7 @@ module.exports = GelatoPage.extend({
 	 * @param {Object} formData dictionary of values to check
 	 * @return {Boolean} whether the data can be submitted
 	 */
-	_validateUserData: function (formData) {
+	_validateUserData: function(formData) {
 		var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 		if (_.isEmpty(formData.username)) {

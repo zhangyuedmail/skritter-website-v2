@@ -17,7 +17,7 @@ module.exports = GelatoPage.extend({
 	 * @param {Object} [options]
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.dialog = null;
 		this.lang = 'zh';
 		this.navbar = new DefaultNavbar();
@@ -48,7 +48,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Contact}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.prompt.setElement('#demo-prompt-container').render().hide();
@@ -58,15 +58,15 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method loadDemo
 	 */
-	loadDemo: function () {
+	loadDemo: function() {
 		var self = this;
 		async.waterfall([
-			function (callback) {
+			function(callback) {
 				self.dialog = new DemoLanguageSelectDialog();
 				self.dialog.open();
 				self.dialog.once('select', callback);
 			},
-			function (lang, callback) {
+			function(lang, callback) {
 				ScreenLoader.show();
 				ScreenLoader.post('Loading demo word');
 				mixpanel.track('Started demo', {lang: lang});
@@ -77,17 +77,17 @@ module.exports = GelatoPage.extend({
 						include_strokes: true,
 						ids: lang === 'zh' ? 'zh-你好-0' : 'ja-元気-0'
 					},
-					error: function (vocabs, error) {
+					error: function(vocabs, error) {
 						callback(error);
 					},
-					success: function (vocabs) {
+					success: function(vocabs) {
 						app.set('demoLang', lang);
 						self.vocab = vocabs.at(0);
 						callback(null, self.vocab);
 					}
 				});
 			},
-			function (vocab, callback) {
+			function(vocab, callback) {
 				if (vocab.has('containedVocabIds')) {
 					self.vocabs.fetch({
 						data: {
@@ -97,10 +97,10 @@ module.exports = GelatoPage.extend({
 							ids: vocab.get('containedVocabIds').join('|')
 						},
 						remove: false,
-						error: function (error) {
+						error: function(error) {
 							callback(error);
 						},
-						success: function () {
+						success: function() {
 							callback(null, vocab);
 						}
 					});
@@ -108,7 +108,7 @@ module.exports = GelatoPage.extend({
 					callback(null, vocab);
 				}
 			}
-		], function (error, vocab) {
+		], function(error, vocab) {
 			ScreenLoader.hide();
 			self.prompt.show();
 			self.promptItems = vocab.getPromptItems('rune');
@@ -119,7 +119,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method step1
 	 */
-	step1: function () {
+	step1: function() {
 		this.prompt.tutorial.show();
 		this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step1')));
 		this.prompt.set(this.promptItems);
@@ -132,7 +132,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method step2
 	 */
-	step2: function () {
+	step2: function() {
 		mixpanel.track('Completed tracing demo character #1');
 		this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step2')));
 		this.prompt.part.eraseCharacter();
@@ -144,7 +144,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method step3
 	 */
-	step3: function () {
+	step3: function() {
 		mixpanel.track('Completed writing demo character #1');
 		this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step3')));
 		this.prompt.$('#toolbar-action-container').hide();
@@ -153,7 +153,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method step4
 	 */
-	step4: function () {
+	step4: function() {
 		mixpanel.track('Completed tracing demo character #2');
 		this.prompt.tutorial.setMessage(this.parseTemplate(require('./notify-step4')));
 		this.prompt.part.eraseCharacter();
@@ -164,7 +164,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method step5
 	 */
-	step5: function () {
+	step5: function() {
 		mixpanel.track('Completed writing demo character #2');
 		this.dialog = new DemoCallToActionDialog();
 		this.dialog.open();
@@ -173,7 +173,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Contact}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.prompt.remove();
 		return GelatoPage.prototype.remove.call(this);

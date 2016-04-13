@@ -1,9 +1,9 @@
 var expect = chai.expect;
 
-describe('Application', function () {
+describe('Application', function() {
 	var application = new (require('application'));
 
-	it('should have valid api credentials', function () {
+	it('should have valid api credentials', function() {
 		var apiDomain = application.get('apiDomain');
 		var apiRoot = application.get('apiRoot');
 		var apiVersion = application.get('apiVersion');
@@ -12,7 +12,7 @@ describe('Application', function () {
 		expect(apiVersion).to.be.a('number');
 	});
 
-	it('should have a valid version string', function () {
+	it('should have a valid version string', function() {
 		var version = application.get('version');
 		expect(version).to.be.a('string');
 		expect(version).to.not.equal('undefined');

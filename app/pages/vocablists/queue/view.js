@@ -15,13 +15,13 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.vocablists = new Vocablists();
 		this.addingTable = new AddingTable({vocablists: this.vocablists});
 		this.navbar = new DefaultNavbar();
 		this.reviewingTable = new ReviewingTable({vocablists: this.vocablists});
 		this.sidebar = new Sidebar();
-		this.listenTo(this.vocablists, 'state:standby', function () {
+		this.listenTo(this.vocablists, 'state:standby', function() {
 			if (this.vocablists.cursor) {
 				this.vocablists.fetch({
 					data: {
@@ -58,7 +58,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {VocablistQueue}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.addingTable.setElement('#adding-container').render();
 		this.navbar.setElement('#navbar-container').render();
@@ -70,7 +70,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {VocablistQueue}
 	 */
-	remove: function () {
+	remove: function() {
 		this.addingTable.remove();
 		this.navbar.remove();
 		this.reviewingTable.remove();

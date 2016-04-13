@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this._lists = [];
 		this._filterString = '';
 		this._filterType = [];
@@ -23,7 +23,7 @@ module.exports = GelatoComponent.extend({
 			lang: app.getLanguage()
 		};
 		this.vocablists.fetch({data: data});
-		this.listenTo(this.vocablists, 'sync', function () {
+		this.listenTo(this.vocablists, 'sync', function() {
 			if (this.vocablists.cursor) {
 				data.cursor = this.vocablists.cursor;
 				this.vocablists.fetch({data: data, remove: false})
@@ -48,7 +48,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {VocablistTable}
 	 */
-	render: function () {
+	render: function() {
 		this.update();
 		this.renderTemplate();
 		this.$('#grid img').error(this.handleLoadImageError);
@@ -59,7 +59,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickTitleSort
 	 * @param {Event} event
 	 */
-	handleClickTitleSort: function (event) {
+	handleClickTitleSort: function(event) {
 		event.preventDefault();
 		this._sortType = 'title';
 		this.render();
@@ -68,7 +68,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickPopularitySort
 	 * @param {Event} event
 	 */
-	handleClickPopularitySort: function (event) {
+	handleClickPopularitySort: function(event) {
 		event.preventDefault();
 		this._sortType = 'popularity';
 		this.render();
@@ -77,7 +77,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickAddToQueueLink
 	 * @param {Event} event
 	 */
-	handleClickAddToQueueLink: function (event) {
+	handleClickAddToQueueLink: function(event) {
 		event.preventDefault();
 		var listId = $(event.currentTarget).data('vocablist-id');
 		var vocablist = this.vocablists.get(listId);
@@ -90,14 +90,14 @@ module.exports = GelatoComponent.extend({
 	 * @method handleLoadImageError
 	 * @param {Event} event
 	 */
-	handleLoadImageError: function (event) {
+	handleLoadImageError: function(event) {
 		$(event.target).remove();
 	},
 	/**
 	 * @method setFilterString
 	 * @param {String} value
 	 */
-	setFilterString: function (value) {
+	setFilterString: function(value) {
 		this._filterString = value.toLowerCase();
 		this.render();
 	},
@@ -105,7 +105,7 @@ module.exports = GelatoComponent.extend({
 	 * @method setLayout
 	 * @param {String} value
 	 */
-	setLayout: function (value) {
+	setLayout: function(value) {
 		this._layout = value.toLowerCase();
 		this.render();
 	},
@@ -113,7 +113,7 @@ module.exports = GelatoComponent.extend({
 	 * @method update
 	 * @returns {VocablistBrowseTable}
 	 */
-	update: function () {
+	update: function() {
 		this._lists = this.vocablists.models;
 		this.updateFilter();
 		this.updateSort();
@@ -122,8 +122,8 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method updateFilter
 	 */
-	updateFilter: function () {
-		this._lists = _.filter(this._lists, (function (vocablist) {
+	updateFilter: function() {
+		this._lists = _.filter(this._lists, (function(vocablist) {
 			if (this._filterString !== '') {
 				var name = vocablist.get('name').toLowerCase();
 				var shortName = vocablist.get('shortName').toLowerCase();
@@ -145,8 +145,8 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method updateSort
 	 */
-	updateSort: function () {
-		this._lists = _.sortBy(this._lists, (function (vocablist) {
+	updateSort: function() {
+		this._lists = _.sortBy(this._lists, (function(vocablist) {
 			if (this._sortType === 'popularity') {
 				return -vocablist.get('peopleStudying');
 			}

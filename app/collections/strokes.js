@@ -18,7 +18,7 @@ module.exports = GelatoCollection.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.params = new StrokeParams();
 		this.shapes = ShapeData;
 		this.add(KanaStrokes.getData());
@@ -33,14 +33,14 @@ module.exports = GelatoCollection.extend({
 	 * @method getPromptTones
 	 * @returns {PromptCharacter}
 	 */
-	getPromptTones: function () {
+	getPromptTones: function() {
 		return this.get('tones').getPromptCharacter();
 	},
 	/**
 	 * @method reset
 	 * @returns {Stroke}
 	 */
-	reset: function () {
+	reset: function() {
 		GelatoCollection.prototype.reset.call(this);
 		this.add(KanaStrokes.getData());
 		this.add(ToneStrokes.getData());

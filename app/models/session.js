@@ -11,7 +11,7 @@ module.exports = SkritterModel.extend({
 	 * @param {Object} [options]
 	 * @constructor
 	 */
-	initialize: function (attributes, options) {
+	initialize: function(attributes, options) {
 		options = options || {};
 		this.user = options.user;
 	},
@@ -41,7 +41,7 @@ module.exports = SkritterModel.extend({
 	 * @param {Function} callbackSuccess
 	 * @param {Function} callbackError
 	 */
-	authenticate: function (type, username, password, callbackSuccess, callbackError) {
+	authenticate: function(type, username, password, callbackSuccess, callbackError) {
 		this.fetch({
 			data: {
 				client_id: this.getClientId(),
@@ -50,11 +50,11 @@ module.exports = SkritterModel.extend({
 				username: username
 			},
 			type: 'post',
-			success: _.bind(function (model) {
+			success: _.bind(function(model) {
 				this.set('created', moment().unix(), {silent: true});
 				callbackSuccess(model);
 			}, this),
-			error: _.bind(function (model, error) {
+			error: _.bind(function(model, error) {
 				callbackError(error, model);
 			}, this)
 		});
@@ -62,14 +62,14 @@ module.exports = SkritterModel.extend({
 	/**
 	 * @method cache
 	 */
-	cache: function () {
+	cache: function() {
 		app.setLocalStorage(this.user.id + '-session', this.toJSON());
 	},
 	/**
 	 * @method getClientId
 	 * @returns {String}
 	 */
-	getClientId: function () {
+	getClientId: function() {
 		switch (app.getPlatform()) {
 			case 'Android':
 				return 'skritterandroid';
@@ -83,28 +83,28 @@ module.exports = SkritterModel.extend({
 	 * @method getExpires
 	 * @returns {Number}
 	 */
-	getExpires: function () {
+	getExpires: function() {
 		return this.get('created') + this.get('expires_in');
 	},
 	/**
 	 * @method isExpired
 	 * @returns {Boolean}
 	 */
-	isExpired: function () {
+	isExpired: function() {
 		return this.getExpires() < moment().unix();
 	},
 	/**
 	 * @method getHeaders
 	 * @returns {Object}
 	 */
-	getHeaders: function () {
+	getHeaders: function() {
 		return {'Authorization': 'bearer ' + this.get('access_token')};
 	},
 	/**
 	 * @method getLoginCredentials
 	 * @returns {String}
 	 */
-	getLoginCredentials: function () {
+	getLoginCredentials: function() {
 		switch (app.getPlatform()) {
 			case 'Android':
 				return 'c2tyaXR0ZXJhbmRyb2lkOmRjOTEyYzAzNzAwMmE3ZGQzNWRkNjUxZjBiNTA3NA==';
@@ -118,14 +118,14 @@ module.exports = SkritterModel.extend({
 	 * @method getLoginHeaders
 	 * @returns {Object}
 	 */
-	getLoginHeaders: function () {
+	getLoginHeaders: function() {
 		return {'Authorization': 'basic ' + this.getLoginCredentials()};
 	},
 	/**
 	 * @method headers
 	 * @returns {Object}
 	 */
-	headers: function () {
+	headers: function() {
 		return this.getLoginHeaders();
 	},
 	/**
@@ -133,7 +133,7 @@ module.exports = SkritterModel.extend({
 	 * @param {Function} callbackSuccess
 	 * @param {Function} callbackError
 	 */
-	refresh: function (callbackSuccess, callbackError) {
+	refresh: function(callbackSuccess, callbackError) {
 		this.fetch({
 			data: {
 				client_id: this.getClientId(),
@@ -141,11 +141,11 @@ module.exports = SkritterModel.extend({
 				refresh_token: this.get('refresh_token')
 			},
 			type: 'POST',
-			success: _.bind(function (model) {
+			success: _.bind(function(model) {
 				this.set('created', moment().unix(), {silent: true});
 				callbackSuccess(model);
 			}, this),
-			error: _.bind(function (model, error) {
+			error: _.bind(function(model, error) {
 				callbackError(error, model);
 			}, this)
 		});

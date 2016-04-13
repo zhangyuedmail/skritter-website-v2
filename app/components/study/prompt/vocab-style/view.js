@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 	},
 	/**
@@ -22,7 +22,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptVocabStyle}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	}

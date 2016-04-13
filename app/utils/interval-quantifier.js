@@ -15,7 +15,7 @@ function IntervalQuantifier() {
  * @param {Number} score
  * @returns {Number}
  */
-IntervalQuantifier.prototype.quantify = function (item, score) {
+IntervalQuantifier.prototype.quantify = function(item, score) {
 	var newInterval = 0;
 	var now = moment().unix();
 	//return new items with randomized default config values
@@ -98,7 +98,7 @@ IntervalQuantifier.prototype.quantify = function (item, score) {
  * @method randomizeInterval
  * @param {Number} value
  */
-IntervalQuantifier.prototype.randomizeInterval = function (value) {
+IntervalQuantifier.prototype.randomizeInterval = function(value) {
 	return Math.round(value * (0.925 + (Math.random() * 0.15)));
 };
 

@@ -15,7 +15,7 @@ module.exports = SkritterCollection.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function (models, options) {
+	initialize: function(models, options) {
 		options = options || {};
 		this.cursor = null;
 		this.cursorContaining = null;
@@ -39,7 +39,7 @@ module.exports = SkritterCollection.extend({
 	 * @param {Object} response
 	 * @returns Array
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		this.cursor = response.cursor;
 		this.cursorContaining = response.containingCursor;
 		this.decomps.add(response.Decomps);
@@ -51,7 +51,7 @@ module.exports = SkritterCollection.extend({
 	 * @method reset
 	 * @returns {Items}
 	 */
-	reset: function () {
+	reset: function() {
 		this.decomps.reset();
 		this.sentences.reset();
 		this.strokes.reset();

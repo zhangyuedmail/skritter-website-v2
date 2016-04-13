@@ -12,7 +12,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.navbar = new DefaultNavbar();
 	},
 	/**
@@ -34,7 +34,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {AccountSettingsGeneral}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		$.ajax({
@@ -48,7 +48,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method load
 	 */
-	load: function () {
+	load: function() {
 		mocha.setup('bdd');
 		require('test/index');
 		mocha.checkLeaks();
@@ -59,7 +59,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {AccountSettingsGeneral}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		return GelatoPage.prototype.remove.call(this);
 	}

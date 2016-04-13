@@ -9,7 +9,7 @@ var ResetAllDataDialog = GelatoDialog.extend({
 	 * @method initialize
 	 * @param {Object} options
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 	},
 	/**
 	 * @property events
@@ -28,7 +28,7 @@ var ResetAllDataDialog = GelatoDialog.extend({
 	 * @method render
 	 * @returns {ResetAllDataDialog}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -36,7 +36,7 @@ var ResetAllDataDialog = GelatoDialog.extend({
 	 * @method handleClickButtonCancel
 	 * @param {Event} event
 	 */
-	handleClickButtonCancel: function (event) {
+	handleClickButtonCancel: function(event) {
 		event.preventDefault();
 		this.close();
 	},
@@ -44,7 +44,7 @@ var ResetAllDataDialog = GelatoDialog.extend({
 	 * @method handleClickButtonConfirm
 	 * @param {Event} event
 	 */
-	handleClickButtonConfirm: function (event) {
+	handleClickButtonConfirm: function(event) {
 		event.preventDefault();
 		ScreenLoader.show();
 		ScreenLoader.post('Resetting account data');
@@ -56,11 +56,11 @@ var ResetAllDataDialog = GelatoDialog.extend({
 			headers: app.user.session.getHeaders(),
 			type: 'POST',
 			url: app.getApiUrl() + 'reset',
-			error: function (error) {
+			error: function(error) {
 				ScreenLoader.hide();
 				self.$('#error-message').text(error.responseJSON.message);
 			},
-			success: function () {
+			success: function() {
 				app.user.setLastItemUpdate(0);
 				app.user.cache();
 				app.router.navigate('dashboard');

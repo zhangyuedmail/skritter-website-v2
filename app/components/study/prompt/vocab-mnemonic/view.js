@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.editing = false;
 		this.prompt = options.prompt;
 	},
@@ -30,7 +30,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptVocabMnemonic}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -38,14 +38,14 @@ module.exports = GelatoComponent.extend({
 	 * @method getValue
 	 * @returns {Object}
 	 */
-	getValue: function () {
+	getValue: function() {
 		return {text: this.$('textarea').val()}
 	},
 	/**
 	 * @method handleClickShowMnemonic
 	 * @param {Event} event
 	 */
-	handleClickShowMnemonic: function (event) {
+	handleClickShowMnemonic: function(event) {
 		event.preventDefault();
 		this.prompt.review.set('showMnemonic', true);
 		this.render();

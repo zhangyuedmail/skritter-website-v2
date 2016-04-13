@@ -11,7 +11,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.footer = new MarketingFooter();
 		this.navbar = new DefaultNavbar();
 		mixpanel.track('Viewed features page');
@@ -35,7 +35,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Contact}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.footer.setElement('#footer-container').render();
 		this.navbar.setElement('#navbar-container').render();
@@ -45,7 +45,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Contact}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.footer.remove();
 		return GelatoPage.prototype.remove.call(this);

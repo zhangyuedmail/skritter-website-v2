@@ -10,7 +10,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.viewer = new VocabViewer();
 	},
 	/**
@@ -22,7 +22,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method remove
 	 * @returns {VocabDialog}
 	 */
-	remove: function () {
+	remove: function() {
 		this.viewer.remove();
 		return BootstrapDialog.prototype.remove.call(this);
 	},
@@ -30,7 +30,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method render
 	 * @returns {VocabDialog}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.viewer.setElement('#vocab-container').render();
 		return this;
@@ -46,21 +46,21 @@ module.exports = BootstrapDialog.extend({
 	 * @method handleClickButtonClose
 	 * @param {Event} event
 	 */
-	handleClickButtonClose: function (event) {
+	handleClickButtonClose: function(event) {
 		event.preventDefault();
 		this.close();
 	},
 	/**
 	 * @method handleLoadVocab
 	 */
-	handleLoadVocab: function () {
+	handleLoadVocab: function() {
 		this.$('#loading-spinner').hide();
 	},
 	/**
 	 * @method set
 	 * @param {String} [vocabId]
 	 */
-	load: function (vocabId) {
+	load: function(vocabId) {
 		this.$('#loading-spinner').show();
 		this.listenToOnce(this.viewer, 'load', this.handleLoadVocab);
 		this.viewer.load(vocabId);

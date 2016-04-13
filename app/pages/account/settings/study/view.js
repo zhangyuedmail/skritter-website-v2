@@ -12,7 +12,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.navbar = new DefaultNavbar();
 		this.sidebar = new AccountSidebar();
 		this.sourceLanguages = require('data/source-languages');
@@ -41,7 +41,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {AccountSettingsStudy}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.sidebar.setElement('#sidebar-container').render();
@@ -51,9 +51,9 @@ module.exports = GelatoPage.extend({
 	 * @method getSelectedParts
 	 * @returns {Array}
 	 */
-	getSelectedParts: function () {
+	getSelectedParts: function() {
 		var parts = [];
-		this.$('#field-parts :checked').each(function () {
+		this.$('#field-parts :checked').each(function() {
 			parts.push($(this).val());
 		});
 		return parts;
@@ -62,7 +62,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleChangeTargetLanguage
 	 * @param {Event} event
 	 */
-	handleChangeTargetLanguage: function (event) {
+	handleChangeTargetLanguage: function(event) {
 		event.preventDefault();
 		app.user.set('targetLang', this.$('#field-target-language').val());
 		this.render();
@@ -71,7 +71,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickButtonSave
 	 * @param {Event} event
 	 */
-	handleClickButtonSave: function (event) {
+	handleClickButtonSave: function(event) {
 		event.preventDefault();
 		app.user.set({
 			autoAddComponentCharacters: this.$('#field-add-contained').is(':checked'),
@@ -99,7 +99,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {AccountSettingsStudy}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.sidebar.remove();
 		return GelatoPage.prototype.remove.call(this);

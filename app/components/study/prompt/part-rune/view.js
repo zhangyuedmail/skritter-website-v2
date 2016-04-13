@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 		this.listenTo(this.prompt.canvas, 'click', this.handlePromptCanvasClick);
 		this.listenTo(this.prompt.canvas, 'doubletap', this.handlePromptDoubleTap);
@@ -45,7 +45,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptPartRune}
 	 */
-	render: function () {
+	render: function() {
 		this.prompt.review = this.prompt.reviews.current();
 		this.prompt.canvas.grid = true;
 		this.prompt.canvas.reset();
@@ -76,7 +76,7 @@ module.exports = GelatoComponent.extend({
 	 * @method renderComplete
 	 * @returns {StudyPromptPartRune}
 	 */
-	renderComplete: function () {
+	renderComplete: function() {
 		this.prompt.review.stop();
 		this.prompt.review.set('complete', true);
 		this.prompt.canvas.clearLayer('character-teach');
@@ -122,7 +122,7 @@ module.exports = GelatoComponent.extend({
 	 * @method renderIncomplete
 	 * @returns {StudyPromptPartRune}
 	 */
-	renderIncomplete: function () {
+	renderIncomplete: function() {
 		this.prompt.review.start();
 		this.prompt.review.set('complete', false);
 		this.prompt.canvas.enableInput();
@@ -156,7 +156,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handleAttemptFail
 	 */
-	handleAttemptFail: function () {
+	handleAttemptFail: function() {
 		var character = this.prompt.review.character;
 		var failedConsecutive = this.prompt.review.get('failedConsecutive') + 1;
 		var failedTotal = this.prompt.review.get('failedTotal') + 1;
@@ -193,13 +193,13 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handleAttemptSuccess
 	 */
-	handleAttemptSuccess: function () {
+	handleAttemptSuccess: function() {
 		this.prompt.review.set('failedConsecutive', 0);
 	},
 	/**
 	 * @method handlePromptCanvasClick
 	 */
-	handlePromptCanvasClick: function () {
+	handlePromptCanvasClick: function() {
 		if (this.prompt.review.isComplete()) {
 			if (this.prompt.review.get('score') === 1) {
 				this.prompt.review.item.consecutiveWrong++;
@@ -216,7 +216,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Array} points
 	 * @param {createjs.Shape} shape
 	 */
-	handlePromptCanvasInputUp: function (points, shape) {
+	handlePromptCanvasInputUp: function(points, shape) {
 		if (app.fn.getLength(points) >= 5) {
 			var stroke = this.prompt.review.character.recognize(points, shape);
 			if (stroke) {
@@ -251,7 +251,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptCanvasSwipeUp
 	 */
-	handlePromptCanvasSwipeUp: function () {
+	handlePromptCanvasSwipeUp: function() {
 		this.prompt.review.set({
 			complete: false,
 			failedConsecutive: 0,
@@ -264,7 +264,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptDoubleTap
 	 */
-	handlePromptDoubleTap: function () {
+	handlePromptDoubleTap: function() {
 		var expectedShape = this.prompt.review.character.getTargetShape();
 		if (expectedShape) {
 			this.prompt.canvas.clearLayer('character-hint');
@@ -279,7 +279,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptCanvasTap
 	 */
-	handlePromptCanvasTap: function () {
+	handlePromptCanvasTap: function() {
 		var expectedStroke = this.prompt.review.character.getExpectedStroke();
 		if (expectedStroke) {
 			this.prompt.canvas.clearLayer('stroke-hint');
@@ -290,7 +290,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptToolbarActionCorrect
 	 */
-	handlePromptToolbarActionCorrect: function () {
+	handlePromptToolbarActionCorrect: function() {
 		this.prompt.review.set('score', this.prompt.review.get('score') === 1 ? 3 : 1);
 		this.prompt.toolbarGrading.select(this.prompt.review.get('score'));
 		if (this.prompt.review.isComplete()) {
@@ -304,26 +304,26 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method handlePromptToolbarActionErase
 	 */
-	handlePromptToolbarActionErase: function () {
+	handlePromptToolbarActionErase: function() {
 		this.eraseCharacter();
 	},
 	/**
 	 * @method handlePromptToolbarActionShow
 	 */
-	handlePromptToolbarActionShow: function () {
+	handlePromptToolbarActionShow: function() {
 		this.showCharacter();
 	},
 	/**
 	 * @method handlePromptToolbarActionTeach
 	 */
-	handlePromptToolbarActionTeach: function () {
+	handlePromptToolbarActionTeach: function() {
 		this.teachCharacter();
 	},
 	/**
 	 * @method handlePromptToolbarGradingMousedown
 	 * @param {Number} value
 	 */
-	handlePromptToolbarGradingMousedown: function (value) {
+	handlePromptToolbarGradingMousedown: function(value) {
 		if (this.prompt.review.isComplete()) {
 			this.prompt.review.set('score', value);
 			this.prompt.canvas.injectLayerColor(
@@ -335,7 +335,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method completeCharacter
 	 */
-	completeCharacter: function () {
+	completeCharacter: function() {
 		this.prompt.canvas.clearLayer('character');
 		this.prompt.review.set('complete', true);
 		this.prompt.review.character.reset();
@@ -345,7 +345,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method eraseCharacter
 	 */
-	eraseCharacter: function () {
+	eraseCharacter: function() {
 		this.prompt.review.set({complete: false, showTeaching: false});
 		this.prompt.review.character.reset();
 		this.render();
@@ -353,7 +353,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method showCharacter
 	 */
-	showCharacter: function () {
+	showCharacter: function() {
 		this.prompt.review.set('score', 1);
 		this.prompt.canvas.clearLayer('character-hint');
 		this.prompt.canvas.drawShape(
@@ -365,7 +365,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method teachCharacter
 	 */
-	teachCharacter: function () {
+	teachCharacter: function() {
 		if (!this.prompt.review.isComplete()) {
 			var stroke = this.prompt.review.character.getExpectedStroke();
 			if (stroke) {

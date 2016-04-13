@@ -50,17 +50,17 @@ module.exports = GelatoCollection.extend({
 	 * @method current
 	 * @returns {PromptItem}
 	 */
-	current: function () {
+	current: function() {
 		return this.getActive()[this.position];
 	},
 	/**
 	 * @method getActive
 	 * @returns {Array}
 	 */
-	getActive: function () {
+	getActive: function() {
 		return _.filter(
 			this.models,
-			function (item) {
+			function(item) {
 				return !item.get('filler');
 			}
 		);
@@ -69,14 +69,14 @@ module.exports = GelatoCollection.extend({
 	 * @method getActiveLength
 	 * @returns {Number}
 	 */
-	getActiveLength: function () {
+	getActiveLength: function() {
 		return this.getActive().length;
 	},
 	/**
 	 * @method getBaseReviewData
 	 * @returns {Object}
 	 */
-	getBaseReviewData: function () {
+	getBaseReviewData: function() {
 		return {
 			id: this.at(0).id,
 			itemId: this.item ? this.item.id : this.vocab.id,
@@ -93,14 +93,14 @@ module.exports = GelatoCollection.extend({
 	 * @method getBaseSubmitTime
 	 * @returns {Number}
 	 */
-	getBaseSubmitTime: function () {
+	getBaseSubmitTime: function() {
 		return this.at(0).get('submitTime');
 	},
 	/**
 	 * @method getBaseReviewingTime
 	 * @returns {Number}
 	 */
-	getBaseReviewingTime: function () {
+	getBaseReviewingTime: function() {
 		var reviewingTime = 0;
 		for (var i = 0, length = this.length; i < length; i++) {
 			reviewingTime += this.at(i).getReviewingTime();
@@ -111,7 +111,7 @@ module.exports = GelatoCollection.extend({
 	 * @method getBaseScore
 	 * @returns {Number}
 	 */
-	getBaseScore: function () {
+	getBaseScore: function() {
 		var score = null;
 		if (this.length > 1) {
 			var totalCount = this.length;
@@ -138,7 +138,7 @@ module.exports = GelatoCollection.extend({
 	 * @method getBaseThinkingTime
 	 * @returns {Number}
 	 */
-	getBaseThinkingTime: function () {
+	getBaseThinkingTime: function() {
 		var thinkingTime = 0;
 		for (var i = 0, length = this.length; i < length; i++) {
 			thinkingTime += this.at(i).getThinkingTime();
@@ -149,10 +149,10 @@ module.exports = GelatoCollection.extend({
 	 * @method getChildReviewData
 	 * @returns {Array}
 	 */
-	getChildReviewData: function () {
-		return this.filter(function (review) {
+	getChildReviewData: function() {
+		return this.filter(function(review) {
 			return !review.get('filler') && !review.get('kana');
-		}).map(function (model) {
+		}).map(function(model) {
 			return model.getReviewData();
 		});
 	},
@@ -160,7 +160,7 @@ module.exports = GelatoCollection.extend({
 	 * @method getReview
 	 * @returns {Object}
 	 */
-	getReview: function () {
+	getReview: function() {
 		var reviews = [this.getBaseReviewData()];
 		if (this.length > 1) {
 			reviews = reviews.concat(this.getChildReviewData());
@@ -176,56 +176,56 @@ module.exports = GelatoCollection.extend({
 	 * @method getLimit
 	 * @returns {Number}
 	 */
-	getLimit: function () {
+	getLimit: function() {
 		return this.part === 'tone' ? 15000 : 30000;
 	},
 	/**
 	 * @method isChinese
 	 * @returns {Boolean}
 	 */
-	isChinese: function () {
+	isChinese: function() {
 		return this.vocab.isChinese();
 	},
 	/**
 	 * @method isComplete
 	 * @returns {Boolean}
 	 */
-	isComplete: function () {
+	isComplete: function() {
 		return _.includes(this.map('complete'), false) === false;
 	},
 	/**
 	 * @method isFirst
 	 * @returns {Boolean}
 	 */
-	isFirst: function () {
+	isFirst: function() {
 		return this.position === 0;
 	},
 	/**
 	 * @method isJapanese
 	 * @returns {Boolean}
 	 */
-	isJapanese: function () {
+	isJapanese: function() {
 		return this.vocab.isJapanese();
 	},
 	/**
 	 * @method isNew
 	 * @returns {Boolean}
 	 */
-	isNew: function () {
+	isNew: function() {
 		return this.item ? this.item.isNew() : false;
 	},
 	/**
 	 * @method isLast
 	 * @returns {Boolean}
 	 */
-	isLast: function () {
+	isLast: function() {
 		return this.position >= this.getActiveLength() - 1;
 	},
 	/**
 	 * @method isTeachable
 	 * @returns {Boolean}
 	 */
-	isTeachable: function () {
+	isTeachable: function() {
 		if (this.item && app.user.get('teachingMode')) {
 			return this.item.isNew();
 		}
@@ -235,7 +235,7 @@ module.exports = GelatoCollection.extend({
 	 * @method next
 	 * @returns {PromptItem}
 	 */
-	next: function () {
+	next: function() {
 		if (!this.isLast()) {
 			this.position++;
 		}
@@ -245,7 +245,7 @@ module.exports = GelatoCollection.extend({
 	 * @method previous
 	 * @returns {PromptItem}
 	 */
-	previous: function () {
+	previous: function() {
 		if (!this.isFirst()) {
 			this.position--;
 		}
@@ -254,8 +254,8 @@ module.exports = GelatoCollection.extend({
 	/**
 	 * @method teachAll
 	 */
-	teachAll: function () {
-		this.forEach(function (review) {
+	teachAll: function() {
+		this.forEach(function(review) {
 			review.set('showTeaching', true);
 		});
 	}

@@ -10,7 +10,7 @@ var Page = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 	},
 	/**
 	 * @property title
@@ -26,7 +26,7 @@ var Page = GelatoPage.extend({
 	 * @method render
 	 * @returns {Page}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -34,7 +34,7 @@ var Page = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Page}
 	 */
-	remove: function () {
+	remove: function() {
 		return GelatoPage.prototype.remove.call(this);
 	}
 });

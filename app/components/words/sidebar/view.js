@@ -14,10 +14,10 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {WordsSideBar}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.$('[data-toggle="tooltip"]').tooltip();
-		$.each(this.$('.options a'), function (i, el) {
+		$.each(this.$('.options a'), function(i, el) {
 			if ($(el).attr('href') === document.location.pathname) {
 				$(el).addClass('active');
 			}

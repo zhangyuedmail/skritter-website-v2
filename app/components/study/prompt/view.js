@@ -29,7 +29,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		//properties
 		this.$inputContainer = null;
 		this.$panelLeft = null;
@@ -65,7 +65,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPrompt}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.$inputContainer = this.$('#input-container');
 		this.$panelLeft = this.$('#panel-left');
@@ -92,7 +92,7 @@ module.exports = GelatoComponent.extend({
 	 * @method renderPart
 	 * @returns {StudyPrompt}
 	 */
-	renderPart: function () {
+	renderPart: function() {
 		if (this.part) {
 			this.part.remove();
 		}
@@ -122,7 +122,7 @@ module.exports = GelatoComponent.extend({
 	 * @method getInputSize
 	 * @returns {Number}
 	 */
-	getInputSize: function () {
+	getInputSize: function() {
 		var $content = this.$panelLeft.find('.content');
 		if ($content.length) {
 			return $content.width();
@@ -134,14 +134,14 @@ module.exports = GelatoComponent.extend({
 	 * @method isLoaded
 	 * @returns {Boolean}
 	 */
-	isLoaded: function () {
+	isLoaded: function() {
 		return this.reviews ? true : false;
 	},
 	/**
 	 * @method next
 	 * @param {Boolean} [skip]
 	 */
-	next: function (skip) {
+	next: function(skip) {
 		this.review.stop();
 		if (skip || this.reviews.isLast()) {
 			this.trigger('next', skip ? null : this.reviews);
@@ -154,7 +154,7 @@ module.exports = GelatoComponent.extend({
 	/**
 	 * @method previous
 	 */
-	previous: function () {
+	previous: function() {
 		this.review.stop();
 		if (this.reviews.isFirst()) {
 			this.trigger('previous', this.reviews);
@@ -168,7 +168,7 @@ module.exports = GelatoComponent.extend({
 	 * @method remove
 	 * @returns {StudyPrompt}
 	 */
-	remove: function () {
+	remove: function() {
 		this.canvas.remove();
 		this.navigation.remove();
 		if (this.part) {
@@ -193,7 +193,7 @@ module.exports = GelatoComponent.extend({
 	 * @method reset
 	 * @returns {StudyPrompt}
 	 */
-	reset: function () {
+	reset: function() {
 		this.review = null;
 		this.reviews = null;
 		this.remove();
@@ -204,7 +204,7 @@ module.exports = GelatoComponent.extend({
 	 * @method resize
 	 * @returns {StudyPrompt}
 	 */
-	resize: function () {
+	resize: function() {
 		var inputSize = this.getInputSize();
 		this.$inputContainer.css({height: inputSize, width: inputSize});
 		this.canvas.resize();
@@ -215,7 +215,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {PromptReviews} reviews
 	 * @returns {StudyPrompt}
 	 */
-	set: function (reviews) {
+	set: function(reviews) {
 		console.info('PROMPT:', reviews);
 		this.reviews = reviews;
 		this.renderPart();
@@ -228,7 +228,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Items} schedule
 	 * @returns {Prompt}
 	 */
-	setSchedule: function (schedule) {
+	setSchedule: function(schedule) {
 		this.navigation.setReviews(schedule.reviews);
 		this.reviewStatus.setReviews(schedule.reviews);
 		return this;

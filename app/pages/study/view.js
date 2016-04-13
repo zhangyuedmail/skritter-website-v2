@@ -14,7 +14,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		ScreenLoader.show();
 		this.item = null;
 		this.navbar = new Navbar();
@@ -49,7 +49,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Study}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.prompt.setElement('#study-prompt-container').render();
@@ -59,7 +59,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleWindowOnBeforeUnload
 	 */
-	handleWindowOnBeforeUnload: function () {
+	handleWindowOnBeforeUnload: function() {
 		if (!this.schedule.reviews.length) {
 			return;
 		}
@@ -69,14 +69,14 @@ module.exports = GelatoPage.extend({
 	 * @method handlePromptNext
 	 * @param {PromptItems} promptItems
 	 */
-	handlePromptNext: function (promptItems) {
+	handlePromptNext: function(promptItems) {
 		var self = this;
 		if (this.item && promptItems) {
 			var review = promptItems.getReview();
 			if (!this.schedule.reviews.get(review)) {
 				this.toolbar.timer.addLocalOffset(promptItems.getBaseReviewingTime());
 			}
-			this.schedule.reviews.put(review, null, function () {
+			this.schedule.reviews.put(review, null, function() {
 				if (self.schedule.reviews.length > 4) {
 					self.schedule.reviews.post({skip: 1});
 				}
@@ -91,7 +91,7 @@ module.exports = GelatoPage.extend({
 	 * @method handlePromptPrevious
 	 * @param {PromptItems} promptItems
 	 */
-	handlePromptPrevious: function (promptItems) {
+	handlePromptPrevious: function(promptItems) {
 		if (!this.queue[0].group) {
 			this.queue.unshift(promptItems);
 			this.previous();
@@ -100,17 +100,17 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleScheduledLoad
 	 */
-	handleScheduledLoad: function () {
+	handleScheduledLoad: function() {
 		var self = this;
 		ScreenLoader.post('Preparing for study');
 		app.user.db.reviews
 			.toArray()
-			.then(function (reviews) {
+			.then(function(reviews) {
 				self.schedule.reviews.add(reviews);
 				self.prompt.setSchedule(self.schedule);
 				self.populateQueue();
 			})
-			.catch(function (error) {
+			.catch(function(error) {
 				console.error('SCHEDULE LOAD ERROR:', error);
 				self.populateQueue();
 			});
@@ -118,7 +118,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleSchedulePopulate
 	 */
-	handleSchedulePopulate: function () {
+	handleSchedulePopulate: function() {
 		if (this.prompt.isLoaded()) {
 			console.info('QUEUE:', 'Added more items to queue.');
 		} else {
@@ -129,7 +129,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method loadSchedule
 	 */
-	loadSchedule: function () {
+	loadSchedule: function() {
 		var self = this;
 		var lang = app.getLanguage();
 		var parts = app.user.getFilteredParts();
@@ -137,8 +137,8 @@ module.exports = GelatoPage.extend({
 		var styles = app.user.getFilteredStyles();
 		app.user.db.items
 			.toArray()
-			.then(function (items) {
-				items = items.filter(function (item) {
+			.then(function(items) {
+				items = items.filter(function(item) {
 					if (!item.vocabIds.length) {
 						return false;
 					} else if (item.lang !== lang) {
@@ -161,14 +161,14 @@ module.exports = GelatoPage.extend({
 				self.schedule.set(items.splice(0, 2000));
 				self.schedule.trigger('load', self.schedule);
 			})
-			.catch(function (error) {
+			.catch(function(error) {
 				self.schedule.trigger('error', error);
 			});
 	},
 	/**
 	 * @method next
 	 */
-	next: function () {
+	next: function() {
 		var item = this.queue.shift();
 		if (item) {
 			this.toolbar.render();
@@ -183,13 +183,13 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method populateQueue
 	 */
-	populateQueue: function () {
+	populateQueue: function() {
 		var self = this;
 		var items = [];
 		this.$('#loading-indicator').removeClass('hidden');
 		//store base histories for better spacing
 		var localHistory = [];
-		var queueHistory = this.queue.map(function (item) {
+		var queueHistory = this.queue.map(function(item) {
 			return item.getBase();
 		});
 		//creates an array items to queue
@@ -219,13 +219,13 @@ module.exports = GelatoPage.extend({
 			},
 			merge: false,
 			remove: false,
-			error: function (error) {
+			error: function(error) {
 				self.schedule.trigger('error', error);
 				self.scheduleState = 'standby';
 			},
-			success: function (items, result) {
+			success: function(items, result) {
 				var now = moment().unix();
-				var sortedItems = _.sortBy(result.Items, function (item) {
+				var sortedItems = _.sortBy(result.Items, function(item) {
 					var readiness = 0;
 					if (!item.last) {
 						readiness = 9999;
@@ -245,7 +245,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method previous
 	 */
-	previous: function () {
+	previous: function() {
 		if (this.schedule.reviews.length) {
 			var review = this.schedule.reviews.last();
 			if (review.has('promptItems')) {
@@ -258,7 +258,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Study}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.prompt.remove();
 		this.toolbar.remove();

@@ -14,7 +14,7 @@ function Shortstraw() {
  * @param {Array} points
  * @returns {Object}
  */
-Shortstraw.prototype.boundingBox = function (points) {
+Shortstraw.prototype.boundingBox = function(points) {
 	var minX = Number.POSITIVE_INFINITY;
 	var maxX = Number.NEGATIVE_INFINITY;
 	var minY = Number.POSITIVE_INFINITY;
@@ -42,7 +42,7 @@ Shortstraw.prototype.boundingBox = function (points) {
  * @param {Array} points
  * @returns {Number}
  */
-Shortstraw.prototype.determineResampleSpacing = function (points) {
+Shortstraw.prototype.determineResampleSpacing = function(points) {
 	var b = this.boundingBox(points);
 	var p1 = {x: b.x, y: b.y};
 	var p2 = {x: b.x + b.w, y: b.y + b.h};
@@ -56,7 +56,7 @@ Shortstraw.prototype.determineResampleSpacing = function (points) {
  * @param {Object} p2
  * @returns {Number}
  */
-Shortstraw.prototype.distance = function (p1, p2) {
+Shortstraw.prototype.distance = function(p1, p2) {
 	var dx = p2.x - p1.x;
 	var dy = p2.y - p1.y;
 	return Math.pow((dx * dx + dy * dy), 1 / 2);
@@ -67,7 +67,7 @@ Shortstraw.prototype.distance = function (p1, p2) {
  * @param {Array} points
  * @returns {Array}
  */
-Shortstraw.prototype.getCorners = function (points) {
+Shortstraw.prototype.getCorners = function(points) {
 	var corners = [0];
 	var w = this.STRAW_WINDOW;
 	var straws = [];
@@ -103,7 +103,7 @@ Shortstraw.prototype.getCorners = function (points) {
  * @param {Object} b
  * @returns {Number}
  */
-Shortstraw.prototype.halfwayCorner = function (straws, a, b) {
+Shortstraw.prototype.halfwayCorner = function(straws, a, b) {
 	var quarter = (b - a) / 4;
 	var minValue = Number.POSITIVE_INFINITY;
 	var minIndex;
@@ -123,7 +123,7 @@ Shortstraw.prototype.halfwayCorner = function (straws, a, b) {
  * @param {Object} b
  * @returns {Boolean}
  */
-Shortstraw.prototype.isLine = function (points, a, b) {
+Shortstraw.prototype.isLine = function(points, a, b) {
 	var distance = this.distance(points[a], points[b]);
 	var pathDistance = this.pathDistance(points, a, b);
 	return (distance / pathDistance) > this.LINE_THRESHOLD;
@@ -134,7 +134,7 @@ Shortstraw.prototype.isLine = function (points, a, b) {
  * @param {Array} values
  * @returns {Number}
  */
-Shortstraw.prototype.median = function (values) {
+Shortstraw.prototype.median = function(values) {
 	var s = values.concat();
 	s.sort();
 	var m;
@@ -153,7 +153,7 @@ Shortstraw.prototype.median = function (values) {
  * @param {Object} b
  * @returns {Number}
  */
-Shortstraw.prototype.pathDistance = function (points, a, b) {
+Shortstraw.prototype.pathDistance = function(points, a, b) {
 	var d = 0;
 	for (var i = a; i < b; i++) {
 		d += this.distance(points[i], points[i + 1]);
@@ -168,7 +168,7 @@ Shortstraw.prototype.pathDistance = function (points, a, b) {
  * @param {Array} straws
  * @returns {Array}
  */
-Shortstraw.prototype.postProcessCorners = function (points, corners, straws) {
+Shortstraw.prototype.postProcessCorners = function(points, corners, straws) {
 	var go = false;
 	var i, c1, c2;
 	while (!go) {
@@ -201,7 +201,7 @@ Shortstraw.prototype.postProcessCorners = function (points, corners, straws) {
  * @param {Array} points
  * @returns {Array}
  */
-Shortstraw.prototype.process = function (points) {
+Shortstraw.prototype.process = function(points) {
 	if (points && Array.isArray(points) && points.length > 0) {
 		var s = this.determineResampleSpacing(points);
 		var resampled = this.resamplePoints(points, s);
@@ -221,7 +221,7 @@ Shortstraw.prototype.process = function (points) {
  * @param {Object} s
  * @returns {Array}
  */
-Shortstraw.prototype.resamplePoints = function (points, s) {
+Shortstraw.prototype.resamplePoints = function(points, s) {
 	var distance = 0;
 	var resampled = [];
 	resampled.push(points[0]);

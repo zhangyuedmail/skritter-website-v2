@@ -2735,10 +2735,10 @@ function toSimplified(word) {
 	var result = [];
 	_.forEach(
 		word.split(''),
-		function (character) {
+		function(character) {
 			var key = _.findKey(
 				map,
-				function (value) {
+				function(value) {
 					return _.includes(value, character);
 				}
 			);
@@ -2759,11 +2759,11 @@ function toTraditional(wordString) {
 	var words = [''];
 
 	var simplifiedString = toSimplified(wordString);
-	simplifiedString.split('').forEach(function (c) {
+	simplifiedString.split('').forEach(function(c) {
 		var trads = simpCharToTrad(c, true);
 		var tradWords = [];
-		words.forEach(function (w) {
-			trads.forEach(function (t) {
+		words.forEach(function(w) {
+			trads.forEach(function(t) {
 				tradWords.push(w + t);
 			});
 		});

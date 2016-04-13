@@ -9,7 +9,7 @@ module.exports = GelatoModel.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.on('change:points', this.updateCorners);
 		this.updateCorners();
 	},
@@ -22,7 +22,7 @@ module.exports = GelatoModel.extend({
 	 * @method defaults
 	 * @returns {Object}
 	 */
-	defaults: function () {
+	defaults: function() {
 		return {
 			tweening: false
 		};
@@ -31,14 +31,14 @@ module.exports = GelatoModel.extend({
 	 * @method getFirstAngle
 	 * @returns {Number}
 	 */
-	getFirstAngle: function () {
+	getFirstAngle: function() {
 		return app.fn.getAngle(this.get('corners')[0], this.get('corners')[1]);
 	},
 	/**
 	 * @method getParamPath
 	 * @returns {DataParam}
 	 */
-	getParamPath: function () {
+	getParamPath: function() {
 		//TODO: make sure to get the trace parameter
 		var matrix = this.getTargetShape().getMatrix();
 		var param = this.get('params')[0];
@@ -60,7 +60,7 @@ module.exports = GelatoModel.extend({
 	 * @method getParams
 	 * @returns {Array}
 	 */
-	getParams: function () {
+	getParams: function() {
 		var inflatedParams = [];
 		var size = this.getSize();
 		var matrix = this.getTargetShape().getMatrix();
@@ -85,14 +85,14 @@ module.exports = GelatoModel.extend({
 	 * @method size
 	 * @returns {Number}
 	 */
-	getSize: function () {
+	getSize: function() {
 		return app.get('canvasSize');
 	},
 	/**
 	 * @method getTargetShape
 	 * @return {createjs.Shape}
 	 */
-	getTargetShape: function () {
+	getTargetShape: function() {
 		var data = this.inflateData();
 		var shape = this.get('shape').clone(true);
 		if (this.isKana()) {
@@ -119,7 +119,7 @@ module.exports = GelatoModel.extend({
 	 * @method getUserRectangle
 	 * @returns {Object}
 	 */
-	getUserRectangle: function () {
+	getUserRectangle: function() {
 		var size = this.getSize();
 		var corners = _.clone(this.get('corners'));
 		return app.fn.getBoundingRectangle(corners, size, size, 18);
@@ -128,7 +128,7 @@ module.exports = GelatoModel.extend({
 	 * @method getUserShape
 	 * @returns {createjs.Shape}
 	 */
-	getUserShape: function () {
+	getUserShape: function() {
 		//TODO: improve stroke position and size
 		//var size = this.getSize();
 		//shape.scaleX = rect.width / bounds.width;
@@ -145,14 +145,14 @@ module.exports = GelatoModel.extend({
 	 * @method getUserSquig
 	 * @returns {createjs.Shape}
 	 */
-	getUserSquig: function () {
+	getUserSquig: function() {
 		return this.get('squig');
 	},
 	/**
 	 * @method inflatedData
 	 * @return {Object}
 	 */
-	inflateData: function () {
+	inflateData: function() {
 		var size = this.getSize();
 		var bounds = this.get('shape').getBounds();
 		var data = this.get('data');
@@ -171,14 +171,14 @@ module.exports = GelatoModel.extend({
 	 * @method isKana
 	 * @returns {Boolean}
 	 */
-	isKana: function () {
+	isKana: function() {
 		return this.get('strokeId') >= 600 && this.get('strokeId') <= 834;
 	},
 	/**
 	 * @method updateCorners
 	 * @returns {PromptStroke}
 	 */
-	updateCorners: function () {
+	updateCorners: function() {
 		var points = _.clone(this.get('points'));
 		this.set('corners', app.fn.shortstraw.process(points));
 		return this;

@@ -7,13 +7,13 @@ var ReviewData = GelatoModel.extend(/** @lends ReviewData.prototype */ {
 	 * @param {Object} [options]
 	 * @augments {GelatoModel}
 	 */
-	initialize: function (attributes, options) {
+	initialize: function(attributes, options) {
 		this.review = options.review;
 	},
 	/**
 	 * @returns {Function|Object}
 	 */
-	defaults: function () {
+	defaults: function() {
 		return {
 			itemId: null,
 			vocabId: null,
@@ -45,7 +45,7 @@ var ReviewData = GelatoModel.extend(/** @lends ReviewData.prototype */ {
 	 * Is the definition hidden?
 	 * @returns {Boolean}
 	 */
-	isDefinitionHidden: function () {
+	isDefinitionHidden: function() {
 		if (this.get('showDefinition')) {
 			return false;
 		}
@@ -62,7 +62,7 @@ var ReviewData = GelatoModel.extend(/** @lends ReviewData.prototype */ {
 	 * Is the reading hidden?
 	 * @returns {Boolean}
 	 */
-	isReadingHidden: function () {
+	isReadingHidden: function() {
 		if (this.get('showReading')) {
 			return false;
 		}

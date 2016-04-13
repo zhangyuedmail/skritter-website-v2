@@ -15,7 +15,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.countries = require('data/country-codes');
 		this.dialog = null;
 		this.timezones = require('data/country-timezones');
@@ -50,7 +50,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {AccountSettingsGeneral}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.sidebar.setElement('#sidebar-container').render();
@@ -60,18 +60,18 @@ module.exports = GelatoPage.extend({
 	 * @method getSelectedCountryCode
 	 * @returns {String}
 	 */
-	getSelectedCountryCode: function () {
+	getSelectedCountryCode: function() {
 		return this.$('#field-country :selected').val() || app.user.get('country');
 	},
 	/**
 	 * @method handleChangeAvatarUploadInput
 	 * @param {Event} event
 	 */
-	handleChangeAvatarUploadInput: function (event) {
+	handleChangeAvatarUploadInput: function(event) {
 		var file = event.target.files[0];
 		var data = new FormData().append('image', file);
 		var reader = new FileReader();
-		reader.onload = function (event) {
+		reader.onload = function(event) {
 			$('#field-avatar').attr('src', event.target.result);
 		};
 		reader.readAsDataURL(file);
@@ -81,7 +81,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickButtonSave
 	 * @param {Event} event
 	 */
-	handleClickButtonSave: function (event) {
+	handleClickButtonSave: function(event) {
 		event.preventDefault();
 		app.user.set({
 			avatar: this.$('#field-avatar').get(0).src.replace('data:image/png;base64,', ''),
@@ -97,7 +97,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickChangeAvatar
 	 * @param {Event} event
 	 */
-	handleClickChangeAvatar: function (event) {
+	handleClickChangeAvatar: function(event) {
 		event.preventDefault();
 		this.$('#avatar-upload-input').trigger('click');
 	},
@@ -105,7 +105,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickChangePassword
 	 * @param {Event} event
 	 */
-	handleClickChangePassword: function (event) {
+	handleClickChangePassword: function(event) {
 		event.preventDefault();
 		this.dialog = new ChangePasswordDialog();
 		this.dialog.render();
@@ -115,7 +115,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickResetAllData
 	 * @param {Event} event
 	 */
-	handleClickResetAllData: function (event) {
+	handleClickResetAllData: function(event) {
 		event.preventDefault();
 		this.dialog = new ResetAllDataDialog();
 		this.dialog.render();
@@ -125,7 +125,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleSelectCountry
 	 * @param event
 	 */
-	handleSelectCountry: function (event) {
+	handleSelectCountry: function(event) {
 		event.preventDefault();
 		this.render();
 	},
@@ -133,7 +133,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {AccountSettingsGeneral}
 	 */
-	remove: function () {
+	remove: function() {
 		this.navbar.remove();
 		this.sidebar.remove();
 		return GelatoPage.prototype.remove.call(this);

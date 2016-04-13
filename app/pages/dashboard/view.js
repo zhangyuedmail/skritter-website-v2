@@ -14,7 +14,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.navbar = new DefaultNavbar();
 		this.dashboardGoal = new DashboardGoal();
 		this.dashboardMonth = new DashboardMonth();
@@ -35,7 +35,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Dashboard}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.dashboardGoal.setElement('#dashboard-goal-container').render();
 		this.dashboardMonth.setElement('#dashboard-month-container').render();
@@ -53,7 +53,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Dashboard}
 	 */
-	remove: function () {
+	remove: function() {
 		this.dashboardGoal.remove();
 		this.dashboardMonth.remove();
 		this.dashboardTotal.remove();

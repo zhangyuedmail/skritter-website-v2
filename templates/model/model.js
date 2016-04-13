@@ -11,13 +11,13 @@ var Model = GelatoModel.extend({
 	 * @param {Object} [options]
 	 * @constructor
 	 */
-	initialize: function (attributes, options) {
+	initialize: function(attributes, options) {
 	},
 	/**
 	 * @method defaults
 	 * @returns {Function|Object}
 	 */
-	defaults: function () {
+	defaults: function() {
 		return {};
 	},
 	/**

@@ -2212,7 +2212,7 @@ var data = [
 ];
 
 module.exports = {
-	getData: function () {
+	getData: function() {
 		return data;
 	}
 };

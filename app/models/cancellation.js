@@ -9,7 +9,7 @@ module.exports = SkritterModel.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 	},
 	/**
 	 * @property idAttribute
@@ -24,7 +24,7 @@ module.exports = SkritterModel.extend({
 	 * @method parse
 	 * @returns {Object}
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.Cancellation || response;
 	}
 });

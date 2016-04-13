@@ -16,7 +16,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.editing = false;
 		this.vocablist = new Vocablist({id: options.vocablistId});
 		this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId});
@@ -24,24 +24,24 @@ module.exports = GelatoPage.extend({
 		this.navbar = new DefaultNavbar();
 		this.sidebar = new Sidebar({vocablist: this.vocablist});
 		async.series([
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				this.vocablist.fetch({
-					error: function (error) {
+					error: function(error) {
 						callback(error);
 					},
-					success: function () {
+					success: function() {
 						callback();
 					}
 				});
 			}, this),
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				if (this.vocablist.get('sections').length === 1) {
 					this.vocablistSection.set('id', this.vocablist.get('sections')[0].id);
 					this.vocablistSection.fetch({
-						error: function (error) {
+						error: function(error) {
 							callback(error);
 						},
-						success: function () {
+						success: function() {
 							callback();
 						}
 					});
@@ -49,10 +49,10 @@ module.exports = GelatoPage.extend({
 					callback();
 				}
 			}, this),
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				callback();
 			}, this)
-		], _.bind(function (error) {
+		], _.bind(function(error) {
 			this.listenTo(this.vocablist, 'state:standby', this.handleVocablistState);
 			this.render();
 		}, this));
@@ -82,7 +82,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {VocablistsListPage}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.editor.setElement('#editor-container').render();
 		this.navbar.setElement('#navbar-container').render();
@@ -96,7 +96,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickAddSection
 	 * @param {Event} event
 	 */
-	handleClickAddSection: function (event) {
+	handleClickAddSection: function(event) {
 		event.preventDefault();
 		this.editor.addSection();
 	},
@@ -104,7 +104,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickDiscardChanges
 	 * @param {Event} event
 	 */
-	handleClickDiscardChanges: function (event) {
+	handleClickDiscardChanges: function(event) {
 		event.preventDefault();
 		this.editing = false;
 		this.editor.editing = false;
@@ -114,7 +114,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickEditList
 	 * @param {Event} event
 	 */
-	handleClickEditList: function (event) {
+	handleClickEditList: function(event) {
 		event.preventDefault();
 		this.editing = true;
 		this.editor.editing = true;
@@ -124,7 +124,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickSaveChanges
 	 * @param {Event} event
 	 */
-	handleClickSaveChanges: function (event) {
+	handleClickSaveChanges: function(event) {
 		event.preventDefault();
 		this.editing = false;
 		this.editor.editing = false;
@@ -137,7 +137,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleKeydownAddInput
 	 * @param {Event} event
 	 */
-	handleKeydownAddInput: function (event) {
+	handleKeydownAddInput: function(event) {
 		if (event.keyCode === 13) {
 			var $input = $(event.target);
 			this.editor.addWord($(event.target).val());
@@ -148,7 +148,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleVocablistState
 	 */
-	handleVocablistState: function () {
+	handleVocablistState: function() {
 		this.sidebar.render();
 		this.render();
 	},
@@ -156,7 +156,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {VocablistsListPage}
 	 */
-	remove: function () {
+	remove: function() {
 		this.editor.remove();
 		this.navbar.remove();
 		this.sidebar.remove();
@@ -165,7 +165,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method updateVocablist
 	 */
-	updateVocablist: function () {
+	updateVocablist: function() {
 		this.vocablist.set({
 			description: this.$('.list-description').val(),
 			name: this.$('.list-name').val()

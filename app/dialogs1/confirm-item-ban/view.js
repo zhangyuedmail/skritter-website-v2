@@ -9,7 +9,7 @@ var Dialog = GelatoDialog.extend({
 	 * @method initialize
 	 * @param {Object} options
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.item = options.item;
 		this.vocab = options.vocab;
 	},
@@ -30,7 +30,7 @@ var Dialog = GelatoDialog.extend({
 	 * @method render
 	 * @returns {ConfirmItemBanDialog}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -38,7 +38,7 @@ var Dialog = GelatoDialog.extend({
 	 * @method handleClickButtonCancel
 	 * @param {Event} event
 	 */
-	handleClickButtonCancel: function (event) {
+	handleClickButtonCancel: function(event) {
 		event.preventDefault();
 		this.close();
 	},
@@ -46,7 +46,7 @@ var Dialog = GelatoDialog.extend({
 	 * @method handleClickButtonConfirm
 	 * @param {Event} event
 	 */
-	handleClickButtonConfirm: function (event) {
+	handleClickButtonConfirm: function(event) {
 		event.preventDefault();
 		if (this.item) {
 			this.vocab.banPart(this.item.get('part'));

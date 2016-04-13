@@ -10,7 +10,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
 	 * @method initialize
 	 * @param {Object} options
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.row = null;
 	},
 	/**
@@ -30,7 +30,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
 	 * @method render
 	 * @returns {VocabCreatorDialog}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -38,7 +38,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
 	 * @method handleClickButtonCancel
 	 * @param {Event} event
 	 */
-	handleClickButtonCancel: function (event) {
+	handleClickButtonCancel: function(event) {
 		event.preventDefault();
 		this.close();
 	},
@@ -46,7 +46,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
 	 * @method handleClickButtonAddWord
 	 * @param {Event} event
 	 */
-	handleClickButtonAddWord: function (event) {
+	handleClickButtonAddWord: function(event) {
 		var self = this;
 		var formData = this.getFormData();
 		event.preventDefault();
@@ -67,7 +67,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
 			reading: formData.reading,
 			writing: formData.writing,
 			writingTraditional: formData.writingTraditional
-		}).post(function (error, vocab) {
+		}).post(function(error, vocab) {
 			if (error) {
 				//TODO: display errors from server
 				console.error(error);
@@ -81,7 +81,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
 	 * @method getFormData
 	 * @returns {Object}
 	 */
-	getFormData: function () {
+	getFormData: function() {
 		var formData = {
 			definitions: this.$('#word-definition-input textarea').val(),
 			lang: this.row.lang,
@@ -101,7 +101,7 @@ var VocabCreatorDialog = GelatoDialog.extend({
 	 * @method open
 	 * @param {Object} options
 	 */
-	open: function (options) {
+	open: function(options) {
 		this.row = options.row;
 		return GelatoDialog.prototype.open.call(this, options);
 	}

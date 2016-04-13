@@ -12,7 +12,7 @@ module.exports = SkritterCollection.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.cursor = null;
 		this.sorted = null;
 		this.reviews = new Reviews(null, {items: this});
@@ -33,25 +33,25 @@ module.exports = SkritterCollection.extend({
 	 * @param {Object} [options]
 	 * @param {Function} callback
 	 */
-	addItems: function (options, callback) {
+	addItems: function(options, callback) {
 		var self = this;
 		options = options || {};
 		async.waterfall([
-			function (callback) {
+			function(callback) {
 				self.fetch({
 					remove: false,
 					sort: false,
 					type: 'POST',
 					url: app.getApiUrl() + 'items/add?lists=' + (options.lists || ''),
-					error: function (error) {
+					error: function(error) {
 						callback(error);
 					},
-					success: function (items, result) {
+					success: function(items, result) {
 						callback(null, result);
 					}
 				});
 			},
-			function (result, callback) {
+			function(result, callback) {
 				self.fetch({
 					data: {
 						ids: _.map(result.Items, 'id').join('|'),
@@ -59,15 +59,15 @@ module.exports = SkritterCollection.extend({
 					},
 					remove: false,
 					sort: false,
-					error: function (error) {
+					error: function(error) {
 						callback(error);
 					},
-					success: function () {
+					success: function() {
 						callback(null, result);
 					}
 				});
 			}
-		], function (error, result) {
+		], function(error, result) {
 			if (error) {
 				console.error('ITEM ADD ERROR:', error);
 				callback(error)
@@ -81,7 +81,7 @@ module.exports = SkritterCollection.extend({
 	 * @param {Item} item
 	 * @returns {Number}
 	 */
-	comparator: function (item) {
+	comparator: function(item) {
 		return -item.getReadiness();
 	},
 	/**
@@ -89,7 +89,7 @@ module.exports = SkritterCollection.extend({
 	 * @param {Object} response
 	 * @returns {Object}
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		this.cursor = response.cursor;
 		this.vocabs.add(response.Vocabs);
 		this.vocabs.decomps.add(response.Decomps);
@@ -101,7 +101,7 @@ module.exports = SkritterCollection.extend({
 	 * @method reset
 	 * @returns {Items}
 	 */
-	reset: function () {
+	reset: function() {
 		this.vocabs.reset();
 		return SkritterCollection.prototype.reset.call(this);
 	},
@@ -109,7 +109,7 @@ module.exports = SkritterCollection.extend({
 	 * @method sort
 	 * @returns {Items}
 	 */
-	sort: function () {
+	sort: function() {
 		this.sorted = moment().unix();
 		return SkritterCollection.prototype.sort.call(this);
 	}

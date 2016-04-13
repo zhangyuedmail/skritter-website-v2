@@ -14,7 +14,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {GelatoComponent}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	}

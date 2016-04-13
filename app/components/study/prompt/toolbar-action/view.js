@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 	},
 	/**
@@ -52,7 +52,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptToolbarAction}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -60,7 +60,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickToolbarCorrect
 	 * @param {Event} event
 	 */
-	handleClickToolbarCorrect: function (event) {
+	handleClickToolbarCorrect: function(event) {
 		event.preventDefault();
 		this.trigger('click:correct');
 	},
@@ -68,7 +68,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickToolbarErase
 	 * @param {Event} event
 	 */
-	handleClickToolbarErase: function (event) {
+	handleClickToolbarErase: function(event) {
 		event.preventDefault();
 		this.trigger('click:erase');
 	},
@@ -76,7 +76,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickToolbarShow
 	 * @param {Event} event
 	 */
-	handleClickToolbarShow: function (event) {
+	handleClickToolbarShow: function(event) {
 		event.preventDefault();
 		this.trigger('click:show');
 	},
@@ -84,7 +84,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickToolbarStrokeOrder
 	 * @param {Event} event
 	 */
-	handleClickToolbarStrokeOrder: function (event) {
+	handleClickToolbarStrokeOrder: function(event) {
 		event.preventDefault();
 		this.trigger('click:teach');
 	}

@@ -16,7 +16,7 @@ module.exports = SkritterCollection.extend({
 	 * @param {Object} response
 	 * @returns Array
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.ChinesePodLists;
 	},
 	/**

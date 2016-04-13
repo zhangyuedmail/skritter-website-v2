@@ -12,7 +12,7 @@ module.exports = GelatoDialog.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.content = new Content({dialog: this});
 		this.vocabs = new Vocabs();
 	},
@@ -25,7 +25,7 @@ module.exports = GelatoDialog.extend({
 	 * @method render
 	 * @returns {VocabViewer}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.content.setElement('#content-container').render();
 		return this;
@@ -35,7 +35,7 @@ module.exports = GelatoDialog.extend({
 	 * @param {String} vocabId
 	 * @returns {VocabViewer}
 	 */
-	load: function (vocabId) {
+	load: function(vocabId) {
 		var self = this;
 		this.vocabs.fetch({
 			data: {
@@ -47,10 +47,10 @@ module.exports = GelatoDialog.extend({
 				include_top_mnemonics: true,
 				ids: vocabId
 			},
-			error: function (error) {
+			error: function(error) {
 				console.error(error);
 			},
-			success: function (vocabs) {
+			success: function(vocabs) {
 				self.content.set(vocabs);
 			}
 		});
@@ -60,7 +60,7 @@ module.exports = GelatoDialog.extend({
 	 * @method remove
 	 * @returns {VocabViewer}
 	 */
-	remove: function () {
+	remove: function() {
 		this.content.remove();
 		this.vocabs.reset();
 		return GelatoDialog.prototype.remove.call(this);

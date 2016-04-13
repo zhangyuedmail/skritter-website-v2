@@ -11,7 +11,7 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.footer = new MarketingFooter();
 		this.navbar = new DefaultNavbar();
 		mixpanel.track('Viewed login page');
@@ -30,7 +30,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {Login}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.navbar.setElement('#navbar-container').render();
 		this.footer.setElement('#footer-container').render();
@@ -49,7 +49,7 @@ module.exports = GelatoPage.extend({
 	 * @method getFormData
 	 * @returns {Object}
 	 */
-	getFormData: function () {
+	getFormData: function() {
 		return {
 			password: this.$('#login-password').val(),
 			username: this.$('#login-username').val()
@@ -59,7 +59,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickLoginButton
 	 * @param {Event} event
 	 */
-	handleClickLoginButton: function (event) {
+	handleClickLoginButton: function(event) {
 		event.preventDefault();
 		this.login();
 	},
@@ -67,7 +67,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleKeyUpLoginPassword
 	 * @param {Event} event
 	 */
-	handleKeyUpLoginPassword: function (event) {
+	handleKeyUpLoginPassword: function(event) {
 		event.preventDefault();
 		if (event.which === 13 || event.keyCode === 13) {
 			this.login();
@@ -77,7 +77,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickSkeleton
 	 * @param {Event} event
 	 */
-	handleClickSkeleton: function (event) {
+	handleClickSkeleton: function(event) {
 		event.preventDefault();
 		switch (app.getPlatform()) {
 			case 'Android':
@@ -95,7 +95,7 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method login
 	 */
-	login: function () {
+	login: function() {
 		var self = this;
 		var formData = this.getFormData();
 		this.$('#login-message').empty();
@@ -105,7 +105,7 @@ module.exports = GelatoPage.extend({
 		app.user.login(
 			formData.username.trim(),
 			formData.password.trim(),
-			function (error) {
+			function(error) {
 				if (error) {
 					self.$('#login-message').text(error.responseJSON.message);
 					self.$('#login-form').prop('disabled', false);
@@ -121,7 +121,7 @@ module.exports = GelatoPage.extend({
 	 * @method remove
 	 * @returns {Login}
 	 */
-	remove: function () {
+	remove: function() {
 		return GelatoPage.prototype.remove.call(this);
 	}
 });

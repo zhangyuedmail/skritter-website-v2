@@ -22,7 +22,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method render
 	 * @returns {StudySettingsDialog}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -30,9 +30,9 @@ module.exports = BootstrapDialog.extend({
 	 * @method getSelectedParts
 	 * @returns {Array}
 	 */
-	getSelectedParts: function () {
+	getSelectedParts: function() {
 		var parts = [];
-		this.$('#field-parts :checked').each(function () {
+		this.$('#field-parts :checked').each(function() {
 			parts.push($(this).val());
 		});
 		return parts;
@@ -41,7 +41,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method getSettings
 	 * @returns {Object}
 	 */
-	getSettings: function () {
+	getSettings: function() {
 		if (app.isJapanese()) {
 			return {
 				filteredJapaneseParts: this.getSelectedParts(),
@@ -66,7 +66,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method handleClickClose
 	 * @param {Event} event
 	 */
-	handleClickClose: function (event) {
+	handleClickClose: function(event) {
 		event.preventDefault();
 		this.trigger('close');
 		this.close();
@@ -75,7 +75,7 @@ module.exports = BootstrapDialog.extend({
 	 * @method handleClickSave
 	 * @param {Event} event
 	 */
-	handleClickSave: function (event) {
+	handleClickSave: function(event) {
 		event.preventDefault();
 		this.trigger('save', this.getSettings());
 		this.$(':input').attr('disabled', true);

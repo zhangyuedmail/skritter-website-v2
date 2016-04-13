@@ -18,7 +18,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.vocablists = new Vocablists();
 		this.listenTo(this.vocablists, 'state', this.render);
 		this.vocablists.fetch({
@@ -34,7 +34,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {VocablistPublishedTable}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -47,7 +47,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickAddToQueueLink
 	 * @param {Event} event
 	 */
-	handleClickAddToQueueLink: function (event) {
+	handleClickAddToQueueLink: function(event) {
 		event.preventDefault();
 		var listID = $(event.target).closest('.add-to-queue-link').data('vocablist-id');
 		var vocablist = this.vocablists.get(listID);
@@ -62,7 +62,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickLoadMoreButton
 	 * @param {Event} event
 	 */
-	handleClickLoadMoreButton: function (event) {
+	handleClickLoadMoreButton: function(event) {
 		event.preventDefault();
 		if (!this.vocablists.cursor) {
 			return;
@@ -83,7 +83,7 @@ module.exports = GelatoComponent.extend({
 	 * @method searchFor
 	 * @param {String} value
 	 */
-	searchFor: function (value) {
+	searchFor: function(value) {
 		if (value) {
 			this.vocablists.fetch({
 				data: {

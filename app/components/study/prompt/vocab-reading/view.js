@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 	},
 	/**
@@ -29,7 +29,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StylePromptVocabReading}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -37,7 +37,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickShowReading
 	 * @param {Event} event
 	 */
-	handleClickShowReading: function (event) {
+	handleClickShowReading: function(event) {
 		event.preventDefault();
 		var $reading = $(event.target).parent('.reading');
 		var position = parseInt($reading.data('position'), 10);

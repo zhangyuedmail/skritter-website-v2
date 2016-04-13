@@ -18,14 +18,14 @@ module.exports = SkritterModel.extend({
 	 * @method parse
 	 * @returns {Object}
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		return response.Payment || response;
 	},
 	/**
 	 * @method getChargedAmount
 	 * @returns {String}
 	 */
-	getChargedAmount: function () {
+	getChargedAmount: function() {
 		if (this.get('localCharged')) {
 			return this.get('localCharged');
 		}

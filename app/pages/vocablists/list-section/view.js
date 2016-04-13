@@ -15,44 +15,44 @@ module.exports = GelatoPage.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.editing = false;
 		this.vocablist = new Vocablist({id: options.vocablistId});
 		this.vocablistSection = new VocablistSection({vocablistId: options.vocablistId, id: options.sectionId});
 		this.editor = new EditorRows({vocablist: this.vocablist, vocablistSection: this.vocablistSection});
 		this.navbar = new DefaultNavbar();
 		async.series([
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				this.vocablist.fetch({
-					error: function (error) {
+					error: function(error) {
 						callback(error);
 					},
-					success: function () {
+					success: function() {
 						callback();
 					}
 				});
 			}, this),
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				this.vocablistSection.fetch({
-					error: function (error) {
+					error: function(error) {
 						callback(error);
 					},
-					success: function () {
+					success: function() {
 						callback();
 					}
 				});
 			}, this),
-			_.bind(function (callback) {
+			_.bind(function(callback) {
 				this.editor.loadRows({
-					error: function (error) {
+					error: function(error) {
 						callback(error);
 					},
-					success: function () {
+					success: function() {
 						callback();
 					}
 				});
 			}, this)
-		], _.bind(function (error) {
+		], _.bind(function(error) {
 			this.listenTo(this.vocablist, 'state:standby', this.handleVocablistState);
 			this.render();
 		}, this));
@@ -82,7 +82,7 @@ module.exports = GelatoPage.extend({
 	 * @method render
 	 * @returns {VocablistsListSectionPage}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		this.editor.setElement('#editor-container').render();
 		this.navbar.setElement('#navbar-container').render();
@@ -95,7 +95,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickBackLink
 	 * @param {Event} event
 	 */
-	handleClickBackLink: function (event) {
+	handleClickBackLink: function(event) {
 		var self = this;
 		if (this.editor.editing) {
 			event.preventDefault();
@@ -106,7 +106,7 @@ module.exports = GelatoPage.extend({
 			});
 			this.dialog.once(
 				'confirm',
-				function () {
+				function() {
 					app.router.navigate('vocablists/view/' + self.vocablist.id, {trigger: true});
 					self.dialog.close();
 				}
@@ -118,7 +118,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickDiscardChanges
 	 * @param {Event} event
 	 */
-	handleClickDiscardChanges: function (event) {
+	handleClickDiscardChanges: function(event) {
 		var self = this;
 		event.preventDefault();
 		this.dialog = new ConfirmGenericDialog({
@@ -128,7 +128,7 @@ module.exports = GelatoPage.extend({
 		});
 		this.dialog.once(
 			'confirm',
-			function () {
+			function() {
 				self.editor.editing = false;
 				self.editor.discardChanges();
 				self.dialog.close();
@@ -137,7 +137,7 @@ module.exports = GelatoPage.extend({
 		);
 		this.dialog.once(
 			'hidden',
-			function () {
+			function() {
 				self.render();
 			}
 		);
@@ -147,7 +147,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickEditSection
 	 * @param {Event} event
 	 */
-	handleClickEditSection: function (event) {
+	handleClickEditSection: function(event) {
 		event.preventDefault();
 		this.editor.editing = !this.editor.editing;
 		this.render();
@@ -156,7 +156,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleClickSaveChanges
 	 * @param {Event} event
 	 */
-	handleClickSaveChanges: function (event) {
+	handleClickSaveChanges: function(event) {
 		event.preventDefault();
 		this.editor.editing = false;
 		this.editor.rows = this.editor.getRows();
@@ -166,7 +166,7 @@ module.exports = GelatoPage.extend({
 		//remove all results button
 		_.forEach(
 			this.editor.rows,
-			function (row) {
+			function(row) {
 				delete row.results;
 			}
 		);
@@ -176,7 +176,7 @@ module.exports = GelatoPage.extend({
 	 * @method handleKeydownAddInput
 	 * @param {Event} event
 	 */
-	handleKeydownAddInput: function (event) {
+	handleKeydownAddInput: function(event) {
 		if (event.keyCode === 13) {
 			var $input = $(event.target);
 			this.editor.addRow($(event.target).val());
@@ -188,14 +188,14 @@ module.exports = GelatoPage.extend({
 	/**
 	 * @method handleVocablistState
 	 */
-	handleVocablistState: function () {
+	handleVocablistState: function() {
 		this.render();
 	},
 	/**
 	 * @method remove
 	 * @returns {VocablistsListSectionPage}
 	 */
-	remove: function () {
+	remove: function() {
 		this.editor.remove();
 		this.navbar.remove();
 		return GelatoPage.prototype.remove.call(this);

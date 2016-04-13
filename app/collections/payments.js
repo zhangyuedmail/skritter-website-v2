@@ -10,7 +10,7 @@ module.exports = SkritterCollection.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.cursor = null;
 	},
 	/**
@@ -23,7 +23,7 @@ module.exports = SkritterCollection.extend({
 	 * @param {Object} response
 	 * @returns Array
 	 */
-	parse: function (response) {
+	parse: function(response) {
 		this.cursor = response.cursor;
 		return response.Payments;
 	},

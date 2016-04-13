@@ -1,6 +1,6 @@
 var Application = require('./application');
 
-module.exports = (function () {
+module.exports = (function() {
 
 	function start() {
 		window.app = new Application();

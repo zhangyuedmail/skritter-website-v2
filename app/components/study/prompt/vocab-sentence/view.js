@@ -10,7 +10,7 @@ module.exports = GelatoComponent.extend({
 	 * @param {Object} options
 	 * @constructor
 	 */
-	initialize: function (options) {
+	initialize: function(options) {
 		this.prompt = options.prompt;
 	},
 	/**
@@ -29,7 +29,7 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {StudyPromptVocabSentence}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
@@ -37,7 +37,7 @@ module.exports = GelatoComponent.extend({
 	 * @method handleClickValue
 	 * @param {Event} event
 	 */
-	handleClickValue: function (event) {
+	handleClickValue: function(event) {
 		event.preventDefault();
 		if (this.$('.hint').hasClass('open')) {
 			this.$('.hint').removeClass('open');

@@ -9,7 +9,7 @@ module.exports = GelatoComponent.extend({
 	 * @method initialize
 	 * @constructor
 	 */
-	initialize: function () {
+	initialize: function() {
 		this.dueCount = null;
 		this.updateDueCount();
 	},
@@ -22,14 +22,14 @@ module.exports = GelatoComponent.extend({
 	 * @method render
 	 * @returns {DashboardStatus}
 	 */
-	render: function () {
+	render: function() {
 		this.renderTemplate();
 		return this;
 	},
 	/**
 	 * @method updateDueCount
 	 */
-	updateDueCount: function () {
+	updateDueCount: function() {
 		var self = this;
 		var count = 0;
 		var lang = app.getLanguage();
@@ -40,8 +40,8 @@ module.exports = GelatoComponent.extend({
 			.where('next')
 			.belowOrEqual(now)
 			.toArray()
-			.then(function (items) {
-				items.forEach(function (item) {
+			.then(function(items) {
+				items.forEach(function(item) {
 					if (!item.vocabIds.length) {
 						return;
 					} else if (item.lang !== lang) {
