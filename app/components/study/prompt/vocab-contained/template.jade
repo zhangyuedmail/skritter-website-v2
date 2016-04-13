@@ -1,61 +1,61 @@
 gelato-component(data-name='study-prompt-vocab-contained')
-	- var prompt = view.prompt;
+  - var prompt = view.prompt;
 
-	if prompt.reviews
-		- var vocabs = prompt.reviews.vocab.getContained(true);
+  if prompt.reviews
+    - var vocabs = prompt.reviews.vocab.getContained(true);
 
-		if !vocabs.length
-			- contained = [prompt.reviews.vocab];
+    if !vocabs.length
+      - contained = [prompt.reviews.vocab];
 
-		if vocabs.length
+    if vocabs.length
 
-			hr
+      hr
 
-			div.value
-				if prompt.review.get('showContained') || prompt.review.isComplete()
+      div.value
+        if prompt.review.get('showContained') || prompt.review.isComplete()
 
-					for vocab in vocabs
-						- var decomp = vocab.getDecomp();
-						- var definition = vocab.getDefinition();
-						- var heisig = vocab.get('heisigDefinition');
-						- var mnemonic = vocab.getMnemonic();
-						- var reading = vocab.get('reading');
-						- var writing = vocab.get('writing');
+          for vocab in vocabs
+            - var decomp = vocab.getDecomp();
+            - var definition = vocab.getDefinition();
+            - var heisig = vocab.get('heisigDefinition');
+            - var mnemonic = vocab.getMnemonic();
+            - var reading = vocab.get('reading');
+            - var writing = vocab.get('writing');
 
-						.child-character
+            .child-character
 
-							if vocabs.length > 1
-								.child-vocab-row
-									span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
-									| &nbsp;
-									span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
+              if vocabs.length > 1
+                .child-vocab-row
+                  span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
+                  | &nbsp;
+                  span.child-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading) : reading
 
-							if decomp && !decomp.get('atomic')
-								.child-vocab-row
-									label Decomposition
-									for child in decomp.get('Children')
-										.child-decomp
-											span.decomp-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
-											| &nbsp;
-											span.decomp-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
-											| &nbsp;
-											if app.user.get('showHeisig') && child.heisigDefinition
-												em!= child.heisigDefinition + ' - '
-											span.decomp-definition= child.definitions.en
+              if decomp && !decomp.get('atomic')
+                .child-vocab-row
+                  label Decomposition
+                  for child in decomp.get('Children')
+                    .child-decomp
+                      span.decomp-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= child.writing
+                      | &nbsp;
+                      span.decomp-reading= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(child.reading) : child.reading
+                      | &nbsp;
+                      if app.user.get('showHeisig') && child.heisigDefinition
+                        em!= child.heisigDefinition + ' - '
+                      span.decomp-definition= child.definitions.en
 
-							if vocabs.length > 1 && definition
-								.child-vocab-row
-									label Definition
-									.child-definition
-										if app.user.get('showHeisig') && heisig
-											em!= heisig + ' - '
-										span!= definition
+              if vocabs.length > 1 && definition
+                .child-vocab-row
+                  label Definition
+                  .child-definition
+                    if app.user.get('showHeisig') && heisig
+                      em!= heisig + ' - '
+                    span!= definition
 
-							if vocabs.length > 1 && mnemonic
-								.child-vocab-row
-									label Mnemonic
-									.child-mnemonic!= vocab.getMnemonic().text
+              if vocabs.length > 1 && mnemonic
+                .child-vocab-row
+                  label Mnemonic
+                  .child-mnemonic!= vocab.getMnemonic().text
 
-				else
+        else
 
-					button#show-contained.btn.btn-default show
+          button#show-contained.btn.btn-default show

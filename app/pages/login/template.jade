@@ -1,21 +1,21 @@
 gelato-page(data-name='login')
 
-	#navbar-container
+  #navbar-container
 
-	section.container
-		.content-block
-			form#login-form
-				#login-message.text-danger
-				.form-group
-					label(for="login-username") Username
-					input#login-username.form-control(type="text", placeholder="Username")
-				.form-group
-					label(for="login-password") Password
-					input#login-password.form-control(type="password", placeholder="Password")
-				button#button-login.btn.btn-fixed.btn-primary(type="button") Login
-				if app.isDevelopment()
-					| &nbsp;&nbsp;
-					button#button-skeleton.btn.btn-fixed.btn-default(type="button") Skeleton
-			a#password-reset(href="/password-reset") Forgot your password?
+  section.container
+    .content-block
+      form#login-form
+        #login-message.text-danger
+        .form-group
+          label(for="login-username") Username
+          input#login-username.form-control(type="text", placeholder="Username")
+        .form-group
+          label(for="login-password") Password
+          input#login-password.form-control(type="password", placeholder="Password")
+        button#button-login.btn.btn-fixed.btn-primary(type="button") Login
+        if app.isDevelopment()
+          | &nbsp;&nbsp;
+          button#button-skeleton.btn.btn-fixed.btn-default(type="button") Skeleton
+      a#password-reset(href="/password-reset") Forgot your password?
 
-	#footer-container
+  #footer-container

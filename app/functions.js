@@ -41,13 +41,13 @@ var shortstraw = new Shortstraw();
  * @returns {Number}
  */
 function addAllObjectAttributes(array, attribute) {
-	var total = 0;
-	for (var i = 0, length = array.length; i < length; i++) {
-		if (array[i][attribute]) {
-			total += array[i][attribute];
-		}
-	}
-	return total;
+  var total = 0;
+  for (var i = 0, length = array.length; i < length; i++) {
+    if (array[i][attribute]) {
+      total += array[i][attribute];
+    }
+  }
+  return total;
 }
 
 /**
@@ -56,9 +56,9 @@ function addAllObjectAttributes(array, attribute) {
  * @returns {Array}
  */
 function arrayToJSON(array) {
-	return array.map(function(data) {
-		return data.toJSON();
-	});
+  return array.map(function(data) {
+    return data.toJSON();
+  });
 }
 
 /**
@@ -67,9 +67,9 @@ function arrayToJSON(array) {
  * @returns {Array}
  */
 function arrayToInt(array) {
-	return array.map(function(value) {
-		return parseInt(value, 10);
-	});
+  return array.map(function(value) {
+    return parseInt(value, 10);
+  });
 }
 
 /**
@@ -78,12 +78,12 @@ function arrayToInt(array) {
  * @returns {String}
  */
 function convertBytesToSize(bytes) {
-	var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-	if (bytes > 0) {
-		var value = parseFloat(Math.floor(Math.log(bytes) / Math.log(1024)));
-		return (bytes / Math.pow(1024, value)).toFixed(2) + ' ' + sizes[value];
-	}
-	return '0 B';
+  var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes > 0) {
+    var value = parseFloat(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return (bytes / Math.pow(1024, value)).toFixed(2) + ' ' + sizes[value];
+  }
+  return '0 B';
 }
 
 /**
@@ -91,15 +91,15 @@ function convertBytesToSize(bytes) {
  * @param {Number} time
  */
 function convertTimeToClock(time) {
-	var hours = (time / (3600 * 1000)) >> 0;
-	time = time % (3600 * 1000);
-	var minutes = (time / (60 * 1000)) >> 0;
-	time = time % (60 * 1000);
-	var seconds = (time / 1000) >> 0;
-	if (hours > 0) {
-		return pad(hours, 0, 2) + ':' + pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
-	}
-	return pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
+  var hours = (time / (3600 * 1000)) >> 0;
+  time = time % (3600 * 1000);
+  var minutes = (time / (60 * 1000)) >> 0;
+  time = time % (60 * 1000);
+  var seconds = (time / 1000) >> 0;
+  if (hours > 0) {
+    return pad(hours, 0, 2) + ':' + pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
+  }
+  return pad(minutes, 0, 2) + ':' + pad(seconds, 0, 2);
 }
 
 /**
@@ -107,7 +107,7 @@ function convertTimeToClock(time) {
  * @param {Number} timestamp
  */
 function formatDate(timestamp) {
-	return Moment(timestamp * 1000).format('MMMM Do YYYY');
+  return Moment(timestamp * 1000).format('MMMM Do YYYY');
 }
 
 /**
@@ -117,11 +117,11 @@ function formatDate(timestamp) {
  * @return {Number}
  */
 function getAngle(point1, point2) {
-	var p1 = Array.isArray(point1) ? point1[0] : point1;
-	var p2 = Array.isArray(point1) ? point1[point1.length - 1] : point2;
-	var xDiff = p2.x - p1.x;
-	var yDiff = p2.y - p1.y;
-	return (Math.atan2(yDiff, xDiff)) * (180 / Math.PI);
+  var p1 = Array.isArray(point1) ? point1[0] : point1;
+  var p2 = Array.isArray(point1) ? point1[point1.length - 1] : point2;
+  var xDiff = p2.x - p1.x;
+  var yDiff = p2.y - p1.y;
+  return (Math.atan2(yDiff, xDiff)) * (180 / Math.PI);
 }
 
 /**
@@ -133,26 +133,26 @@ function getAngle(point1, point2) {
  * @return {Object}
  */
 function getBoundingRectangle(points, areaWidth, areaHeight, pointRadius) {
-	var left = areaWidth;
-	var top = 0.0;
-	var right = 0.0;
-	var bottom = areaHeight;
-	for (var i = 0, length = points.length; i < length; i++) {
-		var x = points[i].x;
-		var y = points[i].y;
-		if (x - pointRadius < left)
-			left = x - pointRadius;
-		if (y + pointRadius > top)
-			top = y + pointRadius;
-		if (x + pointRadius > right)
-			right = x + pointRadius;
-		if (y - pointRadius < bottom)
-			bottom = y - pointRadius;
-	}
-	var width = right - left;
-	var height = top - bottom;
-	var center = {x: width / 2 + left, y: height / 2 + bottom};
-	return {x: left, y: bottom, width: width, height: height, center: center};
+  var left = areaWidth;
+  var top = 0.0;
+  var right = 0.0;
+  var bottom = areaHeight;
+  for (var i = 0, length = points.length; i < length; i++) {
+    var x = points[i].x;
+    var y = points[i].y;
+    if (x - pointRadius < left)
+      left = x - pointRadius;
+    if (y + pointRadius > top)
+      top = y + pointRadius;
+    if (x + pointRadius > right)
+      right = x + pointRadius;
+    if (y - pointRadius < bottom)
+      bottom = y - pointRadius;
+  }
+  var width = right - left;
+  var height = top - bottom;
+  var center = {x: width / 2 + left, y: height / 2 + bottom};
+  return {x: left, y: bottom, width: width, height: height, center: center};
 }
 
 /**
@@ -162,11 +162,11 @@ function getBoundingRectangle(points, areaWidth, areaHeight, pointRadius) {
  * @return {Number}
  */
 function getDistance(point1, point2) {
-	var xs = point2.x - point1.x;
-	xs = xs * xs;
-	var ys = point2.y - point1.y;
-	ys = ys * ys;
-	return Math.sqrt(xs + ys);
+  var xs = point2.x - point1.x;
+  xs = xs * xs;
+  var ys = point2.y - point1.y;
+  ys = ys * ys;
+  return Math.sqrt(xs + ys);
 }
 
 /**
@@ -174,7 +174,7 @@ function getDistance(point1, point2) {
  * @returns {String}
  */
 function getGuid() {
-	return Math.floor((1 + Math.random()) * 0x100000000).toString(16).substring(1);
+  return Math.floor((1 + Math.random()) * 0x100000000).toString(16).substring(1);
 }
 
 /**
@@ -183,13 +183,13 @@ function getGuid() {
  * @return {Number}
  */
 function getLength(points) {
-	var total = 0;
-	if (points.length > 1) {
-		for (var i = 1, length = points.length; i < length; i++) {
-			total += getDistance(points[i - 1], points[i]);
-		}
-	}
-	return total;
+  var total = 0;
+  if (points.length > 1) {
+    for (var i = 1, length = points.length; i < length; i++) {
+      total += getDistance(points[i - 1], points[i]);
+    }
+  }
+  return total;
 }
 
 /**
@@ -198,17 +198,17 @@ function getLength(points) {
  * @returns {Boolean}
  */
 function hasKana(text) {
-	var chars = text.split('');
-	if (chars.length > 0) {
-		for (var i = 0, length = chars.length; i < length; i++) {
-			var charCode = text.charCodeAt(i);
-			if ((charCode >= 12353 && charCode <= 12436) ||
-				(charCode >= 12449 && charCode <= 12540)) {
-				return true;
-			}
-		}
-	}
-	return false;
+  var chars = text.split('');
+  if (chars.length > 0) {
+    for (var i = 0, length = chars.length; i < length; i++) {
+      var charCode = text.charCodeAt(i);
+      if ((charCode >= 12353 && charCode <= 12436) ||
+        (charCode >= 12449 && charCode <= 12540)) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 /**
@@ -217,16 +217,16 @@ function hasKana(text) {
  * @returns {Boolean}
  */
 function isKana(text) {
-	var chars = text.split('');
-	if (chars.length > 0) {
-		for (var i = 0, length = chars.length; i < length; i++) {
-			var charCode = text.charCodeAt(i);
-			if (!(charCode >= 12353 && charCode <= 12436) && !(charCode >= 12449 && charCode <= 12540)) {
-				return false;
-			}
-		}
-	}
-	return true;
+  var chars = text.split('');
+  if (chars.length > 0) {
+    for (var i = 0, length = chars.length; i < length; i++) {
+      var charCode = text.charCodeAt(i);
+      if (!(charCode >= 12353 && charCode <= 12436) && !(charCode >= 12449 && charCode <= 12540)) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 /**
@@ -236,16 +236,16 @@ function isKana(text) {
  * @param {Function} [callbackError]
  */
 function imageExists(src, callbackSuccess, callbackError) {
-	var image = new Image();
-	image.onload = function() {
-		callbackSuccess(image);
-	};
-	image.onerror = function() {
-		if (typeof callbackError === 'function') {
-			callbackError();
-		}
-	};
-	image.src = src;
+  var image = new Image();
+  image.onload = function() {
+    callbackSuccess(image);
+  };
+  image.onerror = function() {
+    if (typeof callbackError === 'function') {
+      callbackError();
+    }
+  };
+  image.src = src;
 }
 
 /**
@@ -253,7 +253,7 @@ function imageExists(src, callbackSuccess, callbackError) {
  * @returns {Boolean}
  */
 function isNumber() {
-	return !isNaN(parseFloat(number)) && isFinite(number);
+  return !isNaN(parseFloat(number)) && isFinite(number);
 }
 
 /**
@@ -263,18 +263,18 @@ function isNumber() {
  * @returns {Object}
  */
 function mergeObjectArrays(object1, object2) {
-	for (var key in object2) {
-		if (object1[key]) {
-			if (Array.isArray(object1[key])) {
-				object1[key] = object1[key].concat(object2[key]);
-			} else {
-				object1[key] = object2[key];
-			}
-		} else {
-			object1[key] = object2[key];
-		}
-	}
-	return object1;
+  for (var key in object2) {
+    if (object1[key]) {
+      if (Array.isArray(object1[key])) {
+        object1[key] = object1[key].concat(object2[key]);
+      } else {
+        object1[key] = object2[key];
+      }
+    } else {
+      object1[key] = object2[key];
+    }
+  }
+  return object1;
 }
 
 /**
@@ -285,12 +285,12 @@ function mergeObjectArrays(object1, object2) {
  * @return {String}
  */
 function pad(text, value, size) {
-	value = '' + value;
-	var string = text + '';
-	while (string.length < size) {
-		string = value + '' + string;
-	}
-	return string;
+  value = '' + value;
+  var string = text + '';
+  while (string.length < size) {
+    string = value + '' + string;
+  }
+  return string;
 }
 
 /**
@@ -300,7 +300,7 @@ function pad(text, value, size) {
  * @returns {Number}
  */
 function randomDecimal(min, max) {
-	return Math.random() * (max - min) + min;
+  return Math.random() * (max - min) + min;
 }
 
 /**
@@ -308,14 +308,14 @@ function randomDecimal(min, max) {
  * @param {String} text
  */
 function textToHTML(text) {
-	if (!text) {
-		return '';
-	}
-	return text
-		.replace(/img:(http:\/\/\S+)/gi, '<img src="$1"/>')
-		.replace(/_([^ _][^_]*)_(?!\S{4})/gi, '<em>$1</em>')
-		.replace(/\n/gi, '<br/>')
-		.replace(/\*([^*]+)\*/gi, '<strong>$1</strong>');
+  if (!text) {
+    return '';
+  }
+  return text
+    .replace(/img:(http:\/\/\S+)/gi, '<img src="$1"/>')
+    .replace(/_([^ _][^_]*)_(?!\S{4})/gi, '<em>$1</em>')
+    .replace(/\n/gi, '<br/>')
+    .replace(/\*([^*]+)\*/gi, '<strong>$1</strong>');
 }
 
 /**
@@ -324,7 +324,7 @@ function textToHTML(text) {
  * @returns {String}
  */
 function toLowerCase(value) {
-	return value.toLowerCase();
+  return value.toLowerCase();
 }
 
 /**
@@ -333,34 +333,34 @@ function toLowerCase(value) {
  * @returns {String}
  */
 function toUpperCase(value) {
-	return value.toUpperCase();
+  return value.toUpperCase();
 }
 
 module.exports = {
-	interval: interval,
-	mapper: mapper,
-	pinyin: pinyin,
-	recognizer: recognizer,
-	shortstraw: shortstraw,
-	addAllObjectAttributes: addAllObjectAttributes,
-	arrayToInt: arrayToInt,
-	arrayToJSON: arrayToJSON,
-	convertTimeToClock: convertTimeToClock,
-	convertBytesToSize: convertBytesToSize,
-	formatDate: formatDate,
-	getAngle: getAngle,
-	getBoundingRectangle: getBoundingRectangle,
-	getDistance: getDistance,
-	getGuid: getGuid,
-	getLength: getLength,
-	hasKana: hasKana,
-	imageExists: imageExists,
-	isKana: isKana,
-	isNumber: isNumber,
-	mergeObjectArrays: mergeObjectArrays,
-	pad: pad,
-	randomDecimal: randomDecimal,
-	textToHTML: textToHTML,
-	toLowerCase: toLowerCase,
-	toUpperCase: toUpperCase
+  interval: interval,
+  mapper: mapper,
+  pinyin: pinyin,
+  recognizer: recognizer,
+  shortstraw: shortstraw,
+  addAllObjectAttributes: addAllObjectAttributes,
+  arrayToInt: arrayToInt,
+  arrayToJSON: arrayToJSON,
+  convertTimeToClock: convertTimeToClock,
+  convertBytesToSize: convertBytesToSize,
+  formatDate: formatDate,
+  getAngle: getAngle,
+  getBoundingRectangle: getBoundingRectangle,
+  getDistance: getDistance,
+  getGuid: getGuid,
+  getLength: getLength,
+  hasKana: hasKana,
+  imageExists: imageExists,
+  isKana: isKana,
+  isNumber: isNumber,
+  mergeObjectArrays: mergeObjectArrays,
+  pad: pad,
+  randomDecimal: randomDecimal,
+  textToHTML: textToHTML,
+  toLowerCase: toLowerCase,
+  toUpperCase: toUpperCase
 };

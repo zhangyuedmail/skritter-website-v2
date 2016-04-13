@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="48px" height="32px" viewBox="0 0 48 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
-		 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-	<!-- Generator: Sketch 3.3 (11970) - http://www.bohemiancoding.com/sketch -->
-	<title>marketing-laptop</title>
-	<desc>Created with Sketch.</desc>
-	<defs></defs>
-	<g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-		<g id="marketing-laptop" sketch:type="MSArtboardGroup" fill="#EAEAEA" opacity="0.599999964">
-			<g id="Web-+-Shape" sketch:type="MSLayerGroup">
-				<path
-					d="M40,28 C42.2,28 44,26.2 44,24 L44,4 C44,1.8 42.2,0 40,0 L8,0 C5.8,0 4,1.8 4,4 L4,24 C4,26.2 5.8,28 8,28 L0,28 L0,32 L48,32 L48,28 L40,28 L40,28 Z M8,4 L40,4 L40,24 L8,24 L8,4 L8,4 Z"
-					id="Shape" sketch:type="MSShapeGroup"></path>
-			</g>
-		</g>
-	</g>
+     xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3 (11970) - http://www.bohemiancoding.com/sketch -->
+    <title>marketing-laptop</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="marketing-laptop" sketch:type="MSArtboardGroup" fill="#EAEAEA" opacity="0.599999964">
+            <g id="Web-+-Shape" sketch:type="MSLayerGroup">
+                <path
+                        d="M40,28 C42.2,28 44,26.2 44,24 L44,4 C44,1.8 42.2,0 40,0 L8,0 C5.8,0 4,1.8 4,4 L4,24 C4,26.2 5.8,28 8,28 L0,28 L0,32 L48,32 L48,28 L40,28 L40,28 Z M8,4 L40,4 L40,24 L8,24 L8,4 L8,4 Z"
+                        id="Shape" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
 </svg>

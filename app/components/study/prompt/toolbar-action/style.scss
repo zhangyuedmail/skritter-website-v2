@@ -2,19 +2,19 @@
 
 gelato-component[data-name="study-prompt-toolbar-action"] {
 
-	.btn-default {
-		background-color: transparent;
-		border: none;
-		box-shadow: none;
-		margin-top: 10px;
-		&:active,
-		&:focus,
-		&:hover {
-			background-color: transparent;
-			border: none;
-			box-shadow: none;
-			outline: 0;
-		}
-	}
+  .btn-default {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    margin-top: 10px;
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      outline: 0;
+    }
+  }
 
 }

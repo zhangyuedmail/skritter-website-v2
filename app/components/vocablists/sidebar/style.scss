@@ -2,40 +2,40 @@
 
 gelato-component[data-name='vocablists-sidebar'] {
 
-	color: $white1;
-	margin: 45px auto 0 auto;
-	width: 140px;
+  color: $white1;
+  margin: 45px auto 0 auto;
+  width: 140px;
 
-	button {
-		height: 50px;
-		padding: 0 20px;
-	}
+  button {
+    height: 50px;
+    padding: 0 20px;
+  }
 
-	.options {
-		color: #8c9196;
-		font-family: $font-ubuntu;
-		font-size: 16px;
-		font-weight: 300;
-		margin-top: 30px;
-		padding: 10px;
+  .options {
+    color: #8c9196;
+    font-family: $font-ubuntu;
+    font-size: 16px;
+    font-weight: 300;
+    margin-top: 30px;
+    padding: 10px;
 
-		> a {
-			color: $grey3;
-			display: block;
-			margin-bottom: 20px;
-			text-decoration: none;
+    > a {
+      color: $grey3;
+      display: block;
+      margin-bottom: 20px;
+      text-decoration: none;
 
-			&:hover {
-				color: $grey6;
-			}
+      &:hover {
+        color: $grey6;
+      }
 
-			&.active {
-				color: $green5;
-				font-weight: 400;
-			}
+      &.active {
+        color: $green5;
+        font-weight: 400;
+      }
 
-		}
+    }
 
-	}
+  }
 
 }

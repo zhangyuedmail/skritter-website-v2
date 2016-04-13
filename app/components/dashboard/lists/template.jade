@@ -1,34 +1,34 @@
 gelato-component(data-name='dashboard-lists')
-	- var vocablist = view.vocablist;
-	- var vocablists = view.vocablists;
+  - var vocablist = view.vocablist;
+  - var vocablists = view.vocablists;
 
-	if vocablist
-		#sections-table
-			for section, index in vocablist.get('sections')
-				.row(data-section-id=section.id)
-					.col-md-5.section-name
-						a(href='/vocablists/view/' + vocablist.id + '/' + section.id)= section.name
-					.col-md-5.text-center
-						span= section.rows.length + ' words'
-					.col-md-2.text-center
-						a(href='study/' + vocablist.id + '/' + section.id) Study
-			a.text-primary.button-show-lists(href="#") Back to all lists
+  if vocablist
+    #sections-table
+      for section, index in vocablist.get('sections')
+        .row(data-section-id=section.id)
+          .col-md-5.section-name
+            a(href='/vocablists/view/' + vocablist.id + '/' + section.id)= section.name
+          .col-md-5.text-center
+            span= section.rows.length + ' words'
+          .col-md-2.text-center
+            a(href='study/' + vocablist.id + '/' + section.id) Study
+      a.text-primary.button-show-lists(href="#") Back to all lists
 
-	else if vocablists.length
-		#vocablists-table
-			for list, index in vocablists.models
-				- var progress = list.getProgress();
-				.row(data-list-id=list.id)
-					.col-md-6.list-name
-						a(href='/vocablists/view/' + list.id)= list.get('name')
-					.col-md-4.list-progress
-						.progress
-							.progress-bar(style='width:' + progress.percent + '%')
-					.col-md-1.text-center
-						a.button-sections(href="#") Sections
-					.col-md-1.text-center
-						a(href='/study/' + list.id) Study
+  else if vocablists.length
+    #vocablists-table
+      for list, index in vocablists.models
+        - var progress = list.getProgress();
+        .row(data-list-id=list.id)
+          .col-md-6.list-name
+            a(href='/vocablists/view/' + list.id)= list.get('name')
+          .col-md-4.list-progress
+            .progress
+              .progress-bar(style='width:' + progress.percent + '%')
+          .col-md-1.text-center
+            a.button-sections(href="#") Sections
+          .col-md-1.text-center
+            a(href='/study/' + list.id) Study
 
-	if vocablists.state === 'fetching'
-		p.text-center
-			i.fa.fa-3x.fa-spinner.fa-pulse
+  if vocablists.state === 'fetching'
+    p.text-center
+      i.fa.fa-3x.fa-spinner.fa-pulse

@@ -14,36 +14,36 @@ var ShapeData = require('data/shape-data');
  * @extends {GelatoCollection}
  */
 module.exports = GelatoCollection.extend({
-	/**
-	 * @method initialize
-	 * @constructor
-	 */
-	initialize: function() {
-		this.params = new StrokeParams();
-		this.shapes = ShapeData;
-		this.add(KanaStrokes.getData());
-		this.add(ToneStrokes.getData());
-	},
-	/**
-	 * @property model
-	 * @type {Stroke}
-	 */
-	model: Stroke,
-	/**
-	 * @method getPromptTones
-	 * @returns {PromptCharacter}
-	 */
-	getPromptTones: function() {
-		return this.get('tones').getPromptCharacter();
-	},
-	/**
-	 * @method reset
-	 * @returns {Stroke}
-	 */
-	reset: function() {
-		GelatoCollection.prototype.reset.call(this);
-		this.add(KanaStrokes.getData());
-		this.add(ToneStrokes.getData());
-		return this;
-	}
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.params = new StrokeParams();
+        this.shapes = ShapeData;
+        this.add(KanaStrokes.getData());
+        this.add(ToneStrokes.getData());
+    },
+    /**
+     * @property model
+     * @type {Stroke}
+     */
+    model: Stroke,
+    /**
+     * @method getPromptTones
+     * @returns {PromptCharacter}
+     */
+    getPromptTones: function() {
+        return this.get('tones').getPromptCharacter();
+    },
+    /**
+     * @method reset
+     * @returns {Stroke}
+     */
+    reset: function() {
+        GelatoCollection.prototype.reset.call(this);
+        this.add(KanaStrokes.getData());
+        this.add(ToneStrokes.getData());
+        return this;
+    }
 });

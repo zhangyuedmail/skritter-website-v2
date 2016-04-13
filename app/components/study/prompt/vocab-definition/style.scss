@@ -2,30 +2,30 @@
 
 gelato-component[data-name='study-prompt-vocab-definition'] {
 
-	margin-top: 25px;
+  margin-top: 25px;
 
-	button {
-		border-radius: 4px;
-	}
+  button {
+    border-radius: 4px;
+  }
 
-	label {
-		color: $grey3;
-		font-size: 14px;
-		font-weight: 700;
-	}
+  label {
+    color: $grey3;
+    font-size: 14px;
+    font-weight: 700;
+  }
 
-	img {
-		max-width: 250px;
-		width: 100%;
-	}
+  img {
+    max-width: 250px;
+    width: 100%;
+  }
 
-	.value {
-		color: $grey3;
-		font-size: 14px;
-		font-weight: 300;
-		textarea {
-			width: 100%;
-		}
-	}
+  .value {
+    color: $grey3;
+    font-size: 14px;
+    font-weight: 300;
+    textarea {
+      width: 100%;
+    }
+  }
 
 }

@@ -1,25 +1,25 @@
 gelato-component(data-name="study-prompt-toolbar-vocab")
-	- var prompt = view.prompt;
+  - var prompt = view.prompt;
 
-	if prompt.reviews
+  if prompt.reviews
 
-		i#button-vocab-audio.icon.icon-study-word-volume
+    i#button-vocab-audio.icon.icon-study-word-volume
 
-		if prompt.reviews.item
-			if prompt.reviews.vocab.isStarred()
-				i#button-vocab-star.icon.icon-study-word-star-filled
-			else
-				i#button-vocab-star.icon.icon-study-word-star
+    if prompt.reviews.item
+      if prompt.reviews.vocab.isStarred()
+        i#button-vocab-star.icon.icon-study-word-star-filled
+      else
+        i#button-vocab-star.icon.icon-study-word-star
 
-		if prompt.reviews.item
-			i#button-vocab-edit.icon.icon-study-word-edit
+    if prompt.reviews.item
+      i#button-vocab-edit.icon.icon-study-word-edit
 
-		if prompt.reviews.item
-			i#button-vocab-ban.icon.icon-study-ban
+    if prompt.reviews.item
+      i#button-vocab-ban.icon.icon-study-ban
 
-		if prompt.reviews.item
-			i#button-vocab-info.icon.icon-study-info
+    if prompt.reviews.item
+      i#button-vocab-info.icon.icon-study-info
 
-		if prompt.reviews.item
-			if prompt.reviews.item.get('last')
-				#item-last-studied= 'studied ' + moment(prompt.reviews.item.get('last') * 1000).fromNow()
+    if prompt.reviews.item
+      if prompt.reviews.item.get('last')
+        #item-last-studied= 'studied ' + moment(prompt.reviews.item.get('last') * 1000).fromNow()

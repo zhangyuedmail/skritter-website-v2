@@ -1,113 +1,113 @@
 gelato-component(data-name='vocablists-list-sidebar')
-	- var sort = view.vocablist.get('sort');
-	- var vocablist = view.vocablist;
+  - var sort = view.vocablist.get('sort');
+  - var vocablist = view.vocablist;
 
-	if vocablist.state === 'standby'
+  if vocablist.state === 'standby'
 
-		.sidebar-spacer
-			div
-				if sort === 'official'
-					a.back-link(href="/vocablists/browse")
-						span.glyphicon.glyphicon-chevron-left
-						span back to official lists
+    .sidebar-spacer
+      div
+        if sort === 'official'
+          a.back-link(href="/vocablists/browse")
+            span.glyphicon.glyphicon-chevron-left
+            span back to official lists
 
-				else if sort === 'custom' && vocablist.get('creator') === app.user.id
-					a.back-link(href="/vocablists/my-lists")
-						span.glyphicon.glyphicon-chevron-left
-						span back to my lists
+        else if sort === 'custom' && vocablist.get('creator') === app.user.id
+          a.back-link(href="/vocablists/my-lists")
+            span.glyphicon.glyphicon-chevron-left
+            span back to my lists
 
-				else if sort === 'custom' && vocablist.get('creator') !== app.user.id
-					a.back-link(href="/vocablists/published")
-						span.glyphicon.glyphicon-chevron-left
-						span back to published lists
+        else if sort === 'custom' && vocablist.get('creator') !== app.user.id
+          a.back-link(href="/vocablists/published")
+            span.glyphicon.glyphicon-chevron-left
+            span back to published lists
 
-				else if sort === 'chinesepod-label' || sort === 'chinesepod-lesson'
-					a.back-link(href="/vocablists/chinesepod")
-						span.glyphicon.glyphicon-chevron-left
-						span back to ChinesePod lists
+        else if sort === 'chinesepod-label' || sort === 'chinesepod-lesson'
+          a.back-link(href="/vocablists/chinesepod")
+            span.glyphicon.glyphicon-chevron-left
+            span back to ChinesePod lists
 
-				else if sort
-					// TODO: add links to other custom lists
-					a.back-link(href="/vocablists/queue")
-						span.glyphicon.glyphicon-chevron-left
-						span back to lists
+        else if sort
+          // TODO: add links to other custom lists
+          a.back-link(href="/vocablists/queue")
+            span.glyphicon.glyphicon-chevron-left
+            span back to lists
 
-			div#list-img-wrapper
-				img#list-img.img-thumbnail(src=vocablist.getImageUrl())
-				#missing-image-stub.hide
-					span.glyphicon.glyphicon-book
+      div#list-img-wrapper
+        img#list-img.img-thumbnail(src=vocablist.getImageUrl())
+        #missing-image-stub.hide
+          span.glyphicon.glyphicon-book
 
-				i.fa.fa-5x.fa-spinner.fa-pulse.hide
+        i.fa.fa-5x.fa-spinner.fa-pulse.hide
 
-				if vocablist.isEditable()
-					#image-upload-prompt
-						a#image-upload-link
-							span.glyphicon.glyphicon-plus-sign
-							span.spl Change photo
-					input#image-upload-input.hide(type="file", accept="image/*")
+        if vocablist.isEditable()
+          #image-upload-prompt
+            a#image-upload-link
+              span.glyphicon.glyphicon-plus-sign
+              span.spl Change photo
+          input#image-upload-input.hide(type="file", accept="image/*")
 
-			if !vocablist.get('disabled') && vocablist.state !== 'fetching'
+      if !vocablist.get('disabled') && vocablist.state !== 'fetching'
 
-				p
-					if vocablist.state === 'saving'
-						button.btn.btn-fixed.btn-success(disabled=true) Saving changes
+        p
+          if vocablist.state === 'saving'
+            button.btn.btn-fixed.btn-success(disabled=true) Saving changes
 
-					else if vocablist.get('studyingMode') === 'not studying'
-						button#add-to-queue.btn.btn-fixed.btn-success Add to queue
+          else if vocablist.get('studyingMode') === 'not studying'
+            button#add-to-queue.btn.btn-fixed.btn-success Add to queue
 
-					else
-						a.btn.btn-fixed.btn-primary(href='/study/' + vocablist.id) Study now
+          else
+            a.btn.btn-fixed.btn-primary(href='/study/' + vocablist.id) Study now
 
-				p.status-p
-					span.spr Status:
-					span= _.capitalize(vocablist.get('studyingMode'))
+        p.status-p
+          span.spr Status:
+          span= _.capitalize(vocablist.get('studyingMode'))
 
-				if vocablist.get('studyingMode') !== 'not studying'
-					- var progress = vocablist.getProgress();
-					- var title = progress.percent.toFixed(1)+'% complete';
-					if progress.total
-						- title += ' ('+(progress.total - progress.added)+' left)';
-					.progress(title=title, data-toggle="tooltip" data-placement="top")
-						.progress-bar(style="width:" + progress.percent + '%')
+        if vocablist.get('studyingMode') !== 'not studying'
+          - var progress = vocablist.getProgress();
+          - var title = progress.percent.toFixed(1)+'% complete';
+          if progress.total
+            - title += ' ('+(progress.total - progress.added)+' left)';
+          .progress(title=title, data-toggle="tooltip" data-placement="top")
+            .progress-bar(style="width:" + progress.percent + '%')
 
-				hr
+        hr
 
-				.actions
-					if vocablist.get('studyingMode') !== 'not studying'
-						div.action
-							a#study-settings-link
-								span.glyphicon.glyphicon-cog
-								span Settings
+        .actions
+          if vocablist.get('studyingMode') !== 'not studying'
+            div.action
+              a#study-settings-link
+                span.glyphicon.glyphicon-cog
+                span Settings
 
-					if vocablist.publishable()
-						a#publish-link
-							div.action
-								span.glyphicon.glyphicon-share
-								span Publish
+          if vocablist.publishable()
+            a#publish-link
+              div.action
+                span.glyphicon.glyphicon-share
+                span Publish
 
-					if vocablist.copyable()
-						a#copy-link
-							div.action
-								span.glyphicon.glyphicon-duplicate
-								span Copy
+          if vocablist.copyable()
+            a#copy-link
+              div.action
+                span.glyphicon.glyphicon-duplicate
+                span Copy
 
-					if vocablist.deletable()
-						a#delete-link
-							div.action
-								span.glyphicon.glyphicon-trash
-								span Delete
+          if vocablist.deletable()
+            a#delete-link
+              div.action
+                span.glyphicon.glyphicon-trash
+                span Delete
 
-					if vocablist.get('sort') === 'chinesepod-label'
-						a#update-link
-							div.action
-								i.fa.fa-1x.fa-spinner.fa-pulse.hide
-								span.glyphicon.glyphicon-refresh
-								span Update
+          if vocablist.get('sort') === 'chinesepod-label'
+            a#update-link
+              div.action
+                i.fa.fa-1x.fa-spinner.fa-pulse.hide
+                span.glyphicon.glyphicon-refresh
+                span Update
 
-					//div.action
-					//  span.glyphicon.glyphicon-blackboard
-					//  span Assign to group
-					//
-					//div.action
-					//  span.glyphicon.glyphicon-export
-					//  span Export
+          //div.action
+          //  span.glyphicon.glyphicon-blackboard
+          //  span Assign to group
+          //
+          //div.action
+          //  span.glyphicon.glyphicon-export
+          //  span Export

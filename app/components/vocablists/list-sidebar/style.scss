@@ -2,92 +2,92 @@
 
 gelato-component[data-name='vocablists-list-sidebar'] {
 
-	.sidebar-spacer {
-		margin: 45px 2% 0;
-		text-align: center;
+  .sidebar-spacer {
+    margin: 45px 2% 0;
+    text-align: center;
 
-		.back-link {
-			color: $grey3;
-			.glyphicon {
-				margin-right: 5px;
-			}
-		}
+    .back-link {
+      color: $grey3;
+      .glyphicon {
+        margin-right: 5px;
+      }
+    }
 
-		#list-img-wrapper {
-			margin: 20px auto 20px;
-			width: 60%;
-			position: relative;
+    #list-img-wrapper {
+      margin: 20px auto 20px;
+      width: 60%;
+      position: relative;
 
-			&:hover #image-upload-prompt {
-				opacity: 1;
-			}
+      &:hover #image-upload-prompt {
+        opacity: 1;
+      }
 
-			.fa-spinner {
-				position: absolute;
-				z-index: 1;
-				top: 30px;
-				left: 10px;
-				right: 10px;
-				color: $green5;
-			}
-		}
+      .fa-spinner {
+        position: absolute;
+        z-index: 1;
+        top: 30px;
+        left: 10px;
+        right: 10px;
+        color: $green5;
+      }
+    }
 
-		#image-upload-prompt {
-			opacity: 0;
-			padding: 5px;
-			position: absolute;
-			bottom: 5px;
-			left: 5px;
-			right: 5px;
-			text-align: center;
-			z-index: 1;
-			background: $grey7;
+    #image-upload-prompt {
+      opacity: 0;
+      padding: 5px;
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      right: 5px;
+      text-align: center;
+      z-index: 1;
+      background: $grey7;
 
-			&:hover {
-				opacity: 1;
-			}
+      &:hover {
+        opacity: 1;
+      }
 
-			a {
-				color: $white4;
-			}
+      a {
+        color: $white4;
+      }
 
-			.glyphicon {
-				color: $green4;
-			}
-		}
+      .glyphicon {
+        color: $green4;
+      }
+    }
 
-		#missing-image-stub {
-			background: #e6e4ec;
-			text-align: center;
-			padding: 20px 0;
-			.glyphicon {
-				font-size: 100px;
-			}
-		}
+    #missing-image-stub {
+      background: #e6e4ec;
+      text-align: center;
+      padding: 20px 0;
+      .glyphicon {
+        font-size: 100px;
+      }
+    }
 
-		.status-p {
-			margin-top: 20px;
-		}
+    .status-p {
+      margin-top: 20px;
+    }
 
-		.progress {
-			width: 120px;
-			margin: 0 auto;
-		}
+    .progress {
+      width: 120px;
+      margin: 0 auto;
+    }
 
-		.actions {
-			text-align: left;
-			width: 140px;
-			margin: 0 auto;
+    .actions {
+      text-align: left;
+      width: 140px;
+      margin: 0 auto;
 
-			.action {
-				margin-bottom: 15px;
-			}
+      .action {
+        margin-bottom: 15px;
+      }
 
-			.glyphicon, .fa-spinner {
-				margin-right: 10px;
-			}
-		}
+      .glyphicon, .fa-spinner {
+        margin-right: 10px;
+      }
+    }
 
-	}
+  }
 
 }

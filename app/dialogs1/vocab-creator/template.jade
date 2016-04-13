@@ -1,41 +1,41 @@
 gelato-dialog(data-name='vocab-creator')
-	- var row = view.row;
+  - var row = view.row;
 
-	.modal.fade(tabindex='-1', role='dialog')
-		.modal-dialog
-			.modal-content
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
 
-				.modal-header
-					.pull-left
-						.modal-title
-							span.spr Add
-							span.word-writing= row.writing
-							span.spl to the dictionary
-					.pull-right
-						a(href='#', data-dismiss='modal')
-							i.fa.fa-times-circle-o
+        .modal-header
+          .pull-left
+            .modal-title
+              span.spr Add
+              span.word-writing= row.writing
+              span.spl to the dictionary
+          .pull-right
+            a(href='#', data-dismiss='modal')
+              i.fa.fa-times-circle-o
 
-				.modal-body
-					#error-message.text-danger
-					form
-						.form-group
-							h5= row.lang === 'zh' ? 'Simplified' : 'Writing'
-							span= row.writing
-						if row.lang === 'zh' && row.writingTrads.length
-							#word-writing-trad-input.form-group
-								h5 Traditional
-								if row.writingTrads.length > 1
-									select.form-control
-										for writing in row.writingTrads
-											option= writing
-								else
-									span= row.writingTrads[0]
-						#word-reading-input.form-group
-							h5= row.lang === 'zh' ? 'Pinyin' : 'Kana'
-							input(type='text')
-						#word-definition-input.form-group
-							h5 Definition
-							textarea
-				.modal-footer
-					button#button-add-word.btn.btn-success Add Word
-					button#button-cancel.btn.btn-default Cancel
+        .modal-body
+          #error-message.text-danger
+          form
+            .form-group
+              h5= row.lang === 'zh' ? 'Simplified' : 'Writing'
+              span= row.writing
+            if row.lang === 'zh' && row.writingTrads.length
+              #word-writing-trad-input.form-group
+                h5 Traditional
+                if row.writingTrads.length > 1
+                  select.form-control
+                    for writing in row.writingTrads
+                      option= writing
+                else
+                  span= row.writingTrads[0]
+            #word-reading-input.form-group
+              h5= row.lang === 'zh' ? 'Pinyin' : 'Kana'
+              input(type='text')
+            #word-definition-input.form-group
+              h5 Definition
+              textarea
+        .modal-footer
+          button#button-add-word.btn.btn-success Add Word
+          button#button-cancel.btn.btn-default Cancel

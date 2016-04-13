@@ -2,67 +2,67 @@
 
 gelato-component[data-name='dashboard-month'] {
 
-	#heatmap {
-		margin-bottom: -100px;
-		margin-top: 50px;
-		rect {
-			shape-rendering: auto;
-		}
-		.cal-heatmap-container {
-			margin: 25px auto;
-		}
-		.graph-label,
-		.graph-legend {
-			display: none;
-		}
-		.graph-rect {
-			cursor: inherit;
-			&:hover {
-				stroke: none;
-			}
-		}
-		.q1 {
-			background-color: #ededed;
-			fill: #ededed
-		}
-		.q2 {
-			background-color: #cedb9c;
-			fill: #9cc069
-		}
-		.q3 {
-			background-color: #b5cf6b;
-			fill: #669d45
-		}
-		.q4 {
-			background-color: #637939;
-			fill: #637939
-		}
-		.q5 {
-			background-color: #3b6427;
-			fill: #3b6427
-		}
-		.subdomain-text {
-			fill: $grey7;
-		}
-	}
+  #heatmap {
+    margin-bottom: -100px;
+    margin-top: 50px;
+    rect {
+      shape-rendering: auto;
+    }
+    .cal-heatmap-container {
+      margin: 25px auto;
+    }
+    .graph-label,
+    .graph-legend {
+      display: none;
+    }
+    .graph-rect {
+      cursor: inherit;
+      &:hover {
+        stroke: none;
+      }
+    }
+    .q1 {
+      background-color: #ededed;
+      fill: #ededed
+    }
+    .q2 {
+      background-color: #cedb9c;
+      fill: #9cc069
+    }
+    .q3 {
+      background-color: #b5cf6b;
+      fill: #669d45
+    }
+    .q4 {
+      background-color: #637939;
+      fill: #637939
+    }
+    .q5 {
+      background-color: #3b6427;
+      fill: #3b6427
+    }
+    .subdomain-text {
+      fill: $grey7;
+    }
+  }
 
-	#streak {
-		> div {
-			display: inline-block;
-		}
-		margin-top: 30px;
-		text-align: center;
-		.text {
-			font-family: $font-ubuntu;
-			font-size: 16px;
-			font-weight: 300;
-		}
-		.value {
-			color: #87a64b;
-			font-family: $font-slab;
-			font-size: 36px;
-			font-weight: 300;
-		}
-	}
+  #streak {
+    > div {
+      display: inline-block;
+    }
+    margin-top: 30px;
+    text-align: center;
+    .text {
+      font-family: $font-ubuntu;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .value {
+      color: #87a64b;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 300;
+    }
+  }
 
 }

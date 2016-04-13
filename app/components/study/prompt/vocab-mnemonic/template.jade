@@ -1,17 +1,17 @@
 gelato-component(data-name='study-prompt-vocab-mnemonic')
-	- var prompt = view.prompt;
+  - var prompt = view.prompt;
 
-	if prompt.reviews
-		- var mnemonic = prompt.reviews.vocab.getMnemonic();
+  if prompt.reviews
+    - var mnemonic = prompt.reviews.vocab.getMnemonic();
 
-		label Mnemonic
+    label Mnemonic
 
-		.value
-			if view.editing
-				textarea= mnemonic ? mnemonic.text : ''
-			else if !mnemonic || mnemonic.text === ''
-				em Click the 'edit' icon to add a mnemonic
-			else if prompt.review.get('showMnemonic') || prompt.reviews.isComplete()
-				span!= app.fn.textToHTML(mnemonic.text)
-			else
-				button#show-mnemonic.btn.btn-default show
+    .value
+      if view.editing
+        textarea= mnemonic ? mnemonic.text : ''
+      else if !mnemonic || mnemonic.text === ''
+        em Click the 'edit' icon to add a mnemonic
+      else if prompt.review.get('showMnemonic') || prompt.reviews.isComplete()
+        span!= app.fn.textToHTML(mnemonic.text)
+      else
+        button#show-mnemonic.btn.btn-default show

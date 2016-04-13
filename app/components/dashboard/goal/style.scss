@@ -2,35 +2,35 @@
 
 gelato-component[data-name='dashboard-goal'] {
 
-	margin-top: 30px;
+  margin-top: 30px;
 
-	.highcharts-container {
-		margin-left: auto;
-		.highcharts-title {
-			font-family: $font-slab;
-		}
-	}
+  .highcharts-container {
+    margin-left: auto;
+    .highcharts-title {
+      font-family: $font-slab;
+    }
+  }
 
-	#doughnut-column {
-		margin-left: 20px;
-	}
+  #doughnut-column {
+    margin-left: 20px;
+  }
 
-	#items-column {
-		margin-top: 40px;
-		.text {
-			color: #8c9196;
-			display: inline-block;
-			font-family: $font-ubuntu;
-			font-size: 16px;
-			font-weight: 300;
-		}
-		.value {
-			color: #87a64b;
-			display: inline-block;
-			font-family: $font-slab;
-			font-size: 36px;
-			font-weight: 300;
-		}
-	}
+  #items-column {
+    margin-top: 40px;
+    .text {
+      color: #8c9196;
+      display: inline-block;
+      font-family: $font-ubuntu;
+      font-size: 16px;
+      font-weight: 300;
+    }
+    .value {
+      color: #87a64b;
+      display: inline-block;
+      font-family: $font-slab;
+      font-size: 36px;
+      font-weight: 300;
+    }
+  }
 
 }

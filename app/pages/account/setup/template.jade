@@ -1,59 +1,59 @@
 gelato-page(data-name='account-setup')
 
-	#navbar-container
+  #navbar-container
 
-	section.container
+  section.container
 
-		.content-block
+    .content-block
 
-			form.form-horizontal
-				.text-center
-					#error-message.danger
-					h3 Let's setup your account!
-					p Select your basic account settings below to get started.
+      form.form-horizontal
+        .text-center
+          #error-message.danger
+          h3 Let's setup your account!
+          p Select your basic account settings below to get started.
 
-				.form-group
-					label.col-sm-3.control-label(for="field-language") Language
-					.col-sm-9
-						select#field-language.form-control
-							option(value="zh", selected=(view.settings.targetLang === 'zh')) Chinese
-							option(value="ja", selected=(view.settings.targetLang === 'ja')) Japanese
+        .form-group
+          label.col-sm-3.control-label(for="field-language") Language
+          .col-sm-9
+            select#field-language.form-control
+              option(value="zh", selected=(view.settings.targetLang === 'zh')) Chinese
+              option(value="ja", selected=(view.settings.targetLang === 'ja')) Japanese
 
-				if (view.settings.targetLang === 'zh')
-					.form-group
-						label.col-sm-3.control-label(for="field-styles") Styles
-						.col-sm-9#field-styles
-							label.checkbox-inline
-								input(type="checkbox", name="styles", value="simplified", checked=view.settings.addSimplified)
-								| Simplified
-							label.checkbox-inline
-								input(type="checkbox", name="styles", value="traditional", checked=view.settings.addTraditional)
-								| Traditional
+        if (view.settings.targetLang === 'zh')
+          .form-group
+            label.col-sm-3.control-label(for="field-styles") Styles
+            .col-sm-9#field-styles
+              label.checkbox-inline
+                input(type="checkbox", name="styles", value="simplified", checked=view.settings.addSimplified)
+                | Simplified
+              label.checkbox-inline
+                input(type="checkbox", name="styles", value="traditional", checked=view.settings.addTraditional)
+                | Traditional
 
-				.form-group
-					label.col-sm-3.control-label(for="field-country") Country
-					.col-sm-9
-						select#field-country.form-control
-							for name, code in view.countries
-								if code === view.settings.country
-									option(value=code, selected="selected")= name
-								else
-									option(value=code)= name
+        .form-group
+          label.col-sm-3.control-label(for="field-country") Country
+          .col-sm-9
+            select#field-country.form-control
+              for name, code in view.countries
+                if code === view.settings.country
+                  option(value=code, selected="selected")= name
+                else
+                  option(value=code)= name
 
-				.form-group
-					label.col-sm-3.control-label(for="field-timezone") Timezone
-					.col-sm-9
-						select#field-timezone.form-control
-							for timezone, code in view.timezones[view.settings.country]
-								if timezone === user.get('timezone')
-									option(value=timezone, selected="selected")= timezone
-								else
-									option(value=timezone)= timezone
+        .form-group
+          label.col-sm-3.control-label(for="field-timezone") Timezone
+          .col-sm-9
+            select#field-timezone.form-control
+              for timezone, code in view.timezones[view.settings.country]
+                if timezone === user.get('timezone')
+                  option(value=timezone, selected="selected")= timezone
+                else
+                  option(value=timezone)= timezone
 
-				.form-group
-					.col-sm-12.text-center
-						if view.state === 'saving'
-							button.btn.btn-fixed.btn-primary(type="submit", disabled=true)
-								i.fa.fa-2x.fa-spinner.fa-pulse
-						else
-							button#button-continue.btn.btn-fixed.btn-primary(type="submit") Continue
+        .form-group
+          .col-sm-12.text-center
+            if view.state === 'saving'
+              button.btn.btn-fixed.btn-primary(type="submit", disabled=true)
+                i.fa.fa-2x.fa-spinner.fa-pulse
+            else
+              button#button-continue.btn.btn-fixed.btn-primary(type="submit") Continue

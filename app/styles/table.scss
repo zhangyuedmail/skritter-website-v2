@@ -1,20 +1,20 @@
 @import "./variables";
 
 .table-oversized-wrapper {
-	margin: 0 -40px;
+  margin: 0 -40px;
 
-	tr.odd-row {
-		background-color: $white2;
-	}
-	tr.even-row {
-		background-color: $white1;
-	}
+  tr.odd-row {
+    background-color: $white2;
+  }
+  tr.even-row {
+    background-color: $white1;
+  }
 
-	.table > tbody > tr > td:first-child {
-		padding-left: 40px;
-	}
+  .table > tbody > tr > td:first-child {
+    padding-left: 40px;
+  }
 
-	.table > tbody > tr > td {
-		padding: 14px 8px;
-	}
+  .table > tbody > tr > td {
+    padding: 14px 8px;
+  }
 }

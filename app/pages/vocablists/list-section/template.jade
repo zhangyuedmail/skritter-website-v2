@@ -1,50 +1,50 @@
 gelato-page(data-name='vocablists-list-section')
-	- var editor = view.editor;
-	- var vocablist = view.vocablist;
-	- var vocablistSection = view.vocablistSection;
+  - var editor = view.editor;
+  - var vocablist = view.vocablist;
+  - var vocablistSection = view.vocablistSection;
 
-	#navbar-container
+  #navbar-container
 
-	section.container
-		.content-block
-			.row
+  section.container
+    .content-block
+      .row
 
-				.col-xs-12
+        .col-xs-12
 
-					if vocablist.state === 'fetching'
+          if vocablist.state === 'fetching'
 
-						.loading-section.text-center
-							i.fa.fa-3x.fa-spinner.fa-pulse
+            .loading-section.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
 
-					else
+          else
 
-						.content-details
-							.row
-								.col-xs-6
-									.list-name
-										a#back-link(href='/vocablists/view/' + vocablist.id)
-											i.fa.fa-angle-left
-											| &nbsp;
-											span= vocablist.get('name')
-									if editor.editing
-										input#section-name(value=vocablistSection.get('name'))
-									else
-										#section-name= vocablistSection.get('name') || '(empty)'
-								.col-xs-6.text-right
-									#editing-buttons
-										if vocablist.isEditable()
-											if editor.editing
-												button#save-changes.btn.btn-success
-													i.fa.fa-save &nbsp;Save&nbsp;
-												button#discard-changes.btn.btn-danger
-													i.fa.fa-close &nbsp;Discard&nbsp;
-											else
-												button#edit-section.btn.btn-success
-													i.fa.fa-pencil &nbsp;Edit&nbsp;
+            .content-details
+              .row
+                .col-xs-6
+                  .list-name
+                    a#back-link(href='/vocablists/view/' + vocablist.id)
+                      i.fa.fa-angle-left
+                      | &nbsp;
+                      span= vocablist.get('name')
+                  if editor.editing
+                    input#section-name(value=vocablistSection.get('name'))
+                  else
+                    #section-name= vocablistSection.get('name') || '(empty)'
+                .col-xs-6.text-right
+                  #editing-buttons
+                    if vocablist.isEditable()
+                      if editor.editing
+                        button#save-changes.btn.btn-success
+                          i.fa.fa-save &nbsp;Save&nbsp;
+                        button#discard-changes.btn.btn-danger
+                          i.fa.fa-close &nbsp;Discard&nbsp;
+                      else
+                        button#edit-section.btn.btn-success
+                          i.fa.fa-pencil &nbsp;Edit&nbsp;
 
-						#editor-container
+            #editor-container
 
-						if editor.editing && vocablist.isEditable()
-							#input-row.row
-								.col-xs-12
-									input#add-input(type='text', placeholder='Type a word and hit enter')
+            if editor.editing && vocablist.isEditable()
+              #input-row.row
+                .col-xs-12
+                  input#add-input(type='text', placeholder='Type a word and hit enter')

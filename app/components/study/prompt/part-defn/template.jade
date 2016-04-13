@@ -1,17 +1,17 @@
 gelato-component(data-name="study-prompt-part-defn")
-	- var prompt = view.prompt;
+  - var prompt = view.prompt;
 
-	if prompt.reviews.part === 'defn' && prompt.reviews
-		- var vocab = prompt.reviews.vocab;
+  if prompt.reviews.part === 'defn' && prompt.reviews
+    - var vocab = prompt.reviews.vocab;
 
-		.writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
-			span= vocab.get('writing')
+    .writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')
+      span= vocab.get('writing')
 
-		if prompt.reviews.isComplete()
-			.answer
-				if app.user.get('showHeisig') && vocab.has('heisigDefinition')
-					em!= vocab.get('heisigDefinition') + ' - '
-				span!= vocab.getDefinition()
-		else
-			.question
-				span What's the definition?
+    if prompt.reviews.isComplete()
+      .answer
+        if app.user.get('showHeisig') && vocab.has('heisigDefinition')
+          em!= vocab.get('heisigDefinition') + ' - '
+        span!= vocab.getDefinition()
+    else
+      .question
+        span What's the definition?

@@ -1,14 +1,14 @@
 gelato-component(data-name="study-prompt-review-status")
-	- var prompt = view.prompt;
+  - var prompt = view.prompt;
 
-	if prompt.reviews
-		if view.reviews
+  if prompt.reviews
+    if view.reviews
 
-			if view.reviews.length
-				if view.reviews.state === 'standby'
-					button#save-reviews.btn.btn-sm.btn-success= 'Save (' + view.reviews.length + ')'
-				else
-					#loading-indicator
-						.spinner1
-							.double-bounce1
-							.double-bounce2
+      if view.reviews.length
+        if view.reviews.state === 'standby'
+          button#save-reviews.btn.btn-sm.btn-success= 'Save (' + view.reviews.length + ')'
+        else
+          #loading-indicator
+            .spinner1
+              .double-bounce1
+              .double-bounce2

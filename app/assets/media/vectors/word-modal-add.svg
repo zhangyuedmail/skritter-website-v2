@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
-		 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-	<!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
-	<title>word-modal-add</title>
-	<desc>Created with Sketch.</desc>
-	<defs></defs>
-	<g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-		<g id="word-modal-add" sketch:type="MSArtboardGroup" fill="#87A64B">
-			<g id="modal-add" sketch:type="MSLayerGroup">
-				<path
-					d="M9,0.6 C4.361,0.6 0.6,4.361 0.6,9 C0.6,13.639 4.361,17.4 9,17.4 C13.639,17.4 17.4,13.639 17.4,9 C17.4,4.361 13.639,0.6 9,0.6 L9,0.6 Z M14,10 L10,10 L10,14 L8,14 L8,10 L4,10 L4,8 L8,8 L8,4 L10,4 L10,8 L14,8 L14,10 L14,10 Z"
-					id="Shape" sketch:type="MSShapeGroup"></path>
-			</g>
-		</g>
-	</g>
+     xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>word-modal-add</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="word-modal-add" sketch:type="MSArtboardGroup" fill="#87A64B">
+            <g id="modal-add" sketch:type="MSLayerGroup">
+                <path
+                        d="M9,0.6 C4.361,0.6 0.6,4.361 0.6,9 C0.6,13.639 4.361,17.4 9,17.4 C13.639,17.4 17.4,13.639 17.4,9 C17.4,4.361 13.639,0.6 9,0.6 L9,0.6 Z M14,10 L10,10 L10,14 L8,14 L8,10 L4,10 L4,8 L8,8 L8,4 L10,4 L10,8 L14,8 L14,10 L14,10 Z"
+                        id="Shape" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
 </svg>

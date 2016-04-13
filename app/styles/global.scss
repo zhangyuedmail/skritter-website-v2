@@ -1,55 +1,55 @@
 @import "_variables";
 
 body {
-	font-family: $font-ubuntu;
+  font-family: $font-ubuntu;
 }
 
 .background1 {
-	background: url("#{$dir-assets}/textures/bg-retina-wood.png") repeat;
+  background: url("#{$dir-assets}/textures/bg-retina-wood.png") repeat;
 }
 
 .background2 {
-	background: url("#{$dir-assets}/textures/bg-characters.png") repeat;
+  background: url("#{$dir-assets}/textures/bg-characters.png") repeat;
 }
 
 .background3 {
-	background: url("#{$dir-assets}/backgrounds/landscape4.jpg") no-repeat center center fixed;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+  background: url("#{$dir-assets}/backgrounds/landscape4.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .content-block {
-	background-color: $white1;
-	border-radius: 25px;
-	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
-	margin-bottom: 30px;
-	padding: 15px;
-	position: relative;
+  background-color: $white1;
+  border-radius: 25px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.15);
+  margin-bottom: 30px;
+  padding: 15px;
+  position: relative;
 }
 
 .no-select {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .text-chinese {
-	font-family: "KaiTi", "SimSun", "Microsoft YaHei", "Arial Unicode MS", serif;
+  font-family: "KaiTi", "SimSun", "Microsoft YaHei", "Arial Unicode MS", serif;
 }
 
 .text-japanese {
-	font-family: "DFKaiSho-Md", "Meiryo", "MS Gothic", "Arial Unicode MS", serif;
+  font-family: "DFKaiSho-Md", "Meiryo", "MS Gothic", "Arial Unicode MS", serif;
 }
 
 .spr:after {
-	content: " "
+  content: " "
 }
 
 .spl:before {
-	content: " "
+  content: " "
 }

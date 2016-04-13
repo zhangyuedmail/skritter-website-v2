@@ -6,9 +6,9 @@ var Decomp = require('models/decomp');
  * @extends {GelatoCollection}
  */
 module.exports = GelatoCollection.extend({
-	/**
-	 * @property model
-	 * @type {Decomp}
-	 */
-	model: Decomp
+    /**
+     * @property model
+     * @type {Decomp}
+     */
+    model: Decomp
 });

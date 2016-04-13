@@ -1,89 +1,89 @@
 gelato-page(data-name='vocablists-list')
-	- var editor = view.editor;
-	- var vocablist = view.vocablist;
+  - var editor = view.editor;
+  - var vocablist = view.vocablist;
 
-	#navbar-container
+  #navbar-container
 
-	section.container
-		.content-block
-			.row
+  section.container
+    .content-block
+      .row
 
-				.col-md-3.sidebar
-					#sidebar-container
+        .col-md-3.sidebar
+          #sidebar-container
 
-				.col-md-9.content
-					if vocablist.state === 'fetching'
+        .col-md-9.content
+          if vocablist.state === 'fetching'
 
-						p.text-center
-							i.fa.fa-3x.fa-spinner.fa-pulse
+            p.text-center
+              i.fa.fa-3x.fa-spinner.fa-pulse
 
-					else
+          else
 
-						.content-details
+            .content-details
 
-							.row
-								.col-xs-6
-									if view.editing
-										input.list-name(value=vocablist.get('name'))
-									else
-										.list-name= vocablist.get('name')
-								.col-xs-6.text-right
-									if vocablist.isEditable()
-										#editing-buttons
-											if editor.editing
-												button#save-changes.btn.btn-success
-													i.fa.fa-save &nbsp;Save&nbsp;
-												button#discard-changes.btn.btn-danger
-													i.fa.fa-close &nbsp;Discard&nbsp;
-											else
-												button#edit-list.btn.btn-success
-													i.fa.fa-pencil &nbsp;Edit&nbsp;
+              .row
+                .col-xs-6
+                  if view.editing
+                    input.list-name(value=vocablist.get('name'))
+                  else
+                    .list-name= vocablist.get('name')
+                .col-xs-6.text-right
+                  if vocablist.isEditable()
+                    #editing-buttons
+                      if editor.editing
+                        button#save-changes.btn.btn-success
+                          i.fa.fa-save &nbsp;Save&nbsp;
+                        button#discard-changes.btn.btn-danger
+                          i.fa.fa-close &nbsp;Discard&nbsp;
+                      else
+                        button#edit-list.btn.btn-success
+                          i.fa.fa-pencil &nbsp;Edit&nbsp;
 
-							.list-stats
-								span.spr Made by:
-								if vocablist.get('sort') === 'official'
-									span Skritter
-								else if vocablist.get('sort') === 'chinesepod-lesson'
-									span ChinesePod
-								else if vocablist.get('creator') === app.user.id
-									span= app.user.get('name') || app.user.id
-								else
-									if creator && creator.state === 'standby'
-										span= creator.get('name') || creator.id
-									else
-										span(data-user-id=vocablist.get('creator')) Unknown
-								span.spl.spr |
+              .list-stats
+                span.spr Made by:
+                if vocablist.get('sort') === 'official'
+                  span Skritter
+                else if vocablist.get('sort') === 'chinesepod-lesson'
+                  span ChinesePod
+                else if vocablist.get('creator') === app.user.id
+                  span= app.user.get('name') || app.user.id
+                else
+                  if creator && creator.state === 'standby'
+                    span= creator.get('name') || creator.id
+                  else
+                    span(data-user-id=vocablist.get('creator')) Unknown
+                span.spl.spr |
 
-								if vocablist.get('published')
-									span.spr Published:
-									span= moment(vocablist.get('published') * 1000).format('LL')
-									span.spl.spr |
+                if vocablist.get('published')
+                  span.spr Published:
+                  span= moment(vocablist.get('published') * 1000).format('LL')
+                  span.spl.spr |
 
-								if vocablist.get('published') && vocablist.get('peopleStudying')
-									span.spr Studied by:
-									span= vocablist.get('peopleStudying')
-									span.spl.spr |
+                if vocablist.get('published') && vocablist.get('peopleStudying')
+                  span.spr Studied by:
+                  span= vocablist.get('peopleStudying')
+                  span.spl.spr |
 
-								span.spr Words:
-								span= vocablist.getWordCount()
+                span.spr Words:
+                span= vocablist.getWordCount()
 
-							if view.editing
-								textarea.list-description= vocablist.get('description')
-							else
-								.list-description= vocablist.get('description')
+              if view.editing
+                textarea.list-description= vocablist.get('description')
+              else
+                .list-description= vocablist.get('description')
 
-							hr
+              hr
 
-							if vocablist.get('sections').length > 1
-								.list-sections-header Sections
+              if vocablist.get('sections').length > 1
+                .list-sections-header Sections
 
-						#editor-container
+            #editor-container
 
-						if !vocablist.get('singleSect')
-							if vocablist.isEditable() && view.editing
-								#input-row.row
-									.col-xs-12
-										button#add-section.btn.btn-success
-											i.fa.fa-plus
-											| &nbsp;&nbsp;
-											| Add section
+            if !vocablist.get('singleSect')
+              if vocablist.isEditable() && view.editing
+                #input-row.row
+                  .col-xs-12
+                    button#add-section.btn.btn-success
+                      i.fa.fa-plus
+                      | &nbsp;&nbsp;
+                      | Add section
