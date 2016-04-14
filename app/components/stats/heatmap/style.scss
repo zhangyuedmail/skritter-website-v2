@@ -3,16 +3,26 @@
 gelato-component[data-name='stats-heatmap'] {
   .heatmap {
     height: 150px;
-    rect { shape-rendering: auto; }
-    .cal-heatmap-container { margin: 25px auto; }
+    rect {
+      shape-rendering: auto;
+    }
+    .cal-heatmap-container {
+      margin: 25px auto;
+    }
     .graph-label,
-    .graph-legend { display: none; }
+    .graph-legend {
+      display: none;
+    }
     .graph-rect {
       cursor: inherit;
-      &:hover { stroke: none; }
+      &:hover {
+        stroke: none;
+      }
     }
 
-    .subdomain-text { fill: $grey7; }
+    .subdomain-text {
+      fill: $grey7;
+    }
   }
 
   .q1 {
