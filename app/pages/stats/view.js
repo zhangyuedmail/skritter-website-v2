@@ -32,7 +32,7 @@ module.exports = GelatoPage.extend({
     },
 
     events: {
-        'vclick .stats-section-selector': 'handleStatsSectionSelectorClicked'
+        'click .stats-section-selector': 'handleStatsSectionSelectorClicked'
     },
 
     /**
@@ -88,9 +88,9 @@ module.exports = GelatoPage.extend({
             this._views[toShowSection].onTabVisible();
         }
     },
-    
+
     /**
-     * 
+     *
      * @param {jQuery.Event} event a click event
      */
     handleStatsSectionSelectorClicked: function(event) {
