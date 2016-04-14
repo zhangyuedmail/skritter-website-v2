@@ -143,7 +143,7 @@ module.exports = SkritterCollection.extend({
    * @returns {Number}
    */
   getAllTimeCharactersLearned: function() {
-    return this.length ? this.at(0).get('char').rune.learned.all : 0;
+    return this.getItemsLearnedForPeriod('char', 'all');
   },
 
   /**
@@ -151,7 +151,7 @@ module.exports = SkritterCollection.extend({
    * @returns {Number}
    */
   getAllTimeWordsLearned: function() {
-    return this.length ? this.at(0).get('word').rune.learned.all : 0;
+    return this.getItemsLearnedForPeriod('word', 'all');
   },
 
   /**
@@ -176,6 +176,34 @@ module.exports = SkritterCollection.extend({
     var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
       minutes ? minutes + ':' + seconds :
         seconds;
+    return {
+      amount: amount,
+      units: largestUnit
+    };
+  },
+
+  getAverageTimeStudied: function() {
+    var avgTime = 0;
+
+    for (var i = 0; i < this.length; i++) {
+      avgTime += this.at(i).get('timeStudied').day;
+    }
+
+    return this.convertToLargestTimeUnit(avgTime / (this.length || 1));
+  },
+
+  convertToLargestTimeUnit: function(time) {
+    var seconds = Math.floor(time) % 60;
+    var minutes = Math.floor(time / 60) % 60;
+    var hours = Math.floor(time / 3600);
+
+    var largestUnit = hours ? 'hours' :
+      minutes ? 'minutes' :
+        'seconds';
+    var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
+      minutes ? minutes + ':' + seconds :
+        seconds;
+
     return {
       amount: amount,
       units: largestUnit
@@ -304,5 +332,12 @@ module.exports = SkritterCollection.extend({
       }
     }
     return bestStreak;
+  },
+
+  getItemsLearnedForPeriod: function(itemType, timePeriod) {
+    itemType = itemType || 'word';
+    timePeriod = timePeriod || 'month';
+
+    return this.length ? this.at(0).get(itemType).rune.learned[timePeriod] : 0;
   }
 });
