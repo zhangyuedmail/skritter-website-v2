@@ -40,6 +40,7 @@ module.exports = GelatoComponent.extend({
     render: function() {
         this.renderTemplate();
         this.timer.setElement('#timer-container').render();
+        this.updateDueCount();
         return this;
     },
     /**
@@ -112,6 +113,47 @@ module.exports = GelatoComponent.extend({
     remove: function() {
         this.timer.remove();
         return this;
+    },
+    /**
+     * @method updateDueCount
+     */
+    updateDueCount: function() {
+        var self = this;
+        var count = 0;
+        var lang = app.getLanguage();
+        var now = moment().unix();
+        var parts = app.user.getFilteredParts();
+        var styles = app.user.getFilteredStyles();
+        app.user.db.items
+            .where('next')
+            .belowOrEqual(now)
+            .toArray()
+            .then(function(items) {
+                _.forEach(
+                    items,
+                    function(item) {
+                        if (!item.vocabIds.length) {
+                            return;
+                        } else if (item.lang !== lang) {
+                            return
+                        } else if (!_.includes(parts, item.part)) {
+                            return;
+                        } else if (!_.includes(styles, item.style)) {
+                            return;
+                        }
+                        if (!item.last) {
+                            count++;
+                            return;
+                        }
+                        var readiness = (now - item.last) / (item.next - item.last);
+                        if (readiness >= 1.0) {
+                            count++;
+                        }
+                    }
+                );
+                self.dueCount = count;
+                self.render();
+            });
     },
     /**
      * @method updateTimerOffset
