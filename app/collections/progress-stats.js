@@ -41,7 +41,11 @@ module.exports = SkritterCollection.extend({
    * @returns Array
    */
   parse: function(response) {
-    return response.ProgressStats;
+    var now = moment().startOf('day').toDate();
+    var stats = response.ProgressStats.filter(function(s) {
+      return Date.parse(s.date) <= now;
+    });
+    return stats;
   },
 
   /**
