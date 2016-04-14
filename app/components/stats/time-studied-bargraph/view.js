@@ -41,6 +41,15 @@ module.exports = GelatoComponent.extend({
         categories: this._getLastWeekLabels()
       },
       yAxis: {
+        dateTimeLabelFormats: {
+          second: '%H:%M',
+          minute: '%H:%M',
+          hour: '%H:%M',
+          day: '%H:%M',
+          week: '%H:%M',
+          month: '%H:%M',
+          year: '%H:%M'
+        },
         type: 'datetime',
         title: {
           text: 'hours:min'
@@ -52,17 +61,9 @@ module.exports = GelatoComponent.extend({
       },
       series: [{
         data: [0, 0, 0, 0, 0, 0, 0],
-        showInLegend: false,
+        showInLegend: false
       }],
-      dateTimeLabelFormats: {
-        second: '%H:%M:%S',
-        minute: '%H:%M:%S',
-        hour: '%H:%M:%S',
-        day: '%H:%M:%S',
-        week: '%H:%M:%S',
-        month: '%H:%M:%S',
-        year: '%H:%M:%S'
-      },
+
       tooltip: {
         useHTML: true,
         pointFormat: '{point.y} seconds studied'
@@ -79,24 +80,13 @@ module.exports = GelatoComponent.extend({
     var chartData = this.$('#bargraph').highcharts().series[0];
     var data = [];
     var length = this.collection.length > 6 ? 6 : this.collection.length - 1;
+
     for (var i = length; i >= 0; i--) {
       var stat = this.collection.at(i);
       data.push(Math.floor(stat.get('timeStudied').day * 1000));
     }
-    console.log(data);
-    // TODO: figure out date formats for graph
+
     chartData.setData(data);
-    /*
-    [
-      1 * 60 * 1000,
-      2 * 60 * 1000,
-      3 * 60 * 1000,
-      4 * 60 * 1000,
-      5 * 60 * 1000,
-      6 * 60 * 1000,
-      7 * 60 * 1000
-    ]
-     */
   },
 
   redrawGraph: function() {
