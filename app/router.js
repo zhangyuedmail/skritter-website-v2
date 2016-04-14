@@ -27,6 +27,7 @@ module.exports = Router.extend({
         'account/settings/study': 'navigateAccountSettingsStudy',
         'account/settings-study': 'navigateAccountSettingsStudy', //LEGACY
         'account/setup': 'navigateAccountSetup',
+        'admin': 'navigateAdmin', 
         'contact': 'navigateContact',
         'dashboard': 'navigateDashboard',
         'demo': 'navigateDemo',
@@ -104,6 +105,7 @@ module.exports = Router.extend({
         this.navigate('about');
         this.go('pages/about');
     },
+
     /**
      * @method navigateAccount
      */
