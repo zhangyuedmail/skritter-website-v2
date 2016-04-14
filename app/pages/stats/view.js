@@ -7,12 +7,12 @@ var StatsTimelineComponent = require('components/stats/timeline/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-  /**
-   * @method initialize
-   * @constructor
-   */
-  initialize: function() {
-    this.statsCollection = new ProgressStats();
+    /**
+     * @method initialize
+     * @constructor
+     */
+    initialize: function() {
+        this.statsCollection = new ProgressStats();
 
     // TODO: better this
     this.statsCollection.fetchMonth();
