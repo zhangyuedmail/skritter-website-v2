@@ -53,5 +53,13 @@ module.exports = GelatoComponent.extend({
     this.heatmap.update(this.collection.getMonthlyHeatmapData());
     this.$('#current-streak').text(this.collection.getMonthlyStreak(true));
     this.$('#longest-streak').text(this.collection.getMonthlyStreak());
+
+    var avgTimeStudied = this.collection.getAverageTimeStudied();
+    this.$('#avg-time-studied-amount').text(avgTimeStudied.amount);
+    this.$('#avg-time-studied-units').text(avgTimeStudied.units);
+
+    var itemsLearned = this.collection.getItemsLearnedForPeriod('word', 'month') +
+      this.collection.getItemsLearnedForPeriod('char', 'month');
+    this.$('#items-studied').text(itemsLearned);
   }
 });
