@@ -7,16 +7,16 @@ var ParamData = require('data/param-data');
  * @extends {GelatoCollection}
  */
 module.exports = GelatoCollection.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.add(ParamData.getData());
-    },
-    /**
-     * @property model
-     * @type {StrokeParam}
-     */
-    model: StrokeParam
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.add(ParamData.getData());
+  },
+  /**
+   * @property model
+   * @type {StrokeParam}
+   */
+  model: StrokeParam
 });

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="16px" height="18px" viewBox="0 0 16 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
-    <title>word-modal-edit</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="word-modal-edit" sketch:type="MSArtboardGroup" fill="#87A64B">
-            <g id="modal-edit" sketch:type="MSLayerGroup">
-                <path
-                        d="M12.69,1.661 C10.796,0.282 9.448,0.312 8.936,0.395 C8.792,0.418 8.671,0.501 8.586,0.618 L3.966,6.992 L1.703,10.115 C1.426,10.497 1.266,10.951 1.241,11.422 L0.945,17.046 C0.924,17.451 1.327,17.744 1.705,17.599 L6.961,15.589 C7.404,15.419 7.789,15.124 8.067,14.74 L9.911,12.195 L14.947,5.246 C15.036,5.123 15.072,4.973 15.047,4.823 C14.963,4.297 14.56,3.021 12.69,1.661 L12.69,1.661 Z M6.977,14.465 L4.934,15.254 C4.854,15.285 4.765,15.26 4.713,15.192 C4.45,14.857 4.137,14.525 3.638,14.162 C3.139,13.8 2.727,13.604 2.328,13.456 C2.248,13.426 2.197,13.35 2.202,13.264 L2.324,11.078 L2.873,10.323 C2.873,10.323 4.102,10.154 5.706,11.321 C7.308,12.487 7.527,13.709 7.527,13.709 L6.977,14.465 L6.977,14.465 Z"
-                        id="Shape" sketch:type="MSShapeGroup"></path>
-            </g>
-        </g>
+  <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+  <title>word-modal-edit</title>
+  <desc>Created with Sketch.</desc>
+  <defs></defs>
+  <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+    <g id="word-modal-edit" sketch:type="MSArtboardGroup" fill="#87A64B">
+      <g id="modal-edit" sketch:type="MSLayerGroup">
+        <path
+          d="M12.69,1.661 C10.796,0.282 9.448,0.312 8.936,0.395 C8.792,0.418 8.671,0.501 8.586,0.618 L3.966,6.992 L1.703,10.115 C1.426,10.497 1.266,10.951 1.241,11.422 L0.945,17.046 C0.924,17.451 1.327,17.744 1.705,17.599 L6.961,15.589 C7.404,15.419 7.789,15.124 8.067,14.74 L9.911,12.195 L14.947,5.246 C15.036,5.123 15.072,4.973 15.047,4.823 C14.963,4.297 14.56,3.021 12.69,1.661 L12.69,1.661 Z M6.977,14.465 L4.934,15.254 C4.854,15.285 4.765,15.26 4.713,15.192 C4.45,14.857 4.137,14.525 3.638,14.162 C3.139,13.8 2.727,13.604 2.328,13.456 C2.248,13.426 2.197,13.35 2.202,13.264 L2.324,11.078 L2.873,10.323 C2.873,10.323 4.102,10.154 5.706,11.321 C7.308,12.487 7.527,13.709 7.527,13.709 L6.977,14.465 L6.977,14.465 Z"
+          id="Shape" sketch:type="MSShapeGroup"></path>
+      </g>
     </g>
+  </g>
 </svg>

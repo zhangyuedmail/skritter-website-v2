@@ -6,30 +6,30 @@ var SkritterCollection = require('base/skritter-collection');
  * @extends {SkritterCollection}
  */
 module.exports = SkritterCollection.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.cursor = null;
-    },
-    /**
-     * @property model
-     * @type {Vocablist}
-     */
-    model: Payment,
-    /**
-     * @method parse
-     * @param {Object} response
-     * @returns Array
-     */
-    parse: function(response) {
-        this.cursor = response.cursor;
-        return response.Payments;
-    },
-    /**
-     * @property url
-     * @type {String}
-     */
-    url: 'payments'
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.cursor = null;
+  },
+  /**
+   * @property model
+   * @type {Vocablist}
+   */
+  model: Payment,
+  /**
+   * @method parse
+   * @param {Object} response
+   * @returns Array
+   */
+  parse: function(response) {
+    this.cursor = response.cursor;
+    return response.Payments;
+  },
+  /**
+   * @property url
+   * @type {String}
+   */
+  url: 'payments'
 });

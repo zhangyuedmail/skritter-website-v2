@@ -5,20 +5,20 @@ var GelatoModel = require('gelato/model');
  * @extends {GelatoModel}
  */
 module.exports = GelatoModel.extend({
-    /**
-     * @property idAttribute
-     * @type {String}
-     */
-    idAttribute: 'id',
-    /**
-     * @method defaults
-     * @returns {Object}
-     */
-    defaults: function() {
-        return {
-            contains: [],
-            corners: [],
-            strokeId: undefined
-        };
-    }
+  /**
+   * @property idAttribute
+   * @type {String}
+   */
+  idAttribute: 'id',
+  /**
+   * @method defaults
+   * @returns {Object}
+   */
+  defaults: function() {
+    return {
+      contains: [],
+      corners: [],
+      strokeId: undefined
+    };
+  }
 });

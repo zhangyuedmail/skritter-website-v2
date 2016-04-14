@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="19px" height="18px" viewBox="0 0 19 18" version="1.1" xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
-    <title>list-publish-modal-close</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="list-publish-modal-close" sketch:type="MSArtboardGroup" transform="translate(0.400000, 0.000000)"
-           fill="#666C73">
-            <g id="circle-with-cross" sketch:type="MSLayerGroup">
-                <path
-                        d="M9,0.6 C4.361,0.6 0.6,4.361 0.6,9 C0.6,13.639 4.361,17.4 9,17.4 C13.639,17.4 17.4,13.639 17.4,9 C17.4,4.361 13.639,0.6 9,0.6 L9,0.6 Z M13.789,12.061 L12.06,13.79 L9,10.729 L5.939,13.789 L4.21,12.06 L7.272,9 L4.211,5.939 L5.94,4.211 L9,7.271 L12.061,4.21 L13.79,5.939 L10.728,9 L13.789,12.061 L13.789,12.061 Z"
-                        id="Shape" sketch:type="MSShapeGroup"></path>
-            </g>
-        </g>
+  <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+  <title>list-publish-modal-close</title>
+  <desc>Created with Sketch.</desc>
+  <defs></defs>
+  <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+    <g id="list-publish-modal-close" sketch:type="MSArtboardGroup" transform="translate(0.400000, 0.000000)"
+       fill="#666C73">
+      <g id="circle-with-cross" sketch:type="MSLayerGroup">
+        <path
+          d="M9,0.6 C4.361,0.6 0.6,4.361 0.6,9 C0.6,13.639 4.361,17.4 9,17.4 C13.639,17.4 17.4,13.639 17.4,9 C17.4,4.361 13.639,0.6 9,0.6 L9,0.6 Z M13.789,12.061 L12.06,13.79 L9,10.729 L5.939,13.789 L4.21,12.06 L7.272,9 L4.211,5.939 L5.94,4.211 L9,7.271 L12.061,4.21 L13.79,5.939 L10.728,9 L13.789,12.061 L13.789,12.061 Z"
+          id="Shape" sketch:type="MSShapeGroup"></path>
+      </g>
     </g>
+  </g>
 </svg>

@@ -5,9 +5,9 @@ var GelatoModel = require('gelato/model');
  * @extends {GelatoModel}
  */
 module.exports = GelatoModel.extend({
-    /**
-     * @property idAttribute
-     * @type String
-     */
-    idAttribute: 'writing'
+  /**
+   * @property idAttribute
+   * @type String
+   */
+  idAttribute: 'writing'
 });

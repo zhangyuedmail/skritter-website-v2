@@ -5,62 +5,62 @@ var SkritterModel = require('base/skritter-model');
  * @extends {SkritterModel}
  */
 module.exports = SkritterModel.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.wasUsed = false;
-        this.error = '';
-    },
-    /**
-     * @property idAttribute
-     * @type {String}
-     */
-    idAttribute: 'id',
-    /**
-     * @property urlRoot
-     */
-    urlRoot: 'coupons',
-    /**
-     * @method parse
-     * @returns {Object}
-     */
-    parse: function(response) {
-        return response.Coupon || response;
-    },
-    /**
-     * @method use
-     * @returns {jqXHR|null}
-     */
-    use: function() {
-        this.error = '';
-        if (!this.get('code')) {
-            this.error = 'No code provided';
-            return;
-        }
-        this.listenToOnce(this, 'sync', this.useSync);
-        this.listenToOnce(this, 'error', this.useError);
-        return this.save(null, {
-            url: app.getApiUrl() + 'coupons/' + this.get('code') + '/use',
-            method: 'POST'
-        });
-    },
-    /**
-     * @method useError
-     * @param {Coupon}
-     * @param {jqXHR}
-     */
-    useError: function(model, jqxhr) {
-        this.error = jqxhr.responseJSON.message;
-        this.stopListening(this, 'sync', this.useSync);
-    },
-    /**
-     * @method useSync
-     */
-    useSync: function(model, response) {
-        this.subscriptionAttributes = response.Subscription;
-        this.wasUsed = true;
-        this.stopListening(this, 'error', this.useError);
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.wasUsed = false;
+    this.error = '';
+  },
+  /**
+   * @property idAttribute
+   * @type {String}
+   */
+  idAttribute: 'id',
+  /**
+   * @property urlRoot
+   */
+  urlRoot: 'coupons',
+  /**
+   * @method parse
+   * @returns {Object}
+   */
+  parse: function(response) {
+    return response.Coupon || response;
+  },
+  /**
+   * @method use
+   * @returns {jqXHR|null}
+   */
+  use: function() {
+    this.error = '';
+    if (!this.get('code')) {
+      this.error = 'No code provided';
+      return;
     }
+    this.listenToOnce(this, 'sync', this.useSync);
+    this.listenToOnce(this, 'error', this.useError);
+    return this.save(null, {
+      url: app.getApiUrl() + 'coupons/' + this.get('code') + '/use',
+      method: 'POST'
+    });
+  },
+  /**
+   * @method useError
+   * @param {Coupon}
+   * @param {jqXHR}
+   */
+  useError: function(model, jqxhr) {
+    this.error = jqxhr.responseJSON.message;
+    this.stopListening(this, 'sync', this.useSync);
+  },
+  /**
+   * @method useSync
+   */
+  useSync: function(model, response) {
+    this.subscriptionAttributes = response.Subscription;
+    this.wasUsed = true;
+    this.stopListening(this, 'error', this.useError);
+  }
 });

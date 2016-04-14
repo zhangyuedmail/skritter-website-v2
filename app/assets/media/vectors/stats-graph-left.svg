@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="20px" height="36px" viewBox="0 0 20 36" version="1.1" xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
-    <title>stats-graph-left</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="stats-graph-left" sketch:type="MSArtboardGroup" fill="#EAEAEA">
-            <path
-                    d="M19.563091,33.5263617 C20.1456363,34.0956516 20.1456363,35.0102829 19.563091,35.5753868 C18.9805456,36.1404908 18.0393435,36.1425837 17.4567982,35.5753868 L0.436909032,19.0241199 C-0.145636344,18.459016 -0.145636344,17.5443848 0.436909032,16.9750948 L17.4567982,0.423827965 C18.0393435,-0.141275988 18.9805456,-0.141275988 19.563091,0.423827965 C20.1456363,0.991024895 20.1456363,1.90774909 19.563091,2.47285304 L4.04086512,18.0006539 L19.563091,33.5263617 L19.563091,33.5263617 Z"
-                    id="study-previous-light" sketch:type="MSShapeGroup"></path>
-        </g>
+  <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+  <title>stats-graph-left</title>
+  <desc>Created with Sketch.</desc>
+  <defs></defs>
+  <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+    <g id="stats-graph-left" sketch:type="MSArtboardGroup" fill="#EAEAEA">
+      <path
+        d="M19.563091,33.5263617 C20.1456363,34.0956516 20.1456363,35.0102829 19.563091,35.5753868 C18.9805456,36.1404908 18.0393435,36.1425837 17.4567982,35.5753868 L0.436909032,19.0241199 C-0.145636344,18.459016 -0.145636344,17.5443848 0.436909032,16.9750948 L17.4567982,0.423827965 C18.0393435,-0.141275988 18.9805456,-0.141275988 19.563091,0.423827965 C20.1456363,0.991024895 20.1456363,1.90774909 19.563091,2.47285304 L4.04086512,18.0006539 L19.563091,33.5263617 L19.563091,33.5263617 Z"
+        id="study-previous-light" sketch:type="MSShapeGroup"></path>
     </g>
+  </g>
 </svg>
