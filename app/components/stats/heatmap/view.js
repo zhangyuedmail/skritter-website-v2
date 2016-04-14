@@ -51,5 +51,7 @@ module.exports = GelatoComponent.extend({
 
   update: function() {
     this.heatmap.update(this.collection.getMonthlyHeatmapData());
+    this.$('#current-streak').text(this.collection.getMonthlyStreak(true));
+    this.$('#longest-streak').text(this.collection.getMonthlyStreak());
   }
 });
