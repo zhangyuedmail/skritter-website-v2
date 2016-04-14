@@ -11,11 +11,13 @@ gelato-component(data-name='stats-heatmap')
   #heatmap.heatmap
   .row.numbers
     .col-md-3.data-section
-      .num-hero 1924
-      .units-label items studied
+      #items-studied.num-hero ...
+      .units-label items learned
     .col-md-3.data-section
-      .num-hero 30:24
-      .units-label mins per day
+      #avg-time-studied-amount.num-hero ...
+      .units-label
+        #avg-time-studied-units
+        | per day
     .col-md-3.data-section
       #longest-streak.num-hero ...
       .units-label longest streak
