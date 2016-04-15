@@ -18,8 +18,8 @@ module.exports = GelatoComponent.extend({
    * @type Object
    */
   events: {
-    'vmousedown button': 'handleMousedownButton',
-    'vmouseup button': 'handleMouseupButton'
+    'mousedown button': 'handleMousedownButton',
+    'mouseup button': 'handleMouseupButton'
   },
   /**
    * @property template
