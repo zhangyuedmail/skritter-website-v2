@@ -9,6 +9,31 @@ gelato-component[data-name='stats-timeline'] {
     color: $grey5;
   }
 
+  .granularity-selector {
+    background-color: $white3;
+    cursor: pointer;
+
+    // thx, bootstrap
+    border: 0px !important;
+    outline: 0 !important;
+
+    &:hover {
+      color: $grey4;
+    }
+  }
+
+  .date-range-selector {
+    color: $grey5;
+
+    &:hover {
+      color: $grey4;
+    }
+  }
+
+  .down-arrow {
+    margin-left: 15px;
+  }
+
   .content-block {
     background: none;
     padding: 0px;

@@ -3,11 +3,19 @@ gelato-component(data-name='stats-timeline')
   .content-block
     .heading-block
       .row
-        .col-md-4.granularity-selector-wrapper Hours studied
+        .col-md-4.granularity-selector-wrapper
+          select#granularity-selector.granularity-selector
+            option(value="hours") Hours studied
+            option(value="minutes" selected="selected") Minutes studied
         .col-md-4#hours-studied-container
           .time-placeholder 2:39
           .units-label hours studied
-        .col-md-4.date-range-wrapper Feb 30th, 2015 - March 6th, 2015
+        .col-md-4.date-range-wrapper
+          a#date-range-selector.date-range-selector
+            | #{moment().subtract(6, 'days').format('MMM DD, YYYY')}
+            | -
+            | #{moment().format('MMM DD, YYYY')}
+            span.down-arrow &#x25BC;
     .content
       #time-studied-bar-graph-container
         .bar-graph-placeholder
@@ -52,4 +60,3 @@ gelato-component(data-name='stats-timeline')
                 .graph Reading graph
               .col-md-3
                 .graph Tone graph
-
