@@ -129,6 +129,7 @@ module.exports = GelatoComponent.extend({
    * @method update
    */
   update: function() {
+
     if (!this.collection.length) {
       return;
     }
