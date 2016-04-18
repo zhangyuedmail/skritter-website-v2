@@ -30,6 +30,7 @@ module.exports = GelatoComponent.extend({
   },
 
   renderGraph: function() {
+    var self = this;
     // TODO: figure out date formats for graph
     this.$('#bargraph').highcharts({
       chart: {
@@ -42,17 +43,17 @@ module.exports = GelatoComponent.extend({
       },
       yAxis: {
         dateTimeLabelFormats: {
-          second: '%H:%M',
-          minute: '%H:%M',
-          hour: '%H:%M',
-          day: '%H:%M',
-          week: '%H:%M',
-          month: '%H:%M',
-          year: '%H:%M'
+          second: '%M:%S',
+          minute: '%M:%S',
+          hour: '%M:%S',
+          day: '%M:%S',
+          week: '%M:%S',
+          month: '%M:%S',
+          year: '%M:%S'
         },
         type: 'datetime',
         title: {
-          text: 'hours:min'
+          text: 'min:sec'
         }
         // min: this.now.valueOf()
       },
@@ -66,13 +67,17 @@ module.exports = GelatoComponent.extend({
 
       tooltip: {
         useHTML: true,
-        pointFormat: '{point.y} seconds studied'
+        // pointFormat: '{point.y} seconds studied',
+        formatter: function() {
+          var time = self.collection.convertToLargestTimeUnit(Math.floor(this.point.y / 1000));
+          var amount = time.amount.split(':');
+          return amount[0] + ' ' + time.units + ' ' + amount[1] + ' ' + time.secondaryUnits + ' studied';
+        }
       }
     });
   },
 
   update: function() {
-
     if (!this.collection.length) {
       return;
     }

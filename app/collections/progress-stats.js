@@ -197,16 +197,39 @@ module.exports = SkritterCollection.extend({
     var minutes = Math.floor(time / 60) % 60;
     var hours = Math.floor(time / 3600);
 
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+
     var largestUnit = hours ? 'hours' :
       minutes ? 'minutes' :
+        'seconds';
+
+
+    var secondLargestUnit = largestUnit === 'hours' ? 'minutes' :
+      largestUnit === 'minutes' ? 'seconds' :
         'seconds';
     var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
       minutes ? minutes + ':' + seconds :
         seconds;
 
+    // note: this is a very English-centric hack--replace me with proper language strings!
+    if (amount.split(':')[0] === '01') {
+      largestUnit = largestUnit.slice(0, -1);
+    }
+
+    if (amount.split(':')[1] === '01') {
+      secondLargestUnit = secondLargestUnit.slice(0, -1);
+    }
+
     return {
       amount: amount,
-      units: largestUnit
+      units: largestUnit,
+      secondaryUnits: secondLargestUnit
     };
   },
 
