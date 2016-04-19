@@ -1,5 +1,6 @@
 var GelatoComponent = require('gelato/component');
 var TimeStudiedBragraphComponent = require('components/stats/time-studied-bargraph/view');
+var ItemsLearnedGraphComponent = require('components/stats/items-learned/view');
 /**
  * A component that is a composite of graphs which show user study statistics
  * over a certain range of time.
@@ -28,6 +29,13 @@ module.exports = GelatoComponent.extend({
       granularity: 'minutes'
     });
 
+    this._views['items-learned'] = new ItemsLearnedGraphComponent({
+      collection: this.collection,
+      title: '',
+      showNumReviews: false,
+      showDaysStudied: false
+    });
+
     this.listenTo(this.collection, 'state:standby', this.update);
   },
 
@@ -48,6 +56,7 @@ module.exports = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
     this._views['bargraph'].setElement('#time-studied-bar-graph-container').render();
+    this._views['items-learned'].setElement('#items-learned-container').render();
   },
 
   /**

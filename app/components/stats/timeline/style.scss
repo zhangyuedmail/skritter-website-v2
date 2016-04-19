@@ -3,7 +3,7 @@
 gelato-component[data-name='stats-timeline'] {
   .heading-block {
     background-color: $white3;
-    border-radius: 25px 25px 0px 0px;
+    border-radius: 25px 25px 0 0;
     padding: 15px;
     font-size: 24px;
     color: $grey5;
@@ -14,7 +14,7 @@ gelato-component[data-name='stats-timeline'] {
     cursor: pointer;
 
     // thx, bootstrap
-    border: 0px !important;
+    border: 0 !important;
     outline: 0 !important;
 
     &:hover {
@@ -36,13 +36,13 @@ gelato-component[data-name='stats-timeline'] {
 
   .content-block {
     background: none;
-    padding: 0px;
+    padding: 0;
   }
 
   .content {
     padding-bottom: 35px;
     background: #FFF;
-    border-radius: 0px 0px 25px 25px;
+    border-radius: 0 0 25px 25px;
   }
 
   .time-studied, .units-label {
@@ -56,28 +56,37 @@ gelato-component[data-name='stats-timeline'] {
     color: $grade3;
   }
 
-  .bar-graph-placeholder {
-    height: 222px;
-    background: $grey5;
+  gelato-component[data-name='stats-items-learned-circle'] {
+    .title {
+      margin-bottom: 25px;
+      margin-top: 10px;
+    }
+
+    .data-section {
+      margin-bottom: 0;
+      margin-top: 56px;
+    }
   }
 
-  .items-learned-placeholder, .days-studied-placeholder {
+
+
+  .days-studied-placeholder {
     height: 205px;
     background: $grey6;
     color: #FFF;
   }
 
   .middle-graph-wrapper-l {
-    padding-right: 0px;
+    padding-right: 0;
   }
 
   .middle-graph-wrapper-r {
-    padding-left: 0px;
+    padding-left: 0;
   }
 
   .days-studied-placeholder {
     background: $grey7;
-    padding-left: 0px;
+    padding-left: 0;
   }
 
   .rwdt-label {
