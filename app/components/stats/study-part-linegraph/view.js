@@ -55,7 +55,25 @@ module.exports = GelatoComponent.extend({
       yAxis: {
         title: {
           text: ''
-        }
+        },
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: 'transparent',
+        labels: {
+         enabled: false
+        },
+        minorTickLength: 0,
+        tickLength: 0
+      },
+      xAxis: {
+        lineWidth: 0,
+        minorGridLineWidth: 0,
+        lineColor: 'transparent',
+        labels: {
+          enabled: false
+        },
+        minorTickLength: 0,
+        tickLength: 0
       },
       credits: {
         enabled: false
