@@ -1,5 +1,7 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='stats-summary'] {
-
+  .all-time-content-block {
+    min-height: 347px;
+  }
 }
