@@ -56,9 +56,10 @@ gelato-component[data-name='stats-timeline'] {
     color: $grade3;
   }
 
+
   gelato-component[data-name='stats-items-learned-circle'] {
     background: $white2;
-    padding: 15px 0px;
+    padding: 15px 0;
     border-right: 1px solid $white5;
 
     .title {
@@ -71,12 +72,26 @@ gelato-component[data-name='stats-timeline'] {
     }
   }
 
+  .days-studied-container {
+    background: $white2;
+  }
+
   #time-studied-bar-graph-container {
     border-bottom: 1px solid $white5;
   }
 
-  #items-learned-container {
+  .days-studied-container, .items-learned-container {
     border-bottom: 1px solid $white5;
+  }
+
+  // TODO: fix this...
+  .days-studied-container {
+    gelato-component {
+
+      #circle {
+        height: 230px;
+      }
+    }
   }
 
   .days-studied-placeholder {
