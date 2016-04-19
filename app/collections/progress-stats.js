@@ -388,15 +388,39 @@ module.exports = SkritterCollection.extend({
 
   /**
    * Gets the number for a certain category of items learned within a specified granularity.
-   * @param itemType the type of item to get "char"|"word"
+   * @param {String} itemType the type of item to get "char"|"word"
    * @param {String} timePeriod the time period to look for "all"|"month"|"week"|"day"
+   * @param {ProgressStat} [stat] the model from which to get the attributes
    * @returns {Number} The number of items learned in the time period
+   * @method getItemsLearnedForPeriod
    */
-  getItemsLearnedForPeriod: function(itemType, timePeriod) {
+  getItemsLearnedForPeriod: function(itemType, timePeriod, stat) {
     itemType = itemType || 'word';
     timePeriod = timePeriod || 'month';
+    stat = stat || this.at(0);
 
-    return this.length ? this.at(0).get(itemType).rune.learned[timePeriod] : 0;
+    return this.length ? stat.get(itemType).rune.learned[timePeriod] : 0;
+  },
+
+  /**
+   * Sums the desired type of stat for a specified time range
+   * @param {String} itemType the type of item of get "char"|"word"
+   * @param {String} start YYYY-MM-DD formatted date from where to start (inclusive) counting
+   * @param {String} end YYYY-MM-DD formatted date from where to end (inclusive) counting
+   * @returns {Number} the sum of the desired stat for the period
+   * @method getSumItemsLearnedForPeriod
+     */
+  getSumItemsLearnedForPeriod: function(itemType, start, end) {
+    // TODO: fetch stats if missing?
+    var models = this._getStatsInRange(start, end);
+    var learned = 0;
+    var self = this;
+
+    learned = models.reduce(function(sum, m) {
+      return sum + self.getItemsLearnedForPeriod(itemType, 'day', m);
+    }, learned);
+
+    return learned;
   },
 
   /**
@@ -410,6 +434,24 @@ module.exports = SkritterCollection.extend({
   getTimeStudiedForPeriod: function(start, end) {
     var endFound = false;
     var timeStudied = 0;
+    var models = this._getStatsInRange(start, end);
+
+    timeStudied = models.reduce(function(sum, m) {
+      return sum + m.get('timeStudied').day;
+    }, timeStudied);
+
+    return this.convertToLargestTimeUnit(timeStudied);
+  },
+
+  /**
+   * Gets the models for a specified date range
+   * @param {String} start the start date (inclusive) in YYYY-MM-DD format
+   * @param {String} end the end date (inclusive) in YYYY-MM-DD format
+   * @returns {Array<ProgressStat>} The models within the specified range
+   * @private
+   */
+  _getStatsInRange: function(start, end) {
+    var endFound = false;
     var models = [];
 
     for (var i = 0; i < this.length; i++) {
@@ -424,10 +466,6 @@ module.exports = SkritterCollection.extend({
       }
     }
 
-    timeStudied = models.reduce(function(sum, m) {
-      return sum + m.get('timeStudied').day;
-    }, timeStudied);
-
-    return this.convertToLargestTimeUnit(timeStudied);
+    return models;
   }
 });
