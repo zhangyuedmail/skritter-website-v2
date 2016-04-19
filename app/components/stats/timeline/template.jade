@@ -8,8 +8,10 @@ gelato-component(data-name='stats-timeline')
             option(value="hours") Hours studied
             option(value="minutes" selected="selected") Minutes studied
         .col-md-4#hours-studied-container
-          .time-placeholder 2:39
-          .units-label hours studied
+          #time-studied.time-studied ..:..
+          .units-label
+            span#time-studied-units-label #{view.granularity === 'minutes' ? 'minutes' : 'hours'}
+            span &nbsp;studied
         .col-md-4.date-range-wrapper
           a#date-range-selector.date-range-selector
             | #{moment().subtract(6, 'days').format('MMM DD, YYYY')}
