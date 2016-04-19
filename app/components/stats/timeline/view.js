@@ -42,8 +42,7 @@ module.exports = GelatoComponent.extend({
 
     // TODO: check localStorage for user-set granularity config?
     this._views['bargraph'] = new TimeStudiedBragraphComponent({
-      collection: this.collection,
-      granularity: 'minutes'
+      collection: this.collection
     });
 
     this._views['items-learned'] = new ItemsLearnedGraphComponent({
@@ -117,17 +116,11 @@ module.exports = GelatoComponent.extend({
 
     this.listenTo(this.collection, 'state:standby', this.update);
   },
-
-  events: {
-    'change #granularity-selector': 'onTimelineUnitsChanged'
-  },
-
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
-
   /**
    * @method render
    * @returns {VocablistSideBar}
