@@ -1,7 +1,8 @@
 var GelatoComponent = require('gelato/component');
 var TimeStudiedBragraphComponent = require('components/stats/time-studied-bargraph/view');
 var ItemsLearnedGraphComponent = require('components/stats/items-learned/view');
-
+var TimeStudiedCircleComponent = require('components/stats/time-studied-circle/view');
+var StudyPartLinegraphComponent = require('components/stats/study-part-linegraph/view');
 /**
  * A component that is a composite of graphs which show user study statistics
  * over a certain range of time.
@@ -54,6 +55,18 @@ module.exports = GelatoComponent.extend({
       range: this.range
     });
 
+    this._views['daysStudied'] = new TimeStudiedCircleComponent({
+      collection: this.collection,
+      range: this.range
+    });
+
+    this._views['lineWordWriting'] = new StudyPartLinegraphComponent({
+      collection: this.collection,
+      range: this.range,
+      type: 'word',
+      part: 'wrtg'
+    });
+
     this.listenTo(this.collection, 'state:standby', this.update);
   },
 
@@ -75,6 +88,8 @@ module.exports = GelatoComponent.extend({
     this.renderTemplate();
     this._views['bargraph'].setElement('#time-studied-bar-graph-container').render();
     this._views['items-learned'].setElement('#items-learned-container').render();
+    this._views['daysStudied'].setElement('#days-studied-container').render();
+    this._views['lineWordWriting'].setElement('#line-word-writing-container').render();
   },
 
   /**
