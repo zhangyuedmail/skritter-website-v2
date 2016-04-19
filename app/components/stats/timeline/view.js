@@ -116,11 +116,14 @@ module.exports = GelatoComponent.extend({
 
     this.listenTo(this.collection, 'state:standby', this.update);
   },
+  
   /**
    * @property template
    * @type {Function}
    */
+  
   template: require('./template'),
+  
   /**
    * @method render
    * @returns {VocablistSideBar}
