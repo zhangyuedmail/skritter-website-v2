@@ -20,13 +20,12 @@ gelato-component(data-name='stats-timeline')
             span.down-arrow &#x25BC;
     .content
       #time-studied-bar-graph-container
-        .bar-graph-placeholder
       .items-leaned-days-studied-wrapper
         .row
           .col-md-6.middle-graph-wrapper-l
-            #items-learned-container
+            #items-learned-container.items-learned-container
           .col-md-6.middle-graph-wrapper-r
-            .days-studied-placeholder days studied
+            #days-studied-container.days-studied-container
       .rwdt-graphs-wrapper
         .row
           .col-md-1 &nbsp;
@@ -42,7 +41,7 @@ gelato-component(data-name='stats-timeline')
           .col-md-11
             .row
               .col-md-3
-                .graph Writing graph
+                #line-word-writing-container.graph
               .col-md-3
                 .graph Definition graph
               .col-md-3
