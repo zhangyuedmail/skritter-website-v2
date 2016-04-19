@@ -14,11 +14,21 @@ module.exports = GelatoComponent.extend({
   initialize: function(options) {
     this._views = {};
 
+    /**
+     * The granularity level of the timeline graphs "minutes"|"hours"
+     * @type {string}
+     * @private
+     * @default
+     */
+    this.granularity = 'minutes';
+
     // TODO: check localStorage for user-set granularity config?
     this._views['bargraph'] = new TimeStudiedBragraphComponent({
       collection: this.collection,
       granularity: 'minutes'
     });
+
+    this.listenTo(this.collection, 'state:standby', this.update);
   },
 
   events: {
@@ -41,6 +51,22 @@ module.exports = GelatoComponent.extend({
   },
 
   /**
+   * Gets the total amount of time a user has studied in the selected time period
+   * @returns {Object} a larget units time object from progress-stats
+   */
+  getTimeStudied: function() {
+
+    // TODO: get values from date selector, possibly fetch stats for that range first
+    var userTZ = app.user.get('timezone');
+    var now = moment().tz(userTZ).subtract(4, 'hours').startOf('day')
+      .format('YYYY-MM-DD');
+    var past = moment().tz(userTZ).subtract(4, 'hours').subtract(6, 'days')
+      .startOf('day').format('YYYY-MM-DD');
+
+    return this.collection.getTimeStudiedForPeriod(past, now);
+  },
+
+  /**
    * Runs entrance animations, fetches any data, and does any resetting that
    * should be performed when this section of the stats page is made visible.
    * @method onTabVisible
@@ -60,5 +86,14 @@ module.exports = GelatoComponent.extend({
     var units = event.target.value;
 
     this._views['bargraph'].updateUnits(units);
+  },
+
+  /**
+   * Updates the amount of time studied. Child graphs should update themselves independently of this method.
+   */
+  update: function() {
+    var timeStudied = this.getTimeStudied();
+    this.$('#time-studied').text(timeStudied.amount);
+    this.$('#time-studied-units-label').text(timeStudied.units);
   }
 });

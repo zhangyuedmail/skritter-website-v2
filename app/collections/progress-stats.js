@@ -386,10 +386,48 @@ module.exports = SkritterCollection.extend({
     return bestStreak;
   },
 
+  /**
+   * Gets the number for a certain category of items learned within a specified granularity.
+   * @param itemType the type of item to get "char"|"word"
+   * @param {String} timePeriod the time period to look for "all"|"month"|"week"|"day"
+   * @returns {Number} The number of items learned in the time period
+   */
   getItemsLearnedForPeriod: function(itemType, timePeriod) {
     itemType = itemType || 'word';
     timePeriod = timePeriod || 'month';
 
     return this.length ? this.at(0).get(itemType).rune.learned[timePeriod] : 0;
+  },
+
+  /**
+   * Gets the total time studied for a period of time
+   * @param {String} start a date string formatted YYYY-MM-DD of when the period starts
+   * @param {String} end a date string formatted YYYY-MM-DD of when the period starts
+   * @returns {Object} Formatted time unit object from convertToLargestTimeUnit of
+   *                   the sum of the time studied during the specified period.
+   * @method getTimeStudiedForPeriod
+   */
+  getTimeStudiedForPeriod: function(start, end) {
+    var endFound = false;
+    var timeStudied = 0;
+    var models = [];
+
+    for (var i = 0; i < this.length; i++) {
+      if (this.at(i).id === end) {
+        endFound = true;
+      }
+      if (endFound) {
+        models.push(this.at(i));
+      }
+      if (this.at(i).id === start) {
+        break;
+      }
+    }
+
+    timeStudied = models.reduce(function(sum, m) {
+      return sum + m.get('timeStudied').day;
+    }, timeStudied);
+
+    return this.convertToLargestTimeUnit(timeStudied);
   }
 });
