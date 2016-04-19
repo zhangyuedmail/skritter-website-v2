@@ -1,6 +1,7 @@
 var GelatoComponent = require('gelato/component');
 var TimeStudiedBragraphComponent = require('components/stats/time-studied-bargraph/view');
 var ItemsLearnedGraphComponent = require('components/stats/items-learned/view');
+
 /**
  * A component that is a composite of graphs which show user study statistics
  * over a certain range of time.
@@ -15,9 +16,26 @@ module.exports = GelatoComponent.extend({
   initialize: function(options) {
     this._views = {};
 
+    // TODO: get actual selectable range
+    var userTZ = app.user.get('timezone');
+    var now = moment().tz(userTZ).subtract(4, 'hours').startOf('day')
+      .format('YYYY-MM-DD');
+    var past = moment().tz(userTZ).subtract(4, 'hours').subtract(6, 'days')
+      .startOf('day').format('YYYY-MM-DD');
+
+    /**
+     * The date range by which to filter the stats contained in this view.
+     * Dates should be in YYYY-MM-DD format.
+     * @type {{start: String, end: String}}
+     */
+    this.range = {
+      start: past,
+      end: now
+    };
+
     /**
      * The granularity level of the timeline graphs "minutes"|"hours"
-     * @type {string}
+     * @type {String}
      * @private
      * @default
      */
@@ -31,9 +49,9 @@ module.exports = GelatoComponent.extend({
 
     this._views['items-learned'] = new ItemsLearnedGraphComponent({
       collection: this.collection,
-      title: '',
       showNumReviews: false,
-      showDaysStudied: false
+      showTimeStudied: false,
+      range: this.range
     });
 
     this.listenTo(this.collection, 'state:standby', this.update);
@@ -64,15 +82,7 @@ module.exports = GelatoComponent.extend({
    * @returns {Object} a larget units time object from progress-stats
    */
   getTimeStudied: function() {
-
-    // TODO: get values from date selector, possibly fetch stats for that range first
-    var userTZ = app.user.get('timezone');
-    var now = moment().tz(userTZ).subtract(4, 'hours').startOf('day')
-      .format('YYYY-MM-DD');
-    var past = moment().tz(userTZ).subtract(4, 'hours').subtract(6, 'days')
-      .startOf('day').format('YYYY-MM-DD');
-
-    return this.collection.getTimeStudiedForPeriod(past, now);
+    return this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end);
   },
 
   /**
