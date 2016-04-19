@@ -57,8 +57,6 @@ module.exports = GelatoPage.extend({
     this._views['summary'].setElement('#stats-summary-container').render();
     this._views['timeline'].setElement('#stats-timeline-container').render();
 
-    this.showStatsSection();
-
     return this;
   },
 
@@ -79,6 +77,10 @@ module.exports = GelatoPage.extend({
    */
   handleStatsSectionSelectorClicked: function(event) {
     event.preventDefault();
+
+    // TODO: re-enable when we have enough stats to call for dividing this into sections
+    return;
+
     var newSection = event.target.id.split('-')[0];
 
     if (newSection === this.activeSection) {
