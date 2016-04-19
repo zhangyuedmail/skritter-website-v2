@@ -11,6 +11,10 @@ module.exports = GelatoComponent.extend({
    * @constructor
    */
   initialize: function(options) {
+    this.title = _.isString(options.title) ? options.title : 'All Time';
+    this.showNumReviews = _.isBoolean(options.showNumReviews) ? options.showNumReviews : true;
+    this.showDaysStudied = _.isBoolean(options.showDaysStudied) ? options.showDaysStudied : true;
+
     this.listenTo(this.collection, 'state:standby', this.update);
   },
   /**
@@ -87,7 +91,12 @@ module.exports = GelatoComponent.extend({
     var totalWordsLearned = this.collection.getAllTimeWordsLearned();
     var totalItemsLearned = totalCharactersLearned + totalWordsLearned;
 
-    var chartData = this.$('#items-learned').highcharts().series[0].points;
+    var chartData = this.$('#items-learned').highcharts();
+    if (chartData) {
+      chartData = chartData.series[0].points;
+    } else {
+      return;
+    }
     chartData[0].update(totalWordsLearned);
     chartData[1].update(totalCharactersLearned);
 
