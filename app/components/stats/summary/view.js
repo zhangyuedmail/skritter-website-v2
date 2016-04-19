@@ -1,6 +1,6 @@
 var GelatoComponent = require('gelato/component');
 
-var StatsAllTimeComponent = require('components/stats/all-time/view');
+var StatsAllTimeComponent = require('components/stats/items-learned/view');
 var StatsHeatmapComponent = require('components/stats/heatmap/view');
 /**
  * A component that is a composite of graphs which show user study statistics
