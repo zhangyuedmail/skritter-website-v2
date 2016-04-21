@@ -118,8 +118,10 @@ module.exports = GelatoComponent.extend({
     var rangeData = this.getRangeData();
 
     // total change number
-    var totalStr = "+";
-    if (rangeData.totalChangeLearned < 0) {
+    var totalStr = "";
+    if (rangeData.totalChangeLearned > 0) {
+      totalStr = "+";
+    } else if (rangeData.totalChangeLearned < 0) {
       totalStr = "-";
     }
     totalStr += rangeData.totalChangeLearned;
@@ -128,11 +130,18 @@ module.exports = GelatoComponent.extend({
     var chartData = this._graph.series[0];
     chartData.setData(rangeData.chartData);
 
-    this.$('#num-added').text(rangeData.added);
-    this.$('#num-learned').text(totalStr);
-    this.$('#num-reviews').text(rangeData.studied);
-    this.$('#num-retention').text(rangeData.retentionRate + '%');
-    // TODO: color retention rate
+
+    this.$('#num-learned').text(totalStr)
+      .toggleClass('good', rangeData.totalChangeLearned > 0)
+      .toggleClass('bad', rangeData.totalChangeLearned < 0);
+
+    this.$('#num-added').text(rangeData.added).toggleClass('good', rangeData.added > 0);
+    this.$('#num-reviews').text(rangeData.studied).toggleClass('good', rangeData.studied > 0);
+    this.$('#num-retention').text(rangeData.retentionRate + '%')
+      .toggleClass('excellent', rangeData.retentionRate > 95)
+      .toggleClass('good', rangeData.retentionRate > 80)
+      .toggleClass('okay', rangeData.retentionRate > 60)
+      .toggleClass('bad', rangeData.retentionRate <= 60);
   },
 
   getRangeData: function() {
