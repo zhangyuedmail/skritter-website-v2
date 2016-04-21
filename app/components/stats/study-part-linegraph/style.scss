@@ -6,14 +6,38 @@ gelato-component[data-name='stats-study-part-linegraph'] {
   }
 
   .num, .num-label {
+    color: $grey3;
     text-align: center;
   }
 
+  .num {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
   .num-label {
-    color: $grey3;
+    font-size: 14px;
   }
 
   .num-learned {
     font-size: 24px;
+    margin-top: 23px;
+  }
+
+  // ordering is important for specificity here!
+  .bad {
+    color: $gradeRed5;
+  }
+
+  .okay {
+    color: $gradeYellow5;
+  }
+
+  .good {
+    color: $green5;
+  }
+
+  .excellent {
+    color: $gradeBlue5;
   }
 }
