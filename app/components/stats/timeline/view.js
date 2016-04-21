@@ -65,7 +65,7 @@ module.exports = GelatoComponent.extend({
       collection: this.collection,
       range: this.range,
       type: 'char',
-      part: 'wrtg'
+      part: 'rune'
     });
 
     this._views['lineCharDefinition'] = new StudyPartLinegraphComponent({
@@ -93,7 +93,7 @@ module.exports = GelatoComponent.extend({
       collection: this.collection,
       range: this.range,
       type: 'word',
-      part: 'wrtg'
+      part: 'rune'
     });
 
     this._views['lineWordDefinition'] = new StudyPartLinegraphComponent({
