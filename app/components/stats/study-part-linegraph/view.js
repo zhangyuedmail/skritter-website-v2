@@ -16,9 +16,13 @@ module.exports = GelatoComponent.extend({
   initialize: function(options) {
     options = options || {};
 
-    this.listenTo(this.collection, 'state:standby', this.update);
+    this.range = options.range || false;
+    this.type = options.type || 'char';
+    this.part = options.part || 'rune';
 
     this._graph = null;
+
+    this.listenTo(this.collection, 'state:standby', this.update);
   },
 
   /**
@@ -111,15 +115,64 @@ module.exports = GelatoComponent.extend({
       return;
     }
 
+    var rangeData = this.getRangeData();
+
+    // total change number
+    var totalStr = "+";
+    if (rangeData.totalChangeLearned < 0) {
+      totalStr = "-";
+    }
+    totalStr += rangeData.totalChangeLearned;
+
+    // graph
     var chartData = this._graph.series[0];
-    var data = [];
+    chartData.setData(rangeData.chartData);
+
+    this.$('#num-added').text(rangeData.added);
+    this.$('#num-learned').text(totalStr);
+    this.$('#num-reviews').text(rangeData.studied);
+    this.$('#num-retention').text(rangeData.retentionRate + '%');
+    // TODO: color retention rate
+  },
+
+  getRangeData: function() {
+    var chartData = [];
+    var total = 0;
     var length = this.collection.length > 6 ? 6 : this.collection.length - 1;
+    var studied = 0;
+    var remembered = 0;
+    var retentionRate = 0;
+    var stats = [];
 
     for (var i = length; i >= 0; i--) {
-      var stat = this.collection.at(i);
-      data.push(Math.floor(stat.get('timeStudied').day * 1000));
+      var stat = this.collection.at(i).get(this.type)[this.part];
+      stats.push(stat);
+      chartData.push(stat.learned.day);
+      total += stat.learned.day;
+      studied += stat.studied.day;
+      remembered += stat.remembered.day;
     }
 
-    chartData.setData(data);
+    retentionRate = studied === 0 ? 0 : Math.floor((remembered / studied) * 100);
+
+    return {
+      chartData: chartData,
+      totalChangeLearned: total,
+      studied: studied,
+      remembered: remembered,
+      retentionRate: retentionRate,
+      added: this._getAdded(stats)
+    };
+  },
+
+  _getAdded: function(stats) {
+    var start = stats[0];
+    var end = stats[stats.length - 1];
+
+    var addedStartDate = start.learned.all + start.learning.all;
+    var addedEndDate = end.learned.all + end.learning.all;
+    var totalAdded = addedEndDate - addedStartDate;
+
+    return totalAdded;
   }
 });

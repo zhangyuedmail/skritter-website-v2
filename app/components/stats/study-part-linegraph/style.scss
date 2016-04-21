@@ -4,4 +4,16 @@ gelato-component[data-name='stats-study-part-linegraph'] {
   #linegraph {
     height: 80px;
   }
+
+  .num, .num-label {
+    text-align: center;
+  }
+
+  .num-label {
+    color: $grey3;
+  }
+
+  .num-learned {
+    font-size: 24px;
+  }
 }
