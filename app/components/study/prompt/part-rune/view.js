@@ -149,6 +149,8 @@ module.exports = GelatoComponent.extend({
       this.prompt.$('#leech-ribbon').removeClass('hidden');
       this.prompt.review.item.consecutiveWrong = 0;
       this.teachCharacter();
+    } else {
+      this.prompt.$('#leech-ribbon').addClass('hidden');
     }
     this.renderTemplate();
     return this;

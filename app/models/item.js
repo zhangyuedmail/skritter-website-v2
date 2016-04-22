@@ -241,7 +241,7 @@ module.exports = SkritterModel.extend({
    * @returns {Boolean}
    */
   isLeech: function() {
-    return this.consecutiveWrong > 2;
+    return !this.isNew() && this.consecutiveWrong > 2;
   },
   /**
    * @method isNew
