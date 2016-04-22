@@ -94,6 +94,7 @@ module.exports = GelatoComponent.extend({
    */
   renderPart: function() {
     if (this.part) {
+      this.toolbarVocab.disableEditing();
       this.part.remove();
     }
     if (this.reviews.isNew()) {
