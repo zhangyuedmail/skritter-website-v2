@@ -10,55 +10,55 @@ var DashboardGoal = require('components/dashboard/status/view');
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.navbar = new DefaultNavbar();
-        this.dashboardGoal = new DashboardGoal();
-        this.dashboardMonth = new DashboardMonth();
-        this.dashboardTotal = new DashboardTotal();
-        this.dashboardQueue = new DashboardQueue();
-    },
-    /**
-     * @property title
-     * @type {String}
-     */
-    title: 'Dashboard - Skritter',
-    /**
-     * @property template
-     * @type {Function}
-     */
-    template: require('./template'),
-    /**
-     * @method render
-     * @returns {Dashboard}
-     */
-    render: function() {
-        this.renderTemplate();
-        this.dashboardGoal.setElement('#dashboard-goal-container').render();
-        this.dashboardMonth.setElement('#dashboard-month-container').render();
-        this.dashboardTotal.setElement('#dashboard-total-container').render();
-        this.dashboardQueue.setElement('#dashboard-queue-container').render();
-        this.navbar.setElement('#navbar-container').render();
-        return this;
-    },
-    /**
-     * @property events
-     * @type {Object}
-     */
-    events: {},
-    /**
-     * @method remove
-     * @returns {Dashboard}
-     */
-    remove: function() {
-        this.dashboardGoal.remove();
-        this.dashboardMonth.remove();
-        this.dashboardTotal.remove();
-        this.dashboardQueue.remove();
-        this.navbar.remove();
-        return GelatoPage.prototype.remove.call(this);
-    }
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.navbar = new DefaultNavbar();
+    this.dashboardGoal = new DashboardGoal();
+    this.dashboardMonth = new DashboardMonth();
+    this.dashboardTotal = new DashboardTotal();
+    this.dashboardQueue = new DashboardQueue();
+  },
+  /**
+   * @property title
+   * @type {String}
+   */
+  title: 'Dashboard - Skritter',
+  /**
+   * @property template
+   * @type {Function}
+   */
+  template: require('./template'),
+  /**
+   * @method render
+   * @returns {Dashboard}
+   */
+  render: function() {
+    this.renderTemplate();
+    this.dashboardGoal.setElement('#dashboard-goal-container').render();
+    this.dashboardMonth.setElement('#dashboard-month-container').render();
+    this.dashboardTotal.setElement('#dashboard-total-container').render();
+    this.dashboardQueue.setElement('#dashboard-queue-container').render();
+    this.navbar.setElement('#navbar-container').render();
+    return this;
+  },
+  /**
+   * @property events
+   * @type {Object}
+   */
+  events: {},
+  /**
+   * @method remove
+   * @returns {Dashboard}
+   */
+  remove: function() {
+    this.dashboardGoal.remove();
+    this.dashboardMonth.remove();
+    this.dashboardTotal.remove();
+    this.dashboardQueue.remove();
+    this.navbar.remove();
+    return GelatoPage.prototype.remove.call(this);
+  }
 });

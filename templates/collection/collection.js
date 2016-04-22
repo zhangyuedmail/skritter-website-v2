@@ -6,24 +6,24 @@ var Model = require('model');
  * @extends {GelatoCollection}
  */
 var Collection = GelatoCollection.extend({
-    /**
-     * @method initialize
-     * @param {Array|Object} [models]
-     * @param {Object} [options]
-     * @constructor
-     */
-    initialize: function(models, options) {
-    },
-    /**
-     * @property model
-     * @type {Model}
-     */
-    model: Model,
-    /**
-     * @property url
-     * @type {String}
-     */
-    url: 'model'
+  /**
+   * @method initialize
+   * @param {Array|Object} [models]
+   * @param {Object} [options]
+   * @constructor
+   */
+  initialize: function(models, options) {
+  },
+  /**
+   * @property model
+   * @type {Model}
+   */
+  model: Model,
+  /**
+   * @property url
+   * @type {String}
+   */
+  url: 'model'
 });
 
 module.exports = Collection;
