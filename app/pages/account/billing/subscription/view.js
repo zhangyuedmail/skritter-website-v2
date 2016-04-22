@@ -113,7 +113,7 @@ module.exports = GelatoPage.extend({
   handleClickRedeemCodeButton: function() {
     this.coupon.set('code', this.$('#code-input').val());
     this.coupon.use();
-    this.renderMainContent();
+    this.render();
   },
   /**
    * @method handleClickSpoofButtonAreaButton
