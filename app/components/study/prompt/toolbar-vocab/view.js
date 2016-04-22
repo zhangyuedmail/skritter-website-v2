@@ -55,7 +55,6 @@ module.exports = GelatoComponent.extend({
       customDefinition: this.prompt.vocabDefinition.getValue(),
       mnemonic: this.prompt.vocabMnemonic.getValue()
     });
-    this.prompt.reviews.vocab.save();
     this.prompt.vocabDefinition.render();
     this.prompt.vocabMnemonic.render();
     return this;
@@ -105,6 +104,7 @@ module.exports = GelatoComponent.extend({
     event.preventDefault();
     if (this.prompt.editing) {
       this.disableEditing();
+      this.prompt.reviews.vocab.save();
     } else {
       this.enableEditing();
     }

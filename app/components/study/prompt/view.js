@@ -94,7 +94,6 @@ module.exports = GelatoComponent.extend({
    */
   renderPart: function() {
     if (this.part) {
-      this.toolbarVocab.disableEditing();
       this.part.remove();
     }
     if (this.reviews.isNew()) {
@@ -116,6 +115,7 @@ module.exports = GelatoComponent.extend({
         this.part = new PartTone({prompt: this}).render();
         break;
     }
+    this.toolbarVocab.disableEditing();
     return this;
   },
   /**
