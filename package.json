@@ -24,15 +24,15 @@
     "test": "node ./bin/test"
   },
   "dependencies": {
-    "brunch": "~2.6.0",
+    "brunch": "~2.7.0",
     "chai": "~3.5.0",
-    "lodash": "~4.10.0",
+    "lodash": "~4.11.0",
     "minimist": "~1.2.0",
     "mocha": "~2.4.0",
     "mocha-phantomjs": "~4.0.0",
     "shelljs": "~0.6.0",
     "sinon": "~1.17.0",
-    "auto-reload-brunch": "~2.2.0",
+    "auto-reload-brunch": "~2.7.0",
     "clean-css-brunch": "~2.0.0",
     "css-brunch": "~2.6.0",
     "jade-brunch": "~2.0.0",
