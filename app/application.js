@@ -4,15 +4,20 @@ var Functions = require('functions');
 var Router = require('router');
 
 /**
+ * The base singleton class for Skritter that constructs and initializes all
+ * necessary subviews to run the app.
  * @class Application
  * @extends {GelatoApplication}
  */
 module.exports = GelatoApplication.extend({
   /**
+   * Initializes a new application instance. Sets up error handling, analytics,
+   * and various app-level properties such as referrals.
    * @method initialize
    * @constructor
    */
   initialize: function() {
+    this.checkAndSetReferralInfo();
 
     Raygun.init(
       'VF3L4HPYRvk1x0F5x3hGVg==',
@@ -30,6 +35,8 @@ module.exports = GelatoApplication.extend({
     this.fn = Functions;
     this.router = new Router();
     this.user = new User({id: this.getSetting('user') || 'application'});
+
+    this.localBackend = this.fn.getParameterByName('thinkLocally');
 
     if (window.ga && this.isProduction()) {
       ga('create', 'UA-4642573-1', 'auto');
@@ -58,18 +65,41 @@ module.exports = GelatoApplication.extend({
     canvasSize: 450,
     language: undefined,
     lastItemChanged: 0,
+    siteRef: null,
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
   },
+
   /**
+   * Checks if the URL contains a siteref param, and if it does, sets its value
+   * as the siteRef instance varaible on the application object.
+   * @method checkAndSetReferralInfo
+   */
+  checkAndSetReferralInfo: function() {
+    var siteRef = Functions.getParameterByName('siteref');
+    if (siteRef) {
+      var expiration = moment().add(2, 'weeks').format('YYYY-MM-DD');
+      this.setSetting('siteRef', {
+        referer: siteRef,
+        expiration: expiration
+      });
+    }
+  },
+
+  /**
+   * Gets the base URL for the API depending on the context in which the application is running.
    * @method getApiUrl
-   * @returns {String}
+   * @returns {String} the base URL for the API
    */
   getApiUrl: function() {
-    //return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
+    if (!this.isProduction() && this.localBackend) {
+      return 'http://localhost:8080' + '/api/v' + this.get('apiVersion') + '/';
+    }
+
     return this.get('apiRoot') + this.get('apiDomain') + '/api/v' + this.get('apiVersion') + '/';
   },
+
   /**
    * @method getLanguage
    * @returns {String}
@@ -88,6 +118,32 @@ module.exports = GelatoApplication.extend({
       return '456c03002118e80555d7136131bf10a3';
     }
   },
+
+  /**
+   * Gets the id of the person/organization who originally referred the user
+   * to Skritter.
+   * http://english.stackexchange.com/a/42636
+   * @returns {null}
+   */
+  getRefererId: function() {
+    var ref = (this.getSetting('siteRef') || {});
+    var referer = ref['referer'];
+    var expiration = ref['expiration'];
+
+    if (!referer || !expiration) {
+      return null;
+    }
+
+    expiration = moment(expiration, 'YYYY-MM-DD');
+
+    // if more time has passed than allowed by
+    if (expiration.diff(moment().startOf('day'), 'days') < 0) {
+      return null;
+    }
+
+    return referer;
+  },
+
   /**
    * @method getStripeKey
    * @returns {String}

@@ -108,12 +108,14 @@ module.exports = GelatoPage.extend({
    */
   createUser: function(formData, callback) {
     var self = this;
+    var siteRef = app.getRefererId();
 
     this.user.set({
       email: formData.email,
       name: formData.username,
       password: formData.password1,
-      recaptcha: formData.recaptcha
+      recaptcha: formData.recaptcha,
+      siteRef: siteRef
     });
     if (formData.method === 'credit') {
       this.user.set({
@@ -136,6 +138,7 @@ module.exports = GelatoPage.extend({
               callback(error);
             },
             success: function(user) {
+              app.removeSetting('siteRef');
               mixpanel.alias(user.id);
               mixpanel.track(
                 'Signup',
