@@ -2,6 +2,7 @@ var GelatoApplication = require('gelato/application');
 var User = require('models/user');
 var Functions = require('functions');
 var Router = require('router');
+var Config = require('config');
 
 /**
  * The base singleton class for Skritter that constructs and initializes all
@@ -17,6 +18,8 @@ module.exports = GelatoApplication.extend({
    * @constructor
    */
   initialize: function() {
+    this.config = Config;
+
     this.checkAndSetReferralInfo();
 
     Raygun.init(
@@ -78,7 +81,7 @@ module.exports = GelatoApplication.extend({
   checkAndSetReferralInfo: function() {
     var siteRef = Functions.getParameterByName('siteref');
     if (siteRef) {
-      var expiration = moment().add(2, 'weeks').format('YYYY-MM-DD');
+      var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
       this.setSetting('siteRef', {
         referer: siteRef,
         expiration: expiration
@@ -133,7 +136,7 @@ module.exports = GelatoApplication.extend({
       return null;
     }
 
-    expiration = moment(expiration, 'YYYY-MM-DD');
+    expiration = moment(expiration, Config.dateFormatApp);
 
     // if more time has passed than allowed for a referral
     if (expiration.diff(moment().startOf('day'), 'days') < 0) {
