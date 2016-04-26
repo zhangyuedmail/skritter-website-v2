@@ -1,5 +1,6 @@
 bootstrap-navbar(data-name='default')
   - var user = app.user;
+  - var currentSection = view.getCurrentSection();
 
   nav.navbar.navbar-inverse.navbar-fixed-top
     .container
@@ -17,13 +18,13 @@ bootstrap-navbar(data-name='default')
         if user.isLoggedIn()
 
           ul.nav.navbar-nav
-            li
+            li(class=currentSection === 'study' ? 'active' : '')
               a(href="/study") Study
-            li
+            li(class=currentSection === 'vocablists' ? 'active' : '')
               a(href="/vocablists") Lists
-            li
+            li(class=currentSection === 'words' ? 'active' : '')
               a(href="/words") Words
-            li
+            li(class=currentSection === 'stats' ? 'active' : '')
               //TODO: replace when progress stats supported
               a(href="/stats") Stats
 
@@ -39,7 +40,7 @@ bootstrap-navbar(data-name='default')
                 li
                   a(href="/account") Account
                 li
-                  a(href="https://blog.skritter.com/") Blog
+                  a(href="https://blog.skritter.com/" target="_blank") Blog
                 li
                   a(href="http://classroom.skritter.com", target="_blank") Classroom
                 li
@@ -48,7 +49,7 @@ bootstrap-navbar(data-name='default')
                 li
                   a#button-logout(href="#") Logout
             li.dropdown.target-lang-dropdown
-              a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
+              a.dropdown-toggle.lang-select-icon-wrapper(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                 - var lang = user.get('targetLang');
                 - var otherLang = lang === 'zh' ? 'ja' : 'zh';
                 span.lang-icon #{view.getDisplayLanguageCharacters(lang)}
@@ -56,7 +57,6 @@ bootstrap-navbar(data-name='default')
                 span.caret
               ul.dropdown-menu.language-select-menu
                 li.currently-studying
-                  //img(src="media/images/flags/flag-#{lang}.png" alt="" class="flag")
                   | You are studying #{view.getDisplayLanguageName(user.get('targetLang'))}.
                 li.divider(role="separator")
                 li
@@ -70,10 +70,10 @@ bootstrap-navbar(data-name='default')
         else
 
           ul.nav.navbar-nav
+            li(class=currentSection === 'features' ? 'active' : '')
+              a(href="/features", target="_blank") Features
             li
-              a(href="/features") Features
-            li
-              a(href="https://blog.skritter.com/") Blog
+              a(href="https://blog.skritter.com/", target="_blank") Blog
             li
               a(href="https://discourse.skritter.com/") Forum
 
@@ -81,10 +81,10 @@ bootstrap-navbar(data-name='default')
             li
               a(href="http://www.skritter.com/home") Back to skritter.com
             if user.isLoggedIn()
-              li
+              li(class=currentSection === 'dashboard' ? 'active' : '')
                 a(href="/dashboard") Dashboard
             else
-              li
+              li(class=currentSection === 'signup' ? 'active' : '')
                 a(href="/signup") Signup
-              li
+              li(class=currentSection === 'login' ? 'active' : '')
                 a(href="/login") Login
