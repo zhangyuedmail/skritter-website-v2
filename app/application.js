@@ -65,7 +65,6 @@ module.exports = GelatoApplication.extend({
     canvasSize: 450,
     language: undefined,
     lastItemChanged: 0,
-    siteRef: null,
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
@@ -136,7 +135,7 @@ module.exports = GelatoApplication.extend({
 
     expiration = moment(expiration, 'YYYY-MM-DD');
 
-    // if more time has passed than allowed by
+    // if more time has passed than allowed for a referral
     if (expiration.diff(moment().startOf('day'), 'days') < 0) {
       return null;
     }
