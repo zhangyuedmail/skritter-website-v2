@@ -39,7 +39,9 @@ module.exports = GelatoComponent.extend({
    */
   handleClickLookup: function(event) {
     event.preventDefault();
-    window.open(this.$('select').val().replace('href-', ''), '_blank');
+    var $selected = this.$('select option:selected');
+    window.open($selected.val().replace('href-', ''), '_blank');
+    app.user.set('wordDictionary', $selected.text()).cache();
   },
   /**
    * @method set
