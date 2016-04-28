@@ -2,6 +2,9 @@ gelato-component(data-name='vocab-viewer-lookup')
 
   select#dictionary-list.form-control(name="dictionary-list")
     for link, name in view.links
-      option(value=link)= name
+      if app.user.get('wordDictionary') === name
+        option(value=link, selected)= name
+      else
+        option(value=link)= name
 
   button#button-lookup.btn.btn-success Look up
