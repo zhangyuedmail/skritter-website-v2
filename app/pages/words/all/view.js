@@ -16,6 +16,7 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
+    this.dialog = null;
     this.navbar = new DefaultNavbar();
     this.sidebar = new WordsSidebar();
     this.items = new Items();
@@ -234,8 +235,9 @@ module.exports = GelatoPage.extend({
     var row = $(event.target).parent('tr');
     var vocabId = row.data('vocab-id');
     if (vocabId) {
-      var dialog = new VocabViewerDialog();
-      dialog.open().load(vocabId);
+      this.dialog = new VocabViewerDialog();
+      this.dialog.load(vocabId);
+      this.dialog.open();
     }
   },
   /**
