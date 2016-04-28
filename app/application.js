@@ -68,6 +68,7 @@ module.exports = GelatoApplication.extend({
     canvasSize: 450,
     language: undefined,
     lastItemChanged: 0,
+    locale: 'ja',
     timestamp: '{!timestamp!}',
     title: '{!application-title!}',
     version: '{!application-version!}'
@@ -236,6 +237,21 @@ module.exports = GelatoApplication.extend({
     parent.parentNode.insertBefore(script, parent);
     window.HSCW = HSCW;
     window.HS = HS;
+  },
+  /**
+   * @method locale
+   * @param {String} path
+   * @param {String} [code]
+   * @returns {*}
+   */
+  locale: function(path, code) {
+    var locale;
+    try {
+      locale = require('locale/' + (code || app.get('locale')));
+    } catch (error) {
+      locale = {};
+    }
+    return _.get(locale, path) || _.get(require('locale/en'), path);
   },
   /**
    * @method reset
