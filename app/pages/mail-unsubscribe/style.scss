@@ -1,0 +1,14 @@
+@import "../../styles/_variables";
+
+gelato-page[data-name='mail-unsubscribe'] {
+
+  background: $background-marketing;
+  padding-top: 100px;
+
+  #footer-container {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+}
