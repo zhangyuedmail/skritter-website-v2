@@ -9,7 +9,7 @@ gelato-component(data-name='vocab-viewer-content')
 
     #header-section
       .block.separator
-        #vocab-writing= vocab.get('writing')
+        #vocab-writing(class=vocab.getFontClass())= vocab.get('writing')
         #vocab-reading= vocab.getReading()
       .block
         #vocab-difficulty= vocab.get('toughnessString')
@@ -31,7 +31,7 @@ gelato-component(data-name='vocab-viewer-content')
           .value
             #vocab-sentence
               if sentence
-                span!= sentence.getWriting()
+                span(class=vocab.getFontClass())!= sentence.getWriting()
         .block
           .header Mnemonic
           .value
@@ -66,3 +66,14 @@ gelato-component(data-name='vocab-viewer-content')
                   td.item-ban
                     button.btn.btn-xs.btn-danger Ban
       #panel-right
+        if view.vocabsContaining.length
+          .block
+            .header Words containing #{vocab.get('writing')}
+            .value
+              #vocab-words-containing
+                for word in view.vocabsContaining.models
+                  div
+                    span.spr.writing(class=word.getFontClass())= word.get('writing')
+                    span.spr.reading= word.getReading()
+                    span.spr :
+                    span.definition= word.getDefinition()
