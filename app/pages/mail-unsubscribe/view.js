@@ -10,9 +10,11 @@ var MarketingFooter = require('components/marketing/footer/view');
 var MailUnsubscribe = GelatoPage.extend({
   /**
    * @method initialize
+   * @param {Object} options
    * @constructor
    */
-  initialize: function() {
+  initialize: function(options) {
+    this.email = options.email;
     this.footer = new MarketingFooter();
     this.navbar = new DefaultNavbar();
   },

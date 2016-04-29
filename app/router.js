@@ -251,8 +251,8 @@ module.exports = Router.extend({
    * @method navigateMailUnsubscribe
    */
   navigateMailUnsubscribe: function() {
+    this.go('pages/mail-unsubscribe', {email: app.fn.getParameterByName('md_email')});
     this.navigate('mail/unsubscribe');
-    this.go('pages/mail-unsubscribe');
   },
   /**
    * @method navigateNotFound
