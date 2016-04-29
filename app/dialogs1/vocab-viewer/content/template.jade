@@ -1,6 +1,7 @@
 gelato-component(data-name='vocab-viewer-content')
 
   if view.vocabs && view.vocabs.length
+    - var items = view.items;
     - var vocab = view.vocabs.at(0);
     - var definition = vocab.getDefinition();
     - var mnemonic = vocab.getMnemonic();
@@ -41,4 +42,27 @@ gelato-component(data-name='vocab-viewer-content')
           .header Dictionary
           .value
             #lookup-container
+        .block
+          table.table
+            thead
+              tr
+                th Part
+                th Next
+                th Last
+                th Time
+                th
+            tbody
+              for item in items
+                tr.item-row(data-id=item.id, data-part=item.part)
+                 //TODO: move this logic to the item model
+                 td= _.capitalize(item.part)
+                 td= item.next > moment().unix() ? moment(item.next * 1000).from() : 'Ready'
+                 td= item.last ? moment(item.last * 1000).from() : '-'
+                 td= item.timeStudied ? Math.round(item.timeStudied) + ' seconds' : '-'
+                 if _.includes(vocab.get('bannedParts'), item.part)
+                  td.item-unban
+                   button.btn.btn-xs.btn-default Unban
+                 else
+                  td.item-ban
+                    button.btn.btn-xs.btn-danger Ban
       #panel-right
