@@ -7,7 +7,7 @@ module.exports = {
 
   "pages": {
     "home": {
-      "free_trial": "Start your 7-day free trial"
+      "freeTrial": "Start your 7-day free trial"
     }
   }
 
