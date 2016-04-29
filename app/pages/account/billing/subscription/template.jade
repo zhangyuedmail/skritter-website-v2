@@ -171,6 +171,11 @@ gelato-page(data-name='account-billing-subscription')
                 if !subscribed
                   .title Add subscription
 
+                .form-group.form-group-lg.paypal-form-group.hide
+                  if view.subscription.has('discount')
+                    .alert.alert-danger
+                      span Coupon discounts can't be applied to Paypal transactions.
+
                 .form-group.form-group-lg
                   label.control-label.col-sm-3 Payment method
                   .col-sm-9
@@ -278,6 +283,7 @@ gelato-page(data-name='account-billing-subscription')
                     #card-error-alert.alert.alert-danger.hide
 
                 .form-group.form-group-lg.paypal-form-group.hide
+
                   .col-sm-3
                     button#subscribe-paypal-btn.btn.btn-fixed.btn-success
                       span Subscribe now
