@@ -1,5 +1,4 @@
 gelato-page(data-name='admin')
-
   - var payments = view.payments.getTotalByDate();
 
   #navbar-container
@@ -11,23 +10,27 @@ gelato-page(data-name='admin')
 
           p.lead Subscriptions
 
-          table.table.table-striped
-            thead
-              tr
-                th Date
-                th Apple
-                th Google
-                th Paypal
-                th Stripe
-                th Total
-            tbody
-              for entry, date in payments
+          if view.payments.state === 'standby'
+            table.table.table-striped
+              thead
                 tr
-                  td= date
-                  td= entry.newApple + '/' + entry.returningApple
-                  td= entry.newGoogle + '/' + entry.returningGoogle
-                  td= entry.newPaypal + '/' + entry.returningPaypal
-                  td= entry.newStripe + '/' + entry.returningStripe
-                  td= entry.newTotal + '/' + entry.returningTotal
+                  th Date
+                  th Apple
+                  th Google
+                  th Paypal
+                  th Stripe
+                  th Total
+              tbody
+                for entry, date in payments
+                  tr
+                    td= date
+                    td= entry.newApple + ' / ' + entry.returningApple
+                    td= entry.newGoogle + ' / ' + entry.returningGoogle
+                    td= entry.newPaypal + '/' + entry.returningPaypal
+                    td= entry.newStripe + '/' + entry.returningStripe
+                    td= entry.newTotal + '/' + entry.returningTotal
+          else
+            .text-center
+              i.fa.fa-5x.fa-spinner.fa-pulse
 
   #footer-container
