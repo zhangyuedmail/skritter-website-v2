@@ -16,6 +16,7 @@ module.exports = GelatoDialog.extend({
     this.content = new Content({dialog: this});
     this.items = [];
     this.vocabs = new Vocabs();
+    this.vocabsContaining = new Vocabs();
   },
   /**
    * @property template
@@ -40,6 +41,7 @@ module.exports = GelatoDialog.extend({
     var self = this;
     var wordItems = null;
     var wordVocabs = null;
+    var wordVocabsContaining = null;
     async.parallel(
       [
         function(callback) {
@@ -58,6 +60,21 @@ module.exports = GelatoDialog.extend({
             },
             success: function(vocabs) {
               wordVocabs = vocabs;
+              callback();
+            }
+          });
+        },
+        function(callback) {
+          self.vocabsContaining.fetch({
+            data: {
+              include_containing: true,
+              q: vocabId
+            },
+            error: function(error) {
+              callback(error);
+            },
+            success: function(vocabs) {
+              wordVocabsContaining = vocabs;
               callback();
             }
           });
@@ -83,7 +100,8 @@ module.exports = GelatoDialog.extend({
         if (error) {
           console.error('WORD DIALOG LOAD ERROR:', error);
         } else {
-          self.content.set(wordVocabs, wordItems);
+          wordVocabsContaining.remove(wordVocabs.at(0).id);
+          self.content.set(wordVocabs, wordVocabsContaining, wordItems);
         }
       }
     );

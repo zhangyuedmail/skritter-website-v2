@@ -16,6 +16,7 @@ module.exports = GelatoComponent.extend({
     this.lookup = new VocabViewerLookup();
     this.items = [];
     this.vocabs = null;
+    this.vocabsContaining = null;
   },
   /**
    * @property events
@@ -64,12 +65,14 @@ module.exports = GelatoComponent.extend({
   /**
    * @method set
    * @param {Vocabs} vocabs
+   * @param {Vocabs} vocabsContaining
    * @param {Array} items
    * @returns {VocabViewerContent}
    */
-  set: function(vocabs, items) {
+  set: function(vocabs, vocabsContaining, items) {
     this.items = items || [];
     this.vocabs = vocabs || null;
+    this.vocabsContaining = vocabsContaining || null;
     this.lookup.set(vocabs);
     return this.render();
   }
