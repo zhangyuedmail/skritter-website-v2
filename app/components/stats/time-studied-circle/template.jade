@@ -1,10 +1,16 @@
 gelato-component(data-name='stats-time-studied-circle-component')
   .row
     .col-md-3
-      .num 2
-      .num-label mins per day
+      .num-area-wrapper
+        #num-time-per-day.num ...
+        #time-per-day-units.units-label
     .col-md-6
-      #circle circle!
+      .graph-wrapper
+        #circle
+        .days-studied-wrapper
+          #num-days-studied.num.num-days-studied
+          .units-label.week / 7 days
     .col-md-3
-      .num 1%
-      .num-label retention rate
+      .num-area-wrapper
+        #num-retention-rate.num ...
+        .units-label retention rate

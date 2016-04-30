@@ -387,6 +387,25 @@ module.exports = SkritterCollection.extend({
   },
 
   /**
+   * Given a range of dates, gives the number of days in that range that the user studied.
+   * @param {String} start YYYY-MM-DD formatted date from where to start (inclusive) counting
+   * @param {String} end  YYYY-MM-DD formatted date from where to end (inclusive) counting
+   * @returns {Number} the number of days the user studied
+   */
+  getNumDaysStudiedInPeriod: function(start, end) {
+    var daysStudied = 0;
+    var models = this._getStatsInRange(start, end);
+
+    daysStudied = models.reduce(function(sum, m) {
+      var timeStudied = m.get('timeStudied').day;
+      return timeStudied > 0 ? sum + 1 : sum;
+    }, daysStudied);
+
+
+    return daysStudied;
+  },
+
+  /**
    * Gets the number for a certain category of items learned within a specified granularity.
    * @param {String} itemType the type of item to get "char"|"word"
    * @param {String} timePeriod the time period to look for "all"|"month"|"week"|"day"
@@ -400,6 +419,43 @@ module.exports = SkritterCollection.extend({
     stat = stat || this.at(0);
 
     return this.length ? stat.get(itemType).rune.learned[timePeriod] : 0;
+  },
+
+  /**
+   * Given a range of dates, gives the retention rate
+   * @param {String} start YYYY-MM-DD formatted date from where to start (inclusive) counting
+   * @param {String} end  YYYY-MM-DD formatted date from where to end (inclusive) counting
+   * @returns {Number} the number of days the user studied
+     */
+  getRetentionRateForPeriod: function(start, end, itemType, part) {
+    var stats = this._getStatsInRange(start, end);
+
+    return this.getRetentionRate(stats, itemType, part);
+  },
+
+  /**
+   *
+   * @param {Array<ProgressStat>} stats
+   * @param {String} itemType The type of
+   * @param {String} part
+   * @returns {number|*}
+     */
+  getRetentionRate: function(stats, itemType, part) {
+    var remembered = 0;
+    var studied = 0;
+    var retentionRate;
+
+    itemType = itemType || 'word';
+    part = part || 'rune';
+
+    _.forEach(stats, function(stat) {
+      studied += stat.get(itemType)[part].studied.day;
+      remembered += stat.get(itemType)[part].remembered.day;
+    });
+
+    retentionRate = studied === 0 ? 0 : ((remembered / studied) * 100);
+
+    return retentionRate;
   },
 
   /**
@@ -427,18 +483,24 @@ module.exports = SkritterCollection.extend({
    * Gets the total time studied for a period of time
    * @param {String} start a date string formatted YYYY-MM-DD of when the period starts
    * @param {String} end a date string formatted YYYY-MM-DD of when the period starts
+   * @param {Boolean} [keepInMs] whether to return the time formatted in the
+   *                              largest unit (default), or when true, return
+   *                              the time in ms.
    * @returns {Object} Formatted time unit object from convertToLargestTimeUnit of
    *                   the sum of the time studied during the specified period.
    * @method getTimeStudiedForPeriod
    */
-  getTimeStudiedForPeriod: function(start, end) {
-    var endFound = false;
+  getTimeStudiedForPeriod: function(start, end, keepInMs) {
     var timeStudied = 0;
     var models = this._getStatsInRange(start, end);
 
     timeStudied = models.reduce(function(sum, m) {
       return sum + m.get('timeStudied').day;
     }, timeStudied);
+
+    if (keepInMs) {
+      return timeStudied;
+    }
 
     return this.convertToLargestTimeUnit(timeStudied);
   },
