@@ -325,20 +325,20 @@ module.exports = SkritterCollection.extend({
      * @returns {Number}
      */
     getDailyItemsReviewed: function() {
-        var total = 0;
-        var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
-        var stat = this.get(today);
-        if (stat) {
-            total += stat.get('char').defn.studied.day;
-            total += stat.get('char').rdng.studied.day;
-            total += stat.get('char').rune.studied.day;
-            total += stat.get('char').tone.studied.day;
-            total += stat.get('word').defn.studied.day;
-            total += stat.get('word').rdng.studied.day;
-            total += stat.get('word').rune.studied.day;
-            total += stat.get('word').tone.studied.day;
-        }
-        return total;
+      var total = 0;
+      var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
+      var stat = this.get(today);
+      if (stat) {
+        total += stat.get('char').defn.studied.day;
+        total += stat.get('char').rdng.studied.day;
+        total += stat.get('char').rune.studied.day;
+        total += stat.get('char').tone.studied.day;
+        total += stat.get('word').defn.studied.day;
+        total += stat.get('word').rdng.studied.day;
+        total += stat.get('word').rune.studied.day;
+        total += stat.get('word').tone.studied.day;
+      }
+      return total;
     },
 
   /**
