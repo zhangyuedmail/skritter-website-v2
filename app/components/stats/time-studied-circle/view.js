@@ -19,6 +19,14 @@ module.exports = GelatoComponent.extend({
     this.listenTo(this.collection, 'state:standby', this.update);
 
     this._graph = null;
+
+    /**
+     * The date range to filter by. If set, should have start and end properties
+     * which are YYYY-MM-DD formatted date strings.
+     * If not set through init options, is false and all-time stats will be used.
+     * @type {Object|Boolean}
+     */
+    this.range = _.isObject(options.range) ? options.range : false;
   },
 
   /**
@@ -113,17 +121,20 @@ module.exports = GelatoComponent.extend({
     if (!this.collection.length) {
       return;
     }
-    /*
-    var chartData = this._graph.series[0];
-    var data = [];
-    var length = this.collection.length > 6 ? 6 : this.collection.length - 1;
 
-    for (var i = length; i >= 0; i--) {
-      var stat = this.collection.at(i);
-      data.push(Math.floor(stat.get('timeStudied').day * 1000));
-    }
+    // time studied
+    var timeStudied = this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end, true);
+    var avgTimeStudied = this.collection.convertToLargestTimeUnit(timeStudied / 7);
+    this.$('#num-time-per-day').text(Number(avgTimeStudied.amount.split(':')[0]));
+    this.$('#time-per-day-units').text(avgTimeStudied.units + ' per day');
 
-    chartData.setData(data);
-    */
+    // retention rate
+    var retentionRate = this.collection.getRetentionRateForPeriod(
+      this.range.start, this.range.end, 'word', 'rune');
+    this.$('#num-retention-rate').text(Math.round(retentionRate) + '%');
+
+    // circle & vals
+    var daysStudied = this.collection.getNumDaysStudiedInPeriod(this.range.start, this.range.end);
+    this.$('#num-days-studied').text(daysStudied);
   }
 });
