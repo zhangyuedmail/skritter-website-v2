@@ -62,6 +62,10 @@ gelato-component[data-name='stats-items-learned-circle'] {
   .data-section {
     position: relative;
     margin-bottom: 50px;
+
+    // this will be reduced on smaller screens
+    width: 100%;
+    display: inline-block;
   }
 
   .colored-square {
@@ -88,5 +92,20 @@ gelato-component[data-name='stats-items-learned-circle'] {
 
   .highcharts-tracker {
     cursor: default !important;
+  }
+
+  @media (max-width: 1000px) {
+    .data-section {
+      width: 50%;
+    }
+
+    .words-learned-bg {
+      left: auto;
+      right: 20%;
+    }
+
+    .chars-learned-bg {
+      right: 20%;
+    }
   }
 }

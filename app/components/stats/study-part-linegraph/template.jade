@@ -1,4 +1,7 @@
 gelato-component(data-name='stats-study-part-linegraph')
+  .row.hidden-md.hidden-lg
+    - var title = view.part === 'rune' ? 'Writing' : view.part === 'rdng' ? 'Reading' : view.part === 'defn' ? 'Definition' : 'Tone';
+    #graph-title.graph-title #{title}
   .row
     .col-md-9.col-xs-9
       #linegraph
