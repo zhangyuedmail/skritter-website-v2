@@ -264,52 +264,24 @@ module.exports = SkritterCollection.extend({
 
 
     /**
-     * Gets the total amount of time a user has spent studying for the lifetime of their account.
-     * @returns {object} the amount of time studied as a string with a units property 
-     *                   specifiying the largest denomination of the amount property.
-     */
-    getAllTimeTimeStudied: function() {
-        if (!this.length) {
-            return {amount: '0', units: 'seconds'};
-        }
-
-        var timeStudied = this.at(0).get('timeStudied');
-        var allStudied = Math.floor(timeStudied.all);
-        var seconds = Math.floor(allStudied) % 60;
-        var minutes = Math.floor(allStudied / 60) % 60;
-        var hours = Math.floor(allStudied / 3600);
-
-        var largestUnit = hours ? 'hours' :
-                          minutes ? 'minutes' :
-                          'seconds';
-        var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
-                     minutes ? minutes + ':' + seconds :
-                     seconds;
-        return {
-            amount: amount,
-            units: largestUnit
-        };
-    },
-
-    /**
      * @method getDailyItemsReviewed
      * @returns {Number}
      */
     getDailyItemsReviewed: function() {
-        var total = 0;
-        var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
-        var stat = this.get(today);
-        if (stat) {
-            total += stat.get('char').defn.studied.day;
-            total += stat.get('char').rdng.studied.day;
-            total += stat.get('char').rune.studied.day;
-            total += stat.get('char').tone.studied.day;
-            total += stat.get('word').defn.studied.day;
-            total += stat.get('word').rdng.studied.day;
-            total += stat.get('word').rune.studied.day;
-            total += stat.get('word').tone.studied.day;
-        }
-        return total;
+      var total = 0;
+      var today = moment().subtract(4, 'hours').format('YYYY-MM-DD');
+      var stat = this.get(today);
+      if (stat) {
+        total += stat.get('char').defn.studied.day;
+        total += stat.get('char').rdng.studied.day;
+        total += stat.get('char').rune.studied.day;
+        total += stat.get('char').tone.studied.day;
+        total += stat.get('word').defn.studied.day;
+        total += stat.get('word').rdng.studied.day;
+        total += stat.get('word').rune.studied.day;
+        total += stat.get('word').tone.studied.day;
+      }
+      return total;
     },
 
   /**
