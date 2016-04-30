@@ -162,7 +162,8 @@ module.exports = GelatoComponent.extend({
       remembered += stat.remembered.day;
     }
 
-    retentionRate = studied === 0 ? 0 : Math.floor((remembered / studied) * 100);
+    // wonky 1000 / 10 division to get first decimal place
+    retentionRate = studied === 0 ? 0 : (Math.floor((remembered / studied) * 1000) / 10);
 
     return {
       chartData: chartData,
