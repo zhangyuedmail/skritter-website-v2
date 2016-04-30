@@ -1,6 +1,10 @@
 @import "../../../styles/_variables";
 
 gelato-component[data-name='stats-heatmap'] {
+  .title {
+    display: inline-block;
+  }
+
   .heatmap {
     height: 150px;
     rect {
@@ -48,6 +52,7 @@ gelato-component[data-name='stats-heatmap'] {
 
   .graph-legend {
     float: right;
+    margin-top: 22px;
   }
 
   .legend-square {
