@@ -27,22 +27,18 @@ gelato-component(data-name='stats-timeline')
           .col-md-6.middle-graph-wrapper-r
             #days-studied-container.days-studied-container
       .rwdt-graphs-wrapper
-        .row
-          .col-md-1 &nbsp;
-          .col-md-11
-            .row
-              .col-md-3
-                .rwdt-label Writing
-              .col-md-3
-                .rwdt-label Definition
-              .col-md-3
-                .rwdt-label Reading
-              .col-md-3
-                .rwdt-label Tone
-        .row
-          .col-md-1
-            .vertical-label Characters
-          .col-md-11
+        .row.push-left
+          .col-md-3
+            .rwdt-label Writing
+          .col-md-3
+            .rwdt-label Definition
+          .col-md-3
+            .rwdt-label Reading
+          .col-md-3
+            .rwdt-label Tone
+        .row.push-left
+          .vertical-label Characters
+          .col-md-12
             .row
               .col-md-3
                 #line-char-writing-container.graph
@@ -52,10 +48,9 @@ gelato-component(data-name='stats-timeline')
                 #line-char-reading-container.graph
               .col-md-3
                 #line-char-tone-container.graph
-        .row
-          .col-md-1
-            .vertical-label Words
-          .col-md-11
+        .row.push-left.word-line-graphs-wrapper
+          .vertical-label Words
+          .col-md-12
             .row
               .col-md-3
                 #line-word-writing-container.graph
