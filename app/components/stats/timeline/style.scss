@@ -56,6 +56,17 @@ gelato-component[data-name='stats-timeline'] {
     color: $grade3;
   }
 
+  .push-left {
+    padding-left: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
+    position: relative;
+  }
+
+  .word-line-graphs-wrapper {
+    background: $white2;
+  }
+
 
   gelato-component[data-name='stats-items-learned-circle'] {
     background: $white2;
@@ -122,6 +133,12 @@ gelato-component[data-name='stats-timeline'] {
     writing-mode: vertical-lr;
     transform: rotate(180deg);
     height: 150px;
+    position: absolute;
+    text-align: center;
+    font-size: 16px;
+    color: $grey5;
+    left: 0px;
+    top: 0px;
   }
 
   .graph {

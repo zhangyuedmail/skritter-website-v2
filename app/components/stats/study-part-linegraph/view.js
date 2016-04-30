@@ -52,9 +52,10 @@ module.exports = GelatoComponent.extend({
 
     $linegraph.highcharts({
       chart: {
-        type: 'spline'
+        type: 'spline',
+        backgroundColor: 'transparent'
       },
-      colors: ['#87a64b'],
+      colors: ['#C5DA4B'],
       title: null,
       yAxis: {
         title: {
@@ -84,7 +85,15 @@ module.exports = GelatoComponent.extend({
       },
       series: [{
         data: [0, 0, 0, 0, 0, 0, 0],
-        showInLegend: false
+        showInLegend: false,
+        marker: {
+          enabled: false,
+          states: {
+            hover: {
+              radius: 5
+            }
+          }
+        }
       }]
     });
 
