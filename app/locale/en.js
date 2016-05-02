@@ -6,6 +6,9 @@ module.exports = {
   "title": "Skritter",
 
   "pages": {
+    "contact": {
+      "title": "Contact Us"
+    },
     "home": {
       "freeTrial": "Start your 7-day free trial"
     }
