@@ -53,6 +53,7 @@ module.exports = GelatoComponent.extend({
    */
   handleMousedownButton: function(event) {
     event.preventDefault();
+    console.log('downing');
     this.select($(event.currentTarget).data('value'));
     this.trigger('mousedown', this.value);
   },
@@ -62,6 +63,7 @@ module.exports = GelatoComponent.extend({
    */
   handleMouseupButton: function(event) {
     event.preventDefault();
+    console.log('upping');
     this.select($(event.currentTarget).data('value'));
     this.trigger('mouseup', this.value);
   },
