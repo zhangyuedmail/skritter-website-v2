@@ -22,6 +22,7 @@ module.exports = GelatoComponent.extend({
     this.listenTo(this.prompt.toolbarAction, 'click:show', this.handlePromptToolbarActionShow);
     this.listenTo(this.prompt.toolbarAction, 'click:teach', this.handlePromptToolbarActionTeach);
     this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
+    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
     this.on('attempt:fail', this.handleAttemptFail);
     this.on('attempt:success', this.handleAttemptSuccess);
     this.on('resize', this.render);
@@ -149,6 +150,8 @@ module.exports = GelatoComponent.extend({
       this.prompt.$('#leech-ribbon').removeClass('hidden');
       this.prompt.review.item.consecutiveWrong = 0;
       this.teachCharacter();
+    } else {
+      this.prompt.$('#leech-ribbon').addClass('hidden');
     }
     this.renderTemplate();
     return this;

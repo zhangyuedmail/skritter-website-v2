@@ -23,7 +23,7 @@ exports.config = {
           'vendor/d3-3.5.16.js',
           'vendor/dexie-1.3.6.js',
           'vendor/heatmap-3.5.4.js',
-          'vendor/highcharts-4.2.3.js',
+          'vendor/highcharts-4.2.4.js',
           'vendor/jquery.ui-1.11.4.js',
           'vendor/keypress-2.1.4.js',
           'vendor/mocha-2.4.5.js',

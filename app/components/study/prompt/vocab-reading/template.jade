@@ -12,7 +12,7 @@ gelato-component(data-name='style-prompt-vocab-reading')
           if (reading.type === 'character')
             - var review = prompt.reviews.at(index)
             div.reading(data-position=index)
-              if review.isReadingHidden()
+              if !prompt.reviews.isComplete() && review.isReadingHidden()
                 button.show-reading.btn.btn-sm.btn-default show
               else
                 span= prompt.reviews.isChinese() ? app.fn.pinyin.toTone(reading.value) : reading.value

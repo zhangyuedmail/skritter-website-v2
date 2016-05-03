@@ -35,6 +35,7 @@ module.exports = Router.extend({
     'institutions': 'navigateInstitutions',
     'legal': 'navigateLegal',
     'login': 'navigateLogin',
+    'mail/unsubscribe': 'navigateMailUnsubscribe',
     'password-reset': 'navigatePasswordReset',
     'scratchpad/:writing(/:part)': 'navigateScratchpad',
     'signup(/:plan)': 'navigateSignup',
@@ -245,6 +246,13 @@ module.exports = Router.extend({
       this.navigate('login');
       this.go('pages/login');
     }
+  },
+  /**
+   * @method navigateMailUnsubscribe
+   */
+  navigateMailUnsubscribe: function() {
+    this.go('pages/mail-unsubscribe', {email: app.fn.getParameterByName('md_email')});
+    this.navigate('mail/unsubscribe');
   },
   /**
    * @method navigateNotFound

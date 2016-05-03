@@ -16,6 +16,7 @@ module.exports = GelatoComponent.extend({
     this.listenTo(this.prompt.canvas, 'input:up', this.handlePromptCanvasInputUp);
     this.listenTo(this.prompt.toolbarAction, 'click:correct', this.handlePromptToolbarActionCorrect);
     this.listenTo(this.prompt.toolbarGrading, 'mousedown', this.handlePromptToolbarGradingMousedown);
+    this.listenTo(this.prompt.toolbarGrading, 'mouseup', this.handlePromptCanvasClick);
     this.on('resize', this.render);
   },
   /**

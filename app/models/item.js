@@ -125,6 +125,7 @@ module.exports = SkritterModel.extend({
       }
       if (_.includes(['rune', 'tone'], part)) {
         promptItem.set('filler', characters[i] ? childVocab.isFiller() : true);
+        promptItem.set('complete', characters[i] ? childVocab.isFiller() : true);
       } else {
         promptItem.set('filler', false);
       }
@@ -241,7 +242,7 @@ module.exports = SkritterModel.extend({
    * @returns {Boolean}
    */
   isLeech: function() {
-    return this.consecutiveWrong > 2;
+    return !this.isNew() && this.consecutiveWrong > 2;
   },
   /**
    * @method isNew

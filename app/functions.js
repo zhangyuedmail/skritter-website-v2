@@ -193,6 +193,22 @@ function getLength(points) {
 }
 
 /**
+ * Gets the value of a URL parameter by its name
+ * @param {String} name the name of the parameter to look for
+ * @param {String} [url] the URL string to look in. Defaults to window.location.href.
+ * @returns {String} the value of the parameter, if it is found
+ */
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+/**
  * @method hasKana
  * @param {String} text
  * @returns {Boolean}
@@ -353,6 +369,7 @@ module.exports = {
   getDistance: getDistance,
   getGuid: getGuid,
   getLength: getLength,
+  getParameterByName: getParameterByName,
   hasKana: hasKana,
   imageExists: imageExists,
   isKana: isKana,

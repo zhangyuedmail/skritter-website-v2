@@ -101,7 +101,6 @@ module.exports = GelatoComponent.extend({
     } else {
       this.$('#new-ribbon').addClass('hidden');
     }
-    this.$('#leech-ribbon').addClass('hidden');
     switch (this.reviews.part) {
       case 'defn':
         this.part = new PartDefn({prompt: this}).render();
@@ -116,6 +115,7 @@ module.exports = GelatoComponent.extend({
         this.part = new PartTone({prompt: this}).render();
         break;
     }
+    this.toolbarVocab.disableEditing();
     return this;
   },
   /**

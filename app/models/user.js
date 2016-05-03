@@ -160,6 +160,17 @@ module.exports = SkritterModel.extend({
     async.series(
       [
         function(callback) {
+          self.fetch({
+            error: function(error) {
+              callback(error);
+            },
+            success: function() {
+              self.cache();
+              callback();
+            }
+          });
+        },
+        function(callback) {
           self.openDatabase(callback);
         },
         function(callback) {
@@ -205,6 +216,7 @@ module.exports = SkritterModel.extend({
         self.cache();
         self.session.cache();
         app.removeSetting('session');
+        app.removeSetting('siteRef');
         app.setSetting('user', self.id);
         mixpanel.identify(self.id);
         callback(null, user);
@@ -221,6 +233,7 @@ module.exports = SkritterModel.extend({
         app.removeLocalStorage(self.id + '-session');
         app.removeLocalStorage(self.id + '-user');
         app.removeSetting('user');
+        app.removeSetting('siteRef');
         app.reload();
       })
       .catch(function(error) {
