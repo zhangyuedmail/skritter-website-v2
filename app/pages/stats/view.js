@@ -16,7 +16,7 @@ module.exports = GelatoPage.extend({
 
     var today = moment().format('YYYY-MM-DD');
     var lastMonth = moment().subtract(1, 'month').format('YYYY-MM-DD');
-    
+
     this.statsCollection.fetchRange(lastMonth, today);
 
     this._views = {};
@@ -76,10 +76,11 @@ module.exports = GelatoPage.extend({
    * @param {jQuery.Event} event a click event
    */
   handleStatsSectionSelectorClicked: function(event) {
-    event.preventDefault();
 
     // TODO: re-enable when we have enough stats to call for dividing this into sections
     return;
+
+    // event.preventDefault();
 
     var newSection = event.target.id.split('-')[0];
 
