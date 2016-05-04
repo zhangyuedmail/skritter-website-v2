@@ -26,10 +26,8 @@ gelato-page(data-name='contact')
         .form-group
           label.col-sm-2.control-label(for='contact-message')= app.locale('pages.contact.message')
           textarea#field-message.col-sm-10(rows='5')
-        p#friendly-text
-          | Good to hear from you! We do respond to everything. Want to get Skritter for your school?&nbsp;
-          a(href='/institutions') Click Here
+        p#friendly-text= app.locale('pages.contact.friendlyText')
         .text-center
-          button#contact-submit.btn.btn-fixed.btn-success(type='submit') Submit
+          button#contact-submit.btn.btn-fixed.btn-success(type='submit')= app.locale('pages.contact.submit')
 
   #footer-container
