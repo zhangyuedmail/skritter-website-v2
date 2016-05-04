@@ -6,7 +6,12 @@ module.exports = {
   "title": "Skritter",
 
   "pages": {
-    "home": {}
+    "contact": {
+      "title": "お問い合わせ"
+    },
+    "home": {
+      "freeTrial": "７日間無料トライアルを試してみよう！"
+    }
   }
 
 };
