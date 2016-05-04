@@ -159,7 +159,7 @@ module.exports = GelatoComponent.extend({
     chartData.setData(rangeData.chartData);
 
 
-    this.$('#num-learned').text(totalStr)
+    this.$('#num-learned').text(totalStr !== "0" ? totalStr : '')
       .toggleClass('good', rangeData.totalChangeLearned > 0)
       .toggleClass('bad', rangeData.totalChangeLearned < 0);
 
@@ -169,7 +169,7 @@ module.exports = GelatoComponent.extend({
       .toggleClass('excellent', rangeData.retentionRate > 95)
       .toggleClass('good', rangeData.retentionRate > 80)
       .toggleClass('okay', rangeData.retentionRate > 60)
-      .toggleClass('bad', rangeData.retentionRate <= 60);
+      .toggleClass('bad', rangeData.retentionRate <= 60 && rangeData.studied > 0);
   },
 
   getRangeData: function() {
