@@ -43,25 +43,25 @@ gelato-component(data-name='stats-timeline')
           .vertical-label Characters
           .col-md-12
             .row
-              div(class="col-md-#{lineGraphColSize}")
+              div(class="col-md-#{lineGraphColSize} border-right")
                 #line-char-writing-container.graph
-              div(class="col-md-#{lineGraphColSize}")
+              div(class="col-md-#{lineGraphColSize} border-right")
                 #line-char-definition-container.graph
               div(class="col-md-#{lineGraphColSize}")
                 #line-char-reading-container.graph
               if app.isChinese()
-                div(class="col-md-#{lineGraphColSize}")
+                div(class="col-md-#{lineGraphColSize} border-left")
                   #line-char-tone-container.graph
         .row.push-left.word-line-graphs-wrapper
           .vertical-label Words
           .col-md-12
             .row
-              div(class="col-md-#{lineGraphColSize}")
+              div(class="col-md-#{lineGraphColSize} border-right")
                 #line-word-writing-container.graph
-              div(class="col-md-#{lineGraphColSize}")
+              div(class="col-md-#{lineGraphColSize} border-right")
                 #line-word-definition-container.graph
               div(class="col-md-#{lineGraphColSize}")
                 #line-word-reading-container.graph
               if app.isChinese()
-                div(class="col-md-#{lineGraphColSize}")
+                div(class="col-md-#{lineGraphColSize} border-left")
                   #line-word-tone-container.graph
