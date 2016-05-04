@@ -26,37 +26,41 @@ gelato-component(data-name='stats-timeline')
             #items-learned-container.items-learned-container
           .col-md-6.middle-graph-wrapper-r
             #days-studied-container.days-studied-container
+      - var lineGraphColSize = app.isChinese() ? 3 : 4;
       .rwdt-graphs-wrapper
         .row.push-left.hidden-sm.hidden-xs
-          .col-md-3
+          div(class="col-md-#{lineGraphColSize}")
             .rwdt-label Writing
-          .col-md-3
+          div(class="col-md-#{lineGraphColSize}")
             .rwdt-label Definition
-          .col-md-3
+          div(class="col-md-#{lineGraphColSize}")
             .rwdt-label Reading
-          .col-md-3
+          div(class="col-md-#{lineGraphColSize}")
             .rwdt-label Tone
+
         .row.push-left
           .vertical-label Characters
           .col-md-12
             .row
-              .col-md-3
+              div(class="col-md-#{lineGraphColSize}")
                 #line-char-writing-container.graph
-              .col-md-3
+              div(class="col-md-#{lineGraphColSize}")
                 #line-char-definition-container.graph
-              .col-md-3
+              div(class="col-md-#{lineGraphColSize}")
                 #line-char-reading-container.graph
-              .col-md-3
-                #line-char-tone-container.graph
+              if app.isChinese()
+                div(class="col-md-#{lineGraphColSize}")
+                  #line-char-tone-container.graph
         .row.push-left.word-line-graphs-wrapper
           .vertical-label Words
           .col-md-12
             .row
-              .col-md-3
+              div(class="col-md-#{lineGraphColSize}")
                 #line-word-writing-container.graph
-              .col-md-3
+              div(class="col-md-#{lineGraphColSize}")
                 #line-word-definition-container.graph
-              .col-md-3
+              div(class="col-md-#{lineGraphColSize}")
                 #line-word-reading-container.graph
-              .col-md-3
-                #line-word-tone-container.graph
+              if app.isChinese()
+                div(class="col-md-#{lineGraphColSize}")
+                  #line-word-tone-container.graph
