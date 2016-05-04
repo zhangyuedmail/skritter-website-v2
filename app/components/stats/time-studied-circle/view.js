@@ -53,64 +53,54 @@ module.exports = GelatoComponent.extend({
   renderGraph: function() {
     var self = this;
     var $circle = this.$('#circle');
-/*
+
     $circle.highcharts({
       chart: {
-        type: 'solidgauge'
-      },
-      colors: ['#87a64b'],
-      title: null,
-      pane: {
-        startAngle: 0,
-        endAngle: 360,
-        background: [{ // Track for Move
-          outerRadius: '112%',
-          innerRadius: '88%',
-          backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0.3).get(),
-          borderWidth: 0
-        }, { // Track for Exercise
-          outerRadius: '87%',
-          innerRadius: '63%',
-          backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[1]).setOpacity(0.3).get(),
-          borderWidth: 0
-        }, { // Track for Stand
-         outerRadius: '62%',
-          innerRadius: '38%',
-          backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[2]).setOpacity(0.3).get(),
-          borderWidth: 0
-        }]
-      },
-
-      yAxis: {
-        min: 0,
-        max: 100,
-        lineWidth: 0,
-        tickPositions: []
-      },
-
-      plotOptions: {
-        solidgauge: {
-          linecap: 'round'
-        }
+        backgroundColor: 'transparent',
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
       },
       credits: {
         enabled: false
       },
+      plotOptions: {
+        pie: {
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: false
+          }
+        }
+      },
       series: [{
-            name: 'Move',
-            borderColor: Highcharts.getOptions().colors[0],
-            data: [{
-                color: Highcharts.getOptions().colors[0],
-                radius: '100%',
-                innerRadius: '100%',
-                y: 80
-            }]
-        }]
+        name: ' ',
+        animation: true,
+        colorByPoint: true,
+        data: [
+          {name: "Studied", color: '#c5da4b', y: 0},
+          {name: "Didn't Study", color: '#efeef3', y: 7}
+        ],
+        innerSize: '80%'
+      }],
+      title: {
+        text: '',
+        align: 'center',
+        style: {
+          color: '#87a64b',
+          background: '#FFFFFF',
+          fontSize: '24px',
+          fontWeight: '300'
+        },
+        verticalAlign: 'middle',
+        y: 0
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.y}</b> days'
+      }
     });
 
-
     this._graph = $circle.highcharts();
-    */
   },
 
   /**
@@ -133,8 +123,16 @@ module.exports = GelatoComponent.extend({
       this.range.start, this.range.end, 'word', 'rune');
     this.$('#num-retention-rate').text(Math.round(retentionRate) + '%');
 
-    // circle & vals
+    // circle inner vals
     var daysStudied = this.collection.getNumDaysStudiedInPeriod(this.range.start, this.range.end);
     this.$('#num-days-studied').text(daysStudied);
+
+    // circle graph
+    var daysNotStudied = 7 - daysStudied;
+
+    this._graph.series[0].setData([
+      {name: "Studied", color: '#c5da4b', y: daysStudied},
+      {name: "Didn't Study", color: '#efeef3', y: daysNotStudied}
+    ], true);
   }
 });
