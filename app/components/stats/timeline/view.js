@@ -79,13 +79,6 @@ module.exports = GelatoComponent.extend({
       part: 'rdng'
     });
 
-    this._views['lineCharTone'] = new StudyPartLinegraphComponent({
-      collection: this.collection,
-      range: this.range,
-      type: 'char',
-      part: 'tone'
-    });
-
     this._views['lineWordWriting'] = new StudyPartLinegraphComponent({
       collection: this.collection,
       range: this.range,
@@ -107,12 +100,21 @@ module.exports = GelatoComponent.extend({
       part: 'rdng'
     });
 
-    this._views['lineWordTone'] = new StudyPartLinegraphComponent({
-      collection: this.collection,
-      range: this.range,
-      type: 'word',
-      part: 'tone'
-    });
+    if (app.isChinese()) {
+      this._views['lineCharTone'] = new StudyPartLinegraphComponent({
+        collection: this.collection,
+        range: this.range,
+        type: 'char',
+        part: 'tone'
+      });
+
+      this._views['lineWordTone'] = new StudyPartLinegraphComponent({
+        collection: this.collection,
+        range: this.range,
+        type: 'word',
+        part: 'tone'
+      });
+    }
 
     this.listenTo(this.collection, 'state:standby', this.update);
   },
@@ -137,12 +139,15 @@ module.exports = GelatoComponent.extend({
     this._views['lineCharWriting'].setElement('#line-char-writing-container').render();
     this._views['lineCharDefinition'].setElement('#line-char-definition-container').render();
     this._views['lineCharReading'].setElement('#line-char-reading-container').render();
-    this._views['lineCharTone'].setElement('#line-char-tone-container').render();
 
     this._views['lineWordWriting'].setElement('#line-word-writing-container').render();
     this._views['lineWordDefinition'].setElement('#line-word-definition-container').render();
     this._views['lineWordReading'].setElement('#line-word-reading-container').render();
-    this._views['lineWordTone'].setElement('#line-word-tone-container').render();
+
+    if (app.isChinese()) {
+      this._views['lineCharTone'].setElement('#line-char-tone-container').render();
+      this._views['lineWordTone'].setElement('#line-word-tone-container').render();
+    }
   },
 
   /**
