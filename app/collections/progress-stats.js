@@ -49,6 +49,38 @@ module.exports = SkritterCollection.extend({
   },
 
   /**
+   * Given a range of dates, splits it into an array of evenly-ranged chunks.
+   * E.g. for a range spanning 30 days, will return 3 sequential ranges each
+   * spanning 10 days.
+   * @param {Moment} momentStart start date of the range
+   * @param {Moment} momentEnd end date of the range
+   * @param {Number} chunkSize the maximum number of days that should be in the range
+   * @returns {Array<Array<String, String>>} A list of date ranges with the
+   *                                         first value being the start date
+   *                                         and the second being teh end date,
+   *                                         both formatted YYYY-MM-DD
+   */
+  divideDateRange: function(momentStart, momentEnd, chunkSize) {
+    var dates = [];
+    var diff = momentStart.diff(momentEnd, 'days');
+
+    if (diff <= chunkSize) {
+      return [
+        [momentStart.format('YYYY-MM-DD'), momentEnd.format('YYYY-MM-DD')]
+      ];
+    }
+
+    for (var  i = 0; i < diff; i += chunkSize) {
+      dates.push([
+        moment(momentStart).subtract(Math.min(i + chunkSize, diff), 'days').format('YYYY-MM-DD'),
+        moment(momentStart).subtract(i, 'days').format('YYYY-MM-DD')
+      ]);
+    }
+
+    return dates;
+  },
+
+  /**
    * @method fetchMonth
    * @param {Function} [callbackSuccess]
    * @param {Function} [callbackError]
@@ -56,6 +88,7 @@ module.exports = SkritterCollection.extend({
   fetchMonth: function(callbackSuccess, callbackError) {
     var momentMonthStart = moment().subtract(4, 'hours').startOf('month');
     var momentMonthEnd = moment().subtract(4, 'hours').endOf('month');
+
     async.series([
       _.bind(function(callback) {
         this.fetch({
@@ -113,6 +146,73 @@ module.exports = SkritterCollection.extend({
         }
       }
     }, this));
+  },
+
+  /**
+   * Fetches the stats between an arbitrary date range, splitting larger ranges
+   * into smaller chunks if needed for more immediate access to partial data.
+   * @param {String} start a YYYY-MM-DD formatted string that specifies the
+   *                        start of the date range
+   * @param {String} end  a YYYY-MM-DD formatted string that specifies the
+   *                      end of the date range
+   * @param {Function} callbackSuccess called when all of the fetches successfully complete
+   * @param {Function} callbackError called when any of the fetches fail
+   */
+  fetchRange: function(start, end, callbackSuccess, callbackError) {
+    // TODO: look into changing granularity for ranges larger than a month
+    var momentEnd = moment(start, 'YYYY-MM-DD');
+    var momentStart = moment(end, 'YYYY-MM-DD');
+    var dates = this.divideDateRange(momentStart, momentEnd, 10);
+    var dfds = [];
+    var self = this;
+
+    dates.forEach(function(date) {
+      var dfd = $.Deferred();
+      self._fetchRange(date[0], date[1], dfd.resolve, function() {
+        dfd.reject();
+        if (_.isFunction((callbackError))) {
+          callbackError(error, model);
+        }
+      });
+
+      dfds.push(dfd);
+    });
+
+    $.when.apply(null, dfds).done(function() {
+      if (_.isFunction(callbackSuccess)) {
+        callbackSuccess();
+      }
+    });
+  },
+
+  /**
+   * Performs a single fetch of stats within a given date range
+   * @param {String} start a YYYY-MM-DD formatted date string that specifies
+   *                       the start of the date range.
+   * @param {String} end  a YYYY-MM-DD formatted date string that specifies
+   *                      the end of the date range.
+   * @param {Function} callbackSuccess called when the fetch completes
+   * @param {Function} callbackError called when the fetch fails
+   * @private
+   */
+  _fetchRange: function(start, end, callbackSuccess, callbackError) {
+    this.fetch({
+      data: {
+        start: start,
+        end: end
+      },
+      remove: false,
+      success: function(data) {
+        if (_.isFunction(callbackSuccess)) {
+          callbackSuccess(data);
+        }
+      },
+      error: function(model, error) {
+        if (_.isFunction((callbackError))) {
+          callbackError(error, model);
+        }
+      }
+    });
   },
 
   /**
