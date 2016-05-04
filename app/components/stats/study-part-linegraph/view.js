@@ -19,6 +19,9 @@ module.exports = GelatoComponent.extend({
     this.range = options.range || false;
     this.type = options.type || 'char';
     this.part = options.part || 'rune';
+    this.partName = this.part === 'rune' ? 'writings' :
+      this.part === 'defn' ? 'definitions' :
+      this.part === 'rdng' ? 'readings' : 'tones';
 
     this._graph = null;
 
@@ -94,10 +97,26 @@ module.exports = GelatoComponent.extend({
             }
           }
         }
-      }]
+      }],
+      tooltip: {
+        formatter: function() {
+          var partName = self.partName;
+
+          // TODO: plural hack--get a proper string key for like defnPlural or something
+          partName = this.point.y !== 1 ? partName : partName.substring(0, partName.length - 1);
+          return self._getDateFromRangeOffset(this.key) + ' : learned <b>'+this.point.y+'</b> ' + partName;
+        }
+      }
     });
 
     this._graph = $linegraph.highcharts();
+  },
+
+  _getDateFromRangeOffset: function(offset) {
+    var date = moment(this.range.start, 'YYYY-MM-DD');
+    date.add(offset, 'days');
+
+    return date.format('MM/DD');
   },
 
   /**

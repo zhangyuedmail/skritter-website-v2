@@ -87,8 +87,8 @@ module.exports = GelatoComponent.extend({
         formatter: function() {
           var time = self.collection.convertToLargestTimeUnit(Math.floor(this.point.y / 1000));
           var amount = time.amount.split(':');
-          
-          return amount[0] + ' ' + time.units + ' ' + amount[1] + ' ' + time.secondaryUnits + ' studied';
+
+          return Number(amount[0]) + ' ' + time.units + ' ' + Number(amount[1]) + ' ' + time.secondaryUnits + ' studied';
         }
       }
     });
