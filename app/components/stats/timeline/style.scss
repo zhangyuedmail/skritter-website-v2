@@ -150,7 +150,18 @@ gelato-component[data-name='stats-timeline'] {
   .border-left {
     border-left: 1px solid $white5;
   }
+
   .border-right {
     border-right: 1px solid $white5;
+  }
+
+  @media all and (max-width: 1000px) {
+    .border-left {
+      border-left: none;
+    }
+
+    .border-right {
+      border-right: none;
+    }
   }
 }
