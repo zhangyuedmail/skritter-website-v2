@@ -89,7 +89,6 @@ module.exports = GelatoComponent.extend({
         align: 'center',
         style: {
           color: '#87a64b',
-          background: '#FFFFFF',
           fontSize: '24px',
           fontWeight: '300'
         },
@@ -97,7 +96,10 @@ module.exports = GelatoComponent.extend({
         y: 0
       },
       tooltip: {
-        pointFormat: '{series.name}: <b>{point.y}</b> days'
+        backgroundColor: '#efeef3',
+        formatter: function() {
+          return this.key + ' : <b>'+this.point.y+'</b> days';
+        }
       }
     });
 
