@@ -70,7 +70,8 @@ module.exports = GelatoComponent.extend({
           cursor: 'pointer',
           dataLabels: {
             enabled: false
-          }
+          },
+          borderWidth: 0
         }
       },
       series: [{
