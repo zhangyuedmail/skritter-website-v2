@@ -146,4 +146,11 @@ gelato-component[data-name='stats-timeline'] {
     text-align: right;
     display: inline-block;
   }
+
+  .border-left {
+    border-left: 1px solid $white5;
+  }
+  .border-right {
+    border-right: 1px solid $white5;
+  }
 }
