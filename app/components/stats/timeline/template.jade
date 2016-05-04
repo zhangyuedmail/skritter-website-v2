@@ -35,8 +35,9 @@ gelato-component(data-name='stats-timeline')
             .rwdt-label Definition
           div(class="col-md-#{lineGraphColSize}")
             .rwdt-label Reading
-          div(class="col-md-#{lineGraphColSize}")
-            .rwdt-label Tone
+          if app.isChinese()
+            div(class="col-md-#{lineGraphColSize}")
+              .rwdt-label Tone
 
         .row.push-left
           .vertical-label Characters
