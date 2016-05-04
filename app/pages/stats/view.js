@@ -14,8 +14,10 @@ module.exports = GelatoPage.extend({
     initialize: function() {
         this.statsCollection = new ProgressStats();
 
-    // TODO: better this
-    this.statsCollection.fetchMonth();
+    var today = moment().format('YYYY-MM-DD');
+    var lastMonth = moment().subtract(1, 'month').format('YYYY-MM-DD');
+    
+    this.statsCollection.fetchRange(lastMonth, today);
 
     this._views = {};
     this._views['navbar'] = new DefaultNavbar();
