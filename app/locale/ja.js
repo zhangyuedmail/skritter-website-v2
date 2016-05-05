@@ -16,12 +16,21 @@ module.exports = {
 	  "bugReport": "バグレポート",
 	  "featureSuggestion": "新機能",
 	  "paymentIssue": "お支払い",
-	  "friendlyText": "ご連絡をいただき、ありがとうございます。学校ライセンスに関する情報はこちらへ",
+	  "friendlyText": "ご連絡をいただき、ありがとうございます。いただいたメールには必ずお返事しております。学校ライセンスに関する情報はこちらへ",
 	  "submit": "送る"
     },
     "home": {
+	  "motto1": "中国語と日本語の漢字を",
+	  "motto2": "楽しんで覚えてしまう",
+	  "headerText": "世界一の中国語と日本語を学ぶ方法",
+	  "planeHeader": "どこでも使える",
+	  "planeText": "中国語・日本語をどこでも学なぶ。南極大陸にも！",
+	  "flashcardsHeader": "スマートな単語帳",
+	  "flashcardsText": "一画一画の即時フィードバック、覚えにくい字と言葉を最優先に見る。",
       "freeTrial": "７日間無料トライアルを試してみよう！"
     }
   }
 
 };
+
+書き順
