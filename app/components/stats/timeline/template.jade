@@ -13,11 +13,11 @@ gelato-component(data-name='stats-timeline')
             span#time-studied-units-label #{view.granularity === 'minutes' ? 'minutes' : 'hours'}
             span &nbsp;studied
         .col-md-4.date-range-wrapper
-          a#date-range-selector.date-range-selector
-            | #{moment().subtract(6, 'days').format('MMM DD, YYYY')}
-            | -
-            | #{moment().format('MMM DD, YYYY')}
-            span.down-arrow &#x25BC;
+          #date-range-picker.date-range-picker
+            span#start-date #{moment().subtract(6, 'days').format('MMM DD, YYYY')}
+            span &nbsp;-&nbsp;
+            span#end-date #{moment().format('MMM DD, YYYY')}
+            span.down-arrow &#x25BE;
     .content
       #time-studied-bar-graph-container
       .items-leaned-days-studied-wrapper
