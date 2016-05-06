@@ -46,15 +46,15 @@ gelato-page(data-name='home')
             .media-left
               i.icon.icon-marketing-book
             .media-body
-              .media-heading Studying, your way
-              | Start learning from hundreds of textbooks and users lists, or make your own.
+              .media-heading= app.locale('pages.home.bookHeader')
+              span= app.locale('pages.home.bookText')
         .col-sm-6
           .media
             .media-left
               i.icon.icon-marketing-review
             .media-body
-              .media-heading Efficient reviewing
-              | Learn new characters in less than a minute, and remember 95% of what you learn.
+              .media-heading= app.locale('pages.home.reviewHeader')
+              span= app.locale('pages.home.reviewText')
       .row
         .col-xs-6.text-right
           a#link-apple-store(href="https://itunes.apple.com/us/artist/inkren-llc/id402280587", target="_blank")
