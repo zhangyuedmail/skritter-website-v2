@@ -22,8 +22,9 @@ gelato-component[data-name='stats-timeline'] {
     }
   }
 
-  .date-range-selector {
+  .date-range-picker {
     color: $grey5;
+    cursor: pointer;
 
     &:hover {
       color: $grey4;

@@ -10,6 +10,9 @@ var StudyPartLinegraphComponent = require('components/stats/study-part-linegraph
  * @extends {GelatoComponent}
  */
 module.exports = GelatoComponent.extend({
+  events: {
+    'change #granularity-selector': 'onTimelineUnitsChanged'
+  },
   /**
    * @method initialize
    * @constructor
@@ -122,10 +125,6 @@ module.exports = GelatoComponent.extend({
     this.listenTo(this.collection, 'state:standby', this.update);
   },
 
-  events: {
-    'change #granularity-selector': 'onTimelineUnitsChanged'
-  },
-
   /**
    * @property template
    * @type {Function}
@@ -138,6 +137,16 @@ module.exports = GelatoComponent.extend({
    */
   render: function() {
     this.renderTemplate();
+
+    // TODO: get user date format!
+    this.$('#date-range-picker').daterangepicker({
+      startDate: moment().subtract(6, 'days').format('MM/DD/YYYY'),
+      endDate: moment().format('MM/DD/YYYY'),
+      opens: "left"
+    });
+
+    this.$('#date-range-picker').on('apply.daterangepicker', $.proxy(this.onDatePickerUpdated, this));
+
     this._views['bargraph'].setElement('#time-studied-bar-graph-container').render();
     this._views['items-learned'].setElement('#items-learned-container').render();
     this._views['daysStudied'].setElement('#days-studied-container').render();
@@ -156,12 +165,36 @@ module.exports = GelatoComponent.extend({
     }
   },
 
+  remove: function() {
+    this.$('#date-range-picker').off();
+  },
+
   /**
    * Gets the total amount of time a user has studied in the selected time period
    * @returns {Object} a larget units time object from progress-stats
    */
   getTimeStudied: function() {
     return this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end);
+  },
+
+  /**
+   * Updates the range, UI, and graphs based on changed values from the DateRangePicker.
+   * @param {Event} event
+   * @param {DateRangePicker} picker
+   */
+  onDatePickerUpdated: function(event, picker) {
+    var startDate = picker.startDate.format('MMM DD, YYYY');
+    var endDate = picker.endDate.format('MMM DD, YYYY');
+
+    this.range.start = startDate;
+    this.range.end = endDate;
+
+    this.$('#start-date').text(startDate);
+    this.$('#end-date').text(endDate);
+
+    // TODO: fetch stats data--async?
+
+    this.updateGraphs();
   },
 
   /**
@@ -193,5 +226,9 @@ module.exports = GelatoComponent.extend({
     var timeStudied = this.getTimeStudied();
     this.$('#time-studied').text(timeStudied.amount);
     this.$('#time-studied-units-label').text(timeStudied.units);
+  },
+
+  updateGraphs: function() {
+    // TODO: pass new range to subviews
   }
 });
