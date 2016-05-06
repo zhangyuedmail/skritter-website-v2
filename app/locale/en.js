@@ -20,14 +20,18 @@ module.exports = {
 	  "submit": "Submit"
     },
     "home": {
-	"motto1": "Chinese & Japanese",
+	  "motto1": "Chinese & Japanese",
 	  "motto2": "characters, made fun",
 	  "headerText": "The best way to learn Chinese and Japanese",
 	  "planeHeader": "Characters on the go",
 	  "planeText": "Learn Chinese & Japanese characters anywhere, even in Antarctica.",
 	  "flashcardsHeader": "Smart flashcards",
 	  "flashcardsText": "Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.",
-      "freeTrial": "Start your 7-day free trial"
+      "freeTrial": "Start your 7-day free trial",
+	  "bookHeader": "Studying, your way",
+	  "bookText": "Start learning from hundreds of textbooks and users lists, or make your own.",
+	  "reviewHeader": "Efficient reviewing",
+	  "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn."
     }
   }
 
