@@ -60,6 +60,7 @@ module.exports = GelatoComponent.extend({
 
     var itemsLearned = this.collection.getItemsLearnedForPeriod('word', 'month') +
       this.collection.getItemsLearnedForPeriod('char', 'month');
-    this.$('#items-studied').text(itemsLearned);
+    this.$('#items-studied').text(itemsLearned)
+      .toggleClass('bad', itemsLearned < 0);
   }
 });
