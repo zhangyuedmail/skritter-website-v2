@@ -1,4 +1,5 @@
 var GelatoComponent = require('gelato/component');
+var config = require('config');
 
 /**
  * A circle graph that displays the retention percentage, minutes per day,
@@ -115,6 +116,11 @@ module.exports = GelatoComponent.extend({
       return;
     }
 
+    var daysRange = moment(this.range.end, config.dateFormatApp).diff(
+      moment(this.range.start, config.dateFormatApp), 'days'
+    ) + 1;
+    this.$('#days-range').text(daysRange);
+
     // time studied
     var timeStudied = this.collection.getTimeStudiedForPeriod(this.range.start, this.range.end, true);
     var avgTimeStudied = this.collection.convertToLargestTimeUnit(timeStudied / 7);
@@ -131,7 +137,7 @@ module.exports = GelatoComponent.extend({
     this.$('#num-days-studied').text(daysStudied);
 
     // circle graph
-    var daysNotStudied = 7 - daysStudied;
+    var daysNotStudied = daysRange - daysStudied;
 
     this._graph.series[0].setData([
       {name: "Studied", color: '#c5da4b', y: daysStudied},
