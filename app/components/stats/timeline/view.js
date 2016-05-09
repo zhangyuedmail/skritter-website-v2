@@ -3,6 +3,8 @@ var TimeStudiedBragraphComponent = require('components/stats/time-studied-bargra
 var ItemsLearnedGraphComponent = require('components/stats/items-learned/view');
 var TimeStudiedCircleComponent = require('components/stats/time-studied-circle/view');
 var StudyPartLinegraphComponent = require('components/stats/study-part-linegraph/view');
+var config = require('config');
+
 /**
  * @class StatsTimelineComponent
  * @extends {GelatoComponent}
@@ -11,6 +13,7 @@ module.exports = GelatoComponent.extend({
   events: {
     'change #granularity-selector': 'onTimelineUnitsChanged'
   },
+
   /**
    * @method initialize
    * @constructor
@@ -135,10 +138,11 @@ module.exports = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
 
-    // TODO: get user date format!
     this.$('#date-range-picker').daterangepicker({
       startDate: moment().subtract(6, 'days').format('MM/DD/YYYY'),
       endDate: moment().format('MM/DD/YYYY'),
+      maxDate: moment().format('MM/DD/YYYY'),
+      minDate: moment(app.user.get('created') * 1000),
       opens: "left"
     });
 
@@ -180,18 +184,35 @@ module.exports = GelatoComponent.extend({
    * @param {DateRangePicker} picker
    */
   onDatePickerUpdated: function(event, picker) {
-    var startDate = picker.startDate.format('MMM DD, YYYY');
-    var endDate = picker.endDate.format('MMM DD, YYYY');
+    var startDate = picker.startDate;
+    var endDate = picker.endDate;
+    var self = this;
 
-    this.range.start = startDate;
-    this.range.end = endDate;
+    var oldRangeStart = moment(this.range.start, config.dateFormatApp);
+    var oldRangeEnd = moment(this.range.end, config.dateFormatApp);
 
-    this.$('#start-date').text(startDate);
-    this.$('#end-date').text(endDate);
+    this.range.start = startDate.format(config.dateFormatApp);
+    this.range.end = endDate.format(config.dateFormatApp);
 
-    // TODO: fetch stats data--async?
+    this.$('#start-date').text(startDate.format('MMM DD, YYYY'))
+      .addClass('fetching');
+    this.$('#end-date').text(endDate.format('MMM DD, YYYY'))
+      .addClass('fetching');
 
-    this.updateGraphs();
+    this.collection.fetchRange(
+      startDate.format(config.dateFormatApp),
+      endDate.format(config.dateFormatApp),
+      function() {
+        self.$('#start-date').removeClass('fetching');
+        self.$('#end-date').removeClass('fetching');
+      },
+      function() {
+        self.$('#start-date').text(oldRangeStart.format('MMM DD, YYYY')).removeClass('fetching');
+        self.$('#end-date').text(oldRangeEnd.format('MMM DD, YYYY')).removeClass('fetching');
+        self.range.start = oldRangeStart.format(config.dateFormatApp);
+        self.range.end = oldRangeEnd.format(config.dateFormatApp);
+      }
+    );
   },
 
   /**
@@ -223,9 +244,5 @@ module.exports = GelatoComponent.extend({
     var timeStudied = this.getTimeStudied();
     this.$('#time-studied').text(timeStudied.amount);
     this.$('#time-studied-units-label').text(timeStudied.units);
-  },
-
-  updateGraphs: function() {
-    // TODO: pass new range to subviews
   }
 });

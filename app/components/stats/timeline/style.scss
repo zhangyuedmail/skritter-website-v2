@@ -31,6 +31,10 @@ gelato-component[data-name='stats-timeline'] {
     }
   }
 
+  .fetching {
+    color: $grey3;
+  }
+
   .down-arrow {
     margin-left: 15px;
   }
