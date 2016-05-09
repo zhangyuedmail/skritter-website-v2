@@ -62,7 +62,7 @@ module.exports = SkritterCollection.extend({
    */
   divideDateRange: function(momentStart, momentEnd, chunkSize) {
     var dates = [];
-    var diff = momentStart.diff(momentEnd, 'days');
+    var diff = momentEnd.diff(momentStart, 'days');
 
     if (diff <= chunkSize) {
       return [
@@ -70,10 +70,10 @@ module.exports = SkritterCollection.extend({
       ];
     }
 
-    for (var  i = 0; i < diff; i += chunkSize) {
+    for (var  i = 0; i < diff; i += chunkSize + 1) {
       dates.push([
-        moment(momentStart).subtract(Math.min(i + chunkSize, diff), 'days').format('YYYY-MM-DD'),
-        moment(momentStart).subtract(i, 'days').format('YYYY-MM-DD')
+        moment(momentEnd).subtract(Math.min(i + chunkSize, diff), 'days').format('YYYY-MM-DD'),
+        moment(momentEnd).subtract(i, 'days').format('YYYY-MM-DD')
       ]);
     }
 
@@ -160,15 +160,15 @@ module.exports = SkritterCollection.extend({
    */
   fetchRange: function(start, end, callbackSuccess, callbackError) {
     // TODO: look into changing granularity for ranges larger than a month
-    var momentEnd = moment(start, 'YYYY-MM-DD');
-    var momentStart = moment(end, 'YYYY-MM-DD');
+    var momentEnd = moment(end, 'YYYY-MM-DD');
+    var momentStart = moment(start, 'YYYY-MM-DD');
     var dates = this.divideDateRange(momentStart, momentEnd, 10);
     var dfds = [];
     var self = this;
 
     dates.forEach(function(date) {
       var dfd = $.Deferred();
-      self._fetchRange(date[0], date[1], dfd.resolve, function() {
+      self._fetchRange(date[0], date[1], dfd.resolve, function(error, model) {
         dfd.reject();
         if (_.isFunction((callbackError))) {
           callbackError(error, model);
