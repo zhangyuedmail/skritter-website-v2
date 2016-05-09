@@ -161,11 +161,11 @@ module.exports = GelatoComponent.extend({
   update: function() {
     var totalCharactersLearned = this.getCharactersLearned();
     var totalWordsLearned = this.getWordsLearned();
-    var totalItemsLearned = totalCharactersLearned + totalWordsLearned;
+    var totalItemsLearned = Math.max(totalCharactersLearned, 0) + Math.max(totalWordsLearned, 0);
 
     var chartData = this.$('#items-learned').highcharts().series[0].points;
-    chartData[0].update(totalWordsLearned);
-    chartData[1].update(totalCharactersLearned);
+    chartData[0].update(Math.max(totalWordsLearned, 0));
+    chartData[1].update(Math.max(totalCharactersLearned, 0));
 
     this.$('#characters-learned').text(totalCharactersLearned);
     this.$('#words-learned').text(totalWordsLearned);
