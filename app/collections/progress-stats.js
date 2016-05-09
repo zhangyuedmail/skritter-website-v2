@@ -155,8 +155,8 @@ module.exports = SkritterCollection.extend({
    *                        start of the date range
    * @param {String} end  a YYYY-MM-DD formatted string that specifies the
    *                      end of the date range
-   * @param {Function} callbackSuccess called when all of the fetches successfully complete
-   * @param {Function} callbackError called when any of the fetches fail
+   * @param {Function} [callbackSuccess] called when all of the fetches successfully complete
+   * @param {Function} [callbackError] called when any of the fetches fail
    */
   fetchRange: function(start, end, callbackSuccess, callbackError) {
     // TODO: look into changing granularity for ranges larger than a month
