@@ -21,6 +21,7 @@ module.exports = GelatoPage.extend({
     this.footer = new MarketingFooter();
     this.navbar = new DefaultNavbar();
     this.plan = options.plan;
+    this.subscribing = false;
     this.user = new User();
     mixpanel.track('Viewed signup page');
   },
@@ -247,17 +248,20 @@ module.exports = GelatoPage.extend({
    */
   handleClickSignupSubmit: function(event) {
     event.preventDefault();
-    var formData = this.getFormData();
-    if (formData.password1 === '') {
-      return;
-    }
-    if (formData.password1 !== formData.password2) {
-      return;
-    }
-    if (formData.method === 'credit') {
-      this.subscribeCredit(formData);
-    } else {
-      this.subscribeCoupon(formData);
+    if (!this.subscribing) {
+      this.subscribing = true;
+      var formData = this.getFormData();
+      if (formData.password1 === '') {
+        return;
+      }
+      if (formData.password1 !== formData.password2) {
+        return;
+      }
+      if (formData.method === 'credit') {
+        this.subscribeCredit(formData);
+      } else {
+        this.subscribeCoupon(formData);
+      }
     }
   },
 
@@ -362,6 +366,9 @@ module.exports = GelatoPage.extend({
    * @private
    */
   _handleSubmittedProcessError: function(error) {
+
+    // Let the user actually subscribe again when submitting the form
+    this.subscribing = false;
 
     // For when the error is a jQuery XHR object, we just want the plain error object
     if (_.isFunction(error.error)) {
