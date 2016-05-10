@@ -55,7 +55,7 @@ module.exports = SkritterCollection.extend({
    * @param {Moment} momentStart start date of the range
    * @param {Moment} momentEnd end date of the range
    * @param {Number} chunkSize the maximum number of days that should be in the range
-   * @returns {Array<Array<String, String>>} A list of date ranges with the
+   * @returns {Array<Array<String>>} A list of date ranges with the
    *                                         first value being the start date
    *                                         and the second being teh end date,
    *                                         both formatted YYYY-MM-DD
