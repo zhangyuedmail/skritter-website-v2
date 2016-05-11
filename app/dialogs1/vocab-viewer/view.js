@@ -66,7 +66,7 @@ module.exports = GelatoDialog.extend({
                 });
               },
               function(vocabs, callback) {
-                if (vocabs.has('containedVocabIds')) {
+                if (vocabs.at(0).has('containedVocabIds')) {
                   self.vocabs.fetch({
                     data: {
                       ids: vocabs.at(0).get('containedVocabIds').join('|')
