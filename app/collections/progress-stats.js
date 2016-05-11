@@ -52,6 +52,7 @@ module.exports = SkritterCollection.extend({
    * Given a range of dates, splits it into an array of evenly-ranged chunks.
    * E.g. for a range spanning 30 days, will return 3 sequential ranges each
    * spanning 10 days.
+   * @method divideDateRange
    * @param {Moment} momentStart start date of the range
    * @param {Moment} momentEnd end date of the range
    * @param {Number} chunkSize the maximum number of days that should be in the range
@@ -151,6 +152,7 @@ module.exports = SkritterCollection.extend({
   /**
    * Fetches the stats between an arbitrary date range, splitting larger ranges
    * into smaller chunks if needed for more immediate access to partial data.
+   * @method fetchRange
    * @param {String} start a YYYY-MM-DD formatted string that specifies the
    *                        start of the date range
    * @param {String} end  a YYYY-MM-DD formatted string that specifies the
