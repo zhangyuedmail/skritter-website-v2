@@ -3,6 +3,7 @@ gelato-component(data-name='vocab-viewer-content')
   if view.vocabs && view.vocabs.length
     - var items = view.items;
     - var vocab = view.vocabs.at(0);
+    - var contained = vocab.getContained();
     - var definition = vocab.getDefinition();
     - var mnemonic = vocab.getMnemonic();
     - var sentence = vocab.getSentence();
@@ -66,7 +67,7 @@ gelato-component(data-name='vocab-viewer-content')
                   td.item-ban
                     button.btn.btn-xs.btn-danger Ban
       #panel-right
-        if view.vocabsContaining.length
+        if view.vocabsContaining.length > 1
           .block
             .header Words containing #{vocab.get('writing')}
             .value
@@ -77,3 +78,14 @@ gelato-component(data-name='vocab-viewer-content')
                     span.spr.reading= word.getReading()
                     span.spr :
                     span.definition= word.getDefinition()
+        if view.vocabs.length > 1
+          .block
+            .header Characters contained #{vocab.get('writing')}
+            .value
+              #vocab-characters-contained
+                for vocab in view.vocabs.slice(1)
+                  div
+                    span.spr.writing(class=vocab.getFontClass())= vocab.get('writing')
+                    span.spr.reading= vocab.getReading()
+                    span.spr :
+                    span.definition= vocab.getDefinition()

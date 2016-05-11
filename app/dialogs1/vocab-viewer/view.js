@@ -45,24 +45,48 @@ module.exports = GelatoDialog.extend({
     async.parallel(
       [
         function(callback) {
-          self.vocabs.fetch({
-            data: {
-              include_containing: true,
-              include_decomps: true,
-              include_heisigs: true,
-              include_sentences: true,
-              include_strokes: true,
-              include_top_mnemonics: true,
-              ids: vocabId
-            },
-            error: function(error) {
-              callback(error);
-            },
-            success: function(vocabs) {
-              wordVocabs = vocabs;
-              callback();
-            }
-          });
+          async.waterfall(
+            [
+              function(callback) {
+                self.vocabs.fetch({
+                  data: {
+                    include_decomps: true,
+                    include_heisigs: true,
+                    include_sentences: true,
+                    include_top_mnemonics: true,
+                    ids: vocabId
+                  },
+                  error: function(error) {
+                    callback(error);
+                  },
+                  success: function(vocabs) {
+                    wordVocabs = vocabs;
+                    callback(null, vocabs);
+                  }
+                });
+              },
+              function(vocabs, callback) {
+                if (vocabs.has('containedVocabIds')) {
+                  self.vocabs.fetch({
+                    data: {
+                      ids: vocabs.at(0).get('containedVocabIds').join('|')
+                    },
+                    remove: false,
+                    error: function(error) {
+                      callback(error);
+                    },
+                    success: function(vocabs) {
+                      wordVocabs = vocabs;
+                      callback(null, vocabs);
+                    }
+                  });
+                } else {
+                  callback();
+                }
+              }
+            ],
+            callback
+          )
         },
         function(callback) {
           self.vocabsContaining.fetch({
