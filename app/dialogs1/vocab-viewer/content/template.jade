@@ -3,7 +3,8 @@ gelato-component(data-name='vocab-viewer-content')
   if view.vocabs && view.vocabs.length
     - var items = view.items;
     - var vocab = view.vocabs.at(0);
-    - var contained = vocab.getContained();
+    - var containingVocabs = view.getContainingCharacters();
+    - var containingWords = view.getContainingWords();
     - var definition = vocab.getDefinition();
     - var mnemonic = vocab.getMnemonic();
     - var sentence = vocab.getSentence();
@@ -67,25 +68,26 @@ gelato-component(data-name='vocab-viewer-content')
                   td.item-ban
                     button.btn.btn-xs.btn-danger Ban
       #panel-right
-        if view.vocabsContaining.length > 1
+        if containingWords.length > 1
           .block
             .header Words containing #{vocab.get('writing')}
             .value
               #vocab-words-containing
-                for word in view.vocabsContaining.models
+                for model in containingWords
                   div
-                    span.spr.writing(class=word.getFontClass())= word.get('writing')
-                    span.spr.reading= word.getReading()
+                    span.spr.writing(class=model.getFontClass())= model.get('writing')
+                    span.spr.reading= model.getReading()
                     span.spr :
-                    span.definition= word.getDefinition()
-        if view.vocabs.length > 1
+                    span.definition= model.getDefinition()
+        if containingVocabs.length > 1
           .block
             .header Characters contained #{vocab.get('writing')}
             .value
               #vocab-characters-contained
-                for vocab in view.vocabs.slice(1)
-                  div
-                    span.spr.writing(class=vocab.getFontClass())= vocab.get('writing')
-                    span.spr.reading= vocab.getReading()
-                    span.spr :
-                    span.definition= vocab.getDefinition()
+                for model in containingVocabs
+                  if model.get('writing') != vocab.get('writing')
+                    div
+                      span.spr.writing(class=vocab.getFontClass())= model.get('writing')
+                      span.spr.reading= model.getReading()
+                      span.spr :
+                      span.definition= model.getDefinition()

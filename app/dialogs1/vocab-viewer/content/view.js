@@ -41,9 +41,34 @@ module.exports = GelatoComponent.extend({
     return this;
   },
   /**
+   * @method getContainingCharacters
+   * @returns {Array}
+   */
+  getContainingCharacters: function() {
+    var baseWriting = this.vocabs.at(0).get('writing');
+    return _.filter(
+      this.vocabs.models,
+      function(vocab) {
+        return vocab.get('writing') !== baseWriting;
+      }
+    );
+  },
+  /**
+   * @method getContainingWords
+   * @returns {Array}
+   */
+  getContainingWords: function() {
+    return _.filter(
+      this.vocabsContaining.models,
+      function(vocab) {
+        return vocab.get('writing').length > 1;
+      }
+    );
+  },
+  /**
    * @method handleClickItemBan
    * @param {Event} event
-     */
+   */
   handleClickItemBan: function(event) {
     event.preventDefault();
     var vocab = this.vocabs.at(0);
