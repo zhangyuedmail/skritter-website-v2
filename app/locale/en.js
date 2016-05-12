@@ -5,6 +5,13 @@ module.exports = {
   "languageNative": "English",
   "title": "Skritter",
 
+  "common": {
+    "errorApplication": "Application Error",
+    "errorUserReferralExpired": "User referrals can only be used with new accounts.",
+    "errorUserReferralFailed": "Error making user referral. Please try again.",
+    "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription."
+  },
+
   "pages": {
     "contact": {
       "title": "Contact Us",

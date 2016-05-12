@@ -55,6 +55,7 @@ module.exports = GelatoApplication.extend({
     }
 
   },
+
   /**
    * @property defaults
    * @type {Object}
@@ -110,6 +111,7 @@ module.exports = GelatoApplication.extend({
   getLanguage: function() {
     return this.get('language') || this.user.get('targetLang');
   },
+
   /**
    * @method getMixpanelKey
    * @returns {String}
@@ -158,6 +160,31 @@ module.exports = GelatoApplication.extend({
       return 'pk_test_5RIYZGe8XgeYfU9pgvkxK01r';
     }
   },
+
+  /**
+   * Gets a user referral id. If it finds one, confirms that it's still valid
+   * before returning it. If it's invalid/expired, this function removes
+   * the referral setting.
+   * @returns {String} The referrer id if found and valid, or null
+   */
+  getUserReferral: function() {
+    var referral = this.getSetting('referral');
+
+    if (!referral) {
+      return null;
+    }
+
+    var now = moment();
+    var expiration = moment(referral.expiration, Config.dateFormatApp);
+
+    if (expiration.diff(now, 'days') > 0) {
+      return referral.referrer;
+    }
+    this.removeSetting('referral');
+
+    return null;
+  },
+
   /**
    * @method handleError
    * @param {String} message
@@ -166,23 +193,14 @@ module.exports = GelatoApplication.extend({
    * @returns {Boolean}
    */
   handleError: function(message, url, line) {
-    $.notify(
-      {
-        title: 'Application Error',
-        message: message
-      },
-      {
-        type: 'pastel-danger',
-        animate: {
-          enter: 'animated fadeInDown',
-          exit: 'animated fadeOutUp'
-        },
-        delay: 5000,
-        icon_type: 'class'
-      }
-    );
+    app.notifyUser({
+      title: app.locale('common.errorApplication'),
+      message: message
+    });
+
     return false;
   },
+
   /**
    * @method isChinese
    * @returns {Boolean}
@@ -190,6 +208,7 @@ module.exports = GelatoApplication.extend({
   isChinese: function() {
     return this.getLanguage() === 'zh';
   },
+
   /**
    * @method isJapanese
    * @returns {Boolean}
@@ -197,6 +216,7 @@ module.exports = GelatoApplication.extend({
   isJapanese: function() {
     return this.getLanguage() === 'ja';
   },
+
   /**
    * @method loadHelpscout
    */
@@ -238,6 +258,7 @@ module.exports = GelatoApplication.extend({
     window.HSCW = HSCW;
     window.HS = HS;
   },
+
   /**
    * @method locale
    * @param {String} path
@@ -253,6 +274,103 @@ module.exports = GelatoApplication.extend({
     }
     return _.get(locale, path) || _.get(require('locale/en'), path);
   },
+
+  /**
+   *
+   * @param {Object} options
+   */
+  notifyUser: function(options) {
+    $.notify(
+      {
+        title: options.title,
+        message: options.message
+      },
+      {
+        type: options.type || 'pastel-danger',
+        animate: {
+          enter: options.animateEnter || 'animated fadeInDown',
+          exit: options.animateExit || 'animated fadeOutUp'
+        },
+        delay: options.delay || 5000,
+        icon_type: options.iconType || 'class'
+      }
+    );
+  },
+
+  /**
+   * Processes a stored user referral after an account is created.
+   * @param {Boolean} [suppressMessages] whether to hide any UI notifications
+   *                                      about the process triggered from
+   *                                      this method.
+   * @method processUserReferral
+   */
+  processUserReferral: function(suppressMessages) {
+    var referral = this.getSetting('referral');
+
+    if (!referral) {
+      return false;
+    }
+
+    var now = moment();
+    var expiration = moment(referral.expiration, Config.dateFormatApp);
+    var dfd = $.Deferred();
+    var self = this;
+
+    if (expiration.diff(now, 'days') > 0) {
+      $.ajax({
+        type: 'post',
+        url: this.getApiUrl() + 'referrals',
+        headers: {
+          'Authorization': 'bearer ' + this.user.session.get('access_token')
+        },
+        data: {
+          referrer: referral.referrer
+        }
+      })
+        .done(function (response) {
+          self.removeSetting('referral');
+          dfd.resolve(response);
+          if (!suppressMessages) {
+            self.notifyUser({
+              title: 'Referral successful',
+              message: app.locale('common.userReferralSuccessful'),
+              type: 'alert-pastel-info'
+            });
+          }
+        })
+        .fail(function(error) {
+          dfd.reject('common.errorUserReferralFailed');
+          // TODO
+        });
+    } else {
+      this.removeSetting('referral');
+      this.notifyUser({
+        message: this.locale('common.errorUserReferralExpired')
+      });
+      dfd.reject('common.errorUserReferralExpired');
+    }
+
+    return dfd;
+  },
+
+  /**
+   * Stores a user referral and optionally fires off the API request to process it
+   * @param {String} userId the user id of the referrer
+   * @param {Boolean} [processImmediately] whether to immediately fire off an API request
+   * @method setUserReferral
+   */
+  setUserReferral: function(userId, processImmediately) {
+    var expiration = moment().add(2, 'weeks').format(Config.dateFormatApp);
+    this.setSetting('referral', {
+      referrer: userId,
+      expiration: expiration
+    });
+
+    if (processImmediately) {
+      this.processUserReferral();
+    }
+  },
+
   /**
    * @method reset
    */
@@ -272,6 +390,7 @@ module.exports = GelatoApplication.extend({
       }
     );
   },
+
   /**
    * @method start
    */
@@ -330,6 +449,5 @@ module.exports = GelatoApplication.extend({
         app.router.start();
       }, 500);
     });
-
   }
 });
