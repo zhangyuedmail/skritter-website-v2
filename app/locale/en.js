@@ -7,10 +7,31 @@ module.exports = {
 
   "pages": {
     "contact": {
-      "title": "Contact Us"
+      "title": "Contact Us",
+	  "email": "Email",
+	  "topic": "Topic",
+	  "message": "Message",
+	  "feedback": "Feedback",
+	  "question": "How to",
+	  "bugReport": "Bug Report",
+	  "featureSuggestion": "Feature Suggestion",
+	  "paymentIssue": "Payment Issue",
+	  "friendlyText": "Thanks for contacting us! We do respond to everything. If you're interested in Skritter for your school, click here.",
+	  "submit": "Submit"
     },
     "home": {
-      "freeTrial": "Start your 7-day free trial"
+	  "motto1": "Chinese & Japanese",
+	  "motto2": "characters, made fun",
+	  "headerText": "The best way to learn Chinese and Japanese",
+	  "planeHeader": "Characters on the go",
+	  "planeText": "Learn Chinese & Japanese characters anywhere, even in Antarctica.",
+	  "flashcardsHeader": "Smart flashcards",
+	  "flashcardsText": "Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.",
+      "freeTrial": "Start your 7-day free trial",
+	  "bookHeader": "Studying, your way",
+	  "bookText": "Start learning from hundreds of textbooks and users lists, or make your own.",
+	  "reviewHeader": "Efficient reviewing",
+	  "reviewText": "Learn new characters in less than a minute, and remember 95% of what you learn."
     }
   }
 

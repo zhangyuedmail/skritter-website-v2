@@ -4,32 +4,30 @@ gelato-page(data-name='contact')
 
   .container
 
-    #contact-title.text-center= locale('pages.contact.title')
+    #contact-title.text-center= app.locale('pages.contact.title')
 
     #contact-block.content-block
       .text-center
         #contact-message
       form.form-horizontal
         .form-group
-          label.col-sm-2.control-label(for='contact-email') Email
+          label.col-sm-2.control-label(for='contact-email')= app.locale('pages.contact.email')
           .col-sm-10
             input#contact-email.form-control(type='email')
         .form-group
-          label.col-sm-2.control-label(for='contact-topic-select') Topic
+          label.col-sm-2.control-label(for='contact-topic-select')= app.locale('pages.contact.topic')
           .col-sm-10
             select#contact-topic-select.form-control
-              option(value='Feedback') Feedback
-              option(value='How To') Question
-              option(value='Bug') Bug report
-              option(value='Suggestion') Feature suggestion
-              option(value='Payment Issue') Payment issue
+              option(value='Feedback')= app.locale('pages.contact.feedback')
+              option(value='How To')= app.locale('pages.contact.question')
+              option(value='Bug')= app.locale('pages.contact.bugReport')
+              option(value='Suggestion')= app.locale('pages.contact.featureSuggestion')
+              option(value='Payment Issue')= app.locale('pages.contact.paymentIssue')
         .form-group
-          label.col-sm-2.control-label(for='contact-message') Message
+          label.col-sm-2.control-label(for='contact-message')= app.locale('pages.contact.message')
           textarea#field-message.col-sm-10(rows='5')
-        p#friendly-text
-          | Good to hear from you! We do respond to everything. Want to get Skritter for your school?&nbsp;
-          a(href='/institutions') Click Here
+        p#friendly-text= app.locale('pages.contact.friendlyText')
         .text-center
-          button#contact-submit.btn.btn-fixed.btn-success(type='submit') Submit
+          button#contact-submit.btn.btn-fixed.btn-success(type='submit')= app.locale('pages.contact.submit')
 
   #footer-container
