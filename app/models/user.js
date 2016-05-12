@@ -32,7 +32,8 @@ module.exports = SkritterModel.extend({
     studyKana: false,
     teachingMode: true,
     timezone: 'America/New_York',
-    volume: 1
+    volume: 1,
+    wordDictionary: null
   },
   /**
    * @property urlRoot

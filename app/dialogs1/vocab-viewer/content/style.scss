@@ -20,16 +20,36 @@ gelato-component[data-name='vocab-viewer-content'] {
         font-size: 16px;
         font-weight: 300;
       }
-      #vocab-sentence {
+    }
+    #dictionary-list {
+      display: inline-block;
+      margin-right: 15px;
+      width: 60%;
+    }
+    #panel-left {
+      display: inline-block;
+      width: 50%;
+    }
+    #panel-right {
+      display: inline-block;
+      width: 50%;
+    }
+    #vocab-sentence {
+      font-size: 26px;
+    }
+    #vocab-words-containing {
+      .definition {
+        font-size: 16px;
+      }
+      .reading {
+        font-size: 16px;
+      }
+      .writing {
+        color: $grey5;
         font-size: 26px;
       }
-    }
-  }
 
-  #dictionary-list {
-    display: inline-block;
-    margin-right: 15px;
-    width: 60%;
+    }
   }
 
   #header-section {

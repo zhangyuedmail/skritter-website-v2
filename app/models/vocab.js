@@ -39,35 +39,21 @@ var Vocab = SkritterModel.extend({
   urlRoot: 'vocabs',
   /**
    * @method banAll
+   * @returns {Vocab}
    */
   banAll: function() {
     this.set('bannedParts', []);
+    return this;
   },
   /**
    * @method banPart
    * @param {String} part
+   * @returns {Vocab}
    */
   banPart: function(part) {
     this.get('bannedParts').push(part);
     this.set('bannedParts', _.uniq(this.get('bannedParts')));
-  },
-  /**
-   * @method fetchMissing
-   * @param {Function} [callback]
-   */
-  fetchMissing: function(callback) {
-    $.ajax({
-      context: this,
-      headers: app.user.session.getHeaders(),
-      type: 'POST',
-      url: app.getApiUrl() + 'items/addmissing?vocabId=' + this.id,
-      error: function(error) {
-        typeof callback === 'function' && callback(error);
-      },
-      success: function() {
-        typeof callback === 'function' && callback();
-      }
-    });
+    return this;
   },
   /**
    * @method getBase
@@ -448,16 +434,20 @@ var Vocab = SkritterModel.extend({
   },
   /**
    * @method unbanAll
+   * @returns {Vocab}
    */
   unbanAll: function() {
     this.set('bannedParts', []);
+    return this;
   },
   /**
    * @method unbanPart
    * @param {String} part
+   * @returns {Vocab}
    */
   unbanPart: function(part) {
     this.set('bannedParts', _.remove(this.get('bannedParts'), part));
+    return this;
   }
 });
 
