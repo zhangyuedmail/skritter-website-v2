@@ -73,9 +73,10 @@ var ExportVocablist = GelatoDialog.extend({
     var rows = this.vocablist.getRows();
     var rowsCompleted = 0;
     event.preventDefault();
+    this.$('#button-export').hide();
     this.content.$('#download-progress').show();
     this.content.disableForm();
-    async.eachSeries(
+    async.each(
       rows,
       function(row, callback) {
         var vocab = new Vocab({id: row.vocabId});
@@ -100,6 +101,7 @@ var ExportVocablist = GelatoDialog.extend({
       function(error) {
         if (error) {
           //TODO: display some kind of error message
+          self.$('#button-export').show();
           self.content.$('#download-progress').hide();
           self.content.enableForm();
         } else {
