@@ -3,6 +3,7 @@ var GelatoComponent = require('gelato/component');
 var ConfirmDialog = require('dialogs/confirm/view');
 var VocablistSettingsDialog = require('dialogs/vocablist-settings/view');
 var VocablistSectionsEditDialog = require('dialogs/vocablist-sections-edit/view');
+var ExportVocablistDialog = require('dialogs1/export-vocablist/view');
 
 /**
  * @class VocablistsListSidebar
@@ -26,6 +27,7 @@ module.exports = GelatoComponent.extend({
     'click #add-to-queue': 'handleClickAddToQueue',
     'click #copy-link': 'handleClickCopyLink',
     'click #delete-link': 'handleClickDeleteLink',
+    'click #export-link': 'handleClickExportLink',
     'click #publish-link': 'handleClickPublishLink',
     'click #study-settings-link': 'handleClickStudySettingsLink',
     'click #image-upload-link': 'handleClickImageUploadLink'
@@ -120,6 +122,14 @@ module.exports = GelatoComponent.extend({
       });
     });
     confirmDialog.render().open();
+  },
+  /**
+   * @method handleClickExportLink
+   * @param {Event} event
+   */
+  handleClickExportLink: function(event) {
+    event.preventDefault();
+    new ExportVocablistDialog({id: this.vocablist.id}).open();
   },
   /**
    * @method handleClickImageUploadLink

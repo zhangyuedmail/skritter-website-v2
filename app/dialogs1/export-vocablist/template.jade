@@ -1,0 +1,19 @@
+gelato-dialog(data-name='export-vocablist')
+
+  .modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog
+      .modal-content
+
+        .modal-header
+          .pull-left
+            .modal-title Export List
+          .pull-right
+            a(href='#', data-dismiss='modal')
+              i.fa.fa-times-circle-o
+
+        .modal-body
+          #content-container
+
+        .modal-footer
+          button#button-export.btn.btn-primary Export
+          button#button-cancel.btn.btn-default Cancel

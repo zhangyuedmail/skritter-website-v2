@@ -91,6 +91,12 @@ gelato-component(data-name='vocablists-list-sidebar')
                 span.glyphicon.glyphicon-duplicate
                 span Copy
 
+          if vocablist
+            a#export-link
+              div.action
+                span.glyphicon.glyphicon-download
+                span Export
+
           if vocablist.deletable()
             a#delete-link
               div.action
