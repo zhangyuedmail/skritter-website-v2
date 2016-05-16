@@ -88,7 +88,7 @@ var ExportVocablist = GelatoDialog.extend({
             rowsCompleted++;
             self.content.$('#download-progress .progress-bar').css('width', (rowsCompleted / rows.length) * 100 + '%');
             output += vocab.get('writing') + delimiter;
-            if (vocab.isChinese) {
+            if (vocab.isChinese()) {
               output += app.fn.mapper.fromBase(row.tradVocabId) + delimiter;
             }
             output += vocab.get('reading') + delimiter;
