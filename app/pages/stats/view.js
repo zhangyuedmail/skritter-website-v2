@@ -2,17 +2,19 @@ var GelatoPage = require('gelato/page');
 var DefaultNavbar = require('navbars/default/view');
 var StatsSummaryComponent = require('components/stats/summary/view');
 var StatsTimelineComponent = require('components/stats/timeline/view');
+var ProgressStats = require('collections/progress-stats');
+
 /**
  * @class Stats
  * @extends {GelatoPage}
  */
 module.exports = GelatoPage.extend({
-    /**
-     * @method initialize
-     * @constructor
-     */
-    initialize: function() {
-        this.statsCollection = new ProgressStats();
+  /**
+   * @method initialize
+   * @constructor
+   */
+  initialize: function() {
+    this.statsCollection = new ProgressStats();
 
     var today = moment().format('YYYY-MM-DD');
     var lastMonth = moment().subtract(1, 'month').format('YYYY-MM-DD');

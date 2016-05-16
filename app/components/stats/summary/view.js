@@ -3,6 +3,8 @@ var StatsItemsLearnedComponent = require('components/stats/items-learned/view');
 var StatsHeatmapComponent = require('components/stats/heatmap/view');
 
 /**
+ * A component that is a composite of graphs which show user study statistics
+ * for all time.
  * @class StatsSummaryComponent
  * @extends {GelatoComponent}
  */

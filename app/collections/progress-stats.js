@@ -366,63 +366,6 @@ module.exports = SkritterCollection.extend({
 
 
     /**
-     * Gets the total amount of time a user has spent studying for the lifetime of their account.
-     * @returns {object} the amount of time studied as a string with a units property 
-     *                   specifiying the largest denomination of the amount property.
-     */
-    getAllTimeTimeStudied: function() {
-        if (!this.length) {
-            return {amount: '0', units: 'seconds'};
-        }
-
-        var timeStudied = this.at(0).get('timeStudied');
-        var allStudied = Math.floor(timeStudied.all);
-        var seconds = Math.floor(allStudied) % 60;
-        var minutes = Math.floor(allStudied / 60) % 60;
-        var hours = Math.floor(allStudied / 3600);
-
-        var largestUnit = hours ? 'hours' :
-                          minutes ? 'minutes' :
-                          'seconds';
-        var amount = hours ? '' + hours + ':' + minutes + ':' + seconds :
-                     minutes ? minutes + ':' + seconds :
-                     seconds;
-        return {
-            amount: amount,
-            units: largestUnit
-        };
-    },
-
-    /**
-     * Gets the total number of reviews a user has studied over their lifetime
-     * @returns {Number} the total number of reviews a user has studied over their lifetime
-     */
-    getCountAllTimeReviews: function() {
-        if (!this.length) {
-            return 0;
-        }
-
-        var stat = this.at(0);
-        var wordStats = stat.get('word');
-        var charStats = stat.get('char');
-
-        // .char, .word ... .defn .rdng .rune .tone ... .studied .all
-        // gets the total number of reviews for both word and character reviews
-        var totalNum = [wordStats, charStats].reduce(function(total, reviewCat) {
-
-            // for a given stat, loops through the parts (defn, rdng, etc.)
-            // and sums the numbers of .studied.all for each part.
-            var partsTotal = Object.keys(reviewCat).reduce(function(pTotal, studyPart) {
-                return pTotal + reviewCat[studyPart].studied.all;
-            }, 0);
-
-            return total + partsTotal;
-        }, 0);
-
-        return totalNum;
-    },
-
-    /**
      * @method getDailyItemsReviewed
      * @returns {Number}
      */

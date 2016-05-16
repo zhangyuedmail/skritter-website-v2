@@ -1,18 +1,21 @@
 @import "../../../styles/_variables";
 
-gelato-component[data-name='stats-all-time'] {
+gelato-component[data-name='stats-items-learned-circle'] {
+  .chart-overlay-wrapper {
+    position: absolute;
+    top: 25px;
+    width: 100%;
+  }
   .chart-overlay {
     border-radius: 50%;
-    background: #AAA;
+    background: $white1;
     height: 150px;
     width: 150px;
     margin: auto;
     display: block;
     text-align: center;
     color: $grey3;
-    position: absolute;
-    top: 25px;
-    left: 61px;
+
     border-top: 1px solid #DDD;
     border-bottom: 1px solid #FFF;
   }
@@ -73,12 +76,20 @@ gelato-component[data-name='stats-all-time'] {
 
   .chars-learned-bg {
     background: $lime5;
+<<<<<<< HEAD
     float: right;
+=======
+    right: 0px;
+>>>>>>> origin/stats-page
   }
 
   .words-learned-bg {
     background: $green5;
+<<<<<<< HEAD
     float: left;
+=======
+    left: 0px;
+>>>>>>> origin/stats-page
   }
 
   .center {

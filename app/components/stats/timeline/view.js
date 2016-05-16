@@ -6,6 +6,8 @@ var StudyPartLinegraphComponent = require('components/stats/study-part-linegraph
 var config = require('config');
 
 /**
+ * A component that is a composite of graphs which show user study statistics
+ * over a certain range of time.
  * @class StatsTimelineComponent
  * @extends {GelatoComponent}
  */
@@ -48,7 +50,8 @@ module.exports = GelatoComponent.extend({
 
     // TODO: check localStorage for user-set granularity config?
     this._views['bargraph'] = new TimeStudiedBragraphComponent({
-      collection: this.collection
+      collection: this.collection,
+      granularity: 'minutes'
     });
 
     this._views['items-learned'] = new ItemsLearnedGraphComponent({
@@ -124,13 +127,13 @@ module.exports = GelatoComponent.extend({
 
     this.listenTo(this.collection, 'state:standby', this.update);
   },
-  
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
-  
+
   /**
    * @method render
    * @returns {VocablistSideBar}
