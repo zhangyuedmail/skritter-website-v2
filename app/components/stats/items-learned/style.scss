@@ -1,0 +1,117 @@
+@import "../../../styles/_variables";
+
+gelato-component[data-name='stats-items-learned-circle'] {
+  .chart-overlay-wrapper {
+    position: absolute;
+    top: 25px;
+    width: 100%;
+  }
+  .chart-overlay {
+    border-radius: 50%;
+    background: $white1;
+    height: 150px;
+    width: 150px;
+    margin: auto;
+    display: block;
+    text-align: center;
+    color: $grey3;
+
+    border-top: 1px solid #DDD;
+    border-bottom: 1px solid #FFF;
+  }
+
+  .cicle-label {
+    letter-spacing: .5px;
+  }
+
+  .num-items-learned {
+    font-size: 36px;
+    margin-top: 32px;
+  }
+
+  #items-learned {
+    height: 200px;
+  }
+
+  .circle {
+    position: relative;
+  }
+
+  .num-hero {
+    font-size: 38px;
+  }
+
+  .num-subhero {
+    font-size: 28px;
+    color: $grey3;
+  }
+
+  .chars-learned {
+    color: $lime5;
+  }
+
+  .words-learned {
+    color: $green5;
+  }
+
+  .units-label {
+    font-size: 16px;
+    color: $grey3;
+  }
+
+  .data-section {
+    position: relative;
+    margin-bottom: 50px;
+
+    // this will be reduced on smaller screens
+    width: 100%;
+    display: inline-block;
+  }
+
+  .colored-square {
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+  }
+
+  .chars-learned-bg {
+    background: $lime5;
+<<<<<<< HEAD
+    float: right;
+=======
+    right: 0px;
+>>>>>>> origin/stats-page
+  }
+
+  .words-learned-bg {
+    background: $green5;
+<<<<<<< HEAD
+    float: left;
+=======
+    left: 0px;
+>>>>>>> origin/stats-page
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .highcharts-tracker {
+    cursor: default !important;
+  }
+
+  @media (max-width: 1000px) {
+    .data-section {
+      width: 50%;
+    }
+
+    .words-learned-bg {
+      left: auto;
+      right: 20%;
+    }
+
+    .chars-learned-bg {
+      right: 20%;
+    }
+  }
+}
