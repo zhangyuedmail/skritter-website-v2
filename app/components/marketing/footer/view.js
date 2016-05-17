@@ -6,6 +6,8 @@ var GelatoComponent = require('gelato/component');
  */
 module.exports = GelatoComponent.extend({
   initialize: function(options) {
+    options = options || {};
+    
     if (options.theme) {
       this.className = options.theme;
     }
