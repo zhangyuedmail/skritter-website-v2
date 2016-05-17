@@ -143,10 +143,10 @@ module.exports = GelatoComponent.extend({
       this.prompt.reviews.isFirst()) {
       this.prompt.reviews.vocab.play();
     }
-    if (this.prompt.reviews.isTeachable()) {
+    if (this.prompt.reviews.isTeachable() || this.prompt.review.get('showTeaching')) {
       this.teachCharacter();
     }
-    if (this.prompt.review.item.isLeech()) {
+    if (this.prompt.review.item && this.prompt.review.item.isLeech()) {
       this.prompt.$('#leech-ribbon').removeClass('hidden');
       this.prompt.review.item.consecutiveWrong = 0;
       this.teachCharacter();
@@ -204,10 +204,12 @@ module.exports = GelatoComponent.extend({
    */
   handlePromptCanvasClick: function() {
     if (this.prompt.review.isComplete()) {
-      if (this.prompt.review.get('score') === 1) {
-        this.prompt.review.item.consecutiveWrong++;
-      } else {
-        this.prompt.review.item.consecutiveWrong = 0;
+      if (this.prompt.review.item) {
+        if (this.prompt.review.get('score') === 1) {
+          this.prompt.review.item.consecutiveWrong++;
+        } else {
+          this.prompt.review.item.consecutiveWrong = 0;
+        }
       }
       this.prompt.next();
     } else {
