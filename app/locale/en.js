@@ -13,7 +13,7 @@ module.exports = {
   },
 
   "navbar": {
-    "backToOldSkritter": "Back to old skritter.com",
+    "backToOldSkritter": "Back to Skritter 1.0",
     "backToOldSkritterAlt": "New Skritter too spicy? Return to the original flavor.",
     "betaTitle": "Μια τέτοια μεγάλη βήτα!"
   },
