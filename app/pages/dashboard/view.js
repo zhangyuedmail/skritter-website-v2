@@ -4,6 +4,7 @@ var DashboardMonth = require('components/dashboard/month/view');
 var DashboardTotal = require('components/dashboard/total/view');
 var DashboardQueue = require('components/dashboard/queue/view');
 var DashboardGoal = require('components/dashboard/status/view');
+var MarketingFooter = require('components/marketing/footer/view');
 
 /**
  * @class Dashboard
@@ -15,11 +16,15 @@ module.exports = GelatoPage.extend({
    * @constructor
    */
   initialize: function() {
+    this._views = {};
     this.navbar = new DefaultNavbar();
     this.dashboardGoal = new DashboardGoal();
     this.dashboardMonth = new DashboardMonth();
     this.dashboardTotal = new DashboardTotal();
     this.dashboardQueue = new DashboardQueue();
+    this._views['footer'] = new MarketingFooter({
+      theme: 'theme2'
+    });
   },
   /**
    * @property title
@@ -41,6 +46,7 @@ module.exports = GelatoPage.extend({
     this.dashboardMonth.setElement('#dashboard-month-container').render();
     this.dashboardTotal.setElement('#dashboard-total-container').render();
     this.dashboardQueue.setElement('#dashboard-queue-container').render();
+    this._views['footer'].setElement('#footer-container').render();
     this.navbar.setElement('#navbar-container').render();
     return this;
   },
@@ -59,6 +65,7 @@ module.exports = GelatoPage.extend({
     this.dashboardTotal.remove();
     this.dashboardQueue.remove();
     this.navbar.remove();
+    this._views['footer'].remove();
     return GelatoPage.prototype.remove.call(this);
   }
 });
