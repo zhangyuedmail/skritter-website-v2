@@ -50,17 +50,26 @@ bootstrap-navbar[data-name='default'] {
       }
     }
 
+    .target-lang-dropdown {
+      height: 50px;
+    }
+
     .lang-icon {
       font-size: smaller;
     }
 
+    .lang-select-icon-wrapper {
+      padding-bottom: 13px;
+    }
+
     .other-lang-icon {
-      min-width: 70px;
       display: inline-block;
+      min-width: 70px;
     }
 
     .language-select-menu {
       background: $white;
+      margin-top: 1px;
 
       .currently-studying {
         background: $grey1;

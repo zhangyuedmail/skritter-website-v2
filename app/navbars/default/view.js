@@ -16,11 +16,13 @@ module.exports = BootstrapNavbar.extend({
     'click #switch-targetLang': 'handleClickSwitchTargetLang',
     'click .item-dropdown': 'handleClickDropdown'
   },
+
   /**
    * @property template
    * @type {Function}
    */
   template: require('./template'),
+
   /**
    * @method render
    * @returns {DefaultNavbar}
@@ -29,6 +31,15 @@ module.exports = BootstrapNavbar.extend({
     this.renderTemplate();
     this.$('[data-toggle="tooltip"]').tooltip();
     return this;
+  },
+
+  /**
+   * Gets the first part of the URL fragment for the current route.
+   * @todo More robust "sectioning" logic needed?
+   * @returns {String} The section of the site the user is currently on.
+   */
+  getCurrentSection: function() {
+    return Backbone.history.getFragment().split('/')[0];
   },
 
   /**

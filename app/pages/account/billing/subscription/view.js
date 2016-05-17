@@ -113,7 +113,7 @@ module.exports = GelatoPage.extend({
   handleClickRedeemCodeButton: function() {
     this.coupon.set('code', this.$('#code-input').val());
     this.coupon.use();
-    this.renderMainContent();
+    this.render();
   },
   /**
    * @method handleClickSpoofButtonAreaButton
@@ -189,44 +189,44 @@ module.exports = GelatoPage.extend({
       if (client === 'site') {
         app.isWebsite = function() {
           return true;
-        }
+        };
         app.isMobile = function() {
           return false;
-        }
+        };
         app.isAndroid = function() {
           return false;
-        }
+        };
         app.isIOS = function() {
           return false;
-        }
+        };
       }
       if (client === 'ios') {
         app.isWebsite = function() {
           return false;
-        }
+        };
         app.isMobile = function() {
           return true;
-        }
+        };
         app.isAndroid = function() {
           return false;
-        }
+        };
         app.isIOS = function() {
           return true;
-        }
+        };
       }
       if (client === 'android') {
         app.isWebsite = function() {
           return false;
-        }
+        };
         app.isMobile = function() {
           return true;
-        }
+        };
         app.isAndroid = function() {
           return true;
-        }
+        };
         app.isIOS = function() {
           return false;
-        }
+        };
       }
     }
     if (discount) {

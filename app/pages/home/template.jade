@@ -12,9 +12,9 @@ gelato-page(data-name='home')
         img(src="/media/images/marketing_hero1_phone.jpg", alt="")
         .container
           .carousel-header
-            div Chinese & Japanese
-            div characters, made fun
-            a.btn.btn-lg.btn-danger(href='/demo') Start your 7-day free trial
+            div= app.locale('pages.home.motto1')
+            div= app.locale('pages.home.motto2')
+            a.btn.btn-lg.btn-danger(href='/demo')= app.locale('pages.home.freeTrial')
       //.item
         img(src="/media/images/home_hero2.png", alt="")
     //a.left.carousel-control(href="#hero-slider", role="button", data-ignore="true", data-slide="prev")
@@ -24,37 +24,37 @@ gelato-page(data-name='home')
 
   section#section-features.light
     .container
-      .header.text-center The best way to learn Chinese and Japanese
+      .header.text-center= app.locale('pages.home.headerText')
       .row
         .col-sm-6
           .media
             .media-left
               i.icon.icon-marketing-plane
             .media-body
-              .media-heading Characters on the go
-              | Learn Chinese & Japanese characters anywhere, even in Antarctica
+              .media-heading= app.locale('pages.home.planeHeader')
+              span= app.locale('pages.home.planeText')
         .col-sm-6
           .media
             .media-left
               i.icon.icon-marketing-flashcards
             .media-body
-              .media-heading Smart flashcards
-              | Skritter gives you immediate stroke-level feedback and helps you review hard characters more often.
+              .media-heading= app.locale('pages.home.flashcardsHeader')
+              span= app.locale('pages.home.flashcardsText')
       .row
         .col-sm-6
           .media
             .media-left
               i.icon.icon-marketing-book
             .media-body
-              .media-heading Studying, your way
-              | Start learning from hundreds of textbooks and users lists, or make your own.
+              .media-heading= app.locale('pages.home.bookHeader')
+              span= app.locale('pages.home.bookText')
         .col-sm-6
           .media
             .media-left
               i.icon.icon-marketing-review
             .media-body
-              .media-heading Efficient reviewing
-              | Learn new characters in less than a minute, and remember 95% of what you learn.
+              .media-heading= app.locale('pages.home.reviewHeader')
+              span= app.locale('pages.home.reviewText')
       .row
         .col-xs-6.text-right
           a#link-apple-store(href="https://itunes.apple.com/us/artist/inkren-llc/id402280587", target="_blank")

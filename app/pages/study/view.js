@@ -147,6 +147,9 @@ module.exports = GelatoPage.extend({
             return false;
           } else if (styles.indexOf(item.style) === -1) {
             return false;
+          } else if (item.id.split('-')[0] !== app.user.id) {
+            //TODO: remove this line when SKRIT-89 is resolved
+            return false;
           }
           if (item.lang === 'ja') {
             var writing = item.id.split('-')[2];

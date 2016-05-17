@@ -42,6 +42,37 @@ module.exports = GelatoComponent.extend({
     'click #button-vocab-star': 'handleClickButtonVocabStar'
   },
   /**
+   * @method disableEditing
+   * @returns {StudyPromptToolbarVocab}
+   */
+  disableEditing: function() {
+    this.prompt.editing = false;
+    this.prompt.vocabDefinition.editing = false;
+    this.prompt.vocabMnemonic.editing = false;
+    this.prompt.shortcuts.registerAll();
+    this.prompt.review.set('showMnemonic', true);
+    this.prompt.reviews.vocab.set({
+      customDefinition: this.prompt.vocabDefinition.getValue(),
+      mnemonic: this.prompt.vocabMnemonic.getValue()
+    });
+    this.prompt.vocabDefinition.render();
+    this.prompt.vocabMnemonic.render();
+    return this;
+  },
+  /**
+   * @method enableEditing
+   * @returns {StudyPromptToolbarVocab}
+   */
+  enableEditing: function() {
+    this.prompt.editing = true;
+    this.prompt.vocabDefinition.editing = true;
+    this.prompt.vocabMnemonic.editing = true;
+    this.prompt.shortcuts.unregisterAll();
+    this.prompt.vocabDefinition.render();
+    this.prompt.vocabMnemonic.render();
+    return this;
+  },
+  /**
    * @method handleClickButtonVocabAudio
    * @param {Event} event
    */
@@ -72,24 +103,11 @@ module.exports = GelatoComponent.extend({
   handleClickButtonVocabEdit: function(event) {
     event.preventDefault();
     if (this.prompt.editing) {
-      this.prompt.editing = false;
-      this.prompt.vocabDefinition.editing = false;
-      this.prompt.vocabMnemonic.editing = false;
-      this.prompt.shortcuts.registerAll();
-      this.prompt.review.set('showMnemonic', true);
-      this.prompt.reviews.vocab.set({
-        customDefinition: this.prompt.vocabDefinition.getValue(),
-        mnemonic: this.prompt.vocabMnemonic.getValue()
-      });
+      this.disableEditing();
       this.prompt.reviews.vocab.save();
     } else {
-      this.prompt.editing = true;
-      this.prompt.vocabDefinition.editing = true;
-      this.prompt.vocabMnemonic.editing = true;
-      this.prompt.shortcuts.unregisterAll();
+      this.enableEditing();
     }
-    this.prompt.vocabDefinition.render();
-    this.prompt.vocabMnemonic.render();
   },
   /**
    * @method handleClickButtonVocabInfo

@@ -21,7 +21,10 @@ module.exports = GelatoPage.extend({
     this.footer = new MarketingFooter();
     this.navbar = new DefaultNavbar();
     this.plan = options.plan;
+    this.subscribing = false;
     this.user = new User();
+    this.userReferral = app.getUserReferral();
+
     mixpanel.track('Viewed signup page');
   },
 
@@ -108,12 +111,14 @@ module.exports = GelatoPage.extend({
    */
   createUser: function(formData, callback) {
     var self = this;
+    var siteRef = app.getRefererId();
 
     this.user.set({
       email: formData.email,
       name: formData.username,
       password: formData.password1,
-      recaptcha: formData.recaptcha
+      recaptcha: formData.recaptcha,
+      siteRef: siteRef
     });
     if (formData.method === 'credit') {
       this.user.set({
@@ -136,6 +141,7 @@ module.exports = GelatoPage.extend({
               callback(error);
             },
             success: function(user) {
+              app.removeSetting('siteRef');
               mixpanel.alias(user.id);
               mixpanel.track(
                 'Signup',
@@ -164,27 +170,8 @@ module.exports = GelatoPage.extend({
           }
         )
       },
-      function(callback) {
-        if (app.isProduction()) {
-          ScreenLoader.post('Sending welcome email');
-          $.ajax({
-            method: 'GET',
-            url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
-            data: {
-              client: 'website',
-              token: app.user.session.get('access_token')
-            },
-            error: function(error) {
-              callback(error);
-            },
-            success: function() {
-              callback()
-            }
-          });
-        } else {
-          callback();
-        }
-      }
+      this._processUserReferral,
+      this._sendWelcomeEmail
     ], callback);
   },
 
@@ -218,6 +205,16 @@ module.exports = GelatoPage.extend({
     };
   },
 
+  getTrialExpirationDate: function() {
+    var expiration = moment().add(7, 'days');
+
+    if (this.userReferral) {
+      expiration.add(14, 'days');
+    }
+
+    return expiration.format('LL');
+  },
+
   /**
    * @method handleChangeSignupPaymentMethod
    * @param {Event} event
@@ -244,17 +241,20 @@ module.exports = GelatoPage.extend({
    */
   handleClickSignupSubmit: function(event) {
     event.preventDefault();
-    var formData = this.getFormData();
-    if (formData.password1 === '') {
-      return;
-    }
-    if (formData.password1 !== formData.password2) {
-      return;
-    }
-    if (formData.method === 'credit') {
-      this.subscribeCredit(formData);
-    } else {
-      this.subscribeCoupon(formData);
+    if (!this.subscribing) {
+      this.subscribing = true;
+      var formData = this.getFormData();
+      if (formData.password1 === '') {
+        return;
+      }
+      if (formData.password1 !== formData.password2) {
+        return;
+      }
+      if (formData.method === 'credit') {
+        this.subscribeCredit(formData);
+      } else {
+        this.subscribeCoupon(formData);
+      }
     }
   },
 
@@ -360,6 +360,9 @@ module.exports = GelatoPage.extend({
    */
   _handleSubmittedProcessError: function(error) {
 
+    // Let the user actually subscribe again when submitting the form
+    this.subscribing = false;
+
     // For when the error is a jQuery XHR object, we just want the plain error object
     if (_.isFunction(error.error)) {
       error = error.responseJSON;
@@ -388,6 +391,61 @@ module.exports = GelatoPage.extend({
    */
   _handleSubmittedProcessSuccess: function() {
     app.router.navigate('account/setup', {trigger: true});
+  },
+
+  /**
+   * Processes a valid user referral.
+   * @param {Function} callback called when the process is complete
+   * @private
+   */
+  _processUserReferral: function(callback) {
+    var dfd = app.processUserReferral(true);
+    var siteRef = app.getRefererId();
+
+    // affiliate referrals take priority over user referrals,
+    // only process 1 of them.
+    if (dfd && !siteRef) {
+      dfd.done(function(subscription) {
+        callback();
+      })
+      .fail(function(error) {
+        app.notifyUser({
+          message: app.locale('common.errorUserReferralFailed')
+        });
+        callback();
+      });
+    } else {
+
+      // no user referral to process
+      callback();
+    }
+  },
+
+  /**
+   * Sends an email that welcomes the new user to Skritter.
+   * @param {Function} callback called when the process is complete
+   * @private
+   */
+  _sendWelcomeEmail: function(callback) {
+    if (app.isProduction()) {
+      ScreenLoader.post('Sending welcome email');
+      $.ajax({
+        method: 'GET',
+        url: 'https://api-dot-write-way.appspot.com/v1/email/welcome',
+        data: {
+          client: 'website',
+          token: app.user.session.get('access_token')
+        },
+        error: function(error) {
+          callback(error);
+        },
+        success: function() {
+          callback()
+        }
+      });
+    } else {
+      callback();
+    }
   },
 
   /**

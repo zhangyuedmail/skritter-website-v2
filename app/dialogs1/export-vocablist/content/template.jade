@@ -1,0 +1,21 @@
+gelato-component(data-name='export-vocablist-content')
+  - var dialog = view.dialog;
+
+  if dialog.vocablist.has('name')
+    form
+      .form-group
+        label(for='export-name') Name
+        input#export-name.form-control(type='text', value=dialog.vocablist.get('name'))
+      .form-group
+        h5 Delimiter
+        label.radio-inline
+          input#inlineRadio1(type='radio', name='inlineRadioOptions', value='tab', checked)
+          |  Tab
+        label.radio-inline
+          input#inlineRadio2(type='radio', name='inlineRadioOptions', value='comma')
+          |  Comma
+    #download-progress.progress(style='display: none')
+      .progress-bar.progress-bar-striped.active(role='progressbar', style='width: 0%')
+  else
+    .text-center
+      i.fa.fa-3x.fa-spinner.fa-pulse

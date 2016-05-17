@@ -2,12 +2,10 @@ gelato-component(data-name='study-prompt-vocab-contained')
   - var prompt = view.prompt;
 
   if prompt.reviews
-    - var vocabs = prompt.reviews.vocab.getContained(true);
+    - var contained = prompt.reviews.vocab.getContained(true);
+    - var vocabs = [prompt.review.vocab];
 
-    if !vocabs.length
-      - contained = [prompt.reviews.vocab];
-
-    if vocabs.length
+    if _.includes(['rune', 'tone'], prompt.reviews.part) && contained.length > 1
 
       hr
 
@@ -24,7 +22,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
 
             .child-character
 
-              if vocabs.length > 1
+              if vocabs.length
                 .child-vocab-row
                   span.child-writing(class=prompt.reviews.isChinese() ? 'text-chinese' : 'text-japanese')= writing
                   | &nbsp;
@@ -43,7 +41,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
                         em!= child.heisigDefinition + ' - '
                       span.decomp-definition= child.definitions.en
 
-              if vocabs.length > 1 && definition
+              if vocabs.length && definition
                 .child-vocab-row
                   label Definition
                   .child-definition
@@ -51,7 +49,7 @@ gelato-component(data-name='study-prompt-vocab-contained')
                       em!= heisig + ' - '
                     span!= definition
 
-              if vocabs.length > 1 && mnemonic
+              if vocabs.length && mnemonic
                 .child-vocab-row
                   label Mnemonic
                   .child-mnemonic!= vocab.getMnemonic().text

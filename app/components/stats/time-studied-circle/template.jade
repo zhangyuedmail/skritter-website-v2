@@ -1,0 +1,19 @@
+gelato-component(data-name='stats-time-studied-circle-component')
+  .row
+    .col-md-3.col-sm-6.col-xs-6
+      .num-area-wrapper
+        #num-time-per-day.num ...
+        #time-per-day-units.units-label
+    .col-md-3.col-sm-6.col-xs-6.col-md-push-6
+      .num-area-wrapper
+        #num-retention-rate.num ...
+        .units-label retention rate
+    .col-md-6.col-sm-12.col-xs-12.col-md-pull-3
+      .graph-wrapper
+        #circle
+        .days-studied-wrapper
+          #num-days-studied.num.num-days-studied
+          .units-label.week /
+            span#days-range 7
+            | &nbsp;days
+

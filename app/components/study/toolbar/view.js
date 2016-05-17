@@ -19,6 +19,7 @@ module.exports = GelatoComponent.extend({
     this.timer = new Timer();
     this.listenTo(this.stats, 'state:standby', this.updateTimerOffset);
     this.stats.fetchToday();
+    this.updateDueCount();
   },
   /**
    * @property events
@@ -40,7 +41,6 @@ module.exports = GelatoComponent.extend({
   render: function() {
     this.renderTemplate();
     this.timer.setElement('#timer-container').render();
-    this.updateDueCount();
     return this;
   },
   /**
@@ -79,9 +79,9 @@ module.exports = GelatoComponent.extend({
    * @param {Event} event
    */
   handleClickStudySettings: function(event) {
-    event.preventDefault();
     var self = this;
     var dialog = new StudySettings();
+    event.preventDefault();
     dialog.open();
     dialog.on('save', function(settings) {
       ScreenLoader.show();

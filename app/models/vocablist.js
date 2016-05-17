@@ -108,6 +108,17 @@ module.exports = SkritterModel.extend({
     }
   },
   /**
+   * @method getRows
+   * @returns {Array}
+   */
+  getRows: function() {
+    return _
+      .chain(this.get('sections'))
+      .map('rows')
+      .flatten()
+      .value();
+  },
+  /**
    * @method getSectionById
    * @param {String} sectionId
    * @returns {Object}
