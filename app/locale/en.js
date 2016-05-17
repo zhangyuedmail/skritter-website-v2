@@ -12,6 +12,11 @@ module.exports = {
     "userReferralSuccessful": "User referral successful! Two free weeks have been added to your subscription."
   },
 
+  "navbar": {
+    "backToOldSkritter": "Back to old skritter.com",
+    "backToOldSkritterAlt": "New Skritter too spicy? Return to the original flavor."
+  },
+
   "pages": {
     "contact": {
       "title": "Contact Us",
